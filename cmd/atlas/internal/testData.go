@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -8,7 +8,7 @@ import (
 )
 
 //go:generate templify -p main -o testData.gen.go testData.sql
-func createTestData(db *sql.DB) (err error) {
+func CreateTestData(db *sql.DB) (err error) {
 	if e := tables.CreateModel(db); e != nil {
 		err = e
 	} else if _, e := db.Exec(testDataTemplate()); e != nil {

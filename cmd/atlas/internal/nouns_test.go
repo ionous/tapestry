@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -9,7 +9,7 @@ import (
 )
 
 func ExampleNounData() {
-	templates.ExecuteTemplate(os.Stdout, "nounList", []Noun{
+	Templates.ExecuteTemplate(os.Stdout, "nounList", []Noun{
 		{Name: "pants", Kind: "clothes", Spec: "An important start to every day, the putting on of.",
 			Props: []Prop{
 				// possibly links back to the declaring kind?
@@ -48,7 +48,7 @@ func ExampleNounDB() {
 	const memory = "file:ExampleNounDB.db?cache=shared&mode=memory"
 	if db, e := sql.Open(tables.DefaultDriver, memory); e != nil {
 		log.Fatalln("couldnt open db ", e)
-	} else if e := createTestData(db); e != nil {
+	} else if e := CreateTestData(db); e != nil {
 		log.Fatal("couldnt create test data ", e)
 	} else if e := CreateAtlas(db); e != nil {
 		log.Fatal("couldnt create atlas tables ", e)

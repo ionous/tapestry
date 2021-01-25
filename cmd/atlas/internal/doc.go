@@ -14,4 +14,4 @@
 //  - Graphical maps.
 // * Search ( ex. by name. )
 // * Inspecting in progress, or saved, games.
-package main
+package internal

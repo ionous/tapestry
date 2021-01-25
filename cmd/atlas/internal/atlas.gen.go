@@ -4,7 +4,7 @@
  * THIS FILE SHOULD NOT BE EDITED BY HAND
  */
 
-package main
+package internal
 
 // atlasTemplate is a generated function returning the template as a string.
 // That string should be parsed by the functions of the golang's template package.
@@ -43,7 +43,7 @@ func atlasTemplate() string {
 		"\t\t\torder by rank desc\n" +
 		"\t\t\tlimit 1\n" +
 		"\t\t)\n" +
-		"\t\twhen 'number' then '0'\n" +
+		"\t\twhen 'digi' then '0'\n" +
 		"\t\twhen 'text' then '\"\"'\n" +
 		"\t\telse '???'||mf.type\n" +
 		"\tend)\n" +

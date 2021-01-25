@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -25,7 +25,7 @@ func listOfRelations(w io.Writer, db *sql.DB) (err error) {
 		}, &rel.Name, &rel.Kind, &rel.Cardinality, &rel.OtherKind, &rel.Spec); e != nil {
 		err = e
 	} else {
-		err = templates.ExecuteTemplate(w, "relList", rels)
+		err = Templates.ExecuteTemplate(w, "relList", rels)
 	}
 	return
 }

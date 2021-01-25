@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -63,7 +63,7 @@ func listOfAspects(w io.Writer, db *sql.DB) (err error) {
 		}, &aname, &aspect); e != nil {
 		err = e
 	} else {
-		err = templates.ExecuteTemplate(w, "aspectList", aspects)
+		err = Templates.ExecuteTemplate(w, "aspectList", aspects)
 	}
 	return
 }

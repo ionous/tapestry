@@ -4,7 +4,7 @@
  * THIS FILE SHOULD NOT BE EDITED BY HAND
  */
 
-package main
+package internal
 
 // testDataTemplate is a generated function returning the template as a string.
 // That string should be parsed by the functions of the golang's template package.
@@ -21,7 +21,7 @@ func testDataTemplate() string {
 		"insert into mdl_field(kind, field, type) values\n" +
 		"\t('things', 'brief', 'text'),\n" +
 		"\t('vehicles', 'flightiness', 'aspect'),\n" +
-		"\t('cars', 'num wheels', 'number');\n" +
+		"\t('cars', 'num wheels', 'digi');\n" +
 		"\n" +
 		"insert into mdl_default(kind, field, value) values\n" +
 		"\t('cars', 'flightiness', 'flightless'),\n" +

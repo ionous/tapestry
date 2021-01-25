@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -9,7 +9,7 @@ import (
 )
 
 func ExampleRelData() {
-	templates.ExecuteTemplate(os.Stdout, "relList", []Relation{
+	Templates.ExecuteTemplate(os.Stdout, "relList", []Relation{
 		{"containing", "containers", tables.ONE_TO_MANY, "things", "Containers contain stuff."},
 		{"driving", "people", tables.ONE_TO_ONE, "cars", "No backseat drivers please."},
 	})
@@ -30,7 +30,7 @@ func ExampleRelDB() {
 	const memory = "file:ExampleRelDB.db?cache=shared&mode=memory"
 	if db, e := sql.Open(tables.DefaultDriver, memory); e != nil {
 		log.Fatalln("couldnt open db ", e)
-	} else if e := createTestData(db); e != nil {
+	} else if e := CreateTestData(db); e != nil {
 		log.Fatal("couldnt create test data ", e)
 	} else if e := CreateAtlas(db); e != nil {
 		log.Fatal("couldnt create atlas tables ", e)

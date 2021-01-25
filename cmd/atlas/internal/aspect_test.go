@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -9,7 +9,7 @@ import (
 )
 
 func ExampleAspectData() {
-	templates.ExecuteTemplate(os.Stdout, "aspectList", []Aspect{{
+	Templates.ExecuteTemplate(os.Stdout, "aspectList", []Aspect{{
 		Name:  "flightiness",
 		Kinds: []string{"vehicles", "birds"},
 		Traits: []Trait{{
@@ -63,7 +63,7 @@ func ExampleAspectDB() {
 	const memory = "file:ExampleAspectDB.db?cache=shared&mode=memory"
 	if db, e := sql.Open(tables.DefaultDriver, memory); e != nil {
 		log.Fatalln("couldnt open db ", e)
-	} else if e := createTestData(db); e != nil {
+	} else if e := CreateTestData(db); e != nil {
 		log.Fatal("couldnt create test data ", e)
 	} else if e := CreateAtlas(db); e != nil {
 		log.Fatal("couldnt create atlas tables ", e)

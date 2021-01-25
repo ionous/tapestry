@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -29,7 +29,7 @@ func (k Kind) Parent() string {
 	return strings.Split(k.Path, ",")[0]
 }
 
-func listOfKinds(w io.Writer, db *sql.DB) (err error) {
+func ListOfKinds(w io.Writer, db *sql.DB) (err error) {
 	// originally used a channel, but the template iterates over the same elements multiple times
 	var kind Kind
 	var kinds []Kind
@@ -69,7 +69,7 @@ func listOfKinds(w io.Writer, db *sql.DB) (err error) {
 		}, &kind.Name, &kind.Path, &kind.Spec); e != nil {
 		err = e
 	} else {
-		err = templates.ExecuteTemplate(w, "kindList", kinds)
+		err = Templates.ExecuteTemplate(w, "kindList", kinds)
 	}
 	return
 }

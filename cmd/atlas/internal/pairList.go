@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -48,7 +48,7 @@ func listOfPairs(w io.Writer, relation string, db *sql.DB) (err error) {
 		err = e
 	} else {
 		pin := rel
-		err = templates.ExecuteTemplate(w, "pairList", &Pairing{
+		err = Templates.ExecuteTemplate(w, "pairList", &Pairing{
 			Rel:   &pin,
 			Pairs: pairs,
 		})

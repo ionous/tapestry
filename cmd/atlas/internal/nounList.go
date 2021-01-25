@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -65,7 +65,7 @@ func listOfNouns(w io.Writer, db *sql.DB) (err error) {
 		}, &name, &kind, &spec); e != nil {
 		err = e
 	} else {
-		err = templates.ExecuteTemplate(w, "nounList", nouns)
+		err = Templates.ExecuteTemplate(w, "nounList", nouns)
 	}
 	return
 }

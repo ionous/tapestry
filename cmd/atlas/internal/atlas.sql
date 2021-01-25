@@ -1,6 +1,6 @@
 /* any default values defined for the kind;
  null spec indicates the field isnt declared in this kind */
-create view
+create temp view
 atlas_fields as
 select kind, field, value, null as spec
 	from mdl_default md 

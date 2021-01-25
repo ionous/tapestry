@@ -1,16 +1,31 @@
-package main
+package internal
 
 import (
+	"database/sql"
 	"html/template"
 	"reflect"
 	"regexp"
 	"strings"
+
+	"github.com/ionous/errutil"
+	"github.com/ionous/iffy/lang"
 )
+
+var AtlasTemplate = atlasTemplate
+var Templates *template.Template = template.New("none").Funcs(funcMap)
+
+//go:generate templify -p main -o atlas.gen.go atlas.sql
+func CreateAtlas(db *sql.DB) (err error) {
+	if _, e := db.Exec(AtlasTemplate()); e != nil {
+		err = errutil.New("CreateAtlas:", e)
+	}
+	return
+}
 
 var spaces = regexp.MustCompile(`\s+`)
 
 var funcMap = template.FuncMap{
-	"title": strings.Title,
+	"title": lang.Titlecase,
 	"safe": func(s string) string {
 		return spaces.ReplaceAllString(s, "-")
 	},
@@ -30,8 +45,6 @@ var funcMap = template.FuncMap{
 	},
 }
 
-var templates *template.Template = template.New("none").Funcs(funcMap)
-
 func registerTemplate(n, t string) {
-	templates = template.Must(templates.New(n).Parse(t))
+	Templates = template.Must(Templates.New(n).Parse(t))
 }

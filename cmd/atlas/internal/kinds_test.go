@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"database/sql"
@@ -12,7 +12,7 @@ func ExampleKindData() {
 	str := func(s string) sql.NullString {
 		return sql.NullString{String: s, Valid: true}
 	}
-	templates.ExecuteTemplate(os.Stdout, "kindList", []Kind{
+	Templates.ExecuteTemplate(os.Stdout, "kindList", []Kind{
 		{Name: "things", Path: "", Spec: "The things.",
 			Props: []Prop{
 				{"doe", "a deer", str("A female deer.")},
@@ -45,11 +45,11 @@ func ExampleKindDB() {
 	const memory = "file:ExampleKindDB.db?cache=shared&mode=memory"
 	if db, e := sql.Open(tables.DefaultDriver, memory); e != nil {
 		log.Fatalln("couldnt open db ", e)
-	} else if e := createTestData(db); e != nil {
+	} else if e := CreateTestData(db); e != nil {
 		log.Fatal("couldnt create test data ", e)
 	} else if e := CreateAtlas(db); e != nil {
 		log.Fatal("couldnt create atlas tables ", e)
-	} else if e := listOfKinds(os.Stdout, db); e != nil {
+	} else if e := ListOfKinds(os.Stdout, db); e != nil {
 		log.Fatal("couldnt process kinds ", e)
 	}
 
