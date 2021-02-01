@@ -3,11 +3,11 @@ package core
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/object"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/object"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/rt/safe"
 )
 
 // test some simple functionality of the object commands using a mock runtime

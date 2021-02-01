@@ -3,9 +3,9 @@ package test
 import (
 	"testing"
 
-	"github.com/ionous/iffy/dl/core"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/kr/pretty"
 )
 

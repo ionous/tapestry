@@ -1,10 +1,10 @@
 package core
 
 import (
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/object"
-	"github.com/ionous/iffy/rt"
-	g "github.com/ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 type HasDominion struct {

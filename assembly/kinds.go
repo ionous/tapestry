@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/ephemera"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/ephemera"
 )
 
 type cachedKind struct {

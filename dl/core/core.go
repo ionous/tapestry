@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/composer"
 )
 
 var Slots = []composer.Slot{{

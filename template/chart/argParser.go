@@ -1,7 +1,7 @@
 package chart
 
 import (
-	"github.com/ionous/iffy/template/postfix"
+	"git.sr.ht/~ionous/iffy/template/postfix"
 )
 
 // ArgParser reads arguments specified by a function call.

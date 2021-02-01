@@ -1,7 +1,7 @@
 package generic
 
 import (
-	"github.com/ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/affine"
 )
 
 // Value represents any one of the built in types.

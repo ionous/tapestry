@@ -1,11 +1,11 @@
 package list
 
 import (
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/rt"
-	g "github.com/ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 type Gather struct {

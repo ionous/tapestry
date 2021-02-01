@@ -1,13 +1,13 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/debug"
+	"git.sr.ht/~ionous/iffy/dl/list"
+	"git.sr.ht/~ionous/iffy/dl/rel"
+	"git.sr.ht/~ionous/iffy/ephemera/decode"
+	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/debug"
-	"github.com/ionous/iffy/dl/list"
-	"github.com/ionous/iffy/dl/rel"
-	"github.com/ionous/iffy/ephemera/decode"
-	"github.com/ionous/iffy/rt"
 )
 
 type Activity core.Activity

@@ -3,9 +3,9 @@ package story_test
 import (
 	"testing"
 
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/kr/pretty"
 )
 

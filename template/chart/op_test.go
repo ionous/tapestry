@@ -1,10 +1,11 @@
 package chart
 
 import (
-	"github.com/ionous/iffy/template/types"
-	"github.com/kr/pretty"
 	"sort"
 	"testing"
+
+	"git.sr.ht/~ionous/iffy/template/types"
+	"github.com/kr/pretty"
 )
 
 func TestOpListIsSorted(t *testing.T) {

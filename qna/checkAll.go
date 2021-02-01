@@ -7,8 +7,8 @@ import (
 
 	"github.com/ionous/errutil"
 
-	"github.com/ionous/iffy/dl/check"
-	"github.com/ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/dl/check"
+	"git.sr.ht/~ionous/iffy/tables"
 )
 
 // CheckAll tests stored in the passed db.

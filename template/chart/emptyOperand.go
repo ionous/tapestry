@@ -1,6 +1,6 @@
 package chart
 
-import "github.com/ionous/iffy/template/postfix"
+import "git.sr.ht/~ionous/iffy/template/postfix"
 
 // implements OperandState by returning nothing
 type EmptyOperand struct{ r rune }

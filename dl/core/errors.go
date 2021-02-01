@@ -1,8 +1,8 @@
 package core
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/composer"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/composer"
 )
 
 type CommandError struct {

@@ -3,7 +3,7 @@ package generic
 import (
 	r "reflect"
 
-	"github.com/ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/affine"
 )
 
 func BoolOf(v bool) Value {

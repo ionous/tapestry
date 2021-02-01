@@ -1,9 +1,9 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/ephemera/reader"
 )
 
 type OpError struct {

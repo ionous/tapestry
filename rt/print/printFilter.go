@@ -1,6 +1,6 @@
 package print
 
-import "github.com/ionous/iffy/rt/writer"
+import "git.sr.ht/~ionous/iffy/rt/writer"
 
 // implements writer.ChunkWriter and io.Closer
 type Filter struct {

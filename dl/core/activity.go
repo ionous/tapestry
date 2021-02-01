@@ -1,9 +1,9 @@
 package core
 
 import (
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 // Activity wraps a block of multiple execute statements

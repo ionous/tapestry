@@ -3,7 +3,7 @@ package print
 import (
 	"unicode"
 
-	"github.com/ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
 // AutoWriter accepts incoming text chunks and writes them to target writing newlines at the end of sentences.

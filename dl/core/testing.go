@@ -3,7 +3,7 @@ package core
 import (
 	"strconv"
 
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 func NewActivity(exe ...rt.Execute) *Activity {

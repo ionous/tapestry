@@ -8,9 +8,9 @@ import (
 
 	r "reflect"
 
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/export"
-	"github.com/ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/export"
+	"git.sr.ht/~ionous/iffy/lang"
 )
 
 type Collect struct {

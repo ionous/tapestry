@@ -1,9 +1,9 @@
 package generic
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/lang"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/lang"
 )
 
 // every primitive value is its own unique instance.

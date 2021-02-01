@@ -1,6 +1,6 @@
 package core
 
-import "github.com/ionous/iffy/dl/composer"
+import "git.sr.ht/~ionous/iffy/dl/composer"
 
 type CompareType int
 

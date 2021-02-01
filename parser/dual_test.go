@@ -1,9 +1,10 @@
 package parser_test
 
 import (
-	. "github.com/ionous/iffy/parser"
-	"github.com/ionous/sliceOf"
 	"testing"
+
+	. "git.sr.ht/~ionous/iffy/parser"
+	"github.com/ionous/sliceOf"
 )
 
 // note, in reality burn would use only held things.

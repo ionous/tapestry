@@ -3,9 +3,9 @@ package core
 import (
 	"fmt"
 
-	"github.com/ionous/iffy/rt/safe"
-	"github.com/ionous/iffy/rt/writer"
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 var helloThereWorld = NewActivity(

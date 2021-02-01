@@ -1,8 +1,8 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/ephemera"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/ephemera"
 )
 
 // ImportPhrase implements StoryStatement

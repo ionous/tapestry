@@ -1,8 +1,8 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/ephemera/decode"
 )
 
 func (op *Certainty) ImportString(k *Importer) (ret string, err error) {

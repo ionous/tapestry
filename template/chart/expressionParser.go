@@ -1,8 +1,8 @@
 package chart
 
 import (
+	"git.sr.ht/~ionous/iffy/template/postfix"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/template/postfix"
 )
 
 // ExpressionParser reads either a single call or a series of operations.

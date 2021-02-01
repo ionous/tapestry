@@ -1,11 +1,11 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/tables"
 )
 
 func (op *PropertyDecl) ImportProperty(k *Importer, kind ephemera.Named) (err error) {

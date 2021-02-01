@@ -1,13 +1,13 @@
 package pattern
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/object"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/rt/scope"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/object"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/rt/safe"
-	"github.com/ionous/iffy/rt/scope"
 )
 
 type patScope struct {

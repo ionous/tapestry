@@ -1,10 +1,10 @@
 package list
 
 import (
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 type Set struct {

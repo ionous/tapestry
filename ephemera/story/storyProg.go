@@ -1,8 +1,8 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/core"
 )
 
 type programImporter interface {

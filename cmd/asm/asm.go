@@ -9,10 +9,10 @@ import (
 	"os"
 	"path/filepath"
 
+	"git.sr.ht/~ionous/iffy/assembly"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/assembly"
-	"github.com/ionous/iffy/ephemera/reader"
-	"github.com/ionous/iffy/tables"
 )
 
 // ex. go run asm.go -in /Users/ionous/Documents/Iffy/scratch/shared/ephemera.db -out /Users/ionous/Documents/Iffy/scratch/shared/play.db

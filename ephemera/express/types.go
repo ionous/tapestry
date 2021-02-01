@@ -3,8 +3,8 @@ package express
 import (
 	r "reflect"
 
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 var typeNumEval = r.TypeOf((*rt.NumberEval)(nil)).Elem()

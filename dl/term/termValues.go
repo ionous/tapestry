@@ -1,8 +1,8 @@
 package term
 
 import (
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 type Number struct {

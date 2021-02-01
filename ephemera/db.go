@@ -3,7 +3,7 @@ package ephemera
 import (
 	"database/sql"
 
-	"github.com/ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/tables"
 )
 
 // KidsOf the passed ancestor as specified in the Kinds table.

@@ -1,9 +1,9 @@
 package template
 
 import (
+	"git.sr.ht/~ionous/iffy/template/chart"
+	"git.sr.ht/~ionous/iffy/template/postfix"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/template/chart"
-	"github.com/ionous/iffy/template/postfix"
 )
 
 // Expression provides a local alias for postfix.Expression;

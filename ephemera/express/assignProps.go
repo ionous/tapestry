@@ -3,8 +3,8 @@ package express
 import (
 	r "reflect"
 
+	"git.sr.ht/~ionous/iffy/export"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/export"
 )
 
 func assignProps(out r.Value, args []r.Value) (err error) {

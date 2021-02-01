@@ -3,9 +3,9 @@ package chart
 import (
 	"strconv"
 
+	"git.sr.ht/~ionous/iffy/template/postfix"
+	"git.sr.ht/~ionous/iffy/template/types"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/template/postfix"
-	"github.com/ionous/iffy/template/types"
 )
 
 type FloatMode int

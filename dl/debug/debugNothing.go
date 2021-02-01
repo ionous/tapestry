@@ -1,8 +1,8 @@
 package debug
 
 import (
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 // DoNothing implements Execute, but .... does nothing.

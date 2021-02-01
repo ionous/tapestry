@@ -1,9 +1,9 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/tables"
 )
 
 func (op *KindOfRelation) ImportPhrase(k *Importer) (err error) {

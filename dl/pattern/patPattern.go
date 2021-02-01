@@ -1,10 +1,10 @@
 package pattern
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/term"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/term"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/safe"
 )
 
 type Pattern struct {

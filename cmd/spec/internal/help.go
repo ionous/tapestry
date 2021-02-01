@@ -7,11 +7,11 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/ionous/iffy"
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/export"
-	"github.com/ionous/iffy/export/tag"
-	"github.com/ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/export"
+	"git.sr.ht/~ionous/iffy/export/tag"
+	"git.sr.ht/~ionous/iffy/lang"
 )
 
 var tokenPlaceholders = regexp.MustCompile(`^\$([0-9]+)$`)

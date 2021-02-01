@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/kr/pretty"
 )
 

@@ -1,8 +1,8 @@
 package pattern
 
 import (
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 // Rule triggers a series of statements when its filters are satisfied.

@@ -4,11 +4,11 @@ import (
 	"database/sql"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/ephemera/reader"
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
 )
 
 func newAssemblyTest(t *testing.T, path string) (ret *assemblyTest, err error) {

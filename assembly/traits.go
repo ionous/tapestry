@@ -1,8 +1,8 @@
 package assembly
 
 import (
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/tables"
 )
 
 // goal: build table of aspects and their traits.

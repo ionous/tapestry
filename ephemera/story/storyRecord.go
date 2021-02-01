@@ -1,8 +1,8 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/tables"
 )
 
 // ex. "cats are a kind of record"

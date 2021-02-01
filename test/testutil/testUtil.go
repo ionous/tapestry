@@ -4,9 +4,9 @@ import (
 	"fmt"
 	r "reflect"
 
+	"git.sr.ht/~ionous/iffy/affine"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	g "github.com/ionous/iffy/rt/generic"
 )
 
 type Kinds struct {

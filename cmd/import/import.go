@@ -12,10 +12,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/ephemera/reader"
-	"github.com/ionous/iffy/ephemera/story"
-	"github.com/ionous/iffy/tables"
 	"github.com/kr/pretty"
 )
 

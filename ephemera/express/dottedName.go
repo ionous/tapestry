@@ -1,10 +1,10 @@
 package express
 
 import (
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/render"
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/render"
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 // single dotted name supporting the printing of an object's name or

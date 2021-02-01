@@ -3,7 +3,7 @@ package composer
 import (
 	r "reflect"
 
-	"github.com/ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/lang"
 )
 
 // fix? imposes some otherwise unneeded imports....

@@ -3,8 +3,8 @@ package pattern_test
 import (
 	"fmt"
 
-	"github.com/ionous/iffy/ephemera/debug"
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/ephemera/debug"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 // ExampleSayMe converts numbers to text

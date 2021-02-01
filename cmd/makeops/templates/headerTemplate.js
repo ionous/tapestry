@@ -5,8 +5,8 @@ module.exports =
 package {{package}}
 
 import (
-  "github.com/ionous/iffy/dl/composer"
-  "github.com/ionous/iffy/ephemera/reader"
-  "github.com/ionous/iffy/rt"
+  "git.sr.ht/~ionous/iffy/dl/composer"
+  "git.sr.ht/~ionous/iffy/ephemera/reader"
+  "git.sr.ht/~ionous/iffy/rt"
 )
 `

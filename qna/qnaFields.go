@@ -6,12 +6,12 @@ import (
 
 	r "reflect"
 
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/object"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/object"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/tables"
 )
 
 // Fields implements rt.Fields: key,field,value storage for nouns, kinds, and patterns.

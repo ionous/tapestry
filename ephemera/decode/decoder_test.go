@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/ephemera/debug"
-	"github.com/ionous/iffy/ephemera/decode"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/ephemera/debug"
+	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"github.com/kr/pretty"
 )
 

@@ -3,7 +3,7 @@ package print
 import (
 	"bytes"
 
-	"github.com/ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
 // Lines implements io.Writer, buffering every Write as a new line.

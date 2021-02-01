@@ -3,8 +3,8 @@ package core
 import (
 	"testing"
 
-	"github.com/ionous/iffy/rt/safe"
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 func TestCompareNumbers(t *testing.T) {

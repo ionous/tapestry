@@ -1,8 +1,8 @@
 package testutil
 
 import (
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
-	g "github.com/ionous/iffy/rt/generic"
 )
 
 func SetRecord(d *g.Record, pairs ...interface{}) (err error) {

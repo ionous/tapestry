@@ -4,7 +4,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/ionous/iffy/export"
+	"git.sr.ht/~ionous/iffy/export"
 )
 
 type Groups map[string]bool

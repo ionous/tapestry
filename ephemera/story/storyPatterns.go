@@ -3,12 +3,12 @@ package story
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/tables"
 )
 
 func (op *PatternActions) ImportPhrase(k *Importer) (err error) {

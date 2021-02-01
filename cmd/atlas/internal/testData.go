@@ -3,8 +3,8 @@ package internal
 import (
 	"database/sql"
 
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/tables"
 )
 
 //go:generate templify -p main -o testData.gen.go testData.sql

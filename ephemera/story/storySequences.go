@@ -1,8 +1,8 @@
 package story
 
 import (
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
 )
 
 func (op *CycleText) ImportStub(k *Importer) (ret interface{}, err error) {

@@ -1,9 +1,9 @@
 package core
 
 import (
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 // ChooseAction runs one block of instructions or another based on the results of a conditional evaluation.

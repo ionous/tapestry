@@ -3,8 +3,8 @@ package print
 import (
 	"strings"
 
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
 // Parens filters writer.Output, parenthesizing a stream of writes. Close adds the closing paren.

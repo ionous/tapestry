@@ -1,9 +1,9 @@
 package chart
 
 import (
+	"git.sr.ht/~ionous/iffy/template/postfix"
+	"git.sr.ht/~ionous/iffy/template/types"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/template/postfix"
-	"github.com/ionous/iffy/template/types"
 )
 
 // FieldParser reads identifiers separated by dots,

@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 func TestPatternCheck(t *testing.T) {

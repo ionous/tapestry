@@ -6,8 +6,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/ionous/iffy"
-	"github.com/ionous/iffy/cmd/spec/internal"
+	"git.sr.ht/~ionous/iffy"
+	"git.sr.ht/~ionous/iffy/cmd/spec/internal"
 )
 
 // go run spec.go > ../compose/www/data/lang/spec.js
@@ -28,7 +28,7 @@ func main() {
 	if b, e := c.Marshal(); e != nil {
 		panic(b)
 	} else {
-		fmt.Println("/* generated using github.com/ionous/iffy/cmd/spec/spec.go */")
+		fmt.Println("/* generated using git.sr.ht/~ionous/iffy/cmd/spec/spec.go */")
 		fmt.Print("const spec = ")
 		fmt.Print(string(b))
 		fmt.Println(";")

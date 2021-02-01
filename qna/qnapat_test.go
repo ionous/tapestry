@@ -5,11 +5,11 @@ import (
 	"encoding/gob"
 	"testing"
 
-	"github.com/ionous/iffy/assembly"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/ephemera/debug"
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/iffy/assembly"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/ephemera/debug"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 // manually add an assembled pattern to the database, test that it works as expected.

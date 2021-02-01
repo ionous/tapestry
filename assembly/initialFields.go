@@ -3,8 +3,8 @@ package assembly
 import (
 	"reflect"
 
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/tables"
 )
 
 // reads mdl_kind, mdl_field, mdl_noun

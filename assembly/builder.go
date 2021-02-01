@@ -5,12 +5,12 @@ import (
 	"database/sql"
 	"encoding/gob"
 
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/dl/term"
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/dl/term"
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/tables"
 )
 
 type BuildRule struct {

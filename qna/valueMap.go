@@ -1,9 +1,9 @@
 package qna
 
 import (
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/object"
-	g "github.com/ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/object"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 type keyType struct {

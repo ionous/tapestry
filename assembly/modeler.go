@@ -7,11 +7,11 @@ import (
 	r "reflect"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/ephemera/reader"
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/tables"
 	"github.com/reiver/go-porterstemmer"
 )
 

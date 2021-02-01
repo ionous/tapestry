@@ -3,8 +3,8 @@ package list_test
 import (
 	"testing"
 
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/list"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/list"
 )
 
 func TestSlices(t *testing.T) {

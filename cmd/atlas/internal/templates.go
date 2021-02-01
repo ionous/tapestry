@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/lang"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/lang"
 )
 
 var AtlasTemplate = atlasTemplate

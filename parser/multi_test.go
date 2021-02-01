@@ -1,10 +1,11 @@
 package parser_test
 
 import (
-	. "github.com/ionous/iffy/parser"
-	"github.com/ionous/sliceOf"
 	"strings"
 	"testing"
+
+	. "git.sr.ht/~ionous/iffy/parser"
+	"github.com/ionous/sliceOf"
 )
 
 func TestMulti(t *testing.T) {

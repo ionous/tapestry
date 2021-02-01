@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/tables"
 )
 
 func listOfAspects(w io.Writer, db *sql.DB) (err error) {

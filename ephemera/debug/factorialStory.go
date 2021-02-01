@@ -1,10 +1,10 @@
 package debug
 
 import (
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/ephemera/story"
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 var FactorialStory = &story.Story{

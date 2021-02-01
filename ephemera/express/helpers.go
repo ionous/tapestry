@@ -1,9 +1,9 @@
 package express
 
 import (
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/render"
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/render"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 func T(s string) rt.TextEval {

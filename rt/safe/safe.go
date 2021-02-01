@@ -1,11 +1,11 @@
 package safe
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/object"
-	"github.com/ionous/iffy/rt"
-	g "github.com/ionous/iffy/rt/generic"
 )
 
 // resolve a requested variable name into any list type.

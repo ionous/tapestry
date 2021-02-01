@@ -1,6 +1,6 @@
 package term
 
-import g "github.com/ionous/iffy/rt/generic"
+import g "git.sr.ht/~ionous/iffy/rt/generic"
 
 type Value struct {
 	value g.Value

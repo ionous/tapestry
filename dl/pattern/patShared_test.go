@@ -1,11 +1,11 @@
 package pattern_test
 
 import (
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/scope"
-	"github.com/ionous/iffy/rt/writer"
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/scope"
+	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 func B(i bool) rt.BoolEval     { return &core.Bool{i} }

@@ -1,8 +1,8 @@
 package story
 
 import (
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 // generates rules based on guards

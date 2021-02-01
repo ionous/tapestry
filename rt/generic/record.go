@@ -1,9 +1,9 @@
 package generic
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/object"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/object"
 )
 
 type Record struct {

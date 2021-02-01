@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/tables"
 )
 
 func ExampleKindData() {

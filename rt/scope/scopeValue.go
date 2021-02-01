@@ -1,9 +1,9 @@
 package scope
 
 import (
+	"git.sr.ht/~ionous/iffy/object"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/object"
-	g "github.com/ionous/iffy/rt/generic"
 )
 
 type TargetValue struct {

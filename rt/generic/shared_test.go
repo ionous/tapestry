@@ -1,11 +1,11 @@
 package generic_test
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/object"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/object"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/test/testutil"
 )
 
 func (n *recordTest) NewKind(name string, fields []g.Field) (ret *g.Kind) {

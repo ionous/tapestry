@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"testing"
 
-	"github.com/ionous/iffy/assembly"
-	"github.com/ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/iffy/assembly"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 // if path is nil, it will use a file db.

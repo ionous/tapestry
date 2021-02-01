@@ -1,8 +1,8 @@
 package core
 
 import (
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
 )
 
 // Variable requires a user-specified string.

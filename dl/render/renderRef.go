@@ -1,13 +1,13 @@
 package render
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/rt"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/rt/safe"
 )
 
 // RenderRef returns the value of a variable or the id of an object.

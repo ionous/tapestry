@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 // TestAncestors verifies valid parent-child ephemera can generate a valid ancestry cache.

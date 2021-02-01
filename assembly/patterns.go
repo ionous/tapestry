@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/tables"
 )
 
 func AssemblePatterns(asm *Assembler) (err error) {

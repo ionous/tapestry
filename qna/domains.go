@@ -3,8 +3,8 @@ package qna
 import (
 	"database/sql"
 
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/tables"
 )
 
 func ActivateDomain(db *sql.DB, domain string, active bool) (err error) {

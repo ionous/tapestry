@@ -1,8 +1,8 @@
 package generic
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
 )
 
 // CopyValue: create a new value from a snapshot of the passed value

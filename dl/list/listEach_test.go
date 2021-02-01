@@ -3,11 +3,11 @@ package list_test
 import (
 	"testing"
 
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/list"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/list"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/kr/pretty"
 )
 

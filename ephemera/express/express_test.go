@@ -3,12 +3,12 @@ package express
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/dl/render"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/template"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/dl/render"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/template"
 	"github.com/kr/pretty"
 )
 

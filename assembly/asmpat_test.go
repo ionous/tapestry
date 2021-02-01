@@ -6,12 +6,12 @@ import (
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/ephemera/debug"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/ephemera/debug"
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
 	"github.com/kr/pretty"
 )
 

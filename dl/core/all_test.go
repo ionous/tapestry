@@ -3,11 +3,11 @@ package core
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/rt"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/rt/safe"
-	"github.com/ionous/iffy/test/testutil"
 )
 
 func TestAllTrue(t *testing.T) {

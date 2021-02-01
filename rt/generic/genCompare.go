@@ -1,6 +1,6 @@
 package generic
 
-import "github.com/ionous/iffy/affine"
+import "git.sr.ht/~ionous/iffy/affine"
 
 func AreEqualTypes(a, b Value) bool {
 	return areEqualTypes(a.Affinity(), a.Type(), b.Affinity(), b.Type())

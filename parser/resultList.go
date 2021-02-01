@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/ionous/iffy/ident"
+	"git.sr.ht/~ionous/iffy/ident"
 )
 
 // ResultList contains multiple results. Its methods help tease out its contents.

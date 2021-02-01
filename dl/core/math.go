@@ -3,11 +3,11 @@ package core
 import (
 	"math"
 
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/rt"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/rt/safe"
 )
 
 func getPair(run rt.Runtime, a, b rt.NumberEval) (reta, retb float64, err error) {

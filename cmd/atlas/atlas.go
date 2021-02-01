@@ -9,10 +9,10 @@ import (
 
 	"golang.org/x/net/context"
 
-	. "github.com/ionous/iffy/cmd/atlas/internal"
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/web"
-	"github.com/ionous/iffy/web/support"
+	. "git.sr.ht/~ionous/iffy/cmd/atlas/internal"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/web"
+	"git.sr.ht/~ionous/iffy/web/support"
 	_ "github.com/mattn/go-sqlite3"
 )
 

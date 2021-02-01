@@ -4,11 +4,11 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/decode"
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/ephemera/decode"
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/tables"
 )
 
 func (*Pronoun) Import(*Importer) (err error) {

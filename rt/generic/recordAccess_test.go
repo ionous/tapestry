@@ -3,8 +3,8 @@ package generic_test
 import (
 	"testing"
 
-	"github.com/ionous/iffy/object"
-	g "github.com/ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/object"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 //

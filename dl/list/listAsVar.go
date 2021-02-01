@@ -1,9 +1,9 @@
 package list
 
 import (
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
 )
 
 // ListIterator defines a variable name

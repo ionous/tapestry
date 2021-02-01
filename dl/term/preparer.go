@@ -1,7 +1,7 @@
 package term
 
 import (
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 // preparable terms are stored as part of a pattern.

@@ -4,8 +4,8 @@ import (
 	"flag"
 	"go/build"
 
-	"github.com/ionous/iffy/composer"
-	"github.com/ionous/iffy/web/support"
+	"git.sr.ht/~ionous/iffy/composer"
+	"git.sr.ht/~ionous/iffy/web/support"
 )
 
 // ex. go run compose.go -open -dir /Users/ionous/Documents/Iffy

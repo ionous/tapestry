@@ -4,11 +4,11 @@ import (
 	r "reflect"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/export"
+	"git.sr.ht/~ionous/iffy/export/tag"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/ephemera/reader"
-	"github.com/ionous/iffy/export"
-	"github.com/ionous/iffy/export/tag"
 )
 
 // ReadRet is similar to reader.ReadMap, except it returns a value.

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/core"
 )
 
 func TestLog(t *testing.T) {

@@ -3,12 +3,12 @@ package list_test
 // import (
 // 	"testing"
 
-// 	"github.com/ionous/iffy/dl/core"
-// 	"github.com/ionous/iffy/dl/list"
-// 	"github.com/ionous/iffy/dl/pattern"
-// 	"github.com/ionous/iffy/dl/term"
-// 	"github.com/ionous/iffy/rt"
-// 	g "github.com/ionous/iffy/rt/generic"
+// 	"git.sr.ht/~ionous/iffy/dl/core"
+// 	"git.sr.ht/~ionous/iffy/dl/list"
+// 	"git.sr.ht/~ionous/iffy/dl/pattern"
+// 	"git.sr.ht/~ionous/iffy/dl/term"
+// 	"git.sr.ht/~ionous/iffy/rt"
+// 	g "git.sr.ht/~ionous/iffy/rt/generic"
 // 	"github.com/kr/pretty"
 // )
 

@@ -1,6 +1,6 @@
 package list
 
-import "github.com/ionous/iffy/dl/composer"
+import "git.sr.ht/~ionous/iffy/dl/composer"
 
 type Edge bool
 

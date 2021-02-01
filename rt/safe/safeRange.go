@@ -1,7 +1,7 @@
 package safe
 
 import (
-	g "github.com/ionous/iffy/rt/generic"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 // min inclusive, max exclusive

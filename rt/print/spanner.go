@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"unicode"
 
-	"github.com/ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
 // Spanner buffers with spacing, treating each new Write as word and adding spaces to separate words as necessary.

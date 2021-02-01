@@ -1,9 +1,9 @@
 package testutil
 
 import (
-	"github.com/ionous/iffy/rt"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
 // PanicRuntime implements Runtime throwing a panic for every method

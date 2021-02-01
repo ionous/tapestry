@@ -1,10 +1,10 @@
 package pattern
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/term"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/term"
 )
 
 // Rules contained by this package.

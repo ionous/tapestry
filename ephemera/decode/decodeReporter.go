@@ -1,7 +1,7 @@
 package decode
 
 import (
-	"github.com/ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
 )
 
 type IssueReport func(reader.Position, error)

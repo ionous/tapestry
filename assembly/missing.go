@@ -3,7 +3,7 @@ package assembly
 import (
 	"fmt"
 
-	"github.com/ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/tables"
 )
 
 // MissingKinds reports named kinds which don't have a defined ancestry.

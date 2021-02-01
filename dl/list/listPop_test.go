@@ -3,9 +3,9 @@ package list_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/list"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/list"
 	"github.com/kr/pretty"
 )
 

@@ -3,7 +3,7 @@ package assembly
 import (
 	"database/sql"
 
-	"github.com/ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/lang"
 	"github.com/mattn/go-sqlite3"
 )
 

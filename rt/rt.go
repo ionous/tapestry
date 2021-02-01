@@ -1,6 +1,6 @@
 package rt
 
-import "github.com/ionous/iffy/dl/composer"
+import "git.sr.ht/~ionous/iffy/dl/composer"
 
 var Slots = []composer.Slot{{
 	Name: "execute",

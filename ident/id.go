@@ -4,7 +4,7 @@ import (
 	"hash/fnv"
 	"io"
 
-	"github.com/ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/lang"
 )
 
 func None() (invalid Id) {

@@ -3,11 +3,11 @@ package pattern_test
 import (
 	"testing"
 
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/dl/term"
-	"github.com/ionous/iffy/rt/safe"
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/dl/term"
+	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 // TestFactorial of the number 3 to verify pattern recursion works.

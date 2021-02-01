@@ -1,13 +1,13 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/render"
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/express"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/template"
+	"git.sr.ht/~ionous/iffy/template/types"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/render"
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/ephemera/express"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/template"
-	"github.com/ionous/iffy/template/types"
 )
 
 func (op *RenderTemplate) ImportStub(k *Importer) (ret interface{}, err error) {

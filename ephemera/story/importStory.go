@@ -3,11 +3,11 @@ package story
 import (
 	"database/sql"
 
+	"git.sr.ht/~ionous/iffy"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/ephemera/decode"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/ephemera/decode"
-	"github.com/ionous/iffy/ephemera/reader"
 )
 
 func ImportStory(src string, db *sql.DB, m reader.Map, reporter decode.IssueReport) (ret *Story, err error) {

@@ -3,9 +3,9 @@ package core
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/safe"
 	"github.com/kr/pretty"
 )
 

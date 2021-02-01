@@ -1,13 +1,13 @@
 package pattern
 
 import (
-	"github.com/ionous/iffy/affine"
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/term"
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/term"
+	"git.sr.ht/~ionous/iffy/rt"
 
-	g "github.com/ionous/iffy/rt/generic"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 // Determine helps run a pattern.

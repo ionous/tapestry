@@ -5,12 +5,12 @@ import (
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/assembly"
+	"git.sr.ht/~ionous/iffy/object"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/assembly"
-	"github.com/ionous/iffy/object"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
 )
 
 //

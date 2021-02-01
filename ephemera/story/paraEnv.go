@@ -1,6 +1,6 @@
 package story
 
-import "github.com/ionous/iffy/ephemera"
+import "git.sr.ht/~ionous/iffy/ephemera"
 
 type StoryEnv struct {
 	Recent struct {

@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/rt"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 // IsEmpty determines whether the text contains any characters at all.

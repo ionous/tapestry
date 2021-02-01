@@ -3,7 +3,7 @@ package assembly
 import (
 	"database/sql"
 
-	"github.com/ionous/iffy"
+	"git.sr.ht/~ionous/iffy"
 )
 
 func AssembleStory(db *sql.DB, baseKind string, reporter IssueReport) (err error) {

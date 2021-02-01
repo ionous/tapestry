@@ -3,8 +3,8 @@ package chart
 import (
 	"sort"
 
+	"git.sr.ht/~ionous/iffy/template/types"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/template/types"
 )
 
 // OperatorParser reads a binary operator.

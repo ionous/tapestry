@@ -1,8 +1,8 @@
 package assembly
 
 import (
-	"github.com/ionous/iffy/dl/check"
-	"github.com/ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/check"
+	"git.sr.ht/~ionous/iffy/dl/core"
 )
 
 func AssembleTests(asm *Assembler) (err error) {

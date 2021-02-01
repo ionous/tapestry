@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 // TestMissingKinds to verify the kinds mentioned in parent-child ephemera exist.

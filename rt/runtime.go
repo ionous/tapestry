@@ -1,8 +1,8 @@
 package rt
 
 import (
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/rt/writer"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
 // Scope provides access to a pool of named objects.

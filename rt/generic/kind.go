@@ -3,8 +3,8 @@ package generic
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/affine"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/affine"
 )
 
 // we bake it down for faster, easier indexed access.

@@ -3,8 +3,8 @@ package qna
 import (
 	"testing"
 
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 func TestPairRelates(t *testing.T) {

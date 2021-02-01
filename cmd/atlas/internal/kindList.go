@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/tables"
 )
 
 // some things we could do:

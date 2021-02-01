@@ -6,10 +6,10 @@ import (
 	"log"
 	"path/filepath"
 
+	"git.sr.ht/~ionous/iffy"
+	"git.sr.ht/~ionous/iffy/qna"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy"
-	"github.com/ionous/iffy/qna"
-	"github.com/ionous/iffy/tables"
 )
 
 // ex. go run check.go -in /Users/ionous/Documents/Iffy/scratch/shared/play.db

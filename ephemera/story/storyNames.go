@@ -1,9 +1,9 @@
 package story
 
 import (
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/tables"
 )
 
 func (op *Aspect) NewName(k *Importer) (ret ephemera.Named, err error) {

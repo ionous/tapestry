@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/web"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/web"
 	"golang.org/x/net/context"
 )
 

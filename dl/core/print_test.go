@@ -3,8 +3,8 @@ package core
 import (
 	"fmt"
 
-	"github.com/ionous/iffy/rt/safe"
-	"github.com/ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
 func ExamplePrintNum() {

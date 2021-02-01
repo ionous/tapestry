@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 // does the custom sql function from pluralize.go function correctly.

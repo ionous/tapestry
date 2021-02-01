@@ -1,9 +1,9 @@
 package express
 
 import (
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/lang"
 )
 
 // maps cmd spec name to a nil pointer to the cmd type in question

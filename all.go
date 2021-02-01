@@ -3,14 +3,14 @@ package iffy
 import (
 	"encoding/gob"
 
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/debug"
-	"github.com/ionous/iffy/dl/list"
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/dl/rel"
-	"github.com/ionous/iffy/dl/render"
-	"github.com/ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/debug"
+	"git.sr.ht/~ionous/iffy/dl/list"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/dl/rel"
+	"git.sr.ht/~ionous/iffy/dl/render"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 var AllSlots = [][]composer.Slot{rt.Slots, core.Slots, list.Slots}

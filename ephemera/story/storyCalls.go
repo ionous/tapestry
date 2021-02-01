@@ -1,11 +1,11 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/pattern"
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/tables"
 )
 
 func (op *Determine) ImportStub(k *Importer) (ret interface{}, err error) {

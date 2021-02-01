@@ -1,6 +1,6 @@
 package pattern
 
-import "github.com/ionous/iffy/rt"
+import "git.sr.ht/~ionous/iffy/rt"
 
 // call apply on each list rule ( in reverse order )
 // we want the last added rules to win over earlier ones

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	r "reflect"
 
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/tables"
 )
 
 // reads mdl_field, mdl_kind

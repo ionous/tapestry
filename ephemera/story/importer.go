@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	r "reflect"
 
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/ephemera/decode"
-	"github.com/ionous/iffy/ephemera/reader"
-	"github.com/ionous/iffy/ident"
-	"github.com/ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/decode"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/ident"
+	"git.sr.ht/~ionous/iffy/tables"
 )
 
 // Importer helps read story specific json.

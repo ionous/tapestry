@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/gob"
 
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/tables"
 )
 
 // the first parameter should be a *string, the second some *bytes

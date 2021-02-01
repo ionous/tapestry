@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"log"
 
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/print"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/print"
-	"github.com/ionous/iffy/rt/safe"
 )
 
 type CheckOutput struct {

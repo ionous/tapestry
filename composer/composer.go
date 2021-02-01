@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/ionous/iffy/web"
+	"git.sr.ht/~ionous/iffy/web"
 	"golang.org/x/net/context"
 )
 

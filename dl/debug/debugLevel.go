@@ -3,7 +3,7 @@ package debug
 import (
 	"strings"
 
-	"github.com/ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/composer"
 )
 
 type Level int

@@ -4,14 +4,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ionous/iffy/ephemera/story"
-	"github.com/ionous/iffy/rt"
-	"github.com/ionous/iffy/rt/print"
-	"github.com/ionous/iffy/rt/safe"
-	"github.com/ionous/iffy/rt/writer"
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/print"
+	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/kr/pretty"
 )
 

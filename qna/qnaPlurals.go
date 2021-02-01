@@ -3,9 +3,9 @@ package qna
 import (
 	"database/sql"
 
+	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/lang"
-	"github.com/ionous/iffy/tables"
 )
 
 func NewPlurals(db *sql.DB) (ret *Plurals, err error) {

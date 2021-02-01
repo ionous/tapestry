@@ -1,7 +1,7 @@
 package scope
 
 import (
-	g "github.com/ionous/iffy/rt/generic"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 type TargetRecord struct {

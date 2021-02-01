@@ -4,13 +4,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/object"
-	"github.com/ionous/iffy/rt"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/rt/scope"
-	"github.com/ionous/iffy/rt/writer"
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/scope"
+	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 type panicTime struct {

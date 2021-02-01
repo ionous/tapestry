@@ -3,10 +3,10 @@ package check
 import (
 	"testing"
 
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/rt/print"
-	"github.com/ionous/iffy/rt/writer"
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/rt/print"
+	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 func TestCheck(t *testing.T) {

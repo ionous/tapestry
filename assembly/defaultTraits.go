@@ -3,8 +3,8 @@ package assembly
 import (
 	"fmt"
 
+	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/tables"
 )
 
 // reads asm_default, mdl_aspect, mdl_field, mdl_kind to write mdl_default

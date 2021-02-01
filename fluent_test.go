@@ -6,14 +6,14 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/ionous/iffy"
-	"github.com/ionous/iffy/dl/composer"
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/debug"
-	"github.com/ionous/iffy/dl/list"
-	"github.com/ionous/iffy/dl/rel"
-	"github.com/ionous/iffy/export"
-	"github.com/ionous/iffy/export/tag"
+	"git.sr.ht/~ionous/iffy"
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/debug"
+	"git.sr.ht/~ionous/iffy/dl/list"
+	"git.sr.ht/~ionous/iffy/dl/rel"
+	"git.sr.ht/~ionous/iffy/export"
+	"git.sr.ht/~ionous/iffy/export/tag"
 	"github.com/kr/pretty"
 )
 

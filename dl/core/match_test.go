@@ -3,7 +3,7 @@ package core
 import (
 	"testing"
 
-	"github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 func TestMatches(t *testing.T) {

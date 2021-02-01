@@ -3,11 +3,11 @@ package test
 import (
 	"testing"
 
-	"github.com/ionous/iffy/dl/core"
-	"github.com/ionous/iffy/dl/pattern"
-	g "github.com/ionous/iffy/rt/generic"
-	"github.com/ionous/iffy/test/testutil"
-	test "github.com/ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/test/testutil"
+	test "git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 func TestMatching(t *testing.T) {

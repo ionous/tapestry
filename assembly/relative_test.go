@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/ionous/errutil"
-	"github.com/ionous/iffy/ephemera"
-	"github.com/ionous/iffy/tables"
-	"github.com/ionous/iffy/test/testdb"
 	"github.com/kr/pretty"
 )
 
