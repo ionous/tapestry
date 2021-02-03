@@ -44,7 +44,7 @@ func main() {
 				pretty.Println(x)
 			}
 		}
-		log.Println("Imported", inFile, "into", outFile)
+		log.Println("Imported", outFile)
 	}
 }
 
@@ -55,8 +55,6 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 		err = e
 	} else if outFile, e := filepath.Abs(outFile); e != nil {
 		err = e
-	} else if inData, e := readPath(inFile); e != nil {
-		err = errutil.New("couldn't read file", inFile, e)
 	} else if e := os.Remove(outFile); e != nil && !os.IsNotExist(e) {
 		err = errutil.New("couldn't clean output file", outFile, e)
 	} else {
@@ -65,17 +63,20 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 		// 0777 -> ModePerm ... read/writable by all
 		os.MkdirAll(path.Dir(outFile), os.ModePerm)
 		//
-		if outDB, e := sql.Open(tables.DefaultDriver, outFile); e != nil {
+		if db, e := sql.Open(tables.DefaultDriver, outFile); e != nil {
 			err = errutil.New("couldn't create output file", outFile, e)
 		} else {
 			var ds reader.Dilemmas
-			defer outDB.Close()
-			if e := tables.CreateEphemera(outDB); e != nil {
+			defer db.Close()
+			if e := tables.CreateEphemera(db); e != nil {
 				err = errutil.New("couldn't create tables", outFile, e)
-			} else if xs, e := story.ImportStories(inFile, outDB, inData, ds.Report); e != nil {
-				err = errutil.New("couldn't import story", e)
 			} else {
-				ret = xs
+				k := story.NewImporter(db, ds.Report)
+				if xs, e := importPath(k, inFile); e != nil {
+					err = errutil.New("couldn't import  file", inFile, e)
+				} else {
+					ret = xs
+				}
 				reader.PrintDilemmas(log.Writer(), ds)
 			}
 		}
@@ -83,34 +84,21 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 	return
 }
 
-func readJson(filePath string) (ret reader.Map, err error) {
-	if f, e := os.Open(filePath); e != nil {
-		err = e
-	} else {
-		defer f.Close()
-		dec := json.NewDecoder(f)
-		if e := dec.Decode(&ret); e != nil && e != io.EOF {
-			err = e
-		}
-	}
-	return
-}
-
 // read a comma-separated list of files and directories
-func readPath(filePaths string) (ret []reader.Map, err error) {
+func importPath(k *story.Importer, filePaths string) (ret []*story.Story, err error) {
 	split := strings.Split(filePaths, ",")
 	for _, filePath := range split {
 		if info, e := os.Stat(filePath); e != nil {
 			err = e
 		} else {
 			if !info.IsDir() {
-				if one, e := readJson(filePath); e != nil {
+				if one, e := importOne(k, filePath); e != nil {
 					err = e
 				} else {
 					ret = append(ret, one)
 				}
 			} else {
-				if many, e := readDir(filePath); e != nil {
+				if many, e := importMany(k, filePath); e != nil {
 					err = e
 				} else {
 					ret = append(ret, many...)
@@ -121,7 +109,7 @@ func readPath(filePaths string) (ret []reader.Map, err error) {
 	return
 }
 
-func readDir(path string) (ret []reader.Map, err error) {
+func importMany(k *story.Importer, path string) (ret []*story.Story, err error) {
 	if !strings.HasSuffix(path, "/") {
 		path += "/" // for opening symbolic directories
 	}
@@ -129,7 +117,7 @@ func readDir(path string) (ret []reader.Map, err error) {
 		if e != nil {
 			err = e
 		} else if !info.IsDir() && filepath.Ext(path) == ".if" {
-			if one, e := readJson(path); e != nil {
+			if one, e := importOne(k, path); e != nil {
 				err = errutil.New("error reading", path, e)
 			} else {
 				ret = append(ret, one)
@@ -137,5 +125,21 @@ func readDir(path string) (ret []reader.Map, err error) {
 		}
 		return
 	})
+	return
+}
+
+func importOne(k *story.Importer, filePath string) (ret *story.Story, err error) {
+	if f, e := os.Open(filePath); e != nil {
+		err = e
+	} else {
+		defer f.Close()
+		var one reader.Map
+		if e := json.NewDecoder(f).Decode(&one); e != nil && e != io.EOF {
+			err = e
+		} else {
+			log.Println("importing", filePath)
+			ret, err = k.ImportStory(filePath, one)
+		}
+	}
 	return
 }

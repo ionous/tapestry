@@ -31,7 +31,7 @@ func newAssemblyTest(t *testing.T, path string) (ret *assemblyTest, err error) {
 			err = errutil.New(e, "for", source)
 		} else {
 			var ds reader.Dilemmas
-			rec := ephemera.NewRecorder(t.Name(), db)
+			rec := ephemera.NewRecorder(db).SetSource(t.Name())
 			mdl := NewAssemblerReporter(db, ds.Add)
 			ret = &assemblyTest{
 				T:         t,

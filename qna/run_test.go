@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy/assembly"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
+	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -22,17 +23,21 @@ func TestFullFactorial(t *testing.T) {
 	var ds reader.Dilemmas
 	if e := tables.CreateAll(db); e != nil {
 		t.Fatal("couldn't create tables", e)
-	} else if e := debug.FactorialStory.ImportStory(story.NewImporter(t.Name(), db)); e != nil {
-		t.Fatal("couldn't import story", e)
-	} else if e := assembly.AssembleStory(db, "kinds", ds.Add); e != nil {
-		t.Fatal("couldnt assemble story", e, ds.Err())
-	} else if len(ds) > 0 {
-		t.Fatal("issues assembling", ds.Err())
-	} else if cnt, e := CheckAll(db, ""); e != nil {
-		t.Fatal(e)
-	} else if cnt != 1 {
-		t.Fatal("expected one test", cnt)
 	} else {
-		t.Log("ok", cnt)
+		k := story.NewImporterDecoder(db, decode.NewDecoder()).SetSource(t.Name())
+		//
+		if e := debug.FactorialStory.ImportStory(k); e != nil {
+			t.Fatal("couldn't import story", e)
+		} else if e := assembly.AssembleStory(db, "kinds", ds.Add); e != nil {
+			t.Fatal("couldnt assemble story", e, ds.Err())
+		} else if len(ds) > 0 {
+			t.Fatal("issues assembling", ds.Err())
+		} else if cnt, e := CheckAll(db, ""); e != nil {
+			t.Fatal(e)
+		} else if cnt != 1 {
+			t.Fatal("expected one test", cnt)
+		} else {
+			t.Log("ok", cnt)
+		}
 	}
 }

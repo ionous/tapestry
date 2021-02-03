@@ -30,7 +30,7 @@ type Decoder struct {
 
 func NewDecoder() *Decoder {
 	reportNothing := func(reader.Position, error) {}
-	return NewDecoderReporter("decoder", reportNothing)
+	return NewDecoderReporter(reportNothing)
 }
 
 // AddCallback registers a command parser.

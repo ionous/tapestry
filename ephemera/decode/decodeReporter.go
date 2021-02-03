@@ -6,11 +6,13 @@ import (
 
 type IssueReport func(reader.Position, error)
 
-func NewDecoderReporter(source string, report IssueReport) *Decoder {
-	dec := &Decoder{source: source, cmds: make(map[string]cmdRec), issueFn: report}
-	return dec
+func NewDecoderReporter(report IssueReport) *Decoder {
+	return &Decoder{source: "decoder", cmds: make(map[string]cmdRec), issueFn: report}
 }
-
+func (m *Decoder) SetSource(source string) *Decoder {
+	m.source = source
+	return m
+}
 func (m *Decoder) report(ofs string, err error) {
 	m.issueFn(reader.Position{m.source, ofs}, err)
 	m.IssueCount++

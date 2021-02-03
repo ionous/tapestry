@@ -4,12 +4,15 @@ import (
 	"database/sql"
 	r "reflect"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/ident"
 	"git.sr.ht/~ionous/iffy/tables"
+	"github.com/ionous/errutil"
 )
 
 // Importer helps read story specific json.
@@ -23,18 +26,50 @@ type Importer struct {
 	StoryEnv
 }
 
-func NewImporter(srcURI string, db *sql.DB) *Importer {
-	return NewImporterDecoder(srcURI, db, decode.NewDecoder())
-}
-
-func NewImporterDecoder(srcURI string, db *sql.DB, dec *decode.Decoder) *Importer {
-	rec := ephemera.NewRecorder(srcURI, db)
+// low level
+func NewImporterDecoder(db *sql.DB, dec *decode.Decoder) *Importer {
 	return &Importer{
-		Recorder:    rec,
+		Recorder:    ephemera.NewRecorder(db),
 		oneTime:     make(map[string]bool),
 		decoder:     dec,
 		autoCounter: make(ident.Counters),
 	}
+}
+
+func NewImporter(db *sql.DB, reporter decode.IssueReport) *Importer {
+	iffy.RegisterGobs()
+	dec := decode.NewDecoderReporter(reporter)
+	k := NewImporterDecoder(db, dec)
+	//
+	for _, slats := range iffy.AllSlats {
+		dec.AddDefaultCallbacks(slats)
+	}
+	dec.AddDefaultCallbacks(core.Slats)
+	// add ops from iffy.js, including golang generated stubs via stubs.js
+	// anything that implements ImportStub() will get processed during ReadSpec.
+	k.AddModel(Model)
+	//
+	return k
+}
+
+func (k *Importer) ImportStory(src string, m reader.Map) (ret *Story, err error) {
+	k.SetSource(src)
+	if i, e := k.decoder.ReadSpec(m); e != nil {
+		err = e
+	} else if story, ok := i.(*Story); !ok {
+		err = errutil.Fmt("imported spec wasn't a story %T", i)
+	} else if e := story.ImportStory(k); e != nil {
+		err = e
+	} else {
+		ret = story
+	}
+	return
+}
+
+func (k *Importer) SetSource(s string) *Importer {
+	k.Recorder.SetSource(s)
+	k.decoder.SetSource(s)
+	return k
 }
 
 //

@@ -25,10 +25,10 @@ func newImporter(t *testing.T, where string) (ret *story.Importer, retDec *decod
 		t.Fatal("create ephemera", e)
 	} else {
 		iffy.RegisterGobs()
-		dec := decode.NewDecoderReporter(t.Name(), func(pos reader.Position, err error) {
+		dec := decode.NewDecoderReporter(func(pos reader.Position, err error) {
 			t.Errorf("%s at %s", err, pos)
 		})
-		k := story.NewImporterDecoder(t.Name(), db, dec)
+		k := story.NewImporterDecoder(db, dec).SetSource(t.Name())
 		dec.AddDefaultCallbacks(core.Slats)
 		k.AddModel(story.Model)
 		ret, retDec, retDB = k, dec, db

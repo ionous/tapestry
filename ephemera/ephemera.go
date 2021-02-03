@@ -14,10 +14,13 @@ type Recorder struct {
 	cache *tables.Cache
 }
 
-func NewRecorder(srcURI string, db *sql.DB) (ret *Recorder) {
-	cache := tables.NewCache(db)
-	srcId := cache.Must(eph_source, srcURI)
-	return &Recorder{srcId: srcId, cache: cache}
+func NewRecorder(db *sql.DB) *Recorder {
+	return &Recorder{cache: tables.NewCache(db)}
+}
+
+func (r *Recorder) SetSource(srcURI string) *Recorder {
+	r.srcId = r.cache.Must(eph_source, srcURI)
+	return r
 }
 
 // NewName records a user-specified string, including a category and location,
@@ -107,6 +110,10 @@ func (r *Recorder) NewNoun(noun, kind Named) {
 // declare a pattern or pattern parameter
 func (r *Recorder) NewPatternDecl(pattern, param, patternType Named, affinity string) {
 	r.cache.Must(eph_pattern, pattern, param, patternType, affinity, Prog{})
+}
+
+func (r *Recorder) NewPatternInit(pattern, param, patternType Named, affinity string, prog Prog) {
+	r.cache.Must(eph_pattern, pattern, param, patternType, affinity, prog)
 }
 
 //
