@@ -46,13 +46,13 @@ function localLang(make) {
     // make.flow("summary", "{The [summary] is:: %lines}");
     make.flow("summary", "The summary is: {summary%lines|quote}");
 
-    make.swap("noun_phrase", "{kind_of_noun}, {noun_traits}, or {noun_relation}");
+    make.swap("noun_phrase", "{is a kind%kind_of_noun}, {noun_traits}, or {noun_relation}");
 
     // fix: think this should always be "are" never "is"
     // fix: this shouldnt be "kind of", kind of declares a kind
     // ( but note singular vs. plural nouns phrases here along with are/is )
     // probably should have a switch for singular/ plural -- would be nice if are_an could look ahead and mutate with a custom filter maybe.
-    make.flow("kind_of_noun", "{are_an} {*trait|comma-and} kind of {kind:singular_kind} {?noun_relation}");
+    make.flow("kind_of_noun", "{are_an} {*trait|comma-and} {kind:singular_kind} {?noun_relation}");
 
     make.flow("named_noun", "object_eval", "{determiner} {name:noun_name}");
 
@@ -186,7 +186,7 @@ For example: animals, containers, etc.`);
     // ex. The description of the nets is xxx
     make.flow("noun_assignment", "story_statement",
             // "The {property} of {+noun} is the {[text]:: %lines}",
-            "The {property} of {nouns+named_noun} is {the text%lines|summary}",
+            "The {property} of {nouns+named_noun} is {the text%lines|quote}",
             "Assign text to a noun: Assign text. Gives a noun one or more lines of text.");
 
     make.flow("property_decl", "{an:determiner} {property} ( {property_type} {comment?lines} )");

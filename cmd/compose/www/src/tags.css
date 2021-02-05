@@ -1,4 +1,7 @@
 
+.mk-composer > div > .em-row {
+  margin-bottom: 1em;
+}
 .em-gutter--digi {
   border-right: 3px double rgb(239, 207, 173); 
 }
