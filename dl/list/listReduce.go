@@ -57,16 +57,16 @@ func (op *Reduce) reduce(run rt.Runtime) (err error) {
 				if inVal, e := it.GetNext(); e != nil {
 					err = e
 					break
-				} else if e := ps.SetFieldByIndex(in, inVal); e != nil {
+				} else if e := ps.SetIndexedField(in, inVal); e != nil {
 					err = e
 					break
-				} else if e := ps.SetFieldByIndex(out, outVal); e != nil {
+				} else if e := ps.SetIndexedField(out, outVal); e != nil {
 					err = e
 					break
 				} else if _, e := pat.Run(run, ps, ""); e != nil {
 					err = e
 					break
-				} else if newVal, e := ps.GetFieldByIndex(out); e != nil {
+				} else if newVal, e := ps.GetIndexedField(out); e != nil {
 					err = e
 					break
 				} else {

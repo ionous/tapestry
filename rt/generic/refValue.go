@@ -124,8 +124,10 @@ func (n refValue) FieldByName(f string) (ret Value, err error) {
 }
 
 func (n refValue) SetFieldByName(f string, v Value) (err error) {
+	rec := n.Record()
 	name := lang.SpecialBreakcase(f)
-	return n.Record().SetNamedField(name, v)
+	newVal := dupeValue(v)
+	return rec.SetNamedField(name, newVal)
 }
 
 func (n refValue) SetIndex(i int, v Value) {

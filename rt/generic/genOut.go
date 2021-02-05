@@ -18,7 +18,7 @@ func RecordsToValue(ds []*Record) []interface{} {
 func RecordToValue(d *Record) map[string]interface{} {
 	m := make(map[string]interface{})
 	for i, f := range d.kind.fields {
-		if rv, e := d.GetFieldByIndex(i); e != nil {
+		if rv, e := d.GetIndexedField(i); e != nil {
 			panic(e)
 		} else {
 			var el interface{}

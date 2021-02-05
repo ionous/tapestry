@@ -13,23 +13,9 @@ type Terms struct {
 	values []g.Value
 }
 
-// rather than copying etc here, can we use records --
-// what is it anyway?
+// fix: creating the kind should really happen during assembly
 func (ps *Terms) NewRecord(kinds g.Kinds) (ret *g.Record, err error) {
-	// fix: creating the kind should really happen during assembly
-	k := g.NewKind(kinds, "", append([]g.Field{}, ps.fields...))
-	n := k.NewRecord()
-	// fix? maybe we should be able to directly fill values?
-	for i, v := range ps.values {
-		if v != nil {
-			if e := n.SetFieldByIndex(i, v); e != nil {
-				err = errutil.Append(err, e)
-			}
-		}
-	}
-	if err == nil {
-		ret = n
-	}
+	ret = g.NewInternalRecord(kinds, ps.fields, ps.values)
 	return
 }
 

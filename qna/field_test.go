@@ -35,7 +35,7 @@ func xTestPatternFields(t *testing.T) {
 	// 	t.Fatal(e)
 	// } else if v != "default" {
 	// 	t.Fatal("mismatch", v)
-	// } else /*if field, e := run.GetFieldByIndex("pat", 1); e != nil {
+	// } else /*if field, e := run.GetIndexedField("pat", 1); e != nil {
 	// 	t.Fatal(e)
 	// } else if field != "param" {
 	// 	t.Fatal(e)
@@ -50,5 +50,5 @@ func xTestPatternFields(t *testing.T) {
 	// } /*else if field := pairs[keyType{"pat", "$1"}]; field != "param" {
 	// 	t.Fatal("expected cached param name; have", field)
 	// }*/
-	// FIX -- test pattern prep ( what was GetFieldByIndex )
+	// FIX -- test pattern prep ( what was GetIndexedField )
 }

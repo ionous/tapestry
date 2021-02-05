@@ -78,16 +78,16 @@ func (op *Each) forEach(run rt.Runtime) (err error) {
 				run.PushScope(&scope.TargetRecord{object.Variables, ls})
 				for i := 0; i < cnt; i++ {
 					at := vs.Index(i)
-					if e := ls.SetFieldByIndex(el, at); e != nil {
+					if e := ls.SetIndexedField(el, at); e != nil {
 						err = e
 						break
-					} else if e := ls.SetFieldByIndex(index, g.IntOf(i+1)); e != nil {
+					} else if e := ls.SetIndexedField(index, g.IntOf(i+1)); e != nil {
 						err = e
 						break
-					} else if e := ls.SetFieldByIndex(first, g.BoolOf(i == 0)); e != nil {
+					} else if e := ls.SetIndexedField(first, g.BoolOf(i == 0)); e != nil {
 						err = e
 						break
-					} else if e := ls.SetFieldByIndex(last, g.BoolOf((i+1) == cnt)); e != nil {
+					} else if e := ls.SetIndexedField(last, g.BoolOf((i+1) == cnt)); e != nil {
 						err = e
 						break
 					} else if e := op.Do.Execute(run); e != nil {

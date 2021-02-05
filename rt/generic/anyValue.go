@@ -6,50 +6,61 @@ import (
 
 // Value represents any one of the built in types.
 // It's similar to reflect.Value in golang's standard library.
+//
 type Value interface {
-	// Affinity identifies the general category
+	// identifies the general category of the value.
 	Affinity() affine.Affinity
-	// Type name of the specific underlying
+	// identifies how the passed value is represented internally.
+	// ex. a number can be represented as float or as an int,
+	// a record might be one of several different kinds,
+	// text might represent an object id of a specific kind, an aspect, trait, or other value.
 	Type() string
-	// Bool, or panic if the underlying value isn't a bool
+	// return this value as a bool, or panic if the value isn't a bool.
 	Bool() bool
-	// Float, or panic if the underlying value isn't a number
+	// return this value as a float, or panic if the value isn't a number.
 	Float() float64
-	// Float, or panic if the underlying value isn't a number
+	// return this value as an int, or panic if the value isn't a number.
 	Int() int
-	// String, or panic if the underlying value isn't represented by a string.
+	// return this value as a string, or panic if the value isn't a string.
 	String() string
-	// Record, returns the underlying record structure for record values
+	// return this value as a record, or panic if the value isn't a record.
 	Record() *Record
-	// FloatSlice, or panic if the underlying value isn't represented by a slice of floats.
+	// return this value as a slice of floats, or panic if this isn't a float slice.
+	// note: while primitive values support both ints and floats, slices can only be floats.
 	Floats() []float64
-	// StringSlice, or panic if the underlying value isn't represented by a slice of strings.
+	// return this value as a slice of strings, or panic if this isn't a string slice.
 	Strings() []string
-	// RecordSlice, or panic if the underlying value isn't represented by a slice of values.
-	// ( every value in the returned list should be a record of this value's Type() )
+	// return this value as a slice of records, or panic if not a record slice.
+	// note: every value in the returned slice is expected to be record of this value's Type().
 	Records() []*Record
-	// Index returns the nth element of the underlying slice, where 0 is the first value;
-	// otherwise this returns an panic.
+	// return the nth element of this value, where 0 is the first value.
+	// panics if this isn't a slice.
 	Index(int) Value
-	// Len returns the number of elements in the underylying value if it's a slice,
-	// otherwise this returns an panic.
+	// the number of elements in the value.
+	// panics if this isn't a slice.
 	Len() int
-	// FieldByName for values representing objects, errors otherwise ( or if the field doesnt exit ).
+	// return a value representing a field inside this record.
+	// if the field holds a record or a slice, the returned value shares its memory with the named field.
+	// errors if the field doesn't exist.
+	// panics if this isn't a record.
 	FieldByName(string) (Value, error)
-	// SetFieldByName to write values back into objects.
-	// errors if the affinities dont match. if the field doesnt exist, or if the value doesnt represent an object.
+	// writes a *copy* of the passed value into a record.
+	// errors if the field doesn't exist or if its affinity cant support the passed value.
+	// panics if this isn't a record.
 	SetFieldByName(string, Value) error
-	// panics if out of range or if the values are mismatched.
+	// writes a *copy* of the passed value into a slice
+	// panics if this isn't a slice, if the index is out of range, or if the affinities are mismatched.
 	SetIndex(int, Value)
-	// Append adds a value or value list if the underlying value is a slice.
+	// adds a *copy* of a value, or a copy of a slice of values, to the end of this slice.
+	// panics if this value isn't a slice.
 	// In golang, this is a package level function, presumably to mirror the built-in append()
 	Append(Value)
-	// Slice returns a new list containing the first index up to (not including) the second index
-	// Unlike go, the slices are distinct.
+	// return a *copy* of this slice and its values containing the first index up to (and not including) the second index.
+	// panics if this value isn't a slice.
 	Slice(i, j int) (Value, error)
-	// Splice cuts elements from start to end, adding new elements at the start of the cut point
-	// As a special case, passing a nil value to add only cuts elements.
-	// Returns the cut elements, or an error if the start and end indices are bad;
-	// panics if the element/s to add are of an incompatible type.
+	// cut elements out of this slice from start to end,
+	// adding copies of the passed additional elements (if any) at the start of the cut point.
+	// Returns the cut elements, or an error if the start and end indices are bad.
+	// panics if this value isn't a slice, or if additional element(s) are of an incompatible affinity.
 	Splice(start, end int, add Value) (Value, error)
 }

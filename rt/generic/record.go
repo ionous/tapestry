@@ -6,6 +6,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// Record - provides low level access to named field/values pairs.
+// The fields of a record are defined by its kind.
 type Record struct {
 	kind   *Kind
 	values []Value
@@ -19,8 +21,7 @@ func (d *Record) Type() string {
 	return d.kind.name
 }
 
-// GetNamedField distinguishes itself from Value.FieldByName to help with find in files.
-// Record doesnt directly implement generic.Value, nor any method other than "Type"
+// GetNamedField picks out a value from this record.
 func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	switch k := d.kind; field {
 	case object.Name:
@@ -32,7 +33,7 @@ func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	default:
 		if i := k.FieldIndex(field); i < 0 {
 			err = UnknownField{k.name, field}
-		} else if v, e := d.GetFieldByIndex(i); e != nil {
+		} else if v, e := d.GetIndexedField(i); e != nil {
 			err = e
 		} else {
 			ft := k.fields[i] // isTrait if we found aspect (a) while looking for field (t)
@@ -48,8 +49,8 @@ func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	return
 }
 
-// GetFieldByIndex cant ask for traits, only their aspects.
-func (d *Record) GetFieldByIndex(i int) (ret Value, err error) {
+// GetIndexedField can't ask for traits, only their aspects.
+func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 	if fv, ft := d.values[i], d.kind.fields[i]; fv != nil {
 		ret = fv
 	} else {
@@ -73,6 +74,8 @@ func (d *Record) GetFieldByIndex(i int) (ret Value, err error) {
 	return
 }
 
+// SetNamedField - pokes the passed value into the record.
+// Unlike the Vsalue interface, this doesnt panic and it doesnt copy values.
 func (d *Record) SetNamedField(field string, val Value) (err error) {
 	k := d.kind
 	if i := k.FieldIndex(field); i < 0 {
@@ -80,7 +83,7 @@ func (d *Record) SetNamedField(field string, val Value) (err error) {
 	} else {
 		ft := k.fields[i] // isTrait if we found aspect (a) while looking for field (t)
 		if isTrait := ft.Type == "aspect" && ft.Name != field; !isTrait {
-			err = d.SetFieldByIndex(i, val)
+			err = d.SetIndexedField(i, val)
 		} else if yes := val.Affinity() == affine.Bool && val.Bool(); !yes {
 			err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s %v", field, val.Affinity(), val)
 		} else {
@@ -91,7 +94,9 @@ func (d *Record) SetNamedField(field string, val Value) (err error) {
 	return
 }
 
-func (d *Record) SetFieldByIndex(i int, val Value) (err error) {
+// SetIndexedField - note this doesn't handle trait translation.
+// Unlike the Value interface, this doesnt panic and it doesnt copy values.
+func (d *Record) SetIndexedField(i int, val Value) (err error) {
 	ft := d.kind.fields[i]
 	if a, t := val.Affinity(), val.Type(); !matchTypes(d.kind.kinds, ft.Affinity, ft.Type, a, t) {
 		err = errutil.Fmt("couldnt set field %s ( %s of type %s ) because val %s of type %s doesnt match", ft.Name, ft.Affinity, ft.Type, a, t)

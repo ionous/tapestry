@@ -10,7 +10,7 @@ import (
 
 func getResult(rec *g.Record, res int, aff affine.Affinity) (ret g.Value, err error) {
 	if n := res; n >= 0 {
-		if res, e := rec.GetFieldByIndex(n); e != nil {
+		if res, e := rec.GetIndexedField(n); e != nil {
 			err = errutil.New("error trying to get return value", e)
 		} else if e := safe.Check(res, aff); e != nil {
 			err = errutil.New("error trying to get return value", e)
