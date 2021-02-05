@@ -1,8 +1,6 @@
 package core
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/lang"
@@ -111,17 +109,12 @@ func (*IsKindOf) Compose() composer.Spec {
 }
 
 func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
+	kind := lang.Breakcase(op.Kind)
 	if obj, e := safe.ObjectFromText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if obj == nil {
-		ret = g.BoolOf(false)
-	} else if fullPath, e := safe.Unpack(obj, object.Kinds, affine.Text); e != nil {
-		err = cmdError(op, e)
 	} else {
-		// Contains reports whether second is within first.
-		kind := lang.Breakcase(op.Kind)
-		b := strings.Contains(fullPath.String()+",", kind+",")
-		ret = g.BoolOf(b)
+		ok := safe.Compatible(obj, kind, false)
+		ret = g.BoolOf(ok)
 	}
 	return
 }
@@ -135,17 +128,12 @@ func (*IsExactKindOf) Compose() composer.Spec {
 }
 
 func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
+	kind := lang.Breakcase(op.Kind)
 	if obj, e := safe.ObjectFromText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if obj == nil {
-		ret = g.BoolOf(false)
-	} else if fullPath, e := safe.Unpack(obj, object.Kinds, affine.Text); e != nil {
-		err = cmdError(op, e)
 	} else {
-		// Contains reports whether second is within first.
-		kind := lang.Breakcase(op.Kind)
-		b := strings.Contains(fullPath.String()+",", kind+",")
-		ret = g.BoolOf(b)
+		ok := safe.Compatible(obj, kind, true)
+		ret = g.BoolOf(ok)
 	}
 	return
 }

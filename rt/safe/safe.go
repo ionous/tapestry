@@ -1,6 +1,8 @@
 package safe
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -221,6 +223,21 @@ func ObjectFromString(run rt.Runtime, n string) (ret g.Value, err error) {
 			err = g.UnknownObject(n)
 		default:
 			ret, err = val, e
+		}
+	}
+	return
+}
+
+// fix: see also kind.Implements and qna.compatibleKind
+func Compatible(obj g.Value, kind string, exact bool) (ret bool) {
+	if obj != nil {
+		if objectPath, e := Unpack(obj, object.Kinds, affine.Text); e == nil {
+			if cp, ck := objectPath.String()+",", kind+","; exact {
+				ret = cp == ck
+			} else {
+				// Contains reports whether second is within first.
+				ret = strings.Contains(cp, ck)
+			}
 		}
 	}
 	return
