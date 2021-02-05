@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"github.com/ionous/errutil"
 )
 
 // SortNumbers implements Sorter
@@ -34,15 +35,15 @@ type SortByField struct {
 }
 
 func (op *SortText) Sort(rt.Runtime, g.Value) (ret error) {
-	return
+	return errutil.New("not implemented")
 }
 
 func (op *SortNumbers) Sort(rt.Runtime, g.Value) (ret error) {
-	return
+	return errutil.New("not implemented")
 }
 
 func (op *SortRecords) Sort(rt.Runtime, g.Value) (ret error) {
-	return
+	return errutil.New("not implemented")
 }
 
 func (op *SortByField) Compose() composer.Spec {
