@@ -732,6 +732,58 @@
                     "type": "pattern_name",
                     "value": "VisibilityList"
                   },
+                  "$PATTERN_LOCALS": {
+                    "id": "id-177661f02fe-66",
+                    "type": "pattern_locals",
+                    "value": {
+                      "$LOCAL_DECL": [
+                        {
+                          "id": "id-177661f02fe-67",
+                          "type": "local_decl",
+                          "value": {
+                            "$VARIABLE_DECL": {
+                              "id": "id-177661f02fe-68",
+                              "type": "variable_decl",
+                              "value": {
+                                "$AN": {
+                                  "id": "id-177661f02fe-69",
+                                  "type": "determiner",
+                                  "value": "$OUR"
+                                },
+                                "$NAME": {
+                                  "id": "id-177661f02fe-70",
+                                  "type": "variable_name",
+                                  "value": "transParent"
+                                },
+                                "$TYPE": {
+                                  "id": "id-177661f02fe-71",
+                                  "type": "variable_type",
+                                  "value": {
+                                    "$OBJECT": {
+                                      "id": "id-177661f02fe-72",
+                                      "type": "object_type",
+                                      "value": {
+                                        "$AN": {
+                                          "id": "id-177661f02fe-73",
+                                          "type": "ana",
+                                          "value": "$AN"
+                                        },
+                                        "$KIND": {
+                                          "id": "id-177661f02fe-74",
+                                          "type": "singular_kind",
+                                          "value": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
                   "$PATTERN_RETURN": {
                     "id": "id-177661f02fe-89",
                     "type": "pattern_return",
@@ -1065,58 +1117,6 @@
                                         }
                                       }
                                     ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  },
-                  "$PATTERN_LOCALS": {
-                    "id": "id-177661f02fe-66",
-                    "type": "pattern_locals",
-                    "value": {
-                      "$LOCAL_DECL": [
-                        {
-                          "id": "id-177661f02fe-67",
-                          "type": "local_decl",
-                          "value": {
-                            "$VARIABLE_DECL": {
-                              "id": "id-177661f02fe-68",
-                              "type": "variable_decl",
-                              "value": {
-                                "$AN": {
-                                  "id": "id-177661f02fe-69",
-                                  "type": "determiner",
-                                  "value": "$OUR"
-                                },
-                                "$NAME": {
-                                  "id": "id-177661f02fe-70",
-                                  "type": "variable_name",
-                                  "value": "transParent"
-                                },
-                                "$TYPE": {
-                                  "id": "id-177661f02fe-71",
-                                  "type": "variable_type",
-                                  "value": {
-                                    "$OBJECT": {
-                                      "id": "id-177661f02fe-72",
-                                      "type": "object_type",
-                                      "value": {
-                                        "$AN": {
-                                          "id": "id-177661f02fe-73",
-                                          "type": "ana",
-                                          "value": "$AN"
-                                        },
-                                        "$KIND": {
-                                          "id": "id-177661f02fe-74",
-                                          "type": "singular_kind",
-                                          "value": "object"
-                                        }
-                                      }
-                                    }
                                   }
                                 }
                               }
