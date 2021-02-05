@@ -6,8 +6,10 @@ import (
 	"encoding/gob"
 
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/dl/term"
+	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -73,7 +75,7 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 		on (ep.rowid = ap.idProg)`,
 		func() (err error) {
 			// fix: need to handle conflicting prog definitions
-			// fix: should probably watch for locals which shadow parameter names
+			// fix: should watch for locals which shadow parameter names ( i think, ideally merge them )
 			if last == nil || last.patternName != patternName {
 				if patternName != paramName {
 					err = errutil.New("expected the first param should be the pattern return type", patternName, paramName, typeName)
@@ -90,31 +92,82 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 
 				// locals have simple type names, parameters are still using _eval.
 				var p term.Preparer
+				var dig digInit
 				switch typeName {
 				case "text_eval", "text":
-					p = &term.Text{Name: paramName}
+					prep := &term.Text{Name: paramName}
+					p, dig = prep, func(in core.Assignment) (okay bool) {
+						if src, ok := in.(*core.FromText); ok {
+							prep.Init, okay = src.Val, true
+						}
+						return
+					}
 				case "number_eval", "number":
-					p = &term.Number{Name: paramName}
+					prep := &term.Number{Name: paramName}
+					p, dig = prep, func(in core.Assignment) (okay bool) {
+						if src, ok := in.(*core.FromNum); ok {
+							prep.Init, okay = src.Val, true
+						}
+						return
+					}
 				case "bool_eval", "bool":
-					p = &term.Bool{Name: paramName}
+					prep := &term.Bool{Name: paramName}
+					p, dig = prep, func(in core.Assignment) (okay bool) {
+						if src, ok := in.(*core.FromBool); ok {
+							prep.Init, okay = src.Val, true
+						}
+						return
+					}
 				case "text_list", "text_list_eval":
-					p = &term.TextList{Name: paramName}
+					prep := &term.TextList{Name: paramName}
+					p, dig = prep, func(in core.Assignment) (okay bool) {
+						if src, ok := in.(*core.FromTexts); ok {
+							prep.Init, okay = src.Vals, true
+						}
+						return
+					}
 				case "num_list", "num_list_eval":
-					p = &term.NumList{Name: paramName}
+					prep := &term.NumList{Name: paramName}
+					p, dig = prep, func(in core.Assignment) (okay bool) {
+						if src, ok := in.(*core.FromNumbers); ok {
+							prep.Init, okay = src.Vals, true
+						}
+						return
+					}
 				default:
 					// the type might be some sort of kind...
 					if kind := kind.String; len(kind) > 0 {
 						switch aff := affinity.String; aff {
 						case string(affine.Object):
-							p = &term.Object{Name: paramName, Kind: kind}
+							prep := &term.Object{Name: paramName, Kind: kind}
+							p, dig = prep, func(in core.Assignment) (okay bool) {
+								if src, ok := in.(*core.FromText); ok {
+									prep.Init, okay = src.Val, true
+								}
+								return
+							}
 						case string(affine.Record):
-							p = &term.Record{Name: paramName, Kind: kind}
+							prep := &term.Record{Name: paramName, Kind: kind}
+							p, dig = prep, func(in core.Assignment) (okay bool) {
+								if src, ok := in.(*core.FromRecord); ok {
+									prep.Init, okay = src.Val, true
+								}
+								return
+							}
 						case string(affine.RecordList):
-							p = &term.RecordList{Name: paramName, Kind: kind}
+							prep := &term.RecordList{Name: paramName, Kind: kind}
+							p, dig = prep, func(in core.Assignment) (okay bool) {
+								if src, ok := in.(*core.FromRecords); ok {
+									prep.Init, okay = src.Vals, true
+								}
+								return
+							}
 						}
 					}
 				}
-				if p != nil {
+				if e := decode(prog, dig); e != nil {
+					err = errutil.New("couldnt decode", patternName, paramName, e)
+				} else if p != nil {
 					err = last.AddParam(category, p)
 				} else {
 					err = errutil.Fmt("pattern %q parameter %q has unknown type %q(%s)",
@@ -131,10 +184,21 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 	return
 }
 
-func decode(prog []byte, out interface{}) (err error) {
-	if len(prog) > 0 {
+type digInit func(in core.Assignment) (okay bool)
+
+// the author specified a "local init"
+// it has a Value assignment, we want to dig out that assignment and assign it to the term prep.
+// im not convinced that terms and assigments should be different beasts...
+// if they were the same thing.. this would look different.
+func decode(prog []byte, dig digInit) (err error) {
+	if haveProg := len(prog) > 0; haveProg {
+		var local story.LocalInit
 		dec := gob.NewDecoder(bytes.NewBuffer(prog))
-		err = dec.Decode(out)
+		if e := dec.Decode(&local); e != nil {
+			err = e
+		} else if !dig(local.Value) {
+			err = errutil.New("couldnt convert from %T", local.Value)
+		}
 	}
 	return
 }
