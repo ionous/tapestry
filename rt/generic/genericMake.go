@@ -51,8 +51,8 @@ func ObjectAsText(v Value) (ret Value) {
 	if v == nil {
 		ret = StringOf("") // fix: or "nothing"?
 	} else {
-		// fix: consider the type format: string#object?<kind>
-		ret = makeValue(affine.Text, v.Type(), v.String())
+		typeName := "object=" + v.String()
+		ret = makeValue(affine.Text, typeName, v.String())
 	}
 	return
 }
@@ -65,6 +65,7 @@ func StringsFrom(vs []string, subtype string) (ret Value) {
 	}
 	return
 }
+
 func FloatsFrom(vs []float64, subtype string) (ret Value) {
 	if a := affine.NumList; vs != nil {
 		// note: this address is of the unique slice "vs" which shares memory with the slice passed
@@ -75,6 +76,7 @@ func FloatsFrom(vs []float64, subtype string) (ret Value) {
 	}
 	return
 }
+
 func RecordsFrom(vs []*Record, subtype string) (ret Value) {
 	if a := affine.RecordList; vs != nil {
 		ret = makeValue(a, subtype, &vs)

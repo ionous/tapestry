@@ -16,7 +16,6 @@ type Map struct {
 	ToList       string
 	FromList     core.Assignment
 	UsingPattern pattern.PatternName
-	activityCache
 }
 
 func (*Map) Compose() composer.Spec {
@@ -40,34 +39,45 @@ func (op *Map) remap(run rt.Runtime) (err error) {
 		err = errutil.New("from_list:", op.FromList, e)
 	} else if toList, e := safe.List(run, op.ToList); e != nil {
 		err = errutil.New("to_list:", op.ToList, e)
-	} else if e := op.cacheKinds(run, op.UsingPattern); e != nil {
-		err = errutil.New("using_pattern:", op.UsingPattern, e)
 	} else {
-		for it := g.ListIt(fromList); it.HasNext(); {
-			ps := op.pk.NewRecord() // create a new set of parameters each loop
-			in, out := 0, 1
-			if inVal, e := it.GetNext(); e != nil {
-				err = e
-				break
-			} else if e := ps.SetFieldByIndex(in, inVal); e != nil {
-				err = e
-				break
-			} else if e := op.call(run, ps); e != nil {
-				err = e
-				break
-			} else if newVal, e := ps.GetFieldByIndex(out); e != nil {
-				err = e
-				break
-			} else if src, dst := newVal.Affinity(), toList.Affinity(); src != affine.Element(dst) ||
-				((src == affine.Record) && newVal.Type() != toList.Type()) {
-				err = errutil.New("elements dont match")
-				break
-			} else {
-				toList.Append(newVal)
+		var pat pattern.Pattern
+		if e := run.GetEvalByName(op.UsingPattern.String(), &pat); e != nil {
+			err = e
+		} else if ps, e := pat.NewRecord(run); e != nil {
+			err = e
+		} else {
+			var pk *g.Kind
+			for it := g.ListIt(fromList); it.HasNext(); {
+				// create a new set of parameters each loop
+				if pk == nil {
+					pk = ps.Kind()
+				} else {
+					ps = pk.NewRecord()
+				}
+				in, out := 0, 1
+				if inVal, e := it.GetNext(); e != nil {
+					err = e
+					break
+				} else if e := ps.SetFieldByIndex(in, inVal); e != nil {
+					err = e
+					break
+				} else if _, e := pat.Run(run, ps, ""); e != nil {
+					err = e
+					break
+				} else if newVal, e := ps.GetFieldByIndex(out); e != nil {
+					err = e
+					break
+				} else if src, dst := newVal.Affinity(), toList.Affinity(); src != affine.Element(dst) ||
+					((src == affine.Record) && newVal.Type() != toList.Type()) {
+					err = errutil.New("elements don't match")
+					break
+				} else {
+					toList.Append(newVal)
+				}
 			}
-		}
-		if err == nil {
-			err = run.SetField(object.Variables, op.ToList, toList)
+			if err == nil {
+				err = run.SetField(object.Variables, op.ToList, toList)
+			}
 		}
 	}
 	return

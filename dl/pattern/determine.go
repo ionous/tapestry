@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/term"
 	"git.sr.ht/~ionous/iffy/rt"
 
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -16,64 +15,6 @@ import (
 type Determine struct {
 	Pattern   PatternName     // a text eval here would be like a function pointer maybe...
 	Arguments *core.Arguments // pattern args kept as a pointer for composer formatting...
-}
-
-// Stitch finds the pattern, builds the scope, and executes the passed callback to generate a result.
-// It's an adapter from the the specific DetermineActivity, DetermineNumber, etc. statements.
-func (op *Determine) newScope(run rt.Runtime, pat *Pattern) (ret *patScope, err error) {
-	// find the pattern (p), qna's implementation assembles the rules by querying the db.
-	if e := run.GetEvalByName(op.Pattern.String(), pat); e != nil {
-		err = e
-	} else {
-		// pack down parameters and locals into a single set of "terms"
-		var ts term.Terms
-		if _, e := pat.ComputeParams(run, &ts); e != nil {
-			err = e
-		} else if _, e := pat.ComputeLocals(run, &ts); e != nil {
-			err = e
-		} else if retVar, e := pat.ComputeReturn(run, &ts); e != nil {
-			err = e
-		} else {
-			// create a kind and a record from that.
-			// ( fix: should be happening in the assembler )
-			vs := ts.NewKind(run).NewRecord()
-			if op.Arguments != nil {
-				// read from each argument and store into the parameters
-				err = op.Arguments.Distill(run, ts, vs)
-			}
-			if err == nil {
-				ret = newScope(retVar, vs)
-			}
-		}
-	}
-	return
-}
-
-func (op *Determine) runPattern(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	var pat Pattern
-	if x, e := op.newScope(run, &pat); e != nil {
-		err = e
-	} else {
-		run.PushScope(x)
-		if e := pat.Execute(run); e != nil {
-			err = e
-		} else if res, e := x.GetValue(aff); e != nil {
-			err = e
-		} else {
-			ret = res
-		}
-		run.PopScope()
-	}
-	return
-}
-
-func (op *Determine) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if v, e := op.runPattern(run, aff); e != nil {
-		err = cmdErrorCtx(op, op.Pattern.String(), e)
-	} else {
-		ret = v
-	}
-	return
 }
 
 func (*Determine) Compose() composer.Spec {
@@ -119,4 +60,31 @@ func (op *Determine) GetTextList(run rt.Runtime) (g.Value, error) {
 
 func (op *Determine) GetRecordList(run rt.Runtime) (g.Value, error) {
 	return op.determine(run, affine.RecordList)
+}
+
+func (op *Determine) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+	if v, e := op.runPattern(run, aff); e != nil {
+		err = cmdErrorCtx(op, op.Pattern.String(), e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func (op *Determine) runPattern(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+	var pat Pattern
+	if e := run.GetEvalByName(op.Pattern.String(), &pat); e != nil {
+		err = e
+	} else if vs, e := pat.NewRecord(run); e != nil {
+		err = e
+	} else {
+		if op.Arguments != nil {
+			// read from each argument and store into the parameters
+			err = op.Arguments.Distill(run, vs)
+		}
+		if err == nil {
+			ret, err = pat.Run(run, vs, aff)
+		}
+	}
+	return
 }

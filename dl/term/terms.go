@@ -1,56 +1,65 @@
 package term
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
+	"github.com/ionous/errutil"
 )
 
 // Terms implements a Scope mapping names to specified parameters.
-// The only current user is pattern.FromPattern::Stitch()
-// It stores values from indexed and key name arguments ( originally specified as evals. )
-// Its pushed into scope so the names can be used as a source of values for rt.Runtime::GetField().
-// ( ex. For use with the commands Var{},  SimpleNoun{}, ProperNoun{}, ObjectName{}, ... )
-type Terms []g.Field
+type Terms struct {
+	fields []g.Field
+	values []g.Value
+}
 
 // rather than copying etc here, can we use records --
 // what is it anyway?
-func (ps Terms) NewKind(kinds g.Kinds) *g.Kind {
-	return g.NewKind(kinds, "", append([]g.Field{}, ps...))
-}
-
-// fix:in the declaration of a pattern, we allow the specification of objects and types
-// and so probably? the specification should become a text filter for the pattern
-func (ps Terms) ConvertTerm(run rt.Runtime, i int, v g.Value) (ret g.Value, err error) {
-	ret = v          // provisionally
-	if len(ps) > 0 { // the list can be nil meaning no conversion...
-		if field := ps[i]; field.Type == affine.Object.String() { // our hack...
-			switch aff := v.Affinity(); aff {
-			// fix? templates do send us some object values right now...
-			case affine.Object:
-				ret = g.ObjectAsText(v)
-			case affine.Text:
-				// look up the named object...
-				if n := v.String(); len(n) == 0 {
-					ret = g.Empty
-				} else if v, e := safe.ObjectFromString(run, n); e != nil {
-					err = e
-				} else {
-					// ...and return its id
-					ret = g.ObjectAsText(v)
-				}
+func (ps *Terms) NewRecord(kinds g.Kinds) (ret *g.Record, err error) {
+	// fix: creating the kind should really happen during assembly
+	k := g.NewKind(kinds, "", append([]g.Field{}, ps.fields...))
+	n := k.NewRecord()
+	// fix? maybe we should be able to directly fill values?
+	for i, v := range ps.values {
+		if v != nil {
+			if e := n.SetFieldByIndex(i, v); e != nil {
+				err = errutil.Append(err, e)
 			}
 		}
+	}
+	if err == nil {
+		ret = n
 	}
 	return
 }
 
-func (ps *Terms) AddTerm(name string, affinity affine.Affinity, typeName string) {
-	// see notes: ConvertTerm
-	if affinity == affine.Object {
-		affinity = affine.Text
-		typeName = affine.Object.String()
+func (ps *Terms) AddValue(name string, v g.Value) int {
+	field := g.Field{name, v.Affinity(), v.Type()}
+	ps.fields = append(ps.fields, field)
+	ps.values = append(ps.values, v)
+	return len(ps.fields) - 1
+}
+
+// converts an object value to an object id
+// a nil kind is okay -- it allows any type
+func ConvertObject(run rt.Runtime, obj g.Value, kind string) (ret g.Value, err error) {
+	if !safe.Compatible(obj, kind, false) {
+		err = errutil.New("object", obj, "not compatible with", kind)
+	} else {
+		ret = g.ObjectAsText(obj)
 	}
-	(*ps) = append((*ps), g.Field{Name: name, Affinity: affinity, Type: typeName})
+	return
+}
+
+// converts a text value to a valid object id
+func ConvertName(run rt.Runtime, n string, kind string) (ret g.Value, err error) {
+	// look up the named object...
+	if len(n) == 0 {
+		ret = g.StringFrom("", "object="+kind)
+	} else if obj, e := safe.ObjectFromString(run, n); e != nil {
+		err = e
+	} else {
+		ret, err = ConvertObject(run, obj, kind)
+	}
+	return
 }

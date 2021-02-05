@@ -15,7 +15,6 @@ type Reduce struct {
 	IntoValue    string
 	FromList     core.Assignment
 	UsingPattern pattern.PatternName
-	activityCache
 }
 
 func (*Reduce) Compose() composer.Spec {
@@ -39,34 +38,45 @@ func (op *Reduce) reduce(run rt.Runtime) (err error) {
 		err = e
 	} else if outVal, e := safe.CheckVariable(run, op.IntoValue, ""); e != nil {
 		err = e
-	} else if e := op.cacheKinds(run, op.UsingPattern); e != nil {
-		err = e
 	} else {
-		ps := op.pk.NewRecord()
-		for it := g.ListIt(fromList); it.HasNext(); {
-			in, out := 0, 1
-			if inVal, e := it.GetNext(); e != nil {
-				err = e
-				break
-			} else if e := ps.SetFieldByIndex(in, inVal); e != nil {
-				err = e
-				break
-			} else if e := ps.SetFieldByIndex(out, outVal); e != nil {
-				err = e
-				break
-			} else if e := op.call(run, ps); e != nil {
-				err = e
-				break
-			} else if newVal, e := ps.GetFieldByIndex(out); e != nil {
-				err = e
-				break
-			} else {
-				// send it back in for the next time.
-				outVal = newVal
+		var pat pattern.Pattern
+		if e := run.GetEvalByName(op.UsingPattern.String(), &pat); e != nil {
+			err = e
+		} else if ps, e := pat.NewRecord(run); e != nil {
+			err = e
+		} else {
+			var pk *g.Kind
+			for it := g.ListIt(fromList); it.HasNext(); {
+				// create a new set of parameters each loop
+				if pk == nil {
+					pk = ps.Kind()
+				} else {
+					ps = pk.NewRecord()
+				}
+				in, out := 0, 1
+				if inVal, e := it.GetNext(); e != nil {
+					err = e
+					break
+				} else if e := ps.SetFieldByIndex(in, inVal); e != nil {
+					err = e
+					break
+				} else if e := ps.SetFieldByIndex(out, outVal); e != nil {
+					err = e
+					break
+				} else if _, e := pat.Run(run, ps, ""); e != nil {
+					err = e
+					break
+				} else if newVal, e := ps.GetFieldByIndex(out); e != nil {
+					err = e
+					break
+				} else {
+					// send it back in for the next time.
+					outVal = newVal
+				}
 			}
-		}
-		if err == nil {
-			err = run.SetField(object.Variables, op.IntoValue, outVal)
+			if err == nil {
+				err = run.SetField(object.Variables, op.IntoValue, outVal)
+			}
 		}
 	}
 	return
