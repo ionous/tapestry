@@ -10,7 +10,6 @@ func SetRecord(d *g.Record, pairs ...interface{}) (err error) {
 		if n, ok := pairs[0].(string); !ok {
 			err = errutil.New("couldnt convert field")
 		} else {
-
 			if v, e := ValueOf(pairs[1]); e != nil {
 				err = errutil.New("couldnt convert value", e)
 				break

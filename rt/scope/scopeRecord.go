@@ -23,6 +23,8 @@ func (k *TargetRecord) SetField(target, field string, v g.Value) (err error) {
 	if target != k.Target {
 		err = g.UnknownTarget{target}
 	} else {
+		// FIX: if v is a record, then it becomes shared by k.Record;
+		// that's probably incorrect.
 		err = k.Record.SetNamedField(field, v)
 	}
 	return
