@@ -33,7 +33,7 @@ type Nouns struct {
 }
 
 // add to the known recent nouns over the course of the passed function.
-// subjects are the main focus of the sentence, often the ones mentioned first (lhs).
+// "subjects" are the main focus of the sentence, often the ones mentioned first (lhs).
 func (n *Nouns) CollectSubjects(fn func() error) error {
 	n.Subjects = nil
 	n.Objectifying = false
@@ -41,7 +41,7 @@ func (n *Nouns) CollectSubjects(fn func() error) error {
 }
 
 // add to the known recent nouns over the course of the passed function.
-// objects are the support nouns in a sentence, often mentioned last (rhs).
+// "objects" are the support nouns in a sentence, often mentioned last (rhs).
 func (n *Nouns) CollectObjects(fn func() error) error {
 	n.Objects = nil
 	n.Objectifying = true

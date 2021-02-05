@@ -85,8 +85,8 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 		k.NewNoun(noun, namedSingularKind)
 		k.NewValue(noun, countedTypeTrait, true)
 		k.NewValue(noun, printedNameProp, baseName)
-		//
-		// k.Recent.Nouns.Add(noun) -- no need, we're adding them here.
+		// needed for relations, etc.
+		k.Recent.Nouns.Add(noun)
 	}
 	return
 }
@@ -122,7 +122,6 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 				indefinite := k.NewDomainName(domain, "indefinite_article", tables.NAMED_FIELD, once)
 				k.NewField(objects, indefinite, tables.PRIM_TEXT, "")
 			}
-
 		}
 	}
 	return
@@ -151,6 +150,11 @@ func (op *KindOfNoun) Import(k *Importer) (err error) {
 				for _, trait := range traits {
 					k.NewValue(noun, trait, true) // the value of the trait for the noun is true
 				}
+			}
+
+			//
+			if op.NounRelation != nil {
+				err = op.NounRelation.Import(k)
 			}
 		}
 	}
