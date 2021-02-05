@@ -130,12 +130,21 @@ func (op *PatternFlags) ReadFlags() (ret pattern.Flags, err error) {
 }
 
 func (op *PatternLocals) ImportPattern(k *Importer, patternName ephemera.Named) (err error) {
-	// fix: shouldnt this be called pattern parameters?
-	for _, el := range op.VariableDecl {
-		if val, e := el.ImportVariable(k, tables.NAMED_LOCAL); e != nil {
-			err = errutil.Append(err, e)
+	for _, el := range op.LocalDecl {
+		if val, e := el.VariableDecl.ImportVariable(k, tables.NAMED_LOCAL); e != nil {
+			err = e
+			break
 		} else {
-			k.NewPatternDecl(patternName, val.name, val.typeName, val.affinity)
+			var prog ephemera.Prog
+			if init := el.Value; init != nil {
+				if p, e := k.NewGob("assignment", init); e != nil {
+					err = e
+					break
+				} else {
+					prog = p
+				}
+			}
+			k.NewPatternInit(patternName, val.name, val.typeName, val.affinity, prog)
 		}
 	}
 	return

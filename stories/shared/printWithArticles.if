@@ -138,38 +138,43 @@
                     "id": "id-17691d01da5-19",
                     "type": "pattern_locals",
                     "value": {
-                      "$VARIABLE_DECL": [
+                      "$LOCAL_DECL": [
                         {
                           "id": "id-17691d01da5-20",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17691d01da5-21",
-                              "type": "determiner",
-                              "value": "$AN"
-                            },
-                            "$NAME": {
-                              "id": "id-17691d01da5-22",
-                              "type": "variable_name",
-                              "value": "object"
-                            },
-                            "$TYPE": {
-                              "id": "id-17691d01da5-23",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$OBJECT": {
-                                  "id": "id-17691d01da5-24",
-                                  "type": "object_type",
+                                "$AN": {
+                                  "id": "id-17691d01da5-21",
+                                  "type": "determiner",
+                                  "value": "$AN"
+                                },
+                                "$NAME": {
+                                  "id": "id-17691d01da5-22",
+                                  "type": "variable_name",
+                                  "value": "object"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17691d01da5-23",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$AN": {
-                                      "id": "id-17691d01da5-25",
-                                      "type": "ana",
-                                      "value": "$A"
-                                    },
-                                    "$KIND": {
-                                      "id": "id-17691d01da5-26",
-                                      "type": "singular_kind",
-                                      "value": "thing"
+                                    "$OBJECT": {
+                                      "id": "id-17691d01da5-24",
+                                      "type": "object_type",
+                                      "value": {
+                                        "$AN": {
+                                          "id": "id-17691d01da5-25",
+                                          "type": "ana",
+                                          "value": "$A"
+                                        },
+                                        "$KIND": {
+                                          "id": "id-17691d01da5-26",
+                                          "type": "singular_kind",
+                                          "value": "thing"
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -179,30 +184,35 @@
                         },
                         {
                           "id": "id-17691d01da5-27",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17691d01da5-28",
-                              "type": "determiner",
-                              "value": "$OUR"
-                            },
-                            "$NAME": {
-                              "id": "id-17691d01da5-29",
-                              "type": "variable_name",
-                              "value": "no named objects"
-                            },
-                            "$TYPE": {
-                              "id": "id-17691d01da5-30",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17691d01da5-31",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17691d01da5-28",
+                                  "type": "determiner",
+                                  "value": "$OUR"
+                                },
+                                "$NAME": {
+                                  "id": "id-17691d01da5-29",
+                                  "type": "variable_name",
+                                  "value": "no named objects"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17691d01da5-30",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$TEXT_LIST": {
-                                      "id": "id-17691d01da5-32",
-                                      "type": "text_list",
-                                      "value": "$LIST"
+                                    "$EXT": {
+                                      "id": "id-17691d01da5-31",
+                                      "type": "ext_type",
+                                      "value": {
+                                        "$TEXT_LIST": {
+                                          "id": "id-17691d01da5-32",
+                                          "type": "text_list",
+                                          "value": "$LIST"
+                                        }
+                                      }
                                     }
                                   }
                                 }

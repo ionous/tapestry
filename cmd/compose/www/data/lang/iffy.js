@@ -98,7 +98,12 @@ function localLang(make) {
 
     make.str("pattern_flags", "{continue before%before}, {continue after%after}, {terminate}");
 
-    make.flow("pattern_locals", " using {+variable_decl|comma-and}",
+    make.flow("pattern_locals", "{+local_decl|comma-and}");
+
+    make.flow("local_decl",  " using {variable_decl} {starting as%value?local_init}",
+      "Local: local variables can use the parameters of a pattern to compute temporary values.");
+
+    make.flow("local_init",  " starting as {value:assignment}",
       "Local: local variables can use the parameters of a pattern to compute temporary values.");
 
     make.swap("program_hook", "run an {activity}");

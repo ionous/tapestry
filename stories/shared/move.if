@@ -883,14 +883,14 @@
                                               "id": "id-1770d66eb57-18",
                                               "type": "text_eval",
                                               "value": {
-                                      "type": "text_value",
-                                      "value": {
-                                        "$TEXT": {
-                                          "type": "text",
-                                          "value": "$EMPTY"
-                                        }
-                                      }
-                                    }
+                                                "type": "text_value",
+                                                "value": {
+                                                  "$TEXT": {
+                                                    "type": "text",
+                                                    "value": "$EMPTY"
+                                                  }
+                                                }
+                                              }
                                             },
                                             "$TO_OBJECT": {
                                               "id": "id-1770d66eb57-21",

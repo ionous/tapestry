@@ -308,37 +308,42 @@
                     "id": "id-17692024e5f-57",
                     "type": "pattern_locals",
                     "value": {
-                      "$VARIABLE_DECL": [
+                      "$LOCAL_DECL": [
                         {
                           "id": "id-17692024e5f-58",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17692024e5f-59",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17692024e5f-60",
-                              "type": "variable_name",
-                              "value": "settings"
-                            },
-                            "$TYPE": {
-                              "id": "id-17692024e5f-61",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17692024e5f-62",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17692024e5f-59",
+                                  "type": "determiner",
+                                  "value": "$THE"
+                                },
+                                "$NAME": {
+                                  "id": "id-17692024e5f-60",
+                                  "type": "variable_name",
+                                  "value": "settings"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17692024e5f-61",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$RECORD": {
-                                      "id": "id-17692024e5f-63",
-                                      "type": "record_type",
+                                    "$EXT": {
+                                      "id": "id-17692024e5f-62",
+                                      "type": "ext_type",
                                       "value": {
-                                        "$KIND": {
-                                          "id": "id-17692024e5f-64",
-                                          "type": "record_singular",
-                                          "value": "group settings"
+                                        "$RECORD": {
+                                          "id": "id-17692024e5f-63",
+                                          "type": "record_type",
+                                          "value": {
+                                            "$KIND": {
+                                              "id": "id-17692024e5f-64",
+                                              "type": "record_singular",
+                                              "value": "group settings"
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -350,30 +355,35 @@
                         },
                         {
                           "id": "id-17693c74441-28",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17693c74441-29",
-                              "type": "determiner",
-                              "value": "some"
-                            },
-                            "$NAME": {
-                              "id": "id-17693c74441-30",
-                              "type": "variable_name",
-                              "value": "objects"
-                            },
-                            "$TYPE": {
-                              "id": "id-17693c74441-31",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17693c74441-32",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17693c74441-29",
+                                  "type": "determiner",
+                                  "value": "some"
+                                },
+                                "$NAME": {
+                                  "id": "id-17693c74441-30",
+                                  "type": "variable_name",
+                                  "value": "objects"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17693c74441-31",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$TEXT_LIST": {
-                                      "id": "id-17693c74441-33",
-                                      "type": "text_list",
-                                      "value": "$LIST"
+                                    "$EXT": {
+                                      "id": "id-17693c74441-32",
+                                      "type": "ext_type",
+                                      "value": {
+                                        "$TEXT_LIST": {
+                                          "id": "id-17693c74441-33",
+                                          "type": "text_list",
+                                          "value": "$LIST"
+                                        }
+                                      }
                                     }
                                   }
                                 }

@@ -1130,29 +1130,34 @@
                     "id": "id-17692f1b70b-300",
                     "type": "pattern_locals",
                     "value": {
-                      "$VARIABLE_DECL": [
+                      "$LOCAL_DECL": [
                         {
                           "id": "id-17692f1b70b-301",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17692f1b70b-302",
-                              "type": "determiner",
-                              "value": "$AN"
-                            },
-                            "$NAME": {
-                              "id": "id-17692f1b70b-303",
-                              "type": "variable_name",
-                              "value": "idx"
-                            },
-                            "$TYPE": {
-                              "id": "id-17692f1b70b-304",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$PRIMITIVE": {
-                                  "id": "id-17692f1b70b-305",
-                                  "type": "primitive_type",
-                                  "value": "$NUMBER"
+                                "$AN": {
+                                  "id": "id-17692f1b70b-302",
+                                  "type": "determiner",
+                                  "value": "$AN"
+                                },
+                                "$NAME": {
+                                  "id": "id-17692f1b70b-303",
+                                  "type": "variable_name",
+                                  "value": "idx"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17692f1b70b-304",
+                                  "type": "variable_type",
+                                  "value": {
+                                    "$PRIMITIVE": {
+                                      "id": "id-17692f1b70b-305",
+                                      "type": "primitive_type",
+                                      "value": "$NUMBER"
+                                    }
+                                  }
                                 }
                               }
                             }
@@ -1160,34 +1165,39 @@
                         },
                         {
                           "id": "id-17692f1b70b-306",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17692f1b70b-307",
-                              "type": "determiner",
-                              "value": "some"
-                            },
-                            "$NAME": {
-                              "id": "id-17692f1b70b-308",
-                              "type": "variable_name",
-                              "value": "groups"
-                            },
-                            "$TYPE": {
-                              "id": "id-17692f1b70b-309",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17692f1b70b-310",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17692f1b70b-307",
+                                  "type": "determiner",
+                                  "value": "some"
+                                },
+                                "$NAME": {
+                                  "id": "id-17692f1b70b-308",
+                                  "type": "variable_name",
+                                  "value": "groups"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17692f1b70b-309",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$RECORDS": {
-                                      "id": "id-17692f1b70b-311",
-                                      "type": "record_list",
+                                    "$EXT": {
+                                      "id": "id-17692f1b70b-310",
+                                      "type": "ext_type",
                                       "value": {
-                                        "$KIND": {
-                                          "id": "id-17692f1b70b-312",
-                                          "type": "record_singular",
-                                          "value": "grouped objects"
+                                        "$RECORDS": {
+                                          "id": "id-17692f1b70b-311",
+                                          "type": "record_list",
+                                          "value": {
+                                            "$KIND": {
+                                              "id": "id-17692f1b70b-312",
+                                              "type": "record_singular",
+                                              "value": "grouped objects"
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -1199,34 +1209,39 @@
                         },
                         {
                           "id": "id-17692f1b70b-313",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17692f1b70b-314",
-                              "type": "determiner",
-                              "value": "one"
-                            },
-                            "$NAME": {
-                              "id": "id-17692f1b70b-315",
-                              "type": "variable_name",
-                              "value": "group"
-                            },
-                            "$TYPE": {
-                              "id": "id-17692f1b70b-316",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17692f1b70b-317",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17692f1b70b-314",
+                                  "type": "determiner",
+                                  "value": "one"
+                                },
+                                "$NAME": {
+                                  "id": "id-17692f1b70b-315",
+                                  "type": "variable_name",
+                                  "value": "group"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17692f1b70b-316",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$RECORD": {
-                                      "id": "id-17692f1b70b-318",
-                                      "type": "record_type",
+                                    "$EXT": {
+                                      "id": "id-17692f1b70b-317",
+                                      "type": "ext_type",
                                       "value": {
-                                        "$KIND": {
-                                          "id": "id-17692f1b70b-319",
-                                          "type": "record_singular",
-                                          "value": "grouped objects"
+                                        "$RECORD": {
+                                          "id": "id-17692f1b70b-318",
+                                          "type": "record_type",
+                                          "value": {
+                                            "$KIND": {
+                                              "id": "id-17692f1b70b-319",
+                                              "type": "record_singular",
+                                              "value": "grouped objects"
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -1238,30 +1253,35 @@
                         },
                         {
                           "id": "id-17692f1b70b-320",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17692f1b70b-321",
-                              "type": "determiner",
-                              "value": "some"
-                            },
-                            "$NAME": {
-                              "id": "id-17692f1b70b-322",
-                              "type": "variable_name",
-                              "value": "names"
-                            },
-                            "$TYPE": {
-                              "id": "id-17692f1b70b-323",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17692f1b70b-324",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17692f1b70b-321",
+                                  "type": "determiner",
+                                  "value": "some"
+                                },
+                                "$NAME": {
+                                  "id": "id-17692f1b70b-322",
+                                  "type": "variable_name",
+                                  "value": "names"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17692f1b70b-323",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$TEXT_LIST": {
-                                      "id": "id-17692f1b70b-325",
-                                      "type": "text_list",
-                                      "value": "$LIST"
+                                    "$EXT": {
+                                      "id": "id-17692f1b70b-324",
+                                      "type": "ext_type",
+                                      "value": {
+                                        "$TEXT_LIST": {
+                                          "id": "id-17692f1b70b-325",
+                                          "type": "text_list",
+                                          "value": "$LIST"
+                                        }
+                                      }
                                     }
                                   }
                                 }

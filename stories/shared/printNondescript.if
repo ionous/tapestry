@@ -108,33 +108,38 @@
                     "id": "id-17672ecd044-10",
                     "type": "pattern_locals",
                     "value": {
-                      "$VARIABLE_DECL": [
+                      "$LOCAL_DECL": [
                         {
                           "id": "id-17672fb43de-76",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17672fb43de-77",
-                              "type": "determiner",
-                              "value": "some"
-                            },
-                            "$NAME": {
-                              "id": "id-17672fb43de-78",
-                              "type": "variable_name",
-                              "value": "temp objects"
-                            },
-                            "$TYPE": {
-                              "id": "id-17672fb43de-79",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17672fb43de-80",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17672fb43de-77",
+                                  "type": "determiner",
+                                  "value": "some"
+                                },
+                                "$NAME": {
+                                  "id": "id-17672fb43de-78",
+                                  "type": "variable_name",
+                                  "value": "temp objects"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17672fb43de-79",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$TEXT_LIST": {
-                                      "id": "id-17672fb43de-81",
-                                      "type": "text_list",
-                                      "value": "$LIST"
+                                    "$EXT": {
+                                      "id": "id-17672fb43de-80",
+                                      "type": "ext_type",
+                                      "value": {
+                                        "$TEXT_LIST": {
+                                          "id": "id-17672fb43de-81",
+                                          "type": "text_list",
+                                          "value": "$LIST"
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -144,34 +149,39 @@
                         },
                         {
                           "id": "id-17672fb43de-43",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17672fb43de-44",
-                              "type": "determiner",
-                              "value": "some"
-                            },
-                            "$NAME": {
-                              "id": "id-17672fb43de-45",
-                              "type": "variable_name",
-                              "value": "groups"
-                            },
-                            "$TYPE": {
-                              "id": "id-17672fb43de-46",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17672fb43de-47",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17672fb43de-44",
+                                  "type": "determiner",
+                                  "value": "some"
+                                },
+                                "$NAME": {
+                                  "id": "id-17672fb43de-45",
+                                  "type": "variable_name",
+                                  "value": "groups"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17672fb43de-46",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$RECORDS": {
-                                      "id": "id-17672fb43de-48",
-                                      "type": "record_list",
+                                    "$EXT": {
+                                      "id": "id-17672fb43de-47",
+                                      "type": "ext_type",
                                       "value": {
-                                        "$KIND": {
-                                          "id": "id-17672fb43de-49",
-                                          "type": "record_singular",
-                                          "value": "grouped objects"
+                                        "$RECORDS": {
+                                          "id": "id-17672fb43de-48",
+                                          "type": "record_list",
+                                          "value": {
+                                            "$KIND": {
+                                              "id": "id-17672fb43de-49",
+                                              "type": "record_singular",
+                                              "value": "grouped objects"
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -183,30 +193,35 @@
                         },
                         {
                           "id": "id-17672fb43de-33",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17672fb43de-34",
-                              "type": "determiner",
-                              "value": "some"
-                            },
-                            "$NAME": {
-                              "id": "id-17672fb43de-35",
-                              "type": "variable_name",
-                              "value": "ungrouped objects"
-                            },
-                            "$TYPE": {
-                              "id": "id-17672fb43de-36",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17672fb43de-37",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17672fb43de-34",
+                                  "type": "determiner",
+                                  "value": "some"
+                                },
+                                "$NAME": {
+                                  "id": "id-17672fb43de-35",
+                                  "type": "variable_name",
+                                  "value": "ungrouped objects"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17672fb43de-36",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$TEXT_LIST": {
-                                      "id": "id-17672fb43de-38",
-                                      "type": "text_list",
-                                      "value": "$LIST"
+                                    "$EXT": {
+                                      "id": "id-17672fb43de-37",
+                                      "type": "ext_type",
+                                      "value": {
+                                        "$TEXT_LIST": {
+                                          "id": "id-17672fb43de-38",
+                                          "type": "text_list",
+                                          "value": "$LIST"
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -216,34 +231,39 @@
                         },
                         {
                           "id": "id-17672ecd044-11",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17672ecd044-12",
-                              "type": "determiner",
-                              "value": "some"
-                            },
-                            "$NAME": {
-                              "id": "id-17672ecd044-13",
-                              "type": "variable_name",
-                              "value": "settings"
-                            },
-                            "$TYPE": {
-                              "id": "id-17672ecd044-14",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17672ecd044-15",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17672ecd044-12",
+                                  "type": "determiner",
+                                  "value": "some"
+                                },
+                                "$NAME": {
+                                  "id": "id-17672ecd044-13",
+                                  "type": "variable_name",
+                                  "value": "settings"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17672ecd044-14",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$RECORDS": {
-                                      "id": "id-17672ecd044-16",
-                                      "type": "record_list",
+                                    "$EXT": {
+                                      "id": "id-17672ecd044-15",
+                                      "type": "ext_type",
                                       "value": {
-                                        "$KIND": {
-                                          "id": "id-17672ecd044-17",
-                                          "type": "record_singular",
-                                          "value": "group settings"
+                                        "$RECORDS": {
+                                          "id": "id-17672ecd044-16",
+                                          "type": "record_list",
+                                          "value": {
+                                            "$KIND": {
+                                              "id": "id-17672ecd044-17",
+                                              "type": "record_singular",
+                                              "value": "group settings"
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -255,34 +275,39 @@
                         },
                         {
                           "id": "id-17692fbc689-6",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17692fbc689-7",
-                              "type": "determiner",
-                              "value": "$A"
-                            },
-                            "$NAME": {
-                              "id": "id-17692fbc689-8",
-                              "type": "variable_name",
-                              "value": "temp settings"
-                            },
-                            "$TYPE": {
-                              "id": "id-17692fbc689-9",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17692fbc689-10",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17692fbc689-7",
+                                  "type": "determiner",
+                                  "value": "$A"
+                                },
+                                "$NAME": {
+                                  "id": "id-17692fbc689-8",
+                                  "type": "variable_name",
+                                  "value": "temp settings"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17692fbc689-9",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$RECORD": {
-                                      "id": "id-17692fbc689-11",
-                                      "type": "record_type",
+                                    "$EXT": {
+                                      "id": "id-17692fbc689-10",
+                                      "type": "ext_type",
                                       "value": {
-                                        "$KIND": {
-                                          "id": "id-17692fbc689-12",
-                                          "type": "record_singular",
-                                          "value": "group settings"
+                                        "$RECORD": {
+                                          "id": "id-17692fbc689-11",
+                                          "type": "record_type",
+                                          "value": {
+                                            "$KIND": {
+                                              "id": "id-17692fbc689-12",
+                                              "type": "record_singular",
+                                              "value": "group settings"
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -294,34 +319,39 @@
                         },
                         {
                           "id": "id-17672ecd044-18",
-                          "type": "variable_decl",
+                          "type": "local_decl",
                           "value": {
-                            "$AN": {
-                              "id": "id-17672ecd044-19",
-                              "type": "determiner",
-                              "value": "$A"
-                            },
-                            "$NAME": {
-                              "id": "id-17672ecd044-20",
-                              "type": "variable_name",
-                              "value": "collation"
-                            },
-                            "$TYPE": {
-                              "id": "id-17672ecd044-21",
-                              "type": "variable_type",
+                            "$VARIABLE_DECL": {
+                              "type": "variable_decl",
                               "value": {
-                                "$EXT": {
-                                  "id": "id-17672ecd044-22",
-                                  "type": "ext_type",
+                                "$AN": {
+                                  "id": "id-17672ecd044-19",
+                                  "type": "determiner",
+                                  "value": "$A"
+                                },
+                                "$NAME": {
+                                  "id": "id-17672ecd044-20",
+                                  "type": "variable_name",
+                                  "value": "collation"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17672ecd044-21",
+                                  "type": "variable_type",
                                   "value": {
-                                    "$RECORD": {
-                                      "id": "id-17672ecd044-23",
-                                      "type": "record_type",
+                                    "$EXT": {
+                                      "id": "id-17672ecd044-22",
+                                      "type": "ext_type",
                                       "value": {
-                                        "$KIND": {
-                                          "id": "id-17672ecd044-24",
-                                          "type": "record_singular",
-                                          "value": "group collation"
+                                        "$RECORD": {
+                                          "id": "id-17672ecd044-23",
+                                          "type": "record_type",
+                                          "value": {
+                                            "$KIND": {
+                                              "id": "id-17672ecd044-24",
+                                              "type": "record_singular",
+                                              "value": "group collation"
+                                            }
+                                          }
                                         }
                                       }
                                     }

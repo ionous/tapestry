@@ -598,6 +598,35 @@ func (*ListOrder) Compose() composer.Spec {
 	}
 }
 
+// LocalDecl requires various parameters.
+type LocalDecl struct {
+	At           reader.Position `if:"internal"`
+	VariableDecl VariableDecl
+	Value        *LocalInit
+}
+
+func (*LocalDecl) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "local_decl",
+		Desc: `Local: local variables can use the parameters of a pattern to compute temporary values.`,
+		Spec: " using {variable_decl} {starting as%value?local_init}",
+	}
+}
+
+// LocalInit requires various parameters.
+type LocalInit struct {
+	At    reader.Position `if:"internal"`
+	Value Assignment
+}
+
+func (*LocalInit) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "local_init",
+		Desc: `Local: local variables can use the parameters of a pattern to compute temporary values.`,
+		Spec: " starting as {value:assignment}",
+	}
+}
+
 // ManyToMany requires various parameters.
 type ManyToMany struct {
 	At         reader.Position `if:"internal"`
@@ -907,15 +936,14 @@ func (*PatternFlags) Compose() composer.Spec {
 
 // PatternLocals requires various parameters.
 type PatternLocals struct {
-	At           reader.Position `if:"internal"`
-	VariableDecl []VariableDecl
+	At        reader.Position `if:"internal"`
+	LocalDecl []LocalDecl
 }
 
 func (*PatternLocals) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_locals",
-		Desc: `Local: local variables can use the parameters of a pattern to compute temporary values.`,
-		Spec: " using {+variable_decl|comma-and}",
+		Spec: "{+local_decl|comma-and}",
 	}
 }
 
@@ -1762,6 +1790,8 @@ var Model = []composer.Composer{
 	(*ListCase)(nil),
 	(*ListEdge)(nil),
 	(*ListOrder)(nil),
+	(*LocalDecl)(nil),
+	(*LocalInit)(nil),
 	(*ManyToMany)(nil),
 	(*ManyToOne)(nil),
 	(*NamedNoun)(nil),
