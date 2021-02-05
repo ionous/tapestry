@@ -94,7 +94,7 @@ func (d *Record) SetNamedField(field string, val Value) (err error) {
 func (d *Record) SetFieldByIndex(i int, val Value) (err error) {
 	ft := d.kind.fields[i]
 	if a, t := val.Affinity(), val.Type(); !matchTypes(d.kind.kinds, ft.Affinity, ft.Type, a, t) {
-		err = errutil.Fmt("%s of %s is not %s of %s ( setting field %q )", a, t, ft.Affinity, ft.Type, ft.Name)
+		err = errutil.Fmt("couldnt set field %s ( %s of type %s ) because val %s of type %s doesnt match", ft.Name, ft.Affinity, ft.Type, a, t)
 	} else {
 		d.values[i] = val
 	}

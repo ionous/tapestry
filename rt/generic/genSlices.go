@@ -19,14 +19,6 @@ func copyStrings(src []string) []string {
 	return out
 }
 
-// duplicate the passed slice of record pointers
-// note: doesnt copy the contents of the records, just the pointers.
-func copyRecords(src []*Record) []*Record {
-	out := make([]*Record, len(src))
-	copy(out, src)
-	return out
-}
-
 // rare, just for splice for now.
 func safeAffinity(v Value) (ret affine.Affinity) {
 	if v != nil {

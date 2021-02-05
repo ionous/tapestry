@@ -137,13 +137,16 @@ func (n refValue) SetIndex(i int, v Value) {
 	case *[]*Record:
 		if n.t != v.Type() {
 			panic("record types dont match")
+		} else {
+			n := copyRecord(v.Record())
+			(*vp)[i] = n
 		}
-		(*vp)[i] = v.Record()
 	default:
 		panic(n.a.String() + " is not index writable")
 	}
 }
 
+// Slices copies a chunk out of a list
 func (n refValue) Slice(i, j int) (ret Value, err error) {
 	if i < 0 {
 		err = Underflow{i, 0}
@@ -155,11 +158,11 @@ func (n refValue) Slice(i, j int) (ret Value, err error) {
 		switch n.a {
 		case affine.NumList:
 			vp := n.i.(*[]float64)
-			ret = FloatsOf(copyFloats((*vp)[i:j]))
+			ret = FloatsFrom(copyFloats((*vp)[i:j]), n.Type())
 
 		case affine.TextList:
 			vp := n.i.(*[]string)
-			ret = StringsOf(copyStrings((*vp)[i:j]))
+			ret = StringsFrom(copyStrings((*vp)[i:j]), n.Type())
 
 		case affine.RecordList:
 			vp := n.i.(*[]*Record)
@@ -172,6 +175,7 @@ func (n refValue) Slice(i, j int) (ret Value, err error) {
 	return
 }
 
+// Splice replaces a range of values
 func (n refValue) Splice(i, j int, add Value) (ret Value, err error) {
 	if i < 0 {
 		err = Underflow{i, 0}
@@ -203,11 +207,17 @@ func (n refValue) Splice(i, j int, add Value) (ret Value, err error) {
 				panic("record types dont match")
 			}
 			els := (*vp)
-			cut := copyRecords(els[i:j])
-			ins := normalizeRecords(add)
+			// move the record pointers
+			// no need to copy the record values
+			// only one list will have the pointers at a time
+			cut := make([]*Record, j-i)
+			copy(cut, els[i:j])
+			// make a list out of one or more records from add
+			ins := copyRecords(normalizeRecords(add))
+			// read from els before adding to els to avoid stomping overlapping memory.
 			(*vp) = append(els[:i], append(ins, els[j:]...)...)
+			// return our cut pointers
 			ret = RecordsOf(n.t, cut)
-
 		default:
 			panic(n.a.String() + " is not spliceable")
 		}
@@ -231,9 +241,10 @@ func (n refValue) Append(add Value) {
 		vp := n.i.(*[]*Record)
 		if n.t != add.Type() {
 			panic("record types dont match")
+		} else {
+			ins := copyRecords(normalizeRecords(add))
+			(*vp) = append((*vp), ins...)
 		}
-		ins := normalizeRecords(add)
-		(*vp) = append((*vp), ins...)
 
 	default:
 		panic(n.a.String() + " is not appendable")

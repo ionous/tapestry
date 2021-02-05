@@ -18,61 +18,77 @@ func CopyValue(val Value) (ret interface{}, err error) {
 		case affine.Text:
 			ret = val.String()
 		case affine.Record:
-			if next, e := copyRecord(val.Record()); e != nil {
-				err = e
-			} else {
-				ret = next
-			}
+			ret = copyRecord(val.Record())
 		case affine.NumList:
 			ret = copyFloats(val.Floats())
-
 		case affine.TextList:
 			ret = copyStrings(val.Strings())
-
 		case affine.RecordList:
-			vs := val.Records()
-			values := make([]*Record, len(vs))
-			for i, el := range vs {
-				if cpy, e := copyRecord(el); e != nil {
-					err = e
-					break
-				} else {
-					values[i] = cpy
-				}
-			}
-			if err == nil {
-				ret = values
-			}
-
-		case affine.Object:
-			// new nouns cant be dynamically added to the runtime.
-			err = errutil.New("can't duplicate object values")
-
+			ret = copyRecords(val.Records())
 		default:
-			err = errutil.Fmt("failed to copy value, expected %s got %v(%T)", a, val, val)
+			err = errutil.Fmt("failed to copy value of %s:%v(%T)", a, val, val)
 		}
 	}
 	return
 }
 
+// dupeValue is what copy value probably should be
+// panics on error because it assumes all values should be copyable
+func dupeValue(val Value) (ret Value) {
+	if val == nil {
+		panic("failed to copy nil value")
+	}
+	switch a := val.Affinity(); a {
+	case affine.Bool, affine.Number, affine.Text:
+		// because we dont have a value.set the values of primitives are immutable
+		// so we dont have to actually copy them, which saves us from having to mange their subtypes
+		// ( ex. copy of an int, should still probably be an int under the hood. )
+		ret = val
+
+	case affine.Record:
+		vs := copyRecord(val.Record())
+		ret = RecordOf(vs)
+
+	case affine.NumList:
+		vs := copyFloats(val.Floats())
+		ret = FloatsFrom(vs, val.Type())
+
+	case affine.TextList:
+		vs := copyStrings(val.Strings())
+		ret = StringsFrom(vs, val.Type())
+
+	case affine.RecordList:
+		vs := copyRecords(val.Records())
+		ret = RecordsFrom(vs, val.Type())
+
+	default:
+		panic(errutil.Sprint("failed to dupe value of %s:%v(%T)", a, val, val))
+	}
+	return
+}
+
+// duplicates all of the passed records
+// panics on error because it assumes all records are copyable.
+func copyRecords(src []*Record) []*Record {
+	out := make([]*Record, len(src))
+	for i, el := range src {
+		cpy := copyRecord(el)
+		out[i] = cpy
+	}
+	return out
+}
+
 // assumes in value is a record.
-func copyRecord(v *Record) (ret *Record, err error) {
+// panics on error because it assumes all records are copyable.
+func copyRecord(v *Record) (ret *Record) {
 	cnt := v.kind.NumField()
 	values := make([]Value, cnt, cnt)
 	for i := 0; i < cnt; i++ {
 		if el, e := v.GetFieldByIndex(i); e != nil {
-			err = e
-			break
-		} else if cpy, e := CopyValue(el); e != nil {
-			err = e
-			break
+			panic(e)
 		} else {
-			// fix: CopyValue should really return a value
-			values[i] = makeValue(el.Affinity(), el.Type(), cpy)
+			values[i] = dupeValue(el)
 		}
 	}
-	if err == nil {
-		ret = &Record{kind: v.kind, values: values}
-	}
-	return
+	return &Record{kind: v.kind, values: values}
 }
