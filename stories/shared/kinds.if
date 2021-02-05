@@ -239,55 +239,143 @@
               }
             },
             {
-              "id": "id-1770cb3192a-75",
+              "id": "id-17773598bfa-133",
               "type": "story_statement",
               "value": {
-                "id": "id-1770cb3192a-76",
+                "id": "id-17773598bfa-134",
                 "type": "kinds_of_aspect",
                 "value": {
                   "$ASPECT": {
-                    "id": "id-1770cb3192a-77",
+                    "id": "id-17773598bfa-135",
                     "type": "aspect",
-                    "value": " player controlled"
+                    "value": " scenery status"
                   }
                 }
               }
             },
             {
-              "id": "id-1770cb3192a-78",
+              "id": "id-17773598bfa-136",
               "type": "story_statement",
               "value": {
-                "id": "id-1770cb3192a-79",
+                "id": "id-17773598bfa-137",
                 "type": "aspect_traits",
                 "value": {
                   "$ASPECT": {
-                    "id": "id-1770cb3192a-80",
+                    "id": "id-17773598bfa-138",
                     "type": "aspect",
-                    "value": " player controlled"
+                    "value": " scenery status"
                   },
                   "$TRAIT_PHRASE": {
-                    "id": "id-1770cb3192a-81",
+                    "id": "id-17773598bfa-139",
                     "type": "trait_phrase",
                     "value": {
                       "$ARE_EITHER": {
-                        "id": "id-1770cb3192a-82",
+                        "id": "id-17773598bfa-140",
                         "type": "are_either",
                         "value": "$EITHER"
                       },
                       "$TRAIT": [
                         {
-                          "id": "id-1770cb3192a-83",
+                          "id": "id-17773598bfa-141",
                           "type": "trait",
-                          "value": "player"
+                          "value": "scenery"
                         },
                         {
-                          "id": "id-1770cb3192a-84",
+                          "id": "id-17773598bfa-142",
                           "type": "trait",
-                          "value": "not player"
+                          "value": "not scenery"
                         }
                       ]
                     }
                   }
+                }
+              }
+            },
+            {
+              "id": "id-17773598bfa-143",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-144",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-17773598bfa-145",
+                    "type": "plural_kinds",
+                    "value": "things"
+                  },
+                  "$PROPERTY_DECL": [
+                    {
+                      "id": "id-17773598bfa-146",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-17773598bfa-147",
+                          "type": "determiner",
+                          "value": "$A"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-17773598bfa-148",
+                          "type": "property",
+                          "value": "scenery status"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-17773598bfa-149",
+                          "type": "property_type",
+                          "value": {
+                            "$PROPERTY_ASPECT": {
+                              "id": "id-17773598bfa-150",
+                              "type": "property_aspect",
+                              "value": "$ASPECT"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-17773598bfa-151",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-152",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-17773598bfa-153",
+                    "type": "plural_kinds",
+                    "value": " things"
+                  },
+                  "$PROPERTY_DECL": [
+                    {
+                      "id": "id-17773598bfa-154",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-17773598bfa-155",
+                          "type": "determiner",
+                          "value": "$AN"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-17773598bfa-156",
+                          "type": "property",
+                          "value": "initial appearance"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-17773598bfa-157",
+                          "type": "property_type",
+                          "value": {
+                            "$PRIMITIVE": {
+                              "id": "id-17773598bfa-158",
+                              "type": "primitive_type",
+                              "value": "$TEXT"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -315,6 +403,26 @@
                     "id": "id-1769a72b6ea-27",
                     "type": "singular_kind",
                     "value": "thing"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17773598bfa-159",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-160",
+                "type": "kinds_of_kind",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-17773598bfa-161",
+                    "type": "plural_kinds",
+                    "value": " animals"
+                  },
+                  "$SINGULAR_KIND": {
+                    "id": "id-17773598bfa-162",
+                    "type": "singular_kind",
+                    "value": "actor"
                   }
                 }
               }

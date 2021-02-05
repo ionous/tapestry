@@ -456,6 +456,7 @@
                     "type": "pattern_type",
                     "value": {
                       "$ACTIVITY": {
+                        "id": "id-177732e76a8-62",
                         "type": "patterned_activity",
                         "value": "$ACTIVITY"
                       }
@@ -641,11 +642,14 @@
                                                   "value": "label"
                                                 },
                                                 "$FROM": {
+                                                  "id": "id-177732e76a8-63",
                                                   "type": "from_source_fields",
                                                   "value": {
+                                                    "id": "id-177732e76a8-64",
                                                     "type": "from_var",
                                                     "value": {
                                                       "$VAR": {
+                                                        "id": "id-177732e76a8-65",
                                                         "type": "variable_name",
                                                         "value": "first group"
                                                       }
@@ -668,11 +672,14 @@
                                                   "value": "label"
                                                 },
                                                 "$FROM": {
+                                                  "id": "id-177732e76a8-66",
                                                   "type": "from_source_fields",
                                                   "value": {
+                                                    "id": "id-177732e76a8-67",
                                                     "type": "from_var",
                                                     "value": {
                                                       "$VAR": {
+                                                        "id": "id-177732e76a8-68",
                                                         "type": "variable_name",
                                                         "value": "second group"
                                                       }
@@ -714,11 +721,14 @@
                                                   "value": "innumerable"
                                                 },
                                                 "$FROM": {
+                                                  "id": "id-177732e76a8-69",
                                                   "type": "from_source_fields",
                                                   "value": {
+                                                    "id": "id-177732e76a8-70",
                                                     "type": "from_var",
                                                     "value": {
                                                       "$VAR": {
+                                                        "id": "id-177732e76a8-71",
                                                         "type": "variable_name",
                                                         "value": "first group"
                                                       }
@@ -741,11 +751,14 @@
                                                   "value": "innumerable"
                                                 },
                                                 "$FROM": {
+                                                  "id": "id-177732e76a8-72",
                                                   "type": "from_source_fields",
                                                   "value": {
+                                                    "id": "id-177732e76a8-73",
                                                     "type": "from_var",
                                                     "value": {
                                                       "$VAR": {
+                                                        "id": "id-177732e76a8-74",
                                                         "type": "variable_name",
                                                         "value": "second group"
                                                       }
@@ -787,11 +800,14 @@
                                                   "value": "group option"
                                                 },
                                                 "$FROM": {
+                                                  "id": "id-177732e76a8-75",
                                                   "type": "from_source_fields",
                                                   "value": {
+                                                    "id": "id-177732e76a8-76",
                                                     "type": "from_var",
                                                     "value": {
                                                       "$VAR": {
+                                                        "id": "id-177732e76a8-77",
                                                         "type": "variable_name",
                                                         "value": "first group"
                                                       }
@@ -814,11 +830,14 @@
                                                   "value": "group option"
                                                 },
                                                 "$FROM": {
+                                                  "id": "id-177732e76a8-78",
                                                   "type": "from_source_fields",
                                                   "value": {
+                                                    "id": "id-177732e76a8-79",
                                                     "type": "from_var",
                                                     "value": {
                                                       "$VAR": {
+                                                        "id": "id-177732e76a8-80",
                                                         "type": "variable_name",
                                                         "value": "second group"
                                                       }
@@ -1136,6 +1155,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-177732e76a8-81",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -1168,6 +1188,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-177732e76a8-82",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -1212,6 +1233,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-177732e76a8-83",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -1256,6 +1278,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-177732e76a8-84",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -1339,11 +1362,14 @@
                                                     "value": "groups"
                                                   },
                                                   "$FROM": {
+                                                    "id": "id-177732e76a8-85",
                                                     "type": "from_source_fields",
                                                     "value": {
+                                                      "id": "id-177732e76a8-86",
                                                       "type": "from_var",
                                                       "value": {
                                                         "$VAR": {
+                                                          "id": "id-177732e76a8-87",
                                                           "type": "variable_name",
                                                           "value": "collation"
                                                         }
@@ -1515,11 +1541,14 @@
                                                                                             "value": "settings"
                                                                                           },
                                                                                           "$FROM": {
+                                                                                            "id": "id-177732e76a8-94",
                                                                                             "type": "from_source_fields",
                                                                                             "value": {
+                                                                                              "id": "id-177732e76a8-95",
                                                                                               "type": "from_var",
                                                                                               "value": {
                                                                                                 "$VAR": {
+                                                                                                  "id": "id-177732e76a8-96",
                                                                                                   "type": "variable_name",
                                                                                                   "value": "el"
                                                                                                 }
@@ -1588,11 +1617,14 @@
                                                                                     "value": "label"
                                                                                   },
                                                                                   "$FROM": {
+                                                                                    "id": "id-177732e76a8-88",
                                                                                     "type": "from_source_fields",
                                                                                     "value": {
+                                                                                      "id": "id-177732e76a8-89",
                                                                                       "type": "from_var",
                                                                                       "value": {
                                                                                         "$VAR": {
+                                                                                          "id": "id-177732e76a8-90",
                                                                                           "type": "variable_name",
                                                                                           "value": "settings"
                                                                                         }
@@ -1628,11 +1660,14 @@
                                                                               "value": "without objects"
                                                                             },
                                                                             "$FROM": {
+                                                                              "id": "id-177732e76a8-91",
                                                                               "type": "from_source_fields",
                                                                               "value": {
+                                                                                "id": "id-177732e76a8-92",
                                                                                 "type": "from_var",
                                                                                 "value": {
                                                                                   "$VAR": {
+                                                                                    "id": "id-177732e76a8-93",
                                                                                     "type": "variable_name",
                                                                                     "value": "settings"
                                                                                   }
@@ -1725,11 +1760,14 @@
                                                                 "value": "name"
                                                               },
                                                               "$FROM": {
+                                                                "id": "id-177732e76a8-97",
                                                                 "type": "from_source_fields",
                                                                 "value": {
+                                                                  "id": "id-177732e76a8-98",
                                                                   "type": "from_var",
                                                                   "value": {
                                                                     "$VAR": {
+                                                                      "id": "id-177732e76a8-99",
                                                                       "type": "variable_name",
                                                                       "value": "settings"
                                                                     }
@@ -2007,11 +2045,14 @@
                                                                       "value": "objects"
                                                                     },
                                                                     "$FROM": {
+                                                                      "id": "id-177732e76a8-100",
                                                                       "type": "from_source_fields",
                                                                       "value": {
+                                                                        "id": "id-177732e76a8-101",
                                                                         "type": "from_var",
                                                                         "value": {
                                                                           "$VAR": {
+                                                                            "id": "id-177732e76a8-102",
                                                                             "type": "variable_name",
                                                                             "value": "group"
                                                                           }
@@ -2054,11 +2095,14 @@
                                                                       "value": "name"
                                                                     },
                                                                     "$FROM": {
+                                                                      "id": "id-177732e76a8-103",
                                                                       "type": "from_source_fields",
                                                                       "value": {
+                                                                        "id": "id-177732e76a8-104",
                                                                         "type": "from_var",
                                                                         "value": {
                                                                           "$VAR": {
+                                                                            "id": "id-177732e76a8-105",
                                                                             "type": "variable_name",
                                                                             "value": "settings"
                                                                           }
@@ -3383,11 +3427,14 @@
                                                             "value": "name"
                                                           },
                                                           "$FROM": {
+                                                            "id": "id-177732e76a8-106",
                                                             "type": "from_source_fields",
                                                             "value": {
+                                                              "id": "id-177732e76a8-107",
                                                               "type": "from_var",
                                                               "value": {
                                                                 "$VAR": {
+                                                                  "id": "id-177732e76a8-108",
                                                                   "type": "variable_name",
                                                                   "value": "settings"
                                                                 }
@@ -4025,11 +4072,14 @@
                                                             "value": "name"
                                                           },
                                                           "$FROM": {
+                                                            "id": "id-177732e76a8-109",
                                                             "type": "from_source_fields",
                                                             "value": {
+                                                              "id": "id-177732e76a8-110",
                                                               "type": "from_var",
                                                               "value": {
                                                                 "$VAR": {
+                                                                  "id": "id-177732e76a8-111",
                                                                   "type": "variable_name",
                                                                   "value": "settings"
                                                                 }
@@ -4546,11 +4596,14 @@
                                                             "value": "name"
                                                           },
                                                           "$FROM": {
+                                                            "id": "id-177732e76a8-112",
                                                             "type": "from_source_fields",
                                                             "value": {
+                                                              "id": "id-177732e76a8-113",
                                                               "type": "from_var",
                                                               "value": {
                                                                 "$VAR": {
+                                                                  "id": "id-177732e76a8-114",
                                                                   "type": "variable_name",
                                                                   "value": "settings"
                                                                 }
@@ -4804,8 +4857,10 @@
                                                             "value": "label"
                                                           },
                                                           "$FROM": {
+                                                            "id": "id-177732e76a8-115",
                                                             "type": "from_source_fields",
                                                             "value": {
+                                                              "id": "id-177732e76a8-116",
                                                               "type": "from_rec",
                                                               "value": {
                                                                 "$REC": {
@@ -4821,11 +4876,14 @@
                                                                         "value": "settings"
                                                                       },
                                                                       "$FROM": {
+                                                                        "id": "id-177732e76a8-117",
                                                                         "type": "from_source_fields",
                                                                         "value": {
+                                                                          "id": "id-177732e76a8-118",
                                                                           "type": "from_var",
                                                                           "value": {
                                                                             "$VAR": {
+                                                                              "id": "id-177732e76a8-119",
                                                                               "type": "variable_name",
                                                                               "value": "group"
                                                                             }
@@ -5153,11 +5211,14 @@
                                                             "value": "name"
                                                           },
                                                           "$FROM": {
+                                                            "id": "id-177732e76a8-120",
                                                             "type": "from_source_fields",
                                                             "value": {
+                                                              "id": "id-177732e76a8-121",
                                                               "type": "from_var",
                                                               "value": {
                                                                 "$VAR": {
+                                                                  "id": "id-177732e76a8-122",
                                                                   "type": "variable_name",
                                                                   "value": "settings"
                                                                 }
@@ -5540,11 +5601,14 @@
                                                             "value": "name"
                                                           },
                                                           "$FROM": {
+                                                            "id": "id-177732e76a8-123",
                                                             "type": "from_source_fields",
                                                             "value": {
+                                                              "id": "id-177732e76a8-124",
                                                               "type": "from_var",
                                                               "value": {
                                                                 "$VAR": {
+                                                                  "id": "id-177732e76a8-125",
                                                                   "type": "variable_name",
                                                                   "value": "settings"
                                                                 }
@@ -6051,11 +6115,14 @@
                                                             "value": "name"
                                                           },
                                                           "$FROM": {
+                                                            "id": "id-177732e76a8-126",
                                                             "type": "from_source_fields",
                                                             "value": {
+                                                              "id": "id-177732e76a8-127",
                                                               "type": "from_var",
                                                               "value": {
                                                                 "$VAR": {
+                                                                  "id": "id-177732e76a8-128",
                                                                   "type": "variable_name",
                                                                   "value": "settings"
                                                                 }

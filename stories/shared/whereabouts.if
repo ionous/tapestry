@@ -415,6 +415,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-1777298ab40-12",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -1117,6 +1118,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-1777298ab40-13",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -1160,6 +1162,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-1777298ab40-14",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -2188,6 +2191,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-1777298ab40-15",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -2884,6 +2888,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-1777298ab40-16",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -3305,6 +3310,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-1777298ab40-17",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -3699,6 +3705,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-1777298ab40-18",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -4093,6 +4100,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-1777298ab40-19",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {
@@ -4529,6 +4537,7 @@
                           "type": "local_decl",
                           "value": {
                             "$VARIABLE_DECL": {
+                              "id": "id-1777298ab40-20",
                               "type": "variable_decl",
                               "value": {
                                 "$AN": {

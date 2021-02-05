@@ -1,0 +1,1398 @@
+{
+  "id": "id-1777298ab40-6",
+  "type": "story",
+  "value": {
+    "$PARAGRAPH": [
+      {
+        "id": "id-1777298ab40-21",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-1777298ab40-22",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1777298ab40-23",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-1777298ab40-24",
+                    "type": "lines",
+                    "value": "Since \"domains\" aren't yet hierarchical, to share objects across tests they have to be described globally."
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-1777298ab40-7",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-1777298ab40-8",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1777298ab40-9",
+                "type": "test_scene",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-1777298ab40-10",
+                    "type": "test_name",
+                    "value": "looking"
+                  },
+                  "$STORY": {
+                    "id": "id-1777298ab40-11",
+                    "type": "story",
+                    "value": {
+                      "$PARAGRAPH": []
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1777298ab40-25",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1777298ab40-26",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-1777298ab40-27",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-1777298ab40-28",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-1777298ab40-29",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-1777298ab40-30",
+                              "type": "noun_name",
+                              "value": "kitchen"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-1777298ab40-31",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-1777298ab40-35",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-1777298ab40-36",
+                                "type": "are_an",
+                                "value": "$ISA"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-1777298ab40-37",
+                                "type": "singular_kind",
+                                "value": "room"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": [],
+                  "$SUMMARY": {
+                    "id": "id-177732e76a8-215",
+                    "type": "summary",
+                    "value": {
+                      "$LINES": {
+                        "id": "id-177732e76a8-216",
+                        "type": "lines",
+                        "value": "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177732e76a8-0",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177732e76a8-1",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177732e76a8-2",
+                "type": "kinds_of_kind",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-177732e76a8-3",
+                    "type": "plural_kinds",
+                    "value": " cats"
+                  },
+                  "$SINGULAR_KIND": {
+                    "id": "id-177732e76a8-4",
+                    "type": "singular_kind",
+                    "value": "animal"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177732e76a8-5",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177732e76a8-6",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-177732e76a8-7",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-177732e76a8-8",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-9",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-10",
+                              "type": "noun_name",
+                              "value": "broom"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-177732e76a8-12",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-13",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-14",
+                              "type": "noun_name",
+                              "value": "hat"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-177732e76a8-15",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-16",
+                              "type": "determiner",
+                              "value": "two"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-17",
+                              "type": "noun_name",
+                              "value": "cats"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-177732e76a8-11",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$NOUN_RELATION": {
+                            "id": "id-177732e76a8-129",
+                            "type": "noun_relation",
+                            "value": {
+                              "$ARE_BEING": {
+                                "id": "id-177732e76a8-134",
+                                "type": "are_being",
+                                "value": "$ARE"
+                              },
+                              "$RELATION": {
+                                "id": "id-177732e76a8-130",
+                                "type": "relation_name",
+                                "value": "whereabouts"
+                              },
+                              "$NOUNS": [
+                                {
+                                  "id": "id-177732e76a8-131",
+                                  "type": "named_noun",
+                                  "value": {
+                                    "$DETERMINER": {
+                                      "id": "id-177732e76a8-132",
+                                      "type": "determiner",
+                                      "value": "$THE"
+                                    },
+                                    "$NAME": {
+                                      "id": "id-177732e76a8-133",
+                                      "type": "noun_name",
+                                      "value": "kitchen"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-177732e76a8-136",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177732e76a8-137",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-177732e76a8-138",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-177732e76a8-139",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-140",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-141",
+                              "type": "noun_name",
+                              "value": "broom"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-177732e76a8-142",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-143",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-144",
+                              "type": "noun_name",
+                              "value": "hat"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-177732e76a8-148",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-177732e76a8-159",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-177732e76a8-160",
+                                "type": "are_an",
+                                "value": "$ARE"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-177732e76a8-161",
+                                "type": "singular_kind",
+                                "value": "things"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177732e76a8-217",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177732e76a8-218",
+                "type": "noun_assignment",
+                "value": {
+                  "$PROPERTY": {
+                    "id": "id-177732e76a8-219",
+                    "type": "property",
+                    "value": "initial appearance"
+                  },
+                  "$NOUNS": [
+                    {
+                      "id": "id-177732e76a8-220",
+                      "type": "named_noun",
+                      "value": {
+                        "$DETERMINER": {
+                          "id": "id-177732e76a8-221",
+                          "type": "determiner",
+                          "value": "$THE"
+                        },
+                        "$NAME": {
+                          "id": "id-177732e76a8-222",
+                          "type": "noun_name",
+                          "value": "hat"
+                        }
+                      }
+                    }
+                  ],
+                  "$LINES": {
+                    "id": "id-177732e76a8-223",
+                    "type": "lines",
+                    "value": "A pointed black hat lies discarded on the floor under a dusty shelf."
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177732e76a8-162",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177732e76a8-163",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177732e76a8-164",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-177732e76a8-165",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-177732e76a8-166",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-167",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-168",
+                              "type": "noun_name",
+                              "value": "cabinet"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-177732e76a8-169",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$NOUN_TRAITS": {
+                            "id": "id-177732e76a8-170",
+                            "type": "noun_traits",
+                            "value": {
+                              "$ARE_BEING": {
+                                "id": "id-177732e76a8-171",
+                                "type": "are_being",
+                                "value": "$IS"
+                              },
+                              "$TRAIT": [
+                                {
+                                  "id": "id-177732e76a8-172",
+                                  "type": "trait",
+                                  "value": "openable"
+                                },
+                                {
+                                  "id": "id-177732e76a8-188",
+                                  "type": "trait",
+                                  "value": "enterable"
+                                },
+                                {
+                                  "id": "id-177732e76a8-189",
+                                  "type": "trait",
+                                  "value": "scenery"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": [
+                    {
+                      "id": "id-177732e76a8-173",
+                      "type": "tail",
+                      "value": {
+                        "$PRONOUN": {
+                          "id": "id-177732e76a8-174",
+                          "type": "pronoun",
+                          "value": "$IT"
+                        },
+                        "$NOUN_PHRASE": {
+                          "id": "id-177732e76a8-175",
+                          "type": "noun_phrase",
+                          "value": {
+                            "$KIND_OF_NOUN": {
+                              "id": "id-177732e76a8-176",
+                              "type": "kind_of_noun",
+                              "value": {
+                                "$ARE_AN": {
+                                  "id": "id-177732e76a8-177",
+                                  "type": "are_an",
+                                  "value": "$ISA"
+                                },
+                                "$TRAIT": [],
+                                "$KIND": {
+                                  "id": "id-177732e76a8-178",
+                                  "type": "singular_kind",
+                                  "value": "container"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "id-177732e76a8-179",
+                      "type": "tail",
+                      "value": {
+                        "$PRONOUN": {
+                          "id": "id-177732e76a8-180",
+                          "type": "pronoun",
+                          "value": "$IT"
+                        },
+                        "$NOUN_PHRASE": {
+                          "id": "id-177732e76a8-181",
+                          "type": "noun_phrase",
+                          "value": {
+                            "$NOUN_RELATION": {
+                              "id": "id-177732e76a8-182",
+                              "type": "noun_relation",
+                              "value": {
+                                "$ARE_BEING": {
+                                  "id": "id-177732e76a8-187",
+                                  "type": "are_being",
+                                  "value": "$IS"
+                                },
+                                "$RELATION": {
+                                  "id": "id-177732e76a8-183",
+                                  "type": "relation_name",
+                                  "value": "whereabouts"
+                                },
+                                "$NOUNS": [
+                                  {
+                                    "id": "id-177732e76a8-184",
+                                    "type": "named_noun",
+                                    "value": {
+                                      "$DETERMINER": {
+                                        "id": "id-177732e76a8-185",
+                                        "type": "determiner",
+                                        "value": "$THE"
+                                      },
+                                      "$NAME": {
+                                        "id": "id-177732e76a8-186",
+                                        "type": "noun_name",
+                                        "value": "kitchen"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-177732e76a8-190",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177732e76a8-200",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-177732e76a8-201",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-177732e76a8-202",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-203",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-204",
+                              "type": "noun_name",
+                              "value": "book of matches"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-177732e76a8-206",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-207",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-208",
+                              "type": "noun_name",
+                              "value": "bottle of descaling solution"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-177732e76a8-209",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-210",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-211",
+                              "type": "noun_name",
+                              "value": "fish hook"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-177732e76a8-212",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177732e76a8-213",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-177732e76a8-214",
+                              "type": "noun_name",
+                              "value": "rusty knife"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-177732e76a8-205",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-177732e76a8-224",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-177732e76a8-225",
+                                "type": "are_an",
+                                "value": "$ARE"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-177732e76a8-226",
+                                "type": "singular_kind",
+                                "value": "things"
+                              },
+                              "$NOUN_RELATION": {
+                                "id": "id-177732e76a8-227",
+                                "type": "noun_relation",
+                                "value": {
+                                  "$RELATION": {
+                                    "id": "id-177732e76a8-228",
+                                    "type": "relation_name",
+                                    "value": "whereabouts"
+                                  },
+                                  "$NOUNS": [
+                                    {
+                                      "id": "id-177732e76a8-229",
+                                      "type": "named_noun",
+                                      "value": {
+                                        "$DETERMINER": {
+                                          "id": "id-177732e76a8-230",
+                                          "type": "determiner",
+                                          "value": "$THE"
+                                        },
+                                        "$NAME": {
+                                          "id": "id-177732e76a8-231",
+                                          "type": "noun_name",
+                                          "value": "cabinet"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-177732e76a8-232",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177732e76a8-233",
+                "type": "noun_assignment",
+                "value": {
+                  "$PROPERTY": {
+                    "id": "id-177732e76a8-234",
+                    "type": "property",
+                    "value": "initial appearance"
+                  },
+                  "$NOUNS": [
+                    {
+                      "id": "id-177732e76a8-235",
+                      "type": "named_noun",
+                      "value": {
+                        "$DETERMINER": {
+                          "id": "id-177732e76a8-236",
+                          "type": "determiner",
+                          "value": "$THE"
+                        },
+                        "$NAME": {
+                          "id": "id-177732e76a8-237",
+                          "type": "noun_name",
+                          "value": "hook"
+                        }
+                      }
+                    }
+                  ],
+                  "$LINES": {
+                    "id": "id-177732e76a8-238",
+                    "type": "lines",
+                    "value": "Beneath your feet is a bright and shiny hook."
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-17773598bfa-0",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-17773598bfa-1",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-2",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-17773598bfa-3",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-17773598bfa-4",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-5",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-6",
+                              "type": "noun_name",
+                              "value": "shelf"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-17773598bfa-7",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$NOUN_TRAITS": {
+                            "id": "id-17773598bfa-8",
+                            "type": "noun_traits",
+                            "value": {
+                              "$ARE_BEING": {
+                                "id": "id-17773598bfa-9",
+                                "type": "are_being",
+                                "value": "$IS"
+                              },
+                              "$TRAIT": [
+                                {
+                                  "id": "id-17773598bfa-10",
+                                  "type": "trait",
+                                  "value": "scenery"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": [
+                    {
+                      "id": "id-17773598bfa-11",
+                      "type": "tail",
+                      "value": {
+                        "$PRONOUN": {
+                          "id": "id-17773598bfa-12",
+                          "type": "pronoun",
+                          "value": "$IT"
+                        },
+                        "$NOUN_PHRASE": {
+                          "id": "id-17773598bfa-13",
+                          "type": "noun_phrase",
+                          "value": {
+                            "$KIND_OF_NOUN": {
+                              "id": "id-17773598bfa-14",
+                              "type": "kind_of_noun",
+                              "value": {
+                                "$ARE_AN": {
+                                  "id": "id-17773598bfa-15",
+                                  "type": "are_an",
+                                  "value": "$ISA"
+                                },
+                                "$TRAIT": [],
+                                "$KIND": {
+                                  "id": "id-17773598bfa-16",
+                                  "type": "singular_kind",
+                                  "value": "supporter"
+                                },
+                                "$NOUN_RELATION": {
+                                  "id": "id-17773598bfa-17",
+                                  "type": "noun_relation",
+                                  "value": {
+                                    "$RELATION": {
+                                      "id": "id-17773598bfa-18",
+                                      "type": "relation_name",
+                                      "value": "whereabouts"
+                                    },
+                                    "$NOUNS": [
+                                      {
+                                        "id": "id-17773598bfa-19",
+                                        "type": "named_noun",
+                                        "value": {
+                                          "$DETERMINER": {
+                                            "id": "id-17773598bfa-20",
+                                            "type": "determiner",
+                                            "value": "$THE"
+                                          },
+                                          "$NAME": {
+                                            "id": "id-17773598bfa-21",
+                                            "type": "noun_name",
+                                            "value": "kitchen"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-17773598bfa-22",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-23",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-17773598bfa-24",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-17773598bfa-25",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-26",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-27",
+                              "type": "noun_name",
+                              "value": "can of beans"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-17773598bfa-29",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-30",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-31",
+                              "type": "noun_name",
+                              "value": "can of potato leek soup"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-17773598bfa-32",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-33",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-34",
+                              "type": "noun_name",
+                              "value": "tin of deflating power"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-17773598bfa-28",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-17773598bfa-35",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-17773598bfa-36",
+                                "type": "are_an",
+                                "value": "$ARE"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-17773598bfa-37",
+                                "type": "singular_kind",
+                                "value": "things"
+                              },
+                              "$NOUN_RELATION": {
+                                "id": "id-17773598bfa-38",
+                                "type": "noun_relation",
+                                "value": {
+                                  "$RELATION": {
+                                    "id": "id-17773598bfa-39",
+                                    "type": "relation_name",
+                                    "value": "whereabouts"
+                                  },
+                                  "$NOUNS": [
+                                    {
+                                      "id": "id-17773598bfa-40",
+                                      "type": "named_noun",
+                                      "value": {
+                                        "$DETERMINER": {
+                                          "id": "id-17773598bfa-41",
+                                          "type": "determiner",
+                                          "value": "$THE"
+                                        },
+                                        "$NAME": {
+                                          "id": "id-17773598bfa-42",
+                                          "type": "noun_name",
+                                          "value": "shelf"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-17773598bfa-43",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-17773598bfa-44",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-45",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-17773598bfa-46",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-17773598bfa-47",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-48",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-49",
+                              "type": "noun_name",
+                              "value": "counter"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-17773598bfa-50",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-17773598bfa-51",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-17773598bfa-52",
+                                "type": "are_an",
+                                "value": "$ISA"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-17773598bfa-53",
+                                "type": "singular_kind",
+                                "value": "supporter"
+                              },
+                              "$NOUN_RELATION": {
+                                "id": "id-17773598bfa-54",
+                                "type": "noun_relation",
+                                "value": {
+                                  "$RELATION": {
+                                    "id": "id-17773598bfa-55",
+                                    "type": "relation_name",
+                                    "value": "whereabouts"
+                                  },
+                                  "$NOUNS": [
+                                    {
+                                      "id": "id-17773598bfa-56",
+                                      "type": "named_noun",
+                                      "value": {
+                                        "$DETERMINER": {
+                                          "id": "id-17773598bfa-57",
+                                          "type": "determiner",
+                                          "value": "$THE"
+                                        },
+                                        "$NAME": {
+                                          "id": "id-17773598bfa-58",
+                                          "type": "noun_name",
+                                          "value": "kitchen"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-17773598bfa-59",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-60",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-17773598bfa-61",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-17773598bfa-62",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-63",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-64",
+                              "type": "noun_name",
+                              "value": "espresso machine"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-17773598bfa-66",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-67",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-68",
+                              "type": "noun_name",
+                              "value": "blender"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-17773598bfa-69",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-70",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-71",
+                              "type": "noun_name",
+                              "value": "mortar"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-17773598bfa-65",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-17773598bfa-75",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-17773598bfa-76",
+                                "type": "are_an",
+                                "value": "$ARE"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-17773598bfa-77",
+                                "type": "singular_kind",
+                                "value": "things"
+                              },
+                              "$NOUN_RELATION": {
+                                "id": "id-17773598bfa-78",
+                                "type": "noun_relation",
+                                "value": {
+                                  "$RELATION": {
+                                    "id": "id-17773598bfa-79",
+                                    "type": "relation_name",
+                                    "value": "whereabouts"
+                                  },
+                                  "$NOUNS": [
+                                    {
+                                      "id": "id-17773598bfa-80",
+                                      "type": "named_noun",
+                                      "value": {
+                                        "$DETERMINER": {
+                                          "id": "id-17773598bfa-81",
+                                          "type": "determiner",
+                                          "value": "$THE"
+                                        },
+                                        "$NAME": {
+                                          "id": "id-17773598bfa-82",
+                                          "type": "noun_name",
+                                          "value": "counter"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-17773598bfa-83",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-84",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-17773598bfa-85",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-17773598bfa-86",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-87",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-88",
+                              "type": "noun_name",
+                              "value": "blender"
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-17773598bfa-90",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-91",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-92",
+                              "type": "noun_name",
+                              "value": "mortar"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-17773598bfa-89",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-17773598bfa-93",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-17773598bfa-94",
+                                "type": "are_an",
+                                "value": "$ARE"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-17773598bfa-95",
+                                "type": "singular_kind",
+                                "value": "containers"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-17773598bfa-96",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-97",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-17773598bfa-98",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-17773598bfa-99",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17773598bfa-100",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-17773598bfa-101",
+                              "type": "noun_name",
+                              "value": "pestle"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-17773598bfa-102",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-17773598bfa-103",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-17773598bfa-104",
+                                "type": "are_an",
+                                "value": "$ISA"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-17773598bfa-105",
+                                "type": "singular_kind",
+                                "value": "thing"
+                              },
+                              "$NOUN_RELATION": {
+                                "id": "id-17773598bfa-106",
+                                "type": "noun_relation",
+                                "value": {
+                                  "$RELATION": {
+                                    "id": "id-17773598bfa-107",
+                                    "type": "relation_name",
+                                    "value": "whereabouts"
+                                  },
+                                  "$NOUNS": [
+                                    {
+                                      "id": "id-17773598bfa-108",
+                                      "type": "named_noun",
+                                      "value": {
+                                        "$DETERMINER": {
+                                          "id": "id-17773598bfa-109",
+                                          "type": "determiner",
+                                          "value": "$THE"
+                                        },
+                                        "$NAME": {
+                                          "id": "id-17773598bfa-110",
+                                          "type": "noun_name",
+                                          "value": "mortar"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-17773598bfa-111",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-112",
+                "type": "noun_assignment",
+                "value": {
+                  "$PROPERTY": {
+                    "id": "id-17773598bfa-113",
+                    "type": "property",
+                    "value": "initial appearance"
+                  },
+                  "$NOUNS": [
+                    {
+                      "id": "id-17773598bfa-114",
+                      "type": "named_noun",
+                      "value": {
+                        "$DETERMINER": {
+                          "id": "id-17773598bfa-115",
+                          "type": "determiner",
+                          "value": "$THE"
+                        },
+                        "$NAME": {
+                          "id": "id-17773598bfa-116",
+                          "type": "noun_name",
+                          "value": "espresso machine"
+                        }
+                      }
+                    }
+                  ],
+                  "$LINES": {
+                    "id": "id-17773598bfa-117",
+                    "type": "lines",
+                    "value": "Steam leaks from the top of a recently used espresso machine."
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-17773598bfa-129",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-17773598bfa-130",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17773598bfa-131",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-17773598bfa-132",
+                    "type": "lines",
+                    "value": "we dont want to declare the cabinet open, because we want to be able to declare it closed in a subtest. And we cant do both right now."
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
