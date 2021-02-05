@@ -1,13 +1,7 @@
 _
-dl/core/express/ignore.go
-template/old
-*.zip
-notes
 .vscode
 __debug_bin
-ephemera/cmd/parse
-ephemera/cmd/stem
-assembly/debug.test
+node_modules
 cmd/asm/asm
 cmd/atlas/atlas
 cmd/check/check
@@ -15,8 +9,4 @@ cmd/compose/compose
 cmd/import/import
 cmd/play/play
 cmd/spec/spec
-cmd/spec/spec.js
 cmd/stem/stem
-node_modules
-cmd/makeops/temp.go
-cmd/compose/compose
