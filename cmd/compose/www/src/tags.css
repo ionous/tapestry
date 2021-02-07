@@ -71,6 +71,5 @@
   color: orange; 
 }
 .mk-str-ctrl[data-tag="pattern_name"] {
-  text-transform: capitalize;
   color:rgb(0, 102, 214);   /* blue*/  
 }
