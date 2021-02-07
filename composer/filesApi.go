@@ -1,7 +1,6 @@
 package composer
 
 import (
-	"bytes"
 	"encoding/json"
 	"io"
 	"log"
@@ -11,6 +10,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/web"
+	"github.com/iancoleman/orderedmap"
 	"github.com/ionous/errutil"
 	"golang.org/x/net/context"
 )
@@ -35,8 +35,8 @@ type rootFolder struct {
 
 func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	var els []struct {
-		Path  string          `json:"path"`
-		Story json.RawMessage `json:"story"`
+		Path  string                `json:"path"`
+		Story orderedmap.OrderedMap `json:"story"`
 	}
 	dec := json.NewDecoder(r)
 	if e := dec.Decode(&els); err != nil {
@@ -49,7 +49,7 @@ func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 			if !strings.HasPrefix(where, root) {
 				e := errutil.New("couldnt save", where)
 				err = errutil.Append(err, e)
-			} else if e := saveBytes(where, []byte(el.Story)); e != nil {
+			} else if e := saveBytes(where, el.Story); e != nil {
 				e := errutil.New("couldnt save", where)
 				err = errutil.Append(err, e)
 			} else {
@@ -63,21 +63,14 @@ func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 	return
 }
 
-func saveBytes(where string, data []byte) (err error) {
+func saveBytes(where string, story orderedmap.OrderedMap) (err error) {
 	if f, e := os.Create(where); e != nil {
 		err = e
 	} else {
-		defer f.Close()
-		// for now... save as indented to make reading; diffing easier
-		var buf bytes.Buffer
-		if e := json.Indent(&buf, data, "", "  "); e != nil {
-			err = e
-		} else {
-			storyData := bytes.NewReader(buf.Bytes())
-			if _, e := io.Copy(f, storyData); e != nil {
-				err = e
-			}
-		}
+		enc := json.NewEncoder(f)
+		enc.SetEscapeHTML(false)
+		enc.SetIndent("", "  ")
+		err = enc.Encode(story)
 	}
 	return
 }
