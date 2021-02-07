@@ -129,8 +129,8 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 				// ie. "text" not "text_eval" -- tests and other things have to be adjusted
 				// it also seems a bad time to be camelizing things.
 				paramName := lang.Breakcase(inParam)
-				if aff, typeName, e := convertType(inType, inKind.String, inAff.String); e != nil {
-					err = e
+				if aff, typeName := convertType(inType, inKind.String, inAff.String); len(aff) == 0 {
+					err = errutil.New("unknown type", inType, inKind, inAff)
 				} else if i, e := decodeProg(inProg, aff); e != nil {
 					err = errutil.New("couldnt decode", inPat, paramName, e)
 				} else {
@@ -147,7 +147,7 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 	return
 }
 
-func convertType(inType, inKind, inAff string) (retAff affine.Affinity, retType string, err error) {
+func convertType(inType, inKind, inAff string) (retAff affine.Affinity, retType string) {
 	// locals have simple type names, parameters are still using _eval.
 	switch inType {
 	case "text_eval", "text":
@@ -162,12 +162,13 @@ func convertType(inType, inKind, inAff string) (retAff affine.Affinity, retType 
 		retAff = affine.NumList
 	default:
 		// the type might be some sort of kind...
-		aff := affine.Affinity(inAff)
-		//
-		if (len(inKind) > 0) && (aff == affine.Object || aff == affine.Record || aff == affine.RecordList) {
-			retAff, retType = aff, inKind
-		} else {
-			err = errutil.New("unknown type", inType, inKind, inAff)
+		if len(inKind) > 0 {
+			switch aff := affine.Affinity(inAff); aff {
+			case affine.Object:
+				retAff, retType = affine.Text, "object="+inKind
+			case affine.Record, affine.RecordList:
+				retAff, retType = aff, inKind
+			}
 		}
 	}
 	return
