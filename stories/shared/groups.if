@@ -1315,6 +1315,51 @@
                       ]
                     }
                   },
+                  "$PATTERN_RETURN": {
+                    "id": "id-1777e2865a2-0",
+                    "type": "pattern_return",
+                    "value": {
+                      "$RESULT": {
+                        "id": "id-1777e2865a2-1",
+                        "type": "variable_decl",
+                        "value": {
+                          "$AN": {
+                            "id": "id-1777e2865a2-2",
+                            "type": "determiner",
+                            "value": "$OUR"
+                          },
+                          "$NAME": {
+                            "id": "id-1777e2865a2-3",
+                            "type": "variable_name",
+                            "value": "collation"
+                          },
+                          "$TYPE": {
+                            "id": "id-1777e2865a2-4",
+                            "type": "variable_type",
+                            "value": {
+                              "$EXT": {
+                                "id": "id-1777e2865a2-5",
+                                "type": "ext_type",
+                                "value": {
+                                  "$RECORD": {
+                                    "id": "id-1777e2865a2-6",
+                                    "type": "record_type",
+                                    "value": {
+                                      "$KIND": {
+                                        "id": "id-1777e2865a2-7",
+                                        "type": "record_singular",
+                                        "value": "group collations"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
                   "$PATTERN_RULES": {
                     "id": "id-17692f1b70b-326",
                     "type": "pattern_rules",
