@@ -44,13 +44,17 @@ func (pat *Pattern) Run(run rt.Runtime, args []*core.Argument, aff affine.Affini
 		//
 		run.ReplaceScope(oldScope)
 	}
+	if err != nil {
+		err = errutil.New(pat.Name, err.Error())
+	}
 	return
 }
 
 func (pat *Pattern) determineArgs(run rt.Runtime, rec *g.Record, args []*core.Argument) (err error) {
 	// future: args matching is predetermined in reading / parsing
-	if paramCnt, argCnt := len(pat.Labels), len(args); paramCnt != argCnt {
-		err = errutil.New("pattern uses", paramCnt, "parameters(s), have", argCnt, "arguments")
+	// note: templates (ex. print_article) dont always specify all the parameters...
+	if paramCnt, argCnt := len(pat.Labels), len(args); paramCnt < argCnt {
+		err = errutil.New("expected", paramCnt, "parameters(s), have", argCnt, "arguments")
 	} else {
 		// note: set indexed field assigns without copying
 		for i, a := range args {
