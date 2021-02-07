@@ -1,4 +1,4 @@
-/* generated using github.com/ionous/iffy/cmd/spec/spec.go */
+/* generated using git.sr.ht/~ionous/iffy/cmd/spec/spec.go */
 const spec = [
   {
     "desc": "debug level: Debug level.",
@@ -529,7 +529,6 @@ const spec = [
       "params": {
         "$GO": {
           "label": "go",
-          "optional": true,
           "type": "activity"
         }
       },
@@ -574,7 +573,6 @@ const spec = [
       "params": {
         "$GO": {
           "label": "go",
-          "optional": true,
           "type": "activity"
         }
       },
@@ -772,7 +770,7 @@ const spec = [
     }
   },
   {
-    "desc": "List text: Separates words with commas, and 'and'.",
+    "desc": "Comma text: Separates words with commas, and 'and'.",
     "group": [
       "printing"
     ],
@@ -782,7 +780,6 @@ const spec = [
       "params": {
         "$GO": {
           "label": "go",
-          "optional": true,
           "type": "activity"
         }
       },
@@ -2015,7 +2012,7 @@ const spec = [
     }
   },
   {
-    "desc": "Map List: Transform the values from one list and place the results in another list.\n\t\tThe named pattern is called with two records 'in' and 'out' from the source and output lists respectively.",
+    "desc": "Map List: Transform the values from one list and place the results in another list.\n\t\tThe designated pattern is called with each value from the \"from list\", one value at a time.",
     "group": [
       "list"
     ],
@@ -3085,7 +3082,6 @@ const spec = [
       "params": {
         "$GO": {
           "label": "go",
-          "optional": true,
           "type": "activity"
         }
       },
@@ -3113,7 +3109,6 @@ const spec = [
       "params": {
         "$GO": {
           "label": "go",
-          "optional": true,
           "type": "activity"
         }
       },

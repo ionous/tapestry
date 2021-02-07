@@ -121,12 +121,12 @@
                                     "$AN": {
                                       "id": "id-176f427859d-47",
                                       "type": "ana",
-                                      "value": "$A"
+                                      "value": "$AN"
                                     },
                                     "$KIND": {
                                       "id": "id-176f427859d-48",
                                       "type": "singular_kind",
-                                      "value": "thing"
+                                      "value": "object"
                                     }
                                   }
                                 }

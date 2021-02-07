@@ -626,6 +626,21 @@
                                             }
                                           }
                                         }
+                                      },
+                                      {
+                                        "id": "id-17773cdb8b3-47",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-17773cdb8b3-49",
+                                          "type": "comment",
+                                          "value": {
+                                            "$LINES": {
+                                              "id": "id-17773cdb8b3-50",
+                                              "type": "lines",
+                                              "value": "we dont absorb \"actors\" because a player might be on an actor: ex. riding a horse, or whatever."
+                                            }
+                                          }
+                                        }
                                       }
                                     ]
                                   }
@@ -658,7 +673,7 @@
                   "$NAME": {
                     "id": "id-177661f02fe-52",
                     "type": "pattern_name",
-                    "value": "VisibilityList"
+                    "value": "VisibilityOf"
                   },
                   "$TYPE": {
                     "id": "id-177661f02fe-53",
@@ -730,7 +745,7 @@
                   "$NAME": {
                     "id": "id-177661f02fe-65",
                     "type": "pattern_name",
-                    "value": "VisibilityList"
+                    "value": "VisibilityOf"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-177661f02fe-66",

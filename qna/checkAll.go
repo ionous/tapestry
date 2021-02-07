@@ -40,6 +40,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string) (ret int, err error) {
 		err = errutil.New("no matching tests found")
 	} else {
 		// FIX: we have to cache the statements b/c we cant use them during QueryAll
+		run.ActivateDomain("entire_game", true)
 		for _, t := range tests {
 			if e := t.RunTest(run); e != nil {
 				err = errutil.Append(err, e)

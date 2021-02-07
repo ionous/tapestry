@@ -44,9 +44,6 @@ func (pat *Pattern) Run(run rt.Runtime, args []*core.Argument, aff affine.Affini
 		//
 		run.ReplaceScope(oldScope)
 	}
-	if err != nil {
-		err = errutil.New(pat.Name, err.Error())
-	}
 	return
 }
 
@@ -85,18 +82,19 @@ func argIndex(i int) string {
 }
 
 func (pat *Pattern) initializeLocals(run rt.Runtime, rec *g.Record) (err error) {
-	fin := len(pat.Labels) // locals start after labels
-	for i, init := range pat.Locals {
-		field := pat.Fields[i+fin]
-		if init != nil {
+	lin, fin, lcnt := 0, len(pat.Labels), len(pat.Locals) // locals start after labels
+	for lin < lcnt {
+		if field, init := pat.Fields[fin], pat.Locals[lin]; init != nil {
 			if v, e := init.GetAssignedValue(run); e != nil {
-				err = errutil.New(pat.Name, "error determining local", i, field.Name, e)
+				err = errutil.New(pat.Name, "error determining local", lin, field.Name, e)
 				break
-			} else if e := rec.SetIndexedField(i, v); e != nil {
-				err = errutil.New(pat.Name, "error setting local", i, field.Name, e)
+			} else if e := rec.SetIndexedField(fin, v); e != nil {
+				err = errutil.New(pat.Name, "error setting local", lin, field.Name, e)
 				break
 			}
 		}
+		lin++
+		fin++
 	}
 	return
 }

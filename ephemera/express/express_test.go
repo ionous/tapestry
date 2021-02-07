@@ -254,7 +254,7 @@ func TestTemplates(t *testing.T) {
 	// parameters to template calls become indexed parameter assignments
 	t.Run("indexed", func(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
-			&core.Buffer{core.NewActivity(
+			&core.Buffer{core.MakeActivity(
 				&pattern.Determine{
 					Pattern: "hello", Arguments: core.Args(
 						&core.FromText{T("world")},

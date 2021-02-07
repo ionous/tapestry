@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
-var helloThereWorld = NewActivity(
+var helloThereWorld = MakeActivity(
 	&Say{&Text{"hello"}},
 	&Say{&Text{"there"}},
 	&Say{&Text{"world"}},

@@ -19,27 +19,27 @@ type Say struct {
 // Buffer collects text said by other statements and returns them as a string.
 // Unlike Span, it does not add or alter spaces between writes.
 type Buffer struct {
-	Go *Activity
+	Go Activity
 }
 
 // Span collects text printed during a block and writes the text with spaces.
 type Span struct {
-	Go *Activity
+	Go Activity
 }
 
 // Bracket sandwiches text printed during a block and puts them inside parenthesis ().
 type Bracket struct {
-	Go *Activity
+	Go Activity
 }
 
 // Slash separates text printed during a block with left-leaning slashes.
 type Slash struct {
-	Go *Activity
+	Go Activity
 }
 
 // Commas writes words separated with commas, ending with an "and".
 type Commas struct {
-	Go *Activity
+	Go Activity
 }
 
 // Compose defines a spec for the composer editor.
@@ -120,7 +120,7 @@ func (*Commas) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "comma_text",
 		Group: "printing",
-		Desc:  "List text: Separates words with commas, and 'and'.",
+		Desc:  "Comma text: Separates words with commas, and 'and'.",
 	}
 }
 
@@ -131,9 +131,9 @@ func (op *Commas) GetText(run rt.Runtime) (g.Value, error) {
 
 type stringer interface{ String() string }
 
-func writeSpan(run rt.Runtime, span stringer, op composer.Composer, act *Activity, w writer.Output) (ret g.Value, err error) {
+func writeSpan(run rt.Runtime, span stringer, op composer.Composer, act Activity, w writer.Output) (ret g.Value, err error) {
 	if e := rt.WritersBlock(run, w, func() error {
-		return safe.Run(run, act)
+		return safe.Run(run, &act)
 	}); e != nil {
 		err = cmdError(op, e)
 	} else if res := span.String(); len(res) > 0 {
