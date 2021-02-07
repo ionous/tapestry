@@ -51,7 +51,7 @@ func ObjectAsText(v Value) (ret Value) {
 	if v == nil {
 		ret = StringOf("") // fix: or "nothing"?
 	} else {
-		typeName := "object=" + v.String()
+		typeName := "object=" + v.Type()
 		ret = makeValue(affine.Text, typeName, v.String())
 	}
 	return

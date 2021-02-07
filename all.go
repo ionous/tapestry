@@ -34,9 +34,6 @@ func registerGob() {
 				gob.Register(cmd)
 			}
 		}
-		for _, rule := range pattern.Support {
-			gob.Register(rule)
-		}
 		registeredGob = true
 	}
 }

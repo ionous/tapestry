@@ -5,50 +5,21 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/scope"
-	"git.sr.ht/~ionous/iffy/rt/writer"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 )
-
-type panicTime struct {
-	testutil.PanicRuntime
-}
-type listTime struct {
-	panicTime
-	objs map[string]*g.Record
-	scope.ScopeStack
-	testutil.PatternMap
-	*testutil.Kinds
-}
-
-func (lt *listTime) Writer() writer.Output {
-	return writer.NewStdout()
-}
-
-func (lt *listTime) GetField(target, field string) (ret g.Value, err error) {
-	if obj, ok := lt.objs[field]; target == object.Value && ok {
-		ret = g.RecordOf(obj)
-	} else {
-		ret, err = lt.ScopeStack.GetField(target, field)
-	}
-	return
-}
 
 func newListTime(src []string, p testutil.PatternMap) (ret rt.Runtime, vals *g.Record, err error) {
 	var kinds testutil.Kinds
 	type Values struct{ Source []string }
 	kinds.AddKinds((*Values)(nil))
 	values := kinds.New("Values")
-	lt := listTime{
+	lt := testutil.Runtime{
 		Kinds:      &kinds,
 		PatternMap: p,
-		ScopeStack: scope.ScopeStack{
-			Scopes: []rt.Scope{
-				&scope.TargetRecord{object.Variables, values},
-			},
+		Stack: []rt.Scope{
+			g.RecordOf(values),
 		},
 	}
 	if e := values.SetNamedField("Source", g.StringsOf(src)); e != nil {

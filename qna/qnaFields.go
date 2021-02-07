@@ -177,21 +177,18 @@ func (n *Fields) UpdatePairs(domain string) (ret int, err error) {
 }
 
 func (n *Runner) SetField(target, rawField string, val g.Value) (err error) {
-	if len(target) == 0 || len(rawField) == 0 {
+	field := lang.SpecialBreakcase(rawField)
+	//
+	if len(target) == 0 || len(field) == 0 {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
+	} else if target == object.Variables {
+		err = n.Stack.SetFieldByName(field, val)
 	} else if writable := target[0] != object.Prefix ||
-		target == object.Variables ||
 		target == object.Counter; !writable {
 		err = errutil.Fmt("can't change reserved field '%s.%s'", target, rawField)
 	} else {
-		field := lang.SpecialBreakcase(rawField)
-		switch e := n.ScopeStack.SetField(target, field, val); e.(type) {
-		default:
-			err = e
-		case g.UnknownTarget, g.UnknownField:
-			key := makeKey(target, field)
-			err = n.setField(key, val)
-		}
+		key := makeKey(target, field)
+		err = n.setField(key, val)
 	}
 	return
 }
@@ -211,7 +208,7 @@ func (n *Runner) setField(key keyType, val g.Value) (err error) {
 			err = n.setField(targetAspect, g.StringOf(key.field))
 		}
 
-	case g.UnknownField:
+	case g.Unknown:
 		// didnt refer to a trait, so just set the field normally.
 		// ( to set the field, we get the field to verify it exists, and to check affinity )
 		if q, e := n.getOrCache(key.target, key.field, n.queryFieldValue); e != nil {
@@ -361,40 +358,37 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			})
 		}
 
+	case object.Variables:
+		varName := lang.SpecialBreakcase(rawField)
+		ret, err = n.Stack.FieldByName(varName)
+
 	default:
 		varName := lang.SpecialBreakcase(rawField)
-		switch v, e := n.ScopeStack.GetField(target, varName); e.(type) {
-		default:
-			err = e
-		case nil:
-			ret = v
-		case g.UnknownTarget, g.UnknownField:
-			key := makeKey(target, varName)
-			if q, ok := n.pairs[key]; ok {
-				ret, err = q.Snapshot(n)
-			} else {
-				// first: loop. ask if we are trying to find the value of a trait. ( noun.trait )
-				switch aspectOfTrait, e := n.GetField(object.Aspect, key.dot()); e.(type) {
-				default:
+		key := makeKey(target, varName)
+		if q, ok := n.pairs[key]; ok {
+			ret, err = q.Snapshot(n)
+		} else {
+			// first: loop. ask if we are trying to find the value of a trait. ( noun.trait )
+			switch aspectOfTrait, e := n.GetField(object.Aspect, key.dot()); e.(type) {
+			default:
+				err = e
+			case nil:
+				// we found the aspect name from the trait
+				// now we need to ask for the current value of the aspect
+				aspectName := aspectOfTrait.String()
+				if q, e := n.getOrCache(key.target, aspectName, n.queryFieldValue); e != nil {
 					err = e
-				case nil:
-					// we found the aspect name from the trait
-					// now we need to ask for the current value of the aspect
-					aspectName := aspectOfTrait.String()
-					if q, e := n.getOrCache(key.target, aspectName, n.queryFieldValue); e != nil {
-						err = e
-					} else {
-						// return whether the object's aspect equals the specified trait.
-						// ( we dont cache this value because multiple things can change it )
-						ret = g.BoolOf(key.field == q.String())
-					}
-				case g.UnknownField:
-					// it wasnt a trait, so query the field value
-					// fix: b/c its more common, should we do this first?
-					ret, err = n.getOrCache(key.target, key.field, n.queryFieldValue)
+				} else {
+					// return whether the object's aspect equals the specified trait.
+					// ( we dont cache this value because multiple things can change it )
+					ret = g.BoolOf(key.field == q.String())
 				}
-				return
+			case g.Unknown:
+				// it wasnt a trait, so query the field value
+				// fix: b/c its more common, should we do this first?
+				ret, err = n.getOrCache(key.target, key.field, n.queryFieldValue)
 			}
+			return
 		}
 	}
 	return

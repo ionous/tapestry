@@ -47,7 +47,7 @@ func (PanicRuntime) PushScope(rt.Scope) {
 func (PanicRuntime) PopScope() {
 	panic("Runtime panic")
 }
-func (PanicRuntime) MakeRecord(kind string) (g.Value, error) {
+func (PanicRuntime) ReplaceScope(rt.Scope) rt.Scope {
 	panic("Runtime panic")
 }
 func (PanicRuntime) Random(inclusiveMin, exclusiveMax int) int {

@@ -75,13 +75,9 @@ func (op *RenderRef) getAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 // returns nil if the named variable doesnt exist; errors only on critical errors.
 func getVariable(run rt.Runtime, n string, flags TryAsNoun) (ret g.Value, err error) {
 	if flags.tryVariable() {
-		switch v, e := safe.CheckVariable(run, n, ""); e.(type) {
-		default:
-			err = e
-		case g.UnknownTarget, g.UnknownField:
-			ret = nil // not a variable
-		case nil:
-			ret = v
+		ret, err = safe.CheckVariable(run, n, "")
+		if _, isUnknown := err.(g.Unknown); isUnknown {
+			err = nil // simplify caller check.
 		}
 	}
 	return

@@ -3,9 +3,10 @@ package pattern_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
-	"git.sr.ht/~ionous/iffy/dl/term"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 )
@@ -13,13 +14,14 @@ import (
 // TestFactorial of the number 3 to verify pattern recursion works.
 func TestFactorial(t *testing.T) {
 	// rules are run in reverse order.
-	run := patternRuntime{PatternMap: testutil.PatternMap{
+	run := testutil.Runtime{PatternMap: testutil.PatternMap{
 		"factorial": &pattern.Pattern{
-			Name: "factorial",
-			Params: []term.Preparer{
-				&term.Number{Name: "num"},
+			Name:   "factorial",
+			Labels: []string{"num"},
+			Return: "num",
+			Fields: []g.Field{
+				{Name: "num", Affinity: affine.Number},
 			},
-			Returns: &term.Number{Name: "num"},
 			Rules: []*pattern.Rule{{
 				Execute: core.NewActivity(
 					&core.Assign{Var: N("num"),

@@ -2,8 +2,10 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"github.com/ionous/errutil"
 )
 
 type Make struct {
@@ -28,13 +30,27 @@ func (op *Make) makeRecord(run rt.Runtime) (ret *g.Record, err error) {
 	if k, e := run.GetKindByName(op.Name); e != nil {
 		err = e
 	} else {
-		b := k.NewRecord()
-		if op.Arguments == nil {
-			ret = b // return the empty record
-		} else if e := op.Arguments.Distill(run, b); e != nil {
-			err = e
+		out := k.NewRecord()
+		if args := op.Arguments; len(args.Args) == 0 {
+			ret = out // return the empty record
 		} else {
-			ret = b
+			for _, arg := range args.Args {
+				name := lang.Breakcase(arg.Name)
+				if fin := k.FieldIndex(name); fin < 0 {
+					e := g.UnknownField(op.Name, arg.Name)
+					err = errutil.Append(err, e)
+				} else if val, e := GetAssignedValue(run, arg.From); e != nil {
+					err = errutil.Append(err, e)
+				} else if e := out.SetNamedField(name, val); e != nil {
+					err = errutil.Append(err, e)
+					// fix? we have to set by name to handle traits
+					// would it make more sense to switch out here for that?
+					// or possibly handle traits at the indexed level?
+				}
+			}
+			if err == nil {
+				ret = out
+			}
 		}
 	}
 	return

@@ -8,9 +8,9 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
-	"git.sr.ht/~ionous/iffy/dl/term"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/lang"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -23,22 +23,30 @@ type BuildRule struct {
 
 // map name to pattern interface
 type patternEntry struct {
-	patternName string          // name of the pattern
-	patternType string          // "return" type of the pattern
-	prologue    []term.Preparer // list of all parameters sent to the pattern
-	locals      []term.Preparer // ...
-	returns     term.Preparer
+	patternName             string // name of the pattern
+	patternType             string // "return" type of the pattern
+	params, locals, returns []fieldInit
 }
 
-func (pat *patternEntry) AddParam(cat string, param term.Preparer) (err error) {
+type fieldInit struct {
+	Name     string
+	Affinity affine.Affinity
+	Type     string // ex. record name, "aspect", "trait", "float64", ...
+	Init     core.Assignment
+}
+
+func (fi *fieldInit) Field() g.Field {
+	return g.Field{fi.Name, fi.Affinity, fi.Type}
+}
+
+func (pat *patternEntry) AddField(cat string, fi fieldInit) (err error) {
 	switch cat {
 	case tables.NAMED_PARAMETER:
-		pat.prologue = append(pat.prologue, param)
+		pat.params = append(pat.params, fi)
 	case tables.NAMED_LOCAL:
-		pat.locals = append(pat.locals, param)
+		pat.locals = append(pat.locals, fi)
 	case tables.NAMED_RETURN:
-		// fix? check for multiple / different sets?
-		pat.returns = param
+		pat.returns = append(pat.returns, fi)
 	default:
 		err = errutil.New("unknown category", cat)
 	}
@@ -47,14 +55,43 @@ func (pat *patternEntry) AddParam(cat string, param term.Preparer) (err error) {
 
 type patternCache map[string]*patternEntry
 
+// fix: report errors
 func (cache patternCache) init(name, patternType string) (ret *pattern.Pattern, okay bool) {
 	if c, ok := (cache)[name]; ok && c.patternType == patternType {
-		ret = &pattern.Pattern{
-			Name:    name,
-			Params:  c.prologue,
-			Locals:  c.locals,
-			Returns: c.returns,
+		pat := pattern.Pattern{Name: name}
+		//
+		if ps := c.params; len(ps) > 0 {
+			for _, fi := range ps {
+				pat.Fields = append(pat.Fields, fi.Field())
+				// eventually labels might be different than parameter names
+				//( cause swift makes that seem cool )
+				pat.Labels = append(pat.Labels, fi.Name)
+			}
 		}
+		if ps := c.locals; len(ps) > 0 {
+			for _, fi := range ps {
+				pat.Fields = append(pat.Fields, fi.Field())
+				pat.Locals = append(pat.Locals, fi.Init)
+			}
+		}
+
+		// fix: report if too many returns
+		if ps := c.returns; len(ps) > 0 {
+			var found bool
+			res := ps[0].Field()
+			for _, f := range pat.Fields {
+				if f.Name == res.Name {
+					found = true
+					break
+				}
+			}
+			if !found {
+				pat.Fields = append(pat.Fields, res)
+			}
+			pat.Return = res.Name
+		}
+		//
+		ret = &pat
 		okay = true
 	}
 	return
@@ -64,11 +101,14 @@ func (cache patternCache) init(name, patternType string) (ret *pattern.Pattern, 
 func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 	// build the pattern cache
 	out := make(patternCache)
-	var patternName, paramName, category, typeName string
-	var kind, affinity sql.NullString
-	var prog []byte
+	var inPat, inParam, inCat, inType string
+	var inKind, inAff sql.NullString
+	var inProg []byte
 	var last *patternEntry
 	if e := tables.QueryAll(db,
+		// fix: these are grouped by pattern, param, cat --
+		// so there are conflicts in names and types we wont see
+		// this needs much better handling of conflicting and redundant info
 		`select ap.pattern, ap.param, ap.cat, ap.type, ap.affinity, ap.kind, ep.prog
 		from asm_pattern_decl ap
 		left join eph_prog ep
@@ -76,107 +116,30 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 		func() (err error) {
 			// fix: need to handle conflicting prog definitions
 			// fix: should watch for locals which shadow parameter names ( i think, ideally merge them )
-			if last == nil || last.patternName != patternName {
-				if patternName != paramName {
-					err = errutil.New("expected the first param should be the pattern return type", patternName, paramName, typeName)
+			if last == nil || last.patternName != inPat {
+				if inPat != inParam {
+					err = errutil.New("expected the first param should be the pattern return type", inPat, inProg, inType)
 				} else {
-					last = &patternEntry{patternName: patternName, patternType: typeName}
-					out[patternName] = last
+					last = &patternEntry{patternName: inPat, patternType: inType}
+					out[inPat] = last
 				}
 			}
-			if err == nil && paramName != patternName {
+			if err == nil && inParam != inPat {
 				// fix: these should probably be tables.PRIM_ names
 				// ie. "text" not "text_eval" -- tests and other things have to be adjusted
 				// it also seems a bad time to be camelizing things.
-				paramName := lang.Breakcase(paramName)
-
-				// locals have simple type names, parameters are still using _eval.
-				var p term.Preparer
-				var dig digInit
-				switch typeName {
-				case "text_eval", "text":
-					prep := &term.Text{Name: paramName}
-					p, dig = prep, func(in core.Assignment) (okay bool) {
-						if src, ok := in.(*core.FromText); ok {
-							prep.Init, okay = src.Val, true
-						}
-						return
-					}
-				case "number_eval", "number":
-					prep := &term.Number{Name: paramName}
-					p, dig = prep, func(in core.Assignment) (okay bool) {
-						if src, ok := in.(*core.FromNum); ok {
-							prep.Init, okay = src.Val, true
-						}
-						return
-					}
-				case "bool_eval", "bool":
-					prep := &term.Bool{Name: paramName}
-					p, dig = prep, func(in core.Assignment) (okay bool) {
-						if src, ok := in.(*core.FromBool); ok {
-							prep.Init, okay = src.Val, true
-						}
-						return
-					}
-				case "text_list", "text_list_eval":
-					prep := &term.TextList{Name: paramName}
-					p, dig = prep, func(in core.Assignment) (okay bool) {
-						if src, ok := in.(*core.FromTexts); ok {
-							prep.Init, okay = src.Vals, true
-						}
-						return
-					}
-				case "num_list", "num_list_eval":
-					prep := &term.NumList{Name: paramName}
-					p, dig = prep, func(in core.Assignment) (okay bool) {
-						if src, ok := in.(*core.FromNumbers); ok {
-							prep.Init, okay = src.Vals, true
-						}
-						return
-					}
-				default:
-					// the type might be some sort of kind...
-					if kind := kind.String; len(kind) > 0 {
-						switch aff := affinity.String; aff {
-						case string(affine.Object):
-							prep := &term.Object{Name: paramName, Kind: kind}
-							p, dig = prep, func(in core.Assignment) (okay bool) {
-								if src, ok := in.(*core.FromText); ok {
-									prep.Init, okay = src.Val, true
-								}
-								return
-							}
-						case string(affine.Record):
-							prep := &term.Record{Name: paramName, Kind: kind}
-							p, dig = prep, func(in core.Assignment) (okay bool) {
-								if src, ok := in.(*core.FromRecord); ok {
-									prep.Init, okay = src.Val, true
-								}
-								return
-							}
-						case string(affine.RecordList):
-							prep := &term.RecordList{Name: paramName, Kind: kind}
-							p, dig = prep, func(in core.Assignment) (okay bool) {
-								if src, ok := in.(*core.FromRecords); ok {
-									prep.Init, okay = src.Vals, true
-								}
-								return
-							}
-						}
-					}
-				}
-				if e := decode(prog, dig); e != nil {
-					err = errutil.New("couldnt decode", patternName, paramName, e)
-				} else if p != nil {
-					err = last.AddParam(category, p)
+				paramName := lang.Breakcase(inParam)
+				if aff, typeName, e := convertType(inType, inKind.String, inAff.String); e != nil {
+					err = e
+				} else if i, e := decodeProg(inProg, aff); e != nil {
+					err = errutil.New("couldnt decode", inPat, paramName, e)
 				} else {
-					err = errutil.Fmt("pattern %q parameter %q has unknown type %q(%s)",
-						patternName, paramName, typeName, affinity.String)
+					err = last.AddField(inCat, fieldInit{paramName, aff, typeName, i})
 				}
 			}
 			return
 		},
-		&patternName, &paramName, &category, &typeName, &affinity, &kind, &prog); e != nil {
+		&inPat, &inParam, &inCat, &inType, &inAff, &inKind, &inProg); e != nil {
 		err = e
 	} else {
 		ret = out
@@ -184,20 +147,46 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 	return
 }
 
-type digInit func(in core.Assignment) (okay bool)
+func convertType(inType, inKind, inAff string) (retAff affine.Affinity, retType string, err error) {
+	// locals have simple type names, parameters are still using _eval.
+	switch inType {
+	case "text_eval", "text":
+		retAff = affine.Text
+	case "number_eval", "number":
+		retAff = affine.Number
+	case "bool_eval", "bool":
+		retAff = affine.Bool
+	case "text_list", "text_list_eval":
+		retAff = affine.TextList
+	case "num_list", "num_list_eval":
+		retAff = affine.NumList
+	default:
+		// the type might be some sort of kind...
+		aff := affine.Affinity(inAff)
+		//
+		if (len(inKind) > 0) && (aff == affine.Object || aff == affine.Record || aff == affine.RecordList) {
+			retAff, retType = aff, inKind
+		} else {
+			err = errutil.New("unknown type", inType, inKind, inAff)
+		}
+	}
+	return
+}
 
 // the author specified a "local init"
 // it has a Value assignment, we want to dig out that assignment and assign it to the term prep.
 // im not convinced that terms and assigments should be different beasts...
 // if they were the same thing.. this would look different.
-func decode(prog []byte, dig digInit) (err error) {
+func decodeProg(prog []byte, aff affine.Affinity) (ret core.Assignment, err error) {
 	if haveProg := len(prog) > 0; haveProg {
 		var local story.LocalInit
 		dec := gob.NewDecoder(bytes.NewBuffer(prog))
 		if e := dec.Decode(&local); e != nil {
 			err = e
-		} else if !dig(local.Value) {
-			err = errutil.New("couldnt convert from %T", local.Value)
+		} else if a := local.Value.Affinity(); a != aff {
+			err = errutil.New("incompatible arguments, wanted", aff, "have expression of", a)
+		} else {
+			ret = local.Value
 		}
 	}
 	return

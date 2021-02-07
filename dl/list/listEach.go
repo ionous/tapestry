@@ -6,10 +6,8 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/scope"
 	"github.com/ionous/errutil"
 )
 
@@ -68,14 +66,13 @@ func (op *Each) forEach(run rt.Runtime) (err error) {
 				// could cache this -- just trying to keep it simple right now.
 				// hopefully could live right in the db.
 				const el, index, first, last = 0, 1, 2, 3
-				k := g.NewKind(run, "", []g.Field{
+				ls := g.NewAnonymousRecord(run, []g.Field{
 					{Name: it.Name(), Affinity: itAff, Type: vs.Type()},
 					{Name: "index", Affinity: affine.Number},
 					{Name: "first", Affinity: affine.Bool},
 					{Name: "last", Affinity: affine.Bool},
 				})
-				ls := k.NewRecord()
-				run.PushScope(&scope.TargetRecord{object.Variables, ls})
+				run.PushScope(g.RecordOf(ls))
 				for i := 0; i < cnt; i++ {
 					at := vs.Index(i)
 					if e := ls.SetIndexedField(el, at); e != nil {

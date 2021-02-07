@@ -218,12 +218,7 @@ func ObjectFromString(run rt.Runtime, n string) (ret g.Value, err error) {
 	if len(n) == 0 {
 		err = g.NothingObject
 	} else {
-		switch val, e := run.GetField(object.Value, n); e.(type) {
-		case g.UnknownField:
-			err = g.UnknownObject(n)
-		default:
-			ret, err = val, e
-		}
+		ret, err = run.GetField(object.Value, n)
 	}
 	return
 }

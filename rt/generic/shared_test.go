@@ -32,7 +32,7 @@ func (n *recordTest) GetField(target, field string) (ret g.Value, err error) {
 	switch target {
 	case object.Variables:
 		if v, ok := n.vars[field]; !ok {
-			err = g.UnknownField{target, field}
+			err = g.UnknownField(target, field)
 		} else {
 			ret = g.RecordOf(v)
 		}

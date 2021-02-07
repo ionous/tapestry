@@ -16,7 +16,7 @@ func (k *keyType) unknown() (err error) {
 	if k.target == object.Value {
 		err = g.UnknownObject(k.field)
 	} else {
-		err = g.UnknownField{k.target, k.field}
+		err = g.UnknownField(k.target, k.field)
 	}
 	return
 }

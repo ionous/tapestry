@@ -50,7 +50,7 @@ func (op *ObjectExists) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.False
 	} else if e == nil {
 		ret = g.True
-	} else if _, isUnknown := e.(g.UnknownObject); isUnknown {
+	} else if _, isUnknown := e.(g.Unknown); isUnknown {
 		ret = g.False
 	} else {
 		err = e

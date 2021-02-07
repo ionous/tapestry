@@ -1,11 +1,12 @@
 package test
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
-	"git.sr.ht/~ionous/iffy/dl/term"
 	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 var runGroupTogther = list.Map{
@@ -15,10 +16,12 @@ var runGroupTogther = list.Map{
 
 // from a list of object names, build a list of group settings
 var assignGrouping = pattern.Pattern{
-	Name: "assignGrouping",
-	Params: []term.Preparer{
-		&term.Text{Name: "in"},
-		&term.Record{Name: "out", Kind: "GroupSettings"},
+	Name:   "assignGrouping",
+	Return: "out",
+	Labels: []string{"in"},
+	Fields: []g.Field{
+		{Name: "in", Affinity: affine.Text},
+		{Name: "out", Affinity: affine.Record, Type: "GroupSettings"},
 	},
 	Rules: []*pattern.Rule{
 		{Execute: &core.Activity{[]rt.Execute{

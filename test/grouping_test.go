@@ -3,10 +3,8 @@ package test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/scope"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/ionous/sliceOf"
 	"github.com/kr/pretty"
@@ -22,13 +20,11 @@ func TestGrouping(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		values := kinds.New("Values", "Objects", objectNames)
-		lt := testTime{
-			Kinds: &kinds,
-			objs:  objs,
-			ScopeStack: scope.ScopeStack{
-				Scopes: []rt.Scope{
-					&scope.TargetRecord{object.Variables, values},
-				},
+		lt := testutil.Runtime{
+			Kinds:     &kinds,
+			ObjectMap: objs,
+			Stack: []rt.Scope{
+				g.RecordOf(values),
 			},
 			PatternMap: testutil.PatternMap{
 				"assignGrouping": &assignGrouping,

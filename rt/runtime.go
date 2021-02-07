@@ -5,16 +5,28 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
-// Scope provides access to a pool of named objects.
-// Various runtime objects (ex. nouns, kinds, etc. ) store data addressed by name.
-// The objects and their fields depend on implementation and context.
-// See package object for a variety of common objects.
+// Scope - implements a portion of generic.Value
+// while usually used with record under the hood --
+// it fields the Value interface to show it plays by the same aliasing rules:
+// set generates a copy.
 type Scope interface {
-	GetField(object, field string) (g.Value, error)
-	// Store, or at least attempt to store, the passed value at the named field in the named object.
-	// It may return an error if the value is not of a compatible type,
-	// if its considered to be read-only, or if there is no predeclared value of that name.
-	SetField(object, field string, value g.Value) error
+	// should return g.UnknownVariable or g.UnknownField
+	FieldByName(field string) (g.Value, error)
+	SetFieldByName(field string, val g.Value) error
+}
+
+// VariableStack - a pool of record like name-value pairs.
+// if a variable isnt found in the most recently pushed scope
+// the next most recently pushed scope gets checked and so on.
+type VariableStack interface {
+	// completely replace the current record lookup
+	// ex. patterns have opaque namespaces
+	ReplaceScope(Scope) (prev Scope)
+	// add a set of variables to the internal stack.
+	// ex. loops add to the current namespace.
+	PushScope(Scope)
+	// remove the most recently added set of variables from the internal stack.
+	PopScope()
 }
 
 // Runtime environment for an in-progress game.
@@ -32,14 +44,17 @@ type Runtime interface {
 	RelateTo(a, b, relation string) error
 	RelativesOf(a, relation string) ([]string, error)
 	ReciprocalsOf(b, relation string) ([]string, error)
-	// the runtime behaves as stack of scopes.
-	// if a variable isnt found in the most recently pushed scope
-	// the next most recently pushed scope will be checked and so on.
-	Scope
-	// add a set of variables to the internal stack.
-	PushScope(Scope)
-	// remove the most recently added set of variables from the internal stack.
-	PopScope()
+	// modifies the behavior of Get/SetField object.Variable
+	VariableStack
+	// various runtime objects (ex. nouns, kinds, etc. ) store data addressed by name.
+	// the objects and their fields depend on implementation and context.
+	// see package object for a variety of common objects.
+	GetField(object, field string) (g.Value, error)
+	// store, or at least attempt to store, the passed value at the named field in the named object.
+	// it may return an error if the value is not of a compatible type,
+	// if its considered to be read-only, or if there is no predeclared value of that name.
+	SetField(object, field string, value g.Value) error
+	//
 	// turn single words into their plural variants, and vice-versa
 	PluralOf(single string) string
 	SingularOf(plural string) string

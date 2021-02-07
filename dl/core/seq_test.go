@@ -92,7 +92,7 @@ func (m *seqTest) Random(inclusiveMin, exclusiveMax int) int {
 
 func (m *seqTest) GetField(target, field string) (ret g.Value, err error) {
 	if target != object.Counter {
-		err = g.UnknownField{target, field}
+		err = g.UnknownField(target, field)
 	} else {
 		v := m.counters[field]
 		ret = g.IntOf(v)
@@ -102,7 +102,7 @@ func (m *seqTest) GetField(target, field string) (ret g.Value, err error) {
 
 func (m *seqTest) SetField(target, field string, value g.Value) (err error) {
 	if target != object.Counter {
-		err = g.UnknownField{target, field}
+		err = g.UnknownField(target, field)
 	} else {
 		m.counters[field] = value.Int()
 	}

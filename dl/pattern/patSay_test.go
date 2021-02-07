@@ -11,7 +11,7 @@ import (
 // http://learnyouahaskell.com/syntax-in-functions
 func ExampleSayMe() {
 	// rules are run in reverse order.
-	run := patternRuntime{PatternMap: testutil.PatternMap{
+	run := testutil.Runtime{PatternMap: testutil.PatternMap{
 		"say_me": &debug.SayPattern,
 	}}
 	// say 4 numbers

@@ -109,7 +109,7 @@ func (op *ReciprocalOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 			err = cmdError(op, e)
 		} else {
 			var rel string
-			if cnt != 0 {
+			if cnt != 0 { // no relative is considered okay.
 				rel = vs[0]
 			}
 			ret = g.StringOf(rel)

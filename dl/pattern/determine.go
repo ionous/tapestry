@@ -75,16 +75,13 @@ func (op *Determine) runPattern(run rt.Runtime, aff affine.Affinity) (ret g.Valu
 	var pat Pattern
 	if e := run.GetEvalByName(op.Pattern.String(), &pat); e != nil {
 		err = e
-	} else if vs, e := pat.NewRecord(run); e != nil {
-		err = e
 	} else {
+		// normalize optional arguments
+		var args []*core.Argument
 		if op.Arguments != nil {
-			// read from each argument and store into the parameters
-			err = op.Arguments.Distill(run, vs)
+			args = op.Arguments.Args
 		}
-		if err == nil {
-			ret, err = pat.Run(run, vs, aff)
-		}
+		ret, err = pat.Run(run, args, aff)
 	}
 	return
 }

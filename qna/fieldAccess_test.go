@@ -38,8 +38,7 @@ func TestFieldAccess(t *testing.T) {
 			switch _, e := q.GetField(object.Value, name); e.(type) {
 			default:
 				t.Fatal("assign", e)
-
-			case g.UnknownObject:
+			case g.Unknown:
 				if v.exists {
 					t.Fatal("wanted to exist and it doesnt", name)
 				}
@@ -91,7 +90,7 @@ func TestFieldAccess(t *testing.T) {
 					switch e.(type) {
 					default:
 						t.Fatal(e)
-					case g.UnknownField:
+					case g.Unknown:
 						if value != nil {
 							t.Fatal("got unknown field, but expecting a value")
 						}

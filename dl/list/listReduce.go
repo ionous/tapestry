@@ -42,39 +42,27 @@ func (op *Reduce) reduce(run rt.Runtime) (err error) {
 		var pat pattern.Pattern
 		if e := run.GetEvalByName(op.UsingPattern.String(), &pat); e != nil {
 			err = e
-		} else if ps, e := pat.NewRecord(run); e != nil {
-			err = e
 		} else {
-			var pk *g.Kind
 			for it := g.ListIt(fromList); it.HasNext(); {
-				// create a new set of parameters each loop
-				if pk == nil {
-					pk = ps.Kind()
-				} else {
-					ps = pk.NewRecord()
-				}
-				in, out := 0, 1
 				if inVal, e := it.GetNext(); e != nil {
 					err = e
 					break
-				} else if e := ps.SetIndexedField(in, inVal); e != nil {
-					err = e
-					break
-				} else if e := ps.SetIndexedField(out, outVal); e != nil {
-					err = e
-					break
-				} else if _, e := pat.Run(run, ps, ""); e != nil {
-					err = e
-					break
-				} else if newVal, e := ps.GetIndexedField(out); e != nil {
-					err = e
-					break
 				} else {
-					// send it back in for the next time.
-					outVal = newVal
+					args := []*core.Argument{
+						{"$1", &fromVal{inVal}},
+						{"$2", &fromVal{outVal}},
+					}
+					if newVal, e := pat.Run(run, args, outVal.Affinity()); e != nil {
+						err = e
+						break
+					} else {
+						// send it back in for the next time.
+						outVal = newVal 
+					}
 				}
 			}
 			if err == nil {
+				// write back the completed value
 				err = run.SetField(object.Variables, op.IntoValue, outVal)
 			}
 		}

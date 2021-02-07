@@ -3,14 +3,12 @@ package list_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
-	"git.sr.ht/~ionous/iffy/dl/term"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/scope"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/kr/pretty"
 )
@@ -24,15 +22,13 @@ func TestMapStrings(t *testing.T) {
 		Fruits, Results []string
 	}
 	kinds.AddKinds((*Fruit)(nil), (*Values)(nil))
-	values := kinds.New("Values")
-	lt := listTime{
+	values := kinds.New("Values") // a record.
+	lt := testutil.Runtime{
 		PatternMap: testutil.PatternMap{
 			"remap": &reverseStrings,
 		},
-		ScopeStack: scope.ScopeStack{
-			Scopes: []rt.Scope{
-				&scope.TargetRecord{object.Variables, values},
-			},
+		Stack: []rt.Scope{
+			g.RecordOf(values),
 		},
 		Kinds: &kinds,
 	}
@@ -80,15 +76,14 @@ func TestMapRecords(t *testing.T) {
 			t.Fatal(e)
 		}
 	}
-	lt := listTime{
+	//
+	lt := testutil.Runtime{
 		Kinds: &kinds,
 		PatternMap: testutil.PatternMap{
 			"remap": &reverseRecords,
 		},
-		ScopeStack: scope.ScopeStack{
-			Scopes: []rt.Scope{
-				&scope.TargetRecord{object.Variables, values},
-			},
+		Stack: []rt.Scope{
+			g.RecordOf(values),
 		},
 	}
 	if e := remap.Execute(&lt); e != nil {
@@ -118,10 +113,12 @@ func TestMapRecords(t *testing.T) {
 var remap = list.Map{FromList: &core.Var{Name: "Fruits"}, ToList: "Results", UsingPattern: "remap"}
 
 var reverseRecords = pattern.Pattern{
-	Name: "remap",
-	Params: []term.Preparer{
-		&term.Record{Name: "in", Kind: "Fruit"},
-		&term.Record{Name: "out", Kind: "Fruit"},
+	Name:   "remap",
+	Return: "out",
+	Labels: []string{"in"},
+	Fields: []g.Field{
+		{Name: "in", Affinity: affine.Record, Type: "Fruit"},
+		{Name: "out", Affinity: affine.Record, Type: "Fruit"},
 	},
 	Rules: []*pattern.Rule{
 		&pattern.Rule{
@@ -142,10 +139,12 @@ var reverseRecords = pattern.Pattern{
 }
 
 var reverseStrings = pattern.Pattern{
-	Name: "remap",
-	Params: []term.Preparer{
-		&term.Text{Name: "in"},
-		&term.Text{Name: "out"},
+	Name:   "remap",
+	Labels: []string{"in"},
+	Return: "out",
+	Fields: []g.Field{
+		{Name: "in", Affinity: affine.Text},
+		{Name: "out", Affinity: affine.Text},
 	},
 	Rules: []*pattern.Rule{
 		&pattern.Rule{

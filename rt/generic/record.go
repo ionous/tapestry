@@ -32,7 +32,7 @@ func (d *Record) GetNamedField(field string) (ret Value, err error) {
 
 	default:
 		if i := k.FieldIndex(field); i < 0 {
-			err = UnknownField{k.name, field}
+			err = UnknownField(k.name, field)
 		} else if v, e := d.GetIndexedField(i); e != nil {
 			err = e
 		} else {
@@ -75,11 +75,11 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 }
 
 // SetNamedField - pokes the passed value into the record.
-// Unlike the Vsalue interface, this doesnt panic and it doesnt copy values.
+// Unlike the Value interface, this doesnt panic and it doesnt copy values.
 func (d *Record) SetNamedField(field string, val Value) (err error) {
 	k := d.kind
 	if i := k.FieldIndex(field); i < 0 {
-		err = UnknownField{k.name, field}
+		err = UnknownField(k.name, field)
 	} else {
 		ft := k.fields[i] // isTrait if we found aspect (a) while looking for field (t)
 		if isTrait := ft.Type == "aspect" && ft.Name != field; !isTrait {

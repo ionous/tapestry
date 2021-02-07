@@ -17,7 +17,8 @@ func TestMatching(t *testing.T) {
 	k := kinds.Kind("GroupSettings")
 
 	//
-	lt := testTime{Kinds: &kinds,
+	lt := testutil.Runtime{
+		Kinds: &kinds,
 		PatternMap: testutil.PatternMap{
 			"matchGroups": &matchGroups,
 		},

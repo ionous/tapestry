@@ -1,11 +1,12 @@
 package test
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
-	"git.sr.ht/~ionous/iffy/dl/term"
 	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 var runCollateGroups = list.Reduce{
@@ -14,16 +15,16 @@ var runCollateGroups = list.Reduce{
 	UsingPattern: "collateGroups"}
 
 var collateGroups = pattern.Pattern{
-	Name: "collateGroups",
-	Params: []term.Preparer{
-		&term.Record{Name: "settings", Kind: "GroupSettings"},
-		&term.Record{Name: "collation", Kind: "GroupCollation"},
-	},
-	Locals: []term.Preparer{
-		&term.Number{Name: "idx"},
-		&term.RecordList{Name: "groups", Kind: "GroupedObjects"},
-		&term.Record{Name: "group", Kind: "GroupedObjects"},
-		&term.TextList{Name: "names"},
+	Name:   "collateGroups",
+	Labels: []string{"settings", "collation"},
+	Return: "collation",
+	Fields: []g.Field{
+		{Name: "settings", Affinity: affine.Record, Type: "GroupSettings"},
+		{Name: "collation", Affinity: affine.Record, Type: "GroupCollation"},
+		{Name: "idx", Affinity: affine.Number},
+		{Name: "groups", Affinity: affine.RecordList, Type: "GroupedObjects"},
+		{Name: "group", Affinity: affine.Record, Type: "GroupedObjects"},
+		{Name: "names", Affinity: affine.TextList},
 	},
 	Rules: []*pattern.Rule{
 		&pattern.Rule{Execute: core.NewActivity(

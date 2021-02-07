@@ -3,17 +3,16 @@ package scope
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
-func TestScopeStack(t *testing.T) {
+func TestStack(t *testing.T) {
 	names := []string{"inner", "outer", "top"}
 	mocks := make(map[string]*mockScope)
 	for _, n := range names {
 		mocks[n] = &mockScope{name: n}
 	}
-	var stack ScopeStack
+	var stack Stack
 
 	// push and pop scopes onto the stack
 	// we expect to hear these counts back
@@ -31,10 +30,10 @@ func TestScopeStack(t *testing.T) {
 		count := counts[step]
 		for i, name := range names {
 			var have int
-			switch p, e := stack.GetField(object.Variables, name); e.(type) {
+			switch p, e := stack.FieldByName(name); e.(type) {
 			default:
 				t.Fatal("fatal", e)
-			case g.UnknownTarget, g.UnknownField:
+			case g.Unknown:
 				// t.Log(reason, "loop", i, "asking for", name, "... unknown")
 				have = -1
 			case nil:
@@ -47,10 +46,10 @@ func TestScopeStack(t *testing.T) {
 				t.Fatal("fatal", reason, "step", step, name, "have:", have, "want:", want)
 			} else {
 				n := g.IntOf(have + 1)
-				switch e := stack.SetField(object.Variables, name, n); e.(type) {
+				switch e := stack.SetFieldByName(name, n); e.(type) {
 				default:
 					t.Fatal("fatal", reason, "step", step, name, "set failed", e)
-				case g.UnknownField:
+				case g.Unknown:
 					if have != -1 {
 						t.Fatal("fatal", "step", step, name, "set failed", e)
 					}
@@ -58,7 +57,7 @@ func TestScopeStack(t *testing.T) {
 					if have == -1 {
 						t.Fatal("fatal", reason, "step", step, name, "set unexpected success")
 					} else {
-						t.Log(reason, name, "set", n)
+						t.Log(reason, name, "set", n.Int())
 					}
 				}
 			}
@@ -95,11 +94,9 @@ type mockScope struct {
 	val        int
 }
 
-func (k *mockScope) GetField(target, field string) (ret g.Value, err error) {
-	if target != object.Variables {
-		err = g.UnknownTarget{target}
-	} else if field != k.name {
-		err = g.UnknownField{target, field}
+func (k *mockScope) FieldByName(field string) (ret g.Value, err error) {
+	if field != k.name {
+		err = g.UnknownVariable(field)
 	} else {
 		k.gets++
 		ret = g.IntOf(k.val)
@@ -107,11 +104,9 @@ func (k *mockScope) GetField(target, field string) (ret g.Value, err error) {
 	return
 }
 
-func (k *mockScope) SetField(target, field string, v g.Value) (err error) {
-	if target != object.Variables {
-		err = g.UnknownTarget{target}
-	} else if field != k.name {
-		err = g.UnknownField{target, field}
+func (k *mockScope) SetFieldByName(field string, v g.Value) (err error) {
+	if field != k.name {
+		err = g.UnknownVariable(field)
 	} else {
 		k.val = v.Int()
 		k.sets++

@@ -40,7 +40,7 @@ func NewRuntime(db *sql.DB) *Runner {
 
 type Runner struct {
 	db *sql.DB
-	scope.ScopeStack
+	scope.Stack
 	Randomizer
 	writer.Sink
 	fields  *Fields
@@ -77,6 +77,7 @@ func (run *Runner) ActivateDomain(domain string, active bool) {
 func (run *Runner) GetKindByName(n string) (*g.Kind, error) {
 	return run.kinds.GetKindByName(n)
 }
+
 func (run *Runner) SingularOf(str string) (ret string) {
 	if n, e := run.plurals.Singular(str); e != nil {
 		ret = str // fix: report e

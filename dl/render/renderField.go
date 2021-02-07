@@ -54,7 +54,7 @@ func getSourceFields(run rt.Runtime, name string) (ret g.Value, err error) {
 			default:
 				err = errutil.Fmt("unexpected %q for %q", aff, name)
 			}
-		case g.UnknownTarget, g.UnknownField:
+		case g.Unknown:
 			// no such variable? try as an object
 			ret, err = run.GetField(object.Value, name)
 		default:

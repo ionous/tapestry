@@ -4,7 +4,6 @@ import (
   "git.sr.ht/~ionous/iffy/affine"
   "git.sr.ht/~ionous/iffy/dl/core"
   "git.sr.ht/~ionous/iffy/dl/pattern"
-  "git.sr.ht/~ionous/iffy/dl/term"
   "git.sr.ht/~ionous/iffy/rt"
   g "git.sr.ht/~ionous/iffy/rt/generic"
   "git.sr.ht/~ionous/iffy/rt/safe"
@@ -39,9 +38,10 @@ func DetermineSay(i int) *pattern.Determine {
 }
 
 var SayPattern = pattern.Pattern{
-  Name: "say_me",
-  Params: []term.Preparer{
-    &term.Number{Name: "num"},
+  Name:   "say_me",
+  Labels: []string{"num"},
+  Fields: []g.Field{
+    {Name: "num", Affinity: affine.Number},
   },
   Rules: []*pattern.Rule{
     {Execute: SayIt("Not between 1 and 3.")},

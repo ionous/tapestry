@@ -1,70 +1,109 @@
 package pattern
 
 import (
+	"strconv"
+
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/term"
-	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
-	"git.sr.ht/~ionous/iffy/rt/scope"
 	"github.com/ionous/errutil"
 )
 
 type Pattern struct {
-	Name    string
-	Params  []term.Preparer
-	Locals  []term.Preparer
-	Returns term.Preparer
-	Rules   []*Rule
+	Name   string
+	Return string            // name of return field; empty if none ( could be an index but slightly safer this way )
+	Labels []string          // one label for every parameter
+	Locals []core.Assignment // usually equal to the number of locals; or nil for testing.
+	Fields []g.Field         // flat list of params and locals and an optional return
+	Rules  []*Rule
 }
 
-// NewRecord - create a new record capable of holding a pattern's parameters, locals, and return values.
-// return the record and the index of the return value ( or negative 1 if none )
-func (ps *Pattern) NewRecord(run rt.Runtime) (ret *g.Record, err error) {
-	var ts term.Terms
-	if _, e := ps.computeParams(run, &ts); e != nil {
-		err = e
-	} else if _, e := ps.computeLocals(run, &ts); e != nil {
-		err = e
-	} else if _, e := ps.computeReturn(run, &ts); e != nil {
-		err = e
-	} else if vs, e := ts.NewRecord(run); e != nil {
+func (pat *Pattern) Run(run rt.Runtime, args []*core.Argument, aff affine.Affinity) (ret g.Value, err error) {
+	// create a container to hold results of args, locals, and the pending return value
+	rec := g.NewAnonymousRecord(run, pat.Fields)
+	// args run in the scope of their parent context
+	// they write to the record that will become the new context
+	if e := pat.determineArgs(run, rec, args); e != nil {
 		err = e
 	} else {
-		ret = vs
+		// initializers ( and the pattern itself ) run in the scope of the pattern
+		// ( with access to all locals and args)
+		oldScope := run.ReplaceScope(g.RecordOf(rec))
+		// locals ( by definition ) write to the record context
+		if e := pat.initializeLocals(run, rec); e != nil {
+			err = e
+		} else if e := pat.executePattern(run); e != nil {
+			err = e
+		} else if res, e := pat.getResult(rec, aff); e != nil {
+			err = e
+		} else {
+			ret = res
+		}
+		//
+		run.ReplaceScope(oldScope)
 	}
 	return
 }
 
-// Run - given a record ( returned by new record ) and an expected return affinity.
-// push the record onto the scope, execute the matching pattern rules, and return its result.
-func (ps *Pattern) Run(run rt.Runtime, rec *g.Record, aff affine.Affinity) (ret g.Value, err error) {
-	res := -1
-	if ps.Returns != nil {
-		res = rec.Kind().FieldIndex(ps.Returns.String())
-	}
-	//
-	scope := scope.TargetRecord{object.Variables, rec}
-	run.PushScope(&scope)
-	if e := ps.run(run); e != nil {
-		err = e
-	} else if res, e := getResult(rec, res, aff); e != nil {
-		err = e
+func (pat *Pattern) determineArgs(run rt.Runtime, rec *g.Record, args []*core.Argument) (err error) {
+	// future: args matching is predetermined in reading / parsing
+	if paramCnt, argCnt := len(pat.Labels), len(args); paramCnt != argCnt {
+		err = errutil.New("pattern uses", paramCnt, "parameters(s), have", argCnt, "arguments")
 	} else {
-		ret = res
+		// note: set indexed field assigns without copying
+		for i, a := range args {
+			if n, l := a.Name, pat.Labels[i]; n != l && n != argIndex(i) {
+				err = errutil.New("has mismatched arg.", i, "expected", l, "have", n)
+				break
+			} else if val, e := core.GetAssignedValue(run, a.From); e != nil {
+				err = errutil.New("error determining arg", i, n, e)
+				break
+			} else if v, e := filterText(run, pat.Fields[i], val); e != nil {
+				err = errutil.New("error narrowing arg", i, n, e)
+				break
+			} else if e := rec.SetIndexedField(i, v); e != nil {
+				err = errutil.New("error setting arg", i, n, e)
+				break
+			}
+		}
 	}
-	run.PopScope()
+	return
+}
+
+// fix? allows callers to use positional arguments
+// for lists could have a special RunWithVarArgs that uses a custom determineArgs
+// or, allow blank names to match any arg --
+// note: templates currently use positional args too.
+func argIndex(i int) string {
+	return "$" + strconv.Itoa(i+1)
+}
+
+func (pat *Pattern) initializeLocals(run rt.Runtime, rec *g.Record) (err error) {
+	fin := len(pat.Labels) // locals start after labels
+	for i, init := range pat.Locals {
+		field := pat.Fields[i+fin]
+		if init != nil {
+			if v, e := init.GetAssignedValue(run); e != nil {
+				err = errutil.New(pat.Name, "error determining local", i, field.Name, e)
+				break
+			} else if e := rec.SetIndexedField(i, v); e != nil {
+				err = errutil.New(pat.Name, "error setting local", i, field.Name, e)
+				break
+			}
+		}
+	}
 	return
 }
 
 // RunWithScope - note: assumes whatever scope is needed to run the pattern has already been setup.
-func (ps *Pattern) run(run rt.Runtime) (err error) {
-	if inds, e := splitRules(run, ps.Rules); e != nil {
+func (pat *Pattern) executePattern(run rt.Runtime) (err error) {
+	if inds, e := splitRules(run, pat.Rules); e != nil {
 		err = e
 	} else {
 		for _, i := range inds {
-			if e := safe.Run(run, ps.Rules[i].Execute); e != nil {
+			if e := safe.Run(run, pat.Rules[i].Execute); e != nil {
 				err = e
 				break
 			}
@@ -75,34 +114,26 @@ func (ps *Pattern) run(run rt.Runtime) (err error) {
 	return
 }
 
-func (ps *Pattern) computeParams(run rt.Runtime, terms *term.Terms) (ret int, err error) {
-	return prepareList(run, ps.Params, terms)
-}
-
-func (ps *Pattern) computeLocals(run rt.Runtime, terms *term.Terms) (ret int, err error) {
-	return prepareList(run, ps.Locals, terms)
-}
-
-func (ps *Pattern) computeReturn(run rt.Runtime, terms *term.Terms) (ret int, err error) {
-	if res := ps.Returns; res == nil {
-		ret = -1
-	} else if v, e := res.Prepare(run); e != nil {
-		err = e
-	} else {
-		n := res.String()
-		ret = terms.AddValue(n, v)
-	}
-	return
-}
-
-func prepareList(run rt.Runtime, list []term.Preparer, terms *term.Terms) (ret int, err error) {
-	for _, n := range list {
-		if v, e := n.Prepare(run); e != nil {
-			err = errutil.Append(err, e)
+func (pat *Pattern) getResult(rec *g.Record, aff affine.Affinity) (ret g.Value, err error) {
+	// labels=parameters, inits=locals, the rest ( no more than 1 ) is the return.
+	if res := pat.Return; len(res) > 0 {
+		// get the value and check its result
+		if res, e := rec.GetNamedField(res); e != nil {
+			err = errutil.New("error trying to get return value", e)
+		} else if e := safe.Check(res, aff); e != nil {
+			err = errutil.New("error trying to get return value", e)
+		} else if len(aff) == 0 {
+			// the caller expects nothing but we have a return value.
+			if res.Affinity() == affine.Text {
+				core.HackTillTemplatesCanEvaluatePatternTypes = res.String()
+			} else {
+				err = errutil.New("the caller expects nothing but we returned", aff)
+			}
 		} else {
-			terms.AddValue(n.String(), v)
-			ret++
+			ret = res
 		}
+	} else if len(aff) != 0 {
+		err = errutil.New("caller expected", aff, "returned nothing")
 	}
 	return
 }

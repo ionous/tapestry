@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -23,7 +22,7 @@ func (*Map) Compose() composer.Spec {
 		Name:  "list_map",
 		Group: "list",
 		Desc: `Map List: Transform the values from one list and place the results in another list.
-		The named pattern is called with two records 'in' and 'out' from the source and output lists respectively.`,
+		The designated pattern is called with each value from the "from list", one value at a time.`,
 	}
 }
 
@@ -43,42 +42,35 @@ func (op *Map) remap(run rt.Runtime) (err error) {
 		var pat pattern.Pattern
 		if e := run.GetEvalByName(op.UsingPattern.String(), &pat); e != nil {
 			err = e
-		} else if ps, e := pat.NewRecord(run); e != nil {
-			err = e
 		} else {
-			var pk *g.Kind
+			aff := affine.Element(toList.Affinity())
 			for it := g.ListIt(fromList); it.HasNext(); {
-				// create a new set of parameters each loop
-				if pk == nil {
-					pk = ps.Kind()
-				} else {
-					ps = pk.NewRecord()
-				}
-				in, out := 0, 1
 				if inVal, e := it.GetNext(); e != nil {
 					err = e
 					break
-				} else if e := ps.SetIndexedField(in, inVal); e != nil {
-					err = e
-					break
-				} else if _, e := pat.Run(run, ps, ""); e != nil {
-					err = e
-					break
-				} else if newVal, e := ps.GetIndexedField(out); e != nil {
-					err = e
-					break
-				} else if src, dst := newVal.Affinity(), toList.Affinity(); src != affine.Element(dst) ||
-					((src == affine.Record) && newVal.Type() != toList.Type()) {
-					err = errutil.New("elements don't match")
-					break
 				} else {
-					toList.Append(newVal)
+					args := []*core.Argument{
+						{"$1", &fromVal{inVal}},
+					}
+					if newVal, e := pat.Run(run, args, aff); e != nil {
+						err = e
+						break
+					} else {
+						toList.Append(newVal)
+					}
 				}
-			}
-			if err == nil {
-				err = run.SetField(object.Variables, op.ToList, toList)
 			}
 		}
 	}
 	return
+}
+
+// allows values to be passed as arguments ( arguments are usually evals )
+type fromVal struct{ val g.Value }
+
+func (op *fromVal) GetAssignedValue(rt.Runtime) (g.Value, error) {
+	return op.val, nil
+}
+func (op *fromVal) Affinity() affine.Affinity {
+	return op.val.Affinity()
 }

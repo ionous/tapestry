@@ -48,7 +48,7 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 		switch v, e := run.GetField(object.Variables, op.Name); e.(type) {
 		default:
 			err = e
-		case g.UnknownTarget, g.UnknownField:
+		case g.Unknown:
 			// if there was no such variable, then it's probably an object name
 			ret, err = op.getPrintedNamedOf(run, name)
 		case nil:

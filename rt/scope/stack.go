@@ -1,74 +1,67 @@
 package scope
 
 import (
-	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
-type ScopeStack struct {
-	Scopes         []rt.Scope
-	NormalizeNames bool
-}
+type Stack []rt.Scope
 
-func (k *ScopeStack) PushScope(scope rt.Scope) {
-	if len(k.Scopes) > 25 {
-		panic("Scopes overflow")
+var MaxStack = 25
+
+func (k *Stack) PushScope(scope rt.Scope) {
+	if len((*k)) > MaxStack {
+		panic("scope overflow")
 	}
-	k.Scopes = append(k.Scopes, scope)
+	(*k) = append((*k), scope)
 }
 
-func (k *ScopeStack) PopScope() {
-	if cnt := len(k.Scopes); cnt == 0 {
-		panic("ScopeStack: popping an empty Scopes")
+func (k *Stack) PopScope() {
+	if cnt := len((*k)); cnt == 0 {
+		panic("Stack: popping an empty scopes")
 	} else {
-		k.Scopes = k.Scopes[0 : cnt-1]
+		(*k) = (*k)[0 : cnt-1]
 	}
 }
 
-// GetField returns the value at 'name'
-func (k *ScopeStack) GetField(target, field string) (ret g.Value, err error) {
-	norm := field
-	if k.NormalizeNames {
-		norm = lang.Underscore(field)
+func (k *Stack) ReplaceScope(scope rt.Scope) (ret rt.Scope) {
+	// that's okay; its probably from a replace of an empty stack
+	if scope == nil {
+		k.PopScope()
+	} else if end := len(*k) - 1; end < 0 {
+		(*k) = append((*k), scope)
+	} else {
+		ret, (*k)[end] = (*k)[end], scope
 	}
-	err = k.visit(target, field, func(scope rt.Scope) (err error) {
-		if v, e := scope.GetField(target, norm); e != nil {
-			err = e
-		} else {
-			ret = v
-		}
-		return err
-	})
 	return
 }
 
-// SetField writes the value of 'v' into the value at 'name'.
-func (k *ScopeStack) SetField(target, field string, v g.Value) (err error) {
-	norm := field
-	if k.NormalizeNames {
-		norm = lang.Underscore(field)
-	}
-	return k.visit(target, field, func(scope rt.Scope) error {
-		return scope.SetField(target, norm, v)
-	})
-}
-
-func (k *ScopeStack) visit(target, field string, visitor func(rt.Scope) error) (err error) {
-	for i := len(k.Scopes) - 1; i >= 0; i-- {
-		switch e := visitor(k.Scopes[i]); e.(type) {
-		case nil:
-			// no error? we're done.
-			goto Done
-		case g.UnknownTarget, g.UnknownField:
-			// didn't find? keep looking...
-		default:
-			// other error? done.
-			err = e
-			goto Done
+// FieldByName returns the value at 'field'
+func (k *Stack) FieldByName(field string) (ret g.Value, err error) {
+	if cnt := len((*k)); cnt == 0 {
+		err = g.UnknownVariable(field)
+	} else {
+		for i := cnt - 1; i >= 0; i-- {
+			ret, err = (*k)[i].FieldByName(field)
+			if _, isUnknown := err.(g.Unknown); !isUnknown {
+				break // while isUnknown keep going; otherwise done.
+			}
 		}
 	}
-	err = g.UnknownField{target, field}
-Done:
+	return
+}
+
+// SetFieldByName writes the value of 'v' into the value at 'field'.
+func (k *Stack) SetFieldByName(field string, v g.Value) (err error) {
+	if cnt := len((*k)); cnt == 0 {
+		err = g.UnknownVariable(field)
+	} else {
+		for i := cnt - 1; i >= 0; i-- {
+			err = (*k)[i].SetFieldByName(field, v)
+			if _, isUnknown := err.(g.Unknown); !isUnknown {
+				break // while isUnknown keep going; otherwise done.
+			}
+		}
+	}
 	return
 }

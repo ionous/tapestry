@@ -29,13 +29,8 @@ func NewKind(kinds Kinds, name string, fields []Field) *Kind {
 	return &Kind{kinds: kinds, name: path[0], path: path, fields: fields}
 }
 
-// NewInternalRecord -
-// this is a user beware function which initializes the record with the passed values.
-// creates ( for now ) an anonymous kind -- the values passed (ex. records) are shared not copied.
-// this allows pattern inputs to pass record pointers instead of record copies.
-func NewInternalRecord(kinds Kinds, fields []Field, values []Value) *Record {
-	k := NewKind(kinds, "", fields)
-	return &Record{kind: k, values: values}
+func NewAnonymousRecord(kinds Kinds, fields []Field) *Record {
+	return NewKind(kinds, "", fields).NewRecord()
 }
 
 // fix: temp till all kinds are moved to assembly
