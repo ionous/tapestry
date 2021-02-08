@@ -50,12 +50,12 @@
                                 "type": "are_an",
                                 "value": "$ISA"
                               },
+                              "$TRAIT": [],
                               "$KIND": {
                                 "id": "id-1771724a77b-12",
                                 "type": "singular_kind",
                                 "value": "supporter"
-                              },
-                              "$TRAIT": []
+                              }
                             }
                           }
                         }
@@ -108,12 +108,12 @@
                                 "type": "are_an",
                                 "value": "$ISA"
                               },
+                              "$TRAIT": [],
                               "$KIND": {
                                 "id": "id-1771724a77b-22",
                                 "type": "singular_kind",
                                 "value": "room"
-                              },
-                              "$TRAIT": []
+                              }
                             }
                           }
                         }
@@ -166,12 +166,12 @@
                                 "type": "are_an",
                                 "value": "$ISA"
                               },
+                              "$TRAIT": [],
                               "$KIND": {
                                 "id": "id-1771724a77b-32",
                                 "type": "singular_kind",
                                 "value": "container"
-                              },
-                              "$TRAIT": []
+                              }
                             }
                           }
                         }
@@ -224,18 +224,18 @@
                                 "type": "are_an",
                                 "value": "$ISA"
                               },
-                              "$KIND": {
-                                "id": "id-1771724a77b-146",
-                                "type": "singular_kind",
-                                "value": "prop"
-                              },
                               "$TRAIT": [
                                 {
                                   "id": "id-1771724a77b-147",
                                   "type": "trait",
                                   "value": "carried"
                                 }
-                              ]
+                              ],
+                              "$KIND": {
+                                "id": "id-1771724a77b-146",
+                                "type": "singular_kind",
+                                "value": "prop"
+                              }
                             }
                           }
                         }
@@ -284,6 +284,11 @@
                 "id": "id-1771724a77b-35",
                 "type": "test_scene",
                 "value": {
+                  "$TEST_NAME": {
+                    "id": "id-1771724a77b-36",
+                    "type": "test_name",
+                    "value": "whereabouts"
+                  },
                   "$STORY": {
                     "id": "id-1771724a77b-37",
                     "type": "story",
@@ -352,6 +357,11 @@
                                                   "type": "are_being",
                                                   "value": "$ARE"
                                                 },
+                                                "$RELATION": {
+                                                  "id": "id-1771724a77b-66",
+                                                  "type": "relation_name",
+                                                  "value": "whereabouts"
+                                                },
                                                 "$NOUNS": [
                                                   {
                                                     "id": "id-1771724a77b-67",
@@ -369,12 +379,7 @@
                                                       }
                                                     }
                                                   }
-                                                ],
-                                                "$RELATION": {
-                                                  "id": "id-1771724a77b-66",
-                                                  "type": "relation_name",
-                                                  "value": "whereabouts"
-                                                }
+                                                ]
                                               }
                                             }
                                           }
@@ -435,6 +440,11 @@
                                                   "type": "are_being",
                                                   "value": "$IS"
                                                 },
+                                                "$RELATION": {
+                                                  "id": "id-1771724a77b-132",
+                                                  "type": "relation_name",
+                                                  "value": "whereabouts"
+                                                },
                                                 "$NOUNS": [
                                                   {
                                                     "id": "id-1771724a77b-133",
@@ -452,12 +462,7 @@
                                                       }
                                                     }
                                                   }
-                                                ],
-                                                "$RELATION": {
-                                                  "id": "id-1771724a77b-132",
-                                                  "type": "relation_name",
-                                                  "value": "whereabouts"
-                                                }
+                                                ]
                                               }
                                             }
                                           }
@@ -534,6 +539,11 @@
                                                   "type": "are_being",
                                                   "value": "$ARE"
                                                 },
+                                                "$RELATION": {
+                                                  "id": "id-1771724a77b-84",
+                                                  "type": "relation_name",
+                                                  "value": "whereabouts"
+                                                },
                                                 "$NOUNS": [
                                                   {
                                                     "id": "id-1771724a77b-85",
@@ -551,12 +561,7 @@
                                                       }
                                                     }
                                                   }
-                                                ],
-                                                "$RELATION": {
-                                                  "id": "id-1771724a77b-84",
-                                                  "type": "relation_name",
-                                                  "value": "whereabouts"
-                                                }
+                                                ]
                                               }
                                             }
                                           }
@@ -684,6 +689,11 @@
                                                   "type": "are_being",
                                                   "value": "$IS"
                                                 },
+                                                "$RELATION": {
+                                                  "id": "id-17736705b90-55",
+                                                  "type": "relation_name",
+                                                  "value": "whereabouts"
+                                                },
                                                 "$NOUNS": [
                                                   {
                                                     "id": "id-17736705b90-56",
@@ -701,12 +711,7 @@
                                                       }
                                                     }
                                                   }
-                                                ],
-                                                "$RELATION": {
-                                                  "id": "id-17736705b90-55",
-                                                  "type": "relation_name",
-                                                  "value": "whereabouts"
-                                                }
+                                                ]
                                               }
                                             }
                                           }
@@ -722,11 +727,6 @@
                         }
                       ]
                     }
-                  },
-                  "$TEST_NAME": {
-                    "id": "id-1771724a77b-36",
-                    "type": "test_name",
-                    "value": "whereabouts"
                   }
                 }
               }
@@ -746,6 +746,11 @@
                 "id": "id-1771724a77b-151",
                 "type": "test_statement",
                 "value": {
+                  "$TEST_NAME": {
+                    "id": "id-1771724a77b-152",
+                    "type": "test_name",
+                    "value": "whereabouts"
+                  },
                   "$TEST": {
                     "id": "id-1771724a77b-153",
                     "type": "testing",
@@ -760,11 +765,6 @@
                         }
                       }
                     }
-                  },
-                  "$TEST_NAME": {
-                    "id": "id-1771724a77b-152",
-                    "type": "test_name",
-                    "value": "whereabouts"
                   }
                 }
               }
@@ -784,6 +784,11 @@
                 "id": "id-1771724a77b-158",
                 "type": "test_rule",
                 "value": {
+                  "$TEST_NAME": {
+                    "id": "id-1771724a77b-159",
+                    "type": "test_name",
+                    "value": "whereabouts"
+                  },
                   "$HOOK": {
                     "id": "id-1771724a77b-160",
                     "type": "program_hook",
@@ -822,11 +827,6 @@
                         }
                       }
                     }
-                  },
-                  "$TEST_NAME": {
-                    "id": "id-1771724a77b-159",
-                    "type": "test_name",
-                    "value": "whereabouts"
                   }
                 }
               }
