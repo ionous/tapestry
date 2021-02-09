@@ -11,7 +11,7 @@ import (
 
 type Slice struct {
 	List       core.Assignment
-	Start, End rt.NumberEval // from start to end (end not included)
+	Start, End rt.NumberEval `if:"optional"` // from start to end (end not included)
 }
 
 // Start is optional, if omitted slice starts at the first element.
@@ -27,7 +27,7 @@ func (*Slice) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "list_slice",
 		Group: "list",
-		Spec:  "slice {list:assignment} {from entry%start?number} {ending before entry%end?number}",
+		Spec:  "slice {list:assignment} {from entry%start?number_eval} {ending before entry%end?number_eval}",
 		Desc:  "Slice of List: Create a new list from a section of another list.",
 	}
 }

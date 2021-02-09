@@ -60,6 +60,7 @@
 }
 /* role: TERMINAL */
 .mk-flow-param[data-role="T"] {
+  display: none;
   color:black; /**/
 }
 /* role: SELECTOR, TOKEN, FUNCTION */

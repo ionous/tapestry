@@ -23,7 +23,7 @@ func (*Argument) Compose() composer.Spec {
 
 func (*Arguments) Compose() composer.Spec {
 	return composer.Spec{
-		Spec:  " {arguments%args+argument|comma-and}",
+		Spec:  " {arguments%args+argument|commas}",
 		Group: "patterns",
 		Stub:  true,
 	}

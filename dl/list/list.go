@@ -27,6 +27,7 @@ var Slats = []composer.Composer{
 	(*Len)(nil),
 	(*Map)(nil),
 	(*Reduce)(nil),
+	(*Reverse)(nil),
 	(*Set)(nil),
 	(*Slice)(nil),
 	(*Splice)(nil),

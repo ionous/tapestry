@@ -373,7 +373,7 @@ const spec = [
       "patterns"
     ],
     "name": "arguments",
-    "spec": " {arguments%args+argument|comma-and}",
+    "spec": " {arguments%args+argument|commas}",
     "uses": "flow"
   },
   {
@@ -2098,6 +2098,32 @@ const spec = [
     }
   },
   {
+    "desc": "Reverse List: Reverse a list.",
+    "group": [
+      "list"
+    ],
+    "name": "list_reverse",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$LIST": {
+          "label": "list",
+          "type": "list_source"
+        }
+      },
+      "roles": "CZKT",
+      "slots": [
+        "execute"
+      ],
+      "tokens": [
+        "reverse",
+        ": ",
+        "$LIST",
+        "."
+      ]
+    }
+  },
+  {
     "desc": "Set Value of List: Overwrite an existing value in a list.",
     "group": [
       "list"
@@ -2146,7 +2172,7 @@ const spec = [
       "list"
     ],
     "name": "list_slice",
-    "spec": "slice {list:assignment} {from entry%start?number} {ending before entry%end?number}",
+    "spec": "slice {list:assignment} {from entry%start?number_eval} {ending before entry%end?number_eval}",
     "uses": "flow",
     "with": {
       "slots": [

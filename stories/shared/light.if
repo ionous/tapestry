@@ -381,7 +381,7 @@
                                                 "$NAME": {
                                                   "id": "id-177661f02fe-22",
                                                   "type": "text",
-                                                  "value": "parent"
+                                                  "value": "obj"
                                                 }
                                               }
                                             }
@@ -416,7 +416,7 @@
                                                 "$VAR": {
                                                   "id": "id-177661f02fe-29",
                                                   "type": "variable_name",
-                                                  "value": "parent"
+                                                  "value": "obj"
                                                 }
                                               }
                                             }
@@ -446,7 +446,7 @@
                                                 "$VAR": {
                                                   "id": "id-177661f02fe-34",
                                                   "type": "variable_name",
-                                                  "value": "parent"
+                                                  "value": "obj"
                                                 }
                                               }
                                             }
@@ -477,7 +477,7 @@
                                             "$LINES": {
                                               "id": "id-177661f02fe-46",
                                               "type": "lines",
-                                              "value": "if the parent is a closed container, dont return anything."
+                                              "value": "if our object is a closed, opaque, container, dont return anything."
                                             }
                                           }
                                         }
@@ -698,7 +698,7 @@
                             "$AN": {
                               "id": "id-177661f02fe-57",
                               "type": "determiner",
-                              "value": "$AN"
+                              "value": "$A"
                             },
                             "$NAME": {
                               "id": "id-177661f02fe-58",
@@ -746,58 +746,6 @@
                     "id": "id-177661f02fe-65",
                     "type": "pattern_name",
                     "value": "VisibilityOf"
-                  },
-                  "$PATTERN_LOCALS": {
-                    "id": "id-177661f02fe-66",
-                    "type": "pattern_locals",
-                    "value": {
-                      "$LOCAL_DECL": [
-                        {
-                          "id": "id-177661f02fe-67",
-                          "type": "local_decl",
-                          "value": {
-                            "$VARIABLE_DECL": {
-                              "id": "id-177661f02fe-68",
-                              "type": "variable_decl",
-                              "value": {
-                                "$AN": {
-                                  "id": "id-177661f02fe-69",
-                                  "type": "determiner",
-                                  "value": "$OUR"
-                                },
-                                "$NAME": {
-                                  "id": "id-177661f02fe-70",
-                                  "type": "variable_name",
-                                  "value": "transParent"
-                                },
-                                "$TYPE": {
-                                  "id": "id-177661f02fe-71",
-                                  "type": "variable_type",
-                                  "value": {
-                                    "$OBJECT": {
-                                      "id": "id-177661f02fe-72",
-                                      "type": "object_type",
-                                      "value": {
-                                        "$AN": {
-                                          "id": "id-177661f02fe-73",
-                                          "type": "ana",
-                                          "value": "$AN"
-                                        },
-                                        "$KIND": {
-                                          "id": "id-177661f02fe-74",
-                                          "type": "singular_kind",
-                                          "value": "object"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
                   },
                   "$PATTERN_RETURN": {
                     "id": "id-177661f02fe-89",
@@ -866,90 +814,6 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-177661f02fe-219",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-177661f02fe-220",
-                                          "type": "assign",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-177661f02fe-221",
-                                              "type": "variable_name",
-                                              "value": "transParent"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-177661f02fe-222",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-177661f02fe-223",
-                                                "type": "from_text",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-177661f02fe-224",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-177661f02fe-225",
-                                                      "type": "determine",
-                                                      "value": {
-                                                        "$NAME": {
-                                                          "id": "id-177661f02fe-226",
-                                                          "type": "pattern_name",
-                                                          "value": "TransParentOf"
-                                                        },
-                                                        "$ARGUMENTS": {
-                                                          "id": "id-177661f02fe-227",
-                                                          "type": "arguments",
-                                                          "value": {
-                                                            "$ARGS": [
-                                                              {
-                                                                "id": "id-177661f02fe-228",
-                                                                "type": "argument",
-                                                                "value": {
-                                                                  "$NAME": {
-                                                                    "id": "id-177661f02fe-229",
-                                                                    "type": "variable_name",
-                                                                    "value": "obj"
-                                                                  },
-                                                                  "$FROM": {
-                                                                    "id": "id-177661f02fe-230",
-                                                                    "type": "assignment",
-                                                                    "value": {
-                                                                      "id": "id-177661f02fe-231",
-                                                                      "type": "from_text",
-                                                                      "value": {
-                                                                        "$VAL": {
-                                                                          "id": "id-177661f02fe-232",
-                                                                          "type": "text_eval",
-                                                                          "value": {
-                                                                            "id": "id-177661f02fe-233",
-                                                                            "type": "get_var",
-                                                                            "value": {
-                                                                              "$NAME": {
-                                                                                "id": "id-177661f02fe-234",
-                                                                                "type": "text",
-                                                                                "value": "obj"
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            ]
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                      {
                                         "id": "id-177661f02fe-147",
                                         "type": "execute",
                                         "value": {
@@ -980,7 +844,7 @@
                                                               "$NAME": {
                                                                 "id": "id-177661f02fe-168",
                                                                 "type": "text",
-                                                                "value": "transParent"
+                                                                "value": "obj"
                                                               }
                                                             }
                                                           }
@@ -1013,7 +877,7 @@
                                                               "$NAME": {
                                                                 "id": "id-177661f02fe-185",
                                                                 "type": "text",
-                                                                "value": "transParent"
+                                                                "value": "obj"
                                                               }
                                                             }
                                                           }
@@ -1051,7 +915,7 @@
                                                         "$VAR": {
                                                           "id": "id-177661f02fe-105",
                                                           "type": "variable_name",
-                                                          "value": "transParent"
+                                                          "value": "obj"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-177661f02fe-106",
@@ -1103,7 +967,7 @@
                                                                                           "$NAME": {
                                                                                             "id": "id-177661f02fe-162",
                                                                                             "type": "text",
-                                                                                            "value": "transParent"
+                                                                                            "value": "obj"
                                                                                           }
                                                                                         }
                                                                                       }
