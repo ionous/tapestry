@@ -26,6 +26,6 @@ Ongoing work includes:
 * expanding the abilities of the story engine to support unit tests and game play.
 
 # building iffy
-I'm going to try to commit to keeping track of progress on the [iffy wiki](https://github.com/ionous/iffy/wiki). Nothing is probably usable by other people yet. It is a work in progress.
+I'm going to try to commit to keeping track of progress on the [iffy wiki](https://man.sr.ht/~ionous/iffy/). Nothing is probably usable by other people yet. It is a work in progress.
 
 note: iffy uses [sqlite3](https://www.sqlite.org/index.html), the [best](https://en.wikipedia.org/wiki/Highlander_(film)) go-sqlite driver [requires](https://github.com/mattn/go-sqlite3/issues/467) cgo, so on windows you'll probably have to install gcc. i'm using: https://jmeubank.github.io/tdm-gcc/
