@@ -292,25 +292,11 @@ const spec = [
       "logic"
     ],
     "name": "all_true",
+    "spec": "allTrue: {test+bool_eval|comma-and}",
     "uses": "flow",
     "with": {
-      "params": {
-        "$TEST": {
-          "label": "test",
-          "repeats": true,
-          "type": "bool_eval"
-        }
-      },
-      "roles": "QZSZK",
       "slots": [
         "bool_eval"
-      ],
-      "tokens": [
-        "allTrue",
-        " ",
-        "test",
-        ": ",
-        "$TEST"
       ]
     }
   },
