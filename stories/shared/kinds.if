@@ -278,12 +278,12 @@
                         {
                           "id": "id-17773598bfa-141",
                           "type": "trait",
-                          "value": "scenery"
+                          "value": "not scenery"
                         },
                         {
                           "id": "id-17773598bfa-142",
                           "type": "trait",
-                          "value": "not scenery"
+                          "value": "scenery"
                         }
                       ]
                     }
@@ -301,7 +301,7 @@
                   "$PLURAL_KINDS": {
                     "id": "id-17773598bfa-145",
                     "type": "plural_kinds",
-                    "value": "things"
+                    "value": " things"
                   },
                   "$PROPERTY_DECL": [
                     {
@@ -376,6 +376,200 @@
                       }
                     }
                   ]
+                }
+              }
+            },
+            {
+              "id": "id-1778a42f288-596",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1778a42f288-597",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-1778a42f288-598",
+                    "type": "plural_kinds",
+                    "value": " things"
+                  },
+                  "$PROPERTY_DECL": [
+                    {
+                      "id": "id-1778a42f288-599",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-1778a42f288-600",
+                          "type": "determiner",
+                          "value": "$OUR"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-1778a42f288-601",
+                          "type": "property",
+                          "value": "mentionable"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-1778a42f288-602",
+                          "type": "property_type",
+                          "value": {
+                            "$PROPERTY_ASPECT": {
+                              "id": "id-1778a42f288-603",
+                              "type": "property_aspect",
+                              "value": "$ASPECT"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-1778a42f288-604",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1778a42f288-605",
+                "type": "kinds_of_aspect",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-1778a42f288-606",
+                    "type": "aspect",
+                    "value": " mentionable"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1778a42f288-607",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1778a42f288-608",
+                "type": "aspect_traits",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-1778a42f288-609",
+                    "type": "aspect",
+                    "value": " mentionable"
+                  },
+                  "$TRAIT_PHRASE": {
+                    "id": "id-1778a42f288-610",
+                    "type": "trait_phrase",
+                    "value": {
+                      "$ARE_EITHER": {
+                        "id": "id-1778a42f288-611",
+                        "type": "are_either",
+                        "value": "$EITHER"
+                      },
+                      "$TRAIT": [
+                        {
+                          "id": "id-1778a42f288-612",
+                          "type": "trait",
+                          "value": "not mentioned"
+                        },
+                        {
+                          "id": "id-1778a42f288-613",
+                          "type": "trait",
+                          "value": "mentioned"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1778a42f288-596",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1778a42f288-597",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-1778a42f288-598",
+                    "type": "plural_kinds",
+                    "value": " things"
+                  },
+                  "$PROPERTY_DECL": [
+                    {
+                      "id": "id-1778a42f288-599",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-1778a42f288-600",
+                          "type": "determiner",
+                          "value": "$OUR"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-1778a42f288-601",
+                          "type": "property",
+                          "value": "handleable"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-1778a42f288-602",
+                          "type": "property_type",
+                          "value": {
+                            "$PROPERTY_ASPECT": {
+                              "id": "id-1778a42f288-603",
+                              "type": "property_aspect",
+                              "value": "$ASPECT"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-1778a42f288-604",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1778a42f288-605",
+                "type": "kinds_of_aspect",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-1778a42f288-606",
+                    "type": "aspect",
+                    "value": " handleable"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1778a42f288-607",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1778a42f288-608",
+                "type": "aspect_traits",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-1778a42f288-609",
+                    "type": "aspect",
+                    "value": " handleable"
+                  },
+                  "$TRAIT_PHRASE": {
+                    "id": "id-1778a42f288-610",
+                    "type": "trait_phrase",
+                    "value": {
+                      "$ARE_EITHER": {
+                        "id": "id-1778a42f288-611",
+                        "type": "are_either",
+                        "value": "$EITHER"
+                      },
+                      "$TRAIT": [
+                        {
+                          "id": "id-1778a42f288-612",
+                          "type": "trait",
+                          "value": "not handled"
+                        },
+                        {
+                          "id": "id-1778a42f288-613",
+                          "type": "trait",
+                          "value": "handled"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }

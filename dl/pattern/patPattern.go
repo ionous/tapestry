@@ -160,9 +160,9 @@ func (pat *Pattern) getResult(rec *g.Record, aff affine.Affinity) (ret g.Value, 
 			// the caller expects nothing but we have a return value.
 			if res.Affinity() == affine.Text {
 				core.HackTillTemplatesCanEvaluatePatternTypes = res.String()
-			} else {
-				err = errutil.New("the caller expects nothing but we returned", aff)
 			}
+			// other than passing data back to templates in a hack...
+			// we dont treat this as an error -- we allow patterns to be run for side effects.
 		} else {
 			ret = res
 		}
