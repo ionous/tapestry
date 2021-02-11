@@ -39,8 +39,8 @@ func (op *Always) GetBool(run rt.Runtime) (ret g.Value, err error) {
 func (*AllTrue) Compose() composer.Spec {
 	return composer.Spec{
 		Group: "logic",
-		// Spec:  "all true test: {+test|comma-and}",
-		Desc: "All True: returns true if all of the evaluations are true.",
+		Spec:  "allTrue: {test+bool_eval|comma-and}",
+		Desc:  "All True: returns true if all of the evaluations are true.",
 	}
 }
 

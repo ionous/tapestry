@@ -12,7 +12,7 @@ type Rule struct {
 	rt.Execute
 }
 
-func (r *Rule) GetFlags(run rt.Runtime) (ret Flags, err error) {
+func (r *Rule) ApplyRule(run rt.Runtime) (ret Flags, err error) {
 	if ok, e := safe.GetOptionalBool(run, r.Filter, true); e != nil {
 		err = e
 	} else if !ok.Bool() {

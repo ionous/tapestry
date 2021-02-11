@@ -2,7 +2,7 @@ package pattern
 
 // Flags controlling patterns capable of producing multiple results.
 // Rules satisfying their filters get sorted and processed in the flagged order.
-// see also: splitRules
+// see also: sortRules
 type Flags int
 
 //go:generate stringer -type=Flags

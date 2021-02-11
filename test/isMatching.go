@@ -19,7 +19,7 @@ var matchGroups = pattern.Pattern{
 		{Name: "matches", Affinity: affine.Bool},
 	},
 	Return: "matches",
-	// rules are evaluated in reverse order ( see splitRules )
+	// rules are evaluated in reverse order ( see sortRules )
 	Rules: []*pattern.Rule{{
 		Filter:  &core.Always{},
 		Execute: matches(true),
