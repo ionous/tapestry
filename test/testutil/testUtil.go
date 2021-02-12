@@ -43,7 +43,6 @@ func (ks *Kinds) Kind(name string) (ret *g.Kind) {
 	return
 }
 
-//
 func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	if k, ok := ks.Kinds[name]; ok {
 		ret = k // we created the kind already

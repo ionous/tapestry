@@ -1,11 +1,17 @@
 package list
 
 import (
+	"sort"
+	"strings"
+
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -32,18 +38,6 @@ type SortRecords struct {
 
 type SortByField struct {
 	Name string `if:"selector"`
-}
-
-func (op *SortText) Sort(rt.Runtime, g.Value) (ret error) {
-	return errutil.New("not implemented")
-}
-
-func (op *SortNumbers) Sort(rt.Runtime, g.Value) (ret error) {
-	return errutil.New("not implemented")
-}
-
-func (op *SortRecords) Sort(rt.Runtime, g.Value) (ret error) {
-	return errutil.New("not implemented")
 }
 
 func (op *SortByField) Compose() composer.Spec {
@@ -80,78 +74,133 @@ func (op *SortRecords) Compose() composer.Spec {
 	}
 }
 
-// func (op *Sort) sort(run rt.Runtime) (err error) {
-// 	if vs, e := safe.List(run, op.List); e != nil {
-// 		err = e
-// 	} else {
-// 		var newVals g.Value
-// 		switch a := vs.Affinity(); a {
-// 		case affine.NumList:
-// 			els := vs.Floats()
-// 			if e := op.sortNumbers(run, els); e != nil {
-// 				err = e
-// 			} else {
-// 				newVals = g.FloatsOf(els)
-// 			}
-// 		case affine.TextList:
-// 			els := vs.Strings()
-// 			if e := op.sortText(run, els); e != nil {
-// 				err = e
-// 			} else {
-// 				newVals = g.StringsOf(els)
-// 			}
-// 		default:
-// 			err = errutil.Fmt("variable '%s(%s)' isn't a list", op.List, a)
-// 		}
-// 		if err == nil {
-// 			err = run.SetField(object.Variables, op.List, newVals)
-// 		}
-// 	}
-// 	return
-// }
+func (op *SortNumbers) Execute(run rt.Runtime) (err error) {
+	if e := op.sortByNum(run); e != nil {
+		err = cmdError(op, e)
+	}
+	return
+}
 
-// func (op *Sort) sortNumbers(run rt.Runtime, src []float64) (err error) {
-// 	var one, two core.FromValue
-// 	det := makeDet(op.Pattern, &one, &two)
-// 	sort.Slice(src, func(i, j int) (ret bool) {
-// 		one.Value, two.Value = g.FloatOf(src[i]), g.FloatOf(src[j])
-// 		if x, e := det.GetBool(run); e != nil {
-// 			err = errutil.Append(err, e)
-// 		} else {
-// 			ret = x.Bool()
-// 		}
-// 		return
-// 	})
-// 	return
-// }
+func (op *SortText) Execute(run rt.Runtime) (err error) {
+	if e := op.sortByText(run); e != nil {
+		err = cmdError(op, e)
+	}
+	return
+}
 
-// func (op *Sort) sortText(run rt.Runtime, src []string) (err error) {
-// 	var one, two core.FromValue
-// 	det := makeDet(op.Pattern, &one, &two)
-// 	sort.Slice(src, func(i, j int) (ret bool) {
-// 		one.Value, two.Value = g.StringOf(src[i]), g.StringOf(src[j])
-// 		if x, e := det.GetBool(run); e != nil {
-// 			err = errutil.Append(err, e)
-// 		} else {
-// 			ret = x.Bool()
-// 		}
-// 		return
-// 	})
-// 	return
-// }
+func (op *SortRecords) Execute(rt.Runtime) (err error) {
+	return errutil.New("not implemented")
+}
 
-// // similar to express buildPattern
-// func makeDet(name pattern.PatternName, first, second *core.FromValue) rt.BoolEval {
-// 	return &pattern.DetermineBool{
-// 		Pattern: name,
-// 		Arguments: &core.Arguments{
-// 			Args: []*core.Argument{{
-// 				Name: "$1",
-// 				From: first,
-// 			}, {
-// 				Name: "$2",
-// 				From: second,
-// 			}},
-// 		},
-// 	}
-// }
+func (op *SortNumbers) sortByNum(run rt.Runtime) (err error) {
+	if v, e := run.GetField(object.Variables, op.Var.String()); e != nil {
+		err = e
+	} else {
+		if pby := op.ByField; pby == nil {
+			err = errutil.New("not implemented")
+		} else {
+			switch aff := v.Affinity(); aff {
+			case affine.RecordList:
+				err = sortRecords(run, v.Records(), pby.Name, affine.Number, op.numSorter)
+
+			case affine.TextList:
+				err = sortObjects(run, v.Strings(), pby.Name, affine.Number, op.numSorter)
+
+			default:
+				err = errutil.New("not implemented")
+			}
+		}
+	}
+	return
+}
+
+func (op *SortText) sortByText(run rt.Runtime) (err error) {
+	if v, e := run.GetField(object.Variables, op.Var.String()); e != nil {
+		err = e
+	} else {
+		if pby := op.ByField; pby == nil {
+			err = errutil.New("not implemented")
+		} else {
+			switch aff := v.Affinity(); aff {
+			case affine.RecordList:
+				err = sortRecords(run, v.Records(), pby.Name, affine.Text, op.textSorter)
+
+			case affine.TextList:
+				err = sortObjects(run, v.Strings(), pby.Name, affine.Text, op.textSorter)
+
+			default:
+				err = errutil.New("not implemented")
+			}
+		}
+	}
+	return
+}
+
+func (op *SortNumbers) numSorter(a, b g.Value) (ret bool) {
+	aa, bb := a.Float(), b.Float()
+	if !op.Order.Descending() {
+		ret = aa < bb
+	} else {
+		ret = bb < aa
+	}
+	return
+}
+
+func (op *SortText) textSorter(a, b g.Value) (ret bool) {
+	aa, bb := a.String(), b.String()
+	if !op.Case.Sensitive() {
+		aa, bb = strings.ToLower(aa), strings.ToLower(bb)
+	}
+	if !op.Order.Descending() {
+		ret = aa < bb
+	} else {
+		ret = bb < aa
+	}
+	return
+}
+
+func sortRecords(run rt.Runtime, src []*g.Record, field string, aff affine.Affinity, cmp func(a, b g.Value) bool) (err error) {
+	sort.Slice(src, func(i, j int) (ret bool) {
+		ret = i < j // provisionally
+		a, b := src[i], src[j]
+		if aa, e := unpackRecord(a, field, aff); e != nil {
+			err = e
+		} else if bb, e := unpackRecord(b, field, aff); e != nil {
+			err = e
+		} else {
+			ret = cmp(aa, bb)
+		}
+		return
+	})
+	return
+}
+
+func sortObjects(run rt.Runtime, src []string, field string, aff affine.Affinity, cmp func(a, b g.Value) bool) (err error) {
+	sort.Slice(src, func(i, j int) (ret bool) {
+		ret = i < j // provisionally
+		if a, e := safe.ObjectFromString(run, src[i]); e != nil {
+			err = errutil.Append(err, e)
+		} else if b, e := safe.ObjectFromString(run, src[j]); e != nil {
+			err = errutil.Append(err, e)
+		} else if aa, e := safe.Unpack(a, field, aff); e != nil {
+			err = e
+		} else if bb, e := safe.Unpack(b, field, aff); e != nil {
+			err = e
+		} else {
+			ret = cmp(aa, bb)
+		}
+		return
+	})
+	return
+}
+
+func unpackRecord(src *g.Record, field string, aff affine.Affinity) (ret g.Value, err error) {
+	if v, e := src.GetNamedField(field); e != nil {
+		err = e
+	} else if e := safe.Check(v, aff); e != nil {
+		err = e
+	} else {
+		ret = v
+	}
+	return
+}

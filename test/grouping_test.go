@@ -14,11 +14,11 @@ import (
 func TestGrouping(t *testing.T) {
 	var kinds testutil.Kinds
 	kinds.AddKinds((*Things)(nil), (*Values)(nil))
-	objectNames := sliceOf.String("mildred", "apple", "pen", "thing_1", "thing_2") // COUNTER:#
-	//
-	if objs, e := objects(kinds.Kind("Things"), objectNames...); e != nil {
+	objectNames := sliceOf.String("mildred", "apple", "pen", "thing_1", "thing_2")
+	if objs, e := testutil.Objects(kinds.Kind("Things"), objectNames...); e != nil {
 		t.Fatal(e)
 	} else {
+		// create a new value of type "Values" containing "Objects:objectNames"
 		values := kinds.New("Values", "Objects", objectNames)
 		lt := testutil.Runtime{
 			Kinds:     &kinds,
@@ -72,16 +72,4 @@ func TestGrouping(t *testing.T) {
 
 func logGroups(t *testing.T, groups []*g.Record) {
 	t.Log("groups", len(groups), pretty.Sprint(g.RecordsToValue(groups)))
-}
-
-func objects(kind *g.Kind, names ...string) (ret map[string]*g.Record, err error) {
-	out := make(map[string]*g.Record)
-	for _, name := range names {
-		// we'll use normal records for this test....
-		out[name] = kind.NewRecord()
-	}
-	if err == nil {
-		ret = out
-	}
-	return
 }

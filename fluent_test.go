@@ -146,8 +146,8 @@ func TestFluid(t *testing.T) {
 		t.Error(got)
 	}
 	if got := makeSig((*list.SortText)(nil)); !got.equals(
-		"sort text:ascending|descending!includeCase|ignoreCase!",
-		"sort text:byField:ascending|descending!includeCase|ignoreCase!",
+		"sort text:ascending|descending!ignoreCase|includeCase!",
+		"sort text:byField:ascending|descending!ignoreCase|includeCase!",
 	) {
 		t.Error(got)
 	}

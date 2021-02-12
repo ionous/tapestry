@@ -17,7 +17,7 @@ func (*Edge) Compose() composer.Spec {
 	}
 }
 
-type Order bool
+type Order bool // when true, sort descending
 
 func (op *Order) Descending() bool { return *op != false }
 
@@ -31,16 +31,16 @@ func (*Order) Compose() composer.Spec {
 	}
 }
 
-type Case bool
+type Case bool // when true, consider case case
 
-func (op *Case) IgnoreCase() bool { return *op != false }
+func (op *Case) Sensitive() bool { return *op != false }
 
 func (*Case) Compose() composer.Spec {
 	return composer.Spec{
 		Name:    "list_case",
 		Group:   "list",
-		Strings: []string{"include_case", "ignore_case"},
-		Desc:    "List Case: When sorting, treat uppercase and lowercase versions of letters the same.",
+		Strings: []string{"ignore_case", "include_case"},
+		Desc:    "List Case: When sorting, treat uppercase and lowercase versions of letters differently.",
 		Stub:    true, // the stub parse the flag
 	}
 }
