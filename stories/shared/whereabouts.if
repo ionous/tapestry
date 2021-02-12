@@ -394,6 +394,45 @@
                     "type": "pattern_name",
                     "value": "childrenOf"
                   },
+                  "$PATTERN_RETURN": {
+                    "id": "id-1778a42f288-366",
+                    "type": "pattern_return",
+                    "value": {
+                      "$RESULT": {
+                        "id": "id-1778a42f288-367",
+                        "type": "variable_decl",
+                        "value": {
+                          "$AN": {
+                            "id": "id-1778a42f288-368",
+                            "type": "determiner",
+                            "value": "$OUR"
+                          },
+                          "$NAME": {
+                            "id": "id-1778a42f288-369",
+                            "type": "variable_name",
+                            "value": "kids"
+                          },
+                          "$TYPE": {
+                            "id": "id-1778a42f288-370",
+                            "type": "variable_type",
+                            "value": {
+                              "$EXT": {
+                                "id": "id-1778a42f288-372",
+                                "type": "ext_type",
+                                "value": {
+                                  "$TEXT_LIST": {
+                                    "id": "id-1778a42f288-373",
+                                    "type": "text_list",
+                                    "value": "$LIST"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
                   "$PATTERN_RULES": {
                     "id": "id-1778a42f288-360",
                     "type": "pattern_rules",
@@ -484,45 +523,6 @@
                           }
                         }
                       ]
-                    }
-                  },
-                  "$PATTERN_RETURN": {
-                    "id": "id-1778a42f288-366",
-                    "type": "pattern_return",
-                    "value": {
-                      "$RESULT": {
-                        "id": "id-1778a42f288-367",
-                        "type": "variable_decl",
-                        "value": {
-                          "$AN": {
-                            "id": "id-1778a42f288-368",
-                            "type": "determiner",
-                            "value": "$OUR"
-                          },
-                          "$NAME": {
-                            "id": "id-1778a42f288-369",
-                            "type": "variable_name",
-                            "value": "kids"
-                          },
-                          "$TYPE": {
-                            "id": "id-1778a42f288-370",
-                            "type": "variable_type",
-                            "value": {
-                              "$EXT": {
-                                "id": "id-1778a42f288-372",
-                                "type": "ext_type",
-                                "value": {
-                                  "$TEXT_LIST": {
-                                    "id": "id-1778a42f288-373",
-                                    "type": "text_list",
-                                    "value": "$LIST"
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
                     }
                   }
                 }

@@ -493,25 +493,121 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-174f06d08a4-85",
+                                        "id": "id-17792f52f66-83",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-174f06d08a4-86",
-                                          "type": "say_text",
+                                          "id": "id-17792f52f66-84",
+                                          "type": "determine",
                                           "value": {
-                                            "$TEXT": {
-                                              "id": "id-174f06d08a4-87",
-                                              "type": "text_eval",
+                                            "$NAME": {
+                                              "id": "id-17792f52f66-85",
+                                              "type": "pattern_name",
+                                              "value": "print_article"
+                                            },
+                                            "$ARGUMENTS": {
+                                              "id": "id-17792f52f66-86",
+                                              "type": "arguments",
                                               "value": {
-                                                "id": "id-174f06d08a4-88",
-                                                "type": "render_template",
-                                                "value": {
-                                                  "$TEMPLATE": {
-                                                    "id": "id-174f06d08a4-89",
-                                                    "type": "lines",
-                                                    "value": "{print_article: .noun \"The\"}"
+                                                "$ARGS": [
+                                                  {
+                                                    "id": "id-17792f52f66-92",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17792f52f66-93",
+                                                        "type": "variable_name",
+                                                        "value": "article"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-17792f52f66-94",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-17792f52f66-95",
+                                                          "type": "from_text",
+                                                          "value": {
+                                                            "$VAL": {
+                                                              "id": "id-17792f52f66-96",
+                                                              "type": "text_eval",
+                                                              "value": {
+                                                                "id": "id-17792f52f66-97",
+                                                                "type": "text_value",
+                                                                "value": {
+                                                                  "$TEXT": {
+                                                                    "id": "id-17792f52f66-98",
+                                                                    "type": "text",
+                                                                    "value": "The"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  {
+                                                    "id": "id-17792f52f66-87",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17792f52f66-88",
+                                                        "type": "variable_name",
+                                                        "value": "obj"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-17792f52f66-89",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-17792f52f66-90",
+                                                          "type": "get_var",
+                                                          "value": {
+                                                            "$NAME": {
+                                                              "id": "id-17792f52f66-91",
+                                                              "type": "text",
+                                                              "value": "noun"
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  {
+                                                    "id": "id-17792f52f66-99",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17792f52f66-100",
+                                                        "type": "variable_name",
+                                                        "value": "name"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-17792f52f66-101",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-17792f52f66-102",
+                                                          "type": "from_text",
+                                                          "value": {
+                                                            "$VAL": {
+                                                              "id": "id-17792f52f66-103",
+                                                              "type": "text_eval",
+                                                              "value": {
+                                                                "id": "id-17792f52f66-104",
+                                                                "type": "render_template",
+                                                                "value": {
+                                                                  "$TEMPLATE": {
+                                                                    "id": "id-17792f52f66-105",
+                                                                    "type": "lines",
+                                                                    "value": "{.noun}"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
                                                   }
-                                                }
+                                                ]
                                               }
                                             }
                                           }
@@ -650,25 +746,121 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-174f06d08a4-112",
+                                        "id": "id-17792f52f66-58",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-174f06d08a4-113",
-                                          "type": "say_text",
+                                          "id": "id-17792f52f66-59",
+                                          "type": "determine",
                                           "value": {
-                                            "$TEXT": {
-                                              "id": "id-174f06d08a4-114",
-                                              "type": "text_eval",
+                                            "$NAME": {
+                                              "id": "id-17792f52f66-60",
+                                              "type": "pattern_name",
+                                              "value": "print_article"
+                                            },
+                                            "$ARGUMENTS": {
+                                              "id": "id-17792f52f66-61",
+                                              "type": "arguments",
                                               "value": {
-                                                "id": "id-174f06d08a4-115",
-                                                "type": "render_template",
-                                                "value": {
-                                                  "$TEMPLATE": {
-                                                    "id": "id-174f06d08a4-116",
-                                                    "type": "lines",
-                                                    "value": "{print_article: .noun \"the\"}"
+                                                "$ARGS": [
+                                                  {
+                                                    "id": "id-17792f52f66-67",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17792f52f66-68",
+                                                        "type": "variable_name",
+                                                        "value": "article"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-17792f52f66-69",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-17792f52f66-70",
+                                                          "type": "from_text",
+                                                          "value": {
+                                                            "$VAL": {
+                                                              "id": "id-17792f52f66-71",
+                                                              "type": "text_eval",
+                                                              "value": {
+                                                                "id": "id-17792f52f66-81",
+                                                                "type": "text_value",
+                                                                "value": {
+                                                                  "$TEXT": {
+                                                                    "id": "id-17792f52f66-82",
+                                                                    "type": "text",
+                                                                    "value": "the"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  {
+                                                    "id": "id-17792f52f66-62",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17792f52f66-63",
+                                                        "type": "variable_name",
+                                                        "value": "obj"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-17792f52f66-64",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-17792f52f66-65",
+                                                          "type": "get_var",
+                                                          "value": {
+                                                            "$NAME": {
+                                                              "id": "id-17792f52f66-66",
+                                                              "type": "text",
+                                                              "value": "noun"
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  {
+                                                    "id": "id-17792f52f66-74",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17792f52f66-75",
+                                                        "type": "variable_name",
+                                                        "value": "name"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-17792f52f66-76",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-17792f52f66-77",
+                                                          "type": "from_text",
+                                                          "value": {
+                                                            "$VAL": {
+                                                              "id": "id-17792f52f66-78",
+                                                              "type": "text_eval",
+                                                              "value": {
+                                                                "id": "id-17792f52f66-79",
+                                                                "type": "render_template",
+                                                                "value": {
+                                                                  "$TEMPLATE": {
+                                                                    "id": "id-17792f52f66-80",
+                                                                    "type": "lines",
+                                                                    "value": "{.noun}"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
                                                   }
-                                                }
+                                                ]
                                               }
                                             }
                                           }
@@ -807,6 +999,21 @@
                                   "value": {
                                     "$EXE": [
                                       {
+                                        "id": "id-17792f52f66-55",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-17792f52f66-56",
+                                          "type": "comment",
+                                          "value": {
+                                            "$LINES": {
+                                              "id": "id-17792f52f66-57",
+                                              "type": "lines",
+                                              "value": "capitalize the normal output of a/an"
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
                                         "id": "id-174f06d08a4-139",
                                         "type": "execute",
                                         "value": {
@@ -823,7 +1030,7 @@
                                                   "$TEMPLATE": {
                                                     "id": "id-174f06d08a4-143",
                                                     "type": "lines",
-                                                    "value": "{print_article: .noun|make_sentence_case!}"
+                                                    "value": "{a: .noun|make_sentence_case!}"
                                                   }
                                                 }
                                               }
@@ -964,25 +1171,85 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-174f06d08a4-166",
+                                        "id": "id-17792f52f66-9",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-174f06d08a4-167",
-                                          "type": "say_text",
+                                          "id": "id-17792f52f66-10",
+                                          "type": "determine",
                                           "value": {
-                                            "$TEXT": {
-                                              "id": "id-174f06d08a4-168",
-                                              "type": "text_eval",
+                                            "$NAME": {
+                                              "id": "id-17792f52f66-11",
+                                              "type": "pattern_name",
+                                              "value": "print_article"
+                                            },
+                                            "$ARGUMENTS": {
+                                              "id": "id-17792f52f66-12",
+                                              "type": "arguments",
                                               "value": {
-                                                "id": "id-174f06d08a4-169",
-                                                "type": "render_template",
-                                                "value": {
-                                                  "$TEMPLATE": {
-                                                    "id": "id-174f06d08a4-170",
-                                                    "type": "lines",
-                                                    "value": "{print_article: .noun}"
+                                                "$ARGS": [
+                                                  {
+                                                    "id": "id-17792f52f66-13",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17792f52f66-14",
+                                                        "type": "variable_name",
+                                                        "value": "obj"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-17792f52f66-15",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-17792f52f66-26",
+                                                          "type": "get_var",
+                                                          "value": {
+                                                            "$NAME": {
+                                                              "id": "id-17792f52f66-27",
+                                                              "type": "text",
+                                                              "value": "noun"
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  {
+                                                    "id": "id-17792f52f66-19",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17792f52f66-20",
+                                                        "type": "variable_name",
+                                                        "value": "name"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-17792f52f66-21",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-17792f52f66-22",
+                                                          "type": "from_text",
+                                                          "value": {
+                                                            "$VAL": {
+                                                              "id": "id-17792f52f66-23",
+                                                              "type": "text_eval",
+                                                              "value": {
+                                                                "id": "id-17792f52f66-24",
+                                                                "type": "render_template",
+                                                                "value": {
+                                                                  "$TEMPLATE": {
+                                                                    "id": "id-17792f52f66-25",
+                                                                    "type": "lines",
+                                                                    "value": "{.noun}"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
                                                   }
-                                                }
+                                                ]
                                               }
                                             }
                                           }
@@ -1410,6 +1677,293 @@
         }
       },
       {
+        "id": "id-1778e3636ac-49",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-1778e3636ac-50",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1778e3636ac-51",
+                "type": "pattern_decl",
+                "value": {
+                  "$NAME": {
+                    "id": "id-1778e3636ac-52",
+                    "type": "pattern_name",
+                    "value": "are listed"
+                  },
+                  "$TYPE": {
+                    "id": "id-1778e3636ac-53",
+                    "type": "pattern_type",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-1778e3636ac-54",
+                        "type": "patterned_activity",
+                        "value": "$ACTIVITY"
+                      }
+                    }
+                  },
+                  "$OPTVARS": {
+                    "id": "id-1778e3636ac-55",
+                    "type": "pattern_variables_tail",
+                    "value": {
+                      "$VARIABLE_DECL": [
+                        {
+                          "id": "id-1778e3636ac-56",
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              "id": "id-1778e3636ac-57",
+                              "type": "determiner",
+                              "value": "a"
+                            },
+                            "$NAME": {
+                              "id": "id-1778e3636ac-58",
+                              "type": "variable_name",
+                              "value": "names"
+                            },
+                            "$TYPE": {
+                              "id": "id-1778e3636ac-59",
+                              "type": "variable_type",
+                              "value": {
+                                "$EXT": {
+                                  "id": "id-1778e3636ac-94",
+                                  "type": "ext_type",
+                                  "value": {
+                                    "$TEXT_LIST": {
+                                      "id": "id-1778e3636ac-95",
+                                      "type": "text_list",
+                                      "value": "$LIST"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1778e3636ac-112",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1778e3636ac-113",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-1778e3636ac-114",
+                    "type": "lines",
+                    "value": "print is or are depending on the length of the passed list of names"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1778e3636ac-63",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1778e3636ac-64",
+                "type": "pattern_actions",
+                "value": {
+                  "$NAME": {
+                    "id": "id-1778e3636ac-65",
+                    "type": "pattern_name",
+                    "value": "are listed"
+                  },
+                  "$PATTERN_RULES": {
+                    "id": "id-1778e3636ac-66",
+                    "type": "pattern_rules",
+                    "value": {
+                      "$PATTERN_RULE": [
+                        {
+                          "id": "id-1778e3636ac-67",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-1778e3636ac-68",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-1778e3636ac-69",
+                                "type": "always",
+                                "value": {}
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-1778e3636ac-70",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-1778e3636ac-71",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-1778e3636ac-72",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-1778e3636ac-73",
+                                          "type": "choose_action",
+                                          "value": {
+                                            "$IF": {
+                                              "id": "id-1778e3636ac-74",
+                                              "type": "bool_eval",
+                                              "value": {
+                                                "id": "id-1778e3636ac-98",
+                                                "type": "compare_num",
+                                                "value": {
+                                                  "$A": {
+                                                    "id": "id-1778e3636ac-99",
+                                                    "type": "number_eval",
+                                                    "value": {
+                                                      "id": "id-1778e3636ac-102",
+                                                      "type": "list_len",
+                                                      "value": {
+                                                        "$LIST": {
+                                                          "id": "id-1778e3636ac-103",
+                                                          "type": "assignment",
+                                                          "value": {
+                                                            "id": "id-1778e3636ac-104",
+                                                            "type": "get_var",
+                                                            "value": {
+                                                              "$NAME": {
+                                                                "id": "id-1778e3636ac-105",
+                                                                "type": "text",
+                                                                "value": "names"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "$IS": {
+                                                    "id": "id-1778e3636ac-100",
+                                                    "type": "comparator",
+                                                    "value": {
+                                                      "id": "id-1778e3636ac-109",
+                                                      "type": "greater_than",
+                                                      "value": {}
+                                                    }
+                                                  },
+                                                  "$B": {
+                                                    "id": "id-1778e3636ac-101",
+                                                    "type": "number_eval",
+                                                    "value": {
+                                                      "id": "id-1778e3636ac-110",
+                                                      "type": "num_value",
+                                                      "value": {
+                                                        "$NUM": {
+                                                          "id": "id-1778e3636ac-111",
+                                                          "type": "number",
+                                                          "value": 1
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "$DO": {
+                                              "id": "id-1778e3636ac-80",
+                                              "type": "activity",
+                                              "value": {
+                                                "$EXE": [
+                                                  {
+                                                    "id": "id-1778e3636ac-81",
+                                                    "type": "execute",
+                                                    "value": {
+                                                      "id": "id-1778e3636ac-82",
+                                                      "type": "say_text",
+                                                      "value": {
+                                                        "$TEXT": {
+                                                          "id": "id-1778e3636ac-83",
+                                                          "type": "text_eval",
+                                                          "value": {
+                                                            "id": "id-1778e3636ac-84",
+                                                            "type": "text_value",
+                                                            "value": {
+                                                              "$TEXT": {
+                                                                "id": "id-1778e3636ac-85",
+                                                                "type": "text",
+                                                                "value": "are"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            "$ELSE": {
+                                              "id": "id-1778e3636ac-86",
+                                              "type": "brancher",
+                                              "value": {
+                                                "id": "id-1778e3636ac-87",
+                                                "type": "choose_nothing_else",
+                                                "value": {
+                                                  "$DO": {
+                                                    "id": "id-1778e3636ac-88",
+                                                    "type": "activity",
+                                                    "value": {
+                                                      "$EXE": [
+                                                        {
+                                                          "id": "id-1778e3636ac-89",
+                                                          "type": "execute",
+                                                          "value": {
+                                                            "id": "id-1778e3636ac-90",
+                                                            "type": "say_text",
+                                                            "value": {
+                                                              "$TEXT": {
+                                                                "id": "id-1778e3636ac-91",
+                                                                "type": "text_eval",
+                                                                "value": {
+                                                                  "id": "id-1778e3636ac-92",
+                                                                  "type": "text_value",
+                                                                  "value": {
+                                                                    "$TEXT": {
+                                                                      "id": "id-1778e3636ac-93",
+                                                                      "type": "text",
+                                                                      "value": "is"
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
         "id": "id-174f08a1a93-4",
         "type": "paragraph",
         "value": {
@@ -1443,18 +1997,45 @@
                     "value": {
                       "$VARIABLE_DECL": [
                         {
+                          "id": "id-174f08a1a93-13",
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              "id": "id-17672fb43de-11",
+                              "type": "determiner",
+                              "value": "$AN"
+                            },
+                            "$NAME": {
+                              "id": "id-174f08a1a93-15",
+                              "type": "variable_name",
+                              "value": "article"
+                            },
+                            "$TYPE": {
+                              "id": "id-174f08a1a93-14",
+                              "type": "variable_type",
+                              "value": {
+                                "$PRIMITIVE": {
+                                  "id": "id-174f08a1a93-16",
+                                  "type": "primitive_type",
+                                  "value": "$TEXT"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
                           "id": "id-174f08a1a93-7",
                           "type": "variable_decl",
                           "value": {
                             "$AN": {
                               "id": "id-17672fb43de-10",
                               "type": "determiner",
-                              "value": "a"
+                              "value": "$AN"
                             },
                             "$NAME": {
                               "id": "id-174f08a1a93-9",
                               "type": "variable_name",
-                              "value": "target"
+                              "value": "obj"
                             },
                             "$TYPE": {
                               "id": "id-174f08a1a93-8",
@@ -1481,25 +2062,25 @@
                           }
                         },
                         {
-                          "id": "id-174f08a1a93-13",
+                          "id": "id-17792cff6fa-43",
                           "type": "variable_decl",
                           "value": {
                             "$AN": {
-                              "id": "id-17672fb43de-11",
+                              "id": "id-17792cff6fa-44",
                               "type": "determiner",
-                              "value": "a"
+                              "value": "$THE"
                             },
                             "$NAME": {
-                              "id": "id-174f08a1a93-15",
+                              "id": "id-17792cff6fa-45",
                               "type": "variable_name",
-                              "value": "article"
+                              "value": "name"
                             },
                             "$TYPE": {
-                              "id": "id-174f08a1a93-14",
+                              "id": "id-17792cff6fa-46",
                               "type": "variable_type",
                               "value": {
                                 "$PRIMITIVE": {
-                                  "id": "id-174f08a1a93-16",
+                                  "id": "id-17792cff6fa-47",
                                   "type": "primitive_type",
                                   "value": "$TEXT"
                                 }
@@ -1553,23 +2134,23 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-174f0910998-133",
+                                        "id": "id-17792cff6fa-49",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-174f0910998-134",
+                                          "id": "id-17792cff6fa-50",
                                           "type": "say_text",
                                           "value": {
                                             "$TEXT": {
-                                              "id": "id-174f0910998-135",
+                                              "id": "id-17792cff6fa-51",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-174f0910998-136",
+                                                "id": "id-17792cff6fa-52",
                                                 "type": "render_template",
                                                 "value": {
                                                   "$TEMPLATE": {
-                                                    "id": "id-174f0910998-137",
+                                                    "id": "id-17792cff6fa-53",
                                                     "type": "lines",
-                                                    "value": "a {.target}"
+                                                    "value": "a {.name}"
                                                   }
                                                 }
                                               }
@@ -1592,49 +2173,39 @@
                               "id": "id-174f0910998-10",
                               "type": "bool_eval",
                               "value": {
-                                "id": "id-174f0910998-12",
+                                "id": "id-17792f52f66-0",
                                 "type": "determine",
                                 "value": {
                                   "$NAME": {
-                                    "id": "id-174f0910998-13",
+                                    "id": "id-17792f52f66-1",
                                     "type": "pattern_name",
                                     "value": "starts with vowel"
                                   },
                                   "$ARGUMENTS": {
-                                    "id": "id-174f0910998-14",
+                                    "id": "id-17792f52f66-2",
                                     "type": "arguments",
                                     "value": {
                                       "$ARGS": [
                                         {
-                                          "id": "id-174f0910998-15",
+                                          "id": "id-17792f52f66-3",
                                           "type": "argument",
                                           "value": {
                                             "$NAME": {
-                                              "id": "id-174f0910998-16",
+                                              "id": "id-17792f52f66-4",
                                               "type": "variable_name",
                                               "value": "text"
                                             },
                                             "$FROM": {
-                                              "id": "id-174f0910998-17",
+                                              "id": "id-17792f52f66-5",
                                               "type": "assignment",
                                               "value": {
-                                                "id": "id-174f0910998-18",
-                                                "type": "from_text",
+                                                "id": "id-17792f52f66-6",
+                                                "type": "get_var",
                                                 "value": {
-                                                  "$VAL": {
-                                                    "id": "id-174f0910998-19",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-174f0910998-24",
-                                                      "type": "render_template",
-                                                      "value": {
-                                                        "$TEMPLATE": {
-                                                          "id": "id-174f0910998-25",
-                                                          "type": "lines",
-                                                          "value": "{.target}"
-                                                        }
-                                                      }
-                                                    }
+                                                  "$NAME": {
+                                                    "id": "id-17792f52f66-7",
+                                                    "type": "text",
+                                                    "value": "name"
                                                   }
                                                 }
                                               }
@@ -1657,23 +2228,23 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-174f0910998-27",
+                                        "id": "id-17792cff6fa-54",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-174f0910998-28",
+                                          "id": "id-17792cff6fa-55",
                                           "type": "say_text",
                                           "value": {
                                             "$TEXT": {
-                                              "id": "id-174f0910998-29",
+                                              "id": "id-17792cff6fa-56",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-174f0910998-30",
+                                                "id": "id-17792cff6fa-57",
                                                 "type": "render_template",
                                                 "value": {
                                                   "$TEMPLATE": {
-                                                    "id": "id-174f0910998-31",
+                                                    "id": "id-17792cff6fa-58",
                                                     "type": "lines",
-                                                    "value": "an {.target}"
+                                                    "value": "an {.name}"
                                                   }
                                                 }
                                               }
@@ -1709,7 +2280,7 @@
                                         "$NAME": {
                                           "id": "id-174f0910998-60",
                                           "type": "text",
-                                          "value": "target"
+                                          "value": "obj"
                                         }
                                       }
                                     }
@@ -1742,23 +2313,23 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-174f0910998-64",
+                                        "id": "id-17792cff6fa-59",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-174f0910998-65",
+                                          "id": "id-17792cff6fa-60",
                                           "type": "say_text",
                                           "value": {
                                             "$TEXT": {
-                                              "id": "id-174f0910998-66",
+                                              "id": "id-17792cff6fa-61",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-174f0910998-67",
+                                                "id": "id-17792cff6fa-62",
                                                 "type": "render_template",
                                                 "value": {
                                                   "$TEMPLATE": {
-                                                    "id": "id-174f0910998-68",
+                                                    "id": "id-17792cff6fa-63",
                                                     "type": "lines",
-                                                    "value": "some {.target}"
+                                                    "value": "some {.name}"
                                                   }
                                                 }
                                               }
@@ -1806,7 +2377,7 @@
                                               "$VAR": {
                                                 "id": "id-17737e601d0-2",
                                                 "type": "variable_name",
-                                                "value": "target"
+                                                "value": "obj"
                                               }
                                             }
                                           }
@@ -1851,23 +2422,23 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-174f0910998-93",
+                                        "id": "id-17792cff6fa-64",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-174f0910998-94",
+                                          "id": "id-17792cff6fa-65",
                                           "type": "say_text",
                                           "value": {
                                             "$TEXT": {
-                                              "id": "id-174f0910998-95",
+                                              "id": "id-17792cff6fa-66",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-174f0910998-96",
+                                                "id": "id-17792cff6fa-67",
                                                 "type": "render_template",
                                                 "value": {
                                                   "$TEMPLATE": {
-                                                    "id": "id-174f0910998-97",
+                                                    "id": "id-17792cff6fa-68",
                                                     "type": "lines",
-                                                    "value": "{.target.indefinite_article} {.target}"
+                                                    "value": "{.obj.indefinite_article} {.name}"
                                                   }
                                                 }
                                               }
@@ -1945,23 +2516,23 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-174f0910998-118",
+                                        "id": "id-17792cff6fa-69",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-174f0910998-119",
+                                          "id": "id-17792cff6fa-70",
                                           "type": "say_text",
                                           "value": {
                                             "$TEXT": {
-                                              "id": "id-174f0910998-120",
+                                              "id": "id-17792cff6fa-71",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-174f0910998-121",
+                                                "id": "id-17792cff6fa-72",
                                                 "type": "render_template",
                                                 "value": {
                                                   "$TEMPLATE": {
-                                                    "id": "id-174f0910998-122",
+                                                    "id": "id-17792cff6fa-73",
                                                     "type": "lines",
-                                                    "value": "{.article} {.target}"
+                                                    "value": "{.article} {.name}"
                                                   }
                                                 }
                                               }
@@ -1997,7 +2568,7 @@
                                         "$NAME": {
                                           "id": "id-174f2020d9d-35",
                                           "type": "text",
-                                          "value": "target"
+                                          "value": "obj"
                                         }
                                       }
                                     }
@@ -2030,23 +2601,38 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-174f2020d9d-41",
+                                        "id": "id-17792cff6fa-35",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-174f2020d9d-42",
+                                          "id": "id-17792cff6fa-36",
+                                          "type": "comment",
+                                          "value": {
+                                            "$LINES": {
+                                              "id": "id-17792cff6fa-37",
+                                              "type": "lines",
+                                              "value": "by definition proper named objects have no article."
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "id": "id-1779302e1ea-7",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-1779302e1ea-8",
                                           "type": "say_text",
                                           "value": {
                                             "$TEXT": {
-                                              "id": "id-174f2020d9d-43",
+                                              "id": "id-1779302e1ea-9",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-174f2020d9d-44",
+                                                "id": "id-1779302e1ea-10",
                                                 "type": "render_template",
                                                 "value": {
                                                   "$TEMPLATE": {
-                                                    "id": "id-174f2020d9d-45",
+                                                    "id": "id-1779302e1ea-11",
                                                     "type": "lines",
-                                                    "value": "{print_name: .target|make_title_case!}"
+                                                    "value": "{.name}"
                                                   }
                                                 }
                                               }

@@ -9,22 +9,21 @@ import (
 
 func TestRuleSorting(t *testing.T) {
 	ps := []*Rule{
-		{Flags: Terminal, Execute: Text("1")},
+		{Flags: Infix, Execute: Text("1")},
 		{Flags: Postfix, Execute: Text("2")},
 		{Flags: Prefix, Execute: Text("3")},
 		{Flags: -1 /*Filter: Skip,*/, Execute: Text("0")},
 		{Flags: Postfix, Execute: Text("4")},
 	}
-	if inds, e := sortRules(nil, ps); e != nil {
-		t.Fatal(e)
-	} else /*if cnt := len(inds); cnt != 4 {
-		t.Fatal("expected 4 matching rules")
-	} else */{
+	inds, flags := sortRules(ps)
+	if flags != (Infix | Prefix | Postfix) {
+		t.Fatal("expected all flags set", flags)
+	} else {
 		var got string
 		for _, i := range inds {
 			got += string(ps[i].Execute.(Text))
 		}
-		if got != "3124" {
+		if got != "3142" {
 			t.Fatal("got", got)
 		}
 	}

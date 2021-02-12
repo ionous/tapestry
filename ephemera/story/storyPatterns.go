@@ -91,7 +91,7 @@ func (op *PatternRule) ImportPattern(k *Importer, patternName ephemera.Named) (e
 		err = e
 	} else if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
-	} else if slotType := hook.SlotType(); flags != pattern.Terminal && slotType != "execute" && !strings.HasSuffix(slotType, "_list") {
+	} else if slotType := hook.SlotType(); flags != pattern.Infix && slotType != "execute" && !strings.HasSuffix(slotType, "_list") {
 		err = errutil.New("didnt expect continuation flags for", slotType, "in", patternName.String())
 	} else {
 		guard := op.Guard
@@ -121,7 +121,7 @@ func (op *PatternFlags) ReadFlags() (ret pattern.Flags, err error) {
 			// keep going after running the current pattern. this...others.
 			ret = pattern.Prefix
 		case "$TERMINATE":
-			ret = pattern.Terminal
+			ret = pattern.Infix
 		default:
 			err = errutil.New("unknown pattern flags", str)
 		}

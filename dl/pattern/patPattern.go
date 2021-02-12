@@ -72,26 +72,53 @@ func (pat *Pattern) Run(run rt.Runtime, args []*core.Argument, aff affine.Affini
 }
 
 func (pat *Pattern) determineArgs(run rt.Runtime, rec *g.Record, args []*core.Argument) (err error) {
-	// future: args matching is predetermined in reading / parsing
-	// note: templates (ex. print_article) dont always specify all the parameters...
-	if paramCnt, argCnt := len(pat.Labels), len(args); paramCnt < argCnt {
-		err = errutil.New("expected", paramCnt, "parameters(s), have", argCnt, "arguments")
-	} else {
-		// note: set indexed field assigns without copying
-		for i, a := range args {
-			if n, l := a.Name, pat.Labels[i]; n != l && n != argIndex(i) {
-				err = errutil.New("has mismatched arg.", i, "expected", l, "have", n)
-				break
-			} else if val, e := core.GetAssignedValue(run, a.From); e != nil {
-				err = errutil.New("error determining arg", i, n, e)
-				break
-			} else if v, e := filterText(run, pat.Fields[i], val); e != nil {
-				err = errutil.New("error narrowing arg", i, n, e)
-				break
-			} else if e := rec.SetIndexedField(i, v); e != nil {
-				err = errutil.New("error setting arg", i, n, e)
+	// note: set indexed field assigns without copying
+	var labelIndex int
+	var fieldIndex int
+	for i, a := range args {
+		n := a.Name
+		// search for a matching label.
+		if len(n) == 0 {
+			err = errutil.New("unnamed arg at", i)
+		} else if n[0] == '$' {
+			// validate positional arguments make sense
+			if argIndex(labelIndex) != n {
 				break
 			}
+			fieldIndex, labelIndex = labelIndex, labelIndex+1
+		} else {
+			// search in increasing order for the next label that matches the specified argument
+			// this is our soft way of allowing patterns to participate in fluid like specs.
+			if i := pat.findLabel(n, labelIndex); i < 0 {
+				err = errutil.New("has mismatched arg.", i, n)
+				break
+			} else {
+				fieldIndex, labelIndex = i, i+1
+			}
+		}
+		//
+		field := pat.Fields[fieldIndex]
+		if val, e := core.GetAssignedValue(run, a.From); e != nil {
+			err = errutil.New("error determining arg", i, n, e)
+			break
+		} else if v, e := filterText(run, field, val); e != nil {
+			err = errutil.New("error narrowing arg", i, n, e)
+			break
+		} else if e := rec.SetIndexedField(fieldIndex, v); e != nil {
+			err = errutil.New("error setting arg", i, n, e)
+			break
+		}
+	}
+	return
+}
+
+// returns -1 if not found
+func (pat *Pattern) findLabel(name string, startingAt int) (ret int) {
+	ret = -1 // provisionally
+	for i, cnt := startingAt, len(pat.Labels); i < cnt; i++ {
+		if l := pat.Labels[i]; l == name {
+			ret = i
+			break
 		}
 	}
 	return
@@ -125,23 +152,25 @@ func (pat *Pattern) initializeLocals(run rt.Runtime, rec *g.Record) (err error) 
 
 // RunWithScope - note: assumes whatever scope is needed to run the pattern has already been setup.
 func (pat *Pattern) executePattern(run rt.Runtime, rw *resultsWatcher) (err error) {
-	if inds, e := sortRules(run, pat.Rules); e != nil {
-		err = e // this cant happen currently
-	} else {
-		for _, i := range inds {
-			rule := pat.Rules[i]
-			if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
-				err = e
-			} else if ok.Bool() { // the rule returns false if it didnt apply
-				if e := safe.Run(run, rule.Execute); e != nil {
-					err = e
-					break
-				} else if rw.sets > 0 || len(rw.watch) == 0 {
-					// ... and we're done.
-					break
-				}
-				// NOTE: if we need to differentiate between "no errors" and "no rules matched",
-				// the latter could become an error.
+	sets := rw.sets
+	inds, allFlags := sortRules(pat.Rules)
+	for j, cnt := 0, len(inds); j < cnt && allFlags != 0; j++ {
+		i := inds[j]
+		if ranFlag, e := pat.Rules[i].ApplyRule(run, allFlags); e != nil {
+			err = e
+		} else if ranFlag != 0 {
+			didSomething := (rw.sets > sets)
+			sets = rw.sets
+			// if we ran a prefix or a post fix rule and it did something, we are done.
+			if didSomething && ranFlag != Infix {
+				break
+			}
+			// otherwise, if an infix rule did something
+			// check the other kinds of rules
+			// ditto if we dont expect the pattern to return anything:
+			// in that case we just want to do the first of each rule type.
+			if didSomething || len(rw.watch) == 0 {
+				allFlags = allFlags &^ ranFlag
 			}
 		}
 	}

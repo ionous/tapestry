@@ -13,8 +13,10 @@ func Parens(out writer.Output) writer.OutputCloser {
 }
 
 func Brackets(out writer.Output, open, close rune) writer.OutputCloser {
+	wrote := false
 	f := &Filter{
 		First: func(c writer.Chunk) (int, error) {
+			wrote = true
 			n, _ := out.WriteRune('(')
 			x, _ := c.WriteTo(out)
 			return n + x, nil
@@ -22,9 +24,11 @@ func Brackets(out writer.Output, open, close rune) writer.OutputCloser {
 		Rest: func(c writer.Chunk) (int, error) {
 			return c.WriteTo(out)
 		},
-		Last: func() error {
-			_, e := out.WriteRune(')')
-			return e
+		Last: func() (err error) {
+			if wrote {
+				_, err = out.WriteRune(')')
+			}
+			return
 		},
 	}
 	writer.InitChunks(f)

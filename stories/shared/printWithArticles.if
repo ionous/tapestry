@@ -498,7 +498,7 @@
                                                                                 "$TEMPLATE": {
                                                                                   "id": "id-17691d01da5-264",
                                                                                   "type": "lines",
-                                                                                  "value": "{unless .objects_without_articles}{print_article: .object}{otherwise}{print_name: .object}{end}"
+                                                                                  "value": "{unless .objects_without_articles}{a: .object}{otherwise}{print_name: .object}{end}"
                                                                                 }
                                                                               }
                                                                             }
