@@ -51,7 +51,7 @@ Vue.component('mk-repeater-ctrl', {
         } else if (filters.includes("comma-or")) {
           ret= "or";
         } else if (filters.includes("commas")) {
-          ret= ",";
+          ret= " ";
         }
       }
       return ret;
