@@ -26,14 +26,14 @@ func (op *Summary) Import(k *Importer) (err error) {
 	if text, e := op.Lines.ConvertText(); e != nil {
 		err = e
 	} else {
-		// give "things" an "appearance"
+		// give "things" an "description"
 		if once := "summary"; k.Once(once) {
 			domain := k.gameDomain()
 			things := k.NewDomainName(domain, "things", tables.NAMED_KINDS, once)
-			appear := k.NewDomainName(domain, "appearance", tables.NAMED_FIELD, once)
+			appear := k.NewDomainName(domain, "description", tables.NAMED_FIELD, once)
 			k.NewField(things, appear, tables.PRIM_TEXT, "")
 		}
-		prop := k.NewName("appearance", tables.NAMED_FIELD, op.At.String())
+		prop := k.NewName("description", tables.NAMED_FIELD, op.At.String())
 		noun := LastNameOf(k.Recent.Nouns.Subjects)
 		k.NewValue(noun, prop, text)
 	}
