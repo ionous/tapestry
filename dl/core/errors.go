@@ -20,9 +20,13 @@ func (e *CommandError) Error() string {
 }
 
 func cmdError(op composer.Composer, err error) error {
-	return errutil.Append(err, &CommandError{Cmd: op})
+	return cmdErrorCtx(op, "", err)
 }
 
 func cmdErrorCtx(op composer.Composer, ctx string, err error) error {
-	return errutil.Append(err, &CommandError{Cmd: op, Ctx: ctx})
+	// avoid triggering errutil panics for break statements
+	if _, ok := err.(DoInterrupt); !ok {
+		err = errutil.Append(err, &CommandError{Cmd: op, Ctx: ctx})
+	}
+	return err
 }
