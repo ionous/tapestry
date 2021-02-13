@@ -1,0 +1,240 @@
+{
+  "id": "id-17798c5d676-19",
+  "type": "story",
+  "value": {
+    "$PARAGRAPH": [
+      {
+        "id": "id-17798c5d676-20",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-17798c5d676-21",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17798c5d676-22",
+                "type": "kinds_of_kind",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-17798c5d676-23",
+                    "type": "plural_kinds",
+                    "value": " settings"
+                  },
+                  "$SINGULAR_KIND": {
+                    "id": "id-17798c5d676-24",
+                    "type": "singular_kind",
+                    "value": "object"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17798c5d676-25",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17798c5d676-26",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-17798c5d676-27",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-17798c5d676-28",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17798c5d676-29",
+                              "type": "determiner",
+                              "value": "$OUR"
+                            },
+                            "$NAME": {
+                              "id": "id-17798c5d676-30",
+                              "type": "noun_name",
+                              "value": "settings"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-17798c5d676-31",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-17798c5d676-32",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-17798c5d676-33",
+                                "type": "are_an",
+                                "value": "$ISA"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-17798c5d676-34",
+                                "type": "singular_kind",
+                                "value": "settings"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-17798c5d676-35",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17798c5d676-36",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-17798c5d676-37",
+                    "type": "plural_kinds",
+                    "value": " settings"
+                  },
+                  "$PROPERTY_DECL": [
+                    {
+                      "id": "id-17798c5d676-38",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-17798c5d676-39",
+                          "type": "determiner",
+                          "value": "some"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-17798c5d676-40",
+                          "type": "property",
+                          "value": "abbreviated room descriptions"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-17798c5d676-41",
+                          "type": "property_type",
+                          "value": {
+                            "$PROPERTY_ASPECT": {
+                              "id": "id-17798c5d676-42",
+                              "type": "property_aspect",
+                              "value": "$ASPECT"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-17798c5d676-43",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17798c5d676-44",
+                "type": "kinds_of_aspect",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-17798c5d676-45",
+                    "type": "aspect",
+                    "value": " abbreviated room descriptions"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17798c5d676-46",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17798c5d676-47",
+                "type": "aspect_traits",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-17798c5d676-48",
+                    "type": "aspect",
+                    "value": " abbreviated room descriptions"
+                  },
+                  "$TRAIT_PHRASE": {
+                    "id": "id-17798c5d676-49",
+                    "type": "trait_phrase",
+                    "value": {
+                      "$ARE_EITHER": {
+                        "id": "id-17798c5d676-50",
+                        "type": "are_either",
+                        "value": "$CANBE"
+                      },
+                      "$TRAIT": [
+                        {
+                          "id": "id-17798c5d676-51",
+                          "type": "trait",
+                          "value": "brief"
+                        },
+                        {
+                          "id": "id-17798c5d676-53",
+                          "type": "trait",
+                          "value": "verbose"
+                        },
+                        {
+                          "id": "id-17798c5d676-52",
+                          "type": "trait",
+                          "value": "superbrief"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17799bae367-24",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17799bae367-25",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-17799bae367-26",
+                    "type": "plural_kinds",
+                    "value": " settings"
+                  },
+                  "$PROPERTY_DECL": [
+                    {
+                      "id": "id-17799bae367-27",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-17799bae367-28",
+                          "type": "determiner",
+                          "value": "$A"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-17799bae367-29",
+                          "type": "property",
+                          "value": "darkness witnessed"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-17799bae367-30",
+                          "type": "property_type",
+                          "value": {
+                            "$PRIMITIVE": {
+                              "id": "id-17799bae367-31",
+                              "type": "primitive_type",
+                              "value": "$BOOL"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

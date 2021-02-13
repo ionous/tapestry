@@ -1037,7 +1037,7 @@
                                                               "$LINES": {
                                                                 "id": "id-17672fb43de-110",
                                                                 "type": "lines",
-                                                                "value": "now \"print articles\" of ungrouped objects"
+                                                                "value": "now print the of ungrouped objects"
                                                               }
                                                             }
                                                           }
