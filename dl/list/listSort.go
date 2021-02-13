@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -44,7 +45,7 @@ func (op *SortByField) Compose() composer.Spec {
 	return composer.Spec{
 		Name:   "list_sort_by_field",
 		Group:  "list",
-		Desc:   `Sort numbers: .`,
+		Desc:   `Sort by field: .`,
 		Fluent: &composer.Fluid{Name: "byField", Role: composer.Selector},
 	}
 }
@@ -61,7 +62,7 @@ func (op *SortText) Compose() composer.Spec {
 	return composer.Spec{
 		Name:   "list_sort_text",
 		Group:  "list",
-		Desc:   `Sort list: rearrange the elements in the named list by using the designated pattern to test pairs of elements.`,
+		Desc:   `Sort text: rearrange the elements in the named list by using the designated pattern to test pairs of elements.`,
 		Fluent: &composer.Fluid{Name: "sort", Role: composer.Command},
 	}
 }
@@ -69,7 +70,7 @@ func (op *SortRecords) Compose() composer.Spec {
 	return composer.Spec{
 		Name:   "list_sort_using",
 		Group:  "list",
-		Desc:   `Sort list: rearrange the elements in the named list by using the designated pattern to test pairs of elements.`,
+		Desc:   `Sort records: rearrange the elements in the named list by using the designated pattern to test pairs of elements.`,
 		Fluent: &composer.Fluid{Name: "sort", Role: composer.Command},
 	}
 }
@@ -99,12 +100,13 @@ func (op *SortNumbers) sortByNum(run rt.Runtime) (err error) {
 		if pby := op.ByField; pby == nil {
 			err = errutil.New("not implemented")
 		} else {
+			name := lang.Breakcase(pby.Name)
 			switch aff := v.Affinity(); aff {
 			case affine.RecordList:
-				err = sortRecords(run, v.Records(), pby.Name, affine.Number, op.numSorter)
+				err = sortRecords(run, v.Records(), name, affine.Number, op.numSorter)
 
 			case affine.TextList:
-				err = sortObjects(run, v.Strings(), pby.Name, affine.Number, op.numSorter)
+				err = sortObjects(run, v.Strings(), name, affine.Number, op.numSorter)
 
 			default:
 				err = errutil.New("not implemented")
@@ -121,12 +123,15 @@ func (op *SortText) sortByText(run rt.Runtime) (err error) {
 		if pby := op.ByField; pby == nil {
 			err = errutil.New("not implemented")
 		} else {
+			name := lang.Breakcase(pby.Name)
 			switch aff := v.Affinity(); aff {
 			case affine.RecordList:
-				err = sortRecords(run, v.Records(), pby.Name, affine.Text, op.textSorter)
+				// fix? would any of this be clearer/smaller if we used v.Index?
+				// ( well sort.Slice couldnt work on it directly, but maybe there's a slice index )
+				err = sortRecords(run, v.Records(), name, affine.Text, op.textSorter)
 
 			case affine.TextList:
-				err = sortObjects(run, v.Strings(), pby.Name, affine.Text, op.textSorter)
+				err = sortObjects(run, v.Strings(), name, affine.Text, op.textSorter)
 
 			default:
 				err = errutil.New("not implemented")

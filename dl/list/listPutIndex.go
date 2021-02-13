@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 /**
@@ -20,10 +21,10 @@ type PutIndex struct {
 func (*PutIndex) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "put", Role: composer.Command},
-		Desc:   "Put: replace one value in a list with another",
+		Desc:   "Put at index: replace one value in a list with another",
 	}
 }
 
 func (op *PutIndex) Execute(run rt.Runtime) (err error) {
-	return
+	return errutil.New("not implemented")
 }

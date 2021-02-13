@@ -20,7 +20,7 @@ func (*PutAtField) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "put", Role: composer.Command},
 		Group:  "variables",
-		Desc:   "Put: put a value into the field of an record or object",
+		Desc:   "Put into field: put a value into the field of an record or object",
 	}
 }
 

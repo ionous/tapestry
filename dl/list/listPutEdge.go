@@ -20,7 +20,7 @@ type PutEdge struct {
 func (*PutEdge) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "put", Role: composer.Command},
-		Desc:   "Put: add a value to a list",
+		Desc:   "Put at Edge: add a value to a list",
 	}
 }
 

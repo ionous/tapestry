@@ -29,7 +29,7 @@ const spec = [
     }
   },
   {
-    "desc": "List Case: When sorting, treat uppercase and lowercase versions of letters the same.",
+    "desc": "List Case: When sorting, treat uppercase and lowercase versions of letters differently.",
     "group": [
       "list"
     ],
@@ -38,12 +38,12 @@ const spec = [
     "with": {
       "params": {
         "$FALSE": {
-          "label": "includeCase",
-          "value": "include_case"
-        },
-        "$TRUE": {
           "label": "ignoreCase",
           "value": "ignore_case"
+        },
+        "$TRUE": {
+          "label": "includeCase",
+          "value": "include_case"
         }
       },
       "tokens": [
@@ -2169,7 +2169,7 @@ const spec = [
     }
   },
   {
-    "desc": "Sort numbers: .",
+    "desc": "Sort by field: .",
     "group": [
       "list"
     ],
@@ -2214,6 +2214,9 @@ const spec = [
         }
       },
       "roles": "CZSZKZKZKT",
+      "slots": [
+        "execute"
+      ],
       "tokens": [
         "sort",
         " ",
@@ -2229,7 +2232,7 @@ const spec = [
     }
   },
   {
-    "desc": "Sort list: rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
+    "desc": "Sort text: rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
     "group": [
       "list"
     ],
@@ -2256,6 +2259,9 @@ const spec = [
         }
       },
       "roles": "CZSZKZKZKZKT",
+      "slots": [
+        "execute"
+      ],
       "tokens": [
         "sort",
         " ",
@@ -2273,7 +2279,7 @@ const spec = [
     }
   },
   {
-    "desc": "Sort list: rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
+    "desc": "Sort records: rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
     "group": [
       "list"
     ],
@@ -2291,6 +2297,9 @@ const spec = [
         }
       },
       "roles": "CZSZKZSZKT",
+      "slots": [
+        "execute"
+      ],
       "tokens": [
         "sort",
         " ",
@@ -2645,7 +2654,7 @@ const spec = [
     }
   },
   {
-    "desc": "Put: put a value into the field of an record or object",
+    "desc": "Put into field: put a value into the field of an record or object",
     "group": [
       "variables"
     ],
@@ -2685,7 +2694,7 @@ const spec = [
     }
   },
   {
-    "desc": "Put: add a value to a list",
+    "desc": "Put at Edge: add a value to a list",
     "name": "put_edge",
     "uses": "flow",
     "with": {
@@ -2720,7 +2729,7 @@ const spec = [
     }
   },
   {
-    "desc": "Put: replace one value in a list with another",
+    "desc": "Put at index: replace one value in a list with another",
     "name": "put_index",
     "uses": "flow",
     "with": {
