@@ -14,7 +14,6 @@ import (
 // CheckAll tests stored in the passed db.
 // It logs the results of running the tests, and only returns error on critical errors.
 func CheckAll(db *sql.DB, actuallyJustThisOne string) (ret int, err error) {
-	run := NewRuntime(db)
 	var name string
 	var prog []byte
 	var tests []check.CheckOutput
@@ -40,8 +39,10 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string) (ret int, err error) {
 		err = errutil.New("no matching tests found")
 	} else {
 		// FIX: we have to cache the statements b/c we cant use them during QueryAll
-		run.ActivateDomain("entire_game", true)
 		for _, t := range tests {
+			run := NewRuntime(db)
+			tables.Must(db, `delete from run_domain; delete from run_pair`)
+			run.ActivateDomain("entire_game", true)
 			if e := t.RunTest(run); e != nil {
 				err = errutil.Append(err, e)
 			}
