@@ -31,7 +31,7 @@ func ExampleBracket() {
 		fmt.Println("Error:", e)
 	}
 	// Output:
-	// ( hello there world )
+	// (hello there world)
 }
 
 func ExampleSlash() {

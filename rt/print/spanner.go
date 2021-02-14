@@ -34,11 +34,11 @@ func (p *Spanner) WriteChunk(c writer.Chunk) (ret int, err error) {
 	if b, cnt := c.DecodeRune(); cnt > 0 {
 		// and already written something and the thing we are writing is not a space?
 		if p.Len() > 0 && !spaceLike(b) {
-			n, _ := p.buf.WriteRune(' ')
-			ret += n
+			p.buf.WriteRune(' ')
 		}
-		n, _ := c.WriteTo(&p.buf)
-		ret += n
+		// go (bytes.Buffer) expects us to return how much of the input we wrote,
+		// not the actual number of bytes we wrote.
+		ret, err = c.WriteTo(&p.buf)
 	}
 	return
 }

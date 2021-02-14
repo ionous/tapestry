@@ -11,7 +11,7 @@ func TestBracket(t *testing.T) {
 	io.WriteString(w, "hello")
 	io.WriteString(w, "you")
 	w.Close()
-	if str := span.String(); str != "( hello you )" {
+	if str := span.String(); str != "(hello you)" {
 		t.Fatal("mismatched", str)
 	}
 }

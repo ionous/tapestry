@@ -2,17 +2,17 @@ package print
 
 import "git.sr.ht/~ionous/iffy/rt/writer"
 
-// implements writer.ChunkWriter and io.Closer
+// Filter - sends incoming chunks to one of three functions: first, rest, or last.
 type Filter struct {
 	writer.ChunkOutput
 	First, Rest func(writer.Chunk) (int, error)
-	Last        func() error
+	Last        func(int) error
 	cnt         int
 }
 
 func (f *Filter) Close() (err error) {
 	if f.Last != nil {
-		err = f.Last()
+		err = f.Last(f.cnt)
 	}
 	return
 }

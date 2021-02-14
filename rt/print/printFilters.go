@@ -1,6 +1,7 @@
 package print
 
 import (
+	"bytes"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/lang"
@@ -12,21 +13,29 @@ func Parens(out writer.Output) writer.OutputCloser {
 	return Brackets(out, '(', ')')
 }
 
+// Brackets - prefix the first chunk written to out with 'open', and suffix the last chunk with 'close'.
 func Brackets(out writer.Output, open, close rune) writer.OutputCloser {
-	wrote := false
+	var last bytes.Buffer
 	f := &Filter{
 		First: func(c writer.Chunk) (int, error) {
-			wrote = true
-			n, _ := out.WriteRune('(')
-			x, _ := c.WriteTo(out)
-			return n + x, nil
+			// write to last, not to out
+			last.WriteRune(open)
+			ret, err := c.WriteTo(&last)
+			return int(ret), err
 		},
 		Rest: func(c writer.Chunk) (int, error) {
-			return c.WriteTo(out)
+			// flush the last chunk
+			last.WriteTo(out)
+			// buffer the new chunk
+			ret, err := c.WriteTo(&last)
+			return int(ret), err
 		},
-		Last: func() (err error) {
-			if wrote {
-				_, err = out.WriteRune(')')
+		Last: func(cnt int) (err error) {
+			if cnt > 0 {
+				// append the bracket to the last chunk
+				// and write it
+				last.WriteRune(close)
+				_, err = last.WriteTo(out)
 			}
 			return
 		},

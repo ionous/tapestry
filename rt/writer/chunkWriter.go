@@ -1,6 +1,6 @@
 package writer
 
-// ChunkWriter adapts a WriteChunk method into writer friendly output.
+// ChunkWriter adapts a single WriteChunk() method into writer.Writer friendly interface.
 type ChunkWriter interface {
 	WriteChunk(Chunk) (int, error)
 	init(alson ChunkWriter)
@@ -18,7 +18,6 @@ func InitChunks(n ChunkWriter) {
 func (n *ChunkOutput) init(alson ChunkWriter) {
 	n.target = alson
 }
-
 func (n ChunkOutput) Write(p []byte) (int, error) {
 	return n.target.WriteChunk(Chunk{p})
 }
