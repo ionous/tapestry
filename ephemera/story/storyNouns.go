@@ -171,9 +171,10 @@ func (op *NounRelation) Import(k *Importer) (err error) {
 	}); e != nil {
 		err = e
 	} else {
+		domain := k.currentDomain()
 		for _, subject := range k.Recent.Nouns.Subjects {
 			for _, object := range k.Recent.Nouns.Objects {
-				k.NewRelative(object, rel, subject, k.Current.Domain)
+				k.NewRelative(object, rel, subject, domain)
 			}
 		}
 	}

@@ -23,7 +23,7 @@ func TestSayMe(t *testing.T) {
 		t.Fatal(e)
 	}
 	m := assembly.NewAssembler(db)
-	if _, e := m.WriteGob("say_me", &debug.SayPattern); e != nil {
+	if e := m.WriteGob("say_me", &debug.SayPattern); e != nil {
 		t.Fatal(e)
 	}
 	//

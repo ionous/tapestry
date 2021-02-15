@@ -95,6 +95,7 @@ func (op *PatternRule) ImportPattern(k *Importer, patternName ephemera.Named) (e
 		err = errutil.New("didnt expect continuation flags for", slotType, "in", patternName.String())
 	} else {
 		guard := op.Guard
+		// if this rule is declared inside a specific domain, add a check for that.
 		if dom := k.Current.Domain.String(); len(dom) > 0 {
 			guard = &core.AllTrue{[]rt.BoolEval{
 				&core.HasDominion{dom},

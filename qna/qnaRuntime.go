@@ -118,7 +118,8 @@ func (run *Runner) RelateTo(a, b, relation string) (err error) {
 	} else if res, e := run.fields.relateTo.Exec(a, b, relation, rel.cardinality); e != nil {
 		err = e
 	} else {
-		log.Println(tables.RowsAffected(res), "rows affected relating", a, "to", b, "via", relation)
+		res = res
+		// log.Println(tables.RowsAffected(res), "rows affected relating", a, "to", b, "via", relation)
 	}
 	return
 }

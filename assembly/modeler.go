@@ -147,11 +147,12 @@ func (m *Assembler) WritePlural(one, many string) error {
 	return e
 }
 
-func (m *Assembler) WriteProg(progName, typeName string, bytes []byte) (int64, error) {
-	return m.cache.Exec(mdl_prog, progName, typeName, bytes)
+func (m *Assembler) WriteProg(progName, typeName string, bytes []byte) (err error) {
+	_, err = m.cache.Exec(mdl_prog, progName, typeName, bytes)
+	return
 }
 
-func (m *Assembler) WriteGob(progName string, cmd interface{}) (ret int64, err error) {
+func (m *Assembler) WriteGob(progName string, cmd interface{}) (err error) {
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
 	rval := r.ValueOf(cmd)
@@ -159,14 +160,14 @@ func (m *Assembler) WriteGob(progName string, cmd interface{}) (ret int64, err e
 		err = errutil.New("WriteGob, error encoding value", e)
 	} else {
 		typeName := rval.Elem().Type().Name()
-		ret, err = m.WriteProg(progName, typeName, buf.Bytes())
+		err = m.WriteProg(progName, typeName, buf.Bytes())
 	}
 	return
 }
 
 func (m *Assembler) WriteGobs(gobs map[string]interface{}) (err error) {
 	for k, v := range gobs {
-		if _, e := m.WriteGob(k, v); e != nil {
+		if e := m.WriteGob(k, v); e != nil {
 			err = e
 			break
 		}

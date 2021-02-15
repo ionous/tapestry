@@ -12,7 +12,14 @@ type Query interface {
 	Query(query string, args ...interface{}) (*sql.Rows, error)
 }
 
-func Must(db *sql.DB, q string, args ...interface{}) (ret int64) {
+func Must(db *sql.DB, q string, args ...interface{}) {
+	if _, e := db.Exec(q, args...); e != nil {
+		panic(e)
+	}
+	return
+}
+
+func MustGetId(db *sql.DB, q string, args ...interface{}) (ret int64) {
 	if res, e := db.Exec(q, args...); e != nil {
 		panic(e)
 	} else if id, e := res.LastInsertId(); e != nil {

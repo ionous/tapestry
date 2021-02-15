@@ -100,11 +100,7 @@ func (k *Importer) AddModel(model []composer.Composer) {
 
 //
 func (k *Importer) NewName(name, category, ofs string) ephemera.Named {
-	domain := k.Current.Domain
-	if !domain.IsValid() {
-		domain = k.gameDomain()
-	}
-	return k.NewDomainName(domain, name, category, ofs)
+	return k.NewDomainName(k.currentDomain(), name, category, ofs)
 }
 
 func (k *Importer) gameDomain() ephemera.Named {
@@ -112,6 +108,14 @@ func (k *Importer) gameDomain() ephemera.Named {
 		k.entireGame = k.Recorder.NewName("entire_game", tables.NAMED_SCENE, "internal")
 	}
 	return k.entireGame
+}
+
+func (k *Importer) currentDomain() ephemera.Named {
+	domain := k.Current.Domain
+	if !domain.IsValid() {
+		domain = k.gameDomain()
+	}
+	return domain
 }
 
 // return true if m is the first time once has been called with the specified string.

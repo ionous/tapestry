@@ -19,7 +19,7 @@ func NewRecorder(db *sql.DB) *Recorder {
 }
 
 func (r *Recorder) SetSource(srcURI string) *Recorder {
-	r.srcId = r.cache.Must(eph_source, srcURI)
+	r.srcId = r.cache.MustGetId(eph_source, srcURI)
 	return r
 }
 
@@ -36,7 +36,7 @@ func (r *Recorder) NewDomainName(domain Named, name, category, ofs string) (ret 
 	// many tests would have to be adjusted to be able to handle normalization wholesale
 	// so for now make this opt-in.
 	norm := strings.TrimSpace(name)
-	namedId := r.cache.Must(eph_named, norm, name, category, domain, r.srcId, ofs)
+	namedId := r.cache.MustGetId(eph_named, norm, name, category, domain, r.srcId, ofs)
 	return Named{namedId, norm}
 }
 
@@ -44,7 +44,7 @@ type Prog struct{ Named }
 
 // fix: this should probably take "ofs" just like NewName does.
 func (r *Recorder) NewProg(rootType string, blob []byte) (ret Prog) {
-	id := r.cache.Must(eph_prog, r.srcId, rootType, blob)
+	id := r.cache.MustGetId(eph_prog, r.srcId, rootType, blob)
 	ret = Prog{Named{id, rootType}}
 	return
 }

@@ -42,8 +42,17 @@ func (c *Cache) Close() {
 	c.cache = make(map[string]*sql.Stmt)
 }
 
-func (c *Cache) Must(q string, args ...interface{}) (ret int64) {
-	if id, e := c.Exec(q, args...); e != nil {
+func (c *Cache) Must(q string, args ...interface{}) {
+	if _, e := c.Exec(q, args...); e != nil {
+		panic(e)
+	}
+	return
+}
+
+func (c *Cache) MustGetId(q string, args ...interface{}) (ret int64) {
+	if res, e := c.Exec(q, args...); e != nil {
+		panic(e)
+	} else if id, e := res.LastInsertId(); e != nil {
 		panic(e)
 	} else {
 		ret = id
@@ -51,15 +60,11 @@ func (c *Cache) Must(q string, args ...interface{}) (ret int64) {
 	return
 }
 
-func (c *Cache) Exec(q string, args ...interface{}) (ret int64, err error) {
+func (c *Cache) Exec(q string, args ...interface{}) (ret sql.Result, err error) {
 	if stmt, e := c.prep(q); e != nil {
 		err = e
-	} else if res, e := stmt.Exec(args...); e != nil {
-		err = errutil.New("Exec error:", e)
-	} else if id, e := res.LastInsertId(); e != nil {
-		err = errutil.New("LastInsertId error:", e)
 	} else {
-		ret = id
+		ret, err = stmt.Exec(args...)
 	}
 	return
 }

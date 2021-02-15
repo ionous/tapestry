@@ -118,9 +118,10 @@ func (op *RelativeToNoun) ImportPhrase(k *Importer) (err error) {
 	}); e != nil {
 		err = e
 	} else {
+		domain := k.currentDomain()
 		for _, object := range k.Recent.Nouns.Objects {
 			for _, subject := range k.Recent.Nouns.Subjects {
-				k.NewRelative(subject, relation, object, k.Current.Domain)
+				k.NewRelative(subject, relation, object, domain)
 			}
 		}
 	}
