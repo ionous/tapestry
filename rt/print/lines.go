@@ -14,21 +14,21 @@ type Lines struct {
 }
 
 func NewLines() *Lines {
-	lines := new(Lines)
-	writer.InitChunks(lines)
-	return lines
+	ls := new(Lines)
+	ls.ChunkOutput = writer.ChunkOutput(ls.WriteChunk)
+	return ls
 }
 
 // Lines returns all current lines.
 // There is no flush. A new line writer can be constructed instead.
-func (l *Lines) Lines() []string {
-	return l.lines
+func (ls *Lines) Lines() []string {
+	return ls.lines
 }
 
 // Write implements writer.Output, spacing writes with separators.
-func (l *Lines) WriteChunk(c writer.Chunk) (int, error) {
+func (ls *Lines) WriteChunk(c writer.Chunk) (int, error) {
 	var buf bytes.Buffer
 	n, e := c.WriteTo(&buf)
-	l.lines = append(l.lines, buf.String())
+	ls.lines = append(ls.lines, buf.String())
 	return n, e
 }

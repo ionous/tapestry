@@ -43,7 +43,7 @@ func TestPrintSep(t *testing.T) {
 
 func write(sep func(w writer.Output) writer.OutputCloser, names ...string) (ret string, err error) {
 	span := NewSpanner()
-	w := sep(span)
+	w := sep(span.ChunkOutput())
 	for _, n := range names {
 		if _, e := io.WriteString(w, n); e != nil {
 			err = e

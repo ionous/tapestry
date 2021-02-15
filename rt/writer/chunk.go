@@ -9,10 +9,11 @@ type Chunk struct {
 	Data interface{}
 }
 
-// Reset - forget the chunk's data; empty will return true.
-func (c *Chunk) Reset() {
-	c.Data = nil
-}
+// Reset - forget the chunk's data; empty will return true, valid will return false.
+func (c *Chunk) Reset() { c.Data = nil }
+
+// IsClosed - return true if the chunk was explicitly set to writer.Closed
+func (c *Chunk) IsClosed() bool { return c.Data == Closed }
 
 // IsEmpty - return true if has no data or if the data is empty.
 func (c *Chunk) IsEmpty() (okay bool) {
@@ -62,6 +63,8 @@ func (c *Chunk) DecodeLastRune() (ret rune, cnt int) {
 // WriteTo - output the chunk's data to w; return the number of bytes written.
 func (c *Chunk) WriteTo(w Output) (ret int, err error) {
 	switch b := c.Data.(type) {
+	case error:
+		err = b
 	case byte:
 		if e := w.WriteByte(b); e != nil {
 			err = e

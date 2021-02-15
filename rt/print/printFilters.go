@@ -8,40 +8,40 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
-// Parens filters writer.Output, parenthesizing a stream of writes. Close adds the closing paren.
-func Parens(out writer.Output) writer.OutputCloser {
-	return Brackets(out, '(', ')')
+// Parens buffers writer.Output, grouping a stream of writes.
+// Close adds the closing paren.
+func Parens() *BracketSpanner {
+	return &BracketSpanner{open: '(', close: ')'}
 }
 
-// Brackets - prefix the first chunk written to out with 'open', and suffix the last chunk with 'close'.
-func Brackets(out writer.Output, open, close rune) writer.OutputCloser {
-	var last bytes.Buffer
-	f := &Filter{
-		First: func(c writer.Chunk) (int, error) {
-			// write to last, not to out
-			last.WriteRune(open)
-			ret, err := c.WriteTo(&last)
-			return int(ret), err
-		},
-		Rest: func(c writer.Chunk) (int, error) {
-			// flush the last chunk
-			last.WriteTo(out)
-			// buffer the new chunk
-			ret, err := c.WriteTo(&last)
-			return int(ret), err
-		},
-		Last: func(cnt int) (err error) {
-			if cnt > 0 {
-				// append the bracket to the last chunk
-				// and write it
-				last.WriteRune(close)
-				_, err = last.WriteTo(out)
+type BracketSpanner struct {
+	Spanner     // inside the brackets: write with spaces
+	open, close rune
+}
+
+func (p *BracketSpanner) ChunkOutput() writer.ChunkOutput {
+	return p.WriteChunk
+}
+
+func (p *BracketSpanner) WriteChunk(c writer.Chunk) (ret int, err error) {
+	if c.IsClosed() {
+		if p.Len() > 0 {
+			p.buf.WriteRune(p.close)
+		}
+	} else {
+		if p.buf.Len() > 0 {
+			ret, err = p.Spanner.WriteChunk(c)
+		} else {
+			var buf bytes.Buffer
+			ret, err = c.WriteTo(&buf)
+			// wrote something locally? prepend it with the open.
+			if buf.Len() > 0 {
+				p.buf.WriteRune(p.open)
+				buf.WriteTo(&p.buf)
 			}
-			return
-		},
+		}
 	}
-	writer.InitChunks(f)
-	return f
+	return
 }
 
 // Capitalize filters writer.Output, capitalizing the first string.
@@ -55,8 +55,7 @@ func Capitalize(out writer.Output) writer.Output {
 			return c.WriteTo(out)
 		},
 	}
-	writer.InitChunks(f)
-	return f
+	return writer.ChunkOutput(f.WriteChunk)
 }
 
 // TitleCase filters writer.Output, capitalizing every write.
@@ -67,8 +66,7 @@ func TitleCase(out writer.Output) writer.Output {
 			return out.WriteString(cap)
 		},
 	}
-	writer.InitChunks(f)
-	return f
+	return writer.ChunkOutput(f.WriteChunk)
 }
 
 // Lowercase filters writer.Output, lowering every string.
@@ -79,8 +77,7 @@ func Lowercase(out writer.Output) writer.Output {
 			return out.WriteString(cap)
 		},
 	}
-	writer.InitChunks(f)
-	return f
+	return writer.ChunkOutput(f.WriteChunk)
 }
 
 // Slash filters writer.Output, separating writes with a slash.
@@ -95,6 +92,5 @@ func Slash(out writer.Output) writer.Output {
 			return n + x, nil
 		},
 	}
-	writer.InitChunks(f)
-	return f
+	return writer.ChunkOutput(f.WriteChunk)
 }

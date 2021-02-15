@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/print"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"git.sr.ht/~ionous/iffy/rt/writer"
+	"github.com/ionous/errutil"
 )
 
 // Say some bit of text.
@@ -84,7 +85,7 @@ func (*Span) Compose() composer.Spec {
 
 func (op *Span) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Go, span)
+	return writeSpan(run, span, op, op.Go, span.ChunkOutput())
 }
 
 // Compose defines a spec for the composer editor.
@@ -97,8 +98,8 @@ func (*Bracket) Compose() composer.Spec {
 }
 
 func (op *Bracket) GetText(run rt.Runtime) (g.Value, error) {
-	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Go, print.Parens(span))
+	span := print.Parens()
+	return writeSpan(run, span, op, op.Go, span.ChunkOutput())
 }
 
 // Compose defines a spec for the composer editor.
@@ -112,7 +113,7 @@ func (*Slash) Compose() composer.Spec {
 
 func (op *Slash) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Go, print.Slash(span))
+	return writeSpan(run, span, op, op.Go, print.Slash(span.ChunkOutput()))
 }
 
 // Compose defines a spec for the composer editor.
@@ -126,22 +127,27 @@ func (*Commas) Compose() composer.Spec {
 
 func (op *Commas) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Go, print.AndSeparator(span))
+	return writeSpan(run, span, op, op.Go, print.AndSeparator(span.ChunkOutput()))
 }
 
 type stringer interface{ String() string }
 
 func writeSpan(run rt.Runtime, span stringer, op composer.Composer, act Activity, w writer.Output) (ret g.Value, err error) {
-	if e := rt.WritersBlock(run, w, func() error {
-		return safe.Run(run, &act)
-	}); e != nil {
-		err = cmdError(op, e)
-	} else if res := span.String(); len(res) > 0 {
-		ret = g.StringOf(res)
-	} else {
-		hack := &HackTillTemplatesCanEvaluatePatternTypes
-		ret = g.StringOf(*hack)
-		*hack = ""
+	if !act.Empty() {
+		was := run.SetWriter(w)
+		ex := act.Execute(run)
+		run.SetWriter(was)
+		if e := errutil.Append(ex, writer.Close(w)); e != nil {
+			err = cmdError(op, e)
+		} else {
+			if res := span.String(); len(res) > 0 {
+				ret = g.StringOf(res)
+			} else {
+				hack := &HackTillTemplatesCanEvaluatePatternTypes
+				ret = g.StringOf(*hack)
+				*hack = ""
+			}
+		}
 	}
 	return
 }

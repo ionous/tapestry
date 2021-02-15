@@ -6,8 +6,8 @@ import (
 )
 
 func TestBracket(t *testing.T) {
-	span := NewSpanner()
-	w := Parens(span)
+	span := Parens()
+	w := span.ChunkOutput()
 	io.WriteString(w, "hello")
 	io.WriteString(w, "you")
 	w.Close()
@@ -18,7 +18,7 @@ func TestBracket(t *testing.T) {
 
 func TestManualBracket(t *testing.T) {
 	span := NewSpanner()
-	w := span
+	w := span.ChunkOutput()
 	io.WriteString(w, "hello")
 	io.WriteString(w, "( you )")
 	io.WriteString(w, "guys")
@@ -29,7 +29,7 @@ func TestManualBracket(t *testing.T) {
 
 func TestCapitalize(t *testing.T) {
 	span := NewSpanner()
-	w := Capitalize(span)
+	w := Capitalize(span.ChunkOutput())
 	io.WriteString(w, "hello")
 	io.WriteString(w, "you")
 	if str := span.String(); str != "Hello you" {
@@ -39,7 +39,7 @@ func TestCapitalize(t *testing.T) {
 
 func TestLowercase(t *testing.T) {
 	span := NewSpanner()
-	w := Lowercase(span)
+	w := Lowercase(span.ChunkOutput())
 	io.WriteString(w, "Hello")
 	io.WriteString(w, "Hugh")
 	if str := span.String(); str != "hello hugh" {
@@ -49,7 +49,7 @@ func TestLowercase(t *testing.T) {
 
 func TestTitlecase(t *testing.T) {
 	span := NewSpanner()
-	w := TitleCase(span)
+	w := TitleCase(span.ChunkOutput())
 	io.WriteString(w, "hello")
 	io.WriteString(w, "you")
 	if str := span.String(); str != "Hello You" {

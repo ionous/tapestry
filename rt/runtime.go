@@ -65,18 +65,3 @@ type Runtime interface {
 	// Override the current writer
 	SetWriter(writer.Output) (prev writer.Output)
 }
-
-// WritersBlock applies a writer to the runtime for the duration of fn.
-// If the writer also implements io.Closer and fn is free of errors,
-// w.Close gets called and its result returned.
-func WritersBlock(run Runtime, w writer.Output, fn func() error) (err error) {
-	was := run.SetWriter(w)
-	e := fn()
-	run.SetWriter(was)
-	if e != nil {
-		err = e
-	} else {
-		err = writer.Close(w)
-	}
-	return
-}

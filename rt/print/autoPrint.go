@@ -6,22 +6,13 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
-// AutoWriter accepts incoming text chunks and writes them to target writing newlines at the end of sentences.
-type AutoWriter struct {
-	writer.ChunkOutput
-	Target writer.Output
-}
-
-func NewAutoWriter(w writer.Output) *AutoWriter {
-	a := &AutoWriter{Target: w}
-	writer.InitChunks(a)
-	return a
-}
-
-func (w *AutoWriter) WriteChunk(c writer.Chunk) (int, error) {
-	n, e := c.WriteTo(w.Target)
-	if last, _ := c.DecodeLastRune(); unicode.Is(unicode.Terminal_Punctuation, last) {
-		w.Target.WriteRune('\n')
+// NewAutoWriter accepts incoming text chunks and writes them to target writing newlines at the end of sentences.
+func NewAutoWriter(w writer.Output) writer.ChunkOutput {
+	return func(c writer.Chunk) (int, error) {
+		n, e := c.WriteTo(w)
+		if last, _ := c.DecodeLastRune(); unicode.Is(unicode.Terminal_Punctuation, last) {
+			w.WriteRune('\n')
+		}
+		return n, e
 	}
-	return n, e
 }

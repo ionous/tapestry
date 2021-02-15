@@ -7,16 +7,14 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
-// Spanner buffers with spacing, treating each new Write as word and adding spaces to separate words as necessary.
+// Spanner implements ChunkWriter, buffering output with spaces.
+// It treats each new Write as a word adding spaces to separate words as necessary.
 type Spanner struct {
-	writer.ChunkOutput
 	buf bytes.Buffer // note: we cant aggregate buf or io.WriteString will bypasses implementation of Write() in favor of bytes.Buffer.WriteString()
 }
 
 func NewSpanner() *Spanner {
-	s := new(Spanner)
-	writer.InitChunks(s)
-	return s
+	return new(Spanner)
 }
 
 func (p *Spanner) Len() int {
@@ -29,9 +27,18 @@ func (p *Spanner) String() string {
 	return p.buf.String()
 }
 
+func (p *Spanner) WriteTo(w writer.Output) (int, error) {
+	i, e := p.buf.WriteTo(w)
+	return int(i), e
+}
+
+func (p *Spanner) ChunkOutput() writer.ChunkOutput {
+	return p.WriteChunk
+}
+
 func (p *Spanner) WriteChunk(c writer.Chunk) (ret int, err error) {
 	// writing something?
-	if b, cnt := c.DecodeRune(); cnt > 0 {
+	if b, cnt := c.DecodeLastRune(); cnt > 0 {
 		// and already written something and the thing we are writing is not a space?
 		if p.Len() > 0 && !spaceLike(b) {
 			p.buf.WriteRune(' ')
