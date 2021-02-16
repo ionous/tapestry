@@ -17,7 +17,7 @@ type IntoObj struct {
 	Object rt.TextEval `if:"selector"`
 }
 
-// IntoVar: Targets a record or object stored in a variable.
+// IntoVar: Targets a record or object name stored in a variable.
 type IntoVar struct {
 	Var Variable `if:"selector"`
 }

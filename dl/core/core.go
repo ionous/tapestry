@@ -72,6 +72,7 @@ var Slats = []composer.Composer{
 	(*KindOf)(nil),
 	(*IsKindOf)(nil),
 	(*IsExactKindOf)(nil),
+	(*KindsOf)(nil),
 	(*HasTrait)(nil),
 
 	(*PrintNum)(nil),

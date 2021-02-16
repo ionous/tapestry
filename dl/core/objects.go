@@ -37,6 +37,11 @@ type IsExactKindOf struct {
 	Kind   string      `if:"selector=isExactly"`
 }
 
+// KindsOf returns all kinds of the specified type
+type KindsOf struct {
+	Kind string `if:"selector"`
+}
+
 func (*ObjectExists) Compose() composer.Spec {
 	return composer.Spec{
 		Group:  "objects",
@@ -136,4 +141,17 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.BoolOf(ok)
 	}
 	return
+}
+
+func (*KindsOf) Compose() composer.Spec {
+	return composer.Spec{
+		Fluent: &composer.Fluid{Name: "kindsOf", Role: composer.Function},
+		Group:  "objects",
+		Desc:   "Kinds Of: A list of compatible kinds.",
+	}
+}
+
+func (op *KindsOf) GetTextList(run rt.Runtime) (g.Value, error) {
+	kind := lang.Breakcase(op.Kind) // fix: assembly time.
+	return run.GetField(object.Nouns, kind)
 }

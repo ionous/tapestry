@@ -19,6 +19,7 @@ import (
 type Fields struct {
 	activeDomains,
 	activeNouns,
+	activeNounList,
 	valueOf,
 	progBytes,
 	countOf,
@@ -50,7 +51,14 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 			join run_domain rd 
 			where rd.active and instr(mn.noun, '#' || rd.domain || '::') = 1
 			and mn.noun=?`),
-
+		activeNounList: ps.Prep(db,
+			`select mn.noun
+			from mdl_noun mn 
+			join mdl_kind mk 
+					using (kind) 
+			join run_domain rd 
+			where instr(mk.kind || ',' || mk.path || ',', ?|| ',')  
+			and	rd.active and instr(mn.noun, '#' || rd.domain || '::') = 1`),
 		valueOf: ps.Prep(db,
 			`select value, type
 				from run_value 
@@ -105,6 +113,7 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 				order by rank
 				limit 1`),
 		// given a name, find the id
+		// FIX: shouldnt this be limited to activeNouns?
 		objOf: ps.Prep(db,
 			`select noun
 				from mdl_name
@@ -271,6 +280,23 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			}
 			return
 		})
+
+	case object.Nouns:
+		kind := lang.Breakcase(rawField)
+		if rows, e := n.fields.activeNounList.Query(kind); e != nil {
+			err = errutil.New(target, e)
+		} else {
+			var nouns []string
+			var noun string
+			if tables.ScanAll(rows, func() (err error) {
+				nouns = append(nouns, noun)
+				return
+			}, &noun); e != nil {
+				err = e
+			} else {
+				ret = g.StringsOf(nouns)
+			}
+		}
 
 	case object.Domain:
 		// fix,once there's a domain hierarchy:

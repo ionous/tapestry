@@ -1837,6 +1837,31 @@ const spec = [
     }
   },
   {
+    "desc": "Kinds Of: A list of compatible kinds.",
+    "group": [
+      "objects"
+    ],
+    "name": "kinds_of",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$KIND": {
+          "label": "kind",
+          "type": "text"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "text_list_eval"
+      ],
+      "tokens": [
+        "kindsOf",
+        ": ",
+        "$KIND"
+      ]
+    }
+  },
+  {
     "desc": "Less Than: The first value is less than the second value.",
     "group": [
       "comparison"
@@ -1876,7 +1901,7 @@ const spec = [
     }
   },
   {
-    "desc": "For each in list: Loops over the elements in the passed list, or runs the 'else' activity if empty.",
+    "desc": "Repeating over list: Loops over the elements in the passed list, or runs the 'else' activity if empty.",
     "group": [
       "list"
     ],

@@ -24,7 +24,7 @@ func (a *activeNouns) isActive(id string) (ret bool) {
 			if a.cache == nil {
 				a.cache = make(map[string]bool)
 			}
-			a.cache[id] = el
+			a.cache[id] = el // store bool
 			ret = el
 		}
 	}
