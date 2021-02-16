@@ -29,7 +29,7 @@ func (op *Each) Compose() composer.Spec {
 		Name:   "list_each",
 		Group:  "list",
 		Fluent: &composer.Fluid{Name: "repeating", Role: composer.Command},
-		Desc:   `For each in list: Loops over the elements in the passed list, or runs the 'else' activity if empty.`,
+		Desc:   `Repeating over list: Loops over the elements in the passed list, or runs the 'else' activity if empty.`,
 		Locals: []string{"index", "first", "last"},
 	}
 }
