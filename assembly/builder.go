@@ -184,7 +184,8 @@ func decodeProg(prog []byte, aff affine.Affinity) (ret core.Assignment, err erro
 		dec := gob.NewDecoder(bytes.NewBuffer(prog))
 		if e := dec.Decode(&local); e != nil {
 			err = e
-		} else if a := local.Value.Affinity(); a != aff {
+		} else if a := local.Value.Affinity(); len(a) > 0 && a != aff {
+			// note: some expressions (ex. GetAtField) cant determine affinity until runtime
 			err = errutil.New("incompatible arguments, wanted", aff, "have expression of", a)
 		} else {
 			ret = local.Value
