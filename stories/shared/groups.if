@@ -5185,7 +5185,7 @@
                         "$LINES": {
                           "id": "id-17692f1b70b-785",
                           "type": "lines",
-                          "value": "Mildred and five scrabble tiles ( X, W, F, Y, and Z )"
+                          "value": "Mildred and five scrabble tiles (X, W, F, Y, and Z)"
                         }
                       }
                     }
@@ -5575,7 +5575,7 @@
                         "$LINES": {
                           "id": "id-17692f1b70b-813",
                           "type": "lines",
-                          "value": "Mildred and five scrabble tiles ( a X, a W, a F, a Y, and a Z )"
+                          "value": "Mildred and five scrabble tiles (a X, a W, a F, a Y, and a Z)"
                         }
                       }
                     }
@@ -6089,7 +6089,7 @@
                         "$LINES": {
                           "id": "id-17692f1b70b-841",
                           "type": "lines",
-                          "value": "Mildred and three things ( an empire apple, a pen, and one triangle ); Mildred and four things ( an empire apple, a pen, and two triangles )"
+                          "value": "Mildred and three things (an empire apple, a pen, and one triangle); Mildred and four things (an empire apple, a pen, and two triangles)"
                         }
                       }
                     }

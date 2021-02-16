@@ -1081,6 +1081,93 @@
               }
             },
             {
+              "id": "id-1779e5b2fdb-108",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1779e5b2fdb-109",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-1779e5b2fdb-110",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-1779e5b2fdb-111",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-1779e5b2fdb-112",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-1779e5b2fdb-113",
+                              "type": "noun_name",
+                              "value": "espresso machine"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-1779e5b2fdb-114",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-1779e5b2fdb-115",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-1779e5b2fdb-116",
+                                "type": "are_an",
+                                "value": "$ISA"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-1779e5b2fdb-117",
+                                "type": "singular_kind",
+                                "value": "thing"
+                              },
+                              "$NOUN_RELATION": {
+                                "id": "id-1779e5b2fdb-118",
+                                "type": "noun_relation",
+                                "value": {
+                                  "$RELATION": {
+                                    "id": "id-1779e5b2fdb-119",
+                                    "type": "relation_name",
+                                    "value": "whereabouts"
+                                  },
+                                  "$NOUNS": [
+                                    {
+                                      "id": "id-1779e5b2fdb-120",
+                                      "type": "named_noun",
+                                      "value": {
+                                        "$DETERMINER": {
+                                          "id": "id-1779e5b2fdb-121",
+                                          "type": "determiner",
+                                          "value": "$THE"
+                                        },
+                                        "$NAME": {
+                                          "id": "id-1779e5b2fdb-122",
+                                          "type": "noun_name",
+                                          "value": "counter"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
               "id": "id-17773598bfa-59",
               "type": "story_statement",
               "value": {
@@ -1092,22 +1179,6 @@
                     "type": "lede",
                     "value": {
                       "$NOUNS": [
-                        {
-                          "id": "id-17773598bfa-62",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17773598bfa-63",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17773598bfa-64",
-                              "type": "noun_name",
-                              "value": "espresso machine"
-                            }
-                          }
-                        },
                         {
                           "id": "id-17773598bfa-66",
                           "type": "named_noun",
@@ -1158,7 +1229,7 @@
                               "$KIND": {
                                 "id": "id-17773598bfa-77",
                                 "type": "singular_kind",
-                                "value": "things"
+                                "value": "containers"
                               },
                               "$NOUN_RELATION": {
                                 "id": "id-17773598bfa-78",
@@ -1188,80 +1259,6 @@
                                     }
                                   ]
                                 }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
-                }
-              }
-            },
-            {
-              "id": "id-17773598bfa-83",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17773598bfa-84",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17773598bfa-85",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17773598bfa-86",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17773598bfa-87",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17773598bfa-88",
-                              "type": "noun_name",
-                              "value": "blender"
-                            }
-                          }
-                        },
-                        {
-                          "id": "id-17773598bfa-90",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17773598bfa-91",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17773598bfa-92",
-                              "type": "noun_name",
-                              "value": "mortar"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17773598bfa-89",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17773598bfa-93",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17773598bfa-94",
-                                "type": "are_an",
-                                "value": "$ARE"
-                              },
-                              "$TRAIT": [],
-                              "$KIND": {
-                                "id": "id-17773598bfa-95",
-                                "type": "singular_kind",
-                                "value": "containers"
                               }
                             }
                           }
@@ -2689,7 +2686,7 @@
                         "$LINES": {
                           "id": "id-17799bae367-81",
                           "type": "lines",
-                          "value": "Darkness.\nIt is pitch dark, and you can't see a thing.\nKitchen (in the cabinet).\nThe cabinet.\n"
+                          "value": "Darkness.\nIt is pitch dark, and you can't see a thing.\n.....\nKitchen (in the cabinet).\nYour Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.\nA pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of beans, a can of potato leek soup, and a tin of deflating powder.\nYou can also see a broom, a counter (on which are a blender (empty), an espresso machine, and a mortar (in which is a pestle)), and two cats.\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nIn the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife.\n"
                         }
                       }
                     }
@@ -2830,7 +2827,7 @@
                                         "$TEXT": {
                                           "id": "id-17799bae367-149",
                                           "type": "text",
-                                          "value": "xxx."
+                                          "value": "....."
                                         }
                                       }
                                     }
@@ -2914,7 +2911,7 @@
                                         "$TEXT": {
                                           "id": "id-17799bae367-154",
                                           "type": "text",
-                                          "value": "xxx."
+                                          "value": "....."
                                         }
                                       }
                                     }
@@ -3047,25 +3044,355 @@
                               }
                             },
                             {
-                              "id": "id-17799bae367-140",
+                              "id": "id-1779fc56090-122",
                               "type": "execute",
                               "value": {
-                                "id": "id-17799bae367-141",
+                                "id": "id-1779fc56090-123",
                                 "type": "say_text",
                                 "value": {
                                   "$TEXT": {
-                                    "id": "id-17799bae367-142",
+                                    "id": "id-1779fc56090-124",
                                     "type": "text_eval",
                                     "value": {
-                                      "id": "id-17799bae367-143",
+                                      "id": "id-1779fc56090-125",
                                       "type": "text_value",
                                       "value": {
                                         "$TEXT": {
-                                          "id": "id-17799bae367-144",
+                                          "id": "id-1779fc56090-126",
                                           "type": "text",
-                                          "value": "xxx."
+                                          "value": "....."
                                         }
                                       }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177a87f4234-53",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177a87f4234-54",
+                                "type": "comment",
+                                "value": {
+                                  "$LINES": {
+                                    "id": "id-177a87f4234-55",
+                                    "type": "lines",
+                                    "value": "remove the hook from the cabinet"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177a87f4234-44",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177a87f4234-45",
+                                "type": "relate",
+                                "value": {
+                                  "$OBJECT": {
+                                    "id": "id-177a87f4234-46",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177a87f4234-49",
+                                      "type": "text_value",
+                                      "value": {
+                                        "$TEXT": {
+                                          "id": "id-177a87f4234-50",
+                                          "type": "text",
+                                          "value": "kitchen"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$TO_OBJECT": {
+                                    "id": "id-177a87f4234-47",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177a87f4234-51",
+                                      "type": "text_value",
+                                      "value": {
+                                        "$TEXT": {
+                                          "id": "id-177a87f4234-52",
+                                          "type": "text",
+                                          "value": "hook"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$VIA": {
+                                    "id": "id-177a87f4234-48",
+                                    "type": "relation_name",
+                                    "value": "whereabouts"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-1779fc56090-127",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-1779fc56090-128",
+                                "type": "determine",
+                                "value": {
+                                  "$NAME": {
+                                    "id": "id-1779fc56090-129",
+                                    "type": "pattern_name",
+                                    "value": "printVantage"
+                                  },
+                                  "$ARGUMENTS": {
+                                    "id": "id-1779fc56090-130",
+                                    "type": "arguments",
+                                    "value": {
+                                      "$ARGS": [
+                                        {
+                                          "id": "id-1779fc56090-131",
+                                          "type": "argument",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-1779fc56090-132",
+                                              "type": "variable_name",
+                                              "value": "where"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-1779fc56090-133",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-1779fc56090-134",
+                                                "type": "from_text",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-1779fc56090-135",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-1779fc56090-136",
+                                                      "type": "text_value",
+                                                      "value": {
+                                                        "$TEXT": {
+                                                          "id": "id-1779fc56090-137",
+                                                          "type": "text",
+                                                          "value": "cabinet"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-1779a1abe71-105",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-1779a1abe71-106",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1779a1abe71-107",
+                "type": "test_statement",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-1779a1abe71-108",
+                    "type": "test_name",
+                    "value": "printing listed object"
+                  },
+                  "$TEST": {
+                    "id": "id-1779a1abe71-109",
+                    "type": "testing",
+                    "value": {
+                      "id": "id-1779a1abe71-110",
+                      "type": "test_output",
+                      "value": {
+                        "$LINES": {
+                          "id": "id-1779a1abe71-111",
+                          "type": "lines",
+                          "value": "a mortar (in which is a pestle).\na blender (empty).\na counter (on which are a blender (empty), an espresso machine, and a mortar (in which is a pestle)).\n"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1779a1abe71-112",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1779a1abe71-113",
+                "type": "test_rule",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-1779a1abe71-114",
+                    "type": "test_name",
+                    "value": "printing listed object"
+                  },
+                  "$HOOK": {
+                    "id": "id-1779a1abe71-115",
+                    "type": "program_hook",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-1779a1abe71-116",
+                        "type": "activity",
+                        "value": {
+                          "$EXE": [
+                            {
+                              "id": "id-1779fc56090-2",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-1779fc56090-3",
+                                "type": "list_each",
+                                "value": {
+                                  "$LIST": {
+                                    "id": "id-1779fc56090-4",
+                                    "type": "assignment",
+                                    "value": {
+                                      "id": "id-1779fc56090-5",
+                                      "type": "from_texts",
+                                      "value": {
+                                        "$VALS": {
+                                          "id": "id-1779fc56090-6",
+                                          "type": "text_list_eval",
+                                          "value": {
+                                            "id": "id-1779fc56090-7",
+                                            "type": "texts",
+                                            "value": {
+                                              "$VALUES": [
+                                                {
+                                                  "id": "id-1779fc56090-8",
+                                                  "type": "text",
+                                                  "value": "mortar"
+                                                },
+                                                {
+                                                  "id": "id-1779fc56090-9",
+                                                  "type": "text",
+                                                  "value": "blender"
+                                                },
+                                                {
+                                                  "id": "id-1779fc56090-10",
+                                                  "type": "text",
+                                                  "value": "counter"
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$AS": {
+                                    "id": "id-1779fc56090-11",
+                                    "type": "list_iterator",
+                                    "value": {
+                                      "id": "id-1779fc56090-12",
+                                      "type": "as_txt",
+                                      "value": {
+                                        "$VAR": {
+                                          "id": "id-1779fc56090-13",
+                                          "type": "variable_name",
+                                          "value": "it"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$DO": {
+                                    "id": "id-1779fc56090-14",
+                                    "type": "activity",
+                                    "value": {
+                                      "$EXE": [
+                                        {
+                                          "id": "id-1779d6668fc-0",
+                                          "type": "execute",
+                                          "value": {
+                                            "id": "id-1779d6668fc-5",
+                                            "type": "determine",
+                                            "value": {
+                                              "$NAME": {
+                                                "id": "id-1779d6668fc-6",
+                                                "type": "pattern_name",
+                                                "value": "print listed object"
+                                              },
+                                              "$ARGUMENTS": {
+                                                "id": "id-1779d6668fc-7",
+                                                "type": "arguments",
+                                                "value": {
+                                                  "$ARGS": [
+                                                    {
+                                                      "id": "id-1779d6668fc-8",
+                                                      "type": "argument",
+                                                      "value": {
+                                                        "$NAME": {
+                                                          "id": "id-1779d6668fc-9",
+                                                          "type": "variable_name",
+                                                          "value": "obj"
+                                                        },
+                                                        "$FROM": {
+                                                          "id": "id-1779d6668fc-10",
+                                                          "type": "assignment",
+                                                          "value": {
+                                                            "id": "id-1779fc56090-49",
+                                                            "type": "get_var",
+                                                            "value": {
+                                                              "$NAME": {
+                                                                "id": "id-1779fc56090-50",
+                                                                "type": "text",
+                                                                "value": "it"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "id": "id-1779fc56090-44",
+                                          "type": "execute",
+                                          "value": {
+                                            "id": "id-1779fc56090-45",
+                                            "type": "say_text",
+                                            "value": {
+                                              "$TEXT": {
+                                                "id": "id-1779fc56090-46",
+                                                "type": "text_eval",
+                                                "value": {
+                                                  "id": "id-1779fc56090-47",
+                                                  "type": "text_value",
+                                                  "value": {
+                                                    "$TEXT": {
+                                                      "id": "id-1779fc56090-48",
+                                                      "type": "text",
+                                                      "value": "."
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
                                     }
                                   }
                                 }

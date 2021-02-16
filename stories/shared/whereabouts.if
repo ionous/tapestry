@@ -2286,7 +2286,7 @@
                   "$NAME": {
                     "id": "id-17703f5400a-294",
                     "type": "pattern_name",
-                    "value": "IndirectlyHolds"
+                    "value": "AncestorOf"
                   },
                   "$TYPE": {
                     "id": "id-17703f5400a-295",
@@ -2312,7 +2312,7 @@
                   "$PATTERN_NAME": {
                     "id": "id-17703f5400a-300",
                     "type": "pattern_name",
-                    "value": "IndirectlyHolds"
+                    "value": "AncestorOf"
                   },
                   "$VARIABLE_DECL": [
                     {
@@ -2322,12 +2322,12 @@
                         "$AN": {
                           "id": "id-17703f5400a-302",
                           "type": "determiner",
-                          "value": "$AN"
+                          "value": "$A"
                         },
                         "$NAME": {
                           "id": "id-17703f5400a-303",
                           "type": "variable_name",
-                          "value": "holder"
+                          "value": "root"
                         },
                         "$TYPE": {
                           "id": "id-17703f5400a-304",
@@ -2405,7 +2405,7 @@
                   "$NAME": {
                     "id": "id-17703f5400a-317",
                     "type": "pattern_name",
-                    "value": "IndirectlyHolds"
+                    "value": "AncestorOf"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-17703f5400a-380",
@@ -2428,7 +2428,7 @@
                                 "$NAME": {
                                   "id": "id-17703f5400a-383",
                                   "type": "variable_name",
-                                  "value": "it"
+                                  "value": "up"
                                 },
                                 "$TYPE": {
                                   "id": "id-17703f5400a-384",
@@ -2475,7 +2475,7 @@
                           "$NAME": {
                             "id": "id-17703f5400a-327",
                             "type": "variable_name",
-                            "value": "isHeld"
+                            "value": "isAncestor"
                           },
                           "$TYPE": {
                             "id": "id-17703f5400a-328",
@@ -2491,7 +2491,7 @@
                           "$COMMENT": {
                             "id": "id-17703f5400a-477",
                             "type": "lines",
-                            "value": " Returns true if one object acts as the ancestor of another."
+                            "value": "- true if one object acts as the ancestor of another."
                           }
                         }
                       }
@@ -2534,7 +2534,7 @@
                                             "$VAR": {
                                               "id": "id-17703f5400a-368",
                                               "type": "variable_name",
-                                              "value": "it"
+                                              "value": "up"
                                             },
                                             "$FROM": {
                                               "id": "id-17703f5400a-369",
@@ -2601,7 +2601,7 @@
                                                         "$LINES": {
                                                           "id": "id-17703f5400a-469",
                                                           "type": "lines",
-                                                          "value": "Step up immediately, indirect implies objets dont hold themselves."
+                                                          "value": "Step up immediately, indirect implies objects dont hold themselves."
                                                         }
                                                       }
                                                     }
@@ -2616,7 +2616,7 @@
                                                         "$VAR": {
                                                           "id": "id-17703f5400a-420",
                                                           "type": "variable_name",
-                                                          "value": "it"
+                                                          "value": "up"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-17703f5400a-421",
@@ -2661,7 +2661,7 @@
                                                                                     "$NAME": {
                                                                                       "id": "id-17703f5400a-431",
                                                                                       "type": "text",
-                                                                                      "value": "it"
+                                                                                      "value": "up"
                                                                                     }
                                                                                   }
                                                                                 }
@@ -2704,7 +2704,7 @@
                                                                     "$NAME": {
                                                                       "id": "id-17703f5400a-438",
                                                                       "type": "text",
-                                                                      "value": "it"
+                                                                      "value": "up"
                                                                     }
                                                                   }
                                                                 }
@@ -2792,7 +2792,7 @@
                                                                           "$NAME": {
                                                                             "id": "id-17703f5400a-453",
                                                                             "type": "text",
-                                                                            "value": "it"
+                                                                            "value": "up"
                                                                           }
                                                                         }
                                                                       }
@@ -2886,7 +2886,7 @@
                                                                     "$NAME": {
                                                                       "id": "id-17703f5400a-400",
                                                                       "type": "text",
-                                                                      "value": "it"
+                                                                      "value": "up"
                                                                     }
                                                                   }
                                                                 }
@@ -2910,7 +2910,7 @@
                                                                     "$NAME": {
                                                                       "id": "id-17703f5400a-405",
                                                                       "type": "text",
-                                                                      "value": "holder"
+                                                                      "value": "root"
                                                                     }
                                                                   }
                                                                 }
@@ -2948,7 +2948,7 @@
                                                                     "$VAR": {
                                                                       "id": "id-17703f5400a-412",
                                                                       "type": "variable_name",
-                                                                      "value": "isHeld"
+                                                                      "value": "isAncestor"
                                                                     },
                                                                     "$FROM": {
                                                                       "id": "id-17703f5400a-413",
