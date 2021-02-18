@@ -2,10 +2,9 @@ package internal
 
 import (
 	"database/sql"
-	"log"
 	"os"
 
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 func ExampleKindData() {
@@ -42,15 +41,14 @@ func ExampleKindData() {
 }
 
 func ExampleKindDB() {
-	const memory = "file:ExampleKindDB.db?cache=shared&mode=memory"
-	if db, e := sql.Open(tables.DefaultDriver, memory); e != nil {
-		log.Fatalln("couldnt open db ", e)
-	} else if e := CreateTestData(db); e != nil {
-		log.Fatal("couldnt create test data ", e)
+	db := testdb.Open("ExampleKindDB", testdb.Memory, "")
+	defer db.Close()
+	if e := CreateTestData(db); e != nil {
+		panic(e)
 	} else if e := CreateAtlas(db); e != nil {
-		log.Fatal("couldnt create atlas tables ", e)
+		panic(e)
 	} else if e := ListOfKinds(os.Stdout, db); e != nil {
-		log.Fatal("couldnt process kinds ", e)
+		panic(e)
 	}
 
 	// Output:

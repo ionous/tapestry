@@ -173,7 +173,7 @@ func TestFieldAccess(t *testing.T) {
 }
 
 func newFieldAccessTest(t *testing.T, dbloc string) (ret *sql.DB) {
-	db := newQnaDB(t, dbloc)
+	db := testdb.Open(t.Name(), dbloc, assembly.SqlCustomDriver)
 	if e := tables.CreateModel(db); e != nil {
 		t.Fatal(e)
 	} else if e := tables.CreateRun(db); e != nil {

@@ -16,53 +16,47 @@ import (
 // TestNounFormation to verify we can successfully assemble nouns from ephemera
 func TestNounFormation(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+		asm := newAssemblyTest(t, testdb.Memory)
+		defer asm.db.Close()
+		if e := AddTestHierarchy(asm.assembler,
+			"Ts", "",
+		); e != nil {
 			t.Fatal(e)
-		} else {
-			defer asm.db.Close()
-			if e := AddTestHierarchy(asm.assembler,
-				"Ts", "",
-			); e != nil {
-				t.Fatal(e)
-			} else if e := addNounEphemera(asm.rec,
-				"apple", "T",
-				"pear", "T",
-				"toy boat", "T",
-			); e != nil {
-				t.Fatal(e)
-			} else if e := AssembleNouns(asm.assembler); e != nil {
-				t.Log(asm.dilemmas)
-				t.Fatal(e)
-			} else if e := matchNouns(asm.db, []modeledNoun{
-				{"apple", "Ts", 0},
-				{"pear", "Ts", 0},
-				{"toy boat", "Ts", 0},
-				{"toy_boat", "Ts", 1},
-				{"boat", "Ts", 2},
-				{"toy", "Ts", 3},
-			}); e != nil {
-				t.Fatal(e)
-			}
+		} else if e := addNounEphemera(asm.rec,
+			"apple", "T",
+			"pear", "T",
+			"toy boat", "T",
+		); e != nil {
+			t.Fatal(e)
+		} else if e := AssembleNouns(asm.assembler); e != nil {
+			t.Log(asm.dilemmas)
+			t.Fatal(e)
+		} else if e := matchNouns(asm.db, []modeledNoun{
+			{"apple", "Ts", 0},
+			{"pear", "Ts", 0},
+			{"toy boat", "Ts", 0},
+			{"toy_boat", "Ts", 1},
+			{"boat", "Ts", 2},
+			{"toy", "Ts", 3},
+		}); e != nil {
+			t.Fatal(e)
 		}
 	})
 	t.Run("failure", func(t *testing.T) {
-		if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+		asm := newAssemblyTest(t, testdb.Memory)
+		defer asm.db.Close()
+		if e := AddTestHierarchy(asm.assembler,
+			"Ts", "",
+		); e != nil {
 			t.Fatal(e)
-		} else {
-			defer asm.db.Close()
-			if e := AddTestHierarchy(asm.assembler,
-				"Ts", "",
-			); e != nil {
-				t.Fatal(e)
-			} else if e := addNounEphemera(asm.rec,
-				"bad apple", "Bs",
-			); e != nil {
-				t.Fatal(e)
-			} else if e := AssembleNouns(asm.assembler); e == nil {
-				t.Fatal("expected error")
-			} else if !containsOnly(asm.dilemmas, `missing noun: "bad_apple"`) {
-				t.Fatal(asm.dilemmas)
-			}
+		} else if e := addNounEphemera(asm.rec,
+			"bad apple", "Bs",
+		); e != nil {
+			t.Fatal(e)
+		} else if e := AssembleNouns(asm.assembler); e == nil {
+			t.Fatal("expected error")
+		} else if !containsOnly(asm.dilemmas, `missing noun: "bad_apple"`) {
+			t.Fatal(asm.dilemmas)
 		}
 	})
 }
@@ -107,90 +101,81 @@ func addNounEphemera(rec *ephemera.Recorder, els ...string) (err error) {
 
 // TestNounLcaSuccess to verify we can successfully determine the lowest common ancestor of nouns.
 func TestNounLcaSuccess(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	if e := AddTestHierarchy(asm.assembler,
+		"Ts", "",
+		"Ps", "Ts",
+		"Cs", "Ps,Ts",
+		"Ds", "Ps,Ts",
+	); e != nil {
 		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		if e := AddTestHierarchy(asm.assembler,
-			"Ts", "",
-			"Ps", "Ts",
-			"Cs", "Ps,Ts",
-			"Ds", "Ps,Ts",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := addNounEphemera(asm.rec,
-			"apple", "C",
-			"apple", "P",
-			"pear", "D",
-			"pear", "T",
-			"bandanna", "C",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleNouns(asm.assembler); e != nil {
-			t.Fatal(e)
-		} else if e := matchNouns(asm.db, []modeledNoun{
-			{"apple", "Ps", 0},
-			{"bandanna", "Cs", 0},
-			{"pear", "Ts", 0},
-		}); e != nil {
-			t.Fatal(e)
-		}
+	} else if e := addNounEphemera(asm.rec,
+		"apple", "C",
+		"apple", "P",
+		"pear", "D",
+		"pear", "T",
+		"bandanna", "C",
+	); e != nil {
+		t.Fatal(e)
+	} else if e := AssembleNouns(asm.assembler); e != nil {
+		t.Fatal(e)
+	} else if e := matchNouns(asm.db, []modeledNoun{
+		{"apple", "Ps", 0},
+		{"bandanna", "Cs", 0},
+		{"pear", "Ts", 0},
+	}); e != nil {
+		t.Fatal(e)
 	}
 }
 
 // TestNounLcaFailure to verify a mismatched noun hierarchy generates an error.
 func TestNounLcaFailure(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := AddTestHierarchy(asm.assembler,
+		"Ts", "",
+		"Ps", "Ts",
+		"Cs", "Ps,Ts",
+		"Ds", "Ps,Ts",
+	); e != nil {
 		t.Fatal(e)
+	} else if e := addNounEphemera(asm.rec,
+		"apple", "C",
+		"apple", "D",
+	); e != nil {
+		t.Fatal(e)
+	} else if e := AssembleNouns(asm.assembler); e == nil {
+		t.Fatal("expected failure")
 	} else {
-		defer asm.db.Close()
-		//
-		if e := AddTestHierarchy(asm.assembler,
-			"Ts", "",
-			"Ps", "Ts",
-			"Cs", "Ps,Ts",
-			"Ds", "Ps,Ts",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := addNounEphemera(asm.rec,
-			"apple", "C",
-			"apple", "D",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleNouns(asm.assembler); e == nil {
-			t.Fatal("expected failure")
-		} else {
-			t.Log("okay:", e)
-		}
+		t.Log("okay:", e)
 	}
 }
 
 // TestNounParts to verify a single noun generates multi part names
 func TestNounParts(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := AddTestHierarchy(asm.assembler,
+		"Ts", "",
+	); e != nil {
 		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		//
-		if e := AddTestHierarchy(asm.assembler,
-			"Ts", "",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := addNounEphemera(asm.rec,
-			"collection of words", "T",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleNouns(asm.assembler); e != nil {
-			t.Fatal(e)
-		} else if e := matchNouns(asm.db, []modeledNoun{
-			{"collection of words", "Ts", 0},
-			{"collection_of_words", "Ts", 1},
-			{"words", "Ts", 2},
-			{"of", "Ts", 3},
-			{"collection", "Ts", 4},
-		}); e != nil {
-			t.Fatal(e)
-		}
+	} else if e := addNounEphemera(asm.rec,
+		"collection of words", "T",
+	); e != nil {
+		t.Fatal(e)
+	} else if e := AssembleNouns(asm.assembler); e != nil {
+		t.Fatal(e)
+	} else if e := matchNouns(asm.db, []modeledNoun{
+		{"collection of words", "Ts", 0},
+		{"collection_of_words", "Ts", 1},
+		{"words", "Ts", 2},
+		{"of", "Ts", 3},
+		{"collection", "Ts", 4},
+	}); e != nil {
+		t.Fatal(e)
 	}
 }
 

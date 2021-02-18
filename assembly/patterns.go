@@ -16,10 +16,8 @@ func AssemblePatterns(asm *Assembler) (err error) {
 		err = errutil.New("error reading patterns", e)
 	} else if pats, e := buildPatternRules(asm, cache); e != nil {
 		err = errutil.New("error building rules", e)
-	} else if e := buildPatternTable(asm, pats); e != nil {
-		err = errutil.New("error building pattern table", e)
-	} else if e := buildRulesTable(asm, pats); e != nil {
-		err = errutil.New("error building rules table", e)
+	} else if e := buildPatternTables(asm, pats); e != nil {
+		err = errutil.New("error building pattern tables", e)
 	}
 	return
 }

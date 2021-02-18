@@ -66,13 +66,6 @@ func (m *Assembler) WriteField(kind, field, fieldType, aff string) error {
 	return e
 }
 
-// WriteDefault: if no specific value has been assigned to the an instance of the idModelField's kind,
-// the passed default value will be used for that instance's kind.
-func (m *Assembler) WriteDefault(kind, field string, value interface{}) error {
-	_, e := m.cache.Exec(mdl_default, kind, field, value)
-	return e
-}
-
 func DomainNameOf(domain, noun string) string {
 	var b strings.Builder
 	b.WriteRune('#')
@@ -199,9 +192,9 @@ func (m *Assembler) WriteRule(name *string, pattern, domain, target string, flag
 	return e
 }
 
-// WriteStart: store the initial value of an instance's field used at start of play.
-func (m *Assembler) WriteStart(noun, field string, value interface{}) error {
-	_, e := m.cache.Exec(mdl_start, noun, field, value)
+// WriteStart: store the initial value of a field used at start of play.
+func (m *Assembler) WriteStart(name, field string, value interface{}) error {
+	_, e := m.cache.Exec(mdl_start, name, field, value)
 	return e
 }
 
@@ -231,7 +224,6 @@ func (m *Assembler) WriteVerb(relation, verb string) (err error) {
 
 var mdl_aspect = tables.Insert("mdl_aspect", "aspect", "trait", "rank")
 var mdl_check = tables.Insert("mdl_check", "name", "type", "expect")
-var mdl_default = tables.Insert("mdl_default", "kind", "field", "value")
 var mdl_domain = tables.Insert("mdl_domain", "domain", "path")
 var mdl_field = tables.Insert("mdl_field", "kind", "field", "type", "affinity")
 var mdl_kind = tables.Insert("mdl_kind", "kind", "path")
@@ -244,4 +236,4 @@ var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes")
 var mdl_rel = tables.Insert("mdl_rel", "relation", "kind", "cardinality", "otherKind")
 var mdl_rule = tables.Insert("mdl_rule", "name", "pattern", "domain", "target", "phase", "prog")
 var mdl_spec = tables.Insert("mdl_spec", "type", "name", "spec")
-var mdl_start = tables.Insert("mdl_start", "noun", "field", "value")
+var mdl_start = tables.Insert("mdl_start", "name", "field", "value")

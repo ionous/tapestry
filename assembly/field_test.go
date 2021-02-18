@@ -51,82 +51,74 @@ func matchProperties(db *sql.DB, want ...string) (err error) {
 }
 
 func TestFields(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := AddTestHierarchy(asm.assembler,
+		"Ts", "",
+		"Ps", "Ts",
+		"Qs", "Ts",
+	); e != nil {
 		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		//
-		if e := AddTestHierarchy(asm.assembler,
-			"Ts", "",
-			"Ps", "Ts",
-			"Qs", "Ts",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := writeFields(asm.rec,
-			"Ps", "a", tables.PRIM_TEXT,
-			"Qs", "b", tables.PRIM_TEXT,
-			"Ts", "c", tables.PRIM_TEXT,
-		); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleFields(asm.assembler); e != nil {
-			t.Fatal(e)
-		} else if e := matchProperties(asm.db,
-			"Ps", "a", tables.PRIM_TEXT,
-			"Qs", "b", tables.PRIM_TEXT,
-			"Ts", "c", tables.PRIM_TEXT,
-		); e != nil {
-			t.Fatal(e)
-		}
+	} else if e := writeFields(asm.rec,
+		"Ps", "a", tables.PRIM_TEXT,
+		"Qs", "b", tables.PRIM_TEXT,
+		"Ts", "c", tables.PRIM_TEXT,
+	); e != nil {
+		t.Fatal(e)
+	} else if e := AssembleFields(asm.assembler); e != nil {
+		t.Fatal(e)
+	} else if e := matchProperties(asm.db,
+		"Ps", "a", tables.PRIM_TEXT,
+		"Qs", "b", tables.PRIM_TEXT,
+		"Ts", "c", tables.PRIM_TEXT,
+	); e != nil {
+		t.Fatal(e)
 	}
 }
 
 func TestFieldLca(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := AddTestHierarchy(asm.assembler,
+		"Ts", "",
+		"Ps", "Ts",
+		"Qs", "Ts",
+	); e != nil {
 		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		//
-		if e := AddTestHierarchy(asm.assembler,
-			"Ts", "",
-			"Ps", "Ts",
-			"Qs", "Ts",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := writeFields(asm.rec,
-			"Ps", "a", tables.PRIM_TEXT,
-			"Qs", "a", tables.PRIM_TEXT,
-		); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleFields(asm.assembler); e != nil {
-			t.Fatal(e)
-		} else if e := matchProperties(asm.db,
-			"Ts", "a", tables.PRIM_TEXT,
-		); e != nil {
-			t.Fatal(e)
-		}
+	} else if e := writeFields(asm.rec,
+		"Ps", "a", tables.PRIM_TEXT,
+		"Qs", "a", tables.PRIM_TEXT,
+	); e != nil {
+		t.Fatal(e)
+	} else if e := AssembleFields(asm.assembler); e != nil {
+		t.Fatal(e)
+	} else if e := matchProperties(asm.db,
+		"Ts", "a", tables.PRIM_TEXT,
+	); e != nil {
+		t.Fatal(e)
 	}
 }
 
 // TestFieldTypeMismatch verifies that ephemera with conflicting primitive types generates an error
 // ex. T.a:text, T.a:number
 func TestFieldTypeMismatch(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := AddTestHierarchy(asm.assembler,
+		"Ts", "",
+	); e != nil {
 		t.Fatal(e)
+	} else if e := writeFields(asm.rec,
+		"Ts", "a", tables.PRIM_TEXT,
+		"Ts", "a", tables.PRIM_DIGI,
+	); e != nil {
+		t.Fatal(e)
+	} else if e := AssembleFields(asm.assembler); e != nil {
+		t.Log("okay:", e)
 	} else {
-		defer asm.db.Close()
-		if e := AddTestHierarchy(asm.assembler,
-			"Ts", "",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := writeFields(asm.rec,
-			"Ts", "a", tables.PRIM_TEXT,
-			"Ts", "a", tables.PRIM_DIGI,
-		); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleFields(asm.assembler); e != nil {
-			t.Log("okay:", e)
-		} else {
-			t.Fatal("expected error")
-		}
+		t.Fatal("expected error")
 	}
 }

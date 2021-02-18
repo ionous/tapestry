@@ -160,7 +160,6 @@ func (r *Recorder) NewTrait(trait, aspect Named, rank int) {
 
 // NewValue assigns the property of a noun a value;
 // traits can be assigned by naming the individual trait and setting a true ( or false ) value.
-// see also: NewDefault
 func (r *Recorder) NewValue(noun, prop Named, value interface{}) {
 	r.cache.Must(eph_value, noun, prop, value)
 }

@@ -17,7 +17,7 @@ func TestSayMe(t *testing.T) {
 	gob.Register((*core.Text)(nil))
 	gob.Register((*debug.MatchNumber)(nil))
 
-	db := newQnaDB(t, testdb.Memory)
+	db := testdb.Open(t.Name(), testdb.Memory, assembly.SqlCustomDriver)
 	defer db.Close()
 	if e := tables.CreateModel(db); e != nil {
 		t.Fatal(e)

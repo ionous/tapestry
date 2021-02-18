@@ -45,7 +45,7 @@ func assembleInitialTraits(asm *Assembler) (err error) {
 		err = e
 	} else {
 		store.add(last)
-		err = store.writeInitialTraits(asm)
+		err = store.writeTraits(asm)
 	}
 	return
 }

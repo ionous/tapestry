@@ -14,50 +14,47 @@ import (
 
 // TestDefaultFieldAssigment to verify default values can be assigned to kinds.
 func TestDefaultFieldAssigment(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := AddTestHierarchy(asm.assembler,
+		"Ks", "",
+		"Ls", "Ks",
+		"Ds", "Ks",
+		"Cs", "Ls,Ks",
+	); e != nil {
 		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		//
-		if e := AddTestHierarchy(asm.assembler,
-			"Ks", "",
-			"Ls", "Ks",
-			"Ds", "Ks",
-			"Cs", "Ls,Ks",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := AddTestFields(asm.assembler,
-			"Ks", "d", tables.PRIM_DIGI, "",
-			"Ks", "t", tables.PRIM_TEXT, "",
-			"Ks", "t2", tables.PRIM_TEXT, "",
-			"Ls", "x", tables.PRIM_TEXT, "",
-			"Ds", "x", tables.PRIM_TEXT, "",
-			"Cs", "c", tables.PRIM_TEXT, "",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := addDefaults(asm.rec,
-			"Ks", "t", "some text",
-			"Ls", "t", "override text",
-			"Ls", "t2", "other text",
-			"Ls", "x", "x in p",
-			"Ds", "x", "x in d",
-			"Cs", "c", "c text",
-			"Cs", "d", 123,
-		); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleDefaults(asm.assembler); e != nil {
-			t.Fatal(e)
-		} else if e := matchDefaults(asm.db,
-			"Cs", "c", "c text",
-			"Cs", "d", int64(123), // re: int64 -- default scanner uses https://golang.org/pkg/database/sql/#Scanner
-			"Ds", "x", "x in d",
-			"Ks", "t", "some text",
-			"Ls", "t", "override text",
-			"Ls", "t2", "other text",
-			"Ls", "x", "x in p",
-		); e != nil {
-			t.Fatal(e)
-		}
+	} else if e := AddTestFields(asm.assembler,
+		"Ks", "d", tables.PRIM_DIGI, "",
+		"Ks", "t", tables.PRIM_TEXT, "",
+		"Ks", "t2", tables.PRIM_TEXT, "",
+		"Ls", "x", tables.PRIM_TEXT, "",
+		"Ds", "x", tables.PRIM_TEXT, "",
+		"Cs", "c", tables.PRIM_TEXT, "",
+	); e != nil {
+		t.Fatal(e)
+	} else if e := addDefaults(asm.rec,
+		"Ks", "t", "some text",
+		"Ls", "t", "override text",
+		"Ls", "t2", "other text",
+		"Ls", "x", "x in p",
+		"Ds", "x", "x in d",
+		"Cs", "c", "c text",
+		"Cs", "d", 123,
+	); e != nil {
+		t.Fatal(e)
+	} else if e := AssembleDefaults(asm.assembler); e != nil {
+		t.Fatal(e)
+	} else if e := matchDefaults(asm.db,
+		"Cs", "c", "c text",
+		"Cs", "d", int64(123), // re: int64 -- default scanner uses https://golang.org/pkg/database/sql/#Scanner
+		"Ds", "x", "x in d",
+		"Ks", "t", "some text",
+		"Ls", "t", "override text",
+		"Ls", "t2", "other text",
+		"Ls", "x", "x in p",
+	); e != nil {
+		t.Fatal(e)
 	}
 }
 
@@ -221,9 +218,9 @@ func matchDefaults(db *sql.DB, want ...interface{}) (err error) {
 	var a, b, c interface{}
 	var have []interface{}
 	if e := tables.QueryAll(db,
-		`select kind, field, value 
-			from mdl_default
-			order by kind, field, value`,
+		`select name, field, value 
+			from mdl_start
+			order by name, field, value`,
 		func() (err error) {
 			have = append(have, a, b, c)
 			return
@@ -251,38 +248,35 @@ func addDefaults(rec *ephemera.Recorder, els ...interface{}) (err error) {
 
 func newDefaultsTest(t *testing.T, path string, defaults ...interface{}) (ret *assemblyTest, err error) {
 	ret = &assemblyTest{T: t}
-	if asm, e := newAssemblyTest(t, path); e != nil {
+	asm := newAssemblyTest(t, path)
+	if e := AddTestHierarchy(asm.assembler,
+		"Ks", "",
+		"Ls", "Ks",
+		"Ns", "Ks",
+	); e != nil {
 		err = e
+	} else if e := AddTestFields(asm.assembler,
+		"Ks", "d", tables.PRIM_DIGI, "",
+		"Ks", "t", tables.PRIM_TEXT, "",
+		"Ks", "A", tables.PRIM_ASPECT, "",
+		"Ls", "B", tables.PRIM_ASPECT, "",
+		"Ns", "B", tables.PRIM_ASPECT, "",
+	); e != nil {
+		err = e
+	} else if e := AddTestTraits(asm.assembler,
+		"A", "w",
+		"A", "x",
+		"A", "y",
+		"B", "z",
+	); e != nil {
+		err = e
+	} else if e := addDefaults(asm.rec, defaults...); e != nil {
+		err = e
+	}
+	if err != nil {
+		asm.db.Close()
 	} else {
-		if e := AddTestHierarchy(asm.assembler,
-			"Ks", "",
-			"Ls", "Ks",
-			"Ns", "Ks",
-		); e != nil {
-			err = e
-		} else if e := AddTestFields(asm.assembler,
-			"Ks", "d", tables.PRIM_DIGI, "",
-			"Ks", "t", tables.PRIM_TEXT, "",
-			"Ks", "A", tables.PRIM_ASPECT, "",
-			"Ls", "B", tables.PRIM_ASPECT, "",
-			"Ns", "B", tables.PRIM_ASPECT, "",
-		); e != nil {
-			err = e
-		} else if e := AddTestTraits(asm.assembler,
-			"A", "w",
-			"A", "x",
-			"A", "y",
-			"B", "z",
-		); e != nil {
-			err = e
-		} else if e := addDefaults(asm.rec, defaults...); e != nil {
-			err = e
-		}
-		if err != nil {
-			asm.db.Close()
-		} else {
-			ret = asm
-		}
+		ret = asm
 	}
 	return
 }

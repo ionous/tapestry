@@ -42,7 +42,7 @@ func assembleDefaultFields(asm *Assembler) (err error) {
 		err = e
 	} else {
 		store.add(last)
-		err = store.writeDefaultFields(asm)
+		err = store.writeFieldValues(asm)
 	}
 	return
 }
@@ -66,16 +66,7 @@ func (store *valueStore) add(n valueInfo) {
 	}
 }
 
-func (store *valueStore) writeDefaultFields(asm *Assembler) (err error) {
-	for _, n := range store.list {
-		if e := asm.WriteDefault(n.target, n.field, n.value); e != nil {
-			err = errutil.Append(err, e)
-		}
-	}
-	return
-}
-
-func (store *valueStore) writeInitialFields(asm *Assembler) (err error) {
+func (store *valueStore) writeFieldValues(asm *Assembler) (err error) {
 	for _, n := range store.list {
 		if e := asm.WriteStart(n.target, n.field, n.value); e != nil {
 			err = errutil.Append(err, e)

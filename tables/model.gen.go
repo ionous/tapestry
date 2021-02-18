@@ -19,8 +19,6 @@ func modelTemplate() string {
 		" * ex. determine if \"sources\" should be listed in model ( for debugging )\n" +
 		" */ \n" +
 		"create table mdl_check( name text, type text, expect text );\n" +
-		"/* default values for the field of a kind ( and its descendant kinds ) */\n" +
-		"create table mdl_default( kind text, field text, value blob );\n" +
 		"/* hierarchy of domains */\n" +
 		"create table mdl_domain( domain text, path text, primary key( domain ));\n" +
 		"/* properties of a kind. type is a PRIM_ */\n" +
@@ -48,7 +46,8 @@ func modelTemplate() string {
 		"\t\tcheck (phase in ('action','target','capture','bubble') ));\n" +
 		"/* documentation for pieces of the model: kinds, nouns, fields, etc. */\n" +
 		"create table mdl_spec( type text, name text, spec text, primary key( type, name ));\n" +
-		"/* initial values for various noun properties. these change over the course of a game. */\n" +
-		"create table mdl_start( noun text, field text, value blob );"
+		"/* initial values for various noun properties. \n" +
+		"   changed values are stored in run_start.. */\n" +
+		"create table mdl_start( name text, field text, value blob );"
 	return tmpl
 }

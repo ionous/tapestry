@@ -1,11 +1,10 @@
 package internal
 
 import (
-	"database/sql"
-	"log"
 	"os"
 
 	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 func ExampleRelData() {
@@ -27,15 +26,14 @@ func ExampleRelData() {
 }
 
 func ExampleRelDB() {
-	const memory = "file:ExampleRelDB.db?cache=shared&mode=memory"
-	if db, e := sql.Open(tables.DefaultDriver, memory); e != nil {
-		log.Fatalln("couldnt open db ", e)
-	} else if e := CreateTestData(db); e != nil {
-		log.Fatal("couldnt create test data ", e)
+	db := testdb.Open("ExampleRelDB", testdb.Memory, "")
+	defer db.Close()
+	if e := CreateTestData(db); e != nil {
+		panic(e)
 	} else if e := CreateAtlas(db); e != nil {
-		log.Fatal("couldnt create atlas tables ", e)
+		panic(e)
 	} else if e := listOfRelations(os.Stdout, db); e != nil {
-		log.Fatal("couldnt process relations ", e)
+		panic(e)
 	}
 
 	// Output:

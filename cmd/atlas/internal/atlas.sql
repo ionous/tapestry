@@ -1,14 +1,14 @@
 /* any default values defined for the kind;
  null spec indicates the field isnt declared in this kind */
-create temp view
+create view
 atlas_fields as
-select kind, field, value, null as spec
-	from mdl_default md 
+select name, field, value, null as spec
+	from mdl_start mv 
 	where not exists (
 		select 1 
 		from mdl_field mf 
-		where mf.kind = md.kind 
-		and mf.field = md.field 
+		where mf.kind = mv.name 
+		and mf.field = mv.field 
 	)
 union all 
 /* and all of the fields defined for the kind */
@@ -18,9 +18,9 @@ select
 	coalesce((
 	/* with the default specified value */
 		select value 
-		from mdl_default md 
-		where mf.kind = md.kind 
-		and mf.field = md.field 
+		from mdl_start mv 
+		where mf.kind = mv.name 
+		and mf.field = mv.field 
 		limit 1
 		),
 	/* or, use type-dependent default value */
@@ -45,4 +45,3 @@ select
 		limit 1 ), '')
 	as spec
 from mdl_field mf;
-	

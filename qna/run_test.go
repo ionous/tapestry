@@ -16,7 +16,7 @@ import (
 // tests the importation, assembly, and execution of a factorial story.
 // doesn't test the *reading* of the story.
 func TestFullFactorial(t *testing.T) {
-	db := newQnaDB(t, testdb.Memory)
+	db := testdb.Open(t.Name(), testdb.Memory, assembly.SqlCustomDriver)
 	defer db.Close()
 
 	//import factorialStory, assemble and run.

@@ -11,141 +11,139 @@ import (
 )
 
 func TestPatternCheck(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
-		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		// okay.
-		t.Run("normal", func(t *testing.T) {
-			cleanPatterns(asm.db)
-			addEphPattern(asm.rec,
-				"pat", "num", "number_eval", "false",
-				"pat", "", "number_eval", "false",
-				"pat", "", "number_eval", "true",
-				"pat", "num", "number_eval", "true",
-			)
-			if e := checkPatternSetup(asm.db); e != nil {
-				t.Fatal(e)
-			} else {
-				t.Log("ok", "normal pattern pattern usage")
-			}
-
-		})
-
-		// okay.
-		t.Run("multi", func(t *testing.T) {
-			cleanPatterns(asm.db)
-			addEphPattern(asm.rec,
-				"num", "", "number_eval", "true",
-				"txt", "", "text_eval", "true",
-				"exe", "", "execute", "true",
-			)
-			if e := checkPatternSetup(asm.db); e != nil {
-				t.Fatal(e)
-			} else {
-				t.Log("ok", "three completely different pattern decls")
-			}
-		})
-
-		// FIX: disabled asm-time checks
-		// t.Run("missing return", func(t *testing.T) {
-		// 	cleanPatterns(asm.db)
-		// 	addEphPattern(asm.rec,
-		// 		"pat", "num", "number_eval", "false",
-		// 		"pat", "num", "number_eval", "true",
-		// 	)
-		// 	if e := checkPatternSetup(asm.db); e != nil {
-		// 		t.Log("ok", e)
-		// 	} else {
-		// 		t.Fatal("expected never declared return")
-		// 	}
-		// })
-
-		// FIX: disabled asm-time checks
-		// t.Run("undeclared arg", func(t *testing.T) {
-		// 	cleanPatterns(asm.db)
-		// 	addEphPattern(asm.rec,
-		// 		"pat", "", "number_eval", "true",
-		// 		"pat", "num", "number_eval", "false",
-		// 	)
-		// 	if e := checkPatternSetup(asm.db); e != nil {
-		// 		t.Log("ok", e)
-		// 	} else {
-		// 		t.Fatal("expected undeclared arg")
-		// 	}
-		// })
-
-		// FIX: disabled asm-time checks
-		// t.Run("undeclared pattern", func(t *testing.T) {
-		// 	cleanPatterns(asm.db)
-		// 	addEphPattern(asm.rec,
-		// 		"pat", "", "number_eval", "false",
-		// 	)
-		// 	if e := checkPatternSetup(asm.db); e != nil {
-		// 		t.Log("ok", e)
-		// 	} else {
-		// 		t.Fatal("expected undeclared pat")
-		// 	}
-		// })
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	// okay.
+	t.Run("normal", func(t *testing.T) {
 		cleanPatterns(asm.db)
+		addEphPattern(asm.rec,
+			"pat", "num", "number_eval", "false",
+			"pat", "", "number_eval", "false",
+			"pat", "", "number_eval", "true",
+			"pat", "num", "number_eval", "true",
+		)
+		if e := checkPatternSetup(asm.db); e != nil {
+			t.Fatal(e)
+		} else {
+			t.Log("ok", "normal pattern pattern usage")
+		}
 
-		// FIX: disabled asm-time checks
-		// t.Run("arg mismatch", func(t *testing.T) {
-		// 	addEphPattern(asm.rec,
-		// 		"pat", "", "number_eval", "true",
-		// 		"pat", "num", "number_eval", "true",
-		// 		"pat", "num", "text_eval", "true",
-		// 	)
-		// 	if e := checkPatternSetup(asm.db); e != nil {
-		// 		t.Log("ok", e)
-		// 	} else {
-		// 		t.Fatal("expected type mismatch")
-		// 	}
-		// })
+	})
 
-		// FIX: disabled asm-time checks
-		// t.Run("return mismatch", func(t *testing.T) {
-		// 	cleanPatterns(asm.db)
-		// 	addEphPattern(asm.rec,
-		// 		"pat", "", "number_eval", "true",
-		// 		"pat", "", "text_eval", "true",
-		// 	)
-		// 	if e := checkPatternSetup(asm.db); e != nil {
-		// 		t.Log("ok", e)
-		// 	} else {
-		// 		t.Fatal("expected type mismatch")
-		// 	}
-		// })
+	// okay.
+	t.Run("multi", func(t *testing.T) {
+		cleanPatterns(asm.db)
+		addEphPattern(asm.rec,
+			"num", "", "number_eval", "true",
+			"txt", "", "text_eval", "true",
+			"exe", "", "execute", "true",
+		)
+		if e := checkPatternSetup(asm.db); e != nil {
+			t.Fatal(e)
+		} else {
+			t.Log("ok", "three completely different pattern decls")
+		}
+	})
 
-		// variable and pattern names in the same pattern shouldnt match
-		t.Run("unique variables", func(t *testing.T) {
-			cleanPatterns(asm.db)
-			addEphPattern(asm.rec,
-				"pat", "pat", "number_eval", "true",
-			)
-			if e := checkPatternSetup(asm.db); e != nil {
-				t.Log("ok", e)
-			} else {
-				t.Fatal("expected name conflict")
-			}
-		})
-		t.Run("reused names", func(t *testing.T) {
-			cleanPatterns(asm.db)
-			addEphPattern(asm.rec,
-				"pat", "", "text_eval", "true",
-				"pat", "bat", "number_eval", "true",
-				//
-				"bat", "", "text_eval", "true",
-				"bat", "pat", "number_eval", "true",
-			)
-			if e := checkPatternSetup(asm.db); e != nil {
-				t.Fatal(e)
-			} else {
-				t.Log("ok", "variable and pattern names can be reused")
-			}
-		})
-	}
+	// FIX: disabled asm-time checks
+	// t.Run("missing return", func(t *testing.T) {
+	// 	cleanPatterns(asm.db)
+	// 	addEphPattern(asm.rec,
+	// 		"pat", "num", "number_eval", "false",
+	// 		"pat", "num", "number_eval", "true",
+	// 	)
+	// 	if e := checkPatternSetup(asm.db); e != nil {
+	// 		t.Log("ok", e)
+	// 	} else {
+	// 		t.Fatal("expected never declared return")
+	// 	}
+	// })
+
+	// FIX: disabled asm-time checks
+	// t.Run("undeclared arg", func(t *testing.T) {
+	// 	cleanPatterns(asm.db)
+	// 	addEphPattern(asm.rec,
+	// 		"pat", "", "number_eval", "true",
+	// 		"pat", "num", "number_eval", "false",
+	// 	)
+	// 	if e := checkPatternSetup(asm.db); e != nil {
+	// 		t.Log("ok", e)
+	// 	} else {
+	// 		t.Fatal("expected undeclared arg")
+	// 	}
+	// })
+
+	// FIX: disabled asm-time checks
+	// t.Run("undeclared pattern", func(t *testing.T) {
+	// 	cleanPatterns(asm.db)
+	// 	addEphPattern(asm.rec,
+	// 		"pat", "", "number_eval", "false",
+	// 	)
+	// 	if e := checkPatternSetup(asm.db); e != nil {
+	// 		t.Log("ok", e)
+	// 	} else {
+	// 		t.Fatal("expected undeclared pat")
+	// 	}
+	// })
+	cleanPatterns(asm.db)
+
+	// FIX: disabled asm-time checks
+	// t.Run("arg mismatch", func(t *testing.T) {
+	// 	addEphPattern(asm.rec,
+	// 		"pat", "", "number_eval", "true",
+	// 		"pat", "num", "number_eval", "true",
+	// 		"pat", "num", "text_eval", "true",
+	// 	)
+	// 	if e := checkPatternSetup(asm.db); e != nil {
+	// 		t.Log("ok", e)
+	// 	} else {
+	// 		t.Fatal("expected type mismatch")
+	// 	}
+	// })
+
+	// FIX: disabled asm-time checks
+	// t.Run("return mismatch", func(t *testing.T) {
+	// 	cleanPatterns(asm.db)
+	// 	addEphPattern(asm.rec,
+	// 		"pat", "", "number_eval", "true",
+	// 		"pat", "", "text_eval", "true",
+	// 	)
+	// 	if e := checkPatternSetup(asm.db); e != nil {
+	// 		t.Log("ok", e)
+	// 	} else {
+	// 		t.Fatal("expected type mismatch")
+	// 	}
+	// })
+
+	// variable and pattern names in the same pattern shouldnt match
+	t.Run("unique variables", func(t *testing.T) {
+		cleanPatterns(asm.db)
+		addEphPattern(asm.rec,
+			"pat", "pat", "number_eval", "true",
+		)
+		if e := checkPatternSetup(asm.db); e != nil {
+			t.Log("ok", e)
+		} else {
+			t.Fatal("expected name conflict")
+		}
+	})
+	t.Run("reused names", func(t *testing.T) {
+		cleanPatterns(asm.db)
+		addEphPattern(asm.rec,
+			"pat", "", "text_eval", "true",
+			"pat", "bat", "number_eval", "true",
+			//
+			"bat", "", "text_eval", "true",
+			"bat", "pat", "number_eval", "true",
+		)
+		if e := checkPatternSetup(asm.db); e != nil {
+			t.Fatal(e)
+		} else {
+			t.Log("ok", "variable and pattern names can be reused")
+		}
+	})
 }
+
 func cleanPatterns(db *sql.DB) {
 	tables.Must(db, "delete from eph_pattern")
 	tables.Must(db, "delete from eph_rule")

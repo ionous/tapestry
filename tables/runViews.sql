@@ -45,15 +45,15 @@ create temp view
 run_value as 
 /* future: select from mdl_run to get a save game's stored runtime values */
 /* for now, the mdl_start fields get the lowest possible tier */
-select noun, field, type, value, 0 as tier 
+select mf.noun, mf.field, mf.type, mv.value, 0 as tier 
 from mdl_noun_field mf
-join mdl_start ms 
-	using (noun, field)
+join mdl_start mv 
+	on (mv.name= mf.noun and mv.field= mf.field)
 union all 
-select noun, field, type, value, 
-	instr(mf.fullpath, md.kind || ',') as tier
+select mf.noun, mf.field, mf.type, mv.value, 
+	instr(mf.fullpath, mv.name || ',') as tier
 	from mdl_noun_field mf
-	join mdl_default md
+	join mdl_start mv
 		using (field)
 	where (tier > 0) /* greater than zero means this default kind value applies to this noun */	
 union all  /* add all default traits at the largest possible tier */

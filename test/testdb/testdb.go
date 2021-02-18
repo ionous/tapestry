@@ -40,6 +40,27 @@ type Querier interface {
 	Query(q string, args ...interface{}) (*sql.Rows, error)
 }
 
+// Open panics on error
+func Open(name, path, driver string) (ret *sql.DB) {
+	if len(driver) == 0 {
+		driver = tables.DefaultDriver
+	}
+	var source string
+	if len(path) > 0 {
+		source = path
+	} else if p, e := PathFromName(name); e != nil {
+		panic(e)
+	} else {
+		source = p
+	}
+	if db, e := sql.Open(driver, source); e != nil {
+		panic(e)
+	} else {
+		ret = db
+	}
+	return
+}
+
 func Ins(db Executer, tablecols []string, els ...interface{}) (err error) {
 	ins, width := tables.Insert(tablecols[0], tablecols[1:]...), len(tablecols)-1
 	for i, cnt := 0, len(els); i < cnt; i += width {

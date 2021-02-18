@@ -48,7 +48,7 @@ func assembleDefaultTraits(asm *Assembler) (err error) {
 		err = e
 	} else {
 		store.add(last)
-		err = store.writeDefaultTraits(asm)
+		err = store.writeTraits(asm)
 	}
 	return
 }
@@ -72,16 +72,7 @@ func (store *traitStore) add(n traitInfo) {
 	}
 }
 
-func (store *traitStore) writeDefaultTraits(m *Assembler) (err error) {
-	for _, n := range store.list {
-		if e := m.WriteDefault(n.target, n.aspect, n.trait); e != nil {
-			err = errutil.Append(err, e)
-		}
-	}
-	return
-}
-
-func (store *traitStore) writeInitialTraits(m *Assembler) (err error) {
+func (store *traitStore) writeTraits(m *Assembler) (err error) {
 	for _, n := range store.list {
 		if e := m.WriteStart(n.target, n.aspect, n.trait); e != nil {
 			err = errutil.Append(err, e)

@@ -23,10 +23,6 @@ func testDataTemplate() string {
 		"\t('vehicles', 'flightiness', 'aspect'),\n" +
 		"\t('cars', 'num wheels', 'digi');\n" +
 		"\n" +
-		"insert into mdl_default(kind, field, value) values\n" +
-		"\t('cars', 'flightiness', 'flightless'),\n" +
-		"\t('cars', 'num wheels', 4);\n" +
-		"\n" +
 		"insert into mdl_aspect(aspect, trait) values\n" +
 		"\t('flightiness', 'flightless'),\n" +
 		"\t('flightiness', 'glide worthy'),\n" +
@@ -49,7 +45,9 @@ func testDataTemplate() string {
 		"\t('riker', 'riker', 0),\n" +
 		"\t('picard', 'picard', 0);\n" +
 		"\n" +
-		"insert into mdl_start(noun, field, value) values\n" +
+		"insert into mdl_start(name, field, value) values\n" +
+		"\t('cars', 'flightiness', 'flightless'),\n" +
+		"\t('cars', 'num wheels', 4),\n" +
 		"\t( 'dune buggy', 'num wheels', 3);\n" +
 		"\n" +
 		"insert into mdl_pair(noun, relation, otherNoun) values\n" +

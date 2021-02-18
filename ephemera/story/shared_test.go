@@ -20,38 +20,17 @@ func lines(s ...string) string {
 
 // for tests where we need a default decoder to read json
 func newImporter(t *testing.T, where string) (ret *story.Importer, retDec *decode.Decoder, retDB *sql.DB) {
-	db := newImportDB(t, where)
+	db := testdb.Open(t.Name(), testdb.Memory, "")
 	if e := tables.CreateEphemera(db); e != nil {
 		t.Fatal("create ephemera", e)
-	} else {
-		iffy.RegisterGobs()
-		dec := decode.NewDecoderReporter(func(pos reader.Position, err error) {
-			t.Errorf("%s at %s", err, pos)
-		})
-		k := story.NewImporterDecoder(db, dec).SetSource(t.Name())
-		dec.AddDefaultCallbacks(core.Slats)
-		k.AddModel(story.Model)
-		ret, retDec, retDB = k, dec, db
 	}
-	return
-}
-
-// if path is nil, it will use a file db.
-func newImportDB(t *testing.T, where string) (ret *sql.DB) {
-	var source string
-	if len(where) > 0 {
-		source = where
-	} else if p, e := testdb.PathFromName(t.Name()); e != nil {
-		t.Fatal(e)
-	} else {
-		source = p
-	}
-	//
-	if db, e := sql.Open(tables.DefaultDriver, source); e != nil {
-		t.Fatal(e)
-	} else {
-		t.Log("opened db", source)
-		ret = db
-	}
+	iffy.RegisterGobs()
+	dec := decode.NewDecoderReporter(func(pos reader.Position, err error) {
+		t.Errorf("%s at %s", err, pos)
+	})
+	k := story.NewImporterDecoder(db, dec).SetSource(t.Name())
+	dec.AddDefaultCallbacks(core.Slats)
+	k.AddModel(story.Model)
+	ret, retDec, retDB = k, dec, db
 	return
 }

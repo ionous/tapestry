@@ -190,35 +190,38 @@ func decodeProg(prog []byte, aff affine.Affinity) (ret core.Assignment, err erro
 	return
 }
 
-func buildPatternTable(asm *Assembler, pats []*pattern.Pattern) (err error) {
+func buildPatternTables(asm *Assembler, pats []*pattern.Pattern) (err error) {
 	for _, pat := range pats {
 		labels := strings.Join(pat.Labels, ",")
 		if e := asm.WritePattern(pat.Name, pat.Return, labels); e != nil {
 			err = errutil.Append(err, e)
-		}
-	}
-	return
-}
+		} else {
+			// mdl_start
+			// localOfs := len(pat.Labels)
+			// for i, locals := range pat.Locals {
+			// 	f := pat.Fields[localOfs+i]
+			// 	// asm.WriteStart
 
-func buildRulesTable(asm *Assembler, pats []*pattern.Pattern) (err error) {
-	for _, pat := range pats {
-		for _, rule := range pat.Rules {
-			var name *string  // none of the rules have names right now.
-			var domain string // domain doesnt come through ephemera; hack it for now
-			var target string // targets are just for events
-			if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
-				if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
-					domain = yikes.Name
+			// }
+			//
+			for _, rule := range pat.Rules {
+				var name *string  // none of the rules have names right now.
+				var domain string // domain doesnt come through ephemera; hack it for now
+				var target string // targets are just for events
+				if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
+					if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
+						domain = yikes.Name
+					}
 				}
-			}
-			h := pattern.Handler{
-				Filter:  rule.Filter,
-				Execute: rule.Execute,
-			}
-			if prog, e := asm.EncodeValue(r.ValueOf(&h)); e != nil {
-				err = errutil.Append(err, e)
-			} else if e := asm.WriteRule(name, pat.Name, domain, target, rule.Flags, prog); e != nil {
-				err = errutil.Append(err, e)
+				h := pattern.Handler{
+					Filter:  rule.Filter,
+					Execute: rule.Execute,
+				}
+				if prog, e := asm.EncodeValue(r.ValueOf(&h)); e != nil {
+					err = errutil.Append(err, e)
+				} else if e := asm.WriteRule(name, pat.Name, domain, target, rule.Flags, prog); e != nil {
+					err = errutil.Append(err, e)
+				}
 			}
 		}
 	}

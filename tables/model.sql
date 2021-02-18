@@ -8,8 +8,6 @@ create table mdl_aspect( aspect text, trait text, rank int, primary key( aspect,
  * ex. determine if "sources" should be listed in model ( for debugging )
  */ 
 create table mdl_check( name text, type text, expect text );
-/* default values for the field of a kind ( and its descendant kinds ) */
-create table mdl_default( kind text, field text, value blob );
 /* hierarchy of domains */
 create table mdl_domain( domain text, path text, primary key( domain ));
 /* properties of a kind. type is a PRIM_ */
@@ -37,5 +35,6 @@ create table mdl_rule( name text unique, pattern text, domain text, target text,
 		check (phase in ('action','target','capture','bubble') ));
 /* documentation for pieces of the model: kinds, nouns, fields, etc. */
 create table mdl_spec( type text, name text, spec text, primary key( type, name ));
-/* initial values for various noun properties. these change over the course of a game. */
-create table mdl_start( noun text, field text, value blob );
+/* initial values for various noun properties. 
+   changed values are stored in run_start.. */
+create table mdl_start( name text, field text, value blob );

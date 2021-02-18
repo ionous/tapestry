@@ -34,6 +34,15 @@ func (q textEval) Snapshot(run rt.Runtime) (g.Value, error) {
 	return safe.GetText(run, q.eval)
 }
 
+type recordEval struct{ eval rt.RecordEval }
+
+func (q recordEval) Affinity() affine.Affinity {
+	return affine.Record
+}
+func (q recordEval) Snapshot(run rt.Runtime) (g.Value, error) {
+	return safe.GetRecord(run, q.eval)
+}
+
 type numListEval struct{ eval rt.NumListEval }
 
 func (q numListEval) Affinity() affine.Affinity {
@@ -50,6 +59,15 @@ func (q textListEval) Affinity() affine.Affinity {
 }
 func (q textListEval) Snapshot(run rt.Runtime) (g.Value, error) {
 	return safe.GetTextList(run, q.eval)
+}
+
+type recordListEval struct{ eval rt.RecordListEval }
+
+func (q recordListEval) Affinity() affine.Affinity {
+	return affine.RecordList
+}
+func (q recordListEval) Snapshot(run rt.Runtime) (g.Value, error) {
+	return safe.GetRecordList(run, q.eval)
 }
 
 func newEval(a affine.Affinity, buf []byte) (ret qnaValue, err error) {
@@ -75,6 +93,13 @@ func newEval(a affine.Affinity, buf []byte) (ret qnaValue, err error) {
 		} else {
 			ret = &textEval{eval}
 		}
+	case affine.Record:
+		var eval rt.RecordEval
+		if e := bytesToEval(buf, &eval); e != nil {
+			err = e
+		} else {
+			ret = &recordEval{eval}
+		}
 	case affine.NumList:
 		var eval rt.NumListEval
 		if e := bytesToEval(buf, &eval); e != nil {
@@ -88,6 +113,13 @@ func newEval(a affine.Affinity, buf []byte) (ret qnaValue, err error) {
 			err = e
 		} else {
 			ret = &textListEval{eval}
+		}
+	case affine.RecordList:
+		var eval rt.RecordListEval
+		if e := bytesToEval(buf, &eval); e != nil {
+			err = e
+		} else {
+			ret = &recordListEval{eval}
 		}
 	}
 	return

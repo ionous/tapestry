@@ -17,9 +17,7 @@ import (
 
 //
 // func TestPatternAsm(t *testing.T) {
-// 	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
-// 		t.Fatal(e)
-// 	} else {
+// 	asm := newAssemblyTest(t, testdb.Memory)
 // 		defer asm.db.Close()
 // 		t.Run("normal", func(t *testing.T) {
 // 			cleanPatterns(asm.db)
@@ -55,7 +53,6 @@ import (
 // 				}
 // 			}
 // 		})
-// 	}
 // }
 
 // assemble patterns and rules into the model rules and programs.
@@ -64,56 +61,53 @@ func TestRuleAsm(t *testing.T) {
 	gob.Register((*core.Text)(nil))
 	gob.Register((*debug.MatchNumber)(nil))
 	//
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
-		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		t.Run("normal", func(t *testing.T) {
-			cleanPatterns(asm.db)
-			// say_me has one number parameter
-			addEphPattern(asm.rec,
-				"say_me", "", "execute", "true",
-				"say_me", "num", "number_eval", "true")
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	t.Run("normal", func(t *testing.T) {
+		cleanPatterns(asm.db)
+		// say_me has one number parameter
+		addEphPattern(asm.rec,
+			"say_me", "", "execute", "true",
+			"say_me", "num", "number_eval", "true")
 
-			for i, rule := range debug.SayPattern.Rules {
-				prog, e := asm.rec.NewGob("rule", &rule)
-				if e != nil {
-					t.Fatal(e)
-				}
-				asm.rec.NewPatternRule(
-					asm.rec.NewName("say_me",
-						tables.NAMED_PATTERN,
-						strconv.Itoa(i+1)),
-					prog)
-			}
-			//
-			if cache, e := buildPatternCache(asm.db); e != nil {
+		for i, rule := range debug.SayPattern.Rules {
+			prog, e := asm.rec.NewGob("rule", &rule)
+			if e != nil {
 				t.Fatal(e)
-			} else if _, e := buildPatternRules(asm.assembler, cache); e != nil {
-				t.Fatal(e)
-			} else {
-				var visited bool
-				var progName, typeName string
-				var pat pattern.Pattern
-				if e := tables.QueryAll(asm.db, "select * from mdl_prog",
-					func() (err error) {
-						if visited {
-							err = errutil.New("multiple programs detected")
-						}
-						visited = true
-						return
-					}, &progName, &typeName, tables.NewGobScanner(&pat)); e != nil {
-					t.Fatal(e)
-				} else if progName != "say_me" || typeName != "Pattern" {
-					t.Fatalf("mismatched columns %q %q", progName, typeName)
-				} else if diff := pretty.Diff(debug.SayPattern, pat); len(diff) > 0 {
-					pretty.Println("want:", debug.SayPattern)
-					pretty.Println("have:", pat)
-					t.Fatal("error")
-				}
 			}
-		})
-	}
+			asm.rec.NewPatternRule(
+				asm.rec.NewName("say_me",
+					tables.NAMED_PATTERN,
+					strconv.Itoa(i+1)),
+				prog)
+		}
+		//
+		if cache, e := buildPatternCache(asm.db); e != nil {
+			t.Fatal(e)
+		} else if _, e := buildPatternRules(asm.assembler, cache); e != nil {
+			t.Fatal(e)
+		} else {
+			var visited bool
+			var progName, typeName string
+			var pat pattern.Pattern
+			if e := tables.QueryAll(asm.db, "select * from mdl_prog",
+				func() (err error) {
+					if visited {
+						err = errutil.New("multiple programs detected")
+					}
+					visited = true
+					return
+				}, &progName, &typeName, tables.NewGobScanner(&pat)); e != nil {
+				t.Fatal(e)
+			} else if progName != "say_me" || typeName != "Pattern" {
+				t.Fatalf("mismatched columns %q %q", progName, typeName)
+			} else if diff := pretty.Diff(debug.SayPattern, pat); len(diff) > 0 {
+				pretty.Println("want:", debug.SayPattern)
+				pretty.Println("have:", pat)
+				t.Fatal("error")
+			}
+		}
+	})
 }
 
 func lines(s ...string) string {

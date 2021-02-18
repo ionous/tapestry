@@ -46,7 +46,7 @@ func ListOfKinds(w io.Writer, db *sql.DB) (err error) {
 			var noun string
 			var nouns []string
 			if e := tables.QueryAll(db,
-				fmt.Sprintf("select field, value, spec from atlas_fields where kind='%s' order by field", kind.Name),
+				fmt.Sprintf("select field, value, spec from atlas_fields where name='%s' order by field", kind.Name),
 				func() (err error) {
 					props = append(props, prop)
 					return

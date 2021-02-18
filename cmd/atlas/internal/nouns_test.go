@@ -1,11 +1,9 @@
 package internal
 
 import (
-	"database/sql"
-	"log"
 	"os"
 
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 func ExampleNounData() {
@@ -45,15 +43,14 @@ func ExampleNounData() {
 }
 
 func ExampleNounDB() {
-	const memory = "file:ExampleNounDB.db?cache=shared&mode=memory"
-	if db, e := sql.Open(tables.DefaultDriver, memory); e != nil {
-		log.Fatalln("couldnt open db ", e)
-	} else if e := CreateTestData(db); e != nil {
-		log.Fatal("couldnt create test data ", e)
+	db := testdb.Open("ExampleNounDB", testdb.Memory, "")
+	defer db.Close()
+	if e := CreateTestData(db); e != nil {
+		panic(e)
 	} else if e := CreateAtlas(db); e != nil {
-		log.Fatal("couldnt create atlas tables ", e)
+		panic(e)
 	} else if e := listOfNouns(os.Stdout, db); e != nil {
-		log.Fatal("couldnt process nouns ", e)
+		panic(e)
 	}
 
 	// Output:

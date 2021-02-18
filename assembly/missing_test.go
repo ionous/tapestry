@@ -10,88 +10,80 @@ import (
 
 // TestMissingKinds to verify the kinds mentioned in parent-child ephemera exist.
 func TestMissingKinds(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
-		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		addKinds(asm, // kid, ancestor
-			"T", "",
-			"P", "T",
-			"Q", "T",
-			"P", "R",
-		)
-		if e := AssembleAncestry(asm.assembler, "Ts"); e == nil {
-			t.Fatal("expected error")
-		} else if !containsOnly(asm.dilemmas, `missing singular_kind: "R"`) {
-			if d := asm.dilemmas; d.Len() == 0 {
-				t.Fatal(e)
-			} else {
-				t.Fatal(d)
-			}
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	addKinds(asm, // kid, ancestor
+		"T", "",
+		"P", "T",
+		"Q", "T",
+		"P", "R",
+	)
+	if e := AssembleAncestry(asm.assembler, "Ts"); e == nil {
+		t.Fatal("expected error")
+	} else if !containsOnly(asm.dilemmas, `missing singular_kind: "R"`) {
+		if d := asm.dilemmas; d.Len() == 0 {
+			t.Fatal(e)
 		} else {
-			t.Log("ok:", e)
+			t.Fatal(d)
 		}
+	} else {
+		t.Log("ok:", e)
 	}
 }
 
 // TestMissingAspects detects fields labeled as aspects which are missing from the aspects ephemera.
 func TestMissingAspects(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
-		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		//
-		parent := asm.rec.NewName("Ks", tables.NAMED_KINDS, "container")
-		for i, aspect := range []string{
-			// known, unknown
-			"A", "F",
-			"C", "D",
-			"E", "B",
-		} {
-			a := asm.rec.NewName(aspect, tables.NAMED_ASPECT, "test")
-			if known := i&1 == 0; known {
-				asm.rec.NewAspect(a)
-			}
-			asm.rec.NewField(parent, a, tables.PRIM_ASPECT, "")
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	parent := asm.rec.NewName("Ks", tables.NAMED_KINDS, "container")
+	for i, aspect := range []string{
+		// known, unknown
+		"A", "F",
+		"C", "D",
+		"E", "B",
+	} {
+		a := asm.rec.NewName(aspect, tables.NAMED_ASPECT, "test")
+		if known := i&1 == 0; known {
+			asm.rec.NewAspect(a)
 		}
-		expected := []string{"B", "D", "F"}
-		if missing, e := undeclaredAspects(asm.db); e != nil {
-			t.Fatal(e)
-		} else if matches := reflect.DeepEqual(missing, expected); !matches {
-			t.Fatal("want:", expected, "have:", missing)
-		} else {
-			t.Log("okay")
-		}
+		asm.rec.NewField(parent, a, tables.PRIM_ASPECT, "")
 	}
+	expected := []string{"B", "D", "F"}
+	if missing, e := undeclaredAspects(asm.db); e != nil {
+		t.Fatal(e)
+	} else if matches := reflect.DeepEqual(missing, expected); !matches {
+		t.Fatal("want:", expected, "have:", missing)
+	} else {
+		t.Log("okay")
+	}
+
 }
 
 func TestMissingField(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := AddTestHierarchy(asm.assembler,
+		"Ts", "",
+	); e != nil {
 		t.Fatal(e)
+	} else if e := writeMissing(asm.rec,
+		"z",
+	); e != nil {
+		t.Fatal(e)
+	} else if e := AssembleFields(asm.assembler); e == nil {
+		t.Fatal("expected error")
+	} else if !containsOnly(asm.dilemmas, `missing field: "z"`) {
+		t.Fatal(asm.dilemmas)
 	} else {
-		defer asm.db.Close()
-		//
-		if e := AddTestHierarchy(asm.assembler,
-			"Ts", "",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := writeMissing(asm.rec,
-			"z",
-		); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleFields(asm.assembler); e == nil {
-			t.Fatal("expected error")
-		} else if !containsOnly(asm.dilemmas, `missing field: "z"`) {
-			t.Fatal(asm.dilemmas)
-		} else {
-			t.Log("ok:", e)
-		}
+		t.Log("ok:", e)
 	}
 }
 
 // xTestMissingUnknownField missing properties ( kind, field pair doesn't exist in model )
 // func xTestMissingUnknownField(t *testing.T) {
-// 	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+// 	asm := newAssemblyTest(t, testdb.Memory)
 // 		t.Fatal(e)
 // 	} else {
 // 		defer asm.db.Close()

@@ -43,7 +43,7 @@ func assembleInitialFields(asm *Assembler) (err error) {
 		err = e
 	} else {
 		store.add(last)
-		err = store.writeInitialFields(asm)
+		err = store.writeFieldValues(asm)
 	}
 	return
 }

@@ -56,15 +56,15 @@ func runViewsTemplate() string {
 		"run_value as \n" +
 		"/* future: select from mdl_run to get a save game's stored runtime values */\n" +
 		"/* for now, the mdl_start fields get the lowest possible tier */\n" +
-		"select noun, field, type, value, 0 as tier \n" +
+		"select mf.noun, mf.field, mf.type, mv.value, 0 as tier \n" +
 		"from mdl_noun_field mf\n" +
-		"join mdl_start ms \n" +
-		"\tusing (noun, field)\n" +
+		"join mdl_start mv \n" +
+		"\ton (mv.name= mf.noun and mv.field= mf.field)\n" +
 		"union all \n" +
-		"select noun, field, type, value, \n" +
-		"\tinstr(mf.fullpath, md.kind || ',') as tier\n" +
+		"select mf.noun, mf.field, mf.type, mv.value, \n" +
+		"\tinstr(mf.fullpath, mv.name || ',') as tier\n" +
 		"\tfrom mdl_noun_field mf\n" +
-		"\tjoin mdl_default md\n" +
+		"\tjoin mdl_start mv\n" +
 		"\t\tusing (field)\n" +
 		"\twhere (tier > 0) /* greater than zero means this default kind value applies to this noun */\t\n" +
 		"union all  /* add all default traits at the largest possible tier */\n" +

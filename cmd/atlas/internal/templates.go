@@ -14,7 +14,7 @@ import (
 var AtlasTemplate = atlasTemplate
 var Templates *template.Template = template.New("none").Funcs(funcMap)
 
-//go:generate templify -p main -o atlas.gen.go atlas.sql
+//go:generate templify -p internal -o atlas.gen.go atlas.sql
 func CreateAtlas(db *sql.DB) (err error) {
 	if _, e := db.Exec(AtlasTemplate()); e != nil {
 		err = errutil.New("CreateAtlas:", e)

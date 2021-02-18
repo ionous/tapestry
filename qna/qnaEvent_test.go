@@ -23,7 +23,8 @@ package qna
 // 	gob.Register((*core.Text)(nil))
 // 	gob.Register((*debug.MatchNumber)(nil))
 
-// 	db := newQnaDB(t, testdb.Memory)
+// 	if db, e:= testdb.Open(t.Name(), dbloc, assembly.SqlCustomDriver); e!= nil {
+// t.Fatal(e)
 // 	defer db.Close()
 // 	if e := tables.CreateModel(db); e != nil {
 // 		t.Fatal(e)

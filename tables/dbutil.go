@@ -43,7 +43,7 @@ func RowsAffected(res sql.Result) (ret int) {
 // For each row, it writes the row to the 'dest' args and calls 'cb' for processing.
 func QueryAll(db Query, q string, cb func() error, dest ...interface{}) (err error) {
 	if rows, e := db.Query(q); e != nil {
-		err = errutil.New("QueryAll error:", e)
+		err = errutil.New("QueryAll error:", e, "for", q)
 	} else {
 		err = ScanAll(rows, cb, dest...)
 	}

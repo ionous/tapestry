@@ -115,7 +115,7 @@ func AddTestStarts(m *Assembler, els ...interface{}) (err error) {
 func AddTestDefaults(m *Assembler, els ...interface{}) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 3 {
 		kind, field, value := els[i], els[i+1], els[i+2]
-		if e := m.WriteDefault(kind.(string), field.(string), value); e != nil {
+		if e := m.WriteStart(kind.(string), field.(string), value); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}

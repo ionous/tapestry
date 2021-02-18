@@ -183,52 +183,49 @@ func TestOneToOneViolations(t *testing.T) {
 
 func newRelativesTest(t *testing.T, path string, relatives ...string) (ret *assemblyTest, err error) {
 	ret = &assemblyTest{T: t}
-	if asm, e := newAssemblyTest(t, path); e != nil {
+	asm := newAssemblyTest(t, path)
+	if e := AddTestHierarchy(asm.assembler,
+		"Ks", "",
+		"Ls", "Ks",
+		"Ns", "Ks",
+	); e != nil {
 		err = e
+	} else if e := AddTestNouns(asm.assembler,
+		"a", "Ks",
+		"b", "Ks",
+		"c", "Ks",
+		"d", "Ks",
+		"e", "Ks",
+		"f", "Ks",
+		"l", "Ls",
+		"n", "Ns",
+		"z", "Ks",
+	); e != nil {
+		err = e
+	} else if e := AddTestRelations(asm.assembler,
+		// relation, kind, cardinality, otherKind
+		"Rel1", "Ks", tables.ONE_TO_ONE, "Ks",
+		"Rel1x", "Ks", tables.ONE_TO_MANY, "Ks",
+		"Relx1", "Ks", tables.MANY_TO_ONE, "Ks",
+		"Relxx", "Ks", tables.MANY_TO_MANY, "Ks",
+	); e != nil {
+		err = e
+	} else if e := AddTestVerbs(asm.assembler,
+		// rel, verb
+		"Rel1", "v1",
+		"Rel1x", "v1x",
+		"Relx1", "vx1",
+		"Relxx", "vx",
+	); e != nil {
+		err = e
+	} else if e := addRelatives(asm.rec, relatives...); e != nil {
+		err = e
+	}
+	//
+	if err != nil {
+		asm.db.Close()
 	} else {
-		if e := AddTestHierarchy(asm.assembler,
-			"Ks", "",
-			"Ls", "Ks",
-			"Ns", "Ks",
-		); e != nil {
-			err = e
-		} else if e := AddTestNouns(asm.assembler,
-			"a", "Ks",
-			"b", "Ks",
-			"c", "Ks",
-			"d", "Ks",
-			"e", "Ks",
-			"f", "Ks",
-			"l", "Ls",
-			"n", "Ns",
-			"z", "Ks",
-		); e != nil {
-			err = e
-		} else if e := AddTestRelations(asm.assembler,
-			// relation, kind, cardinality, otherKind
-			"Rel1", "Ks", tables.ONE_TO_ONE, "Ks",
-			"Rel1x", "Ks", tables.ONE_TO_MANY, "Ks",
-			"Relx1", "Ks", tables.MANY_TO_ONE, "Ks",
-			"Relxx", "Ks", tables.MANY_TO_MANY, "Ks",
-		); e != nil {
-			err = e
-		} else if e := AddTestVerbs(asm.assembler,
-			// rel, verb
-			"Rel1", "v1",
-			"Rel1x", "v1x",
-			"Relx1", "vx1",
-			"Relxx", "vx",
-		); e != nil {
-			err = e
-		} else if e := addRelatives(asm.rec, relatives...); e != nil {
-			err = e
-		}
-		//
-		if err != nil {
-			asm.db.Close()
-		} else {
-			ret = asm
-		}
+		ret = asm
 	}
 	return
 }

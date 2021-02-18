@@ -7,7 +7,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-//go:generate templify -p main -o testData.gen.go testData.sql
+//go:generate templify -p internal -o testData.gen.go testData.sql
 func CreateTestData(db *sql.DB) (err error) {
 	if e := tables.CreateModel(db); e != nil {
 		err = e

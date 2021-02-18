@@ -8,7 +8,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
-	"github.com/ionous/errutil"
 )
 
 func TestPairActivation(t *testing.T) {
@@ -113,22 +112,16 @@ func lines(s ...string) string {
 }
 
 func newPairTest(t *testing.T, path string) (ret *sql.DB, err error) {
-	var source string
-	if len(path) > 0 {
-		source = path
-	} else if p, e := testdb.PathFromName(t.Name()); e != nil {
-		t.Fatal(e)
-	} else {
-		source = p
-	}
-	if db, e := sql.Open(tables.DefaultDriver, source); e != nil {
-		err = errutil.New(e, "for", source)
-	} else if e := tables.CreateModel(db); e != nil {
-		err = errutil.New(e, "for", source)
+	db := testdb.Open(t.Name(), testdb.Memory, "")
+	if e := tables.CreateModel(db); e != nil {
+		err = e
+		db.Close()
 	} else if e := tables.CreateRun(db); e != nil {
-		err = errutil.New(e, "for", source)
+		err = e
+		db.Close()
 	} else if e := tables.CreateRunViews(db); e != nil {
-		err = errutil.New(e, "for", source)
+		err = e
+		db.Close()
 	} else {
 		ret = db
 	}

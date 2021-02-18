@@ -13,7 +13,7 @@ import (
 
 // read the factorial test story
 func TestFactorialStory(t *testing.T) {
-	db := newImportDB(t, testdb.Memory)
+	db := testdb.Open(t.Name(), testdb.Memory, "")
 	defer db.Close()
 	if e := tables.CreateEphemera(db); e != nil {
 		t.Fatal("create tables", e)

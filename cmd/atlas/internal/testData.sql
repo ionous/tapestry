@@ -12,10 +12,6 @@ insert into mdl_field(kind, field, type) values
 	('vehicles', 'flightiness', 'aspect'),
 	('cars', 'num wheels', 'digi');
 
-insert into mdl_default(kind, field, value) values
-	('cars', 'flightiness', 'flightless'),
-	('cars', 'num wheels', 4);
-
 insert into mdl_aspect(aspect, trait) values
 	('flightiness', 'flightless'),
 	('flightiness', 'glide worthy'),
@@ -38,7 +34,9 @@ insert into mdl_name(noun, name, rank) values
 	('riker', 'riker', 0),
 	('picard', 'picard', 0);
 
-insert into mdl_start(noun, field, value) values
+insert into mdl_start(name, field, value) values
+	('cars', 'flightiness', 'flightless'),
+	('cars', 'num wheels', 4),
 	( 'dune buggy', 'num wheels', 3);
 
 insert into mdl_pair(noun, relation, otherNoun) values

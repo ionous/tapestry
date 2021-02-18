@@ -13,13 +13,13 @@ func atlasTemplate() string {
 		" null spec indicates the field isnt declared in this kind */\n" +
 		"create view\n" +
 		"atlas_fields as\n" +
-		"select kind, field, value, null as spec\n" +
-		"\tfrom mdl_default md \n" +
+		"select name, field, value, null as spec\n" +
+		"\tfrom mdl_start mv \n" +
 		"\twhere not exists (\n" +
 		"\t\tselect 1 \n" +
 		"\t\tfrom mdl_field mf \n" +
-		"\t\twhere mf.kind = md.kind \n" +
-		"\t\tand mf.field = md.field \n" +
+		"\t\twhere mf.kind = mv.name \n" +
+		"\t\tand mf.field = mv.field \n" +
 		"\t)\n" +
 		"union all \n" +
 		"/* and all of the fields defined for the kind */\n" +
@@ -29,9 +29,9 @@ func atlasTemplate() string {
 		"\tcoalesce((\n" +
 		"\t/* with the default specified value */\n" +
 		"\t\tselect value \n" +
-		"\t\tfrom mdl_default md \n" +
-		"\t\twhere mf.kind = md.kind \n" +
-		"\t\tand mf.field = md.field \n" +
+		"\t\tfrom mdl_start mv \n" +
+		"\t\twhere mf.kind = mv.name \n" +
+		"\t\tand mf.field = mv.field \n" +
 		"\t\tlimit 1\n" +
 		"\t\t),\n" +
 		"\t/* or, use type-dependent default value */\n" +
@@ -55,7 +55,6 @@ func atlasTemplate() string {
 		"\t\tand spec.name = (kind||'.'||field))\n" +
 		"\t\tlimit 1 ), '')\n" +
 		"\tas spec\n" +
-		"from mdl_field mf;\n" +
-		"\t"
+		"from mdl_field mf;"
 	return tmpl
 }

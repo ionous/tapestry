@@ -57,95 +57,82 @@ func matchTraits(db *sql.DB, want []expectedTrait) (err error) {
 
 // TestTraits to verify that aspects/traits in ephemera can become part of the model.
 func TestTraits(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := addTraits(asm.rec, []string{
+		"A", "x",
+		"A", "y",
+		"B", "z",
+		"B", "z",
+	}); e != nil {
 		t.Fatal(e)
-	} else {
-		defer asm.db.Close()
-		//
-		if e := addTraits(asm.rec, []string{
-			"A", "x",
-			"A", "y",
-			"B", "z",
-			"B", "z",
-		}); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleAspects(asm.assembler); e != nil {
-			t.Fatal(e)
-		} else if e := matchTraits(asm.db, []expectedTrait{
-			{"A", "x", 0},
-			{"A", "y", 1},
-			{"B", "z", 0},
-		}); e != nil {
-			t.Fatal("matchTraits:", e)
-		}
+	} else if e := AssembleAspects(asm.assembler); e != nil {
+		t.Fatal(e)
+	} else if e := matchTraits(asm.db, []expectedTrait{
+		{"A", "x", 0},
+		{"A", "y", 1},
+		{"B", "z", 0},
+	}); e != nil {
+		t.Fatal("matchTraits:", e)
 	}
 }
 
 // TestTraitConflicts
 func TestTraitConflicts(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := addTraits(asm.rec, []string{
+		"A", "x",
+		"C", "z",
+		"B", "x",
+	}); e != nil {
 		t.Fatal(e)
+	} else if e := AssembleAspects(asm.assembler); e == nil {
+		t.Fatal("expected an error")
 	} else {
-		defer asm.db.Close()
-		//
-		if e := addTraits(asm.rec, []string{
-			"A", "x",
-			"C", "z",
-			"B", "x",
-		}); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleAspects(asm.assembler); e == nil {
-			t.Fatal("expected an error")
-		} else {
-			t.Log("okay:", e)
-		}
+		t.Log("okay:", e)
 	}
 }
 
 func TestTraitMissingAspect(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := addTraits(asm.rec, []string{
+		"A", "x",
+		"Z", "",
+	}); e != nil {
 		t.Fatal(e)
+	} else if e := AssembleAspects(asm.assembler); e == nil {
+		t.Fatal("expected error")
+	} else if asm.dilemmas.Len() != 1 ||
+		!strings.Contains((*asm.dilemmas)[0].Err.Error(), `missing aspect: "Z"`) {
+		t.Fatal(asm.dilemmas)
 	} else {
-		defer asm.db.Close()
-		//
-		if e := addTraits(asm.rec, []string{
-			"A", "x",
-			"Z", "",
-		}); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleAspects(asm.assembler); e == nil {
-			t.Fatal("expected error")
-		} else if asm.dilemmas.Len() != 1 ||
-			!strings.Contains((*asm.dilemmas)[0].Err.Error(), `missing aspect: "Z"`) {
-			t.Fatal(asm.dilemmas)
-		} else {
-			t.Log("ok:", e)
-
-		}
+		t.Log("ok:", e)
 	}
 }
 
 func TestTraitMissingTraits(t *testing.T) {
-	if asm, e := newAssemblyTest(t, testdb.Memory); e != nil {
+	asm := newAssemblyTest(t, testdb.Memory)
+	defer asm.db.Close()
+	//
+	if e := addTraits(asm.rec, []string{
+		"A", "x",
+		"", "y",
+		"", "z",
+	}); e != nil {
 		t.Fatal(e)
+	} else if e := AssembleAspects(asm.assembler); e == nil {
+		t.Fatal("expected error")
+	} else if !containsOnly(asm.dilemmas,
+		`missing trait: "y"`,
+		`missing trait: "z"`) {
+		t.Fatal(asm.dilemmas)
 	} else {
-		defer asm.db.Close()
-		//
-		if e := addTraits(asm.rec, []string{
-			"A", "x",
-			"", "y",
-			"", "z",
-		}); e != nil {
-			t.Fatal(e)
-		} else if e := AssembleAspects(asm.assembler); e == nil {
-			t.Fatal("expected error")
-		} else if !containsOnly(asm.dilemmas,
-			`missing trait: "y"`,
-			`missing trait: "z"`) {
-			t.Fatal(asm.dilemmas)
-		} else {
-			t.Log("ok:", e)
-		}
+		t.Log("ok:", e)
 	}
 }
 
@@ -172,7 +159,6 @@ func containsMessages(ds *reader.Dilemmas, msg ...string) (ret bool) {
 				msg = msg[:end]
 			}
 		}
-
 	}
 	return
 }
