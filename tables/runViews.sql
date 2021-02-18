@@ -48,10 +48,10 @@ run_value as
 select mf.noun, mf.field, mf.type, mv.value, 0 as tier 
 from mdl_noun_field mf
 join mdl_start mv 
-	on (mv.name= mf.noun and mv.field= mf.field)
+	on (mv.owner= mf.noun and mv.field= mf.field)
 union all 
 select mf.noun, mf.field, mf.type, mv.value, 
-	instr(mf.fullpath, mv.name || ',') as tier
+	instr(mf.fullpath, mv.owner || ',') as tier
 	from mdl_noun_field mf
 	join mdl_start mv
 		using (field)

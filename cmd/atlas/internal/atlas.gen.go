@@ -13,12 +13,12 @@ func atlasTemplate() string {
 		" null spec indicates the field isnt declared in this kind */\n" +
 		"create view\n" +
 		"atlas_fields as\n" +
-		"select name, field, value, null as spec\n" +
+		"select owner, field, value, null as spec\n" +
 		"\tfrom mdl_start mv \n" +
 		"\twhere not exists (\n" +
 		"\t\tselect 1 \n" +
 		"\t\tfrom mdl_field mf \n" +
-		"\t\twhere mf.kind = mv.name \n" +
+		"\t\twhere mf.kind = mv.owner \n" +
 		"\t\tand mf.field = mv.field \n" +
 		"\t)\n" +
 		"union all \n" +
@@ -30,7 +30,7 @@ func atlasTemplate() string {
 		"\t/* with the default specified value */\n" +
 		"\t\tselect value \n" +
 		"\t\tfrom mdl_start mv \n" +
-		"\t\twhere mf.kind = mv.name \n" +
+		"\t\twhere mf.kind = mv.owner \n" +
 		"\t\tand mf.field = mv.field \n" +
 		"\t\tlimit 1\n" +
 		"\t\t),\n" +

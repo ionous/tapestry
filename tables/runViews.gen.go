@@ -59,10 +59,10 @@ func runViewsTemplate() string {
 		"select mf.noun, mf.field, mf.type, mv.value, 0 as tier \n" +
 		"from mdl_noun_field mf\n" +
 		"join mdl_start mv \n" +
-		"\ton (mv.name= mf.noun and mv.field= mf.field)\n" +
+		"\ton (mv.owner= mf.noun and mv.field= mf.field)\n" +
 		"union all \n" +
 		"select mf.noun, mf.field, mf.type, mv.value, \n" +
-		"\tinstr(mf.fullpath, mv.name || ',') as tier\n" +
+		"\tinstr(mf.fullpath, mv.owner || ',') as tier\n" +
 		"\tfrom mdl_noun_field mf\n" +
 		"\tjoin mdl_start mv\n" +
 		"\t\tusing (field)\n" +

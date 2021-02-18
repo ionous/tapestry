@@ -1,6 +1,6 @@
 package assembly
 
-// goal: build table of mdl_start(name, field, value) for instances.
+// goal: build table of mdl_start(owner, field, value) for instances.
 // considerations:
 // . property's actual kind ( default specified against a derived type )
 // . contradiction in specified values

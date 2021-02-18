@@ -34,7 +34,7 @@ insert into mdl_name(noun, name, rank) values
 	('riker', 'riker', 0),
 	('picard', 'picard', 0);
 
-insert into mdl_start(name, field, value) values
+insert into mdl_start(owner, field, value) values
 	('cars', 'flightiness', 'flightless'),
 	('cars', 'num wheels', 4),
 	( 'dune buggy', 'num wheels', 3);

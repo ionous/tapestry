@@ -24,7 +24,7 @@ func newObjectValue(run *Runner, v interface{}) (ret qnaValue, err error) {
 	return
 }
 
-func (q *qnaObject) Snapshot(rt.Runtime) (ret g.Value, err error) {
+func (q *qnaObject) GetAssignedValue(rt.Runtime) (ret g.Value, err error) {
 	ret = q
 	return
 }

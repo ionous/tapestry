@@ -392,7 +392,7 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		varName := lang.SpecialBreakcase(rawField)
 		key := makeKey(target, varName)
 		if q, ok := n.pairs[key]; ok {
-			ret, err = q.Snapshot(n)
+			ret, err = q.GetAssignedValue(n)
 		} else {
 			// first: loop. ask if we are trying to find the value of a trait. ( noun.trait )
 			switch aspectOfTrait, e := n.GetField(object.Aspect, key.dot()); e.(type) {
@@ -424,7 +424,7 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 func (n *Runner) getOrCache(target, field string, cache func(key keyType) (ret qnaValue, err error)) (ret g.Value, err error) {
 	key := makeKey(target, field)
 	if q, ok := n.pairs[key]; ok {
-		ret, err = q.Snapshot(n)
+		ret, err = q.GetAssignedValue(n)
 	} else {
 		switch val, e := cache(key); e {
 		case nil:
@@ -451,11 +451,7 @@ func (n *Runner) queryFieldValue(key keyType) (ret qnaValue, err error) {
 		default:
 			ret = staticValue{a, v}
 		case []byte:
-			if p, e := newEval(a, v); e != nil {
-				err = e
-			} else {
-				ret = p
-			}
+			err = bytesToEval(v, &ret)
 		}
 	}
 	return
@@ -464,5 +460,5 @@ func (n *Runner) queryFieldValue(key keyType) (ret qnaValue, err error) {
 // store the passed value generator, and return the latest snapshot of it
 func (n *Runner) store(key keyType, val qnaValue) (ret g.Value, err error) {
 	n.pairs[key] = val
-	return val.Snapshot(n)
+	return val.GetAssignedValue(n)
 }

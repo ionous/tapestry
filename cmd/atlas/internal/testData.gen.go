@@ -45,7 +45,7 @@ func testDataTemplate() string {
 		"\t('riker', 'riker', 0),\n" +
 		"\t('picard', 'picard', 0);\n" +
 		"\n" +
-		"insert into mdl_start(name, field, value) values\n" +
+		"insert into mdl_start(owner, field, value) values\n" +
 		"\t('cars', 'flightiness', 'flightless'),\n" +
 		"\t('cars', 'num wheels', 4),\n" +
 		"\t( 'dune buggy', 'num wheels', 3);\n" +

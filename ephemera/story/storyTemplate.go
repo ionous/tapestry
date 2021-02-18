@@ -1,6 +1,7 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/express"
@@ -24,6 +25,7 @@ func (op *RenderTemplate) ImportStub(k *Importer) (ret interface{}, err error) {
 	return
 }
 
+// returns a string or a FromText assignment as a slice of bytes
 func convert_text_or_template(str string) (ret interface{}, err error) {
 	if xs, e := template.Parse(str); e != nil {
 		err = e
@@ -34,8 +36,8 @@ func convert_text_or_template(str string) (ret interface{}, err error) {
 			err = errutil.New(e, xs)
 		} else if eval, ok := got.(rt.TextEval); !ok {
 			err = errutil.Fmt("render template has unknown expression %T", got)
-		} else if prog, e := ephemera.EncodeGob(&render.RenderTemplate{eval}); e != nil {
-			err = e // note: we dont have to encode into render but maybe its nice to have a consistent root type
+		} else if prog, e := ephemera.EncodeGob(&core.FromText{eval}); e != nil {
+			err = e
 		} else {
 			ret = prog // okay; return bytes.
 		}

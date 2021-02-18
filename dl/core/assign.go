@@ -11,11 +11,10 @@ import (
 
 // Assignment helps limit variable and parameter assignment to particular contexts.
 type Assignment interface {
-	// write the results of evaluating this into that.
-	GetAssignedValue(rt.Runtime) (g.Value, error)
-
 	// fix: needed by importArgs right now for ... reasons...
 	Affinity() affine.Affinity
+	// write the results of evaluating this into that.
+	GetAssignedValue(rt.Runtime) (g.Value, error)
 }
 
 func GetAssignedValue(run rt.Runtime, a Assignment) (ret g.Value, err error) {

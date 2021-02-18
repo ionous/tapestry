@@ -48,6 +48,6 @@ func modelTemplate() string {
 		"create table mdl_spec( type text, name text, spec text, primary key( type, name ));\n" +
 		"/* initial values for various noun properties. \n" +
 		"   changed values are stored in run_start.. */\n" +
-		"create table mdl_start( name text, field text, value blob );"
+		"create table mdl_start( owner text, field text, value blob );"
 	return tmpl
 }

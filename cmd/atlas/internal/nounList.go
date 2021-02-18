@@ -34,7 +34,7 @@ func listOfNouns(w io.Writer, db *sql.DB) (err error) {
 				fmt.Sprintf(`
 					select field, value 
 					from mdl_start 
-					where name='%s' 
+					where owner='%s' 
 					order by field`, name),
 				func() (err error) {
 					props = append(props, Prop{Name: name, Value: value})

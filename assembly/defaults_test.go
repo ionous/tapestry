@@ -218,9 +218,9 @@ func matchDefaults(db *sql.DB, want ...interface{}) (err error) {
 	var a, b, c interface{}
 	var have []interface{}
 	if e := tables.QueryAll(db,
-		`select name, field, value 
+		`select owner, field, value 
 			from mdl_start
-			order by name, field, value`,
+			order by owner, field, value`,
 		func() (err error) {
 			have = append(have, a, b, c)
 			return

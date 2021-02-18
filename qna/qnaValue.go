@@ -11,13 +11,14 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// take a snapshot of a cached value
+// take a snapshot of a cached value.
 // the meaning of a snapshot changes per value type.
 // ex. snapshots from evals are unique instances,
-// while multiple list snaps share the same slice memory.
+// while snapshots of the same primitive list share the same memory.
+// the interface mirrors core.GetAssignedValue.
 type qnaValue interface {
 	Affinity() affine.Affinity
-	Snapshot(rt.Runtime) (g.Value, error)
+	GetAssignedValue(rt.Runtime) (g.Value, error)
 }
 
 type staticValue struct {
@@ -28,7 +29,8 @@ type staticValue struct {
 func (f staticValue) Affinity() affine.Affinity {
 	return f.affinity
 }
-func (f staticValue) Snapshot(run rt.Runtime) (ret g.Value, err error) {
+
+func (f staticValue) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	switch i, a := f.val, f.affinity; a {
 	case affine.Bool:
 		switch v := i.(type) {
@@ -110,7 +112,8 @@ type errorValue struct{ err error }
 func (f errorValue) Affinity() affine.Affinity {
 	return ""
 }
-func (f errorValue) Snapshot(run rt.Runtime) (_ g.Value, err error) {
+
+func (f errorValue) GetAssignedValue(run rt.Runtime) (_ g.Value, err error) {
 	err = f.err
 	return
 }
@@ -124,7 +127,7 @@ func (f patternValue) Affinity() affine.Affinity {
 	return "" // not needed currently
 }
 
-func (f patternValue) Snapshot(run rt.Runtime) (_ g.Value, err error) {
+func (f patternValue) GetAssignedValue(run rt.Runtime) (_ g.Value, err error) {
 	err = errutil.New("pattern expected use of GetEvalByName")
 	return
 }

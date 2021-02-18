@@ -37,4 +37,4 @@ create table mdl_rule( name text unique, pattern text, domain text, target text,
 create table mdl_spec( type text, name text, spec text, primary key( type, name ));
 /* initial values for various noun properties. 
    changed values are stored in run_start.. */
-create table mdl_start( name text, field text, value blob );
+create table mdl_start( owner text, field text, value blob );

@@ -9,6 +9,7 @@ import (
 )
 
 // reads mdl_field, mdl_kind
+// out of asm_default... via eph_default...  via NewDefault()
 func assembleDefaultFields(asm *Assembler) (err error) {
 	var store valueStore
 	var curr, last valueInfo

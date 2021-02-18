@@ -193,8 +193,8 @@ func (m *Assembler) WriteRule(name *string, pattern, domain, target string, flag
 }
 
 // WriteStart: store the initial value of a field used at start of play.
-func (m *Assembler) WriteStart(name, field string, value interface{}) error {
-	_, e := m.cache.Exec(mdl_start, name, field, value)
+func (m *Assembler) WriteStart(owner, field string, value interface{}) error {
+	_, e := m.cache.Exec(mdl_start, owner, field, value)
 	return e
 }
 
@@ -236,4 +236,4 @@ var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes")
 var mdl_rel = tables.Insert("mdl_rel", "relation", "kind", "cardinality", "otherKind")
 var mdl_rule = tables.Insert("mdl_rule", "name", "pattern", "domain", "target", "phase", "prog")
 var mdl_spec = tables.Insert("mdl_spec", "type", "name", "spec")
-var mdl_start = tables.Insert("mdl_start", "name", "field", "value")
+var mdl_start = tables.Insert("mdl_start", "owner", "field", "value")

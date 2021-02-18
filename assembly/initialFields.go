@@ -8,6 +8,7 @@ import (
 )
 
 // reads mdl_kind, mdl_field, mdl_noun
+// out of asm_noun and asm_value... via eph_value... via NewValue()
 func assembleInitialFields(asm *Assembler) (err error) {
 	var store valueStore
 	var curr, last valueInfo

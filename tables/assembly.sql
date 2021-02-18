@@ -24,13 +24,13 @@ from eph_expect ex
 join eph_named kn
 	on (ex.idNamedTest = kn.rowid);
 
-
 /* resolve default ephemera to strings.
  */
 create temp view 
 asm_default as
 	select p.rowid as idEphDefault, kn.name as kind, nf.name as prop, p.value as value
-from eph_default p join eph_named kn
+from eph_default p 
+join eph_named kn
 	on (p.idNamedKind = kn.rowid)
 left join eph_named nf
 	on (p.idNamedProp = nf.rowid);
@@ -95,7 +95,6 @@ asm_noun as
 	 	order by me.rank limit 1 
 	) as noun
 from asm_value as asm;
-
 
 /* resolve test ephemera to strings
  */
@@ -247,7 +246,8 @@ order by pattern, type, domain, idProg;
 create temp view
 asm_value as
 	select pv.rowid as idEphValue, nn.name, np.name as prop, pv.value
-from eph_value pv join eph_named nn
+from eph_value pv 
+join eph_named nn
 	on (pv.idNamedNoun = nn.rowid)
 left join eph_named np
 	on (pv.idNamedProp = np.rowid);

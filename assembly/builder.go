@@ -197,12 +197,14 @@ func buildPatternTables(asm *Assembler, pats []*pattern.Pattern) (err error) {
 			err = errutil.Append(err, e)
 		} else {
 			// mdl_start
-			// localOfs := len(pat.Labels)
-			// for i, locals := range pat.Locals {
-			// 	f := pat.Fields[localOfs+i]
-			// 	// asm.WriteStart
-
-			// }
+			localOfs := len(pat.Labels)
+			for i, _ := range pat.Locals {
+				f := pat.Fields[localOfs+i]
+				// FIX: write value
+				if e := asm.WriteStart(pat.Name, f.Name, nil); e != nil {
+					err = errutil.Append(err, e)
+				}
+			}
 			//
 			for _, rule := range pat.Rules {
 				var name *string  // none of the rules have names right now.
