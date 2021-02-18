@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"encoding/gob"
 	r "reflect"
-	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
@@ -190,39 +189,57 @@ func decodeProg(prog []byte, aff affine.Affinity) (ret core.Assignment, err erro
 	return
 }
 
+// fix: for now this reads from the established pattern structure
+// eventually we want to skip reading into the structure and instead just write straight to the model.
 func buildPatternTables(asm *Assembler, pats []*pattern.Pattern) (err error) {
-	for _, pat := range pats {
-		labels := strings.Join(pat.Labels, ",")
-		if e := asm.WritePattern(pat.Name, pat.Return, labels); e != nil {
-			err = errutil.Append(err, e)
-		} else {
-			// mdl_start
-			localOfs := len(pat.Labels)
-			for i, _ := range pat.Locals {
-				f := pat.Fields[localOfs+i]
-				// FIX: write value
-				if e := asm.WriteStart(pat.Name, f.Name, nil); e != nil {
-					err = errutil.Append(err, e)
-				}
-			}
+	if e := asm.WriteAncestor("patterns", ""); e != nil {
+		err = e
+	} else {
+		for _, pat := range pats {
 			//
-			for _, rule := range pat.Rules {
-				var name *string  // none of the rules have names right now.
-				var domain string // domain doesnt come through ephemera; hack it for now
-				var target string // targets are just for events
-				if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
-					if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
-						domain = yikes.Name
+			if e := asm.WriteAncestor(pat.Name, "patterns"); e != nil {
+				err = errutil.Append(err, e)
+			} else if e := asm.WritePattern(pat.Name, pat.Return, pat.Labels); e != nil {
+				err = errutil.Append(err, e)
+			} else {
+				localOfs := len(pat.Labels)
+				// write fields exactly as if the pattern was a kind
+				for _, prop := range pat.Fields {
+					if e := asm.WriteField(pat.Name, prop.Name, prop.Type, prop.Affinity.String()); e != nil {
+						err = errutil.Append(err, e)
 					}
 				}
-				h := pattern.Handler{
-					Filter:  rule.Filter,
-					Execute: rule.Execute,
+				// write initialization to mdl_start
+				for i, val := range pat.Locals {
+					if val != nil { //not every local has an initial value
+						f := pat.Fields[localOfs+i]
+						// fix: write encoded value... which we just recently decoded... :/
+						if b, e := asm.EncodeValue(r.ValueOf(val)); e != nil {
+							err = errutil.Append(err, e)
+						} else if e := asm.WriteStart(pat.Name, f.Name, b); e != nil {
+							err = errutil.Append(err, e)
+						}
+					}
 				}
-				if prog, e := asm.EncodeValue(r.ValueOf(&h)); e != nil {
-					err = errutil.Append(err, e)
-				} else if e := asm.WriteRule(name, pat.Name, domain, target, rule.Flags, prog); e != nil {
-					err = errutil.Append(err, e)
+				//
+				for _, rule := range pat.Rules {
+					var name *string  // none of the rules have names right now.
+					var domain string // domain doesnt come through ephemera; hack it for now
+					var target string // targets are just for events
+					if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
+						if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
+							domain = yikes.Name
+						}
+					}
+					h := pattern.Handler{
+						Filter:  rule.Filter,
+						Execute: rule.Execute,
+					}
+					if prog, e := asm.EncodeValue(r.ValueOf(&h)); e != nil {
+						err = errutil.Append(err, e)
+					} else if e := asm.WriteRule(name, pat.Name, domain, target, rule.Flags, prog); e != nil {
+						err = errutil.Append(err, e)
+					}
 				}
 			}
 		}

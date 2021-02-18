@@ -130,8 +130,9 @@ func (m *Assembler) WriteNounWithNames(domain, noun, kind string) (err error) {
 	return
 }
 
-func (m *Assembler) WritePattern(name, result, labels string) error {
-	_, e := m.cache.Exec(mdl_pat, name, result, labels)
+func (m *Assembler) WritePattern(name, result string, labels []string) error {
+	ls := strings.Join(labels, ",")
+	_, e := m.cache.Exec(mdl_pat, name, result, ls)
 	return e
 }
 

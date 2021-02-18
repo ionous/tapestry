@@ -27,7 +27,7 @@ create table mdl_plural( one text, many text );
    the connection between tests and patterns and progs are, essentially, application knowledge. */ 
 create table mdl_prog( name text, type text, bytes blob );
 /* pattern, the field ( in md_field ) used for a return value ( if any ) and comma separated labels for calling/processing fields */
-create table mdl_pat( name text, result text, labels text, primary key( name ) );
+create table mdl_pat( name text, labels text, result text, primary key( name ) );
 /* relation and constraint between two kinds of nouns */
 create table mdl_rel( relation text, kind text, cardinality text, otherKind text, primary key( relation ));
 /* note: rule name is unique, but optional */

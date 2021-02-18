@@ -35,13 +35,13 @@ func assemblyTemplate() string {
 		"join eph_named kn\n" +
 		"\ton (ex.idNamedTest = kn.rowid);\n" +
 		"\n" +
-		"\n" +
 		"/* resolve default ephemera to strings.\n" +
 		" */\n" +
 		"create temp view \n" +
 		"asm_default as\n" +
 		"\tselect p.rowid as idEphDefault, kn.name as kind, nf.name as prop, p.value as value\n" +
-		"from eph_default p join eph_named kn\n" +
+		"from eph_default p \n" +
+		"join eph_named kn\n" +
 		"\ton (p.idNamedKind = kn.rowid)\n" +
 		"left join eph_named nf\n" +
 		"\ton (p.idNamedProp = nf.rowid);\n" +
@@ -106,7 +106,6 @@ func assemblyTemplate() string {
 		"\t \torder by me.rank limit 1 \n" +
 		"\t) as noun\n" +
 		"from asm_value as asm;\n" +
-		"\n" +
 		"\n" +
 		"/* resolve test ephemera to strings\n" +
 		" */\n" +
@@ -258,7 +257,8 @@ func assemblyTemplate() string {
 		"create temp view\n" +
 		"asm_value as\n" +
 		"\tselect pv.rowid as idEphValue, nn.name, np.name as prop, pv.value\n" +
-		"from eph_value pv join eph_named nn\n" +
+		"from eph_value pv \n" +
+		"join eph_named nn\n" +
 		"\ton (pv.idNamedNoun = nn.rowid)\n" +
 		"left join eph_named np\n" +
 		"\ton (pv.idNamedProp = np.rowid);\n" +

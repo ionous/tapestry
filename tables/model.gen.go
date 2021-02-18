@@ -38,7 +38,7 @@ func modelTemplate() string {
 		"   the connection between tests and patterns and progs are, essentially, application knowledge. */ \n" +
 		"create table mdl_prog( name text, type text, bytes blob );\n" +
 		"/* pattern, the field ( in md_field ) used for a return value ( if any ) and comma separated labels for calling/processing fields */\n" +
-		"create table mdl_pat( name text, result text, labels text, primary key( name ) );\n" +
+		"create table mdl_pat( name text, labels text, result text, primary key( name ) );\n" +
 		"/* relation and constraint between two kinds of nouns */\n" +
 		"create table mdl_rel( relation text, kind text, cardinality text, otherKind text, primary key( relation ));\n" +
 		"/* note: rule name is unique, but optional */\n" +
