@@ -8,6 +8,12 @@ import (
 	"github.com/ionous/errutil"
 )
 
+type BuildRule struct {
+	Query        string
+	NewContainer func(name string) interface{}
+	NewEl        func(c interface{}) interface{}
+}
+
 // the first parameter should be a *string, the second some *bytes
 func (b *BuildRule) buildFromRule(asm *Assembler, args ...interface{}) (err error) {
 	list := make(map[string]interface{})

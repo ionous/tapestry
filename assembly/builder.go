@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/gob"
+	r "reflect"
+	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
@@ -14,12 +16,6 @@ import (
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
-
-type BuildRule struct {
-	Query        string
-	NewContainer func(name string) interface{}
-	NewEl        func(c interface{}) interface{}
-}
 
 // map name to pattern interface
 type patternEntry struct {
@@ -194,32 +190,74 @@ func decodeProg(prog []byte, aff affine.Affinity) (ret core.Assignment, err erro
 	return
 }
 
-// collect the rules of all the various patterns and write them into the assembly
-func buildPatterns(asm *Assembler) (err error) {
-	if patterns, e := buildPatternCache(asm.cache.DB()); e != nil {
-		err = e
-	} else {
-		err = buildPatternRules(asm, patterns)
+func buildPatternTable(asm *Assembler, pats []*pattern.Pattern) (err error) {
+	for _, pat := range pats {
+		labels := strings.Join(pat.Labels, ",")
+		if e := asm.WritePattern(pat.Name, pat.Return, labels); e != nil {
+			err = errutil.Append(err, e)
+		}
 	}
 	return
 }
 
-func buildPatternRules(asm *Assembler, patterns patternCache) error {
+func buildRulesTable(asm *Assembler, pats []*pattern.Pattern) (err error) {
+	for _, pat := range pats {
+		for _, rule := range pat.Rules {
+			var name *string  // none of the rules have names right now.
+			var domain string // domain doesnt come through ephemera; hack it for now
+			var target string // targets are just for events
+			if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
+				if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
+					domain = yikes.Name
+				}
+			}
+			h := pattern.Handler{
+				Filter:  rule.Filter,
+				Execute: rule.Execute,
+			}
+			if prog, e := asm.EncodeValue(r.ValueOf(&h)); e != nil {
+				err = errutil.Append(err, e)
+			} else if e := asm.WriteRule(name, pat.Name, domain, target, rule.Flags, prog); e != nil {
+				err = errutil.Append(err, e)
+			}
+		}
+	}
+	return
+}
+
+func buildPatternRules(asm *Assembler, patterns patternCache) (ret []*pattern.Pattern, err error) {
+	list := make(map[string]interface{})
+	var curr *pattern.Pattern
 	var name string
 	var prog []byte
-	rule := BuildRule{
-		Query: `select pattern, prog from asm_rule where type='rule'`,
-		NewContainer: func(name string) (ret interface{}) {
-			if c, ok := patterns.init(name, "execute"); ok {
-				ret = c
+	if e := tables.QueryAll(asm.cache.DB(),
+		`select pattern, prog from asm_rule where type='rule'`,
+		func() (err error) {
+			// new pattern
+			if curr == nil || curr.Name != name {
+				if c, ok := patterns.init(name, "execute"); !ok {
+					err = errutil.New("unknown pattern", name)
+				} else {
+					curr = c
+					list[name] = curr
+					ret = append(ret, curr)
+				}
+			}
+			if err == nil {
+				rulePtr := new(pattern.Rule)
+				dec := gob.NewDecoder(bytes.NewBuffer(prog))
+				if e := dec.Decode(rulePtr); e != nil {
+					err = e
+				} else {
+					curr.Rules = append(curr.Rules, rulePtr)
+				}
 			}
 			return
-		},
-		NewEl: func(c interface{}) interface{} {
-			pat := c.(*pattern.Pattern)
-			pat.Rules = append(pat.Rules, &pattern.Rule{})
-			return pat.Rules[len(pat.Rules)-1]
-		},
+		}, &name, &prog); e != nil {
+		err = errutil.New("buildFromRule", e)
+	} else {
+		// write the passed list of gobs into the assembler db
+		err = asm.WriteGobs(list)
 	}
-	return rule.buildFromRule(asm, &name, &prog)
+	return
 }

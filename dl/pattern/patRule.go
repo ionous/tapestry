@@ -12,7 +12,36 @@ import (
 // The postfix rules run until one decides to end the pattern.
 type Flags int
 
-//go:generate stringer -type=Flags
+func (f Flags) String() (ret string) {
+	switch f {
+	case 0:
+		ret = "action"
+	case Infix:
+		ret = "target"
+	case Prefix:
+		ret = "capture"
+	case Postfix:
+		ret = "bubble"
+	}
+	return
+}
+
+func MakeFlags(s string) (ret Flags) {
+	switch s {
+	case "action":
+		ret = 0
+	case "target":
+		ret = Infix
+	case "capture":
+		ret = Prefix
+	case "bubble":
+		ret = Postfix
+	default:
+		panic("unknown flag")
+	}
+	return
+}
+
 const (
 	Infix   Flags = (1 << iota) // keeps the rule at the same relative location
 	Prefix                      // all prefix rules get sorted towards the front of the list
@@ -33,6 +62,7 @@ func (my *Rule) GetFlags() (ret Flags) {
 	}
 	return
 }
+
 func (my *Rule) ApplyRule(run rt.Runtime, allow Flags) (okay Flags, err error) {
 	if flags := my.GetFlags(); allow&flags != 0 {
 		if ok, e := safe.GetOptionalBool(run, my.Filter, true); e != nil {

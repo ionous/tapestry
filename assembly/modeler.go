@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -136,9 +137,8 @@ func (m *Assembler) WriteNounWithNames(domain, noun, kind string) (err error) {
 	return
 }
 
-// see copyPatterns, mostly this isnt used.
-func (m *Assembler) WritePat(name, paramName, paramType string, idx int64) error {
-	_, e := m.cache.Exec(mdl_pat, name, paramName, paramType, idx)
+func (m *Assembler) WritePattern(name, result, labels string) error {
+	_, e := m.cache.Exec(mdl_pat, name, result, labels)
 	return e
 }
 
@@ -152,15 +152,24 @@ func (m *Assembler) WriteProg(progName, typeName string, bytes []byte) (err erro
 	return
 }
 
-func (m *Assembler) WriteGob(progName string, cmd interface{}) (err error) {
+func (m *Assembler) EncodeValue(rval r.Value) (ret []byte, err error) {
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
-	rval := r.ValueOf(cmd)
 	if e := enc.EncodeValue(rval); e != nil {
+		err = errutil.New("error encoding value", e)
+	} else {
+		ret = buf.Bytes()
+	}
+	return
+
+}
+func (m *Assembler) WriteGob(progName string, cmd interface{}) (err error) {
+	rval := r.ValueOf(cmd)
+	if prog, e := m.EncodeValue(rval); e != nil {
 		err = errutil.New("WriteGob, error encoding value", e)
 	} else {
 		typeName := rval.Elem().Type().Name()
-		err = m.WriteProg(progName, typeName, buf.Bytes())
+		err = m.WriteProg(progName, typeName, prog)
 	}
 	return
 }
@@ -177,6 +186,16 @@ func (m *Assembler) WriteGobs(gobs map[string]interface{}) (err error) {
 
 func (m *Assembler) WriteRelation(relation, kind, cardinality, otherKind string) error {
 	_, e := m.cache.Exec(mdl_rel, relation, kind, cardinality, otherKind)
+	return e
+}
+
+func (m *Assembler) WriteRule(name *string, pattern, domain, target string, flags pattern.Flags, prog []byte) error {
+	var n sql.NullString
+	if name != nil {
+		n.Valid = true
+		n.String = *name
+	}
+	_, e := m.cache.Exec(mdl_rule, n, pattern, domain, target, flags.String(), prog)
 	return e
 }
 
@@ -219,9 +238,10 @@ var mdl_kind = tables.Insert("mdl_kind", "kind", "path")
 var mdl_name = tables.Insert("mdl_name", "noun", "name", "rank")
 var mdl_noun = tables.Insert("mdl_noun", "noun", "kind")
 var mdl_pair = tables.Insert("mdl_pair", "noun", "relation", "otherNoun", "domain")
-var mdl_pat = tables.Insert("mdl_pat", "pattern", "param", "type", "idx")
+var mdl_pat = tables.Insert("mdl_pat", "name", "result", "labels")
 var mdl_plural = tables.Insert("mdl_plural", "one", "many")
 var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes")
 var mdl_rel = tables.Insert("mdl_rel", "relation", "kind", "cardinality", "otherKind")
+var mdl_rule = tables.Insert("mdl_rule", "name", "pattern", "domain", "target", "phase", "prog")
 var mdl_spec = tables.Insert("mdl_spec", "type", "name", "spec")
 var mdl_start = tables.Insert("mdl_start", "noun", "field", "value")

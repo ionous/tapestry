@@ -28,11 +28,13 @@ create table mdl_plural( one text, many text );
 /* stored programs, a work in progress 
    the connection between tests and patterns and progs are, essentially, application knowledge. */ 
 create table mdl_prog( name text, type text, bytes blob );
-/* declared patterns and their parameters -- 
-   used mainly for translating pattern positional parameters into names */
-create table mdl_pat( pattern text, param text, type text, idx int );
+/* pattern, the field ( in md_field ) used for a return value ( if any ) and comma separated labels for calling/processing fields */
+create table mdl_pat( name text, result text, labels text, primary key( name ) );
 /* relation and constraint between two kinds of nouns */
 create table mdl_rel( relation text, kind text, cardinality text, otherKind text, primary key( relation ));
+/* note: rule name is unique, but optional */
+create table mdl_rule( name text unique, pattern text, domain text, target text, phase text, prog blob,
+		check (phase in ('action','target','capture','bubble') ));
 /* documentation for pieces of the model: kinds, nouns, fields, etc. */
 create table mdl_spec( type text, name text, spec text, primary key( type, name ));
 /* initial values for various noun properties. these change over the course of a game. */
