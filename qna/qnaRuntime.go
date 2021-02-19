@@ -25,10 +25,13 @@ func NewRuntime(db *sql.DB) *Runner {
 			fields:  fields,
 			plurals: plurals,
 			pairs:   make(valueMap),
-			kinds: qnaKinds{
+			qnaKinds: qnaKinds{
 				typeOf:    fields.typeOf,
 				fieldsFor: fields.fieldsFor,
 				traitsFor: fields.traitsFor,
+			},
+			qnaRules: qnaRules{
+				rulesFor: fields.rulesFor,
 			},
 			activeNouns:   activeNouns{q: fields.activeNouns},
 			relativeKinds: relativeKinds{q: fields.relativeKinds},
@@ -46,7 +49,8 @@ type Runner struct {
 	fields  *Fields
 	plurals *Plurals
 	pairs   valueMap
-	kinds   qnaKinds
+	qnaKinds
+	qnaRules
 	activeNouns
 	relativeKinds
 }
@@ -72,10 +76,6 @@ func (run *Runner) ActivateDomain(domain string, active bool) {
 	// then, we can just strcmp the noun's path and the active domain to match
 	// maybe even a generalized "hierarchy" test  ( re: kinds ) -- could be even just a string type.
 	run.activeNouns.reset()
-}
-
-func (run *Runner) GetKindByName(n string) (*g.Kind, error) {
-	return run.kinds.GetKindByName(n)
 }
 
 func (run *Runner) SingularOf(str string) (ret string) {

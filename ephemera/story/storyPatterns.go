@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -91,7 +90,7 @@ func (op *PatternRule) ImportPattern(k *Importer, patternName ephemera.Named) (e
 		err = e
 	} else if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
-	} else if slotType := hook.SlotType(); flags != pattern.Infix && slotType != "execute" && !strings.HasSuffix(slotType, "_list") {
+	} else if slotType := hook.SlotType(); flags != rt.Infix && slotType != "execute" && !strings.HasSuffix(slotType, "_list") {
 		err = errutil.New("didnt expect continuation flags for", slotType, "in", patternName.String())
 	} else {
 		guard := op.Guard
@@ -112,17 +111,17 @@ func (op *PatternRule) ImportPattern(k *Importer, patternName ephemera.Named) (e
 	return
 }
 
-func (op *PatternFlags) ReadFlags() (ret pattern.Flags, err error) {
+func (op *PatternFlags) ReadFlags() (ret rt.Flags, err error) {
 	if op != nil {
 		switch str := op.Str; str {
 		case "$BEFORE":
 			// run other matching patterns, and then run this pattern. other...this.
-			ret = pattern.Postfix
+			ret = rt.Postfix
 		case "$AFTER":
 			// keep going after running the current pattern. this...others.
-			ret = pattern.Prefix
+			ret = rt.Prefix
 		case "$TERMINATE":
-			ret = pattern.Infix
+			ret = rt.Infix
 		default:
 			err = errutil.New("unknown pattern flags", str)
 		}

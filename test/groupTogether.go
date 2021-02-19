@@ -28,7 +28,7 @@ var assignGrouping = pattern.Pattern{
 		{Name: "in", Affinity: affine.Text},
 		{Name: "out", Affinity: affine.Record, Type: "group_settings"},
 	},
-	Rules: []*pattern.Rule{
+	Rules: []rt.Rule{
 		{Execute: &core.Activity{[]rt.Execute{
 			Put("out", "name", V("in")),
 			&core.ChooseAction{

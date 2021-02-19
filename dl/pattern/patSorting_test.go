@@ -8,15 +8,15 @@ import (
 )
 
 func TestRuleSorting(t *testing.T) {
-	ps := []*Rule{
-		{Flags: Infix, Execute: Text("1")},
-		{Flags: Postfix, Execute: Text("2")},
-		{Flags: Prefix, Execute: Text("3")},
+	ps := []rt.Rule{
+		{Flags: rt.Infix, Execute: Text("1")},
+		{Flags: rt.Postfix, Execute: Text("2")},
+		{Flags: rt.Prefix, Execute: Text("3")},
 		{Flags: -1 /*Filter: Skip,*/, Execute: Text("0")},
-		{Flags: Postfix, Execute: Text("4")},
+		{Flags: rt.Postfix, Execute: Text("4")},
 	}
-	inds, flags := sortRules(ps)
-	if flags != (Infix | Prefix | Postfix) {
+	inds, flags := SortRules(ps)
+	if flags != (rt.Infix | rt.Prefix | rt.Postfix) {
 		t.Fatal("expected all flags set", flags)
 	} else {
 		var got string
@@ -39,4 +39,4 @@ func (b Bool) GetBool(rt.Runtime) (g.Value, error) {
 	return g.BoolOf(bool(b)), nil
 }
 
-// var Skip = Bool(false)
+var Skip = Bool(false)

@@ -41,6 +41,8 @@ type Runtime interface {
 	// record manipulation
 	GetKindByName(name string) (*g.Kind, error)
 	//
+	GetRules(name string, pflags *Flags) ([]Rule, error)
+	//
 	RelateTo(a, b, relation string) error
 	RelativesOf(a, relation string) ([]string, error)
 	ReciprocalsOf(b, relation string) ([]string, error)

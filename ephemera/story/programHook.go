@@ -1,7 +1,6 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -12,7 +11,7 @@ type programHook interface {
 	CmdPtr() interface{}
 	// create a "pattern rule"
 	// each rule returns its own kind of value -- so there's currently no common interface
-	NewRule(guard rt.BoolEval, flags pattern.Flags) (string, interface{})
+	NewRule(guard rt.BoolEval, flags rt.Flags) (string, interface{})
 }
 
 type executeSlot struct{ cmd rt.Execute }
@@ -20,8 +19,8 @@ type executeSlot struct{ cmd rt.Execute }
 func (b *executeSlot) SlotType() string {
 	return "execute"
 }
-func (b *executeSlot) NewRule(guard rt.BoolEval, flags pattern.Flags) (string, interface{}) {
-	return "rule", &pattern.Rule{guard, flags, b.cmd}
+func (b *executeSlot) NewRule(guard rt.BoolEval, flags rt.Flags) (string, interface{}) {
+	return "rule", &rt.Rule{Filter: guard, Execute: b.cmd, Flags: flags}
 }
 func (b *executeSlot) CmdPtr() interface{} {
 	return &b.cmd

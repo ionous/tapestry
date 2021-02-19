@@ -25,14 +25,19 @@ func TestMapStrings(t *testing.T) {
 	}
 	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Remap)(nil))
 	values := kinds.New("values") // a record.
-	lt := testutil.Runtime{
-		PatternMap: testutil.PatternMap{
+	lt := struct {
+		pattern.Map
+		testutil.Runtime
+	}{
+		pattern.Map{
 			"remap": &reverseStrings,
 		},
-		Stack: []rt.Scope{
-			g.RecordOf(values),
+		testutil.Runtime{
+			Stack: []rt.Scope{
+				g.RecordOf(values),
+			},
+			Kinds: &kinds,
 		},
-		Kinds: &kinds,
 	}
 	if e := values.SetNamedField("fruits", g.StringsOf([]string{"Orange", "Lemon", "Mango", "Banana", "Lime"})); e != nil {
 		t.Fatal(e)
@@ -82,13 +87,18 @@ func TestMapRecords(t *testing.T) {
 		}
 	}
 	//
-	lt := testutil.Runtime{
-		Kinds: &kinds,
-		PatternMap: testutil.PatternMap{
+	lt := struct {
+		pattern.Map
+		testutil.Runtime
+	}{
+		pattern.Map{
 			"remap": &reverseRecords,
 		},
-		Stack: []rt.Scope{
-			g.RecordOf(values),
+		testutil.Runtime{
+			Kinds: &kinds,
+			Stack: []rt.Scope{
+				g.RecordOf(values),
+			},
 		},
 	}
 	if e := remap.Execute(&lt); e != nil {
@@ -125,21 +135,20 @@ var reverseRecords = pattern.Pattern{
 	Name:   "remap",
 	Labels: []string{"in"},
 	Return: "out",
-	Rules: []*pattern.Rule{
-		&pattern.Rule{
-			Execute: &core.PutAtField{
-				Into:    &core.IntoVar{N("out")},
-				AtField: "name",
-				From: &core.FromText{
-					&core.MakeReversed{
-						&core.GetAtField{
-							Field: "name",
-							From:  &core.FromVar{N("in")},
-						},
+	Rules: []rt.Rule{{
+		Execute: &core.PutAtField{
+			Into:    &core.IntoVar{N("out")},
+			AtField: "name",
+			From: &core.FromText{
+				&core.MakeReversed{
+					&core.GetAtField{
+						Field: "name",
+						From:  &core.FromVar{N("in")},
 					},
 				},
 			},
 		},
+	},
 	},
 }
 
@@ -147,18 +156,17 @@ var reverseStrings = pattern.Pattern{
 	Name:   "remap",
 	Labels: []string{"in"},
 	Return: "out",
-	Rules: []*pattern.Rule{
-		&pattern.Rule{
-			Execute: &core.Assign{
-				Var: core.Variable{Str: "out"},
-				From: &core.FromText{
-					&core.MakeReversed{
-						&core.Var{
-							Name: "in",
-						},
+	Rules: []rt.Rule{{
+		Execute: &core.Assign{
+			Var: core.Variable{Str: "out"},
+			From: &core.FromText{
+				&core.MakeReversed{
+					&core.Var{
+						Name: "in",
 					},
 				},
 			},
 		},
+	},
 	},
 }

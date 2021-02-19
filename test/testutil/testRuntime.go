@@ -16,7 +16,6 @@ type Runtime struct {
 	panicTime
 	ObjectMap map[string]*g.Record
 	scope.Stack
-	PatternMap
 	*Kinds
 }
 

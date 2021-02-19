@@ -26,7 +26,7 @@ var matchGroups = pattern.Pattern{
 	},
 	Return: "matches",
 	// rules are evaluated in reverse order ( see sortRules )
-	Rules: []*pattern.Rule{{
+	Rules: []rt.Rule{{
 		Filter:  &core.Always{},
 		Execute: matches(true),
 	}, {

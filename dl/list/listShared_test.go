@@ -5,23 +5,28 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
-func newListTime(src []string, p testutil.PatternMap) (ret rt.Runtime, vals *g.Record, err error) {
+func newListTime(src []string, p pattern.Map) (ret rt.Runtime, vals *g.Record, err error) {
 	var kinds testutil.Kinds
 	type Values struct{ Source []string }
 	kinds.AddKinds((*Values)(nil))
 	values := kinds.New("values")
-	lt := testutil.Runtime{
-		Kinds:      &kinds,
-		PatternMap: p,
-		Stack: []rt.Scope{
-			g.RecordOf(values),
-		},
-	}
+	lt := struct {
+		pattern.Map
+		testutil.Runtime
+	}{
+		p,
+		testutil.Runtime{
+			Kinds: &kinds,
+			Stack: []rt.Scope{
+				g.RecordOf(values),
+			},
+		}}
 	if e := values.SetNamedField("source", g.StringsOf(src)); e != nil {
 		err = e
 	} else {

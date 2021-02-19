@@ -10,12 +10,10 @@ import (
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
-	"github.com/ionous/errutil"
 )
 
 // manually add an assembled pattern to the database, test that it works as expected.
 func TestSayMe(t *testing.T) {
-	errutil.Panic = true
 	gob.Register((*core.Text)(nil))
 	gob.Register((*debug.MatchNumber)(nil))
 
@@ -43,7 +41,7 @@ func TestSayMe(t *testing.T) {
 		if e := debug.DetermineSay(i + 1).Execute(run); e != nil {
 			t.Fatal(e)
 		} else if text := buf.String(); expect != text {
-			t.Fatal(i, text)
+			t.Fatal(i+1, text)
 		} else {
 			t.Log(text)
 		}

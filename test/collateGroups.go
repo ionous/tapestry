@@ -35,8 +35,8 @@ var collateGroups = pattern.Pattern{
 		{Name: "group", Affinity: affine.Record, Type: "grouped_objects"},
 		{Name: "names", Affinity: affine.TextList},
 	},
-	Rules: []*pattern.Rule{
-		&pattern.Rule{Execute: core.NewActivity(
+	Rules: []rt.Rule{{
+		Execute: core.NewActivity(
 			// walk collation.Groups for matching settings
 			&core.Assign{
 				core.Variable{Str: "groups"},

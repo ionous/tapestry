@@ -47,12 +47,12 @@ var SayPattern = pattern.Pattern{
   Fields: []g.Field{
     {Name: "num", Affinity: "number", Type: ""},
   },
-  Rules: []*pattern.Rule{
-    {Execute: SayIt("Not between 1 and 3.")},
-    {Filter: &MatchNumber{3}, Execute: SayIt("San!")},
-    {Filter: &MatchNumber{3}, Execute: SayIt("Three!")},
-    {Filter: &MatchNumber{2}, Execute: SayIt("Two!")},
-    {Filter: &MatchNumber{1}, Execute: SayIt("One!")},
+  Rules: []rt.Rule{
+    {Name: "default", Execute: SayIt("Not between 1 and 3.")},
+    {Name: "3b", Filter: &MatchNumber{3}, Execute: SayIt("San!")},
+    {Name: "3a", Filter: &MatchNumber{3}, Execute: SayIt("Three!")},
+    {Name: "2", Filter: &MatchNumber{2}, Execute: SayIt("Two!")},
+    {Name: "1", Filter: &MatchNumber{1}, Execute: SayIt("One!")},
   },
 }
 

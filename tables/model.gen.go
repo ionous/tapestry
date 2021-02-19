@@ -41,11 +41,17 @@ func modelTemplate() string {
 		"create table mdl_pat( name text, labels text, result text, primary key( name ) );\n" +
 		"/* relation and constraint between two kinds of nouns */\n" +
 		"create table mdl_rel( relation text, kind text, cardinality text, otherKind text, primary key( relation ));\n" +
-		"/* note: rule name is unique, but optional */\n" +
-		"create table mdl_rule( name text unique, pattern text, domain text, target text, phase text, prog blob, role int);\n" +
+		"/* \n" +
+		"\towner: a pattern or event name \n" +
+		"\tdomain: the scene when the rule applies ( could potentially live in another table if we wanted to reuse rule across domains )\n" +
+		"\tscope: for events, the noun or kind to which this rule applies; patterns are called directly and dont have scope.\n" +
+		"\trule name: unique if it exists\n" +
+		"\tprog: a rt.Handler containing an optional filter and executable statement\n" +
+		" */\n" +
+		"create table mdl_rule( owner text, scope text, domain text, phase int, prog blob, name text unique );\n" +
 		"/* documentation for pieces of the model: kinds, nouns, fields, etc. */\n" +
 		"create table mdl_spec( type text, name text, spec text, primary key( type, name ));\n" +
-		"/* initial values for various noun properties. \n" +
+		"/* initial values for various noun, kind, or pattern properties. \n" +
 		"   changed values are stored in run_start.. */\n" +
 		"create table mdl_start( owner text, field text, value blob );"
 	return tmpl

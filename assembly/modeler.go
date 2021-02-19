@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 	"github.com/reiver/go-porterstemmer"
@@ -183,13 +183,12 @@ func (m *Assembler) WriteRelation(relation, kind, cardinality, otherKind string)
 	return e
 }
 
-func (m *Assembler) WriteRule(name *string, pattern, domain, target string, flags pattern.Flags, prog []byte) error {
-	var n sql.NullString
-	if name != nil {
-		n.Valid = true
-		n.String = *name
+func (m *Assembler) WriteRule(owner, scope, domain string, phase rt.Flags, prog []byte, name string) error {
+	var n sql.NullString // we do this so we can have the name unique constraint
+	if len(name) > 0 {
+		n.String, n.Valid = name, true
 	}
-	_, e := m.cache.Exec(mdl_rule, n, pattern, domain, target, flags.Ordinal(), prog)
+	_, e := m.cache.Exec(mdl_rule, owner, scope, domain, phase.Ordinal(), prog, n)
 	return e
 }
 
@@ -235,6 +234,6 @@ var mdl_pat = tables.Insert("mdl_pat", "name", "result", "labels")
 var mdl_plural = tables.Insert("mdl_plural", "one", "many")
 var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes")
 var mdl_rel = tables.Insert("mdl_rel", "relation", "kind", "cardinality", "otherKind")
-var mdl_rule = tables.Insert("mdl_rule", "name", "pattern", "domain", "target", "phase", "prog")
+var mdl_rule = tables.Insert("mdl_rule", "owner", "scope", "domain", "phase", "prog", "name")
 var mdl_spec = tables.Insert("mdl_spec", "type", "name", "spec")
 var mdl_start = tables.Insert("mdl_start", "owner", "field", "value")

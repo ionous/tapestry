@@ -43,13 +43,18 @@ func TestReduce(t *testing.T) {
 		}
 	}
 	//
-	lt := testutil.Runtime{
-		Kinds: &kinds,
-		PatternMap: testutil.PatternMap{
+	lt := struct {
+		pattern.Map
+		testutil.Runtime
+	}{
+		pattern.Map{
 			"reduce": &reduceRecords,
 		},
-		Stack: []rt.Scope{
-			g.RecordOf(values),
+		testutil.Runtime{
+			Kinds: &kinds,
+			Stack: []rt.Scope{
+				g.RecordOf(values),
+			},
 		},
 	}
 	if e := reduce.Execute(&lt); e != nil {
@@ -78,15 +83,14 @@ var reduceRecords = pattern.Pattern{
 	Name:   "reduce",
 	Return: "out",
 	Labels: []string{"in", "out"},
-	Rules: []*pattern.Rule{
-		&pattern.Rule{
-			Execute: &core.Assign{
-				Var: N("out"),
-				From: &core.FromText{&core.Join{Sep: T(", "), Parts: []rt.TextEval{
-					V("out"),
-					&core.GetAtField{Field: "name", From: &core.FromVar{N("in")}},
-				}}},
-			},
+	Rules: []rt.Rule{{
+		Execute: &core.Assign{
+			Var: N("out"),
+			From: &core.FromText{&core.Join{Sep: T(", "), Parts: []rt.TextEval{
+				V("out"),
+				&core.GetAtField{Field: "name", From: &core.FromVar{N("in")}},
+			}}},
 		},
+	},
 	},
 }

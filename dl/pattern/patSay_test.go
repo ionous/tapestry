@@ -3,6 +3,7 @@ package pattern_test
 import (
 	"fmt"
 
+	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 )
@@ -13,9 +14,14 @@ func ExampleSayMe() {
 	// rules are run in reverse order.
 	var kinds testutil.Kinds
 	kinds.AddKinds((*debug.SayMe)(nil))
-	run := testutil.Runtime{
-		Kinds: &kinds,
-		PatternMap: testutil.PatternMap{
+	run := struct {
+		testutil.Runtime
+		pattern.Map
+	}{
+		testutil.Runtime{
+			Kinds: &kinds,
+		},
+		pattern.Map{
 			"say_me": &debug.SayPattern,
 		}}
 	// say 4 numbers

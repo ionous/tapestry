@@ -36,6 +36,7 @@ type Fields struct {
 	reciprocalOf,
 	relateTo,
 	relativeKinds,
+	rulesFor,
 	updatePairs *sql.Stmt
 }
 
@@ -130,6 +131,17 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 			`select mr.kind, mr.otherKind, mr.cardinality
 				from mdl_rel mr 
 				where relation=?`),
+		rulesFor: ps.Prep(db,
+			`select 
+					coalesce(mr.name, 'rule' || mr.rowid) as name,
+					mr.phase,
+					mr.prog
+				from mdl_rule mr
+				where (mr.owner=?) and 
+					(ifnull(mr.domain,'') is '' or 
+						(select 1 from run_domain rd 
+						 where (rd.active and (rd.domain = mr.domain))))
+					order by phase, mr.rowid`),
 		// instead of separately deleting old pairs and inserting new ones;
 		// we insert and replace active ones.
 		updatePairs: ps.Prep(db,
@@ -248,7 +260,9 @@ func (n *Runner) GetEvalByName(name string, pv interface{}) (err error) {
 		outVal.Set(rval)
 	} else {
 		var val qnaValue
-		switch e := n.fields.progBytes.QueryRow(key.target, key.field).Scan(&tables.GobScanner{outVal}); e {
+		switch e := n.fields.progBytes.
+			QueryRow(key.target, key.field).
+			Scan(&tables.GobScanner{outVal}); e {
 		case nil:
 			store := outVal.Interface()
 			val = patternValue{store}

@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"git.sr.ht/~ionous/iffy/test/testutil"
@@ -19,10 +20,14 @@ func TestFactorial(t *testing.T) {
 	var kinds testutil.Kinds
 	kinds.AddKinds((*Factorial)(nil))
 	// rules are run in reverse order.
-	run := testutil.Runtime{
-		Kinds: &kinds,
-
-		PatternMap: testutil.PatternMap{
+	run := struct {
+		testutil.Runtime
+		pattern.Map
+	}{
+		testutil.Runtime{
+			Kinds: &kinds,
+		},
+		pattern.Map{
 			"factorial": &pattern.Pattern{
 				Name:   "factorial",
 				Labels: []string{"num"},
@@ -30,7 +35,7 @@ func TestFactorial(t *testing.T) {
 				Fields: []g.Field{
 					{Name: "num", Affinity: affine.Number},
 				},
-				Rules: []*pattern.Rule{{
+				Rules: []rt.Rule{{
 					Execute: core.NewActivity(
 						&core.Assign{Var: N("num"),
 							From: &core.FromNum{

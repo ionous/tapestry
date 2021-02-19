@@ -17,7 +17,7 @@ type Pattern struct {
 	Labels []string          // one label for every parameter
 	Locals []core.Assignment // usually equal to the number of locals; or nil for testing.
 	Fields []g.Field         // flat list of params and locals and an optional return
-	Rules  []*Rule
+	Rules  []rt.Rule
 }
 
 // track the number of times a particular field gets successfully written to.
@@ -158,24 +158,27 @@ func (pat *Pattern) initializeLocals(run rt.Runtime, rec *g.Record) (err error) 
 // RunWithScope - note: assumes whatever scope is needed to run the pattern has already been setup.
 func (pat *Pattern) executePattern(run rt.Runtime, rw *resultsWatcher) (err error) {
 	sets := rw.sets
-	inds, allFlags := sortRules(pat.Rules)
-	for j, cnt := 0, len(inds); j < cnt && allFlags != 0; j++ {
-		i := inds[j]
-		if ranFlag, e := pat.Rules[i].ApplyRule(run, allFlags); e != nil {
-			err = e
-		} else if ranFlag != 0 {
-			didSomething := (rw.sets > sets)
-			sets = rw.sets
-			// if we ran a prefix or a post fix rule and it did something, we are done.
-			if didSomething && ranFlag != Infix {
-				break
-			}
-			// otherwise, if an infix rule did something
-			// check the other kinds of rules
-			// ditto if we dont expect the pattern to return anything:
-			// in that case we just want to do the first of each rule type.
-			if didSomething || len(rw.watch) == 0 {
-				allFlags = allFlags &^ ranFlag
+	var allFlags rt.Flags
+	if rules, e := run.GetRules(pat.Name, &allFlags); e != nil {
+		err = e
+	} else {
+		for i, cnt := 0, len(rules); i < cnt && allFlags != 0; i++ {
+			if ranFlag, e := safe.ApplyRule(run, rules[i], allFlags); e != nil {
+				err = e
+			} else if ranFlag != 0 {
+				didSomething := (rw.sets > sets)
+				sets = rw.sets
+				// if we ran a prefix or a post fix rule and it did something, we are done.
+				if didSomething && ranFlag != rt.Infix {
+					break
+				}
+				// otherwise, if an infix rule did something
+				// check the other kinds of rules
+				// ditto if we dont expect the pattern to return anything:
+				// in that case we just want to do the first of each rule type.
+				if didSomething || len(rw.watch) == 0 {
+					allFlags = allFlags &^ ranFlag
+				}
 			}
 		}
 	}

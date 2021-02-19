@@ -1,9 +1,11 @@
 package pattern
 
+import . "git.sr.ht/~ionous/iffy/rt"
+
 // previously we matched the rules, and then ran them.
 // now: they are sorted first, and then matched so rules can affect each other.
 // FIX: presort everything in the assembler?
-func sortRules(rules []*Rule) (ret []int, retFlags Flags) {
+func SortRules(rules []Rule) (ret []int, retFlags Flags) {
 	cnt := len(rules)
 	var pre, post []int
 	in := make([]int, 0, cnt)

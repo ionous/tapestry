@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -231,22 +232,21 @@ func WritePattern(asm *Assembler, pat *pattern.Pattern) (err error) {
 			}
 		}
 		//
-		for _, rule := range pat.Rules {
-			var name *string  // none of the rules have names right now.
+		inds, _ := pattern.SortRules(pat.Rules)
+		for _, j := range inds {
+			rule := pat.Rules[j]
 			var domain string // domain doesnt come through ephemera; hack it for now
 			var target string // targets are just for events
+			name := rule.Name // only tests rules have names right now.
 			if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
 				if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
 					domain = yikes.Name
 				}
 			}
-			h := pattern.Handler{
-				Filter:  rule.Filter,
-				Execute: rule.Execute,
-			}
-			if prog, e := asm.EncodeValue(r.ValueOf(&h)); e != nil {
+			handler := rt.Handler{Filter: rule.Filter, Exe: rule.Execute}
+			if prog, e := asm.EncodeValue(r.ValueOf(&handler)); e != nil {
 				err = errutil.Append(err, e)
-			} else if e := asm.WriteRule(name, pat.Name, domain, target, rule.Flags, prog); e != nil {
+			} else if e := asm.WriteRule(pat.Name, target, domain, rule.GetFlags(), prog, name); e != nil {
 				err = errutil.Append(err, e)
 			}
 		}
@@ -273,12 +273,12 @@ func buildPatternRules(asm *Assembler, patterns patternCache) (ret []*pattern.Pa
 				}
 			}
 			if err == nil {
-				rulePtr := new(pattern.Rule)
+				var rule rt.Rule
 				dec := gob.NewDecoder(bytes.NewBuffer(prog))
-				if e := dec.Decode(rulePtr); e != nil {
+				if e := dec.Decode(&rule); e != nil {
 					err = e
 				} else {
-					curr.Rules = append(curr.Rules, rulePtr)
+					curr.Rules = append(curr.Rules, rule)
 				}
 			}
 			return

@@ -20,6 +20,9 @@ func (PanicRuntime) GetEvalByName(string, interface{}) error {
 func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {
 	panic("Runtime panic")
 }
+func (PanicRuntime) GetRules(string, *rt.Flags) ([]rt.Rule, error) {
+	panic("Runtime panic")
+}
 func (PanicRuntime) RelateTo(a, b, relation string) error {
 	panic("Runtime panic")
 }
