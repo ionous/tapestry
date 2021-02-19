@@ -20,24 +20,25 @@ type Fields struct {
 	activeDomains,
 	activeNouns,
 	activeNounList,
-	valueOf,
-	progBytes,
-	countOf,
 	ancestorsOf,
-	kindOf,
-	typeOf,
-	fieldsFor,
-	traitsFor,
 	aspectOf,
+	//countOf,
+	fieldsFor,
+	isLike,
+	kindOf,
 	nameOf,
 	objOf,
-	isLike,
-	relativesOf,
+	progBytes,
 	reciprocalOf,
 	relateTo,
 	relativeKinds,
+	relativesOf,
 	rulesFor,
-	updatePairs *sql.Stmt
+	startOf,
+	traitsFor,
+	typeOf,
+	updatePairs,
+	valueOf *sql.Stmt
 }
 
 func NewFields(db *sql.DB) (ret *Fields, err error) {
@@ -60,51 +61,30 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 			join run_domain rd 
 			where instr(mk.kind || ',' || mk.path || ',', ?|| ',')  
 			and	rd.active and instr(mn.noun, '#' || rd.domain || '::') = 1`),
-		valueOf: ps.Prep(db,
-			`select value, type
-				from run_value 
-				where noun=? and field=? 
-				order by tier asc nulls last limit 1`),
-		progBytes: ps.Prep(db,
-			// performs case preferred matching
-			`select bytes 
-				from mdl_prog
-				where UPPER(name) = UPPER(?1)
-				and type = ?2
-				order by (name != ?1)
-				limit 1`),
-		// countOf: ps.Prep(db,
-		// 	`select count(), 'bool' from run_noun where noun=?`),
 		ancestorsOf: ps.Prep(db,
 			`select kind || ( case path when '' then ('') else (',' || path) end ) as path
 				from mdl_noun mn 
 				join mdl_kind mk 
 					using (kind)
 				where noun=?`),
-		kindOf: ps.Prep(db,
-			`select kind
-				from mdl_noun 
-				where noun=?`),
-		typeOf: ps.Prep(db,
-			`select case 
-				when ( select 1 from mdl_aspect where aspect = ?1 ) then '$aspect'
-				else ( select kind || ( case path when '' then ('') else (',' || path) end ) from mdl_kind where kind = ?1 )
-			end as 'role'`),
-		fieldsFor: ps.Prep(db,
-			`select field, type, affinity 
-			from mdl_field
-			where kind=?
-			order by rowid`),
-		traitsFor: ps.Prep(db,
-			`select trait
-				from mdl_aspect 
-				where aspect=?
-				order by rank`),
 		// return the name of the aspect of the specified trait, or the empty string.
 		aspectOf: ps.Prep(db,
 			`select aspect
 				from mdl_noun_traits 
 				where (noun||'.'||trait)=?`),
+		// countOf: ps.Prep(db,
+		// 	`select count(), 'bool' from run_noun where noun=?`),
+		fieldsFor: ps.Prep(db,
+			`select field, type, affinity 
+			from mdl_field
+			where kind=?
+			order by rowid`),
+		isLike: ps.Prep(db,
+			`select ? like ?`),
+		kindOf: ps.Prep(db,
+			`select kind
+				from mdl_noun 
+				where noun=?`),
 		// given an id, find the name
 		nameOf: ps.Prep(db,
 			`select name
@@ -124,13 +104,37 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 				where UPPER(name)=UPPER(?)
 				order by rank
 				limit 1`),
+		progBytes: ps.Prep(db,
+			// performs case preferred matching
+			`select bytes 
+				from mdl_prog
+				where UPPER(name) = UPPER(?1)
+				and type = ?2
+				order by (name != ?1)
+				limit 1`),
+		reciprocalOf: ps.Prep(db,
+			`select noun from run_pair where active and otherNoun=?1 and relation=?2`),
 		// use the sqlite like function to match
-		isLike: ps.Prep(db,
-			`select ? like ?`),
+		relateTo: ps.Prep(db,
+			`with next as (
+				select ?1 as noun, ?2 as otherNoun, ?3 as relation, ?4 as cardinality
+			)
+			insert or replace into run_pair
+			select prev.noun, relation, prev.otherNoun, 0
+			from next
+			join run_pair prev 
+				using (relation)
+			where  ((prev.noun = next.noun and next.cardinality glob '*_one') or
+					(prev.otherNoun = next.otherNoun and next.cardinality glob 'one_*')) 
+			union all 
+			select next.noun, relation, next.otherNoun, 1
+			from next`),
 		relativeKinds: ps.Prep(db,
 			`select mr.kind, mr.otherKind, mr.cardinality
 				from mdl_rel mr 
 				where relation=?`),
+		relativesOf: ps.Prep(db,
+			`select otherNoun from run_pair where active and noun=?1 and relation=?2`),
 		rulesFor: ps.Prep(db,
 			`select 
 					coalesce(mr.name, 'rule' || mr.rowid) as name,
@@ -142,6 +146,17 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 						(select 1 from run_domain rd 
 						 where (rd.active and (rd.domain = mr.domain))))
 					order by phase, mr.rowid`),
+		traitsFor: ps.Prep(db,
+			`select trait
+				from mdl_aspect 
+				where aspect=?
+				order by rank`),
+		typeOf: ps.Prep(db,
+			`select case 
+				when ( select 1 from mdl_aspect where aspect = ?1 ) then '$aspect'
+				else ( select kind || ( case path when '' then ('') else (',' || path) end ) from mdl_kind where kind = ?1 )
+			end as 'role'`),
+
 		// instead of separately deleting old pairs and inserting new ones;
 		// we insert and replace active ones.
 		updatePairs: ps.Prep(db,
@@ -162,24 +177,11 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 			union all
 			select next.noun, relation, next.otherNoun, 1 
 			from next`),
-		relativesOf: ps.Prep(db,
-			`select otherNoun from run_pair where active and noun=?1 and relation=?2`),
-		reciprocalOf: ps.Prep(db,
-			`select noun from run_pair where active and otherNoun=?1 and relation=?2`),
-		relateTo: ps.Prep(db,
-			`with next as (
-				select ?1 as noun, ?2 as otherNoun, ?3 as relation, ?4 as cardinality
-			)
-			insert or replace into run_pair
-			select prev.noun, relation, prev.otherNoun, 0
-			from next
-			join run_pair prev 
-				using (relation)
-			where  ((prev.noun = next.noun and next.cardinality glob '*_one') or
-					(prev.otherNoun = next.otherNoun and next.cardinality glob 'one_*')) 
-			union all 
-			select next.noun, relation, next.otherNoun, 1
-			from next`),
+		valueOf: ps.Prep(db,
+			`select value, type
+				from run_value 
+				where noun=? and field=? 
+				order by tier asc nulls last limit 1`),
 	}
 	if e := ps.Err(); e != nil {
 		err = e
