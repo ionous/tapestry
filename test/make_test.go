@@ -18,17 +18,17 @@ func TestMake(t *testing.T) {
 		testutil.Kinds
 	}
 	testTime.Kinds.AddKinds((*GroupSettings)(nil))
-	op := &core.Make{Name: "GroupSettings",
+	op := &core.Make{Name: "group_settings",
 		Arguments: &core.Arguments{[]*core.Argument{
-			{"ObjectsWithArticles", &core.FromBool{&core.Bool{true}}},
+			{"objects_with_articles", &core.FromBool{&core.Bool{true}}},
 		}}}
 	if obj, e := op.GetRecord(&testTime); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(g.RecordToValue(obj.Record()), map[string]interface{}{
-		"Name":         "",
-		"Label":        "",
-		"Innumerable":  "NotInnumerable",
-		"GroupOptions": "ObjectsWithArticles",
+		"name":          "",
+		"label":         "",
+		"innumerable":   "not_innumerable",
+		"group_options": "objects_with_articles",
 	}); len(diff) != 0 {
 		t.Fatal(diff)
 	}

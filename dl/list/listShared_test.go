@@ -14,7 +14,7 @@ func newListTime(src []string, p testutil.PatternMap) (ret rt.Runtime, vals *g.R
 	var kinds testutil.Kinds
 	type Values struct{ Source []string }
 	kinds.AddKinds((*Values)(nil))
-	values := kinds.New("Values")
+	values := kinds.New("values")
 	lt := testutil.Runtime{
 		Kinds:      &kinds,
 		PatternMap: p,
@@ -22,7 +22,7 @@ func newListTime(src []string, p testutil.PatternMap) (ret rt.Runtime, vals *g.R
 			g.RecordOf(values),
 		},
 	}
-	if e := values.SetNamedField("Source", g.StringsOf(src)); e != nil {
+	if e := values.SetNamedField("source", g.StringsOf(src)); e != nil {
 		err = e
 	} else {
 		ret = &lt

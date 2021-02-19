@@ -12,40 +12,32 @@ import (
 // The postfix rules run until one decides to end the pattern.
 type Flags int
 
-func (f Flags) String() (ret string) {
+func (f Flags) Ordinal() (ret int) {
 	switch f {
-	case 0:
-		ret = "action"
-	case Infix:
-		ret = "target"
 	case Prefix:
-		ret = "capture"
+		ret = 1
+	case Infix:
+		ret = 2
 	case Postfix:
-		ret = "bubble"
+		ret = 3
+	case After:
+		ret = 4
 	}
 	return
 }
 
-func MakeFlags(s string) (ret Flags) {
-	switch s {
-	case "action":
-		ret = 0
-	case "target":
-		ret = Infix
-	case "capture":
-		ret = Prefix
-	case "bubble":
-		ret = Postfix
-	default:
-		panic("unknown flag")
+func MakeFlags(i int) (ret Flags) {
+	if i > 0 {
+		ret = 1 << (i - 1)
 	}
 	return
 }
 
 const (
-	Infix   Flags = (1 << iota) // keeps the rule at the same relative location
-	Prefix                      // all prefix rules get sorted towards the front of the list
+	Prefix  Flags = (1 << iota) // all prefix rules get sorted towards the front of the list
+	Infix                       // keeps the rule at the same relative location
 	Postfix                     // all postfix rules get sorted towards the end of the list
+	After
 )
 
 // Rule triggers a series of statements when its filters are satisfied.

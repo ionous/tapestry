@@ -42,8 +42,7 @@ func modelTemplate() string {
 		"/* relation and constraint between two kinds of nouns */\n" +
 		"create table mdl_rel( relation text, kind text, cardinality text, otherKind text, primary key( relation ));\n" +
 		"/* note: rule name is unique, but optional */\n" +
-		"create table mdl_rule( name text unique, pattern text, domain text, target text, phase text, prog blob,\n" +
-		"\t\tcheck (phase in ('action','target','capture','bubble') ));\n" +
+		"create table mdl_rule( name text unique, pattern text, domain text, target text, phase text, prog blob, role int);\n" +
 		"/* documentation for pieces of the model: kinds, nouns, fields, etc. */\n" +
 		"create table mdl_spec( type text, name text, spec text, primary key( type, name ));\n" +
 		"/* initial values for various noun properties. \n" +

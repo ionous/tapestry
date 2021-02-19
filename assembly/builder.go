@@ -196,51 +196,58 @@ func buildPatternTables(asm *Assembler, pats []*pattern.Pattern) (err error) {
 		err = e
 	} else {
 		for _, pat := range pats {
-			//
-			if e := asm.WriteAncestor(pat.Name, "patterns"); e != nil {
+			if e := WritePattern(asm, pat); e != nil {
 				err = errutil.Append(err, e)
-			} else if e := asm.WritePattern(pat.Name, pat.Return, pat.Labels); e != nil {
+			}
+		}
+	}
+	return
+}
+
+//
+func WritePattern(asm *Assembler, pat *pattern.Pattern) (err error) {
+	if e := asm.WriteAncestor(pat.Name, "patterns"); e != nil {
+		err = e
+	} else if e := asm.WritePattern(pat.Name, pat.Return, pat.Labels); e != nil {
+		err = e
+	} else {
+		localOfs := len(pat.Labels)
+		// write fields exactly as if the pattern was a kind
+		for _, prop := range pat.Fields {
+			if e := asm.WriteField(pat.Name, prop.Name, prop.Type, prop.Affinity.String()); e != nil {
 				err = errutil.Append(err, e)
-			} else {
-				localOfs := len(pat.Labels)
-				// write fields exactly as if the pattern was a kind
-				for _, prop := range pat.Fields {
-					if e := asm.WriteField(pat.Name, prop.Name, prop.Type, prop.Affinity.String()); e != nil {
-						err = errutil.Append(err, e)
-					}
+			}
+		}
+		// write initialization to mdl_start
+		for i, val := range pat.Locals {
+			if val != nil { //not every local has an initial value
+				f := pat.Fields[localOfs+i]
+				// fix: write encoded value... which we just recently decoded... :/
+				if b, e := asm.EncodeValue(r.ValueOf(val)); e != nil {
+					err = errutil.Append(err, e)
+				} else if e := asm.WriteStart(pat.Name, f.Name, b); e != nil {
+					err = errutil.Append(err, e)
 				}
-				// write initialization to mdl_start
-				for i, val := range pat.Locals {
-					if val != nil { //not every local has an initial value
-						f := pat.Fields[localOfs+i]
-						// fix: write encoded value... which we just recently decoded... :/
-						if b, e := asm.EncodeValue(r.ValueOf(val)); e != nil {
-							err = errutil.Append(err, e)
-						} else if e := asm.WriteStart(pat.Name, f.Name, b); e != nil {
-							err = errutil.Append(err, e)
-						}
-					}
+			}
+		}
+		//
+		for _, rule := range pat.Rules {
+			var name *string  // none of the rules have names right now.
+			var domain string // domain doesnt come through ephemera; hack it for now
+			var target string // targets are just for events
+			if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
+				if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
+					domain = yikes.Name
 				}
-				//
-				for _, rule := range pat.Rules {
-					var name *string  // none of the rules have names right now.
-					var domain string // domain doesnt come through ephemera; hack it for now
-					var target string // targets are just for events
-					if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
-						if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
-							domain = yikes.Name
-						}
-					}
-					h := pattern.Handler{
-						Filter:  rule.Filter,
-						Execute: rule.Execute,
-					}
-					if prog, e := asm.EncodeValue(r.ValueOf(&h)); e != nil {
-						err = errutil.Append(err, e)
-					} else if e := asm.WriteRule(name, pat.Name, domain, target, rule.Flags, prog); e != nil {
-						err = errutil.Append(err, e)
-					}
-				}
+			}
+			h := pattern.Handler{
+				Filter:  rule.Filter,
+				Execute: rule.Execute,
+			}
+			if prog, e := asm.EncodeValue(r.ValueOf(&h)); e != nil {
+				err = errutil.Append(err, e)
+			} else if e := asm.WriteRule(name, pat.Name, domain, target, rule.Flags, prog); e != nil {
+				err = errutil.Append(err, e)
 			}
 		}
 	}

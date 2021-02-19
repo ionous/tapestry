@@ -10,28 +10,33 @@ import (
 )
 
 var runGroupTogther = list.Map{
-	FromList:     &core.Var{Name: "Objects"},
-	ToList:       "Settings",
-	UsingPattern: "assignGrouping"}
+	FromList:     &core.Var{Name: "objects"},
+	ToList:       "settings",
+	UsingPattern: "assign_grouping"}
+
+type AssignGrouping struct {
+	In  string
+	Out GroupSettings
+}
 
 // from a list of object names, build a list of group settings
 var assignGrouping = pattern.Pattern{
-	Name:   "assignGrouping",
+	Name:   "assign_grouping",
 	Return: "out",
 	Labels: []string{"in"},
 	Fields: []g.Field{
 		{Name: "in", Affinity: affine.Text},
-		{Name: "out", Affinity: affine.Record, Type: "GroupSettings"},
+		{Name: "out", Affinity: affine.Record, Type: "group_settings"},
 	},
 	Rules: []*pattern.Rule{
 		{Execute: &core.Activity{[]rt.Execute{
-			Put("out", "Name", V("in")),
+			Put("out", "name", V("in")),
 			&core.ChooseAction{
 				If: &core.Matches{
 					Text:    &core.Var{Name: "in"},
 					Pattern: "^thing"},
 				Do: core.MakeActivity(
-					Put("out", "Label", &core.FromText{&core.Text{"thingies"}}),
+					Put("out", "label", &core.FromText{&core.Text{"thingies"}}),
 				),
 			},
 		}}},

@@ -92,7 +92,8 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 		fieldsFor: ps.Prep(db,
 			`select field, type, affinity 
 			from mdl_field
-			where kind=?`),
+			where kind=?
+			order by rowid`),
 		traitsFor: ps.Prep(db,
 			`select trait
 				from mdl_aspect 

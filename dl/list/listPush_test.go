@@ -54,9 +54,9 @@ func push(src []string, front bool, ins []string) (ret string, err error) {
 		err = e
 	} else {
 		front := list.Edge(front)
-		if e := safe.Run(run, &list.PutEdge{Into: &list.IntoTxtList{core.Variable{Str: "Source"}}, From: FromTs(ins), AtEdge: front}); e != nil {
+		if e := safe.Run(run, &list.PutEdge{Into: &list.IntoTxtList{core.Variable{Str: "source"}}, From: FromTs(ins), AtEdge: front}); e != nil {
 			err = e
-		} else if strs, e := vals.GetNamedField("Source"); e != nil {
+		} else if strs, e := vals.GetNamedField("source"); e != nil {
 			err = e
 		} else {
 			strs := strs.Strings()

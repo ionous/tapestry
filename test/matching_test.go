@@ -13,20 +13,20 @@ import (
 func TestMatching(t *testing.T) {
 	var kinds testutil.Kinds
 	type Things struct{}
-	kinds.AddKinds((*Things)(nil), (*GroupSettings)(nil))
-	k := kinds.Kind("GroupSettings")
+	kinds.AddKinds((*Things)(nil), (*GroupSettings)(nil), (*MatchGroups)(nil))
+	k := kinds.Kind("group_settings")
 
 	//
 	lt := testutil.Runtime{
 		Kinds: &kinds,
 		PatternMap: testutil.PatternMap{
-			"matchGroups": &matchGroups,
+			"match_groups": &matchGroups,
 		},
 	}
 
 	a, b := k.NewRecord(), k.NewRecord()
 	runMatching := &pattern.Determine{
-		Pattern: "matchGroups", Arguments: core.Args(
+		Pattern: "match_groups", Arguments: core.Args(
 			&core.FromValue{g.RecordOf(a)},
 			&core.FromValue{g.RecordOf(b)},
 		)}
@@ -40,7 +40,7 @@ func TestMatching(t *testing.T) {
 	}
 	// different labels shouldnt match
 	{
-		if e := test.SetRecord(a, "Label", "beep"); e != nil {
+		if e := test.SetRecord(a, "label", "beep"); e != nil {
 			t.Fatal(e)
 		} else if ok, e := runMatching.GetBool(&lt); e != nil {
 			t.Fatal(e)
@@ -50,7 +50,7 @@ func TestMatching(t *testing.T) {
 	}
 	// same labels should match
 	{
-		if e := test.SetRecord(b, "Label", "beep"); e != nil {
+		if e := test.SetRecord(b, "label", "beep"); e != nil {
 			t.Fatal(e)
 		} else if ok, e := runMatching.GetBool(&lt); e != nil {
 			t.Fatal(e)
@@ -60,13 +60,13 @@ func TestMatching(t *testing.T) {
 	}
 	// many fields should match
 	{
-		if e := test.SetRecord(a, "Innumerable", "IsInnumerable"); e != nil {
+		if e := test.SetRecord(a, "innumerable", "is_innumerable"); e != nil {
 			t.Fatal(e)
-		} else if e := test.SetRecord(b, "IsInnumerable", true); e != nil {
+		} else if e := test.SetRecord(b, "is_innumerable", true); e != nil {
 			t.Fatal(e)
-		} else if e := test.SetRecord(a, "GroupOptions", "ObjectsWithArticles"); e != nil {
+		} else if e := test.SetRecord(a, "group_options", "objects_with_articles"); e != nil {
 			t.Fatal(e)
-		} else if e := test.SetRecord(b, "GroupOptions", "ObjectsWithArticles"); e != nil {
+		} else if e := test.SetRecord(b, "group_options", "objects_with_articles"); e != nil {
 			t.Fatal(e)
 		} else if ok, e := runMatching.GetBool(&lt); e != nil {
 			t.Fatal(e)
@@ -76,7 +76,7 @@ func TestMatching(t *testing.T) {
 	}
 	// names shouldnt be involved
 	{
-		if e := test.SetRecord(a, "Name", "hola"); e != nil {
+		if e := test.SetRecord(a, "name", "hola"); e != nil {
 			t.Fatal(e)
 		} else if ok, e := runMatching.GetBool(&lt); e != nil {
 			t.Fatal(e)

@@ -37,11 +37,15 @@ func DetermineSay(i int) *pattern.Determine {
   }
 }
 
+type SayMe struct {
+  Num float64
+}
+
 var SayPattern = pattern.Pattern{
   Name:   "say_me",
   Labels: []string{"num"},
   Fields: []g.Field{
-    {Name: "num", Affinity: affine.Number},
+    {Name: "num", Affinity: "number", Type: ""},
   },
   Rules: []*pattern.Rule{
     {Execute: SayIt("Not between 1 and 3.")},

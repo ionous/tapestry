@@ -59,7 +59,7 @@ func slice(start, end int, src []string) (ret string) {
 	if run, _, e := newListTime(src, nil); e != nil {
 		ret = e.Error()
 	} else {
-		ret = joinText(run, &list.Slice{&core.Var{Name: "Source"}, I(start), I(end)})
+		ret = joinText(run, &list.Slice{&core.Var{Name: "source"}, I(start), I(end)})
 	}
 	return
 }

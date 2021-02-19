@@ -11,9 +11,13 @@ import (
 // http://learnyouahaskell.com/syntax-in-functions
 func ExampleSayMe() {
 	// rules are run in reverse order.
-	run := testutil.Runtime{PatternMap: testutil.PatternMap{
-		"say_me": &debug.SayPattern,
-	}}
+	var kinds testutil.Kinds
+	kinds.AddKinds((*debug.SayMe)(nil))
+	run := testutil.Runtime{
+		Kinds: &kinds,
+		PatternMap: testutil.PatternMap{
+			"say_me": &debug.SayPattern,
+		}}
 	// say 4 numbers
 	for i := 1; i <= 4; i++ {
 		fmt.Printf(`say_me %d = "`, i)

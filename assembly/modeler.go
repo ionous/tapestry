@@ -189,7 +189,7 @@ func (m *Assembler) WriteRule(name *string, pattern, domain, target string, flag
 		n.Valid = true
 		n.String = *name
 	}
-	_, e := m.cache.Exec(mdl_rule, n, pattern, domain, target, flags.String(), prog)
+	_, e := m.cache.Exec(mdl_rule, n, pattern, domain, target, flags.Ordinal(), prog)
 	return e
 }
 

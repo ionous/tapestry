@@ -31,8 +31,7 @@ create table mdl_pat( name text, labels text, result text, primary key( name ) )
 /* relation and constraint between two kinds of nouns */
 create table mdl_rel( relation text, kind text, cardinality text, otherKind text, primary key( relation ));
 /* note: rule name is unique, but optional */
-create table mdl_rule( name text unique, pattern text, domain text, target text, phase text, prog blob,
-		check (phase in ('action','target','capture','bubble') ));
+create table mdl_rule( name text unique, pattern text, domain text, target text, phase text, prog blob, role int);
 /* documentation for pieces of the model: kinds, nouns, fields, etc. */
 create table mdl_spec( type text, name text, spec text, primary key( type, name ));
 /* initial values for various noun properties. 

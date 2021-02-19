@@ -11,27 +11,27 @@ func TestKindsForType(t *testing.T) {
 	var ks testutil.Kinds
 	ks.AddKinds((*GroupCollation)(nil))
 	if diff := pretty.Diff(ks.Fields, testutil.FieldMap{
-		"Innumerable": {
-			{"NotInnumerable", "bool", "trait"},
-			{"IsInnumerable", "bool", "trait"},
+		"innumerable": {
+			{"not_innumerable", "bool", "trait"},
+			{"is_innumerable", "bool", "trait"},
 		},
-		"GroupOptions": {
-			{"WithoutObjects", "bool", "trait"},
-			{"ObjectsWithArticles", "bool", "trait"},
-			{"ObjectsWithoutArticles", "bool", "trait"},
+		"group_options": {
+			{"without_objects", "bool", "trait"},
+			{"objects_with_articles", "bool", "trait"},
+			{"objects_without_articles", "bool", "trait"},
 		},
-		"GroupSettings": {
-			{"Name", "text", "string"},
-			{"Label", "text", "string"},
-			{"Innumerable", "text", "aspect"},
-			{"GroupOptions", "text", "aspect"},
+		"group_settings": {
+			{"name", "text", "string"},
+			{"label", "text", "string"},
+			{"innumerable", "text", "aspect"},
+			{"group_options", "text", "aspect"},
 		},
-		"GroupedObjects": {
-			{"Settings", "record", "GroupSettings"},
-			{"Objects", "text_list", "string"},
+		"grouped_objects": {
+			{"settings", "record", "group_settings"},
+			{"objects", "text_list", "string"},
 		},
-		"GroupCollation": {
-			{"Groups", "record_list", "GroupedObjects"},
+		"group_collation": {
+			{"groups", "record_list", "grouped_objects"},
 		},
 	}); len(diff) > 0 {
 		t.Fatal(pretty.Println(ks.Fields))

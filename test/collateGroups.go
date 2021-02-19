@@ -10,20 +10,29 @@ import (
 )
 
 var runCollateGroups = list.Reduce{
-	FromList:     V("Settings"),
-	IntoValue:    "Collation",
-	UsingPattern: "collateGroups"}
+	FromList:     V("settings"),
+	IntoValue:    "collation",
+	UsingPattern: "collate_groups"}
+
+type CollateGroups struct {
+	Settings  GroupSettings
+	Collation GroupCollation
+	Idx       float64
+	Groups    []GroupedObjects
+	Group     GroupedObjects
+	Names     []string
+}
 
 var collateGroups = pattern.Pattern{
-	Name:   "collateGroups",
+	Name:   "collate_groups",
 	Labels: []string{"settings", "collation"},
 	Return: "collation",
 	Fields: []g.Field{
-		{Name: "settings", Affinity: affine.Record, Type: "GroupSettings"},
-		{Name: "collation", Affinity: affine.Record, Type: "GroupCollation"},
+		{Name: "settings", Affinity: affine.Record, Type: "group_settings"},
+		{Name: "collation", Affinity: affine.Record, Type: "group_collation"},
 		{Name: "idx", Affinity: affine.Number},
-		{Name: "groups", Affinity: affine.RecordList, Type: "GroupedObjects"},
-		{Name: "group", Affinity: affine.Record, Type: "GroupedObjects"},
+		{Name: "groups", Affinity: affine.RecordList, Type: "grouped_objects"},
+		{Name: "group", Affinity: affine.Record, Type: "grouped_objects"},
 		{Name: "names", Affinity: affine.TextList},
 	},
 	Rules: []*pattern.Rule{
@@ -32,7 +41,7 @@ var collateGroups = pattern.Pattern{
 			&core.Assign{
 				core.Variable{Str: "groups"},
 				// &core.Unpack{V("collation"), "Groups"},
-				&core.GetAtField{From: &core.FromVar{N("collation")}, Field: "Groups"},
+				&core.GetAtField{From: &core.FromVar{N("collation")}, Field: "groups"},
 			},
 			&list.Each{
 				List: V("groups"),
@@ -40,10 +49,10 @@ var collateGroups = pattern.Pattern{
 				Do: core.MakeActivity(
 					&core.ChooseAction{
 						If: &pattern.Determine{
-							Pattern: "matchGroups",
+							Pattern: "match_groups",
 							Arguments: core.Args(
 								V("settings"),
-								&core.GetAtField{From: &core.FromVar{N("el")}, Field: "Settings"}),
+								&core.GetAtField{From: &core.FromVar{N("el")}, Field: "settings"}),
 							// &core.Unpack{V("el"), "Settings"}),
 						},
 						Do: core.MakeActivity(
@@ -67,11 +76,11 @@ var collateGroups = pattern.Pattern{
 				Do: core.MakeActivity(
 					&list.PutEdge{
 						Into: &list.IntoTxtList{N("names")},
-						// From: &core.Unpack{V("settings"), "Name"},
-						From: &core.GetAtField{From: &core.FromVar{N("settings")}, Field: "Name"},
+						// From: &core.Unpack{V("settings"), "name"},
+						From: &core.GetAtField{From: &core.FromVar{N("settings")}, Field: "name"},
 					},
-					Put("group", "Objects", V("names")),
-					Put("group", "Settings", V("settings")),
+					Put("group", "objects", V("names")),
+					Put("group", "settings", V("settings")),
 					&list.PutEdge{Into: &list.IntoRecList{N("groups")}, From: V("group")},
 				), // end true
 				// found a matching group?
@@ -83,19 +92,19 @@ var collateGroups = pattern.Pattern{
 					&core.Assign{
 						N("names"),
 						// &core.Unpack{V("group"), "Objects"},
-						&core.GetAtField{From: &core.FromVar{N("group")}, Field: "Objects"},
+						&core.GetAtField{From: &core.FromVar{N("group")}, Field: "objects"},
 					},
 					&list.PutEdge{
 						Into: &list.IntoTxtList{N("names")},
-						// From: &core.Unpack{V("settings"), "Name"},
-						From: &core.GetAtField{From: &core.FromVar{N("settings")}, Field: "Name"},
+						// From: &core.Unpack{V("settings"), "name"},
+						From: &core.GetAtField{From: &core.FromVar{N("settings")}, Field: "name"},
 					},
-					Put("group", "Objects", V("names")),
+					Put("group", "objects", V("names")),
 					&list.Set{List: "groups", Index: V("idx"), From: V("group")},
 				), // end false
 				},
 			},
-			Put("collation", "Groups", V("groups")),
+			Put("collation", "groups", V("groups")),
 		)},
 	},
 }

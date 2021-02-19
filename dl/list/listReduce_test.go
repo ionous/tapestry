@@ -3,7 +3,6 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
@@ -21,22 +20,25 @@ func TestReduce(t *testing.T) {
 		Fruits  []Fruit
 		Results string
 	}
-
+	type Reduce struct {
+		In  Fruit
+		Out string
+	}
 	var kinds testutil.Kinds
-	kinds.AddKinds((*Fruit)(nil), (*Values)(nil))
-	values := kinds.New("Values")
-	if k, e := kinds.GetKindByName("Fruit"); e != nil {
+	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Reduce)(nil))
+	values := kinds.New("values")
+	if k, e := kinds.GetKindByName("fruit"); e != nil {
 		t.Fatal(e)
 	} else {
 		var fruits []*g.Record
 		for _, f := range []string{"Orange", "Lemon", "Mango", "Banana", "Lime"} {
 			one := k.NewRecord()
-			if e := one.SetNamedField("Name", g.StringOf(f)); e != nil {
+			if e := one.SetNamedField("name", g.StringOf(f)); e != nil {
 				t.Fatal(e)
 			}
 			fruits = append(fruits, one)
 		}
-		if e := values.SetNamedField("Fruits", g.RecordsOf(k.Name(), fruits)); e != nil {
+		if e := values.SetNamedField("fruits", g.RecordsOf(k.Name(), fruits)); e != nil {
 			t.Fatal(e)
 		}
 	}
@@ -52,7 +54,7 @@ func TestReduce(t *testing.T) {
 	}
 	if e := reduce.Execute(&lt); e != nil {
 		t.Fatal(e)
-	} else if res, e := values.GetNamedField("Results"); e != nil {
+	} else if res, e := values.GetNamedField("results"); e != nil {
 		t.Fatal(e)
 	} else {
 		out := res.String()
@@ -66,8 +68,8 @@ func TestReduce(t *testing.T) {
 }
 
 var reduce = list.Reduce{
-	FromList:     &core.FromRecords{&core.Var{"Fruits"}},
-	IntoValue:    "Results",
+	FromList:     &core.FromRecords{&core.Var{"fruits"}},
+	IntoValue:    "results",
 	UsingPattern: "reduce",
 }
 
@@ -76,17 +78,13 @@ var reduceRecords = pattern.Pattern{
 	Name:   "reduce",
 	Return: "out",
 	Labels: []string{"in", "out"},
-	Fields: []g.Field{
-		{Name: "in", Affinity: affine.Record, Type: "Fruit"},
-		{Name: "out", Affinity: affine.Text},
-	},
 	Rules: []*pattern.Rule{
 		&pattern.Rule{
 			Execute: &core.Assign{
 				Var: N("out"),
 				From: &core.FromText{&core.Join{Sep: T(", "), Parts: []rt.TextEval{
 					V("out"),
-					&core.GetAtField{Field: "Name", From: &core.FromVar{N("in")}},
+					&core.GetAtField{Field: "name", From: &core.FromVar{N("in")}},
 				}}},
 			},
 		},

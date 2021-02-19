@@ -5,6 +5,8 @@ import (
 	r "reflect"
 
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/export/tag"
+	"git.sr.ht/~ionous/iffy/lang"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
 )
@@ -78,18 +80,25 @@ func kindsForType(kinds FieldMap, t r.Type) FieldMap {
 		default:
 			panic(errutil.Sprint("unknown kind", k))
 		case r.Bool:
-			a, t = affine.Text, "aspect"
-			// the name of the aspect is the name of the field
-			kinds[f.Name] = []g.Field{
-				// false first.
-				{Name: "Not" + f.Name, Affinity: affine.Bool, Type: "trait"},
-				{Name: "Is" + f.Name, Affinity: affine.Bool, Type: "trait"},
+			tags := tag.ReadTag(f.Tag)
+			if _, ok := tags.Find("bool"); ok {
+				a, t = affine.Bool, k.String()
+			} else {
+				a, t = affine.Text, "aspect"
+				n := lang.Underscore(f.Name)
+				// the name of the aspect is the name of the field
+				kinds[n] = []g.Field{
+					// false first.
+					{Name: "not_" + n, Affinity: affine.Bool, Type: "trait"},
+					{Name: "is_" + n, Affinity: affine.Bool, Type: "trait"},
+				}
 			}
 
 		case r.String:
 			a, t = affine.Text, k.String()
+
 		case r.Struct:
-			a, t = affine.Record, fieldType.Name()
+			a, t = affine.Record, nameOfType(fieldType)
 			kinds = kindsForType(kinds, fieldType)
 
 		case r.Slice:
@@ -100,7 +109,7 @@ func kindsForType(kinds FieldMap, t r.Type) FieldMap {
 			case r.Float64:
 				a, t = affine.NumList, k.String()
 			case r.Struct:
-				a, t = affine.RecordList, elType.Name()
+				a, t = affine.RecordList, nameOfType(elType)
 				kinds = kindsForType(kinds, elType)
 
 			default:
@@ -124,14 +133,21 @@ func kindsForType(kinds FieldMap, t r.Type) FieldMap {
 				if trait == end {
 					break
 				}
-				traits = append(traits, g.Field{Name: trait, Affinity: affine.Bool, Type: "trait"})
+				name := lang.Underscore(trait)
+				traits = append(traits, g.Field{Name: name, Affinity: affine.Bool, Type: "trait"})
 			}
-			aspect := fieldType.Name()
+			aspect := nameOfType(fieldType)
 			kinds[aspect] = traits
 		}
-		fields = append(fields, g.Field{Name: f.Name, Affinity: a, Type: t})
+		name := lang.Underscore(f.Name)
+		fields = append(fields, g.Field{Name: name, Affinity: a, Type: t})
 
 	}
-	kinds[t.Name()] = fields
+	name := nameOfType(t)
+	kinds[name] = fields
 	return kinds
+}
+
+func nameOfType(t r.Type) string {
+	return lang.Underscore(t.Name())
 }

@@ -35,7 +35,7 @@ func popTest(front bool, amt int, src ...string) []string {
 		EraseIndex: list.EraseIndex{
 			Count:   I(1),
 			AtIndex: I(start),
-			From:    &list.FromTxtList{N("Source")},
+			From:    &list.FromTxtList{N("source")},
 		},
 		As: "text",
 		Do: core.MakeActivity(&core.ChooseAction{

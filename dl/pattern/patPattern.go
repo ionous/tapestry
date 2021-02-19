@@ -42,31 +42,35 @@ func (rw *resultsWatcher) SetFieldByName(field string, val g.Value) (err error) 
 
 func (pat *Pattern) Run(run rt.Runtime, args []*core.Argument, aff affine.Affinity) (ret g.Value, err error) {
 	// create a container to hold results of args, locals, and the pending return value
-	rec := g.NewAnonymousRecord(run, pat.Fields)
-	// args run in the scope of their parent context
-	// they write to the record that will become the new context
-	if e := pat.determineArgs(run, rec, args); e != nil {
+	if k, e := run.GetKindByName(pat.Name); e != nil {
 		err = e
 	} else {
-		// initializers ( and the pattern itself ) run in the scope of the pattern
-		// ( with access to all locals and args)
-		watcher := &resultsWatcher{
-			Scope: g.RecordOf(rec),
-			watch: pat.Return,
-		}
-		oldScope := run.ReplaceScope(watcher)
-		// locals ( by definition ) write to the record context
-		if e := pat.initializeLocals(run, rec); e != nil {
-			err = e
-		} else if e := pat.executePattern(run, watcher); e != nil {
-			err = e
-		} else if res, e := pat.getResult(rec, aff); e != nil {
+		rec := k.NewRecord()
+		// args run in the scope of their parent context
+		// they write to the record that will become the new context
+		if e := pat.determineArgs(run, rec, args); e != nil {
 			err = e
 		} else {
-			ret = res
+			// initializers ( and the pattern itself ) run in the scope of the pattern
+			// ( with access to all locals and args)
+			watcher := &resultsWatcher{
+				Scope: g.RecordOf(rec),
+				watch: pat.Return,
+			}
+			oldScope := run.ReplaceScope(watcher)
+			// locals ( by definition ) write to the record context
+			if e := pat.initializeLocals(run, rec); e != nil {
+				err = e
+			} else if e := pat.executePattern(run, watcher); e != nil {
+				err = e
+			} else if res, e := pat.getResult(rec, aff); e != nil {
+				err = e
+			} else {
+				ret = res
+			}
+			//
+			run.ReplaceScope(oldScope)
 		}
-		//
-		run.ReplaceScope(oldScope)
 	}
 	return
 }
@@ -97,7 +101,7 @@ func (pat *Pattern) determineArgs(run rt.Runtime, rec *g.Record, args []*core.Ar
 			}
 		}
 		//
-		field := pat.Fields[fieldIndex]
+		field := rec.Kind().Field(fieldIndex)
 		if val, e := core.GetAssignedValue(run, a.From); e != nil {
 			err = errutil.New("error determining arg", i, n, e)
 			break
@@ -134,8 +138,9 @@ func argIndex(i int) string {
 
 func (pat *Pattern) initializeLocals(run rt.Runtime, rec *g.Record) (err error) {
 	lin, fin, lcnt := 0, len(pat.Labels), len(pat.Locals) // locals start after labels
+	k := rec.Kind()
 	for lin < lcnt {
-		if field, init := pat.Fields[fin], pat.Locals[lin]; init != nil {
+		if field, init := k.Field(fin), pat.Locals[lin]; init != nil {
 			if v, e := init.GetAssignedValue(run); e != nil {
 				err = errutil.New(pat.Name, "error determining local", lin, field.Name, e)
 				break

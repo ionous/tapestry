@@ -8,14 +8,20 @@ import (
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
+type MatchGroups struct {
+	A       GroupSettings
+	B       GroupSettings
+	Matches bool `if:"bool"`
+}
+
 // a pattern for matching groups --
 // we add rules that if things arent equal we return false
 var matchGroups = pattern.Pattern{
-	Name:   "matchGroups",
+	Name:   "match_groups",
 	Labels: []string{"a", "b"},
 	Fields: []g.Field{
-		{Name: "a", Affinity: affine.Record, Type: "GroupSettings"},
-		{Name: "b", Affinity: affine.Record, Type: "GroupSettings"},
+		{Name: "a", Affinity: affine.Record, Type: "group_settings"},
+		{Name: "b", Affinity: affine.Record, Type: "group_settings"},
 		{Name: "matches", Affinity: affine.Bool},
 	},
 	Return: "matches",
@@ -27,12 +33,12 @@ var matchGroups = pattern.Pattern{
 		Filter: &core.CompareText{
 			&core.GetAtField{
 				From:  &core.FromVar{N("a")},
-				Field: "Label",
+				Field: "label",
 			},
 			&core.NotEqualTo{},
 			&core.GetAtField{
 				From:  &core.FromVar{N("b")},
-				Field: "Label",
+				Field: "label",
 			},
 		},
 		Execute: matches(false),
@@ -40,12 +46,12 @@ var matchGroups = pattern.Pattern{
 		Filter: &core.CompareText{
 			&core.GetAtField{
 				From:  &core.FromVar{N("a")},
-				Field: "Innumerable",
+				Field: "innumerable",
 			},
 			&core.NotEqualTo{},
 			&core.GetAtField{
 				From:  &core.FromVar{N("b")},
-				Field: "Innumerable",
+				Field: "innumerable",
 			},
 		},
 		Execute: matches(false),
@@ -53,12 +59,12 @@ var matchGroups = pattern.Pattern{
 		Filter: &core.CompareText{
 			&core.GetAtField{
 				From:  &core.FromVar{N("a")},
-				Field: "GroupOptions",
+				Field: "group_options",
 			},
 			&core.NotEqualTo{},
 			&core.GetAtField{
 				From:  &core.FromVar{N("b")},
-				Field: "GroupOptions",
+				Field: "group_options",
 			},
 		},
 		Execute: matches(false),

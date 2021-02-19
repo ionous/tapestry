@@ -35,7 +35,7 @@ func (km *qnaKinds) GetKindByName(name string) (ret *g.Kind, err error) {
 			err = e
 		} else {
 			if len(role) == 0 {
-				err = errutil.Fmt("no such kind %q", name)
+				err = errutil.New("missing role")
 			} else if role == object.Aspect {
 				if ts, e := km.queryTraits(name); e != nil {
 					err = e
@@ -50,6 +50,9 @@ func (km *qnaKinds) GetKindByName(name string) (ret *g.Kind, err error) {
 				}
 			}
 		}
+	}
+	if err != nil {
+		err = errutil.Fmt("error while getting kind %q, %w", name, err)
 	}
 	return
 }

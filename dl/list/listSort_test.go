@@ -17,10 +17,10 @@ func TestSort(t *testing.T) {
 	var kinds testutil.Kinds
 	kinds.AddKinds((*Things)(nil), (*Values)(nil))
 	objectNames := sliceOf.String("mildred", "apple", "pen", "eve", "Pan")
-	if objs, e := testutil.Objects(kinds.Kind("Things"), objectNames...); e != nil {
+	if objs, e := testutil.Objects(kinds.Kind("things"), objectNames...); e != nil {
 		t.Fatal(e)
 	} else {
-		values := kinds.New("Values", "Objects", objectNames)
+		values := kinds.New("values", "objects", objectNames)
 		lt := testutil.Runtime{
 			Kinds:     &kinds,
 			ObjectMap: objs,
@@ -28,14 +28,16 @@ func TestSort(t *testing.T) {
 				g.RecordOf(values),
 			},
 		}
-		// create a new value of type "Values" containing "Objects:objectNames"
+		// create a new value of type "values" containing "Objects:objectNames"
 		for key, obj := range objs {
-			obj.SetNamedField("Key", g.StringOf(key))
+			if e := obj.SetNamedField("key", g.StringOf(key)); e != nil {
+				t.Fatal(e)
+			}
 		}
 		// sorts in place
 		sorter := &list.SortText{
-			Var:     core.Variable{Str: "Objects"},
-			ByField: &list.SortByField{Name: "Key"},
+			Var:     core.Variable{Str: "objects"},
+			ByField: &list.SortByField{Name: "key"},
 		}
 		if e := safe.Run(&lt, sorter); e != nil {
 			t.Fatal(e)
