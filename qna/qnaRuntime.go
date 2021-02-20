@@ -30,7 +30,6 @@ func NewRuntime(db *sql.DB) *Runner {
 				typeOf:    fields.typeOf,
 				fieldsOf:  fields.fieldsOf,
 				traitsFor: fields.traitsFor,
-				values:    values,
 			},
 			qnaRules: qnaRules{
 				rulesFor: fields.rulesFor,

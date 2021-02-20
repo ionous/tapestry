@@ -1,8 +1,11 @@
 package qna
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
+	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -10,10 +13,11 @@ import (
 )
 
 // normalize optional arguments
-func (run *Runner) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
-	pat := new(pattern.Pattern) // FIX
-	if e := run.GetEvalByName(name, pat); e != nil {
-		err = e
+func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
+	name := lang.Breakcase(pat)
+	var labels, result string // fix? consider a cache for this info?
+	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
+		err = errutil.New("error while querying", pat, e)
 	} else {
 		if k, e := run.GetKindByName(name); e != nil {
 			err = e
@@ -21,15 +25,14 @@ func (run *Runner) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g.
 			rec := k.NewRecord()
 			// args run in the scope of their parent context
 			// they write to the record that will become the new context
-			if e := pattern.DetermineArgs(run, rec, pat.Labels, args); e != nil {
+			labels := strings.Split(labels, ",") //
+			if e := pattern.DetermineArgs(run, rec, labels, args); e != nil {
 				err = e
 			} else {
-				// initializers ( and the pattern itself ) run in the scope of the pattern
-				// ( with access to all locals and args)
-				watcher := pattern.NewResults(rec, pat.Return)
+				// locals can ( and often do ) read arguments.
+				watcher := pattern.NewResults(rec, result)
 				oldScope := run.ReplaceScope(watcher)
-				// locals ( by definition ) write to the record context
-				if e := run.initializeLocals(pat, rec); e != nil {
+				if e := run.initializeLocals(rec); e != nil {
 					err = e
 				} else {
 					var allFlags rt.Flags
@@ -38,7 +41,7 @@ func (run *Runner) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g.
 					} else if e := watcher.ApplyRules(run, rules, allFlags); e != nil {
 						err = e
 					} else {
-						ret, err = safe.UnpackResult(rec, pat.Return, aff)
+						ret, err = safe.UnpackResult(rec, result, aff)
 					}
 				}
 				run.ReplaceScope(oldScope)
@@ -46,26 +49,29 @@ func (run *Runner) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g.
 		}
 	}
 	if err != nil {
-		err = errutil.New("error calling", name, err)
+		err = errutil.New("error calling", pat, err)
 	}
 	return
 }
 
-func (run *Runner) initializeLocals(pat *pattern.Pattern, rec *g.Record) (err error) {
-	lin, fin, lcnt := 0, len(pat.Labels), len(pat.Locals) // locals start after labels
+// by now the initializers for the kind will have been cached....
+func (run *Runner) initializeLocals(rec *g.Record) (err error) {
 	k := rec.Kind()
-	for lin < lcnt {
-		if field, init := k.Field(fin), pat.Locals[lin]; init != nil {
-			if v, e := init.GetAssignedValue(run); e != nil {
-				err = errutil.New(pat.Name, "error determining local", lin, field.Name, e)
-				break
-			} else if e := rec.SetIndexedField(fin, v); e != nil {
-				err = errutil.New(pat.Name, "error setting local", lin, field.Name, e)
-				break
+	if qk, ok := run.qnaKinds.kinds[k.Name()]; !ok {
+		err = errutil.New("unknown kind", k.Name())
+	} else {
+		// run all the initializers
+		for i, init := range qk.init {
+			if init != nil { // not every field necessarily has an initializer
+				if v, e := init.GetAssignedValue(run); e != nil {
+					err = errutil.New("error determining local", k.Name(), k.Field(i).Name, e)
+					break
+				} else if e := rec.SetIndexedField(i, v); e != nil {
+					err = errutil.New("error setting local", k.Name(), k.Field(i).Name, e)
+					break
+				}
 			}
 		}
-		lin++
-		fin++
 	}
 	return
 }

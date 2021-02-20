@@ -29,6 +29,7 @@ type Fields struct {
 	kindOf,
 	nameOf,
 	objOf,
+	patternOf,
 	progBytes,
 	reciprocalOf,
 	relateTo,
@@ -112,6 +113,11 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 				where UPPER(name)=UPPER(?)
 				order by rank
 				limit 1`),
+		patternOf: ps.Prep(db,
+			`select name, labels, result
+			from mdl_pat
+			where UPPER(name) = UPPER(?1)
+			order by name != ?1`),
 		progBytes: ps.Prep(db,
 			// performs case preferred matching
 			`select bytes 

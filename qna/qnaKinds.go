@@ -6,23 +6,30 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
 
 type qnaKinds struct {
-	kinds                       map[string]*g.Kind
-	values                      valueMap  // kind.field => rt.Assignment
+	kinds                       qnaKindMap
 	typeOf, fieldsOf, traitsFor *sql.Stmt // selects field, type for a named kind
 }
 
+type qnaKindMap map[string]qnaKind
+
+type qnaKind struct {
+	kind *g.Kind
+	init []rt.Assignment
+}
+
 // aspects are a specific kind of record where every field is a boolean trait
-func (q *qnaKinds) addKind(n string, k *g.Kind) *g.Kind {
+func (q *qnaKinds) addKind(n string, k *g.Kind, init []rt.Assignment) *g.Kind {
 	if q.kinds == nil {
-		q.kinds = make(map[string]*g.Kind)
+		q.kinds = make(qnaKindMap)
 	}
-	q.kinds[n] = k
+	q.kinds[n] = qnaKind{kind: k, init: init}
 	return k
 }
 
@@ -31,7 +38,7 @@ func (q *qnaKinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	// different cased names might therefore point to the same kind.
 	name = lang.Breakcase(name)
 	if k, ok := q.kinds[name]; ok {
-		ret = k
+		ret = k.kind
 	} else {
 		var n, path string
 		if e := q.typeOf.QueryRow(name).Scan(&n, &path); e != nil {
@@ -40,16 +47,18 @@ func (q *qnaKinds) GetKindByName(name string) (ret *g.Kind, err error) {
 			if len(path) == 0 {
 				err = errutil.New("cant determine typeOf", name)
 			} else if path == object.Aspect {
+				// aspects also have kinds, but they are stored in their own table
 				if ts, e := q.queryTraits(n); e != nil {
 					err = e
 				} else {
-					ret = q.addKind(n, g.NewKind(q, n, ts))
+					// fix: inits would allow the "usually x" to vary per kind
+					ret = q.addKind(n, g.NewKind(q, n, ts), nil)
 				}
 			} else {
-				if ts, e := q.queryFields(n); e != nil {
+				if ts, inits, e := q.queryFields(n); e != nil {
 					err = e
 				} else {
-					ret = q.addKind(n, g.NewKind(q, path, ts))
+					ret = q.addKind(n, g.NewKind(q, path, ts), inits)
 				}
 			}
 		}
@@ -60,7 +69,7 @@ func (q *qnaKinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	return
 }
 
-func (q *qnaKinds) queryFields(kind string) (ret []g.Field, err error) {
+func (q *qnaKinds) queryFields(kind string) (ret []g.Field, retInit []rt.Assignment, err error) {
 	// creates the kind if it needs to.
 	if rows, e := q.fieldsOf.Query(kind); e != nil {
 		err = e
@@ -68,7 +77,6 @@ func (q *qnaKinds) queryFields(kind string) (ret []g.Field, err error) {
 		var field, fieldType string
 		var affinity affine.Affinity
 		var i interface{}
-		var hasInit bool
 		err = tables.ScanAll(rows, func() (err error) {
 			// by default the type and the affinity are the same
 			// ( like reflect, where type and kind are the same for primitive types )
@@ -84,15 +92,16 @@ func (q *qnaKinds) queryFields(kind string) (ret []g.Field, err error) {
 				if val, e := decodeValue(affinity, i); e != nil {
 					err = errutil.New("error while decoding", field, e)
 				} else {
-					key := keyType{kind, field}
-					q.values[key] = val
+					// add room for all earlier fields
+					if retInit == nil {
+						cnt := len(ret) // ; -1 so we can immediately append
+						retInit = make([]rt.Assignment, cnt-1, cnt)
+					}
+					retInit = append(retInit, val)
 				}
-				hasInit = true // for debugging
 			}
 			return
 		}, &field, &fieldType, &affinity, &i)
-		//
-		hasInit = hasInit
 	}
 	return
 }
