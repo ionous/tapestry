@@ -1,16 +1,15 @@
 package rt
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/writer"
 )
 
-// Scope - implements a portion of generic.Value
-// while usually used with record under the hood --
-// it fields the Value interface to show it plays by the same aliasing rules:
-// set generates a copy.
+// Scope - establishes local variables.
+// it abides by the rules of the matching g.Value methods: set copies.
 type Scope interface {
-	// should return g.UnknownVariable or g.UnknownField
+	// return g.Unknown if the named field/variable isnt found.
 	FieldByName(field string) (g.Value, error)
 	SetFieldByName(field string, val g.Value) error
 }
@@ -42,6 +41,7 @@ type Runtime interface {
 	GetKindByName(name string) (*g.Kind, error)
 	//
 	GetRules(name string, pflags *Flags) ([]Rule, error)
+	Call(name string, aff affine.Affinity, args []Arg) (g.Value, error)
 	//
 	RelateTo(a, b, relation string) error
 	RelativesOf(a, relation string) ([]string, error)

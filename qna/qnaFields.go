@@ -62,6 +62,7 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 			join run_domain rd 
 			where instr(mk.kind || ',' || mk.path || ',', ?|| ',')  
 			and	rd.active and instr(mn.noun, '#' || rd.domain || '::') = 1`),
+		// return kind path for the named noun
 		ancestorsOf: ps.Prep(db,
 			`select kind || ( case path when '' then ('') else (',' || path) end ) as path
 				from mdl_noun mn 
@@ -158,12 +159,19 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 				from mdl_aspect 
 				where aspect=?
 				order by rank`),
+		// returns either $aspect, or a kind's ancestry.
+		// it is case-aware for the sake of patterns
 		typeOf: ps.Prep(db,
-			`select case 
-				when ( select 1 from mdl_aspect where aspect = ?1 ) then '$aspect'
-				else ( select kind || ( case path when '' then ('') else (',' || path) end ) from mdl_kind where kind = ?1 )
-			end as 'role'`),
-
+			`select * from (
+				select aspect as name,'$aspect'  as path
+				from mdl_aspect 
+				where rank = 0 and UPPER(aspect) = UPPER(?1)
+				union all 
+				select kind, kind || ( case path when '' then ('') else (',' || path) end ) 
+				from mdl_kind 
+				where UPPER(kind) = UPPER(?1)
+				)
+				order by name != ?1`),
 		// instead of separately deleting old values and inserting new ones;
 		// we insert and replace active ones.
 		updatePairs: ps.Prep(db,

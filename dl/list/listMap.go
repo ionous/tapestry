@@ -3,7 +3,6 @@ package list
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -39,25 +38,21 @@ func (op *Map) remap(run rt.Runtime) (err error) {
 	} else if toList, e := safe.List(run, op.ToList); e != nil {
 		err = errutil.New("to_list:", op.ToList, e)
 	} else {
-		var pat pattern.Pattern
-		if e := run.GetEvalByName(op.UsingPattern.String(), &pat); e != nil {
-			err = e
-		} else {
-			aff := affine.Element(toList.Affinity())
-			for it := g.ListIt(fromList); it.HasNext(); {
-				if inVal, e := it.GetNext(); e != nil {
+		pat := op.UsingPattern.String()
+		aff := affine.Element(toList.Affinity())
+		//
+		for it := g.ListIt(fromList); it.HasNext(); {
+			if inVal, e := it.GetNext(); e != nil {
+				err = e
+				break
+			} else {
+				if newVal, e := run.Call(pat, aff, []rt.Arg{
+					{"$1", &fromVal{inVal}},
+				}); e != nil {
 					err = e
 					break
 				} else {
-					args := []*core.Argument{
-						{"$1", &fromVal{inVal}},
-					}
-					if newVal, e := pat.Run(run, args, aff); e != nil {
-						err = e
-						break
-					} else {
-						toList.Append(newVal)
-					}
+					toList.Append(newVal)
 				}
 			}
 		}

@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/test/testpat"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/ionous/sliceOf"
 	"github.com/kr/pretty"
@@ -21,17 +22,15 @@ func TestGrouping(t *testing.T) {
 	} else {
 		// create a new value of type "values" containing "Objects:objectNames"
 		values := kinds.New("values", "objects", objectNames)
-		lt := struct {
-			testutil.Runtime
-			pattern.Map
-		}{
-			testutil.Runtime{
+		lt := testpat.Runtime{
+			Runtime: testutil.Runtime{
 				Kinds:     &kinds,
 				ObjectMap: objs,
 				Stack: []rt.Scope{
 					g.RecordOf(values),
 				},
-			}, pattern.Map{
+			},
+			Map: pattern.Map{
 				"assign_grouping": &assignGrouping,
 				"collate_groups":  &collateGroups,
 				"match_groups":    &matchGroups,

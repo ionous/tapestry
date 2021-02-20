@@ -63,25 +63,17 @@ func (op *Determine) GetRecordList(run rt.Runtime) (g.Value, error) {
 }
 
 func (op *Determine) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if v, e := op.runPattern(run, aff); e != nil {
-		err = cmdErrorCtx(op, op.Pattern.String(), e)
+	var args []rt.Arg
+	if op.Arguments != nil { // FIX!!!!!!!!
+		for _, a := range op.Arguments.Args {
+			args = append(args, rt.Arg{a.Name, a.From})
+		}
+	}
+	name := op.Pattern.String()
+	if v, e := run.Call(name, aff, args); e != nil {
+		err = cmdErrorCtx(op, name, e)
 	} else {
 		ret = v
-	}
-	return
-}
-
-func (op *Determine) runPattern(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	var pat Pattern
-	if e := run.GetEvalByName(op.Pattern.String(), &pat); e != nil {
-		err = e
-	} else {
-		// normalize optional arguments
-		var args []*core.Argument
-		if op.Arguments != nil {
-			args = op.Arguments.Args
-		}
-		ret, err = pat.Run(run, args, aff)
 	}
 	return
 }

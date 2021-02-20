@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/iffy/test/testpat"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
@@ -20,14 +21,11 @@ func TestFactorial(t *testing.T) {
 	var kinds testutil.Kinds
 	kinds.AddKinds((*Factorial)(nil))
 	// rules are run in reverse order.
-	run := struct {
-		testutil.Runtime
-		pattern.Map
-	}{
-		testutil.Runtime{
+	run := testpat.Runtime{
+		Runtime: testutil.Runtime{
 			Kinds: &kinds,
 		},
-		pattern.Map{
+		Map: pattern.Map{
 			"factorial": &pattern.Pattern{
 				Name:   "factorial",
 				Labels: []string{"num"},

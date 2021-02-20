@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/test/testpat"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 	test "git.sr.ht/~ionous/iffy/test/testutil"
 )
@@ -17,14 +18,12 @@ func TestMatching(t *testing.T) {
 	k := kinds.Kind("group_settings")
 
 	//
-	lt := struct {
-		testutil.Runtime
-		pattern.Map
-	}{
+	lt := testpat.Runtime{
+		pattern.Map{
+			"match_groups": &matchGroups,
+		},
 		testutil.Runtime{
 			Kinds: &kinds,
-		}, pattern.Map{
-			"match_groups": &matchGroups,
 		},
 	}
 

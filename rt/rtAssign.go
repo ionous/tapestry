@@ -12,3 +12,8 @@ type Assignment interface {
 	// write the results of evaluating this into that.
 	GetAssignedValue(Runtime) (g.Value, error)
 }
+
+type Arg struct {
+	Name string
+	From Assignment
+}

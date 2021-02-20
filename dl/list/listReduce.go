@@ -2,7 +2,6 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -39,26 +38,22 @@ func (op *Reduce) reduce(run rt.Runtime) (err error) {
 	} else if outVal, e := safe.CheckVariable(run, op.IntoValue, ""); e != nil {
 		err = e
 	} else {
-		var pat pattern.Pattern
-		if e := run.GetEvalByName(op.UsingPattern.String(), &pat); e != nil {
-			err = e
-		} else {
-			for it := g.ListIt(fromList); it.HasNext(); {
-				if inVal, e := it.GetNext(); e != nil {
+		pat := op.UsingPattern.String()
+		aff := outVal.Affinity()
+		for it := g.ListIt(fromList); it.HasNext(); {
+			if inVal, e := it.GetNext(); e != nil {
+				err = e
+				break
+			} else {
+				if newVal, e := run.Call(pat, aff, []rt.Arg{
+					{"$1", &fromVal{inVal}},
+					{"$2", &fromVal{outVal}},
+				}); e != nil {
 					err = e
 					break
 				} else {
-					args := []*core.Argument{
-						{"$1", &fromVal{inVal}},
-						{"$2", &fromVal{outVal}},
-					}
-					if newVal, e := pat.Run(run, args, outVal.Affinity()); e != nil {
-						err = e
-						break
-					} else {
-						// send it back in for the next time.
-						outVal = newVal
-					}
+					// send it back in for the next time.
+					outVal = newVal
 				}
 			}
 			if err == nil {

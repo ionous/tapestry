@@ -13,7 +13,7 @@ import (
 
 type qnaKinds struct {
 	kinds                       map[string]*g.Kind
-	values                      valueMap  // keyed by kind.field
+	values                      valueMap  // kind.field => rt.Assignment
 	typeOf, fieldsOf, traitsFor *sql.Stmt // selects field, type for a named kind
 }
 
@@ -27,27 +27,29 @@ func (q *qnaKinds) addKind(n string, k *g.Kind) *g.Kind {
 }
 
 func (q *qnaKinds) GetKindByName(name string) (ret *g.Kind, err error) {
+	// fix? breakcase doesnt normalize casing ( mainly b/c of case-aware patterns and kinds )
+	// different cased names might therefore point to the same kind.
 	name = lang.Breakcase(name)
 	if k, ok := q.kinds[name]; ok {
 		ret = k
 	} else {
-		var role string
-		if e := q.typeOf.QueryRow(name).Scan(&role); e != nil {
+		var n, path string
+		if e := q.typeOf.QueryRow(name).Scan(&n, &path); e != nil {
 			err = e
 		} else {
-			if len(role) == 0 {
-				err = errutil.New("missing role")
-			} else if role == object.Aspect {
-				if ts, e := q.queryTraits(name); e != nil {
+			if len(path) == 0 {
+				err = errutil.New("cant determine typeOf", name)
+			} else if path == object.Aspect {
+				if ts, e := q.queryTraits(n); e != nil {
 					err = e
 				} else {
-					ret = q.addKind(name, g.NewKind(q, name, ts))
+					ret = q.addKind(n, g.NewKind(q, n, ts))
 				}
 			} else {
-				if ts, e := q.queryFields(name); e != nil {
+				if ts, e := q.queryFields(n); e != nil {
 					err = e
 				} else {
-					ret = q.addKind(name, g.NewKind(q, role, ts))
+					ret = q.addKind(n, g.NewKind(q, path, ts))
 				}
 			}
 		}
@@ -66,6 +68,7 @@ func (q *qnaKinds) queryFields(kind string) (ret []g.Field, err error) {
 		var field, fieldType string
 		var affinity affine.Affinity
 		var i interface{}
+		var hasInit bool
 		err = tables.ScanAll(rows, func() (err error) {
 			// by default the type and the affinity are the same
 			// ( like reflect, where type and kind are the same for primitive types )
@@ -77,14 +80,19 @@ func (q *qnaKinds) queryFields(kind string) (ret []g.Field, err error) {
 				Affinity: affinity,
 				Type:     fieldType,
 			})
-			if val, e := decodeValue(affinity, i); e != nil {
-				err = errutil.New("error while decoding", field, e)
-			} else {
-				key := keyType{kind, field}
-				q.values[key] = val
+			if i != nil {
+				if val, e := decodeValue(affinity, i); e != nil {
+					err = errutil.New("error while decoding", field, e)
+				} else {
+					key := keyType{kind, field}
+					q.values[key] = val
+				}
+				hasInit = true // for debugging
 			}
 			return
 		}, &field, &fieldType, &affinity, &i)
+		//
+		hasInit = hasInit
 	}
 	return
 }

@@ -143,13 +143,10 @@ func writeSpan(run rt.Runtime, span stringer, op composer.Composer, act Activity
 			if res := span.String(); len(res) > 0 {
 				ret = g.StringOf(res)
 			} else {
-				hack := &HackTillTemplatesCanEvaluatePatternTypes
-				ret = g.StringOf(*hack)
-				*hack = ""
+				ret = g.StringOf(safe.HackTillTemplatesCanEvaluatePatternTypes)
+				safe.HackTillTemplatesCanEvaluatePatternTypes = ""
 			}
 		}
 	}
 	return
 }
-
-var HackTillTemplatesCanEvaluatePatternTypes string

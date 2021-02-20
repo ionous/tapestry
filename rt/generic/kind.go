@@ -24,9 +24,9 @@ type Field struct {
 }
 
 // aspects are a specific kind of record where every field is a boolean trait
-func NewKind(kinds Kinds, name string, fields []Field) *Kind {
-	path := strings.Split(name, ",")
-	return &Kind{kinds: kinds, name: path[0], path: path, fields: fields}
+func NewKind(kinds Kinds, path string, fields []Field) *Kind {
+	parts := strings.Split(path, ",")
+	return &Kind{kinds: kinds, name: parts[0], path: parts, fields: fields}
 }
 
 func NewAnonymousRecord(kinds Kinds, fields []Field) *Record {

@@ -1,6 +1,7 @@
 package testutil
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/writer"
@@ -18,6 +19,9 @@ func (PanicRuntime) GetEvalByName(string, interface{}) error {
 	panic("Runtime panic")
 }
 func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {
+	panic("Runtime panic")
+}
+func (PanicRuntime) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) GetRules(string, *rt.Flags) ([]rt.Rule, error) {
