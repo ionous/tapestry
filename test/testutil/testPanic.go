@@ -15,16 +15,10 @@ var _ rt.Runtime = (*PanicRuntime)(nil)
 func (PanicRuntime) ActivateDomain(name string, enable bool) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) GetEvalByName(string, interface{}) error {
-	panic("Runtime panic")
-}
 func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
-	panic("Runtime panic")
-}
-func (PanicRuntime) GetRules(string, *rt.Flags) ([]rt.Rule, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) RelateTo(a, b, relation string) error {

@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"strings"
 
-	r "reflect"
-
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/object"
@@ -30,7 +28,6 @@ type Fields struct {
 	nameOf,
 	objOf,
 	patternOf,
-	progBytes,
 	reciprocalOf,
 	relateTo,
 	relativeKinds,
@@ -118,14 +115,6 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 			from mdl_pat
 			where UPPER(name) = UPPER(?1)
 			order by name != ?1`),
-		progBytes: ps.Prep(db,
-			// performs case preferred matching
-			`select bytes 
-				from mdl_prog
-				where UPPER(name) = UPPER(?1)
-				and type = ?2
-				order by (name != ?1)
-				limit 1`),
 		reciprocalOf: ps.Prep(db,
 			`select noun from run_pair where active and otherNoun=?1 and relation=?2`),
 		// use the sqlite like function to match
@@ -265,40 +254,6 @@ func (n *Runner) setField(key keyType, val g.Value) (err error) {
 		} else {
 			n.values[key] = staticValue{a, v}
 		}
-	}
-	return
-}
-
-// pv is a pointer to a pattern instance, and we copy its contents in.
-func (n *Runner) GetEvalByName(name string, pv interface{}) (err error) {
-	name = lang.Breakcase(name)
-	outVal := r.ValueOf(pv).Elem() // outVal is a pattern instance who's fields get overwritten
-	rtype := outVal.Type()
-	// note: makeKey camelCases, while go types are PascalCase
-	// this automatically keeps them from conflicting.
-	key := makeKeyForEval(name, rtype.Name())
-	if q, ok := n.values[key]; ok {
-		eval := q.(patternValue).store
-		rval := r.ValueOf(eval)
-		outVal.Set(rval)
-	} else {
-		var val rt.Assignment
-		switch e := n.fields.progBytes.
-			QueryRow(key.target, key.field).
-			Scan(&tables.GobScanner{outVal}); e {
-		case nil:
-			store := outVal.Interface()
-			val = patternValue{store}
-			// pretty.Println("pattern", name, store)
-		case sql.ErrNoRows:
-			err = key.unknown()
-			val = errorValue{err}
-		default:
-			err = e
-			val = errorValue{err}
-		}
-		// see notes: in theory GetEvalByName with
-		n.values[key] = val
 	}
 	return
 }

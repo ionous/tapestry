@@ -41,7 +41,7 @@ func Unpack(src g.Value, field string, aff affine.Affinity) (ret g.Value, err er
 }
 
 // fix: still trying to figure out where this should live
-// maybe just merge with regular unpack
+// maybe just merge with regular unpack? ( though FieldByName copies and GetNamedField does not )
 func UnpackResult(src *g.Record, field string, aff affine.Affinity) (ret g.Value, err error) {
 	if len(field) > 0 {
 		// get the value and check its result

@@ -18,9 +18,6 @@ type Scope interface {
 // if a variable isnt found in the most recently pushed scope
 // the next most recently pushed scope gets checked and so on.
 type VariableStack interface {
-	// completely replace the current record lookup
-	// ex. patterns have opaque namespaces
-	ReplaceScope(Scope) (prev Scope)
 	// add a set of variables to the internal stack.
 	// ex. loops add to the current namespace.
 	PushScope(Scope)
@@ -34,13 +31,9 @@ type Runtime interface {
 	// de/activating makes those groups hidden/visible to the runtime.
 	// Domain hierarchy is defined at assembly time.
 	ActivateDomain(name string, enable bool)
-	// find a function, test, or pattern addressed by name
-	// pv should be a pointer to a concrete type.
-	GetEvalByName(name string, pv interface{}) error
 	// record manipulation
 	GetKindByName(name string) (*g.Kind, error)
-	//
-	GetRules(name string, pflags *Flags) ([]Rule, error)
+	// run the named pattern; add can be blank for execute style patterns.
 	Call(name string, aff affine.Affinity, args []Arg) (g.Value, error)
 	//
 	RelateTo(a, b, relation string) error

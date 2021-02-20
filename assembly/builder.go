@@ -289,9 +289,6 @@ func buildPatternRules(asm *Assembler, patterns patternCache) (ret []*pattern.Pa
 			return
 		}, &name, &prog); e != nil {
 		err = errutil.New("buildFromRule", e)
-	} else {
-		// write the passed list of gobs into the assembler db
-		err = asm.WriteGobs(list)
 	}
 	return
 }
