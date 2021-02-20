@@ -5,9 +5,9 @@ import (
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -18,8 +18,8 @@ import (
 var LogLevel Level
 
 type Log struct {
-	Value core.Assignment `if:"selector"`
-	Level Level           `if:"selector"`
+	Value rt.Assignment `if:"selector"`
+	Level Level         `if:"selector"`
 }
 
 func (op *Log) Compose() composer.Spec {
@@ -33,7 +33,7 @@ func (op *Log) Compose() composer.Spec {
 func (op *Log) Execute(run rt.Runtime) (err error) {
 	// fix? at this time we cant guarantee a lack of side-effects
 	// so we always eval even if we don't print.
-	if v, e := core.GetAssignedValue(run, op.Value); e != nil {
+	if v, e := safe.GetAssignedValue(run, op.Value); e != nil {
 		err = cmdError(op, e)
 	} else {
 		var i interface{}

@@ -2,11 +2,12 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/rt"
 )
 
 type Argument struct {
 	Name string // argument name
-	From Assignment
+	From rt.Assignment
 }
 
 type Arguments struct {

@@ -41,7 +41,7 @@ func (on dotName) getValueNamed() *render.RenderRef {
 // 		ex. {printPluralName: .target}
 // we dont know the type of "target" ahead of time
 // so we just pass it around behind the scenes as an interface.
-func (on dotName) getFromVar() core.Assignment {
+func (on dotName) getFromVar() rt.Assignment {
 	return on.getValueNamed()
 }
 

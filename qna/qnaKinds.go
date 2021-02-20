@@ -12,8 +12,9 @@ import (
 )
 
 type qnaKinds struct {
-	kinds                        map[string]*g.Kind
-	typeOf, fieldsFor, traitsFor *sql.Stmt // selects field, type for a named kind
+	kinds                       map[string]*g.Kind
+	values                      valueMap  // keyed by kind.field
+	typeOf, fieldsOf, traitsFor *sql.Stmt // selects field, type for a named kind
 }
 
 // aspects are a specific kind of record where every field is a boolean trait
@@ -57,13 +58,14 @@ func (q *qnaKinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	return
 }
 
-func (q *qnaKinds) queryFields(name string) (ret []g.Field, err error) {
+func (q *qnaKinds) queryFields(kind string) (ret []g.Field, err error) {
 	// creates the kind if it needs to.
-	var field, fieldType string
-	var affinity affine.Affinity
-	if rows, e := q.fieldsFor.Query(name); e != nil {
+	if rows, e := q.fieldsOf.Query(kind); e != nil {
 		err = e
 	} else {
+		var field, fieldType string
+		var affinity affine.Affinity
+		var i interface{}
 		err = tables.ScanAll(rows, func() (err error) {
 			// by default the type and the affinity are the same
 			// ( like reflect, where type and kind are the same for primitive types )
@@ -75,8 +77,14 @@ func (q *qnaKinds) queryFields(name string) (ret []g.Field, err error) {
 				Affinity: affinity,
 				Type:     fieldType,
 			})
+			if val, e := decodeValue(affinity, i); e != nil {
+				err = errutil.New("error while decoding", field, e)
+			} else {
+				key := keyType{kind, field}
+				q.values[key] = val
+			}
 			return
-		}, &field, &fieldType, &affinity)
+		}, &field, &fieldType, &affinity, &i)
 	}
 	return
 }

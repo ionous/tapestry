@@ -10,22 +10,6 @@ type keyType struct {
 	target, field string
 }
 
-type valueMap map[keyType]qnaValue
-
-func (k *keyType) unknown() (err error) {
-	if k.target == object.Value {
-		err = g.UnknownObject(k.field)
-	} else {
-		err = g.UnknownField(k.target, k.field)
-	}
-	return
-}
-
-// subField should be one of the package object prefixes
-func (k *keyType) dot() string {
-	return k.target + "." + k.field
-}
-
 func makeKey(target, field string) keyType {
 	// FIX?
 	// operations generating get field should be registering the field as a name
@@ -38,6 +22,22 @@ func makeKey(target, field string) keyType {
 	return keyType{target, field}
 }
 
+// FIX: remove.
 func makeKeyForEval(obj, typeName string) keyType {
 	return keyType{obj, typeName}
+}
+
+// return an error saying that the value of this key is unknown
+func (k *keyType) unknown() (err error) {
+	if k.target == object.Value {
+		err = g.UnknownObject(k.field)
+	} else {
+		err = g.UnknownField(k.target, k.field)
+	}
+	return
+}
+
+// subField should be one of the package object prefixes
+func (k *keyType) dot() string {
+	return k.target + "." + k.field
 }

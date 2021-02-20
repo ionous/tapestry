@@ -1,9 +1,7 @@
 package qna
 
 import (
-	"bytes"
 	"database/sql"
-	"encoding/gob"
 
 	"github.com/ionous/errutil"
 
@@ -25,8 +23,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string) (ret int, err error) {
 		func() (err error) {
 			if len(actuallyJustThisOne) == 0 || actuallyJustThisOne == name {
 				var curr check.CheckOutput
-				dec := gob.NewDecoder(bytes.NewBuffer(prog))
-				if e := dec.Decode(&curr); e != nil {
+				if e := tables.DecodeGob(prog, &curr); e != nil {
 					err = e
 				} else {
 					tests = append(tests, curr)

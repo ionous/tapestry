@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -23,7 +24,7 @@ type Fields struct {
 	ancestorsOf,
 	aspectOf,
 	//countOf,
-	fieldsFor,
+	fieldsOf,
 	isLike,
 	kindOf,
 	nameOf,
@@ -72,11 +73,17 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 			`select aspect
 				from mdl_noun_traits 
 				where (noun||'.'||trait)=?`),
-		// countOf: ps.Prep(db,
-		// 	`select count(), 'bool' from run_noun where noun=?`),
-		fieldsFor: ps.Prep(db,
-			`select field, type, affinity 
-			from mdl_field
+		// the starting value for every field of a kind.
+		// ( this is not the thing to use for objects.
+		//   objects might have instance initializers or runtime )
+		fieldsOf: ps.Prep(db,
+			`select field, type, affinity,
+					( select value 
+							from mdl_start mv 
+							where mv.owner=mf.kind 
+							and mv.field=mf.field ) 
+						as value
+			from mdl_field mf
 			where kind=?
 			order by rowid`),
 		isLike: ps.Prep(db,
@@ -157,7 +164,7 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 				else ( select kind || ( case path when '' then ('') else (',' || path) end ) from mdl_kind where kind = ?1 )
 			end as 'role'`),
 
-		// instead of separately deleting old pairs and inserting new ones;
+		// instead of separately deleting old values and inserting new ones;
 		// we insert and replace active ones.
 		updatePairs: ps.Prep(db,
 			`with next as (
@@ -242,7 +249,7 @@ func (n *Runner) setField(key keyType, val g.Value) (err error) {
 		} else if v, e := g.CopyValue(val); e != nil {
 			err = e
 		} else {
-			n.pairs[key] = staticValue{a, v}
+			n.values[key] = staticValue{a, v}
 		}
 	}
 	return
@@ -256,12 +263,12 @@ func (n *Runner) GetEvalByName(name string, pv interface{}) (err error) {
 	// note: makeKey camelCases, while go types are PascalCase
 	// this automatically keeps them from conflicting.
 	key := makeKeyForEval(name, rtype.Name())
-	if q, ok := n.pairs[key]; ok {
+	if q, ok := n.values[key]; ok {
 		eval := q.(patternValue).store
 		rval := r.ValueOf(eval)
 		outVal.Set(rval)
 	} else {
-		var val qnaValue
+		var val rt.Assignment
 		switch e := n.fields.progBytes.
 			QueryRow(key.target, key.field).
 			Scan(&tables.GobScanner{outVal}); e {
@@ -277,7 +284,7 @@ func (n *Runner) GetEvalByName(name string, pv interface{}) (err error) {
 			val = errorValue{err}
 		}
 		// see notes: in theory GetEvalByName with
-		n.pairs[key] = val
+		n.values[key] = val
 	}
 	return
 }
@@ -288,7 +295,7 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		// used internally: return the name of an aspect for a noun's trait
 		// rawField looks like: #test::apple.w
 		nounDotTrait := rawField
-		ret, err = n.getOrCache(object.Aspect, nounDotTrait, func(key keyType) (ret qnaValue, err error) {
+		ret, err = n.getOrCache(object.Aspect, nounDotTrait, func(key keyType) (ret rt.Assignment, err error) {
 			var val string
 			if e := n.fields.aspectOf.QueryRow(nounDotTrait).Scan(&val); e != nil {
 				err = e
@@ -329,7 +336,7 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 
 	case object.Kind:
 		objId := rawField
-		ret, err = n.getOrCache(object.Kind, objId, func(key keyType) (ret qnaValue, err error) {
+		ret, err = n.getOrCache(object.Kind, objId, func(key keyType) (ret rt.Assignment, err error) {
 			var val string
 			if e := n.fields.kindOf.QueryRow(objId).Scan(&val); e != nil {
 				err = e
@@ -341,7 +348,7 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 
 	case object.Kinds:
 		objId := rawField
-		ret, err = n.getOrCache(object.Kinds, objId, func(key keyType) (ret qnaValue, err error) {
+		ret, err = n.getOrCache(object.Kinds, objId, func(key keyType) (ret rt.Assignment, err error) {
 			var val string
 			if e := n.fields.ancestorsOf.QueryRow(objId).Scan(&val); e != nil {
 				err = e
@@ -358,7 +365,7 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		if !n.activeNouns.isActive(objId) {
 			err = g.UnknownObject(objId)
 		} else {
-			ret, err = n.getOrCache(object.Name, objId, func(key keyType) (ret qnaValue, err error) {
+			ret, err = n.getOrCache(object.Name, objId, func(key keyType) (ret rt.Assignment, err error) {
 				var val string
 				if e := n.fields.nameOf.QueryRow(objId).Scan(&val); e != nil {
 					err = e
@@ -377,7 +384,7 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 				// fix: differentiate b/t unknown and unavailable?
 				err = g.UnknownObject(objId)
 			} else {
-				ret, err = n.getOrCache(object.Value, objId, func(key keyType) (ret qnaValue, err error) {
+				ret, err = n.getOrCache(object.Value, objId, func(key keyType) (ret rt.Assignment, err error) {
 					ret = &qnaObject{n: n, id: objId}
 					return
 				})
@@ -386,7 +393,7 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			// given a name, find an object (id) and make sure it should be available
 			// note: currently we're able to get names with spaces here " apple", so we breakcase it.
 			objName := lang.Breakcase(rawField)
-			ret, err = n.getOrCache(object.Value, objName, func(key keyType) (ret qnaValue, err error) {
+			ret, err = n.getOrCache(object.Value, objName, func(key keyType) (ret rt.Assignment, err error) {
 				var id string
 				if e := n.fields.objOf.QueryRow(objName).Scan(&id); e != nil {
 					err = e
@@ -408,7 +415,7 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 	default:
 		varName := lang.SpecialBreakcase(rawField)
 		key := makeKey(target, varName)
-		if q, ok := n.pairs[key]; ok {
+		if q, ok := n.values[key]; ok {
 			ret, err = q.GetAssignedValue(n)
 		} else {
 			// first: loop. ask if we are trying to find the value of a trait. ( noun.trait )
@@ -437,20 +444,27 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 	return
 }
 
+// FIX: see about extracting this into a small helper like qnaStart, etc.
+// its possible that each of the key values ( object.Kind, etc. ) all should have their own micro class
+// they could share the same map object maybe if need be.
 // check the cache before asking the database for info
-func (n *Runner) getOrCache(target, field string, cache func(key keyType) (ret qnaValue, err error)) (ret g.Value, err error) {
+func (n *Runner) getOrCache(target, field string, queryFn func(key keyType) (ret rt.Assignment, err error)) (ret g.Value, err error) {
 	key := makeKey(target, field)
-	if q, ok := n.pairs[key]; ok {
-		ret, err = q.GetAssignedValue(n)
+	// first try to get the cached value
+	if v, ok := n.values[key]; ok {
+		ret, err = v.GetAssignedValue(n)
 	} else {
-		switch val, e := cache(key); e {
-		case nil:
-			ret, err = n.store(key, val)
+		// no? call the query.
+		switch val, e := queryFn(key); e {
+		case nil: // success!
+			n.values[key] = val
+			ret, err = val.GetAssignedValue(n)
 
-		case sql.ErrNoRows:
-			ret, err = n.store(key, errorValue{key.unknown()})
+		case sql.ErrNoRows: // no data.
+			v := n.values.storeError(key, key.unknown())
+			ret, err = v.GetAssignedValue(n)
 
-		default:
+		default: // some other error.
 			err = errutil.New("runtime error:", e)
 		}
 	}
@@ -458,24 +472,13 @@ func (n *Runner) getOrCache(target, field string, cache func(key keyType) (ret q
 }
 
 // query the db for the value of an noun's field
-func (n *Runner) queryFieldValue(key keyType) (ret qnaValue, err error) {
+func (n *Runner) queryFieldValue(key keyType) (ret rt.Assignment, err error) {
 	var i interface{}
 	var a affine.Affinity
 	if e := n.fields.valueOf.QueryRow(key.target, key.field).Scan(&i, &a); e != nil {
 		err = e
 	} else {
-		switch v := i.(type) {
-		default:
-			ret = staticValue{a, v}
-		case []byte:
-			err = bytesToEval(v, &ret)
-		}
+		ret, err = decodeValue(a, i)
 	}
 	return
-}
-
-// store the passed value generator, and return the latest snapshot of it
-func (n *Runner) store(key keyType, val qnaValue) (ret g.Value, err error) {
-	n.pairs[key] = val
-	return val.GetAssignedValue(n)
 }

@@ -3,6 +3,7 @@ package core
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 /**
@@ -11,7 +12,7 @@ import (
  * atField: string.
  */
 type PutAtField struct {
-	From    Assignment       `if:"selector"`
+	From    rt.Assignment    `if:"selector"`
 	Into    IntoTargetFields `if:"selector"`
 	AtField string
 }
@@ -32,7 +33,7 @@ func (op *PutAtField) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *PutAtField) pack(run rt.Runtime) (err error) {
-	if val, e := GetAssignedValue(run, op.From); e != nil {
+	if val, e := safe.GetAssignedValue(run, op.From); e != nil {
 		err = e
 	} else if target, e := GetTargetFields(run, op.Into); e != nil {
 		err = e

@@ -3,14 +3,13 @@ package list
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 type Slice struct {
-	List       core.Assignment
+	List       rt.Assignment
 	Start, End rt.NumberEval `if:"optional"` // from start to end (end not included)
 }
 
@@ -66,7 +65,7 @@ func (op *Slice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *Slice) sliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
-	if els, e := core.GetAssignedValue(run, op.List); e != nil {
+	if els, e := safe.GetAssignedValue(run, op.List); e != nil {
 		err = e
 	} else if e := safe.Check(els, aff); e != nil {
 		err = e

@@ -13,7 +13,7 @@ import (
 // A normal reduce would return a value, instead we accumulate into a variable
 type Reduce struct {
 	IntoValue    string
-	FromList     core.Assignment
+	FromList     rt.Assignment
 	UsingPattern pattern.PatternName
 }
 
@@ -34,7 +34,7 @@ func (op *Reduce) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *Reduce) reduce(run rt.Runtime) (err error) {
-	if fromList, e := core.GetAssignedValue(run, op.FromList); e != nil {
+	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
 		err = e
 	} else if outVal, e := safe.CheckVariable(run, op.IntoValue, ""); e != nil {
 		err = e
@@ -57,7 +57,7 @@ func (op *Reduce) reduce(run rt.Runtime) (err error) {
 						break
 					} else {
 						// send it back in for the next time.
-						outVal = newVal 
+						outVal = newVal
 					}
 				}
 			}

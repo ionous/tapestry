@@ -115,6 +115,6 @@ func V(n string) *core.Var {
 func N(n string) core.Variable {
 	return core.Variable{Str: n}
 }
-func Put(rec, field string, from core.Assignment) rt.Execute {
+func Put(rec, field string, from rt.Assignment) rt.Execute {
 	return &core.PutAtField{Into: &core.IntoVar{Var: N(rec)}, AtField: field, From: from}
 }

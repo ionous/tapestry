@@ -28,7 +28,7 @@ func xTestProcessProg(t *testing.T) {
 	// 		} else {
 	// 			var res check.Testing
 	// 			t.Log(id, typeName)
-	// 			dec := gob.NewDecoder(bytes.NewBuffer(prog))
+	// 			dec := tables.DecodeGob(prog, &res)
 	// 			if e := dec.Decode(&res); e != nil {
 	// 				t.Fatal(e)
 	// 			} else if diff := pretty.Diff(&debug.SayHelloGoodbye, res); len(diff) > 0 {

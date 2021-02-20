@@ -15,7 +15,7 @@ type qnaObject struct {
 	id string
 }
 
-func newObjectValue(run *Runner, v interface{}) (ret qnaValue, err error) {
+func newObjectValue(run *Runner, v interface{}) (ret rt.Assignment, err error) {
 	if id, ok := v.(string); !ok {
 		err = errutil.Fmt("expected id value, got %v(%T)", v, v)
 	} else {

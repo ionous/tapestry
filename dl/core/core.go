@@ -8,9 +8,6 @@ var Slots = []composer.Slot{{
 	Type: (*Comparator)(nil),
 	Desc: "Comparison Types: Helper for comparing values.",
 }, {
-	Type: (*Assignment)(nil),
-	Desc: "Assignments: Helper for setting variables.",
-}, {
 	Type: (*Brancher)(nil),
 	Desc: "Helper for choose action.",
 }, {
@@ -24,8 +21,6 @@ var Slots = []composer.Slot{{
 var Slats = []composer.Composer{
 	(*Activity)(nil),
 	(*Arguments)(nil),
-	(*Argument)(nil),
-
 	// some boolean tests:
 	(*Always)(nil),
 	(*AllTrue)(nil),
@@ -35,7 +30,7 @@ var Slats = []composer.Composer{
 	(*HasDominion)(nil),
 	(*IsNotTrue)(nil), // inverts a bool eval
 
-	// Assign turns an Assignment a normal statement.
+	// Assign turns an rt.Assignment a normal statement.
 	(*Assign)(nil),
 	(*Variable)(nil),
 	(*FromBool)(nil),

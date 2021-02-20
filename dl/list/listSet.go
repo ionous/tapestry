@@ -2,7 +2,6 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
@@ -10,7 +9,7 @@ import (
 type Set struct {
 	List  string // variable name
 	Index rt.NumberEval
-	From  core.Assignment
+	From  rt.Assignment
 }
 
 func (*Set) Compose() composer.Spec {
@@ -33,7 +32,7 @@ func (op *Set) setAt(run rt.Runtime) (err error) {
 		err = e
 	} else if onedex, e := safe.GetNumber(run, op.Index); e != nil {
 		err = e
-	} else if el, e := core.GetAssignedValue(run, op.From); e != nil {
+	} else if el, e := safe.GetAssignedValue(run, op.From); e != nil {
 		err = e
 	} else if !IsInsertable(el, els) {
 		err = insertError{el, els}

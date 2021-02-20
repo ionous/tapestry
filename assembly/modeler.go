@@ -1,9 +1,7 @@
 package assembly
 
 import (
-	"bytes"
 	"database/sql"
-	"encoding/gob"
 	r "reflect"
 	"strings"
 
@@ -146,22 +144,11 @@ func (m *Assembler) WriteProg(progName, typeName string, bytes []byte) (err erro
 	return
 }
 
-func (m *Assembler) EncodeValue(rval r.Value) (ret []byte, err error) {
-	var buf bytes.Buffer
-	enc := gob.NewEncoder(&buf)
-	if e := enc.EncodeValue(rval); e != nil {
-		err = errutil.New("error encoding value", e)
-	} else {
-		ret = buf.Bytes()
-	}
-	return
-
-}
 func (m *Assembler) WriteGob(progName string, cmd interface{}) (err error) {
-	rval := r.ValueOf(cmd)
-	if prog, e := m.EncodeValue(rval); e != nil {
-		err = errutil.New("WriteGob, error encoding value", e)
+	if prog, e := tables.EncodeGob(cmd); e != nil {
+		err = e
 	} else {
+		rval := r.ValueOf(cmd)
 		typeName := rval.Elem().Type().Name()
 		err = m.WriteProg(progName, typeName, prog)
 	}

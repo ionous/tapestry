@@ -9,53 +9,43 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-// Assignment helps limit variable and parameter assignment to particular contexts.
-type Assignment interface {
-	// fix: needed by importArgs right now for ... reasons...
-	Affinity() affine.Affinity
-	// write the results of evaluating this into that.
-	GetAssignedValue(rt.Runtime) (g.Value, error)
-}
-
-func GetAssignedValue(run rt.Runtime, a Assignment) (ret g.Value, err error) {
-	if a == nil {
-		err = safe.MissingEval("assignment")
-	} else {
-		ret, err = a.GetAssignedValue(run)
-	}
-	return
-}
-
 // Let assigns a value to a local variable.
 type Assign struct {
-	Var  Variable   `if:"selector"`
-	From Assignment `if:"selector=be"`
+	Var  Variable      `if:"selector"`
+	From rt.Assignment `if:"selector=be"`
 }
 
+// FromBool - implements Assignment
 type FromBool struct {
 	Val rt.BoolEval `if:"selector"`
 }
 
+// FromNum - implements Assignment
 type FromNum struct {
 	Val rt.NumberEval `if:"selector"`
 }
 
+// FromText - implements Assignment
 type FromText struct {
 	Val rt.TextEval `if:"selector"`
 }
 
+// FromRecord - implements Assignment
 type FromRecord struct {
 	Val rt.RecordEval `if:"selector"`
 }
 
+// FromNumbers - implements Assignment
 type FromNumbers struct {
 	Vals rt.NumListEval `if:"selector"`
 }
 
+// FromTexts - implements Assignment
 type FromTexts struct {
 	Vals rt.TextListEval `if:"selector"`
 }
 
+// FromRecords - implements Assignment
 type FromRecords struct {
 	Vals rt.RecordListEval `if:"selector"`
 }
@@ -63,13 +53,13 @@ type FromRecords struct {
 func (*Assign) Compose() composer.Spec {
 	return composer.Spec{
 		Group:  "variables",
-		Desc:   "Assignment: Sets a variable to a value.",
+		Desc:   "rt.Assignment: Sets a variable to a value.",
 		Fluent: &composer.Fluid{Name: "let", Role: composer.Command},
 	}
 }
 
 func (op *Assign) Execute(run rt.Runtime) (err error) {
-	if v, e := GetAssignedValue(run, op.From); e != nil {
+	if v, e := safe.GetAssignedValue(run, op.From); e != nil {
 		err = cmdError(op, e)
 	} else if e := run.SetField(object.Variables, op.Var.String(), v); e != nil {
 		err = cmdError(op, e)

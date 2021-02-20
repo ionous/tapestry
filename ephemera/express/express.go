@@ -180,7 +180,7 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 }
 
 // an eval has been passed to a pattern, return the command to assign the eval to an arg.
-func newAssignment(arg r.Value) (ret core.Assignment, err error) {
+func newAssignment(arg r.Value) (ret rt.Assignment, err error) {
 	switch arg := arg.Interface().(type) {
 	case dotName:
 		ret = arg.getFromVar()

@@ -42,7 +42,7 @@ func T(i string) rt.TextEval   { return &core.Text{i} }
 func V(i string) *core.Var     { return &core.Var{Name: i} }
 func N(n string) core.Variable { return core.Variable{Str: n} }
 
-func FromTs(vs []string) (ret core.Assignment) {
+func FromTs(vs []string) (ret rt.Assignment) {
 	if len(vs) == 1 {
 		ret = &core.FromText{&core.Text{vs[0]}}
 	} else {

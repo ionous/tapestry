@@ -2,7 +2,6 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
 )
@@ -13,8 +12,8 @@ import (
  * atIndex: numEval.
  */
 type PutIndex struct {
-	From    core.Assignment `if:"selector"`
-	Into    ListTarget      `if:"selector"`
+	From    rt.Assignment `if:"selector"`
+	Into    ListTarget    `if:"selector"`
 	AtIndex rt.NumberEval
 }
 

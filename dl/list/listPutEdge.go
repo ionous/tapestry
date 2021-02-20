@@ -2,8 +2,8 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 /**
@@ -12,9 +12,9 @@ import (
  * atBack|atFront.
  */
 type PutEdge struct {
-	From   core.Assignment `if:"selector"`
-	Into   ListTarget      `if:"selector"`
-	AtEdge Edge            `if:"selector"`
+	From   rt.Assignment `if:"selector"`
+	Into   ListTarget    `if:"selector"`
+	AtEdge Edge          `if:"selector"`
 }
 
 func (*PutEdge) Compose() composer.Spec {
@@ -32,7 +32,7 @@ func (op *PutEdge) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *PutEdge) push(run rt.Runtime) (err error) {
-	if ins, e := core.GetAssignedValue(run, op.From); e != nil {
+	if ins, e := safe.GetAssignedValue(run, op.From); e != nil {
 		err = e
 	} else if els, e := op.Into.GetListTarget(run); e != nil {
 		err = e

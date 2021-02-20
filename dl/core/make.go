@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -39,7 +40,7 @@ func (op *Make) makeRecord(run rt.Runtime) (ret *g.Record, err error) {
 				if fin := k.FieldIndex(name); fin < 0 {
 					e := g.UnknownField(op.Name, arg.Name)
 					err = errutil.Append(err, e)
-				} else if val, e := GetAssignedValue(run, arg.From); e != nil {
+				} else if val, e := safe.GetAssignedValue(run, arg.From); e != nil {
 					err = errutil.Append(err, e)
 				} else if e := out.SetNamedField(name, val); e != nil {
 					err = errutil.Append(err, e)

@@ -1,9 +1,6 @@
 package assembly
 
 import (
-	"bytes"
-	"encoding/gob"
-
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -27,9 +24,7 @@ func (b *BuildRule) buildFromRule(asm *Assembler, args ...interface{}) (err erro
 				list[name] = curr
 				last = name
 			}
-			el := b.NewEl(curr)
-			dec := gob.NewDecoder(bytes.NewBuffer(prog))
-			return dec.Decode(el)
+			return tables.DecodeGob(prog, b.NewEl(curr))
 		}, args...); e != nil {
 		err = errutil.New("buildFromRule", e)
 	} else {

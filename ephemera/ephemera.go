@@ -1,13 +1,11 @@
 package ephemera
 
 import (
-	"bytes"
 	"database/sql"
-	"encoding/gob"
 	r "reflect"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
@@ -54,21 +52,10 @@ func (k *Recorder) NewProg(rootType string, blob []byte) (ret Prog) {
 // fix:  could this be a function in tables somehow?
 // see also: WriteGob in assembler
 func (k *Recorder) NewGob(typeName string, cmd interface{}) (ret Prog, err error) {
-	if prog, e := EncodeGob(cmd); e != nil {
+	if prog, e := tables.EncodeGob(cmd); e != nil {
 		err = e
 	} else {
 		ret = k.NewProg(typeName, prog)
-	}
-	return
-}
-
-func EncodeGob(cmd interface{}) (ret []byte, err error) {
-	var buf bytes.Buffer
-	enc := gob.NewEncoder(&buf)
-	if e := enc.Encode(cmd); e != nil {
-		err = e
-	} else {
-		ret = buf.Bytes()
 	}
 	return
 }
@@ -165,7 +152,7 @@ func (k *Recorder) NewTrait(trait, aspect Named, rank int) {
 func (k *Recorder) NewValue(noun, prop Named, value interface{}) {
 	// temp; for testing...
 	if v := r.ValueOf(value); v.Kind() == r.Interface {
-		value = value.(core.Assignment)
+		value = value.(rt.Assignment)
 	}
 	k.cache.Must(eph_value, noun, prop, value)
 }

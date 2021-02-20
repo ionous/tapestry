@@ -20,15 +20,17 @@ func NewRuntime(db *sql.DB) *Runner {
 	} else if fields, e := NewFields(db); e != nil {
 		panic(e)
 	} else {
+		values := make(valueMap)
 		run = &Runner{
 			db:      db,
 			fields:  fields,
 			plurals: plurals,
-			pairs:   make(valueMap),
+			values:  values,
 			qnaKinds: qnaKinds{
 				typeOf:    fields.typeOf,
-				fieldsFor: fields.fieldsFor,
+				fieldsOf:  fields.fieldsOf,
 				traitsFor: fields.traitsFor,
+				values:    values,
 			},
 			qnaRules: qnaRules{
 				rulesFor: fields.rulesFor,
@@ -48,7 +50,7 @@ type Runner struct {
 	writer.Sink
 	fields  *Fields
 	plurals *Plurals
-	pairs   valueMap
+	values  valueMap
 	qnaKinds
 	qnaRules
 	activeNouns
@@ -69,7 +71,7 @@ func (run *Runner) ActivateDomain(domain string, active bool) {
 		if cnt, e := run.fields.UpdatePairs(domain); e != nil {
 			panic(e)
 		} else {
-			log.Println("activate domain", domain, "affected", cnt, "noun pairs")
+			log.Println("activate domain", domain, "affected", cnt, "noun values")
 		}
 	}
 	// FIX? maybe better than an active list would be just keep the noun's domain path

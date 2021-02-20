@@ -8,12 +8,13 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
 
 type Each struct {
-	List core.Assignment `if:"selector=across"`
-	As   ListIterator    `if:"selector"`
+	List rt.Assignment `if:"selector=across"`
+	As   ListIterator  `if:"selector"`
 	Do   core.Activity
 	Else *ElseIfEmpty `if:"optional,selector"`
 }
@@ -51,7 +52,7 @@ func (op *Each) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *Each) forEach(run rt.Runtime) (err error) {
-	if vs, e := core.GetAssignedValue(run, op.List); e != nil {
+	if vs, e := safe.GetAssignedValue(run, op.List); e != nil {
 		err = e
 	} else {
 		if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {

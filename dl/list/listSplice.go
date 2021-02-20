@@ -3,7 +3,6 @@ package list
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -12,7 +11,7 @@ import (
 type Splice struct {
 	List          string        // variable name
 	Start, Remove rt.NumberEval // from start
-	Insert        core.Assignment
+	Insert        rt.Assignment
 }
 
 // if start is negative, it will begin that many elements from the end of the array.
@@ -75,7 +74,7 @@ func (op *Splice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Valu
 		err = e
 	} else if e := safe.Check(els, aff); e != nil {
 		err = e
-	} else if ins, e := core.GetAssignedValue(run, op.Insert); e != nil {
+	} else if ins, e := safe.GetAssignedValue(run, op.Insert); e != nil {
 		err = e
 	} else if !IsAppendable(ins, els) {
 		err = insertError{ins, els}

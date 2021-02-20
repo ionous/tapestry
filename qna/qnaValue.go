@@ -1,26 +1,13 @@
 package qna
 
 import (
-	"bytes"
-	"encoding/gob"
-	r "reflect"
-
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
 )
 
-// take a snapshot of a cached value.
-// the meaning of a snapshot changes per value type.
-// ex. snapshots from evals are unique instances,
-// while snapshots of the same primitive list share the same memory.
-// the interface mirrors core.GetAssignedValue.
-type qnaValue interface {
-	Affinity() affine.Affinity
-	GetAssignedValue(rt.Runtime) (g.Value, error)
-}
-
+// the database stores raw values we normalize them to assignments
 type staticValue struct {
 	affinity affine.Affinity
 	val      interface{}
@@ -104,36 +91,4 @@ func (f staticValue) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 		err = errutil.New("unhandled affinity", a)
 	}
 	return
-
-}
-
-type errorValue struct{ err error }
-
-func (f errorValue) Affinity() affine.Affinity {
-	return ""
-}
-
-func (f errorValue) GetAssignedValue(run rt.Runtime) (_ g.Value, err error) {
-	err = f.err
-	return
-}
-
-// temp, ideally.
-type patternValue struct {
-	store interface{}
-}
-
-func (f patternValue) Affinity() affine.Affinity {
-	return "" // not needed currently
-}
-
-func (f patternValue) GetAssignedValue(run rt.Runtime) (_ g.Value, err error) {
-	err = errutil.New("pattern expected use of GetEvalByName")
-	return
-}
-
-func bytesToEval(b []byte, iptr interface{}) error {
-	rptr := r.ValueOf(iptr)
-	dec := gob.NewDecoder(bytes.NewBuffer(b))
-	return dec.DecodeValue(rptr)
 }

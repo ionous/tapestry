@@ -3,6 +3,9 @@ package rt
 import "git.sr.ht/~ionous/iffy/dl/composer"
 
 var Slots = []composer.Slot{{
+	Type: (*Assignment)(nil),
+	Desc: "Assignments: Helper for setting variables.",
+}, {
 	Name: "execute",
 	Type: (*Execute)(nil),
 	Desc: "Action: Run a series of statements.",

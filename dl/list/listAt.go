@@ -3,14 +3,13 @@ package list
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 type At struct {
-	List  core.Assignment
+	List  rt.Assignment
 	Index rt.NumberEval
 }
 
@@ -37,7 +36,7 @@ func (op *At) GetRecord(run rt.Runtime) (g.Value, error) {
 }
 
 func (op *At) getAt(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if vs, e := core.GetAssignedValue(run, op.List); e != nil {
+	if vs, e := safe.GetAssignedValue(run, op.List); e != nil {
 		err = cmdError(op, e)
 	} else if e := safe.Check(vs, aff); e != nil {
 		err = cmdError(op, e)

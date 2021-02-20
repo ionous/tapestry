@@ -13,10 +13,10 @@ import (
 
 type Pattern struct {
 	Name   string
-	Return string            // name of return field; empty if none ( could be an index but slightly safer this way )
-	Labels []string          // one label for every parameter
-	Locals []core.Assignment // usually equal to the number of locals; or nil for testing.
-	Fields []g.Field         // flat list of params and locals and an optional return
+	Return string          // name of return field; empty if none ( could be an index but slightly safer this way )
+	Labels []string        // one label for every parameter
+	Locals []rt.Assignment // usually equal to the number of locals; or nil for testing.
+	Fields []g.Field       // flat list of params and locals and an optional return
 	Rules  []rt.Rule
 }
 
@@ -102,7 +102,7 @@ func (pat *Pattern) determineArgs(run rt.Runtime, rec *g.Record, args []*core.Ar
 		}
 		//
 		field := rec.Kind().Field(fieldIndex)
-		if val, e := core.GetAssignedValue(run, a.From); e != nil {
+		if val, e := safe.GetAssignedValue(run, a.From); e != nil {
 			err = errutil.New("error determining arg", i, n, e)
 			break
 		} else if v, e := filterText(run, field, val); e != nil {

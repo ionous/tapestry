@@ -11,7 +11,7 @@ import (
 )
 
 type Activity core.Activity
-type Assignment core.Assignment
+type Assignment rt.Assignment
 type BoolEval rt.BoolEval
 type Execute rt.Execute
 type NumberEval rt.NumberEval

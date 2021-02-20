@@ -13,7 +13,7 @@ import (
 
 type Map struct {
 	ToList       string
-	FromList     core.Assignment
+	FromList     rt.Assignment
 	UsingPattern pattern.PatternName
 }
 
@@ -34,7 +34,7 @@ func (op *Map) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *Map) remap(run rt.Runtime) (err error) {
-	if fromList, e := core.GetAssignedValue(run, op.FromList); e != nil {
+	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
 		err = errutil.New("from_list:", op.FromList, e)
 	} else if toList, e := safe.List(run, op.ToList); e != nil {
 		err = errutil.New("to_list:", op.ToList, e)

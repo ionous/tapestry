@@ -3,9 +3,9 @@ package story
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/express"
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/template"
 	"git.sr.ht/~ionous/iffy/template/types"
 	"github.com/ionous/errutil"
@@ -36,7 +36,7 @@ func convert_text_or_template(str string) (ret interface{}, err error) {
 			err = errutil.New(e, xs)
 		} else if eval, ok := got.(rt.TextEval); !ok {
 			err = errutil.Fmt("render template has unknown expression %T", got)
-		} else if prog, e := ephemera.EncodeGob(&core.FromText{eval}); e != nil {
+		} else if prog, e := tables.EncodeGob(&core.FromText{eval}); e != nil {
 			err = e
 		} else {
 			ret = prog // okay; return bytes.

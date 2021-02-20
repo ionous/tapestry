@@ -1,10 +1,7 @@
 package assembly
 
 import (
-	"bytes"
 	"database/sql"
-	"encoding/gob"
-	r "reflect"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
@@ -28,7 +25,7 @@ type fieldInit struct {
 	Name     string
 	Affinity affine.Affinity
 	Type     string // ex. record name, "aspect", "trait", "float64", ...
-	Init     core.Assignment
+	Init     rt.Assignment
 }
 
 func (fi *fieldInit) Field() g.Field {
@@ -174,11 +171,10 @@ func convertType(inType, inKind, inAff string) (retAff affine.Affinity, retType 
 // it has a Value assignment, we want to dig out that assignment and assign it to the term prep.
 // im not convinced that terms and assigments should be different beasts...
 // if they were the same thing.. this would look different.
-func decodeProg(prog []byte, aff affine.Affinity) (ret core.Assignment, err error) {
+func decodeProg(prog []byte, aff affine.Affinity) (ret rt.Assignment, err error) {
 	if haveProg := len(prog) > 0; haveProg {
 		var local story.LocalInit
-		dec := gob.NewDecoder(bytes.NewBuffer(prog))
-		if e := dec.Decode(&local); e != nil {
+		if e := tables.DecodeGob(prog, &local); e != nil {
 			err = e
 		} else if a := local.Value.Affinity(); len(a) > 0 && a != aff {
 			// note: some expressions (ex. GetAtField) cant determine affinity until runtime
@@ -213,6 +209,15 @@ func WritePattern(asm *Assembler, pat *pattern.Pattern) (err error) {
 		err = e
 	} else {
 		localOfs := len(pat.Labels)
+		// write pattern callinfo
+		// if e := asm.WriteField(pat.Name, object.Pattern, "", affine.TextList.String()); e != nil {
+		// 	err = errutil.Append(err, e)
+		// } else {
+		// 	callInfo := strings.Join(append([]string{pat.Return}, pat.Labels...), ",")
+		// 	if e := asm.WriteStart(pat.Name, object.Pattern, callInfo); e != nil {
+		// 		err = errutil.Append(err, e)
+		// 	}
+		// }
 		// write fields exactly as if the pattern was a kind
 		for _, prop := range pat.Fields {
 			if e := asm.WriteField(pat.Name, prop.Name, prop.Type, prop.Affinity.String()); e != nil {
@@ -221,12 +226,13 @@ func WritePattern(asm *Assembler, pat *pattern.Pattern) (err error) {
 		}
 		// write initialization to mdl_start
 		for i, val := range pat.Locals {
-			if val != nil { //not every local has an initial value
+			if val != nil { // not every local has an initial value
 				f := pat.Fields[localOfs+i]
 				// fix: write encoded value... which we just recently decoded... :/
-				if b, e := asm.EncodeValue(r.ValueOf(val)); e != nil {
+				meta := struct{ Init rt.Assignment }{val}
+				if prog, e := tables.EncodeGob(&meta); e != nil {
 					err = errutil.Append(err, e)
-				} else if e := asm.WriteStart(pat.Name, f.Name, b); e != nil {
+				} else if e := asm.WriteStart(pat.Name, f.Name, prog); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}
@@ -244,7 +250,7 @@ func WritePattern(asm *Assembler, pat *pattern.Pattern) (err error) {
 				}
 			}
 			handler := rt.Handler{Filter: rule.Filter, Exe: rule.Execute}
-			if prog, e := asm.EncodeValue(r.ValueOf(&handler)); e != nil {
+			if prog, e := tables.EncodeGob(&handler); e != nil {
 				err = errutil.Append(err, e)
 			} else if e := asm.WriteRule(pat.Name, target, domain, rule.GetFlags(), prog, name); e != nil {
 				err = errutil.Append(err, e)
@@ -274,8 +280,7 @@ func buildPatternRules(asm *Assembler, patterns patternCache) (ret []*pattern.Pa
 			}
 			if err == nil {
 				var rule rt.Rule
-				dec := gob.NewDecoder(bytes.NewBuffer(prog))
-				if e := dec.Decode(&rule); e != nil {
+				if e := tables.DecodeGob(prog, &rule); e != nil {
 					err = e
 				} else {
 					curr.Rules = append(curr.Rules, rule)
