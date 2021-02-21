@@ -34,7 +34,7 @@ func (run *Runtime) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g
 				watcher := pattern.NewResults(rec, pat.Return)
 				oldScope := run.ReplaceScope(watcher)
 				var allFlags rt.Flags
-				if rules, e := run.GetRules(pat.Name, &allFlags); e != nil {
+				if rules, e := run.GetRules(pat.Name, "", &allFlags); e != nil {
 					err = e
 				} else if e := watcher.ApplyRules(run, rules, allFlags); e != nil {
 					err = e

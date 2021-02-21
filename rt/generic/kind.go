@@ -44,7 +44,7 @@ func (k *Kind) NewRecord() *Record {
 }
 
 func (k *Kind) Path() (ret []string) {
-	ret = append(ret, k.path...)
+	ret = append(ret, k.path...) // copies the slice
 	return
 }
 

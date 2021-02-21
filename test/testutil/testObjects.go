@@ -1,15 +1,26 @@
 package testutil
 
-import g "git.sr.ht/~ionous/iffy/rt/generic"
+import (
+	"sort"
 
-func Objects(kind *g.Kind, names ...string) (ret map[string]*g.Record, err error) {
-	out := make(map[string]*g.Record)
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+)
+
+type Objects map[string]*g.Record
+
+func (or *Objects) AddObjects(kind *g.Kind, names ...string) {
+	if *or == nil {
+		*or = make(Objects)
+	}
 	for _, name := range names {
-		// we'll use normal records for this test....
-		out[name] = kind.NewRecord()
+		(*or)[name] = kind.NewRecord()
 	}
-	if err == nil {
-		ret = out
+}
+
+func (or *Objects) Names() (ret []string) {
+	for n, _ := range *or {
+		ret = append(ret, n)
 	}
+	sort.Strings(ret)
 	return
 }

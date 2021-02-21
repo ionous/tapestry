@@ -12,7 +12,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// normalize optional arguments
+// note: this is mirrored/mimicked in package testpat
 func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
 	name := lang.Breakcase(pat)
 	var labels, result string // fix? consider a cache for this info?

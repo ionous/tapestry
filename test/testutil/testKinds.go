@@ -3,6 +3,7 @@ package testutil
 import (
 	"fmt"
 	r "reflect"
+	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/export/tag"
@@ -20,13 +21,15 @@ type KindMap map[string]*g.Kind
 type FieldMap map[string][]g.Field
 
 // register kinds from a struct using reflection
+// note: this doesnt actually create the kinds....
+// it preps them for use -- they are created on Get()
 func (ks *Kinds) AddKinds(is ...interface{}) {
 	for _, el := range is {
-		ks.Fields = kindsForType(ks.Fields, r.TypeOf(el).Elem())
+		ks.Fields = kindsForType(ks, ks.Fields, r.TypeOf(el).Elem())
 	}
 }
 
-func (ks *Kinds) New(name string, valuePairs ...interface{}) *g.Record {
+func (ks *Kinds) NewRecord(name string, valuePairs ...interface{}) *g.Record {
 	v := ks.Kind(name).NewRecord()
 	if len(valuePairs) > 0 {
 		if e := SetRecord(v, valuePairs...); e != nil {
@@ -36,6 +39,7 @@ func (ks *Kinds) New(name string, valuePairs ...interface{}) *g.Record {
 	return v
 }
 
+// return a kind ( declared via AddKinds ) panic if it doesn't exist.
 func (ks *Kinds) Kind(name string) (ret *g.Kind) {
 	if k, e := ks.GetKindByName(name); e != nil {
 		panic(e)
@@ -45,6 +49,7 @@ func (ks *Kinds) Kind(name string) (ret *g.Kind) {
 	return
 }
 
+// return a kind ( declared via AddKinds ) or error if it doesnt exist.
 func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	if k, ok := ks.Kinds[name]; ok {
 		ret = k // we created the kind already
@@ -54,6 +59,10 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 		if ks.Kinds == nil {
 			ks.Kinds = make(KindMap)
 		}
+		// magic parent field for fake objects
+		if len(fs) > 0 && len(fs[0].Affinity) == 0 {
+			name = name + "," + fs[0].Type
+		}
 		// create the kind from the stored fields
 		k := g.NewKind(ks, name, fs)
 		ks.Kinds[name] = k
@@ -62,29 +71,33 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	return
 }
 
-// generate kinds from a struct using reflection
-func kindsForType(kinds FieldMap, t r.Type) FieldMap {
+// generate fields from type t using reflection
+//
+func kindsForType(ks *Kinds, kinds FieldMap, t r.Type) FieldMap {
 	type stringer interface{ String() string }
 	rstringer := r.TypeOf((*stringer)(nil)).Elem()
 	if kinds == nil {
 		kinds = make(FieldMap)
 	}
 
+	var path string
 	var fields []g.Field
 	for i, cnt := 0, t.NumField(); i < cnt; i++ {
 		f := t.Field(i)
 		fieldType := f.Type
-		var a affine.Affinity
-		var t string
+		var pending struct {
+			Aff  affine.Affinity
+			Type string
+		}
 		switch k := fieldType.Kind(); k {
 		default:
 			panic(errutil.Sprint("unknown kind", k))
 		case r.Bool:
 			tags := tag.ReadTag(f.Tag)
 			if _, ok := tags.Find("bool"); ok {
-				a, t = affine.Bool, k.String()
+				pending.Aff, pending.Type = affine.Bool, k.String()
 			} else {
-				a, t = affine.Text, "aspect"
+				pending.Aff, pending.Type = affine.Text, "aspect"
 				n := lang.Underscore(f.Name)
 				// the name of the aspect is the name of the field
 				kinds[n] = []g.Field{
@@ -95,32 +108,42 @@ func kindsForType(kinds FieldMap, t r.Type) FieldMap {
 			}
 
 		case r.String:
-			a, t = affine.Text, k.String()
+			pending.Aff, pending.Type = affine.Text, k.String()
 
 		case r.Struct:
-			a, t = affine.Record, nameOfType(fieldType)
-			kinds = kindsForType(kinds, fieldType)
+			pending.Type = nameOfType(fieldType)
+			if f.Anonymous {
+				if len(fields) > 0 {
+					panic("anonymous structs are used for hierarchy and should be the first member")
+				}
+				parent := ks.Kind(pending.Type)
+				pending.Type = strings.Join(parent.Path(), ",")
+
+			} else {
+				pending.Aff = affine.Record
+				kinds = kindsForType(ks, kinds, fieldType)
+			}
 
 		case r.Slice:
 			elType := fieldType.Elem()
 			switch k := elType.Kind(); k {
 			case r.String:
-				a, t = affine.TextList, k.String()
+				pending.Aff, pending.Type = affine.TextList, k.String()
 			case r.Float64:
-				a, t = affine.NumList, k.String()
+				pending.Aff, pending.Type = affine.NumList, k.String()
 			case r.Struct:
-				a, t = affine.RecordList, nameOfType(elType)
-				kinds = kindsForType(kinds, elType)
+				pending.Aff, pending.Type = affine.RecordList, nameOfType(elType)
+				kinds = kindsForType(ks, kinds, elType)
 
 			default:
 				panic(errutil.Sprint("unknown slice", elType.String()))
 			}
 
 		case r.Float64:
-			a, t = affine.Number, k.String()
+			pending.Aff, pending.Type = affine.Number, k.String()
 
 		case r.Int:
-			a, t = affine.Text, "aspect"
+			pending.Aff, pending.Type = affine.Text, "aspect"
 			if !fieldType.Implements(rstringer) {
 				panic("unknown enum")
 			}
@@ -139,9 +162,10 @@ func kindsForType(kinds FieldMap, t r.Type) FieldMap {
 			aspect := nameOfType(fieldType)
 			kinds[aspect] = traits
 		}
-		name := lang.Underscore(f.Name)
-		fields = append(fields, g.Field{Name: name, Affinity: a, Type: t})
-
+		if len(pending.Aff) > 0 || len(path) > 0 {
+			name := lang.Underscore(f.Name)
+			fields = append(fields, g.Field{Name: name, Affinity: pending.Aff, Type: pending.Type})
+		}
 	}
 	name := nameOfType(t)
 	kinds[name] = fields

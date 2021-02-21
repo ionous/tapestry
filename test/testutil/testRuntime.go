@@ -1,6 +1,8 @@
 package testutil
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/scope"
@@ -35,6 +37,20 @@ func (x *Runtime) SetField(target, field string, value g.Value) (err error) {
 
 func (x *Runtime) GetField(target, field string) (ret g.Value, err error) {
 	switch target {
+	// return type of an object
+	case object.Kind:
+		if a, ok := x.ObjectMap[field]; !ok {
+			err = g.UnknownObject(field)
+		} else {
+			ret = g.StringOf(a.Type())
+		}
+		// hierarchy of an object's types ( a path )
+	case object.Kinds:
+		if a, ok := x.ObjectMap[field]; !ok {
+			err = g.UnknownObject(field)
+		} else {
+			ret = g.StringOf(strings.Join(a.Kind().Path(), ","))
+		}
 	case object.Variables:
 		ret, err = x.Stack.FieldByName(field)
 	case object.Value:

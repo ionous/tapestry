@@ -30,6 +30,7 @@ func (my *Rule) GetFlags() (ret Flags) {
 	return
 }
 
+//go:generate stringer -type=Flags
 const (
 	Prefix  Flags = (1 << iota) // all prefix rules get sorted towards the front of the list
 	Infix                       // keeps the rule at the same relative location

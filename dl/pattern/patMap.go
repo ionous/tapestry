@@ -2,16 +2,16 @@ package pattern
 
 import (
 	"git.sr.ht/~ionous/iffy/rt"
-	"github.com/ionous/errutil"
 )
 
 // Map - a simple helper for testing to provide patterns w/o a db.
 type Map map[string]*Pattern
 
-func (m Map) GetRules(name string, pflags *rt.Flags) (ret []rt.Rule, err error) {
-	if pat, ok := m[name]; !ok {
-		err = errutil.New("unknown pattern", name)
-	} else {
+func (m Map) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.Rule, err error) {
+	if len(target) > 0 {
+		pattern += "." + target
+	}
+	if pat, ok := m[pattern]; ok {
 		inds, allFlags := SortRules(pat.Rules)
 		ret = make([]rt.Rule, len(inds))
 		for i, j := range inds {
