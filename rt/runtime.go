@@ -18,6 +18,10 @@ type Scope interface {
 // if a variable isnt found in the most recently pushed scope
 // the next most recently pushed scope gets checked and so on.
 type VariableStack interface {
+	// swap the current scope for the passed scope
+	// when init is true, try to initialize all the the values in the passed scope.
+	// only init can return an error.
+	ReplaceScope(scope Scope, init bool) (ret Scope, err error)
 	// add a set of variables to the internal stack.
 	// ex. loops add to the current namespace.
 	PushScope(Scope)
@@ -33,6 +37,8 @@ type Runtime interface {
 	ActivateDomain(name string, enable bool)
 	// record manipulation
 	GetKindByName(name string) (*g.Kind, error)
+	// return the runtime rules matching the passed pattern and target
+	GetRules(pattern, target string, pflags *Flags) ([]Rule, error)
 	// run the named pattern; add can be blank for execute style patterns.
 	Call(name string, aff affine.Affinity, args []Arg) (g.Value, error)
 	//

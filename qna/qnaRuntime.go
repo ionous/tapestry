@@ -4,7 +4,10 @@ import (
 	"database/sql"
 	"log"
 
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/print"
 	"git.sr.ht/~ionous/iffy/rt/scope"
@@ -77,6 +80,26 @@ func (run *Runner) ActivateDomain(domain string, active bool) {
 	// then, we can just strcmp the noun's path and the active domain to match
 	// maybe even a generalized "hierarchy" test  ( re: kinds ) -- could be even just a string type.
 	run.activeNouns.reset()
+}
+
+func (run *Runner) ReplaceScope(s rt.Scope, init bool) (ret rt.Scope, err error) {
+	ret = run.Stack.ReplaceScope(s)
+	if init {
+		// fix... yeah, possibly this needs work.
+		// Runner is the thing calling replace scope
+		// so it could initialize locals, but... also depends on what happens with "Send"
+		if v, ok := s.(*pattern.Results).Scope.(g.Value); !ok || v.Affinity() != affine.Record {
+			err = errutil.New("can only initialize records")
+		} else {
+			err = run.initializeLocals(v.Record())
+		}
+	}
+	// fix our errors
+	if err != nil {
+		run.Stack.ReplaceScope(ret)
+		ret = nil
+	}
+	return
 }
 
 func (run *Runner) SingularOf(str string) (ret string) {

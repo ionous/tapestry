@@ -40,29 +40,6 @@ func Unpack(src g.Value, field string, aff affine.Affinity) (ret g.Value, err er
 	return
 }
 
-// fix: still trying to figure out where this should live
-// maybe just merge with regular unpack? ( though FieldByName copies and GetNamedField does not )
-func UnpackResult(src *g.Record, field string, aff affine.Affinity) (ret g.Value, err error) {
-	if len(field) > 0 {
-		// get the value and check its result
-		if v, e := src.GetNamedField(field); e != nil {
-			err = errutil.New("error trying to get return value", e)
-		} else if e := Check(v, aff); e != nil {
-			err = errutil.New("error trying to get return value", e)
-		} else if len(aff) == 0 {
-			// the caller expects nothing but we have a return value.
-			if v.Affinity() == affine.Text {
-				HackTillTemplatesCanEvaluatePatternTypes = v.String()
-			}
-			// other than passing data back to templates in a hack...
-			// we dont treat this as an error -- we allow patterns to be run for side effects.
-		} else {
-			ret = v
-		}
-	} else if len(aff) != 0 {
-		err = errutil.New("caller expected", aff, "returned nothing")
-	}
-	return
-}
-
+// fix! ( at the very least should live in pattern
+// but we need to remove its few -- tests and Determine -- dependencies on core
 var HackTillTemplatesCanEvaluatePatternTypes string

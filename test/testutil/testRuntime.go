@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/scope"
 	"git.sr.ht/~ionous/iffy/rt/writer"
@@ -23,6 +24,13 @@ type Runtime struct {
 
 func (x *Runtime) Writer() writer.Output {
 	return writer.NewStdout()
+}
+
+// we ignore the request to initialize the scope during testing.
+// that's only honored by the real thing.
+func (x *Runtime) ReplaceScope(s rt.Scope, init bool) (ret rt.Scope, err error) {
+	ret = x.Stack.ReplaceScope(s)
+	return
 }
 
 func (x *Runtime) SetField(target, field string, value g.Value) (err error) {

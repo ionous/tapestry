@@ -1,11 +1,12 @@
 package testpat
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/safe"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/ionous/errutil"
 )
@@ -19,29 +20,22 @@ func (run *Runtime) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g
 	if pat, ok := run.Map[name]; !ok {
 		err = errutil.New("unknown pattern", name)
 	} else {
-		// create a container to hold results of args, locals, and the pending return value
-		if k, e := run.GetKindByName(pat.Name); e != nil {
+		ls := strings.Join(pat.Labels, ",")
+		if rec, e := pattern.NewRecord(run, pat.Name, ls, args); e != nil {
 			err = e
 		} else {
-			rec := k.NewRecord()
-			// args run in the scope of their parent context
-			// they write to the record that will become the new context
-			if e := pattern.DetermineArgs(run, rec, pat.Labels, args); e != nil {
+			results := pattern.NewResults(rec, pat.Return, aff)
+			if oldScope, e := run.ReplaceScope(results, true); e != nil {
 				err = e
 			} else {
-				// initializers ( and the pattern itself ) run in the scope of the pattern
-				// ( with access to all locals and args)
-				watcher := pattern.NewResults(rec, pat.Return)
-				oldScope := run.ReplaceScope(watcher)
 				var allFlags rt.Flags
 				if rules, e := run.GetRules(pat.Name, "", &allFlags); e != nil {
 					err = e
-				} else if e := watcher.ApplyRules(run, rules, allFlags); e != nil {
-					err = e
 				} else {
-					ret, err = safe.UnpackResult(rec, pat.Return, aff)
+					ret, err = results.Compute(run, rules, allFlags)
 				}
-				run.ReplaceScope(oldScope)
+				// only init can return an error
+				run.ReplaceScope(oldScope, false)
 			}
 		}
 	}

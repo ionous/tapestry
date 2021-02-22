@@ -19,9 +19,9 @@ func TestSort(t *testing.T) {
 
 	kinds.AddKinds((*Things)(nil), (*Values)(nil))
 	objectNames := sliceOf.String("mildred", "apple", "pen", "eve", "Pan")
-	objs := objs.Add(kinds.Kind("things"), objectNames...)
+	objs.AddObjects(kinds.Kind("things"), objectNames...)
 
-	values := kinds.New("values", "objects", objectNames)
+	values := kinds.NewRecord("values", "objects", objectNames)
 	lt := testutil.Runtime{
 		Kinds:     &kinds,
 		ObjectMap: objs,

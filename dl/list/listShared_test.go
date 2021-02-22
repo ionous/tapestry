@@ -16,7 +16,7 @@ func newListTime(src []string, p pattern.Map) (ret rt.Runtime, vals *g.Record, e
 	var kinds testutil.Kinds
 	type Values struct{ Source []string }
 	kinds.AddKinds((*Values)(nil))
-	values := kinds.New("values")
+	values := kinds.NewRecord("values")
 	lt := testpat.Runtime{
 		p,
 		testutil.Runtime{

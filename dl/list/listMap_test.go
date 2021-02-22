@@ -25,7 +25,7 @@ func TestMapStrings(t *testing.T) {
 		In, Out string
 	}
 	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Remap)(nil))
-	values := kinds.New("values") // a record.
+	values := kinds.NewRecord("values") // a record.
 	lt := testpat.Runtime{
 		pattern.Map{
 			"remap": &reverseStrings,
@@ -68,7 +68,7 @@ func TestMapRecords(t *testing.T) {
 		In, Out Fruit
 	}
 	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Remap)(nil))
-	values := kinds.New("values")
+	values := kinds.NewRecord("values")
 	if k, e := kinds.GetKindByName("fruit"); e != nil {
 		t.Fatal(e)
 	} else {

@@ -27,7 +27,7 @@ func TestReduce(t *testing.T) {
 	}
 	var kinds testutil.Kinds
 	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Reduce)(nil))
-	values := kinds.New("values")
+	values := kinds.NewRecord("values")
 	if k, e := kinds.GetKindByName("fruit"); e != nil {
 		t.Fatal(e)
 	} else {

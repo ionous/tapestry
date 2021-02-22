@@ -3,7 +3,6 @@ package list
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
 )
@@ -66,7 +65,7 @@ var Slats = []composer.Composer{
 }
 
 func cmdError(op composer.Composer, err error) error {
-	return errutil.Append(err, &core.CommandError{Cmd: op})
+	return errutil.Append(err, &composer.CommandError{Cmd: op})
 }
 
 // can add be inserted into els?

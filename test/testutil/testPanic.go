@@ -18,6 +18,9 @@ func (PanicRuntime) ActivateDomain(name string, enable bool) {
 func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {
 	panic("Runtime panic")
 }
+func (PanicRuntime) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.Rule, err error) {
+	panic("Runtime panic")
+}
 func (PanicRuntime) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
 	panic("Runtime panic")
 }
@@ -48,7 +51,7 @@ func (PanicRuntime) PushScope(rt.Scope) {
 func (PanicRuntime) PopScope() {
 	panic("Runtime panic")
 }
-func (PanicRuntime) ReplaceScope(rt.Scope) rt.Scope {
+func (PanicRuntime) ReplaceScope(scope rt.Scope, init bool) (ret rt.Scope, err error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) Random(inclusiveMin, exclusiveMax int) int {

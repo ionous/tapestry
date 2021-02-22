@@ -20,8 +20,8 @@ type ruleSet struct {
 	flags rt.Flags
 }
 
-func (q *qnaRules) GetRules(name string, pflags *rt.Flags) (ret []rt.Rule, err error) {
-	key := lang.Breakcase(name)
+func (q *qnaRules) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.Rule, err error) {
+	key := lang.Breakcase(pattern)
 	if x, ok := q.rules[key]; ok {
 		if e := x.err; e != nil {
 			err = e
