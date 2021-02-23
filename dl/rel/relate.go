@@ -3,7 +3,6 @@ package rel
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
@@ -29,19 +28,12 @@ func (op *Relate) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *Relate) setRelation(run rt.Runtime) (err error) {
-	if a, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if a, e := safe.ObjectText(run, op.Object); e != nil {
 		err = e
-	} else if b, e := safe.ObjectFromText(run, op.ToObject); e != nil {
+	} else if b, e := safe.ObjectText(run, op.ToObject); e != nil {
 		err = e
 	} else {
-		err = run.RelateTo(objectString(a), objectString(b), op.Via.String())
-	}
-	return
-}
-
-func objectString(obj g.Value) (ret string) {
-	if obj != nil {
-		ret = obj.String()
+		err = run.RelateTo(a.String(), b.String(), op.Via.String())
 	}
 	return
 }

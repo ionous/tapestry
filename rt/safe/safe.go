@@ -223,6 +223,20 @@ func ObjectFromString(run rt.Runtime, n string) (ret g.Value, err error) {
 	return
 }
 
+// ObjectText - given an eval producing a name, return a string value of the object's id.
+func ObjectText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
+	if eval == nil {
+		err = MissingEval("object text")
+	} else if t, e := GetText(run, eval); e != nil {
+		err = e
+	} else if n := t.String(); len(n) == 0 {
+		ret = g.Empty
+	} else {
+		ret, err = run.GetField(object.Id, n)
+	}
+	return
+}
+
 // fix: see also kind.Implements and qna.compatibleKind
 func Compatible(obj g.Value, kind string, exact bool) (ret bool) {
 	if obj != nil {

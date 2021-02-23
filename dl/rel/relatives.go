@@ -60,12 +60,12 @@ func (*ReciprocalsOf) Compose() composer.Spec {
 }
 
 func (op *RelativeOf) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if a, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if a, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if a == nil {
+	} else if a := a.String(); len(a) == 0 {
 		ret = g.Empty
 	} else {
-		noun, rel := a.String(), op.Via.String()
+		noun, rel := a, op.Via.String()
 		if vs, e := run.ReciprocalsOf(noun, rel); e != nil {
 			err = cmdError(op, e)
 		} else if cnt := len(vs); cnt > 1 {
@@ -83,11 +83,11 @@ func (op *RelativeOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *RelativesOf) GetTextList(run rt.Runtime) (ret g.Value, err error) {
-	if a, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if a, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if a == nil {
+	} else if a := a.String(); len(a) == 0 {
 		ret = g.StringsOf(nil)
-	} else if vs, e := run.RelativesOf(a.String(), op.Via.String()); e != nil {
+	} else if vs, e := run.RelativesOf(a, op.Via.String()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = g.StringsOf(vs)
@@ -96,12 +96,12 @@ func (op *RelativesOf) GetTextList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *ReciprocalOf) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if a, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if a, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if a == nil {
+	} else if a := a.String(); len(a) == 0 {
 		ret = g.Empty
 	} else {
-		noun, rel := a.String(), op.Via.String()
+		noun, rel := a, op.Via.String()
 		if vs, e := run.ReciprocalsOf(noun, rel); e != nil {
 			err = cmdError(op, e)
 		} else if cnt := len(vs); cnt > 1 {
@@ -119,11 +119,11 @@ func (op *ReciprocalOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *ReciprocalsOf) GetTextList(run rt.Runtime) (ret g.Value, err error) {
-	if a, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if a, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if a == nil {
+	} else if a := a.String(); len(a) == 0 {
 		ret = g.StringsOf(nil)
-	} else if vs, e := run.ReciprocalsOf(a.String(), op.Via.String()); e != nil {
+	} else if vs, e := run.ReciprocalsOf(a, op.Via.String()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = g.StringsOf(vs)

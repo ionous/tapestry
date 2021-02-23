@@ -1,7 +1,8 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
+	"strings"
+
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/object"
@@ -51,14 +52,17 @@ func (*ObjectExists) Compose() composer.Spec {
 }
 
 func (op *ObjectExists) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	if obj, e := safe.ObjectFromText(run, op.Object); obj == nil {
-		ret = g.False
-	} else if e == nil {
-		ret = g.True
-	} else if _, isUnknown := e.(g.Unknown); isUnknown {
-		ret = g.False
-	} else {
-		err = e
+	switch obj, e := safe.ObjectText(run, op.Object); e.(type) {
+	case nil:
+		if len(obj.String()) == 0 {
+			ret = g.False
+		} else {
+			ret = g.True
+		}
+	case g.Unknown:
+		ret = g.False // fix: is this branch even possible?
+	default:
+		err = cmdError(op, e)
 	}
 	return
 }
@@ -72,11 +76,11 @@ func (*NameOf) Compose() composer.Spec {
 }
 
 func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if obj, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if obj, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if obj == nil {
+	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.Empty // fix: or, should it be "nothing"
-	} else if v, e := safe.Unpack(obj, object.Name, affine.Text); e != nil {
+	} else if v, e := run.GetField(object.Name, obj); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -93,11 +97,11 @@ func (*KindOf) Compose() composer.Spec {
 }
 
 func (op *KindOf) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if obj, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if obj, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if obj == nil {
+	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.Empty
-	} else if v, e := safe.Unpack(obj, object.Kind, affine.Text); e != nil {
+	} else if v, e := run.GetField(object.Kind, obj); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -114,12 +118,20 @@ func (*IsKindOf) Compose() composer.Spec {
 }
 
 func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	kind := lang.Breakcase(op.Kind)
-	if obj, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if obj, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
+	} else if obj := obj.String(); len(obj) == 0 {
+		ret = g.False
 	} else {
-		ok := safe.Compatible(obj, kind, false)
-		ret = g.BoolOf(ok)
+		kind := lang.Breakcase(op.Kind)
+		if objectPath, e := run.GetField(object.Kinds, obj); e != nil {
+			err = cmdError(op, e)
+		} else {
+			// Contains reports whether second is within first.
+			cp, ck := objectPath.String()+",", kind+","
+			ok := strings.Contains(cp, ck)
+			ret = g.BoolOf(ok)
+		}
 	}
 	return
 }
@@ -133,12 +145,20 @@ func (*IsExactKindOf) Compose() composer.Spec {
 }
 
 func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	kind := lang.Breakcase(op.Kind)
-	if obj, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if obj, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
+	} else if obj := obj.String(); len(obj) == 0 {
+		ret = g.False
 	} else {
-		ok := safe.Compatible(obj, kind, true)
-		ret = g.BoolOf(ok)
+		kind := lang.Breakcase(op.Kind)
+		if objectPath, e := run.GetField(object.Kinds, obj); e != nil {
+			err = cmdError(op, e)
+		} else {
+			// Contains reports whether second is within first.
+			cp, ck := objectPath.String()+",", kind+","
+			ok := cp == ck
+			ret = g.BoolOf(ok)
+		}
 	}
 	return
 }

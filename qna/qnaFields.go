@@ -345,6 +345,14 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			})
 		}
 
+	case object.Id:
+		// fix: object.Value should go away...
+		if tmp, e := n.GetField(object.Value, rawField); e != nil {
+			err = e
+		} else {
+			ret = g.StringOf(tmp.String())
+		}
+
 	case object.Value:
 		// fix: internal object handling needs some love; i dont much like the # test.
 		if strings.HasPrefix(rawField, "#") {

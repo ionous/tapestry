@@ -3,7 +3,6 @@ package core
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -15,7 +14,7 @@ func TestObjects(t *testing.T) {
 	this, that, nothing := named("this"), named("that"), named("nothing")
 	base, derived := &Text{"base"}, &Text{"derived"}
 
-	run := modelTest{clsMap: map[string]string{
+	run := modelTest{objClass: map[string]string{
 		// objects:
 		"this": base.Text,
 		"that": derived.Text,
@@ -76,53 +75,30 @@ func named(n string) *Text {
 
 type modelTest struct {
 	baseRuntime
-	clsMap map[string]string
+	objClass map[string]string
 }
 
 func (m *modelTest) GetField(target, field string) (ret g.Value, err error) {
-	switch target {
-	case object.Value:
-		if _, ok := m.clsMap[field]; !ok {
-			err = g.UnknownObject(field)
-		} else {
-			ret = &objValue{model: m, name: field}
-		}
-	default:
+	if cls, ok := m.objClass[field]; !ok {
 		err = g.UnknownField(target, field)
-	}
-	return
-}
+	} else {
+		switch target {
+		case object.Id:
+			ret = g.StringOf(field)
 
-type objValue struct {
-	g.PanicValue
-	model *modelTest
-	name  string
-}
-
-func (j *objValue) Affinity() affine.Affinity {
-	return affine.Object
-}
-
-func (j *objValue) FieldByName(field string) (ret g.Value, err error) {
-	switch m := j.model; field {
-	case object.Kind:
-		if cls, ok := m.clsMap[j.name]; !ok {
-			err = g.UnknownField(j.name, field)
-		} else {
+		case object.Kind:
 			ret = g.StringOf(cls)
-		}
 
-	case object.Kinds:
-		if cls, ok := m.clsMap[j.name]; !ok {
-			err = g.UnknownField(j.name, field)
-		} else if path, ok := m.clsMap[cls]; !ok {
-			err = errutil.New("modelTest: unknown class", cls)
-		} else {
-			ret = g.StringOf(path)
-		}
+		case object.Kinds:
+			if path, ok := m.objClass[cls]; !ok {
+				err = errutil.New("modelTest: unknown class", cls)
+			} else {
+				ret = g.StringOf(path)
+			}
 
-	default:
-		err = g.UnknownField(j.name, field)
+		default:
+			err = g.UnknownField(target, field)
+		}
 	}
 	return
 }

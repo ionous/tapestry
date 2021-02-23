@@ -23,13 +23,13 @@ func (*HasTrait) Compose() composer.Spec {
 }
 
 func (op *HasTrait) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	if obj, e := safe.ObjectFromText(run, op.Object); e != nil {
+	if obj, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if obj == nil {
+	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.False
 	} else if trait, e := safe.GetText(run, op.Trait); e != nil {
 		err = cmdError(op, e)
-	} else if p, e := obj.FieldByName(trait.String()); e != nil {
+	} else if p, e := run.GetField(obj, trait.String()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = p
