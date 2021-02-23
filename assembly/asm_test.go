@@ -2,6 +2,7 @@ package assembly
 
 import (
 	"database/sql"
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/ephemera"
@@ -39,4 +40,8 @@ type assemblyTest struct {
 	rec       *ephemera.Recorder
 	assembler *Assembler
 	dilemmas  *reader.Dilemmas
+}
+
+func lines(s ...string) string {
+	return strings.Join(s, "\n") + "\n"
 }
