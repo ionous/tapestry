@@ -39,7 +39,7 @@ func (w *Word) Scan(ctx Context, bounds Bounds, cs Cursor) (ret Result, err erro
 	return
 }
 
-// AnyOf matches any one of the passed scanners; whichever first matches.
+// AnyOf matches any one of the passed Scanners; whichever first matches.
 type AnyOf struct {
 	Match []Scanner
 }
@@ -63,7 +63,7 @@ func (m *AnyOf) Scan(ctx Context, bounds Bounds, cs Cursor) (ret Result, err err
 	return
 }
 
-// AllOf matches the passed matchers in order.
+// AllOf matches the passed Scanners in order.
 type AllOf struct {
 	Match []Scanner
 }

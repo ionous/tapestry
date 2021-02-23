@@ -7,7 +7,7 @@ type RankNoun interface {
 
 // RankNouns visits each noun in a bounds, calling RankNoun
 func RankNouns(bounds Bounds, cs Cursor, r RankNoun) bool {
-	return !bounds.SearchBounds(func(n NounInstance) bool {
+	return !bounds(func(n NounInstance) bool {
 		return !r.RankNoun(cs, n)
 	})
 }

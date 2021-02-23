@@ -33,8 +33,8 @@ func TestTarget(t *testing.T) {
 		Log:      t,
 		MyBounds: bounds,
 		Other: map[ident.Id]Bounds{
-			ident.IdOf("apple-cart"): appleCart,
-			ident.IdOf("red-cart"):   redCart},
+			ident.IdOf("apple-cart"): appleCart.SearchBounds,
+			ident.IdOf("red-cart"):   redCart.SearchBounds},
 	}
 
 	t.Run("take exact", func(t *testing.T) {

@@ -78,21 +78,15 @@ var ctx = func() (ret MyBounds) {
 	return append(ret, Directions...)
 }()
 
-type Goal interface {
-	Goal() Goal // marker: returns self
-}
-
-type ActionGoal struct {
-	Action string
-	Nouns  []string
-}
-
+// StringIds - convert a list of strings to ids
 func StringIds(strs []string) (ret []ident.Id) {
 	for _, str := range strs {
 		ret = append(ret, ident.IdOf(str))
 	}
 	return
 }
+
+// IdStrings - convert a ids to strings
 func IdStrings(ids []ident.Id) (ret []string) {
 	for _, id := range ids {
 		ret = append(ret, id.String())
@@ -100,23 +94,7 @@ func IdStrings(ids []ident.Id) (ret []string) {
 	return
 }
 
-type ClarifyGoal struct {
-	// do we print the text here or not?
-	// it might be nice for testing sake --
-	// What do you want to examine
-	// What do you want to look at?
-	// and note, yu eed the matched "verb"?
-	NounInstance string
-}
-
-type ErrorGoal struct {
-	Error string
-}
-
-func (a *ActionGoal) Goal() Goal  { return a }
-func (a *ClarifyGoal) Goal() Goal { return a }
-func (a *ErrorGoal) Goal() Goal   { return a }
-
+// Log helper - matches testing.T
 type Log interface {
 	Log(args ...interface{})
 	Logf(format string, args ...interface{})
@@ -133,6 +111,7 @@ func parse(log Log, ctx Context, match Scanner, phrases []string, goals ...Goal)
 	return
 }
 
+// test a string of words against a grammar to see if they match the desired goals
 func innerParse(log Log, ctx Context, match Scanner, in []string, goals []Goal) (err error) {
 	if len(goals) == 0 {
 		err = errutil.New("expected some goals")

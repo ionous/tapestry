@@ -3,6 +3,7 @@ package parser
 type FilterSpec struct {
 	*HasAttr
 	*HasClass
+	*Filters
 }
 
 type Filter interface {

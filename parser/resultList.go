@@ -31,7 +31,8 @@ func (rs *ResultList) AddResult(r Result) {
 	return
 }
 
-// Last result in the list, true if the list was not empty. Generally, when the parser succeeds, this is an Action.
+// Last result in the list, true if the list was not empty.
+// Generally, when the parser succeeds, this is an Action.
 func (rs *ResultList) Last() (ret Result, okay bool) {
 	if cnt := len(rs.list); cnt > 0 {
 		ret, okay = rs.list[cnt-1], true
@@ -39,11 +40,11 @@ func (rs *ResultList) Last() (ret Result, okay bool) {
 	return
 }
 
-// Objects used by this result. Idenfified via Noun.Id()
+// Objects used by this result. Identified via Noun.Id()
 func (rs *ResultList) Objects() (ret []ident.Id) {
 	for _, r := range rs.list {
 		switch k := r.(type) {
-		case ResolvedObject:
+		case ResolvedNoun:
 			n := k.NounInstance
 			ret = append(ret, n.Id())
 		case ResolvedMulti:

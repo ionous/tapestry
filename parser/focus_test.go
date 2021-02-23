@@ -22,17 +22,17 @@ type MyContext struct {
 
 func (m MyContext) GetPlayerBounds(n string) (ret Bounds, err error) {
 	if s, ok := m.Player[n]; ok {
-		m.Log.Log("asking for bounds", n, len(s.(MyBounds)))
+		m.Log.Log("asking for bounds", n)
 		ret = s
 	} else {
-		ret = m
+		ret = m.SearchBounds
 	}
 	return
 }
 
 func (m MyContext) GetObjectBounds(n ident.Id) (ret Bounds, err error) {
 	if s, ok := m.Other[n]; ok {
-		m.Log.Log("asking for bounds", n, len(s.(MyBounds)))
+		m.Log.Log("asking for bounds", n)
 		ret = s
 	} else {
 		err = errutil.New("unknown bounds", n)
@@ -54,7 +54,7 @@ func TestFocus(t *testing.T) {
 	ctx := MyContext{
 		Log:      t,
 		MyBounds: bounds,
-		Player:   map[string]Bounds{"held": invBounds},
+		Player:   map[string]Bounds{"held": invBounds.SearchBounds},
 	}
 
 	t.Run("drop one", func(t *testing.T) {

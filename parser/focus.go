@@ -4,10 +4,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Focus scanner provides a way to change bounds for subsequent scanners.
+// Focus - a Scanner which changes the bounds for subsequent scanners.
 // For instance, searching only though held objects.
 type Focus struct {
-	// future: Who string -- with "" means¥ing player
+	// future: Who string -- with "" meaning player
 	What  Scanner
 	Where string
 }
@@ -41,7 +41,7 @@ func (a *Target) Scan(ctx Context, bounds Bounds, start Cursor) (ret Result, err
 			continue // keep looking for success
 		} else if last, ok := rl.Last(); !ok {
 			err = errutil.New("target not found")
-		} else if obj, ok := last.(ResolvedObject); !ok {
+		} else if obj, ok := last.(ResolvedNoun); !ok {
 			err = errutil.Fmt("expected an object, got %T", last)
 			break
 		} else if bounds, e := ctx.GetObjectBounds(obj.NounInstance.Id()); e != nil {

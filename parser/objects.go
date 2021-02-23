@@ -4,7 +4,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Noun matches one object in ctx.
+// Noun matches one object held by the context.
 // (plus or minus some ambiguity)
 type Noun struct {
 	Filters Filters
@@ -31,7 +31,7 @@ func resolveObject(cs Cursor, wordCount int, nouns []NounInstance) (ret Result, 
 		last := cs.Pos + wordCount
 		if cnt := len(nouns); cnt == 1 {
 			words := cs.Words[cs.Pos:last]
-			ret = ResolvedObject{nouns[0], words}
+			ret = ResolvedNoun{nouns[0], words}
 		} else {
 			err = AmbiguousObject{nouns, Depth(last)}
 		}

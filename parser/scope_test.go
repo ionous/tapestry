@@ -36,10 +36,10 @@ func (m MyBounds) Many(rs ...rune) (ret []NounInstance) {
 }
 
 func (m MyBounds) GetPlayerBounds(string) (Bounds, error) {
-	return m, nil
+	return m.SearchBounds, nil
 }
 func (m MyBounds) GetObjectBounds(ident.Id) (Bounds, error) {
-	return m, nil
+	return m.SearchBounds, nil
 }
 func (m MyBounds) IsPlural(word string) bool {
 	return word != inflect.Singularize(word)
@@ -120,7 +120,7 @@ func TestBounds(t *testing.T) {
 	}
 	if res, e := matching(ctx, "unique"); e != nil {
 		t.Fatal("error", e)
-	} else if obj, ok := res.(ResolvedObject); !ok {
+	} else if obj, ok := res.(ResolvedNoun); !ok {
 		t.Fatalf("%T", res)
 	} else if obj.NounInstance != ctx.Get('a') {
 		t.Fatal("mismatched", obj.NounInstance)
@@ -130,7 +130,7 @@ func TestBounds(t *testing.T) {
 
 	if res, e := matching(ctx, "exact match"); e != nil {
 		t.Fatal("error", e)
-	} else if obj, ok := res.(ResolvedObject); !ok {
+	} else if obj, ok := res.(ResolvedNoun); !ok {
 		t.Fatalf("%T", res)
 	} else if obj.NounInstance != ctx.Get('c') {
 		t.Fatal("mismatched", obj.NounInstance)
@@ -140,7 +140,7 @@ func TestBounds(t *testing.T) {
 
 	if res, e := matchingFilter(ctx, "filter", "attr", "class"); e != nil {
 		t.Fatal("error", e)
-	} else if obj, ok := res.(ResolvedObject); !ok {
+	} else if obj, ok := res.(ResolvedNoun); !ok {
 		t.Fatalf("%T", res)
 	} else if obj.NounInstance != ctx.Get('f') {
 		t.Fatal("mismatched", obj.NounInstance)

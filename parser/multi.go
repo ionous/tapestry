@@ -4,7 +4,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Multi matches one or more objects in ctx.
+// Multi matches one or more objects.
 // (plus or minus some ambiguity)
 type Multi struct {
 	Filters Filters
