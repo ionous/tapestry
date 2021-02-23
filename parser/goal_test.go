@@ -1,5 +1,7 @@
 package parser_test
 
+import "git.sr.ht/~ionous/iffy/ident"
+
 // Goal - tests the results of a parsed statement.
 type Goal interface {
 	Goal() Goal // marker: returns self
@@ -9,6 +11,10 @@ type Goal interface {
 type ActionGoal struct {
 	Action string
 	Nouns  []string
+}
+
+func (a *ActionGoal) Objects() []ident.Id {
+	return StringIds(a.Nouns)
 }
 
 // ClarifyGoal - expects that the parser ended ambiguously.

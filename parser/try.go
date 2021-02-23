@@ -83,7 +83,7 @@ func (m *AllOf) scan(ctx Context, bounds Bounds, cs Cursor) (ret *ResultList, er
 				err = e
 				break
 			} else {
-				rl.AddResult(res)
+				rl.addResult(res)
 				cs = cs.Skip(res.WordsMatched())
 			}
 		}

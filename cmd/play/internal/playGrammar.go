@@ -17,4 +17,10 @@ var pickGrammar = allOf(words("pick"), anyOf(
 	allOf(things(), words("up"), act("take")),
 ))
 
-var Grammar = anyOf(lookGrammar, pickGrammar)
+var takeGrammar = allOf(
+	words("get"),
+	&parser.Target{[]parser.Scanner{things(), words("from/off"), thing()}},
+	act("Remove"),
+)
+
+var Grammar = anyOf(lookGrammar, pickGrammar, takeGrammar)

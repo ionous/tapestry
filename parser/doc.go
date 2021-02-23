@@ -1,8 +1,7 @@
 /*
 Package parser
 
-The parser requires some sort of grammar.
-there's a hidden dsl that we could expose. ( allOf , any Of, nouns... )
+The parser requires a grammar built of Scanner commands.
 
 Grammar
 
@@ -38,6 +37,10 @@ Scanners read from the world model using "Context".
 	- the set of objects in reach of the player
 	- the set of objects available to another object. ( ex. inside or on )
 
+Results
+
+The result of a successful parsing is most often a ResultList,
+the .Last element() of which is usually an action.
 
 */
 package parser

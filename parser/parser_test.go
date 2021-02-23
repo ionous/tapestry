@@ -86,14 +86,6 @@ func StringIds(strs []string) (ret []ident.Id) {
 	return
 }
 
-// IdStrings - convert a ids to strings
-func IdStrings(ids []ident.Id) (ret []string) {
-	for _, id := range ids {
-		ret = append(ret, id.String())
-	}
-	return
-}
-
 // Log helper - matches testing.T
 type Log interface {
 	Log(args ...interface{})
@@ -121,15 +113,15 @@ func innerParse(log Log, ctx Context, match Scanner, in []string, goals []Goal) 
 			err = e
 		} else if res, e := match.Scan(ctx, bounds, Cursor{Words: in}); e != nil {
 			// on error:
-			switch g := goal.(type) {
+			switch want := goal.(type) {
 			case *ErrorGoal:
-				if e.Error() != g.Error {
-					err = errutil.Fmt("mismatched error want:'%s' got:'%s'", g, e)
+				if e.Error() != want.Error {
+					err = errutil.Fmt("mismatched error want:'%s' got:'%s'", want, e)
 				} else {
 					log.Log("matched error", []error{e})
 				}
 			case *ClarifyGoal:
-				clarify := g
+				clarify := want
 				switch e := e.(type) {
 				case MissingObject:
 					extend := append(in, clarify.NounInstance)
@@ -150,25 +142,20 @@ func innerParse(log Log, ctx Context, match Scanner, in []string, goals []Goal) 
 			}
 		} else if goal == nil {
 			err = errutil.New("unexpected success")
-		} else if g, ok := goal.(*ActionGoal); !ok {
+		} else if want, ok := goal.(*ActionGoal); !ok {
 			err = errutil.Fmt("unexpected goal %s %T for result %v", in, goal, pretty.Sprint(res))
-		} else if list, ok := res.(*ResultList); !ok {
+		} else if results, ok := res.(*ResultList); !ok {
 			err = errutil.Fmt("expected result list %T", res)
-		} else if last, ok := list.Last(); !ok {
+		} else if last, ok := results.Last(); !ok {
 			err = errutil.New("result list was empty")
 		} else if act, ok := last.(ResolvedAction); !ok {
 			err = errutil.Fmt("expected resolved action %T", last)
-		} else if !strings.EqualFold(act.Name, g.Action) {
-			err = errutil.New("expected action", act, "got", g.Action)
+		} else if !strings.EqualFold(act.Name, want.Action) {
+			err = errutil.New("expected action", act, "got", want.Action)
+		} else if want, have := prettyIds(want.Objects()), prettyIds(results.Objects()); want != have {
+			err = errutil.Fmt("expected nouns %q got %q", want, have)
 		} else {
-			nouns := StringIds(g.Nouns)
-			objs := list.Objects()
-			if want, have := strings.Join(IdStrings(nouns), ","),
-				strings.Join(IdStrings(objs), ","); want != have {
-				err = errutil.Fmt("expected nouns %q got %q", want, have)
-			} else {
-				log.Logf("matched %v", in)
-			}
+			log.Logf("matched %v", in)
 		}
 	}
 	return

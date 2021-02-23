@@ -15,13 +15,14 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// ex. go run play.go -in /Users/ionous/Documents/Iffy/scratch/main#entire_game::kitchen"/play.db
+// go run play.go -in  /Users/ionous/Documents/Iffy/scratch/shared/play.db
 func main() {
-	var inFile string
+	var inFile, testString string
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
+	flag.StringVar(&testString, "test", "", "input test string")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
-	if cnt, e := playGame(inFile); e != nil {
+	if cnt, e := playGame(inFile, testString); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
 			log.Panic("mismatched")
@@ -33,7 +34,7 @@ func main() {
 
 // open db, select tests, de-gob and run them each in turn.
 // print the results, only error on critical errors
-func playGame(inFile string) (ret int, err error) {
+func playGame(inFile, testString string) (ret int, err error) {
 	if inFile, e := filepath.Abs(inFile); e != nil {
 		err = e
 	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
@@ -47,16 +48,23 @@ func playGame(inFile string) (ret int, err error) {
 		} else {
 			run := play.NewPlaytime(db, "#entire_game::kitchen")
 			parser := play.NewParser(run, nil)
-			reader := bufio.NewReader(os.Stdin)
-			for {
-				fmt.Printf("> ")
-				if in, _ := reader.ReadString('\n'); len(in) <= 1 {
-					break
-				} else {
-					words := in[:len(in)-1]
-					fmt.Println(words)
-					if e := parser.Parse(words); e != nil {
-						fmt.Println(e)
+			//
+			if len(testString) > 0 {
+				if e := parser.Parse(testString); e != nil {
+					fmt.Println(e)
+				}
+			} else {
+				reader := bufio.NewReader(os.Stdin)
+				for {
+					fmt.Printf("> ")
+					if in, _ := reader.ReadString('\n'); len(in) <= 1 {
+						break
+					} else {
+						words := in[:len(in)-1]
+						fmt.Println(words)
+						if e := parser.Parse(words); e != nil {
+							fmt.Println(e)
+						}
 					}
 				}
 			}

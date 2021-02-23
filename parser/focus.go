@@ -56,7 +56,7 @@ func (a *Target) Scan(ctx Context, bounds Bounds, start Cursor) (ret Result, err
 				err = e
 				break
 			} else {
-				rl.AddResult(r)
+				rl.addResult(r)
 				ret, err = rl, nil
 				break
 			}

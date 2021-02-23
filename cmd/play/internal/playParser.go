@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"log"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/parser"
@@ -60,7 +61,18 @@ func (p *Parser) Parse(words string) (err error) {
 
 	case nil:
 		switch res := res.(type) {
-		// case parser.ResultList:
+		// usually, we get a result list
+		// the last element of which is an action
+		case *parser.ResultList:
+			if last, ok := res.Last(); !ok {
+				err = errutil.New("result list was empty")
+			} else if act, ok := last.(parser.ResolvedAction); !ok {
+				err = errutil.Fmt("expected resolved action %T", last)
+			} else {
+				log.Println(act.Name, res.PrettyObjects())
+				err = errutil.New("unhandled results", res)
+
+			}
 
 		// - Action terminates a matcher sequence, resolving to the named action.
 		// case parser.ResolvedAction:
