@@ -1,12 +1,12 @@
 package composer
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strconv"
 
 	"git.sr.ht/~ionous/iffy/web"
-	"golang.org/x/net/context"
 )
 
 // Compose starts the composer server, this function doesnt return.

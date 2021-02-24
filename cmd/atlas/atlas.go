@@ -1,13 +1,12 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
-
-	"golang.org/x/net/context"
 
 	. "git.sr.ht/~ionous/iffy/cmd/atlas/internal"
 	"git.sr.ht/~ionous/iffy/tables"

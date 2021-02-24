@@ -21,7 +21,12 @@ func NewParser(pt *Playtime, gram parser.Scanner) *Parser {
 	return &Parser{pt, gram}
 }
 
-func (p *Parser) Parse(words string) (err error) {
+type Result struct {
+	Action string
+	Nouns  []string
+}
+
+func (p *Parser) Parse(words string) (ret *Result, err error) {
 	pt := p.pt
 	bounds := pt.GetDefaultBounds(pt.location)
 	cursor := parser.Cursor{Words: strings.Fields(words)}
@@ -69,9 +74,19 @@ func (p *Parser) Parse(words string) (err error) {
 			} else if act, ok := last.(parser.ResolvedAction); !ok {
 				err = errutil.Fmt("expected resolved action %T", last)
 			} else {
-				log.Println(act.Name, res.PrettyObjects())
+				// multi-actions are probably repeats or something
+				// or maybe get passed lists of objects hrmm.
+				out := new(Result)
+				out.Action = act.Name
+				if objs := res.Objects(); len(objs) > 0 {
+					out.Nouns = make([]string, len(objs))
+					for i, obj := range objs {
+						out.Nouns[i] = obj.String()
+					}
+				}
+				log.Println(act.Name, out)
 				err = errutil.New("unhandled results", res)
-
+				ret = out
 			}
 
 		// - Action terminates a matcher sequence, resolving to the named action.

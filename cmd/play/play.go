@@ -50,9 +50,7 @@ func playGame(inFile, testString string) (ret int, err error) {
 			parser := play.NewParser(run, nil)
 			//
 			if len(testString) > 0 {
-				if e := parser.Parse(testString); e != nil {
-					fmt.Println(e)
-				}
+				step(parser, testString)
 			} else {
 				reader := bufio.NewReader(os.Stdin)
 				for {
@@ -62,15 +60,21 @@ func playGame(inFile, testString string) (ret int, err error) {
 					} else {
 						words := in[:len(in)-1]
 						fmt.Println(words)
-						if e := parser.Parse(words); e != nil {
-							fmt.Println(e)
-						}
+						step(parser, words)
 					}
 				}
 			}
 		}
 	}
 	return
+}
+
+func step(p *play.Parser, s string) {
+	if res, e := p.Parse(s); e != nil {
+		fmt.Println(e)
+	} else if res != nil {
+		fmt.Println()
+	}
 }
 
 func init() {

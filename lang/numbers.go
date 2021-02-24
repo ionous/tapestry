@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/divan/num2words"
+	"github.com/ionous/num2words"
 )
 
 func NumToWords(n int) (ret string, okay bool) {

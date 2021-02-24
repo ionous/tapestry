@@ -1,12 +1,12 @@
 package web
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strings"
 
 	"github.com/ionous/errutil"
-	"golang.org/x/net/context"
 )
 
 // HandleResource turns a Resource into an http.HandlerFunc;

@@ -1,8 +1,8 @@
 package composer
 
 import (
-	"io/ioutil"
 	"log"
+	"os"
 	"path"
 )
 
@@ -29,7 +29,7 @@ func (c *Config) PathTo(parts ...string) string {
 func DevConfig(base string) *Config {
 	bin := "bin"
 	var dir string // echo $TMPDIR
-	if temp, e := ioutil.TempDir("", "iffy"); e != nil {
+	if temp, e := os.MkdirTemp("", "iffy"); e != nil {
 		log.Fatal(e)
 	} else {
 		dir = temp

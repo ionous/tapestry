@@ -62,7 +62,7 @@ func (rs *ResultList) Objects() (ret []ident.Id) {
 }
 
 func (rs *ResultList) PrettyObjects() string {
-	return prettyIds(rs.Objects())
+	return PrettyIds(rs.Objects())
 }
 
 func (rs *ResultList) String() string {
@@ -83,8 +83,8 @@ func (rs *ResultList) String() string {
 	return b.String()
 }
 
-// prettyIds - convert a ids to a single comma separated string
-func prettyIds(ids []ident.Id) (ret string) {
+// PrettyIds - convert a ids to a single comma separated string
+func PrettyIds(ids []ident.Id) (ret string) {
 	var buf bytes.Buffer
 	for i, id := range ids {
 		if i > 0 {

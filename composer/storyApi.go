@@ -1,9 +1,9 @@
 package composer
 
 import (
+	"context"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/ionous/errutil"
-	"golang.org/x/net/context"
 )
 
 // write the contents to the passed filename but only if the file doesnt already exist
@@ -23,7 +22,7 @@ func ensureFile(fullPath string, contents map[string]interface{}) (err error) {
 		} else if b, e := json.MarshalIndent(contents, "", "  "); e != nil {
 			err = e
 		} else {
-			err = ioutil.WriteFile(fullPath, b, 0644)
+			err = os.WriteFile(fullPath, b, 0644)
 		}
 	} else if e != nil {
 		err = e

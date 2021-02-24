@@ -1,13 +1,13 @@
 package composer
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"os"
 
 	"git.sr.ht/~ionous/iffy/web"
 	"github.com/ionous/errutil"
-	"golang.org/x/net/context"
 )
 
 // path of a local .if file

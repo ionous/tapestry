@@ -1,10 +1,9 @@
 package web
 
 import (
+	"context"
 	"io"
 	"net/http"
-
-	"golang.org/x/net/context"
 )
 
 // Error generates an error for every endpoint.

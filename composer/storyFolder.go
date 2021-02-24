@@ -1,6 +1,7 @@
 package composer
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"log"
@@ -11,7 +12,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/web"
 	"github.com/ionous/errutil"
-	"golang.org/x/net/context"
 )
 
 // a directory of .if files

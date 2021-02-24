@@ -152,7 +152,7 @@ func innerParse(log Log, ctx Context, match Scanner, in []string, goals []Goal) 
 			err = errutil.Fmt("expected resolved action %T", last)
 		} else if !strings.EqualFold(act.Name, want.Action) {
 			err = errutil.New("expected action", act, "got", want.Action)
-		} else if want, have := prettyIds(want.Objects()), prettyIds(results.Objects()); want != have {
+		} else if want, have := PrettyIds(want.Objects()), PrettyIds(results.Objects()); want != have {
 			err = errutil.Fmt("expected nouns %q got %q", want, have)
 		} else {
 			log.Logf("matched %v", in)

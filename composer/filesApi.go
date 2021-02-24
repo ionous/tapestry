@@ -1,6 +1,7 @@
 package composer
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"log"
@@ -12,7 +13,6 @@ import (
 	"git.sr.ht/~ionous/iffy/web"
 	"github.com/iancoleman/orderedmap"
 	"github.com/ionous/errutil"
-	"golang.org/x/net/context"
 )
 
 func FilesApi(cfg *Config) web.Resource {
