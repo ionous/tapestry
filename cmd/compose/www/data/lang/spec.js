@@ -1444,14 +1444,14 @@ const spec = [
       },
       "roles": "FZKZK",
       "slots": [
+        "assignment",
         "bool_eval",
         "number_eval",
         "text_eval",
         "record_eval",
         "num_list_eval",
         "text_list_eval",
-        "record_list_eval",
-        "assignment"
+        "record_list_eval"
       ],
       "tokens": [
         "get",
@@ -1478,14 +1478,14 @@ const spec = [
       },
       "roles": "FZK",
       "slots": [
+        "assignment",
         "bool_eval",
         "number_eval",
         "text_eval",
         "record_eval",
         "num_list_eval",
         "text_list_eval",
-        "record_list_eval",
-        "assignment"
+        "record_list_eval"
       ],
       "tokens": [
         "var",
@@ -3293,8 +3293,8 @@ const spec = [
   }
 ];
 const stub = [
-  "arguments",
   "argument",
+  "arguments",
   "text_value",
   "cycle_text",
   "shuffle_text",

@@ -21,6 +21,7 @@ var Slots = []composer.Slot{{
 
 var Slats = []composer.Composer{
 	(*Activity)(nil),
+	(*Argument)(nil),
 	(*Arguments)(nil),
 	// some boolean tests:
 	(*Always)(nil),

@@ -1,0 +1,181 @@
+{
+  "id": "id-177d2b0a967-0",
+  "type": "story",
+  "value": {
+    "$PARAGRAPH": [
+      {
+        "id": "id-177d2b0a967-1",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177d2b0a967-2",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177d2b0a967-3",
+                "type": "action_decl",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177d2b0a967-4",
+                    "type": "action_name",
+                    "value": "hello"
+                  },
+                  "$ACTION_PARAMS": {
+                    "id": "id-177d2b0a967-5",
+                    "type": "action_params",
+                    "value": {
+                      "$COMMON": {
+                        "id": "id-177d2bb4b5f-5",
+                        "type": "common_action",
+                        "value": {
+                          "$KIND": {
+                            "id": "id-177d2bb4b5f-6",
+                            "type": "singular_kind",
+                            "value": "boop"
+                          },
+                          "$ACTION_CONTEXT": {
+                            "id": "id-177d2bb4b5f-7",
+                            "type": "action_context",
+                            "value": {
+                              "$KIND": {
+                                "id": "id-177d2bb4b5f-8",
+                                "type": "singular_kind",
+                                "value": "sleepy bits"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177d2cb400f-8",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177d2cb400f-7",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177d2cb400f-1",
+                "type": "event_block",
+                "value": {
+                  "$TARGET": {
+                    "id": "id-177d2cb400f-2",
+                    "type": "event_target",
+                    "value": {
+                      "$NAMED_NOUN": {
+                        "id": "id-177d2cdcf8b-1",
+                        "type": "named_noun",
+                        "value": {
+                          "$DETERMINER": {
+                            "id": "id-177d2cdcf8b-2",
+                            "type": "determiner",
+                            "value": "$THE"
+                          },
+                          "$NAME": {
+                            "id": "id-177d2cdcf8b-3",
+                            "type": "noun_name",
+                            "value": "ring"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$HANDLES": [
+                    {
+                      "id": "id-177d2cdcf8b-4",
+                      "type": "event_handler",
+                      "value": {
+                        "$EVENT_PHASE": {
+                          "id": "id-177d2cdcf8b-5",
+                          "type": "event_phase",
+                          "value": "$WHILE"
+                        },
+                        "$EVENT": {
+                          "id": "id-177d2cdcf8b-6",
+                          "type": "event_name",
+                          "value": "looking"
+                        },
+                        "$PATTERN_RULES": {
+                          "id": "id-177d2cdcf8b-7",
+                          "type": "pattern_rules",
+                          "value": {
+                            "$PATTERN_RULE": [
+                              {
+                                "id": "id-177d2cdcf8b-8",
+                                "type": "pattern_rule",
+                                "value": {
+                                  "$GUARD": {
+                                    "id": "id-177d2cdcf8b-9",
+                                    "type": "bool_eval",
+                                    "value": null
+                                  },
+                                  "$HOOK": {
+                                    "id": "id-177d2cdcf8b-10",
+                                    "type": "program_hook",
+                                    "value": null
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "id-177d2cb400f-3",
+                      "type": "event_handler",
+                      "value": {
+                        "$EVENT_PHASE": {
+                          "id": "id-177d2cb400f-4",
+                          "type": "event_phase",
+                          "value": "$AFTER"
+                        },
+                        "$EVENT": {
+                          "id": "id-177d2cb400f-5",
+                          "type": "event_name",
+                          "value": "looking"
+                        },
+                        "$PATTERN_RULES": {
+                          "id": "id-177d2cb400f-6",
+                          "type": "pattern_rules",
+                          "value": {
+                            "$PATTERN_RULE": [
+                              {
+                                "id": "id-177d2cdcf8b-11",
+                                "type": "pattern_rule",
+                                "value": {
+                                  "$GUARD": {
+                                    "id": "id-177d2cdcf8b-12",
+                                    "type": "bool_eval",
+                                    "value": null
+                                  },
+                                  "$HOOK": {
+                                    "id": "id-177d2cdcf8b-13",
+                                    "type": "program_hook",
+                                    "value": null
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

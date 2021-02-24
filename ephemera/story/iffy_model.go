@@ -7,6 +7,103 @@ import (
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
+// AbstractAction requires a user-specified string.
+type AbstractAction struct {
+	At  reader.Position `if:"internal"`
+	Str string
+}
+
+func (op *AbstractAction) String() string {
+	return op.Str
+}
+
+func (*AbstractAction) Choices() (choices map[string]string) {
+	return map[string]string{
+		"$NOTHING": "nothing",
+	}
+}
+
+func (*AbstractAction) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "abstract_action",
+		Spec: "{nothing}",
+		Strings: []string{
+			"nothing",
+		},
+	}
+}
+
+// ActionContext requires various parameters.
+type ActionContext struct {
+	At   reader.Position `if:"internal"`
+	Kind SingularKind
+}
+
+func (*ActionContext) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "action_context",
+		Spec: "and one {kind:singular_kind}",
+	}
+}
+
+// ActionDecl requires various parameters.
+type ActionDecl struct {
+	At           reader.Position `if:"internal"`
+	Name         ActionName
+	ActionParams ActionParams
+}
+
+func (*ActionDecl) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "action_decl",
+		Desc: `Declare an action: Actions let actors accomplish tasks in the game world: for instance, picking up or dropping items. Actions always involve either the player or an npc and up to two other objects at a time.`,
+		Spec: "{name:action_name|quote} is an action applying to {action_params}.",
+	}
+}
+
+// ActionName requires a user-specified string.
+type ActionName struct {
+	At  reader.Position `if:"internal"`
+	Str string
+}
+
+func (op *ActionName) String() string {
+	return op.Str
+}
+
+func (*ActionName) Choices() (choices map[string]string) {
+	return map[string]string{}
+}
+
+func (*ActionName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        "action_name",
+		Spec:        "{action_name}",
+		OpenStrings: true,
+	}
+}
+
+// ActionParams swaps between various options
+type ActionParams struct {
+	At  reader.Position `if:"internal"`
+	Opt interface{}
+}
+
+func (*ActionParams) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "action_params",
+		Spec: "{one or more objects%common:common_action}, or {two similar objects%dual:paired_action}, or {nothing%none:abstract_action}",
+	}
+}
+
+func (*ActionParams) Choices() map[string]interface{} {
+	return map[string]interface{}{
+		"common": (*CommonAction)(nil),
+		"dual":   (*PairedAction)(nil),
+		"none":   (*AbstractAction)(nil),
+	}
+}
+
 // Ana requires a user-specified string.
 type Ana struct {
 	At  reader.Position `if:"internal"`
@@ -285,6 +382,20 @@ func (*Comment) Compose() composer.Spec {
 	}
 }
 
+// CommonAction requires various parameters.
+type CommonAction struct {
+	At            reader.Position `if:"internal"`
+	Kind          SingularKind
+	ActionContext *ActionContext
+}
+
+func (*CommonAction) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "common_action",
+		Spec: "one {kind:singular_kind} {?action_context}",
+	}
+}
+
 // CycleText requires various parameters.
 type CycleText struct {
 	At    reader.Position `if:"internal"`
@@ -369,6 +480,104 @@ func (*Determiner) Compose() composer.Spec {
 	}
 }
 
+// EventBlock requires various parameters.
+type EventBlock struct {
+	At      reader.Position `if:"internal"`
+	Target  EventTarget
+	Handles []EventHandler
+}
+
+func (*EventBlock) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "event_block",
+		Desc: `Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen.`,
+		Spec: "{The target%target:event_target} {handles+event_handler}",
+	}
+}
+
+// EventHandler requires various parameters.
+type EventHandler struct {
+	At           reader.Position `if:"internal"`
+	EventPhase   EventPhase
+	Event        EventName
+	PatternRules PatternRules
+}
+
+func (*EventHandler) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "event_handler",
+		Spec: "{event_phase} {changing%event:event_name} do:{pattern_rules}",
+	}
+}
+
+// EventName requires a user-specified string.
+type EventName struct {
+	At  reader.Position `if:"internal"`
+	Str string
+}
+
+func (op *EventName) String() string {
+	return op.Str
+}
+
+func (*EventName) Choices() (choices map[string]string) {
+	return map[string]string{}
+}
+
+func (*EventName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        "event_name",
+		Spec:        "{event_name}",
+		OpenStrings: true,
+	}
+}
+
+// EventPhase requires a user-specified string.
+type EventPhase struct {
+	At  reader.Position `if:"internal"`
+	Str string
+}
+
+func (op *EventPhase) String() string {
+	return op.Str
+}
+
+func (*EventPhase) Choices() (choices map[string]string) {
+	return map[string]string{
+		"$BEFORE": "before", "$WHILE": "while", "$AFTER": "after",
+	}
+}
+
+func (*EventPhase) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "event_phase",
+		Spec: "{before}, {while}, or {after}",
+		Strings: []string{
+			"before", "while", "after",
+		},
+	}
+}
+
+// EventTarget swaps between various options
+type EventTarget struct {
+	At  reader.Position `if:"internal"`
+	Opt interface{}
+}
+
+func (*EventTarget) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "event_target",
+		Spec: "{The kinds%kinds:plural_kinds} or {named_noun}",
+	}
+}
+
+func (*EventTarget) Choices() map[string]interface{} {
+	return map[string]interface{}{
+		"kinds":      (*PluralKinds)(nil),
+		"named_noun": (*NamedNoun)(nil),
+	}
+}
+
 // ExtType swaps between various options
 type ExtType struct {
 	At  reader.Position `if:"internal"`
@@ -403,7 +612,7 @@ type KindOfNoun struct {
 func (*KindOfNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kind_of_noun",
-		Spec: "{are_an} {*trait|comma-and} kind of {kind:singular_kind} {?noun_relation}",
+		Spec: "{are_an} {*trait|comma-and} {kind:singular_kind} {?noun_relation}",
 	}
 }
 
@@ -529,17 +738,17 @@ func (op *ListCase) String() string {
 
 func (*ListCase) Choices() (choices map[string]string) {
 	return map[string]string{
-		"$FALSE": "include_case", "$TRUE": "ignore_case",
+		"$FALSE": "ignore_case", "$TRUE": "include_case",
 	}
 }
 
 func (*ListCase) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "list_case",
-		Desc:  `List case: When sorting, treat uppercase and lowercase versions of letters the same.`,
+		Desc:  `List case: When sorting, treat uppercase and lowercase versions of letters differently.`,
 		Group: "list",
 		Strings: []string{
-			"include_case", "ignore_case",
+			"ignore_case", "include_case",
 		},
 	}
 }
@@ -681,7 +890,7 @@ func (*NounAssignment) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun_assignment",
 		Desc: `Assign text to a noun: Assign text. Gives a noun one or more lines of text.`,
-		Spec: "The {property} of {nouns+named_noun} is {the text%lines|summary}",
+		Spec: "The {property} of {nouns+named_noun} is {the text%lines|quote}",
 	}
 }
 
@@ -719,7 +928,7 @@ type NounPhrase struct {
 func (*NounPhrase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun_phrase",
-		Spec: "{kind_of_noun}, {noun_traits}, or {noun_relation}",
+		Spec: "{is a kind%kind_of_noun}, {noun_traits}, or {noun_relation}",
 	}
 }
 
@@ -857,6 +1066,19 @@ func (*OneToOne) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "one_to_one",
 		Spec: "one {kind:singular_kind} to one {other_kind:singular_kind}",
+	}
+}
+
+// PairedAction requires various parameters.
+type PairedAction struct {
+	At    reader.Position `if:"internal"`
+	Kinds PluralKinds
+}
+
+func (*PairedAction) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "paired_action",
+		Spec: "two {kinds:plural_kinds}",
 	}
 }
 
@@ -1760,6 +1982,11 @@ var Slots = []composer.Slot{
 }
 
 var Model = []composer.Composer{
+	(*AbstractAction)(nil),
+	(*ActionContext)(nil),
+	(*ActionDecl)(nil),
+	(*ActionName)(nil),
+	(*ActionParams)(nil),
 	(*Ana)(nil),
 	(*AreAn)(nil),
 	(*AreBeing)(nil),
@@ -1774,10 +2001,16 @@ var Model = []composer.Composer{
 	(*Certainties)(nil),
 	(*Certainty)(nil),
 	(*Comment)(nil),
+	(*CommonAction)(nil),
 	(*CycleText)(nil),
 	(*DebugLevel)(nil),
 	(*Determine)(nil),
 	(*Determiner)(nil),
+	(*EventBlock)(nil),
+	(*EventHandler)(nil),
+	(*EventName)(nil),
+	(*EventPhase)(nil),
+	(*EventTarget)(nil),
 	(*ExtType)(nil),
 	(*KindOfNoun)(nil),
 	(*KindOfRelation)(nil),
@@ -1806,6 +2039,7 @@ var Model = []composer.Composer{
 	(*ObjectType)(nil),
 	(*OneToMany)(nil),
 	(*OneToOne)(nil),
+	(*PairedAction)(nil),
 	(*Paragraph)(nil),
 	(*PatternActions)(nil),
 	(*PatternDecl)(nil),
