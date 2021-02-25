@@ -43,8 +43,8 @@ func modelTemplate() string {
 		"create table mdl_rel( relation text, kind text, cardinality text, otherKind text, primary key( relation ));\n" +
 		"/* \n" +
 		"\towner: a pattern or event name \n" +
+		"\tscope: for events, the noun or kind to which this rule applies; patterns dont have scope: they are called directly.\n" +
 		"\tdomain: the scene when the rule applies ( could potentially live in another table if we wanted to reuse rule across domains )\n" +
-		"\tscope: for events, the noun or kind to which this rule applies; patterns are called directly and dont have scope.\n" +
 		"\trule name: unique if it exists\n" +
 		"\tprog: a rt.Handler containing an optional filter and executable statement\n" +
 		" */\n" +

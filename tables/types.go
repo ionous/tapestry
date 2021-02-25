@@ -10,10 +10,12 @@ const (
 )
 
 // eph_named category
-// FIX -- make these match the names in the file and things are much cleaner
+// fix: there shouldnt be a a central name table
 const (
+	NAMED_ARGUMENT     = "argument"
 	NAMED_ASPECT       = "aspect"
 	NAMED_CERTAINTY    = "certainty"
+	NAMED_EVENT        = "event"
 	NAMED_FIELD        = "field"
 	NAMED_KIND         = "singular_kind"
 	NAMED_KINDS        = "kind" // FIX: why are only the auto-generated types using this?
@@ -24,7 +26,6 @@ const (
 	NAMED_LOCAL        = "local"
 	NAMED_RETURN       = "return"
 	NAMED_PARAMETER    = "parameter"
-	NAMED_ARGUMENT     = "argument"
 	NAMED_RELATION     = "relation"
 	NAMED_VERB         = "verb"
 	NAMED_SCENE        = "scene"

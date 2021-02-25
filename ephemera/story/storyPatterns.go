@@ -1,8 +1,6 @@
 package story
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -13,14 +11,14 @@ import (
 func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
 	if patternName, e := op.Name.NewName(k); e != nil {
 		err = e
-	} else if e := op.PatternRules.ImportPattern(k, patternName); e != nil {
+	} else if e := op.PatternRules.ImportRules(k, patternName, ephemera.Named{}, 0); e != nil {
 		err = e
 	} else if e := op.PatternReturn.ImportReturn(k, patternName); e != nil {
 		err = e
 	} else {
 		// import each local if they exist
 		if els := op.PatternLocals; els != nil {
-			err = els.ImportPattern(k, patternName)
+			err = els.ImportLocals(k, patternName)
 		}
 	}
 	return
@@ -45,6 +43,10 @@ func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
 		err = e
 	} else {
 		k.NewPatternDecl(patternName, patternName, patternType, "")
+
+		if res := op.PatternReturn; res != nil {
+			err = res.ImportReturn(k, patternName)
+		}
 		//
 		if els := op.Optvars; els != nil {
 			for _, el := range els.VariableDecl {
@@ -74,10 +76,11 @@ func (op *PatternVariablesDecl) ImportPhrase(k *Importer) (err error) {
 	}
 	return
 }
-func (op *PatternRules) ImportPattern(k *Importer, patternName ephemera.Named) (err error) {
+
+func (op *PatternRules) ImportRules(k *Importer, pattern, target ephemera.Named, flags rt.Flags) (err error) {
 	if els := op.PatternRule; els != nil {
 		for _, el := range *els {
-			if e := el.ImportPattern(k, patternName); e != nil {
+			if e := el.ImportRule(k, pattern, target, flags); e != nil {
 				err = errutil.Append(err, e)
 			}
 		}
@@ -85,27 +88,34 @@ func (op *PatternRules) ImportPattern(k *Importer, patternName ephemera.Named) (
 	return
 }
 
-func (op *PatternRule) ImportPattern(k *Importer, patternName ephemera.Named) (err error) {
+func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, tgtFlags rt.Flags) (err error) {
 	if hook, e := op.Hook.ImportProgram(k); e != nil {
 		err = e
 	} else if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
-	} else if slotType := hook.SlotType(); flags != rt.Infix && slotType != "execute" && !strings.HasSuffix(slotType, "_list") {
-		err = errutil.New("didnt expect continuation flags for", slotType, "in", patternName.String())
 	} else {
-		guard := op.Guard
-		// if this rule is declared inside a specific domain, add a check for that.
-		if dom := k.Current.Domain.String(); len(dom) > 0 {
-			guard = &core.AllTrue{[]rt.BoolEval{
-				&core.HasDominion{dom},
-				guard,
-			}}
+		// make sure only one set of flags is ... set
+		if flags != 0 && tgtFlags != 0 {
+			err = errutil.New("unexpected continuation flags in", pattern.String())
 		}
-		ruleType, rule := hook.NewRule(guard, flags)
-		if patternProg, e := k.NewGob(ruleType, rule); e != nil {
-			err = e
-		} else {
-			k.NewPatternRule(patternName, patternProg)
+		if tgtFlags != 0 {
+			flags = tgtFlags
+		}
+		if err == nil {
+			guard := op.Guard
+			// if this rule is declared inside a specific domain, add a check for that.
+			if dom := k.Current.Domain.String(); len(dom) > 0 {
+				guard = &core.AllTrue{[]rt.BoolEval{
+					&core.HasDominion{dom},
+					guard,
+				}}
+			}
+			rule := &rt.Rule{Filter: guard, Execute: hook, Flags: flags}
+			if patternProg, e := k.NewGob("rule", rule); e != nil {
+				err = e
+			} else {
+				k.NewPatternRule(pattern, target, k.currentDomain(), patternProg)
+			}
 		}
 	}
 	return
@@ -129,7 +139,7 @@ func (op *PatternFlags) ReadFlags() (ret rt.Flags, err error) {
 	return
 }
 
-func (op *PatternLocals) ImportPattern(k *Importer, patternName ephemera.Named) (err error) {
+func (op *PatternLocals) ImportLocals(k *Importer, patternName ephemera.Named) (err error) {
 	for _, el := range op.LocalDecl {
 		if val, e := el.VariableDecl.ImportVariable(k, tables.NAMED_LOCAL); e != nil {
 			err = e

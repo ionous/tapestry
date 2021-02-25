@@ -1,11 +1,11 @@
 package pattern
 
-import . "git.sr.ht/~ionous/iffy/rt"
+import "git.sr.ht/~ionous/iffy/rt"
 
 // previously we matched the rules, and then ran them.
 // now: they are sorted first, and then matched so rules can affect each other.
 // FIX: presort everything in the assembler?
-func SortRules(rules []Rule) (ret []int, retFlags Flags) {
+func SortRules(rules []rt.Rule) (ret []int, retFlags rt.Flags) {
 	cnt := len(rules)
 	var pre, post []int
 	in := make([]int, 0, cnt)
@@ -13,11 +13,11 @@ func SortRules(rules []Rule) (ret []int, retFlags Flags) {
 		flags := rules[i].GetFlags()
 		var at *[]int
 		switch flags {
-		case Prefix:
+		case rt.Prefix:
 			at = &pre
-		case Postfix:
+		case rt.Postfix:
 			at = &post
-		case Infix:
+		case rt.Infix:
 			at = &in
 		}
 		if at != nil {
@@ -25,7 +25,7 @@ func SortRules(rules []Rule) (ret []int, retFlags Flags) {
 			retFlags |= flags
 		}
 	}
-	if retFlags == Infix {
+	if retFlags == rt.Infix {
 		ret = in // this is the most common
 	} else {
 		ret = append(pre, append(in, post...)...)

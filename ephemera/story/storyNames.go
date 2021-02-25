@@ -6,9 +6,19 @@ import (
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
+func (op *ActionName) NewName(k *Importer) (ret ephemera.Named, err error) {
+	name := lang.Breakcase(op.Str)
+	return k.NewName(name, tables.NAMED_PATTERN, op.At.String()), nil
+}
+
 func (op *Aspect) NewName(k *Importer) (ret ephemera.Named, err error) {
 	name := lang.Breakcase(op.Str)
 	return k.NewName(name, tables.NAMED_ASPECT, op.At.String()), nil
+}
+
+func (op *EventName) NewName(k *Importer) (ret ephemera.Named, err error) {
+	name := lang.Breakcase(op.Str)
+	return k.NewName(name, tables.NAMED_EVENT, op.At.String()), nil
 }
 
 func (op *NounName) NewName(k *Importer) (ret ephemera.Named, err error) {
@@ -29,6 +39,11 @@ func (op *PatternName) NewName(k *Importer) (ret ephemera.Named, err error) {
 func (op *PluralKinds) NewName(k *Importer) (ret ephemera.Named, err error) {
 	name := lang.Breakcase(op.Str)
 	return k.NewName(name, tables.NAMED_PLURAL_KINDS, op.At.String()), nil
+}
+
+func (op *PluralKinds) FixPlurals(k *Importer) (ret ephemera.Named, err error) {
+	name := lang.Breakcase(lang.Singularize(op.Str))
+	return k.NewName(name, tables.NAMED_KIND, op.At.String()), nil
 }
 
 func (op *Property) NewName(k *Importer) (ret ephemera.Named, err error) {

@@ -43,7 +43,8 @@ create table eph_relation( idNamedRelation int, idNamedKind int, idNamedOtherKin
 /* connection between two object instances */	
 create table eph_relative( idNamedHead int, idNamedStem int, idNamedDependent int, idNamedDomain int );
 /* function handler for a pattern */
-create table eph_rule( idNamedPattern int, idProg int );/* uri, file name or other identification for the origin of the various ephemera recorded in the db. 
+create table eph_rule( idNamedPattern int, idNamedTarget int, idNamedDomain int, idProg int );
+/* uri, file name or other identification for the origin of the various ephemera recorded in the db. 
 while its not particularly useful to have a one column primitive data type column
 someday, this might contain source modification times or other useful info.
 */

@@ -4,9 +4,9 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/test/testpat"
 )
 
 var runGroupTogther = list.Map{
@@ -20,7 +20,7 @@ type AssignGrouping struct {
 }
 
 // from a list of object names, build a list of group settings
-var assignGrouping = pattern.Pattern{
+var assignGrouping = testpat.Pattern{
 	Name:   "assign_grouping",
 	Return: "out",
 	Labels: []string{"in"},

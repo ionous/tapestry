@@ -7,6 +7,7 @@ import (
   "git.sr.ht/~ionous/iffy/rt"
   g "git.sr.ht/~ionous/iffy/rt/generic"
   "git.sr.ht/~ionous/iffy/rt/safe"
+  "git.sr.ht/~ionous/iffy/test/testpat"
 )
 
 func SayIt(s string) rt.Execute {
@@ -41,7 +42,7 @@ type SayMe struct {
   Num float64
 }
 
-var SayPattern = pattern.Pattern{
+var SayPattern = testpat.Pattern{
   Name:   "say_me",
   Labels: []string{"num"},
   Fields: []g.Field{

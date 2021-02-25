@@ -83,9 +83,9 @@ function localLang(make) {
     make.str("abstract_action", "{nothing}");
     make.str("action_name");
 
-    make.flow("event_block", "story_statement", "{The target%target:event_target} {handles+event_handler}",
+    make.flow("event_block", "story_statement", "{The target%target:event_target} {handlers+event_handler}",
       `Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen.`);
-    make.flow("event_handler", "{event_phase} {changing%event:event_name} do:{pattern_rules}");
+    make.flow("event_handler", "{event_phase} {doing event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}");
 
     make.str("event_phase", "{before}, {while}, or {after}");
     make.str("event_name");
@@ -94,22 +94,24 @@ function localLang(make) {
 
   make.group("Patterns", function() {
     make.flow("pattern_decl", "story_statement",
-       "The pattern {name:pattern_name|quote} determines {type:pattern_type}. {optvars?pattern_variables_tail} {about?comment}",
+       "The pattern {name:pattern_name|quote} determines {type:pattern_type}. {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
        `Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.
   Each function in a given pattern has "guards" which determine whether the function applies in a particular situtation.`
      );
 
+    // fix: shouldnt this be called "parameters" -- maybe look at a few ebnfs to see what other languages use for naming things.
     make.flow("pattern_variables_decl", "story_statement",
       "The pattern {pattern_name|quote} requires {+variable_decl|comma-and}.",
-       `Add parameters to a pattern: Values provided when starting pattern.`);
+       `Add parameters to a pattern: Values provided when calling a pattern.`);
 
-    make.flow("pattern_variables_tail", "It requires {+variable_decl|comma-and}.",
+    make.flow("pattern_variables_tail", "It requires {+variable_decl|comma-and}",
        `Pattern variables: Storage for values used during the execution of a pattern.`);
 
     make.swap("pattern_type", "an {activity:patterned_activity}");
     make.str("patterned_activity", "{an activity%activity}");
     make.str("pattern_name");
 
+    // fix: pattern return should be part of the declaration
     make.flow("pattern_actions", "story_statement",
       "To determine {pattern name%name:pattern_name} {?pattern_locals} {?pattern_return} do:{pattern_rules}",
       "Add actions to a pattern: Actions to take when using a pattern.");

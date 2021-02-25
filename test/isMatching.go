@@ -3,9 +3,9 @@ package test
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/test/testpat"
 )
 
 type MatchGroups struct {
@@ -16,7 +16,7 @@ type MatchGroups struct {
 
 // a pattern for matching groups --
 // we add rules that if things arent equal we return false
-var matchGroups = pattern.Pattern{
+var matchGroups = testpat.Pattern{
 	Name:   "match_groups",
 	Labels: []string{"a", "b"},
 	Fields: []g.Field{

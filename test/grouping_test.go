@@ -3,7 +3,6 @@ package test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testpat"
@@ -28,7 +27,7 @@ func TestGrouping(t *testing.T) {
 				g.RecordOf(values),
 			},
 		},
-		Map: pattern.Map{
+		Map: testpat.Map{
 			"assign_grouping": &assignGrouping,
 			"collate_groups":  &collateGroups,
 			"match_groups":    &matchGroups,

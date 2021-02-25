@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testpat"
@@ -45,7 +44,7 @@ func TestReduce(t *testing.T) {
 	}
 	//
 	lt := testpat.Runtime{
-		pattern.Map{
+		testpat.Map{
 			"reduce": &reduceRecords,
 		},
 		testutil.Runtime{
@@ -77,7 +76,7 @@ var reduce = list.Reduce{
 }
 
 // join each record in turn
-var reduceRecords = pattern.Pattern{
+var reduceRecords = testpat.Pattern{
 	Name:   "reduce",
 	Return: "out",
 	Labels: []string{"in", "out"},

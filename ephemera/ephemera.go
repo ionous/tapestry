@@ -96,22 +96,23 @@ func (k *Recorder) NewNoun(noun, kind Named) {
 	k.cache.Must(eph_noun, noun, kind)
 }
 
-// declare a pattern or pattern parameter
+//  a pattern or pattern parameter
 func (k *Recorder) NewPatternDecl(pattern, param, patternType Named, affinity string) {
 	k.cache.Must(eph_pattern, pattern, param, patternType, affinity, Prog{})
 }
 
+//  a pattern initializer
 func (k *Recorder) NewPatternInit(pattern, param, patternType Named, affinity string, prog Prog) {
 	k.cache.Must(eph_pattern, pattern, param, patternType, affinity, prog)
 }
 
-//
+// a reference to a pattern declared elsewhere
 func (k *Recorder) NewPatternRef(pattern, param, patternType Named, affinity string) {
 	k.cache.Must(eph_pattern, pattern, param, patternType, affinity, -1)
 }
 
-func (k *Recorder) NewPatternRule(pattern Named, handler Prog) {
-	k.cache.Must(eph_rule, pattern, handler)
+func (k *Recorder) NewPatternRule(pattern, target, domain Named, handler Prog) {
+	k.cache.Must(eph_rule, pattern, target, domain, handler)
 }
 
 // NewPlural maps the plural form of a name to its singular form.
@@ -169,7 +170,7 @@ var eph_check = tables.Insert("eph_check", "idNamedTest", "idProg")
 var eph_default = tables.Insert("eph_default", "idNamedKind", "idNamedProp", "value")
 var eph_expect = tables.Insert("eph_expect", "idNamedTest", "testType", "expect")
 var eph_field = tables.Insert("eph_field", "idNamedKind", "idNamedField", "primType", "primAff")
-var eph_rule = tables.Insert("eph_rule", "idNamedPattern", "idProg")
+var eph_rule = tables.Insert("eph_rule", "idNamedPattern", "idNamedTarget", "idNamedDomain", "idProg")
 var eph_kind = tables.Insert("eph_kind", "idNamedKind", "idNamedParent")
 var eph_named = tables.Insert("eph_named", "name", "og", "category", "domain", "idSource", "offset")
 var eph_noun = tables.Insert("eph_noun", "idNamedNoun", "idNamedKind")

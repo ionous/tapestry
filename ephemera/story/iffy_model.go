@@ -482,16 +482,16 @@ func (*Determiner) Compose() composer.Spec {
 
 // EventBlock requires various parameters.
 type EventBlock struct {
-	At      reader.Position `if:"internal"`
-	Target  EventTarget
-	Handles []EventHandler
+	At       reader.Position `if:"internal"`
+	Target   EventTarget
+	Handlers []EventHandler
 }
 
 func (*EventBlock) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_block",
 		Desc: `Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen.`,
-		Spec: "{The target%target:event_target} {handles+event_handler}",
+		Spec: "{The target%target:event_target} {handlers+event_handler}",
 	}
 }
 
@@ -500,13 +500,14 @@ type EventHandler struct {
 	At           reader.Position `if:"internal"`
 	EventPhase   EventPhase
 	Event        EventName
+	Locals       *PatternLocals
 	PatternRules PatternRules
 }
 
 func (*EventHandler) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_handler",
-		Spec: "{event_phase} {changing%event:event_name} do:{pattern_rules}",
+		Spec: "{event_phase} {doing event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}",
 	}
 }
 
@@ -1115,18 +1116,19 @@ func (*PatternActions) Compose() composer.Spec {
 
 // PatternDecl requires various parameters.
 type PatternDecl struct {
-	At      reader.Position `if:"internal"`
-	Name    PatternName
-	Type    PatternType
-	Optvars *PatternVariablesTail
-	About   *Comment
+	At            reader.Position `if:"internal"`
+	Name          PatternName
+	Type          PatternType
+	Optvars       *PatternVariablesTail
+	PatternReturn *PatternReturn
+	About         *Comment
 }
 
 func (*PatternDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_decl",
 		Desc: `Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it. Each function in a given pattern has "guards" which determine whether the function applies in a particular situtation.`,
-		Spec: "The pattern {name:pattern_name|quote} determines {type:pattern_type}. {optvars?pattern_variables_tail} {about?comment}",
+		Spec: "The pattern {name:pattern_name|quote} determines {type:pattern_type}. {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}",
 	}
 }
 
@@ -1262,7 +1264,7 @@ type PatternVariablesDecl struct {
 func (*PatternVariablesDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_variables_decl",
-		Desc: `Add parameters to a pattern: Values provided when starting pattern.`,
+		Desc: `Add parameters to a pattern: Values provided when calling a pattern.`,
 		Spec: "The pattern {pattern_name|quote} requires {+variable_decl|comma-and}.",
 	}
 }

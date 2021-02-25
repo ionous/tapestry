@@ -19,7 +19,7 @@ func TestFullFactorial(t *testing.T) {
 	db := testdb.Open(t.Name(), testdb.Memory, assembly.SqlCustomDriver)
 	defer db.Close()
 
-	//import factorialStory, assemble and run.
+	// read factorialStory, assemble and run.
 	var ds reader.Dilemmas
 	if e := tables.CreateAll(db); e != nil {
 		t.Fatal("couldn't create tables", e)

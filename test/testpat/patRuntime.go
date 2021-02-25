@@ -12,7 +12,7 @@ import (
 )
 
 type Runtime struct {
-	pattern.Map
+	Map
 	testutil.Runtime
 }
 

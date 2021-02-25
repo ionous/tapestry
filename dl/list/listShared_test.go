@@ -5,14 +5,13 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testpat"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
-func newListTime(src []string, p pattern.Map) (ret rt.Runtime, vals *g.Record, err error) {
+func newListTime(src []string, p testpat.Map) (ret rt.Runtime, vals *g.Record, err error) {
 	var kinds testutil.Kinds
 	type Values struct{ Source []string }
 	kinds.AddKinds((*Values)(nil))

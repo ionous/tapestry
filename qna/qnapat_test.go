@@ -23,9 +23,12 @@ func TestSayMe(t *testing.T) {
 		t.Fatal(e)
 	}
 	m := assembly.NewAssembler(db)
-	if e := assembly.WritePattern(m, &debug.SayPattern); e != nil {
-		t.Fatal(e)
-	} else if e := m.WriteGob("say_me", &debug.SayPattern); e != nil {
+	// FIX: change to write sub pattern functions
+	src := debug.SayPattern
+	frag := assembly.PatternFrag{
+		Name: src.Name, Return: src.Return, Labels: src.Labels, Fields: src.Fields, Rules: src.Rules,
+	}
+	if e := assembly.WritePattern(m, &frag); e != nil {
 		t.Fatal(e)
 	}
 	//

@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/test/testpat"
 )
 
 var runCollateGroups = list.Reduce{
@@ -23,7 +24,7 @@ type CollateGroups struct {
 	Names     []string
 }
 
-var collateGroups = pattern.Pattern{
+var collateGroups = testpat.Pattern{
 	Name:   "collate_groups",
 	Labels: []string{"settings", "collation"},
 	Return: "collation",

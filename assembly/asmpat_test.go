@@ -75,7 +75,7 @@ package assembly
 // 		} else {
 // 			var visited bool
 // 			var progName, typeName string
-// 			var pat pattern.Pattern
+// 			var pat PatternFrag
 // 			if e := tables.QueryAll(asm.db, "select * from mdl_prog",
 // 				func() (err error) {
 // 					if visited {

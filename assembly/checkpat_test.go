@@ -184,6 +184,7 @@ func addEphRule(rec *ephemera.Recorder, els ...string) {
 		txt := els[i+2]
 		rec.NewPatternRule(
 			rec.NewName(pat, tables.NAMED_PATTERN, strconv.Itoa(i)),
+			ephemera.Named{}, ephemera.Named{},
 			rec.NewProg(typ, []byte(txt)))
 	}
 }

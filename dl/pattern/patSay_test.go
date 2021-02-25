@@ -3,7 +3,6 @@ package pattern_test
 import (
 	"fmt"
 
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/test/testpat"
 	"git.sr.ht/~ionous/iffy/test/testutil"
@@ -16,7 +15,7 @@ func ExampleSayMe() {
 	var kinds testutil.Kinds
 	kinds.AddKinds((*debug.SayMe)(nil))
 	run := testpat.Runtime{
-		pattern.Map{
+		testpat.Map{
 			"say_me": &debug.SayPattern,
 		}, testutil.Runtime{
 			Kinds: &kinds,

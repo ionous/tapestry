@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testpat"
@@ -27,7 +26,7 @@ func TestMapStrings(t *testing.T) {
 	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Remap)(nil))
 	values := kinds.NewRecord("values") // a record.
 	lt := testpat.Runtime{
-		pattern.Map{
+		testpat.Map{
 			"remap": &reverseStrings,
 		},
 		testutil.Runtime{
@@ -86,7 +85,7 @@ func TestMapRecords(t *testing.T) {
 	}
 	//
 	lt := testpat.Runtime{
-		pattern.Map{
+		testpat.Map{
 			"remap": &reverseRecords,
 		},
 		testutil.Runtime{
@@ -126,7 +125,7 @@ var remap = list.Map{
 	UsingPattern: "remap",
 }
 
-var reverseRecords = pattern.Pattern{
+var reverseRecords = testpat.Pattern{
 	Name:   "remap",
 	Labels: []string{"in"},
 	Return: "out",
@@ -147,7 +146,7 @@ var reverseRecords = pattern.Pattern{
 	},
 }
 
-var reverseStrings = pattern.Pattern{
+var reverseStrings = testpat.Pattern{
 	Name:   "remap",
 	Labels: []string{"in"},
 	Return: "out",

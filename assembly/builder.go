@@ -49,9 +49,9 @@ func (pat *patternEntry) AddField(cat string, fi fieldInit) (err error) {
 type patternCache map[string]*patternEntry
 
 // fix: report errors
-func (cache patternCache) init(name, patternType string) (ret *pattern.Pattern, okay bool) {
-	if c, ok := (cache)[name]; ok && c.patternType == patternType {
-		pat := pattern.Pattern{Name: name}
+func (cache patternCache) init(name, patternType string) (ret *PatternFrag, okay bool) {
+	if c, ok := cache[name]; ok && c.patternType == patternType {
+		pat := PatternFrag{Name: name}
 		//
 		if ps := c.params; len(ps) > 0 {
 			for _, fi := range ps {
@@ -188,7 +188,7 @@ func decodeProg(prog []byte, aff affine.Affinity) (ret rt.Assignment, err error)
 
 // fix: for now this reads from the established pattern structure
 // eventually we want to skip reading into the structure and instead just write straight to the model.
-func buildPatternTables(asm *Assembler, pats []*pattern.Pattern) (err error) {
+func buildPatternTables(asm *Assembler, pats []*PatternFrag) (err error) {
 	if e := asm.WriteAncestor("patterns", ""); e != nil {
 		err = e
 	} else {
@@ -202,7 +202,7 @@ func buildPatternTables(asm *Assembler, pats []*pattern.Pattern) (err error) {
 }
 
 //
-func WritePattern(asm *Assembler, pat *pattern.Pattern) (err error) {
+func WritePattern(asm *Assembler, pat *PatternFrag) (err error) {
 	if e := asm.WriteAncestor(pat.Name, "patterns"); e != nil {
 		err = e
 	} else if e := asm.WritePattern(pat.Name, pat.Return, pat.Labels); e != nil {
@@ -260,9 +260,9 @@ func WritePattern(asm *Assembler, pat *pattern.Pattern) (err error) {
 	return
 }
 
-func buildPatternRules(asm *Assembler, patterns patternCache) (ret []*pattern.Pattern, err error) {
+func buildPatternRules(asm *Assembler, patterns patternCache) (ret []*PatternFrag, err error) {
 	list := make(map[string]interface{})
-	var curr *pattern.Pattern
+	var curr *PatternFrag
 	var name string
 	var prog []byte
 	if e := tables.QueryAll(asm.cache.DB(),

@@ -19,7 +19,7 @@ func TestMatching(t *testing.T) {
 
 	//
 	lt := testpat.Runtime{
-		pattern.Map{
+		testpat.Map{
 			"match_groups": &matchGroups,
 		},
 		testutil.Runtime{

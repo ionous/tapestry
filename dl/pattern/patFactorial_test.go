@@ -25,8 +25,8 @@ func TestFactorial(t *testing.T) {
 		Runtime: testutil.Runtime{
 			Kinds: &kinds,
 		},
-		Map: pattern.Map{
-			"factorial": &pattern.Pattern{
+		Map: testpat.Map{
+			"factorial": &testpat.Pattern{
 				Name:   "factorial",
 				Labels: []string{"num"},
 				Return: "num",
