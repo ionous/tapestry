@@ -42,7 +42,7 @@ type ActionContext struct {
 func (*ActionContext) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action_context",
-		Spec: "and one {kind:singular_kind}",
+		Spec: "and one {kind:singular_kind} ( the other noun )",
 	}
 }
 
@@ -57,7 +57,7 @@ func (*ActionDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action_decl",
 		Desc: `Declare an action: Actions let actors accomplish tasks in the game world: for instance, picking up or dropping items. Actions always involve either the player or an npc and up to two other objects at a time.`,
-		Spec: "{name:action_name|quote} is an action applying to {action_params}.",
+		Spec: "{name:action_name|quote} is an actor action applying to {action_params}.",
 	}
 }
 
@@ -392,7 +392,7 @@ type CommonAction struct {
 func (*CommonAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "common_action",
-		Spec: "one {kind:singular_kind} {?action_context}",
+		Spec: "one {kind:singular_kind} ( the noun ) {?action_context}",
 	}
 }
 
@@ -1079,7 +1079,7 @@ type PairedAction struct {
 func (*PairedAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "paired_action",
-		Spec: "two {kinds:plural_kinds}",
+		Spec: "two {kinds:plural_kinds} ( the noun and other noun )",
 	}
 }
 
@@ -1128,7 +1128,7 @@ func (*PatternDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_decl",
 		Desc: `Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it. Each function in a given pattern has "guards" which determine whether the function applies in a particular situtation.`,
-		Spec: "The pattern {name:pattern_name|quote} determines {type:pattern_type}. {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}",
+		Spec: "The pattern {name:pattern_name|quote} determines {type:pattern_type}. {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
 	}
 }
 
@@ -1279,7 +1279,7 @@ func (*PatternVariablesTail) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_variables_tail",
 		Desc: `Pattern variables: Storage for values used during the execution of a pattern.`,
-		Spec: "It requires {+variable_decl|comma-and}.",
+		Spec: "It requires {+variable_decl|comma-and}",
 	}
 }
 

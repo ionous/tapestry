@@ -23,10 +23,9 @@ func (n EventName) String() string { return string(n) }
 
 func (*Send) Compose() composer.Spec {
 	return composer.Spec{
-		Spec:  "send: {event%name:event_name} to:{path:text_list_eval}{?arguments}",
+		Spec:  "Send: {event:event_name} to:{path:text_list_eval}{?arguments}",
 		Group: "events",
-		Desc:  "Triggers a event, returns a true/false success value.",
-		Stub:  true,
+		Desc:  "Send: Triggers a event, returns a true/false success value.",
 	}
 }
 

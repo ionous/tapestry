@@ -13,5 +13,4 @@ type PatternFrag struct {
 	Labels []string        // one label for every parameter
 	Locals []rt.Assignment // usually equal to the number of locals; or nil for testing.
 	Fields []g.Field       // flat list of params and locals and an optional return
-	Rules  []rt.Rule
 }

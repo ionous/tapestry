@@ -35,12 +35,12 @@ func TestFactorialStory(t *testing.T) {
 				"3", // e@h_prog -- 1 test program, 2 rules
 				"4", // eph_pattern specifies types - (1 pattern, 1 parameter) * (1 decl, 1 call)
 				// eph_named
-				"execute,type",      // we evaluated the return
 				"factorial,pattern", // name of the pattern
 				"factorial,test",    // name of the test
 				"num,parameter",     // we declared the param
 				"num,return",        // we referenced the return
 				"number_eval,type",  // we evaluated the var
+				"patterns,type",     // we evaluated the return
 			); have != want {
 				t.Fatal(have)
 			}

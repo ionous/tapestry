@@ -214,6 +214,10 @@ const spec = [
     "uses": "group"
   },
   {
+    "name": "events",
+    "uses": "group"
+  },
+  {
     "name": "exec",
     "uses": "group"
   },
@@ -429,7 +433,7 @@ const spec = [
     }
   },
   {
-    "desc": "Assignment: Sets a variable to a value.",
+    "desc": "Let: Assigns a variable to a value.",
     "group": [
       "variables"
     ],
@@ -3076,6 +3080,21 @@ const spec = [
     }
   },
   {
+    "desc": "Send: Triggers a event, returns a true/false success value.",
+    "group": [
+      "events"
+    ],
+    "name": "send",
+    "spec": "Send: {event:event_name} to:{path:text_list_eval}{?arguments}",
+    "uses": "flow",
+    "with": {
+      "slots": [
+        "execute",
+        "bool_eval"
+      ]
+    }
+  },
+  {
     "desc": "Shuffle Text: When called multiple times returns its inputs at random.",
     "group": [
       "format"
@@ -3295,13 +3314,13 @@ const spec = [
 const stub = [
   "argument",
   "arguments",
-  "text_value",
   "cycle_text",
+  "determine",
   "shuffle_text",
   "stopping_text",
+  "text_value",
   "debug_level",
   "render_template",
-  "determine",
   "list_case",
   "list_edge",
   "list_order"

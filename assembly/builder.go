@@ -182,57 +182,6 @@ func decodeProg(prog []byte, aff affine.Affinity) (ret rt.Assignment, err error)
 	return
 }
 
-// fix: for now this reads from the established pattern structure
-// eventually we want to skip reading into the structure and instead just write straight to the model.
-func buildPatternTables(asm *Assembler, pats []*PatternFrag) (err error) {
-	const kind = "patterns"
-	if e := asm.WriteAncestor(kind, ""); e != nil {
-		err = e
-	} else {
-		for _, pat := range pats {
-			if e := WritePattern(asm, kind, pat); e != nil {
-				err = errutil.Append(err, e)
-			}
-		}
-	}
-	return
-}
-
-//
-func WritePattern(asm *Assembler, kind string, pat *PatternFrag) (err error) {
-	if e := asm.WriteAncestor(pat.Name, kind); e != nil {
-		err = e
-	} else if e := asm.WritePattern(pat.Name, pat.Return, pat.Labels); e != nil {
-		err = e
-	} else {
-		localOfs := len(pat.Labels)
-		// write fields exactly as if the pattern was a kind
-		for _, prop := range pat.Fields {
-			if e := asm.WriteField(pat.Name, prop.Name, prop.Type, prop.Affinity.String()); e != nil {
-				err = errutil.Append(err, e)
-			}
-		}
-		// write initialization to mdl_start
-		for i, val := range pat.Locals {
-			if val != nil { // not every local has an initial value
-				f := pat.Fields[localOfs+i]
-				// fix: write encoded value... which we just recently decoded... :/
-				meta := struct{ Init rt.Assignment }{val}
-				if prog, e := tables.EncodeGob(&meta); e != nil {
-					err = errutil.Append(err, e)
-				} else if e := asm.WriteStart(pat.Name, f.Name, prog); e != nil {
-					err = errutil.Append(err, e)
-				}
-			}
-		}
-		//
-		if e := WriteRules(asm, pat.Name, pat.Rules); e != nil {
-			err = errutil.Append(err, e)
-		}
-	}
-	return
-}
-
 func WriteRules(asm *Assembler, pat string, rules []rt.Rule) (err error) {
 	inds, _ := pattern.SortRules(rules)
 	for _, j := range inds {
@@ -256,47 +205,85 @@ func WriteRules(asm *Assembler, pat string, rules []rt.Rule) (err error) {
 }
 
 // return pattern meta data for anything that has rules.
-func buildPatternRules(asm *Assembler, patterns patternCache) (ret []*PatternFrag, err error) {
-	var curr *PatternFrag
+func buildPatternRules(asm *Assembler, cache patternCache) (err error) {
+	type ruleset struct {
+		name  string
+		rules []rt.Rule
+	}
+	var curr *ruleset
+	var rules []ruleset
 	var name string
 	var prog []byte
-	err = tables.QueryAll(asm.cache.DB(),
+	if e := tables.QueryAll(asm.cache.DB(),
 		`select pattern, prog 
 		from asm_rule where type='rule'`,
 		func() (err error) {
-			// new pattern
-			if curr == nil || curr.Name != name {
-				if pat, found := patterns[name]; !found {
-					err = errutil.New("unknown pattern", name)
-				} else if pat.patternType != "execute" {
-					// actions also live in the cache and are of a different type
-					err = errutil.New("unexpected pattern type", pat.patternType, "for", name)
-				} else {
-					curr = pat.newFragment()
-					ret = append(ret, curr)
+			newPattern := curr == nil || curr.name != name
+			if newPattern && cache[name] == nil {
+				err = errutil.New("unknown pattern", name)
+			} else {
+				if newPattern {
+					// check the cache?
+					rules = append(rules, ruleset{name: name})
+					curr = &rules[len(rules)-1]
 				}
-			}
-			if err == nil {
 				var rule rt.Rule
 				if e := tables.DecodeGob(prog, &rule); e != nil {
 					err = e
 				} else {
-					curr.Rules = append(curr.Rules, rule)
+					curr.rules = append(curr.rules, rule)
 				}
 			}
 			return
-		}, &name, &prog)
+		}, &name, &prog); e != nil {
+		err = e
+	} else {
+		for _, rs := range rules {
+			e := WriteRules(asm, rs.name, rs.rules)
+			err = errutil.Append(err, e)
+		}
+	}
 	return
 }
 
-func buildPatternActions(asm *Assembler, ps patternCache) (err error) {
-	const kind = "actions"
+func (ps patternCache) WriteFragments(asm *Assembler, kind string) (err error) {
 	if e := asm.WriteAncestor(kind, ""); e != nil {
 		err = e
 	} else {
 		for _, p := range ps {
 			if p.patternType == kind {
-				if e := WritePattern(asm, kind, p.newFragment()); e != nil {
+				if e := WriteFragment(asm, kind, p.newFragment()); e != nil {
+					err = errutil.Append(err, e)
+				}
+			}
+		}
+	}
+	return
+}
+
+//
+func WriteFragment(asm *Assembler, kind string, pat *PatternFrag) (err error) {
+	if e := asm.WriteAncestor(pat.Name, kind); e != nil {
+		err = e
+	} else if e := asm.WritePattern(pat.Name, pat.Return, pat.Labels); e != nil {
+		err = e
+	} else {
+		localOfs := len(pat.Labels)
+		// write fields exactly as if the pattern was a kind
+		for _, prop := range pat.Fields {
+			if e := asm.WriteField(pat.Name, prop.Name, prop.Type, prop.Affinity.String()); e != nil {
+				err = errutil.Append(err, e)
+			}
+		}
+		// write initialization to mdl_start
+		for i, val := range pat.Locals {
+			if val != nil { // not every local has an initial value
+				f := pat.Fields[localOfs+i]
+				// fix: write encoded value... which we just recently decoded... :/
+				meta := struct{ Init rt.Assignment }{val}
+				if prog, e := tables.EncodeGob(&meta); e != nil {
+					err = errutil.Append(err, e)
+				} else if e := asm.WriteStart(pat.Name, f.Name, prog); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}

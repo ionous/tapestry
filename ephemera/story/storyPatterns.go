@@ -160,19 +160,10 @@ func (op *PatternLocals) ImportLocals(k *Importer, patternName ephemera.Named) (
 	return
 }
 
-// returns "prog" as the name of a type  ( eases the difference b/t user named kinds, and internally named types )
-func (op *PatternedActivity) ImportActivity(k *Importer) (ret ephemera.Named, err error) {
-	ret = k.NewName("execute", tables.NAMED_TYPE, op.At.String())
-	return
-}
-
 func (op *PatternType) ImportType(k *Importer) (ret ephemera.Named, err error) {
-	switch opt := op.Opt.(type) {
-	case *PatternedActivity:
-		ret, err = opt.ImportActivity(k)
-	case *VariableType:
-		ret, _, err = opt.ImportVariableType(k)
-	default:
+	if _, ok := op.Opt.(*PatternedActivity); ok {
+		ret = k.NewName("patterns", tables.NAMED_TYPE, op.At.String())
+	} else {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
 	}
 	return

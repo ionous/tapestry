@@ -26,9 +26,11 @@ func TestSayMe(t *testing.T) {
 	// FIX: change to write sub pattern functions
 	src := debug.SayPattern
 	frag := assembly.PatternFrag{
-		Name: src.Name, Return: src.Return, Labels: src.Labels, Fields: src.Fields, Rules: src.Rules,
+		Name: src.Name, Return: src.Return, Labels: src.Labels, Fields: src.Fields,
 	}
-	if e := assembly.WritePattern(m, "patterns", &frag); e != nil {
+	if e := assembly.WriteRules(m, src.Name, src.Rules); e != nil {
+		t.Fatal(e)
+	} else if e := assembly.WriteFragment(m, "patterns", &frag); e != nil {
 		t.Fatal(e)
 	}
 	//

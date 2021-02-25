@@ -3,6 +3,7 @@ package rt
 import "git.sr.ht/~ionous/iffy/dl/composer"
 
 var Slots = []composer.Slot{{
+	Name: "assignment",
 	Type: (*Assignment)(nil),
 	Desc: "Assignments: Helper for setting variables.",
 }, {

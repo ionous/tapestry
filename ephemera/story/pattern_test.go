@@ -75,7 +75,7 @@ func TestPatternDecl(t *testing.T) {
 		tables.WriteCsv(db, &buf, "select idNamedPattern,idNamedParam,idNamedType,idProg from eph_pattern", 4)
 		if have, want := buf.String(), lines(
 			"corral,pattern", // 1
-			"execute,type",   // 2
+			"patterns,type",  // 2
 			"2,2,3,0",        // NewPatternDecl
 		); have != want {
 			t.Fatal("mismatch", have)

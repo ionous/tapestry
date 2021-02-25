@@ -71,14 +71,14 @@ function localLang(make) {
   });
 
   make.group("Events", function() {
-    make.flow("action_decl", "story_statement", "{name:action_name|quote} is an action applying to {action_params}.",
+    make.flow("action_decl", "story_statement", "{name:action_name|quote} is an actor action applying to {action_params}.",
       `Declare an action: Actions let actors accomplish tasks in the game world: for instance, picking up or dropping items.
       Actions always involve either the player or an npc and up to two other objects at a time.`);
     make.swap("action_params", "{one or more objects%common:common_action}, or {two similar objects%dual:paired_action}, or {nothing%none:abstract_action}")
 
-    make.flow("common_action", "one {kind:singular_kind} {?action_context}");
-    make.flow("action_context", "and one {kind:singular_kind}");
-    make.flow("paired_action", "two {kinds:plural_kinds}");
+    make.flow("common_action", "one {kind:singular_kind} ( the noun ) {?action_context}");
+    make.flow("action_context", "and one {kind:singular_kind} ( the other noun )");
+    make.flow("paired_action", "two {kinds:plural_kinds} ( the noun and other noun )");
 
     make.str("abstract_action", "{nothing}");
     make.str("action_name");

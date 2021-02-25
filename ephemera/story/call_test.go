@@ -45,7 +45,7 @@ func TestDetermineNum(t *testing.T) {
 			"factorial,pattern", // 1.
 			"num,argument",      // 2.
 			"number_eval,type",  // 3.
-			"execute,type",      // 4.
+			"patterns,type",     // 4.
 		); have != want {
 			t.Fatal(have)
 		}

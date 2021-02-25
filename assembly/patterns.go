@@ -14,12 +14,12 @@ func AssemblePatterns(asm *Assembler) (err error) {
 		err = e
 	} else if cache, e := buildPatternCache(asm.cache.DB()); e != nil {
 		err = errutil.New("error reading patterns", e)
-	} else if pats, e := buildPatternRules(asm, cache); e != nil {
+	} else if e := buildPatternRules(asm, cache); e != nil {
 		err = errutil.New("error building rules", e)
-	} else if e := buildPatternTables(asm, pats); e != nil {
+	} else if e := cache.WriteFragments(asm, "patterns"); e != nil {
 		err = errutil.New("error building pattern tables", e)
 	} else {
-		err = buildPatternActions(asm, cache)
+		err = cache.WriteFragments(asm, "actions")
 	}
 	return
 }
