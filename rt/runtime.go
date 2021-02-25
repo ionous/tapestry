@@ -41,6 +41,8 @@ type Runtime interface {
 	GetRules(pattern, target string, pflags *Flags) ([]Rule, error)
 	// run the named pattern; add can be blank for execute style patterns.
 	Call(name string, aff affine.Affinity, args []Arg) (g.Value, error)
+	// trigger the named event, passing the objects to visit: target first, root-most last.
+	Send(name string, up []string, arg []Arg) (g.Value, error)
 	//
 	RelateTo(a, b, relation string) error
 	RelativesOf(a, relation string) ([]string, error)

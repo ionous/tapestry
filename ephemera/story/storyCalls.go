@@ -12,7 +12,7 @@ func (op *Determine) ImportStub(k *Importer) (ret interface{}, err error) {
 	if p, args, e := importCall(k, "execute", op.Name, op.Arguments); e != nil {
 		err = ImportError(op, op.At, e)
 	} else {
-		ret = &pattern.Determine{Pattern: pattern.PatternName(p.String()), Arguments: args}
+		ret = &core.Determine{Pattern: pattern.PatternName(p.String()), Arguments: args}
 	}
 	return
 }

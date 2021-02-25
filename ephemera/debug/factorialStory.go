@@ -2,7 +2,6 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/rt"
 )
@@ -27,7 +26,7 @@ var FactorialStory = &story.Story{
 						Exe: []rt.Execute{
 							&core.Say{
 								Text: &core.PrintNum{
-									Num: &pattern.Determine{
+									Num: &core.Determine{
 										Pattern: "factorial",
 										Arguments: &core.Arguments{
 											Args: []*core.Argument{

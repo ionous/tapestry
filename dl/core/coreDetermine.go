@@ -1,9 +1,9 @@
-package pattern
+package core
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -13,8 +13,8 @@ import (
 // It implements every core evaluation,
 // erroring if the value requested doesnt support the error returned.
 type Determine struct {
-	Pattern   PatternName     // a text eval here would be like a function pointer maybe...
-	Arguments *core.Arguments // pattern args kept as a pointer for composer formatting...
+	Pattern   pattern.PatternName // a text eval here would be like a function pointer maybe...
+	Arguments *Arguments          // pattern args kept as a pointer for composer formatting...
 }
 
 func (*Determine) Compose() composer.Spec {

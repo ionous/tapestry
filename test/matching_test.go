@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testpat"
 	"git.sr.ht/~ionous/iffy/test/testutil"
@@ -28,7 +27,7 @@ func TestMatching(t *testing.T) {
 	}
 
 	a, b := k.NewRecord(), k.NewRecord()
-	runMatching := &pattern.Determine{
+	runMatching := &core.Determine{
 		Pattern: "match_groups", Arguments: core.Args(
 			&core.FromValue{g.RecordOf(a)},
 			&core.FromValue{g.RecordOf(b)},

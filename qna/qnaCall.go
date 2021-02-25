@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/evt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
 )
@@ -14,7 +15,7 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 	name := lang.Breakcase(pat)
 	var labels, result string // fix? consider a cache for this info?
 	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
-		err = errutil.New("error while querying", pat, e)
+		err = errutil.New("error querying", pat, e)
 	} else if rec, e := pattern.NewRecord(run, name, labels, args); e != nil {
 		err = e
 	} else {
@@ -35,6 +36,57 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 	}
 	if err != nil {
 		err = errutil.New("error calling", pat, err)
+	}
+	return
+}
+
+// where args should be of the set actor, noun, other noun.
+// and the return for the event pattern is always a bool.
+// optionally, likely, the locals include a "cancel" bool.
+func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, err error) {
+	name := lang.Breakcase(pat)
+	var labels, result string // fix? consider a cache for this info?
+	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
+		err = errutil.New("error querying", pat, e)
+	} else if rec, e := pattern.NewRecord(run, name, labels, args); e != nil {
+		err = e
+		// we always expect a "bool" result.
+		rw := pattern.NewResults(rec, result, affine.Bool)
+		if oldScope, e := run.ReplaceScope(rw, true); e != nil {
+			err = e
+		} else {
+			// note: the scope has to be established before BuildPath gets called
+			// ( suspiciously like initialize value )
+			var allFlags rt.Flags
+			if rules, e := evt.BuildPath(run, name, up, &allFlags); e != nil {
+				err = e
+			} else {
+				for i, rules := range rules {
+					if phase := rt.Flags(1 << i); phase&allFlags == 0 {
+						continue
+					} else {
+						// the rules stop processing if someone sets a return
+						if e := rw.ApplyRules(run, rules, allFlags); e != nil {
+							err = errutil.New("error in phase", phase, e)
+							break
+						} else if rw.HasResults() {
+							// if we have a return... we know its a bool
+							if b, e := rw.GetResult(); e != nil {
+								err = errutil.New("error in phase", phase, e)
+							} else {
+								ret = b
+							}
+							break
+						}
+					}
+				}
+			}
+			// only init can return an error
+			run.ReplaceScope(oldScope, false)
+		}
+	}
+	if err != nil {
+		err = errutil.New("error calling", name, err)
 	}
 	return
 }

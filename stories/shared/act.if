@@ -163,7 +163,7 @@
                           "$NAME": {
                             "id": "id-177d675939e-3",
                             "type": "variable_name",
-                            "value": "result"
+                            "value": "success"
                           },
                           "$TYPE": {
                             "id": "id-177d675939e-4",

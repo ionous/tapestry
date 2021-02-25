@@ -18,6 +18,8 @@ func AssemblePatterns(asm *Assembler) (err error) {
 		err = errutil.New("error building rules", e)
 	} else if e := buildPatternTables(asm, pats); e != nil {
 		err = errutil.New("error building pattern tables", e)
+	} else {
+		err = buildPatternActions(asm, cache)
 	}
 	return
 }

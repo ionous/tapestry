@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/dl/render"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/template"
@@ -255,7 +254,7 @@ func TestTemplates(t *testing.T) {
 	t.Run("indexed", func(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&core.Buffer{core.MakeActivity(
-				&pattern.Determine{
+				&core.Determine{
 					Pattern: "hello", Arguments: core.Args(
 						&core.FromText{T("world")},
 					)})}); e != nil {

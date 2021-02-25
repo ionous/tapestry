@@ -3,7 +3,6 @@ package debug
 import (
   "git.sr.ht/~ionous/iffy/affine"
   "git.sr.ht/~ionous/iffy/dl/core"
-  "git.sr.ht/~ionous/iffy/dl/pattern"
   "git.sr.ht/~ionous/iffy/rt"
   g "git.sr.ht/~ionous/iffy/rt/generic"
   "git.sr.ht/~ionous/iffy/rt/safe"
@@ -28,8 +27,8 @@ func (m MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
   return
 }
 
-func DetermineSay(i int) *pattern.Determine {
-  return &pattern.Determine{
+func DetermineSay(i int) *core.Determine {
+  return &core.Determine{
     Pattern: "say_me",
     Arguments: core.NamedArgs(
       "num", &core.FromNum{

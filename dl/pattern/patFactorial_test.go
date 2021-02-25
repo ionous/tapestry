@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -39,7 +38,7 @@ func TestFactorial(t *testing.T) {
 							From: &core.FromNum{
 								&core.ProductOf{
 									A: V("num"),
-									B: &pattern.Determine{
+									B: &core.Determine{
 										Pattern: "factorial",
 										Arguments: core.NamedArgs(
 											"num", &core.FromNum{
@@ -64,7 +63,7 @@ func TestFactorial(t *testing.T) {
 				}}},
 		}}
 	// determine the factorial of the number 3
-	det := pattern.Determine{
+	det := core.Determine{
 		Pattern: "factorial",
 		Arguments: core.NamedArgs(
 			"num", &core.FromNum{

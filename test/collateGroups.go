@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testpat"
@@ -49,7 +48,7 @@ var collateGroups = testpat.Pattern{
 				As:   &list.AsRec{N("el")},
 				Do: core.MakeActivity(
 					&core.ChooseAction{
-						If: &pattern.Determine{
+						If: &core.Determine{
 							Pattern: "match_groups",
 							Arguments: core.Args(
 								V("settings"),

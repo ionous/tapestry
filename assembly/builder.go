@@ -49,45 +49,41 @@ func (pat *patternEntry) AddField(cat string, fi fieldInit) (err error) {
 type patternCache map[string]*patternEntry
 
 // fix: report errors
-func (cache patternCache) init(name, patternType string) (ret *PatternFrag, okay bool) {
-	if c, ok := cache[name]; ok && c.patternType == patternType {
-		pat := PatternFrag{Name: name}
-		//
-		if ps := c.params; len(ps) > 0 {
-			for _, fi := range ps {
-				pat.Fields = append(pat.Fields, fi.Field())
-				// eventually labels might be different than parameter names
-				//( cause swift makes that seem cool )
-				pat.Labels = append(pat.Labels, fi.Name)
-			}
+func (p *patternEntry) newFragment() *PatternFrag {
+	pat := PatternFrag{Name: p.patternName}
+	//
+	if ps := p.params; len(ps) > 0 {
+		for _, fi := range ps {
+			pat.Fields = append(pat.Fields, fi.Field())
+			// eventually labels might be different than parameter names
+			//( cause swift makes that seem cool )
+			pat.Labels = append(pat.Labels, fi.Name)
 		}
-		if ps := c.locals; len(ps) > 0 {
-			for _, fi := range ps {
-				pat.Fields = append(pat.Fields, fi.Field())
-				pat.Locals = append(pat.Locals, fi.Init)
-			}
-		}
-
-		// fix: report if too many returns
-		if ps := c.returns; len(ps) > 0 {
-			var found bool
-			res := ps[0].Field()
-			for _, f := range pat.Fields {
-				if f.Name == res.Name {
-					found = true
-					break
-				}
-			}
-			if !found {
-				pat.Fields = append(pat.Fields, res)
-			}
-			pat.Return = res.Name
-		}
-		//
-		ret = &pat
-		okay = true
 	}
-	return
+	if ps := p.locals; len(ps) > 0 {
+		for _, fi := range ps {
+			pat.Fields = append(pat.Fields, fi.Field())
+			pat.Locals = append(pat.Locals, fi.Init)
+		}
+	}
+
+	// fix: report if too many returns
+	if ps := p.returns; len(ps) > 0 {
+		var found bool
+		res := ps[0].Field()
+		for _, f := range pat.Fields {
+			if f.Name == res.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			pat.Fields = append(pat.Fields, res)
+		}
+		pat.Return = res.Name
+	}
+	//
+	return &pat
 }
 
 // read pattern declarations from the ephemera db
@@ -189,11 +185,12 @@ func decodeProg(prog []byte, aff affine.Affinity) (ret rt.Assignment, err error)
 // fix: for now this reads from the established pattern structure
 // eventually we want to skip reading into the structure and instead just write straight to the model.
 func buildPatternTables(asm *Assembler, pats []*PatternFrag) (err error) {
-	if e := asm.WriteAncestor("patterns", ""); e != nil {
+	const kind = "patterns"
+	if e := asm.WriteAncestor(kind, ""); e != nil {
 		err = e
 	} else {
 		for _, pat := range pats {
-			if e := WritePattern(asm, pat); e != nil {
+			if e := WritePattern(asm, kind, pat); e != nil {
 				err = errutil.Append(err, e)
 			}
 		}
@@ -202,22 +199,13 @@ func buildPatternTables(asm *Assembler, pats []*PatternFrag) (err error) {
 }
 
 //
-func WritePattern(asm *Assembler, pat *PatternFrag) (err error) {
-	if e := asm.WriteAncestor(pat.Name, "patterns"); e != nil {
+func WritePattern(asm *Assembler, kind string, pat *PatternFrag) (err error) {
+	if e := asm.WriteAncestor(pat.Name, kind); e != nil {
 		err = e
 	} else if e := asm.WritePattern(pat.Name, pat.Return, pat.Labels); e != nil {
 		err = e
 	} else {
 		localOfs := len(pat.Labels)
-		// write pattern callinfo
-		// if e := asm.WriteField(pat.Name, object.Pattern, "", affine.TextList.String()); e != nil {
-		// 	err = errutil.Append(err, e)
-		// } else {
-		// 	callInfo := strings.Join(append([]string{pat.Return}, pat.Labels...), ",")
-		// 	if e := asm.WriteStart(pat.Name, object.Pattern, callInfo); e != nil {
-		// 		err = errutil.Append(err, e)
-		// 	}
-		// }
 		// write fields exactly as if the pattern was a kind
 		for _, prop := range pat.Fields {
 			if e := asm.WriteField(pat.Name, prop.Name, prop.Type, prop.Affinity.String()); e != nil {
@@ -238,43 +226,53 @@ func WritePattern(asm *Assembler, pat *PatternFrag) (err error) {
 			}
 		}
 		//
-		inds, _ := pattern.SortRules(pat.Rules)
-		for _, j := range inds {
-			rule := pat.Rules[j]
-			var domain string // domain doesnt come through ephemera; hack it for now
-			var target string // targets are just for events
-			name := rule.Name // only tests rules have names right now.
-			if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
-				if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
-					domain = yikes.Name
-				}
-			}
-			handler := rt.Handler{Filter: rule.Filter, Exe: rule.Execute}
-			if prog, e := tables.EncodeGob(&handler); e != nil {
-				err = errutil.Append(err, e)
-			} else if e := asm.WriteRule(pat.Name, target, domain, rule.GetFlags(), prog, name); e != nil {
-				err = errutil.Append(err, e)
-			}
+		if e := WriteRules(asm, pat.Name, pat.Rules); e != nil {
+			err = errutil.Append(err, e)
 		}
 	}
 	return
 }
 
+func WriteRules(asm *Assembler, pat string, rules []rt.Rule) (err error) {
+	inds, _ := pattern.SortRules(rules)
+	for _, j := range inds {
+		rule := rules[j]
+		var domain string // domain doesnt come through ephemera; hack it for now
+		var target string // targets are just for events
+		name := rule.Name // only tests rules have names right now.
+		if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
+			if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
+				domain = yikes.Name
+			}
+		}
+		handler := rt.Handler{Filter: rule.Filter, Exe: rule.Execute}
+		if prog, e := tables.EncodeGob(&handler); e != nil {
+			err = errutil.Append(err, e)
+		} else if e := asm.WriteRule(pat, target, domain, rule.GetFlags(), prog, name); e != nil {
+			err = errutil.Append(err, e)
+		}
+	}
+	return
+}
+
+// return pattern meta data for anything that has rules.
 func buildPatternRules(asm *Assembler, patterns patternCache) (ret []*PatternFrag, err error) {
-	list := make(map[string]interface{})
 	var curr *PatternFrag
 	var name string
 	var prog []byte
-	if e := tables.QueryAll(asm.cache.DB(),
-		`select pattern, prog from asm_rule where type='rule'`,
+	err = tables.QueryAll(asm.cache.DB(),
+		`select pattern, prog 
+		from asm_rule where type='rule'`,
 		func() (err error) {
 			// new pattern
 			if curr == nil || curr.Name != name {
-				if c, ok := patterns.init(name, "execute"); !ok {
+				if pat, found := patterns[name]; !found {
 					err = errutil.New("unknown pattern", name)
+				} else if pat.patternType != "execute" {
+					// actions also live in the cache and are of a different type
+					err = errutil.New("unexpected pattern type", pat.patternType, "for", name)
 				} else {
-					curr = c
-					list[name] = curr
+					curr = pat.newFragment()
 					ret = append(ret, curr)
 				}
 			}
@@ -287,8 +285,22 @@ func buildPatternRules(asm *Assembler, patterns patternCache) (ret []*PatternFra
 				}
 			}
 			return
-		}, &name, &prog); e != nil {
-		err = errutil.New("buildFromRule", e)
+		}, &name, &prog)
+	return
+}
+
+func buildPatternActions(asm *Assembler, ps patternCache) (err error) {
+	const kind = "actions"
+	if e := asm.WriteAncestor(kind, ""); e != nil {
+		err = e
+	} else {
+		for _, p := range ps {
+			if p.patternType == kind {
+				if e := WritePattern(asm, kind, p.newFragment()); e != nil {
+					err = errutil.Append(err, e)
+				}
+			}
+		}
 	}
 	return
 }

@@ -13,6 +13,7 @@ import (
 )
 
 // Say some bit of text.
+// FIX: should take a speaker, and we should have a default speaker
 type Say struct {
 	Text rt.TextEval `if:"selector"`
 }

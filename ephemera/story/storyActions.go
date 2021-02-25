@@ -8,11 +8,10 @@ import (
 
 // ImportPhrase - action generates pattern ephemera for now.
 func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
-	// op.Name
 	if n, e := op.Name.NewName(k); e != nil {
 		err = e
 	} else {
-		actionType := k.NewName("execute", tables.NAMED_TYPE, op.At.String())
+		actionType := k.NewName("actions", tables.NAMED_TYPE, op.At.String())
 		actor := k.NewName("actor", tables.NAMED_PARAMETER, op.At.String())
 		actorKind := k.NewName("actor", tables.NAMED_KIND, op.At.String())
 

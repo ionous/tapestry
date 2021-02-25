@@ -34,7 +34,7 @@ func NewRecord(run rt.Runtime, name, labels string, args []rt.Arg) (rec *g.Recor
 				fieldIndex, labelIndex = labelIndex, labelIndex+1
 			} else {
 				// search in increasing order for the next label that matches the specified argument
-				// this is our soft way of allowing patterns to participate in fluid like specs.
+				// this is our soft way of allowing patterns to participate in fluid like specs with optional values.
 				if i := findLabel(parts, n, labelIndex); i < 0 {
 					err = errutil.New("has mismatched arg.", i, n)
 					break

@@ -24,6 +24,9 @@ func (PanicRuntime) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt
 func (PanicRuntime) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
 	panic("Runtime panic")
 }
+func (PanicRuntime) Send(pat string, up []string, args []rt.Arg) (ret g.Value, err error) {
+	panic("Runtime panic")
+}
 func (PanicRuntime) RelateTo(a, b, relation string) error {
 	panic("Runtime panic")
 }

@@ -41,7 +41,8 @@ func TestFluid(t *testing.T) {
 		t.Error(got)
 	}
 	if got := makeSig((*core.CompareNum)(nil)); !got.equals(
-		"is num:equalTo:", "is num:otherThan:", "is num:greaterThan:", "is num:lessThan:", "is num:atLeast:", "is num:atMost:",
+		// order depends on listing in core.Slats
+		"is num:equalTo:", "is num:atLeast:", "is num:greaterThan:", "is num:atMost:", "is num:lessThan:", "is num:otherThan:",
 	) {
 		t.Error(got)
 	}

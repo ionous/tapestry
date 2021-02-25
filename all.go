@@ -7,14 +7,13 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/debug"
 	"git.sr.ht/~ionous/iffy/dl/list"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/dl/rel"
 	"git.sr.ht/~ionous/iffy/dl/render"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
 var AllSlots = [][]composer.Slot{rt.Slots, core.Slots, list.Slots}
-var AllSlats = [][]composer.Composer{core.Slats, debug.Slats, render.Slats, pattern.Slats, list.Slats, rel.Slats}
+var AllSlats = [][]composer.Composer{core.Slats, debug.Slats, render.Slats, list.Slats, rel.Slats}
 
 func RegisterGobs() {
 	registerGob()

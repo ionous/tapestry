@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -75,7 +74,7 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *RenderName) getPrintedNamedOf(run rt.Runtime, objectName string) (ret g.Value, err error) {
 	if printedName, e := safe.GetText(run, &core.Buffer{core.MakeActivity(
-		&pattern.Determine{
+		&core.Determine{
 			Pattern:   "print_name",
 			Arguments: core.Args(&core.FromText{&core.Text{objectName}}),
 		})}); e != nil {
