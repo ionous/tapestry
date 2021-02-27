@@ -144,7 +144,7 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 					mr.phase,
 					mr.prog
 				from mdl_rule mr
-				where (mr.owner=?) and 
+				where (mr.owner=?1) and (mr.target=?2) and
 					(ifnull(mr.domain,'') is '' or 
 						(select 1 from run_domain rd 
 						 where (rd.active and (rd.domain = mr.domain))))

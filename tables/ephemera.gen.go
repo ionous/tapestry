@@ -54,7 +54,8 @@ func ephemeraTemplate() string {
 		"/* connection between two object instances */\t\n" +
 		"create table eph_relative( idNamedHead int, idNamedStem int, idNamedDependent int, idNamedDomain int );\n" +
 		"/* function handler for a pattern */\n" +
-		"create table eph_rule( idNamedPattern int, idNamedTarget int, idNamedDomain int, idProg int );/* uri, file name or other identification for the origin of the various ephemera recorded in the db. \n" +
+		"create table eph_rule( idNamedPattern int, idNamedTarget int, idNamedDomain int, idProg int );\n" +
+		"/* uri, file name or other identification for the origin of the various ephemera recorded in the db. \n" +
 		"while its not particularly useful to have a one column primitive data type column\n" +
 		"someday, this might contain source modification times or other useful info.\n" +
 		"*/\n" +

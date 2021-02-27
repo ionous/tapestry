@@ -1,10 +1,13 @@
 package internal
 
 import (
-	"log"
+	"strconv"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/parser"
+	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
 )
 
@@ -26,7 +29,7 @@ type Result struct {
 	Nouns  []string
 }
 
-func (p *Parser) Parse(words string) (ret *Result, err error) {
+func (p *Parser) Step(words string) (ret *Result, err error) {
 	pt := p.pt
 	bounds := pt.GetDefaultBounds(pt.location)
 	cursor := parser.Cursor{Words: strings.Fields(words)}
@@ -76,17 +79,35 @@ func (p *Parser) Parse(words string) (ret *Result, err error) {
 			} else {
 				// multi-actions are probably repeats or something
 				// or maybe get passed lists of objects hrmm.
+				objs := res.Objects()
+				var args argList
 				out := new(Result)
 				out.Action = act.Name
-				if objs := res.Objects(); len(objs) > 0 {
-					out.Nouns = make([]string, len(objs))
+				if cnt := len(objs); true {
+					args = make([]rt.Arg, 0, cnt+1)
+					args.add(
+						&core.GetAtField{
+							Field: "pawn",
+							From: &core.FromObj{
+								&core.Text{Text: "player"},
+							},
+						})
+					//
+					out.Nouns = make([]string, cnt)
 					for i, obj := range objs {
-						out.Nouns[i] = obj.String()
+						n := obj.String()
+						out.Nouns[i] = n
+						args.add(
+							&core.FromValue{g.StringOf(n)},
+						)
 					}
 				}
-				log.Println(act.Name, out)
-				err = errutil.New("unhandled results", res)
-				ret = out
+				// goal... send this nouns to the runtime
+				if _, e := pt.Call(act.Name, "", args); e != nil {
+					err = errutil.New(e, "calling", res)
+				} else {
+					ret = out
+				}
 			}
 
 		// - Action terminates a matcher sequence, resolving to the named action.
@@ -105,3 +126,12 @@ func (p *Parser) Parse(words string) (ret *Result, err error) {
 	} // end err
 	return
 } // end func
+
+type argList []rt.Arg
+
+func (l *argList) add(a rt.Assignment) {
+	(*l) = append((*l), rt.Arg{
+		Name: "$" + strconv.Itoa(len((*l))+1),
+		From: a,
+	})
+}

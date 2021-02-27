@@ -70,7 +70,7 @@ func playGame(inFile, testString string) (ret int, err error) {
 }
 
 func step(p *play.Parser, s string) {
-	if res, e := p.Parse(s); e != nil {
+	if res, e := p.Step(s); e != nil {
 		fmt.Println(e)
 	} else if res != nil {
 		fmt.Println()

@@ -232,13 +232,16 @@ left join eph_named nd
  */
 create temp view 
 asm_rule as 
-	select rn.name as pattern, progType as type, prog
+	select rn.name as pattern, coalesce(rt.name, "") as target, rd.name as domain, progType as type, prog, er.idProg
 from eph_rule er
 join eph_named rn
 	on (er.idNamedPattern = rn.rowid)
+join eph_named rd
+	on (er.idNamedDomain = rd.rowid)
 join eph_prog ep
 	on (er.idProg = ep.rowid)
-order by pattern, type, domain, idProg;
+left join eph_named rt
+	on (er.idNamedTarget = rt.rowid);
 
 
 /* resolve value ephemera to strings.

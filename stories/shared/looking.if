@@ -3103,6 +3103,55 @@
                                                                             }
                                                                           }
                                                                         }
+                                                                      },
+                                                                      {
+                                                                        "id": "id-177db4bdeb4-183",
+                                                                        "type": "bool_eval",
+                                                                        "value": {
+                                                                          "id": "id-177db4bdeb4-202",
+                                                                          "type": "determine",
+                                                                          "value": {
+                                                                            "$NAME": {
+                                                                              "id": "id-177db4bdeb4-203",
+                                                                              "type": "pattern_name",
+                                                                              "value": "isPlayer"
+                                                                            },
+                                                                            "$ARGUMENTS": {
+                                                                              "id": "id-177db4bdeb4-204",
+                                                                              "type": "arguments",
+                                                                              "value": {
+                                                                                "$ARGS": [
+                                                                                  {
+                                                                                    "id": "id-177db4bdeb4-205",
+                                                                                    "type": "argument",
+                                                                                    "value": {
+                                                                                      "$NAME": {
+                                                                                        "id": "id-177db4bdeb4-206",
+                                                                                        "type": "variable_name",
+                                                                                        "value": "obj"
+                                                                                      },
+                                                                                      "$FROM": {
+                                                                                        "id": "id-177db4bdeb4-207",
+                                                                                        "type": "assignment",
+                                                                                        "value": {
+                                                                                          "id": "id-177db4bdeb4-212",
+                                                                                          "type": "get_var",
+                                                                                          "value": {
+                                                                                            "$NAME": {
+                                                                                              "id": "id-177db4bdeb4-213",
+                                                                                              "type": "text",
+                                                                                              "value": "it"
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                ]
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
                                                                       }
                                                                     ]
                                                                   }

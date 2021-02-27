@@ -114,6 +114,7 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 			if patternProg, e := k.NewGob("rule", rule); e != nil {
 				err = e
 			} else {
+				// currentDomain returns "entire_game" when k.Current.Domain is the empty string.
 				k.NewPatternRule(pattern, target, k.currentDomain(), patternProg)
 			}
 		}

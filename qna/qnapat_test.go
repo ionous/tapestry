@@ -28,7 +28,7 @@ func TestSayMe(t *testing.T) {
 	frag := assembly.PatternFrag{
 		Name: src.Name, Return: src.Return, Labels: src.Labels, Fields: src.Fields,
 	}
-	if e := assembly.WriteRules(m, src.Name, src.Rules); e != nil {
+	if e := assembly.WriteRules(m, src.Name, "", "", src.Rules); e != nil {
 		t.Fatal(e)
 	} else if e := assembly.WriteFragment(m, "patterns", &frag); e != nil {
 		t.Fatal(e)

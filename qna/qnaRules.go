@@ -10,18 +10,26 @@ import (
 )
 
 type qnaRules struct {
-	rules    map[string]ruleSet
+	rules    map[keyType]ruleSet // pattern.target -> []rules
 	rulesFor *sql.Stmt
 }
 
 type ruleSet struct {
 	err   error
 	rules []rt.Rule
-	flags rt.Flags
+	flags rt.Flags // sum of flags of each rule
+}
+
+// the rulesFor query filters by domain; domain info is cached and needs reseting if we change domains.
+func (q *qnaRules) reset() {
+	q.rules = nil
 }
 
 func (q *qnaRules) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.Rule, err error) {
-	key := lang.Breakcase(pattern)
+	key := keyType{
+		lang.Breakcase(pattern),
+		lang.Breakcase(target),
+	}
 	if x, ok := q.rules[key]; ok {
 		if e := x.err; e != nil {
 			err = e
@@ -36,8 +44,8 @@ func (q *qnaRules) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.
 		var phase int
 		var handler rt.Handler
 		hval := r.ValueOf(&handler).Elem()
-		// var
-		if rows, e := q.rulesFor.Query(key); e != nil {
+		// NOTE: rulesFor filters by domain, see: reset()
+		if rows, e := q.rulesFor.Query(key.target, key.field); e != nil {
 			err = e
 		} else if e := tables.ScanAll(rows, func() (err error) {
 			flags := rt.MakeFlags(phase)
@@ -62,7 +70,7 @@ func (q *qnaRules) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.
 			}
 		}
 		if q.rules == nil {
-			q.rules = make(map[string]ruleSet)
+			q.rules = make(map[keyType]ruleSet)
 		}
 		q.rules[key] = x
 	}

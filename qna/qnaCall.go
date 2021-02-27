@@ -12,8 +12,8 @@ import (
 
 // note: this is mirrored/mimicked in package testpat
 func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
-	name := lang.Breakcase(pat)
-	var labels, result string // fix? consider a cache for this info?
+	name := lang.Breakcase(pat) // gets replaced with the actual name by query
+	var labels, result string   // fix? consider a cache for this info?
 	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
 		err = errutil.New("error querying", pat, e)
 	} else if rec, e := pattern.NewRecord(run, name, labels, args); e != nil {
@@ -44,12 +44,13 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 // and the return for the event pattern is always a bool.
 // optionally, likely, the locals include a "cancel" bool.
 func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, err error) {
-	name := lang.Breakcase(pat)
-	var labels, result string // fix? consider a cache for this info?
+	name := lang.Breakcase(pat) // gets replaced with the actual name by query
+	var labels, result string   // fix? consider a cache for this info?
 	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
 		err = errutil.New("error querying", pat, e)
 	} else if rec, e := pattern.NewRecord(run, name, labels, args); e != nil {
 		err = e
+	} else {
 		// we always expect a "bool" result.
 		rw := pattern.NewResults(rec, result, affine.Bool)
 		if oldScope, e := run.ReplaceScope(rw, true); e != nil {

@@ -4,8 +4,6 @@ import (
 	"database/sql"
 
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -177,70 +175,6 @@ func decodeProg(prog []byte, aff affine.Affinity) (ret rt.Assignment, err error)
 			err = errutil.New("incompatible arguments, wanted", aff, "have expression of", a)
 		} else {
 			ret = local.Value
-		}
-	}
-	return
-}
-
-func WriteRules(asm *Assembler, pat string, rules []rt.Rule) (err error) {
-	inds, _ := pattern.SortRules(rules)
-	for _, j := range inds {
-		rule := rules[j]
-		var domain string // domain doesnt come through ephemera; hack it for now
-		var target string // targets are just for events
-		name := rule.Name // only tests rules have names right now.
-		if ugh, ok := rule.Filter.(*core.AllTrue); ok && len(ugh.Test) > 0 {
-			if yikes, ok := ugh.Test[0].(*core.HasDominion); ok {
-				domain = yikes.Name
-			}
-		}
-		handler := rt.Handler{Filter: rule.Filter, Exe: rule.Execute}
-		if prog, e := tables.EncodeGob(&handler); e != nil {
-			err = errutil.Append(err, e)
-		} else if e := asm.WriteRule(pat, target, domain, rule.GetFlags(), prog, name); e != nil {
-			err = errutil.Append(err, e)
-		}
-	}
-	return
-}
-
-// return pattern meta data for anything that has rules.
-func buildPatternRules(asm *Assembler, cache patternCache) (err error) {
-	type ruleset struct {
-		name  string
-		rules []rt.Rule
-	}
-	var curr *ruleset
-	var rules []ruleset
-	var name string
-	var prog []byte
-	if e := tables.QueryAll(asm.cache.DB(),
-		`select pattern, prog 
-		from asm_rule where type='rule'`,
-		func() (err error) {
-			newPattern := curr == nil || curr.name != name
-			if newPattern && cache[name] == nil {
-				err = errutil.New("unknown pattern", name)
-			} else {
-				if newPattern {
-					// check the cache?
-					rules = append(rules, ruleset{name: name})
-					curr = &rules[len(rules)-1]
-				}
-				var rule rt.Rule
-				if e := tables.DecodeGob(prog, &rule); e != nil {
-					err = e
-				} else {
-					curr.rules = append(curr.rules, rule)
-				}
-			}
-			return
-		}, &name, &prog); e != nil {
-		err = e
-	} else {
-		for _, rs := range rules {
-			e := WriteRules(asm, rs.name, rs.rules)
-			err = errutil.Append(err, e)
 		}
 	}
 	return

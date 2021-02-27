@@ -32,12 +32,12 @@ create table mdl_pat( name text, labels text, result text, primary key( name ) )
 create table mdl_rel( relation text, kind text, cardinality text, otherKind text, primary key( relation ));
 /* 
 	owner: a pattern or event name 
-	scope: for events, the noun or kind to which this rule applies; patterns dont have scope: they are called directly.
+	target: for events, the noun or kind to which this rule applies; patterns dont have target: they are called directly.
 	domain: the scene when the rule applies ( could potentially live in another table if we wanted to reuse rule across domains )
 	rule name: unique if it exists
 	prog: a rt.Handler containing an optional filter and executable statement
  */
-create table mdl_rule( owner text, scope text, domain text, phase int, prog blob, name text unique );
+create table mdl_rule( owner text, target text, domain text, phase int, prog blob, name text unique );
 /* documentation for pieces of the model: kinds, nouns, fields, etc. */
 create table mdl_spec( type text, name text, spec text, primary key( type, name ));
 /* initial values for various noun, kind, or pattern properties. 

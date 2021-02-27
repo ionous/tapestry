@@ -243,13 +243,16 @@ func assemblyTemplate() string {
 		" */\n" +
 		"create temp view \n" +
 		"asm_rule as \n" +
-		"\tselect rn.name as pattern, progType as type, prog\n" +
+		"\tselect rn.name as pattern, coalesce(rt.name, \"\") as target, rd.name as domain, progType as type, prog, er.idProg\n" +
 		"from eph_rule er\n" +
 		"join eph_named rn\n" +
 		"\ton (er.idNamedPattern = rn.rowid)\n" +
+		"join eph_named rd\n" +
+		"\ton (er.idNamedDomain = rd.rowid)\n" +
 		"join eph_prog ep\n" +
 		"\ton (er.idProg = ep.rowid)\n" +
-		"order by pattern, type, domain, idProg;\n" +
+		"left join eph_named rt\n" +
+		"\ton (er.idNamedTarget = rt.rowid);\n" +
 		"\n" +
 		"\n" +
 		"/* resolve value ephemera to strings.\n" +

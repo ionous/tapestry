@@ -1,0 +1,811 @@
+{
+  "id": "id-17798c5d676-19",
+  "type": "story",
+  "value": {
+    "$PARAGRAPH": [
+      {
+        "id": "id-17798c5d676-20",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-17798c5d676-21",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17798c5d676-22",
+                "type": "kinds_of_kind",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-17798c5d676-23",
+                    "type": "plural_kinds",
+                    "value": "players"
+                  },
+                  "$SINGULAR_KIND": {
+                    "id": "id-17798c5d676-24",
+                    "type": "singular_kind",
+                    "value": "object"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17798c5d676-25",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17798c5d676-26",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-17798c5d676-27",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-17798c5d676-28",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-17798c5d676-29",
+                              "type": "determiner",
+                              "value": "$OUR"
+                            },
+                            "$NAME": {
+                              "id": "id-17798c5d676-30",
+                              "type": "noun_name",
+                              "value": "player"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-17798c5d676-31",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-17798c5d676-32",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-17798c5d676-33",
+                                "type": "are_an",
+                                "value": "$ISA"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-17798c5d676-34",
+                                "type": "singular_kind",
+                                "value": "players"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-17798c5d676-35",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17798c5d676-36",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-17798c5d676-37",
+                    "type": "plural_kinds",
+                    "value": "players"
+                  },
+                  "$PROPERTY_DECL": [
+                    {
+                      "id": "id-17798c5d676-38",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-17798c5d676-39",
+                          "type": "determiner",
+                          "value": "$A"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-17798c5d676-40",
+                          "type": "property",
+                          "value": "pawn"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-17798c5d676-41",
+                          "type": "property_type",
+                          "value": {
+                            "$PRIMITIVE": {
+                              "id": "id-177db4bdeb4-5",
+                              "type": "primitive_type",
+                              "value": "$TEXT"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177db4bdeb4-13",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177db4bdeb4-14",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177db4bdeb4-15",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-177db4bdeb4-16",
+                    "type": "lines",
+                    "value": "this should be injected rather than be part of the library."
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177db4bdeb4-17",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177db4bdeb4-18",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-177db4bdeb4-19",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-177db4bdeb4-20",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177db4bdeb4-21",
+                              "type": "determiner",
+                              "value": "$OUR"
+                            },
+                            "$NAME": {
+                              "id": "id-177db4bdeb4-22",
+                              "type": "noun_name",
+                              "value": "self"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-177db4bdeb4-23",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-177db4bdeb4-24",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-177db4bdeb4-25",
+                                "type": "are_an",
+                                "value": "$ISAN"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-177db4bdeb4-26",
+                                "type": "singular_kind",
+                                "value": "actor"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": [
+                    {
+                      "id": "id-177db4bdeb4-27",
+                      "type": "tail",
+                      "value": {
+                        "$PRONOUN": {
+                          "id": "id-177db4bdeb4-28",
+                          "type": "pronoun",
+                          "value": "$IT"
+                        },
+                        "$NOUN_PHRASE": {
+                          "id": "id-177db4bdeb4-29",
+                          "type": "noun_phrase",
+                          "value": {
+                            "$NOUN_TRAITS": {
+                              "id": "id-177db4bdeb4-30",
+                              "type": "noun_traits",
+                              "value": {
+                                "$ARE_BEING": {
+                                  "id": "id-177db4bdeb4-31",
+                                  "type": "are_being",
+                                  "value": "$IS"
+                                },
+                                "$TRAIT": [
+                                  {
+                                    "id": "id-177db4bdeb4-32",
+                                    "type": "trait",
+                                    "value": "privately named"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-177db4bdeb4-71",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177db4bdeb4-65",
+                "type": "noun_assignment",
+                "value": {
+                  "$PROPERTY": {
+                    "id": "id-177db4bdeb4-66",
+                    "type": "property",
+                    "value": "pawn"
+                  },
+                  "$NOUNS": [
+                    {
+                      "id": "id-177db4bdeb4-67",
+                      "type": "named_noun",
+                      "value": {
+                        "$DETERMINER": {
+                          "id": "id-177db4bdeb4-68",
+                          "type": "determiner",
+                          "value": "$OUR"
+                        },
+                        "$NAME": {
+                          "id": "id-177db4bdeb4-69",
+                          "type": "noun_name",
+                          "value": "player"
+                        }
+                      }
+                    }
+                  ],
+                  "$LINES": {
+                    "id": "id-177db4bdeb4-70",
+                    "type": "lines",
+                    "value": "#entire_game::self"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177db4bdeb4-98",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177db4bdeb4-99",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177db4bdeb4-100",
+                "type": "pattern_decl",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177db4bdeb4-101",
+                    "type": "pattern_name",
+                    "value": "isPlayer"
+                  },
+                  "$TYPE": {
+                    "id": "id-177db4bdeb4-102",
+                    "type": "pattern_type",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-177db4bdeb4-103",
+                        "type": "patterned_activity",
+                        "value": "$ACTIVITY"
+                      }
+                    }
+                  },
+                  "$OPTVARS": {
+                    "id": "id-177db4bdeb4-111",
+                    "type": "pattern_variables_tail",
+                    "value": {
+                      "$VARIABLE_DECL": [
+                        {
+                          "id": "id-177db4bdeb4-112",
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              "id": "id-177db4bdeb4-113",
+                              "type": "determiner",
+                              "value": "$AN"
+                            },
+                            "$NAME": {
+                              "id": "id-177db4bdeb4-114",
+                              "type": "variable_name",
+                              "value": "obj"
+                            },
+                            "$TYPE": {
+                              "id": "id-177db4bdeb4-115",
+                              "type": "variable_type",
+                              "value": {
+                                "$OBJECT": {
+                                  "id": "id-177db4bdeb4-116",
+                                  "type": "object_type",
+                                  "value": {
+                                    "$AN": {
+                                      "id": "id-177db4bdeb4-117",
+                                      "type": "ana",
+                                      "value": "$AN"
+                                    },
+                                    "$KIND": {
+                                      "id": "id-177db4bdeb4-118",
+                                      "type": "singular_kind",
+                                      "value": "object"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177db4bdeb4-104",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177db4bdeb4-119",
+                "type": "pattern_actions",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177db4bdeb4-120",
+                    "type": "pattern_name",
+                    "value": "isPlayer"
+                  },
+                  "$PATTERN_RULES": {
+                    "id": "id-177db4bdeb4-121",
+                    "type": "pattern_rules",
+                    "value": {
+                      "$PATTERN_RULE": [
+                        {
+                          "id": "id-177db4bdeb4-122",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-177db4bdeb4-123",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-177db4bdeb4-125",
+                                "type": "is_kind_of",
+                                "value": {
+                                  "$OBJECT": {
+                                    "id": "id-177db4bdeb4-126",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177db4bdeb4-128",
+                                      "type": "get_var",
+                                      "value": {
+                                        "$NAME": {
+                                          "id": "id-177db4bdeb4-129",
+                                          "type": "text",
+                                          "value": "obj"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$KIND": {
+                                    "id": "id-177db4bdeb4-127",
+                                    "type": "text",
+                                    "value": "actors"
+                                  }
+                                }
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-177db4bdeb4-124",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-177db4bdeb4-130",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-177db4bdeb4-131",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-177db4bdeb4-132",
+                                          "type": "assign",
+                                          "value": {
+                                            "$VAR": {
+                                              "id": "id-177db4bdeb4-133",
+                                              "type": "variable_name",
+                                              "value": "success"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-177db4bdeb4-134",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-177db4bdeb4-141",
+                                                "type": "from_bool",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-177db4bdeb4-142",
+                                                    "type": "bool_eval",
+                                                    "value": {
+                                                      "id": "id-177db4bdeb4-143",
+                                                      "type": "compare_text",
+                                                      "value": {
+                                                        "$A": {
+                                                          "id": "id-177db4bdeb4-144",
+                                                          "type": "text_eval",
+                                                          "value": {
+                                                            "id": "id-177db4bdeb4-148",
+                                                            "type": "get_var",
+                                                            "value": {
+                                                              "$NAME": {
+                                                                "id": "id-177db4bdeb4-149",
+                                                                "type": "text",
+                                                                "value": "obj"
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        "$IS": {
+                                                          "id": "id-177db4bdeb4-145",
+                                                          "type": "comparator",
+                                                          "value": {
+                                                            "id": "id-177db4bdeb4-147",
+                                                            "type": "equal",
+                                                            "value": {}
+                                                          }
+                                                        },
+                                                        "$B": {
+                                                          "id": "id-177db4bdeb4-146",
+                                                          "type": "text_eval",
+                                                          "value": {
+                                                            "id": "id-177db4bdeb4-150",
+                                                            "type": "get_at_field",
+                                                            "value": {
+                                                              "$FIELD": {
+                                                                "id": "id-177db4bdeb4-151",
+                                                                "type": "text",
+                                                                "value": "pawn"
+                                                              },
+                                                              "$FROM": {
+                                                                "id": "id-177db4bdeb4-152",
+                                                                "type": "from_source_fields",
+                                                                "value": {
+                                                                  "id": "id-177db4bdeb4-153",
+                                                                  "type": "from_obj",
+                                                                  "value": {
+                                                                    "$OBJECT": {
+                                                                      "id": "id-177db4bdeb4-154",
+                                                                      "type": "text_eval",
+                                                                      "value": {
+                                                                        "id": "id-177db4bdeb4-155",
+                                                                        "type": "text_value",
+                                                                        "value": {
+                                                                          "$TEXT": {
+                                                                            "id": "id-177db4bdeb4-156",
+                                                                            "type": "text",
+                                                                            "value": "player"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "$PATTERN_RETURN": {
+                    "id": "id-177db4bdeb4-135",
+                    "type": "pattern_return",
+                    "value": {
+                      "$RESULT": {
+                        "id": "id-177db4bdeb4-136",
+                        "type": "variable_decl",
+                        "value": {
+                          "$AN": {
+                            "id": "id-177db4bdeb4-137",
+                            "type": "determiner",
+                            "value": "$OUR"
+                          },
+                          "$NAME": {
+                            "id": "id-177db4bdeb4-138",
+                            "type": "variable_name",
+                            "value": "success"
+                          },
+                          "$TYPE": {
+                            "id": "id-177db4bdeb4-139",
+                            "type": "variable_type",
+                            "value": {
+                              "$PRIMITIVE": {
+                                "id": "id-177db4bdeb4-140",
+                                "type": "primitive_type",
+                                "value": "$BOOL"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177db4bdeb4-169",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177db4bdeb4-170",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177db4bdeb4-171",
+                "type": "relative_to_noun",
+                "value": {
+                  "$RELATION": {
+                    "id": "id-177db4bdeb4-172",
+                    "type": "relation_name",
+                    "value": " whereabouts"
+                  },
+                  "$NOUNS": [
+                    {
+                      "id": "id-177db4bdeb4-173",
+                      "type": "named_noun",
+                      "value": {
+                        "$DETERMINER": {
+                          "id": "id-177db4bdeb4-174",
+                          "type": "determiner",
+                          "value": "$OUR"
+                        },
+                        "$NAME": {
+                          "id": "id-177db4bdeb4-175",
+                          "type": "noun_name",
+                          "value": "self"
+                        }
+                      }
+                    }
+                  ],
+                  "$ARE_BEING": {
+                    "id": "id-177db4bdeb4-176",
+                    "type": "are_being",
+                    "value": "$IS"
+                  },
+                  "$NOUNS1": [
+                    {
+                      "id": "id-177db4bdeb4-177",
+                      "type": "named_noun",
+                      "value": {
+                        "$DETERMINER": {
+                          "id": "id-177db4bdeb4-178",
+                          "type": "determiner",
+                          "value": "$OUR"
+                        },
+                        "$NAME": {
+                          "id": "id-177db4bdeb4-179",
+                          "type": "noun_name",
+                          "value": " kitchen"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177db4bdeb4-214",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177db4bdeb4-215",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177db4bdeb4-225",
+                "type": "test_rule",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-177db4bdeb4-226",
+                    "type": "test_name",
+                    "value": "player tests"
+                  },
+                  "$HOOK": {
+                    "id": "id-177db4bdeb4-227",
+                    "type": "program_hook",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-177db4bdeb4-228",
+                        "type": "activity",
+                        "value": {
+                          "$EXE": [
+                            {
+                              "id": "id-177db4bdeb4-247",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177db4bdeb4-244",
+                                "type": "choose_action",
+                                "value": {
+                                  "$IF": {
+                                    "id": "id-177db4bdeb4-245",
+                                    "type": "bool_eval",
+                                    "value": {
+                                      "id": "id-177db4bdeb4-248",
+                                      "type": "determine",
+                                      "value": {
+                                        "$NAME": {
+                                          "id": "id-177db4bdeb4-249",
+                                          "type": "pattern_name",
+                                          "value": "isPlayer"
+                                        },
+                                        "$ARGUMENTS": {
+                                          "id": "id-177db4bdeb4-250",
+                                          "type": "arguments",
+                                          "value": {
+                                            "$ARGS": [
+                                              {
+                                                "id": "id-177db4bdeb4-251",
+                                                "type": "argument",
+                                                "value": {
+                                                  "$NAME": {
+                                                    "id": "id-177db4bdeb4-252",
+                                                    "type": "variable_name",
+                                                    "value": "obj"
+                                                  },
+                                                  "$FROM": {
+                                                    "id": "id-177db4bdeb4-253",
+                                                    "type": "assignment",
+                                                    "value": {
+                                                      "id": "id-177db4bdeb4-254",
+                                                      "type": "from_text",
+                                                      "value": {
+                                                        "$VAL": {
+                                                          "id": "id-177db4bdeb4-255",
+                                                          "type": "text_eval",
+                                                          "value": {
+                                                            "id": "id-177db4bdeb4-256",
+                                                            "type": "text_value",
+                                                            "value": {
+                                                              "$TEXT": {
+                                                                "id": "id-177db4bdeb4-257",
+                                                                "type": "text",
+                                                                "value": "self"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$DO": {
+                                    "id": "id-177db4bdeb4-246",
+                                    "type": "activity",
+                                    "value": {
+                                      "$EXE": [
+                                        {
+                                          "id": "id-177db4bdeb4-258",
+                                          "type": "execute",
+                                          "value": {
+                                            "id": "id-177db4bdeb4-259",
+                                            "type": "say_text",
+                                            "value": {
+                                              "$TEXT": {
+                                                "id": "id-177db4bdeb4-260",
+                                                "type": "text_eval",
+                                                "value": {
+                                                  "id": "id-177db4bdeb4-261",
+                                                  "type": "text_value",
+                                                  "value": {
+                                                    "$TEXT": {
+                                                      "id": "id-177db4bdeb4-262",
+                                                      "type": "text",
+                                                      "value": "yes"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177db4bdeb4-216",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177db4bdeb4-239",
+                "type": "test_statement",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-177db4bdeb4-240",
+                    "type": "test_name",
+                    "value": "player tests"
+                  },
+                  "$TEST": {
+                    "id": "id-177db4bdeb4-241",
+                    "type": "testing",
+                    "value": {
+                      "id": "id-177db4bdeb4-242",
+                      "type": "test_output",
+                      "value": {
+                        "$LINES": {
+                          "id": "id-177db4bdeb4-243",
+                          "type": "lines",
+                          "value": "yes"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

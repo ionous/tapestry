@@ -80,6 +80,7 @@ func (run *Runner) ActivateDomain(domain string, active bool) {
 	// then, we can just strcmp the noun's path and the active domain to match
 	// maybe even a generalized "hierarchy" test  ( re: kinds ) -- could be even just a string type.
 	run.activeNouns.reset()
+	run.qnaRules.reset()
 }
 
 func (run *Runner) ReplaceScope(s rt.Scope, init bool) (ret rt.Scope, err error) {
