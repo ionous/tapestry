@@ -15,7 +15,7 @@ func (e *CommandError) Error() string {
 	if len(e.Ctx) > 0 {
 		padding = " "
 	}
-	return errutil.Sprintf("error in command %q%s%s", name, padding, e.Ctx)
+	return errutil.Sprintf("# %s%s%s", name, padding, e.Ctx)
 }
 
 func cmdError(op Composer, err error) error {

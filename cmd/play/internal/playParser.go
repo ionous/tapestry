@@ -104,7 +104,7 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 				}
 				// goal... send this nouns to the runtime
 				if _, e := pt.Call(act.Name, "", args); e != nil {
-					err = errutil.New(e, "calling", res)
+					err = errutil.New(e, "for", res)
 				} else {
 					ret = out
 				}

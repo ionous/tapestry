@@ -79,8 +79,9 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, allFlags rt.Flags) (err error) {
 	sets := rw.sets
 	for i, cnt := 0, len(rules); i < cnt && allFlags != 0; i++ {
-		if ranFlag, e := ApplyRule(run, rules[i], allFlags); e != nil {
-			err = e
+		rule := rules[i]
+		if ranFlag, e := ApplyRule(run, rule, allFlags); e != nil {
+			err = errutil.New(e, "while applying", rule.Name)
 		} else if ranFlag != 0 {
 			didSomething := (rw.sets > sets)
 			sets = rw.sets

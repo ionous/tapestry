@@ -14,9 +14,10 @@ import (
 func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
 	name := lang.Breakcase(pat) // gets replaced with the actual name by query
 	var labels, result string   // fix? consider a cache for this info?
+	var rec *g.Record
 	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
-		err = errutil.New("error querying", pat, e)
-	} else if rec, e := pattern.NewRecord(run, name, labels, args); e != nil {
+		err = e
+	} else if rec, e = pattern.NewRecord(run, name, labels, args); e != nil {
 		err = e
 	} else {
 		// locals can ( and often do ) read arguments.
@@ -35,7 +36,7 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 		}
 	}
 	if err != nil {
-		err = errutil.New("error calling", pat, err)
+		err = errutil.New(err, "calling", pat, g.RecordToValue(rec))
 	}
 	return
 }
@@ -47,7 +48,7 @@ func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, er
 	name := lang.Breakcase(pat) // gets replaced with the actual name by query
 	var labels, result string   // fix? consider a cache for this info?
 	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
-		err = errutil.New("error querying", pat, e)
+		err = e
 	} else if rec, e := pattern.NewRecord(run, name, labels, args); e != nil {
 		err = e
 	} else {
@@ -68,12 +69,12 @@ func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, er
 					} else {
 						// the rules stop processing if someone sets a return
 						if e := rw.ApplyRules(run, rules, allFlags); e != nil {
-							err = errutil.New("error in phase", phase, e)
+							err = errutil.New(e, "in phase", phase)
 							break
 						} else if rw.HasResults() {
 							// if we have a return... we know its a bool
 							if b, e := rw.GetResult(); e != nil {
-								err = errutil.New("error in phase", phase, e)
+								err = errutil.New(e, "in phase", phase)
 							} else {
 								ret = b
 							}
@@ -87,7 +88,7 @@ func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, er
 		}
 	}
 	if err != nil {
-		err = errutil.New("error calling", name, err)
+		err = errutil.New(err, "sending", name)
 	}
 	return
 }
