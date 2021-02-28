@@ -37,6 +37,9 @@ func NewRuntime(db *sql.DB) *Runner {
 			qnaRules: qnaRules{
 				rulesFor: fields.rulesFor,
 			},
+			options: qnaOptions{
+				object.PrintResponseNames.String(): g.BoolOf(false),
+			},
 			activeNouns:   activeNouns{q: fields.activeNouns},
 			relativeKinds: relativeKinds{q: fields.relativeKinds},
 		}
@@ -53,6 +56,7 @@ type Runner struct {
 	fields  *Fields
 	plurals *Plurals
 	values  valueMap
+	options qnaOptions
 	qnaKinds
 	qnaRules
 	activeNouns

@@ -92,6 +92,7 @@ var Slats = []composer.Composer{
 	(*PutAtField)(nil),
 	(*QuotientOf)(nil),
 	(*RemainderOf)(nil),
+	(*Response)(nil),
 	(*Say)(nil),
 	(*Send)(nil),
 	(*ShuffleText)(nil),

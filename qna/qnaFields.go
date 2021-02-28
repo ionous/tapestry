@@ -217,6 +217,8 @@ func (n *Runner) SetField(target, rawField string, val g.Value) (err error) {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
 	} else if target == object.Variables {
 		err = n.Stack.SetFieldByName(field, val)
+	} else if target == object.Option {
+		err = n.options.SetOption(field, val)
 	} else if writable := target[0] != object.Prefix ||
 		target == object.Counter; !writable {
 		err = errutil.Fmt("can't change reserved field '%s.%s'", target, rawField)
@@ -274,23 +276,6 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			return
 		})
 
-	case object.Nouns:
-		kind := lang.Breakcase(rawField)
-		if rows, e := n.fields.activeNounList.Query(kind); e != nil {
-			err = errutil.New(target, e)
-		} else {
-			var nouns []string
-			var noun string
-			if tables.ScanAll(rows, func() (err error) {
-				nouns = append(nouns, noun)
-				return
-			}, &noun); e != nil {
-				err = e
-			} else {
-				ret = g.StringsOf(nouns)
-			}
-		}
-
 	case object.Domain:
 		// fix,once there's a domain hierarchy:
 		// store the active path and test using find in path.
@@ -301,6 +286,14 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			ret = g.BoolOf(b)
 		default:
 			err = errutil.New(target, e)
+		}
+
+	case object.Id:
+		// fix: object.Value should go away...
+		if tmp, e := n.GetField(object.Value, rawField); e != nil {
+			err = e
+		} else {
+			ret = g.StringOf(tmp.String())
 		}
 
 	case object.Kind:
@@ -345,13 +338,25 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			})
 		}
 
-	case object.Id:
-		// fix: object.Value should go away...
-		if tmp, e := n.GetField(object.Value, rawField); e != nil {
-			err = e
+	case object.Nouns:
+		kind := lang.Breakcase(rawField)
+		if rows, e := n.fields.activeNounList.Query(kind); e != nil {
+			err = errutil.New(target, e)
 		} else {
-			ret = g.StringOf(tmp.String())
+			var nouns []string
+			var noun string
+			if tables.ScanAll(rows, func() (err error) {
+				nouns = append(nouns, noun)
+				return
+			}, &noun); e != nil {
+				err = e
+			} else {
+				ret = g.StringsOf(nouns)
+			}
 		}
+
+	case object.Option:
+		ret, err = n.options.Option(rawField)
 
 	case object.Value:
 		// fix: internal object handling needs some love; i dont much like the # test.

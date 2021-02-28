@@ -61,7 +61,7 @@ func (op *Sequence) getText(run rt.Runtime, onedex int) (ret g.Value, err error)
 
 func (*CycleText) Compose() composer.Spec {
 	return composer.Spec{
-		Group: "cycle",
+		Group: "output",
 		Desc:  "Cycle Text: When called multiple times, returns each of its inputs in turn.",
 		Stub:  true,
 	}
@@ -78,7 +78,7 @@ func (op *CycleText) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 func (*ShuffleText) Compose() composer.Spec {
 	return composer.Spec{
-		Group: "format",
+		Group: "output",
 		Desc:  "Shuffle Text: When called multiple times returns its inputs at random.",
 		Stub:  true,
 	}
@@ -114,7 +114,7 @@ func (op *ShuffleText) shuffle(run rt.Runtime) (ret int, err error) {
 
 func (*StoppingText) Compose() composer.Spec {
 	return composer.Spec{
-		Group: "format",
+		Group: "output",
 		Desc:  "Stopping Text: When called multiple times returns each of its inputs in turn, sticking to the last one.",
 		Stub:  true,
 	}

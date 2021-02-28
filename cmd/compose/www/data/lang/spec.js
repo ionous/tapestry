@@ -206,10 +206,6 @@ const spec = [
     "uses": "group"
   },
   {
-    "name": "cycle",
-    "uses": "group"
-  },
-  {
     "name": "debug",
     "uses": "group"
   },
@@ -255,6 +251,10 @@ const spec = [
   },
   {
     "name": "objects",
+    "uses": "group"
+  },
+  {
+    "name": "output",
     "uses": "group"
   },
   {
@@ -867,7 +867,7 @@ const spec = [
   {
     "desc": "Cycle Text: When called multiple times, returns each of its inputs in turn.",
     "group": [
-      "cycle"
+      "output"
     ],
     "name": "cycle_text",
     "uses": "flow",
@@ -3054,6 +3054,39 @@ const spec = [
     }
   },
   {
+    "desc": "Response: Generate text in a replaceable manner.",
+    "group": [
+      "output"
+    ],
+    "name": "response",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$NAME": {
+          "label": "name",
+          "type": "text"
+        },
+        "$TEXT": {
+          "label": "with",
+          "type": "text_eval"
+        }
+      },
+      "roles": "FZKZSZK",
+      "slots": [
+        "text_eval"
+      ],
+      "tokens": [
+        "response",
+        ": ",
+        "$NAME",
+        ", ",
+        "with",
+        ": ",
+        "$TEXT"
+      ]
+    }
+  },
+  {
     "desc": "Say: print some bit of text to the player.",
     "group": [
       "printing"
@@ -3097,7 +3130,7 @@ const spec = [
   {
     "desc": "Shuffle Text: When called multiple times returns its inputs at random.",
     "group": [
-      "format"
+      "output"
     ],
     "name": "shuffle_text",
     "uses": "flow",
@@ -3193,7 +3226,7 @@ const spec = [
   {
     "desc": "Stopping Text: When called multiple times returns each of its inputs in turn, sticking to the last one.",
     "group": [
-      "format"
+      "output"
     ],
     "name": "stopping_text",
     "uses": "flow",
