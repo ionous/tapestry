@@ -3,8 +3,8 @@ package core
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/pattern"
 
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )

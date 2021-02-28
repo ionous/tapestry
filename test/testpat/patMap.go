@@ -1,8 +1,8 @@
 package testpat
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/pattern"
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/pattern"
 )
 
 // Map - a simple helper for testing to provide patterns w/o a db.
