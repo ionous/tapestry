@@ -1,7 +1,7 @@
 github.com/iancoleman/orderedmap v0.2.0 h1:sq1N/TFpYH++aViPcaKjys3bDClUEU7s5B+z6jq8pNA=
 github.com/iancoleman/orderedmap v0.2.0/go.mod h1:N0Wam8K1arqPXNWjMo21EXnBPOPp36vB07FNRdD2geA=
-github.com/ionous/errutil v0.0.0-20210115011726-869e4cd81ad0 h1:F5E7lMPFlSebL0MHUTm5Pu/eWC6BzRy4Cyv9f4meFy4=
-github.com/ionous/errutil v0.0.0-20210115011726-869e4cd81ad0/go.mod h1:Og5oo7WnlR5rAXtLpwk9bevqQQoWyRDEORloqTTBVJY=
+github.com/ionous/errutil v0.0.0-20210301225645-f05ff1857722 h1:Yxqh1aDEonD1lSmjqMIQxXjrMHrcXwSltOoP/jzmmgY=
+github.com/ionous/errutil v0.0.0-20210301225645-f05ff1857722/go.mod h1:VTJyhHa1tKod+S1ORlJT13G6ik3i8eOZJetFxkP9mQ4=
 github.com/ionous/inflect v0.0.0-20201029204737-e550d35d1f31 h1:b98Vr8yCShUMctUmY0NCcbU5O+9ta8p2EUblaJervgE=
 github.com/ionous/inflect v0.0.0-20201029204737-e550d35d1f31/go.mod h1:016aeaLXwujOf8/hgfMo6GjAEtTcxPgGlyel7y79EXw=
 github.com/ionous/num2words v0.0.0-20210224003458-c9a432ced842 h1:K/aFsqWoWaqdjobmzTflGFNlydiiZwviwzNykM/NDGc=

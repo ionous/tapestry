@@ -3294,6 +3294,20 @@ const spec = [
     }
   },
   {
+    "desc": "trying: Runs a pattern, and potentially returns a value.",
+    "group": [
+      "patterns"
+    ],
+    "name": "trying",
+    "spec": "Trying: {pattern%name:pattern_name}{?arguments} as:{as:text} do:{do:activity} else:{else:activity}",
+    "uses": "flow",
+    "with": {
+      "slots": [
+        "execute"
+      ]
+    }
+  },
+  {
     "desc": "Not Equal To: Two values don't match exactly.",
     "group": [
       "comparison"
@@ -3352,6 +3366,7 @@ const stub = [
   "shuffle_text",
   "stopping_text",
   "text_value",
+  "trying",
   "debug_level",
   "render_template",
   "list_case",

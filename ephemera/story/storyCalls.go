@@ -9,13 +9,28 @@ import (
 )
 
 // a stub so that we can record the pattern and its arguments as referenced
-// note: send should be doing something similar, and it isnt.
+// note: "send" should be doing something similar, and it isnt.
 // a simpler way of recording this -- handwaving something about template parsing -- would be nice.
 func (op *Determine) ImportStub(k *Importer) (ret interface{}, err error) {
 	if p, args, e := importCall(k, "patterns", op.Name, op.Arguments); e != nil {
 		err = ImportError(op, op.At, e)
 	} else {
 		ret = &core.Determine{Pattern: pattern.PatternName(p.String()), Arguments: args}
+	}
+	return
+}
+
+func (op *Trying) ImportStub(k *Importer) (ret interface{}, err error) {
+	if p, args, e := importCall(k, "patterns", op.Name, op.Arguments); e != nil {
+		err = ImportError(op, op.At, e)
+	} else {
+		ret = &core.Trying{
+			Pattern:   pattern.PatternName(p.String()),
+			Arguments: args,
+			As:        op.As.String(),
+			Do:        core.Activity(op.Do),
+			Else:      core.Activity(op.Else),
+		}
 	}
 	return
 }

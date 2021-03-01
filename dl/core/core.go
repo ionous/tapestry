@@ -102,6 +102,7 @@ var Slats = []composer.Composer{
 	(*SumOf)(nil),
 	(*Text)(nil),
 	(*Texts)(nil),
+	(*Trying)(nil),
 	(*Var)(nil),
 	(*Variable)(nil),
 	(*While)(nil),

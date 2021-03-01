@@ -28,15 +28,23 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 			var allFlags rt.Flags
 			if rules, e := run.GetRules(name, "", &allFlags); e != nil {
 				err = e
+			} else if v, e := results.Compute(run, rules, allFlags); e != nil {
+				err = e
 			} else {
-				ret, err = results.Compute(run, rules, allFlags)
+				// breaks precedence to return a value and an error
+				// in order to generate appropriate default returns ( ex. a record of the right type )
+				// while still informing the caller of lack of pattern decision in a concise manner.
+				ret = v
+				if !results.HasResults() {
+					err = rt.NoResult{}
+				}
 			}
 			// only init can return an error
 			run.ReplaceScope(oldScope, false)
 		}
 	}
 	if err != nil {
-		err = errutil.New(err, "calling", pat, g.RecordToValue(rec))
+		err = errutil.Fmt("%w calling %s with %v", err, pat, g.RecordToValue(rec))
 	}
 	return
 }

@@ -6,8 +6,6 @@ import (
 )
 
 // error constant for iterators
-const StreamExceeded errutil.Error = "stream exceeded"
-
 const NothingObject errutil.Error = "object is nothing"
 
 type Overflow struct {

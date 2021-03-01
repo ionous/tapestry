@@ -22,6 +22,14 @@ type Handler struct {
 	Exe    Execute
 }
 
+type NoResult struct{}
+
+func (e NoResult) Error() string { return "no result" }
+
+func (e NoResult) Is(target error) bool { return target == e }
+
+func (e NoResult) NoPanic() {}
+
 func (my *Rule) GetFlags() (ret Flags) {
 	ret = my.Flags
 	if ret == 0 {

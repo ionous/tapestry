@@ -49,6 +49,8 @@ func (op *Map) remap(run rt.Runtime) (err error) {
 				if newVal, e := run.Call(pat, aff, []rt.Arg{
 					{"$1", &fromVal{inVal}},
 				}); e != nil {
+					// note: we treat no result as an error because
+					// we are trying to map *all* of the elements from one list into another
 					err = e
 					break
 				} else {

@@ -1,6 +1,8 @@
 package core
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -70,8 +72,8 @@ func (op *Determine) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value
 		}
 	}
 	name := op.Pattern.String()
-	if v, e := run.Call(name, aff, args); e != nil {
-		err = cmdErrorCtx(op, name, e)
+	if v, e := run.Call(name, aff, args); e != nil && !errors.Is(e, rt.NoResult{}) {
+		err = cmdError(op, e)
 	} else {
 		ret = v
 	}

@@ -406,7 +406,7 @@ func (*CycleText) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "cycle_text",
 		Desc:  `Cycle text: When called multiple times, returns each of its inputs in turn.`,
-		Group: "cycle",
+		Group: "output",
 	}
 }
 
@@ -1659,7 +1659,7 @@ func (*ShuffleText) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "shuffle_text",
 		Desc:  `Shuffle text: When called multiple times returns its inputs at random.`,
-		Group: "format",
+		Group: "output",
 	}
 }
 
@@ -1696,7 +1696,7 @@ func (*StoppingText) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "stopping_text",
 		Desc:  `Stopping text: When called multiple times returns each of its inputs in turn, sticking to the last one.`,
-		Group: "format",
+		Group: "output",
 	}
 }
 
@@ -1933,6 +1933,24 @@ func (*TraitPhrase) Compose() composer.Spec {
 	}
 }
 
+// Trying requires various parameters.
+type Trying struct {
+	At        reader.Position `if:"internal"`
+	Name      PatternName
+	Arguments *Arguments
+	As        Text
+	Do        Activity
+	Else      Activity
+}
+
+func (*Trying) Compose() composer.Spec {
+	return composer.Spec{
+		Name:  "trying",
+		Desc:  `Trying: Runs a pattern, and potentially returns a value.`,
+		Group: "patterns",
+	}
+}
+
 // VariableDecl requires various parameters.
 type VariableDecl struct {
 	At      reader.Position `if:"internal"`
@@ -2088,6 +2106,7 @@ var Model = []composer.Composer{
 	(*TextValue)(nil),
 	(*Trait)(nil),
 	(*TraitPhrase)(nil),
+	(*Trying)(nil),
 	(*VariableDecl)(nil),
 	(*VariableType)(nil),
 }

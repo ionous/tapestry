@@ -1,6 +1,8 @@
 package list
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -48,12 +50,14 @@ func (op *Reduce) reduce(run rt.Runtime) (err error) {
 				if newVal, e := run.Call(pat, aff, []rt.Arg{
 					{"$1", &fromVal{inVal}},
 					{"$2", &fromVal{outVal}},
-				}); e != nil {
-					err = e
-					break
-				} else {
+				}); e == nil {
 					// send it back in for the next time.
 					outVal = newVal
+				} else if !errors.Is(e, rt.NoResult{}) {
+					// if there was no result, just keep going with what we had
+					// for other errors, break.
+					err = e
+					break
 				}
 			}
 			if err == nil {
