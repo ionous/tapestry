@@ -59,15 +59,16 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 			err = errutil.New("error trying to get return value", e)
 		} else if e := safe.Check(v, aff); e != nil {
 			err = errutil.New("error trying to get return value", e)
-		} else if len(aff) == 0 {
-			// the caller expects nothing but we have a return value.
-			if v.Affinity() == affine.Text {
-				safe.HackTillTemplatesCanEvaluatePatternTypes = v.String()
-			}
-			// other than passing data back to templates in a hack...
-			// we dont treat this as an error -- we allow patterns to be run for side effects.
 		} else {
 			ret = v
+			// the caller expects nothing but we have a return value.
+			// other than passing data back to templates in a hack...
+			// we dont treat this as an error --
+			// a) we allow patterns to be run for side effects, and:
+			// b) "trying" doesnt know the affinity of the value at the time of the call.
+			if len(aff) == 0 && v.Affinity() == affine.Text {
+				safe.HackTillTemplatesCanEvaluatePatternTypes = v.String()
+			}
 		}
 	} else if len(aff) != 0 {
 		err = errutil.New("caller expected", aff, "returned nothing")
@@ -89,10 +90,9 @@ func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, allFlags rt.Flags
 			if didSomething && ranFlag != rt.Infix {
 				break
 			}
-			// otherwise, if an infix rule did something
-			// check the other kinds of rules
-			// ditto if we dont expect the pattern to return anything:
-			// in that case we just want to do the first of each rule type.
+			// if an infix rule did something allow post-fix rules to run.
+			// ( ditto if we dont expect the pattern to return anything:
+			// in that case we just want to do the first of each rule type. )
 			if didSomething || len(rw.resultField) == 0 {
 				allFlags = allFlags &^ ranFlag
 			}
