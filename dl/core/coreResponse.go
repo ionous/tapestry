@@ -11,7 +11,7 @@ import (
 // if the option PrintResponseNames is enabled, the
 type Response struct {
 	Name string      `if:"selector"`
-	Text rt.TextEval `if:"selector=with"`
+	Text rt.TextEval `if:""optional,selector=with"`
 }
 
 func (*Response) Compose() composer.Spec {

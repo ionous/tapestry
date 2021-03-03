@@ -2366,7 +2366,7 @@ const spec = [
     "with": {
       "params": {
         "$ARGUMENTS": {
-          "label": "arguments",
+          "label": "from",
           "optional": true,
           "type": "arguments"
         },
@@ -2375,18 +2375,16 @@ const spec = [
           "type": "text"
         }
       },
-      "roles": "QZSZKZSZK",
+      "roles": "QZKZSZK",
       "slots": [
         "record_eval"
       ],
       "tokens": [
         "make",
-        " ",
-        "name",
         ": ",
         "$NAME",
         ", ",
-        "arguments",
+        "from",
         ": ",
         "$ARGUMENTS"
       ]
@@ -3067,7 +3065,7 @@ const spec = [
           "type": "text"
         },
         "$TEXT": {
-          "label": "with",
+          "label": "text",
           "type": "text_eval"
         }
       },
@@ -3080,7 +3078,7 @@ const spec = [
         ": ",
         "$NAME",
         ", ",
-        "with",
+        "text",
         ": ",
         "$TEXT"
       ]

@@ -10,8 +10,8 @@ import (
 )
 
 type Make struct {
-	Name      string
-	Arguments *Arguments // kept as a pointer for composer formatting...
+	Name      string     `if:"selector"`
+	Arguments *Arguments `if:"selector=from"` // kept as a pointer for composer formatting...
 }
 
 func (*Make) Compose() composer.Spec {
