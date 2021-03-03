@@ -4,7 +4,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/scope"
 )
 
 /**
@@ -39,17 +39,9 @@ func (op *Erasing) popping(run rt.Runtime) (err error) {
 	if els, e := op.pop(run); e != nil {
 		err = e
 	} else {
-		rec := g.NewAnonymousRecord(run, []g.Field{{
-			Name:     op.As,
-			Affinity: els.Affinity(),
-		}})
-		if e := rec.SetIndexedField(0, els); e != nil {
-			err = e
-		} else {
-			run.PushScope(g.RecordOf(rec))
-			err = op.Do.Execute(run)
-			run.PopScope()
-		}
+		run.PushScope(scope.NewSingleValue(op.As, els))
+		err = op.Do.Execute(run)
+		run.PopScope()
 	}
 	return
 }
