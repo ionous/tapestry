@@ -18,7 +18,7 @@
                   "$NAME": {
                     "id": "id-177660e7610-4",
                     "type": "pattern_name",
-                    "value": "TransParentOf"
+                    "value": "TransparentOf"
                   },
                   "$TYPE": {
                     "id": "id-177660e7610-5",
@@ -90,7 +90,7 @@
                   "$NAME": {
                     "id": "id-177660e7610-8",
                     "type": "pattern_name",
-                    "value": "TransParentOf"
+                    "value": "TransparentOf"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-177660e7610-19",

@@ -1874,7 +1874,7 @@
                                                                     "$TEMPLATE": {
                                                                       "id": "id-17792b4ba55-7",
                                                                       "type": "lines",
-                                                                      "value": "{on: .obj} which {are_listed: .kids}"
+                                                                      "value": "{on: .obj} which {are_listed: .obj .kids}"
                                                                     }
                                                                   }
                                                                 }
@@ -2164,7 +2164,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-1779d6668fc-75",
                                                                 "type": "lines",
-                                                                "value": "{on: .obj} which {are_listed: .kids}"
+                                                                "value": "{on: .obj} which {are_listed: .obj .kids}"
                                                               }
                                                             }
                                                           }

@@ -890,7 +890,7 @@
                             "$NAME": {
                               "id": "id-17773598bfa-27",
                               "type": "noun_name",
-                              "value": "can of beans"
+                              "value": "can of tomatoes"
                             }
                           }
                         },
@@ -1122,11 +1122,17 @@
                                 "type": "are_an",
                                 "value": "$ISA"
                               },
-                              "$TRAIT": [],
+                              "$TRAIT": [
+                                {
+                                  "id": "id-177f1847e15-0",
+                                  "type": "trait",
+                                  "value": "closed"
+                                }
+                              ],
                               "$KIND": {
                                 "id": "id-1779e5b2fdb-117",
                                 "type": "singular_kind",
-                                "value": "thing"
+                                "value": "container"
                               },
                               "$NOUN_RELATION": {
                                 "id": "id-1779e5b2fdb-118",
@@ -1157,6 +1163,152 @@
                                   ]
                                 }
                               }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-177f1847e15-1",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177f1847e15-2",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-177f1847e15-3",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-177f1847e15-4",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177f1847e15-5",
+                              "type": "determiner",
+                              "value": "some"
+                            },
+                            "$NAME": {
+                              "id": "id-177f1847e15-6",
+                              "type": "noun_name",
+                              "value": "coffee beans"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-177f1847e15-7",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$KIND_OF_NOUN": {
+                            "id": "id-177f1847e15-13",
+                            "type": "kind_of_noun",
+                            "value": {
+                              "$ARE_AN": {
+                                "id": "id-177f1847e15-14",
+                                "type": "are_an",
+                                "value": "$AREA"
+                              },
+                              "$TRAIT": [],
+                              "$KIND": {
+                                "id": "id-177f1847e15-15",
+                                "type": "singular_kind",
+                                "value": "thing"
+                              },
+                              "$NOUN_RELATION": {
+                                "id": "id-177f1847e15-24",
+                                "type": "noun_relation",
+                                "value": {
+                                  "$RELATION": {
+                                    "id": "id-177f1847e15-25",
+                                    "type": "relation_name",
+                                    "value": "whereabouts"
+                                  },
+                                  "$NOUNS": [
+                                    {
+                                      "id": "id-177f1847e15-26",
+                                      "type": "named_noun",
+                                      "value": {
+                                        "$DETERMINER": {
+                                          "id": "id-177f1847e15-27",
+                                          "type": "determiner",
+                                          "value": "$THE"
+                                        },
+                                        "$NAME": {
+                                          "id": "id-177f1847e15-28",
+                                          "type": "noun_name",
+                                          "value": "espresso machine"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
+                }
+              }
+            },
+            {
+              "id": "id-177f1a0cde3-3",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177f1a0cde3-4",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-177f1a0cde3-5",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-177f1a0cde3-6",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-177f1a0cde3-7",
+                              "type": "determiner",
+                              "value": "$THE"
+                            },
+                            "$NAME": {
+                              "id": "id-177f1a0cde3-8",
+                              "type": "noun_name",
+                              "value": "beans"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-177f1a0cde3-9",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$NOUN_TRAITS": {
+                            "id": "id-177f1a0cde3-10",
+                            "type": "noun_traits",
+                            "value": {
+                              "$ARE_BEING": {
+                                "id": "id-177f1a0cde3-11",
+                                "type": "are_being",
+                                "value": "$ARE"
+                              },
+                              "$TRAIT": [
+                                {
+                                  "id": "id-177f1a0cde3-12",
+                                  "type": "trait",
+                                  "value": "plural named"
+                                }
+                              ]
                             }
                           }
                         }
@@ -1391,29 +1543,6 @@
                     "id": "id-17773598bfa-117",
                     "type": "lines",
                     "value": "Steam leaks from the top of a recently used espresso machine."
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": "id-17773598bfa-129",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-17773598bfa-130",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17773598bfa-131",
-                "type": "comment",
-                "value": {
-                  "$LINES": {
-                    "id": "id-17773598bfa-132",
-                    "type": "lines",
-                    "value": "we dont want to declare the cabinet open, because we want to be able to declare it closed in a subtest. And we cant do both right now."
                   }
                 }
               }
@@ -2334,7 +2463,7 @@
                         "$LINES": {
                           "id": "id-1778a42f288-497",
                           "type": "lines",
-                          "value": "A pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of beans, a can of potato leek soup, and a tin of deflating powder.\nSteam leaks from the top of a recently used espresso machine.\n"
+                          "value": "A pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nSteam leaks from the top of a recently used espresso machine.\n"
                         }
                       }
                     }
@@ -2686,7 +2815,7 @@
                         "$LINES": {
                           "id": "id-17799bae367-81",
                           "type": "lines",
-                          "value": "Darkness.\nIt is pitch dark, and you can't see a thing.\n.....\nKitchen (in the cabinet).\nYour Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.\nA pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of beans, a can of potato leek soup, and a tin of deflating powder.\nYou can also see a broom, a counter (on which are a blender (empty), an espresso machine, and a mortar (in which is a pestle)), and two cats.\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nIn the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife.\n"
+                          "value": "Darkness.\nIt is pitch dark, and you can't see a thing.\n.....\nKitchen (in the cabinet).\nYour Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.\nA pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nYou can also see a broom, a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle)), and two cats.\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nIn the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife.\n"
                         }
                       }
                     }
@@ -3225,7 +3354,7 @@
                         "$LINES": {
                           "id": "id-1779a1abe71-111",
                           "type": "lines",
-                          "value": "a mortar (in which is a pestle).\na blender (empty).\na counter (on which are a blender (empty), an espresso machine, and a mortar (in which is a pestle)).\n"
+                          "value": "a mortar (in which is a pestle).\na blender (empty).\na counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle)).\n"
                         }
                       }
                     }

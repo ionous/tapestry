@@ -1409,6 +1409,34 @@
             }
           ]
         }
+      },
+      {
+        "id": "id-177f1718d3b-1",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177f1718d3b-2",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177f1718d3b-3",
+                "type": "kinds_of_kind",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-177f1718d3b-4",
+                    "type": "plural_kinds",
+                    "value": " regions"
+                  },
+                  "$SINGULAR_KIND": {
+                    "id": "id-177f1718d3b-5",
+                    "type": "singular_kind",
+                    "value": "object"
+                  }
+                }
+              }
+            }
+          ]
+        }
       }
     ]
   }

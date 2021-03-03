@@ -761,7 +761,7 @@
                         "$LINES": {
                           "id": "id-1771724a77b-155",
                           "type": "lines",
-                          "value": "Mildred's parent is the lab.\nThe basket's parent is the table.\nMildred is in the lab.\nThe scalpel is in the lab.\nThe table encloses the basket.\nThe basket encloses the apple.\nThe basket contains the apple.\nThe  contains the basket.\nThe  supports the apple.\nThe table supports the basket.\nThe basket's parent: table.\nThe scalpel's parent: Mildred.\nMildred owns the pen.\nThe  carries the pen.\nMildred carries the scalpel.\nThe pen is in Mildred's pocket.\nThe scalpel is worn by: .\n"
+                          "value": "Mildred's parent is the lab.\nThe basket's parent is the table.\nMildred is in the lab.\nThe scalpel is in the lab.\nThe table encloses the basket.\nThe basket encloses the apple.\nThe basket contains the apple.\nThe  contains the basket.\nThe  supports the apple.\nThe table supports the basket.\nThe basket's parent: table.\nThe scalpel's parent: Mildred.\nMildred owns the pen.\nThe  carries the pen.\nMildred carries the scalpel.\nThe pen is in Mildred's pocket.\nThe scalpel is worn by: .\nThe common ancestor of the pen and itself: pen.\nThe common ancestor of the pen and a sibling: Mildred.\nThe common ancestor of the sibling and a pen: Mildred.\nThe common ancestor of the pen and its owner: Mildred.\nThe common ancestor of the pen's owner and the pen: Mildred.\n"
                         }
                       }
                     }
@@ -815,7 +815,132 @@
                                         "$TEMPLATE": {
                                           "id": "id-1773799a5eb-59",
                                           "type": "lines",
-                                          "value": "Mildred's parent is {the: {parentOf: .Mildred}}.\nThe basket's parent is {the: {parentOf: .basket}}.\nMildred is in {the: {locationOf: .Mildred}}.\nThe scalpel is in {the: {locationOf: .scalpel}}.\n{The: {enclosureOf: .basket}} encloses the basket.\n{The: {enclosureOf: .apple}} encloses the apple.\n{The: {containerOf: .apple}} contains the apple.\n{The: {containerOf: .basket}} contains the basket.\n{The: {supporterOf: .apple}} supports the apple.\n{The: {supporterOf: .basket}} supports the basket.\nThe basket's parent: {name_of: {parentOf: .basket}}.\nThe scalpel's parent: {name_of: {parentOf: .scalpel}}.\n{The: {ownerOf: .pen}} owns the pen.\n{The: {carrierOf: .pen}} carries the pen.\n{The: {carrierOf: .scalpel}} carries the scalpel.\nThe pen is in {the: {wearerOf: .pen}}'s pocket.\nThe scalpel is worn by: {name_of: {wearerOf: .scalpel}}."
+                                          "value": "Mildred's parent is {the: {parentOf: .Mildred}}.\nThe basket's parent is {the: {parentOf: .basket}}.\nMildred is in {the: {locationOf: .Mildred}}.\nThe scalpel is in {the: {locationOf: .scalpel}}.\n{The: {enclosureOf: .basket}} encloses the basket.\n{The: {enclosureOf: .apple}} encloses the apple.\n{The: {containerOf: .apple}} contains the apple.\n{The: {containerOf: .basket}} contains the basket.\n{The: {supporterOf: .apple}} supports the apple.\n{The: {supporterOf: .basket}} supports the basket.\nThe basket's parent: {name_of: {parentOf: .basket}}.\nThe scalpel's parent: {name_of: {parentOf: .scalpel}}.\n{The: {ownerOf: .pen}} owns the pen.\n{The: {carrierOf: .pen}} carries the pen.\n{The: {carrierOf: .scalpel}} carries the scalpel.\nThe pen is in {the: {wearerOf: .pen}}'s pocket.\nThe scalpel is worn by: {name_of: {wearerOf: .scalpel}}.\n"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177f1aff274-28",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177f1aff274-29",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-177f1aff274-30",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177f1aff274-31",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-177f1aff274-32",
+                                          "type": "lines",
+                                          "value": "The common ancestor of the pen and itself: {name_of: {common_ancestor: .pen .pen}}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177f1aff274-33",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177f1aff274-34",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-177f1aff274-35",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177f1aff274-36",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-177f1aff274-37",
+                                          "type": "lines",
+                                          "value": "The common ancestor of the pen and a sibling: {name_of: {common_ancestor: .pen .scalpel}}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177f1aff274-38",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177f1aff274-39",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-177f1aff274-40",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177f1aff274-41",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-177f1aff274-42",
+                                          "type": "lines",
+                                          "value": "The common ancestor of the sibling and a pen: {name_of: {common_ancestor: .scalpel .pen}}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177f1aff274-43",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177f1aff274-44",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-177f1aff274-45",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177f1aff274-46",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-177f1aff274-47",
+                                          "type": "lines",
+                                          "value": "The common ancestor of the pen and its owner: {name_of: {common_ancestor: .Mildred .pen}}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177f1aff274-48",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177f1aff274-49",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-177f1aff274-50",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177f1aff274-51",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-177f1aff274-52",
+                                          "type": "lines",
+                                          "value": "The common ancestor of the pen's owner and the pen: {name_of: {common_ancestor: .pen .Mildred}}."
                                         }
                                       }
                                     }

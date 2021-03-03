@@ -1131,7 +1131,7 @@
                   "$NAME": {
                     "id": "id-17703f5400a-7",
                     "type": "pattern_name",
-                    "value": "CommonAncestor"
+                    "value": "Common Ancestor"
                   },
                   "$TYPE": {
                     "id": "id-17703f5400a-8",
@@ -1161,7 +1161,7 @@
                             "$NAME": {
                               "id": "id-17703f5400a-16",
                               "type": "variable_name",
-                              "value": "ofObj"
+                              "value": "object"
                             },
                             "$TYPE": {
                               "id": "id-17703f5400a-17",
@@ -1199,7 +1199,7 @@
                             "$NAME": {
                               "id": "id-17703f5400a-103",
                               "type": "variable_name",
-                              "value": "andObj"
+                              "value": "other object"
                             },
                             "$TYPE": {
                               "id": "id-17703f5400a-104",
@@ -1252,7 +1252,7 @@
                   "$NAME": {
                     "id": "id-17703f5400a-25",
                     "type": "pattern_name",
-                    "value": "CommonAncestor"
+                    "value": "Common Ancestor"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-17703f5400a-116",
@@ -1443,7 +1443,7 @@
                                                   "$NAME": {
                                                     "id": "id-17703f5400a-136",
                                                     "type": "text",
-                                                    "value": "ofObj"
+                                                    "value": "object"
                                                   }
                                                 }
                                               }
@@ -1525,7 +1525,7 @@
                                                               "$NAME": {
                                                                 "id": "id-17703f5400a-142",
                                                                 "type": "text",
-                                                                "value": "andObj"
+                                                                "value": "other object"
                                                               }
                                                             }
                                                           }
@@ -1803,7 +1803,7 @@
                                                                                 "$NAME": {
                                                                                   "id": "id-17703f5400a-230",
                                                                                   "type": "text",
-                                                                                  "value": "andObj"
+                                                                                  "value": "other object"
                                                                                 }
                                                                               }
                                                                             }
@@ -2035,7 +2035,7 @@
                                                                     "$NAME": {
                                                                       "id": "id-17703f5400a-171",
                                                                       "type": "text",
-                                                                      "value": "ofObj"
+                                                                      "value": "object"
                                                                     }
                                                                   }
                                                                 }
