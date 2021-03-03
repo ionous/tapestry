@@ -7,8 +7,8 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/pattern"
-
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/scope"
+	"github.com/ionous/errutil"
 )
 
 // Trying runs a pattern.
@@ -17,9 +17,9 @@ import (
 type Trying struct {
 	Pattern   pattern.PatternName `if:"selector"`
 	Arguments *Arguments          `if:"optional"`
-	As        string              // fix: variable definition field
+	As        string              // fix: variable definition field; fix: should be optional.
 	Do        Activity
-	Else      Activity
+	Else      Activity // `if:"optional"` -- optional doesnt work well b/c we still get the leading "else:" selector.
 }
 
 func (*Trying) Compose() composer.Spec {
@@ -33,13 +33,13 @@ func (*Trying) Compose() composer.Spec {
 }
 
 func (op *Trying) Execute(run rt.Runtime) (err error) {
-	if e := op.trying(run, ""); e != nil {
+	if e := op.trying(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *Trying) trying(run rt.Runtime, aff affine.Affinity) (err error) {
+func (op *Trying) trying(run rt.Runtime) (err error) {
 	var args []rt.Arg
 	if op.Arguments != nil { // FIX!!!!!!!!
 		for _, a := range op.Arguments.Args {
@@ -47,17 +47,23 @@ func (op *Trying) trying(run rt.Runtime, aff affine.Affinity) (err error) {
 		}
 	}
 	name := op.Pattern.String()
-	if v, e := run.Call(name, aff, args); e == nil {
-		ls := g.NewAnonymousRecord(run, []g.Field{
-			{Name: op.As, Affinity: v.Affinity(), Type: v.Type()},
-		})
-		run.PushScope(g.RecordOf(ls))
-		err = op.Do.Execute(run)
-		run.PopScope()
+	const anyaff affine.Affinity = "" // pass empty string for any affinity
+	if v, e := run.Call(name, anyaff, args); e == nil {
+		if hasReturn, hasLocal := v != nil, len(op.As) > 0; hasReturn != hasLocal {
+			if hasReturn {
+				err = errutil.New("expected a local value")
+			} else {
+				err = errutil.New("expected a return value")
+			}
+		} else {
+			run.PushScope(scope.NewSingleValue(op.As, v))
+			err = op.Do.Execute(run)
+			run.PopScope()
+		}
 	} else if errors.Is(e, rt.NoResult{}) {
 		err = op.Else.Execute(run)
 	} else {
-		err = cmdError(op, e)
+		err = e
 	}
 	return
 }
