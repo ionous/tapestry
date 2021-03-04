@@ -3,6 +3,7 @@ package list
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
 /*
@@ -18,18 +19,18 @@ type EraseEdge struct {
 func (*EraseEdge) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "erase", Role: composer.Command},
-		Desc:   "Erase: Remove one or more values from a list",
+		Desc:   "Erase at edge: Remove one or more values from a list",
 	}
 }
 
 func (op *EraseEdge) Execute(run rt.Runtime) (err error) {
-	if e := op.pop(run); e != nil {
+	if _, e := op.pop(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *EraseEdge) pop(run rt.Runtime) (err error) {
+func (op *EraseEdge) pop(run rt.Runtime) (ret g.Value, err error) {
 	if vs, e := GetListSource(run, op.From); e != nil {
 		err = e
 	} else {
@@ -38,9 +39,7 @@ func (op *EraseEdge) pop(run rt.Runtime) (err error) {
 			if !op.AtEdge.Front() {
 				at = cnt - 1
 			}
-			if _, e := vs.Splice(at, at+1, nil); e != nil {
-				err = e
-			}
+			ret, err = vs.Splice(at, at+1, nil)
 		}
 	}
 	return

@@ -23,7 +23,7 @@ func (op *Erasing) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "erasing", Role: composer.Command},
 		Group:  "list",
-		Desc: `Erasing from list: Erase elements from the front or back of a list.
+		Desc: `Erasing indices: Erase elements from the front or back of a list.
 Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.`,
 	}
 }
@@ -42,6 +42,48 @@ func (op *Erasing) popping(run rt.Runtime) (err error) {
 		run.PushScope(scope.NewSingleValue(op.As, els))
 		err = op.Do.Execute(run)
 		run.PopScope()
+	}
+	return
+}
+
+/**
+ * removing: count
+ * numFrom/txt/rec:varName,
+ * atIndex:
+ * as: string, do:{}
+ */
+type ErasingEdge struct {
+	EraseEdge
+	As   string // fix: variable definition field
+	Do   core.Activity
+	Else core.Activity
+}
+
+func (op *ErasingEdge) Compose() composer.Spec {
+	return composer.Spec{
+		Fluent: &composer.Fluid{Name: "erasing", Role: composer.Command},
+		Group:  "list",
+		Desc: `Erasing at edge: Erase one element from the front or back of a list.
+Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.`,
+	}
+}
+
+func (op *ErasingEdge) Execute(run rt.Runtime) (err error) {
+	if e := op.popping(run); e != nil {
+		err = cmdError(op, e)
+	}
+	return
+}
+
+func (op *ErasingEdge) popping(run rt.Runtime) (err error) {
+	if vs, e := op.pop(run); e != nil {
+		err = e
+	} else if cnt := vs.Len(); cnt > 0 {
+		run.PushScope(scope.NewSingleValue(op.As, vs.Index(0)))
+		err = op.Do.Execute(run)
+		run.PopScope()
+	} else {
+		err = op.Else.Execute(run)
 	}
 	return
 }
