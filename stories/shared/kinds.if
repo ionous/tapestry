@@ -1311,6 +1311,185 @@
         }
       },
       {
+        "id": "id-177fb15803f-3",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177fb15803f-2",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb15803f-0",
+                "type": "kinds_of_aspect",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-177fb15803f-1",
+                    "type": "aspect",
+                    "value": " illumination"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fb15803f-4",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb15803f-5",
+                "type": "aspect_traits",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-177fb15803f-6",
+                    "type": "aspect",
+                    "value": " illumination"
+                  },
+                  "$TRAIT_PHRASE": {
+                    "id": "id-177fb15803f-7",
+                    "type": "trait_phrase",
+                    "value": {
+                      "$ARE_EITHER": {
+                        "id": "id-177fb15803f-8",
+                        "type": "are_either",
+                        "value": "$EITHER"
+                      },
+                      "$TRAIT": [
+                        {
+                          "id": "id-177fb15803f-9",
+                          "type": "trait",
+                          "value": "unlit"
+                        },
+                        {
+                          "id": "id-177fb15803f-10",
+                          "type": "trait",
+                          "value": "lit"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fb15803f-27",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb15803f-21",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-177fb15803f-22",
+                    "type": "plural_kinds",
+                    "value": " things"
+                  },
+                  "$PROPERTY_DECL": [
+                    {
+                      "id": "id-177fb15803f-23",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-177fb15803f-24",
+                          "type": "determiner",
+                          "value": "$AN"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-177fb15803f-25",
+                          "type": "property",
+                          "value": "illumination"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-177fb15803f-26",
+                          "type": "property_type",
+                          "value": {
+                            "$PROPERTY_ASPECT": {
+                              "id": "id-177fb15803f-28",
+                              "type": "property_aspect",
+                              "value": "$ASPECT"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-177fb15803f-29",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb15803f-30",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-177fb15803f-31",
+                    "type": "plural_kinds",
+                    "value": " rooms"
+                  },
+                  "$PROPERTY_DECL": [
+                    {
+                      "id": "id-177fb15803f-32",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-177fb15803f-33",
+                          "type": "determiner",
+                          "value": "$AN"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-177fb15803f-34",
+                          "type": "property",
+                          "value": "illumination"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-177fb15803f-35",
+                          "type": "property_type",
+                          "value": {
+                            "$PROPERTY_ASPECT": {
+                              "id": "id-177fb15803f-36",
+                              "type": "property_aspect",
+                              "value": "$ASPECT"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-177fb15803f-37",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb15803f-43",
+                "type": "certainties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-177fb15803f-44",
+                    "type": "plural_kinds",
+                    "value": " rooms"
+                  },
+                  "$ARE_BEING": {
+                    "id": "id-177fb15803f-45",
+                    "type": "are_being",
+                    "value": "$ARE"
+                  },
+                  "$CERTAINTY": {
+                    "id": "id-177fb15803f-46",
+                    "type": "certainty",
+                    "value": "$USUALLY"
+                  },
+                  "$TRAIT": {
+                    "id": "id-177fb15803f-47",
+                    "type": "trait",
+                    "value": "lit"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
         "id": "id-17798b6dd76-227",
         "type": "paragraph",
         "value": {

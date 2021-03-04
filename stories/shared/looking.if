@@ -18,7 +18,7 @@
                   "$LINES": {
                     "id": "id-17783032a7b-19",
                     "type": "lines",
-                    "value": "until there's a player object, we pass a flag into printVantage for darkness"
+                    "value": "until there's a player object, we pass a flag into print vantage for darkness"
                   }
                 }
               }
@@ -205,7 +205,7 @@
                                             "$NAME": {
                                               "id": "id-17780500793-32",
                                               "type": "pattern_name",
-                                              "value": "VisibilityOf"
+                                              "value": "transparentList"
                                             },
                                             "$ARGUMENTS": {
                                               "id": "id-17780500793-33",

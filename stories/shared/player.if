@@ -9,6 +9,26 @@
         "value": {
           "$STORY_STATEMENT": [
             {
+              "id": "id-177fb7e29e7-53",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb7e29e7-54",
+                "type": "kinds_of_kind",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-177fb7e29e7-55",
+                    "type": "plural_kinds",
+                    "value": " agents"
+                  },
+                  "$SINGULAR_KIND": {
+                    "id": "id-177fb7e29e7-56",
+                    "type": "singular_kind",
+                    "value": "object"
+                  }
+                }
+              }
+            },
+            {
               "id": "id-17798c5d676-21",
               "type": "story_statement",
               "value": {
@@ -18,12 +38,12 @@
                   "$PLURAL_KINDS": {
                     "id": "id-17798c5d676-23",
                     "type": "plural_kinds",
-                    "value": "players"
+                    "value": " players"
                   },
                   "$SINGULAR_KIND": {
                     "id": "id-17798c5d676-24",
                     "type": "singular_kind",
-                    "value": "object"
+                    "value": "agent"
                   }
                 }
               }
@@ -96,7 +116,7 @@
                   "$PLURAL_KINDS": {
                     "id": "id-17798c5d676-37",
                     "type": "plural_kinds",
-                    "value": "players"
+                    "value": " agents"
                   },
                   "$PROPERTY_DECL": [
                     {
@@ -121,6 +141,33 @@
                               "id": "id-177db4bdeb4-5",
                               "type": "primitive_type",
                               "value": "$TEXT"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "id-177fb7e29e7-64",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-177fb7e29e7-65",
+                          "type": "determiner",
+                          "value": "$AN"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-177fb7e29e7-66",
+                          "type": "property",
+                          "value": "in darkness"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-177fb7e29e7-67",
+                          "type": "property_type",
+                          "value": {
+                            "$PRIMITIVE": {
+                              "id": "id-177fb7e29e7-68",
+                              "type": "primitive_type",
+                              "value": "$BOOL"
                             }
                           }
                         }
@@ -377,6 +424,39 @@
                     "type": "pattern_name",
                     "value": "isPlayer"
                   },
+                  "$PATTERN_RETURN": {
+                    "id": "id-177db4bdeb4-135",
+                    "type": "pattern_return",
+                    "value": {
+                      "$RESULT": {
+                        "id": "id-177db4bdeb4-136",
+                        "type": "variable_decl",
+                        "value": {
+                          "$AN": {
+                            "id": "id-177db4bdeb4-137",
+                            "type": "determiner",
+                            "value": "$OUR"
+                          },
+                          "$NAME": {
+                            "id": "id-177db4bdeb4-138",
+                            "type": "variable_name",
+                            "value": "success"
+                          },
+                          "$TYPE": {
+                            "id": "id-177db4bdeb4-139",
+                            "type": "variable_type",
+                            "value": {
+                              "$PRIMITIVE": {
+                                "id": "id-177db4bdeb4-140",
+                                "type": "primitive_type",
+                                "value": "$BOOL"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
                   "$PATTERN_RULES": {
                     "id": "id-177db4bdeb4-121",
                     "type": "pattern_rules",
@@ -532,39 +612,6 @@
                           }
                         }
                       ]
-                    }
-                  },
-                  "$PATTERN_RETURN": {
-                    "id": "id-177db4bdeb4-135",
-                    "type": "pattern_return",
-                    "value": {
-                      "$RESULT": {
-                        "id": "id-177db4bdeb4-136",
-                        "type": "variable_decl",
-                        "value": {
-                          "$AN": {
-                            "id": "id-177db4bdeb4-137",
-                            "type": "determiner",
-                            "value": "$OUR"
-                          },
-                          "$NAME": {
-                            "id": "id-177db4bdeb4-138",
-                            "type": "variable_name",
-                            "value": "success"
-                          },
-                          "$TYPE": {
-                            "id": "id-177db4bdeb4-139",
-                            "type": "variable_type",
-                            "value": {
-                              "$PRIMITIVE": {
-                                "id": "id-177db4bdeb4-140",
-                                "type": "primitive_type",
-                                "value": "$BOOL"
-                              }
-                            }
-                          }
-                        }
-                      }
                     }
                   }
                 }

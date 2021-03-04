@@ -1,0 +1,970 @@
+{
+  "id": "id-177fa9c4277-0",
+  "type": "story",
+  "value": {
+    "$PARAGRAPH": [
+      {
+        "id": "id-177fb980e34-0",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177fb980e34-1",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb980e34-2",
+                "type": "pattern_decl",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177fb980e34-3",
+                    "type": "pattern_name",
+                    "value": "vision response"
+                  },
+                  "$TYPE": {
+                    "id": "id-177fb980e34-4",
+                    "type": "pattern_type",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-177fb980e34-5",
+                        "type": "patterned_activity",
+                        "value": "$ACTIVITY"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fe89b45e-2",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fe89b45e-0",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-177fe89b45e-1",
+                    "type": "lines",
+                    "value": "Used to determine whether an action needing light can proceed. Returns some response text if the action is blocked.  Relies on the player's current \"in darkness\" status which is (usually) calculated just once per turn ( in \"adjust light.\" ) "
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fb980e34-6",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb980e34-7",
+                "type": "pattern_actions",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177fb980e34-8",
+                    "type": "pattern_name",
+                    "value": "vision response"
+                  },
+                  "$PATTERN_RETURN": {
+                    "id": "id-177fb980e34-10",
+                    "type": "pattern_return",
+                    "value": {
+                      "$RESULT": {
+                        "id": "id-177fb980e34-11",
+                        "type": "variable_decl",
+                        "value": {
+                          "$AN": {
+                            "id": "id-177fb980e34-12",
+                            "type": "determiner",
+                            "value": "$A"
+                          },
+                          "$NAME": {
+                            "id": "id-177fb980e34-13",
+                            "type": "variable_name",
+                            "value": "response"
+                          },
+                          "$TYPE": {
+                            "id": "id-177fb980e34-14",
+                            "type": "variable_type",
+                            "value": {
+                              "$PRIMITIVE": {
+                                "id": "id-177fb980e34-15",
+                                "type": "primitive_type",
+                                "value": "$TEXT"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$PATTERN_RULES": {
+                    "id": "id-177fb980e34-9",
+                    "type": "pattern_rules",
+                    "value": {
+                      "$PATTERN_RULE": [
+                        {
+                          "id": "id-177fb980e34-16",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-177fb980e34-17",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-177fb980e34-30",
+                                "type": "get_at_field",
+                                "value": {
+                                  "$FIELD": {
+                                    "id": "id-177fb980e34-31",
+                                    "type": "text",
+                                    "value": "in darkness"
+                                  },
+                                  "$FROM": {
+                                    "id": "id-177fb980e34-32",
+                                    "type": "from_source_fields",
+                                    "value": {
+                                      "id": "id-177fb980e34-33",
+                                      "type": "from_obj",
+                                      "value": {
+                                        "$OBJECT": {
+                                          "id": "id-177fb980e34-34",
+                                          "type": "text_eval",
+                                          "value": {
+                                            "id": "id-177fb980e34-48",
+                                            "type": "text_value",
+                                            "value": {
+                                              "$TEXT": {
+                                                "id": "id-177fb980e34-49",
+                                                "type": "text",
+                                                "value": "player"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-177fb980e34-18",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-177fb980e34-19",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-177fb980e34-37",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-177fb980e34-38",
+                                          "type": "assign",
+                                          "value": {
+                                            "$VAR": {
+                                              "id": "id-177fb980e34-39",
+                                              "type": "variable_name",
+                                              "value": "response"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-177fb980e34-40",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-177fb980e34-41",
+                                                "type": "from_text",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-177fb980e34-42",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-177fb980e34-43",
+                                                      "type": "response",
+                                                      "value": {
+                                                        "$NAME": {
+                                                          "id": "id-177fb980e34-44",
+                                                          "type": "text",
+                                                          "value": "can't act in the dark"
+                                                        },
+                                                        "$TEXT": {
+                                                          "id": "id-177fb980e34-45",
+                                                          "type": "text_eval",
+                                                          "value": {
+                                                            "id": "id-177fb980e34-46",
+                                                            "type": "render_template",
+                                                            "value": {
+                                                              "$TEMPLATE": {
+                                                                "id": "id-177fb980e34-47",
+                                                                "type": "lines",
+                                                                "value": "It is pitch dark, and {we!} can't see a thing."
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177fb980e34-50",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177fb980e34-54",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb980e34-55",
+                "type": "pattern_decl",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177fb980e34-56",
+                    "type": "pattern_name",
+                    "value": "adjust light"
+                  },
+                  "$TYPE": {
+                    "id": "id-177fb980e34-57",
+                    "type": "pattern_type",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-177fb980e34-58",
+                        "type": "patterned_activity",
+                        "value": "$ACTIVITY"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fb980e34-142",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb980e34-140",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-177fb980e34-141",
+                    "type": "lines",
+                    "value": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fb980e34-59",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb980e34-60",
+                "type": "pattern_actions",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177fb980e34-61",
+                    "type": "pattern_name",
+                    "value": "adjust light"
+                  },
+                  "$PATTERN_LOCALS": {
+                    "id": "id-177fb980e34-63",
+                    "type": "pattern_locals",
+                    "value": {
+                      "$LOCAL_DECL": [
+                        {
+                          "id": "id-177fb980e34-64",
+                          "type": "local_decl",
+                          "value": {
+                            "$VARIABLE_DECL": {
+                              "id": "id-177fb980e34-65",
+                              "type": "variable_decl",
+                              "value": {
+                                "$AN": {
+                                  "id": "id-177fb980e34-66",
+                                  "type": "determiner",
+                                  "value": "$OUR"
+                                },
+                                "$NAME": {
+                                  "id": "id-177fb980e34-67",
+                                  "type": "variable_name",
+                                  "value": "was lit"
+                                },
+                                "$TYPE": {
+                                  "id": "id-177fb980e34-68",
+                                  "type": "variable_type",
+                                  "value": {
+                                    "$PRIMITIVE": {
+                                      "id": "id-177fb980e34-69",
+                                      "type": "primitive_type",
+                                      "value": "$BOOL"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "$VALUE": {
+                              "id": "id-177fb980e34-70",
+                              "type": "local_init",
+                              "value": {
+                                "$VALUE": {
+                                  "id": "id-177fb980e34-71",
+                                  "type": "assignment",
+                                  "value": {
+                                    "id": "id-177fb980e34-80",
+                                    "type": "get_at_field",
+                                    "value": {
+                                      "$FIELD": {
+                                        "id": "id-177fb980e34-81",
+                                        "type": "text",
+                                        "value": "in darkness"
+                                      },
+                                      "$FROM": {
+                                        "id": "id-177fb980e34-82",
+                                        "type": "from_source_fields",
+                                        "value": {
+                                          "id": "id-177fb980e34-83",
+                                          "type": "from_obj",
+                                          "value": {
+                                            "$OBJECT": {
+                                              "id": "id-177fb980e34-84",
+                                              "type": "text_eval",
+                                              "value": {
+                                                "id": "id-177fb980e34-85",
+                                                "type": "text_value",
+                                                "value": {
+                                                  "$TEXT": {
+                                                    "id": "id-177fb980e34-86",
+                                                    "type": "text",
+                                                    "value": "player"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-177fb980e34-72",
+                          "type": "local_decl",
+                          "value": {
+                            "$VARIABLE_DECL": {
+                              "id": "id-177fb980e34-73",
+                              "type": "variable_decl",
+                              "value": {
+                                "$AN": {
+                                  "id": "id-177fb980e34-74",
+                                  "type": "determiner",
+                                  "value": "$OUR"
+                                },
+                                "$NAME": {
+                                  "id": "id-177fb980e34-75",
+                                  "type": "variable_name",
+                                  "value": "now lit"
+                                },
+                                "$TYPE": {
+                                  "id": "id-177fb980e34-76",
+                                  "type": "variable_type",
+                                  "value": {
+                                    "$PRIMITIVE": {
+                                      "id": "id-177fb980e34-77",
+                                      "type": "primitive_type",
+                                      "value": "$BOOL"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "$VALUE": {
+                              "id": "id-177fb980e34-78",
+                              "type": "local_init",
+                              "value": {
+                                "$VALUE": {
+                                  "id": "id-177fb980e34-79",
+                                  "type": "assignment",
+                                  "value": {
+                                    "id": "id-177fb980e34-87",
+                                    "type": "from_bool",
+                                    "value": {
+                                      "$VAL": {
+                                        "id": "id-177fb980e34-88",
+                                        "type": "bool_eval",
+                                        "value": {
+                                          "id": "id-177fb980e34-89",
+                                          "type": "determine",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-177fb980e34-90",
+                                              "type": "pattern_name",
+                                              "value": "contains light"
+                                            },
+                                            "$ARGUMENTS": {
+                                              "id": "id-177fb980e34-91",
+                                              "type": "arguments",
+                                              "value": {
+                                                "$ARGS": [
+                                                  {
+                                                    "id": "id-177fb980e34-92",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-177fb980e34-93",
+                                                        "type": "variable_name",
+                                                        "value": "spot"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-177fb980e34-94",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-177fb980e34-101",
+                                                          "type": "get_at_field",
+                                                          "value": {
+                                                            "$FIELD": {
+                                                              "id": "id-177fb980e34-102",
+                                                              "type": "text",
+                                                              "value": "pawn"
+                                                            },
+                                                            "$FROM": {
+                                                              "id": "id-177fb980e34-103",
+                                                              "type": "from_source_fields",
+                                                              "value": {
+                                                                "id": "id-177fb980e34-104",
+                                                                "type": "from_obj",
+                                                                "value": {
+                                                                  "$OBJECT": {
+                                                                    "id": "id-177fb980e34-105",
+                                                                    "type": "text_eval",
+                                                                    "value": {
+                                                                      "id": "id-177fb980e34-106",
+                                                                      "type": "text_value",
+                                                                      "value": {
+                                                                        "$TEXT": {
+                                                                          "id": "id-177fb980e34-107",
+                                                                          "type": "text",
+                                                                          "value": "player"
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "$PATTERN_RULES": {
+                    "id": "id-177fb980e34-62",
+                    "type": "pattern_rules",
+                    "value": {
+                      "$PATTERN_RULE": [
+                        {
+                          "id": "id-177fb980e34-108",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-177fb980e34-109",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-177fb980e34-111",
+                                "type": "all_true",
+                                "value": {
+                                  "$TEST": [
+                                    {
+                                      "id": "id-177fb980e34-112",
+                                      "type": "bool_eval",
+                                      "value": {
+                                        "id": "id-177fb980e34-114",
+                                        "type": "get_var",
+                                        "value": {
+                                          "$NAME": {
+                                            "id": "id-177fb980e34-115",
+                                            "type": "text",
+                                            "value": "was lit"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "id": "id-177fb980e34-113",
+                                      "type": "bool_eval",
+                                      "value": {
+                                        "id": "id-177fb980e34-116",
+                                        "type": "not",
+                                        "value": {
+                                          "$TEST": {
+                                            "id": "id-177fb980e34-117",
+                                            "type": "bool_eval",
+                                            "value": {
+                                              "id": "id-177fb980e34-118",
+                                              "type": "get_var",
+                                              "value": {
+                                                "$NAME": {
+                                                  "id": "id-177fb980e34-119",
+                                                  "type": "text",
+                                                  "value": "now lit"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-177fb980e34-110",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-177fb980e34-120",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-177fb980e34-134",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-177fb980e34-135",
+                                          "type": "determine",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-177fb980e34-136",
+                                              "type": "pattern_name",
+                                              "value": "Print news of darkness"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-177fb980e34-121",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-177fb980e34-122",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-177fb980e34-123",
+                                "type": "all_true",
+                                "value": {
+                                  "$TEST": [
+                                    {
+                                      "id": "id-177fb980e34-124",
+                                      "type": "bool_eval",
+                                      "value": {
+                                        "id": "id-177fb980e34-125",
+                                        "type": "get_var",
+                                        "value": {
+                                          "$NAME": {
+                                            "id": "id-177fb980e34-126",
+                                            "type": "text",
+                                            "value": "now lit"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "id": "id-177fb980e34-127",
+                                      "type": "bool_eval",
+                                      "value": {
+                                        "id": "id-177fb980e34-128",
+                                        "type": "not",
+                                        "value": {
+                                          "$TEST": {
+                                            "id": "id-177fb980e34-129",
+                                            "type": "bool_eval",
+                                            "value": {
+                                              "id": "id-177fb980e34-130",
+                                              "type": "get_var",
+                                              "value": {
+                                                "$NAME": {
+                                                  "id": "id-177fb980e34-131",
+                                                  "type": "text",
+                                                  "value": "was lit"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-177fb980e34-132",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-177fb980e34-133",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-177fb980e34-137",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-177fb980e34-138",
+                                          "type": "determine",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-177fb980e34-139",
+                                              "type": "pattern_name",
+                                              "value": "print news of light"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177fb980e34-143",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177fb980e34-144",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb980e34-145",
+                "type": "pattern_decl",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177fb980e34-146",
+                    "type": "pattern_name",
+                    "value": "Print news of darkness"
+                  },
+                  "$TYPE": {
+                    "id": "id-177fb980e34-147",
+                    "type": "pattern_type",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-177fb980e34-148",
+                        "type": "patterned_activity",
+                        "value": "$ACTIVITY"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fb980e34-149",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb980e34-150",
+                "type": "pattern_actions",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177fb980e34-151",
+                    "type": "pattern_name",
+                    "value": "Print news of darkness"
+                  },
+                  "$PATTERN_RULES": {
+                    "id": "id-177fb980e34-152",
+                    "type": "pattern_rules",
+                    "value": {
+                      "$PATTERN_RULE": [
+                        {
+                          "id": "id-177fb980e34-153",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-177fb980e34-154",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-177fb980e34-156",
+                                "type": "always",
+                                "value": {}
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-177fb980e34-155",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-177fb980e34-157",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-177fb980e34-158",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-177fb980e34-159",
+                                          "type": "say_text",
+                                          "value": {
+                                            "$TEXT": {
+                                              "id": "id-177fb980e34-160",
+                                              "type": "text_eval",
+                                              "value": {
+                                                "id": "id-177fb980e34-161",
+                                                "type": "response",
+                                                "value": {
+                                                  "$NAME": {
+                                                    "id": "id-177fb980e34-162",
+                                                    "type": "text",
+                                                    "value": "darkness has fallen"
+                                                  },
+                                                  "$TEXT": {
+                                                    "id": "id-177fb980e34-163",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-177fb980e34-164",
+                                                      "type": "text_value",
+                                                      "value": {
+                                                        "$TEXT": {
+                                                          "id": "id-177fb980e34-165",
+                                                          "type": "text",
+                                                          "value": "It is now pitch dark in here!"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177fb980e34-166",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177fb980e34-167",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb980e34-168",
+                "type": "pattern_decl",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177fb980e34-169",
+                    "type": "pattern_name",
+                    "value": "Print news of light"
+                  },
+                  "$TYPE": {
+                    "id": "id-177fb980e34-170",
+                    "type": "pattern_type",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-177fb980e34-171",
+                        "type": "patterned_activity",
+                        "value": "$ACTIVITY"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fb980e34-172",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fb980e34-173",
+                "type": "pattern_actions",
+                "value": {
+                  "$NAME": {
+                    "id": "id-177fb980e34-174",
+                    "type": "pattern_name",
+                    "value": "Print news of light"
+                  },
+                  "$PATTERN_RULES": {
+                    "id": "id-177fb980e34-175",
+                    "type": "pattern_rules",
+                    "value": {
+                      "$PATTERN_RULE": [
+                        {
+                          "id": "id-177fb980e34-176",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-177fb980e34-177",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-177fb980e34-178",
+                                "type": "always",
+                                "value": {}
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-177fb980e34-179",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-177fb980e34-180",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-177fb980e34-189",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-177fb980e34-190",
+                                          "type": "determine",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-177fb980e34-191",
+                                              "type": "pattern_name",
+                                              "value": "in darkness"
+                                            },
+                                            "$ARGUMENTS": {
+                                              "id": "id-177fb980e34-192",
+                                              "type": "arguments",
+                                              "value": {
+                                                "$ARGS": [
+                                                  {
+                                                    "id": "id-177fb980e34-193",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-177fb980e34-194",
+                                                        "type": "variable_name",
+                                                        "value": "where"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-177fb980e34-195",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-177fb980e34-196",
+                                                          "type": "get_at_field",
+                                                          "value": {
+                                                            "$FIELD": {
+                                                              "id": "id-177fb980e34-197",
+                                                              "type": "text",
+                                                              "value": "pawn"
+                                                            },
+                                                            "$FROM": {
+                                                              "id": "id-177fb980e34-198",
+                                                              "type": "from_source_fields",
+                                                              "value": {
+                                                                "id": "id-177fb980e34-199",
+                                                                "type": "from_obj",
+                                                                "value": {
+                                                                  "$OBJECT": {
+                                                                    "id": "id-177fb980e34-200",
+                                                                    "type": "text_eval",
+                                                                    "value": {
+                                                                      "id": "id-177fb980e34-201",
+                                                                      "type": "text_value",
+                                                                      "value": {
+                                                                        "$TEXT": {
+                                                                          "id": "id-177fb980e34-202",
+                                                                          "type": "text",
+                                                                          "value": "player"
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

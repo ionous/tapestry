@@ -1713,7 +1713,7 @@
                                                                             "$NAME": {
                                                                               "id": "id-17773cdb8b3-26",
                                                                               "type": "pattern_name",
-                                                                              "value": "VisibilityOf"
+                                                                              "value": "transparentList"
                                                                             },
                                                                             "$ARGUMENTS": {
                                                                               "id": "id-17773cdb8b3-27",
@@ -1945,7 +1945,7 @@
                                               "$NAME": {
                                                 "id": "id-177837f18ff-6",
                                                 "type": "pattern_name",
-                                                "value": "VisibilityOf"
+                                                "value": "transparentList"
                                               },
                                               "$ARGUMENTS": {
                                                 "id": "id-177837f18ff-7",
@@ -2086,7 +2086,7 @@
                                                           "$NAME": {
                                                             "id": "id-1777f5f0e26-153",
                                                             "type": "pattern_name",
-                                                            "value": "VisibilityOf"
+                                                            "value": "transparentList"
                                                           },
                                                           "$ARGUMENTS": {
                                                             "id": "id-1777f5f0e26-154",
@@ -2307,7 +2307,7 @@
                                                           "$NAME": {
                                                             "id": "id-1777f5f0e26-192",
                                                             "type": "pattern_name",
-                                                            "value": "VisibilityOf"
+                                                            "value": "transparentList"
                                                           },
                                                           "$ARGUMENTS": {
                                                             "id": "id-1777f5f0e26-193",
@@ -2854,7 +2854,7 @@
                                   "$NAME": {
                                     "id": "id-17799bae367-89",
                                     "type": "pattern_name",
-                                    "value": "printVantage"
+                                    "value": "PrintVantage"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-17799bae367-90",
@@ -2974,7 +2974,7 @@
                                   "$NAME": {
                                     "id": "id-17799bae367-107",
                                     "type": "pattern_name",
-                                    "value": "printVantage"
+                                    "value": "PrintVantage"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-17799bae367-108",
@@ -3123,7 +3123,7 @@
                                   "$NAME": {
                                     "id": "id-17799bae367-131",
                                     "type": "pattern_name",
-                                    "value": "printVantage"
+                                    "value": "PrintVantage"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-17799bae367-132",
@@ -3267,7 +3267,7 @@
                                   "$NAME": {
                                     "id": "id-1779fc56090-129",
                                     "type": "pattern_name",
-                                    "value": "printVantage"
+                                    "value": "PrintVantage"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-1779fc56090-130",

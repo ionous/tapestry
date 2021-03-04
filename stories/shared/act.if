@@ -347,6 +347,57 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  {
+                                                    "id": "id-177fe41d8ff-3",
+                                                    "type": "argument",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-177fe41d8ff-4",
+                                                        "type": "variable_name",
+                                                        "value": "in darkness"
+                                                      },
+                                                      "$FROM": {
+                                                        "id": "id-177fe41d8ff-5",
+                                                        "type": "assignment",
+                                                        "value": {
+                                                          "id": "id-177fe41d8ff-6",
+                                                          "type": "get_at_field",
+                                                          "value": {
+                                                            "$FIELD": {
+                                                              "id": "id-177fe41d8ff-7",
+                                                              "type": "text",
+                                                              "value": "in darkness"
+                                                            },
+                                                            "$FROM": {
+                                                              "id": "id-177fe41d8ff-8",
+                                                              "type": "from_source_fields",
+                                                              "value": {
+                                                                "id": "id-177fe41d8ff-9",
+                                                                "type": "from_obj",
+                                                                "value": {
+                                                                  "$OBJECT": {
+                                                                    "id": "id-177fe41d8ff-10",
+                                                                    "type": "text_eval",
+                                                                    "value": {
+                                                                      "id": "id-177fe41d8ff-11",
+                                                                      "type": "text_value",
+                                                                      "value": {
+                                                                        "$TEXT": {
+                                                                          "id": "id-177fe41d8ff-12",
+                                                                          "type": "text",
+                                                                          "value": "player"
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
                                                   }
                                                 ]
                                               }
@@ -689,6 +740,57 @@
                                                                     "id": "id-177d65cfefa-36",
                                                                     "type": "text",
                                                                     "value": "noun"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        {
+                                                          "id": "id-177fe41d8ff-0",
+                                                          "type": "argument",
+                                                          "value": {
+                                                            "$NAME": {
+                                                              "id": "id-177fe41d8ff-1",
+                                                              "type": "variable_name",
+                                                              "value": "in darkness"
+                                                            },
+                                                            "$FROM": {
+                                                              "id": "id-177fe41d8ff-2",
+                                                              "type": "assignment",
+                                                              "value": {
+                                                                "id": "id-177fe41d8ff-17",
+                                                                "type": "get_at_field",
+                                                                "value": {
+                                                                  "$FIELD": {
+                                                                    "id": "id-177fe41d8ff-18",
+                                                                    "type": "text",
+                                                                    "value": "in darkness"
+                                                                  },
+                                                                  "$FROM": {
+                                                                    "id": "id-177fe41d8ff-19",
+                                                                    "type": "from_source_fields",
+                                                                    "value": {
+                                                                      "id": "id-177fe41d8ff-20",
+                                                                      "type": "from_obj",
+                                                                      "value": {
+                                                                        "$OBJECT": {
+                                                                          "id": "id-177fe41d8ff-21",
+                                                                          "type": "text_eval",
+                                                                          "value": {
+                                                                            "id": "id-177fe41d8ff-22",
+                                                                            "type": "text_value",
+                                                                            "value": {
+                                                                              "$TEXT": {
+                                                                                "id": "id-177fe41d8ff-23",
+                                                                                "type": "text",
+                                                                                "value": "player"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
                                                                   }
                                                                 }
                                                               }

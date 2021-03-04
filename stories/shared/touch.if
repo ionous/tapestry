@@ -41,7 +41,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-4",
                     "type": "pattern_name",
-                    "value": "reach"
+                    "value": "touch response"
                   },
                   "$TYPE": {
                     "id": "id-177e140d8c4-5",
@@ -184,7 +184,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-16",
                     "type": "pattern_name",
-                    "value": "reach"
+                    "value": "touch response"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-177e140d8c4-33",
@@ -202,7 +202,7 @@
                                 "$AN": {
                                   "id": "id-177e140d8c4-36",
                                   "type": "determiner",
-                                  "value": "$A"
+                                  "value": "$AN"
                                 },
                                 "$NAME": {
                                   "id": "id-177e140d8c4-37",
@@ -501,7 +501,7 @@
                                                         "$NAME": {
                                                           "id": "id-177ef108915-1",
                                                           "type": "pattern_name",
-                                                          "value": "reach-out"
+                                                          "value": "reach up response"
                                                         },
                                                         "$ARGUMENTS": {
                                                           "id": "id-177ef108915-6",
@@ -1009,7 +1009,7 @@
                                                                     "$NAME": {
                                                                       "id": "id-177ef108915-19",
                                                                       "type": "pattern_name",
-                                                                      "value": "reach-in"
+                                                                      "value": "dig down response"
                                                                     },
                                                                     "$ARGUMENTS": {
                                                                       "id": "id-177ef108915-20",
@@ -1335,7 +1335,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-123",
                     "type": "pattern_name",
-                    "value": "reach-out"
+                    "value": "reach up response"
                   },
                   "$TYPE": {
                     "id": "id-177e140d8c4-124",
@@ -1478,7 +1478,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-149",
                     "type": "pattern_name",
-                    "value": "reach-out"
+                    "value": "reach up response"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-177e140d8c4-150",
@@ -1666,7 +1666,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-62",
                     "type": "pattern_name",
-                    "value": "reach-in"
+                    "value": "dig down response"
                   },
                   "$TYPE": {
                     "id": "id-177e140d8c4-63",
@@ -1809,7 +1809,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-118",
                     "type": "pattern_name",
-                    "value": "reach-in"
+                    "value": "dig down response"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-177e140d8c4-119",

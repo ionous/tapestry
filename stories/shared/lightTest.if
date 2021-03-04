@@ -1,0 +1,195 @@
+{
+  "id": "id-177fe41d8ff-24",
+  "type": "story",
+  "value": {
+    "$PARAGRAPH": [
+      {
+        "id": "id-177fe41d8ff-25",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177fe41d8ff-26",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fe41d8ff-28",
+                "type": "test_scene",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-177fe41d8ff-29",
+                    "type": "test_name",
+                    "value": "vision test"
+                  },
+                  "$STORY": {
+                    "id": "id-177fe41d8ff-30",
+                    "type": "story",
+                    "value": {
+                      "$PARAGRAPH": []
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177fe41d8ff-31",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177fe41d8ff-32",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fe41d8ff-33",
+                "type": "test_statement",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-177fe41d8ff-34",
+                    "type": "test_name",
+                    "value": "testing vision"
+                  },
+                  "$TEST": {
+                    "id": "id-177fe41d8ff-35",
+                    "type": "testing",
+                    "value": {
+                      "id": "id-177fe41d8ff-36",
+                      "type": "test_output",
+                      "value": {
+                        "$LINES": {
+                          "id": "id-177fe41d8ff-37",
+                          "type": "lines",
+                          "value": "The cabinet has light.\n"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fe41d8ff-39",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fe41d8ff-40",
+                "type": "test_rule",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-177fe41d8ff-41",
+                    "type": "test_name",
+                    "value": "testing vision"
+                  },
+                  "$HOOK": {
+                    "id": "id-177fe41d8ff-42",
+                    "type": "program_hook",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-177fe41d8ff-43",
+                        "type": "activity",
+                        "value": {
+                          "$EXE": [
+                            {
+                              "id": "id-177fe41d8ff-44",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fe41d8ff-45",
+                                "type": "put_at_field",
+                                "value": {
+                                  "$FROM": {
+                                    "id": "id-177fe41d8ff-46",
+                                    "type": "assignment",
+                                    "value": {
+                                      "id": "id-177fe41d8ff-49",
+                                      "type": "from_bool",
+                                      "value": {
+                                        "$VAL": {
+                                          "id": "id-177fe41d8ff-50",
+                                          "type": "bool_eval",
+                                          "value": {
+                                            "id": "id-177fe41d8ff-51",
+                                            "type": "bool_value",
+                                            "value": {
+                                              "$BOOL": {
+                                                "id": "id-177fe41d8ff-52",
+                                                "type": "bool",
+                                                "value": "$TRUE"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$INTO": {
+                                    "id": "id-177fe41d8ff-47",
+                                    "type": "into_target_fields",
+                                    "value": {
+                                      "id": "id-177fe86bcf0-0",
+                                      "type": "into_obj",
+                                      "value": {
+                                        "$OBJECT": {
+                                          "id": "id-177fe86bcf0-1",
+                                          "type": "text_eval",
+                                          "value": {
+                                            "id": "id-177fe86bcf0-2",
+                                            "type": "text_value",
+                                            "value": {
+                                              "$TEXT": {
+                                                "id": "id-177fe86bcf0-3",
+                                                "type": "text",
+                                                "value": "Kitchen"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$AT_FIELD": {
+                                    "id": "id-177fe41d8ff-48",
+                                    "type": "text",
+                                    "value": "lit"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177fe89b45e-62",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fe89b45e-63",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-177fe89b45e-64",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177fe89b45e-65",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-177fe89b45e-66",
+                                          "type": "lines",
+                                          "value": "{if contains_light: .cabinet}The cabinet has light.{else}The cabinet is dark.{end}"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
