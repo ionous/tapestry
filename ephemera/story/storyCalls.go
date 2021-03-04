@@ -54,14 +54,13 @@ func importArgs(k *Importer, p ephemera.Named, stubs *Arguments) (ret *core.Argu
 	if stubs != nil {
 		var argList []*core.Argument
 		for _, stub := range stubs.Args {
-			aff := stub.From.Affinity()
 			if paramName, e := stub.Name.NewName(k, tables.NAMED_ARGUMENT); e != nil {
 				err = errutil.Append(err, e)
 			} else {
-				if aff := string(aff); len(aff) > 0 {
+				if aff := stub.From.Affinity(); len(aff) > 0 {
 					// fix: this shouldnt be "eval" here.
 					// see buildPatternCache
-					paramType := k.NewName(aff+"_eval", tables.NAMED_TYPE, stub.At.String())
+					paramType := k.NewName(string(aff)+"_eval", tables.NAMED_TYPE, stub.At.String())
 					k.NewPatternRef(p, paramName, paramType, "")
 				}
 				// after recording the "fact" of the parameter...

@@ -8,6 +8,7 @@ import (
 var Slats = []composer.Composer{
 	(*RenderField)(nil),
 	(*RenderName)(nil),
+	(*RenderPattern)(nil),
 	(*RenderRef)(nil),
 	(*RenderTemplate)(nil),
 }

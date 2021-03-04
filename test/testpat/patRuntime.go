@@ -31,8 +31,10 @@ func (run *Runtime) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g
 				var allFlags rt.Flags
 				if rules, e := run.GetRules(pat.Name, "", &allFlags); e != nil {
 					err = e
+				} else if e := results.ApplyRules(run, rules, allFlags); e != nil {
+					err = e
 				} else {
-					ret, err = results.Compute(run, rules, allFlags)
+					ret, err = results.GetResult()
 				}
 				// only init can return an error
 				run.ReplaceScope(oldScope, false)

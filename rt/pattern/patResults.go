@@ -37,19 +37,12 @@ func (rw *Results) SetFieldByName(field string, val g.Value) (err error) {
 	return
 }
 
-func (rw *Results) Compute(run rt.Runtime, rules []rt.Rule, allFlags rt.Flags) (ret g.Value, err error) {
-	if e := rw.ApplyRules(run, rules, allFlags); e != nil {
-		err = e
-	} else {
-		ret, err = rw.GetResult()
-	}
-	return
-}
-
-func (rw *Results) HasResults() bool {
+// ComputedResult returns whether an explicit result was set.
+func (rw *Results) ComputedResult() bool {
 	return rw.sets > 0
 }
 
+// GetResult returns a default value if none was computed.
 func (rw *Results) GetResult() (ret g.Value, err error) {
 	rec := rw.Scope.(g.Value).Record()
 	field, aff := rw.resultField, rw.resultAff

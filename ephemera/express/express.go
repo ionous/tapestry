@@ -165,15 +165,12 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 			}
 		}
 		if err == nil {
-			// printing is generally an activity b/c say is an activity
-			// and we want the ability to say several things in series.
-			// expressions are text patterns... so for now adapt via text
-			// expressions would ideally adapt based on the pattern type
-			// the assembler probably needs to work directly on tokens...
-			c.buildOne(&core.Buffer{core.MakeActivity(&core.Determine{
-				Pattern:   pattern.PatternName(name),
-				Arguments: &ps,
-			})})
+			c.buildOne(&render.RenderPattern{
+				core.Determine{
+					Pattern:   pattern.PatternName(name),
+					Arguments: &ps,
+				},
+			})
 		}
 	}
 	return
@@ -184,14 +181,19 @@ func newAssignment(arg r.Value) (ret rt.Assignment, err error) {
 	switch arg := arg.Interface().(type) {
 	case dotName:
 		ret = arg.getFromVar()
+		// see notes in RenderPattern
+		// it is sort of the "any value" right now
+		// things ( theoretically ) get checked at runtime.
+	case *render.RenderPattern:
+		ret = arg
 	case rt.BoolEval:
 		ret = &core.FromBool{arg}
 	case rt.NumberEval:
 		ret = &core.FromNum{arg}
-	case rt.TextEval:
-		ret = &core.FromText{arg}
 	case rt.NumListEval:
 		ret = &core.FromNumbers{arg}
+	case rt.TextEval:
+		ret = &core.FromText{arg}
 	case rt.TextListEval:
 		ret = &core.FromTexts{arg}
 	default:

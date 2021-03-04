@@ -23,7 +23,7 @@ func (*Determine) Compose() composer.Spec {
 	return composer.Spec{
 		Spec:  "{pattern%name:pattern_name}{?arguments}",
 		Group: "patterns",
-		Desc:  "Runs a pattern, and potentially returns a value.",
+		Desc:  "Determine: Runs a pattern, and potentially returns a value.",
 		Stub:  true,
 	}
 }
@@ -62,6 +62,12 @@ func (op *Determine) GetTextList(run rt.Runtime) (g.Value, error) {
 
 func (op *Determine) GetRecordList(run rt.Runtime) (g.Value, error) {
 	return op.determine(run, affine.RecordList)
+}
+
+// backdoor for RenderPattern
+// could maybe be GetAssignedValue but that would expose it to the composer that way too
+func (op *Determine) DetermineValue(run rt.Runtime) (ret g.Value, err error) {
+	return op.determine(run, "")
 }
 
 func (op *Determine) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {

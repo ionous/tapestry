@@ -28,14 +28,16 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 			var allFlags rt.Flags
 			if rules, e := run.GetRules(name, "", &allFlags); e != nil {
 				err = e
-			} else if v, e := results.Compute(run, rules, allFlags); e != nil {
+			} else if e := results.ApplyRules(run, rules, allFlags); e != nil {
+				err = e
+			} else if v, e := results.GetResult(); e != nil {
 				err = e
 			} else {
 				// breaks precedence to return a value and an error
 				// in order to generate appropriate default returns ( ex. a record of the right type )
 				// while still informing the caller of lack of pattern decision in a concise manner.
 				ret = v
-				if !results.HasResults() {
+				if !results.ComputedResult() {
 					err = rt.NoResult{}
 				}
 			}
@@ -79,7 +81,7 @@ func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, er
 						if e := rw.ApplyRules(run, rules, allFlags); e != nil {
 							err = errutil.New(e, "in phase", phase)
 							break
-						} else if rw.HasResults() {
+						} else if rw.ComputedResult() {
 							// if we have a return... we know its a bool
 							if b, e := rw.GetResult(); e != nil {
 								err = errutil.New(e, "in phase", phase)
