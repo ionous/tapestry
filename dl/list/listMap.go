@@ -20,7 +20,7 @@ func (*Map) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "list_map",
 		Group: "list",
-		Desc: `Map List: Transform the values from one list and place the results in another list.
+		Desc: `Map list: Transform the values from one list and place the results in another list.
 		The designated pattern is called with each value from the "from list", one value at a time.`,
 	}
 }

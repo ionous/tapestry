@@ -7,7 +7,7 @@ import (
 
 var Slots = []composer.Slot{{
 	Type: (*Comparator)(nil),
-	Desc: "Comparison Types: Helper for comparing values.",
+	Desc: "Comparison types: Helper for comparing values.",
 }, {
 	Type: (*Brancher)(nil),
 	Desc: "Helper for choose action.",

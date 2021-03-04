@@ -24,7 +24,7 @@ func (*While) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "repeating", Role: composer.Command},
 		Group:  "flow",
-		Desc:   "Repeat a series of statements while a conditional is true.",
+		Desc:   "Repeating: Keep running a series of actions while a condition is true.",
 	}
 }
 

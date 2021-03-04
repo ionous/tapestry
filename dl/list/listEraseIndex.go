@@ -21,7 +21,7 @@ type EraseIndex struct {
 func (*EraseIndex) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "erase", Role: composer.Command},
-		Desc:   "Erase: remove one or more values from a list",
+		Desc:   "Erase at index: remove one or more values from a list",
 	}
 }
 

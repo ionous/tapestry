@@ -18,7 +18,7 @@ func (*GetAtField) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "get", Role: composer.Function},
 		Group:  "variables",
-		Desc:   "GetAtField: Get a value from a record.",
+		Desc:   "Get at field: Get a value from a record.",
 	}
 }
 

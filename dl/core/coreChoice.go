@@ -29,6 +29,7 @@ type ChooseNothingElse struct {
 func (*ChooseAction) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "if", Role: composer.Command},
+		Desc:   "Choose action: an if statement.",
 	}
 }
 

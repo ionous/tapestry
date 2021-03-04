@@ -16,7 +16,7 @@ func (*Set) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "list_set",
 		Group: "list",
-		Desc:  "Set Value of List: Overwrite an existing value in a list.",
+		Desc:  "Set value in list: Overwrite an existing value in a list.",
 	}
 }
 

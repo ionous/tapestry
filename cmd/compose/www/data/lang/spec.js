@@ -137,7 +137,7 @@ const spec = [
     "uses": "slot"
   },
   {
-    "desc": "Comparison Types: Helper for comparing values.",
+    "desc": "Comparison types: Helper for comparing values.",
     "name": "comparator",
     "uses": "slot"
   },
@@ -580,6 +580,7 @@ const spec = [
     }
   },
   {
+    "desc": "Choose action: an if statement.",
     "name": "choose_action",
     "uses": "flow",
     "with": {
@@ -893,6 +894,7 @@ const spec = [
     }
   },
   {
+    "desc": "Log: Debug log",
     "group": [
       "debug"
     ],
@@ -924,7 +926,7 @@ const spec = [
     }
   },
   {
-    "desc": "determine: Runs a pattern, and potentially returns a value.",
+    "desc": "Determine: Runs a pattern, and potentially returns a value.",
     "group": [
       "patterns"
     ],
@@ -959,7 +961,7 @@ const spec = [
     }
   },
   {
-    "desc": "Do Nothing: Statement which does nothing.",
+    "desc": "Do nothing: Statement which does nothing.",
     "group": [
       "exec"
     ],
@@ -1000,7 +1002,7 @@ const spec = [
     }
   },
   {
-    "desc": "Erase: Remove one or more values from a list",
+    "desc": "Erase at edge: Remove one or more values from a list",
     "name": "erase_edge",
     "uses": "flow",
     "with": {
@@ -1029,7 +1031,7 @@ const spec = [
     }
   },
   {
-    "desc": "Erase: remove one or more values from a list",
+    "desc": "Erase at index: remove one or more values from a list",
     "name": "erase_index",
     "uses": "flow",
     "with": {
@@ -1066,7 +1068,7 @@ const spec = [
     }
   },
   {
-    "desc": "Erasing from list: Erase elements from the front or back of a list.\nRuns an activity with a list containing the erased values; the list can be empty if nothing was erased.",
+    "desc": "Erasing indices: Erase elements from the front or back of a list.\nRuns an activity with a list containing the erased values; the list can be empty if nothing was erased.",
     "group": [
       "list"
     ],
@@ -1117,6 +1119,62 @@ const spec = [
         "do",
         ": ",
         "$DO",
+        "."
+      ]
+    }
+  },
+  {
+    "desc": "Erasing at edge: Erase one element from the front or back of a list.\nRuns an activity with a list containing the erased values; the list can be empty if nothing was erased.",
+    "group": [
+      "list"
+    ],
+    "name": "erasing_edge",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$AS": {
+          "label": "as",
+          "type": "text"
+        },
+        "$AT_EDGE": {
+          "label": "atEdge",
+          "type": "list_edge"
+        },
+        "$DO": {
+          "label": "do",
+          "type": "activity"
+        },
+        "$ELSE": {
+          "label": "else",
+          "type": "activity"
+        },
+        "$FROM": {
+          "label": "from",
+          "type": "list_source"
+        }
+      },
+      "roles": "CZKZKZSZKZSZKZSZKT",
+      "slots": [
+        "execute"
+      ],
+      "tokens": [
+        "erasing",
+        ": ",
+        "$FROM",
+        ", ",
+        "$AT_EDGE",
+        ", ",
+        "as",
+        ": ",
+        "$AS",
+        ", ",
+        "do",
+        ": ",
+        "$DO",
+        ", ",
+        "else",
+        ": ",
+        "$ELSE",
         "."
       ]
     }
@@ -1429,7 +1487,7 @@ const spec = [
     }
   },
   {
-    "desc": "GetAtField: Get a value from a record.",
+    "desc": "Get at field: Get a value from a record.",
     "group": [
       "variables"
     ],
@@ -2027,7 +2085,7 @@ const spec = [
     }
   },
   {
-    "desc": "Map List: Transform the values from one list and place the results in another list.\n\t\tThe designated pattern is called with each value from the \"from list\", one value at a time.",
+    "desc": "Map list: Transform the values from one list and place the results in another list.\n\t\tThe designated pattern is called with each value from the \"from list\", one value at a time.",
     "group": [
       "list"
     ],
@@ -2070,7 +2128,7 @@ const spec = [
     }
   },
   {
-    "desc": "Reduce List: Transform the values from one list by combining them into a single value.\n\t\tThe named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).",
+    "desc": "Reduce list: Transform the values from one list by combining them into a single value.\n\t\tThe named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).",
     "group": [
       "list"
     ],
@@ -2113,7 +2171,7 @@ const spec = [
     }
   },
   {
-    "desc": "Reverse List: Reverse a list.",
+    "desc": "Reverse list: Reverse a list.",
     "group": [
       "list"
     ],
@@ -2139,7 +2197,7 @@ const spec = [
     }
   },
   {
-    "desc": "Set Value of List: Overwrite an existing value in a list.",
+    "desc": "Set value in list: Overwrite an existing value in a list.",
     "group": [
       "list"
     ],
@@ -2344,12 +2402,12 @@ const spec = [
     }
   },
   {
-    "desc": "Splice into list: Modify a list by adding and removing elements.\nNote: the type of the elements being added must match the type of the list. \nText cant be added to a list of numbers, numbers cant be added to a list of text, \nand true/false values can't be added to a list.",
+    "desc": "Splice into list: Modify a list by adding and removing elements.\nNote: the type of the elements being added must match the type of the list. \nText cant be added to a list of numbers, numbers cant be added to a list of text.\nIf the starting index is negative, it will begin that many elements from the end of the array.\nIf list's length + the start is less than 0, it will begin from index 0.\nIf the remove count is missing, it removes all elements from the start to the end; \nif it is 0 or negative, no elements are removed.",
     "group": [
       "list"
     ],
     "name": "list_splice",
-    "spec": "splice into {list:text} {at entry%start?number} {removing%remove?number} {inserting%insert?assignment}",
+    "spec": "Splice {list:text} {at entry%start?number_eval} {removing%remove?number_eval} {inserting%insert?assignment}",
     "uses": "flow",
     "with": {
       "slots": [
@@ -2721,7 +2779,7 @@ const spec = [
     }
   },
   {
-    "desc": "Put at Edge: add a value to a list",
+    "desc": "Put at edge: add a value to a list",
     "name": "put_edge",
     "uses": "flow",
     "with": {
@@ -3292,7 +3350,7 @@ const spec = [
     }
   },
   {
-    "desc": "trying: Runs a pattern, and potentially returns a value.",
+    "desc": "Trying: Runs a pattern, and potentially returns a value.",
     "group": [
       "patterns"
     ],
@@ -3320,7 +3378,7 @@ const spec = [
     }
   },
   {
-    "desc": "While: Repeat a series of statements while a conditional is true.",
+    "desc": "Repeating: Keep running a series of actions while a condition is true.",
     "group": [
       "flow"
     ],

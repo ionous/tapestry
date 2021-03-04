@@ -22,7 +22,7 @@ func (*Reduce) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "list_reduce",
 		Group: "list",
-		Desc: `Reduce List: Transform the values from one list by combining them into a single value.
+		Desc: `Reduce list: Transform the values from one list by combining them into a single value.
 		The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).`,
 	}
 }

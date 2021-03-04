@@ -14,7 +14,7 @@ func (*Reverse) Compose() composer.Spec {
 	return composer.Spec{
 		Name:   "list_reverse",
 		Group:  "list",
-		Desc:   `Reverse List: Reverse a list.`,
+		Desc:   `Reverse list: Reverse a list.`,
 		Fluent: &composer.Fluid{Role: composer.Command},
 	}
 }

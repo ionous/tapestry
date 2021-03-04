@@ -27,6 +27,7 @@ func (op *Log) Compose() composer.Spec {
 		Name:   "debug_log",
 		Group:  "debug",
 		Fluent: &composer.Fluid{Name: "log", Role: composer.Command},
+		Desc:   "Debug log",
 	}
 }
 

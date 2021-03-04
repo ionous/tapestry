@@ -25,7 +25,7 @@ type Trying struct {
 func (*Trying) Compose() composer.Spec {
 	return composer.Spec{
 		Group: "patterns",
-		Desc:  "Runs a pattern, and potentially returns a value.",
+		Desc:  "Trying: Runs a pattern, and potentially returns a value.",
 		Spec:  "Trying: {pattern%name:pattern_name}{?arguments} as:{as:text} do:{do:activity} else:{else:activity}",
 		// Fluent: &composer.Fluid{Name: "trying", Role: composer.Command},
 		Stub: true,
