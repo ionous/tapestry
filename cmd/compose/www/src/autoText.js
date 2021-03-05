@@ -184,7 +184,7 @@ Vue.component('mk-auto-text', {
     },
     firstIndexOf(text) {
       const choices= this.getChoices();
-      return choices.findIndex(c => c.startsWith(text));
+      return choices.findIndex(c => c.toLowerCase().startsWith(text.toLowerCase()));
     },
     // set the input to :invalid if needed
     checkForError(text) {
