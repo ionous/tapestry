@@ -230,18 +230,20 @@ func (n *Runner) SetField(target, rawField string, val g.Value) (err error) {
 }
 
 func (n *Runner) setField(key keyType, val g.Value) (err error) {
-	// first, check if the specified field refers to a dotted noun trait
-	switch aspectOfTrait, e := n.GetField(object.Aspect, key.dot()); e.(type) {
+	// first, check if the specified field refers to a trait
+	// ( by asking for the name of an aspect. ex. "player.is_in_darkness" )
+	switch aspect, e := n.GetField(object.Aspect, key.dot()); e.(type) {
 	default:
 		err = e // there was an unknown error
 	case nil:
-		if aspectName, b := aspectOfTrait.String(), val.Bool(); !b {
-			// future: might maintain a table of opposite names ( similar to plurals )
-			err = errutil.Fmt("error setting trait: couldn't determine the opposite of %q", key)
+		if aff := val.Affinity(); aff != affine.Bool {
+			err = errutil.New("can only set a trait with booleans, have", aff)
+		} else if trait, e := oppositeDay(n, aspect.String(), key.field, val.Bool()); e != nil {
+			err = e
 		} else {
-			// recurse...
-			targetAspect := keyType{key.target, aspectName}
-			err = n.setField(targetAspect, g.StringOf(key.field))
+			// recurse to the g.Unknown path.
+			key := keyType{key.target, aspect.String()} // ex. "player.in_darkness"
+			err = n.setField(key, g.StringOf(trait))
 		}
 
 	case g.Unknown:
@@ -256,6 +258,22 @@ func (n *Runner) setField(key keyType, val g.Value) (err error) {
 		} else {
 			n.values[key] = staticValue{a, v}
 		}
+	}
+	return
+}
+
+func oppositeDay(ks g.Kinds, aspect, trait string, b bool) (ret string, err error) {
+	if b {
+		ret = trait
+	} else if k, e := ks.GetKindByName(aspect); e != nil {
+		err = e
+	} else if cnt := k.NumField(); cnt != 2 {
+		err = errutil.Fmt("couldn't determine the opposite of %s.%s", aspect, trait)
+	} else if i := k.FieldIndex(trait); i < 0 {
+		err = errutil.Fmt("couldn't find the trait %s.%s", aspect, trait)
+	} else {
+		field := k.Field((i + 1) & 1)
+		ret = field.Name
 	}
 	return
 }

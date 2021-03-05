@@ -367,7 +367,7 @@
                                                             "$FIELD": {
                                                               "id": "id-177fe41d8ff-7",
                                                               "type": "text",
-                                                              "value": "in darkness"
+                                                              "value": "is in darkness"
                                                             },
                                                             "$FROM": {
                                                               "id": "id-177fe41d8ff-8",
@@ -765,7 +765,7 @@
                                                                   "$FIELD": {
                                                                     "id": "id-177fe41d8ff-18",
                                                                     "type": "text",
-                                                                    "value": "in darkness"
+                                                                    "value": "is in darkness"
                                                                   },
                                                                   "$FROM": {
                                                                     "id": "id-177fe41d8ff-19",

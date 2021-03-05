@@ -1602,7 +1602,7 @@ const spec = [
       "objects"
     ],
     "name": "has_trait",
-    "spec": "{object:text_eval} is {trait:text_eval}",
+    "spec": "{object:text_eval} has {trait:text_eval}",
     "uses": "flow",
     "with": {
       "slots": [

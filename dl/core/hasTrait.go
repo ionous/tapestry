@@ -16,7 +16,7 @@ type HasTrait struct {
 // should be "When the target is publicly named"
 func (*HasTrait) Compose() composer.Spec {
 	return composer.Spec{
-		Spec:  "{object:text_eval} is {trait:text_eval}",
+		Spec:  "{object:text_eval} has {trait:text_eval}",
 		Group: "objects",
 		Desc:  "Has Trait: Return true if noun is currently in the requested state.",
 	}

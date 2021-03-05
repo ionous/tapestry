@@ -1,0 +1,471 @@
+{
+  "id": "id-177fecc7bcd-76",
+  "type": "story",
+  "value": {
+    "$PARAGRAPH": [
+      {
+        "id": "id-177fecc7bcd-77",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177fecc7bcd-78",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fecc7bcd-79",
+                "type": "test_statement",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-177fecc7bcd-80",
+                    "type": "test_name",
+                    "value": "vision testing"
+                  },
+                  "$TEST": {
+                    "id": "id-177fecc7bcd-81",
+                    "type": "testing",
+                    "value": {
+                      "id": "id-177fecc7bcd-82",
+                      "type": "test_output",
+                      "value": {
+                        "$LINES": {
+                          "id": "id-177fecc7bcd-83",
+                          "type": "lines",
+                          "value": "ok: started in light.\nIt is now pitch dark in here!\nok: left in the dark.\nThe light, it burns.\nok: expected darkness.\n"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-177fecc7bcd-84",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fecc7bcd-85",
+                "type": "test_rule",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-177fecc7bcd-86",
+                    "type": "test_name",
+                    "value": "vision testing"
+                  },
+                  "$HOOK": {
+                    "id": "id-177fecc7bcd-87",
+                    "type": "program_hook",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-177fecc7bcd-88",
+                        "type": "activity",
+                        "value": {
+                          "$EXE": [
+                            {
+                              "id": "id-177fecc7bcd-106",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fecc7bcd-107",
+                                "type": "comment",
+                                "value": {
+                                  "$LINES": {
+                                    "id": "id-177fecc7bcd-108",
+                                    "type": "lines",
+                                    "value": "the player's in darkness setting defaults to false."
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177ff976bc8-0",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177ff976bc8-1",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-177ff976bc8-2",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177ff976bc8-3",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-177ff976bc8-4",
+                                          "type": "lines",
+                                          "value": "{if .player.is_in_darkness}ng: started in darkness{else}ok: started in light{end}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177fecc7bcd-122",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fecc7bcd-123",
+                                "type": "comment",
+                                "value": {
+                                  "$LINES": {
+                                    "id": "id-177fecc7bcd-124",
+                                    "type": "lines",
+                                    "value": "we expect to see darkness fall"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177fecc7bcd-89",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fecc7bcd-94",
+                                "type": "put_at_field",
+                                "value": {
+                                  "$FROM": {
+                                    "id": "id-177fecc7bcd-95",
+                                    "type": "assignment",
+                                    "value": {
+                                      "id": "id-177fecc7bcd-98",
+                                      "type": "from_bool",
+                                      "value": {
+                                        "$VAL": {
+                                          "id": "id-177fecc7bcd-99",
+                                          "type": "bool_eval",
+                                          "value": {
+                                            "id": "id-177fecc7bcd-100",
+                                            "type": "bool_value",
+                                            "value": {
+                                              "$BOOL": {
+                                                "id": "id-177fecc7bcd-101",
+                                                "type": "bool",
+                                                "value": "$TRUE"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$INTO": {
+                                    "id": "id-177fecc7bcd-96",
+                                    "type": "into_target_fields",
+                                    "value": {
+                                      "id": "id-177fecc7bcd-102",
+                                      "type": "into_obj",
+                                      "value": {
+                                        "$OBJECT": {
+                                          "id": "id-177fecc7bcd-103",
+                                          "type": "text_eval",
+                                          "value": {
+                                            "id": "id-177fecc7bcd-104",
+                                            "type": "text_value",
+                                            "value": {
+                                              "$TEXT": {
+                                                "id": "id-177fecc7bcd-105",
+                                                "type": "text",
+                                                "value": "kitchen"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$AT_FIELD": {
+                                    "id": "id-177fecc7bcd-97",
+                                    "type": "text",
+                                    "value": "unlit"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177fecc7bcd-212",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fecc7bcd-213",
+                                "type": "determine",
+                                "value": {
+                                  "$NAME": {
+                                    "id": "id-177fecc7bcd-214",
+                                    "type": "pattern_name",
+                                    "value": "adjust light"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177fecc7bcd-128",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fecc7bcd-129",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-177fecc7bcd-130",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177fecc7bcd-131",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-177fecc7bcd-132",
+                                          "type": "lines",
+                                          "value": "{if .player.is_in_darkness}ok: left in the dark{else}ng: expected darkness{end}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177fecc7bcd-218",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fecc7bcd-219",
+                                "type": "comment",
+                                "value": {
+                                  "$LINES": {
+                                    "id": "id-177fecc7bcd-220",
+                                    "type": "lines",
+                                    "value": "we expect to see light break forth in a glorious wonder"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177fecc7bcd-133",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fecc7bcd-134",
+                                "type": "put_at_field",
+                                "value": {
+                                  "$FROM": {
+                                    "id": "id-177fecc7bcd-135",
+                                    "type": "assignment",
+                                    "value": {
+                                      "id": "id-177fecc7bcd-136",
+                                      "type": "from_bool",
+                                      "value": {
+                                        "$VAL": {
+                                          "id": "id-177fecc7bcd-137",
+                                          "type": "bool_eval",
+                                          "value": {
+                                            "id": "id-177fecc7bcd-138",
+                                            "type": "bool_value",
+                                            "value": {
+                                              "$BOOL": {
+                                                "id": "id-177fecc7bcd-139",
+                                                "type": "bool",
+                                                "value": "$TRUE"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$INTO": {
+                                    "id": "id-177fecc7bcd-140",
+                                    "type": "into_target_fields",
+                                    "value": {
+                                      "id": "id-177fecc7bcd-141",
+                                      "type": "into_obj",
+                                      "value": {
+                                        "$OBJECT": {
+                                          "id": "id-177fecc7bcd-142",
+                                          "type": "text_eval",
+                                          "value": {
+                                            "id": "id-177fecc7bcd-143",
+                                            "type": "text_value",
+                                            "value": {
+                                              "$TEXT": {
+                                                "id": "id-177fecc7bcd-144",
+                                                "type": "text",
+                                                "value": "kitchen"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$AT_FIELD": {
+                                    "id": "id-177fecc7bcd-145",
+                                    "type": "text",
+                                    "value": "lit"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177fecc7bcd-215",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fecc7bcd-216",
+                                "type": "determine",
+                                "value": {
+                                  "$NAME": {
+                                    "id": "id-177fecc7bcd-217",
+                                    "type": "pattern_name",
+                                    "value": "adjust light"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-177fecc7bcd-221",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-177fecc7bcd-222",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-177fecc7bcd-223",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-177fecc7bcd-224",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-177fecc7bcd-225",
+                                          "type": "lines",
+                                          "value": "{if .player.is_in_darkness}ng: left in the dark{else}ok: expected darkness{end}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-177fecc7bcd-189",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-177fecc7bcd-190",
+              "type": "story_statement",
+              "value": {
+                "id": "id-177fecc7bcd-191",
+                "type": "test_scene",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-177fecc7bcd-192",
+                    "type": "test_name",
+                    "value": "vision testing"
+                  },
+                  "$STORY": {
+                    "id": "id-177fecc7bcd-193",
+                    "type": "story",
+                    "value": {
+                      "$PARAGRAPH": [
+                        {
+                          "id": "id-177fecc7bcd-194",
+                          "type": "paragraph",
+                          "value": {
+                            "$STORY_STATEMENT": [
+                              {
+                                "id": "id-177fecc7bcd-195",
+                                "type": "story_statement",
+                                "value": {
+                                  "id": "id-177fecc7bcd-199",
+                                  "type": "pattern_actions",
+                                  "value": {
+                                    "$NAME": {
+                                      "id": "id-177fecc7bcd-200",
+                                      "type": "pattern_name",
+                                      "value": "Print news of light"
+                                    },
+                                    "$PATTERN_RULES": {
+                                      "id": "id-177fecc7bcd-201",
+                                      "type": "pattern_rules",
+                                      "value": {
+                                        "$PATTERN_RULE": [
+                                          {
+                                            "id": "id-177fecc7bcd-202",
+                                            "type": "pattern_rule",
+                                            "value": {
+                                              "$GUARD": {
+                                                "id": "id-177fecc7bcd-203",
+                                                "type": "bool_eval",
+                                                "value": {
+                                                  "id": "id-177fecc7bcd-205",
+                                                  "type": "always",
+                                                  "value": {}
+                                                }
+                                              },
+                                              "$HOOK": {
+                                                "id": "id-177fecc7bcd-204",
+                                                "type": "program_hook",
+                                                "value": {
+                                                  "$ACTIVITY": {
+                                                    "id": "id-177fecc7bcd-206",
+                                                    "type": "activity",
+                                                    "value": {
+                                                      "$EXE": [
+                                                        {
+                                                          "id": "id-177fecc7bcd-207",
+                                                          "type": "execute",
+                                                          "value": {
+                                                            "id": "id-177fecc7bcd-208",
+                                                            "type": "say_text",
+                                                            "value": {
+                                                              "$TEXT": {
+                                                                "id": "id-177fecc7bcd-209",
+                                                                "type": "text_eval",
+                                                                "value": {
+                                                                  "id": "id-177fecc7bcd-210",
+                                                                  "type": "text_value",
+                                                                  "value": {
+                                                                    "$TEXT": {
+                                                                      "id": "id-177fecc7bcd-211",
+                                                                      "type": "text",
+                                                                      "value": "The light, it burns."
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
