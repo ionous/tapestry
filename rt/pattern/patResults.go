@@ -11,9 +11,10 @@ import (
 // track the number of times a particular field gets successfully written to.
 type Results struct {
 	rt.Scope
-	resultField string
-	resultAff   affine.Affinity
-	sets        int
+	resultField          string
+	resultAff            affine.Affinity
+	resultSets, ranCount int
+	ranFlags             rt.Flags
 }
 
 func NewResults(rec *g.Record, res string, aff affine.Affinity) *Results {
@@ -28,7 +29,7 @@ func (rw *Results) SetFieldByName(field string, val g.Value) (err error) {
 	if e := rw.Scope.SetFieldByName(field, val); e != nil {
 		err = e
 	} else if field == rw.resultField {
-		rw.sets++
+		rw.resultSets++
 		// we could also store the last value set,
 		// and use that for our result --
 		// but if nothing is set, it feels better to use the default record value production
@@ -39,15 +40,24 @@ func (rw *Results) SetFieldByName(field string, val g.Value) (err error) {
 
 // ComputedResult returns whether an explicit result was set.
 func (rw *Results) ComputedResult() bool {
-	return rw.sets > 0
+	return rw.resultSets > 0
 }
 
 // GetResult returns a default value if none was computed.
 func (rw *Results) GetResult() (ret g.Value, err error) {
-	rec := rw.Scope.(g.Value).Record()
 	field, aff := rw.resultField, rw.resultAff
-	if len(field) > 0 {
+	if len(field) == 0 {
+		// no result field, but we still might be checking for whether it had any matching rules.
+		if aff == affine.Bool {
+			// should it be any rule? just the infix rule?
+			// probably always using a return flag would be best.
+			ret = g.BoolOf(rw.ranFlags&rt.Infix != 0)
+		} else if len(aff) != 0 {
+			err = errutil.New("caller expected", aff, "returned nothing")
+		}
+	} else {
 		// get the value and check its result
+		rec := rw.Scope.(g.Value).Record()
 		if v, e := rec.GetNamedField(field); e != nil {
 			err = errutil.New("error trying to get return value", e)
 		} else if e := safe.Check(v, aff); e != nil {
@@ -63,22 +73,22 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 				safe.HackTillTemplatesCanEvaluatePatternTypes = v.String()
 			}
 		}
-	} else if len(aff) != 0 {
-		err = errutil.New("caller expected", aff, "returned nothing")
 	}
 	return
 }
 
 // RunWithScope - note: assumes whatever scope is needed to run the pattern has already been setup.
 func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, allFlags rt.Flags) (err error) {
-	sets := rw.sets
+	resultSets := rw.resultSets
 	for i, cnt := 0, len(rules); i < cnt && allFlags != 0; i++ {
 		rule := rules[i]
 		if ranFlag, e := ApplyRule(run, rule, allFlags); e != nil {
 			err = errutil.New(e, "while applying", rule.Name)
 		} else if ranFlag != 0 {
-			didSomething := (rw.sets > sets)
-			sets = rw.sets
+			rw.ranCount++
+			rw.ranFlags |= ranFlag
+			didSomething := (rw.resultSets > resultSets)
+			resultSets = rw.resultSets
 			// if we ran a prefix or a post fix rule and it did something, we are done.
 			if didSomething && ranFlag != rt.Infix {
 				break
