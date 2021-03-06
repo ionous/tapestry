@@ -191,25 +191,35 @@
                                       "id": "id-177fb15803f-87",
                                       "type": "bool_eval",
                                       "value": {
-                                        "id": "id-177fb15803f-88",
-                                        "type": "get_at_field",
+                                        "id": "id-17800ed6af1-41",
+                                        "type": "has_trait",
                                         "value": {
-                                          "$FIELD": {
-                                            "id": "id-177fb15803f-89",
-                                            "type": "text",
-                                            "value": "opaque"
-                                          },
-                                          "$FROM": {
-                                            "id": "id-177fb15803f-90",
-                                            "type": "from_source_fields",
+                                          "$OBJECT": {
+                                            "id": "id-17800ed6af1-42",
+                                            "type": "text_eval",
                                             "value": {
-                                              "id": "id-177fb15803f-91",
-                                              "type": "from_var",
+                                              "id": "id-17800ed6af1-46",
+                                              "type": "get_var",
                                               "value": {
-                                                "$VAR": {
-                                                  "id": "id-177fb15803f-92",
-                                                  "type": "variable_name",
+                                                "$NAME": {
+                                                  "id": "id-17800ed6af1-47",
+                                                  "type": "text",
                                                   "value": "obj"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "$TRAIT": {
+                                            "id": "id-17800ed6af1-43",
+                                            "type": "text_eval",
+                                            "value": {
+                                              "id": "id-17800ed6af1-44",
+                                              "type": "text_value",
+                                              "value": {
+                                                "$TEXT": {
+                                                  "id": "id-17800ed6af1-45",
+                                                  "type": "text",
+                                                  "value": "opaque"
                                                 }
                                               }
                                             }
@@ -221,25 +231,35 @@
                                       "id": "id-177fb15803f-93",
                                       "type": "bool_eval",
                                       "value": {
-                                        "id": "id-177fb15803f-94",
-                                        "type": "get_at_field",
+                                        "id": "id-17800ed6af1-48",
+                                        "type": "has_trait",
                                         "value": {
-                                          "$FIELD": {
-                                            "id": "id-177fb15803f-95",
-                                            "type": "text",
-                                            "value": "closed"
-                                          },
-                                          "$FROM": {
-                                            "id": "id-177fb15803f-96",
-                                            "type": "from_source_fields",
+                                          "$OBJECT": {
+                                            "id": "id-17800ed6af1-49",
+                                            "type": "text_eval",
                                             "value": {
-                                              "id": "id-177fb15803f-97",
-                                              "type": "from_var",
+                                              "id": "id-17800ed6af1-53",
+                                              "type": "get_var",
                                               "value": {
-                                                "$VAR": {
-                                                  "id": "id-177fb15803f-98",
-                                                  "type": "variable_name",
+                                                "$NAME": {
+                                                  "id": "id-17800ed6af1-54",
+                                                  "type": "text",
                                                   "value": "obj"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "$TRAIT": {
+                                            "id": "id-17800ed6af1-50",
+                                            "type": "text_eval",
+                                            "value": {
+                                              "id": "id-17800ed6af1-51",
+                                              "type": "text_value",
+                                              "value": {
+                                                "$TEXT": {
+                                                  "id": "id-17800ed6af1-52",
+                                                  "type": "text",
+                                                  "value": "closed"
                                                 }
                                               }
                                             }

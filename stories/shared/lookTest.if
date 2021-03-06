@@ -398,6 +398,44 @@
                   }
                 }
               }
+            },
+            {
+              "id": "id-17800ed6af1-90",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17800ed6af1-91",
+                "type": "noun_assignment",
+                "value": {
+                  "$PROPERTY": {
+                    "id": "id-17800ed6af1-92",
+                    "type": "property",
+                    "value": "description"
+                  },
+                  "$NOUNS": [
+                    {
+                      "id": "id-17800ed6af1-93",
+                      "type": "named_noun",
+                      "value": {
+                        "$DETERMINER": {
+                          "id": "id-17800ed6af1-94",
+                          "type": "determiner",
+                          "value": "$THE"
+                        },
+                        "$NAME": {
+                          "id": "id-17800ed6af1-95",
+                          "type": "noun_name",
+                          "value": "hat"
+                        }
+                      }
+                    }
+                  ],
+                  "$LINES": {
+                    "id": "id-17800ed6af1-96",
+                    "type": "lines",
+                    "value": "Your aunt's very own witches hat, a Halloween favorite."
+                  }
+                }
+              }
             }
           ]
         }
@@ -731,6 +769,44 @@
                     "id": "id-177732e76a8-238",
                     "type": "lines",
                     "value": "Beneath your feet is a bright and shiny hook."
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17800ed6af1-77",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17800ed6af1-84",
+                "type": "noun_assignment",
+                "value": {
+                  "$PROPERTY": {
+                    "id": "id-17800ed6af1-85",
+                    "type": "property",
+                    "value": "description"
+                  },
+                  "$NOUNS": [
+                    {
+                      "id": "id-17800ed6af1-86",
+                      "type": "named_noun",
+                      "value": {
+                        "$DETERMINER": {
+                          "id": "id-17800ed6af1-87",
+                          "type": "determiner",
+                          "value": "$THE"
+                        },
+                        "$NAME": {
+                          "id": "id-17800ed6af1-88",
+                          "type": "noun_name",
+                          "value": "cabinet"
+                        }
+                      }
+                    }
+                  ],
+                  "$LINES": {
+                    "id": "id-17800ed6af1-89",
+                    "type": "lines",
+                    "value": "An ancient teak wardrobe repurposed as a kitchen cupboard."
                   }
                 }
               }

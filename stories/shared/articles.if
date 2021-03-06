@@ -1948,7 +1948,7 @@
                   "$NAME": {
                     "id": "id-177f19efdde-3",
                     "type": "pattern_name",
-                    "value": "are listed"
+                    "value": "are"
                   },
                   "$TYPE": {
                     "id": "id-177f19efdde-4",
@@ -2053,7 +2053,7 @@
                   "$LINES": {
                     "id": "id-177f19efdde-15",
                     "type": "lines",
-                    "value": "print \"is\" or \"are\" depending on the length of the passed list of names"
+                    "value": "print \"is\" or \"are\" depending on the plurality of the noun, and (optionally) the length of the passed list of names. "
                   }
                 }
               }
@@ -2068,7 +2068,7 @@
                   "$NAME": {
                     "id": "id-177f19efdde-18",
                     "type": "pattern_name",
-                    "value": "are listed"
+                    "value": "are"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-177f19efdde-19",
