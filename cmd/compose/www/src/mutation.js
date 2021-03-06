@@ -7,7 +7,7 @@ class CommandMap {
     if (removes) {
       CommandMap.add(out, "remove", 0, [removes]);
     }
-    CommandMap.add(out, "append", +1, state.right);
+    CommandMap.add(out, "add", +1, state.right);
     CommandMap.add(out, "insert", -1, state.left);
     return out;
   }
