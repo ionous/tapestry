@@ -322,7 +322,7 @@ module.exports = class TagParser {
       this.msg.setValue(key, this.accum.flush());
       this.state= this.readingFilter;
     } else if (char.isSpecial()) {
-      throw new Error("unexpected character");
+      throw new Error(`unexpected character '${char.ch}'`);
     } else if (char.ends()) {
       throw new Error("unexpected end");
     } else {
