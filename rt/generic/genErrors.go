@@ -30,10 +30,12 @@ func (e Overflow) Error() string {
 }
 
 func (e Unknown) Error() (ret string) {
-	if len(e.Target) > 0 {
-		ret = errutil.Sprintf(`unknown field "%s.%s"`, e.Target, e.Field)
-	} else {
+	if len(e.Target) == 0 {
 		ret = errutil.Sprintf("unknown variable %q", e.Field)
+	} else if e.Target == object.Value {
+		ret = errutil.Sprintf("unknown object %q", e.Field)
+	} else {
+		ret = errutil.Sprintf(`unknown field "%s.%s"`, e.Target, e.Field)
 	}
 	return
 }

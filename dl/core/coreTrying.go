@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/pattern"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"git.sr.ht/~ionous/iffy/rt/scope"
 	"github.com/ionous/errutil"
 )
@@ -18,6 +19,7 @@ type Trying struct {
 	Pattern   pattern.PatternName `if:"selector"`
 	Arguments *Arguments          `if:"optional"`
 	As        string              // fix: variable definition field; fix: should be optional.
+	Filter    rt.BoolEval         `if:"optional,selector=and"`
 	Do        Activity
 	Else      Activity // `if:"optional"` -- optional doesnt work well b/c we still get the leading "else:" selector.
 }
@@ -26,7 +28,7 @@ func (*Trying) Compose() composer.Spec {
 	return composer.Spec{
 		Group: "patterns",
 		Desc:  "Trying: Runs a pattern, and potentially returns a value.",
-		Spec:  "Trying: {pattern%name:pattern_name}{?arguments} as:{as:text} do:{do:activity} else:{else:activity}",
+		Spec:  "Trying: {pattern%name:pattern_name}{?arguments} as:{as:text} {filter?bool_eval} do:{do:activity} else:{else:activity}",
 		// Fluent: &composer.Fluid{Name: "trying", Role: composer.Command},
 		Stub: true,
 	}
@@ -57,7 +59,15 @@ func (op *Trying) trying(run rt.Runtime) (err error) {
 			}
 		} else {
 			run.PushScope(scope.NewSingleValue(op.As, v))
-			err = op.Do.Execute(run)
+			if ok, e := safe.GetOptionalBool(run, op.Filter, true); e != nil {
+				err = e
+			} else {
+				if ok.Bool() {
+					err = op.Do.Execute(run)
+				} else {
+					err = op.Else.Execute(run)
+				}
+			}
 			run.PopScope()
 		}
 	} else if errors.Is(e, rt.NoResult{}) {

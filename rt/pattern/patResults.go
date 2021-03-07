@@ -40,7 +40,10 @@ func (rw *Results) SetFieldByName(field string, val g.Value) (err error) {
 
 // ComputedResult returns whether an explicit result was set.
 func (rw *Results) ComputedResult() bool {
-	return rw.resultSets > 0
+	// did it compute a result; or -- if it wasnt expecting a result -- did at least something happen?
+	// fix: right now aff is coming from the caller. that seems wrong.
+	// why cant the caller just safe.Check the result is what they want.
+	return rw.resultSets > 0 || (len(rw.resultAff) == 0 && rw.ranCount > 0)
 }
 
 // GetResult returns a default value if none was computed.

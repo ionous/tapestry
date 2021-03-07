@@ -35,25 +35,25 @@ func NewRecord(run rt.Runtime, name, labels string, args []rt.Arg) (rec *g.Recor
 			} else {
 				// search in increasing order for the next label that matches the specified argument
 				// this is our soft way of allowing patterns to participate in fluid like specs with optional values.
-				if i := findLabel(parts, n, labelIndex); i < 0 {
-					err = errutil.New("has mismatched arg.", i, n)
+				if at := findLabel(parts, n, labelIndex); at < 0 {
+					err = errutil.New("no matching label for arg", i, n, "in", parts)
 					break
 				} else {
-					fieldIndex, labelIndex = i, i+1
+					fieldIndex, labelIndex = at, at+1
 				}
 			}
 			//
 			field := k.Field(fieldIndex)
 			if val, e := safe.GetAssignedValue(run, a.From); e != nil {
-				err = errutil.New("error determining arg", i, n, e)
+				err = errutil.New(e, "while reading arg", i, n)
 				break
 			} else if v, e := filterText(run, field, val); e != nil {
-				err = errutil.New("error narrowing arg", i, n, e)
+				err = errutil.New(e, "while narrowing arg", i, n)
 				break
 			} else
 			// note: set indexed field assigns without copying
 			if e := rec.SetIndexedField(fieldIndex, v); e != nil {
-				err = errutil.New("error setting arg", i, n, e)
+				err = errutil.New(e, "while setting arg", i, n)
 				break
 			}
 		}

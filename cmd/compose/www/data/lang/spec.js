@@ -3355,7 +3355,7 @@ const spec = [
       "patterns"
     ],
     "name": "trying",
-    "spec": "Trying: {pattern%name:pattern_name}{?arguments} as:{as:text} do:{do:activity} else:{else:activity}",
+    "spec": "Trying: {pattern%name:pattern_name}{?arguments} as:{as:text} {filter?bool_eval} do:{do:activity} else:{else:activity}",
     "uses": "flow",
     "with": {
       "slots": [

@@ -10,7 +10,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// filterText - of not of text affinity, return the value
+// filterText - if not of text affinity, return the value
 // otherwise, if its an object / id make sure it fits
 // FIX: id like to remove this -- the first step is getting rid of object affinities i think.
 func filterText(run rt.Runtime, f g.Field, v g.Value) (ret g.Value, err error) {

@@ -31,7 +31,7 @@ type Result struct {
 
 func (p *Parser) Step(words string) (ret *Result, err error) {
 	pt := p.pt
-	bounds := pt.GetDefaultBounds(pt.location)
+	bounds := pt.GetNamedBounds(pt.location)
 	cursor := parser.Cursor{Words: strings.Fields(words)}
 	switch res, e := p.gram.Scan(pt, bounds, cursor); e.(type) {
 	default:

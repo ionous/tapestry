@@ -1,6 +1,8 @@
 package qna
 
 import (
+	"database/sql"
+
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -16,7 +18,11 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 	var labels, result string   // fix? consider a cache for this info?
 	var rec *g.Record
 	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
-		err = e
+		if e == sql.ErrNoRows {
+			err = errutil.Fmt("couldn't find the pattern named %q", name)
+		} else {
+			err = e
+		}
 	} else if rec, e = pattern.NewRecord(run, name, labels, args); e != nil {
 		err = e
 	} else {
@@ -46,7 +52,8 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 		}
 	}
 	if err != nil {
-		err = errutil.Fmt("%w calling %s with %v", err, pat, g.RecordToValue(rec))
+		// err = errutil.Fmt("%w calling %s with %v", err, pat, g.RecordToValue(rec))
+		err = errutil.Fmt("%w calling %s", err, pat)
 	}
 	return
 }

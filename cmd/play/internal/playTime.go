@@ -37,9 +37,9 @@ func (pt *Playtime) IsPlural(word string) bool {
 
 func (pt *Playtime) GetPlayerBounds(where string) (ret parser.Bounds, err error) {
 	if len(where) > 0 {
-		err = errutil.New("unhandled player bounds", where)
+		err = errutil.New("unknown player bounds", where)
 	} else {
-		ret = pt.GetDefaultBounds(pt.location)
+		ret = pt.GetNamedBounds(pt.location)
 	}
 	return
 }

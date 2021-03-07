@@ -41,7 +41,7 @@
                   "$NAME": {
                     "id": "id-17780500793-4",
                     "type": "pattern_name",
-                    "value": "PrintVantage"
+                    "value": "Print vantage"
                   },
                   "$TYPE": {
                     "id": "id-17780500793-5",
@@ -140,7 +140,7 @@
                   "$NAME": {
                     "id": "id-17780500793-17",
                     "type": "pattern_name",
-                    "value": "PrintVantage"
+                    "value": "Print vantage"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-17780500793-19",
@@ -3867,7 +3867,7 @@
                           "$NAME": {
                             "id": "id-1778e3636ac-19",
                             "type": "variable_name",
-                            "value": "completion"
+                            "value": "success"
                           },
                           "$TYPE": {
                             "id": "id-1778e3636ac-20",
@@ -4439,7 +4439,7 @@
                                             "$VAR": {
                                               "id": "id-1778e3636ac-33",
                                               "type": "variable_name",
-                                              "value": "completion"
+                                              "value": "success"
                                             },
                                             "$FROM": {
                                               "id": "id-1778e3636ac-34",
@@ -4827,7 +4827,7 @@
                           "$NAME": {
                             "id": "id-1778e3636ac-5",
                             "type": "variable_name",
-                            "value": "completion"
+                            "value": "success"
                           },
                           "$TYPE": {
                             "id": "id-1778e3636ac-6",
@@ -5013,7 +5013,7 @@
                                             "$VAR": {
                                               "id": "id-1778e3636ac-10",
                                               "type": "variable_name",
-                                              "value": "completion"
+                                              "value": "success"
                                             },
                                             "$FROM": {
                                               "id": "id-1778e3636ac-11",

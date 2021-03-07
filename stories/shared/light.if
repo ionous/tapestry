@@ -146,6 +146,75 @@
                     "value": {
                       "$PATTERN_RULE": [
                         {
+                          "id": "id-17808f3b3d9-0",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-17808f3b3d9-1",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-17808f3b3d9-3",
+                                "type": "always",
+                                "value": {}
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-17808f3b3d9-2",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-17808f3b3d9-4",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-17808f3b3d9-5",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-17808f3b3d9-6",
+                                          "type": "assign",
+                                          "value": {
+                                            "$VAR": {
+                                              "id": "id-17808f3b3d9-7",
+                                              "type": "variable_name",
+                                              "value": "result"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-17808f3b3d9-8",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-17808f3b3d9-9",
+                                                "type": "from_bool",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-17808f3b3d9-10",
+                                                    "type": "bool_eval",
+                                                    "value": {
+                                                      "id": "id-17808f3b3d9-11",
+                                                      "type": "bool_value",
+                                                      "value": {
+                                                        "$BOOL": {
+                                                          "id": "id-17808f3b3d9-12",
+                                                          "type": "bool",
+                                                          "value": "$FALSE"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
                           "id": "id-177fb15803f-78",
                           "type": "pattern_rule",
                           "value": {

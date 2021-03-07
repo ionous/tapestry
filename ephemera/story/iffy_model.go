@@ -1939,6 +1939,7 @@ type Trying struct {
 	Name      PatternName
 	Arguments *Arguments
 	As        Text
+	Filter    *rt.BoolEval
 	Do        Activity
 	Else      Activity
 }

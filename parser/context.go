@@ -7,9 +7,10 @@ import (
 type Context interface {
 	// return true if the passed word is a plural word.
 	IsPlural(word string) bool
-	// ex. "held", for objects held by the player.
-	// the empty string acts as the default range of the player's known universe.
-	// other names are defined by the "Focus" parts of a Scanner grammar.
+	// the range of the player's known universe.
+	// string names are defined by the "Focus" parts of a Scanner grammar.
+	// for example, maybe "held" for objects held by the player.
+	// the empty string is used as the default range when no focus has been declared.
 	GetPlayerBounds(string) (Bounds, error)
 	// ex. take from a container
 	GetObjectBounds(ident.Id) (Bounds, error)

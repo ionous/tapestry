@@ -47,6 +47,7 @@ func playGame(inFile, testString string) (ret int, err error) {
 			err = e
 		} else {
 			run := play.NewPlaytime(db, "#entire_game::kitchen")
+			run.ActivateDomain("entire_game", true)
 			parser := play.NewParser(run, nil)
 			//
 			if len(testString) > 0 {

@@ -558,7 +558,7 @@
                           "$NAME": {
                             "id": "id-17804dcf54a-3",
                             "type": "variable_name",
-                            "value": "completion"
+                            "value": "success"
                           },
                           "$TYPE": {
                             "id": "id-17804dcf54a-4",
@@ -709,7 +709,7 @@
                                                         "$VAR": {
                                                           "id": "id-17804ca4e22-13",
                                                           "type": "variable_name",
-                                                          "value": "completion"
+                                                          "value": "success"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-17804ca4e22-14",
@@ -924,7 +924,7 @@
                                                                           "$VAR": {
                                                                             "id": "id-17804be0e55-20",
                                                                             "type": "variable_name",
-                                                                            "value": "completion"
+                                                                            "value": "success"
                                                                           },
                                                                           "$FROM": {
                                                                             "id": "id-17804be0e55-21",
@@ -1090,7 +1090,7 @@
                                                         "$VAR": {
                                                           "id": "id-17804be0e55-46",
                                                           "type": "variable_name",
-                                                          "value": "completion"
+                                                          "value": "success"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-17804be0e55-47",

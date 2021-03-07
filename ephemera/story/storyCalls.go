@@ -24,13 +24,17 @@ func (op *Trying) ImportStub(k *Importer) (ret interface{}, err error) {
 	if p, args, e := importCall(k, "patterns", op.Name, op.Arguments); e != nil {
 		err = ImportError(op, op.At, e)
 	} else {
-		ret = &core.Trying{
+		act := core.Trying{
 			Pattern:   pattern.PatternName(p.String()),
 			Arguments: args,
 			As:        op.As.String(),
 			Do:        core.Activity(op.Do),
 			Else:      core.Activity(op.Else),
 		}
+		if op.Filter != nil {
+			act.Filter = *op.Filter
+		}
+		ret = &act
 	}
 	return
 }

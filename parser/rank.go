@@ -2,10 +2,12 @@ package parser
 
 // RankNoun implementations accumulate targets for actions during calls to RankNouns.
 type RankNoun interface {
+	// returning false indicates some critical error that should cancel ranking.
 	RankNoun(Cursor, NounInstance) bool
 }
 
-// RankNouns visits each noun in a bounds, calling RankNoun
+// RankNouns visits each noun in a bounds, calling RankNoun.
+// it returns false if RankNoun returns false.
 func RankNouns(bounds Bounds, cs Cursor, r RankNoun) bool {
 	return !bounds(func(n NounInstance) bool {
 		return !r.RankNoun(cs, n)
@@ -19,8 +21,9 @@ type RankOne struct {
 
 // Ranking accumulates Nouns at a given Rank.
 // Rank counts the number of words that match a given NounInstance
-// Its possible for different nouns to share the same rank for some given set of words.
-// For example, the "real eiffel tower" and the "toy eiffel tower" would share a rank of two for the words: "tower eiffel"
+// It's possible for different nouns to share the same rank for some given set of words.
+// For example, the "real eiffel tower" and the "toy eiffel tower"
+// would share a rank of two for the words: "tower eiffel"
 type Ranking struct {
 	Rank  int
 	Nouns []NounInstance
@@ -39,6 +42,7 @@ func (r *Ranking) AddRanking(n NounInstance, rank int) {
 	}
 }
 
+// RankNoun - never returns false
 func (m *RankOne) RankNoun(cs Cursor, n NounInstance) bool {
 	if m.MatchesNoun(n) {
 		var rank int
@@ -70,6 +74,7 @@ type RankAll struct {
 	mentioned bool
 }
 
+// RankNoun - never returns fals.
 func (m *RankAll) RankNoun(cs Cursor, n NounInstance) bool {
 	if m.MatchesNoun(n) {
 		var rank, cnt int
