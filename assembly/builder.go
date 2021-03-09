@@ -96,10 +96,18 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 		// fix: these are grouped by pattern, param, cat --
 		// so there are conflicts in names and types we wont see
 		// this needs much better handling of conflicting and redundant info
-		`select ap.pattern, ap.param, ap.cat, ap.type, ap.affinity, ap.kind, ep.prog
-		from asm_pattern_decl ap
+		`select pattern, param, cat, type, affinity, ep.prog,
+			( select mk.kind
+			from mdl_kind mk 
+			join mdl_plural mp
+			where mp.one = type
+			and mp.many=mk.kind ) as kind
+		from asm_pattern ap
 		left join eph_prog ep
-		on (ep.rowid = ap.idProg)`,
+		on (ep.rowid = ap.idProg)
+		where decl = 1 
+		group by pattern, param, cat
+		order by pattern, ogid`,
 		func() (err error) {
 			// fix: need to handle conflicting prog definitions
 			// fix: should watch for locals which shadow parameter names ( i think, ideally merge them )
@@ -126,7 +134,7 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 			}
 			return
 		},
-		&inPat, &inParam, &inCat, &inType, &inAff, &inKind, &inProg); e != nil {
+		&inPat, &inParam, &inCat, &inType, &inAff, &inProg, &inKind); e != nil {
 		err = e
 	} else {
 		ret = out

@@ -1976,7 +1976,7 @@
                                                                     "$TEMPLATE": {
                                                                       "id": "id-17780e04b4f-12",
                                                                       "type": "lines",
-                                                                      "value": "{The: .ceiling}"
+                                                                      "value": "{The: .ceiling|capitalize!}"
                                                                     }
                                                                   }
                                                                 }
@@ -5580,7 +5580,7 @@
                                                   "$TEMPLATE": {
                                                     "id": "id-1779a1abe71-1",
                                                     "type": "lines",
-                                                    "value": "{unless .here}{On: .where} {the: .where} you{else}You{end} can {unless .firstMention}also {end}see "
+                                                    "value": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .firstMention}also {end}see "
                                                   }
                                                 }
                                               }

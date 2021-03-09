@@ -3,30 +3,44 @@ package story
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
 // ImportPhrase - action generates pattern ephemera for now.
 func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
-	if n, e := op.Name.NewName(k); e != nil {
+	if _, e := op.makePattern(k, op.Action.Str, "actions"); e != nil {
+		err = e
+	} else if evt, e := op.makePattern(k, op.Event.Str, "events"); e != nil {
 		err = e
 	} else {
-		actionType := k.NewName("actions", tables.NAMED_TYPE, op.At.String())
-		actor := k.NewName("actor", tables.NAMED_PARAMETER, op.At.String())
-		actorKind := k.NewName("actor", tables.NAMED_KIND, op.At.String())
-
-		// need to declare the action itself
-		k.NewPatternDecl(n, n, actionType, "")
-
-		// the first parameter is always "actor"
-		k.NewPatternDecl(n, actor, actorKind, affine.Object.String())
-
-		// then the other parameters...
-		err = op.ActionParams.Opt.(interface {
-			ImportAction(*Importer, ephemera.Named) error
-		}).ImportAction(k, n)
+		// return success
+		retName := k.NewName("success", tables.NAMED_RETURN, op.At.String())
+		retType := k.NewName("bool_eval", tables.NAMED_TYPE, op.At.String())
+		k.NewPatternDecl(evt, retName, retType, "")
 	}
 	return
+}
+
+func (op *ActionDecl) makePattern(k *Importer, name, group string) (ret ephemera.Named, err error) {
+	// declare the pattern
+	n := k.NewName(lang.Breakcase(name), tables.NAMED_PATTERN, op.At.String())
+
+	// need to declare the group itself at least once
+	groupName := k.NewName(group, tables.NAMED_TYPE, op.At.String())
+	k.NewPatternDecl(n, n, groupName, "")
+
+	// the first parameter is always "actor"
+	actor := k.NewName("actor", tables.NAMED_PARAMETER, op.At.String())
+	actorKind := k.NewName("actor", tables.NAMED_KIND, op.At.String())
+	k.NewPatternDecl(n, actor, actorKind, affine.Object.String())
+
+	// then the other parameters...
+	return n, op.ActionParams.Opt.(actionImporter).ImportAction(k, n)
+}
+
+type actionImporter interface {
+	ImportAction(*Importer, ephemera.Named) error
 }
 
 func (op *CommonAction) ImportAction(k *Importer, n ephemera.Named) (err error) {

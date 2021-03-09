@@ -1268,7 +1268,7 @@
                                                                     "$NAME": {
                                                                       "id": "id-177661f02fe-154",
                                                                       "type": "pattern_name",
-                                                                      "value": "TransParentOf"
+                                                                      "value": "TransparentOf"
                                                                     },
                                                                     "$ARGUMENTS": {
                                                                       "id": "id-177661f02fe-155",

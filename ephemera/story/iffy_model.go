@@ -49,15 +49,16 @@ func (*ActionContext) Compose() composer.Spec {
 // ActionDecl requires various parameters.
 type ActionDecl struct {
 	At           reader.Position `if:"internal"`
-	Name         ActionName
+	Event        EventName
+	Action       ActionName
 	ActionParams ActionParams
 }
 
 func (*ActionDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action_decl",
-		Desc: `Declare an action: Actions let actors accomplish tasks in the game world: for instance, picking up or dropping items. Actions always involve either the player or an npc and up to two other objects at a time.`,
-		Spec: "{name:action_name|quote} is an actor action applying to {action_params}.",
+		Desc: `Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items. Activities involve either the player or an npc and possibly one or two other objects.`,
+		Spec: "Actors can {act%event:event_name} and {acting%action:action_name} requires {action_params}.",
 	}
 }
 
@@ -1128,7 +1129,7 @@ func (*PatternDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_decl",
 		Desc: `Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it. Each function in a given pattern has "guards" which determine whether the function applies in a particular situtation.`,
-		Spec: "The pattern {name:pattern_name|quote} determines {type:pattern_type} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
+		Spec: "Determining {name:pattern_name|quote} uses {type:pattern_type} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
 	}
 }
 
@@ -1244,7 +1245,7 @@ type PatternType struct {
 func (*PatternType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_type",
-		Spec: "an {activity:patterned_activity}",
+		Spec: "a {pattern%activity:patterned_activity}",
 	}
 }
 
@@ -1302,7 +1303,7 @@ func (*PatternedActivity) Choices() (choices map[string]string) {
 func (*PatternedActivity) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "patterned_activity",
-		Spec: "{an activity%activity}",
+		Spec: "{a pattern%activity}",
 		Strings: []string{
 			"activity",
 		},

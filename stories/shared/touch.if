@@ -1621,7 +1621,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-177f581cd5c-14",
                                                                 "type": "lines",
-                                                                "value": "{The: .object} {arent: .object} open."
+                                                                "value": "{The: .object|capitalize!} {arent: .object} open."
                                                               }
                                                             }
                                                           }
@@ -2057,7 +2057,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-177f581cd5c-25",
                                                                 "type": "lines",
-                                                                "value": "{The: .object} {arent: .object} open."
+                                                                "value": "{The: .object|capitalize!} {arent: .object} open."
                                                               }
                                                             }
                                                           }

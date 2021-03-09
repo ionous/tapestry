@@ -116,25 +116,6 @@ left join eph_named kn
 left join eph_named tn
 	on (ep.idNamedType = tn.rowid);
 
-/**
- * link declared patterns to the successfully modeled types
- */
-create temp view 
-asm_pattern_decl as 
-select pattern, param, type, affinity, ogid,
-	( select mk.kind
-	from mdl_kind mk 
-	join mdl_plural mp
-	where mp.one = type
-	and mp.many=mk.kind ) as kind, 
-	idProg, 
-	cat
-from asm_pattern 
-where decl = 1 
-group by pattern, param, cat
-order by ogid;
-
-
 /* resolve relative ephemera to nouns and relations
 use left join(s) to return nulls for missing elements 
  */

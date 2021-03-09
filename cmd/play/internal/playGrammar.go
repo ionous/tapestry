@@ -10,9 +10,10 @@ import "git.sr.ht/~ionous/iffy/parser"
 var Grammar = anyOf(
 	allOf(words("look/l"),
 		anyOf(
-			act("look"),
-			allOf(noun(), act("look")),
-			allOf(words("at"), noun(), act("examine")),
+			allOf(words("at"), noun(), act("examining")),
+			allOf(noun(), act("examining")),
+			act("looking"),
+
 			// before "look inside", since inside is also direction.
 			// allOf(noun(&parser.HasClass{"directions"}), act("examine")),
 			// allOf(words("to"), noun(&parser.HasClass{"directions"}), act("examine")),
@@ -21,17 +22,17 @@ var Grammar = anyOf(
 		)),
 	allOf(words("pick"),
 		anyOf(
-			allOf(words("up"), things(), act("take")),
-			allOf(things(), words("up"), act("take")),
+			allOf(words("up"), things(), act("taking")),
+			allOf(things(), words("up"), act("taking")),
 		)),
 	allOf(words("get"),
 		&parser.Target{[]parser.Scanner{things(), words("from/off"), thing()}},
-		act("remove"),
+		act("removing"),
 	),
 	allOf(
-		words("examine/x/watch/describe/check"), noun(), act("examine"),
+		words("examine/x/watch/describe/check"), noun(), act("examining"),
 	),
 	allOf(words("read"),
-		allOf(noun(), act("examine")),
+		allOf(noun(), act("examining")),
 	),
 )

@@ -3374,7 +3374,7 @@
                                                   "$TEMPLATE": {
                                                     "id": "id-1778a42f288-328",
                                                     "type": "lines",
-                                                    "value": "{On: .obj} {the: .obj} {are: .obj .kids} "
+                                                    "value": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} "
                                                   }
                                                 }
                                               }

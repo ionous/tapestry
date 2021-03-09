@@ -580,6 +580,20 @@ const spec = [
     }
   },
   {
+    "desc": "Capitalize: returns new text, with the first letter turned into uppercase.",
+    "group": [
+      "format"
+    ],
+    "name": "capitalize",
+    "spec": "{text:text_eval} capitalized",
+    "uses": "flow",
+    "with": {
+      "slots": [
+        "text_eval"
+      ]
+    }
+  },
+  {
     "desc": "Choose action: an if statement.",
     "name": "choose_action",
     "uses": "flow",
@@ -1597,7 +1611,7 @@ const spec = [
     }
   },
   {
-    "desc": "Has Trait: Return true if noun is currently in the requested state.",
+    "desc": "Has Trait: Return true if the object is currently in the requested state.",
     "group": [
       "objects"
     ],
@@ -3180,6 +3194,20 @@ const spec = [
       "slots": [
         "execute",
         "bool_eval"
+      ]
+    }
+  },
+  {
+    "desc": "Set Trait: put an object into a particular state.",
+    "group": [
+      "objects"
+    ],
+    "name": "set_trait",
+    "spec": "set {object:text_eval} to {trait:text_eval}",
+    "uses": "flow",
+    "with": {
+      "slots": [
+        "execute"
       ]
     }
   },

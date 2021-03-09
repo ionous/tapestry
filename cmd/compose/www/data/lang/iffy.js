@@ -71,9 +71,9 @@ function localLang(make) {
   });
 
   make.group("Events", function() {
-    make.flow("action_decl", "story_statement", "{name:action_name|quote} is an actor action applying to {action_params}.",
-      `Declare an action: Actions let actors accomplish tasks in the game world: for instance, picking up or dropping items.
-      Actions always involve either the player or an npc and up to two other objects at a time.`);
+    make.flow("action_decl", "story_statement", "Actors can {act%event:event_name} and {acting%action:action_name} requires {action_params}.",
+      `Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.
+      Activities involve either the player or an npc and possibly one or two other objects.`);
     make.swap("action_params", "{one or more objects%common:common_action}, or {two similar objects%dual:paired_action}, or {nothing%none:abstract_action}")
 
     make.flow("common_action", "one {kind:singular_kind} ( the noun ) {?action_context}");
@@ -83,18 +83,18 @@ function localLang(make) {
     make.str("abstract_action", "{nothing}");
     make.str("action_name");
 
-    make.flow("event_block", "story_statement", "{The target%target:event_target} {handlers+event_handler}",
+    make.flow("event_block", "story_statement", "For {the target%target:event_target} {handlers+event_handler}",
       `Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen.`);
     make.flow("event_handler", "{event_phase} {doing event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}");
 
-    make.str("event_phase", "{before}, {while}, or {after}");
+    make.str("event_phase", "{before}, {during%while}, or {after}");
     make.str("event_name");
     make.swap("event_target", "{The kinds%kinds:plural_kinds} or {named_noun}");
   });
 
   make.group("Patterns", function() {
     make.flow("pattern_decl", "story_statement",
-       "The pattern {name:pattern_name|quote} determines {type:pattern_type} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
+       "Determining {name:pattern_name|quote} uses {type:pattern_type} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
        `Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.
   Each function in a given pattern has "guards" which determine whether the function applies in a particular situtation.`
      );
@@ -107,8 +107,8 @@ function localLang(make) {
     make.flow("pattern_variables_tail", "It requires {+variable_decl|comma-and}",
        `Pattern variables: Storage for values used during the execution of a pattern.`);
 
-    make.swap("pattern_type", "an {activity:patterned_activity}");
-    make.str("patterned_activity", "{an activity%activity}");
+    make.swap("pattern_type", "a {pattern%activity:patterned_activity}");
+    make.str("patterned_activity", "{a pattern%activity}");
     make.str("pattern_name");
 
     // fix: pattern return should be part of the declaration

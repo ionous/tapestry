@@ -7,7 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-// HasTrait a property value from an object by name.
+// HasTrait - determine if a noun is currently in a particular state.
 type HasTrait struct {
 	Object rt.TextEval
 	Trait  rt.TextEval
@@ -18,7 +18,7 @@ func (*HasTrait) Compose() composer.Spec {
 	return composer.Spec{
 		Spec:  "{object:text_eval} has {trait:text_eval}",
 		Group: "objects",
-		Desc:  "Has Trait: Return true if noun is currently in the requested state.",
+		Desc:  "Has Trait: Return true if the object is currently in the requested state.",
 	}
 }
 
@@ -33,6 +33,32 @@ func (op *HasTrait) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		err = cmdError(op, e)
 	} else {
 		ret = p
+	}
+	return
+}
+
+// SetTrait a property value from an object by name.
+type SetTrait struct {
+	Object rt.TextEval
+	Trait  rt.TextEval
+}
+
+// should be "When the target is publicly named"
+func (*SetTrait) Compose() composer.Spec {
+	return composer.Spec{
+		Spec:  "set {object:text_eval} to {trait:text_eval}",
+		Group: "objects",
+		Desc:  "Set Trait: put an object into a particular state.",
+	}
+}
+
+func (op *SetTrait) Execute(run rt.Runtime) (err error) {
+	if obj, e := safe.ObjectText(run, op.Object); e != nil {
+		err = cmdError(op, e)
+	} else if trait, e := safe.GetText(run, op.Trait); e != nil {
+		err = cmdError(op, e)
+	} else if e := run.SetField(obj.String(), trait.String(), g.BoolOf(true)); e != nil {
+		err = cmdError(op, e)
 	}
 	return
 }

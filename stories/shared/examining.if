@@ -903,7 +903,7 @@
                                                                                       "$TEMPLATE": {
                                                                                         "id": "id-178038b245f-322",
                                                                                         "type": "lines",
-                                                                                        "value": "{The: .obj} {are: .obj} empty."
+                                                                                        "value": "{The: .obj|capitalize!} {are: .obj} empty."
                                                                                       }
                                                                                     }
                                                                                   }

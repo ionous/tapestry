@@ -17,9 +17,11 @@ func AssemblePatterns(asm *Assembler) (err error) {
 	} else if e := buildPatternRules(asm, cache); e != nil {
 		err = errutil.New("error building rules", e)
 	} else if e := cache.WriteFragments(asm, "patterns"); e != nil {
-		err = errutil.New("error building pattern tables", e)
-	} else {
-		err = cache.WriteFragments(asm, "actions")
+		err = errutil.New("error building patterns", e)
+	} else if e := cache.WriteFragments(asm, "actions"); e != nil {
+		err = errutil.New("error building actions", e)
+	} else if e := cache.WriteFragments(asm, "events"); e != nil {
+		err = errutil.New("error building events", e)
 	}
 	return
 }

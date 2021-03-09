@@ -2,6 +2,7 @@ package core
 
 import (
 	"strings"
+	"unicode"
 
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/lang"
@@ -64,6 +65,11 @@ func (op *MakePlural) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
+// Start the first word with a capital letter.
+type Capitalize struct {
+	Text rt.TextEval
+}
+
 type MakeUppercase struct {
 	Text rt.TextEval
 }
@@ -83,6 +89,15 @@ type MakeSentenceCase struct {
 
 type MakeReversed struct {
 	Text rt.TextEval
+}
+
+// Compose defines a spec for the composer editor.
+func (*Capitalize) Compose() composer.Spec {
+	return composer.Spec{
+		Group: "format",
+		Desc:  `Capitalize: returns new text, with the first letter turned into uppercase.`,
+		Spec:  "{text:text_eval} capitalized",
+	}
 }
 
 // Compose defines a spec for the composer editor.
@@ -133,6 +148,24 @@ func (*MakeReversed) Compose() composer.Spec {
 		For example, "elppA" from "Apple", or "noon" from "noon".`,
 		Spec: "{text:text_eval} in reverse",
 	}
+}
+
+func (op *Capitalize) GetText(run rt.Runtime) (ret g.Value, err error) {
+	if t, e := safe.GetText(run, op.Text); e != nil {
+		err = cmdError(op, e)
+	} else if s := t.String(); len(s) == 0 {
+		ret = g.Empty
+	} else {
+		var out strings.Builder
+		for _, ch := range s {
+			if out.Len() == 0 {
+				ch = unicode.ToUpper(ch)
+			}
+			out.WriteRune(ch)
+		}
+		ret = g.StringOf(out.String())
+	}
+	return
 }
 
 func (op *MakeLowercase) GetText(run rt.Runtime) (ret g.Value, err error) {
