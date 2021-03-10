@@ -368,7 +368,8 @@
                     "type": "pattern_name",
                     "value": "print name"
                   },
-            "$TYPE": {
+                  "$TYPE": {
+                    "id": "id-1781a872257-126",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
                   },
@@ -384,12 +385,12 @@
                             "$AN": {
                               "id": "id-1766f3895d1-0",
                               "type": "determiner",
-                              "value": "a"
+                              "value": "$AN"
                             },
                             "$NAME": {
                               "id": "id-a-8",
                               "type": "variable_name",
-                              "value": "target"
+                              "value": "obj"
                             },
                             "$TYPE": {
                               "id": "id-a-7",
@@ -491,7 +492,7 @@
                                                               "$NAME": {
                                                                 "id": "id-1743bd78458-7",
                                                                 "type": "text",
-                                                                "value": "target"
+                                                                "value": "obj"
                                                               }
                                                             }
                                                           }
@@ -541,7 +542,7 @@
                                                             "$NAME": {
                                                               "id": "id-177a87f4234-151",
                                                               "type": "text",
-                                                              "value": "target"
+                                                              "value": "obj"
                                                             }
                                                           }
                                                         }
@@ -582,7 +583,7 @@
                                         "$NAME": {
                                           "id": "id-17494737044-8",
                                           "type": "text",
-                                          "value": "target"
+                                          "value": "obj"
                                         }
                                       }
                                     }
@@ -638,7 +639,7 @@
                                                         "$NAME": {
                                                           "id": "id-17669044d83-7",
                                                           "type": "text",
-                                                          "value": "target"
+                                                          "value": "obj"
                                                         }
                                                       }
                                                     }
@@ -685,7 +686,7 @@
                                                             "$NAME": {
                                                               "id": "id-177a87f4234-142",
                                                               "type": "text",
-                                                              "value": "target"
+                                                              "value": "obj"
                                                             }
                                                           }
                                                         }
@@ -738,7 +739,7 @@
                                               "$VAR": {
                                                 "id": "id-1777298ab40-2",
                                                 "type": "variable_name",
-                                                "value": "target"
+                                                "value": "obj"
                                               }
                                             }
                                           }
@@ -811,7 +812,7 @@
                                                         "$VAR": {
                                                           "id": "id-1777298ab40-5",
                                                           "type": "variable_name",
-                                                          "value": "target"
+                                                          "value": "obj"
                                                         }
                                                       }
                                                     }
@@ -858,7 +859,7 @@
                                                             "$NAME": {
                                                               "id": "id-177a87f4234-133",
                                                               "type": "text",
-                                                              "value": "target"
+                                                              "value": "obj"
                                                             }
                                                           }
                                                         }
@@ -904,7 +905,8 @@
                     "type": "pattern_name",
                     "value": "mention"
                   },
-            "$TYPE": {
+                  "$TYPE": {
+                    "id": "id-1781a872257-127",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
                   },

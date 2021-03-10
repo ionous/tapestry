@@ -352,7 +352,8 @@
                     "type": "pattern_name",
                     "value": "isPlayer"
                   },
-              "$TYPE": {
+                  "$TYPE": {
+                    "id": "id-1781a872257-125",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
                   },

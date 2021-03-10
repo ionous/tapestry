@@ -434,7 +434,7 @@
                   "$NAME": {
                     "id": "id-177da9d86c5-6",
                     "type": "pattern_name",
-                    "value": "ancestryOf"
+                    "value": "parentsOf"
                   },
                   "$TYPE": {
                     "id": "id-1781842316a-24",
@@ -500,7 +500,7 @@
                   "$NAME": {
                     "id": "id-177da9d86c5-19",
                     "type": "pattern_name",
-                    "value": "ancestryOf"
+                    "value": "parentsOf"
                   },
                   "$PATTERN_RETURN": {
                     "id": "id-177da9d86c5-20",
@@ -2649,7 +2649,7 @@
                   "$NAME": {
                     "id": "id-17703f5400a-294",
                     "type": "pattern_name",
-                    "value": "AncestorOf"
+                    "value": "ancestorOf"
                   },
                   "$TYPE": {
                     "id": "id-1781842316a-28",
@@ -2669,7 +2669,7 @@
                   "$PATTERN_NAME": {
                     "id": "id-17703f5400a-300",
                     "type": "pattern_name",
-                    "value": "AncestorOf"
+                    "value": "ancestorOf"
                   },
                   "$VARIABLE_DECL": [
                     {
@@ -2679,12 +2679,12 @@
                         "$AN": {
                           "id": "id-17703f5400a-302",
                           "type": "determiner",
-                          "value": "$A"
+                          "value": "$AN"
                         },
                         "$NAME": {
                           "id": "id-17703f5400a-303",
                           "type": "variable_name",
-                          "value": "root"
+                          "value": "obj"
                         },
                         "$TYPE": {
                           "id": "id-17703f5400a-304",
@@ -2717,12 +2717,12 @@
                         "$AN": {
                           "id": "id-17703f5400a-309",
                           "type": "determiner",
-                          "value": "$AN"
+                          "value": "$A"
                         },
                         "$NAME": {
                           "id": "id-17703f5400a-310",
                           "type": "variable_name",
-                          "value": "obj"
+                          "value": "root"
                         },
                         "$TYPE": {
                           "id": "id-17703f5400a-311",
@@ -2753,6 +2753,21 @@
               }
             },
             {
+              "id": "id-1781842316a-416",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1781842316a-417",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-1781842316a-418",
+                    "type": "lines",
+                    "value": "Returns true if the root is a parent of the object. "
+                  }
+                }
+              }
+            },
+            {
               "id": "id-17703f5400a-315",
               "type": "story_statement",
               "value": {
@@ -2762,7 +2777,7 @@
                   "$NAME": {
                     "id": "id-17703f5400a-317",
                     "type": "pattern_name",
-                    "value": "AncestorOf"
+                    "value": "ancestorOf"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-17703f5400a-380",
@@ -3387,7 +3402,7 @@
                   "$NAME": {
                     "id": "id-17703f5400a-481",
                     "type": "pattern_name",
-                    "value": "EnclosureOf"
+                    "value": "locationOf"
                   },
                   "$TYPE": {
                     "id": "id-1781842316a-29",
@@ -3444,6 +3459,21 @@
               }
             },
             {
+              "id": "id-1781842316a-413",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1781842316a-414",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-1781842316a-415",
+                    "type": "lines",
+                    "value": "Return the parent of an object if the parent is a valid enclosure. By default this means a room, a supporter, or a container. "
+                  }
+                }
+              }
+            },
+            {
               "id": "id-17703f5400a-488",
               "type": "story_statement",
               "value": {
@@ -3453,7 +3483,7 @@
                   "$NAME": {
                     "id": "id-17703f5400a-490",
                     "type": "pattern_name",
-                    "value": "EnclosureOf"
+                    "value": "locationOf"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-17736705b90-38",
@@ -3588,7 +3618,7 @@
                           "$NAME": {
                             "id": "id-17703f5400a-503",
                             "type": "variable_name",
-                            "value": "enclosure"
+                            "value": "location"
                           },
                           "$TYPE": {
                             "id": "id-17703f5400a-504",
@@ -3643,80 +3673,6 @@
                                   "type": "activity",
                                   "value": {
                                     "$EXE": [
-                                      {
-                                        "id": "id-17703f5400a-512",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-17703f5400a-513",
-                                          "type": "assign",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-17703f5400a-514",
-                                              "type": "variable_name",
-                                              "value": "parent"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-17703f5400a-515",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-17703f5400a-518",
-                                                "type": "from_text",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-17703f5400a-519",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-17703f5400a-520",
-                                                      "type": "determine",
-                                                      "value": {
-                                                        "$NAME": {
-                                                          "id": "id-17703f5400a-521",
-                                                          "type": "pattern_name",
-                                                          "value": "parentOf"
-                                                        },
-                                                        "$ARGUMENTS": {
-                                                          "id": "id-17703f5400a-522",
-                                                          "type": "arguments",
-                                                          "value": {
-                                                            "$ARGS": [
-                                                              {
-                                                                "id": "id-17703f5400a-523",
-                                                                "type": "argument",
-                                                                "value": {
-                                                                  "$NAME": {
-                                                                    "id": "id-17703f5400a-524",
-                                                                    "type": "variable_name",
-                                                                    "value": "obj"
-                                                                  },
-                                                                  "$FROM": {
-                                                                    "id": "id-17703f5400a-525",
-                                                                    "type": "assignment",
-                                                                    "value": {
-                                                                      "id": "id-17703f5400a-528",
-                                                                      "type": "get_var",
-                                                                      "value": {
-                                                                        "$NAME": {
-                                                                          "id": "id-17703f5400a-529",
-                                                                          "type": "text",
-                                                                          "value": "obj"
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            ]
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
                                       {
                                         "id": "id-17703f5400a-530",
                                         "type": "execute",
@@ -3841,7 +3797,7 @@
                                                         "$VAR": {
                                                           "id": "id-17703f5400a-556",
                                                           "type": "variable_name",
-                                                          "value": "enclosure"
+                                                          "value": "location"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-17703f5400a-557",
@@ -3950,6 +3906,21 @@
                         }
                       ]
                     }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1781a7f304c-0",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1781a7f304c-7",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-1781a7f304c-8",
+                    "type": "lines",
+                    "value": "Return the parent of an object if the parent is a kind of supporter. "
                   }
                 }
               }
@@ -4315,6 +4286,21 @@
                         }
                       ]
                     }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1781a7f304c-9",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1781a7f304c-10",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-1781a7f304c-11",
+                    "type": "lines",
+                    "value": "Return the parent of an object if the parent is a kind of container. "
                   }
                 }
               }
@@ -4694,7 +4680,7 @@
                   "$LINES": {
                     "id": "id-1770c8a62f5-157",
                     "type": "lines",
-                    "value": "An actor is the owner of something only if the object is either worn or carried."
+                    "value": "Return the parent of an object if the parent is wearing or carrying the object. "
                   }
                 }
               }
@@ -5083,7 +5069,7 @@
                   "$LINES": {
                     "id": "id-1770c8a62f5-91",
                     "type": "lines",
-                    "value": "Only actors can carry, something carried is not worn."
+                    "value": "Return the parent of an object if the parent is carrying the object. Only actors can carry other objects. "
                   }
                 }
               }
@@ -5514,7 +5500,7 @@
                   "$LINES": {
                     "id": "id-1770c8a62f5-88",
                     "type": "lines",
-                    "value": "Only actors can wear, something worn is not carried."
+                    "value": "Return the parent of an object if the parent is wearing the object.  Only actors can wear other objects. "
                   }
                 }
               }

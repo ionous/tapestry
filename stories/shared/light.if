@@ -21,6 +21,7 @@
                     "value": "fully opaque"
                   },
                   "$TYPE": {
+                    "id": "id-1781a872257-41",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
                   },
@@ -521,6 +522,7 @@
                     "value": "transparentOf"
                   },
                   "$TYPE": {
+                    "id": "id-1781a872257-42",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
                   },
@@ -995,7 +997,8 @@
                     "type": "pattern_name",
                     "value": "transparentList"
                   },
-                 "$TYPE": {
+                  "$TYPE": {
+                    "id": "id-1781a872257-43",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
                   },
@@ -1044,6 +1047,21 @@
                         }
                       ]
                     }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1781a872257-45",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1781a872257-46",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-1781a872257-47",
+                    "type": "lines",
+                    "value": "Return a list containing the object and all of its transparent parents. "
                   }
                 }
               }
@@ -1341,7 +1359,8 @@
                     "type": "pattern_name",
                     "value": "contains light"
                   },
-                 "$TYPE": {
+                  "$TYPE": {
+                    "id": "id-1781a872257-44",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
                   },
