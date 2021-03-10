@@ -51,8 +51,8 @@ func playGame(inFile, testString string) (ret int, err error) {
 			run.ActivateDomain("entire_game", true)
 			parser := play.NewParser(run, nil)
 			//
-			if pieces := strings.Split(testString, ";"); len(pieces) > 0 {
-				for _, cmd := range pieces {
+			if len(testString) > 0 {
+				for _, cmd := range strings.Split(testString, ";") {
 					fmt.Println("> ", cmd)
 					step(parser, cmd)
 				}
@@ -63,8 +63,7 @@ func playGame(inFile, testString string) (ret int, err error) {
 					if in, _ := reader.ReadString('\n'); len(in) <= 1 {
 						break
 					} else {
-						words := in[:len(in)-1]
-						fmt.Println(words)
+						words := in[:len(in)-1] // strip the enter.
 						step(parser, words)
 					}
 				}
