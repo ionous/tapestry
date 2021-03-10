@@ -28,13 +28,13 @@ func assembleInitialFields(asm *Assembler) (err error) {
 		order by noun, field, type`,
 		func() (err error) {
 			if nv, e := convertField(curr.fieldType, curr.value); e != nil {
-				err = errutil.New("error assembling", curr.target, curr.field, e)
+				err = errutil.New(e, "assembling", curr.target, curr.field)
 			} else if last.target != curr.target || last.field != curr.field {
 				store.add(last)
 				last, last.value = curr, nv
 			} else if !reflect.DeepEqual(last.value, nv) {
 				e := errutil.Fmt("conflicting values: %s != %s:%T", last.String(), curr.String(), nv)
-				err = errutil.New("error assembling", curr.target, curr.field, e)
+				err = errutil.New(e, "assembling", curr.target, curr.field, e)
 			}
 			return
 		},

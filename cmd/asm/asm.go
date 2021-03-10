@@ -29,7 +29,7 @@ func main() {
 	if e := assemble(outFile, inFile); e != nil {
 		log.Fatalln(e)
 	} else {
-		log.Println("Assembled", inFile, "into", outFile)
+		log.Println("assembled", inFile, "into", outFile)
 	}
 }
 
@@ -65,7 +65,7 @@ func assemble(outFile, inFile string) (err error) {
 		} else {
 			var ds reader.Dilemmas
 			if e := assembly.AssembleStory(db, "kinds", ds.Add); e != nil {
-				err = errutil.New("error assembling", e, inFile)
+				err = errutil.New(e, "assembling story", inFile)
 			}
 			if len(ds) > 0 {
 				e := errutil.New("issues assembling", ds.Err())

@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"git.sr.ht/~ionous/iffy"
 	play "git.sr.ht/~ionous/iffy/cmd/play/internal"
@@ -50,8 +51,11 @@ func playGame(inFile, testString string) (ret int, err error) {
 			run.ActivateDomain("entire_game", true)
 			parser := play.NewParser(run, nil)
 			//
-			if len(testString) > 0 {
-				step(parser, testString)
+			if pieces := strings.Split(testString, ";"); len(pieces) > 0 {
+				for _, cmd := range pieces {
+					fmt.Println("> ", cmd)
+					step(parser, cmd)
+				}
 			} else {
 				reader := bufio.NewReader(os.Stdin)
 				for {

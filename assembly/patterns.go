@@ -13,15 +13,15 @@ func AssemblePatterns(asm *Assembler) (err error) {
 	if e := checkPatternSetup(db); e != nil {
 		err = e
 	} else if cache, e := buildPatternCache(asm.cache.DB()); e != nil {
-		err = errutil.New("error reading patterns", e)
+		err = errutil.New(e, "reading patterns")
 	} else if e := buildPatternRules(asm, cache); e != nil {
-		err = errutil.New("error building rules", e)
+		err = errutil.New(e, "building rules")
 	} else if e := cache.WriteFragments(asm, "patterns"); e != nil {
-		err = errutil.New("error building patterns", e)
+		err = errutil.New(e, "building patterns")
 	} else if e := cache.WriteFragments(asm, "actions"); e != nil {
-		err = errutil.New("error building actions", e)
+		err = errutil.New(e, "building actions")
 	} else if e := cache.WriteFragments(asm, "events"); e != nil {
-		err = errutil.New("error building events", e)
+		err = errutil.New(e, "building events")
 	}
 	return
 }
