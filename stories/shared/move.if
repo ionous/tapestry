@@ -21,15 +21,8 @@
                     "value": "MoveObject"
                   },
                   "$TYPE": {
-                    "id": "id-1770c9c1142-5",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1770c9c1142-6",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-1770c9c1142-16",
@@ -639,15 +632,8 @@
                     "value": "RemoveFromPlay"
                   },
                   "$TYPE": {
-                    "id": "id-1770cb3192a-230",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1770cb3192a-231",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-1770cb3192a-232",
@@ -953,16 +939,9 @@
                     "type": "pattern_name",
                     "value": "WearObject"
                   },
-                  "$TYPE": {
-                    "id": "id-1770d66eb57-31",
+             "$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1770d66eb57-32",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-34",

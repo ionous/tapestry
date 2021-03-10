@@ -21,15 +21,8 @@
                     "value": "fully opaque"
                   },
                   "$TYPE": {
-                    "id": "id-177fb15803f-50",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177fb15803f-53",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177fb15803f-54",
@@ -528,15 +521,8 @@
                     "value": "transparentOf"
                   },
                   "$TYPE": {
-                    "id": "id-177660e7610-5",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177660e7610-10",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177660e7610-42",
@@ -1009,16 +995,9 @@
                     "type": "pattern_name",
                     "value": "transparentList"
                   },
-                  "$TYPE": {
-                    "id": "id-177661f02fe-53",
+                 "$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177661f02fe-54",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177661f02fe-55",
@@ -1362,16 +1341,9 @@
                     "type": "pattern_name",
                     "value": "contains light"
                   },
-                  "$TYPE": {
-                    "id": "id-177fb39e579-4",
+                 "$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177fb39e579-5",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177fb39e579-6",

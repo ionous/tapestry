@@ -44,8 +44,7 @@ var FactorialStory = &story.Story{
 					Str: "factorial",
 				},
 				Type: story.PatternType{
-					Opt: &story.PatternedActivity{
-						Str: "$ACTIVITY"}},
+					Str: "$PATTERNS"},
 				Optvars: &story.PatternVariablesTail{
 					VariableDecl: []story.VariableDecl{numberDecl}},
 			},

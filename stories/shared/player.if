@@ -352,16 +352,9 @@
                     "type": "pattern_name",
                     "value": "isPlayer"
                   },
-                  "$TYPE": {
-                    "id": "id-177db4bdeb4-102",
+              "$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177db4bdeb4-103",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177db4bdeb4-111",

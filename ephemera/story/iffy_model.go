@@ -492,7 +492,7 @@ func (*EventBlock) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_block",
 		Desc: `Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen.`,
-		Spec: "{The target%target:event_target} {handlers+event_handler}",
+		Spec: "For {the target%target:event_target} {handlers+event_handler}",
 	}
 }
 
@@ -508,7 +508,7 @@ type EventHandler struct {
 func (*EventHandler) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_handler",
-		Spec: "{event_phase} {doing event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}",
+		Spec: "{event_phase} {the event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}",
 	}
 }
 
@@ -553,7 +553,7 @@ func (*EventPhase) Choices() (choices map[string]string) {
 func (*EventPhase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_phase",
-		Spec: "{before}, {while}, or {after}",
+		Spec: "{before}, {during%while}, or {after}",
 		Strings: []string{
 			"before", "while", "after",
 		},
@@ -569,7 +569,7 @@ type EventTarget struct {
 func (*EventTarget) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_target",
-		Spec: "{The kinds%kinds:plural_kinds} or {named_noun}",
+		Spec: "the {kinds:plural_kinds} or {named_noun}",
 	}
 }
 
@@ -1236,22 +1236,30 @@ func (*PatternRules) Compose() composer.Spec {
 	}
 }
 
-// PatternType swaps between various options
+// PatternType requires a user-specified string.
 type PatternType struct {
 	At  reader.Position `if:"internal"`
-	Opt interface{}
+	Str string
+}
+
+func (op *PatternType) String() string {
+	return op.Str
+}
+
+func (*PatternType) Choices() (choices map[string]string) {
+	return map[string]string{
+		"$PATTERNS": "patterns", "$ACTIONS": "actions", "$EVENTS": "events",
+	}
 }
 
 func (*PatternType) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "pattern_type",
-		Spec: "a {pattern%activity:patterned_activity}",
-	}
-}
-
-func (*PatternType) Choices() map[string]interface{} {
-	return map[string]interface{}{
-		"activity": (*PatternedActivity)(nil),
+		Name:        "pattern_type",
+		Spec:        "{patterns}, {actions}, {events}, or {another pattern type%pattern_type}",
+		OpenStrings: true,
+		Strings: []string{
+			"patterns", "actions", "events",
+		},
 	}
 }
 
@@ -1281,32 +1289,6 @@ func (*PatternVariablesTail) Compose() composer.Spec {
 		Name: "pattern_variables_tail",
 		Desc: `Pattern variables: Storage for values used during the execution of a pattern.`,
 		Spec: "It requires {+variable_decl|comma-and}",
-	}
-}
-
-// PatternedActivity requires a user-specified string.
-type PatternedActivity struct {
-	At  reader.Position `if:"internal"`
-	Str string
-}
-
-func (op *PatternedActivity) String() string {
-	return op.Str
-}
-
-func (*PatternedActivity) Choices() (choices map[string]string) {
-	return map[string]string{
-		"$ACTIVITY": "activity",
-	}
-}
-
-func (*PatternedActivity) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "patterned_activity",
-		Spec: "{a pattern%activity}",
-		Strings: []string{
-			"activity",
-		},
 	}
 }
 
@@ -1388,7 +1370,7 @@ type ProgramHook struct {
 func (*ProgramHook) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "program_hook",
-		Spec: "run an {activity}",
+		Spec: "do {actions%activity}",
 	}
 }
 
@@ -2074,7 +2056,6 @@ var Model = []composer.Composer{
 	(*PatternType)(nil),
 	(*PatternVariablesDecl)(nil),
 	(*PatternVariablesTail)(nil),
-	(*PatternedActivity)(nil),
 	(*PluralKinds)(nil),
 	(*PrimitiveType)(nil),
 	(*PrimitiveValue)(nil),

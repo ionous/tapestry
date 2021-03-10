@@ -59,9 +59,7 @@ func TestPatternDecl(t *testing.T) {
 			Str: "corral",
 		},
 		Type: story.PatternType{
-			Opt: &story.PatternedActivity{
-				Str: "$ACTIVITY",
-			},
+			Str: "$PATTERNS",
 		},
 	}
 

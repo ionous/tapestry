@@ -3,6 +3,7 @@ package story
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -162,10 +163,10 @@ func (op *PatternLocals) ImportLocals(k *Importer, patternName ephemera.Named) (
 }
 
 func (op *PatternType) ImportType(k *Importer) (ret ephemera.Named, err error) {
-	if _, ok := op.Opt.(*PatternedActivity); ok {
-		ret = k.NewName("patterns", tables.NAMED_TYPE, op.At.String())
+	if t, found := decode.FindChoice(op, op.Str); !found {
+		err = errutil.Fmt("choice %s not found in %T", op.Str, op)
 	} else {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+		ret = k.NewName(t, tables.NAMED_TYPE, op.At.String())
 	}
 	return
 }

@@ -21,15 +21,9 @@
                     "value": "vision response"
                   },
                   "$TYPE": {
-                    "id": "id-177fb980e34-4",
+                    "id": "id-1781842316a-18",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177fb980e34-5",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }
@@ -241,15 +235,9 @@
                     "value": "adjust light"
                   },
                   "$TYPE": {
-                    "id": "id-177fb980e34-57",
+                    "id": "id-1781842316a-19",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177fb980e34-58",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }
@@ -796,15 +784,9 @@
                     "value": "Print news of darkness"
                   },
                   "$TYPE": {
-                    "id": "id-177fb980e34-147",
+                    "id": "id-1781842316a-20",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177fb980e34-148",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }
@@ -922,15 +904,9 @@
                     "value": "Print news of light"
                   },
                   "$TYPE": {
-                    "id": "id-177fb980e34-170",
+                    "id": "id-1781842316a-21",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177fb980e34-171",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }

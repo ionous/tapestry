@@ -20,16 +20,9 @@
                     "type": "pattern_name",
                     "value": "Print description"
                   },
-                  "$TYPE": {
-                    "id": "id-178038b245f-20",
+"$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-178038b245f-21",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-178038b245f-44",
@@ -486,15 +479,8 @@
                     "value": "Print particulars"
                   },
                   "$TYPE": {
-                    "id": "id-178038b245f-30",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-178038b245f-31",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-178038b245f-189",

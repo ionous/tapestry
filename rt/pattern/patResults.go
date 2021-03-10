@@ -46,6 +46,12 @@ func (rw *Results) ComputedResult() bool {
 	return rw.resultSets > 0 || (len(rw.resultAff) == 0 && rw.ranCount > 0)
 }
 
+func (rw *Results) ResetResult() {
+	rw.resultSets = 0
+	rw.ranCount = 0
+	rw.ranFlags = 0
+}
+
 // GetResult returns a default value if none was computed.
 func (rw *Results) GetResult() (ret g.Value, err error) {
 	field, aff := rw.resultField, rw.resultAff
@@ -80,38 +86,58 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 	return
 }
 
-// RunWithScope - note: assumes whatever scope is needed to run the pattern has already been setup.
-func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, allFlags rt.Flags) (err error) {
-	resultSets := rw.resultSets
-	for i, cnt := 0, len(rules); i < cnt && allFlags != 0; i++ {
-		rule := rules[i]
-		if ranFlag, e := ApplyRule(run, rule, allFlags); e != nil {
-			err = errutil.New(e, "while applying", rule.Name)
-		} else if ranFlag != 0 {
-			rw.ranCount++
-			rw.ranFlags |= ranFlag
-			didSomething := (rw.resultSets > resultSets)
-			resultSets = rw.resultSets
-			// if we ran a prefix or a post fix rule and it did something, we are done.
-			if didSomething && ranFlag != rt.Infix {
-				break
-			}
-			// if an infix rule did something allow post-fix rules to run.
-			// ( ditto if we dont expect the pattern to return anything:
-			// in that case we just want to do the first of each rule type. )
-			if didSomething || len(rw.resultField) == 0 {
-				allFlags = allFlags &^ ranFlag
-			}
+// add a member apply rule so its easier to call singly
+// -- maybe allFlags is a pointer so you can manage it better?
+// outside youll have to set value scope OR AddScope value target.
+// ( the latter might be easier for now )
+// call it "current noun" and allow "current kind" as well
+// --
+
+// ApplyRules - note: assumes whatever scope is needed to run the pattern has already been setup.
+func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, flags rt.Flags) (err error) {
+	for _, rule := range rules {
+		if next, e := rw.ApplyRule(run, rule, flags); e != nil || next == 0 {
+			err = e
+			break
+		} else {
+			flags = next
 		}
 	}
 	return
 }
 
+// ApplyRule - note: assumes whatever scope is needed to run the pattern has already been setup.
+// returns remaining flags.
+func (rw *Results) ApplyRule(run rt.Runtime, rule rt.Rule, flags rt.Flags) (ret rt.Flags, err error) {
+	resultSets := rw.resultSets // check if rule changes this.
+	if ranFlag, e := ApplyRule(run, rule, flags); e != nil {
+		err = errutil.New(e, "while applying", rule.Name)
+	} else {
+		var didSomething bool
+		if ranFlag != 0 {
+			rw.ranCount++
+			rw.ranFlags |= ranFlag
+			// did the rule return a value ( or did it run and doesn't expect an explicit return )
+			didSomething = len(rw.resultField) == 0 || rw.resultSets > resultSets
+		}
+		//
+		if !didSomething {
+			ret = flags // no? keep trying rules of this type.
+		} else if ranFlag == rt.Infix {
+			// for prefix and postfix rules, we are completely done: return 0.
+			// for infix rules, just stop running infix type
+			ret = flags &^ ranFlag
+		}
+	}
+	return
+}
+
+// return the flags of the rule if it ran; even if it didnt return anything.
 func ApplyRule(run rt.Runtime, rule rt.Rule, allow rt.Flags) (ret rt.Flags, err error) {
 	if flags := rule.GetFlags(); allow&flags != 0 {
 		if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
 			err = e
-		} else if ok.Bool() { // the rule returns false if it didnt apply
+		} else if ok.Bool() {
 			if e := safe.Run(run, rule.Execute); e != nil {
 				err = e
 			} else {

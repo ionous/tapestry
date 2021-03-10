@@ -81,15 +81,9 @@
                     "value": "parentOf"
                   },
                   "$TYPE": {
-                    "id": "id-176f4124f37-4",
+                    "id": "id-1781842316a-23",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1771724a77b-106",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-176f427859d-41",
@@ -443,15 +437,9 @@
                     "value": "ancestryOf"
                   },
                   "$TYPE": {
-                    "id": "id-177da9d86c5-7",
+                    "id": "id-1781842316a-24",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177da9d86c5-8",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177da9d86c5-9",
@@ -796,15 +784,9 @@
                     "value": "childrenOf"
                   },
                   "$TYPE": {
-                    "id": "id-1778a42f288-345",
+                    "id": "id-1781842316a-25",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1778a42f288-348",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-1778a42f288-349",
@@ -1022,15 +1004,9 @@
                     "value": "CurrentRoom"
                   },
                   "$TYPE": {
-                    "id": "id-176f427859d-9",
+                    "id": "id-1781842316a-26",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1771724a77b-107",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-176f7f50aeb-35",
@@ -1607,15 +1583,9 @@
                     "value": "Common Ancestor"
                   },
                   "$TYPE": {
-                    "id": "id-17703f5400a-8",
+                    "id": "id-1781842316a-27",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1771724a77b-108",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-17703f5400a-13",
@@ -2682,15 +2652,9 @@
                     "value": "AncestorOf"
                   },
                   "$TYPE": {
-                    "id": "id-17703f5400a-295",
+                    "id": "id-1781842316a-28",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1771724a77b-109",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }
@@ -3426,15 +3390,9 @@
                     "value": "EnclosureOf"
                   },
                   "$TYPE": {
-                    "id": "id-17703f5400a-482",
+                    "id": "id-1781842316a-29",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1771724a77b-110",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-96",
@@ -3943,15 +3901,9 @@
                     "value": "SupporterOf"
                   },
                   "$TYPE": {
-                    "id": "id-177bb20a77a-85",
+                    "id": "id-1781842316a-30",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177bb20a77a-86",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177bb20a77a-87",
@@ -4314,15 +4266,9 @@
                     "value": "ContainerOf"
                   },
                   "$TYPE": {
-                    "id": "id-177bb20a77a-4",
+                    "id": "id-1781842316a-31",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177bb20a77a-5",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177bb20a77a-6",
@@ -4685,15 +4631,9 @@
                     "value": "OwnerOf"
                   },
                   "$TYPE": {
-                    "id": "id-1770c8a62f5-96",
+                    "id": "id-1781842316a-32",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1771724a77b-112",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-72",
@@ -5080,15 +5020,9 @@
                     "value": "CarrierOf"
                   },
                   "$TYPE": {
-                    "id": "id-17703f5400a-641",
+                    "id": "id-1781842316a-33",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1771724a77b-113",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-80",
@@ -5517,15 +5451,9 @@
                     "value": "WearerOf"
                   },
                   "$TYPE": {
-                    "id": "id-1770c8a62f5-19",
+                    "id": "id-1781842316a-34",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1771724a77b-114",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-88",

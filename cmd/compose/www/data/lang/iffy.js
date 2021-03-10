@@ -85,11 +85,11 @@ function localLang(make) {
 
     make.flow("event_block", "story_statement", "For {the target%target:event_target} {handlers+event_handler}",
       `Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen.`);
-    make.flow("event_handler", "{event_phase} {doing event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}");
+    make.flow("event_handler", "{event_phase} {the event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}");
 
     make.str("event_phase", "{before}, {during%while}, or {after}");
     make.str("event_name");
-    make.swap("event_target", "{The kinds%kinds:plural_kinds} or {named_noun}");
+    make.swap("event_target", "the {kinds:plural_kinds} or {named_noun}");
   });
 
   make.group("Patterns", function() {
@@ -107,8 +107,7 @@ function localLang(make) {
     make.flow("pattern_variables_tail", "It requires {+variable_decl|comma-and}",
        `Pattern variables: Storage for values used during the execution of a pattern.`);
 
-    make.swap("pattern_type", "a {pattern%activity:patterned_activity}");
-    make.str("patterned_activity", "{a pattern%activity}");
+    make.str("pattern_type", "{patterns}, {actions}, {events}, or {another pattern type%pattern_type}");
     make.str("pattern_name");
 
     // fix: pattern return should be part of the declaration
@@ -130,7 +129,7 @@ function localLang(make) {
     make.flow("local_init",  " starting as {value:assignment}",
       "Local: local variables can use the parameters of a pattern to compute temporary values.");
 
-    make.swap("program_hook", "run an {activity}");
+    make.swap("program_hook", "do {actions%activity}");
 
     make.flow("pattern_return", "returning {result:variable_decl}");
   });

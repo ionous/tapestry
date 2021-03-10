@@ -21,15 +21,9 @@
                     "value": "starts with vowel"
                   },
                   "$TYPE": {
-                    "id": "id-174cda99dde-3",
+                    "id": "id-1781842316a-22",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-17792f52f66-8",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-174cda99dde-8",

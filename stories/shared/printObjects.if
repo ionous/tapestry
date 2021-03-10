@@ -21,15 +21,9 @@
                     "value": "print objects"
                   },
                   "$TYPE": {
-                    "id": "id-17691b305f6-4",
+                    "id": "id-1781842316a-0",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-17691b305f6-5",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }
@@ -302,15 +296,9 @@
                     "value": "print with articles"
                   },
                   "$TYPE": {
-                    "id": "id-17691d01da5-5",
+                    "id": "id-1781842316a-1",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-17691d01da5-6",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$ABOUT": {
                     "id": "id-17691d01da5-265",
@@ -1053,15 +1041,9 @@
                     "value": "print listed object"
                   },
                   "$TYPE": {
-                    "id": "id-17792518843-4",
+                    "id": "id-1781842316a-2",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-17792518843-5",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-17792518843-10",
@@ -1357,15 +1339,9 @@
                     "value": "print minutiae"
                   },
                   "$TYPE": {
-                    "id": "id-17792518843-51",
+                    "id": "id-1781842316a-3",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-17792518843-52",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-17792518843-53",
@@ -2306,15 +2282,9 @@
                     "value": "related objects"
                   },
                   "$TYPE": {
-                    "id": "id-177ffcc5f8b-10",
+                    "id": "id-1781842316a-4",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177ffcc5f8b-11",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177ffcc5f8b-44",
@@ -3087,15 +3057,9 @@
                     "value": "Print related objects"
                   },
                   "$TYPE": {
-                    "id": "id-177ffcc5f8b-155",
+                    "id": "id-1781842316a-5",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177ffcc5f8b-158",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177ffcc5f8b-159",

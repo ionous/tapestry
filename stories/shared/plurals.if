@@ -119,15 +119,8 @@
                     }
                   },
                   "$TYPE": {
-                    "id": "id-1748e116bbd-4",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1748e116bbd-7",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }

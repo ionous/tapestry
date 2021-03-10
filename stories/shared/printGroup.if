@@ -231,16 +231,9 @@
                     "type": "pattern_name",
                     "value": "print group"
                   },
-                  "$TYPE": {
-                    "id": "id-17692024e5f-5",
+                 "$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-17692024e5f-6",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }

@@ -35,4 +35,12 @@ var Grammar = anyOf(
 	allOf(words("read"),
 		allOf(noun(), act("examining")),
 	),
+	allOf(words("open/unwrap/uncover"),
+		allOf(noun(), act("opening")),
+	),
+	allOf(words("close/shut/cover"), anyOf(
+		allOf(words("up"), act("closing")),
+		allOf(noun(), act("closing")),
+	),
+	),
 )

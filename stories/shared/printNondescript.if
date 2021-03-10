@@ -20,16 +20,10 @@
                     "type": "pattern_name",
                     "value": "print nondescript objects"
                   },
+                  
                   "$TYPE": {
-                    "id": "id-1766f3895d1-38",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1766f3895d1-41",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }

@@ -368,16 +368,9 @@
                     "type": "pattern_name",
                     "value": "print name"
                   },
-                  "$TYPE": {
-                    "id": "id-a-4",
+            "$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-a-6",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-a-10",
@@ -911,16 +904,9 @@
                     "type": "pattern_name",
                     "value": "mention"
                   },
-                  "$TYPE": {
-                    "id": "id-177a87f4234-59",
+            "$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177a87f4234-60",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177a87f4234-61",

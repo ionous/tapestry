@@ -3188,7 +3188,7 @@ const spec = [
       "events"
     ],
     "name": "send",
-    "spec": "Send: {event:event_name} to:{path:text_list_eval}{?arguments}",
+    "spec": "Send: {event:event_name} {?arguments} to:{path:text_list_eval}",
     "uses": "flow",
     "with": {
       "slots": [
@@ -3355,7 +3355,7 @@ const spec = [
       "literals"
     ],
     "name": "text_value",
-    "spec": "{text}",
+    "spec": "{text|quote}",
     "uses": "flow",
     "with": {
       "slots": [

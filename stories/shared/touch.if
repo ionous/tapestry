@@ -44,15 +44,9 @@
                     "value": "touch response"
                   },
                   "$TYPE": {
-                    "id": "id-177e140d8c4-5",
+                    "id": "id-1781842316a-11",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177e140d8c4-6",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-18",
@@ -1338,15 +1332,9 @@
                     "value": "reach up response"
                   },
                   "$TYPE": {
-                    "id": "id-177e140d8c4-124",
+                    "id": "id-1781842316a-12",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177e140d8c4-125",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-126",
@@ -1669,15 +1657,9 @@
                     "value": "dig down response"
                   },
                   "$TYPE": {
-                    "id": "id-177e140d8c4-63",
+                    "id": "id-1781842316a-13",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177e140d8c4-64",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-65",

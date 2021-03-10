@@ -361,16 +361,9 @@
                     "type": "pattern_name",
                     "value": "assign grouping"
                   },
-                  "$TYPE": {
-                    "id": "id-17692f1b70b-67",
+"$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-17692f1b70b-68",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }
@@ -452,15 +445,8 @@
                     "value": "match groups"
                   },
                   "$TYPE": {
-                    "id": "id-17692f1b70b-136",
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177732e76a8-62",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }
@@ -1024,16 +1010,9 @@
                     "type": "pattern_name",
                     "value": "collate groups"
                   },
-                  "$TYPE": {
-                    "id": "id-17692f1b70b-278",
+                 "$TYPE": {
                     "type": "pattern_type",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-17692f1b70b-279",
-                        "type": "patterned_activity",
-                        "value": "$ACTIVITY"
-                      }
-                    }
+                    "value": "$PATTERNS"
                   }
                 }
               }

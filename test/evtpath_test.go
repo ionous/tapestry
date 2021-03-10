@@ -55,8 +55,7 @@ func TestEventPath(t *testing.T) {
 			"pen-1-Infix", "pen-0-Infix", "devices-1-Infix", "devices-0-Infix",
 			// this is the most questionable row.
 			// do we really want to visit rules for the table if the pen is the object in question?
-			// ex. taking the pen.
-			// "table-1-Infix", "table-0-Infix", "things-1-Infix", "things-0-Infix",
+			"table-1-Infix", "table-0-Infix", "things-1-Infix", "things-0-Infix",
 			"pen-1-Postfix", "pen-0-Postfix", "devices-1-Postfix", "devices-0-Postfix",
 			"table-1-Postfix", "table-0-Postfix", "things-1-Postfix", "things-0-Postfix",
 			"pen-1-After", "pen-0-After", "devices-1-After", "devices-0-After",
