@@ -11,6 +11,7 @@ var Grammar = anyOf(
 	allOf(words("look/l"),
 		anyOf(
 			allOf(words("at"), noun(), act("examining")),
+			allOf(words("under"), noun(), act("peeking")),
 			allOf(noun(), act("examining")),
 			act("looking"),
 
@@ -18,7 +19,6 @@ var Grammar = anyOf(
 			// allOf(noun(&parser.HasClass{"directions"}), act("examine")),
 			// allOf(words("to"), noun(&parser.HasClass{"directions"}), act("examine")),
 			// allOf(words("inside/in/into/through/on"), noun(), act("search")),
-			// allOf(words("under"), noun(), act("look_under")),
 		)),
 	allOf(words("pick"),
 		anyOf(

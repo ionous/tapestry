@@ -14,7 +14,9 @@ import (
 // where args should be of the set actor, noun, other noun.
 // and the return for the event pattern is always a bool.
 // optionally, likely, the locals include a "cancel" bool.
+// returns whether true if the event handling didnt return false
 func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, err error) {
+	okay := true                // provisionally
 	name := lang.Breakcase(pat) // gets replaced with the actual name by query
 	var labels, result string   // fix? consider a cache for this info?
 	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
@@ -36,35 +38,24 @@ func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, er
 				err = e
 			} else {
 			AllPhases:
-				for i, cnt := 0, len(rules); i < cnt && flags != 0; i++ {
+				for i, cnt := 0, len(rules); okay && i < cnt && flags != 0; i++ {
 					if phase := rt.Flags(1 << i); phase&flags != 0 {
 						for _, el := range rules[i] {
 							currentNoun.SetValue(g.StringOf(el.Noun))
+							// fix? would it make more sense to return the result here?
+							// possibly as a pointer so that we can check "has result"
 							if next, e := rw.ApplyRule(run, el.Rule, flags); e != nil {
 								err = errutil.New(e, "applying phase", phase)
 								break AllPhases
-							} else {
-								flags = next
-								// the first result from a rule kicks us out of this phase.
-								if flags&phase == 0 {
-									break
-								}
+							} else if flags = next; flags&phase == 0 {
+								break // we're done with this phase.
 							}
 						}
-						// note: if we have a return... we know its a bool for events.
-						if rw.ComputedResult() {
-							if res, e := rw.GetResult(); e != nil {
-								err = errutil.New(e, "resulting from phase", phase)
-								break AllPhases
-							} else {
-								ret = res
-								// if the return is false, we end all the remaining phases
-								if !res.Bool() {
-									break AllPhases
-								}
-								// otherwise, we move on to the next.
-								rw.ResetResult()
-							}
+						if ok, e := rw.GetContinuation(); e != nil {
+							err = errutil.New(e, "resulting from phase", phase)
+						} else if !ok {
+							okay = false
+							break
 						}
 					}
 				}
@@ -75,6 +66,8 @@ func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, er
 	}
 	if err != nil {
 		err = errutil.New(err, "sending", name)
+	} else {
+		ret = g.BoolOf(okay)
 	}
 	return
 }

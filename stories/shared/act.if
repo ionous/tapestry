@@ -15,15 +15,15 @@
                 "id": "id-178159d7467-67",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-178159d7467-68",
-                    "type": "pattern_name",
-                    "value": "state change"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-35",
                     "type": "pattern_type",
                     "value": "$EVENTS"
+                  },
+                  "$NAME": {
+                    "id": "id-178159d7467-68",
+                    "type": "pattern_name",
+                    "value": "state change"
                   },
                   "$OPTVARS": {
                     "id": "id-178159d7467-71",
@@ -506,95 +506,105 @@
                                                     }
                                                   },
                                                   "$ELSE": {
-                                                    "id": "id-1781485a46d-227",
-                                                    "type": "activity",
+                                                    "id": "id-1781dd611ac-201",
+                                                    "type": "brancher",
                                                     "value": {
-                                                      "$EXE": [
-                                                        {
-                                                          "id": "id-178159d7467-146",
-                                                          "type": "execute",
+                                                      "id": "id-1781dd611ac-202",
+                                                      "type": "choose_nothing_else",
+                                                      "value": {
+                                                        "$DO": {
+                                                          "id": "id-1781485a46d-227",
+                                                          "type": "activity",
                                                           "value": {
-                                                            "id": "id-178159d7467-147",
-                                                            "type": "comment",
-                                                            "value": {
-                                                              "$LINES": {
-                                                                "id": "id-178159d7467-148",
-                                                                "type": "lines",
-                                                                "value": "nothing has stopped us, so lets change the state now."
-                                                              }
-                                                            }
-                                                          }
-                                                        },
-                                                        {
-                                                          "id": "id-178159d7467-138",
-                                                          "type": "execute",
-                                                          "value": {
-                                                            "id": "id-178159d7467-139",
-                                                            "type": "set_trait",
-                                                            "value": {
-                                                              "$OBJECT": {
-                                                                "id": "id-178159d7467-140",
-                                                                "type": "text_eval",
+                                                            "$EXE": [
+                                                              {
+                                                                "id": "id-178159d7467-146",
+                                                                "type": "execute",
                                                                 "value": {
-                                                                  "id": "id-178159d7467-141",
-                                                                  "type": "get_var",
+                                                                  "id": "id-178159d7467-147",
+                                                                  "type": "comment",
                                                                   "value": {
-                                                                    "$NAME": {
-                                                                      "id": "id-178159d7467-142",
-                                                                      "type": "text",
-                                                                      "value": "noun"
+                                                                    "$LINES": {
+                                                                      "id": "id-178159d7467-148",
+                                                                      "type": "lines",
+                                                                      "value": "nothing has stopped us, so lets change the state now."
                                                                     }
                                                                   }
                                                                 }
                                                               },
-                                                              "$TRAIT": {
-                                                                "id": "id-178159d7467-143",
-                                                                "type": "text_eval",
+                                                              {
+                                                                "id": "id-178159d7467-138",
+                                                                "type": "execute",
                                                                 "value": {
-                                                                  "id": "id-178159d7467-144",
-                                                                  "type": "get_var",
+                                                                  "id": "id-178159d7467-139",
+                                                                  "type": "set_trait",
                                                                   "value": {
-                                                                    "$NAME": {
-                                                                      "id": "id-178159d7467-145",
-                                                                      "type": "text",
-                                                                      "value": "change"
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        },
-                                                        {
-                                                          "id": "id-178159d7467-150",
-                                                          "type": "execute",
-                                                          "value": {
-                                                            "id": "id-178159d7467-151",
-                                                            "type": "assign",
-                                                            "value": {
-                                                              "$VAR": {
-                                                                "id": "id-178159d7467-152",
-                                                                "type": "variable_name",
-                                                                "value": "success"
-                                                              },
-                                                              "$FROM": {
-                                                                "id": "id-178159d7467-153",
-                                                                "type": "assignment",
-                                                                "value": {
-                                                                  "id": "id-178159d7467-154",
-                                                                  "type": "from_bool",
-                                                                  "value": {
-                                                                    "$VAL": {
-                                                                      "id": "id-178159d7467-155",
-                                                                      "type": "bool_eval",
+                                                                    "$OBJECT": {
+                                                                      "id": "id-178159d7467-140",
+                                                                      "type": "text_eval",
                                                                       "value": {
-                                                                        "id": "id-178159d7467-156",
-                                                                        "type": "bool_value",
+                                                                        "id": "id-178159d7467-141",
+                                                                        "type": "get_var",
                                                                         "value": {
-                                                                          "$BOOL": {
-                                                                            "id": "id-178159d7467-157",
-                                                                            "type": "bool",
-                                                                            "value": "$TRUE"
+                                                                          "$NAME": {
+                                                                            "id": "id-178159d7467-142",
+                                                                            "type": "text",
+                                                                            "value": "noun"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    "$TRAIT": {
+                                                                      "id": "id-178159d7467-143",
+                                                                      "type": "text_eval",
+                                                                      "value": {
+                                                                        "id": "id-178159d7467-144",
+                                                                        "type": "get_var",
+                                                                        "value": {
+                                                                          "$NAME": {
+                                                                            "id": "id-178159d7467-145",
+                                                                            "type": "text",
+                                                                            "value": "change"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              {
+                                                                "id": "id-178159d7467-150",
+                                                                "type": "execute",
+                                                                "value": {
+                                                                  "id": "id-178159d7467-151",
+                                                                  "type": "assign",
+                                                                  "value": {
+                                                                    "$VAR": {
+                                                                      "id": "id-178159d7467-152",
+                                                                      "type": "variable_name",
+                                                                      "value": "success"
+                                                                    },
+                                                                    "$FROM": {
+                                                                      "id": "id-178159d7467-153",
+                                                                      "type": "assignment",
+                                                                      "value": {
+                                                                        "id": "id-178159d7467-154",
+                                                                        "type": "from_bool",
+                                                                        "value": {
+                                                                          "$VAL": {
+                                                                            "id": "id-178159d7467-155",
+                                                                            "type": "bool_eval",
+                                                                            "value": {
+                                                                              "id": "id-178159d7467-156",
+                                                                              "type": "bool_value",
+                                                                              "value": {
+                                                                                "$BOOL": {
+                                                                                  "id": "id-178159d7467-157",
+                                                                                  "type": "bool",
+                                                                                  "value": "$TRUE"
+                                                                                }
+                                                                              }
+                                                                            }
                                                                           }
                                                                         }
                                                                       }
@@ -602,10 +612,10 @@
                                                                   }
                                                                 }
                                                               }
-                                                            }
+                                                            ]
                                                           }
                                                         }
-                                                      ]
+                                                      }
                                                     }
                                                   }
                                                 }
@@ -965,15 +975,15 @@
                 "id": "id-17808f3b3d9-45",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17808f3b3d9-46",
-                    "type": "pattern_name",
-                    "value": "state changing"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-36",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17808f3b3d9-46",
+                    "type": "pattern_name",
+                    "value": "state changing"
                   },
                   "$OPTVARS": {
                     "id": "id-17808f3b3d9-55",

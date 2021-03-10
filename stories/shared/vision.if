@@ -15,15 +15,15 @@
                 "id": "id-177fb980e34-2",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177fb980e34-3",
-                    "type": "pattern_name",
-                    "value": "vision response"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-18",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177fb980e34-3",
+                    "type": "pattern_name",
+                    "value": "vision response"
                   }
                 }
               }
@@ -229,15 +229,15 @@
                 "id": "id-177fb980e34-55",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177fb980e34-56",
-                    "type": "pattern_name",
-                    "value": "adjust light"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-19",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177fb980e34-56",
+                    "type": "pattern_name",
+                    "value": "adjust light"
                   }
                 }
               }
@@ -778,15 +778,15 @@
                 "id": "id-177fb980e34-145",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177fb980e34-146",
-                    "type": "pattern_name",
-                    "value": "Print news of darkness"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-20",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177fb980e34-146",
+                    "type": "pattern_name",
+                    "value": "Print news of darkness"
                   }
                 }
               }
@@ -898,15 +898,15 @@
                 "id": "id-177fb980e34-168",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177fb980e34-169",
-                    "type": "pattern_name",
-                    "value": "Print news of light"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-21",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177fb980e34-169",
+                    "type": "pattern_name",
+                    "value": "Print news of light"
                   }
                 }
               }

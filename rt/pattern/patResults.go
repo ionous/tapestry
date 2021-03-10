@@ -38,6 +38,21 @@ func (rw *Results) SetFieldByName(field string, val g.Value) (err error) {
 	return
 }
 
+// returns false if the computed result was false ( and on error )
+func (rw *Results) GetContinuation() (okay bool, err error) {
+	if !rw.ComputedResult() {
+		okay = true
+	} else if res, e := rw.GetResult(); e != nil {
+		err = e
+	} else if !res.Bool() {
+		okay = false
+	} else {
+		rw.reset() // reset the internals so we can keep using the results object
+		okay = true
+	}
+	return
+}
+
 // ComputedResult returns whether an explicit result was set.
 func (rw *Results) ComputedResult() bool {
 	// did it compute a result; or -- if it wasnt expecting a result -- did at least something happen?
@@ -46,7 +61,7 @@ func (rw *Results) ComputedResult() bool {
 	return rw.resultSets > 0 || (len(rw.resultAff) == 0 && rw.ranCount > 0)
 }
 
-func (rw *Results) ResetResult() {
+func (rw *Results) reset() {
 	rw.resultSets = 0
 	rw.ranCount = 0
 	rw.ranFlags = 0

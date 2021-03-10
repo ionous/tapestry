@@ -30,7 +30,7 @@
                         "$LINES": {
                           "id": "id-177f1718d3b-12",
                           "type": "lines",
-                          "value": "okay: The espresso machine isn't open.\nokay: reached outside the open cabinet.\nokay: reached inside the open espresso machine.\nokay: The cabinet isn't open.\nokay: that isn't available.\n"
+                          "value": "okay: The espresso machine isn't open.\nokay: reached outside the open cabinet.\nokay: reached inside the open espresso machine.\nokay: The cabinet isn't open.\nokay: That isn't available.\n"
                         }
                       }
                     }
@@ -225,36 +225,46 @@
                                     }
                                   },
                                   "$ELSE": {
-                                    "id": "id-177f1847e15-54",
-                                    "type": "activity",
+                                    "id": "id-1781dd611ac-10",
+                                    "type": "brancher",
                                     "value": {
-                                      "$EXE": [
-                                        {
-                                          "id": "id-177f1847e15-55",
-                                          "type": "execute",
+                                      "id": "id-1781dd611ac-11",
+                                      "type": "choose_nothing_else",
+                                      "value": {
+                                        "$DO": {
+                                          "id": "id-177f1847e15-54",
+                                          "type": "activity",
                                           "value": {
-                                            "id": "id-177f1847e15-56",
-                                            "type": "say_text",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177f1847e15-57",
-                                                "type": "text_eval",
+                                            "$EXE": [
+                                              {
+                                                "id": "id-177f1847e15-55",
+                                                "type": "execute",
                                                 "value": {
-                                                  "id": "id-177f1847e15-58",
-                                                  "type": "text_value",
+                                                  "id": "id-177f1847e15-56",
+                                                  "type": "say_text",
                                                   "value": {
                                                     "$TEXT": {
-                                                      "id": "id-177f1847e15-59",
-                                                      "type": "text",
-                                                      "value": "failed: shouldnt have reached into the espresso machine."
+                                                      "id": "id-177f1847e15-57",
+                                                      "type": "text_eval",
+                                                      "value": {
+                                                        "id": "id-177f1847e15-58",
+                                                        "type": "text_value",
+                                                        "value": {
+                                                          "$TEXT": {
+                                                            "id": "id-177f1847e15-59",
+                                                            "type": "text",
+                                                            "value": "failed: shouldnt have reached into the espresso machine."
+                                                          }
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
                                               }
-                                            }
+                                            ]
                                           }
                                         }
-                                      ]
+                                      }
                                     }
                                   }
                                 }
@@ -426,36 +436,46 @@
                                     }
                                   },
                                   "$ELSE": {
-                                    "id": "id-177f1718d3b-62",
-                                    "type": "activity",
+                                    "id": "id-1781dd611ac-12",
+                                    "type": "brancher",
                                     "value": {
-                                      "$EXE": [
-                                        {
-                                          "id": "id-177f1718d3b-52",
-                                          "type": "execute",
+                                      "id": "id-1781dd611ac-13",
+                                      "type": "choose_nothing_else",
+                                      "value": {
+                                        "$DO": {
+                                          "id": "id-177f1718d3b-62",
+                                          "type": "activity",
                                           "value": {
-                                            "id": "id-177f1718d3b-53",
-                                            "type": "say_text",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177f1718d3b-54",
-                                                "type": "text_eval",
+                                            "$EXE": [
+                                              {
+                                                "id": "id-177f1718d3b-52",
+                                                "type": "execute",
                                                 "value": {
-                                                  "id": "id-177f1718d3b-55",
-                                                  "type": "text_value",
+                                                  "id": "id-177f1718d3b-53",
+                                                  "type": "say_text",
                                                   "value": {
                                                     "$TEXT": {
-                                                      "id": "id-177f1718d3b-56",
-                                                      "type": "text",
-                                                      "value": "okay: reached outside the open cabinet."
+                                                      "id": "id-177f1718d3b-54",
+                                                      "type": "text_eval",
+                                                      "value": {
+                                                        "id": "id-177f1718d3b-55",
+                                                        "type": "text_value",
+                                                        "value": {
+                                                          "$TEXT": {
+                                                            "id": "id-177f1718d3b-56",
+                                                            "type": "text",
+                                                            "value": "okay: reached outside the open cabinet."
+                                                          }
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
                                               }
-                                            }
+                                            ]
                                           }
                                         }
-                                      ]
+                                      }
                                     }
                                   }
                                 }
@@ -692,36 +712,46 @@
                                     }
                                   },
                                   "$ELSE": {
-                                    "id": "id-177f1847e15-98",
-                                    "type": "activity",
+                                    "id": "id-1781dd611ac-14",
+                                    "type": "brancher",
                                     "value": {
-                                      "$EXE": [
-                                        {
-                                          "id": "id-177f1847e15-99",
-                                          "type": "execute",
+                                      "id": "id-1781dd611ac-15",
+                                      "type": "choose_nothing_else",
+                                      "value": {
+                                        "$DO": {
+                                          "id": "id-177f1847e15-98",
+                                          "type": "activity",
                                           "value": {
-                                            "id": "id-177f1847e15-100",
-                                            "type": "say_text",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177f1847e15-101",
-                                                "type": "text_eval",
+                                            "$EXE": [
+                                              {
+                                                "id": "id-177f1847e15-99",
+                                                "type": "execute",
                                                 "value": {
-                                                  "id": "id-177f1847e15-102",
-                                                  "type": "text_value",
+                                                  "id": "id-177f1847e15-100",
+                                                  "type": "say_text",
                                                   "value": {
                                                     "$TEXT": {
-                                                      "id": "id-177f1847e15-103",
-                                                      "type": "text",
-                                                      "value": "okay: reached inside the open espresso machine."
+                                                      "id": "id-177f1847e15-101",
+                                                      "type": "text_eval",
+                                                      "value": {
+                                                        "id": "id-177f1847e15-102",
+                                                        "type": "text_value",
+                                                        "value": {
+                                                          "$TEXT": {
+                                                            "id": "id-177f1847e15-103",
+                                                            "type": "text",
+                                                            "value": "okay: reached inside the open espresso machine."
+                                                          }
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
                                               }
-                                            }
+                                            ]
                                           }
                                         }
-                                      ]
+                                      }
                                     }
                                   }
                                 }
@@ -958,36 +988,46 @@
                                     }
                                   },
                                   "$ELSE": {
-                                    "id": "id-177f1718d3b-109",
-                                    "type": "activity",
+                                    "id": "id-1781dd611ac-16",
+                                    "type": "brancher",
                                     "value": {
-                                      "$EXE": [
-                                        {
-                                          "id": "id-177f1718d3b-110",
-                                          "type": "execute",
+                                      "id": "id-1781dd611ac-17",
+                                      "type": "choose_nothing_else",
+                                      "value": {
+                                        "$DO": {
+                                          "id": "id-177f1718d3b-109",
+                                          "type": "activity",
                                           "value": {
-                                            "id": "id-177f1718d3b-111",
-                                            "type": "say_text",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177f1718d3b-112",
-                                                "type": "text_eval",
+                                            "$EXE": [
+                                              {
+                                                "id": "id-177f1718d3b-110",
+                                                "type": "execute",
                                                 "value": {
-                                                  "id": "id-177f1718d3b-113",
-                                                  "type": "text_value",
+                                                  "id": "id-177f1718d3b-111",
+                                                  "type": "say_text",
                                                   "value": {
                                                     "$TEXT": {
-                                                      "id": "id-177f1718d3b-114",
-                                                      "type": "text",
-                                                      "value": "failed: shouldnt have reached from the closed cabinet."
+                                                      "id": "id-177f1718d3b-112",
+                                                      "type": "text_eval",
+                                                      "value": {
+                                                        "id": "id-177f1718d3b-113",
+                                                        "type": "text_value",
+                                                        "value": {
+                                                          "$TEXT": {
+                                                            "id": "id-177f1718d3b-114",
+                                                            "type": "text",
+                                                            "value": "failed: shouldnt have reached from the closed cabinet."
+                                                          }
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
                                               }
-                                            }
+                                            ]
                                           }
                                         }
-                                      ]
+                                      }
                                     }
                                   }
                                 }
@@ -1159,36 +1199,46 @@
                                     }
                                   },
                                   "$ELSE": {
-                                    "id": "id-177f1847e15-143",
-                                    "type": "activity",
+                                    "id": "id-1781dd611ac-18",
+                                    "type": "brancher",
                                     "value": {
-                                      "$EXE": [
-                                        {
-                                          "id": "id-177f1847e15-144",
-                                          "type": "execute",
+                                      "id": "id-1781dd611ac-19",
+                                      "type": "choose_nothing_else",
+                                      "value": {
+                                        "$DO": {
+                                          "id": "id-177f1847e15-143",
+                                          "type": "activity",
                                           "value": {
-                                            "id": "id-177f1847e15-145",
-                                            "type": "say_text",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177f1847e15-146",
-                                                "type": "text_eval",
+                                            "$EXE": [
+                                              {
+                                                "id": "id-177f1847e15-144",
+                                                "type": "execute",
                                                 "value": {
-                                                  "id": "id-177f1847e15-147",
-                                                  "type": "text_value",
+                                                  "id": "id-177f1847e15-145",
+                                                  "type": "say_text",
                                                   "value": {
                                                     "$TEXT": {
-                                                      "id": "id-177f1847e15-148",
-                                                      "type": "text",
-                                                      "value": "failed: shouldnt have reached out of world."
+                                                      "id": "id-177f1847e15-146",
+                                                      "type": "text_eval",
+                                                      "value": {
+                                                        "id": "id-177f1847e15-147",
+                                                        "type": "text_value",
+                                                        "value": {
+                                                          "$TEXT": {
+                                                            "id": "id-177f1847e15-148",
+                                                            "type": "text",
+                                                            "value": "failed: shouldnt have reached out of world."
+                                                          }
+                                                        }
+                                                      }
                                                     }
                                                   }
                                                 }
                                               }
-                                            }
+                                            ]
                                           }
                                         }
-                                      ]
+                                      }
                                     }
                                   }
                                 }

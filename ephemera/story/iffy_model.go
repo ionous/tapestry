@@ -1118,8 +1118,8 @@ func (*PatternActions) Compose() composer.Spec {
 // PatternDecl requires various parameters.
 type PatternDecl struct {
 	At            reader.Position `if:"internal"`
-	Name          PatternName
 	Type          PatternType
+	Name          PatternName
 	Optvars       *PatternVariablesTail
 	PatternReturn *PatternReturn
 	About         *Comment
@@ -1129,7 +1129,7 @@ func (*PatternDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_decl",
 		Desc: `Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it. Each function in a given pattern has "guards" which determine whether the function applies in a particular situtation.`,
-		Spec: "Determining {name:pattern_name|quote} uses {type:pattern_type} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
+		Spec: "{type:pattern_type} determine {name:pattern_name|quote} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
 	}
 }
 
@@ -1919,12 +1919,12 @@ func (*TraitPhrase) Compose() composer.Spec {
 // Trying requires various parameters.
 type Trying struct {
 	At        reader.Position `if:"internal"`
-	Name      PatternName
 	Arguments *Arguments
 	As        Text
-	Filter    *rt.BoolEval
 	Do        Activity
-	Else      Activity
+	Else      *Brancher
+	Filter    *rt.BoolEval
+	Name      Text
 }
 
 func (*Trying) Compose() composer.Spec {

@@ -16,21 +16,21 @@ import (
 // It implements every evaluation,
 // erroring if the value requested doesnt support the error returned.
 type Trying struct {
-	Pattern   pattern.PatternName `if:"selector"`
+	Name      pattern.PatternName `if:"selector"`
 	Arguments *Arguments          `if:"optional"`
 	As        string              // fix: variable definition field; fix: should be optional.
 	Filter    rt.BoolEval         `if:"optional,selector=and"`
 	Do        Activity
-	Else      Activity // `if:"optional"` -- optional doesnt work well b/c we still get the leading "else:" selector.
+	Else      Brancher `if:"selector,optional"`
 }
 
 func (*Trying) Compose() composer.Spec {
 	return composer.Spec{
 		Group: "patterns",
 		Desc:  "Trying: Runs a pattern, and potentially returns a value.",
-		Spec:  "Trying: {pattern%name:pattern_name}{?arguments} as:{as:text} {filter?bool_eval} do:{do:activity} else:{else:activity}",
-		// Fluent: &composer.Fluid{Name: "trying", Role: composer.Command},
-		Stub: true,
+		// Spec:  "Trying: {pattern%name:pattern_name}{?arguments} as:{as:text} {filter?bool_eval} do:{do:activity} {else:activity}",
+		Fluent: &composer.Fluid{Name: "trying", Role: composer.Command},
+		Stub:   true,
 	}
 }
 
@@ -48,7 +48,7 @@ func (op *Trying) trying(run rt.Runtime) (err error) {
 			args = append(args, rt.Arg{a.Name, a.From})
 		}
 	}
-	name := op.Pattern.String()
+	name := op.Name.String()
 	const anyaff affine.Affinity = "" // pass empty string for any affinity
 	if v, e := run.Call(name, anyaff, args); e == nil {
 		if hasReturn, hasLocal := v != nil, len(op.As) > 0; hasReturn != hasLocal {
@@ -64,14 +64,16 @@ func (op *Trying) trying(run rt.Runtime) (err error) {
 			} else {
 				if ok.Bool() {
 					err = op.Do.Execute(run)
-				} else {
-					err = op.Else.Execute(run)
+				} else if branch := op.Else; branch != nil {
+					err = branch.Branch(run)
 				}
 			}
 			run.PopScope()
 		}
 	} else if errors.Is(e, rt.NoResult{}) {
-		err = op.Else.Execute(run)
+		if branch := op.Else; branch != nil {
+			err = branch.Branch(run)
+		}
 	} else {
 		err = e
 	}

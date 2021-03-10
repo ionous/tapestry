@@ -94,7 +94,7 @@ function localLang(make) {
 
   make.group("Patterns", function() {
     make.flow("pattern_decl", "story_statement",
-       "Determining {name:pattern_name|quote} uses {type:pattern_type} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
+       "{type:pattern_type} determine {name:pattern_name|quote} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
        `Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.
   Each function in a given pattern has "guards" which determine whether the function applies in a particular situtation.`
      );

@@ -16,6 +16,7 @@ type BoolEval rt.BoolEval
 type Execute rt.Execute
 type NumberEval rt.NumberEval
 type TextEval rt.TextEval
+type Brancher core.Brancher
 
 type VariableName struct {
 	core.Variable

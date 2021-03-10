@@ -21,15 +21,20 @@ func (op *Determine) ImportStub(k *Importer) (ret interface{}, err error) {
 }
 
 func (op *Trying) ImportStub(k *Importer) (ret interface{}, err error) {
-	if p, args, e := importCall(k, "patterns", op.Name, op.Arguments); e != nil {
+	pat := PatternName{At: op.Name.At, Str: op.Name.Str}
+	if p, args, e := importCall(k, "patterns", pat, op.Arguments); e != nil {
 		err = ImportError(op, op.At, e)
 	} else {
+		var b core.Brancher
+		if op.Else != nil {
+			b = *op.Else
+		}
 		act := core.Trying{
-			Pattern:   pattern.PatternName(p.String()),
+			Name:      pattern.PatternName(p.String()),
 			Arguments: args,
 			As:        op.As.String(),
 			Do:        core.Activity(op.Do),
-			Else:      core.Activity(op.Else),
+			Else:      b,
 		}
 		if op.Filter != nil {
 			act.Filter = *op.Filter

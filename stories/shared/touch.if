@@ -38,15 +38,15 @@
                 "id": "id-177e140d8c4-3",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177e140d8c4-4",
-                    "type": "pattern_name",
-                    "value": "touch response"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-11",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177e140d8c4-4",
+                    "type": "pattern_name",
+                    "value": "touch response"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-18",
@@ -661,13 +661,6 @@
                                                               }
                                                             ]
                                                           }
-                                                        },
-                                                        "$ELSE": {
-                                                          "id": "id-177f55e2ea0-0",
-                                                          "type": "activity",
-                                                          "value": {
-                                                            "$EXE": []
-                                                          }
                                                         }
                                                       }
                                                     }
@@ -1175,13 +1168,6 @@
                                                                           }
                                                                         ]
                                                                       }
-                                                                    },
-                                                                    "$ELSE": {
-                                                                      "id": "id-177f55e2ea0-1",
-                                                                      "type": "activity",
-                                                                      "value": {
-                                                                        "$EXE": []
-                                                                      }
                                                                     }
                                                                   }
                                                                 }
@@ -1284,7 +1270,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-177f581cd5c-58",
                                                                 "type": "lines",
-                                                                "value": "{Those: .noun} {arent: .noun} available."
+                                                                "value": "{Those: .noun|capitalize!} {arent: .noun} available."
                                                               }
                                                             }
                                                           }
@@ -1326,15 +1312,15 @@
                 "id": "id-177e140d8c4-122",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177e140d8c4-123",
-                    "type": "pattern_name",
-                    "value": "reach up response"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-12",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177e140d8c4-123",
+                    "type": "pattern_name",
+                    "value": "reach up response"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-126",
@@ -1651,15 +1637,15 @@
                 "id": "id-177e140d8c4-61",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177e140d8c4-62",
-                    "type": "pattern_name",
-                    "value": "dig down response"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-13",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177e140d8c4-62",
+                    "type": "pattern_name",
+                    "value": "dig down response"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-65",
@@ -1882,7 +1868,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-177f58ce0a0-13",
                                                                 "type": "lines",
-                                                                "value": "{We:} can't reach into {the: .object}."
+                                                                "value": "{We:|capitalize!} can't reach into {the: .object}."
                                                               }
                                                             }
                                                           }
