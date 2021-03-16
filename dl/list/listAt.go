@@ -9,17 +9,17 @@ import (
 )
 
 type At struct {
-	List  rt.Assignment
-	Index rt.NumberEval
+	List  rt.Assignment `if:"selector"`
+	Index rt.NumberEval `if:"selector=at"`
 }
 
 // future: lists of lists? probably through lists of records containing lists.
 func (*At) Compose() composer.Spec {
 	return composer.Spec{
-		Name:  "list_at",
-		Group: "list",
-		Spec:  "list {list:assignment} at {index:number_eval}",
-		Desc:  "Value of List: Get a value from a list. The first element is is index 1.",
+		Name:   "list_at",
+		Group:  "list",
+		Fluent: &composer.Fluid{Name: "get", Role: composer.Function},
+		Desc:   "Get at index: Get a value from a list. The first element is is index 1.",
 	}
 }
 

@@ -59,6 +59,7 @@ var Slats = []composer.Composer{
 	(*GreaterThan)(nil),
 	(*HasDominion)(nil),
 	(*HasTrait)(nil),
+	(*IdOf)(nil),
 	(*Includes)(nil),
 	(*IntoObj)(nil),
 	(*IntoVar)(nil),

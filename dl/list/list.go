@@ -30,6 +30,7 @@ var Slats = []composer.Composer{
 	(*Set)(nil),
 	(*Slice)(nil),
 	(*Splice)(nil),
+	(*Find)(nil),
 	// flags:
 	(*Case)(nil),
 	(*Edge)(nil),

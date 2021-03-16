@@ -15,6 +15,12 @@ type ObjectExists struct {
 	Object rt.TextEval `if:"selector=valid,placeholder=object"`
 }
 
+// IdOf returns the internal name of the object.
+// It doesnt and cant change over the course of play.
+type IdOf struct {
+	Object rt.TextEval `if:"selector"`
+}
+
 // NameOf returns the full name of an object as declared by the author.
 // It doesnt change over the course of play. To change the name use the "printed name" property.
 type NameOf struct {
@@ -63,6 +69,23 @@ func (op *ObjectExists) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.False // fix: is this branch even possible?
 	default:
 		err = cmdError(op, e)
+	}
+	return
+}
+
+func (*IdOf) Compose() composer.Spec {
+	return composer.Spec{
+		Group:  "objects",
+		Fluent: &composer.Fluid{Name: "idOf", Role: composer.Function},
+		Desc:   "Id Of: A unique object identifier.",
+	}
+}
+
+func (op *IdOf) GetText(run rt.Runtime) (ret g.Value, err error) {
+	if obj, e := safe.ObjectText(run, op.Object); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = obj
 	}
 	return
 }
