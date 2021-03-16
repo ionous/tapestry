@@ -328,25 +328,11 @@ const spec = [
       "logic"
     ],
     "name": "any_true",
+    "spec": "anyTrue: {test+bool_eval|comma-or}",
     "uses": "flow",
     "with": {
-      "params": {
-        "$TEST": {
-          "label": "test",
-          "repeats": true,
-          "type": "bool_eval"
-        }
-      },
-      "roles": "QZSZK",
       "slots": [
         "bool_eval"
-      ],
-      "tokens": [
-        "anyTrue",
-        " ",
-        "test",
-        ": ",
-        "$TEST"
       ]
     }
   },
@@ -1625,6 +1611,31 @@ const spec = [
     }
   },
   {
+    "desc": "Id Of: A unique object identifier.",
+    "group": [
+      "objects"
+    ],
+    "name": "id_of",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$OBJECT": {
+          "label": "object",
+          "type": "text_eval"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "text_eval"
+      ],
+      "tokens": [
+        "idOf",
+        ": ",
+        "$OBJECT"
+      ]
+    }
+  },
+  {
     "desc": "Includes Text: True if text contains text.",
     "group": [
       "strings"
@@ -1961,18 +1972,37 @@ const spec = [
     "uses": "flow"
   },
   {
-    "desc": "Value of List: Get a value from a list. The first element is is index 1.",
+    "desc": "Get at index: Get a value from a list. The first element is is index 1.",
     "group": [
       "list"
     ],
     "name": "list_at",
-    "spec": "list {list:assignment} at {index:number_eval}",
     "uses": "flow",
     "with": {
+      "params": {
+        "$INDEX": {
+          "label": "at",
+          "type": "number_eval"
+        },
+        "$LIST": {
+          "label": "list",
+          "type": "assignment"
+        }
+      },
+      "roles": "FZKZSZK",
       "slots": [
         "number_eval",
         "text_eval",
         "record_eval"
+      ],
+      "tokens": [
+        "get",
+        ": ",
+        "$LIST",
+        ", ",
+        "at",
+        ": ",
+        "$INDEX"
       ]
     }
   },
@@ -2044,6 +2074,41 @@ const spec = [
         "elseIfEmptyDo",
         ": ",
         "$DO"
+      ]
+    }
+  },
+  {
+    "desc": "Find in list: search a list for a specific value.",
+    "group": [
+      "list"
+    ],
+    "name": "list_find",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$LIST": {
+          "label": "in",
+          "type": "assignment"
+        },
+        "$VALUE": {
+          "label": "value",
+          "type": "assignment"
+        }
+      },
+      "roles": "CZKZSZKT",
+      "slots": [
+        "bool_eval",
+        "number_eval"
+      ],
+      "tokens": [
+        "find",
+        ": ",
+        "$VALUE",
+        ", ",
+        "in",
+        ": ",
+        "$LIST",
+        "."
       ]
     }
   },
@@ -3409,8 +3474,8 @@ const spec = [
           "optional": true,
           "type": "bool_eval"
         },
-        "$PATTERN": {
-          "label": "pattern",
+        "$NAME": {
+          "label": "name",
           "type": "text"
         }
       },
@@ -3421,7 +3486,7 @@ const spec = [
       "tokens": [
         "trying",
         ": ",
-        "$PATTERN",
+        "$NAME",
         ", ",
         "arguments",
         ": ",
