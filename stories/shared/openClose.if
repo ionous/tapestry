@@ -210,8 +210,10 @@
                                               }
                                             },
                                             "$ELSE": {
+                                              "id": "id-1781eb867f5-80",
                                               "type": "brancher",
                                               "value": {
+                                                "id": "id-1781eb867f5-81",
                                                 "type": "choose_nothing_else",
                                                 "value": {
                                                   "$DO": {
@@ -365,8 +367,10 @@
                                                                 }
                                                               },
                                                               "$ELSE": {
+                                                                "id": "id-1781eb867f5-82",
                                                                 "type": "brancher",
                                                                 "value": {
+                                                                  "id": "id-1781eb867f5-83",
                                                                   "type": "choose_nothing_else",
                                                                   "value": {
                                                                     "$DO": {
@@ -887,8 +891,10 @@
                                               }
                                             },
                                             "$ELSE": {
+                                              "id": "id-1781eb867f5-84",
                                               "type": "brancher",
                                               "value": {
+                                                "id": "id-1781eb867f5-85",
                                                 "type": "choose_nothing_else",
                                                 "value": {
                                                   "$DO": {
@@ -1082,8 +1088,10 @@
                                                                 }
                                                               },
                                                               "$ELSE": {
+                                                                "id": "id-1781eb867f5-86",
                                                                 "type": "brancher",
                                                                 "value": {
+                                                                  "id": "id-1781eb867f5-87",
                                                                   "type": "choose_nothing_else",
                                                                   "value": {
                                                                     "$DO": {
@@ -1091,46 +1099,6 @@
                                                                       "type": "activity",
                                                                       "value": {
                                                                         "$EXE": [
-                                                                          {
-                                                                            "id": "id-1781aa8fa1d-203",
-                                                                            "type": "execute",
-                                                                            "value": {
-                                                                              "id": "id-1781aa8fa1d-204",
-                                                                              "type": "debug_log",
-                                                                              "value": {
-                                                                                "$VALUE": {
-                                                                                  "id": "id-1781aa8fa1d-205",
-                                                                                  "type": "assignment",
-                                                                                  "value": {
-                                                                                    "id": "id-1781aa8fa1d-206",
-                                                                                    "type": "from_text",
-                                                                                    "value": {
-                                                                                      "$VAL": {
-                                                                                        "id": "id-1781aa8fa1d-207",
-                                                                                        "type": "text_eval",
-                                                                                        "value": {
-                                                                                          "id": "id-1781aa8fa1d-208",
-                                                                                          "type": "render_template",
-                                                                                          "value": {
-                                                                                            "$TEMPLATE": {
-                                                                                              "id": "id-1781aa8fa1d-209",
-                                                                                              "type": "lines",
-                                                                                              "value": "closing {.actor} {.noun}"
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                },
-                                                                                "$LEVEL": {
-                                                                                  "id": "id-1781aa8fa1d-210",
-                                                                                  "type": "number",
-                                                                                  "value": 0
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          },
                                                                           {
                                                                             "id": "id-1781aa8fa1d-211",
                                                                             "type": "execute",

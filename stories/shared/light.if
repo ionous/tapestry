@@ -15,15 +15,15 @@
                 "id": "id-177fb15803f-48",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177fb15803f-49",
-                    "type": "pattern_name",
-                    "value": "fully opaque"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-41",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177fb15803f-49",
+                    "type": "pattern_name",
+                    "value": "fully opaque"
                   },
                   "$OPTVARS": {
                     "id": "id-177fb15803f-54",
@@ -117,7 +117,7 @@
                   "$LINES": {
                     "id": "id-177fb15803f-131",
                     "type": "lines",
-                    "value": "Returns true if light gets stopped when passing from inside an object to outside an object. Note though that \"lit\" objects emit light from all of their surfaces, so while a closed box might not reveal a flashlight locked inside, a haunted treasure chest might itself be a source of light."
+                    "value": "Returns true if light gets stopped when passing from inside an object to outside an object. Note that \"lit\" objects emit light from all of their surfaces, so while a closed box might not reveal a flashlight locked inside, a glowing haunted treasure chest would illuminate its contents and the room it's in. "
                   }
                 }
               }
@@ -516,15 +516,15 @@
                 "id": "id-177660e7610-3",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177660e7610-4",
-                    "type": "pattern_name",
-                    "value": "transparentOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-42",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177660e7610-4",
+                    "type": "pattern_name",
+                    "value": "transparentOf"
                   },
                   "$OPTVARS": {
                     "id": "id-177660e7610-42",
@@ -992,15 +992,15 @@
                 "id": "id-177661f02fe-51",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177661f02fe-52",
-                    "type": "pattern_name",
-                    "value": "transparentList"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-43",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177661f02fe-52",
+                    "type": "pattern_name",
+                    "value": "transparentList"
                   },
                   "$OPTVARS": {
                     "id": "id-177661f02fe-55",
@@ -1354,15 +1354,15 @@
                 "id": "id-177fb39e579-2",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177fb39e579-3",
-                    "type": "pattern_name",
-                    "value": "contains light"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-44",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177fb39e579-3",
+                    "type": "pattern_name",
+                    "value": "contains light"
                   },
                   "$OPTVARS": {
                     "id": "id-177fb39e579-6",

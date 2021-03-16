@@ -15,15 +15,15 @@
                 "id": "id-17780e04b4f-60",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17780e04b4f-61",
-                    "type": "pattern_name",
-                    "value": "On"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-7",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17780e04b4f-61",
+                    "type": "pattern_name",
+                    "value": "On"
                   },
                   "$OPTVARS": {
                     "id": "id-17780e04b4f-64",
@@ -257,15 +257,15 @@
                 "id": "id-1778e3636ac-51",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-1778e3636ac-52",
-                    "type": "pattern_name",
-                    "value": "We"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-8",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-1778e3636ac-52",
+                    "type": "pattern_name",
+                    "value": "We"
                   },
                   "$OPTVARS": {
                     "id": "id-1778e3636ac-55",
@@ -433,15 +433,15 @@
                 "id": "id-1781331ee71-35",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-1781331ee71-36",
-                    "type": "pattern_name",
-                    "value": "They"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-9",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-1781331ee71-36",
+                    "type": "pattern_name",
+                    "value": "They"
                   },
                   "$OPTVARS": {
                     "id": "id-1781331ee71-39",
@@ -669,15 +669,15 @@
                 "id": "id-177ec76fefa-2",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177ec76fefa-3",
-                    "type": "pattern_name",
-                    "value": "Those"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-10",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177ec76fefa-3",
+                    "type": "pattern_name",
+                    "value": "Those"
                   },
                   "$OPTVARS": {
                     "id": "id-177ec76fefa-6",

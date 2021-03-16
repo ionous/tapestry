@@ -347,15 +347,15 @@
                 "id": "id-177db4bdeb4-100",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177db4bdeb4-101",
-                    "type": "pattern_name",
-                    "value": "isPlayer"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-125",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177db4bdeb4-101",
+                    "type": "pattern_name",
+                    "value": "isPlayer"
                   },
                   "$OPTVARS": {
                     "id": "id-177db4bdeb4-111",

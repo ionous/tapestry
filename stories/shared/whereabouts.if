@@ -75,15 +75,15 @@
                 "id": "id-176f4124f37-2",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-176f4124f37-3",
-                    "type": "pattern_name",
-                    "value": "parentOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-23",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-176f4124f37-3",
+                    "type": "pattern_name",
+                    "value": "parentOf"
                   },
                   "$OPTVARS": {
                     "id": "id-176f427859d-41",
@@ -431,15 +431,15 @@
                 "id": "id-177da9d86c5-5",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177da9d86c5-6",
-                    "type": "pattern_name",
-                    "value": "parentsOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-24",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177da9d86c5-6",
+                    "type": "pattern_name",
+                    "value": "parentsOf"
                   },
                   "$OPTVARS": {
                     "id": "id-177da9d86c5-9",
@@ -501,6 +501,79 @@
                     "id": "id-177da9d86c5-19",
                     "type": "pattern_name",
                     "value": "parentsOf"
+                  },
+                  "$PATTERN_LOCALS": {
+                    "id": "id-17837de8674-17",
+                    "type": "pattern_locals",
+                    "value": {
+                      "$LOCAL_DECL": [
+                        {
+                          "id": "id-17837de8674-18",
+                          "type": "local_decl",
+                          "value": {
+                            "$VARIABLE_DECL": {
+                              "id": "id-17837de8674-19",
+                              "type": "variable_decl",
+                              "value": {
+                                "$AN": {
+                                  "id": "id-17837de8674-20",
+                                  "type": "determiner",
+                                  "value": "$AN"
+                                },
+                                "$NAME": {
+                                  "id": "id-17837de8674-21",
+                                  "type": "variable_name",
+                                  "value": "it"
+                                },
+                                "$TYPE": {
+                                  "id": "id-17837de8674-22",
+                                  "type": "variable_type",
+                                  "value": {
+                                    "$OBJECT": {
+                                      "id": "id-17837de8674-23",
+                                      "type": "object_type",
+                                      "value": {
+                                        "$AN": {
+                                          "id": "id-17837de8674-24",
+                                          "type": "ana",
+                                          "value": "$AN"
+                                        },
+                                        "$KIND": {
+                                          "id": "id-17837de8674-25",
+                                          "type": "singular_kind",
+                                          "value": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "$VALUE": {
+                              "id": "id-17837de8674-26",
+                              "type": "local_init",
+                              "value": {
+                                "$VALUE": {
+                                  "id": "id-17837de8674-27",
+                                  "type": "assignment",
+                                  "value": {
+                                    "id": "id-17837de8674-28",
+                                    "type": "get_var",
+                                    "value": {
+                                      "$NAME": {
+                                        "id": "id-17837de8674-29",
+                                        "type": "text",
+                                        "value": "obj"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
                   },
                   "$PATTERN_RETURN": {
                     "id": "id-177da9d86c5-20",
@@ -599,7 +672,7 @@
                                                               "$NAME": {
                                                                 "id": "id-177da9d86c5-41",
                                                                 "type": "text",
-                                                                "value": "obj"
+                                                                "value": "it"
                                                               }
                                                             }
                                                           }
@@ -632,7 +705,7 @@
                                                               "$NAME": {
                                                                 "id": "id-177da9d86c5-47",
                                                                 "type": "text",
-                                                                "value": "obj"
+                                                                "value": "it"
                                                               }
                                                             }
                                                           }
@@ -670,7 +743,7 @@
                                                         "$VAR": {
                                                           "id": "id-177da9d86c5-54",
                                                           "type": "variable_name",
-                                                          "value": "obj"
+                                                          "value": "it"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-177da9d86c5-55",
@@ -722,7 +795,7 @@
                                                                                           "$NAME": {
                                                                                             "id": "id-177da9d86c5-67",
                                                                                             "type": "text",
-                                                                                            "value": "obj"
+                                                                                            "value": "it"
                                                                                           }
                                                                                         }
                                                                                       }
@@ -778,15 +851,15 @@
                 "id": "id-1778a42f288-343",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-1778a42f288-344",
-                    "type": "pattern_name",
-                    "value": "childrenOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-25",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-1778a42f288-344",
+                    "type": "pattern_name",
+                    "value": "childrenOf"
                   },
                   "$OPTVARS": {
                     "id": "id-1778a42f288-349",
@@ -998,15 +1071,15 @@
                 "id": "id-176f427859d-7",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-176f427859d-8",
-                    "type": "pattern_name",
-                    "value": "CurrentRoom"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-26",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-176f427859d-8",
+                    "type": "pattern_name",
+                    "value": "CurrentRoom"
                   },
                   "$OPTVARS": {
                     "id": "id-176f7f50aeb-35",
@@ -1577,15 +1650,15 @@
                 "id": "id-17703f5400a-6",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17703f5400a-7",
-                    "type": "pattern_name",
-                    "value": "Common Ancestor"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-27",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17703f5400a-7",
+                    "type": "pattern_name",
+                    "value": "Common Ancestor"
                   },
                   "$OPTVARS": {
                     "id": "id-17703f5400a-13",
@@ -2646,15 +2719,15 @@
                 "id": "id-17703f5400a-293",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17703f5400a-294",
-                    "type": "pattern_name",
-                    "value": "ancestorOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-28",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17703f5400a-294",
+                    "type": "pattern_name",
+                    "value": "ancestorOf"
                   }
                 }
               }
@@ -3399,15 +3472,15 @@
                 "id": "id-17703f5400a-480",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17703f5400a-481",
-                    "type": "pattern_name",
-                    "value": "locationOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-29",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17703f5400a-481",
+                    "type": "pattern_name",
+                    "value": "locationOf"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-96",
@@ -3851,15 +3924,15 @@
                 "id": "id-177bb20a77a-83",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177bb20a77a-84",
-                    "type": "pattern_name",
-                    "value": "SupporterOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-30",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177bb20a77a-84",
+                    "type": "pattern_name",
+                    "value": "SupporterOf"
                   },
                   "$OPTVARS": {
                     "id": "id-177bb20a77a-87",
@@ -4231,15 +4304,15 @@
                 "id": "id-177bb20a77a-2",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177bb20a77a-3",
-                    "type": "pattern_name",
-                    "value": "ContainerOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-31",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177bb20a77a-3",
+                    "type": "pattern_name",
+                    "value": "ContainerOf"
                   },
                   "$OPTVARS": {
                     "id": "id-177bb20a77a-6",
@@ -4611,15 +4684,15 @@
                 "id": "id-1770c8a62f5-94",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-1770c8a62f5-95",
-                    "type": "pattern_name",
-                    "value": "OwnerOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-32",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-1770c8a62f5-95",
+                    "type": "pattern_name",
+                    "value": "OwnerOf"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-72",
@@ -5000,15 +5073,15 @@
                 "id": "id-17703f5400a-639",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17703f5400a-640",
-                    "type": "pattern_name",
-                    "value": "CarrierOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-33",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17703f5400a-640",
+                    "type": "pattern_name",
+                    "value": "CarrierOf"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-80",
@@ -5431,15 +5504,15 @@
                 "id": "id-1770c8a62f5-17",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-1770c8a62f5-18",
-                    "type": "pattern_name",
-                    "value": "WearerOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-34",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-1770c8a62f5-18",
+                    "type": "pattern_name",
+                    "value": "WearerOf"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-88",
