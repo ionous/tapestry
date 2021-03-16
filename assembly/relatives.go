@@ -10,8 +10,8 @@ select distinct firstNoun, relation, secondNoun, domain from (
 	where max(firstNoun, stem, secondNoun, relation, firstKind, secondKind) is not null
 	window 
 	/* count the times the nouns appear in their respective columns */
-      n1 as (partition by relation,firstNoun),
-	  n2 as (partition by relation,secondNoun)
+    n1 as (partition by relation, firstNoun, domain),
+	  n2 as (partition by relation, secondNoun, domain)
 ) 
 where case cardinality
 	when 'one_one'
