@@ -1,6 +1,7 @@
 package render
 
 import (
+	"strconv"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
@@ -54,6 +55,9 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 			switch aff := v.Affinity(); aff {
 			default:
 				err = errutil.Fmt("variable %q is %s not text or object", op.Name, aff)
+			case affine.Number:
+				str := strconv.FormatFloat(v.Float(), 'g', -1, 64)
+				ret = g.StringOf(str)
 
 			case affine.Object:
 				ret, err = op.getPrintedNamedOf(run, v.String())
