@@ -18,7 +18,7 @@
                   "$TEST_NAME": {
                     "id": "id-177f1718d3b-9",
                     "type": "test_name",
-                    "value": "touch test"
+                    "value": "reach test"
                   },
                   "$TEST": {
                     "id": "id-177f1718d3b-10",
@@ -30,7 +30,7 @@
                         "$LINES": {
                           "id": "id-177f1718d3b-12",
                           "type": "lines",
-                          "value": "okay: The espresso machine isn't open.\nokay: reached outside the open cabinet.\nokay: reached inside the open espresso machine.\nokay: The cabinet isn't open.\nokay: That isn't available.\n"
+                          "value": "okay: The espresso machine isn't open.\nokay: reached outside the open cabinet.\nokay: reached inside the open espresso machine.\nokay: The cabinet isn't open.\nokay: It isn't available.\n"
                         }
                       }
                     }
@@ -48,7 +48,7 @@
                   "$TEST_NAME": {
                     "id": "id-177f1718d3b-15",
                     "type": "test_name",
-                    "value": "touch test"
+                    "value": "reach test"
                   },
                   "$HOOK": {
                     "id": "id-177f1718d3b-16",
@@ -69,7 +69,7 @@
                                   "$NAME": {
                                     "id": "id-177f1847e15-31",
                                     "type": "pattern_name",
-                                    "value": "touch response"
+                                    "value": "reaching"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-177f1847e15-32",
@@ -83,7 +83,7 @@
                                             "$NAME": {
                                               "id": "id-177f1847e15-34",
                                               "type": "variable_name",
-                                              "value": "noun"
+                                              "value": "actor"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1847e15-35",
@@ -102,7 +102,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1847e15-39",
                                                           "type": "text",
-                                                          "value": "cabinet"
+                                                          "value": "yourself"
                                                         }
                                                       }
                                                     }
@@ -119,7 +119,7 @@
                                             "$NAME": {
                                               "id": "id-177f1847e15-41",
                                               "type": "variable_name",
-                                              "value": "other noun"
+                                              "value": "noun"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1847e15-42",
@@ -280,7 +280,7 @@
                                   "$NAME": {
                                     "id": "id-177f1718d3b-59",
                                     "type": "pattern_name",
-                                    "value": "touch response"
+                                    "value": "reaching"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-177f1718d3b-63",
@@ -294,7 +294,7 @@
                                             "$NAME": {
                                               "id": "id-177f1718d3b-68",
                                               "type": "variable_name",
-                                              "value": "noun"
+                                              "value": "actor"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1718d3b-69",
@@ -313,7 +313,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1718d3b-75",
                                                           "type": "text",
-                                                          "value": "cabinet"
+                                                          "value": "yourself"
                                                         }
                                                       }
                                                     }
@@ -330,7 +330,7 @@
                                             "$NAME": {
                                               "id": "id-177f1718d3b-65",
                                               "type": "variable_name",
-                                              "value": "other noun"
+                                              "value": "noun"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1718d3b-66",
@@ -556,7 +556,7 @@
                                   "$NAME": {
                                     "id": "id-177f1847e15-75",
                                     "type": "pattern_name",
-                                    "value": "touch response"
+                                    "value": "reaching"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-177f1847e15-76",
@@ -570,7 +570,7 @@
                                             "$NAME": {
                                               "id": "id-177f1847e15-78",
                                               "type": "variable_name",
-                                              "value": "noun"
+                                              "value": "actor"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1847e15-79",
@@ -589,7 +589,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1847e15-83",
                                                           "type": "text",
-                                                          "value": "cabinet"
+                                                          "value": "yourself"
                                                         }
                                                       }
                                                     }
@@ -606,7 +606,7 @@
                                             "$NAME": {
                                               "id": "id-177f1847e15-85",
                                               "type": "variable_name",
-                                              "value": "other noun"
+                                              "value": "noun"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1847e15-86",
@@ -832,7 +832,7 @@
                                   "$NAME": {
                                     "id": "id-177f1718d3b-86",
                                     "type": "pattern_name",
-                                    "value": "touch response"
+                                    "value": "reaching"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-177f1718d3b-87",
@@ -846,7 +846,7 @@
                                             "$NAME": {
                                               "id": "id-177f1718d3b-89",
                                               "type": "variable_name",
-                                              "value": "noun"
+                                              "value": "actor"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1718d3b-90",
@@ -865,7 +865,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1718d3b-94",
                                                           "type": "text",
-                                                          "value": "cabinet"
+                                                          "value": "yourself"
                                                         }
                                                       }
                                                     }
@@ -882,7 +882,7 @@
                                             "$NAME": {
                                               "id": "id-177f1718d3b-96",
                                               "type": "variable_name",
-                                              "value": "other noun"
+                                              "value": "noun"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1718d3b-97",
@@ -1043,7 +1043,7 @@
                                   "$NAME": {
                                     "id": "id-177f1847e15-120",
                                     "type": "pattern_name",
-                                    "value": "touch response"
+                                    "value": "reaching"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-177f1847e15-121",
@@ -1057,7 +1057,7 @@
                                             "$NAME": {
                                               "id": "id-177f1847e15-123",
                                               "type": "variable_name",
-                                              "value": "noun"
+                                              "value": "actor"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1847e15-124",
@@ -1076,7 +1076,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1847e15-128",
                                                           "type": "text",
-                                                          "value": "cabinet"
+                                                          "value": "yourself"
                                                         }
                                                       }
                                                     }
@@ -1093,7 +1093,7 @@
                                             "$NAME": {
                                               "id": "id-177f1847e15-130",
                                               "type": "variable_name",
-                                              "value": "other noun"
+                                              "value": "noun"
                                             },
                                             "$FROM": {
                                               "id": "id-177f1847e15-131",
@@ -1270,7 +1270,7 @@
                   "$TEST_NAME": {
                     "id": "id-177f1847e15-152",
                     "type": "test_name",
-                    "value": "touch test"
+                    "value": "reach test"
                   },
                   "$STORY": {
                     "id": "id-177f1847e15-153",
@@ -1352,6 +1352,70 @@
                                       "type": "lines",
                                       "value": "it is nowhere."
                                     }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "id": "id-1782d2a9a3e-4",
+                          "type": "paragraph",
+                          "value": {
+                            "$STORY_STATEMENT": [
+                              {
+                                "id": "id-1782d2a9a3e-5",
+                                "type": "story_statement",
+                                "value": {
+                                  "id": "id-1782d2a9a3e-6",
+                                  "type": "relative_to_noun",
+                                  "value": {
+                                    "$RELATION": {
+                                      "id": "id-1782d2a9a3e-7",
+                                      "type": "relation_name",
+                                      "value": " whereabouts"
+                                    },
+                                    "$NOUNS": [
+                                      {
+                                        "id": "id-1782d2a9a3e-8",
+                                        "type": "named_noun",
+                                        "value": {
+                                          "$DETERMINER": {
+                                            "id": "id-1782d2a9a3e-9",
+                                            "type": "determiner",
+                                            "value": "$OUR"
+                                          },
+                                          "$NAME": {
+                                            "id": "id-1782d2a9a3e-10",
+                                            "type": "noun_name",
+                                            "value": "yourself"
+                                          }
+                                        }
+                                      }
+                                    ],
+                                    "$ARE_BEING": {
+                                      "id": "id-1782d2a9a3e-11",
+                                      "type": "are_being",
+                                      "value": "$IS"
+                                    },
+                                    "$NOUNS1": [
+                                      {
+                                        "id": "id-1782d2a9a3e-12",
+                                        "type": "named_noun",
+                                        "value": {
+                                          "$DETERMINER": {
+                                            "id": "id-1782d2a9a3e-13",
+                                            "type": "determiner",
+                                            "value": "$THE"
+                                          },
+                                          "$NAME": {
+                                            "id": "id-1782d2a9a3e-14",
+                                            "type": "noun_name",
+                                            "value": "cabinet"
+                                          }
+                                        }
+                                      }
+                                    ]
                                   }
                                 }
                               }

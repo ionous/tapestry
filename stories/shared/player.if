@@ -145,27 +145,44 @@
                           }
                         }
                       }
-                    },
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "id-1783d2aa0bb-153",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1783d2aa0bb-160",
+                "type": "kinds_possess_properties",
+                "value": {
+                  "$PLURAL_KINDS": {
+                    "id": "id-1783d2aa0bb-161",
+                    "type": "plural_kinds",
+                    "value": "actors"
+                  },
+                  "$PROPERTY_DECL": [
                     {
-                      "id": "id-177fb7e29e7-64",
+                      "id": "id-1783d2aa0bb-162",
                       "type": "property_decl",
                       "value": {
                         "$AN": {
-                          "id": "id-177fb7e29e7-65",
+                          "id": "id-1783d2aa0bb-163",
                           "type": "determiner",
                           "value": "$AN"
                         },
                         "$PROPERTY": {
-                          "id": "id-177fb7e29e7-66",
+                          "id": "id-1783d2aa0bb-164",
                           "type": "property",
                           "value": "in darkness"
                         },
                         "$PROPERTY_TYPE": {
-                          "id": "id-177fb7e29e7-67",
+                          "id": "id-1783d2aa0bb-165",
                           "type": "property_type",
                           "value": {
                             "$PRIMITIVE": {
-                              "id": "id-177fb7e29e7-68",
+                              "id": "id-1783d2aa0bb-166",
                               "type": "primitive_type",
                               "value": "$BOOL"
                             }
@@ -224,7 +241,7 @@
                             "$NAME": {
                               "id": "id-177db4bdeb4-22",
                               "type": "noun_name",
-                              "value": "self"
+                              "value": "yourself"
                             }
                           }
                         }
@@ -327,7 +344,7 @@
                   "$LINES": {
                     "id": "id-177db4bdeb4-70",
                     "type": "lines",
-                    "value": "#entire_game::self"
+                    "value": "#entire_game::yourself"
                   }
                 }
               }
@@ -604,6 +621,140 @@
                               }
                             }
                           }
+                        },
+                        {
+                          "id": "id-178394e4c20-41",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-178394e4c20-42",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-178394e4c20-44",
+                                "type": "is_kind_of",
+                                "value": {
+                                  "$OBJECT": {
+                                    "id": "id-178394e4c20-45",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-178394e4c20-47",
+                                      "type": "get_var",
+                                      "value": {
+                                        "$NAME": {
+                                          "id": "id-178394e4c20-48",
+                                          "type": "text",
+                                          "value": "obj"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$KIND": {
+                                    "id": "id-178394e4c20-46",
+                                    "type": "text",
+                                    "value": "agents"
+                                  }
+                                }
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-178394e4c20-43",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-178394e4c20-49",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-178394e4c20-50",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-178394e4c20-51",
+                                          "type": "assign",
+                                          "value": {
+                                            "$VAR": {
+                                              "id": "id-178394e4c20-52",
+                                              "type": "variable_name",
+                                              "value": "success"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-178394e4c20-53",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-178394e4c20-54",
+                                                "type": "from_bool",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-178394e4c20-55",
+                                                    "type": "bool_eval",
+                                                    "value": {
+                                                      "id": "id-178394e4c20-56",
+                                                      "type": "compare_text",
+                                                      "value": {
+                                                        "$A": {
+                                                          "id": "id-178394e4c20-57",
+                                                          "type": "text_eval",
+                                                          "value": {
+                                                            "id": "id-178394e4c20-58",
+                                                            "type": "get_var",
+                                                            "value": {
+                                                              "$NAME": {
+                                                                "id": "id-178394e4c20-59",
+                                                                "type": "text",
+                                                                "value": "obj"
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        "$IS": {
+                                                          "id": "id-178394e4c20-60",
+                                                          "type": "comparator",
+                                                          "value": {
+                                                            "id": "id-178394e4c20-61",
+                                                            "type": "equal",
+                                                            "value": {}
+                                                          }
+                                                        },
+                                                        "$B": {
+                                                          "id": "id-178394e4c20-62",
+                                                          "type": "text_eval",
+                                                          "value": {
+                                                            "id": "id-178394e4c20-70",
+                                                            "type": "id_of",
+                                                            "value": {
+                                                              "$OBJECT": {
+                                                                "id": "id-178394e4c20-71",
+                                                                "type": "text_eval",
+                                                                "value": {
+                                                                  "id": "id-178394e4c20-72",
+                                                                  "type": "text_value",
+                                                                  "value": {
+                                                                    "$TEXT": {
+                                                                      "id": "id-178394e4c20-73",
+                                                                      "type": "text",
+                                                                      "value": "player"
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
                         }
                       ]
                     }
@@ -644,7 +795,7 @@
                         "$NAME": {
                           "id": "id-177db4bdeb4-175",
                           "type": "noun_name",
-                          "value": "self"
+                          "value": "yourself"
                         }
                       }
                     }
@@ -754,7 +905,7 @@
                                                               "$TEXT": {
                                                                 "id": "id-177db4bdeb4-257",
                                                                 "type": "text",
-                                                                "value": "self"
+                                                                "value": "yourself"
                                                               }
                                                             }
                                                           }

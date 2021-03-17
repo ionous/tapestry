@@ -4,220 +4,6 @@
   "value": {
     "$PARAGRAPH": [
       {
-        "id": "id-177fb980e34-0",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-177fb980e34-1",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb980e34-2",
-                "type": "pattern_decl",
-                "value": {
-                  "$TYPE": {
-                    "id": "id-1781842316a-18",
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
-                  },
-                  "$NAME": {
-                    "id": "id-177fb980e34-3",
-                    "type": "pattern_name",
-                    "value": "vision response"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-177fe89b45e-2",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fe89b45e-0",
-                "type": "comment",
-                "value": {
-                  "$LINES": {
-                    "id": "id-177fe89b45e-1",
-                    "type": "lines",
-                    "value": "Used to determine whether an action needing light can proceed. Returns some response text if the action is blocked.  Relies on the player's \"is in darkness\" which is (usually) calculated just once per turn ( in \"adjust light.\" ) "
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-177fb980e34-6",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb980e34-7",
-                "type": "pattern_actions",
-                "value": {
-                  "$NAME": {
-                    "id": "id-177fb980e34-8",
-                    "type": "pattern_name",
-                    "value": "vision response"
-                  },
-                  "$PATTERN_RETURN": {
-                    "id": "id-177fb980e34-10",
-                    "type": "pattern_return",
-                    "value": {
-                      "$RESULT": {
-                        "id": "id-177fb980e34-11",
-                        "type": "variable_decl",
-                        "value": {
-                          "$AN": {
-                            "id": "id-177fb980e34-12",
-                            "type": "determiner",
-                            "value": "$A"
-                          },
-                          "$NAME": {
-                            "id": "id-177fb980e34-13",
-                            "type": "variable_name",
-                            "value": "response"
-                          },
-                          "$TYPE": {
-                            "id": "id-177fb980e34-14",
-                            "type": "variable_type",
-                            "value": {
-                              "$PRIMITIVE": {
-                                "id": "id-177fb980e34-15",
-                                "type": "primitive_type",
-                                "value": "$TEXT"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$PATTERN_RULES": {
-                    "id": "id-177fb980e34-9",
-                    "type": "pattern_rules",
-                    "value": {
-                      "$PATTERN_RULE": [
-                        {
-                          "id": "id-177fb980e34-16",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-177fb980e34-17",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-177fb980e34-30",
-                                "type": "get_at_field",
-                                "value": {
-                                  "$FIELD": {
-                                    "id": "id-177fb980e34-31",
-                                    "type": "text",
-                                    "value": "is in darkness"
-                                  },
-                                  "$FROM": {
-                                    "id": "id-177fb980e34-32",
-                                    "type": "from_source_fields",
-                                    "value": {
-                                      "id": "id-177fb980e34-33",
-                                      "type": "from_obj",
-                                      "value": {
-                                        "$OBJECT": {
-                                          "id": "id-177fb980e34-34",
-                                          "type": "text_eval",
-                                          "value": {
-                                            "id": "id-177fb980e34-48",
-                                            "type": "text_value",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177fb980e34-49",
-                                                "type": "text",
-                                                "value": "player"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-177fb980e34-18",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-177fb980e34-19",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-177fb980e34-37",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-177fb980e34-38",
-                                          "type": "assign",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-177fb980e34-39",
-                                              "type": "variable_name",
-                                              "value": "response"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-177fb980e34-40",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-177fb980e34-41",
-                                                "type": "from_text",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-177fb980e34-42",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-177fb980e34-43",
-                                                      "type": "response",
-                                                      "value": {
-                                                        "$NAME": {
-                                                          "id": "id-177fb980e34-44",
-                                                          "type": "text",
-                                                          "value": "can't act in the dark"
-                                                        },
-                                                        "$TEXT": {
-                                                          "id": "id-177fb980e34-45",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-177fb980e34-46",
-                                                            "type": "render_template",
-                                                            "value": {
-                                                              "$TEMPLATE": {
-                                                                "id": "id-177fb980e34-47",
-                                                                "type": "lines",
-                                                                "value": "It is pitch dark, and {we!} can't see a thing."
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
         "id": "id-177fb980e34-50",
         "type": "paragraph",
         "value": {
@@ -275,6 +61,96 @@
                     "value": {
                       "$LOCAL_DECL": [
                         {
+                          "id": "id-1783d2aa0bb-167",
+                          "type": "local_decl",
+                          "value": {
+                            "$VARIABLE_DECL": {
+                              "id": "id-1783d2aa0bb-168",
+                              "type": "variable_decl",
+                              "value": {
+                                "$AN": {
+                                  "id": "id-1783d2aa0bb-169",
+                                  "type": "determiner",
+                                  "value": "$AN"
+                                },
+                                "$NAME": {
+                                  "id": "id-1783d2aa0bb-170",
+                                  "type": "variable_name",
+                                  "value": "actor"
+                                },
+                                "$TYPE": {
+                                  "id": "id-1783d2aa0bb-171",
+                                  "type": "variable_type",
+                                  "value": {
+                                    "$OBJECT": {
+                                      "id": "id-1783d2aa0bb-172",
+                                      "type": "object_type",
+                                      "value": {
+                                        "$AN": {
+                                          "id": "id-1783d2aa0bb-173",
+                                          "type": "ana",
+                                          "value": "$AN"
+                                        },
+                                        "$KIND": {
+                                          "id": "id-1783d2aa0bb-174",
+                                          "type": "singular_kind",
+                                          "value": "actor"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "$VALUE": {
+                              "id": "id-1783d2aa0bb-180",
+                              "type": "local_init",
+                              "value": {
+                                "$VALUE": {
+                                  "id": "id-1783d2aa0bb-181",
+                                  "type": "assignment",
+                                  "value": {
+                                    "id": "id-1783d2aa0bb-182",
+                                    "type": "get_at_field",
+                                    "value": {
+                                      "$FIELD": {
+                                        "id": "id-1783d2aa0bb-183",
+                                        "type": "text",
+                                        "value": "pawn"
+                                      },
+                                      "$FROM": {
+                                        "id": "id-1783d2aa0bb-184",
+                                        "type": "from_source_fields",
+                                        "value": {
+                                          "id": "id-1783d2aa0bb-185",
+                                          "type": "from_obj",
+                                          "value": {
+                                            "$OBJECT": {
+                                              "id": "id-1783d2aa0bb-186",
+                                              "type": "text_eval",
+                                              "value": {
+                                                "id": "id-1783d2aa0bb-187",
+                                                "type": "text_value",
+                                                "value": {
+                                                  "$TEXT": {
+                                                    "id": "id-1783d2aa0bb-188",
+                                                    "type": "text",
+                                                    "value": "player"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
                           "id": "id-177fb980e34-64",
                           "type": "local_decl",
                           "value": {
@@ -327,13 +203,13 @@
                                               "id": "id-177ff85b19c-3",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-177ff85b19c-5",
-                                                "type": "text_value",
+                                                "id": "id-1783d670d60-0",
+                                                "type": "get_var",
                                                 "value": {
-                                                  "$TEXT": {
-                                                    "id": "id-177ff85b19c-6",
+                                                  "$NAME": {
+                                                    "id": "id-1783d670d60-1",
                                                     "type": "text",
-                                                    "value": "player"
+                                                    "value": "actor"
                                                   }
                                                 }
                                               }
@@ -435,38 +311,13 @@
                                                         "id": "id-177fb980e34-94",
                                                         "type": "assignment",
                                                         "value": {
-                                                          "id": "id-177fb980e34-101",
-                                                          "type": "get_at_field",
+                                                          "id": "id-1783d2aa0bb-189",
+                                                          "type": "get_var",
                                                           "value": {
-                                                            "$FIELD": {
-                                                              "id": "id-177fb980e34-102",
+                                                            "$NAME": {
+                                                              "id": "id-1783d2aa0bb-190",
                                                               "type": "text",
-                                                              "value": "pawn"
-                                                            },
-                                                            "$FROM": {
-                                                              "id": "id-177fb980e34-103",
-                                                              "type": "from_source_fields",
-                                                              "value": {
-                                                                "id": "id-177fb980e34-104",
-                                                                "type": "from_obj",
-                                                                "value": {
-                                                                  "$OBJECT": {
-                                                                    "id": "id-177fb980e34-105",
-                                                                    "type": "text_eval",
-                                                                    "value": {
-                                                                      "id": "id-177fb980e34-106",
-                                                                      "type": "text_value",
-                                                                      "value": {
-                                                                        "$TEXT": {
-                                                                          "id": "id-177fb980e34-107",
-                                                                          "type": "text",
-                                                                          "value": "player"
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
+                                                              "value": "actor"
                                                             }
                                                           }
                                                         }
@@ -721,23 +572,13 @@
                                               "id": "id-177fecc7bcd-68",
                                               "type": "into_target_fields",
                                               "value": {
-                                                "id": "id-177fecc7bcd-72",
-                                                "type": "into_obj",
+                                                "id": "id-1783d670d60-2",
+                                                "type": "into_var",
                                                 "value": {
-                                                  "$OBJECT": {
-                                                    "id": "id-177fecc7bcd-73",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-177fecc7bcd-74",
-                                                      "type": "text_value",
-                                                      "value": {
-                                                        "$TEXT": {
-                                                          "id": "id-177fecc7bcd-75",
-                                                          "type": "text",
-                                                          "value": "player"
-                                                        }
-                                                      }
-                                                    }
+                                                  "$VAR": {
+                                                    "id": "id-1783d670d60-3",
+                                                    "type": "variable_name",
+                                                    "value": "actor"
                                                   }
                                                 }
                                               }

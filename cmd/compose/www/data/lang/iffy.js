@@ -71,7 +71,7 @@ function localLang(make) {
   });
 
   make.group("Events", function() {
-    make.flow("action_decl", "story_statement", "Actors can {act%event:event_name} and {acting%action:action_name} requires {action_params}.",
+    make.flow("action_decl", "story_statement", "Agents can {act%event:event_name} and {acting%action:action_name} requires {action_params}.",
       `Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.
       Activities involve either the player or an npc and possibly one or two other objects.`);
     make.swap("action_params", "{one or more objects%common:common_action}, or {two similar objects%dual:paired_action}, or {nothing%none:abstract_action}")

@@ -70,6 +70,6 @@ func (Overflow) Error() string {
 func (Underflow) Error() string {
 	return "too few words"
 }
-func (e UnknownObject) Error() string {
+func (UnknownObject) Error() string {
 	return "you can't see any such thing"
 }

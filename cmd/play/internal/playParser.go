@@ -86,12 +86,10 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 				if cnt := len(objs); true {
 					args = make([]rt.Arg, 0, cnt+1)
 					args.add(
-						&core.GetAtField{
-							Field: "pawn",
-							From: &core.FromObj{
+						&core.FromText{
+							&core.IdOf{
 								&core.Text{Text: "player"},
-							},
-						})
+							}})
 					//
 					out.Nouns = make([]string, cnt)
 					for i, obj := range objs {

@@ -9,9 +9,9 @@ import (
 
 // ImportPhrase - action generates pattern ephemera for now.
 func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
-	if _, e := op.makePattern(k, op.Action.Str, "actions"); e != nil {
+	if _, e := op.makePattern(k, op.Action.Str, "agent", "actions"); e != nil {
 		err = e
-	} else if evt, e := op.makePattern(k, op.Event.Str, "events"); e != nil {
+	} else if evt, e := op.makePattern(k, op.Event.Str, "actor", "events"); e != nil {
 		err = e
 	} else {
 		// return success
@@ -22,7 +22,7 @@ func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *ActionDecl) makePattern(k *Importer, name, group string) (ret ephemera.Named, err error) {
+func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret ephemera.Named, err error) {
 	// declare the pattern
 	n := k.NewName(lang.Breakcase(name), tables.NAMED_PATTERN, op.At.String())
 
@@ -30,10 +30,10 @@ func (op *ActionDecl) makePattern(k *Importer, name, group string) (ret ephemera
 	groupName := k.NewName(group, tables.NAMED_TYPE, op.At.String())
 	k.NewPatternDecl(n, n, groupName, "")
 
-	// the first parameter is always "actor"
-	actor := k.NewName("actor", tables.NAMED_PARAMETER, op.At.String())
-	actorKind := k.NewName("actor", tables.NAMED_KIND, op.At.String())
-	k.NewPatternDecl(n, actor, actorKind, affine.Object.String())
+	// the first parameter is always "agent"
+	paramName := k.NewName(kind, tables.NAMED_PARAMETER, op.At.String())
+	paramType := k.NewName(kind, tables.NAMED_KIND, op.At.String())
+	k.NewPatternDecl(n, paramName, paramType, affine.Object.String())
 
 	// then the other parameters...
 	return n, op.ActionParams.Opt.(actionImporter).ImportAction(k, n)

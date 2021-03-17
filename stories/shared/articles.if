@@ -388,14 +388,15 @@
                 "id": "id-174f06d08a4-146",
                 "type": "pattern_decl",
                 "value": {
+                  "$TYPE": {
+                    "id": "id-1783981b1f0-243",
+                    "type": "pattern_type",
+                    "value": "$PATTERNS"
+                  },
                   "$NAME": {
                     "id": "id-174f06d08a4-147",
                     "type": "pattern_name",
                     "value": "A"
-                  },
-                 "$TYPE": {
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-174f06d08a4-150",
@@ -598,14 +599,15 @@
                 "id": "id-174f06d08a4-92",
                 "type": "pattern_decl",
                 "value": {
+                  "$TYPE": {
+                    "id": "id-1783981b1f0-244",
+                    "type": "pattern_type",
+                    "value": "$PATTERNS"
+                  },
                   "$NAME": {
                     "id": "id-174f06d08a4-93",
                     "type": "pattern_name",
                     "value": "The"
-                  },
-                  "$TYPE": {
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-174f06d08a4-96",
@@ -844,14 +846,15 @@
                 "id": "id-174f08a1a93-0",
                 "type": "pattern_decl",
                 "value": {
+                  "$TYPE": {
+                    "id": "id-1783981b1f0-245",
+                    "type": "pattern_type",
+                    "value": "$PATTERNS"
+                  },
                   "$NAME": {
                     "id": "id-174f08a1a93-1",
                     "type": "pattern_name",
                     "value": "Print article"
-                  },
-"$TYPE": {
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
                   },
                   "$OPTVARS": {
                     "id": "id-174f08a1a93-6",

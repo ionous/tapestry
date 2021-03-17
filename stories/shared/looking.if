@@ -51,6 +51,94 @@
                     "type": "pattern_name",
                     "value": "looking"
                   },
+                  "$PATTERN_LOCALS": {
+                    "id": "id-1783ce603b1-139",
+                    "type": "pattern_locals",
+                    "value": {
+                      "$LOCAL_DECL": [
+                        {
+                          "id": "id-1783ce603b1-140",
+                          "type": "local_decl",
+                          "value": {
+                            "$VARIABLE_DECL": {
+                              "id": "id-1783ce603b1-141",
+                              "type": "variable_decl",
+                              "value": {
+                                "$AN": {
+                                  "id": "id-1783ce603b1-142",
+                                  "type": "determiner",
+                                  "value": "$AN"
+                                },
+                                "$NAME": {
+                                  "id": "id-1783ce603b1-143",
+                                  "type": "variable_name",
+                                  "value": "actor"
+                                },
+                                "$TYPE": {
+                                  "id": "id-1783ce603b1-144",
+                                  "type": "variable_type",
+                                  "value": {
+                                    "$OBJECT": {
+                                      "id": "id-1783ce603b1-145",
+                                      "type": "object_type",
+                                      "value": {
+                                        "$AN": {
+                                          "id": "id-1783ce603b1-146",
+                                          "type": "ana",
+                                          "value": "$AN"
+                                        },
+                                        "$KIND": {
+                                          "id": "id-1783ce603b1-147",
+                                          "type": "singular_kind",
+                                          "value": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "$VALUE": {
+                              "id": "id-1783ce603b1-148",
+                              "type": "local_init",
+                              "value": {
+                                "$VALUE": {
+                                  "id": "id-1783ce603b1-149",
+                                  "type": "assignment",
+                                  "value": {
+                                    "id": "id-1783ce603b1-150",
+                                    "type": "get_at_field",
+                                    "value": {
+                                      "$FIELD": {
+                                        "id": "id-1783ce603b1-151",
+                                        "type": "text",
+                                        "value": "pawn"
+                                      },
+                                      "$FROM": {
+                                        "id": "id-1783ce603b1-152",
+                                        "type": "from_source_fields",
+                                        "value": {
+                                          "id": "id-1783ce603b1-153",
+                                          "type": "from_var",
+                                          "value": {
+                                            "$VAR": {
+                                              "id": "id-1783ce603b1-154",
+                                              "type": "variable_name",
+                                              "value": "agent"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
                   "$PATTERN_RULES": {
                     "id": "id-177d7b90e2b-4",
                     "type": "pattern_rules",
@@ -194,11 +282,11 @@
                                                               "id": "id-177da9d86c5-83",
                                                               "type": "assignment",
                                                               "value": {
-                                                                "id": "id-177da9d86c5-84",
+                                                                "id": "id-1783d2aa0bb-0",
                                                                 "type": "get_var",
                                                                 "value": {
                                                                   "$NAME": {
-                                                                    "id": "id-177da9d86c5-85",
+                                                                    "id": "id-1783d2aa0bb-1",
                                                                     "type": "text",
                                                                     "value": "actor"
                                                                   }
@@ -233,7 +321,6 @@
         }
       },
       {
-       
         "id": "id-17814326302-0",
         "type": "paragraph",
         "value": {
@@ -483,23 +570,13 @@
                                                                     "id": "id-177fe41d8ff-19",
                                                                     "type": "from_source_fields",
                                                                     "value": {
-                                                                      "id": "id-177fe41d8ff-20",
-                                                                      "type": "from_obj",
+                                                                      "id": "id-1783d2aa0bb-151",
+                                                                      "type": "from_var",
                                                                       "value": {
-                                                                        "$OBJECT": {
-                                                                          "id": "id-177fe41d8ff-21",
-                                                                          "type": "text_eval",
-                                                                          "value": {
-                                                                            "id": "id-177fe41d8ff-22",
-                                                                            "type": "text_value",
-                                                                            "value": {
-                                                                              "$TEXT": {
-                                                                                "id": "id-177fe41d8ff-23",
-                                                                                "type": "text",
-                                                                                "value": "player"
-                                                                              }
-                                                                            }
-                                                                          }
+                                                                        "$VAR": {
+                                                                          "id": "id-1783d2aa0bb-152",
+                                                                          "type": "variable_name",
+                                                                          "value": "actor"
                                                                         }
                                                                       }
                                                                     }
@@ -573,7 +650,6 @@
             }
           ]
         }
-       
       },
       {
         "id": "id-17780500793-1",
@@ -587,15 +663,15 @@
                 "id": "id-17780500793-3",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17780500793-4",
-                    "type": "pattern_name",
-                    "value": "Print vantage"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-23",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17780500793-4",
+                    "type": "pattern_name",
+                    "value": "Print vantage"
                   },
                   "$OPTVARS": {
                     "id": "id-17780500793-7",
@@ -1837,15 +1913,15 @@
                 "id": "id-177807dda61-49",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177807dda61-50",
-                    "type": "pattern_name",
-                    "value": "PrintDarkHeader"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-24",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177807dda61-50",
+                    "type": "pattern_name",
+                    "value": "PrintDarkHeader"
                   },
                   "$OPTVARS": {
                     "id": "id-177807dda61-54",
@@ -1988,15 +2064,15 @@
                 "id": "id-177807dda61-68",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177807dda61-69",
-                    "type": "pattern_name",
-                    "value": "PrintDarkDescription"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-25",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177807dda61-69",
+                    "type": "pattern_name",
+                    "value": "PrintDarkDescription"
                   },
                   "$OPTVARS": {
                     "id": "id-177807dda61-72",
@@ -2139,15 +2215,15 @@
                 "id": "id-17780a487c0-28",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17780a487c0-29",
-                    "type": "pattern_name",
-                    "value": "PrintLocaleTitle"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-26",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17780a487c0-29",
+                    "type": "pattern_name",
+                    "value": "PrintLocaleTitle"
                   },
                   "$OPTVARS": {
                     "id": "id-17780a487c0-32",
@@ -2551,15 +2627,15 @@
                 "id": "id-17780a487c0-46",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17780a487c0-47",
-                    "type": "pattern_name",
-                    "value": "PrintLocaleSubtitle"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-27",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17780a487c0-47",
+                    "type": "pattern_name",
+                    "value": "PrintLocaleSubtitle"
                   },
                   "$OPTVARS": {
                     "id": "id-17780a487c0-50",
@@ -2939,15 +3015,15 @@
                 "id": "id-17780a487c0-64",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17780a487c0-65",
-                    "type": "pattern_name",
-                    "value": "PrintLocaleDescription"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-28",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17780a487c0-65",
+                    "type": "pattern_name",
+                    "value": "PrintLocaleDescription"
                   },
                   "$OPTVARS": {
                     "id": "id-17780a487c0-68",
@@ -4207,15 +4283,15 @@
                 "id": "id-1778a42f288-162",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-1778a42f288-163",
-                    "type": "pattern_name",
-                    "value": "PrintObjectDescription"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-29",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-1778a42f288-163",
+                    "type": "pattern_name",
+                    "value": "PrintObjectDescription"
                   },
                   "$OPTVARS": {
                     "id": "id-1778a42f288-166",
@@ -5009,15 +5085,15 @@
                 "id": "id-17788b7d6db-99",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17788b7d6db-100",
-                    "type": "pattern_name",
-                    "value": "PrintImpressionOf"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-30",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17788b7d6db-100",
+                    "type": "pattern_name",
+                    "value": "PrintImpressionOf"
                   },
                   "$OPTVARS": {
                     "id": "id-17788b7d6db-103",
@@ -5878,15 +5954,15 @@
                 "id": "id-17788b7d6db-24",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-17788b7d6db-25",
-                    "type": "pattern_name",
-                    "value": "CanAlsoSee"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-31",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-17788b7d6db-25",
+                    "type": "pattern_name",
+                    "value": "CanAlsoSee"
                   },
                   "$OPTVARS": {
                     "id": "id-17788b7d6db-28",
@@ -6190,15 +6266,15 @@
                 "id": "id-1779fc56090-159",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-1779fc56090-160",
-                    "type": "pattern_name",
-                    "value": "set everything unmentioned"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-32",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-1779fc56090-160",
+                    "type": "pattern_name",
+                    "value": "set everything unmentioned"
                   }
                 }
               }

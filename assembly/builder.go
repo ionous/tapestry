@@ -214,7 +214,7 @@ func WriteFragment(asm *Assembler, kind string, pat *PatternFrag) (err error) {
 		// write fields exactly as if the pattern was a kind
 		for _, prop := range pat.Fields {
 			if e := asm.WriteField(pat.Name, prop.Name, prop.Type, prop.Affinity.String()); e != nil {
-				err = errutil.Append(err, e)
+				err = errutil.Append(err, errutil.New(e, "while writing", pat.Name, prop.Name, prop.Type, prop.Affinity))
 			}
 		}
 		// write initialization to mdl_start

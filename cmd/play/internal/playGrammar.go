@@ -20,11 +20,23 @@ var Grammar = anyOf(
 			// allOf(words("to"), noun(&parser.HasClass{"directions"}), act("examine")),
 			// allOf(words("inside/in/into/through/on"), noun(), act("search")),
 		)),
-	allOf(words("pick"),
-		anyOf(
-			allOf(words("up"), things(), act("taking")),
-			allOf(things(), words("up"), act("taking")),
-		)),
+	// fix? inform defines these as synonyms, meaning this happens:
+	// >carry off cat => "You aren't wearing the cat"
+	allOf(words("take/carry/hold"), anyOf(
+		// inventory, etc.
+		noun(), act("taking"),
+	)),
+	//  "take [things]" as taking.
+	// "take off [something]" as taking off.
+	// "take [something] off" as taking off.
+	// "take [things inside] from [something]" as removing it from.
+	// "take [things inside] off [something]" as removing it from.
+	// "take inventory" as taking inventory.
+	allOf(words("pick"), anyOf(
+		allOf(words("up"), things(), act("taking")),
+		allOf(things(), words("up"), act("taking")),
+	),
+	),
 	allOf(words("get"),
 		&parser.Target{[]parser.Scanner{things(), words("from/off"), thing()}},
 		act("removing"),
@@ -40,7 +52,6 @@ var Grammar = anyOf(
 	),
 	allOf(words("close/shut/cover"), anyOf(
 		allOf(words("up"), act("closing")),
-		allOf(noun(), act("closing")),
-	),
+		allOf(noun(), act("closing"))),
 	),
 )
