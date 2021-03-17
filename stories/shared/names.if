@@ -363,15 +363,15 @@
                 "id": "id-a-5",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-a-3",
-                    "type": "pattern_name",
-                    "value": "print name"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-126",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-a-3",
+                    "type": "pattern_name",
+                    "value": "print name"
                   },
                   "$OPTVARS": {
                     "id": "id-a-10",
@@ -900,15 +900,15 @@
                 "id": "id-177a87f4234-57",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-177a87f4234-58",
-                    "type": "pattern_name",
-                    "value": "mention"
-                  },
                   "$TYPE": {
                     "id": "id-1781a872257-127",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-177a87f4234-58",
+                    "type": "pattern_name",
+                    "value": "mention"
                   },
                   "$OPTVARS": {
                     "id": "id-177a87f4234-61",

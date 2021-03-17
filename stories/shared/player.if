@@ -67,7 +67,7 @@
                             "$DETERMINER": {
                               "id": "id-17798c5d676-29",
                               "type": "determiner",
-                              "value": "$OUR"
+                              "value": "$THE"
                             },
                             "$NAME": {
                               "id": "id-17798c5d676-30",
@@ -241,7 +241,7 @@
                             "$NAME": {
                               "id": "id-177db4bdeb4-22",
                               "type": "noun_name",
-                              "value": "yourself"
+                              "value": "self"
                             }
                           }
                         }
@@ -331,7 +331,7 @@
                         "$DETERMINER": {
                           "id": "id-177db4bdeb4-68",
                           "type": "determiner",
-                          "value": "$OUR"
+                          "value": "$THE"
                         },
                         "$NAME": {
                           "id": "id-177db4bdeb4-69",
@@ -344,8 +344,105 @@
                   "$LINES": {
                     "id": "id-177db4bdeb4-70",
                     "type": "lines",
-                    "value": "#entire_game::yourself"
+                    "value": "#entire_game::self"
                   }
+                }
+              }
+            },
+            {
+              "id": "id-1783e90dd4a-27",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1783e90dd4a-28",
+                "type": "noun_assignment",
+                "value": {
+                  "$PROPERTY": {
+                    "id": "id-1783e90dd4a-29",
+                    "type": "property",
+                    "value": "printed name"
+                  },
+                  "$NOUNS": [
+                    {
+                      "id": "id-1783e90dd4a-30",
+                      "type": "named_noun",
+                      "value": {
+                        "$DETERMINER": {
+                          "id": "id-1783e90dd4a-31",
+                          "type": "determiner",
+                          "value": "$OUR"
+                        },
+                        "$NAME": {
+                          "id": "id-1783e90dd4a-32",
+                          "type": "noun_name",
+                          "value": "self"
+                        }
+                      }
+                    }
+                  ],
+                  "$LINES": {
+                    "id": "id-1783e90dd4a-33",
+                    "type": "lines",
+                    "value": "you"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1783e9a0605-19",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1783e9a0605-20",
+                "type": "noun_statement",
+                "value": {
+                  "$LEDE": {
+                    "id": "id-1783e9a0605-21",
+                    "type": "lede",
+                    "value": {
+                      "$NOUNS": [
+                        {
+                          "id": "id-1783e9a0605-22",
+                          "type": "named_noun",
+                          "value": {
+                            "$DETERMINER": {
+                              "id": "id-1783e9a0605-23",
+                              "type": "determiner",
+                              "value": "$OUR"
+                            },
+                            "$NAME": {
+                              "id": "id-1783e9a0605-24",
+                              "type": "noun_name",
+                              "value": "self"
+                            }
+                          }
+                        }
+                      ],
+                      "$NOUN_PHRASE": {
+                        "id": "id-1783e9a0605-25",
+                        "type": "noun_phrase",
+                        "value": {
+                          "$NOUN_TRAITS": {
+                            "id": "id-1783e9a0605-26",
+                            "type": "noun_traits",
+                            "value": {
+                              "$ARE_BEING": {
+                                "id": "id-1783e9a0605-27",
+                                "type": "are_being",
+                                "value": "$IS"
+                              },
+                              "$TRAIT": [
+                                {
+                                  "id": "id-1783e9a0605-28",
+                                  "type": "trait",
+                                  "value": "proper named"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "$TAIL": []
                 }
               }
             }
@@ -795,7 +892,7 @@
                         "$NAME": {
                           "id": "id-177db4bdeb4-175",
                           "type": "noun_name",
-                          "value": "yourself"
+                          "value": "self"
                         }
                       }
                     }
@@ -905,7 +1002,7 @@
                                                               "$TEXT": {
                                                                 "id": "id-177db4bdeb4-257",
                                                                 "type": "text",
-                                                                "value": "yourself"
+                                                                "value": "self"
                                                               }
                                                             }
                                                           }

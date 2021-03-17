@@ -849,7 +849,7 @@
                                                                               "$NAME": {
                                                                                 "id": "id-17837bfbdc2-22",
                                                                                 "type": "variable_name",
-                                                                                "value": "source"
+                                                                                "value": "actor"
                                                                               },
                                                                               "$FROM": {
                                                                                 "id": "id-17837bfbdc2-23",
@@ -875,7 +875,7 @@
                                                                               "$NAME": {
                                                                                 "id": "id-17837bfbdc2-27",
                                                                                 "type": "variable_name",
-                                                                                "value": "target"
+                                                                                "value": "noun"
                                                                               },
                                                                               "$FROM": {
                                                                                 "id": "id-17837bfbdc2-28",
@@ -1524,7 +1524,7 @@
                                                                   "$NAME": {
                                                                     "id": "id-1782ad95c9f-23",
                                                                     "type": "variable_name",
-                                                                    "value": "source"
+                                                                    "value": "actor"
                                                                   },
                                                                   "$FROM": {
                                                                     "id": "id-1782ad95c9f-24",
@@ -1550,7 +1550,7 @@
                                                                   "$NAME": {
                                                                     "id": "id-1782ad95c9f-26",
                                                                     "type": "variable_name",
-                                                                    "value": "target"
+                                                                    "value": "noun"
                                                                   },
                                                                   "$FROM": {
                                                                     "id": "id-1782ad95c9f-27",
@@ -2370,12 +2370,12 @@
                             "$AN": {
                               "id": "id-17823b649db-35",
                               "type": "determiner",
-                              "value": "$A"
+                              "value": "$AN"
                             },
                             "$NAME": {
                               "id": "id-17823b649db-36",
                               "type": "variable_name",
-                              "value": "source"
+                              "value": "actor"
                             },
                             "$TYPE": {
                               "id": "id-17823b649db-37",
@@ -2413,7 +2413,7 @@
                             "$NAME": {
                               "id": "id-17823b649db-43",
                               "type": "variable_name",
-                              "value": "target"
+                              "value": "noun"
                             },
                             "$TYPE": {
                               "id": "id-17823b649db-44",
@@ -2763,7 +2763,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-178284d4b18-105",
                                                                 "type": "lines",
-                                                                "value": "{They:.target|capitalize!} {arent:.target} available."
+                                                                "value": "{They:.noun|capitalize!} {arent:.noun} available."
                                                               }
                                                             }
                                                           }
@@ -2972,12 +2972,12 @@
                             "$AN": {
                               "id": "id-178284d4b18-30",
                               "type": "determiner",
-                              "value": "$A"
+                              "value": "$AN"
                             },
                             "$NAME": {
                               "id": "id-178284d4b18-31",
                               "type": "variable_name",
-                              "value": "source"
+                              "value": "actor"
                             },
                             "$TYPE": {
                               "id": "id-178284d4b18-32",
@@ -3015,7 +3015,7 @@
                             "$NAME": {
                               "id": "id-178284d4b18-38",
                               "type": "variable_name",
-                              "value": "target"
+                              "value": "noun"
                             },
                             "$TYPE": {
                               "id": "id-178284d4b18-39",

@@ -67,6 +67,11 @@
                 "id": "id-1748e116bbd-2",
                 "type": "pattern_decl",
                 "value": {
+                  "$TYPE": {
+                    "id": "id-1783e9a0605-0",
+                    "type": "pattern_type",
+                    "value": "$PATTERNS"
+                  },
                   "$NAME": {
                     "id": "id-1748e116bbd-3",
                     "type": "pattern_name",
@@ -117,10 +122,6 @@
                         }
                       ]
                     }
-                  },
-                  "$TYPE": {
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
                   }
                 }
               }
@@ -245,11 +246,14 @@
                                           "value": "printed plural name"
                                         },
                                         "$FROM": {
+                                          "id": "id-1783e9a0605-1",
                                           "type": "from_source_fields",
                                           "value": {
+                                            "id": "id-1783e9a0605-2",
                                             "type": "from_var",
                                             "value": {
                                               "$VAR": {
+                                                "id": "id-1783e9a0605-3",
                                                 "type": "variable_name",
                                                 "value": "target"
                                               }
@@ -257,6 +261,15 @@
                                           }
                                         }
                                       }
+                                    }
+                                  },
+                                  "$IS": {
+                                    "id": "id-17494737044-17",
+                                    "type": "comparator",
+                                    "value": {
+                                      "id": "id-17494737044-31",
+                                      "type": "unequal",
+                                      "value": {}
                                     }
                                   },
                                   "$B": {
@@ -272,15 +285,6 @@
                                           "value": "$EMPTY"
                                         }
                                       }
-                                    }
-                                  },
-                                  "$IS": {
-                                    "id": "id-17494737044-17",
-                                    "type": "comparator",
-                                    "value": {
-                                      "id": "id-17494737044-31",
-                                      "type": "unequal",
-                                      "value": {}
                                     }
                                   }
                                 }
@@ -348,6 +352,11 @@
                 "id": "id-17494a3a882-0",
                 "type": "test_scene",
                 "value": {
+                  "$TEST_NAME": {
+                    "id": "id-17494a3a882-1",
+                    "type": "test_name",
+                    "value": "plural name printing"
+                  },
                   "$STORY": {
                     "id": "id-17494a3a882-2",
                     "type": "story",
@@ -432,12 +441,12 @@
                                                   "type": "are_an",
                                                   "value": "$ARE"
                                                 },
+                                                "$TRAIT": [],
                                                 "$KIND": {
                                                   "id": "id-17494a3a882-32",
                                                   "type": "singular_kind",
                                                   "value": "thing"
-                                                },
-                                                "$TRAIT": []
+                                                }
                                               }
                                             }
                                           }
@@ -455,10 +464,10 @@
                                   "id": "id-17494ab71d0-1",
                                   "type": "noun_assignment",
                                   "value": {
-                                    "$LINES": {
-                                      "id": "id-17494ab71d0-4",
-                                      "type": "lines",
-                                      "value": "broken flower pots"
+                                    "$PROPERTY": {
+                                      "id": "id-17494ab71d0-2",
+                                      "type": "property",
+                                      "value": "printed plural name"
                                     },
                                     "$NOUNS": [
                                       {
@@ -478,10 +487,10 @@
                                         }
                                       }
                                     ],
-                                    "$PROPERTY": {
-                                      "id": "id-17494ab71d0-2",
-                                      "type": "property",
-                                      "value": "printed plural name"
+                                    "$LINES": {
+                                      "id": "id-17494ab71d0-4",
+                                      "type": "lines",
+                                      "value": "broken flower pots"
                                     }
                                   }
                                 }
@@ -491,11 +500,6 @@
                         }
                       ]
                     }
-                  },
-                  "$TEST_NAME": {
-                    "id": "id-17494a3a882-1",
-                    "type": "test_name",
-                    "value": "plural name printing"
                   }
                 }
               }
@@ -515,6 +519,11 @@
                 "id": "id-17494ab71d0-13",
                 "type": "test_statement",
                 "value": {
+                  "$TEST_NAME": {
+                    "id": "id-17494ab71d0-14",
+                    "type": "test_name",
+                    "value": "plural name printing"
+                  },
                   "$TEST": {
                     "id": "id-17494ab71d0-15",
                     "type": "testing",
@@ -529,11 +538,6 @@
                         }
                       }
                     }
-                  },
-                  "$TEST_NAME": {
-                    "id": "id-17494ab71d0-14",
-                    "type": "test_name",
-                    "value": "plural name printing"
                   }
                 }
               }
@@ -545,6 +549,11 @@
                 "id": "id-17494ab71d0-24",
                 "type": "test_rule",
                 "value": {
+                  "$TEST_NAME": {
+                    "id": "id-17494ab71d0-25",
+                    "type": "test_name",
+                    "value": "$CURRENT_TEST"
+                  },
                   "$HOOK": {
                     "id": "id-17494ab71d0-26",
                     "type": "program_hook",
@@ -583,11 +592,6 @@
                         }
                       }
                     }
-                  },
-                  "$TEST_NAME": {
-                    "id": "id-17494ab71d0-25",
-                    "type": "test_name",
-                    "value": "$CURRENT_TEST"
                   }
                 }
               }

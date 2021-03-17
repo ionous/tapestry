@@ -102,7 +102,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1847e15-39",
                                                           "type": "text",
-                                                          "value": "yourself"
+                                                          "value": "self"
                                                         }
                                                       }
                                                     }
@@ -313,7 +313,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1718d3b-75",
                                                           "type": "text",
-                                                          "value": "yourself"
+                                                          "value": "self"
                                                         }
                                                       }
                                                     }
@@ -589,7 +589,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1847e15-83",
                                                           "type": "text",
-                                                          "value": "yourself"
+                                                          "value": "self"
                                                         }
                                                       }
                                                     }
@@ -865,7 +865,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1718d3b-94",
                                                           "type": "text",
-                                                          "value": "yourself"
+                                                          "value": "self"
                                                         }
                                                       }
                                                     }
@@ -1076,7 +1076,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177f1847e15-128",
                                                           "type": "text",
-                                                          "value": "yourself"
+                                                          "value": "self"
                                                         }
                                                       }
                                                     }
@@ -1388,7 +1388,7 @@
                                           "$NAME": {
                                             "id": "id-1782d2a9a3e-10",
                                             "type": "noun_name",
-                                            "value": "yourself"
+                                            "value": "self"
                                           }
                                         }
                                       }

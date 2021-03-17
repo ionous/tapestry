@@ -91,7 +91,7 @@
                                         "$TEMPLATE": {
                                           "id": "id-177ff976bc8-4",
                                           "type": "lines",
-                                          "value": "{if .yourself.is_in_darkness}ng: started in darkness{else}ok: started in light{end}."
+                                          "value": "{if .self.is_in_darkness}ng: started in darkness{else}ok: started in light{end}."
                                         }
                                       }
                                     }
@@ -211,7 +211,7 @@
                                         "$TEMPLATE": {
                                           "id": "id-177fecc7bcd-132",
                                           "type": "lines",
-                                          "value": "{if .yourself.is_in_darkness}ok: left in the dark{else}ng: expected darkness{end}."
+                                          "value": "{if .self.is_in_darkness}ok: left in the dark{else}ng: expected darkness{end}."
                                         }
                                       }
                                     }
@@ -331,7 +331,7 @@
                                         "$TEMPLATE": {
                                           "id": "id-177fecc7bcd-225",
                                           "type": "lines",
-                                          "value": "{if .yourself.is_in_darkness}ng: left in the dark{else}ok: expected darkness{end}."
+                                          "value": "{if .self.is_in_darkness}ng: left in the dark{else}ok: expected darkness{end}."
                                         }
                                       }
                                     }
