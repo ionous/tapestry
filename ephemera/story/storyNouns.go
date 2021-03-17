@@ -99,15 +99,17 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 		// pick common or proper based on noun capitalization.
 		// fix: implicitly generated facts should be considered preliminary
 		// so that authors can override them.
-		traitStr := "common_named"
+		var traitStr string
 		detStr, detFound := decode.FindChoice(&op.Determiner, op.Determiner.Str)
 		if detStr == "our" {
 			if first, _ := utf8.DecodeRuneInString(noun.String()); unicode.ToUpper(first) == first {
 				traitStr = "proper_named"
 			}
 		}
-		typeTrait := k.NewName(traitStr, tables.NAMED_TRAIT, op.At.String())
-		k.NewValue(noun, typeTrait, true)
+		if len(traitStr) > 0 {
+			typeTrait := k.NewName(traitStr, tables.NAMED_TRAIT, op.At.String())
+			k.NewValue(noun, typeTrait, true)
+		}
 
 		// record any custom determiner
 		if !detFound {
