@@ -783,7 +783,7 @@
                                                                     "$NAME": {
                                                                       "id": "id-17837bfbdc2-9",
                                                                       "type": "text",
-                                                                      "value": "reach outside"
+                                                                      "value": "reach up"
                                                                     },
                                                                     "$ARGUMENTS": {
                                                                       "id": "id-17837bfbdc2-10",
@@ -1360,6 +1360,21 @@
                                                     }
                                                   },
                                                   {
+                                                    "id": "id-1783e19be19-24",
+                                                    "type": "execute",
+                                                    "value": {
+                                                      "id": "id-1783e19be19-25",
+                                                      "type": "comment",
+                                                      "value": {
+                                                        "$LINES": {
+                                                          "id": "id-1783e19be19-26",
+                                                          "type": "lines",
+                                                          "value": "We advance 'i', letting 'next' trail behind -- this lets us reach down from the target noun's parent, but not *into* the target noun. ( We only want to reach the target, not reach into it. )"
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  {
                                                     "id": "id-178234b724c-128",
                                                     "type": "execute",
                                                     "value": {
@@ -1369,7 +1384,7 @@
                                                         "$VAR": {
                                                           "id": "id-178234b724c-130",
                                                           "type": "variable_name",
-                                                          "value": "next"
+                                                          "value": "i"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-178234b724c-131",
@@ -1443,7 +1458,7 @@
                                                         "$NAME": {
                                                           "id": "id-1782ad95c9f-8",
                                                           "type": "text",
-                                                          "value": "reach inside"
+                                                          "value": "reach down"
                                                         },
                                                         "$ARGUMENTS": {
                                                           "id": "id-1782ad95c9f-11",
@@ -1469,7 +1484,7 @@
                                                                         "$NAME": {
                                                                           "id": "id-1782ad95c9f-16",
                                                                           "type": "text",
-                                                                          "value": "next"
+                                                                          "value": "i"
                                                                         }
                                                                       }
                                                                     }
@@ -1495,7 +1510,7 @@
                                                                         "$NAME": {
                                                                           "id": "id-1782ad95c9f-21",
                                                                           "type": "text",
-                                                                          "value": "i"
+                                                                          "value": "next"
                                                                         }
                                                                       }
                                                                     }
@@ -1689,7 +1704,7 @@
                                                         "$VAR": {
                                                           "id": "id-178234b724c-191",
                                                           "type": "variable_name",
-                                                          "value": "i"
+                                                          "value": "next"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-178234b724c-192",
@@ -1701,7 +1716,7 @@
                                                               "$NAME": {
                                                                 "id": "id-178234b724c-194",
                                                                 "type": "text",
-                                                                "value": "next"
+                                                                "value": "i"
                                                               }
                                                             }
                                                           }
@@ -2265,7 +2280,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-123",
                     "type": "pattern_name",
-                    "value": "reach outside"
+                    "value": "reach up"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-126",
@@ -2500,7 +2515,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-149",
                     "type": "pattern_name",
-                    "value": "reach outside"
+                    "value": "reach up"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-177e140d8c4-150",
@@ -2815,7 +2830,7 @@
                                                         "$TEMPLATE": {
                                                           "id": "id-1782ca0c8ee-11",
                                                           "type": "lines",
-                                                          "value": "reach outside: c:{.fromObj} -> p:{.intoObj}"
+                                                          "value": "reach up: from:{.fromObj} -> into:{.intoObj}"
                                                         }
                                                       }
                                                     }
@@ -2826,7 +2841,7 @@
                                             "$LEVEL": {
                                               "id": "id-1782ca0c8ee-12",
                                               "type": "number",
-                                              "value": 0
+                                              "value": -1
                                             }
                                           }
                                         }
@@ -2867,7 +2882,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-62",
                     "type": "pattern_name",
-                    "value": "reach inside"
+                    "value": "reach down"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-65",
@@ -3102,7 +3117,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-118",
                     "type": "pattern_name",
-                    "value": "reach inside"
+                    "value": "reach down"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-177e140d8c4-119",
@@ -3417,7 +3432,7 @@
                                                         "$TEMPLATE": {
                                                           "id": "id-178284d4b18-22",
                                                           "type": "lines",
-                                                          "value": "reach inside: c:{.intoObj} <- p:{.fromObj}  "
+                                                          "value": "reach down: from:{.fromObj} -> into:{.intoObj}"
                                                         }
                                                       }
                                                     }
@@ -3428,7 +3443,7 @@
                                             "$LEVEL": {
                                               "id": "id-178284d4b18-18",
                                               "type": "number",
-                                              "value": 0
+                                              "value": -1
                                             }
                                           }
                                         }

@@ -1931,7 +1931,7 @@
                   "$NAME": {
                     "id": "id-1783981b1f0-123",
                     "type": "pattern_name",
-                    "value": "reach inside"
+                    "value": "reach down"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-1783981b1f0-124",
@@ -2052,7 +2052,7 @@
                                             "$LINES": {
                                               "id": "id-1783981b1f0-127",
                                               "type": "lines",
-                                              "value": "If the noun were owned by the actor taking then that owner would be the lca. Since by checking \"reach inside\" we are checking *below* the lca; by definition... it would be some other actor than the one doing the taking."
+                                              "value": "If the noun were owned by the actor taking then that owner would be the lca. Since by checking \"reach down\" we are checking *below* the lca; by definition... it would be some other actor than the one doing the taking."
                                             }
                                           }
                                         }
@@ -2392,7 +2392,7 @@
                   "$NAME": {
                     "id": "id-1783981b1f0-137",
                     "type": "pattern_name",
-                    "value": "reach outside"
+                    "value": "reach up"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-1783981b1f0-138",
@@ -2513,7 +2513,7 @@
                                             "$LINES": {
                                               "id": "id-1783981b1f0-222",
                                               "type": "lines",
-                                              "value": "If the noun were owned by the actor taking then that owner would be the lca. Since by checking \"reach inside\" we are checking *below* the lca; by definition... it would be some other actor than the one doing the taking."
+                                              "value": "If the noun were owned by the actor taking then that owner would be the lca. Since by checking \"reach down\" we are checking *below* the lca; by definition... it would be some other actor than the one doing the taking."
                                             }
                                           }
                                         }
