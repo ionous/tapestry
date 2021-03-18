@@ -1,0 +1,410 @@
+{
+  "id": "id-178423208b4-20",
+  "type": "story",
+  "value": {
+    "$PARAGRAPH": [
+      {
+        "id": "id-178423208b4-21",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-178423208b4-22",
+              "type": "story_statement",
+              "value": {
+                "id": "id-178423208b4-23",
+                "type": "test_statement",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-178423208b4-24",
+                    "type": "test_name",
+                    "value": "dropping test"
+                  },
+                  "$TEST": {
+                    "id": "id-178423208b4-25",
+                    "type": "testing",
+                    "value": {
+                      "id": "id-178423208b4-26",
+                      "type": "test_output",
+                      "value": {
+                        "$LINES": {
+                          "id": "id-178423208b4-27",
+                          "type": "lines",
+                          "value": "The knife's ogp: you.\nDropped.\nThe knife's newg: the Kitchen.\nYou haven't got that.\n"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-178423208b4-28",
+              "type": "story_statement",
+              "value": {
+                "id": "id-178423208b4-29",
+                "type": "test_rule",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-178423208b4-30",
+                    "type": "test_name",
+                    "value": "dropping test"
+                  },
+                  "$HOOK": {
+                    "id": "id-178423208b4-31",
+                    "type": "program_hook",
+                    "value": {
+                      "$ACTIVITY": {
+                        "id": "id-178423208b4-32",
+                        "type": "activity",
+                        "value": {
+                          "$EXE": [
+                            {
+                              "id": "id-178423208b4-33",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-178423208b4-34",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-178423208b4-35",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-178423208b4-36",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-178423208b4-37",
+                                          "type": "lines",
+                                          "value": "The knife's ogp: {the: {parentOf: .knife}}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-178423208b4-38",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-178423208b4-39",
+                                "type": "determine",
+                                "value": {
+                                  "$NAME": {
+                                    "id": "id-178423208b4-40",
+                                    "type": "pattern_name",
+                                    "value": "dropping"
+                                  },
+                                  "$ARGUMENTS": {
+                                    "id": "id-178423208b4-41",
+                                    "type": "arguments",
+                                    "value": {
+                                      "$ARGS": [
+                                        {
+                                          "id": "id-178423208b4-42",
+                                          "type": "argument",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-178423208b4-43",
+                                              "type": "variable_name",
+                                              "value": "agent"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-178423208b4-44",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-178423208b4-45",
+                                                "type": "from_text",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-178423208b4-46",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-178423208b4-47",
+                                                      "type": "text_value",
+                                                      "value": {
+                                                        "$TEXT": {
+                                                          "id": "id-178423208b4-48",
+                                                          "type": "text",
+                                                          "value": "player"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "id": "id-178423208b4-49",
+                                          "type": "argument",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-178423208b4-50",
+                                              "type": "variable_name",
+                                              "value": "noun"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-178423208b4-51",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-178423208b4-52",
+                                                "type": "from_text",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-178423208b4-53",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-178423208b4-54",
+                                                      "type": "text_value",
+                                                      "value": {
+                                                        "$TEXT": {
+                                                          "id": "id-178423208b4-55",
+                                                          "type": "text",
+                                                          "value": "knife"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-178423208b4-56",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-178423208b4-57",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-178423208b4-58",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-178423208b4-59",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-178423208b4-60",
+                                          "type": "lines",
+                                          "value": "The knife's newg: {the: {parentOf: .knife}}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "id": "id-1784235f948-0",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-1784235f948-1",
+                                "type": "determine",
+                                "value": {
+                                  "$NAME": {
+                                    "id": "id-1784235f948-2",
+                                    "type": "pattern_name",
+                                    "value": "dropping"
+                                  },
+                                  "$ARGUMENTS": {
+                                    "id": "id-1784235f948-3",
+                                    "type": "arguments",
+                                    "value": {
+                                      "$ARGS": [
+                                        {
+                                          "id": "id-1784235f948-4",
+                                          "type": "argument",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-1784235f948-5",
+                                              "type": "variable_name",
+                                              "value": "agent"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-1784235f948-6",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-1784235f948-7",
+                                                "type": "from_text",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-1784235f948-8",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-1784235f948-9",
+                                                      "type": "text_value",
+                                                      "value": {
+                                                        "$TEXT": {
+                                                          "id": "id-1784235f948-10",
+                                                          "type": "text",
+                                                          "value": "player"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        {
+                                          "id": "id-1784235f948-11",
+                                          "type": "argument",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-1784235f948-12",
+                                              "type": "variable_name",
+                                              "value": "noun"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-1784235f948-13",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-1784235f948-14",
+                                                "type": "from_text",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-1784235f948-15",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-1784235f948-16",
+                                                      "type": "text_value",
+                                                      "value": {
+                                                        "$TEXT": {
+                                                          "id": "id-1784235f948-17",
+                                                          "type": "text",
+                                                          "value": "knife"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-178423208b4-61",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-178423208b4-62",
+              "type": "story_statement",
+              "value": {
+                "id": "id-178423208b4-63",
+                "type": "test_scene",
+                "value": {
+                  "$TEST_NAME": {
+                    "id": "id-178423208b4-64",
+                    "type": "test_name",
+                    "value": "dropping test"
+                  },
+                  "$STORY": {
+                    "id": "id-178423208b4-65",
+                    "type": "story",
+                    "value": {
+                      "$PARAGRAPH": [
+                        {
+                          "id": "id-178423208b4-66",
+                          "type": "paragraph",
+                          "value": {
+                            "$STORY_STATEMENT": [
+                              {
+                                "id": "id-178423208b4-67",
+                                "type": "story_statement",
+                                "value": {
+                                  "id": "id-178423208b4-68",
+                                  "type": "relative_to_noun",
+                                  "value": {
+                                    "$RELATION": {
+                                      "id": "id-178423208b4-69",
+                                      "type": "relation_name",
+                                      "value": " whereabouts"
+                                    },
+                                    "$NOUNS": [
+                                      {
+                                        "id": "id-178423208b4-70",
+                                        "type": "named_noun",
+                                        "value": {
+                                          "$DETERMINER": {
+                                            "id": "id-178423208b4-71",
+                                            "type": "determiner",
+                                            "value": "$THE"
+                                          },
+                                          "$NAME": {
+                                            "id": "id-178423208b4-72",
+                                            "type": "noun_name",
+                                            "value": "knife"
+                                          }
+                                        }
+                                      }
+                                    ],
+                                    "$ARE_BEING": {
+                                      "id": "id-178423208b4-73",
+                                      "type": "are_being",
+                                      "value": "$IS"
+                                    },
+                                    "$NOUNS1": [
+                                      {
+                                        "id": "id-178423208b4-74",
+                                        "type": "named_noun",
+                                        "value": {
+                                          "$DETERMINER": {
+                                            "id": "id-178423208b4-75",
+                                            "type": "determiner",
+                                            "value": "$OUR"
+                                          },
+                                          "$NAME": {
+                                            "id": "id-178423208b4-76",
+                                            "type": "noun_name",
+                                            "value": "self"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
