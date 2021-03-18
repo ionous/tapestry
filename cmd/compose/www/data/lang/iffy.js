@@ -145,7 +145,7 @@ function localLang(make) {
     make.flow("noun_relation",  "{?are_being} {relation:relation_name} {nouns+named_noun|comma-and}");
 
     make.flow("relative_to_noun", "story_statement",
-            "{relation:relation_name} {nouns+named_noun} {are_being} {nouns+named_noun}.",
+            "The {relation:relation_name} of {nouns+named_noun} {are_being} {nouns+named_noun}.",
             "Relate nouns to each other");
 
     // make.str("relation_name"); // also declared in rel.go
