@@ -9,7 +9,7 @@ import (
 )
 
 // ex. go run compose.go -open -dir /Users/ionous/Documents/Iffy
-// needs a subdirectory "stories"
+// the specified directory needs a subdirectory "stories"
 func main() {
 	var dir string
 	var open bool

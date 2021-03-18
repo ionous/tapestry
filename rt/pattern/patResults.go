@@ -101,13 +101,6 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 	return
 }
 
-// add a member apply rule so its easier to call singly
-// -- maybe allFlags is a pointer so you can manage it better?
-// outside youll have to set value scope OR AddScope value target.
-// ( the latter might be easier for now )
-// call it "current noun" and allow "current kind" as well
-// --
-
 // ApplyRules - note: assumes whatever scope is needed to run the pattern has already been setup.
 func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, flags rt.Flags) (err error) {
 	for _, rule := range rules {

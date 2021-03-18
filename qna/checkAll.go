@@ -2,6 +2,7 @@ package qna
 
 import (
 	"database/sql"
+	"strings"
 
 	"github.com/ionous/errutil"
 
@@ -15,13 +16,16 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string) (ret int, err error) {
 	var name string
 	var prog []byte
 	var tests []check.CheckOutput
+	if len(actuallyJustThisOne) > 0 {
+		actuallyJustThisOne += ";"
+	}
 	if e := tables.QueryAll(db,
 		`select name, bytes 
 		from mdl_prog pg 
 		where type='CheckOutput'
 		order by name`,
 		func() (err error) {
-			if len(actuallyJustThisOne) == 0 || actuallyJustThisOne == name {
+			if len(actuallyJustThisOne) == 0 || strings.Index(actuallyJustThisOne, name+";") >= 0 {
 				var curr check.CheckOutput
 				if e := tables.DecodeGob(prog, &curr); e != nil {
 					err = e
