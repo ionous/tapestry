@@ -1728,7 +1728,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-1781eb867f5-60",
                                                                 "type": "lines",
-                                                                "value": "{we!|capitalize!} {are:.yourself} always self-possessed."
+                                                                "value": "{we!|capitalize!} {are:.self} always self-possessed."
                                                               }
                                                             }
                                                           }
