@@ -1,6 +1,8 @@
 package core
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -29,10 +31,15 @@ func (op *HasTrait) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.False
 	} else if trait, e := safe.GetText(run, op.Trait); e != nil {
 		err = cmdError(op, e)
-	} else if p, e := run.GetField(obj, trait.String()); e != nil {
-		err = cmdError(op, e)
 	} else {
-		ret = p
+		trait := trait.String()
+		if p, e := run.GetField(obj, trait); e == nil {
+			ret = p
+		} else if errors.Is(e, g.UnknownField(obj, trait)) {
+			ret = g.False
+		} else {
+			err = cmdError(op, e)
+		}
 	}
 	return
 }
