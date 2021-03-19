@@ -15,15 +15,15 @@
                 "id": "id-174f629fe91-3",
                 "type": "pattern_decl",
                 "value": {
-                  "$NAME": {
-                    "id": "id-174f629fe91-4",
-                    "type": "pattern_name",
-                    "value": "print several"
-                  },
                   "$TYPE": {
                     "id": "id-1781842316a-6",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-174f629fe91-4",
+                    "type": "pattern_name",
+                    "value": "print several"
                   },
                   "$OPTVARS": {
                     "id": "id-174f629fe91-7",

@@ -2012,23 +2012,38 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-17780a487c0-88",
+                                        "id": "id-17847382cd4-426",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-17780a487c0-89",
+                                          "id": "id-17847382cd4-427",
                                           "type": "say_text",
                                           "value": {
                                             "$TEXT": {
-                                              "id": "id-17780a487c0-90",
+                                              "id": "id-17847382cd4-428",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-17780a487c0-91",
-                                                "type": "text_value",
+                                                "id": "id-17847382cd4-429",
+                                                "type": "response",
                                                 "value": {
-                                                  "$TEXT": {
-                                                    "id": "id-17780a487c0-92",
+                                                  "$NAME": {
+                                                    "id": "id-17847382cd4-430",
                                                     "type": "text",
-                                                    "value": "Darkness."
+                                                    "value": "the darkness"
+                                                  },
+                                                  "$TEXT": {
+                                                    "id": "id-17847382cd4-431",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-17847382cd4-432",
+                                                      "type": "text_value",
+                                                      "value": {
+                                                        "$TEXT": {
+                                                          "id": "id-17847382cd4-433",
+                                                          "type": "text",
+                                                          "value": "Darkness."
+                                                        }
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
@@ -2163,23 +2178,38 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-17780a487c0-98",
+                                        "id": "id-17847382cd4-418",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-17780a487c0-99",
+                                          "id": "id-17847382cd4-419",
                                           "type": "say_text",
                                           "value": {
                                             "$TEXT": {
-                                              "id": "id-17780a487c0-100",
+                                              "id": "id-17847382cd4-420",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-17780a487c0-101",
-                                                "type": "text_value",
+                                                "id": "id-17847382cd4-421",
+                                                "type": "response",
                                                 "value": {
-                                                  "$TEXT": {
-                                                    "id": "id-17780a487c0-102",
+                                                  "$NAME": {
+                                                    "id": "id-17847382cd4-422",
                                                     "type": "text",
-                                                    "value": "It is pitch dark, and you can't see a thing."
+                                                    "value": "pitch dark"
+                                                  },
+                                                  "$TEXT": {
+                                                    "id": "id-17847382cd4-423",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-17847382cd4-424",
+                                                      "type": "text_value",
+                                                      "value": {
+                                                        "$TEXT": {
+                                                          "id": "id-17847382cd4-425",
+                                                          "type": "text",
+                                                          "value": "It is pitch dark, and you can't see a thing."
+                                                        }
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
@@ -6140,23 +6170,38 @@
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-177999431b1-57",
+                                        "id": "id-17847382cd4-434",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-177999431b1-58",
+                                          "id": "id-17847382cd4-435",
                                           "type": "say_text",
                                           "value": {
                                             "$TEXT": {
-                                              "id": "id-177999431b1-59",
+                                              "id": "id-17847382cd4-436",
                                               "type": "text_eval",
                                               "value": {
-                                                "id": "id-1779a1abe71-0",
-                                                "type": "render_template",
+                                                "id": "id-17847382cd4-437",
+                                                "type": "response",
                                                 "value": {
-                                                  "$TEMPLATE": {
-                                                    "id": "id-1779a1abe71-1",
-                                                    "type": "lines",
-                                                    "value": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .firstMention}also {end}see "
+                                                  "$NAME": {
+                                                    "id": "id-17847382cd4-438",
+                                                    "type": "text",
+                                                    "value": "you can also see"
+                                                  },
+                                                  "$TEXT": {
+                                                    "id": "id-17847382cd4-439",
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      "id": "id-17847382cd4-440",
+                                                      "type": "render_template",
+                                                      "value": {
+                                                        "$TEMPLATE": {
+                                                          "id": "id-17847382cd4-441",
+                                                          "type": "lines",
+                                                          "value": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .firstMention}also {end}see "
+                                                        }
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
