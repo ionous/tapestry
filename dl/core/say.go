@@ -29,6 +29,11 @@ type Span struct {
 	Go Activity
 }
 
+// Carriage collects text printed during a block and writes the text with newlines.
+type Carriage struct {
+	Go Activity
+}
+
 // Bracket sandwiches text printed during a block and puts them inside parenthesis ().
 type Bracket struct {
 	Go Activity
@@ -87,6 +92,20 @@ func (*Span) Compose() composer.Spec {
 func (op *Span) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
 	return writeSpan(run, span, op, op.Go, span.ChunkOutput())
+}
+
+// Compose defines a spec for the composer editor.
+func (*Carriage) Compose() composer.Spec {
+	return composer.Spec{
+		Name:  "carriage_text",
+		Group: "printing",
+		Desc:  "Line Breaks: Writes text with newlines between words.",
+	}
+}
+
+func (op *Carriage) GetText(run rt.Runtime) (g.Value, error) {
+	var buf bytes.Buffer
+	return writeSpan(run, &buf, op, op.Go, print.Carriage(&buf))
 }
 
 // Compose defines a spec for the composer editor.

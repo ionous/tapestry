@@ -580,6 +580,33 @@ const spec = [
     }
   },
   {
+    "desc": "Line Breaks: Writes text with newlines between words.",
+    "group": [
+      "printing"
+    ],
+    "name": "carriage_text",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$GO": {
+          "label": "go",
+          "type": "activity"
+        }
+      },
+      "roles": "QZSZK",
+      "slots": [
+        "text_eval"
+      ],
+      "tokens": [
+        "carriage",
+        " ",
+        "go",
+        ": ",
+        "$GO"
+      ]
+    }
+  },
+  {
     "desc": "Choose action: an if statement.",
     "name": "choose_action",
     "uses": "flow",

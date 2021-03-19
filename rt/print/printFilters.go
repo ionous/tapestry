@@ -44,6 +44,18 @@ func (p *BracketSpanner) WriteChunk(c writer.Chunk) (ret int, err error) {
 	return
 }
 
+// Carriage filters writer.Output, creating a new line after every write
+func Carriage(out writer.Output) writer.Output {
+	f := &Filter{
+		Rest: func(c writer.Chunk) (ret int, err error) {
+			ret, err = c.WriteTo(out)
+			out.WriteRune('\n')
+			return
+		},
+	}
+	return writer.ChunkOutput(f.WriteChunk)
+}
+
 // Capitalize filters writer.Output, capitalizing the first string.
 func Capitalize(out writer.Output) writer.Output {
 	f := &Filter{

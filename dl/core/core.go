@@ -32,6 +32,7 @@ var Slats = []composer.Composer{
 	(*Break)(nil),
 	(*Buffer)(nil),
 	(*Capitalize)(nil),
+	(*Carriage)(nil),
 	(*ChooseAction)(nil),
 	(*ChooseMore)(nil),
 	(*ChooseNothingElse)(nil),
