@@ -59,29 +59,23 @@ func TestTitlecase(t *testing.T) {
 }
 
 func TestTag(t *testing.T) {
-	{
-		var buf bytes.Buffer
-		w := Tag(&buf, "tag")
-		io.WriteString(w, "hel")
-		io.WriteString(w, "lo")
-		w.Close()
-		if str := buf.String(); str != "<tag>hello</tag>" {
-			t.Fatal("mismatched", str)
-		}
+	var buf bytes.Buffer
+	w := Tag(&buf, "tag")
+	io.WriteString(w, "hello")
+	io.WriteString(w, "goodbye")
+	w.Close()
+	if str := buf.String(); str != "<tag>hellogoodbye</tag>" {
+		t.Fatal("mismatched", str)
 	}
-	{
-		// we expect the tag contents to establish a new scope
-		// free of external span, etc. behavior.
-		span := NewSpanner()
-		o := span.ChunkOutput()
-		io.WriteString(o, "front")
-		w := Tag(o, "b")
-		io.WriteString(w, "mid")
-		io.WriteString(w, "dle")
-		w.Close()
-		io.WriteString(o, "back")
-		if str := span.String(); str != "front <b>middle</b> back" {
-			t.Fatal("mismatched", str)
-		}
+}
+
+func TestTagSpan(t *testing.T) {
+	span := Brackets("<tag>", "</tag>")
+	w := span.ChunkOutput()
+	io.WriteString(w, "hello")
+	io.WriteString(w, "goodbye")
+	w.Close()
+	if str := span.String(); str != "<tag>hello goodbye</tag>" {
+		t.Fatal("mismatched", str)
 	}
 }

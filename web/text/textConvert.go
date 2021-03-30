@@ -6,6 +6,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"git.sr.ht/~ionous/iffy/rt/writer"
 	"github.com/ionous/errutil"
 )
 
@@ -51,20 +52,20 @@ func (c *converter) WriteRune(q rune) (ret int, err error) {
 	switch q {
 	case Newline:
 		ret = 1 // we know the size of the newline
-		writeRune(c.out, Newline)
+		writer.WriteRune(c.out, Newline)
 		c.line++
 
 	case Paragraph:
 		ret = 1 // we know the size of the rune
 		for c.line < 2 {
-			writeRune(c.out, Newline)
+			writer.WriteRune(c.out, Newline)
 			c.line++
 		}
 
 	case Softline:
 		ret = 1 // we know the size of the rune
 		for c.line < 1 {
-			writeRune(c.out, Newline)
+			writer.WriteRune(c.out, Newline)
 			c.line++
 		}
 
@@ -78,7 +79,7 @@ func (c *converter) WriteRune(q rune) (ret int, err error) {
 			}
 		}
 		// write the rune
-		ret, err = writeRune(c.out, q)
+		ret, err = writer.WriteRune(c.out, q)
 		c.line = 0
 	}
 	return
@@ -95,10 +96,4 @@ func (c *converter) WriteString(s string) (ret int, err error) {
 		}
 	}
 	return
-}
-
-func writeRune(w io.Writer, q rune) (int, error) {
-	var p [utf8.UTFMax]byte
-	n := utf8.EncodeRune(p[:], q)
-	return w.Write(p[:n])
 }

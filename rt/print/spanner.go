@@ -9,6 +9,7 @@ import (
 
 // Spanner implements ChunkWriter, buffering output with spaces.
 // It treats each new Write as a word adding spaces to separate words as necessary.
+// FIX: this uses a buffer internally, but does it really need to do so?
 type Spanner struct {
 	buf bytes.Buffer // note: we cant aggregate buf or io.WriteString will bypasses implementation of Write() in favor of bytes.Buffer.WriteString()
 }
@@ -27,11 +28,13 @@ func (p *Spanner) String() string {
 	return p.buf.String()
 }
 
+// WriteTo - move the contents of the spanner to the passed output.
 func (p *Spanner) WriteTo(w writer.Output) (int, error) {
 	i, e := p.buf.WriteTo(w)
 	return int(i), e
 }
 
+// ChunkOutput - returns an object capable of writing to the spanner.
 func (p *Spanner) ChunkOutput() writer.ChunkOutput {
 	return p.WriteChunk
 }

@@ -1,46 +1,36 @@
 package writer
 
 import (
-	"github.com/ionous/errutil"
+	"io"
+	"unicode/utf8"
 )
 
-// ChunkOutput - implements go standard output for the specific method
-// ie. when go write bytes, runes, or strings; this turns them all into chunks.
-// this is a convenience so that filters, etc. only have to implement one write method
-// ( WriteChunk ) not the full set of go's five methods.
-// It should return the number of bytes of the *chunk* that were consumed,
-// and any error encountered along the way.
-// Noting that the returned value might not match the number of bytes written
-// if the output is padded or reduced in someway.
-type ChunkOutput func(Chunk) (int, error)
+// ChunkWriter - adapter a regular io.Writer into a chunk writer
+type ChunkWriter struct{ io.Writer }
 
-// Write redirects the call to WriteChunk
-func (n ChunkOutput) Write(p []byte) (int, error) {
-	return n(Chunk{p})
-}
-
-// WriteByte redirects the call to WriteChunk
-func (n ChunkOutput) WriteByte(c byte) error {
-	_, e := n(Chunk{c})
+func (c ChunkWriter) WriteByte(b byte) error {
+	_, e := c.Write([]byte{b})
 	return e
 }
 
-// WriteRune redirects the call to WriteChunk
-func (n ChunkOutput) WriteRune(r rune) (int, error) {
-	return n(Chunk{r})
+func (c ChunkWriter) WriteRune(q rune) (int, error) {
+	return WriteRune(c, q)
 }
 
-// WriteString redirects the call to WriteChunk
-func (n ChunkOutput) WriteString(s string) (int, error) {
-	return n(Chunk{s})
+func (c ChunkWriter) WriteString(s string) (ret int, err error) {
+	for _, q := range s {
+		if i, e := c.WriteRune(q); e != nil {
+			err = e
+			break
+		} else {
+			ret += i
+		}
+	}
+	return
 }
 
-// Close redirects the call to WriteChunk with a Closed error
-func (n ChunkOutput) Close() error {
-	_, e := n(Chunk{Closed})
-	return e
+func WriteRune(w io.Writer, q rune) (int, error) {
+	var p [utf8.UTFMax]byte
+	n := utf8.EncodeRune(p[:], q)
+	return w.Write(p[:n])
 }
-
-// Closed is used by ChunkOutput to indicate a request to close the writer.
-// ( why not io.EOF?  ChunkWriter is custom so the error can be custom too. )
-const Closed = errutil.Error("Closed")

@@ -8,8 +8,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type Sink struct{}
-
+// pass w, the plain text output stream.
+// return a writer that accepts html-like text.
 func Html2Text(w io.Writer) io.Writer {
 	return &fsm{converter{out: w, line: 2}, readingText}
 }

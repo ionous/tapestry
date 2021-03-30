@@ -10,11 +10,11 @@ type FileWriter struct {
 	*os.File
 }
 
-func (fp FileWriter) WriteByte(c byte) error {
-	_, e := fp.File.Write([]byte{c})
+func (fp FileWriter) WriteByte(b byte) error {
+	_, e := fp.File.Write([]byte{b})
 	return e
 }
 
-func (fp FileWriter) WriteRune(r rune) (int, error) {
-	return fp.File.WriteString(string(r))
+func (fp FileWriter) WriteRune(q rune) (int, error) {
+	return WriteRune(fp.File, q)
 }

@@ -11,12 +11,16 @@ import (
 // Parens buffers writer.Output, grouping a stream of writes.
 // Close adds the closing paren.
 func Parens() *BracketSpanner {
-	return &BracketSpanner{open: '(', close: ')'}
+	return &BracketSpanner{open: "(", close: ")"}
+}
+
+func Brackets(open, close string) *BracketSpanner {
+	return &BracketSpanner{open: open, close: close}
 }
 
 type BracketSpanner struct {
 	Spanner     // inside the brackets: write with spaces
-	open, close rune
+	open, close string
 }
 
 func (p *BracketSpanner) ChunkOutput() writer.ChunkOutput {
@@ -26,7 +30,7 @@ func (p *BracketSpanner) ChunkOutput() writer.ChunkOutput {
 func (p *BracketSpanner) WriteChunk(c writer.Chunk) (ret int, err error) {
 	if c.IsClosed() {
 		if p.Len() > 0 {
-			p.buf.WriteRune(p.close)
+			p.buf.WriteString(p.close)
 		}
 	} else {
 		if p.buf.Len() > 0 {
@@ -36,7 +40,7 @@ func (p *BracketSpanner) WriteChunk(c writer.Chunk) (ret int, err error) {
 			ret, err = c.WriteTo(&buf)
 			// wrote something locally? prepend it with the open.
 			if buf.Len() > 0 {
-				p.buf.WriteRune(p.open)
+				p.buf.WriteString(p.open)
 				buf.WriteTo(&p.buf)
 			}
 		}
@@ -107,18 +111,14 @@ func Slash(out writer.Output) writer.Output {
 }
 
 // Tag - surrounds a block of text with an html-like element.
-// It establishes a new "context" for writing --
-// any existing "span", etc. does not apply to the contents of the tag.
 func Tag(out writer.Output, tag string) writer.OutputCloser {
-	var buf bytes.Buffer
-	writeTag(&buf, tag, true)
+	writeTag(out, tag, true)
 	f := &Filter{
 		Rest: func(c writer.Chunk) (int, error) {
-			return c.WriteTo(&buf)
+			return c.WriteTo(out)
 		},
 		Last: func(int) (err error) {
-			writeTag(&buf, tag, false)
-			_, err = buf.WriteTo(out)
+			writeTag(out, tag, false)
 			return
 		},
 	}
