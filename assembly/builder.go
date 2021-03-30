@@ -112,12 +112,8 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 			// fix: need to handle conflicting prog definitions
 			// fix: should watch for locals which shadow parameter names ( i think, ideally merge them )
 			if last == nil || last.patternName != inPat {
-				if inPat != inParam {
-					err = errutil.New("expected the first param should be the pattern return type", inPat, inProg, inType)
-				} else {
-					last = &patternEntry{patternName: inPat, patternType: inType}
-					out[inPat] = last
-				}
+				last = &patternEntry{patternName: inPat, patternType: inType}
+				out[inPat] = last
 			}
 			if err == nil && inParam != inPat {
 				// fix: these should probably be tables.PRIM_ names
@@ -178,6 +174,8 @@ func decodeProg(prog []byte, aff affine.Affinity) (ret rt.Assignment, err error)
 		var local story.LocalInit
 		if e := tables.DecodeGob(prog, &local); e != nil {
 			err = e
+		} else if local.Value == nil {
+			err = errutil.New("empty initializer")
 		} else if a := local.Value.Affinity(); len(a) > 0 && a != aff {
 			// note: some expressions (ex. GetAtField) cant determine affinity until runtime
 			err = errutil.New("incompatible arguments, wanted", aff, "have expression of", a)
