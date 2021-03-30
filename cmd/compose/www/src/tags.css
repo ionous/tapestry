@@ -69,7 +69,10 @@
 }
 /* role: AMBIGUOUS */
 .mk-flow-param[data-role="Q"] {
-  color: orange; 
+  color:rgb(0, 102, 214);   /* blue*/
+  font-weight: bold;
+  font-size: larger;
+  text-transform: capitalize;
 }
 .mk-str-ctrl[data-tag="pattern_name"] {
   color:rgb(0, 102, 214);   /* blue*/  
