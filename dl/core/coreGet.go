@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
+	"github.com/ionous/errutil"
 )
 
 // GetAtField a property value from an object by name.
@@ -61,7 +62,7 @@ func (op *GetAtField) unpack(run rt.Runtime, aff affine.Affinity) (ret g.Value, 
 	if src, e := GetSourceFields(run, op.From); e != nil {
 		err = cmdError(op, e)
 	} else if v, e := safe.Unpack(src, op.Field, aff); e != nil {
-		err = cmdError(op, e)
+		err = errutil.Fmt("trying field %q %w", op.Field, cmdError(op, e))
 	} else {
 		ret = v
 	}

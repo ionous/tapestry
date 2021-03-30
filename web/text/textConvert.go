@@ -9,16 +9,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// func Html2Text(out io.Writer, in io.Reader) (err error) {
-// 	c := converter{out: out, line: 2}
-// 	for ts := html.NewTokenizer(in); err == nil; {
-// 		if e := c.dispatch(ts); e != nil {
-// 			err = e
-// 		}
-// 	}
-// 	return
-// }
-
 type converter struct {
 	out   io.Writer
 	buf   bytes.Buffer

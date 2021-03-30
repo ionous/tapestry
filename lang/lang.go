@@ -13,9 +13,6 @@ var articleBar = strings.Join(Articles, "|")
 var articles = regexp.MustCompile(`^((?i)` + articleBar + `)\s`)
 var articleBare = regexp.MustCompile("^(" + articleBar + ")$")
 
-const NewLine = "\n"
-const Space = " "
-
 // IsArticle returns true if the passed string starts with one of the common determiners.
 func IsArticle(s string) bool {
 	return articleBare.MatchString(s)

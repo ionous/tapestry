@@ -29,7 +29,7 @@ func CheckVariable(run rt.Runtime, n string, aff affine.Affinity) (ret g.Value, 
 
 func Unpack(src g.Value, field string, aff affine.Affinity) (ret g.Value, err error) {
 	if !affine.HasFields(src.Affinity()) {
-		err = errutil.New("Value", src, "doesn't have fields")
+		err = errutil.New("value", src, "doesn't have fields")
 	} else if v, e := src.FieldByName(field); e != nil {
 		err = e
 	} else if e := Check(v, aff); e != nil {

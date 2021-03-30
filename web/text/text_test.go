@@ -68,6 +68,9 @@ elit.`,
 		// 15. unknown tag
 		"<beep><bop>",
 		"<beep><bop>",
+		// 16. explicitly closing self-closing tags should be eaten silently with no change to the output
+		"</p></br></wbr>",
+		"",
 	}
 	//
 	for i, cnt := 0, len(tests); i < cnt; i += 2 {

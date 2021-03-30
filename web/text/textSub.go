@@ -29,6 +29,9 @@ var Formats = Formatting{
 	Softline:  Format{Rune: Softline},  // wbr
 }
 
+// Tabwidth - how many spaces should list indentation generate
+var Tabwidth = 2
+
 //
 const (
 	// Starts a new line of text.
@@ -39,7 +42,6 @@ const (
 	// Starts a new line only if the output isnt already at the start of a newline.
 	Softline = '\r'
 	Space    = ' '
-	Tabwidth = 2
 )
 
 func (fs *Formatting) Select(tag string) (ret Format, okay bool) {

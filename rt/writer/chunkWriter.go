@@ -4,12 +4,14 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// ChunkWriter adapts a single WriteChunk() method into writer.Output friendly interface.
-type ChunkWriter interface {
-	WriteChunk(Chunk) (int, error)
-}
-
 // ChunkOutput - implements go standard output for the specific method
+// ie. when go write bytes, runes, or strings; this turns them all into chunks.
+// this is a convenience so that filters, etc. only have to implement one write method
+// ( WriteChunk ) not the full set of go's five methods.
+// It should return the number of bytes of the *chunk* that were consumed,
+// and any error encountered along the way.
+// Noting that the returned value might not match the number of bytes written
+// if the output is padded or reduced in someway.
 type ChunkOutput func(Chunk) (int, error)
 
 // Write redirects the call to WriteChunk

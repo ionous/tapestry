@@ -92,7 +92,7 @@ func (op *Number) String() string {
 func (*Text) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "text_value",
-		Spec:  "{text|quote}",
+		Spec:  "{text}",
 		Group: "literals",
 		Desc:  "Text Value: specify a small bit of text.",
 		Stub:  true,
