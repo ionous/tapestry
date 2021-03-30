@@ -3,6 +3,8 @@ package print
 import "git.sr.ht/~ionous/iffy/rt/writer"
 
 // Filter - sends incoming chunks to one of three functions: first, rest, or last.
+// a user of filter can alter those chunks before sending them onward somewhere else.
+// this doesnt define that destination.
 type Filter struct {
 	First, Rest func(writer.Chunk) (int, error)
 	Last        func(int) error

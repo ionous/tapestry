@@ -95,14 +95,41 @@ func Lowercase(out writer.Output) writer.Output {
 // Slash filters writer.Output, separating writes with a slash.
 func Slash(out writer.Output) writer.Output {
 	f := &Filter{
-		First: func(c writer.Chunk) (ret int, err error) {
+		First: func(c writer.Chunk) (int, error) {
 			return c.WriteTo(out)
 		},
-		Rest: func(c writer.Chunk) (ret int, err error) {
-			x, _ := out.WriteString(" /")
-			n, _ := c.WriteTo(out)
-			return n + x, nil
+		Rest: func(c writer.Chunk) (int, error) {
+			out.WriteString(" /")
+			return c.WriteTo(out)
 		},
 	}
 	return writer.ChunkOutput(f.WriteChunk)
+}
+
+// Tag - surrounds a block of text with an html-like element.
+// It establishes a new "context" for writing --
+// any existing "span", etc. does not apply to the contents of the tag.
+func Tag(out writer.Output, tag string) writer.OutputCloser {
+	var buf bytes.Buffer
+	writeTag(&buf, tag, true)
+	f := &Filter{
+		Rest: func(c writer.Chunk) (int, error) {
+			return c.WriteTo(&buf)
+		},
+		Last: func(int) (err error) {
+			writeTag(&buf, tag, false)
+			_, err = buf.WriteTo(out)
+			return
+		},
+	}
+	return writer.ChunkOutput(f.WriteChunk)
+}
+
+func writeTag(w writer.Output, tag string, open bool) {
+	w.WriteRune('<')
+	if !open {
+		w.WriteRune('/')
+	}
+	w.WriteString(tag)
+	w.WriteRune('>')
 }
