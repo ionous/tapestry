@@ -44,6 +44,7 @@ var Slats = []composer.Composer{
 	(*CycleText)(nil),
 	(*Determine)(nil),
 	(*DiffOf)(nil),
+	(*During)(nil),
 	(*EqualTo)(nil),
 	(*FromBool)(nil),
 	(*FromNum)(nil),
