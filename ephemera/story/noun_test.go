@@ -51,8 +51,10 @@ order by noun collate nocase, trait`, 2)
 	have, want := buf.String(), lines(
 		"4", // 4 counted nouns were generated
 		//
-		"apple,common_named", "apple,indefinite_article",
-		"robot_sheep,common_named", "robot_sheep,indefinite_article",
+		/*"apple,common_named",*/ // common named is now the implicit default
+		"apple,indefinite_article",
+		/*"robot_sheep,common_named",*/ // common named is now the implicit default
+		"robot_sheep,indefinite_article",
 		"square_1,counted", "square_1,printed_name",
 		"Trevor,indefinite_article", "Trevor,proper_named", // COUNTER:#
 		"triangle_1,counted", "triangle_1,printed_name",
