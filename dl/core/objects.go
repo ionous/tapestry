@@ -163,7 +163,7 @@ func (*IsExactKindOf) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "kindOf", Role: composer.Function},
 		Group:  "objects",
-		Desc:   "Is Kind Of: True if the object is compatible with the named kind.",
+		Desc:   "Is Kind Exactly: True if the object is exactly the named kind.",
 	}
 }
 
@@ -179,7 +179,7 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		} else {
 			// Contains reports whether second is within first.
 			cp, ck := objectPath.String()+",", kind+","
-			ok := cp == ck
+			ok := strings.HasPrefix(cp, ck)
 			ret = g.BoolOf(ok)
 		}
 	}
