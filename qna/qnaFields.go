@@ -376,6 +376,10 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 	case object.Option:
 		ret, err = n.options.Option(rawField)
 
+	case object.Running:
+		b := n.currentPatterns.isRunning(rawField)
+		ret = g.IntOf(b)
+
 	case object.Value:
 		// fix: internal object handling needs some love; i dont much like the # test.
 		if strings.HasPrefix(rawField, "#") {

@@ -26,6 +26,7 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 		err = e
 	} else {
 		// locals can ( and often do ) read arguments ( which can invoke sub-patterns )
+		run.currentPatterns.startedPattern(name)
 		results := pattern.NewResults(rec, result, aff)
 		if oldScope, e := run.ReplaceScope(results, true); e != nil {
 			err = e
@@ -48,6 +49,7 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 			}
 			// only init can return an error
 			run.ReplaceScope(oldScope, false)
+			run.currentPatterns.stoppedPattern(name)
 		}
 	}
 	if err != nil {

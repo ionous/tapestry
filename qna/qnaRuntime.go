@@ -58,6 +58,7 @@ type Runner struct {
 	qnaRules
 	activeNouns
 	relativeKinds
+	currentPatterns currentPatterns
 }
 
 func (run *Runner) ActivateDomain(domain string, active bool) {
