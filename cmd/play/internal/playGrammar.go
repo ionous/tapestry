@@ -23,8 +23,8 @@ var Grammar = anyOf(
 	// fix? inform defines these as synonyms, meaning this happens:
 	// >carry off cat => "You aren't wearing the cat"
 	allOf(words("take/carry/hold"), anyOf(
-		// inventory, etc.
-		noun(), act("taking"),
+		allOf(words("inventory"), act("inventorying")),
+		allOf(noun(), act("taking")),
 	)),
 	//  "take [things]" as taking.
 	// "take off [something]" as taking off.
@@ -43,6 +43,9 @@ var Grammar = anyOf(
 	),
 	allOf(
 		words("examine/x/watch/describe/check"), noun(), act("examining"),
+	),
+	allOf(
+		words("i/inv/inventory"), act("inventorying"),
 	),
 	allOf(words("read"),
 		allOf(noun(), act("examining")),
