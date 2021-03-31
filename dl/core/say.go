@@ -21,32 +21,27 @@ type Say struct {
 // Buffer collects text said by other statements and returns them as a string.
 // Unlike Span, it does not add or alter spaces between writes.
 type Buffer struct {
-	Go Activity
+	Do Activity
 }
 
 // Span collects text printed during a block and writes the text with spaces.
 type Span struct {
-	Go Activity
-}
-
-// Carriage collects text printed during a block and writes the text with newlines.
-type Carriage struct {
-	Go Activity
+	Do Activity
 }
 
 // Bracket sandwiches text printed during a block and puts them inside parenthesis ().
 type Bracket struct {
-	Go Activity
+	Do Activity
 }
 
 // Slash separates text printed during a block with left-leaning slashes.
 type Slash struct {
-	Go Activity
+	Do Activity
 }
 
 // Commas writes words separated with commas, ending with an "and".
 type Commas struct {
-	Go Activity
+	Do Activity
 }
 
 // Compose defines a spec for the composer editor.
@@ -77,7 +72,7 @@ func (*Buffer) Compose() composer.Spec {
 
 func (op *Buffer) GetText(run rt.Runtime) (g.Value, error) {
 	var buf bytes.Buffer
-	return writeSpan(run, &buf, op, op.Go, &buf)
+	return writeSpan(run, &buf, op, op.Do, &buf)
 }
 
 // Compose defines a spec for the composer editor.
@@ -90,22 +85,8 @@ func (*Span) Compose() composer.Spec {
 }
 
 func (op *Span) GetText(run rt.Runtime) (g.Value, error) {
-	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Go, span.ChunkOutput())
-}
-
-// Compose defines a spec for the composer editor.
-func (*Carriage) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "carriage_text",
-		Group: "printing",
-		Desc:  "Line Breaks: Writes text with newlines between words.",
-	}
-}
-
-func (op *Carriage) GetText(run rt.Runtime) (g.Value, error) {
-	var buf bytes.Buffer
-	return writeSpan(run, &buf, op, op.Go, print.Carriage(&buf))
+	span := print.NewSpanner() // separate writes with spaces
+	return writeSpan(run, span, op, op.Do, span.ChunkOutput())
 }
 
 // Compose defines a spec for the composer editor.
@@ -119,7 +100,7 @@ func (*Bracket) Compose() composer.Spec {
 
 func (op *Bracket) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.Parens()
-	return writeSpan(run, span, op, op.Go, span.ChunkOutput())
+	return writeSpan(run, span, op, op.Do, span.ChunkOutput())
 }
 
 // Compose defines a spec for the composer editor.
@@ -133,7 +114,7 @@ func (*Slash) Compose() composer.Spec {
 
 func (op *Slash) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Go, print.Slash(span.ChunkOutput()))
+	return writeSpan(run, span, op, op.Do, print.Slash(span.ChunkOutput()))
 }
 
 // Compose defines a spec for the composer editor.
@@ -147,12 +128,17 @@ func (*Commas) Compose() composer.Spec {
 
 func (op *Commas) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Go, print.AndSeparator(span.ChunkOutput()))
+	return writeSpan(run, span, op, op.Do, print.AndSeparator(span.ChunkOutput()))
 }
 
 type stringer interface{ String() string }
 
-func writeSpan(run rt.Runtime, span stringer, op composer.Composer, act Activity, w writer.Output) (ret g.Value, err error) {
+// s - access to what was written
+// op - for reporting errors
+// act - activity that presumably generates some output
+// w - output target with any needed filters, etc.
+// returns the output of "s" as a value
+func writeSpan(run rt.Runtime, s stringer, op composer.Composer, act Activity, w writer.Output) (ret g.Value, err error) {
 	if !act.Empty() {
 		was := run.SetWriter(w)
 		ex := act.Execute(run)
@@ -160,7 +146,7 @@ func writeSpan(run rt.Runtime, span stringer, op composer.Composer, act Activity
 		if e := errutil.Append(ex, writer.Close(w)); e != nil {
 			err = cmdError(op, e)
 		} else {
-			if res := span.String(); len(res) > 0 {
+			if res := s.String(); len(res) > 0 {
 				ret = g.StringOf(res)
 			} else {
 				ret = g.StringOf(safe.HackTillTemplatesCanEvaluatePatternTypes)

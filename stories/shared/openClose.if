@@ -1956,7 +1956,7 @@
                                                               "$NAME": {
                                                                 "id": "id-1781aa8fa1d-384",
                                                                 "type": "pattern_name",
-                                                                "value": "related objects"
+                                                                "value": "auxiliary objects"
                                                               },
                                                               "$ARGUMENTS": {
                                                                 "id": "id-1781aa8fa1d-385",
@@ -2113,7 +2113,7 @@
                                                                         "id": "id-1781aa8fa1d-415",
                                                                         "type": "span_text",
                                                                         "value": {
-                                                                          "$GO": {
+                                                                          "$DO": {
                                                                             "id": "id-1781aa8fa1d-416",
                                                                             "type": "activity",
                                                                             "value": {
@@ -2157,7 +2157,7 @@
                                                                                           "id": "id-1781aa8fa1d-425",
                                                                                           "type": "comma_text",
                                                                                           "value": {
-                                                                                            "$GO": {
+                                                                                            "$DO": {
                                                                                               "id": "id-1781aa8fa1d-426",
                                                                                               "type": "activity",
                                                                                               "value": {

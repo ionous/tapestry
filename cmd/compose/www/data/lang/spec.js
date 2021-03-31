@@ -495,6 +495,24 @@ const spec = [
     }
   },
   {
+    "desc": "Newline: start a new line.",
+    "group": [
+      "printing"
+    ],
+    "name": "br",
+    "uses": "flow",
+    "with": {
+      "params": {},
+      "roles": "E",
+      "slots": [
+        "execute"
+      ],
+      "tokens": [
+        "br"
+      ]
+    }
+  },
+  {
     "desc": "Bracket text: Sandwiches text printed during a block and puts them inside parenthesis '()'.",
     "group": [
       "printing"
@@ -503,8 +521,8 @@ const spec = [
     "uses": "flow",
     "with": {
       "params": {
-        "$GO": {
-          "label": "go",
+        "$DO": {
+          "label": "do",
           "type": "activity"
         }
       },
@@ -515,9 +533,9 @@ const spec = [
       "tokens": [
         "bracket",
         " ",
-        "go",
+        "do",
         ": ",
-        "$GO"
+        "$DO"
       ]
     }
   },
@@ -547,8 +565,8 @@ const spec = [
     "uses": "flow",
     "with": {
       "params": {
-        "$GO": {
-          "label": "go",
+        "$DO": {
+          "label": "do",
           "type": "activity"
         }
       },
@@ -559,9 +577,9 @@ const spec = [
       "tokens": [
         "buffer",
         " ",
-        "go",
+        "do",
         ": ",
-        "$GO"
+        "$DO"
       ]
     }
   },
@@ -580,7 +598,7 @@ const spec = [
     }
   },
   {
-    "desc": "Line Breaks: Writes text with newlines between words.",
+    "desc": "Carriage returns: Writes text with newlines between words.",
     "group": [
       "printing"
     ],
@@ -588,21 +606,29 @@ const spec = [
     "uses": "flow",
     "with": {
       "params": {
-        "$GO": {
-          "label": "go",
+        "$DO": {
+          "label": "do",
           "type": "activity"
+        },
+        "$INDENT": {
+          "label": "indent",
+          "type": "bool"
         }
       },
-      "roles": "QZSZK",
+      "roles": "QZSZKZSZK",
       "slots": [
         "text_eval"
       ],
       "tokens": [
         "carriage",
         " ",
-        "go",
+        "indent",
         ": ",
-        "$GO"
+        "$INDENT",
+        ", ",
+        "do",
+        ": ",
+        "$DO"
       ]
     }
   },
@@ -796,8 +822,8 @@ const spec = [
     "uses": "flow",
     "with": {
       "params": {
-        "$GO": {
-          "label": "go",
+        "$DO": {
+          "label": "do",
           "type": "activity"
         }
       },
@@ -808,9 +834,9 @@ const spec = [
       "tokens": [
         "commas",
         " ",
-        "go",
+        "do",
         ": ",
-        "$GO"
+        "$DO"
       ]
     }
   },
@@ -1011,6 +1037,35 @@ const spec = [
         "reason",
         ": ",
         "$REASON"
+      ]
+    }
+  },
+  {
+    "desc": "During: Runs a pattern, and potentially returns a value.",
+    "group": [
+      "patterns"
+    ],
+    "name": "during",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$PATTERN": {
+          "label": "pattern",
+          "type": "text"
+        }
+      },
+      "roles": "CZSZKT",
+      "slots": [
+        "bool_eval",
+        "number_eval"
+      ],
+      "tokens": [
+        "during",
+        " ",
+        "pattern",
+        ": ",
+        "$PATTERN",
+        "."
       ]
     }
   },
@@ -1835,7 +1890,7 @@ const spec = [
     }
   },
   {
-    "desc": "Is Kind Of: True if the object is compatible with the named kind.",
+    "desc": "Is Kind Exactly: True if the object is exactly the named kind.",
     "group": [
       "objects"
     ],
@@ -2776,6 +2831,24 @@ const spec = [
     }
   },
   {
+    "desc": "Paragraph: add a single blank line following some text.",
+    "group": [
+      "printing"
+    ],
+    "name": "p",
+    "uses": "flow",
+    "with": {
+      "params": {},
+      "roles": "E",
+      "slots": [
+        "execute"
+      ],
+      "tokens": [
+        "p"
+      ]
+    }
+  },
+  {
     "desc": "Pluralize: Returns the plural form of a singular word. (ex.  apples for apple. )",
     "group": [
       "format"
@@ -3249,6 +3322,62 @@ const spec = [
     }
   },
   {
+    "desc": "Row: a single line as part of a group of lines.",
+    "group": [
+      "printing"
+    ],
+    "name": "row",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$DO": {
+          "label": "do",
+          "type": "activity"
+        }
+      },
+      "roles": "CZSZKT",
+      "slots": [
+        "text_eval"
+      ],
+      "tokens": [
+        "row",
+        " ",
+        "do",
+        ": ",
+        "$DO",
+        "."
+      ]
+    }
+  },
+  {
+    "desc": "Rows: group text into successive lines.",
+    "group": [
+      "printing"
+    ],
+    "name": "rows",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$DO": {
+          "label": "do",
+          "type": "activity"
+        }
+      },
+      "roles": "CZSZKT",
+      "slots": [
+        "text_eval"
+      ],
+      "tokens": [
+        "rows",
+        " ",
+        "do",
+        ": ",
+        "$DO",
+        "."
+      ]
+    }
+  },
+  {
     "desc": "Say: print some bit of text to the player.",
     "group": [
       "printing"
@@ -3354,8 +3483,8 @@ const spec = [
     "uses": "flow",
     "with": {
       "params": {
-        "$GO": {
-          "label": "go",
+        "$DO": {
+          "label": "do",
           "type": "activity"
         }
       },
@@ -3366,9 +3495,9 @@ const spec = [
       "tokens": [
         "slash",
         " ",
-        "go",
+        "do",
         ": ",
-        "$GO"
+        "$DO"
       ]
     }
   },
@@ -3381,8 +3510,8 @@ const spec = [
     "uses": "flow",
     "with": {
       "params": {
-        "$GO": {
-          "label": "go",
+        "$DO": {
+          "label": "do",
           "type": "activity"
         }
       },
@@ -3393,9 +3522,9 @@ const spec = [
       "tokens": [
         "span",
         " ",
-        "go",
+        "do",
         ": ",
-        "$GO"
+        "$DO"
       ]
     }
   },
@@ -3447,7 +3576,7 @@ const spec = [
       "literals"
     ],
     "name": "text_value",
-    "spec": "{text|quote}",
+    "spec": "{text}",
     "uses": "flow",
     "with": {
       "slots": [
@@ -3547,6 +3676,24 @@ const spec = [
     "with": {
       "slots": [
         "comparator"
+      ]
+    }
+  },
+  {
+    "desc": "Softline: start a new line ( if not already at a new line. )",
+    "group": [
+      "printing"
+    ],
+    "name": "wbr",
+    "uses": "flow",
+    "with": {
+      "params": {},
+      "roles": "E",
+      "slots": [
+        "execute"
+      ],
+      "tokens": [
+        "wbr"
       ]
     }
   },

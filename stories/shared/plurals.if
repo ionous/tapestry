@@ -94,7 +94,7 @@
                             "$NAME": {
                               "id": "id-1748e116bbd-11",
                               "type": "variable_name",
-                              "value": "target"
+                              "value": "obj"
                             },
                             "$TYPE": {
                               "id": "id-1748e116bbd-10",
@@ -204,7 +204,7 @@
                                                         "$TEMPLATE": {
                                                           "id": "id-1748e116bbd-30",
                                                           "type": "lines",
-                                                          "value": "{.target}"
+                                                          "value": "{.obj}"
                                                         }
                                                       }
                                                     }
@@ -255,7 +255,7 @@
                                               "$VAR": {
                                                 "id": "id-1783e9a0605-3",
                                                 "type": "variable_name",
-                                                "value": "target"
+                                                "value": "obj"
                                               }
                                             }
                                           }
@@ -316,7 +316,7 @@
                                                   "$TEMPLATE": {
                                                     "id": "id-17494873906-4",
                                                     "type": "lines",
-                                                    "value": "{.target.printed_plural_name}"
+                                                    "value": "{.obj.printed_plural_name}"
                                                   }
                                                 }
                                               }
