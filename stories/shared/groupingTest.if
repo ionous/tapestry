@@ -553,7 +553,7 @@
                                   "$NAME": {
                                     "id": "id-17692f1b70b-514",
                                     "type": "pattern_name",
-                                    "value": "print inline"
+                                    "value": "print inline objects"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-17692f1b70b-515",
@@ -726,7 +726,7 @@
                                   "$NAME": {
                                     "id": "id-1785b9f58c6-2",
                                     "type": "pattern_name",
-                                    "value": "print inline"
+                                    "value": "print inline objects"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-1785b9f58c6-3",
@@ -1362,7 +1362,7 @@
                                                     "$NAME": {
                                                       "id": "id-17692f1b70b-598",
                                                       "type": "pattern_name",
-                                                      "value": "print inline"
+                                                      "value": "print inline objects"
                                                     },
                                                     "$ARGUMENTS": {
                                                       "id": "id-17692f1b70b-599",
@@ -1468,7 +1468,7 @@
                                                     "$NAME": {
                                                       "id": "id-1769dc19ed4-7",
                                                       "type": "pattern_name",
-                                                      "value": "print inline"
+                                                      "value": "print inline objects"
                                                     },
                                                     "$ARGUMENTS": {
                                                       "id": "id-1769dc19ed4-8",
@@ -1931,7 +1931,7 @@
                                                     "$NAME": {
                                                       "id": "id-1769e087ca0-56",
                                                       "type": "pattern_name",
-                                                      "value": "print inline"
+                                                      "value": "print inline objects"
                                                     },
                                                     "$ARGUMENTS": {
                                                       "id": "id-1769e087ca0-57",
@@ -2037,7 +2037,7 @@
                                                     "$NAME": {
                                                       "id": "id-1769e087ca0-76",
                                                       "type": "pattern_name",
-                                                      "value": "print inline"
+                                                      "value": "print inline objects"
                                                     },
                                                     "$ARGUMENTS": {
                                                       "id": "id-1769e087ca0-77",
@@ -2696,7 +2696,7 @@
                                                     "$NAME": {
                                                       "id": "id-1769e215da7-7",
                                                       "type": "pattern_name",
-                                                      "value": "print inline"
+                                                      "value": "print inline objects"
                                                     },
                                                     "$ARGUMENTS": {
                                                       "id": "id-1769e215da7-8",
@@ -2802,7 +2802,7 @@
                                                     "$NAME": {
                                                       "id": "id-1769e215da7-55",
                                                       "type": "pattern_name",
-                                                      "value": "print inline"
+                                                      "value": "print inline objects"
                                                     },
                                                     "$ARGUMENTS": {
                                                       "id": "id-1769e215da7-56",
@@ -3237,7 +3237,7 @@
                                   "$NAME": {
                                     "id": "id-176a185900d-88",
                                     "type": "pattern_name",
-                                    "value": "print inline"
+                                    "value": "print inline objects"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-176a185900d-89",
@@ -3557,7 +3557,7 @@
                                   "$NAME": {
                                     "id": "id-176a185900d-136",
                                     "type": "pattern_name",
-                                    "value": "print inline"
+                                    "value": "print inline objects"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-176a185900d-137",
@@ -3911,7 +3911,7 @@
                                                     "$NAME": {
                                                       "id": "id-176a185900d-219",
                                                       "type": "pattern_name",
-                                                      "value": "print inline"
+                                                      "value": "print inline objects"
                                                     },
                                                     "$ARGUMENTS": {
                                                       "id": "id-176a185900d-220",
@@ -4012,7 +4012,7 @@
                                                     "$NAME": {
                                                       "id": "id-176a185900d-239",
                                                       "type": "pattern_name",
-                                                      "value": "print inline"
+                                                      "value": "print inline objects"
                                                     },
                                                     "$ARGUMENTS": {
                                                       "id": "id-176a185900d-240",

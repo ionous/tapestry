@@ -343,7 +343,7 @@
                                                                   "$BOOL": {
                                                                     "id": "id-1783981b1f0-6",
                                                                     "type": "bool",
-                                                                    "value": "$TRUE"
+                                                                    "value": "$FALSE"
                                                                   }
                                                                 }
                                                               }

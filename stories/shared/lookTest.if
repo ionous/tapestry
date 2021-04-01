@@ -3469,7 +3469,7 @@
                                   "$NAME": {
                                     "id": "id-17865493227-79",
                                     "type": "pattern_name",
-                                    "value": "print inline"
+                                    "value": "print inline objects"
                                   },
                                   "$ARGUMENTS": {
                                     "id": "id-17865493227-80",

@@ -11,6 +11,7 @@ var Grammar = anyOf(
 	allOf(words("look/l"),
 		anyOf(
 			allOf(words("at"), noun(), act("examining")),
+			allOf(words("in/inside/into/through"), noun(), act("searching")),
 			allOf(words("under"), noun(), act("peeking")),
 			allOf(noun(), act("examining")),
 			act("looking"),
@@ -57,8 +58,11 @@ var Grammar = anyOf(
 	allOf(
 		words("i/inv/inventory"), act("inventorying"),
 	),
-	allOf(words("read"),
-		allOf(noun(), act("examining")),
+	allOf(
+		words("read"), noun(), act("examining"),
+	),
+	allOf(
+		words("search"), noun(), act("searching"),
 	),
 	allOf(words("remove/shed/doff/disrobe"),
 		allOf(noun(), act("removing")),

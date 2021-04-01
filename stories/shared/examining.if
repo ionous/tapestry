@@ -1297,7 +1297,7 @@
                                                   "$NAME": {
                                                     "id": "id-17804ca4e22-4",
                                                     "type": "pattern_name",
-                                                    "value": "print auxiliary objects"
+                                                    "value": "print inline storage"
                                                   },
                                                   "$ARGUMENTS": {
                                                     "id": "id-17804ca4e22-5",
@@ -1678,7 +1678,7 @@
                                                   "$NAME": {
                                                     "id": "id-17804be0e55-37",
                                                     "type": "pattern_name",
-                                                    "value": "print auxiliary objects"
+                                                    "value": "print inline storage"
                                                   },
                                                   "$ARGUMENTS": {
                                                     "id": "id-17804be0e55-38",
