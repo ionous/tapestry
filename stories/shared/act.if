@@ -118,7 +118,7 @@
                             "$NAME": {
                               "id": "id-178159d7467-88",
                               "type": "variable_name",
-                              "value": "change"
+                              "value": "trait"
                             },
                             "$TYPE": {
                               "id": "id-178159d7467-89",
@@ -172,7 +172,7 @@
                             "$NAME": {
                               "id": "id-178159d7467-102",
                               "type": "variable_name",
-                              "value": "changed"
+                              "value": "change"
                             },
                             "$TYPE": {
                               "id": "id-178159d7467-103",
@@ -344,7 +344,7 @@
                                                             "$NAME": {
                                                               "id": "id-1781485a46d-235",
                                                               "type": "variable_name",
-                                                              "value": "change"
+                                                              "value": "trait"
                                                             },
                                                             "$FROM": {
                                                               "id": "id-1781485a46d-236",
@@ -356,7 +356,7 @@
                                                                   "$NAME": {
                                                                     "id": "id-178159d7467-114",
                                                                     "type": "text",
-                                                                    "value": "change"
+                                                                    "value": "trait"
                                                                   }
                                                                 }
                                                               }
@@ -383,6 +383,32 @@
                                                                     "id": "id-178159d7467-116",
                                                                     "type": "text",
                                                                     "value": "guard"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        {
+                                                          "id": "id-17885664876-578",
+                                                          "type": "argument",
+                                                          "value": {
+                                                            "$NAME": {
+                                                              "id": "id-17885664876-579",
+                                                              "type": "variable_name",
+                                                              "value": "change"
+                                                            },
+                                                            "$FROM": {
+                                                              "id": "id-17885664876-580",
+                                                              "type": "assignment",
+                                                              "value": {
+                                                                "id": "id-17885664876-581",
+                                                                "type": "get_var",
+                                                                "value": {
+                                                                  "$NAME": {
+                                                                    "id": "id-17885664876-582",
+                                                                    "type": "text",
+                                                                    "value": "change"
                                                                   }
                                                                 }
                                                               }
@@ -564,7 +590,7 @@
                                                                           "$NAME": {
                                                                             "id": "id-178159d7467-145",
                                                                             "type": "text",
-                                                                            "value": "change"
+                                                                            "value": "trait"
                                                                           }
                                                                         }
                                                                       }
@@ -734,7 +760,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-178159d7467-55",
                                                                 "type": "lines",
-                                                                "value": "{The: .noun|capitalize!} {.changed}."
+                                                                "value": "{The: .noun|capitalize!} {are!} {.trait}."
                                                               }
                                                             }
                                                           }
@@ -893,7 +919,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-1781584e827-53",
                                                                 "type": "lines",
-                                                                "value": "{We!|capitalize!} {.changed} {the: .noun}."
+                                                                "value": "{We!|capitalize!} {.change} {the: .noun}."
                                                               }
                                                             }
                                                           }
@@ -1040,7 +1066,7 @@
                             "$NAME": {
                               "id": "id-17808f3b3d9-71",
                               "type": "variable_name",
-                              "value": "change"
+                              "value": "trait"
                             },
                             "$TYPE": {
                               "id": "id-17808f3b3d9-72",
@@ -1061,6 +1087,38 @@
                           }
                         },
                         {
+                          "id": "id-17885664876-572",
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              "id": "id-17885664876-573",
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              "id": "id-17885664876-574",
+                              "type": "variable_name",
+                              "value": "guard"
+                            },
+                            "$TYPE": {
+                              "id": "id-17885664876-575",
+                              "type": "variable_type",
+                              "value": {
+                                "$PRIMITIVE": {
+                                  "id": "id-17885664876-576",
+                                  "type": "primitive_type",
+                                  "value": "$TEXT"
+                                }
+                              }
+                            },
+                            "$COMMENT": {
+                              "id": "id-17885664876-577",
+                              "type": "lines",
+                              "value": ", a trait which blocks the noun from changing"
+                            }
+                          }
+                        },
+                        {
                           "id": "id-17808f3b3d9-63",
                           "type": "variable_decl",
                           "value": {
@@ -1072,7 +1130,7 @@
                             "$NAME": {
                               "id": "id-17808f3b3d9-65",
                               "type": "variable_name",
-                              "value": "guard"
+                              "value": "change"
                             },
                             "$TYPE": {
                               "id": "id-17808f3b3d9-66",
@@ -1088,7 +1146,7 @@
                             "$COMMENT": {
                               "id": "id-17808f3b3d9-68",
                               "type": "lines",
-                              "value": "a trait which blocks the noun from changing"
+                              "value": "which describes the action"
                             }
                           }
                         }
@@ -1199,7 +1257,7 @@
                                         "$NAME": {
                                           "id": "id-17808f3b3d9-112",
                                           "type": "text",
-                                          "value": "change"
+                                          "value": "trait"
                                         }
                                       }
                                     }
@@ -1272,7 +1330,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-1781331ee71-29",
                                                                 "type": "lines",
-                                                                "value": "{They: .noun|capitalize!} {are!} already {.change}."
+                                                                "value": "{They: .noun|capitalize!} {are!} already {.trait}."
                                                               }
                                                             }
                                                           }

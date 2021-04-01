@@ -154,7 +154,7 @@
                   "$ASPECT": {
                     "id": "id-17798b6dd76-13",
                     "type": "aspect",
-                    "value": " possession status"
+                    "value": " possessiveness"
                   }
                 }
               }
@@ -169,7 +169,7 @@
                   "$ASPECT": {
                     "id": "id-17798b6dd76-16",
                     "type": "aspect",
-                    "value": " possession status"
+                    "value": " possessiveness"
                   },
                   "$TRAIT_PHRASE": {
                     "id": "id-17798b6dd76-17",
@@ -184,12 +184,7 @@
                         {
                           "id": "id-17798b6dd76-19",
                           "type": "trait",
-                          "value": "dispossessed"
-                        },
-                        {
-                          "id": "id-17798b6dd76-20",
-                          "type": "trait",
-                          "value": "carried"
+                          "value": "not worn"
                         },
                         {
                           "id": "id-17798b6dd76-21",
@@ -307,7 +302,7 @@
                         "$PROPERTY": {
                           "id": "id-17798b6dd76-42",
                           "type": "property",
-                          "value": "possession status"
+                          "value": "possessiveness"
                         },
                         "$PROPERTY_TYPE": {
                           "id": "id-17798b6dd76-43",
@@ -315,6 +310,33 @@
                           "value": {
                             "$PROPERTY_ASPECT": {
                               "id": "id-17798b6dd76-44",
+                              "type": "property_aspect",
+                              "value": "$ASPECT"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "id-17885664876-820",
+                      "type": "property_decl",
+                      "value": {
+                        "$AN": {
+                          "id": "id-17885664876-821",
+                          "type": "determiner",
+                          "value": "$A"
+                        },
+                        "$PROPERTY": {
+                          "id": "id-17885664876-822",
+                          "type": "property",
+                          "value": "wearability"
+                        },
+                        "$PROPERTY_TYPE": {
+                          "id": "id-17885664876-823",
+                          "type": "property_type",
+                          "value": {
+                            "$PROPERTY_ASPECT": {
+                              "id": "id-17885664876-824",
                               "type": "property_aspect",
                               "value": "$ASPECT"
                             }
@@ -654,6 +676,59 @@
                           "id": "id-17798b6dd76-106",
                           "type": "trait",
                           "value": "handled"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17885664876-809",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17885664876-810",
+                "type": "kinds_of_aspect",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-17885664876-811",
+                    "type": "aspect",
+                    "value": " wearability"
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17885664876-812",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17885664876-813",
+                "type": "aspect_traits",
+                "value": {
+                  "$ASPECT": {
+                    "id": "id-17885664876-814",
+                    "type": "aspect",
+                    "value": " wearability"
+                  },
+                  "$TRAIT_PHRASE": {
+                    "id": "id-17885664876-815",
+                    "type": "trait_phrase",
+                    "value": {
+                      "$ARE_EITHER": {
+                        "id": "id-17885664876-816",
+                        "type": "are_either",
+                        "value": "$CANBE"
+                      },
+                      "$TRAIT": [
+                        {
+                          "id": "id-17885664876-817",
+                          "type": "trait",
+                          "value": "not wearable"
+                        },
+                        {
+                          "id": "id-17885664876-818",
+                          "type": "trait",
+                          "value": "wearable"
                         }
                       ]
                     }

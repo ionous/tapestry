@@ -54,6 +54,11 @@
                                 {
                                   "id": "id-17847f36750-269",
                                   "type": "trait",
+                                  "value": "wearable"
+                                },
+                                {
+                                  "id": "id-17885664876-806",
+                                  "type": "trait",
                                   "value": "worn"
                                 }
                               ],
@@ -122,6 +127,11 @@
                                 },
                                 {
                                   "id": "id-17847f36750-302",
+                                  "type": "trait",
+                                  "value": "wearable"
+                                },
+                                {
+                                  "id": "id-17885664876-807",
                                   "type": "trait",
                                   "value": "worn"
                                 }
@@ -396,6 +406,11 @@
                                 "value": "$ISAN"
                               },
                               "$TRAIT": [
+                                {
+                                  "id": "id-17885664876-808",
+                                  "type": "trait",
+                                  "value": "wearable"
+                                },
                                 {
                                   "id": "id-17848880d04-5",
                                   "type": "trait",

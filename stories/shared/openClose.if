@@ -481,7 +481,7 @@
                                                                         "$NAME": {
                                                                           "id": "id-1781aa8fa1d-87",
                                                                           "type": "variable_name",
-                                                                          "value": "change"
+                                                                          "value": "trait"
                                                                         },
                                                                         "$FROM": {
                                                                           "id": "id-1781aa8fa1d-88",
@@ -553,7 +553,7 @@
                                                                         "$NAME": {
                                                                           "id": "id-1781aa8fa1d-101",
                                                                           "type": "variable_name",
-                                                                          "value": "changed"
+                                                                          "value": "change"
                                                                         },
                                                                         "$FROM": {
                                                                           "id": "id-1781aa8fa1d-102",
@@ -572,7 +572,7 @@
                                                                                     "$TEXT": {
                                                                                       "id": "id-1781aa8fa1d-106",
                                                                                       "type": "text",
-                                                                                      "value": "opened"
+                                                                                      "value": "open"
                                                                                     }
                                                                                   }
                                                                                 }
@@ -1140,7 +1140,7 @@
                                                                         "$NAME": {
                                                                           "id": "id-1783d2aa0bb-81",
                                                                           "type": "variable_name",
-                                                                          "value": "change"
+                                                                          "value": "trait"
                                                                         },
                                                                         "$FROM": {
                                                                           "id": "id-1783d2aa0bb-82",
@@ -1212,7 +1212,7 @@
                                                                         "$NAME": {
                                                                           "id": "id-1783d2aa0bb-95",
                                                                           "type": "variable_name",
-                                                                          "value": "changed"
+                                                                          "value": "change"
                                                                         },
                                                                         "$FROM": {
                                                                           "id": "id-1783d2aa0bb-96",
@@ -1231,7 +1231,7 @@
                                                                                     "$TEXT": {
                                                                                       "id": "id-1783d2aa0bb-100",
                                                                                       "type": "text",
-                                                                                      "value": "closed"
+                                                                                      "value": "close"
                                                                                     }
                                                                                   }
                                                                                 }
@@ -1387,7 +1387,7 @@
                                                 "$NAME": {
                                                   "id": "id-1781aa8fa1d-462",
                                                   "type": "text",
-                                                  "value": "change"
+                                                  "value": "trait"
                                                 }
                                               }
                                             }
@@ -1690,6 +1690,55 @@
                                       "type": "all_true",
                                       "value": {
                                         "$TEST": [
+                                          {
+                                            "id": "id-1788adbf863-0",
+                                            "type": "bool_eval",
+                                            "value": {
+                                              "id": "id-1788adbf863-1",
+                                              "type": "compare_text",
+                                              "value": {
+                                                "$A": {
+                                                  "id": "id-1788adbf863-2",
+                                                  "type": "text_eval",
+                                                  "value": {
+                                                    "id": "id-1788adbf863-5",
+                                                    "type": "get_var",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-1788adbf863-6",
+                                                        "type": "text",
+                                                        "value": "trait"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "$IS": {
+                                                  "id": "id-1788adbf863-3",
+                                                  "type": "comparator",
+                                                  "value": {
+                                                    "id": "id-1788adbf863-7",
+                                                    "type": "equal",
+                                                    "value": {}
+                                                  }
+                                                },
+                                                "$B": {
+                                                  "id": "id-1788adbf863-4",
+                                                  "type": "text_eval",
+                                                  "value": {
+                                                    "id": "id-1788adbf863-8",
+                                                    "type": "text_value",
+                                                    "value": {
+                                                      "$TEXT": {
+                                                        "id": "id-1788adbf863-9",
+                                                        "type": "text",
+                                                        "value": "open"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
                                           {
                                             "id": "id-1781aa8fa1d-327",
                                             "type": "bool_eval",

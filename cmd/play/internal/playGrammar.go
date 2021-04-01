@@ -22,21 +22,31 @@ var Grammar = anyOf(
 		)),
 	// fix? inform defines these as synonyms, meaning this happens:
 	// >carry off cat => "You aren't wearing the cat"
-	allOf(words("take/carry/hold"), anyOf(
+	allOf(words("take"), anyOf(
+		allOf(words("inventory"), act("inventorying")),
+		allOf(words("off"), thing(), act("removing")),
+		anyOf(noun(),
+			allOf(words("off"), act("removing")),
+			act("taking"),
+		))),
+	allOf(words("carry/hold"), anyOf(
 		allOf(words("inventory"), act("inventorying")),
 		allOf(noun(), act("taking")),
 	)),
 	//  "take [things]" as taking.
+	// "take inventory" as taking inventory.
 	// "take off [something]" as taking off.
 	// "take [something] off" as taking off.
 	// "take [things inside] from [something]" as removing it from.
 	// "take [things inside] off [something]" as removing it from.
-	// "take inventory" as taking inventory.
 	allOf(words("pick"), anyOf(
 		allOf(words("up"), things(), act("taking")),
 		allOf(things(), words("up"), act("taking")),
-	),
-	),
+	)),
+	allOf(words("put"), anyOf(
+		allOf(words("on"), thing(), act("wearing")),
+		allOf(thing(), words("on"), act("wearing")),
+	)),
 	allOf(words("get"),
 		&parser.Target{[]parser.Scanner{things(), words("from/off"), thing()}},
 		act("removing"),
@@ -50,11 +60,17 @@ var Grammar = anyOf(
 	allOf(words("read"),
 		allOf(noun(), act("examining")),
 	),
+	allOf(words("remove/shed/doff/disrobe"),
+		allOf(noun(), act("removing")),
+	),
 	allOf(words("open/unwrap/uncover"),
 		allOf(noun(), act("opening")),
 	),
 	allOf(words("close/shut/cover"), anyOf(
 		allOf(words("up"), act("closing")),
 		allOf(noun(), act("closing"))),
+	),
+	allOf(words("wear/don"), anyOf(
+		allOf(things(), act("wearing"))),
 	),
 )
