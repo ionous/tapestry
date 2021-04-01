@@ -12,7 +12,7 @@ func NewAutoWriter(w writer.Output) writer.ChunkOutput {
 	out := writer.ChunkWriter{text.Html2Text(w)}
 	return func(c writer.Chunk) (int, error) {
 		n, e := c.WriteTo(out)
-		if last, _ := c.DecodeLastRune(); unicode.Is(unicode.Terminal_Punctuation, last) {
+		if last, _ := c.DecodeLastRune(); unicode.Is(unicode.Sentence_Terminal, last) {
 			out.WriteRune('\n')
 		}
 		return n, e
