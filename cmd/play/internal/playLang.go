@@ -20,20 +20,28 @@ func allOf(s ...parser.Scanner) (ret parser.Scanner) {
 	return
 }
 
-func noun(f ...parser.Filter) parser.Scanner {
-	return &parser.Noun{f}
+func noun(kinds ...string) parser.Scanner {
+	var fs parser.Filters
+	for _, k := range kinds {
+		fs = append(fs, &parser.HasClass{k})
+	}
+	return &parser.Noun{fs}
 }
-func nouns(f ...parser.Filter) parser.Scanner {
-	return &parser.Multi{f}
+func nouns(kinds ...string) parser.Scanner {
+	var fs parser.Filters
+	for _, k := range kinds {
+		fs = append(fs, &parser.HasClass{k})
+	}
+	return &parser.Multi{fs}
 }
 
 // note: we use things to exclude directions
 func thing() parser.Scanner {
-	return noun(&parser.HasClass{"things"})
+	return noun("things")
 }
 
 func things() parser.Scanner {
-	return nouns(&parser.HasClass{"things"})
+	return nouns("things")
 }
 
 func words(s string) parser.Scanner {

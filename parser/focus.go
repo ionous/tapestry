@@ -22,7 +22,8 @@ func (a *Focus) Scan(ctx Context, _ Bounds, cs Cursor) (ret Result, err error) {
 	return
 }
 
-// Target changes the bounds of its first scanner in response to the results of its last scanner. Generally, this means that the last scanner should be Noun{}.
+// Target changes the bounds of its first scanner in response to the results of its last scanner.
+// Generally, this means that the last scanner should be Noun{}.
 type Target struct {
 	Match []Scanner
 }

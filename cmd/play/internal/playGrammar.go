@@ -71,6 +71,20 @@ var Grammar = anyOf(
 		allOf(noun(), act("closing"))),
 	),
 	allOf(words("wear/don"), anyOf(
-		allOf(things(), act("wearing"))),
+		allOf(thing(), act("wearing"))),
 	),
+	allOf(words("switch/rotate/twist/unscrew/screw"), anyOf(
+		allOf(words("on"), thing(), act("activating")),
+		allOf(words("off"), thing(), act("deactivating")),
+		allOf(thing(), anyOf(
+			allOf(words("on"), act("activating")),
+			allOf(words("off"), act("deactivating")),
+		)),
+	)),
+	allOf(words("close/shut"), anyOf(
+		allOf(words("off"), thing(), act("deactivating")),
+		allOf(thing(), anyOf(
+			allOf(words("off"), act("deactivating")),
+		)),
+	)),
 )
