@@ -980,7 +980,7 @@
                                                                     "$LEVEL": {
                                                                       "id": "id-1783e75e512-8",
                                                                       "type": "number",
-                                                                      "value": 0
+                                                                      "value": -1
                                                                     }
                                                                   }
                                                                 }

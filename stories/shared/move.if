@@ -915,7 +915,7 @@
                                                         "$LEVEL": {
                                                           "id": "id-1770cb3192a-271",
                                                           "type": "number",
-                                                          "value": 0
+                                                          "value": -1
                                                         }
                                                       }
                                                     }
