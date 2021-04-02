@@ -825,7 +825,7 @@
                                 "$NAME": {
                                   "id": "id-1788f214861-697",
                                   "type": "variable_name",
-                                  "value": "kids"
+                                  "value": "items"
                                 },
                                 "$TYPE": {
                                   "id": "id-1788f214861-698",
@@ -1177,7 +1177,7 @@
                                             "$VAR": {
                                               "id": "id-1788f73caa9-51",
                                               "type": "variable_name",
-                                              "value": "kids"
+                                              "value": "items"
                                             },
                                             "$FROM": {
                                               "id": "id-1788f73caa9-52",
@@ -1272,7 +1272,7 @@
                                                               "$NAME": {
                                                                 "id": "id-1788f73caa9-77",
                                                                 "type": "text",
-                                                                "value": "obj"
+                                                                "value": "items"
                                                               }
                                                             }
                                                           }
@@ -1517,6 +1517,31 @@
                                                                                                   }
                                                                                                 ]
                                                                                               }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                },
+                                                                                {
+                                                                                  "id": "id-1788f9dc134-353",
+                                                                                  "type": "execute",
+                                                                                  "value": {
+                                                                                    "id": "id-1788f9dc134-354",
+                                                                                    "type": "say_text",
+                                                                                    "value": {
+                                                                                      "$TEXT": {
+                                                                                        "id": "id-1788f9dc134-355",
+                                                                                        "type": "text_eval",
+                                                                                        "value": {
+                                                                                          "id": "id-1788f9dc134-356",
+                                                                                          "type": "text_value",
+                                                                                          "value": {
+                                                                                            "$TEXT": {
+                                                                                              "id": "id-1788f9dc134-357",
+                                                                                              "type": "text",
+                                                                                              "value": "."
                                                                                             }
                                                                                           }
                                                                                         }
