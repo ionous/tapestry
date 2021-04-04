@@ -23,7 +23,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-4",
                     "type": "pattern_name",
-                    "value": "reaching"
+                    "value": "permit reach"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-18",
@@ -214,7 +214,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-16",
                     "type": "pattern_name",
-                    "value": "reaching"
+                    "value": "permit reach"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-177e140d8c4-33",
@@ -1058,7 +1058,7 @@
                                                                                 "$LINES": {
                                                                                   "id": "id-1783912ef42-14",
                                                                                   "type": "lines",
-                                                                                  "value": "This doesn't exit the loop. \nIt builds a complete hierarchy to help determine if the lca exists and if so,\nis the lca completely unreachable or merely blocked."
+                                                                                  "value": "This doesn't exit the loop. \nIt builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
                                                                                 }
                                                                               }
                                                                             }
@@ -1122,6 +1122,46 @@
                                               "id": "id-177f58ce0a0-1",
                                               "type": "lines",
                                               "value": "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "id": "id-1789e5419eb-0",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-1789e5419eb-1",
+                                          "type": "debug_log",
+                                          "value": {
+                                            "$VALUE": {
+                                              "id": "id-1789e5419eb-2",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-1789e5419eb-4",
+                                                "type": "from_texts",
+                                                "value": {
+                                                  "$VALS": {
+                                                    "id": "id-1789e5419eb-5",
+                                                    "type": "text_list_eval",
+                                                    "value": {
+                                                      "id": "id-1789e5419eb-6",
+                                                      "type": "get_var",
+                                                      "value": {
+                                                        "$NAME": {
+                                                          "id": "id-1789e5419eb-7",
+                                                          "type": "text",
+                                                          "value": "path"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "$LEVEL": {
+                                              "id": "id-1789e5419eb-3",
+                                              "type": "number",
+                                              "value": 0
                                             }
                                           }
                                         }
@@ -1360,21 +1400,6 @@
                                                     }
                                                   },
                                                   {
-                                                    "id": "id-1783e19be19-24",
-                                                    "type": "execute",
-                                                    "value": {
-                                                      "id": "id-1783e19be19-25",
-                                                      "type": "comment",
-                                                      "value": {
-                                                        "$LINES": {
-                                                          "id": "id-1783e19be19-26",
-                                                          "type": "lines",
-                                                          "value": "We advance 'i', letting 'next' trail behind -- this lets us reach down from the target noun's parent, but not *into* the target noun. ( We only want to reach the target, not reach into it. )"
-                                                        }
-                                                      }
-                                                    }
-                                                  },
-                                                  {
                                                     "id": "id-178234b724c-128",
                                                     "type": "execute",
                                                     "value": {
@@ -1384,7 +1409,7 @@
                                                         "$VAR": {
                                                           "id": "id-178234b724c-130",
                                                           "type": "variable_name",
-                                                          "value": "i"
+                                                          "value": "next"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-178234b724c-131",
@@ -1484,7 +1509,7 @@
                                                                         "$NAME": {
                                                                           "id": "id-1782ad95c9f-16",
                                                                           "type": "text",
-                                                                          "value": "i"
+                                                                          "value": "next"
                                                                         }
                                                                       }
                                                                     }
@@ -1510,7 +1535,7 @@
                                                                         "$NAME": {
                                                                           "id": "id-1782ad95c9f-21",
                                                                           "type": "text",
-                                                                          "value": "next"
+                                                                          "value": "i"
                                                                         }
                                                                       }
                                                                     }
@@ -1704,7 +1729,7 @@
                                                         "$VAR": {
                                                           "id": "id-178234b724c-191",
                                                           "type": "variable_name",
-                                                          "value": "next"
+                                                          "value": "i"
                                                         },
                                                         "$FROM": {
                                                           "id": "id-178234b724c-192",
@@ -1716,7 +1741,7 @@
                                                               "$NAME": {
                                                                 "id": "id-178234b724c-194",
                                                                 "type": "text",
-                                                                "value": "i"
+                                                                "value": "next"
                                                               }
                                                             }
                                                           }
@@ -1950,7 +1975,7 @@
                                                               "$LINES": {
                                                                 "id": "id-178390aa355-47",
                                                                 "type": "lines",
-                                                                "value": "There is a reach error between the actor and the lca."
+                                                                "value": "There is an error reaching up from the actor towards the lca."
                                                               }
                                                             }
                                                           }
@@ -3205,6 +3230,65 @@
                                           }
                                         }
                                       }
+                                    },
+                                    {
+                                      "id": "id-17898c98971-506",
+                                      "type": "bool_eval",
+                                      "value": {
+                                        "id": "id-17898c98971-507",
+                                        "type": "not",
+                                        "value": {
+                                          "$TEST": {
+                                            "id": "id-17898c98971-508",
+                                            "type": "bool_eval",
+                                            "value": {
+                                              "id": "id-17898c98971-509",
+                                              "type": "compare_text",
+                                              "value": {
+                                                "$A": {
+                                                  "id": "id-17898c98971-510",
+                                                  "type": "text_eval",
+                                                  "value": {
+                                                    "id": "id-17898c98971-513",
+                                                    "type": "get_var",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17898c98971-514",
+                                                        "type": "text",
+                                                        "value": "intoObj"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "$IS": {
+                                                  "id": "id-17898c98971-511",
+                                                  "type": "comparator",
+                                                  "value": {
+                                                    "id": "id-17898c98971-515",
+                                                    "type": "equal",
+                                                    "value": {}
+                                                  }
+                                                },
+                                                "$B": {
+                                                  "id": "id-17898c98971-512",
+                                                  "type": "text_eval",
+                                                  "value": {
+                                                    "id": "id-17898c98971-516",
+                                                    "type": "get_var",
+                                                    "value": {
+                                                      "$NAME": {
+                                                        "id": "id-17898c98971-517",
+                                                        "type": "text",
+                                                        "value": "noun"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
                                     }
                                   ]
                                 }
@@ -3443,7 +3527,7 @@
                                             "$LEVEL": {
                                               "id": "id-178284d4b18-18",
                                               "type": "number",
-                                              "value": -1
+                                              "value": 0
                                             }
                                           }
                                         }

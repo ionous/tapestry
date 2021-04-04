@@ -598,41 +598,6 @@ const spec = [
     }
   },
   {
-    "desc": "Carriage returns: Writes text with newlines between words.",
-    "group": [
-      "printing"
-    ],
-    "name": "carriage_text",
-    "uses": "flow",
-    "with": {
-      "params": {
-        "$DO": {
-          "label": "do",
-          "type": "activity"
-        },
-        "$INDENT": {
-          "label": "indent",
-          "type": "bool"
-        }
-      },
-      "roles": "QZSZKZSZK",
-      "slots": [
-        "text_eval"
-      ],
-      "tokens": [
-        "carriage",
-        " ",
-        "indent",
-        ": ",
-        "$INDENT",
-        ", ",
-        "do",
-        ": ",
-        "$DO"
-      ]
-    }
-  },
-  {
     "desc": "Choose action: an if statement.",
     "name": "choose_action",
     "uses": "flow",

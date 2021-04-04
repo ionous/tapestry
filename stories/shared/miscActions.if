@@ -222,7 +222,7 @@
                                             "$NAME": {
                                               "id": "id-1781d6b5f71-33",
                                               "type": "pattern_name",
-                                              "value": "reaching"
+                                              "value": "permit reach"
                                             },
                                             "$ARGUMENTS": {
                                               "id": "id-1781dd611ac-190",
@@ -587,7 +587,7 @@
                                                                           "$NAME": {
                                                                             "id": "id-1781d6b5f71-211",
                                                                             "type": "pattern_name",
-                                                                            "value": "print peeking"
+                                                                            "value": "report peeking"
                                                                           },
                                                                           "$ARGUMENTS": {
                                                                             "id": "id-1781d6b5f71-212",
@@ -703,7 +703,7 @@
                   "$NAME": {
                     "id": "id-1781d6b5f71-226",
                     "type": "pattern_name",
-                    "value": "print peeking"
+                    "value": "report peeking"
                   },
                   "$OPTVARS": {
                     "id": "id-1781dd611ac-217",
@@ -802,7 +802,7 @@
                   "$NAME": {
                     "id": "id-1781d6b5f71-230",
                     "type": "pattern_name",
-                    "value": "print peeking"
+                    "value": "report peeking"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-1781d6b5f71-231",

@@ -30,7 +30,7 @@
                         "$LINES": {
                           "id": "id-17885664876-590",
                           "type": "lines",
-                          "value": "The flower's ogp: you, worn.\nFail to re-wear the flower:It is already worn.\nTake off the flower:You take off the flower.\nThe flower's newg: you, not_worn.\nFail to re-remove the flower:You aren't wearing that!\nWear the flower again:You put on the flower.\nThe flower's newg: you, worn.\nThe knife's parent: you, not_worn.\nFail to wear an unwearable:It isn't something you can put on.\nThe knife's parent: you, not_worn.\nFail to wear something not held:You aren't holding that!\nThe purse's parent: the Kitchen, not_worn.\nFail to remove something not held:You aren't wearing that!\nThe purse's parent: the Kitchen, not_worn.\nFail to put on something not reachable:You aren't holding that!\nThe purse's parent: the Kitchen, not_worn.\n"
+                          "value": "The flower's ogp: you, worn.\nFail to re-wear the flower:It is already worn.\nTake off the flower:You take off the flower.\nThe flower's newg: you, not_worn.\nFail to re-remove the flower:You aren't wearing that!\nWear the flower again:You put on the flower.\nThe flower's newg: you, worn.\nThe knife's parent: you, not_worn.\nFail to wear an unwearable:It isn't something you can put on.\nThe knife's parent: you, not_worn.\nThe purse's parent: the Kitchen, not_worn.\nFail to wear something not held:You haven't got that!\nFail to remove something not held:You haven't got that!\nFail to put on something not reachable:You haven't got that!\nThe purse's parent: the Kitchen, not_worn.\n"
                         }
                       }
                     }
@@ -785,6 +785,31 @@
                               }
                             },
                             {
+                              "id": "id-17898c98971-0",
+                              "type": "execute",
+                              "value": {
+                                "id": "id-17898c98971-1",
+                                "type": "say_text",
+                                "value": {
+                                  "$TEXT": {
+                                    "id": "id-17898c98971-2",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-17898c98971-3",
+                                      "type": "render_template",
+                                      "value": {
+                                        "$TEMPLATE": {
+                                          "id": "id-17898c98971-4",
+                                          "type": "lines",
+                                          "value": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
                               "id": "id-1788aa5f1db-65",
                               "type": "execute",
                               "value": {
@@ -905,31 +930,6 @@
                               }
                             },
                             {
-                              "id": "id-17885664876-793",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-17885664876-794",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-17885664876-795",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-17885664876-796",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-17885664876-797",
-                                          "type": "lines",
-                                          "value": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
                               "id": "id-1788aa5f1db-70",
                               "type": "execute",
                               "value": {
@@ -1044,31 +1044,6 @@
                                           }
                                         }
                                       ]
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-17885664876-619",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-17885664876-620",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-17885664876-621",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-17885664876-622",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-17885664876-623",
-                                          "type": "lines",
-                                          "value": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-                                        }
-                                      }
                                     }
                                   }
                                 }

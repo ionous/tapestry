@@ -222,7 +222,7 @@
                                             "$NAME": {
                                               "id": "id-1788f214861-43",
                                               "type": "pattern_name",
-                                              "value": "reaching"
+                                              "value": "permit reach"
                                             },
                                             "$ARGUMENTS": {
                                               "id": "id-1788f214861-44",
@@ -587,7 +587,7 @@
                                                                           "$NAME": {
                                                                             "id": "id-1788f214861-114",
                                                                             "type": "pattern_name",
-                                                                            "value": "print searching"
+                                                                            "value": "report searching"
                                                                           },
                                                                           "$ARGUMENTS": {
                                                                             "id": "id-1788f214861-115",
@@ -703,7 +703,7 @@
                   "$NAME": {
                     "id": "id-1788f214861-199",
                     "type": "pattern_name",
-                    "value": "print searching"
+                    "value": "report searching"
                   },
                   "$OPTVARS": {
                     "id": "id-1788f214861-200",
@@ -802,7 +802,7 @@
                   "$NAME": {
                     "id": "id-1788f214861-217",
                     "type": "pattern_name",
-                    "value": "print searching"
+                    "value": "report searching"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-1788f214861-693",
@@ -1115,7 +1115,7 @@
                                           "$NAME": {
                                             "id": "id-1788f62ad6f-46",
                                             "type": "pattern_name",
-                                            "value": "provides storage"
+                                            "value": "shows storage"
                                           },
                                           "$ARGUMENTS": {
                                             "id": "id-1788f62ad6f-47",
@@ -1601,7 +1601,7 @@
                   "$NAME": {
                     "id": "id-1788f214861-257",
                     "type": "pattern_name",
-                    "value": "reaching"
+                    "value": "permit reach"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-1788f214861-258",

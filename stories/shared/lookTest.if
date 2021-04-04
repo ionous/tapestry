@@ -1200,6 +1200,11 @@
                               },
                               "$TRAIT": [
                                 {
+                                  "id": "id-17898c98971-520",
+                                  "type": "trait",
+                                  "value": "fixed in place"
+                                },
+                                {
                                   "id": "id-177f1847e15-0",
                                   "type": "trait",
                                   "value": "closed"

@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -22,7 +23,7 @@ func NewRecord(run rt.Runtime, name, labels string, args []rt.Arg) (rec *g.Recor
 		parts := strings.Split(labels, ",") //
 		//
 		for i, a := range args {
-			n := a.Name
+			n := lang.Breakcase(a.Name)
 			// search for a matching label.
 			if len(n) == 0 {
 				err = errutil.New("unnamed arg at", i)

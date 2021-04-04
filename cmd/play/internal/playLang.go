@@ -20,6 +20,11 @@ func allOf(s ...parser.Scanner) (ret parser.Scanner) {
 	return
 }
 
+// changes the bounds of its first scanner in response to the results of its last scanner.
+func retarget(s ...parser.Scanner) parser.Scanner {
+	return &parser.Target{s}
+}
+
 func noun(kinds ...string) parser.Scanner {
 	var fs parser.Filters
 	for _, k := range kinds {

@@ -4,6 +4,629 @@
   "value": {
     "$PARAGRAPH": [
       {
+        "id": "id-1788f62ad6f-98",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-1788f62ad6f-99",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1788f62ad6f-100",
+                "type": "pattern_decl",
+                "value": {
+                  "$TYPE": {
+                    "id": "id-1788f62ad6f-101",
+                    "type": "pattern_type",
+                    "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-1788f62ad6f-102",
+                    "type": "pattern_name",
+                    "value": "provides storage"
+                  },
+                  "$OPTVARS": {
+                    "id": "id-1788f62ad6f-103",
+                    "type": "pattern_variables_tail",
+                    "value": {
+                      "$VARIABLE_DECL": [
+                        {
+                          "id": "id-1788f62ad6f-104",
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              "id": "id-1788f62ad6f-105",
+                              "type": "determiner",
+                              "value": "$AN"
+                            },
+                            "$NAME": {
+                              "id": "id-1788f62ad6f-106",
+                              "type": "variable_name",
+                              "value": "obj"
+                            },
+                            "$TYPE": {
+                              "id": "id-1788f62ad6f-107",
+                              "type": "variable_type",
+                              "value": {
+                                "$OBJECT": {
+                                  "id": "id-1788f62ad6f-108",
+                                  "type": "object_type",
+                                  "value": {
+                                    "$AN": {
+                                      "id": "id-1788f62ad6f-109",
+                                      "type": "ana",
+                                      "value": "$AN"
+                                    },
+                                    "$KIND": {
+                                      "id": "id-1788f62ad6f-110",
+                                      "type": "singular_kind",
+                                      "value": "object"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "$PATTERN_RETURN": {
+                    "id": "id-1788f62ad6f-111",
+                    "type": "pattern_return",
+                    "value": {
+                      "$RESULT": {
+                        "id": "id-1788f62ad6f-112",
+                        "type": "variable_decl",
+                        "value": {
+                          "$AN": {
+                            "id": "id-1788f62ad6f-113",
+                            "type": "determiner",
+                            "value": "$A"
+                          },
+                          "$NAME": {
+                            "id": "id-1788f62ad6f-114",
+                            "type": "variable_name",
+                            "value": "success"
+                          },
+                          "$TYPE": {
+                            "id": "id-1788f62ad6f-115",
+                            "type": "variable_type",
+                            "value": {
+                              "$PRIMITIVE": {
+                                "id": "id-1788f62ad6f-116",
+                                "type": "primitive_type",
+                                "value": "$BOOL"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17895af74e6-171",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17895af74e6-172",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-17895af74e6-173",
+                    "type": "lines",
+                    "value": "Does the object allow items to be stored inside or on top of it? "
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1788f62ad6f-117",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1788f62ad6f-118",
+                "type": "pattern_actions",
+                "value": {
+                  "$NAME": {
+                    "id": "id-1788f62ad6f-119",
+                    "type": "pattern_name",
+                    "value": "provides storage"
+                  },
+                  "$PATTERN_RULES": {
+                    "id": "id-1788f62ad6f-120",
+                    "type": "pattern_rules",
+                    "value": {
+                      "$PATTERN_RULE": [
+                        {
+                          "id": "id-1788f62ad6f-121",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-1788f62ad6f-122",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-1788f62ad6f-123",
+                                "type": "is_kind_of",
+                                "value": {
+                                  "$OBJECT": {
+                                    "id": "id-1788f62ad6f-124",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-1788f62ad6f-125",
+                                      "type": "get_var",
+                                      "value": {
+                                        "$NAME": {
+                                          "id": "id-1788f62ad6f-126",
+                                          "type": "text",
+                                          "value": "obj"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$KIND": {
+                                    "id": "id-1788f62ad6f-127",
+                                    "type": "text",
+                                    "value": "containers"
+                                  }
+                                }
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-1788f62ad6f-128",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-1788f62ad6f-129",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-1788f62ad6f-144",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-1788f62ad6f-145",
+                                          "type": "assign",
+                                          "value": {
+                                            "$VAR": {
+                                              "id": "id-1788f62ad6f-146",
+                                              "type": "variable_name",
+                                              "value": "success"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-1788f62ad6f-147",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-1788f62ad6f-148",
+                                                "type": "from_bool",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-1788f62ad6f-149",
+                                                    "type": "bool_eval",
+                                                    "value": {
+                                                      "id": "id-1788f62ad6f-150",
+                                                      "type": "bool_value",
+                                                      "value": {
+                                                        "$BOOL": {
+                                                          "id": "id-1788f62ad6f-151",
+                                                          "type": "bool",
+                                                          "value": "$TRUE"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "id": "id-1788f62ad6f-152",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-1788f62ad6f-153",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-1788f62ad6f-154",
+                                "type": "is_kind_of",
+                                "value": {
+                                  "$OBJECT": {
+                                    "id": "id-1788f62ad6f-155",
+                                    "type": "text_eval",
+                                    "value": {
+                                      "id": "id-1788f62ad6f-156",
+                                      "type": "get_var",
+                                      "value": {
+                                        "$NAME": {
+                                          "id": "id-1788f62ad6f-157",
+                                          "type": "text",
+                                          "value": "obj"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$KIND": {
+                                    "id": "id-1788f62ad6f-158",
+                                    "type": "text",
+                                    "value": "supporters"
+                                  }
+                                }
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-1788f62ad6f-159",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-1788f62ad6f-160",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-1788f62ad6f-161",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-1788f62ad6f-162",
+                                          "type": "assign",
+                                          "value": {
+                                            "$VAR": {
+                                              "id": "id-1788f62ad6f-163",
+                                              "type": "variable_name",
+                                              "value": "success"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-1788f62ad6f-164",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-1788f62ad6f-165",
+                                                "type": "from_bool",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-1788f62ad6f-166",
+                                                    "type": "bool_eval",
+                                                    "value": {
+                                                      "id": "id-1788f62ad6f-167",
+                                                      "type": "bool_value",
+                                                      "value": {
+                                                        "$BOOL": {
+                                                          "id": "id-1788f62ad6f-168",
+                                                          "type": "bool",
+                                                          "value": "$TRUE"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "id-1788f62ad6f-2",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-1788f62ad6f-3",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1788f62ad6f-4",
+                "type": "pattern_decl",
+                "value": {
+                  "$TYPE": {
+                    "id": "id-1788f62ad6f-5",
+                    "type": "pattern_type",
+                    "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    "id": "id-1788f62ad6f-6",
+                    "type": "pattern_name",
+                    "value": "shows storage"
+                  },
+                  "$OPTVARS": {
+                    "id": "id-1788f62ad6f-7",
+                    "type": "pattern_variables_tail",
+                    "value": {
+                      "$VARIABLE_DECL": [
+                        {
+                          "id": "id-1788f62ad6f-8",
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              "id": "id-1788f62ad6f-9",
+                              "type": "determiner",
+                              "value": "$AN"
+                            },
+                            "$NAME": {
+                              "id": "id-1788f62ad6f-10",
+                              "type": "variable_name",
+                              "value": "obj"
+                            },
+                            "$TYPE": {
+                              "id": "id-1788f62ad6f-11",
+                              "type": "variable_type",
+                              "value": {
+                                "$OBJECT": {
+                                  "id": "id-1788f62ad6f-12",
+                                  "type": "object_type",
+                                  "value": {
+                                    "$AN": {
+                                      "id": "id-1788f62ad6f-13",
+                                      "type": "ana",
+                                      "value": "$AN"
+                                    },
+                                    "$KIND": {
+                                      "id": "id-1788f62ad6f-14",
+                                      "type": "singular_kind",
+                                      "value": "object"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "$PATTERN_RETURN": {
+                    "id": "id-1788f62ad6f-15",
+                    "type": "pattern_return",
+                    "value": {
+                      "$RESULT": {
+                        "id": "id-1788f62ad6f-16",
+                        "type": "variable_decl",
+                        "value": {
+                          "$AN": {
+                            "id": "id-1788f62ad6f-17",
+                            "type": "determiner",
+                            "value": "$A"
+                          },
+                          "$NAME": {
+                            "id": "id-1788f62ad6f-18",
+                            "type": "variable_name",
+                            "value": "success"
+                          },
+                          "$TYPE": {
+                            "id": "id-1788f62ad6f-19",
+                            "type": "variable_type",
+                            "value": {
+                              "$PRIMITIVE": {
+                                "id": "id-1788f62ad6f-20",
+                                "type": "primitive_type",
+                                "value": "$BOOL"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-17895af74e6-174",
+              "type": "story_statement",
+              "value": {
+                "id": "id-17895af74e6-175",
+                "type": "comment",
+                "value": {
+                  "$LINES": {
+                    "id": "id-17895af74e6-176",
+                    "type": "lines",
+                    "value": "Does the object provide storage, and can that storage be seen from outside? "
+                  }
+                }
+              }
+            },
+            {
+              "id": "id-1788f62ad6f-21",
+              "type": "story_statement",
+              "value": {
+                "id": "id-1788f62ad6f-22",
+                "type": "pattern_actions",
+                "value": {
+                  "$NAME": {
+                    "id": "id-1788f62ad6f-23",
+                    "type": "pattern_name",
+                    "value": "shows storage"
+                  },
+                  "$PATTERN_RULES": {
+                    "id": "id-1788f62ad6f-24",
+                    "type": "pattern_rules",
+                    "value": {
+                      "$PATTERN_RULE": [
+                        {
+                          "id": "id-17895af74e6-199",
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              "id": "id-17895af74e6-200",
+                              "type": "bool_eval",
+                              "value": {
+                                "id": "id-17895af74e6-201",
+                                "type": "determine",
+                                "value": {
+                                  "$NAME": {
+                                    "id": "id-17895af74e6-202",
+                                    "type": "pattern_name",
+                                    "value": "provides storage"
+                                  },
+                                  "$ARGUMENTS": {
+                                    "id": "id-17895af74e6-203",
+                                    "type": "arguments",
+                                    "value": {
+                                      "$ARGS": [
+                                        {
+                                          "id": "id-17895af74e6-204",
+                                          "type": "argument",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-17895af74e6-205",
+                                              "type": "variable_name",
+                                              "value": "obj"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-17895af74e6-206",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-17895af74e6-207",
+                                                "type": "get_var",
+                                                "value": {
+                                                  "$NAME": {
+                                                    "id": "id-17895af74e6-208",
+                                                    "type": "text",
+                                                    "value": "obj"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "$HOOK": {
+                              "id": "id-17895af74e6-209",
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  "id": "id-17895af74e6-210",
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        "id": "id-17895af74e6-136",
+                                        "type": "execute",
+                                        "value": {
+                                          "id": "id-17895af74e6-137",
+                                          "type": "assign",
+                                          "value": {
+                                            "$VAR": {
+                                              "id": "id-17895af74e6-138",
+                                              "type": "variable_name",
+                                              "value": "success"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-17895af74e6-139",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-17895af74e6-140",
+                                                "type": "from_bool",
+                                                "value": {
+                                                  "$VAL": {
+                                                    "id": "id-17895af74e6-141",
+                                                    "type": "bool_eval",
+                                                    "value": {
+                                                      "id": "id-17895af74e6-267",
+                                                      "type": "not",
+                                                      "value": {
+                                                        "$TEST": {
+                                                          "id": "id-17895af74e6-268",
+                                                          "type": "bool_eval",
+                                                          "value": {
+                                                            "id": "id-17895af74e6-269",
+                                                            "type": "determine",
+                                                            "value": {
+                                                              "$NAME": {
+                                                                "id": "id-17895af74e6-270",
+                                                                "type": "pattern_name",
+                                                                "value": "fully opaque"
+                                                              },
+                                                              "$ARGUMENTS": {
+                                                                "id": "id-17895af74e6-271",
+                                                                "type": "arguments",
+                                                                "value": {
+                                                                  "$ARGS": [
+                                                                    {
+                                                                      "id": "id-17895af74e6-272",
+                                                                      "type": "argument",
+                                                                      "value": {
+                                                                        "$NAME": {
+                                                                          "id": "id-17895af74e6-273",
+                                                                          "type": "variable_name",
+                                                                          "value": "obj"
+                                                                        },
+                                                                        "$FROM": {
+                                                                          "id": "id-17895af74e6-274",
+                                                                          "type": "assignment",
+                                                                          "value": {
+                                                                            "id": "id-17895af74e6-275",
+                                                                            "type": "get_var",
+                                                                            "value": {
+                                                                              "$NAME": {
+                                                                                "id": "id-17895af74e6-276",
+                                                                                "type": "text",
+                                                                                "value": "obj"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
         "id": "id-177ffcc5f8b-6",
         "type": "paragraph",
         "value": {
@@ -123,7 +746,7 @@
                   "$LINES": {
                     "id": "id-177ffcc5f8b-104",
                     "type": "lines",
-                    "value": "When printing object details, sometimes we want to filter which other objects should be listed along with it. "
+                    "value": "Return a list containing any visible contents."
                   }
                 }
               }
@@ -515,61 +1138,61 @@
         }
       },
       {
-        "id": "id-1788f62ad6f-2",
+        "id": "id-17895af74e6-56",
         "type": "paragraph",
         "value": {
           "$STORY_STATEMENT": [
             {
-              "id": "id-1788f62ad6f-3",
+              "id": "id-17895af74e6-57",
               "type": "story_statement",
               "value": {
-                "id": "id-1788f62ad6f-4",
+                "id": "id-17895af74e6-58",
                 "type": "pattern_decl",
                 "value": {
                   "$TYPE": {
-                    "id": "id-1788f62ad6f-5",
+                    "id": "id-17895af74e6-59",
                     "type": "pattern_type",
                     "value": "$PATTERNS"
                   },
                   "$NAME": {
-                    "id": "id-1788f62ad6f-6",
+                    "id": "id-17895af74e6-60",
                     "type": "pattern_name",
-                    "value": "shows storage"
+                    "value": "allows storage"
                   },
                   "$OPTVARS": {
-                    "id": "id-1788f62ad6f-7",
+                    "id": "id-17895af74e6-61",
                     "type": "pattern_variables_tail",
                     "value": {
                       "$VARIABLE_DECL": [
                         {
-                          "id": "id-1788f62ad6f-8",
+                          "id": "id-17895af74e6-62",
                           "type": "variable_decl",
                           "value": {
                             "$AN": {
-                              "id": "id-1788f62ad6f-9",
+                              "id": "id-17895af74e6-63",
                               "type": "determiner",
                               "value": "$AN"
                             },
                             "$NAME": {
-                              "id": "id-1788f62ad6f-10",
+                              "id": "id-17895af74e6-64",
                               "type": "variable_name",
                               "value": "obj"
                             },
                             "$TYPE": {
-                              "id": "id-1788f62ad6f-11",
+                              "id": "id-17895af74e6-65",
                               "type": "variable_type",
                               "value": {
                                 "$OBJECT": {
-                                  "id": "id-1788f62ad6f-12",
+                                  "id": "id-17895af74e6-66",
                                   "type": "object_type",
                                   "value": {
                                     "$AN": {
-                                      "id": "id-1788f62ad6f-13",
+                                      "id": "id-17895af74e6-67",
                                       "type": "ana",
                                       "value": "$AN"
                                     },
                                     "$KIND": {
-                                      "id": "id-1788f62ad6f-14",
+                                      "id": "id-17895af74e6-68",
                                       "type": "singular_kind",
                                       "value": "object"
                                     }
@@ -583,29 +1206,29 @@
                     }
                   },
                   "$PATTERN_RETURN": {
-                    "id": "id-1788f62ad6f-15",
+                    "id": "id-17895af74e6-69",
                     "type": "pattern_return",
                     "value": {
                       "$RESULT": {
-                        "id": "id-1788f62ad6f-16",
+                        "id": "id-17895af74e6-70",
                         "type": "variable_decl",
                         "value": {
                           "$AN": {
-                            "id": "id-1788f62ad6f-17",
+                            "id": "id-17895af74e6-71",
                             "type": "determiner",
                             "value": "$A"
                           },
                           "$NAME": {
-                            "id": "id-1788f62ad6f-18",
+                            "id": "id-17895af74e6-72",
                             "type": "variable_name",
                             "value": "success"
                           },
                           "$TYPE": {
-                            "id": "id-1788f62ad6f-19",
+                            "id": "id-17895af74e6-73",
                             "type": "variable_type",
                             "value": {
                               "$PRIMITIVE": {
-                                "id": "id-1788f62ad6f-20",
+                                "id": "id-17895af74e6-74",
                                 "type": "primitive_type",
                                 "value": "$BOOL"
                               }
@@ -619,480 +1242,127 @@
               }
             },
             {
-              "id": "id-1788f62ad6f-21",
+              "id": "id-17895af74e6-128",
               "type": "story_statement",
               "value": {
-                "id": "id-1788f62ad6f-22",
-                "type": "pattern_actions",
+                "id": "id-17895af74e6-129",
+                "type": "comment",
                 "value": {
-                  "$NAME": {
-                    "id": "id-1788f62ad6f-23",
-                    "type": "pattern_name",
-                    "value": "shows storage"
-                  },
-                  "$PATTERN_RULES": {
-                    "id": "id-1788f62ad6f-24",
-                    "type": "pattern_rules",
-                    "value": {
-                      "$PATTERN_RULE": [
-                        {
-                          "id": "id-177ffcc5f8b-132",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-177ffcc5f8b-133",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-177ffcc5f8b-135",
-                                "type": "is_kind_of",
-                                "value": {
-                                  "$OBJECT": {
-                                    "id": "id-177ffcc5f8b-136",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177ffcc5f8b-138",
-                                      "type": "get_var",
-                                      "value": {
-                                        "$NAME": {
-                                          "id": "id-177ffcc5f8b-139",
-                                          "type": "text",
-                                          "value": "obj"
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$KIND": {
-                                    "id": "id-177ffcc5f8b-137",
-                                    "type": "text",
-                                    "value": "containers"
-                                  }
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-177ffcc5f8b-134",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-177ffcc5f8b-140",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-17800ed6af1-55",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-17800ed6af1-56",
-                                          "type": "choose_action",
-                                          "value": {
-                                            "$IF": {
-                                              "id": "id-17800ed6af1-57",
-                                              "type": "bool_eval",
-                                              "value": {
-                                                "id": "id-17800ed6af1-67",
-                                                "type": "not",
-                                                "value": {
-                                                  "$TEST": {
-                                                    "id": "id-17800ed6af1-68",
-                                                    "type": "bool_eval",
-                                                    "value": {
-                                                      "id": "id-17800ed6af1-69",
-                                                      "type": "determine",
-                                                      "value": {
-                                                        "$NAME": {
-                                                          "id": "id-17800ed6af1-70",
-                                                          "type": "pattern_name",
-                                                          "value": "fully opaque"
-                                                        },
-                                                        "$ARGUMENTS": {
-                                                          "id": "id-17800ed6af1-71",
-                                                          "type": "arguments",
-                                                          "value": {
-                                                            "$ARGS": [
-                                                              {
-                                                                "id": "id-17800ed6af1-72",
-                                                                "type": "argument",
-                                                                "value": {
-                                                                  "$NAME": {
-                                                                    "id": "id-17800ed6af1-73",
-                                                                    "type": "variable_name",
-                                                                    "value": "obj"
-                                                                  },
-                                                                  "$FROM": {
-                                                                    "id": "id-17800ed6af1-74",
-                                                                    "type": "assignment",
-                                                                    "value": {
-                                                                      "id": "id-17800ed6af1-75",
-                                                                      "type": "get_var",
-                                                                      "value": {
-                                                                        "$NAME": {
-                                                                          "id": "id-17800ed6af1-76",
-                                                                          "type": "text",
-                                                                          "value": "obj"
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            ]
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "$DO": {
-                                              "id": "id-17800ed6af1-58",
-                                              "type": "activity",
-                                              "value": {
-                                                "$EXE": [
-                                                  {
-                                                    "id": "id-17800d49b33-83",
-                                                    "type": "execute",
-                                                    "value": {
-                                                      "id": "id-17800d49b33-84",
-                                                      "type": "assign",
-                                                      "value": {
-                                                        "$VAR": {
-                                                          "id": "id-17800d49b33-85",
-                                                          "type": "variable_name",
-                                                          "value": "success"
-                                                        },
-                                                        "$FROM": {
-                                                          "id": "id-17800d49b33-86",
-                                                          "type": "assignment",
-                                                          "value": {
-                                                            "id": "id-17800d49b33-87",
-                                                            "type": "from_bool",
-                                                            "value": {
-                                                              "$VAL": {
-                                                                "id": "id-17800d49b33-88",
-                                                                "type": "bool_eval",
-                                                                "value": {
-                                                                  "id": "id-17800d49b33-89",
-                                                                  "type": "bool_value",
-                                                                  "value": {
-                                                                    "$BOOL": {
-                                                                      "id": "id-17800d49b33-90",
-                                                                      "type": "bool",
-                                                                      "value": "$TRUE"
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          "id": "id-177ffcc5f8b-107",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-177ffcc5f8b-108",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-177ffcc5f8b-110",
-                                "type": "is_kind_of",
-                                "value": {
-                                  "$OBJECT": {
-                                    "id": "id-177ffcc5f8b-111",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177ffcc5f8b-113",
-                                      "type": "get_var",
-                                      "value": {
-                                        "$NAME": {
-                                          "id": "id-177ffcc5f8b-114",
-                                          "type": "text",
-                                          "value": "obj"
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$KIND": {
-                                    "id": "id-177ffcc5f8b-112",
-                                    "type": "text",
-                                    "value": "supporters"
-                                  }
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-177ffcc5f8b-109",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-177ffcc5f8b-115",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-17800d49b33-91",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-17800d49b33-92",
-                                          "type": "assign",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-17800d49b33-93",
-                                              "type": "variable_name",
-                                              "value": "success"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-17800d49b33-94",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-17800d49b33-95",
-                                                "type": "from_bool",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-17800d49b33-96",
-                                                    "type": "bool_eval",
-                                                    "value": {
-                                                      "id": "id-17800d49b33-97",
-                                                      "type": "bool_value",
-                                                      "value": {
-                                                        "$BOOL": {
-                                                          "id": "id-17800d49b33-98",
-                                                          "type": "bool",
-                                                          "value": "$TRUE"
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": "id-1788f62ad6f-98",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-1788f62ad6f-99",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1788f62ad6f-100",
-                "type": "pattern_decl",
-                "value": {
-                  "$TYPE": {
-                    "id": "id-1788f62ad6f-101",
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
-                  },
-                  "$NAME": {
-                    "id": "id-1788f62ad6f-102",
-                    "type": "pattern_name",
-                    "value": "provides storage"
-                  },
-                  "$OPTVARS": {
-                    "id": "id-1788f62ad6f-103",
-                    "type": "pattern_variables_tail",
-                    "value": {
-                      "$VARIABLE_DECL": [
-                        {
-                          "id": "id-1788f62ad6f-104",
-                          "type": "variable_decl",
-                          "value": {
-                            "$AN": {
-                              "id": "id-1788f62ad6f-105",
-                              "type": "determiner",
-                              "value": "$AN"
-                            },
-                            "$NAME": {
-                              "id": "id-1788f62ad6f-106",
-                              "type": "variable_name",
-                              "value": "obj"
-                            },
-                            "$TYPE": {
-                              "id": "id-1788f62ad6f-107",
-                              "type": "variable_type",
-                              "value": {
-                                "$OBJECT": {
-                                  "id": "id-1788f62ad6f-108",
-                                  "type": "object_type",
-                                  "value": {
-                                    "$AN": {
-                                      "id": "id-1788f62ad6f-109",
-                                      "type": "ana",
-                                      "value": "$AN"
-                                    },
-                                    "$KIND": {
-                                      "id": "id-1788f62ad6f-110",
-                                      "type": "singular_kind",
-                                      "value": "object"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  },
-                  "$PATTERN_RETURN": {
-                    "id": "id-1788f62ad6f-111",
-                    "type": "pattern_return",
-                    "value": {
-                      "$RESULT": {
-                        "id": "id-1788f62ad6f-112",
-                        "type": "variable_decl",
-                        "value": {
-                          "$AN": {
-                            "id": "id-1788f62ad6f-113",
-                            "type": "determiner",
-                            "value": "$A"
-                          },
-                          "$NAME": {
-                            "id": "id-1788f62ad6f-114",
-                            "type": "variable_name",
-                            "value": "success"
-                          },
-                          "$TYPE": {
-                            "id": "id-1788f62ad6f-115",
-                            "type": "variable_type",
-                            "value": {
-                              "$PRIMITIVE": {
-                                "id": "id-1788f62ad6f-116",
-                                "type": "primitive_type",
-                                "value": "$BOOL"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                  "$LINES": {
+                    "id": "id-17895af74e6-130",
+                    "type": "lines",
+                    "value": "Returns true when the storage can be accessed."
                   }
                 }
               }
             },
             {
-              "id": "id-1788f62ad6f-117",
+              "id": "id-17895af74e6-75",
               "type": "story_statement",
               "value": {
-                "id": "id-1788f62ad6f-118",
+                "id": "id-17895af74e6-76",
                 "type": "pattern_actions",
                 "value": {
                   "$NAME": {
-                    "id": "id-1788f62ad6f-119",
+                    "id": "id-17895af74e6-77",
                     "type": "pattern_name",
-                    "value": "provides storage"
+                    "value": "allows storage"
                   },
                   "$PATTERN_RULES": {
-                    "id": "id-1788f62ad6f-120",
+                    "id": "id-17895af74e6-78",
                     "type": "pattern_rules",
                     "value": {
                       "$PATTERN_RULE": [
                         {
-                          "id": "id-1788f62ad6f-121",
+                          "id": "id-17895af74e6-277",
                           "type": "pattern_rule",
                           "value": {
                             "$GUARD": {
-                              "id": "id-1788f62ad6f-122",
+                              "id": "id-17895af74e6-278",
                               "type": "bool_eval",
                               "value": {
-                                "id": "id-1788f62ad6f-123",
-                                "type": "is_kind_of",
+                                "id": "id-17895af74e6-279",
+                                "type": "determine",
                                 "value": {
-                                  "$OBJECT": {
-                                    "id": "id-1788f62ad6f-124",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1788f62ad6f-125",
-                                      "type": "get_var",
-                                      "value": {
-                                        "$NAME": {
-                                          "id": "id-1788f62ad6f-126",
-                                          "type": "text",
-                                          "value": "obj"
-                                        }
-                                      }
-                                    }
+                                  "$NAME": {
+                                    "id": "id-17895af74e6-280",
+                                    "type": "pattern_name",
+                                    "value": "provides storage"
                                   },
-                                  "$KIND": {
-                                    "id": "id-1788f62ad6f-127",
-                                    "type": "text",
-                                    "value": "containers"
+                                  "$ARGUMENTS": {
+                                    "id": "id-17895af74e6-281",
+                                    "type": "arguments",
+                                    "value": {
+                                      "$ARGS": [
+                                        {
+                                          "id": "id-17895af74e6-282",
+                                          "type": "argument",
+                                          "value": {
+                                            "$NAME": {
+                                              "id": "id-17895af74e6-283",
+                                              "type": "variable_name",
+                                              "value": "obj"
+                                            },
+                                            "$FROM": {
+                                              "id": "id-17895af74e6-284",
+                                              "type": "assignment",
+                                              "value": {
+                                                "id": "id-17895af74e6-285",
+                                                "type": "get_var",
+                                                "value": {
+                                                  "$NAME": {
+                                                    "id": "id-17895af74e6-286",
+                                                    "type": "text",
+                                                    "value": "obj"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
                                   }
                                 }
                               }
                             },
                             "$HOOK": {
-                              "id": "id-1788f62ad6f-128",
+                              "id": "id-17895af74e6-287",
                               "type": "program_hook",
                               "value": {
                                 "$ACTIVITY": {
-                                  "id": "id-1788f62ad6f-129",
+                                  "id": "id-17895af74e6-288",
                                   "type": "activity",
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-1788f62ad6f-144",
+                                        "id": "id-17895af74e6-289",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-1788f62ad6f-145",
+                                          "id": "id-17895af74e6-290",
                                           "type": "assign",
                                           "value": {
                                             "$VAR": {
-                                              "id": "id-1788f62ad6f-146",
+                                              "id": "id-17895af74e6-291",
                                               "type": "variable_name",
                                               "value": "success"
                                             },
                                             "$FROM": {
-                                              "id": "id-1788f62ad6f-147",
+                                              "id": "id-17895af74e6-292",
                                               "type": "assignment",
                                               "value": {
-                                                "id": "id-1788f62ad6f-148",
+                                                "id": "id-17895af74e6-293",
                                                 "type": "from_bool",
                                                 "value": {
                                                   "$VAL": {
-                                                    "id": "id-1788f62ad6f-149",
+                                                    "id": "id-17895af74e6-294",
                                                     "type": "bool_eval",
                                                     "value": {
-                                                      "id": "id-1788f62ad6f-150",
+                                                      "id": "id-17895af74e6-305",
                                                       "type": "bool_value",
                                                       "value": {
                                                         "$BOOL": {
-                                                          "id": "id-1788f62ad6f-151",
+                                                          "id": "id-17895af74e6-306",
                                                           "type": "bool",
                                                           "value": "$TRUE"
                                                         }
@@ -1113,78 +1383,130 @@
                           }
                         },
                         {
-                          "id": "id-1788f62ad6f-152",
+                          "id": "id-17895af74e6-178",
                           "type": "pattern_rule",
                           "value": {
                             "$GUARD": {
-                              "id": "id-1788f62ad6f-153",
+                              "id": "id-17895af74e6-179",
                               "type": "bool_eval",
                               "value": {
-                                "id": "id-1788f62ad6f-154",
-                                "type": "is_kind_of",
+                                "id": "id-17895af74e6-183",
+                                "type": "all_true",
                                 "value": {
-                                  "$OBJECT": {
-                                    "id": "id-1788f62ad6f-155",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1788f62ad6f-156",
-                                      "type": "get_var",
+                                  "$TEST": [
+                                    {
+                                      "id": "id-17895af74e6-184",
+                                      "type": "bool_eval",
                                       "value": {
-                                        "$NAME": {
-                                          "id": "id-1788f62ad6f-157",
-                                          "type": "text",
-                                          "value": "obj"
+                                        "id": "id-17895af74e6-185",
+                                        "type": "is_kind_of",
+                                        "value": {
+                                          "$OBJECT": {
+                                            "id": "id-17895af74e6-186",
+                                            "type": "text_eval",
+                                            "value": {
+                                              "id": "id-17895af74e6-188",
+                                              "type": "get_var",
+                                              "value": {
+                                                "$NAME": {
+                                                  "id": "id-17895af74e6-189",
+                                                  "type": "text",
+                                                  "value": "obj"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "$KIND": {
+                                            "id": "id-17895af74e6-187",
+                                            "type": "text",
+                                            "value": "containers"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "id": "id-17895af74e6-190",
+                                      "type": "bool_eval",
+                                      "value": {
+                                        "id": "id-17895af74e6-191",
+                                        "type": "has_trait",
+                                        "value": {
+                                          "$OBJECT": {
+                                            "id": "id-17895af74e6-192",
+                                            "type": "text_eval",
+                                            "value": {
+                                              "id": "id-17895af74e6-194",
+                                              "type": "get_var",
+                                              "value": {
+                                                "$NAME": {
+                                                  "id": "id-17895af74e6-195",
+                                                  "type": "text",
+                                                  "value": "obj"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "$TRAIT": {
+                                            "id": "id-17895af74e6-193",
+                                            "type": "text_eval",
+                                            "value": {
+                                              "id": "id-17895af74e6-196",
+                                              "type": "text_value",
+                                              "value": {
+                                                "$TEXT": {
+                                                  "id": "id-17895af74e6-197",
+                                                  "type": "text",
+                                                  "value": "closed"
+                                                }
+                                              }
+                                            }
+                                          }
                                         }
                                       }
                                     }
-                                  },
-                                  "$KIND": {
-                                    "id": "id-1788f62ad6f-158",
-                                    "type": "text",
-                                    "value": "supporters"
-                                  }
+                                  ]
                                 }
                               }
                             },
                             "$HOOK": {
-                              "id": "id-1788f62ad6f-159",
+                              "id": "id-17895af74e6-180",
                               "type": "program_hook",
                               "value": {
                                 "$ACTIVITY": {
-                                  "id": "id-1788f62ad6f-160",
+                                  "id": "id-17895af74e6-198",
                                   "type": "activity",
                                   "value": {
                                     "$EXE": [
                                       {
-                                        "id": "id-1788f62ad6f-161",
+                                        "id": "id-17895af74e6-119",
                                         "type": "execute",
                                         "value": {
-                                          "id": "id-1788f62ad6f-162",
+                                          "id": "id-17895af74e6-120",
                                           "type": "assign",
                                           "value": {
                                             "$VAR": {
-                                              "id": "id-1788f62ad6f-163",
+                                              "id": "id-17895af74e6-121",
                                               "type": "variable_name",
                                               "value": "success"
                                             },
                                             "$FROM": {
-                                              "id": "id-1788f62ad6f-164",
+                                              "id": "id-17895af74e6-122",
                                               "type": "assignment",
                                               "value": {
-                                                "id": "id-1788f62ad6f-165",
+                                                "id": "id-17895af74e6-123",
                                                 "type": "from_bool",
                                                 "value": {
                                                   "$VAL": {
-                                                    "id": "id-1788f62ad6f-166",
+                                                    "id": "id-17895af74e6-124",
                                                     "type": "bool_eval",
                                                     "value": {
-                                                      "id": "id-1788f62ad6f-167",
+                                                      "id": "id-17895af74e6-125",
                                                       "type": "bool_value",
                                                       "value": {
                                                         "$BOOL": {
-                                                          "id": "id-1788f62ad6f-168",
+                                                          "id": "id-17895af74e6-126",
                                                           "type": "bool",
-                                                          "value": "$TRUE"
+                                                          "value": "$FALSE"
                                                         }
                                                       }
                                                     }
