@@ -253,7 +253,7 @@
                                         "$NAME": {
                                           "id": "id-178946c1513-51",
                                           "type": "pattern_name",
-                                          "value": "ownerOf"
+                                          "value": "parentOf"
                                         },
                                         "$ARGUMENTS": {
                                           "id": "id-178946c1513-52",

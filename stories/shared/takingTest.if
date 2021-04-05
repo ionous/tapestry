@@ -30,7 +30,7 @@
                         "$LINES": {
                           "id": "id-1783e19be19-70",
                           "type": "lines",
-                          "value": "  - The apple's parent: Mildred. Fail to steal:\n  That seems to belong to Mildred.\n  - Fail to take possessions:\n  You already have that.\n  - Fail to take your container:\n  You would have to get out first.\n  - The knife's parent was: the cabinet. Okay, take something:\n  Taken.The knife's parent is: you.\n  - Fail to take your self:\n  You are always self-possessed.\n  - Fail to take someone else:\n  I don't suppose Mildred would care for that.\n  - Fail to take scenery:\n  It is hardly portable.\n  - Fail to take something fixed in place:\n  It is fixed in place.\n"
+                          "value": "  - Fail to take from something closed:\n  The espresso machine isn't open.\n  - The apple's parent: Mildred. Fail to steal:\n  That seems to belong to Mildred.\n  - Fail to take possessions:\n  You already have that.\n  - Fail to take your container:\n  You would have to get out first.\n  - The knife's parent was: the cabinet. Okay, take something:\n  Taken.The knife's parent is: you.\n  - Fail to take your self:\n  You are always self-possessed.\n  - Fail to take someone else:\n  I don't suppose Mildred would care for that.\n  - Fail to take scenery:\n  It is hardly portable.\n  - Fail to take something fixed in place:\n  It is fixed in place.\n"
                         }
                       }
                     }
@@ -78,6 +78,154 @@
                                           "type": "activity",
                                           "value": {
                                             "$EXE": [
+                                              {
+                                                "id": "id-178a3c13cd9-98",
+                                                "type": "execute",
+                                                "value": {
+                                                  "id": "id-178a3c13cd9-99",
+                                                  "type": "say_text",
+                                                  "value": {
+                                                    "$TEXT": {
+                                                      "id": "id-178a3c13cd9-100",
+                                                      "type": "text_eval",
+                                                      "value": {
+                                                        "id": "id-178a3c13cd9-101",
+                                                        "type": "row",
+                                                        "value": {
+                                                          "$DO": {
+                                                            "id": "id-178a3c13cd9-102",
+                                                            "type": "activity",
+                                                            "value": {
+                                                              "$EXE": [
+                                                                {
+                                                                  "id": "id-178a3c13cd9-103",
+                                                                  "type": "execute",
+                                                                  "value": {
+                                                                    "id": "id-178a3c13cd9-104",
+                                                                    "type": "say_text",
+                                                                    "value": {
+                                                                      "$TEXT": {
+                                                                        "id": "id-178a3c13cd9-105",
+                                                                        "type": "text_eval",
+                                                                        "value": {
+                                                                          "id": "id-178a3c13cd9-106",
+                                                                          "type": "text_value",
+                                                                          "value": {
+                                                                            "$TEXT": {
+                                                                              "id": "id-178a3c13cd9-107",
+                                                                              "type": "text",
+                                                                              "value": "Fail to take from something closed:<br>"
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                },
+                                                                {
+                                                                  "id": "id-178a3c13cd9-108",
+                                                                  "type": "execute",
+                                                                  "value": {
+                                                                    "id": "id-178a3c13cd9-109",
+                                                                    "type": "determine",
+                                                                    "value": {
+                                                                      "$NAME": {
+                                                                        "id": "id-178a3c13cd9-110",
+                                                                        "type": "pattern_name",
+                                                                        "value": "taking"
+                                                                      },
+                                                                      "$ARGUMENTS": {
+                                                                        "id": "id-178a3c13cd9-111",
+                                                                        "type": "arguments",
+                                                                        "value": {
+                                                                          "$ARGS": [
+                                                                            {
+                                                                              "id": "id-178a3c13cd9-112",
+                                                                              "type": "argument",
+                                                                              "value": {
+                                                                                "$NAME": {
+                                                                                  "id": "id-178a3c13cd9-113",
+                                                                                  "type": "variable_name",
+                                                                                  "value": "agent"
+                                                                                },
+                                                                                "$FROM": {
+                                                                                  "id": "id-178a3c13cd9-114",
+                                                                                  "type": "assignment",
+                                                                                  "value": {
+                                                                                    "id": "id-178a3c13cd9-115",
+                                                                                    "type": "from_text",
+                                                                                    "value": {
+                                                                                      "$VAL": {
+                                                                                        "id": "id-178a3c13cd9-116",
+                                                                                        "type": "text_eval",
+                                                                                        "value": {
+                                                                                          "id": "id-178a3c13cd9-117",
+                                                                                          "type": "text_value",
+                                                                                          "value": {
+                                                                                            "$TEXT": {
+                                                                                              "id": "id-178a3c13cd9-118",
+                                                                                              "type": "text",
+                                                                                              "value": "player"
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            },
+                                                                            {
+                                                                              "id": "id-178a3c13cd9-119",
+                                                                              "type": "argument",
+                                                                              "value": {
+                                                                                "$NAME": {
+                                                                                  "id": "id-178a3c13cd9-120",
+                                                                                  "type": "variable_name",
+                                                                                  "value": "noun"
+                                                                                },
+                                                                                "$FROM": {
+                                                                                  "id": "id-178a3c13cd9-121",
+                                                                                  "type": "assignment",
+                                                                                  "value": {
+                                                                                    "id": "id-178a3c13cd9-122",
+                                                                                    "type": "from_text",
+                                                                                    "value": {
+                                                                                      "$VAL": {
+                                                                                        "id": "id-178a3c13cd9-123",
+                                                                                        "type": "text_eval",
+                                                                                        "value": {
+                                                                                          "id": "id-178a3c13cd9-124",
+                                                                                          "type": "text_value",
+                                                                                          "value": {
+                                                                                            "$TEXT": {
+                                                                                              "id": "id-178a3c13cd9-125",
+                                                                                              "type": "text",
+                                                                                              "value": "coffee"
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              ]
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
                                               {
                                                 "id": "id-17898c98971-662",
                                                 "type": "execute",
@@ -1641,6 +1789,70 @@
                                             "id": "id-1789e6caadb-61",
                                             "type": "noun_name",
                                             "value": "Mildred"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "id": "id-178a3c13cd9-127",
+                          "type": "paragraph",
+                          "value": {
+                            "$STORY_STATEMENT": [
+                              {
+                                "id": "id-178a3c13cd9-128",
+                                "type": "story_statement",
+                                "value": {
+                                  "id": "id-178a3c13cd9-129",
+                                  "type": "relative_to_noun",
+                                  "value": {
+                                    "$RELATION": {
+                                      "id": "id-178a3c13cd9-130",
+                                      "type": "relation_name",
+                                      "value": "whereabouts"
+                                    },
+                                    "$NOUNS": [
+                                      {
+                                        "id": "id-178a3c13cd9-131",
+                                        "type": "named_noun",
+                                        "value": {
+                                          "$DETERMINER": {
+                                            "id": "id-178a3c13cd9-132",
+                                            "type": "determiner",
+                                            "value": "$THE"
+                                          },
+                                          "$NAME": {
+                                            "id": "id-178a3c13cd9-133",
+                                            "type": "noun_name",
+                                            "value": "coffee"
+                                          }
+                                        }
+                                      }
+                                    ],
+                                    "$ARE_BEING": {
+                                      "id": "id-178a3c13cd9-134",
+                                      "type": "are_being",
+                                      "value": "$IS"
+                                    },
+                                    "$NOUNS1": [
+                                      {
+                                        "id": "id-178a3c13cd9-135",
+                                        "type": "named_noun",
+                                        "value": {
+                                          "$DETERMINER": {
+                                            "id": "id-178a3c13cd9-136",
+                                            "type": "determiner",
+                                            "value": "$THE"
+                                          },
+                                          "$NAME": {
+                                            "id": "id-178a3c13cd9-137",
+                                            "type": "noun_name",
+                                            "value": "machine"
                                           }
                                         }
                                       }

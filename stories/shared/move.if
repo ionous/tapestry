@@ -1119,7 +1119,7 @@
                             "$NAME": {
                               "id": "id-1770d66eb57-44",
                               "type": "variable_name",
-                              "value": "on"
+                              "value": "actor"
                             },
                             "$TYPE": {
                               "id": "id-1770d66eb57-45",
@@ -1236,7 +1236,7 @@
                                                               "$NAME": {
                                                                 "id": "id-1770d66eb57-112",
                                                                 "type": "pattern_name",
-                                                                "value": "OwnerOf"
+                                                                "value": "holderOf"
                                                               },
                                                               "$ARGUMENTS": {
                                                                 "id": "id-1770d66eb57-113",
@@ -1294,7 +1294,7 @@
                                                               "$NAME": {
                                                                 "id": "id-1770d66eb57-110",
                                                                 "type": "text",
-                                                                "value": "on"
+                                                                "value": "actor"
                                                               }
                                                             }
                                                           }
@@ -1372,7 +1372,7 @@
                                                                         "$NAME": {
                                                                           "id": "id-1770d66eb57-132",
                                                                           "type": "text",
-                                                                          "value": "on"
+                                                                          "value": "actor"
                                                                         }
                                                                       }
                                                                     }
@@ -1415,7 +1415,7 @@
                                                         "$NAME": {
                                                           "id": "id-17885664876-562",
                                                           "type": "pattern_name",
-                                                          "value": "OwnerOf"
+                                                          "value": "holderOf"
                                                         },
                                                         "$ARGUMENTS": {
                                                           "id": "id-17885664876-563",
@@ -1473,7 +1473,7 @@
                                                         "$NAME": {
                                                           "id": "id-17885664876-571",
                                                           "type": "text",
-                                                          "value": "on"
+                                                          "value": "actor"
                                                         }
                                                       }
                                                     }

@@ -4692,7 +4692,7 @@
                   "$NAME": {
                     "id": "id-1770c8a62f5-95",
                     "type": "pattern_name",
-                    "value": "OwnerOf"
+                    "value": "holderOf"
                   },
                   "$OPTVARS": {
                     "id": "id-1770d66eb57-72",
@@ -4768,7 +4768,7 @@
                   "$NAME": {
                     "id": "id-1770c8a62f5-103",
                     "type": "pattern_name",
-                    "value": "OwnerOf"
+                    "value": "holderOf"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-17736705b90-22",
