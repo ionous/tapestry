@@ -222,7 +222,7 @@
                                             "$NAME": {
                                               "id": "id-17885664876-49",
                                               "type": "pattern_name",
-                                              "value": "permit use"
+                                              "value": "can handle"
                                             },
                                             "$ARGUMENTS": {
                                               "id": "id-17885664876-50",
@@ -881,7 +881,7 @@
                                             "$NAME": {
                                               "id": "id-17885664876-171",
                                               "type": "pattern_name",
-                                              "value": "permit use"
+                                              "value": "can handle"
                                             },
                                             "$ARGUMENTS": {
                                               "id": "id-17885664876-172",

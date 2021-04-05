@@ -23,7 +23,7 @@
                   "$NAME": {
                     "id": "id-178946c1513-5",
                     "type": "pattern_name",
-                    "value": "permit use"
+                    "value": "can handle"
                   },
                   "$OPTVARS": {
                     "id": "id-178946c1513-6",
@@ -225,7 +225,7 @@
                   "$NAME": {
                     "id": "id-178946c1513-35",
                     "type": "pattern_name",
-                    "value": "permit use"
+                    "value": "can handle"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-178946c1513-36",

@@ -222,7 +222,7 @@
                                             "$NAME": {
                                               "id": "id-1781aa8fa1d-45",
                                               "type": "pattern_name",
-                                              "value": "permit reach"
+                                              "value": "can reach"
                                             },
                                             "$ARGUMENTS": {
                                               "id": "id-1781aa8fa1d-46",
@@ -881,7 +881,7 @@
                                             "$NAME": {
                                               "id": "id-1783d2aa0bb-30",
                                               "type": "pattern_name",
-                                              "value": "permit reach"
+                                              "value": "can reach"
                                             },
                                             "$ARGUMENTS": {
                                               "id": "id-1783d2aa0bb-31",

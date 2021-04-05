@@ -23,7 +23,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-4",
                     "type": "pattern_name",
-                    "value": "permit reach"
+                    "value": "can reach"
                   },
                   "$OPTVARS": {
                     "id": "id-177e140d8c4-18",
@@ -214,7 +214,7 @@
                   "$NAME": {
                     "id": "id-177e140d8c4-16",
                     "type": "pattern_name",
-                    "value": "permit reach"
+                    "value": "can reach"
                   },
                   "$PATTERN_LOCALS": {
                     "id": "id-177e140d8c4-33",

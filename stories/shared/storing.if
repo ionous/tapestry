@@ -277,7 +277,7 @@
                                             "$NAME": {
                                               "id": "id-178946c1513-75",
                                               "type": "text",
-                                              "value": "permit use"
+                                              "value": "can handle"
                                             },
                                             "$ARGUMENTS": {
                                               "id": "id-178946c1513-80",
@@ -511,7 +511,7 @@
                                                               "$NAME": {
                                                                 "id": "id-17893ae97e0-43",
                                                                 "type": "pattern_name",
-                                                                "value": "permit reach"
+                                                                "value": "can reach"
                                                               },
                                                               "$ARGUMENTS": {
                                                                 "id": "id-17893ae97e0-44",
@@ -1703,7 +1703,7 @@
                   "$NAME": {
                     "id": "id-178946c1513-114",
                     "type": "pattern_name",
-                    "value": "permit use"
+                    "value": "can handle"
                   },
                   "$PATTERN_RULES": {
                     "id": "id-178946c1513-115",

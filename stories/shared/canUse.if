@@ -1,0 +1,404 @@
+{
+  
+  "type": "story",
+  "value": {
+    "$PARAGRAPH": [
+      {
+        
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              
+              "type": "story_statement",
+              "value": {
+                
+                "type": "pattern_decl",
+                "value": {
+                  "$TYPE": {
+                    
+                    "type": "pattern_type",
+                    "value": "$PATTERNS"
+                  },
+                  "$NAME": {
+                    
+                    "type": "pattern_name",
+                    "value": "can use"
+                  },
+                  "$OPTVARS": {
+                    
+                    "type": "pattern_variables_tail",
+                    "value": {
+                      "$VARIABLE_DECL": [
+                        {
+                          
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              
+                              "type": "determiner",
+                              "value": "$AN"
+                            },
+                            "$NAME": {
+                              
+                              "type": "variable_name",
+                              "value": "actor"
+                            },
+                            "$TYPE": {
+                              
+                              "type": "variable_type",
+                              "value": {
+                                "$OBJECT": {
+                                  
+                                  "type": "object_type",
+                                  "value": {
+                                    "$AN": {
+                                      
+                                      "type": "ana",
+                                      "value": "$AN"
+                                    },
+                                    "$KIND": {
+                                      
+                                      "type": "singular_kind",
+                                      "value": "actor"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              
+                              "type": "determiner",
+                              "value": "$AN"
+                            },
+                            "$NAME": {
+                              
+                              "type": "variable_name",
+                              "value": "action"
+                            },
+                            "$TYPE": {
+                              
+                              "type": "variable_type",
+                              "value": {
+                                "$PRIMITIVE": {
+                                  
+                                  "type": "primitive_type",
+                                  "value": "$TEXT"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              
+                              "type": "determiner",
+                              "value": "$A"
+                            },
+                            "$NAME": {
+                              
+                              "type": "variable_name",
+                              "value": "noun"
+                            },
+                            "$TYPE": {
+                              
+                              "type": "variable_type",
+                              "value": {
+                                "$OBJECT": {
+                                  
+                                  "type": "object_type",
+                                  "value": {
+                                    "$AN": {
+                                      
+                                      "type": "ana",
+                                      "value": "$A"
+                                    },
+                                    "$KIND": {
+                                      
+                                      "type": "singular_kind",
+                                      "value": "thing"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          
+                          "type": "variable_decl",
+                          "value": {
+                            "$AN": {
+                              
+                              "type": "determiner",
+                              "value": "$AN"
+                            },
+                            "$NAME": {
+                              
+                              "type": "variable_name",
+                              "value": "other noun"
+                            },
+                            "$TYPE": {
+                              
+                              "type": "variable_type",
+                              "value": {
+                                "$OBJECT": {
+                                  
+                                  "type": "object_type",
+                                  "value": {
+                                    "$AN": {
+                                      
+                                      "type": "ana",
+                                      "value": "$A"
+                                    },
+                                    "$KIND": {
+                                      
+                                      "type": "singular_kind",
+                                      "value": "thing"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "$COMMENT": {
+                              
+                              "type": "lines",
+                              "value": ", not all actions have a second noun and that's okay"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "$PATTERN_RETURN": {
+                    
+                    "type": "pattern_return",
+                    "value": {
+                      "$RESULT": {
+                        
+                        "type": "variable_decl",
+                        "value": {
+                          "$AN": {
+                            
+                            "type": "determiner",
+                            "value": "$A"
+                          },
+                          "$NAME": {
+                            
+                            "type": "variable_name",
+                            "value": "response"
+                          },
+                          "$TYPE": {
+                            
+                            "type": "variable_type",
+                            "value": {
+                              "$PRIMITIVE": {
+                                
+                                "type": "primitive_type",
+                                "value": "$TEXT"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              
+              "type": "story_statement",
+              "value": {
+                
+                "type": "pattern_actions",
+                "value": {
+                  "$NAME": {
+                    
+                    "type": "pattern_name",
+                    "value": "can use"
+                  },
+                  "$PATTERN_RULES": {
+                    
+                    "type": "pattern_rules",
+                    "value": {
+                      "$PATTERN_RULE": [
+                        {
+                          
+                          "type": "pattern_rule",
+                          "value": {
+                            "$GUARD": {
+                              
+                              "type": "bool_eval",
+                              "value": {
+                                
+                                "type": "compare_text",
+                                "value": {
+                                  "$A": {
+                                    
+                                    "type": "text_eval",
+                                    "value": {
+                                      
+                                      "type": "determine",
+                                      "value": {
+                                        "$NAME": {
+                                          
+                                          "type": "pattern_name",
+                                          "value": "ownerOf"
+                                        },
+                                        "$ARGUMENTS": {
+                                          
+                                          "type": "arguments",
+                                          "value": {
+                                            "$ARGS": [
+                                              {
+                                                
+                                                "type": "argument",
+                                                "value": {
+                                                  "$NAME": {
+                                                    
+                                                    "type": "variable_name",
+                                                    "value": "obj"
+                                                  },
+                                                  "$FROM": {
+                                                    
+                                                    "type": "assignment",
+                                                    "value": {
+                                                      
+                                                      "type": "get_var",
+                                                      "value": {
+                                                        "$NAME": {
+                                                          
+                                                          "type": "text",
+                                                          "value": "noun"
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "$IS": {
+                                    
+                                    "type": "comparator",
+                                    "value": {
+                                      
+                                      "type": "unequal",
+                                      "value": {}
+                                    }
+                                  },
+                                  "$B": {
+                                    
+                                    "type": "text_eval",
+                                    "value": {
+                                      
+                                      "type": "get_var",
+                                      "value": {
+                                        "$NAME": {
+                                          
+                                          "type": "text",
+                                          "value": "actor"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "$HOOK": {
+                              
+                              "type": "program_hook",
+                              "value": {
+                                "$ACTIVITY": {
+                                  
+                                  "type": "activity",
+                                  "value": {
+                                    "$EXE": [
+                                      {
+                                        
+                                        "type": "execute",
+                                        "value": {
+                                          
+                                          "type": "assign",
+                                          "value": {
+                                            "$VAR": {
+                                              
+                                              "type": "variable_name",
+                                              "value": "response"
+                                            },
+                                            "$FROM": {
+                                              
+                                              "type": "assignment",
+                                              "value": {
+                                                
+                                                "type": "from_text",
+                                                "value": {
+                                                  "$VAL": {
+                                                    
+                                                    "type": "text_eval",
+                                                    "value": {
+                                                      
+                                                      "type": "response",
+                                                      "value": {
+                                                        "$NAME": {
+                                                          
+                                                          "type": "text",
+                                                          "value": "can only use possessions"
+                                                        },
+                                                        "$TEXT": {
+                                                          
+                                                          "type": "text_eval",
+                                                          "value": {
+                                                            
+                                                            "type": "render_template",
+                                                            "value": {
+                                                              "$TEMPLATE": {
+                                                                
+                                                                "type": "lines",
+                                                                "value": "{we:|capitalize!} haven't got {those:.noun}!"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
