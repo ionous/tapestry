@@ -31,12 +31,11 @@ func NewPlaytime(db *sql.DB, startWhere string) *Playtime {
 	}
 }
 
-func (pt *Playtime) Play(name string, args []rt.Arg) (ret error) {
+func (pt *Playtime) Play(name string, args []rt.Arg) (err error) {
 	// future: to differentiate b/t system actions and "timed" actions,
 	// consider using naming convention: ex. #save.
 	if _, e := pt.Call(name, "", args); e != nil {
 		err = e
-	} else {
 	}
 	return
 }

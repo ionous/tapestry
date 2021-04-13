@@ -20,30 +20,6 @@ func (op *Determine) ImportStub(k *Importer) (ret interface{}, err error) {
 	return
 }
 
-func (op *Trying) ImportStub(k *Importer) (ret interface{}, err error) {
-	pat := PatternName{At: op.Name.At, Str: op.Name.Str}
-	if p, args, e := importCall(k, "patterns", pat, op.Arguments); e != nil {
-		err = ImportError(op, op.At, e)
-	} else {
-		var b core.Brancher
-		if op.Else != nil {
-			b = *op.Else
-		}
-		act := core.Trying{
-			Name:      pattern.PatternName(p.String()),
-			Arguments: args,
-			As:        op.As.String(),
-			Do:        core.Activity(op.Do),
-			Else:      b,
-		}
-		if op.Filter != nil {
-			act.Filter = *op.Filter
-		}
-		ret = &act
-	}
-	return
-}
-
 func importCall(k *Importer, slot string, n PatternName, stubs *Arguments) (retName ephemera.Named, retArgs *core.Arguments, err error) {
 	if p, e := n.NewName(k); e != nil {
 		err = e

@@ -779,6 +779,60 @@ const spec = [
     }
   },
   {
+    "desc": "Choose value: an if statement with local assignment.",
+    "name": "choose_value",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$ASSIGN": {
+          "label": "assign",
+          "type": "text"
+        },
+        "$DO": {
+          "label": "do",
+          "type": "activity"
+        },
+        "$ELSE": {
+          "label": "else",
+          "optional": true,
+          "type": "brancher"
+        },
+        "$FILTER": {
+          "label": "and",
+          "type": "bool_eval"
+        },
+        "$FROM": {
+          "label": "from",
+          "type": "assignment"
+        }
+      },
+      "roles": "CZSZKZKZSZKZSZKZKT",
+      "slots": [
+        "execute"
+      ],
+      "tokens": [
+        "if",
+        " ",
+        "assign",
+        ": ",
+        "$ASSIGN",
+        ", ",
+        "$FROM",
+        ", ",
+        "and",
+        ": ",
+        "$FILTER",
+        ", ",
+        "do",
+        ": ",
+        "$DO",
+        ", ",
+        "$ELSE",
+        "."
+      ]
+    }
+  },
+  {
     "desc": "Comma text: Separates words with commas, and 'and'.",
     "group": [
       "printing"
@@ -3564,73 +3618,6 @@ const spec = [
     }
   },
   {
-    "desc": "Trying: Runs a pattern, and potentially returns a value.",
-    "group": [
-      "patterns"
-    ],
-    "name": "trying",
-    "uses": "flow",
-    "with": {
-      "params": {
-        "$ARGUMENTS": {
-          "label": "arguments",
-          "optional": true,
-          "type": "arguments"
-        },
-        "$AS": {
-          "label": "as",
-          "type": "text"
-        },
-        "$DO": {
-          "label": "do",
-          "type": "activity"
-        },
-        "$ELSE": {
-          "label": "else",
-          "optional": true,
-          "type": "brancher"
-        },
-        "$FILTER": {
-          "label": "and",
-          "optional": true,
-          "type": "bool_eval"
-        },
-        "$NAME": {
-          "label": "name",
-          "type": "text"
-        }
-      },
-      "roles": "CZKZSZKZSZKZSZKZSZKZKT",
-      "slots": [
-        "execute"
-      ],
-      "tokens": [
-        "trying",
-        ": ",
-        "$NAME",
-        ", ",
-        "arguments",
-        ": ",
-        "$ARGUMENTS",
-        ", ",
-        "as",
-        ": ",
-        "$AS",
-        ", ",
-        "and",
-        ": ",
-        "$FILTER",
-        ", ",
-        "do",
-        ": ",
-        "$DO",
-        ", ",
-        "$ELSE",
-        "."
-      ]
-    }
-  },
-  {
     "desc": "Not Equal To: Two values don't match exactly.",
     "group": [
       "comparison"
@@ -3707,7 +3694,6 @@ const stub = [
   "shuffle_text",
   "stopping_text",
   "text_value",
-  "trying",
   "debug_level",
   "render_template",
   "list_case",

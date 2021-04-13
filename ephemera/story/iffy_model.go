@@ -58,7 +58,7 @@ func (*ActionDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action_decl",
 		Desc: `Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items. Activities involve either the player or an npc and possibly one or two other objects.`,
-		Spec: "Actors can {act%event:event_name} and {acting%action:action_name} requires {action_params}.",
+		Spec: "Agents can {act%event:event_name} and {acting%action:action_name} requires {action_params}.",
 	}
 }
 
@@ -1614,7 +1614,7 @@ func (*RelativeToNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "relative_to_noun",
 		Desc: `Relate nouns to each other`,
-		Spec: "{relation:relation_name} {nouns+named_noun} {are_being} {nouns+named_noun}.",
+		Spec: "The {relation:relation_name} of {nouns+named_noun|comma-and} {are_being} {nouns+named_noun|comma-and}.",
 	}
 }
 
@@ -1916,25 +1916,6 @@ func (*TraitPhrase) Compose() composer.Spec {
 	}
 }
 
-// Trying requires various parameters.
-type Trying struct {
-	At        reader.Position `if:"internal"`
-	Arguments *Arguments
-	As        Text
-	Do        Activity
-	Else      *Brancher
-	Filter    *rt.BoolEval
-	Name      Text
-}
-
-func (*Trying) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "trying",
-		Desc:  `Trying: Runs a pattern, and potentially returns a value.`,
-		Group: "patterns",
-	}
-}
-
 // VariableDecl requires various parameters.
 type VariableDecl struct {
 	At      reader.Position `if:"internal"`
@@ -2089,7 +2070,6 @@ var Model = []composer.Composer{
 	(*TextValue)(nil),
 	(*Trait)(nil),
 	(*TraitPhrase)(nil),
-	(*Trying)(nil),
 	(*VariableDecl)(nil),
 	(*VariableType)(nil),
 }

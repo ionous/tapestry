@@ -13,35 +13,10 @@ type ChooseAction struct {
 	Else Brancher `if:"selector,optional"`
 }
 
-// Brancher connects else and else-if clauses.
-type Brancher interface {
-	Branch(rt.Runtime) error
-}
-
-// ChooseMore provides an else-if clause.
-// Like ChooseAction it chooses a branch based on an if statement.
-type ChooseMore ChooseAction
-
-type ChooseNothingElse struct {
-	Do Activity `if:"selector"`
-}
-
 func (*ChooseAction) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "if", Role: composer.Command},
 		Desc:   "Choose action: an if statement.",
-	}
-}
-
-func (*ChooseMore) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "elseIf", Role: composer.Selector},
-	}
-}
-
-func (*ChooseNothingElse) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "elseDo", Role: composer.Selector},
 	}
 }
 
@@ -59,20 +34,6 @@ func (op *ChooseAction) ifDoElse(run rt.Runtime) (err error) {
 		err = op.Do.Execute(run)
 	} else if branch := op.Else; branch != nil {
 		err = branch.Branch(run)
-	}
-	return
-}
-
-func (op *ChooseMore) Branch(run rt.Runtime) (err error) {
-	if e := (*ChooseAction)(op).ifDoElse(run); e != nil {
-		err = cmdError(op, e)
-	}
-	return
-}
-
-func (op *ChooseNothingElse) Branch(run rt.Runtime) (err error) {
-	if e := op.Do.Execute(run); e != nil {
-		err = cmdError(op, e)
 	}
 	return
 }

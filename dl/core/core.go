@@ -37,6 +37,7 @@ var Slats = []composer.Composer{
 	(*ChooseNothingElse)(nil),
 	(*ChooseNum)(nil), // FIX: Choose scalar/any?
 	(*ChooseText)(nil),
+	(*ChooseValue)(nil),
 	(*Commas)(nil),
 	(*CompareNum)(nil),
 	(*CompareText)(nil),
@@ -111,7 +112,6 @@ var Slats = []composer.Composer{
 	(*SumOf)(nil),
 	(*Text)(nil),
 	(*Texts)(nil),
-	(*Trying)(nil),
 	(*Var)(nil),
 	(*Variable)(nil),
 	(*While)(nil),
