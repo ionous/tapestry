@@ -1,9 +1,12 @@
 package story
 
 import (
+	r "reflect"
+
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/decode"
+	"git.sr.ht/~ionous/iffy/export"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -104,13 +107,18 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 		}
 		if err == nil {
 			guard := op.Guard
-			// if this rule is declared inside a specific domain, add a check for that.
+			// check if this rule is declared inside a specific domain
+			if searchForCounters(r.ValueOf(guard)) {
+				flags |= rt.Filter
+			}
+			// check if this rule is declared inside a specific domain
 			if dom := k.Current.Domain.String(); len(dom) > 0 {
 				guard = &core.AllTrue{[]rt.BoolEval{
 					&core.HasDominion{dom},
 					guard,
 				}}
 			}
+			// a token stream sure would be nice here -- then we could just strstr for countOf
 			rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: flags}
 			if patternProg, e := k.NewGob("rule", rule); e != nil {
 				err = e
@@ -167,6 +175,60 @@ func (op *PatternType) ImportType(k *Importer) (ret ephemera.Named, err error) {
 		err = errutil.Fmt("choice %s not found in %T", op.Str, op)
 	} else {
 		ret = k.NewName(t, tables.NAMED_TYPE, op.At.String())
+	}
+	return
+}
+
+func searchForCounters(rval r.Value) bool {
+	return searchForType(rval.Elem(), r.TypeOf((*core.CountOf)(nil)).Elem())
+}
+
+func searchForType(rval r.Value, match r.Type) (ret bool) {
+	if rtype := rval.Type(); rtype == match {
+		ret = true
+	} else {
+		ret = export.WalkProperties(rtype, func(f *r.StructField, path []int) (ret bool) {
+			switch ftype := f.Type; ftype.Kind() {
+			case r.Slice:
+				k := ftype.Elem().Kind()
+				if k == r.Interface {
+					f := rval.FieldByIndex(path)
+					for i, cnt := 0, f.Len(); i < cnt; i++ {
+						if el := f.Index(i); checkInterfaceType(el, match) {
+							ret = true
+							break
+						}
+					}
+				}
+
+			case r.Ptr:
+				f := rval.FieldByIndex(path)
+				ret = checkPtrType(f, match)
+			case r.Interface:
+				f := rval.FieldByIndex(path)
+				ret = checkInterfaceType(f, match)
+			}
+			return
+		})
+	}
+	return
+}
+
+func checkPtrType(f r.Value, match r.Type) (ret bool) {
+	if !f.IsNil() {
+		if el := f.Elem(); el.Kind() == r.Struct {
+			ret = searchForType(el, match)
+		}
+	}
+	return
+}
+
+func checkInterfaceType(f r.Value, match r.Type) (ret bool) {
+	if !f.IsNil() {
+		el := f.Elem()
+		if k := el.Kind(); k == r.Ptr {
+			ret = checkPtrType(el, match)
+		}
 	}
 	return
 }

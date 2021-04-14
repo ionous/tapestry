@@ -18,9 +18,11 @@ func walkProperties(rtype r.Type, base []int, fn PropertyFunc) (done bool) {
 				path := append(base, i)
 				if !isEmbedded(field) {
 					if fn(&field, path) {
+						done = true
 						break
 					}
 				} else if walkProperties(field.Type, path, fn) {
+					done = true
 					break
 				}
 			}

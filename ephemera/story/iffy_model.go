@@ -3,6 +3,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/rt"
 )
@@ -394,6 +395,21 @@ func (*CommonAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "common_action",
 		Spec: "one {kind:singular_kind} ( the noun ) {?action_context}",
+	}
+}
+
+// CountOf requires various parameters.
+type CountOf struct {
+	At      reader.Position `if:"internal"`
+	Num     rt.NumberEval
+	Trigger core.Trigger
+}
+
+func (*CountOf) Compose() composer.Spec {
+	return composer.Spec{
+		Name:  "count_of",
+		Desc:  `Countof: A guard which returns true based on a counter. Counters start at zero and are incremented every time the guard gets checked.`,
+		Group: "logic",
 	}
 }
 
@@ -1987,6 +2003,7 @@ var Model = []composer.Composer{
 	(*Certainty)(nil),
 	(*Comment)(nil),
 	(*CommonAction)(nil),
+	(*CountOf)(nil),
 	(*CycleText)(nil),
 	(*DebugLevel)(nil),
 	(*Determine)(nil),
