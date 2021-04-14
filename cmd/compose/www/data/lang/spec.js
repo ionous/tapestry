@@ -202,6 +202,11 @@ const spec = [
     "uses": "slot"
   },
   {
+    "desc": "Trigger types: Helper for counting values.",
+    "name": "trigger",
+    "uses": "slot"
+  },
+  {
     "name": "comparison",
     "uses": "group"
   },
@@ -934,6 +939,39 @@ const spec = [
         "$IS",
         ", ",
         "$B"
+      ]
+    }
+  },
+  {
+    "desc": "CountOf: A guard which returns true based on a counter. \nCounters start at zero and are incremented every time the guard gets checked.",
+    "group": [
+      "logic"
+    ],
+    "name": "count_of",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$NUM": {
+          "label": "num",
+          "type": "number_eval"
+        },
+        "$TRIGGER": {
+          "label": "trigger",
+          "type": "trigger"
+        }
+      },
+      "roles": "FZKZSZK",
+      "slots": [
+        "bool_eval"
+      ],
+      "tokens": [
+        "countOf",
+        ": ",
+        "$NUM",
+        ", ",
+        "trigger",
+        ": ",
+        "$TRIGGER"
       ]
     }
   },
@@ -3618,6 +3656,57 @@ const spec = [
     }
   },
   {
+    "group": [
+      "comparison"
+    ],
+    "name": "trigger_cycle",
+    "uses": "flow",
+    "with": {
+      "params": {},
+      "roles": "E",
+      "slots": [
+        "trigger"
+      ],
+      "tokens": [
+        "cycle"
+      ]
+    }
+  },
+  {
+    "group": [
+      "comparison"
+    ],
+    "name": "trigger_once",
+    "uses": "flow",
+    "with": {
+      "params": {},
+      "roles": "E",
+      "slots": [
+        "trigger"
+      ],
+      "tokens": [
+        "once"
+      ]
+    }
+  },
+  {
+    "group": [
+      "comparison"
+    ],
+    "name": "trigger_switch",
+    "uses": "flow",
+    "with": {
+      "params": {},
+      "roles": "E",
+      "slots": [
+        "trigger"
+      ],
+      "tokens": [
+        "switch"
+      ]
+    }
+  },
+  {
     "desc": "Not Equal To: Two values don't match exactly.",
     "group": [
       "comparison"
@@ -3689,6 +3778,7 @@ const spec = [
 const stub = [
   "argument",
   "arguments",
+  "count_of",
   "cycle_text",
   "determine",
   "shuffle_text",

@@ -17,6 +17,9 @@ var Slots = []composer.Slot{{
 }, {
 	Type: (*IntoTargetFields)(nil),
 	Desc: "Helper for setting fields.",
+}, {
+	Type: (*Trigger)(nil),
+	Desc: "Trigger types: Helper for counting values.",
 }}
 
 var Slats = []composer.Composer{
@@ -41,6 +44,7 @@ var Slats = []composer.Composer{
 	(*Commas)(nil),
 	(*CompareNum)(nil),
 	(*CompareText)(nil),
+	(*CountOf)(nil),
 	(*CycleText)(nil),
 	(*Determine)(nil),
 	(*DiffOf)(nil),
@@ -112,6 +116,9 @@ var Slats = []composer.Composer{
 	(*SumOf)(nil),
 	(*Text)(nil),
 	(*Texts)(nil),
+	(*TriggerCycle)(nil),
+	(*TriggerOnce)(nil),
+	(*TriggerSwitch)(nil),
 	(*Var)(nil),
 	(*Variable)(nil),
 	(*While)(nil),
