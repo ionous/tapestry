@@ -111,7 +111,7 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 					guard,
 				}}
 			}
-			rule := &rt.Rule{Filter: guard, Execute: hook, Flags: flags}
+			rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: flags}
 			if patternProg, e := k.NewGob("rule", rule); e != nil {
 				err = e
 			} else {

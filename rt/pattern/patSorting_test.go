@@ -9,11 +9,11 @@ import (
 
 func TestRuleSorting(t *testing.T) {
 	ps := []rt.Rule{
-		{Flags: rt.Infix, Execute: Text("1")},
-		{Flags: rt.Postfix, Execute: Text("2")},
-		{Flags: rt.Prefix, Execute: Text("3")},
-		{Flags: -1 /*Filter: Skip,*/, Execute: Text("0")},
-		{Flags: rt.Postfix, Execute: Text("4")},
+		{RawFlags: rt.Infix, Execute: Text("1")},
+		{RawFlags: rt.Postfix, Execute: Text("2")},
+		{RawFlags: rt.Prefix, Execute: Text("3")},
+		{RawFlags: -1 /*Filter: Skip,*/, Execute: Text("0")},
+		{RawFlags: rt.Postfix, Execute: Text("4")},
 	}
 	inds, flags := SortRules(ps)
 	if flags != (rt.Infix | rt.Prefix | rt.Postfix) {

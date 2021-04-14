@@ -26,7 +26,7 @@ func WriteRules(asm *Assembler, pat, tgt, domain string, rules []rt.Rule) (err e
 		handler := rt.Handler{Filter: rule.Filter, Exe: rule.Execute}
 		if prog, e := tables.EncodeGob(&handler); e != nil {
 			err = errutil.Append(err, e)
-		} else if e := asm.WriteRule(pat, tgt, domain, rule.GetFlags(), prog, rule.Name); e != nil {
+		} else if e := asm.WriteRule(pat, tgt, domain, rule.Flags(), prog, rule.Name); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}

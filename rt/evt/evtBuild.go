@@ -9,7 +9,7 @@ import (
 
 // 4 phases: capture, target, bubble, after
 // with a list of rules in each set.
-type Rulesets [4]Ruleset
+type Rulesets [rt.NumPhases]Ruleset
 
 // hold parallel arrays
 // [ separated this way to preserve existing ApplyRules which needs a rule slice ]
@@ -43,15 +43,14 @@ func BuildPath(run rt.Runtime, event string, up []string, allFlags *rt.Flags) (r
 					err = e
 					break
 				} else if cnt := len(rules); cnt > 0 {
-					var j int                // index into all of the rules
-					for p := 0; p < 4; p++ { // separate them by phase
-						flags := rt.Flags(1 << p)
-						if flags&tgtFlags != 0 {
+					var j int                                        // index into all of the rules
+					for p := rt.FirstPhase; p <= rt.LastPhase; p++ { // separate them by phase
+						if flags := rt.MakeFlags(p); flags&tgtFlags != 0 {
 							var set Ruleset
-							for ; (j < cnt) && (rules[j].Flags&flags) != 0; j++ {
+							for ; (j < cnt) && (rules[j].Flags()&flags) != 0; j++ {
 								set.Add(target, cls, rules[j])
 							}
-							ret[p].Append(set)
+							ret[p-rt.FirstPhase].Append(set)
 						}
 					}
 					if allFlags != nil {

@@ -170,12 +170,12 @@ func (m *Assembler) WriteRelation(relation, kind, cardinality, otherKind string)
 	return e
 }
 
-func (m *Assembler) WriteRule(owner, target, domain string, phase rt.Flags, prog []byte, name string) error {
+func (m *Assembler) WriteRule(owner, target, domain string, flags rt.Flags, prog []byte, name string) error {
 	var n sql.NullString // we do this so we can have the name unique constraint
 	if len(name) > 0 {
 		n.String, n.Valid = name, true
 	}
-	_, e := m.cache.Exec(mdl_rule, owner, target, domain, phase.Ordinal(), prog, n)
+	_, e := m.cache.Exec(mdl_rule, owner, target, domain, flags.Phase(), prog, n)
 	return e
 }
 

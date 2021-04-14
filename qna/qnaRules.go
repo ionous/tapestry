@@ -41,7 +41,7 @@ func (q *qnaRules) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.
 		}
 	} else {
 		var rulen string
-		var phase int
+		var phase rt.Phase
 		var handler rt.Handler
 		hval := r.ValueOf(&handler).Elem()
 		// NOTE: rulesFor filters by domain, see: reset()
@@ -50,10 +50,10 @@ func (q *qnaRules) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.
 		} else if e := tables.ScanAll(rows, func() (err error) {
 			flags := rt.MakeFlags(phase)
 			x.rules = append(x.rules, rt.Rule{
-				Name:    rulen,
-				Filter:  handler.Filter,
-				Execute: handler.Exe,
-				Flags:   flags,
+				Name:     rulen,
+				Filter:   handler.Filter,
+				Execute:  handler.Exe,
+				RawFlags: flags,
 			})
 			x.flags |= flags
 			handler = rt.Handler{} // gob doesnt write nil values

@@ -104,11 +104,12 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 // ApplyRules - note: assumes whatever scope is needed to run the pattern has already been setup.
 func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, flags rt.Flags) (err error) {
 	for _, rule := range rules {
-		if next, e := rw.ApplyRule(run, rule, flags); e != nil || next == 0 {
+		// end if there are no flags left, and we didn't want to filter everything.
+		if next, e := rw.ApplyRule(run, rule, flags); e != nil || (next == 0 && flags&rt.Filter == 0) {
 			err = e
 			break
 		} else {
-			flags = next
+			flags = next | (flags & rt.Filter) // if filter was set, keep it set.
 		}
 	}
 	return
@@ -142,14 +143,16 @@ func (rw *Results) ApplyRule(run rt.Runtime, rule rt.Rule, flags rt.Flags) (ret 
 
 // return the flags of the rule if it ran; even if it didnt return anything.
 func ApplyRule(run rt.Runtime, rule rt.Rule, allow rt.Flags) (ret rt.Flags, err error) {
-	if flags := rule.GetFlags(); allow&flags != 0 {
+	if flags := rule.Flags(); (allow&flags != 0) || (flags&rt.Filter != 0) {
 		if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
 			err = e
-		} else if ok.Bool() {
+		} else if ok.Bool() && allow&flags != 0 {
 			if e := safe.Run(run, rule.Execute); e != nil {
 				err = e
 			} else {
-				ret = flags
+				// don't let the "run always" filter flag show through
+				// only let through if we actually executed something.
+				ret = flags & ^rt.Filter
 			}
 		}
 	}

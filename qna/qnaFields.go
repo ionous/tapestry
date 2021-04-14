@@ -148,7 +148,7 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 					(ifnull(mr.domain,'') is '' or 
 						(select 1 from run_domain rd 
 						 where (rd.active and (rd.domain = mr.domain))))
-					order by phase, mr.rowid`),
+					order by abs(phase), mr.rowid`),
 		traitsFor: ps.Prep(db,
 			`select trait
 				from mdl_aspect 

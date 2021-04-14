@@ -80,8 +80,8 @@ func (ep *eventPathRt) GetRules(pattern, target string, pflags *rt.Flags) (ret [
 		}
 		// each with two layers to simulate "recently" declared and "oldest" declared
 		ret = append(ret,
-			rt.Rule{Name: target + "-1-" + flags.String(), Flags: flags},
-			rt.Rule{Name: target + "-0-" + flags.String(), Flags: flags})
+			rt.Rule{Name: target + "-1-" + flags.String(), RawFlags: flags},
+			rt.Rule{Name: target + "-0-" + flags.String(), RawFlags: flags})
 	}
 	return
 }
