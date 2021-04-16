@@ -19,8 +19,7 @@ func SortRules(rules []rt.Rule) (ret []int, retFlags rt.Flags) {
 		}
 	}
 	if infixOnly := rt.Infix.Ordinal(); retFlags.Ordinal() == infixOnly {
-		ofs := infixOnly
-		ret = ls[ofs] // this is the most common
+		ret = ls[infixOnly] // this is the most common
 	} else {
 		for _, els := range ls {
 			ret = append(ret, els...)

@@ -29,7 +29,6 @@ func (*TriggerOnce) Compose() composer.Spec {
 	return composer.Spec{
 		Fluent: &composer.Fluid{Name: "once", Role: composer.Selector},
 		Group:  "comparison",
-		Stub:   true,
 	}
 }
 

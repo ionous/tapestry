@@ -22,10 +22,11 @@ func NewRuntime(db *sql.DB) *Runner {
 	} else {
 		values := make(valueMap)
 		run = &Runner{
-			db:      db,
-			fields:  fields,
-			plurals: plurals,
-			values:  values,
+			db:       db,
+			counters: make(map[string]int),
+			fields:   fields,
+			plurals:  plurals,
+			values:   values,
 			qnaKinds: qnaKinds{
 				typeOf:    fields.typeOf,
 				fieldsOf:  fields.fieldsOf,
@@ -50,10 +51,11 @@ type Runner struct {
 	scope.Stack
 	Randomizer
 	writer.Sink
-	fields  *Fields
-	plurals *Plurals
-	values  valueMap
-	options qnaOptions
+	fields   *Fields
+	plurals  *Plurals
+	values   valueMap
+	options  qnaOptions
+	counters map[string]int
 	qnaKinds
 	qnaRules
 	activeNouns

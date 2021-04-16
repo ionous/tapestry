@@ -97,35 +97,34 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 		err = e
 	} else if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
+	} else if flags != 0 && tgtFlags != 0 {
+		// ensure flags were only set via the rule or via the pattern
+		err = errutil.New("unexpected continuation flags in", pattern.String())
 	} else {
-		// make sure only one set of flags is ... set
-		if flags != 0 && tgtFlags != 0 {
-			err = errutil.New("unexpected continuation flags in", pattern.String())
-		}
 		if tgtFlags != 0 {
 			flags = tgtFlags
+		} else if flags == 0 {
+			flags = rt.Infix
 		}
-		if err == nil {
-			guard := op.Guard
-			// check if this rule is declared inside a specific domain
-			if searchForCounters(r.ValueOf(guard)) {
-				flags |= rt.Filter
-			}
-			// check if this rule is declared inside a specific domain
-			if dom := k.Current.Domain.String(); len(dom) > 0 {
-				guard = &core.AllTrue{[]rt.BoolEval{
-					&core.HasDominion{dom},
-					guard,
-				}}
-			}
-			// a token stream sure would be nice here -- then we could just strstr for countOf
-			rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: flags}
-			if patternProg, e := k.NewGob("rule", rule); e != nil {
-				err = e
-			} else {
-				// currentDomain returns "entire_game" when k.Current.Domain is the empty string.
-				k.NewPatternRule(pattern, target, k.currentDomain(), patternProg)
-			}
+		// check if this rule is declared inside a specific domain
+		guard := op.Guard
+		if searchForCounters(r.ValueOf(guard)) {
+			flags |= rt.Filter
+		}
+		// check if this rule is declared inside a specific domain
+		if dom := k.Current.Domain.String(); len(dom) > 0 {
+			guard = &core.AllTrue{[]rt.BoolEval{
+				&core.HasDominion{dom},
+				guard,
+			}}
+		}
+		// a token stream sure would be nice here -- then we could just strstr for countOf
+		rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: flags}
+		if patternProg, e := k.NewGob("rule", rule); e != nil {
+			err = e
+		} else {
+			// currentDomain returns "entire_game" when k.Current.Domain is the empty string.
+			k.NewPatternRule(pattern, target, k.currentDomain(), patternProg)
 		}
 	}
 	return

@@ -215,16 +215,30 @@ func (n *Runner) SetField(target, rawField string, val g.Value) (err error) {
 	//
 	if len(target) == 0 || len(field) == 0 {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
-	} else if target == object.Variables {
-		err = n.Stack.SetFieldByName(field, val)
-	} else if target == object.Option {
-		err = n.options.SetOption(field, val)
-	} else if writable := target[0] != object.Prefix ||
-		target == object.Counter; !writable {
-		err = errutil.Fmt("can't change reserved field '%s.%s'", target, rawField)
 	} else {
-		key := makeKey(target, field)
-		err = n.setField(key, val)
+		switch target {
+		case object.Variables:
+			err = n.Stack.SetFieldByName(field, val)
+
+		case object.Option:
+			err = n.options.SetOption(field, val)
+
+		case object.Counter:
+			if aff := val.Affinity(); aff != affine.Number {
+				err = errutil.Fmt("counter expected a number '%s.%s', got %s", target, rawField, aff)
+			} else {
+				counter := lang.Breakcase(rawField)
+				n.counters[counter] = val.Int()
+			}
+
+		default:
+			if target[0] == object.Prefix {
+				err = errutil.Fmt("can't change reserved field '%s.%s'", target, rawField)
+			} else {
+				key := makeKey(target, field)
+				err = n.setField(key, val)
+			}
+		}
 	}
 	return
 }
@@ -293,6 +307,13 @@ func (n *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			}
 			return
 		})
+
+	case object.Counter:
+		// fix: i think at some point we should have a global $counters object
+		// with integer fields for everything, and we read/write serialize normally.
+		counter := lang.Breakcase(rawField)
+		i := n.counters[counter]
+		ret = g.IntOf(i)
 
 	case object.Domain:
 		// fix,once there's a domain hierarchy:
