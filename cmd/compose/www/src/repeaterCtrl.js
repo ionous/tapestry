@@ -44,7 +44,7 @@ Vue.component('mk-repeater-ctrl', {
       return i === (nodes.length - 1);
     },
     commaText(filters) {
-      let ret= "";
+      let ret= " ";
       if (filters) {
         if (filters.includes("comma-and")) {
           ret= "and";
