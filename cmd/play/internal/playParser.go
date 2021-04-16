@@ -12,16 +12,13 @@ import (
 )
 
 type Parser struct {
-	pt   *Playtime
-	gram parser.Scanner
+	pt      *Playtime
+	grammar parser.Scanner
 	// state    int or something
 }
 
-func NewParser(pt *Playtime, gram parser.Scanner) *Parser {
-	if gram == nil {
-		gram = Grammar
-	}
-	return &Parser{pt, gram}
+func NewParser(pt *Playtime, grammar parser.Scanner) *Parser {
+	return &Parser{pt, grammar}
 }
 
 type Result struct {
@@ -33,7 +30,7 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 	pt := p.pt
 	bounds := pt.GetNamedBounds(pt.location)
 	cursor := parser.Cursor{Words: strings.Fields(words)}
-	switch res, e := p.gram.Scan(pt, bounds, cursor); e.(type) {
+	switch res, e := p.grammar.Scan(pt, bounds, cursor); e.(type) {
 	default:
 		err = errutil.New("unhandled error", e)
 

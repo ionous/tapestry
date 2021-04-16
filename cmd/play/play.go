@@ -46,10 +46,12 @@ func playGame(inFile, testString string) (ret int, err error) {
 			err = e
 		} else if e := tables.CreateRunViews(db); e != nil {
 			err = e
+		} else if grammar, e := play.MakeGrammar(db); e != nil {
+			err = e
 		} else {
 			run := play.NewPlaytime(db, "#entire_game::kitchen")
 			run.ActivateDomain("entire_game", true)
-			parser := play.NewParser(run, nil)
+			parser := play.NewParser(run, grammar)
 			//
 			if len(testString) > 0 {
 				for _, cmd := range strings.Split(testString, ";") {

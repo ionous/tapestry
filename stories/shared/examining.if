@@ -584,42 +584,6 @@
                                                                                       }
                                                                                     }
                                                                                   }
-                                                                                },
-                                                                                {
-                                                                                  "id": "id-178a36e86af-185",
-                                                                                  "type": "argument",
-                                                                                  "value": {
-                                                                                    "$NAME": {
-                                                                                      "id": "id-178a36e86af-186",
-                                                                                      "type": "variable_name",
-                                                                                      "value": "requires light"
-                                                                                    },
-                                                                                    "$FROM": {
-                                                                                      "id": "id-178a36e86af-187",
-                                                                                      "type": "assignment",
-                                                                                      "value": {
-                                                                                        "id": "id-178a36e86af-188",
-                                                                                        "type": "from_bool",
-                                                                                        "value": {
-                                                                                          "$VAL": {
-                                                                                            "id": "id-178a36e86af-189",
-                                                                                            "type": "bool_eval",
-                                                                                            "value": {
-                                                                                              "id": "id-178a36e86af-190",
-                                                                                              "type": "bool_value",
-                                                                                              "value": {
-                                                                                                "$BOOL": {
-                                                                                                  "id": "id-178a36e86af-191",
-                                                                                                  "type": "bool",
-                                                                                                  "value": "$TRUE"
-                                                                                                }
-                                                                                              }
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
                                                                                 }
                                                                               ]
                                                                             }

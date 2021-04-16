@@ -93,7 +93,7 @@ func (op *AnyOf) MakeScanner() (ret parser.Scanner) {
 		ret = els[0].MakeScanner()
 	} else {
 		ls := reduce(els)
-		ret = &parser.AllOf{ls}
+		ret = &parser.AnyOf{ls}
 	}
 	return
 }

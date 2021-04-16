@@ -2,6 +2,7 @@ package internal
 
 import (
 	"log"
+	"strings"
 
 	"git.sr.ht/~ionous/iffy/ident"
 	"git.sr.ht/~ionous/iffy/lang"
@@ -40,7 +41,7 @@ func (n *Noun) HasClass(s string) (ret bool) {
 		// Contains reports whether second is within first.
 		kind := lang.Breakcase(s)
 		cp, ck := objectPath.String()+",", kind+","
-		ret = cp == ck
+		ret = strings.Contains(cp, ck)
 	}
 	return
 }
