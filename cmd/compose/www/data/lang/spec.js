@@ -192,6 +192,11 @@ const spec = [
     "uses": "slot"
   },
   {
+    "desc": "Grammar: Helper for defining parser input scanners.",
+    "name": "scanner_maker",
+    "uses": "slot"
+  },
+  {
     "desc": "Texts: Statements which return text.",
     "name": "text_eval",
     "uses": "slot"
@@ -228,6 +233,10 @@ const spec = [
   },
   {
     "name": "format",
+    "uses": "group"
+  },
+  {
+    "name": "grammar",
     "uses": "group"
   },
   {
@@ -284,6 +293,30 @@ const spec = [
   },
   {
     "group": [
+      "grammar"
+    ],
+    "name": "action",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$ACTION": {
+          "label": "action",
+          "type": "text"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "scanner_maker"
+      ],
+      "tokens": [
+        "as",
+        ": ",
+        "$ACTION"
+      ]
+    }
+  },
+  {
+    "group": [
       "hidden"
     ],
     "name": "activity",
@@ -292,6 +325,31 @@ const spec = [
     "with": {
       "slots": [
         "execute"
+      ]
+    }
+  },
+  {
+    "group": [
+      "grammar"
+    ],
+    "name": "all_of",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$SERIES": {
+          "label": "series",
+          "repeats": true,
+          "type": "scanner_maker"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "scanner_maker"
+      ],
+      "tokens": [
+        "allOf",
+        ": ",
+        "$SERIES"
       ]
     }
   },
@@ -324,6 +382,31 @@ const spec = [
       ],
       "tokens": [
         "always"
+      ]
+    }
+  },
+  {
+    "group": [
+      "grammar"
+    ],
+    "name": "any_of",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$OPTIONS": {
+          "label": "options",
+          "repeats": true,
+          "type": "scanner_maker"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "scanner_maker"
+      ],
+      "tokens": [
+        "anyOf",
+        ": ",
+        "$OPTIONS"
       ]
     }
   },
@@ -1696,6 +1779,20 @@ const spec = [
     }
   },
   {
+    "desc": "Understand grammar: Reading what the player types and turning that text into actions currently is defined with hand written parse trees.",
+    "group": [
+      "grammar"
+    ],
+    "name": "grammar_decl",
+    "spec": "Understand {grammar%scanner:scanner_maker}",
+    "uses": "flow",
+    "with": {
+      "slots": [
+        "story_statement"
+      ]
+    }
+  },
+  {
     "desc": "Greater Than: The first value is larger than the second value.",
     "group": [
       "comparison"
@@ -2819,6 +2916,30 @@ const spec = [
     }
   },
   {
+    "group": [
+      "grammar"
+    ],
+    "name": "noun",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$KIND": {
+          "label": "kind",
+          "type": "text"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "scanner_maker"
+      ],
+      "tokens": [
+        "noun",
+        ": ",
+        "$KIND"
+      ]
+    }
+  },
+  {
     "desc": "Number Value: Specify a particular number.",
     "group": [
       "literals"
@@ -3379,6 +3500,31 @@ const spec = [
     }
   },
   {
+    "group": [
+      "grammar"
+    ],
+    "name": "retarget",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$SPAN": {
+          "label": "span",
+          "repeats": true,
+          "type": "scanner_maker"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "scanner_maker"
+      ],
+      "tokens": [
+        "retarget",
+        ": ",
+        "$SPAN"
+      ]
+    }
+  },
+  {
     "desc": "Row: a single line as part of a group of lines.",
     "group": [
       "printing"
@@ -3773,6 +3919,30 @@ const spec = [
         "."
       ]
     }
+  },
+  {
+    "group": [
+      "grammar"
+    ],
+    "name": "words",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$WORDS": {
+          "label": "words",
+          "type": "text"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "scanner_maker"
+      ],
+      "tokens": [
+        "words",
+        ": ",
+        "$WORDS"
+      ]
+    }
   }
 ];
 const stub = [
@@ -3788,5 +3958,6 @@ const stub = [
   "render_template",
   "list_case",
   "list_edge",
-  "list_order"
+  "list_order",
+  "grammar_decl"
 ];

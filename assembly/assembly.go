@@ -40,6 +40,8 @@ func AssembleStory(db *sql.DB, baseKind string, reporter IssueReport) (err error
 		err = e
 	} else if e := AssemblePatterns(asm); e != nil || asm.IssueCount > 0 {
 		err = e
+	} else if e := AssembleGrammar(asm); e != nil || asm.IssueCount > 0 {
+		err = e
 	} else if e := AssembleTests(asm); e != nil || asm.IssueCount > 0 {
 		err = e
 	}

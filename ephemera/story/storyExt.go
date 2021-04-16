@@ -3,6 +3,7 @@ package story
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/debug"
+	"git.sr.ht/~ionous/iffy/dl/grammar"
 	"git.sr.ht/~ionous/iffy/dl/list"
 	"git.sr.ht/~ionous/iffy/dl/rel"
 	"git.sr.ht/~ionous/iffy/ephemera/decode"
@@ -13,10 +14,12 @@ import (
 type Activity core.Activity
 type Assignment rt.Assignment
 type BoolEval rt.BoolEval
+type Brancher core.Brancher
 type Execute rt.Execute
 type NumberEval rt.NumberEval
+type ScannerMaker grammar.ScannerMaker
 type TextEval rt.TextEval
-type Brancher core.Brancher
+type Trigger core.Trigger
 
 type VariableName struct {
 	core.Variable

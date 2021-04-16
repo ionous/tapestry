@@ -3,7 +3,6 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/rt"
 )
@@ -402,7 +401,7 @@ func (*CommonAction) Compose() composer.Spec {
 type CountOf struct {
 	At      reader.Position `if:"internal"`
 	Num     rt.NumberEval
-	Trigger core.Trigger
+	Trigger Trigger
 }
 
 func (*CountOf) Compose() composer.Spec {
@@ -615,6 +614,20 @@ func (*ExtType) Choices() map[string]interface{} {
 		"text_list": (*TextList)(nil),
 		"record":    (*RecordType)(nil),
 		"records":   (*RecordList)(nil),
+	}
+}
+
+// GrammarDecl requires various parameters.
+type GrammarDecl struct {
+	At      reader.Position `if:"internal"`
+	Scanner ScannerMaker
+}
+
+func (*GrammarDecl) Compose() composer.Spec {
+	return composer.Spec{
+		Name:  "grammar_decl",
+		Desc:  `Understand grammar: Reading what the player types and turning that text into actions currently is defined with hand written parse trees.`,
+		Group: "grammar",
 	}
 }
 
@@ -2014,6 +2027,7 @@ var Model = []composer.Composer{
 	(*EventPhase)(nil),
 	(*EventTarget)(nil),
 	(*ExtType)(nil),
+	(*GrammarDecl)(nil),
 	(*KindOfNoun)(nil),
 	(*KindOfRelation)(nil),
 	(*KindsOfAspect)(nil),

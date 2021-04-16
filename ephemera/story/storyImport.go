@@ -1,6 +1,7 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/grammar"
 	"github.com/ionous/errutil"
 )
 
@@ -63,6 +64,11 @@ func (op *Certainties) ImportPhrase(k *Importer) (err error) {
 func (op *Comment) ImportPhrase(k *Importer) (err error) {
 	// do nothing for now.
 	return
+}
+
+func (op *GrammarDecl) ImportPhrase(k *Importer) error {
+	_, e := k.NewGob("grammar", &grammar.Grammar{op.Scanner})
+	return e
 }
 
 // ex. The description of the nets is xxx

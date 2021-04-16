@@ -38,6 +38,11 @@ nodeListComponent('mk-activity-ctrl', {
   type: "execute",
 });
 
+nodeListComponent('mk-any-of-ctrl', {
+  token: "$OPTIONS",
+  type: "scanner_maker",
+});
+
 nodeListComponent('mk-pattern-rules-ctrl', {
   listClass: PatternRules // "$PATTERN_RULE", "pattern_rule"
 });
