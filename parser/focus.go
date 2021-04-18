@@ -30,12 +30,12 @@ type Target struct {
 
 //
 func (a *Target) Scan(ctx Context, bounds Bounds, start Cursor) (ret Result, err error) {
-	first, rest := a.Match[0], AllOf{a.Match[1:]}
+	first, rest := a.Match[0], a.Match[1:]
 	errorDepth := -1
 	// scan ahead for matches and determine how many words might match this target.
 	for cs := start; len(cs.CurrentWord()) > 0; cs = cs.Skip(1) {
-		if rl, e := rest.scan(ctx, bounds, cs); e != nil {
-			// like any of, we track the "deepest" error.
+		if rl, e := scanAllOf(ctx, bounds, cs, rest); e != nil {
+			// like anyOf, we track the "deepest" error.
 			if d := DepthOf(e); d > errorDepth {
 				err, errorDepth = e, d
 			}
