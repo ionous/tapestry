@@ -15,13 +15,13 @@ func MakeGrammar(db *sql.DB) (ret parser.Scanner, err error) {
 	var xs []parser.Scanner
 	var prog []byte
 	if e := tables.QueryAll(db,
-		`select bytes from mdl_prog where type='Grammar' order by rowid`,
+		`select bytes from mdl_prog where type='Directive' order by rowid`,
 		func() (err error) {
-			var gram grammar.Grammar
-			if e := tables.DecodeGob(prog, &gram); e != nil {
+			var d grammar.Directive
+			if e := tables.DecodeGob(prog, &d); e != nil {
 				err = e
 			} else {
-				x := gram.Scanner.MakeScanner()
+				x := d.MakeScanners()
 				xs = append(xs, x)
 			}
 			return

@@ -15,6 +15,7 @@ type Activity core.Activity
 type Assignment rt.Assignment
 type BoolEval rt.BoolEval
 type Brancher core.Brancher
+type GrammarMaker grammar.GrammarMaker
 type Execute rt.Execute
 type NumberEval rt.NumberEval
 type ScannerMaker grammar.ScannerMaker

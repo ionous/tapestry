@@ -9,9 +9,9 @@ import (
 )
 
 var takeGrammar = allOf(
-	Words("get"), anyOf(
+	words("get"), anyOf(
 		allOf(
-			&Target{[]Scanner{things(), Words("from/off"), thing()}},
+			&Target{[]Scanner{things(), words("from", "off"), thing()}},
 			&Action{"Remove"}),
 		allOf(
 			things(),

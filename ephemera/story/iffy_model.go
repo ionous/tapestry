@@ -620,13 +620,13 @@ func (*ExtType) Choices() map[string]interface{} {
 // GrammarDecl requires various parameters.
 type GrammarDecl struct {
 	At      reader.Position `if:"internal"`
-	Scanner ScannerMaker
+	Grammar GrammarMaker
 }
 
 func (*GrammarDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "grammar_decl",
-		Desc:  `Understand grammar: Reading what the player types and turning that text into actions currently is defined with hand written parse trees.`,
+		Desc:  `Understand input: Read what the player types and turn it into actions.`,
 		Group: "grammar",
 	}
 }

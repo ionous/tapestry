@@ -152,6 +152,11 @@ const spec = [
     "uses": "slot"
   },
   {
+    "desc": "Grammar Maker: Helper for defining parser grammars.",
+    "name": "grammar_maker",
+    "uses": "slot"
+  },
+  {
     "desc": "into_target_fields: Helper for setting fields.",
     "name": "into_target_fields",
     "uses": "slot"
@@ -192,7 +197,7 @@ const spec = [
     "uses": "slot"
   },
   {
-    "desc": "Grammar: Helper for defining parser input scanners.",
+    "desc": "Scanner Maker: Helper for defining input scanners.",
     "name": "scanner_maker",
     "uses": "slot"
   },
@@ -325,6 +330,39 @@ const spec = [
     "with": {
       "slots": [
         "execute"
+      ]
+    }
+  },
+  {
+    "group": [
+      "grammar"
+    ],
+    "name": "alias",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$AS_NOUN": {
+          "label": "asNoun",
+          "type": "text"
+        },
+        "$NAMES": {
+          "label": "names",
+          "repeats": true,
+          "type": "text"
+        }
+      },
+      "roles": "FZKZSZK",
+      "slots": [
+        "grammar_maker"
+      ],
+      "tokens": [
+        "alias",
+        ": ",
+        "$NAMES",
+        ", ",
+        "asNoun",
+        ": ",
+        "$AS_NOUN"
       ]
     }
   },
@@ -1154,6 +1192,40 @@ const spec = [
     }
   },
   {
+    "group": [
+      "grammar"
+    ],
+    "name": "directive",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$LEDE": {
+          "label": "lede",
+          "repeats": true,
+          "type": "text"
+        },
+        "$SCANS": {
+          "label": "scans",
+          "repeats": true,
+          "type": "scanner_maker"
+        }
+      },
+      "roles": "FZKZSZK",
+      "slots": [
+        "grammar_maker"
+      ],
+      "tokens": [
+        "directive",
+        ": ",
+        "$LEDE",
+        ", ",
+        "scans",
+        ": ",
+        "$SCANS"
+      ]
+    }
+  },
+  {
     "desc": "Do nothing: Statement which does nothing.",
     "group": [
       "exec"
@@ -1779,12 +1851,12 @@ const spec = [
     }
   },
   {
-    "desc": "Understand grammar: Reading what the player types and turning that text into actions currently is defined with hand written parse trees.",
+    "desc": "Understand input: Read what the player types and turn it into actions.",
     "group": [
       "grammar"
     ],
     "name": "grammar_decl",
-    "spec": "Understand {grammar%scanner:scanner_maker}",
+    "spec": "Understand {grammar:grammar_maker}",
     "uses": "flow",
     "with": {
       "slots": [
@@ -3930,6 +4002,7 @@ const spec = [
       "params": {
         "$WORDS": {
           "label": "words",
+          "repeats": true,
           "type": "text"
         }
       },

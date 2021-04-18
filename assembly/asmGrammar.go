@@ -1,14 +1,16 @@
 package assembly
 
 import (
-	"strconv"
+	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/grammar"
 	"git.sr.ht/~ionous/iffy/tables"
+	"github.com/ionous/errutil"
 )
 
 func AssembleGrammar(asm *Assembler) (err error) {
-	var grams []grammar.Grammar
+	var directives []*grammar.Directive
+	var aliases []*grammar.Alias
 	var names []string
 	var prog []byte
 	if e := tables.QueryAll(asm.cache.DB(),
@@ -16,39 +18,68 @@ func AssembleGrammar(asm *Assembler) (err error) {
 		from eph_prog where progType='grammar'
 		order by rowid`,
 		func() (err error) {
-			var gram grammar.Grammar
+			var decl grammar.GrammarDecl
 			var name string // try to make a name for ourselves
-			if e := tables.DecodeGob(prog, &gram); e != nil {
+			if e := tables.DecodeGob(prog, &decl); e != nil {
 				err = e
 			} else {
-				// if we store the scanner, then we have to register the scanners
-				// which means we have both the parser and the maker operations
-				// in gob -- but only use the maker operations here.
-				// for now, just let runtime make the scanners.. (too).
-				gram.Scanner.MakeScanner()
-				if allOf, ok := gram.Scanner.(*grammar.AllOf); ok {
-					if len(allOf.Series) > 0 {
-						if words, ok := allOf.Series[0].(*grammar.Words); ok {
-							name = words.Words
-						}
-					}
+				switch d := decl.Grammar.(type) {
+				case *grammar.Alias:
+					aliases = append(aliases, d)
+
+				case *grammar.Directive:
+					// for now, just let runtime make the scanners..
+					// because, if we store the scanner, then we have to register the scanners.
+					// which means we have both the parser and the maker operations registered
+					// while using only one of them
+					name = strings.Join(d.Lede, "/")
+					names = append(names, name)
+					directives = append(directives, d)
+				default:
+					err = errutil.Fmt("unhandled grammar %T", d)
 				}
-				if len(name) == 0 {
-					name = "scanner" + strconv.Itoa(len(grams)+1)
-				}
-				grams = append(grams, gram)
-				names = append(names, name)
 			}
 			return
 		}, &prog); e != nil {
 		err = e
-	} else {
-		for i, gram := range grams {
-			if e := asm.WriteGob(names[i], &gram); e != nil {
+	} else if e := assembleAliases(asm, aliases); e != nil {
+		err = e
+	} else if e := assembleDirectives(asm, names, directives); e != nil {
+		err = e
+	}
+	return
+}
+
+func assembleDirectives(asm *Assembler, names []string, directives []*grammar.Directive) (err error) {
+	// write directives
+	for i, d := range directives {
+		if e := asm.WriteGob(names[i], d); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+func assembleAliases(asm *Assembler, aliases []*grammar.Alias) (err error) {
+	for _, d := range aliases {
+		shortName := d.AsNoun
+		for _, alias := range d.Names {
+			var fullName string
+			if e := asm.cache.QueryRow(
+				`select noun
+				from mdl_name
+				join mdl_noun
+					using (noun)
+				where UPPER(name)=UPPER(?)
+				order by rank
+				limit 1`, shortName).Scan(&fullName); e != nil {
 				err = e
-				break
+			} else {
+				asm.WriteName(fullName, alias, -1)
 			}
 		}
 	}
+
 	return
 }

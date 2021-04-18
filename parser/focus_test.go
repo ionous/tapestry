@@ -9,7 +9,7 @@ import (
 	"github.com/ionous/sliceOf"
 )
 
-var dropGrammar = allOf(Words("drop"), anyOf(
+var dropGrammar = allOf(words("drop"), anyOf(
 	allOf(&Focus{Where: "held", What: things()}, &Action{"Drop"}),
 ))
 

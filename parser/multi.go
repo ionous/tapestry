@@ -10,7 +10,7 @@ type Multi struct {
 	Filters Filters
 }
 
-var AllPhrase = "all/each/every/both/everything"
+var AllWords = []string{"all", "each", "every", "both", "everything"}
 var allScanner Scanner
 
 func (try *Multi) Scan(ctx Context, bounds Bounds, cs Cursor) (ret Result, err error) {
@@ -18,7 +18,7 @@ func (try *Multi) Scan(ctx Context, bounds Bounds, cs Cursor) (ret Result, err e
 		err = MissingObject{Depth(cs.Pos)}
 	} else {
 		if allScanner == nil {
-			allScanner = Words(AllPhrase)
+			allScanner = Words(AllWords)
 		}
 		var all bool
 		if _, e := allScanner.Scan(ctx, bounds, cs); e == nil {

@@ -5,31 +5,37 @@ import (
 	"git.sr.ht/~ionous/iffy/parser"
 )
 
-// Scanner - mirrors package parser for composing grammars
+// ScannerMaker - creates parser scanners
 type ScannerMaker interface{ MakeScanner() parser.Scanner }
 
+// Action makes a parser scanner producing a script defined action.
 type Action struct {
 	Action string `if:"selector"`
 }
 
+// AllOf makes a parser scanner
 type AllOf struct {
 	Series []ScannerMaker `if:"selector"`
 }
 
+// AllOf makes a parser scanner
 type AnyOf struct {
 	Options []ScannerMaker `if:"selector"`
 }
 
+// AllOf makes a parser scanner
 type Noun struct {
 	Kind string `if:"selector"`
 }
 
+// AllOf makes a parser scanner
 type Retarget struct {
 	Span []ScannerMaker `if:"selector"`
 }
 
+// AllOf makes a parser scanner
 type Words struct {
-	Words string `if:"selector"`
+	Words []string `if:"selector"`
 }
 
 func (*Action) Compose() composer.Spec {
@@ -112,6 +118,7 @@ func (op *Retarget) MakeScanner() parser.Scanner {
 }
 
 func (op *Words) MakeScanner() parser.Scanner {
+	// returns an "any of" with individual word matches
 	return parser.Words(op.Words)
 }
 

@@ -15,29 +15,26 @@
                 "id": "id-178d6a5dd36-0",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6a5dd36-1",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6a5dd36-2",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6a5dd36-3",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6a5dd36-4",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6a5dd36-5",
-                                  "type": "text",
-                                  "value": "carry/hold"
-                                }
-                              }
-                            }
+                            "id": "id-178e141e7b9-0",
+                            "type": "text",
+                            "value": "carry"
                           },
+                          {
+                            "id": "id-178e141e7b9-1",
+                            "type": "text",
+                            "value": "hold"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6a5dd36-6",
                             "type": "scanner_maker",
@@ -61,11 +58,13 @@
                                               "id": "id-178d6a5dd36-15",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6a5dd36-16",
-                                                  "type": "text",
-                                                  "value": "inventory"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-2",
+                                                    "type": "text",
+                                                    "value": "inventory"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -156,29 +155,21 @@
                 "id": "id-178d6b190d8-1",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6b190d8-2",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6b190d8-5",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6b190d8-6",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6b190d8-7",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6b190d8-8",
-                                  "type": "text",
-                                  "value": "close"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-3",
+                            "type": "text",
+                            "value": "close"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6b190d8-9",
                             "type": "scanner_maker",
@@ -202,11 +193,13 @@
                                               "id": "id-178d6c49038-0",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6c49038-1",
-                                                  "type": "text",
-                                                  "value": "off"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-4",
+                                                    "type": "text",
+                                                    "value": "off"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -259,11 +252,13 @@
                                               "id": "id-178d6c49038-11",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6c49038-12",
-                                                  "type": "text",
-                                                  "value": "off"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-5",
+                                                    "type": "text",
+                                                    "value": "off"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -347,11 +342,13 @@
                                                               "id": "id-178d6b190d8-30",
                                                               "type": "words",
                                                               "value": {
-                                                                "$WORDS": {
-                                                                  "id": "id-178d6b190d8-31",
-                                                                  "type": "text",
-                                                                  "value": "off"
-                                                                }
+                                                                "$WORDS": [
+                                                                  {
+                                                                    "id": "id-178e141e7b9-6",
+                                                                    "type": "text",
+                                                                    "value": "off"
+                                                                  }
+                                                                ]
                                                               }
                                                             }
                                                           },
@@ -389,11 +386,13 @@
                                                               "id": "id-178d6b190d8-38",
                                                               "type": "words",
                                                               "value": {
-                                                                "$WORDS": {
-                                                                  "id": "id-178d6b190d8-39",
-                                                                  "type": "text",
-                                                                  "value": "up"
-                                                                }
+                                                                "$WORDS": [
+                                                                  {
+                                                                    "id": "id-178e141e7b9-7",
+                                                                    "type": "text",
+                                                                    "value": "up"
+                                                                  }
+                                                                ]
                                                               }
                                                             }
                                                           },
@@ -465,29 +464,21 @@
                 "id": "id-178d6d17ad9-151",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6d17ad9-152",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6d17ad9-153",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6d17ad9-154",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6d17ad9-155",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6d17ad9-156",
-                                  "type": "text",
-                                  "value": "cover"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-8",
+                            "type": "text",
+                            "value": "cover"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6d17ad9-157",
                             "type": "scanner_maker",
@@ -511,11 +502,13 @@
                                               "id": "id-178d6d17ad9-162",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6d17ad9-163",
-                                                  "type": "text",
-                                                  "value": "up"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-9",
+                                                    "type": "text",
+                                                    "value": "up"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -621,29 +614,31 @@
                 "id": "id-178d6d17ad9-180",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6d17ad9-181",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6d17ad9-182",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6d17ad9-183",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6d17ad9-184",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6d17ad9-185",
-                                  "type": "text",
-                                  "value": "doff/disrobe/shed"
-                                }
-                              }
-                            }
+                            "id": "id-178e141e7b9-10",
+                            "type": "text",
+                            "value": "doff"
                           },
+                          {
+                            "id": "id-178e141e7b9-11",
+                            "type": "text",
+                            "value": "disrobe"
+                          },
+                          {
+                            "id": "id-178e141e7b9-12",
+                            "type": "text",
+                            "value": "shed"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6d17ad9-186",
                             "type": "scanner_maker",
@@ -720,29 +715,21 @@
                 "id": "id-178d6d17ad9-245",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6d17ad9-246",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6d17ad9-247",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6d17ad9-248",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6d17ad9-249",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6d17ad9-250",
-                                  "type": "text",
-                                  "value": "drop"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-13",
+                            "type": "text",
+                            "value": "drop"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6d17ad9-251",
                             "type": "scanner_maker",
@@ -781,11 +768,33 @@
                                               "id": "id-178d6d17ad9-259",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6d17ad9-260",
-                                                  "type": "text",
-                                                  "value": "in/into/down/on/onto"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-14",
+                                                    "type": "text",
+                                                    "value": "in"
+                                                  },
+                                                  {
+                                                    "id": "id-178e141e7b9-15",
+                                                    "type": "text",
+                                                    "value": "into"
+                                                  },
+                                                  {
+                                                    "id": "id-178e141e7b9-16",
+                                                    "type": "text",
+                                                    "value": "down"
+                                                  },
+                                                  {
+                                                    "id": "id-178e141e7b9-17",
+                                                    "type": "text",
+                                                    "value": "on"
+                                                  },
+                                                  {
+                                                    "id": "id-178e141e7b9-18",
+                                                    "type": "text",
+                                                    "value": "onto"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -864,29 +873,41 @@
                 "id": "id-178d6d17ad9-209",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6d17ad9-210",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6d17ad9-211",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6d17ad9-212",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6d17ad9-213",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6d17ad9-214",
-                                  "type": "text",
-                                  "value": "examine/x/watch/describe/check"
-                                }
-                              }
-                            }
+                            "id": "id-178e141e7b9-19",
+                            "type": "text",
+                            "value": "examine"
                           },
+                          {
+                            "id": "id-178e141e7b9-20",
+                            "type": "text",
+                            "value": "x"
+                          },
+                          {
+                            "id": "id-178e141e7b9-21",
+                            "type": "text",
+                            "value": "watch"
+                          },
+                          {
+                            "id": "id-178e141e7b9-22",
+                            "type": "text",
+                            "value": "describe"
+                          },
+                          {
+                            "id": "id-178e141e7b9-23",
+                            "type": "text",
+                            "value": "check"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6d17ad9-215",
                             "type": "scanner_maker",
@@ -939,29 +960,21 @@
                 "id": "id-178d6d17ad9-278",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6d17ad9-279",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6d17ad9-280",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6d17ad9-281",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6d17ad9-282",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6d17ad9-283",
-                                  "type": "text",
-                                  "value": "get"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-24",
+                            "type": "text",
+                            "value": "get"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6d17ad9-284",
                             "type": "scanner_maker",
@@ -1008,11 +1021,18 @@
                                                       "id": "id-178d6d17ad9-316",
                                                       "type": "words",
                                                       "value": {
-                                                        "$WORDS": {
-                                                          "id": "id-178d6d17ad9-317",
-                                                          "type": "text",
-                                                          "value": "from/off"
-                                                        }
+                                                        "$WORDS": [
+                                                          {
+                                                            "id": "id-178e141e7b9-25",
+                                                            "type": "text",
+                                                            "value": "from"
+                                                          },
+                                                          {
+                                                            "id": "id-178e141e7b9-26",
+                                                            "type": "text",
+                                                            "value": "off"
+                                                          }
+                                                        ]
                                                       }
                                                     }
                                                   },
@@ -1122,29 +1142,31 @@
                 "id": "id-178d6d17ad9-325",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6d17ad9-326",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6d17ad9-327",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6d17ad9-328",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6d17ad9-329",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6d17ad9-330",
-                                  "type": "text",
-                                  "value": "i/inv/inventorying"
-                                }
-                              }
-                            }
+                            "id": "id-178e141e7b9-27",
+                            "type": "text",
+                            "value": "i"
                           },
+                          {
+                            "id": "id-178e141e7b9-28",
+                            "type": "text",
+                            "value": "inv"
+                          },
+                          {
+                            "id": "id-178e141e7b9-29",
+                            "type": "text",
+                            "value": "inventorying"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6d17ad9-334",
                             "type": "scanner_maker",
@@ -1182,29 +1204,21 @@
                 "id": "id-178d6e2eaf8-6",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e2eaf8-7",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e2eaf8-8",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e2eaf8-9",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e2eaf8-10",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e2eaf8-11",
-                                  "type": "text",
-                                  "value": "insert"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-30",
+                            "type": "text",
+                            "value": "insert"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e2eaf8-12",
                             "type": "scanner_maker",
@@ -1227,11 +1241,18 @@
                               "id": "id-178d6e2eaf8-18",
                               "type": "words",
                               "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e2eaf8-19",
-                                  "type": "text",
-                                  "value": "in/into"
-                                }
+                                "$WORDS": [
+                                  {
+                                    "id": "id-178e141e7b9-31",
+                                    "type": "text",
+                                    "value": "in"
+                                  },
+                                  {
+                                    "id": "id-178e141e7b9-32",
+                                    "type": "text",
+                                    "value": "into"
+                                  }
+                                ]
                               }
                             }
                           },
@@ -1287,29 +1308,26 @@
                 "id": "id-178d6e5ff29-2",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-3",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-4",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-5",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-6",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-7",
-                                  "type": "text",
-                                  "value": "look/l"
-                                }
-                              }
-                            }
+                            "id": "id-178e141e7b9-33",
+                            "type": "text",
+                            "value": "look"
                           },
+                          {
+                            "id": "id-178e141e7b9-34",
+                            "type": "text",
+                            "value": "l"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-9",
                             "type": "scanner_maker",
@@ -1333,11 +1351,13 @@
                                               "id": "id-178d6e5ff29-14",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-15",
-                                                  "type": "text",
-                                                  "value": "at"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-35",
+                                                    "type": "text",
+                                                    "value": "at"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -1390,11 +1410,33 @@
                                               "id": "id-178d6e5ff29-25",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-26",
-                                                  "type": "text",
-                                                  "value": "in/inside/into/through/on"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-36",
+                                                    "type": "text",
+                                                    "value": "in"
+                                                  },
+                                                  {
+                                                    "id": "id-178e141e7b9-37",
+                                                    "type": "text",
+                                                    "value": "inside"
+                                                  },
+                                                  {
+                                                    "id": "id-178e141e7b9-38",
+                                                    "type": "text",
+                                                    "value": "into"
+                                                  },
+                                                  {
+                                                    "id": "id-178e141e7b9-39",
+                                                    "type": "text",
+                                                    "value": "through"
+                                                  },
+                                                  {
+                                                    "id": "id-178e141e7b9-40",
+                                                    "type": "text",
+                                                    "value": "on"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -1447,11 +1489,13 @@
                                               "id": "id-178d6e5ff29-36",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-37",
-                                                  "type": "text",
-                                                  "value": "under"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-41",
+                                                    "type": "text",
+                                                    "value": "under"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -1572,29 +1616,31 @@
                 "id": "id-178d6e5ff29-60",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-61",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-62",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-63",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-64",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-65",
-                                  "type": "text",
-                                  "value": "open/unwrap/uncover"
-                                }
-                              }
-                            }
+                            "id": "id-178e141e7b9-42",
+                            "type": "text",
+                            "value": "open"
                           },
+                          {
+                            "id": "id-178e141e7b9-43",
+                            "type": "text",
+                            "value": "unwrap"
+                          },
+                          {
+                            "id": "id-178e141e7b9-44",
+                            "type": "text",
+                            "value": "uncover"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-66",
                             "type": "scanner_maker",
@@ -1671,29 +1717,21 @@
                 "id": "id-178d6e5ff29-97",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-98",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-99",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-100",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-101",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-102",
-                                  "type": "text",
-                                  "value": "pick"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-45",
+                            "type": "text",
+                            "value": "pick"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-103",
                             "type": "scanner_maker",
@@ -1717,11 +1755,13 @@
                                               "id": "id-178d6e5ff29-119",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-120",
-                                                  "type": "text",
-                                                  "value": "up"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-46",
+                                                    "type": "text",
+                                                    "value": "up"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -1789,11 +1829,13 @@
                                               "id": "id-178d6e5ff29-114",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-115",
-                                                  "type": "text",
-                                                  "value": "up"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-47",
+                                                    "type": "text",
+                                                    "value": "up"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -1842,29 +1884,21 @@
                 "id": "id-178d6e5ff29-129",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-130",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-131",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-132",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-133",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-134",
-                                  "type": "text",
-                                  "value": "put"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-48",
+                            "type": "text",
+                            "value": "put"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-135",
                             "type": "scanner_maker",
@@ -1888,11 +1922,13 @@
                                               "id": "id-178d6e5ff29-140",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-141",
-                                                  "type": "text",
-                                                  "value": "on"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-49",
+                                                    "type": "text",
+                                                    "value": "on"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -1976,11 +2012,28 @@
                                                               "id": "id-178d6e5ff29-169",
                                                               "type": "words",
                                                               "value": {
-                                                                "$WORDS": {
-                                                                  "id": "id-178d6e5ff29-170",
-                                                                  "type": "text",
-                                                                  "value": "in/inside/into/onto"
-                                                                }
+                                                                "$WORDS": [
+                                                                  {
+                                                                    "id": "id-178e141e7b9-50",
+                                                                    "type": "text",
+                                                                    "value": "in"
+                                                                  },
+                                                                  {
+                                                                    "id": "id-178e141e7b9-51",
+                                                                    "type": "text",
+                                                                    "value": "inside"
+                                                                  },
+                                                                  {
+                                                                    "id": "id-178e141e7b9-52",
+                                                                    "type": "text",
+                                                                    "value": "into"
+                                                                  },
+                                                                  {
+                                                                    "id": "id-178e141e7b9-53",
+                                                                    "type": "text",
+                                                                    "value": "onto"
+                                                                  }
+                                                                ]
                                                               }
                                                             }
                                                           },
@@ -2033,11 +2086,13 @@
                                                               "id": "id-178d6e5ff29-177",
                                                               "type": "words",
                                                               "value": {
-                                                                "$WORDS": {
-                                                                  "id": "id-178d6e5ff29-178",
-                                                                  "type": "text",
-                                                                  "value": "on"
-                                                                }
+                                                                "$WORDS": [
+                                                                  {
+                                                                    "id": "id-178e141e7b9-54",
+                                                                    "type": "text",
+                                                                    "value": "on"
+                                                                  }
+                                                                ]
                                                               }
                                                             }
                                                           },
@@ -2148,29 +2203,21 @@
                 "id": "id-178d6e5ff29-199",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-200",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-201",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-202",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-203",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-204",
-                                  "type": "text",
-                                  "value": "read"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-55",
+                            "type": "text",
+                            "value": "read"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-208",
                             "type": "scanner_maker",
@@ -2223,29 +2270,21 @@
                 "id": "id-178d6e5ff29-213",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-214",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-215",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-216",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-217",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-218",
-                                  "type": "text",
-                                  "value": "remove"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-56",
+                            "type": "text",
+                            "value": "remove"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-219",
                             "type": "scanner_maker",
@@ -2292,11 +2331,13 @@
                                                       "id": "id-178d6e5ff29-237",
                                                       "type": "words",
                                                       "value": {
-                                                        "$WORDS": {
-                                                          "id": "id-178d6e5ff29-238",
-                                                          "type": "text",
-                                                          "value": "from"
-                                                        }
+                                                        "$WORDS": [
+                                                          {
+                                                            "id": "id-178e141e7b9-57",
+                                                            "type": "text",
+                                                            "value": "from"
+                                                          }
+                                                        ]
                                                       }
                                                     }
                                                   },
@@ -2406,29 +2447,21 @@
                 "id": "id-178d6e5ff29-247",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-248",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-249",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-250",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-251",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-252",
-                                  "type": "text",
-                                  "value": "search"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-58",
+                            "type": "text",
+                            "value": "search"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-253",
                             "type": "scanner_maker",
@@ -2481,29 +2514,41 @@
                 "id": "id-178d6e5ff29-261",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-262",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-263",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-264",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-265",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-266",
-                                  "type": "text",
-                                  "value": "switch/rotate/twist/unscrew/screw"
-                                }
-                              }
-                            }
+                            "id": "id-178e141e7b9-59",
+                            "type": "text",
+                            "value": "switch"
                           },
+                          {
+                            "id": "id-178e141e7b9-60",
+                            "type": "text",
+                            "value": "rotate"
+                          },
+                          {
+                            "id": "id-178e141e7b9-61",
+                            "type": "text",
+                            "value": "twist"
+                          },
+                          {
+                            "id": "id-178e141e7b9-62",
+                            "type": "text",
+                            "value": "unscrew"
+                          },
+                          {
+                            "id": "id-178e141e7b9-63",
+                            "type": "text",
+                            "value": "screw"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-267",
                             "type": "scanner_maker",
@@ -2527,11 +2572,13 @@
                                               "id": "id-178d6e5ff29-272",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-273",
-                                                  "type": "text",
-                                                  "value": "on"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-64",
+                                                    "type": "text",
+                                                    "value": "on"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -2584,11 +2631,13 @@
                                               "id": "id-178d6e5ff29-319",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-320",
-                                                  "type": "text",
-                                                  "value": "off"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-65",
+                                                    "type": "text",
+                                                    "value": "off"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -2672,11 +2721,13 @@
                                                               "id": "id-178d6e5ff29-330",
                                                               "type": "words",
                                                               "value": {
-                                                                "$WORDS": {
-                                                                  "id": "id-178d6e5ff29-331",
-                                                                  "type": "text",
-                                                                  "value": "on"
-                                                                }
+                                                                "$WORDS": [
+                                                                  {
+                                                                    "id": "id-178e141e7b9-66",
+                                                                    "type": "text",
+                                                                    "value": "on"
+                                                                  }
+                                                                ]
                                                               }
                                                             }
                                                           },
@@ -2714,11 +2765,13 @@
                                                               "id": "id-178d6e5ff29-341",
                                                               "type": "words",
                                                               "value": {
-                                                                "$WORDS": {
-                                                                  "id": "id-178d6e5ff29-342",
-                                                                  "type": "text",
-                                                                  "value": "off"
-                                                                }
+                                                                "$WORDS": [
+                                                                  {
+                                                                    "id": "id-178e141e7b9-67",
+                                                                    "type": "text",
+                                                                    "value": "off"
+                                                                  }
+                                                                ]
                                                               }
                                                             }
                                                           },
@@ -2775,29 +2828,21 @@
                 "id": "id-178d6e5ff29-351",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-352",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-353",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-354",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-355",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-356",
-                                  "type": "text",
-                                  "value": "shut"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-68",
+                            "type": "text",
+                            "value": "shut"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-357",
                             "type": "scanner_maker",
@@ -2821,11 +2866,13 @@
                                               "id": "id-178d6e5ff29-362",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-363",
-                                                  "type": "text",
-                                                  "value": "off"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-69",
+                                                    "type": "text",
+                                                    "value": "off"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -2878,11 +2925,13 @@
                                               "id": "id-178d6e5ff29-373",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-374",
-                                                  "type": "text",
-                                                  "value": "up"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-70",
+                                                    "type": "text",
+                                                    "value": "up"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -2966,11 +3015,13 @@
                                                               "id": "id-178d6e5ff29-391",
                                                               "type": "words",
                                                               "value": {
-                                                                "$WORDS": {
-                                                                  "id": "id-178d6e5ff29-392",
-                                                                  "type": "text",
-                                                                  "value": "off"
-                                                                }
+                                                                "$WORDS": [
+                                                                  {
+                                                                    "id": "id-178e141e7b9-71",
+                                                                    "type": "text",
+                                                                    "value": "off"
+                                                                  }
+                                                                ]
                                                               }
                                                             }
                                                           },
@@ -3008,11 +3059,13 @@
                                                               "id": "id-178d6e5ff29-399",
                                                               "type": "words",
                                                               "value": {
-                                                                "$WORDS": {
-                                                                  "id": "id-178d6e5ff29-400",
-                                                                  "type": "text",
-                                                                  "value": "up"
-                                                                }
+                                                                "$WORDS": [
+                                                                  {
+                                                                    "id": "id-178e141e7b9-72",
+                                                                    "type": "text",
+                                                                    "value": "up"
+                                                                  }
+                                                                ]
                                                               }
                                                             }
                                                           },
@@ -3084,29 +3137,21 @@
                 "id": "id-178d6e5ff29-409",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-410",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-411",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-412",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-413",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-414",
-                                  "type": "text",
-                                  "value": "take"
-                                }
-                              }
-                            }
-                          },
+                            "id": "id-178e141e7b9-73",
+                            "type": "text",
+                            "value": "take"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-415",
                             "type": "scanner_maker",
@@ -3130,11 +3175,13 @@
                                               "id": "id-178d6e5ff29-452",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-453",
-                                                  "type": "text",
-                                                  "value": "inventory"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-74",
+                                                    "type": "text",
+                                                    "value": "inventory"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -3172,11 +3219,13 @@
                                               "id": "id-178d6e5ff29-460",
                                               "type": "words",
                                               "value": {
-                                                "$WORDS": {
-                                                  "id": "id-178d6e5ff29-461",
-                                                  "type": "text",
-                                                  "value": "off"
-                                                }
+                                                "$WORDS": [
+                                                  {
+                                                    "id": "id-178e141e7b9-75",
+                                                    "type": "text",
+                                                    "value": "off"
+                                                  }
+                                                ]
                                               }
                                             }
                                           },
@@ -3252,11 +3301,18 @@
                                                       "id": "id-178d6e5ff29-425",
                                                       "type": "words",
                                                       "value": {
-                                                        "$WORDS": {
-                                                          "id": "id-178d6e5ff29-426",
-                                                          "type": "text",
-                                                          "value": "off/from"
-                                                        }
+                                                        "$WORDS": [
+                                                          {
+                                                            "id": "id-178e141e7b9-76",
+                                                            "type": "text",
+                                                            "value": "off"
+                                                          },
+                                                          {
+                                                            "id": "id-178e141e7b9-77",
+                                                            "type": "text",
+                                                            "value": "from"
+                                                          }
+                                                        ]
                                                       }
                                                     }
                                                   },
@@ -3366,29 +3422,26 @@
                 "id": "id-178d6e5ff29-480",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-481",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-482",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-483",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-484",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-485",
-                                  "type": "text",
-                                  "value": "wait/z"
-                                }
-                              }
-                            }
+                            "id": "id-178e141e7b9-78",
+                            "type": "text",
+                            "value": "wait"
                           },
+                          {
+                            "id": "id-178e141e7b9-79",
+                            "type": "text",
+                            "value": "z"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-489",
                             "type": "scanner_maker",
@@ -3426,29 +3479,26 @@
                 "id": "id-178d6e5ff29-494",
                 "type": "grammar_decl",
                 "value": {
-                  "$SCANNER": {
+                  "$GRAMMAR": {
                     "id": "id-178d6e5ff29-495",
-                    "type": "scanner_maker",
+                    "type": "grammar_maker",
                     "value": {
                       "id": "id-178d6e5ff29-496",
-                      "type": "all_of",
+                      "type": "directive",
                       "value": {
-                        "$SERIES": [
+                        "$LEDE": [
                           {
-                            "id": "id-178d6e5ff29-497",
-                            "type": "scanner_maker",
-                            "value": {
-                              "id": "id-178d6e5ff29-498",
-                              "type": "words",
-                              "value": {
-                                "$WORDS": {
-                                  "id": "id-178d6e5ff29-499",
-                                  "type": "text",
-                                  "value": "wear/don"
-                                }
-                              }
-                            }
+                            "id": "id-178e141e7b9-80",
+                            "type": "text",
+                            "value": "wear"
                           },
+                          {
+                            "id": "id-178e141e7b9-81",
+                            "type": "text",
+                            "value": "don"
+                          }
+                        ],
+                        "$SCANS": [
                           {
                             "id": "id-178d6e5ff29-503",
                             "type": "scanner_maker",

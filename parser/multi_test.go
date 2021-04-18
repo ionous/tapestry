@@ -18,7 +18,7 @@ func TestMulti(t *testing.T) {
 	}
 	t.Run("all", func(t *testing.T) {
 		e := parse(t, ctx, grammar,
-			Phrases("pick up "+AllPhrase),
+			Phrases("pick up "+strings.Join(AllWords, "/")),
 			&ActionGoal{"Take", sliceOf.String(
 				"something",
 				"red-apple",

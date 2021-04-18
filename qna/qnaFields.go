@@ -97,17 +97,18 @@ func NewFields(db *sql.DB) (ret *Fields, err error) {
 				from mdl_name
 				join mdl_noun
 					using (noun)
-				where noun=?
+				where (rank>=0) and (noun=?)
 				order by rank
 				limit 1`),
-		// given a name, find the id
+		// given a name, find the id.
+		// we filter out parser understandings (which have ranks < 0)
 		// FIX: shouldnt this be limited to activeNouns?
 		objOf: ps.Prep(db,
 			`select noun
 				from mdl_name
 				join mdl_noun
 					using (noun)
-				where UPPER(name)=UPPER(?)
+				where (rank>=0) and (UPPER(name)=UPPER(?))
 				order by rank
 				limit 1`),
 		patternOf: ps.Prep(db,

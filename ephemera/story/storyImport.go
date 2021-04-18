@@ -67,7 +67,7 @@ func (op *Comment) ImportPhrase(k *Importer) (err error) {
 }
 
 func (op *GrammarDecl) ImportPhrase(k *Importer) error {
-	_, e := k.NewGob("grammar", &grammar.Grammar{op.Scanner})
+	_, e := k.NewGob("grammar", &grammar.GrammarDecl{op.Grammar})
 	return e
 }
 

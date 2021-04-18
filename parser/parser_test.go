@@ -4,58 +4,68 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/ident"
+	"git.sr.ht/~ionous/iffy/parser"
 	. "git.sr.ht/~ionous/iffy/parser"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
-func anyOf(s ...Scanner) (ret Scanner) {
+func anyOf(s ...parser.Scanner) (ret parser.Scanner) {
 	if len(s) == 1 {
 		ret = s[0]
 	} else {
-		ret = &AnyOf{s}
+		ret = &parser.AnyOf{s}
 	}
 	return
 }
 
-func allOf(s ...Scanner) (ret Scanner) {
+func allOf(s ...parser.Scanner) (ret parser.Scanner) {
 	if len(s) == 1 {
 		ret = s[0]
 	} else {
-		ret = &AllOf{s}
+		ret = &parser.AllOf{s}
 	}
 	return
 }
 
-func noun(f ...Filter) Scanner {
-	return &Noun{f}
+func noun(f ...Filter) parser.Scanner {
+	return &parser.Noun{f}
 }
-func nouns(f ...Filter) Scanner {
-	return &Multi{f}
+func nouns(f ...Filter) parser.Scanner {
+	return &parser.Multi{f}
+}
+
+// changes the bounds of its first scanner in response to the results of its last scanner.
+func retarget(s ...parser.Scanner) parser.Scanner {
+	return &parser.Target{s}
 }
 
 // note: we use things to exclude directions
-func thing() Scanner {
-	return noun(&HasClass{"things"})
+func thing() parser.Scanner {
+	return noun(&parser.HasClass{"things"})
 }
 
-func things() Scanner {
-	return nouns(&HasClass{"things"})
+func things() parser.Scanner {
+	return nouns(&parser.HasClass{"things"})
 }
 
-var lookGrammar = allOf(Words("look/l"), anyOf(
+func words(s ...string) (ret parser.Scanner) {
+	return parser.Words(s)
+}
+
+var lookGrammar = allOf(words("look", "l"), anyOf(
 	allOf(&Action{"Look"}),
-	allOf(Words("at"), noun(), &Action{"Examine"}),
+	allOf(words("at"), noun(), &Action{"Examine"}),
 	// before "look inside", since inside is also direction.
 	allOf(noun(&HasClass{"directions"}), &Action{"Examine"}),
-	allOf(Words("to"), noun(&HasClass{"directions"}), &Action{"Examine"}),
-	allOf(Words("inside/in/into/through/on"), noun(), &Action{"Search"}),
-	allOf(Words("under"), noun(), &Action{"LookUnder"}),
+	allOf(words("to"), noun(&HasClass{"directions"}), &Action{"Examine"}),
+	allOf(words("inside", "in", "into", "through", "on"), noun(), &Action{"Search"}),
+	allOf(words("under"), noun(), &Action{"LookUnder"}),
 ))
 
-var pickGrammar = allOf(Words("pick"), anyOf(
-	allOf(Words("up"), things(), &Action{"Take"}),
-	allOf(things(), Words("up"), &Action{"Take"}),
+var pickGrammar = allOf(words("pick"), anyOf(
+	allOf(words("up"), things(), &Action{"Take"}),
+	allOf(things(), words("up"), &Action{"Take"}),
 ))
 
 func makeObject(s ...string) *MyObject {

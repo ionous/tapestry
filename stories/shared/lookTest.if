@@ -810,6 +810,38 @@
                   }
                 }
               }
+            },
+            {
+              "id": "id-178e25719d7-0",
+              "type": "story_statement",
+              "value": {
+                "id": "id-178e25719d7-1",
+                "type": "grammar_decl",
+                "value": {
+                  "$GRAMMAR": {
+                    "id": "id-178e25719d7-2",
+                    "type": "grammar_maker",
+                    "value": {
+                      "id": "id-178e25719d7-3",
+                      "type": "alias",
+                      "value": {
+                        "$NAMES": [
+                          {
+                            "id": "id-178e25719d7-4",
+                            "type": "text",
+                            "value": "blade"
+                          }
+                        ],
+                        "$AS_NOUN": {
+                          "id": "id-178e25719d7-5",
+                          "type": "text",
+                          "value": "rusty knife"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           ]
         }
