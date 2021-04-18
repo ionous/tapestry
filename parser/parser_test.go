@@ -4,53 +4,61 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/ident"
-	"git.sr.ht/~ionous/iffy/parser"
 	. "git.sr.ht/~ionous/iffy/parser"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
-func anyOf(s ...parser.Scanner) (ret parser.Scanner) {
+func actor() Scanner {
+	return noun(&HasClass{"actors"})
+}
+
+func anyOf(s ...Scanner) (ret Scanner) {
 	if len(s) == 1 {
 		ret = s[0]
 	} else {
-		ret = &parser.AnyOf{s}
+		ret = &AnyOf{s}
 	}
 	return
 }
 
-func allOf(s ...parser.Scanner) (ret parser.Scanner) {
+func allOf(s ...Scanner) (ret Scanner) {
 	if len(s) == 1 {
 		ret = s[0]
 	} else {
-		ret = &parser.AllOf{s}
+		ret = &AllOf{s}
 	}
 	return
 }
 
-func noun(f ...Filter) parser.Scanner {
-	return &parser.Noun{f}
+func noun(f ...Filter) Scanner {
+	return &Noun{f}
 }
-func nouns(f ...Filter) parser.Scanner {
-	return &parser.Multi{f}
+func nouns(f ...Filter) Scanner {
+	return &Multi{f}
 }
 
 // changes the bounds of its first scanner in response to the results of its last scanner.
-func retarget(s ...parser.Scanner) parser.Scanner {
-	return &parser.Target{s}
+func retarget(s ...Scanner) Scanner {
+	return &Target{s}
+}
+
+// swaps the first detected noun with the second detected noun
+func reverse(s ...Scanner) Scanner {
+	return &Reverse{s}
 }
 
 // note: we use things to exclude directions
-func thing() parser.Scanner {
-	return noun(&parser.HasClass{"things"})
+func thing() Scanner {
+	return noun(&HasClass{"things"})
 }
 
-func things() parser.Scanner {
-	return nouns(&parser.HasClass{"things"})
+func things() Scanner {
+	return nouns(&HasClass{"things"})
 }
 
-func words(s ...string) (ret parser.Scanner) {
-	return parser.Words(s)
+func words(s ...string) (ret Scanner) {
+	return Words(s)
 }
 
 var lookGrammar = allOf(words("look", "l"), anyOf(
@@ -68,22 +76,30 @@ var pickGrammar = allOf(words("pick"), anyOf(
 	allOf(things(), words("up"), &Action{"Take"}),
 ))
 
+var showGrammar = allOf(words("show"), anyOf(
+	allOf(noun(), words("to"), actor(), &Action{"Show"}),
+	allOf(reverse(actor(), noun()), &Action{"Show"}),
+))
+
 func makeObject(s ...string) *MyObject {
 	name, s := s[0], s[1:]
 	names := strings.Fields(name)
-	s = append(s, "things")
+	if s[0] != "actors" {
+		s = append(s, "things")
+	}
 	id := ident.IdOf(strings.Join(names, "-"))
 	return &MyObject{Id: id, Names: names, Classes: s}
 }
 
 var ctx = func() (ret MyBounds) {
 	ret = MyBounds{
-		makeObject("something"),
+		makeObject("something", "things"),
 		makeObject("red apple", "apples"),
 		makeObject("crab apple", "apples"),
 		makeObject("apple cart", "carts"),
 		makeObject("red cart", "carts"),
 		makeObject("torch", "devices"),
+		makeObject("bob", "actors"),
 	}
 	return append(ret, Directions...)
 }()

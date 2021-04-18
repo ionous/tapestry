@@ -1,8 +1,9 @@
 package parser_test
 
 import (
-	"github.com/ionous/sliceOf"
 	"testing"
+
+	"github.com/ionous/sliceOf"
 )
 
 func TestParser(t *testing.T) {

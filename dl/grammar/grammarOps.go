@@ -18,22 +18,27 @@ type AllOf struct {
 	Series []ScannerMaker `if:"selector"`
 }
 
-// AllOf makes a parser scanner
+// AnyOf makes a parser scanner
 type AnyOf struct {
 	Options []ScannerMaker `if:"selector"`
 }
 
-// AllOf makes a parser scanner
+// Noun makes a parser scanner
 type Noun struct {
 	Kind string `if:"selector"`
 }
 
-// AllOf makes a parser scanner
+// Retarget makes a parser scanner
 type Retarget struct {
 	Span []ScannerMaker `if:"selector"`
 }
 
-// AllOf makes a parser scanner
+// Reverse makes a parser scanner
+type Reverse struct {
+	Reverses []ScannerMaker `if:"selector"`
+}
+
+// Words makes a parser scanner
 type Words struct {
 	Words []string `if:"selector"`
 }
@@ -67,6 +72,13 @@ func (*Noun) Compose() composer.Spec {
 }
 
 func (*Retarget) Compose() composer.Spec {
+	return composer.Spec{
+		Group:  "grammar",
+		Fluent: &composer.Fluid{Role: composer.Function},
+	}
+}
+
+func (*Reverse) Compose() composer.Spec {
 	return composer.Spec{
 		Group:  "grammar",
 		Fluent: &composer.Fluid{Role: composer.Function},
@@ -115,6 +127,11 @@ func (op *Noun) MakeScanner() parser.Scanner {
 func (op *Retarget) MakeScanner() parser.Scanner {
 	ls := reduce(op.Span)
 	return &parser.Target{ls}
+}
+
+func (op *Reverse) MakeScanner() parser.Scanner {
+	ls := reduce(op.Reverses)
+	return &parser.Reverse{ls}
 }
 
 func (op *Words) MakeScanner() parser.Scanner {

@@ -22,6 +22,7 @@ var Slats = []composer.Composer{
 	(*AnyOf)(nil),
 	(*Noun)(nil),
 	(*Retarget)(nil),
+	(*Reverse)(nil),
 	(*Words)(nil),
 	// container for grammar makers
 	(*GrammarDecl)(nil),
