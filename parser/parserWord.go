@@ -13,7 +13,7 @@ func (w *Word) Scan(ctx Context, bounds Bounds, cs Cursor) (ret Result, err erro
 	} else if !strings.EqualFold(word, w.Word) {
 		err = MismatchedWord{w.Word, word, Depth(cs.Pos)}
 	} else {
-		ret = ResolvedWord{word}
+		ret = ResolvedWords{word, 1}
 	}
 	return
 }

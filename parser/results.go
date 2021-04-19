@@ -18,7 +18,6 @@ type ResolvedAction struct {
 
 // ResolvedActor
 // ResolvedNumber
-// ResolvedWords
 
 type ResolvedMulti struct {
 	Nouns     []NounInstance
@@ -30,8 +29,9 @@ type ResolvedNoun struct {
 	Words        []string // what the user said to identify the object
 }
 
-type ResolvedWord struct {
-	Word string
+type ResolvedWords struct {
+	Words     string
+	WordCount int
 }
 
 func (f ResolvedAction) String() string {
@@ -68,9 +68,9 @@ func (f ResolvedNoun) WordsMatched() int {
 }
 
 //
-func (f ResolvedWord) String() string {
-	return "Word: " + f.Word
+func (f ResolvedWords) String() string {
+	return f.Words
 }
-func (f ResolvedWord) WordsMatched() int {
-	return 1
+func (f ResolvedWords) WordsMatched() int {
+	return f.WordCount
 }

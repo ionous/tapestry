@@ -6,11 +6,12 @@ import (
 
 	"git.sr.ht/~ionous/iffy/ident"
 	. "git.sr.ht/~ionous/iffy/parser"
+	"github.com/ionous/errutil"
 	"github.com/ionous/inflect"
 	"github.com/ionous/sliceOf"
 )
 
-// MyObject provides an example ( for testing ) of mapping an "Noun" to a NounInstance.
+// MyObject - along with MyNoun this provides an example of mapping some application defined object to a parser.NounInstance.
 type MyObject struct {
 	Id         ident.Id
 	Names      []string
@@ -24,10 +25,12 @@ func (m *MyObject) String() string {
 
 type MyBounds []*MyObject
 
+// some of the simpler tests have objects ids which are a single rune long.
 func (m MyBounds) Get(r rune) NounInstance {
-	return MyAdapter{m[r-'a']}
+	return MyNoun{m[r-'a']}
 }
 
+// generate a bunch of nouns from single runes for certain tests.
 func (m MyBounds) Many(rs ...rune) (ret []NounInstance) {
 	for _, r := range rs {
 		ret = append(ret, m.Get(r))
@@ -35,21 +38,34 @@ func (m MyBounds) Many(rs ...rune) (ret []NounInstance) {
 	return
 }
 
-func (m MyBounds) GetPlayerBounds(string) (Bounds, error) {
-	return m.SearchBounds, nil
+func (m MyBounds) GetPlayerBounds(n string) (ret Bounds, err error) {
+	switch n {
+	case "":
+		ret = m.SearchBounds
+	case "self":
+		ret = m.SelfBounds
+	default:
+		err = errutil.New("unknown bounds", n)
+	}
+	return
 }
+
 func (m MyBounds) GetObjectBounds(ident.Id) (Bounds, error) {
 	return m.SearchBounds, nil
 }
+
 func (m MyBounds) IsPlural(word string) bool {
 	return word != inflect.Singularize(word)
 }
 
+func (m MyBounds) SelfBounds(v NounVisitor) (ret bool) {
+	n := MyNoun{MyObject: myself}
+	return v(n)
+}
+
 func (m MyBounds) SearchBounds(v NounVisitor) (ret bool) {
-	n := MyAdapter{}
 	for _, k := range m {
-		n.MyObject = k
-		if v(n) {
+		if v(MyNoun{k}) {
 			ret = true
 			break
 		}
@@ -57,30 +73,31 @@ func (m MyBounds) SearchBounds(v NounVisitor) (ret bool) {
 	return
 }
 
-type MyAdapter struct {
+// MyNoun implements NounInstance for MyObject
+type MyNoun struct {
 	*MyObject
 }
 
-func (adapt MyAdapter) Id() ident.Id {
+func (adapt MyNoun) Id() ident.Id {
 	return adapt.MyObject.Id
 }
 
-func (adapt MyAdapter) HasName(name string) bool {
+func (adapt MyNoun) HasName(name string) bool {
 	return MatchAny(name, adapt.Names)
 }
 
-func (adapt MyAdapter) HasClass(cls string) bool {
+func (adapt MyNoun) HasClass(cls string) bool {
 	return MatchAny(cls, adapt.Classes)
 }
 
-func (adapt MyAdapter) HasPlural(plural string) bool {
+func (adapt MyNoun) HasPlural(plural string) bool {
 	// we'll use classes as plurals for tests --
 	// its possible that might be different for the runtime
 	// ex. might check plural / printed names
 	return MatchAny(plural, adapt.Classes)
 }
 
-func (adapt MyAdapter) HasAttribute(attr string) bool {
+func (adapt MyNoun) HasAttribute(attr string) bool {
 	return MatchAny(attr, adapt.Attributes)
 }
 

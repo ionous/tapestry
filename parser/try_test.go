@@ -15,9 +15,9 @@ func TestWord(t *testing.T) {
 	t.Run("match", func(t *testing.T) {
 		if res, e := match("Beep", "beep"); e != nil {
 			t.Fatal("error", e)
-		} else if w, ok := res.(ResolvedWord); !ok {
+		} else if w, ok := res.(ResolvedWords); !ok {
 			t.Fatalf("%T", res)
-		} else if w.Word != "Beep" {
+		} else if w.String() != "Beep" {
 			t.Fatal(w)
 		}
 	})
@@ -44,16 +44,16 @@ func TestVariousOf(t *testing.T) {
 		t.Run("match", func(t *testing.T) {
 			if res, e := match("Beep", &AnyOf{wordList}); e != nil {
 				t.Fatal("error", e)
-			} else if w, ok := res.(ResolvedWord); !ok {
+			} else if w, ok := res.(ResolvedWords); !ok {
 				t.Fatalf("%T", res)
-			} else if w.Word != "Beep" {
+			} else if w.String() != "Beep" {
 				t.Fatal(w)
 			}
 			if res, e := match("Blox", &AnyOf{wordList}); e != nil {
 				t.Fatal("error", e)
-			} else if w, ok := res.(ResolvedWord); !ok {
+			} else if w, ok := res.(ResolvedWords); !ok {
 				t.Fatalf("%T", res)
-			} else if w.Word != "Blox" {
+			} else if w.String() != "Blox" {
 				t.Fatal(w)
 			}
 		})
@@ -82,10 +82,10 @@ func TestVariousOf(t *testing.T) {
 			} else {
 				expect := []string{"Beep", "BLOX"}
 				for i, res := range res.Results() {
-					if w, ok := res.(ResolvedWord); !ok {
+					if w, ok := res.(ResolvedWords); !ok {
 						t.Fatalf("%T", res)
-					} else if w.Word != expect[i] {
-						t.Fatal(i, w.Word)
+					} else if have := w.String(); have != expect[i] {
+						t.Fatal(i, have)
 					}
 				}
 			}

@@ -7,9 +7,8 @@ import (
 // Focus - a Scanner which changes the bounds for subsequent scanners.
 // For instance, searching only though held objects.
 type Focus struct {
-	// future: Who string -- with "" meaning player
-	What  Scanner
 	Where string
+	What  Scanner
 }
 
 //

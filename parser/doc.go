@@ -27,7 +27,7 @@ Terminal scanners:
 	returns ResolvedNoun
 
 	- Word matches one word.
-	returns ResolvedWord
+	returns ResolvedWords{1}
 
 Context
 

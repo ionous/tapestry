@@ -48,6 +48,14 @@ func reverse(s ...Scanner) Scanner {
 	return &Reverse{s}
 }
 
+// match any word/phrase referring to the player:
+// forces the focus to just the player object,
+// attempts to match the specified noun to that player object,
+// absorbs all the words that were used to match the player.
+func self() Scanner {
+	return &Eat{&Focus{"self", &Noun{}}}
+}
+
 // note: we use things to exclude directions
 func thing() Scanner {
 	return noun(&HasClass{"things"})
@@ -77,20 +85,21 @@ var pickGrammar = allOf(words("pick"), anyOf(
 ))
 
 var showGrammar = allOf(words("show"), anyOf(
+	allOf(noun(), words("to"), self(), &Action{"Examine"}),
 	allOf(noun(), words("to"), actor(), &Action{"Show"}),
 	allOf(reverse(actor(), noun()), &Action{"Show"}),
 ))
 
-func makeObject(s ...string) *MyObject {
-	name, s := s[0], s[1:]
+func makeObject(name string, kinds ...string) *MyObject {
 	names := strings.Fields(name)
-	if s[0] != "actors" {
-		s = append(s, "things")
+	if kinds[0] != "actors" {
+		kinds = append(kinds, "things")
 	}
 	id := ident.IdOf(strings.Join(names, "-"))
-	return &MyObject{Id: id, Names: names, Classes: s}
+	return &MyObject{Id: id, Names: names, Classes: kinds}
 }
 
+// MyBounds implements parser.Context
 var ctx = func() (ret MyBounds) {
 	ret = MyBounds{
 		makeObject("something", "things"),
@@ -103,6 +112,8 @@ var ctx = func() (ret MyBounds) {
 	}
 	return append(ret, Directions...)
 }()
+
+var myself = makeObject("self", "actors")
 
 // StringIds - convert a list of strings to ids
 func StringIds(strs []string) (ret []ident.Id) {
