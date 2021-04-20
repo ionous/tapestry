@@ -85,6 +85,7 @@ func TestFluid(t *testing.T) {
 	if got := makeSig((*core.ChooseAction)(nil)); !got.equals(
 		"if:do:",
 		"if:do:elseIf:", // fix: sort!? [currently order is as listed in core.go]
+		"if:do:elseIf:", // fix: choose more values repeats this signature. that seems bad.
 		"if:do:elseDo:",
 	) {
 		t.Error(got)
