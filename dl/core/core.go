@@ -37,6 +37,7 @@ var Slats = []composer.Composer{
 	(*Capitalize)(nil),
 	(*ChooseAction)(nil),
 	(*ChooseMore)(nil),
+	(*ChooseMoreValue)(nil),
 	(*ChooseNothingElse)(nil),
 	(*ChooseNum)(nil), // FIX: Choose scalar/any?
 	(*ChooseText)(nil),

@@ -798,6 +798,58 @@ const spec = [
     }
   },
   {
+    "name": "choose_more_value",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$ASSIGN": {
+          "label": "assign",
+          "type": "text"
+        },
+        "$DO": {
+          "label": "do",
+          "type": "activity"
+        },
+        "$ELSE": {
+          "label": "else",
+          "optional": true,
+          "type": "brancher"
+        },
+        "$FILTER": {
+          "label": "and",
+          "type": "bool_eval"
+        },
+        "$FROM": {
+          "label": "from",
+          "type": "assignment"
+        }
+      },
+      "roles": "SZSZKZKZSZKZSZKZK",
+      "slots": [
+        "brancher"
+      ],
+      "tokens": [
+        "elseIf",
+        ": ",
+        "assign",
+        ": ",
+        "$ASSIGN",
+        ", ",
+        "$FROM",
+        ", ",
+        "and",
+        ": ",
+        "$FILTER",
+        ", ",
+        "do",
+        ": ",
+        "$DO",
+        ", ",
+        "$ELSE"
+      ]
+    }
+  },
+  {
     "name": "choose_nothing_else",
     "uses": "flow",
     "with": {
