@@ -49,7 +49,7 @@ func playGame(inFile, testString string) (ret int, err error) {
 		} else if grammar, e := play.MakeGrammar(db); e != nil {
 			err = e
 		} else {
-			run := play.NewPlaytime(db, "#entire_game::kitchen")
+			run := play.NewPlaytime(db, "#entire_game::player", "#entire_game::kitchen")
 			run.ActivateDomain("entire_game", true)
 			parser := play.NewParser(run, grammar)
 			//

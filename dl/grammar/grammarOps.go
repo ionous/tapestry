@@ -38,6 +38,12 @@ type Reverse struct {
 	Reverses []ScannerMaker `if:"selector"`
 }
 
+// Self makes a parser scanner which matches the player.
+// ( the player string is just to make the fluent display in the composer happy. )
+type Self struct {
+	Player string `if:"selector"`
+}
+
 // Words makes a parser scanner
 type Words struct {
 	Words []string `if:"selector"`
@@ -79,6 +85,13 @@ func (*Retarget) Compose() composer.Spec {
 }
 
 func (*Reverse) Compose() composer.Spec {
+	return composer.Spec{
+		Group:  "grammar",
+		Fluent: &composer.Fluid{Role: composer.Function},
+	}
+}
+
+func (*Self) Compose() composer.Spec {
 	return composer.Spec{
 		Group:  "grammar",
 		Fluent: &composer.Fluid{Role: composer.Function},
@@ -132,6 +145,10 @@ func (op *Retarget) MakeScanner() parser.Scanner {
 func (op *Reverse) MakeScanner() parser.Scanner {
 	ls := reduce(op.Reverses)
 	return &parser.Reverse{ls}
+}
+
+func (op *Self) MakeScanner() parser.Scanner {
+	return &parser.Eat{&parser.Focus{"self", &parser.Noun{}}}
 }
 
 func (op *Words) MakeScanner() parser.Scanner {

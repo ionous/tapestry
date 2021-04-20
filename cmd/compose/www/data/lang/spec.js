@@ -3649,6 +3649,31 @@ const spec = [
     }
   },
   {
+    "group": [
+      "grammar"
+    ],
+    "name": "reverse",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$REVERSES": {
+          "label": "reverses",
+          "repeats": true,
+          "type": "scanner_maker"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "scanner_maker"
+      ],
+      "tokens": [
+        "reverse",
+        ": ",
+        "$REVERSES"
+      ]
+    }
+  },
+  {
     "desc": "Row: a single line as part of a group of lines.",
     "group": [
       "printing"
@@ -3727,6 +3752,30 @@ const spec = [
         ": ",
         "$TEXT",
         "."
+      ]
+    }
+  },
+  {
+    "group": [
+      "grammar"
+    ],
+    "name": "self",
+    "uses": "flow",
+    "with": {
+      "params": {
+        "$PLAYER": {
+          "label": "player",
+          "type": "text"
+        }
+      },
+      "roles": "FZK",
+      "slots": [
+        "scanner_maker"
+      ],
+      "tokens": [
+        "self",
+        ": ",
+        "$PLAYER"
       ]
     }
   },

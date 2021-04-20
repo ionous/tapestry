@@ -14,7 +14,7 @@ import (
 // note: play has to attach to some specifics of a particular runtime to work
 // ex. childrenOf, transparentOf, etc.
 // enc is the enclosureOf the player
-func (pt *Playtime) GetNamedBounds(enc string) parser.Bounds {
+func (pt *Playtime) LocationBounded(enc string) parser.Bounds {
 	return func(cb parser.NounVisitor) (ret bool) {
 		if kids, e := pt.Call("parser_bounds", affine.TextList, []rt.Arg{{"obj",
 			&core.FromValue{g.StringOf(enc)}},
@@ -22,9 +22,19 @@ func (pt *Playtime) GetNamedBounds(enc string) parser.Bounds {
 			log.Println(e)
 		} else {
 			for _, k := range kids.Strings() {
-				cb(MakeNoun(pt, k))
+				if ok := cb(MakeNoun(pt, k)); ok {
+					ret = ok
+					break
+				}
 			}
 		}
 		return
+	}
+}
+
+// return bounds which include only the player object and nothing else.
+func (pt *Playtime) SelfBounded() parser.Bounds {
+	return func(cb parser.NounVisitor) (ret bool) {
+		return cb(&Noun{pt, pt.player})
 	}
 }

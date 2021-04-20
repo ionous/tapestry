@@ -16,14 +16,16 @@ import (
 type Playtime struct {
 	*qna.Runner
 	hasName  *sql.Stmt
+	player   ident.Id
 	location string
 }
 
-func NewPlaytime(db *sql.DB, startWhere string) *Playtime {
+func NewPlaytime(db *sql.DB, player, startWhere string) *Playtime {
 	var ps tables.Prep
 	return &Playtime{
 		Runner:   qna.NewRuntime(db),
 		location: startWhere,
+		player:   ident.IdOf(player),
 		hasName: ps.Prep(db,
 			`select 1 
 				from mdl_name
@@ -46,10 +48,13 @@ func (pt *Playtime) IsPlural(word string) bool {
 }
 
 func (pt *Playtime) GetPlayerBounds(where string) (ret parser.Bounds, err error) {
-	if len(where) > 0 {
+	switch where {
+	case "":
+		ret = pt.LocationBounded(pt.location)
+	case "self":
+		ret = pt.SelfBounded()
+	default:
 		err = errutil.New("unknown player bounds", where)
-	} else {
-		ret = pt.GetNamedBounds(pt.location)
 	}
 	return
 }

@@ -28,7 +28,7 @@ type Result struct {
 
 func (p *Parser) Step(words string) (ret *Result, err error) {
 	pt := p.pt
-	bounds := pt.GetNamedBounds(pt.location)
+	bounds := pt.LocationBounded(pt.location)
 	cursor := parser.Cursor{Words: strings.Fields(words)}
 	switch res, e := p.grammar.Scan(pt, bounds, cursor); e.(type) {
 	default:
@@ -114,7 +114,7 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 		// case parser.ResolvedNoun:
 
 		// - Word matches one word.
-		// case parser.ResolvedWord:
+		// case parser.ResolvedWords:
 		default:
 			err = errutil.New("unhandled results", res)
 		} // end res
