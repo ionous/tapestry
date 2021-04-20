@@ -1094,6 +1094,56 @@
             }
           ]
         }
+      },
+      {
+        "id": "id-178eb4377c3-189",
+        "type": "paragraph",
+        "value": {
+          "$STORY_STATEMENT": [
+            {
+              "id": "id-178eb4377c3-190",
+              "type": "story_statement",
+              "value": {
+                "id": "id-178eb4377c3-191",
+                "type": "grammar_decl",
+                "value": {
+                  "$GRAMMAR": {
+                    "id": "id-178eb4377c3-192",
+                    "type": "grammar_maker",
+                    "value": {
+                      "id": "id-178eb4377c3-193",
+                      "type": "alias",
+                      "value": {
+                        "$NAMES": [
+                          {
+                            "id": "id-178eb4377c3-197",
+                            "type": "text",
+                            "value": "me"
+                          },
+                          {
+                            "id": "id-178eb4377c3-194",
+                            "type": "text",
+                            "value": "myself"
+                          },
+                          {
+                            "id": "id-178eb4377c3-196",
+                            "type": "text",
+                            "value": "self"
+                          }
+                        ],
+                        "$AS_NOUN": {
+                          "id": "id-178eb4377c3-195",
+                          "type": "text",
+                          "value": "player"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
       }
     ]
   }
