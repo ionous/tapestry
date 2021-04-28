@@ -16,6 +16,7 @@ type Len struct {
 func (*Len) Compose() composer.Spec {
 	return composer.Spec{
 		Name:  "list_len",
+		Lede:  "len",
 		Group: "list",
 		Spec:  "length of {list:assignment}",
 		Desc:  "Length of List: Determines the number of values in a list.",

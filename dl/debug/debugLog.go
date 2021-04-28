@@ -18,8 +18,8 @@ import (
 var LogLevel Level
 
 type Log struct {
-	Value rt.Assignment `if:"selector"`
 	Level Level         `if:"selector"`
+	Value rt.Assignment `if:"selector"`
 }
 
 func (op *Log) Compose() composer.Spec {

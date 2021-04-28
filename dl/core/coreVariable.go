@@ -8,7 +8,7 @@ import (
 // Variable requires a user-specified string.
 type Variable struct {
 	At  reader.Position `if:"internal"`
-	Str string
+	Str string          `if:"pb=__variable"`
 }
 
 // String returns user defined variable name.
@@ -20,6 +20,7 @@ func (*Variable) Choices() map[string]string { return nil }
 // Compose returns info for the modeling language.
 func (*Variable) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:        "var",
 		Name:        "variable_name",
 		OpenStrings: true,
 	}

@@ -1,0 +1,61 @@
+// logic.proto
+syntax = "proto3"; 
+package pb;
+option go_package = "git.sr.ht/~ionous/pb";
+
+import "main.proto";
+import "options.proto";
+
+message AllTrue {
+		repeated BoolEval _and__tests    =    1;		
+
+    option (if).desc = "returns true if all of the evaluations are true.";
+}
+
+message Always {
+    option (if).desc = "Always true.";
+}
+
+message AnyTrue {
+		repeated BoolEval _or__tests    =    2;		
+
+    option (if).desc = "True if any of the evaluations are true.";
+}
+
+// Cmp:is:num: 5 GreaterThan 5
+message CompareNum {
+		NumberEval _val         =   1;
+		Comparator is        =   2;
+		NumberEval num         =   3;		
+
+    option (if).desc = "True if eq,ne,gt,lt,ge,le two numbers.";
+}
+
+// Cmp:is:txt: "x" EqualTo "y"
+message CompareText {
+		TextEval   _val        =   1;
+		Comparator is          =   2;		
+		TextEval   txt         =   3;
+		
+    option (if).desc = "True if eq,ne,gt,lt,ge,le two strings ( lexical. )";
+}
+
+// CountOf: 5
+// CountOf:trigger: 5 Cycling
+message CountOf {
+		NumberEval _num       =    1;
+		Trigger    _trigger   =    2;
+		Pos        _pos       =    12;
+
+    option (if).desc = "A guard which returns true based on a counter.  Counters start at zero and are incremented every time the guard gets checked.";
+}
+
+message HasDominion {
+		string     _domain_    =    1;
+}
+
+message IsNotTrue {
+		BoolEval   _test      =    1;		
+
+    option (if).desc = "Returns the opposite value.";
+}

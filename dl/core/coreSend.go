@@ -12,8 +12,8 @@ import (
 // Send triggers an event. All events are expected to return a "bool" success.
 // erroring if the value requested doesnt support the error returned.
 type Send struct {
-	Event     EventName       // a text eval here would be like a function pointer maybe...
-	Path      rt.TextListEval // object names
+	Event     EventName       `if:"pb=__event"` // a text eval here would be like a function pointer maybe...
+	Path      rt.TextListEval `if:"pb=to"`      // object names
 	Arguments *Arguments      // event args shouldnt be optional, but it mirrors pattern
 }
 

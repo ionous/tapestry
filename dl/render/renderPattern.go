@@ -19,6 +19,7 @@ type RenderPattern struct {
 
 func (op *RenderPattern) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "render",
 		Group: "internal",
 	}
 }

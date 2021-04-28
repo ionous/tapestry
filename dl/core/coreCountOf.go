@@ -10,7 +10,7 @@ import (
 )
 
 type CountOf struct {
-	Pos reader.Position `if:"internal"` // generated at import time to provide a unique counter for each sequence
+	At  reader.Position `if:"internal"` // generated at import time to provide a unique counter for each sequence
 	Num rt.NumberEval   `if:"selector"`
 	Trigger
 }
@@ -27,6 +27,7 @@ func (op *TriggerSwitch) Trigger() Trigger { return op }
 
 func (*TriggerOnce) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "at",
 		Fluent: &composer.Fluid{Name: "once", Role: composer.Selector},
 		Group:  "comparison",
 	}
@@ -34,6 +35,7 @@ func (*TriggerOnce) Compose() composer.Spec {
 
 func (*TriggerCycle) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "every",
 		Fluent: &composer.Fluid{Name: "cycle", Role: composer.Selector},
 		Group:  "comparison",
 	}
@@ -41,6 +43,7 @@ func (*TriggerCycle) Compose() composer.Spec {
 
 func (*TriggerSwitch) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "after",
 		Fluent: &composer.Fluid{Name: "switch", Role: composer.Selector},
 		Group:  "comparison",
 	}
@@ -48,6 +51,7 @@ func (*TriggerSwitch) Compose() composer.Spec {
 
 func (*CountOf) Compose() composer.Spec {
 	return composer.Spec{
+		// Lede:   "trigger",
 		Group:  "logic",
 		Fluent: &composer.Fluid{Name: "countOf", Role: composer.Function},
 		Desc: `CountOf: A guard which returns true based on a counter. 
@@ -66,7 +70,7 @@ func (op *CountOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *CountOf) update(run rt.Runtime) (okay bool, err error) {
-	name := op.Pos.String()
+	name := op.At.String()
 	if p, e := run.GetField(object.Counter, name); e != nil {
 		err = e
 	} else if count := p.Int(); count >= 0 {

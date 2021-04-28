@@ -13,11 +13,12 @@ import (
 type Map struct {
 	ToList       string
 	FromList     rt.Assignment
-	UsingPattern pattern.PatternName
+	UsingPattern pattern.PatternName `if:"pb=using__pattern"`
 }
 
 func (*Map) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "map",
 		Name:  "list_map",
 		Group: "list",
 		Desc: `Map list: Transform the values from one list and place the results in another list.

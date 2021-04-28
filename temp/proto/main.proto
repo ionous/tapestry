@@ -1,0 +1,122 @@
+// main.proto
+syntax = "proto3"; 
+package pb;
+option go_package = "git.sr.ht/~ionous/pb";
+
+import "options.proto";
+// import "debug.proto";
+
+message Log {
+		enum Level {
+	    NOTE = 0;
+	    TODO = 1;
+	    FIX = 2;
+	    WARN = 3;
+	    ERROR = 4;
+	  }
+		Level      _level     =    1;
+		Assignment msg     =    2;
+		
+    option (if).desc = "Debug log";
+}
+
+
+message Arg {
+	string _name = 1;
+	Assignment from = 2;
+}
+
+message Assignment {
+
+    option (if).desc = "Helper for setting variables.";
+}
+
+message BoolEval {
+
+    option (if).desc = "Statements which return true/false values.";
+}
+
+message Brancher {
+
+    option (if).desc = "Helper for choose action.";
+}
+
+message Comparator {
+
+    option (if).desc = "Helper for comparing values.";
+}
+
+message Execute {
+		Log             log = 65;
+    option (if).desc = "Run a series of statements.";
+}
+
+message FromSourceFields {
+
+    option (if).desc = "Helper for getting fields.";
+}
+
+message GrammarMaker {
+
+    option (if).desc = "Helper for defining parser grammars.";
+}
+
+message IntoTargetFields {
+
+    option (if).desc = "Helper for setting fields.";
+}
+
+message ListIterator {
+
+    option (if).desc = "Helper for accessing lists.";
+}
+
+message ListSource {
+
+    option (if).desc = "Helper for accessing lists.";
+}
+
+message ListTarget {
+
+    option (if).desc = "Helper for accessing lists.";
+}
+
+message NumListEval {
+
+    option (if).desc = "Statements which return a list of numbers.";
+}
+
+message NumberEval {
+
+    option (if).desc = "Statements which return a number.";
+}
+
+message RecordEval {
+
+    option (if).desc = "Statements which return a record.";
+}
+
+message RecordListEval {
+
+    option (if).desc = "Statements which return a list of records.";
+}
+
+message ScannerMaker {
+
+    option (if).desc = "Helper for defining input scanners.";
+}
+
+message TextEval {
+
+    option (if).desc = "Statements which return text.";
+}
+
+message TextListEval {
+
+    option (if).desc = "Statements which return a list of text.";
+}
+
+message Trigger {
+
+    option (if).desc = "Helper for counting values.";
+}

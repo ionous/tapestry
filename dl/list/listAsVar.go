@@ -25,6 +25,7 @@ type AsRec struct {
 
 func (*AsNum) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "num",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Define the name of a number variable.",
 	}
@@ -32,6 +33,7 @@ func (*AsNum) Compose() composer.Spec {
 
 func (*AsTxt) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "txt",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Define the name of a text variable.",
 	}
@@ -39,6 +41,7 @@ func (*AsTxt) Compose() composer.Spec {
 
 func (*AsRec) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "rec",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Define the name of a record variable.",
 	}

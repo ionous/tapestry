@@ -9,10 +9,12 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/print"
 )
 
+// Row do:
 type Row struct {
 	Do Activity
 }
 
+// Rows do:
 type Rows struct {
 	Do Activity
 }

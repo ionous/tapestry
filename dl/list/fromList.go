@@ -37,6 +37,7 @@ func (*FromNumList) Affinity() affine.Affinity { return affine.NumList }
 
 func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "nums",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Uses a list of numbers",
 	}
@@ -46,6 +47,7 @@ func (*FromTxtList) Affinity() affine.Affinity { return affine.TextList }
 
 func (*FromTxtList) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "txts",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Uses a list of text",
 	}
@@ -55,6 +57,7 @@ func (*FromRecList) Affinity() affine.Affinity { return affine.RecordList }
 
 func (*FromRecList) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "recs",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Uses a list of records",
 	}

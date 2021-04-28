@@ -25,6 +25,7 @@ type IntoRecList struct {
 
 func (*IntoNumList) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "nums",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Targets a list of numbers",
 	}
@@ -32,6 +33,7 @@ func (*IntoNumList) Compose() composer.Spec {
 
 func (*IntoTxtList) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "txts",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Targets a list of text",
 	}
@@ -39,6 +41,7 @@ func (*IntoTxtList) Compose() composer.Spec {
 
 func (*IntoRecList) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "recs",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Targets a list of records",
 	}

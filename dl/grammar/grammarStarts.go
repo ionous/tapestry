@@ -27,6 +27,7 @@ type GrammarDecl struct {
 
 func (*GrammarDecl) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "grammar",
 		Name:  "grammar_decl",
 		Spec:  "Understand {grammar:grammar_maker}",
 		Slots: []string{"story_statement"},

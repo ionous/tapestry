@@ -41,6 +41,7 @@ type Texts struct {
 // Compose returns a spec for use by the composer editor.
 func (*Bool) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "bool",
 		Name:  "bool_value",
 		Spec:  "{bool}",
 		Group: "literals",
@@ -61,6 +62,7 @@ func (op *Bool) String() string {
 
 func (*Number) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "num",
 		Name:  "num_value",
 		Group: "literals",
 		Spec:  "{num:number}",
@@ -91,6 +93,7 @@ func (op *Number) String() string {
 
 func (*Text) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "txt",
 		Name:  "text_value",
 		Spec:  "{text}",
 		Group: "literals",
@@ -112,6 +115,7 @@ func (op *Text) String() string {
 
 func (*Lines) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "here",
 		Name:  "lines_value",
 		Spec:  "{lines|quote}",
 		Group: "literals",
@@ -132,6 +136,7 @@ func (op *Lines) String() string {
 
 func (*Numbers) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "nums",
 		Group: "literals",
 		Desc:  "Number List: Specify a list of multiple numbers.",
 	}
@@ -146,6 +151,7 @@ func (op *Numbers) GetNumList(rt.Runtime) (ret g.Value, _ error) {
 
 func (*Texts) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "txts",
 		Group: "literals",
 		Desc:  "Text List: specifies multiple string values.",
 		Spec:  "text {values*text|comma-and}",

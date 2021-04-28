@@ -13,9 +13,9 @@ import (
 
 // A normal reduce would return a value, instead we accumulate into a variable
 type Reduce struct {
-	IntoValue    string
+	IntoValue    string `if:"pb=into"`
 	FromList     rt.Assignment
-	UsingPattern pattern.PatternName
+	UsingPattern pattern.PatternName `if:"pb=using__pattern"`
 }
 
 func (*Reduce) Compose() composer.Spec {

@@ -8,10 +8,11 @@ import (
 )
 
 // ChooseValue creates a local assignment for use with evaluation.
+// if:txt:and:do:else: #name "value" {#name=="value"}  {...} {...}
 type ChooseValue struct {
 	Assign string
 	From   rt.Assignment `if:"selector"`
-	Filter rt.BoolEval   `if:"selector=and"`
+	Filter rt.BoolEval   `if:"pb=and,selector=and"`
 	Do     Activity
 	Else   Brancher `if:"selector,optional"`
 }
@@ -24,6 +25,13 @@ func (*ChooseValue) Compose() composer.Spec {
 }
 
 func (op *ChooseValue) Execute(run rt.Runtime) (err error) {
+	if e := op.ifDoElse(run); e != nil {
+		err = cmdError(op, e)
+	}
+	return
+}
+
+func (op *ChooseValue) Branch(run rt.Runtime) (err error) {
 	if e := op.ifDoElse(run); e != nil {
 		err = cmdError(op, e)
 	}

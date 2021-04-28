@@ -7,9 +7,7 @@ import (
 )
 
 /*
- * erase: numEval
- * from: varName,
- * atIndex: num,
+ * erase from: varName, atIndex: num,
  */
 type EraseEdge struct {
 	From   ListSource `if:"selector"`

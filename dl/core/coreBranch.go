@@ -26,18 +26,21 @@ type ChooseNothingElse struct {
 
 func (*ChooseMore) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "else_if",
 		Fluent: &composer.Fluid{Name: "elseIf", Role: composer.Selector},
 	}
 }
 
 func (*ChooseMoreValue) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "else_if",
 		Fluent: &composer.Fluid{Name: "elseIf", Role: composer.Selector},
 	}
 }
 
 func (*ChooseNothingElse) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "else_do",
 		Fluent: &composer.Fluid{Name: "elseDo", Role: composer.Selector},
 	}
 }

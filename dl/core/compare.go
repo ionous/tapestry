@@ -9,21 +9,25 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
+// CompareNum - boolean evaluation comparing two numbers.
 type CompareNum struct {
 	A  rt.NumberEval `if:"selector=num"`
 	Is Comparator    `if:"selector,compact"`
-	B  rt.NumberEval `if:"selector"`
+	B  rt.NumberEval `if:"pb=num,selector"`
 	// fix: add optional epsilon?
 }
 
+// CompareText - boolean evaluation comparing two bits of text.
+// Cmp equal:txt:
 type CompareText struct {
 	A  rt.TextEval `if:"selector=txt"`
 	Is Comparator  `if:"selector,compact"`
-	B  rt.TextEval `if:"selector"`
+	B  rt.TextEval `if:"pb=txt,selector"`
 }
 
 func (*CompareNum) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "cmp",
 		Fluent: &composer.Fluid{Name: "is", Role: composer.Function},
 		Group:  "logic",
 		Desc:   "Compare Numbers: True if eq,ne,gt,lt,ge,le two numbers.",
@@ -46,6 +50,7 @@ func (op *CompareNum) GetBool(run rt.Runtime) (ret g.Value, err error) {
 
 func (*CompareText) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "cmp",
 		Fluent: &composer.Fluid{Name: "is", Role: composer.Function},
 		Group:  "logic",
 		Desc:   "Compare Text: True if eq,ne,gt,lt,ge,le two strings ( lexical. )",

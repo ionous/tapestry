@@ -12,8 +12,8 @@ type Level int
 const (
 	Note Level = iota + 1
 	ToDo
-	Warning
 	Fix
+	Warning
 	Error
 )
 

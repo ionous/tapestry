@@ -14,7 +14,7 @@ import (
 type PutEdge struct {
 	From   rt.Assignment `if:"selector"`
 	Into   ListTarget    `if:"selector"`
-	AtEdge Edge          `if:"selector"`
+	AtEdge Edge          `if:"pb="at",selector"`
 }
 
 func (*PutEdge) Compose() composer.Spec {

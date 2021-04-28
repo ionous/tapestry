@@ -10,8 +10,8 @@ import (
 )
 
 type Matches struct {
-	Text    rt.TextEval
-	Pattern string
+	Text    rt.TextEval `if:"selector"`
+	Pattern string      `if:"pb=to,selector"`
 	// fix: should transform into a different command probably during compile
 	exp *regexp.Regexp `if:"internal"`
 	err error

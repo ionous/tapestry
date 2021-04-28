@@ -10,12 +10,13 @@ import (
 
 // Var reads the value of the specified name from the current scope.
 type Var struct {
-	Name string `if:"selector"`
+	Name string `if:"pb=__variable,selector"`
 }
 
 // Compose implements composer.Composer
 func (*Var) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "var",
 		Name:   "get_var",
 		Group:  "variables",
 		Desc:   "Get Variable: Return the value of the named variable.",

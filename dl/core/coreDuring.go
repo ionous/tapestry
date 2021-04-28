@@ -12,13 +12,13 @@ import (
 
 // During determines whether a pattern is running.
 type During struct {
-	Pattern pattern.PatternName // a text eval here would be like a function pointer maybe..
+	Pattern pattern.PatternName `if:"pb=__pattern"` // a text eval here would be like a function pointer maybe..
 }
 
 func (*During) Compose() composer.Spec {
 	return composer.Spec{
 		Group:  "patterns",
-		Desc:   "During: Runs a pattern, and potentially returns a value.",
+		Desc:   "During: Decide whether a pattern is running.",
 		Fluent: &composer.Fluid{Name: "during", Role: composer.Command},
 	}
 }

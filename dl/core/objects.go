@@ -12,7 +12,7 @@ import (
 )
 
 type ObjectExists struct {
-	Object rt.TextEval `if:"selector=valid,placeholder=object"`
+	Object rt.TextEval `if:"pb=valid,selector=valid,placeholder=object"`
 }
 
 // IdOf returns the internal name of the object.
@@ -36,21 +36,22 @@ type KindOf struct {
 // it returns true when the object is compatible with the named kind.
 type IsKindOf struct {
 	Object rt.TextEval `if:"selector"`
-	Kind   string      `if:"selector=is"`
+	Kind   string      `if:"pb=is,selector=is"`
 }
 
 type IsExactKindOf struct {
 	Object rt.TextEval `if:"selector"`
-	Kind   string      `if:"selector=isExactly"`
+	Kind   string      `if:"pb=is_exactly",selector=isExactly"`
 }
 
-// KindsOf returns all kinds of the specified type
+// KindsOf returns all nouns of the specified kind
 type KindsOf struct {
 	Kind string `if:"selector"`
 }
 
 func (*ObjectExists) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "is",
 		Group:  "objects",
 		Desc:   "Object Exists: Returns whether there is a object of the specified name.",
 		Fluent: &composer.Fluid{Name: "is", Role: composer.Function},

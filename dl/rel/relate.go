@@ -8,7 +8,7 @@ import (
 
 type Relate struct {
 	Object   rt.TextEval `if:"selector"`
-	ToObject rt.TextEval `if:"selector=to"`
+	ToObject rt.TextEval `if:"pb=to,selector=to"`
 	Via      Relation
 }
 

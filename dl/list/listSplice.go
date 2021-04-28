@@ -17,6 +17,7 @@ type Splice struct {
 
 func (*Splice) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "splice",
 		Name:  "list_splice",
 		Group: "list",
 		Spec:  "Splice {list:text} {at entry%start?number_eval} {removing%remove?number_eval} {inserting%insert?assignment}",

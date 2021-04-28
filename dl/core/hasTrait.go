@@ -11,13 +11,14 @@ import (
 
 // HasTrait - determine if a noun is currently in a particular state.
 type HasTrait struct {
-	Object rt.TextEval
+	Object rt.TextEval `if:"pb=obj"`
 	Trait  rt.TextEval
 }
 
 // should be "When the target is publicly named"
 func (*HasTrait) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "get",
 		Spec:  "{object:text_eval} has {trait:text_eval}",
 		Group: "objects",
 		Desc:  "Has Trait: Return true if the object is currently in the requested state.",
@@ -45,14 +46,16 @@ func (op *HasTrait) GetBool(run rt.Runtime) (ret g.Value, err error) {
 }
 
 // SetTrait a property value from an object by name.
+// put obj:trait:
 type SetTrait struct {
-	Object rt.TextEval
+	Object rt.TextEval `if:"pb=obj"`
 	Trait  rt.TextEval
 }
 
 // should be "When the target is publicly named"
 func (*SetTrait) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "put",
 		Spec:  "set {object:text_eval} to {trait:text_eval}",
 		Group: "objects",
 		Desc:  "Set Trait: put an object into a particular state.",

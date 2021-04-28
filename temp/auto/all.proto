@@ -1,0 +1,1482 @@
+syntax = "proto3";
+package pb;
+option go_package = "git.sr.ht/~ionous/pb";
+//
+import "options.proto";
+
+
+message Assignment {
+  oneof eval {
+		FromBool             bool1                = 0x01ae1e625d;
+		GetAtField           get1_from2           = 0x0cf7ca8c3d;
+		FromNum              num1                 = 0x04736544bd;
+		FromNumbers          nums1                = 0x088d1c0aed;
+		FromRecord           rec1                 = 0x0a110ee29d;
+		FromRecords          recs1                = 0x02619803cd;
+		RenderPattern        render1_args2        = 0x0317be622d;
+		RenderRef            render_ref1_flags2   = 0x020560d2bd;
+		FromText             txt1                 = 0x0e8a76fefd;
+		FromTexts            txts1                = 0x09344ec8ad;
+		Var                  var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Helper for setting variables.";
+}
+
+message BoolEval {
+  oneof eval {
+		AllTrue              all_of1              = 0x0775e8e5dd;
+		Always               always               = 0x0ad4bbd04d;
+		AnyTrue              any_of1              = 0x0a46412eed;
+		Bool                 bool1                = 0x01ae1e625d;
+		CompareNum           cmp1_is2_num3        = 0x06d6d6801d;
+		CompareText          cmp1_is2_txt3        = 0x0add85a09d;
+		Includes             contains1_part2      = 0x01567b9bfd;
+		CountOf              countOf1_trigger2    = 0x03423d343d;
+		Determine            determine1_args2     = 0x0dbb75089d;
+		During               during1              = 0x09d1eedd6d;
+		Find                 find1_list2          = 0x0239895b6d;
+		HasTrait             get0_obj1_trait2     = 0x04e39127ad;
+		GetAtField           get1_from2           = 0x0cf7ca8c3d;
+		HasDominion          has_dominion1        = 0x0ddebe05ad;
+		IsEmpty              is0_empty1           = 0x0ede81422d;
+		ObjectExists         is0_valid1           = 0x022e25593d;
+		IsKindOf             kindOf1_is2          = 0x09dd95172d;
+		IsExactKindOf        kindOf1_is_exactly2  = 0x01d76891ed;
+		Matches              matches1_to2         = 0x00cdc553dd;
+		IsNotTrue            not1                 = 0x0d5405e30d;
+		RenderPattern        render1_args2        = 0x0317be622d;
+		RenderRef            render_ref1_flags2   = 0x020560d2bd;
+		Send                 send1_to2_args3      = 0x00dd2cef5d;
+		Var                  var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Statements which return true/false values.";
+}
+
+message Brancher {
+  oneof eval {
+		ChooseNothingElse    else_do0_do1         = 0x07729cee4d;
+		ChooseMore           else_if1_do2         = 0x0e7260e68d;
+		ChooseMore           else_if1_do2_else3   = 0x083564fa9d;
+		ChooseMoreValue      else_if1_from2_and3_do4 = 0x08360efefd;
+		ChooseMoreValue      else_if1_from2_and3_do4_else5 = 0x087f7893cd;
+		ChooseAction         if1_do2              = 0x0214d8d35d;
+		ChooseAction         if1_do2_else3        = 0x041fe880ed;
+		ChooseValue          if1_from2_and3_do4   = 0x0b017a9c4d;
+		ChooseValue          if1_from2_and3_do4_else5 = 0x04b09d275d;
+	}
+	option (if).desc = "Helper for choose action.";
+}
+
+message Comparator {
+  oneof eval {
+		GreaterOrEqual       at_least             = 0x036b5e639d;
+		LessOrEqual          at_most              = 0x02343ab77d;
+		EqualTo              equalTo              = 0x0461c9cead;
+		GreaterThan          greater_than         = 0x011ab2d3ed;
+		LessThan             less_than            = 0x00027f923d;
+		NotEqualTo           otherThan            = 0x0bf54f72ad;
+	}
+	option (if).desc = "Helper for comparing values.";
+}
+
+message Execute {
+  oneof eval {
+		Activity             act0_do1             = 0x03b1e0e4ed;
+		Newline              br                   = 0x04edda5d5d;
+		Break                break                = 0x09dd96d18d;
+		Determine            determine1_args2     = 0x0dbb75089d;
+		DoNothing            do_nothing           = 0x0f5fce621d;
+		DoNothing            do_nothing0_why1     = 0x020226f4fd;
+		EraseEdge            erase1_at_edge2      = 0x0a32fc2ddd;
+		EraseIndex           erase1_from2_at_index3 = 0x0fa59fb2ad;
+		ErasingEdge          erasing1_at_edge2_as3_do4_do5 = 0x0fcf636f6d;
+		Erasing              erasing1_from2_at_index3_as4_do5 = 0x02132df22d;
+		ChooseAction         if1_do2              = 0x0214d8d35d;
+		ChooseAction         if1_do2_else3        = 0x041fe880ed;
+		ChooseValue          if1_from2_and3_do4   = 0x0b017a9c4d;
+		ChooseValue          if1_from2_and3_do4_else5 = 0x04b09d275d;
+		Assign               let1_be2             = 0x012ad68f9d;
+		Reduce               list_reduce0_into1_from_list2_using3 = 0x0753dbafdd;
+		ReverseList          list_reverse1        = 0x0dccd98a9d;
+		Set                  list_set1_index2_from3 = 0x0422b6a6dd;
+		Splice               list_splice1_start2_remove3_insert4 = 0x06f4a079cd;
+		Log                  log1_value2          = 0x0d21b7aacd;
+		Map                  map1_from_list2_using3 = 0x0d0fffa2fd;
+		Next                 next                 = 0x0dce2da08d;
+		Paragraph            p                    = 0x0d50c118fd;
+		SetTrait             put0_obj1_trait2     = 0x06a99ae85d;
+		PutAtField           put1_from2_at3       = 0x084f7512fd;
+		PutEdge              put1_into2_at_edge3  = 0x0537d22ded;
+		PutIndex             put1_into2_at_index3 = 0x0006a2e8fd;
+		Relate               relate1_to2_via3     = 0x0f8997545d;
+		RenderPattern        render1_args2        = 0x0317be622d;
+		Each                 repeating0_across1_as2_do3 = 0x0a9629cacd;
+		Each                 repeating0_across1_as2_do3_else4 = 0x00701bb0dd;
+		While                repeating1_do2       = 0x084bd2f85d;
+		Say                  say_text1            = 0x073bbf897d;
+		Send                 send1_to2_args3      = 0x00dd2cef5d;
+		SortNumbers          sort1_by2_order3     = 0x04faff064d;
+		SortText             sort1_by2_order3_case4 = 0x01dd239e6d;
+		SortRecords          sort1_using2         = 0x025ed6e0bd;
+		Softline             wbr                  = 0x08866b56ad;
+	}
+	option (if).desc = "Run a series of statements.";
+}
+
+message FromSourceFields {
+  oneof eval {
+		FromObj              obj1                 = 0x0f235f360d;
+		FromRec              rec1                 = 0x0a110ee29d;
+		RenderField          render_field1        = 0x00c01ceffd;
+		FromVar              var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Helper for getting fields.";
+}
+
+message GrammarMaker {
+  oneof eval {
+		Alias                alias1_as_noun2      = 0x0a75f0563d;
+		Directive            directive1_scans2    = 0x0c3f31c8cd;
+	}
+	option (if).desc = "Helper for defining parser grammars.";
+}
+
+message IntoTargetFields {
+  oneof eval {
+		IntoObj              obj1                 = 0x0f235f360d;
+		IntoVar              var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Helper for setting fields.";
+}
+
+message ListIterator {
+  oneof eval {
+		AsNum                num1                 = 0x04736544bd;
+		AsRec                rec1                 = 0x0a110ee29d;
+		AsTxt                txt1                 = 0x0e8a76fefd;
+	}
+	option (if).desc = "Helper for accessing lists.";
+}
+
+message ListSource {
+  oneof eval {
+		FromNumList          nums1                = 0x088d1c0aed;
+		FromRecList          recs1                = 0x02619803cd;
+		FromTxtList          txts1                = 0x09344ec8ad;
+	}
+	option (if).desc = "Helper for accessing lists.";
+}
+
+message ListTarget {
+  oneof eval {
+		IntoNumList          nums1                = 0x088d1c0aed;
+		IntoRecList          recs1                = 0x02619803cd;
+		IntoTxtList          txts1                = 0x09344ec8ad;
+	}
+	option (if).desc = "Helper for accessing lists.";
+}
+
+message NumListEval {
+  oneof eval {
+		Determine            determine1_args2     = 0x0dbb75089d;
+		GetAtField           get1_from2           = 0x0cf7ca8c3d;
+		Slice                list_slice1          = 0x025e5223dd;
+		Slice                list_slice1_end3     = 0x07678eb68d;
+		Slice                list_slice1_start2   = 0x02459fa67d;
+		Slice                list_slice1_start2_end3 = 0x0333648cad;
+		Splice               list_splice1_start2_remove3_insert4 = 0x06f4a079cd;
+		Numbers              nums1                = 0x088d1c0aed;
+		Range                range1               = 0x0fd2f1658d;
+		Range                range1_by_step3      = 0x0ec6c6a7fd;
+		Range                range1_from2         = 0x0c6ffda76d;
+		Range                range1_from2_by_step3 = 0x0a656e7b5d;
+		RenderPattern        render1_args2        = 0x0317be622d;
+		RenderRef            render_ref1_flags2   = 0x020560d2bd;
+		Var                  var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Statements which return a list of numbers.";
+}
+
+message NumberEval {
+  oneof eval {
+		DiffOf               dec1                 = 0x042ba80ebd;
+		DiffOf               dec1_by2             = 0x07dfa3bc4d;
+		Determine            determine1_args2     = 0x0dbb75089d;
+		QuotientOf           div1_by2             = 0x0f8f53c1fd;
+		During               during1              = 0x09d1eedd6d;
+		Find                 find1_list2          = 0x0239895b6d;
+		GetAtField           get1_from2           = 0x0cf7ca8c3d;
+		At                   get1_index2          = 0x00f5e6d45d;
+		SumOf                inc1                 = 0x0e4eda4e7d;
+		SumOf                inc1_by2             = 0x0e0991338d;
+		Len                  len1                 = 0x060636222d;
+		RemainderOf          mod1_by2             = 0x005e744d4d;
+		ProductOf            mul1_by2             = 0x0e6708faed;
+		Number               num1                 = 0x04736544bd;
+		ChooseNum            num1_if2_else3       = 0x0d5151cd3d;
+		RenderPattern        render1_args2        = 0x0317be622d;
+		RenderRef            render_ref1_flags2   = 0x020560d2bd;
+		Var                  var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Statements which return a number.";
+}
+
+message RecordEval {
+  oneof eval {
+		Determine            determine1_args2     = 0x0dbb75089d;
+		GetAtField           get1_from2           = 0x0cf7ca8c3d;
+		At                   get1_index2          = 0x00f5e6d45d;
+		Make                 make1_args2          = 0x02dc0c5f0d;
+		RenderPattern        render1_args2        = 0x0317be622d;
+		RenderRef            render_ref1_flags2   = 0x020560d2bd;
+		Var                  var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Statements which return a record.";
+}
+
+message RecordListEval {
+  oneof eval {
+		Determine            determine1_args2     = 0x0dbb75089d;
+		GetAtField           get1_from2           = 0x0cf7ca8c3d;
+		Slice                list_slice1          = 0x025e5223dd;
+		Slice                list_slice1_end3     = 0x07678eb68d;
+		Slice                list_slice1_start2   = 0x02459fa67d;
+		Slice                list_slice1_start2_end3 = 0x0333648cad;
+		Splice               list_splice1_start2_remove3_insert4 = 0x06f4a079cd;
+		RenderPattern        render1_args2        = 0x0317be622d;
+		RenderRef            render_ref1_flags2   = 0x020560d2bd;
+		Var                  var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Statements which return a list of records.";
+}
+
+message ScannerMaker {
+  oneof eval {
+		AllOf                all_of1              = 0x0775e8e5dd;
+		AnyOf                any_of1              = 0x0a46412eed;
+		Action               as1                  = 0x04dfd17b5d;
+		Noun                 noun1                = 0x02db1c9e9d;
+		Retarget             retarget1            = 0x03012e5d9d;
+		Reverse              reverse1             = 0x0ace6284dd;
+		Self                 self1                = 0x071772357d;
+		Words                words1               = 0x0edaf9630d;
+	}
+	option (if).desc = "Helper for defining input scanners.";
+}
+
+message TextEval {
+  oneof eval {
+		Bracket              bracket_text0_do1    = 0x0ac0df04dd;
+		Buffer               buffer_text0_do1     = 0x00c24f225d;
+		Capitalize           capitalize1          = 0x0bdce3dbbd;
+		Commas               comma_text0_do1      = 0x0be18f9c2d;
+		CycleText            cycle1               = 0x0845f3c31d;
+		Determine            determine1_args2     = 0x0dbb75089d;
+		GetAtField           get1_from2           = 0x0cf7ca8c3d;
+		At                   get1_index2          = 0x00f5e6d45d;
+		IdOf                 idOf1                = 0x05c663bc1d;
+		Join                 join1_parts2         = 0x0db223899d;
+		KindOf               kind_of1             = 0x0d58167f4d;
+		MakeLowercase        lower1               = 0x0917bd320d;
+		NameOf               nameOf1              = 0x0ba0a9cb7d;
+		PrintNumWord         numeral0_words1      = 0x018cc8016d;
+		PrintNum             numeral1             = 0x05a6b3f25d;
+		MakePlural           pluralize1           = 0x04049cf47d;
+		ReciprocalOf         reciprocal1_object2  = 0x0a2357298d;
+		RelativeOf           relative1_object2    = 0x068afec40d;
+		RenderPattern        render1_args2        = 0x0317be622d;
+		RenderName           render_name1         = 0x0f28a89dcd;
+		RenderRef            render_ref1_flags2   = 0x020560d2bd;
+		RenderTemplate       render_template      = 0x096642193d;
+		Response             response1            = 0x09dd8da8cd;
+		Response             response1_text2      = 0x069fae463d;
+		MakeReversed         reverse1             = 0x0ace6284dd;
+		Row                  row0_do1             = 0x0bf84ce9ed;
+		Rows                 rows0_do1            = 0x0447857d1d;
+		MakeSentenceCase     sentence1            = 0x041efacead;
+		ShuffleText          shuffle1             = 0x00ee8f5bcd;
+		MakeSingular         singularize1         = 0x0875a79f8d;
+		Slash                slash_text0_do1      = 0x09ba13b7cd;
+		Span                 span_text0_do1       = 0x08661b273d;
+		StoppingText         stopping1            = 0x0910e0089d;
+		MakeTitleCase        title1               = 0x08d6eca69d;
+		Text                 txt1                 = 0x0e8a76fefd;
+		ChooseText           txt1_if2_else3       = 0x0efb311a7d;
+		MakeUppercase        upper1               = 0x044d267e7d;
+		Var                  var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Statements which return text.";
+}
+
+message TextListEval {
+  oneof eval {
+		Determine            determine1_args2     = 0x0dbb75089d;
+		GetAtField           get1_from2           = 0x0cf7ca8c3d;
+		KindsOf              kindsOf1             = 0x0963c5df1d;
+		Slice                list_slice1          = 0x025e5223dd;
+		Slice                list_slice1_end3     = 0x07678eb68d;
+		Slice                list_slice1_start2   = 0x02459fa67d;
+		Slice                list_slice1_start2_end3 = 0x0333648cad;
+		Splice               list_splice1_start2_remove3_insert4 = 0x06f4a079cd;
+		ReciprocalsOf        reciprocals1_object2 = 0x04d693b0fd;
+		RelativesOf          relatives1_object2   = 0x09e878507d;
+		RenderPattern        render1_args2        = 0x0317be622d;
+		RenderRef            render_ref1_flags2   = 0x020560d2bd;
+		Texts                txts1                = 0x09344ec8ad;
+		Var                  var1                 = 0x00052f36cd;
+	}
+	option (if).desc = "Statements which return a list of text.";
+}
+
+message Trigger {
+  oneof eval {
+		TriggerSwitch        after                = 0x0a7dd3a69d;
+		TriggerOnce          at                   = 0x056d563a8d;
+		TriggerCycle         every                = 0x0db4979a4d;
+	}
+	option (if).desc = "Helper for counting values.";
+}
+
+
+
+message Action {
+           string               action               =   1;
+
+	option (if).group = "grammar";
+}
+
+message Activity {
+  repeated Execute              exe                  =   1;
+
+	option (if).group = "hidden";
+}
+
+message Alias {
+  repeated string               names                =   1;
+           string               as_noun              =   2;
+
+	option (if).group = "grammar";
+}
+
+message AllOf {
+  repeated ScannerMaker         series               =   1;
+
+	option (if).group = "grammar";
+}
+
+message AllTrue {
+  repeated BoolEval             test                 =   1;
+
+	option (if).group = "logic";
+	option (if).desc = "Returns true if all of the evaluations are true.";
+}
+
+message Always {
+
+	option (if).group = "logic";
+	option (if).desc = "Returns true always.";
+}
+
+message AnyOf {
+  repeated ScannerMaker         options              =   1;
+
+	option (if).group = "grammar";
+}
+
+message AnyTrue {
+  repeated BoolEval             test                 =   1;
+
+	option (if).group = "logic";
+	option (if).desc = "Returns true if any of the evaluations are true.";
+}
+
+message Argument {
+           string               name                 =   1;
+           Assignment           from                 =   2;
+
+	option (if).group = "patterns";
+}
+
+message Arguments {
+  repeated Argument             args                 =   1;
+
+	option (if).group = "patterns";
+}
+
+message AsNum {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Define the name of a number variable.";
+}
+
+message AsRec {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Define the name of a record variable.";
+}
+
+message AsTxt {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Define the name of a text variable.";
+}
+
+message Assign {
+           string               str                  =   1;
+           Assignment           from                 =   2;
+
+	option (if).group = "variables";
+	option (if).desc = "Assigns a variable to a value.";
+}
+
+message At {
+           Assignment           list                 =   1;
+           NumberEval           index                =   2;
+
+	option (if).group = "list";
+	option (if).desc = "Get a value from a list. The first element is is index 1.";
+}
+
+message Bool {
+           bool                 bool                 =   1;
+
+	option (if).group = "literals";
+	option (if).desc = "Specify an explicit true or false value.";
+}
+
+message Bracket {
+  repeated Execute              exe                  =   1;
+
+	option (if).group = "printing";
+	option (if).desc = "Sandwiches text printed during a block and puts them inside parenthesis '()'.";
+}
+
+message Break {
+
+	option (if).group = "flow";
+	option (if).desc = "In a repeating loop, exit the loop.";
+}
+
+message Buffer {
+  repeated Execute              exe                  =   1;
+
+	option (if).group = "printing";
+}
+
+message Capitalize {
+           TextEval             text                 =   1;
+
+	option (if).group = "format";
+	option (if).desc = "Returns new text, with the first letter turned into uppercase.";
+}
+
+message ChooseAction {
+           BoolEval             if                   =   1;
+  repeated Execute              exe                  =   2;
+           Brancher             else                 =   3;
+
+	option (if).group = "misc";
+	option (if).desc = "An if statement.";
+}
+
+message ChooseMore {
+           BoolEval             if                   =   1;
+  repeated Execute              exe                  =   2;
+           Brancher             else                 =   3;
+
+	option (if).group = "misc";
+}
+
+message ChooseMoreValue {
+           string               assign               =   1;
+           Assignment           from                 =   2;
+           BoolEval             filter               =   3;
+  repeated Execute              exe                  =   4;
+           Brancher             else                 =   5;
+
+	option (if).group = "misc";
+}
+
+message ChooseNothingElse {
+  repeated Execute              exe                  =   1;
+
+	option (if).group = "misc";
+}
+
+message ChooseNum {
+           NumberEval           true                 =   1;
+           BoolEval             if                   =   2;
+           NumberEval           false                =   3;
+
+	option (if).group = "math";
+	option (if).desc = "Pick one of two numbers based on a boolean test.";
+}
+
+message ChooseText {
+           TextEval             true                 =   1;
+           BoolEval             if                   =   2;
+           TextEval             false                =   3;
+
+	option (if).group = "format";
+	option (if).desc = "Pick one of two strings based on a boolean test.";
+}
+
+message ChooseValue {
+           string               assign               =   1;
+           Assignment           from                 =   2;
+           BoolEval             filter               =   3;
+  repeated Execute              exe                  =   4;
+           Brancher             else                 =   5;
+
+	option (if).group = "misc";
+	option (if).desc = "An if statement with local assignment.";
+}
+
+message Commas {
+  repeated Execute              exe                  =   1;
+
+	option (if).group = "printing";
+	option (if).desc = "Separates words with commas, and 'and'.";
+}
+
+message CompareNum {
+           NumberEval           a                    =   1;
+           Comparator           is                   =   2;
+           NumberEval           b                    =   3;
+
+	option (if).group = "logic";
+	option (if).desc = "True if eq,ne,gt,lt,ge,le two numbers.";
+}
+
+message CompareText {
+           TextEval             a                    =   1;
+           Comparator           is                   =   2;
+           TextEval             b                    =   3;
+
+	option (if).group = "logic";
+	option (if).desc = "True if eq,ne,gt,lt,ge,le two strings ( lexical. )";
+}
+
+message CountOf {
+           Pos                  at                   =  12;
+           NumberEval           num                  =   1;
+           Trigger              trigger              =   2;
+
+	option (if).group = "logic";
+	option (if).desc = "A guard which returns true based on a counter. Counters start at zero and are incremented every time the guard gets checked.";
+}
+
+message CycleText {
+           string               seq                  =  13;
+  repeated TextEval             parts                =   1;
+
+	option (if).group = "output";
+	option (if).desc = "When called multiple times, returns each of its inputs in turn.";
+}
+
+message Determine {
+           string               pattern              =   1;
+  repeated Argument             args                 =   2;
+
+	option (if).group = "patterns";
+	option (if).desc = "Runs a pattern, and potentially returns a value.";
+}
+
+message DiffOf {
+           NumberEval           a                    =   1;
+           NumberEval           b                    =   2;
+
+	option (if).group = "math";
+	option (if).desc = "Subtract two numbers.";
+}
+
+message Directive {
+  repeated string               lede                 =   1;
+  repeated ScannerMaker         scans                =   2;
+
+	option (if).group = "grammar";
+}
+
+message DoNothing {
+           string               reason               =   1;
+
+	option (if).group = "flow";
+	option (if).desc = "Statement which does nothing.";
+}
+
+message During {
+           string               pattern              =   1;
+
+	option (if).group = "patterns";
+	option (if).desc = "Decide whether a pattern is running.";
+}
+
+message Each {
+           Assignment           list                 =   1;
+           ListIterator         as                   =   2;
+  repeated Execute              exe                  =   3;
+           Brancher             else                 =   4;
+
+	option (if).group = "list";
+	option (if).desc = "Loops over the elements in the passed list, or runs the 'else' activity if empty.";
+}
+
+message EqualTo {
+
+	option (if).group = "comparison";
+	option (if).desc = "Two values exactly match.";
+}
+
+message EraseEdge {
+           ListSource           from                 =   1;
+           bool                 at_edge              =   2;
+
+	option (if).group = "misc";
+	option (if).desc = "Remove one or more values from a list";
+}
+
+message EraseIndex {
+           NumberEval           count                =   1;
+           ListSource           from                 =   2;
+           NumberEval           at_index             =   3;
+
+	option (if).group = "misc";
+	option (if).desc = "Remove one or more values from a list";
+}
+
+message Erasing {
+           NumberEval           count                =   1;
+           ListSource           from                 =   2;
+           NumberEval           at_index             =   3;
+           string               as                   =   4;
+  repeated Execute              exe                  =   5;
+
+	option (if).group = "list";
+	option (if).desc = "Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.";
+}
+
+message ErasingEdge {
+           ListSource           from                 =   1;
+           bool                 at_edge              =   2;
+           string               as                   =   3;
+  repeated Execute              exe                  =   4;
+  repeated Execute              exe                  =   5;
+
+	option (if).group = "list";
+	option (if).desc = "Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.";
+}
+
+message Find {
+           Assignment           value                =   1;
+           Assignment           list                 =   2;
+
+	option (if).group = "list";
+	option (if).desc = "Search a list for a specific value.";
+}
+
+message FromBool {
+           BoolEval             val                  =   1;
+
+	option (if).group = "variables";
+	option (if).desc = "Assigns the calculated boolean value.";
+}
+
+message FromNum {
+           NumberEval           val                  =   1;
+
+	option (if).group = "variables";
+	option (if).desc = "Assigns the calculated number.";
+}
+
+message FromNumList {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Uses a list of numbers";
+}
+
+message FromNumbers {
+           NumListEval          vals                 =   1;
+
+	option (if).group = "variables";
+	option (if).desc = "Assigns the calculated numbers.";
+}
+
+message FromObj {
+           TextEval             object               =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Targets an object with a computed name.";
+}
+
+message FromRec {
+           RecordEval           rec                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Targets a record stored in a record.";
+}
+
+message FromRecList {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Uses a list of records";
+}
+
+message FromRecord {
+           RecordEval           val                  =   1;
+
+	option (if).group = "variables";
+	option (if).desc = "Assigns the calculated record.";
+}
+
+message FromRecords {
+           RecordListEval       vals                 =   1;
+
+	option (if).group = "variables";
+	option (if).desc = "Assigns the calculated records.";
+}
+
+message FromText {
+           TextEval             val                  =   1;
+
+	option (if).group = "variables";
+	option (if).desc = "Assigns the calculated piece of text.";
+}
+
+message FromTexts {
+           TextListEval         vals                 =   1;
+
+	option (if).group = "variables";
+	option (if).desc = "Assigns the calculated texts.";
+}
+
+message FromTxtList {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Uses a list of text";
+}
+
+message FromVar {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Targets a record stored in a variable.";
+}
+
+message Gather {
+           string               str                  =   1;
+           ListSource           from                 =   2;
+           string               using                =   3;
+
+	option (if).group = "list";
+	option (if).desc = "Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.";
+}
+
+message GetAtField {
+           string               field                =   1;
+           FromSourceFields     from                 =   2;
+
+	option (if).group = "variables";
+	option (if).desc = "Get a value from a record.";
+}
+
+message GrammarDecl {
+           GrammarMaker         grammar              =   1;
+
+	option (if).group = "grammar";
+	option (if).desc = "Read what the player types and turn it into actions.";
+}
+
+message GreaterOrEqual {
+
+	option (if).group = "comparison";
+	option (if).desc = "The first value is larger than the second value.";
+}
+
+message GreaterThan {
+
+	option (if).group = "comparison";
+	option (if).desc = "The first value is larger than the second value.";
+}
+
+message HasDominion {
+           string               name                 =   1;
+
+	option (if).group = "logic";
+}
+
+message HasTrait {
+           TextEval             object               =   1;
+           TextEval             trait                =   2;
+
+	option (if).group = "objects";
+	option (if).desc = "Return true if the object is currently in the requested state.";
+}
+
+message IdOf {
+           TextEval             object               =   1;
+
+	option (if).group = "objects";
+	option (if).desc = "A unique object identifier.";
+}
+
+message Includes {
+           TextEval             text                 =   1;
+           TextEval             part                 =   2;
+
+	option (if).group = "strings";
+	option (if).desc = "True if text contains text.";
+}
+
+message IntoNumList {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Targets a list of numbers";
+}
+
+message IntoObj {
+           TextEval             object               =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Targets an object with a computed name.";
+}
+
+message IntoRecList {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Targets a list of records";
+}
+
+message IntoTxtList {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Targets a list of text";
+}
+
+message IntoVar {
+           string               str                  =   1;
+
+	option (if).group = "misc";
+	option (if).desc = "Targets an object or record stored in a variable";
+}
+
+message IsEmpty {
+           TextEval             text                 =   1;
+
+	option (if).group = "strings";
+	option (if).desc = "True if the text is empty.";
+}
+
+message IsExactKindOf {
+           TextEval             object               =   1;
+           string               kind                 =   2;
+
+	option (if).group = "objects";
+	option (if).desc = "True if the object is exactly the named kind.";
+}
+
+message IsKindOf {
+           TextEval             object               =   1;
+           string               kind                 =   2;
+
+	option (if).group = "objects";
+	option (if).desc = "True if the object is compatible with the named kind.";
+}
+
+message IsNotTrue {
+           BoolEval             test                 =   1;
+
+	option (if).group = "logic";
+	option (if).desc = "Returns the opposite value.";
+}
+
+message Join {
+           TextEval             sep                  =   1;
+  repeated TextEval             parts                =   2;
+
+	option (if).group = "strings";
+	option (if).desc = "Returns multiple pieces of text as a single new piece of text.";
+}
+
+message KindOf {
+           TextEval             object               =   1;
+
+	option (if).group = "objects";
+	option (if).desc = "Friendly name of the object's kind.";
+}
+
+message KindsOf {
+           string               kind                 =   1;
+
+	option (if).group = "objects";
+	option (if).desc = "A list of compatible kinds.";
+}
+
+message Len {
+           Assignment           list                 =   1;
+
+	option (if).group = "list";
+	option (if).desc = "Determines the number of values in a list.";
+}
+
+message LessOrEqual {
+
+	option (if).group = "comparison";
+	option (if).desc = "The first value is larger than the second value.";
+}
+
+message LessThan {
+
+	option (if).group = "comparison";
+	option (if).desc = "The first value is less than the second value.";
+}
+
+message Lines {
+           string               lines                =   1;
+
+	option (if).group = "literals";
+	option (if).desc = "Specify one or more lines of text.";
+}
+
+message Log {
+           int32                level                =   1;
+           Assignment           value                =   2;
+
+	option (if).group = "debug";
+	option (if).desc = "Debug log";
+}
+
+message Make {
+           string               name                 =   1;
+  repeated Argument             args                 =   2;
+
+	option (if).group = "misc";
+}
+
+message MakeLowercase {
+           TextEval             text                 =   1;
+
+	option (if).group = "format";
+	option (if).desc = "Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.";
+}
+
+message MakePlural {
+           TextEval             text                 =   1;
+
+	option (if).group = "format";
+	option (if).desc = "Returns the plural form of a singular word. (ex. apples for apple. )";
+}
+
+message MakeReversed {
+           TextEval             text                 =   1;
+
+	option (if).group = "format";
+	option (if).desc = "Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.";
+}
+
+message MakeSentenceCase {
+           TextEval             text                 =   1;
+
+	option (if).group = "format";
+	option (if).desc = "Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.";
+}
+
+message MakeSingular {
+           TextEval             text                 =   1;
+
+	option (if).group = "format";
+	option (if).desc = "Returns the singular form of a plural word. (ex. apple for apples )";
+}
+
+message MakeTitleCase {
+           TextEval             text                 =   1;
+
+	option (if).group = "format";
+	option (if).desc = "Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.";
+}
+
+message MakeUppercase {
+           TextEval             text                 =   1;
+
+	option (if).group = "format";
+	option (if).desc = "Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.";
+}
+
+message Map {
+           string               to_list              =   1;
+           Assignment           from_list            =   2;
+           string               using_pattern        =   3;
+
+	option (if).group = "list";
+	option (if).desc = "Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time.";
+}
+
+message Matches {
+           TextEval             text                 =   1;
+           string               pattern              =   2;
+
+	option (if).group = "matching";
+	option (if).desc = "Determine whether the specified text is similar to the specified regular expression.";
+}
+
+message NameOf {
+           TextEval             object               =   1;
+
+	option (if).group = "objects";
+	option (if).desc = "Full name of the object.";
+}
+
+message Newline {
+
+	option (if).group = "printing";
+	option (if).desc = "Start a new line.";
+}
+
+message Next {
+
+	option (if).group = "flow";
+	option (if).desc = "In a repeating loop, try the next iteration of the loop.";
+}
+
+message NotEqualTo {
+
+	option (if).group = "comparison";
+	option (if).desc = "Two values don't match exactly.";
+}
+
+message Noun {
+           string               kind                 =   1;
+
+	option (if).group = "grammar";
+}
+
+message Number {
+           double               num                  =   1;
+
+	option (if).group = "literals";
+	option (if).desc = "Specify a particular number.";
+}
+
+message Numbers {
+  repeated double               values               =   1;
+
+	option (if).group = "literals";
+	option (if).desc = "Specify a list of multiple numbers.";
+}
+
+message ObjectExists {
+           TextEval             object               =   1;
+
+	option (if).group = "objects";
+	option (if).desc = "Returns whether there is a object of the specified name.";
+}
+
+message Paragraph {
+
+	option (if).group = "printing";
+	option (if).desc = "Add a single blank line following some text.";
+}
+
+message PrintNum {
+           NumberEval           num                  =   1;
+
+	option (if).group = "printing";
+	option (if).desc = "Writes a number using numerals, eg. '1'.";
+}
+
+message PrintNumWord {
+           NumberEval           num                  =   1;
+
+	option (if).group = "printing";
+	option (if).desc = "Writes a number in plain english: eg. 'one'";
+}
+
+message ProductOf {
+           NumberEval           a                    =   1;
+           NumberEval           b                    =   2;
+
+	option (if).group = "math";
+	option (if).desc = "Multiply two numbers.";
+}
+
+message PutAtField {
+           IntoTargetFields     into                 =   1;
+           Assignment           from                 =   2;
+           string               at_field             =   3;
+
+	option (if).group = "variables";
+	option (if).desc = "Put a value into the field of an record or object";
+}
+
+message PutEdge {
+           Assignment           from                 =   1;
+           ListTarget           into                 =   2;
+           bool                 at_edge              =   3;
+
+	option (if).group = "misc";
+	option (if).desc = "Add a value to a list";
+}
+
+message PutIndex {
+           Assignment           from                 =   1;
+           ListTarget           into                 =   2;
+           NumberEval           at_index             =   3;
+
+	option (if).group = "misc";
+	option (if).desc = "Replace one value in a list with another";
+}
+
+message QuotientOf {
+           NumberEval           a                    =   1;
+           NumberEval           b                    =   2;
+
+	option (if).group = "math";
+	option (if).desc = "Divide one number by another.";
+}
+
+message Range {
+           NumberEval           to                   =   1;
+           NumberEval           from                 =   2;
+           NumberEval           by_step              =   3;
+
+	option (if).group = "flow";
+	option (if).desc = "Generates a series of numbers.";
+}
+
+message ReciprocalOf {
+           Relation             via                  =   1;
+           TextEval             object               =   2;
+
+	option (if).group = "relations";
+	option (if).desc = "Returns the implied relative of a noun (ex. the source in a one-to-many relation.)";
+}
+
+message ReciprocalsOf {
+           Relation             via                  =   1;
+           TextEval             object               =   2;
+
+	option (if).group = "relations";
+	option (if).desc = "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)";
+}
+
+message Reduce {
+           string               into_value           =   1;
+           Assignment           from_list            =   2;
+           string               using_pattern        =   3;
+
+	option (if).group = "list";
+	option (if).desc = "Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).";
+}
+
+message Relate {
+           TextEval             object               =   1;
+           TextEval             to_object            =   2;
+           Relation             via                  =   3;
+
+	option (if).group = "relations";
+	option (if).desc = "Relate two nouns.";
+}
+
+message Relation {
+           Pos                  at                   =  12;
+           string               str                  =  13;
+
+	option (if).group = "misc";
+}
+
+message RelativeOf {
+           Relation             via                  =   1;
+           TextEval             object               =   2;
+
+	option (if).group = "relations";
+	option (if).desc = "Returns the relative of a noun (ex. the target of a one-to-one relation.)";
+}
+
+message RelativesOf {
+           Relation             via                  =   1;
+           TextEval             object               =   2;
+
+	option (if).group = "relations";
+	option (if).desc = "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).";
+}
+
+message RemainderOf {
+           NumberEval           a                    =   1;
+           NumberEval           b                    =   2;
+
+	option (if).group = "math";
+	option (if).desc = "Divide one number by another, and return the remainder.";
+}
+
+message RenderField {
+           TextEval             name                 =   1;
+
+	option (if).group = "internal";
+}
+
+message RenderName {
+           string               name                 =   1;
+
+	option (if).group = "internal";
+}
+
+message RenderPattern {
+           string               pattern              =   1;
+  repeated Argument             args                 =   2;
+
+	option (if).group = "internal";
+}
+
+message RenderRef {
+           string               name                 =   1;
+           int32                flags                =   2;
+
+	option (if).group = "internal";
+}
+
+message RenderTemplate {
+           TextEval             expression           =  13;
+
+	option (if).group = "format";
+	option (if).desc = "Parse text using iffy templates. See: https://github.com/ionous/iffy/wiki/Templates";
+}
+
+message Response {
+           string               name                 =   1;
+           TextEval             text                 =   2;
+
+	option (if).group = "output";
+	option (if).desc = "Generate text in a replaceable manner.";
+}
+
+message Retarget {
+  repeated ScannerMaker         span                 =   1;
+
+	option (if).group = "grammar";
+}
+
+message Reverse {
+  repeated ScannerMaker         reverses             =   1;
+
+	option (if).group = "grammar";
+}
+
+message ReverseList {
+           ListSource           list                 =   1;
+
+	option (if).group = "list";
+	option (if).desc = "Reverse a list.";
+}
+
+message Row {
+  repeated Execute              exe                  =   1;
+
+	option (if).group = "printing";
+	option (if).desc = "A single line as part of a group of lines.";
+}
+
+message Rows {
+  repeated Execute              exe                  =   1;
+
+	option (if).group = "printing";
+	option (if).desc = "Group text into successive lines.";
+}
+
+message Say {
+           TextEval             text                 =   1;
+
+	option (if).group = "printing";
+	option (if).desc = "Print some bit of text to the player.";
+}
+
+message Self {
+           string               player               =   1;
+
+	option (if).group = "grammar";
+}
+
+message Send {
+           string               event                =   1;
+           TextListEval         path                 =   2;
+  repeated Argument             args                 =   3;
+
+	option (if).group = "events";
+	option (if).desc = "Triggers a event, returns a true/false success value.";
+}
+
+message Set {
+           string               list                 =   1;
+           NumberEval           index                =   2;
+           Assignment           from                 =   3;
+
+	option (if).group = "list";
+	option (if).desc = "Overwrite an existing value in a list.";
+}
+
+message SetTrait {
+           TextEval             object               =   1;
+           TextEval             trait                =   2;
+
+	option (if).group = "objects";
+	option (if).desc = "Put an object into a particular state.";
+}
+
+message ShuffleText {
+           string               seq                  =  13;
+  repeated TextEval             parts                =   1;
+
+	option (if).group = "output";
+	option (if).desc = "When called multiple times returns its inputs at random.";
+}
+
+message Slash {
+  repeated Execute              exe                  =   1;
+
+	option (if).group = "printing";
+	option (if).desc = "Separates words with left-leaning slashes '/'.";
+}
+
+message Slice {
+           Assignment           list                 =   1;
+           NumberEval           start                =   2;
+           NumberEval           end                  =   3;
+
+	option (if).group = "list";
+	option (if).desc = "Create a new list from a section of another list.";
+}
+
+message Softline {
+
+	option (if).group = "printing";
+	option (if).desc = "Start a new line ( if not already at a new line. )";
+}
+
+message SortByField {
+           string               name                 =   1;
+
+	option (if).group = "list";
+}
+
+message SortNumbers {
+           string               str                  =   1;
+           string               name                 =   2;
+           bool                 order                =   3;
+
+	option (if).group = "list";
+}
+
+message SortRecords {
+           string               str                  =   1;
+           string               using                =   2;
+
+	option (if).group = "list";
+	option (if).desc = "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.";
+}
+
+message SortText {
+           string               str                  =   1;
+           string               name                 =   2;
+           bool                 order                =   3;
+           bool                 case                 =   4;
+
+	option (if).group = "list";
+	option (if).desc = "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.";
+}
+
+message Span {
+  repeated Execute              exe                  =   1;
+
+	option (if).group = "printing";
+	option (if).desc = "Writes text with spaces between words.";
+}
+
+message Splice {
+           string               str                  =   1;
+           NumberEval           start                =   2;
+           NumberEval           remove               =   3;
+           Assignment           insert               =   4;
+
+	option (if).group = "list";
+	option (if).desc = "Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.";
+}
+
+message StoppingText {
+           string               seq                  =  13;
+  repeated TextEval             parts                =   1;
+
+	option (if).group = "output";
+	option (if).desc = "When called multiple times returns each of its inputs in turn, sticking to the last one.";
+}
+
+message SumOf {
+           NumberEval           a                    =   1;
+           NumberEval           b                    =   2;
+
+	option (if).group = "math";
+	option (if).desc = "Add two numbers.";
+}
+
+message Text {
+           string               text                 =   1;
+
+	option (if).group = "literals";
+	option (if).desc = "Specify a small bit of text.";
+}
+
+message Texts {
+  repeated string               values               =   1;
+
+	option (if).group = "literals";
+	option (if).desc = "Specifies multiple string values.";
+}
+
+message TriggerCycle {
+
+	option (if).group = "comparison";
+}
+
+message TriggerOnce {
+
+	option (if).group = "comparison";
+}
+
+message TriggerSwitch {
+
+	option (if).group = "comparison";
+}
+
+message Var {
+           string               name                 =   1;
+
+	option (if).group = "variables";
+	option (if).desc = "Return the value of the named variable.";
+}
+
+message Variable {
+           Pos                  at                   =  12;
+           string               str                  =   1;
+
+	option (if).group = "misc";
+}
+
+message While {
+           BoolEval             true                 =   1;
+  repeated Execute              exe                  =   2;
+
+	option (if).group = "flow";
+	option (if).desc = "Keep running a series of actions while a condition is true.";
+}
+
+message Words {
+  repeated string               words                =   1;
+
+	option (if).group = "grammar";
+}

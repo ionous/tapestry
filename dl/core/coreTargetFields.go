@@ -24,6 +24,7 @@ type IntoVar struct {
 
 func (*IntoObj) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "obj",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Targets an object with a computed name.",
 	}
@@ -31,6 +32,7 @@ func (*IntoObj) Compose() composer.Spec {
 
 func (*IntoVar) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "var",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Targets an object or record stored in a variable",
 	}

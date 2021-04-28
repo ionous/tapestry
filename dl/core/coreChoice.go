@@ -7,6 +7,7 @@ import (
 )
 
 // ChooseAction runs one block of instructions or another based on the results of a conditional evaluation.
+// If:do:, If:do:else:
 type ChooseAction struct {
 	If   rt.BoolEval `if:"selector,placeholder=choose"`
 	Do   Activity
@@ -15,12 +16,20 @@ type ChooseAction struct {
 
 func (*ChooseAction) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "if",
 		Fluent: &composer.Fluid{Name: "if", Role: composer.Command},
 		Desc:   "Choose action: an if statement.",
 	}
 }
 
 func (op *ChooseAction) Execute(run rt.Runtime) (err error) {
+	if e := op.ifDoElse(run); e != nil {
+		err = cmdError(op, e)
+	}
+	return
+}
+
+func (op *ChooseAction) Branch(run rt.Runtime) (err error) {
 	if e := op.ifDoElse(run); e != nil {
 		err = cmdError(op, e)
 	}

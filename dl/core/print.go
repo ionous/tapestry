@@ -11,18 +11,21 @@ import (
 )
 
 // PrintNum writes a number using numerals, eg. "1".
+// Numeral:
 type PrintNum struct {
 	Num rt.NumberEval
 }
 
 // PrintNumWord writes a number using english: eg. "one".
+// Numeral words:5
 type PrintNumWord struct {
-	Num rt.NumberEval
+	Num rt.NumberEval `if:"pb=words"`
 }
 
 // Compose defines a spec for the composer editor.
 func (*PrintNum) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "numeral",
 		Spec:  "as text {num:number_eval}",
 		Desc:  "A number as text: Writes a number using numerals, eg. '1'.",
 		Group: "printing",
@@ -43,6 +46,7 @@ func (op *PrintNum) GetText(run rt.Runtime) (ret g.Value, err error) {
 // Compose defines a spec for the composer editor.
 func (*PrintNumWord) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "numeral",
 		Desc:  "A number in words: Writes a number in plain english: eg. 'one'",
 		Group: "printing",
 	}

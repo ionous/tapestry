@@ -1,0 +1,23 @@
+syntax = "proto3";
+package pb;
+option go_package = "git.sr.ht/~ionous/pb";
+
+import "main.proto";
+
+
+message Arg{
+	string arg  = 1;
+	Assignment from = 2;
+}
+
+
+message Determine struct {
+	string   pattern_  =  1;
+	repeated args Args =  2;
+}
+
+
+message During struct {
+	string pattern  = 1;
+}
+

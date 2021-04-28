@@ -26,6 +26,7 @@ type AllTrue struct {
 
 func (*Always) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "always",
 		Group: "logic",
 		Desc:  "Always: returns true always.",
 	}
@@ -38,6 +39,7 @@ func (op *Always) GetBool(run rt.Runtime) (ret g.Value, err error) {
 
 func (*AllTrue) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "all_of",
 		Group: "logic",
 		Spec:  "allTrue: {test+bool_eval|comma-and}",
 		Desc:  "All True: returns true if all of the evaluations are true.",
@@ -58,6 +60,7 @@ func (op *AllTrue) GetBool(run rt.Runtime) (ret g.Value, err error) {
 
 func (*AnyTrue) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "any_of",
 		Group: "logic",
 		Spec:  "anyTrue: {test+bool_eval|comma-or}",
 		Desc:  "Any True: returns true if any of the evaluations are true.",

@@ -626,13 +626,6 @@
                                                               }
                                                             ]
                                                           }
-                                                        },
-                                                        "$ELSE": {
-                                                          "id": "id-1781dd611ac-95",
-                                                          "type": "activity",
-                                                          "value": {
-                                                            "$EXE": []
-                                                          }
                                                         }
                                                       }
                                                     }

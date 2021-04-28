@@ -8,7 +8,7 @@ import (
 )
 
 type HasDominion struct {
-	Name string
+	Name string `if:"pb=__domain"`
 }
 
 func (*HasDominion) Compose() composer.Spec {

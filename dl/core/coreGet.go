@@ -10,6 +10,7 @@ import (
 )
 
 // GetAtField a property value from an object by name.
+// ex. Get obj:at: #apple #name
 type GetAtField struct {
 	Field string           `if:"selector"`
 	From  FromSourceFields `if:"selector"`
@@ -17,6 +18,7 @@ type GetAtField struct {
 
 func (*GetAtField) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "get",
 		Fluent: &composer.Fluid{Name: "get", Role: composer.Function},
 		Group:  "variables",
 		Desc:   "Get at field: Get a value from a record.",

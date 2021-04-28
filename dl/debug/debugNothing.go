@@ -7,12 +7,12 @@ import (
 
 // DoNothing implements Execute, but .... does nothing.
 type DoNothing struct {
-	Reason string
+	Reason string `if:"pb=why,optional"`
 }
 
 func (*DoNothing) Compose() composer.Spec {
 	return composer.Spec{
-		Group: "exec",
+		Group: "flow",
 		Desc:  "Do nothing: Statement which does nothing.",
 	}
 }

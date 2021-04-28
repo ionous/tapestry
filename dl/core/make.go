@@ -10,7 +10,7 @@ import (
 )
 
 type Make struct {
-	Name      string     `if:"selector"`
+	Name      string     `if:"pb=__kind"`
 	Arguments *Arguments `if:"selector=from"` // kept as a pointer for composer formatting...
 }
 

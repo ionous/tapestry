@@ -34,6 +34,7 @@ type FromVar struct {
 
 func (*FromObj) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "obj",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Targets an object with a computed name.",
 	}
@@ -41,15 +42,15 @@ func (*FromObj) Compose() composer.Spec {
 
 func (*FromRec) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "rec",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Targets a record stored in a record.",
 	}
 }
 
 func (*FromVar) Compose() composer.Spec {
-	// FIX? it'd be great to let this "run-in" to the parent
-	// "get: <var>" instead of "get var: <var>"
 	return composer.Spec{
+		Lede:   "var",
 		Fluent: &composer.Fluid{Role: composer.Selector},
 		Desc:   "Targets a record stored in a variable.",
 	}

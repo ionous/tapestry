@@ -6,11 +6,11 @@ import (
 )
 
 // A normal reduce would return a value, instead we accumulate into a variable
-type Reverse struct {
+type ReverseList struct {
 	List ListSource `if:"selector"`
 }
 
-func (*Reverse) Compose() composer.Spec {
+func (*ReverseList) Compose() composer.Spec {
 	return composer.Spec{
 		Name:   "list_reverse",
 		Group:  "list",
@@ -19,14 +19,14 @@ func (*Reverse) Compose() composer.Spec {
 	}
 }
 
-func (op *Reverse) Execute(run rt.Runtime) (err error) {
+func (op *ReverseList) Execute(run rt.Runtime) (err error) {
 	if e := op.reverse(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *Reverse) reverse(run rt.Runtime) (err error) {
+func (op *ReverseList) reverse(run rt.Runtime) (err error) {
 	if els, e := GetListSource(run, op.List); e != nil {
 		err = e
 	} else {

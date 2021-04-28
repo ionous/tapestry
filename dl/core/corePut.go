@@ -7,14 +7,12 @@ import (
 )
 
 /**
- * put: eval,
- * intoObj/intoObjNamed/intoRec: varName,objName,textEval,
- * atField: string.
+ * put obj:at:txt: #apple #desc #delicious_for_sure
  */
 type PutAtField struct {
-	From    rt.Assignment    `if:"selector"`
 	Into    IntoTargetFields `if:"selector"`
-	AtField string
+	From    rt.Assignment    `if:"selector"`
+	AtField string           `if:"pb=at,selector"`
 }
 
 func (*PutAtField) Compose() composer.Spec {

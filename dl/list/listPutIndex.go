@@ -14,7 +14,7 @@ import (
 type PutIndex struct {
 	From    rt.Assignment `if:"selector"`
 	Into    ListTarget    `if:"selector"`
-	AtIndex rt.NumberEval
+	AtIndex rt.NumberEval `if:"pb="at"`
 }
 
 func (*PutIndex) Compose() composer.Spec {

@@ -12,7 +12,7 @@ import (
 
 // IsEmpty determines whether the text contains any characters at all.
 type IsEmpty struct {
-	Text rt.TextEval `if:"selector=empty,placeholder=text"`
+	Text rt.TextEval `if:"pb=empty,selector=empty,placeholder=text"`
 }
 
 // Includes determines whether text contains part.
@@ -47,6 +47,7 @@ func (op *IsEmpty) GetBool(run rt.Runtime) (ret g.Value, err error) {
 
 func (*Includes) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "contains",
 		Group: "strings",
 		Desc:  "Includes Text: True if text contains text.",
 	}

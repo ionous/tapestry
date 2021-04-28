@@ -26,7 +26,7 @@ var Slats = []composer.Composer{
 	(*Len)(nil),
 	(*Map)(nil),
 	(*Reduce)(nil),
-	(*Reverse)(nil),
+	(*ReverseList)(nil),
 	(*Set)(nil),
 	(*Slice)(nil),
 	(*Splice)(nil),
@@ -40,7 +40,6 @@ var Slats = []composer.Composer{
 	(*AsNum)(nil),
 	(*AsTxt)(nil),
 	(*AsRec)(nil),
-	(*ElseIfEmpty)(nil),
 	// erase:
 	(*Erasing)(nil),
 	(*ErasingEdge)(nil),

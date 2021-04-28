@@ -9,11 +9,12 @@ import (
 // Activity wraps a block of multiple execute statements
 // This is primarily useful for the composer so it can display blocks in a uniform manner.
 type Activity struct {
-	Exe []rt.Execute
+	Exe []rt.Execute `if:"pb=do"`
 }
 
 func (*Activity) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "act",
 		Group: "hidden",
 		Spec:  "{exe*execute}",
 	}

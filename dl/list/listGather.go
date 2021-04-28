@@ -10,9 +10,9 @@ import (
 )
 
 type Gather struct {
-	Var   core.Variable `if:"selector"`
-	From  ListSource    `if:"selector"`
-	Using pattern.PatternName
+	Var   core.Variable       `if:"selector"`
+	From  ListSource          `if:"selector"`
+	Using pattern.PatternName `if:"pb=using__pattern"`
 }
 
 func (*Gather) Compose() composer.Spec {

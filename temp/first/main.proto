@@ -1,0 +1,169 @@
+syntax = "proto3";
+package pb;
+option go_package = "git.sr.ht/~ionous/pb";
+//
+// import "options.proto";
+import "literals.proto";
+import "print.proto"
+
+message BoolEval {
+	// register the types similar to the way you'd need to for all.go	
+  oneof eval {
+    AllTrue       all_true =    5;
+    Always        always =  10;
+    AnyTrue       any_true =    15;
+    BoolValue     bool  =  20;
+    CompareNum    compare_num = 25;
+    CompareText   compare_text =    30;
+    CountOf       count_of =    35;
+    Determine     determine =   40;
+    During        during =  45;
+    FindInList    find =    50;
+    GetAtField    get_at_field =    55;
+    GetVar        get_var = 60;
+    HasDominion   has_dominion =    65;
+    HasTrait      has_trait =   70;
+    Includes      includes =    75;
+    IsEmpty       is_empty =    80;
+    IsExactKindOf is_exact_kind_of =    85;
+    IsKindOf      is_kind_of =  90;
+    IsNotTrue     is_not_true = 95;
+    Matches       matches = 100;
+    ObjectExists  object_exists =   105;
+    Send          send =    110;
+  }
+}
+
+// message Execute {
+//   oneof eval {
+//     Activity        activity= 5;
+//     Assign          assign = 10;
+//     Break           break = 15;
+//     ChooseAction    choose_action = 20; 
+//     ChooseValue     choose_value = 25;
+//     Determine       determine = 30;
+//     DoNothing       do_nothing = 35;
+//     Each            each = 40;
+//     EraseEdge       erase_edge = 45; 
+//     Erasing         erasing = 50;
+//     ErasingEdge     erasing_edge = 55;
+//     Gather          gather = 60;
+//     Log             log = 65;
+//     Map             map = 70;
+//     Newline         newline = 75;
+//     Next            next = 80;
+//     Paragraph       paragraph = 85;
+//     PutAtField      put_at_field = 90;
+//     PutEdge         put_edge = 95;
+//     PutIndex        put_index = 100;
+//     Reduce          reduce = 105;
+//     Relate          relate = 110;
+//     Reverse         reverse = 115; 
+//     Say             say = 120;
+//     Send            send = 125;
+//     Set             set = 130;
+//     SetTratit       set_trait = 135;
+//     Softline        softline = 140;
+//     SortNumbers     sort_numbers = 145;
+//     SortRecords     sort_records = 150;
+//     SortText        sort_text = 155;
+//     Splice          splice = 160;
+//     While           while = 165;   
+//   }
+// }
+
+// message NumEval {
+//   oneof eval {
+//       Add           add= 5;
+//       At            at= 10;
+//       ChooseNum     choose_num=15;
+//       Determine     determine =20;
+//       Div           div=25;
+//       During        during=30;
+//       Find          find=35;
+//       GetAtField    get_at_field = 40;
+//       GetVar        get_var= 45;
+//       Len           len= 50;
+//       Mod           mod=55;
+//       Mul           mul=60;
+//       NumValue      num_value= 65;
+//       Sub           sub= 70;
+//   }
+// }
+
+
+// message TextEval {
+//   oneof eval {
+//     At at = 5;
+//     Bracket bracket = 10;
+//     Buffer buffer = 15;
+//     Capitalize capitalize = 20;
+//     Commas commas = 25;
+//     CycleText cycle_text = 30;
+//     Join join = 35;
+//     MakeLowercase make_lowercase = 40;
+//     MakePlural plural = 45;
+//     MakeReversed make_reversed = 50;
+//     MakeSentenceCase make_sentence_case; = 55;
+//     MakeSingular singular = 60;
+//     MakeTitleCase make_title_case = 65;
+//     MakeUppercase make_uppercase = 70;
+//     ReciprocalOf reciprocal_of = 75;
+//     RelativeOf relative_of = 80;
+//     RenderName render_name = 85;
+//     RenderPattern render_pattern = 90;
+//     RenderRef render_ref = 95;
+//     RenderTemplate render_template = 100;
+//     ShuffleText shuffle_text = 105;
+//     Slash slash = 110;
+//     Span span = 115;
+//     StoppingText stopping_text = 120;
+//   }
+// }
+
+// message RecordEval {
+//   oneof eval {
+//     At at = 5;
+//     Determine determine = 10;
+//     GetAtField get_at_field  = 15;
+//     GetVar get_var = 20;
+//     Make make= 25;
+//   }
+// }
+
+
+// message NumListEval {
+//   oneof eval {
+//     Determine  determine= 5;
+//     GetAtField get_at_field = 10;
+//     GetVar get_var =15;
+//     NumList num_list= 20;
+//     Range range= 25;
+//     Slice  slice= 35;
+//     Splice  splice= 40;
+//   }
+// }
+
+// message TextListEval {
+//   oneof eval {
+//     Determine  determine= 5;
+//     GetAtField get_at_field = 10;
+//     GetVar get_var =15;
+//     KindsOf kinds_of= 20;
+//     ReciprocalsOf  reciprocals_of = 25;
+//     RelativesOf  relatives_of= 30;
+//     Slice  slice= 35;
+//     Splice  splice= 40;
+//     TextList text_list= 45;
+//   }
+// }
+
+// message RecordListEval {
+//    oneof eval {
+//     Determine determine = 5;
+//     GetAtField get_at_field= 10;
+//     GetVar get_var= 15;
+//     Slice  slice = 20;
+//     Splice splce = 25;
+//   }
+// }

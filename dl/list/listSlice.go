@@ -24,6 +24,7 @@ type Slice struct {
 
 func (*Slice) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "slice",
 		Name:  "list_slice",
 		Group: "list",
 		Spec:  "slice {list:assignment} {from entry%start?number_eval} {ending before entry%end?number_eval}",

@@ -9,18 +9,21 @@ import (
 
 // Choose one of two number evaluations based on a boolean test.
 type ChooseNum struct {
-	If          rt.BoolEval
-	True, False rt.NumberEval
+	True  rt.NumberEval
+	If    rt.BoolEval
+	False rt.NumberEval `if:"pb=else"`
 }
 
 // Choose one of two text phrases based on a boolean test.
 type ChooseText struct {
-	If          rt.BoolEval
-	True, False rt.TextEval
+	True  rt.TextEval
+	If    rt.BoolEval
+	False rt.TextEval `if:"pb=else"`
 }
 
 func (*ChooseNum) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "num",
 		Group: "math",
 		Desc:  "Choose Number: Pick one of two numbers based on a boolean test.",
 	}
@@ -47,6 +50,7 @@ func (op *ChooseNum) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 
 func (*ChooseText) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:  "txt",
 		Group: "format",
 		Desc:  "Choose Text: Pick one of two strings based on a boolean test.",
 	}

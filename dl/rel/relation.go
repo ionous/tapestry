@@ -8,7 +8,7 @@ import (
 // Relation requires a user-specified string.
 type Relation struct {
 	At  reader.Position `if:"internal"`
-	Str string
+	Str string          `if:"pb=rel__relation"`
 }
 
 // String returns the name of a user defined relation.

@@ -9,9 +9,8 @@ type Break struct{}
 
 type Next struct{}
 
-type DoInterrupt struct {
-	KeepGoing bool
-}
+// DoInterrupt - an error code to break out of loops
+type DoInterrupt struct{ KeepGoing bool }
 
 func (e DoInterrupt) Error() string {
 	return "loop interrupted"

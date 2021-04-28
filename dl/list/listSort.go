@@ -33,12 +33,12 @@ type SortText struct {
 
 // SortRecords implements Sorter
 type SortRecords struct {
-	Var   core.Variable `if:"selector=records"`
-	Using pattern.PatternName
+	Var   core.Variable       `if:"selector=records"`
+	Using pattern.PatternName `if:"pb=using__pattern"`
 }
 
 type SortByField struct {
-	Name string `if:"selector"`
+	Name string `if:"pb=by,selector"`
 }
 
 func (op *SortByField) Compose() composer.Spec {

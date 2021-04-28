@@ -56,7 +56,7 @@ type ErasingEdge struct {
 	EraseEdge
 	As   string // fix: variable definition field
 	Do   core.Activity
-	Else core.Activity
+	Else core.Brancher `if:"selector,optional"`
 }
 
 func (op *ErasingEdge) Compose() composer.Spec {
@@ -78,12 +78,12 @@ func (op *ErasingEdge) Execute(run rt.Runtime) (err error) {
 func (op *ErasingEdge) popping(run rt.Runtime) (err error) {
 	if vs, e := op.pop(run); e != nil {
 		err = e
-	} else if cnt := vs.Len(); cnt > 0 {
+	} else if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {
+		err = otherwise.Branch(run)
+	} else if cnt > 0 {
 		run.PushScope(scope.NewSingleValue(op.As, vs.Index(0)))
 		err = op.Do.Execute(run)
 		run.PopScope()
-	} else {
-		err = op.Else.Execute(run)
 	}
 	return
 }

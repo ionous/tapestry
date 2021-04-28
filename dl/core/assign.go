@@ -10,9 +10,11 @@ import (
 )
 
 // Let assigns a value to a local variable.
+// Let:txt: @var {}
+// Let:bool: @var {}
 type Assign struct {
 	Var  Variable      `if:"selector"`
-	From rt.Assignment `if:"selector=be"`
+	From rt.Assignment `if:"pb=be,selector=be"`
 }
 
 // FromBool - implements Assignment
@@ -52,6 +54,7 @@ type FromRecords struct {
 
 func (*Assign) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "let",
 		Group:  "variables",
 		Desc:   "Let: Assigns a variable to a value.",
 		Fluent: &composer.Fluid{Name: "let", Role: composer.Command},
@@ -69,6 +72,7 @@ func (op *Assign) Execute(run rt.Runtime) (err error) {
 
 func (*FromBool) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "bool",
 		Group:  "variables",
 		Desc:   "From Bool: Assigns the calculated boolean value.",
 		Fluent: &composer.Fluid{Role: composer.Function},
@@ -88,6 +92,7 @@ func (op *FromBool) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 
 func (*FromNum) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "num",
 		Group:  "variables",
 		Desc:   "From Number: Assigns the calculated number.",
 		Fluent: &composer.Fluid{Role: composer.Function},
@@ -107,6 +112,7 @@ func (op *FromNum) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 
 func (*FromText) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "txt",
 		Group:  "variables",
 		Desc:   "From Text: Assigns the calculated piece of text.",
 		Fluent: &composer.Fluid{Role: composer.Function},
@@ -126,6 +132,7 @@ func (op *FromText) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 
 func (*FromRecord) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "rec",
 		Group:  "variables",
 		Desc:   "From Record: Assigns the calculated record.",
 		Fluent: &composer.Fluid{Role: composer.Function},
@@ -145,6 +152,7 @@ func (op *FromRecord) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) 
 
 func (*FromNumbers) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "nums",
 		Group:  "variables",
 		Desc:   "From Numbers: Assigns the calculated numbers.",
 		Fluent: &composer.Fluid{Role: composer.Function},
@@ -164,6 +172,7 @@ func (op *FromNumbers) GetAssignedValue(run rt.Runtime) (ret g.Value, err error)
 
 func (*FromTexts) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "txts",
 		Group:  "variables",
 		Desc:   "From Texts: Assigns the calculated texts.",
 		Fluent: &composer.Fluid{Role: composer.Function},
@@ -183,6 +192,7 @@ func (op *FromTexts) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 
 func (*FromRecords) Compose() composer.Spec {
 	return composer.Spec{
+		Lede:   "recs",
 		Group:  "variables",
 		Desc:   "From Records: Assigns the calculated records.",
 		Fluent: &composer.Fluid{Role: composer.Function},

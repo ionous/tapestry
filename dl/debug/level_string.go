@@ -10,14 +10,14 @@ func _() {
 	var x [1]struct{}
 	_ = x[Note-1]
 	_ = x[ToDo-2]
-	_ = x[Warning-3]
-	_ = x[Fix-4]
+	_ = x[Fix-3]
+	_ = x[Warning-4]
 	_ = x[Error-5]
 }
 
-const _Level_name = "NoteToDoWarningFixError"
+const _Level_name = "NoteToDoFixWarningError"
 
-var _Level_index = [...]uint8{0, 4, 8, 15, 18, 23}
+var _Level_index = [...]uint8{0, 4, 8, 11, 18, 23}
 
 func (i Level) String() string {
 	i -= 1

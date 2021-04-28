@@ -1,4 +1,5 @@
 // node makeops.js | gofmt -e -s > ../../ephemera/story/iffy_model.go
+// reads from spec.js to generate golang models
 'use strict';
 
 const Handlebars = require('handlebars'); // for templates
