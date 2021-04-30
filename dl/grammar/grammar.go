@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 )
 
+//go:generate capnp compile -I ../../../../../zombiezen.com/go/capnproto2/std -ogo:.. --src-prefix=../../idl ../../idl/core/core.capnp
 var Slots = []composer.Slot{{
 	Type: (*GrammarMaker)(nil),
 	Desc: "Grammar Maker: Helper for defining parser grammars.",

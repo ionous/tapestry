@@ -4,13 +4,13 @@ package internal
 
 const packCap = `@0x{{.Hash}};
 using Go = import "/go.capnp";
-using  X = import "../options.capnp";
+using  X = import "options.capnp";
 {{- range .Deps }}
-using {{.|title}} = import "../{{.}}/{{.}}.capnp";
+using {{.|title}} = import "{{.}}.capnp";
 {{- end }}
 
 $Go.package("{{.Name}}");
-$Go.import("git.sr.ht/~ionous/dl/{{.Name}}");
+$Go.import("git.sr.ht/~ionous/iffy/idl/{{.Name}}");
 {{ range .Slots }}
 struct {{.Name}} { eval @0:AnyPointer; }
 {{- end }}

@@ -8,7 +8,6 @@ import (
 	r "reflect"
 	"sort"
 	"strconv"
-	"strings"
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/cmd/idl/internal"
@@ -38,19 +37,17 @@ type All struct {
 	Packages map[string]Pack
 }
 
-// capnp compile -I$GOPATH/src/zombiezen.com/go/capnproto2/std -ogo ./allCmds.capnp
-// capnp compile -I$GOPATH/src/zombiezen.com/go/capnproto2/std -ogo ./allCmds.capnp ./core/core.capnp ./debug/debug.capnp  ./grammar/grammar.capnp  ./list/list.capnp  ./rel/rel.capnp  ./render/render.capnp
 func main() {
 	all := All{make(map[string]Pack)}
 	all.makeSlots()
 	all.makeSlats()
-	base := os.ExpandEnv("$GOPATH/src/git.sr.ht/~ionous/iffy/idl")
+	dir := os.ExpandEnv("$GOPATH/src/git.sr.ht/~ionous/iffy/idl")
 	for k, p := range all.Packages {
-		// ex. src/git.sr.ht/~ionous/iffy/idl/core
-		dir := path.Join(base, k)
-		if e := os.MkdirAll(dir, os.ModePerm); e != nil {
+		sub := path.Join(dir, k)
+		if e := os.MkdirAll(sub, os.ModePerm); e != nil {
 			panic(e)
 		} else {
+			// ex. src/git.sr.ht/~ionous/iffy/idl/core
 			fn := path.Join(dir, k+temp.Ext)
 			if fp, e := os.Create(fn); e != nil {
 				panic(e)
@@ -64,8 +61,9 @@ func main() {
 			}
 		}
 	}
+
 	{
-		fn := path.Join(base, "allCmds"+temp.Ext)
+		fn := path.Join(dir, "allCmds"+temp.Ext)
 		if fp, e := os.Create(fn); e != nil {
 			panic(e)
 		} else {
@@ -110,7 +108,7 @@ func (all *All) makeSlots() {
 				Sigs: sigs,
 			}
 			//
-			pack := shortPack(r.TypeOf(slot.Type).Elem())
+			pack := internal.PackageOf(r.TypeOf(slot.Type).Elem())
 			p := all.Packages[pack]
 			p.Slots = append(p.Slots, msg)
 			all.Packages[pack] = p
@@ -121,22 +119,17 @@ func (all *All) makeSlots() {
 func (all *All) makeSlats() {
 	for _, cmd := range allCmds {
 		//
-		pack := shortPack(cmd.Type)
+		pack := internal.PackageOf(cmd.Type)
 		p := all.Packages[pack]
 		msg := internal.SlatMessage{cmd}
 		p.Slats = append(p.Slats, msg)
 		// accumulate dependencies
 		for _, place := range cmd.Places {
-			inner := shortPack(place.Type)
+			inner := internal.PackageOf(place.Type)
 			if inner != pack {
 				p.Deps = p.Deps.AddDep(inner)
 			}
 		}
 		all.Packages[pack] = p
 	}
-}
-
-func shortPack(rtype r.Type) string {
-	ns := strings.Split(rtype.PkgPath(), "/")
-	return ns[len(ns)-1]
 }

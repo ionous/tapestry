@@ -1,15 +1,15 @@
-@0xf445246ceb74f07d;
+@0xfa6b4c0b2d8a4348;
 using Go = import "/go.capnp";
-using  X = import "../options.capnp";
-using Rt = import "../rt/rt.capnp";
-using Core = import "../core/core.capnp";
+using  X = import "options.capnp";
+using Core = import "core.capnp";
+using Rtx = import "rtx.capnp";
 
 $Go.package("render");
-$Go.import("git.sr.ht/~ionous/dl/render");
+$Go.import("git.sr.ht/~ionous/iffy/idl/render");
 
 
 struct RenderField $X.label("RenderField") $X.group("internal") {
-  name         @0  :Rt.TextEval;
+  name         @0  :Rtx.TextEval;
 }
 struct RenderName $X.label("RenderName") $X.group("internal") {
   name         @0  :Text;
@@ -23,5 +23,5 @@ struct RenderRef $X.label("RenderRef") $X.group("internal") {
   flags        @1  :Int32 $X.label("flags");
 }
 struct RenderTemplate $X.label("RenderTemplate") $X.group("format") $X.desc("Parse text using iffy templates. See: https://github.com/ionous/iffy/wiki/Templates") {
-  expression   @0  :Rt.TextEval $X.internal;
+  expression   @0  :Rtx.TextEval $X.internal;
 }

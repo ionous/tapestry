@@ -80,7 +80,7 @@ func (op *RenderName) getPrintedNamedOf(run rt.Runtime, objectName string) (ret 
 	if printedName, e := safe.GetText(run, &core.Buffer{core.MakeActivity(
 		&core.Determine{
 			Pattern:   "print_name",
-			Arguments: core.Args(&core.FromText{&core.Text{objectName}}),
+			Arguments: core.Args(&core.FromText{&core.TextValue{objectName}}),
 		})}); e != nil {
 		err = e
 	} else {

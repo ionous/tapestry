@@ -8,7 +8,7 @@ package internal
 // {{- end }}
 
 // $Go.package("{{.Package}}");
-// $Go.import("git.sr.ht/~ionous/dl/{{.Package}}");
+// $Go.import("git.sr.ht/~ionous/iffy/idl/{{.Package}}");
 // {{ range $m := .Slats }}
 // struct {{$m.Name}} $X.label("{{$m.Camel}}"){{ if $m.Desc
 // }} $X.desc("{{$m.Desc}}") {{ end }}

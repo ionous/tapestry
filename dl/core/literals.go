@@ -8,18 +8,18 @@ import (
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
-// Bool specifies a simple true/false value.
-type Bool struct {
+// BoolValue specifies a simple true/false value.
+type BoolValue struct {
 	Bool bool
 }
 
-// Number specifies a number value.
-type Number struct {
+// NumValue specifies a number value.
+type NumValue struct {
 	Num float64
 }
 
 // Text specifies a string value.
-type Text struct {
+type TextValue struct {
 	Text string
 }
 
@@ -28,18 +28,18 @@ type Lines struct {
 	Lines string
 }
 
-// Numbers specifies multiple float values.
-type Numbers struct {
+// NumList specifies multiple float values.
+type NumList struct {
 	Values []float64
 }
 
-// Texts specifies multiple strings.
-type Texts struct {
+// TextList specifies multiple strings.
+type TextList struct {
 	Values []string
 }
 
 // Compose returns a spec for use by the composer editor.
-func (*Bool) Compose() composer.Spec {
+func (*BoolValue) Compose() composer.Spec {
 	return composer.Spec{
 		Lede:  "bool",
 		Name:  "bool_value",
@@ -50,17 +50,17 @@ func (*Bool) Compose() composer.Spec {
 }
 
 // GetBool implements BoolEval; providing the dl with a boolean literal.
-func (op *Bool) GetBool(rt.Runtime) (ret g.Value, _ error) {
+func (op *BoolValue) GetBool(rt.Runtime) (ret g.Value, _ error) {
 	ret = g.BoolOf(op.Bool)
 	return
 }
 
 // String uses strconv.FormatBool.
-func (op *Bool) String() string {
+func (op *BoolValue) String() string {
 	return strconv.FormatBool(op.Bool)
 }
 
-func (*Number) Compose() composer.Spec {
+func (*NumValue) Compose() composer.Spec {
 	return composer.Spec{
 		Lede:  "num",
 		Name:  "num_value",
@@ -71,27 +71,27 @@ func (*Number) Compose() composer.Spec {
 }
 
 // GetNumber implements NumberEval providing the dl with a number literal.
-func (op *Number) GetNumber(rt.Runtime) (ret g.Value, _ error) {
+func (op *NumValue) GetNumber(rt.Runtime) (ret g.Value, _ error) {
 	ret = g.FloatOf(op.Num)
 	return
 }
 
 // Int converts to native int.
-func (op *Number) Int() int {
+func (op *NumValue) Int() int {
 	return int(op.Num)
 }
 
 // Float converts to native float.
-func (op *Number) Float() float64 {
+func (op *NumValue) Float() float64 {
 	return op.Num
 }
 
 // String returns a nicely formatted float, with no decimal point when possible.
-func (op *Number) String() string {
+func (op *NumValue) String() string {
 	return strconv.FormatFloat(op.Num, 'g', -1, 64)
 }
 
-func (*Text) Compose() composer.Spec {
+func (*TextValue) Compose() composer.Spec {
 	return composer.Spec{
 		Lede:  "txt",
 		Name:  "text_value",
@@ -103,13 +103,13 @@ func (*Text) Compose() composer.Spec {
 }
 
 // GetText implements interface TextEval providing the dl with a text literal.
-func (op *Text) GetText(run rt.Runtime) (ret g.Value, _ error) {
+func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
 	ret = g.StringOf(op.Text)
 	return
 }
 
 // String returns the text.
-func (op *Text) String() string {
+func (op *TextValue) String() string {
 	return op.Text
 }
 
@@ -123,18 +123,12 @@ func (*Lines) Compose() composer.Spec {
 	}
 }
 
-// GetLines implements interface LinesEval providing the dl with a lines literal.
-func (op *Lines) GetLines(run rt.Runtime) (ret g.Value, _ error) {
-	ret = g.StringOf(op.Lines)
-	return
-}
-
 // String returns the lines.
 func (op *Lines) String() string {
 	return op.Lines
 }
 
-func (*Numbers) Compose() composer.Spec {
+func (*NumList) Compose() composer.Spec {
 	return composer.Spec{
 		Lede:  "nums",
 		Group: "literals",
@@ -142,14 +136,14 @@ func (*Numbers) Compose() composer.Spec {
 	}
 }
 
-func (op *Numbers) GetNumList(rt.Runtime) (ret g.Value, _ error) {
+func (op *NumList) GetNumList(rt.Runtime) (ret g.Value, _ error) {
 	// note: this generates a new slice pointing to the op.Values memory;
 	// fix: should this be a copy? or, maybe mark this as read-only
 	ret = g.FloatsOf(op.Values)
 	return
 }
 
-func (*Texts) Compose() composer.Spec {
+func (*TextList) Compose() composer.Spec {
 	return composer.Spec{
 		Lede:  "txts",
 		Group: "literals",
@@ -158,7 +152,7 @@ func (*Texts) Compose() composer.Spec {
 	}
 }
 
-func (op *Texts) GetTextList(rt.Runtime) (ret g.Value, _ error) {
+func (op *TextList) GetTextList(rt.Runtime) (ret g.Value, _ error) {
 	ret = g.StringsOf(op.Values)
 	return
 }

@@ -5,11 +5,11 @@ const allCap = ` @0x838375eaedd19910;
 using Go = import "/go.capnp";
 using  X = import "options.capnp";
 {{- range .Deps }}
-using {{.|title}} = import "{{.}}/{{.}}.capnp";
+using {{.|title}} = import "{{.}}.capnp";
 {{- end }}
 
-$Go.package("dl");
-$Go.import("git.sr.ht/~ionous/dl");
+$Go.package("all");
+$Go.import("git.sr.ht/~ionous/iffy/idl/all");
 {{ range $m := .Slots }}
 struct {{$m.Name}}Impl {{ if $m.Desc -}}
 	$X.desc("{{$m.Desc}}")

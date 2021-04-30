@@ -2,7 +2,6 @@ package internal
 
 import (
 	r "reflect"
-	"strings"
 	"unicode"
 
 	"git.sr.ht/~ionous/iffy/dl/composer"
@@ -71,8 +70,7 @@ func (p *Place) CapType() (ret string) {
 	}
 	//
 	pack := p.Cmd.Package()
-	ns := strings.Split(p.Type.PkgPath(), "/")
-	if n := ns[len(ns)-1]; len(n) > 0 && n != pack {
+	if n := PackageOf(p.Type); len(n) > 0 && n != pack {
 		ret = Pascal(n) + "." + ret
 	}
 

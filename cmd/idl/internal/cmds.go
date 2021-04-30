@@ -13,8 +13,7 @@ type Cmd struct {
 }
 
 func (c *Cmd) Package() string {
-	ns := strings.Split(c.Type.PkgPath(), "/")
-	return ns[len(ns)-1]
+	return PackageOf(c.Type)
 }
 
 func (c *Cmd) Signatures() []Sig {

@@ -2,7 +2,7 @@
  using Go = import "/go.capnp";
 
 $Go.package("reader");
-$Go.import("git.sr.ht/~ionous/dl/reader");
+$Go.import("git.sr.ht/~ionous/iffy/idl/reader");
 
 struct Pos {
 	source @0 :Text; 

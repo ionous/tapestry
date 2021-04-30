@@ -1,16 +1,16 @@
  @0x838375eaedd19910;
 using Go = import "/go.capnp";
 using  X = import "options.capnp";
-using Core = import "core/core.capnp";
-using Debug = import "debug/debug.capnp";
-using Grammar = import "grammar/grammar.capnp";
-using List = import "list/list.capnp";
-using Rel = import "rel/rel.capnp";
-using Render = import "render/render.capnp";
-using Rt = import "rt/rt.capnp";
+using Core = import "core.capnp";
+using Debug = import "debug.capnp";
+using Grammar = import "grammar.capnp";
+using List = import "list.capnp";
+using Rel = import "rel.capnp";
+using Render = import "render.capnp";
+using Rtx = import "rtx.capnp";
 
-$Go.package("dl");
-$Go.import("git.sr.ht/~ionous/dl");
+$Go.package("all");
+$Go.import("git.sr.ht/~ionous/iffy/idl/all");
 
 struct AssignmentImpl $X.desc("Helper for setting variables.") {
   union {
@@ -32,7 +32,7 @@ struct BoolEvalImpl $X.desc("Statements which return true/false values.") {
 	allOf                          @0   :Core.AllTrue $X.label("AllOf:");
 	always                         @1   :Core.Always $X.label("Always");
 	anyOf                          @2   :Core.AnyTrue $X.label("AnyOf:");
-	bool                           @3   :Core.Bool $X.label("Bool:");
+	bool                           @3   :Core.BoolValue $X.label("Bool:");
 	cmpIsNum                       @4   :Core.CompareNum $X.label("Cmp:is:num:");
 	cmpIsTxt                       @5   :Core.CompareText $X.label("Cmp:is:txt:");
 	containsPart                   @6   :Core.Includes $X.label("Contains:part:");
@@ -166,7 +166,7 @@ struct NumListEvalImpl $X.desc("Statements which return a list of numbers.") {
   union {
 	determineArgs                  @0   :Core.Determine $X.label("Determine:args:");
 	getFrom                        @1   :Core.GetAtField $X.label("Get:from:");
-	nums                           @2   :Core.Numbers $X.label("Nums:");
+	nums                           @2   :Core.NumList $X.label("Nums:");
 	range                          @3   :List.Range $X.label("Range:");
 	rangeByStep                    @4   :List.Range $X.label("Range:byStep:");
 	rangeFrom                      @5   :List.Range $X.label("Range:from:");
@@ -196,7 +196,7 @@ struct NumberEvalImpl $X.desc("Statements which return a number.") {
 	len                            @10  :List.Len $X.label("Len:");
 	modBy                          @11  :Core.RemainderOf $X.label("Mod:by:");
 	mulBy                          @12  :Core.ProductOf $X.label("Mul:by:");
-	num                            @13  :Core.Number $X.label("Num:");
+	num                            @13  :Core.NumValue $X.label("Num:");
 	numIfElse                      @14  :Core.ChooseNum $X.label("Num:if:else:");
 	renderArgs                     @15  :Render.RenderPattern $X.label("Render:args:");
 	renderRefFlags                 @16  :Render.RenderRef $X.label("RenderRef:flags:");
@@ -276,7 +276,7 @@ struct TextEvalImpl $X.desc("Statements which return text.") {
 	spanTextDo                     @31  :Core.Span $X.label("SpanText do:");
 	stopping                       @32  :Core.StoppingText $X.label("Stopping:");
 	title                          @33  :Core.MakeTitleCase $X.label("Title:");
-	txt                            @34  :Core.Text $X.label("Txt:");
+	txt                            @34  :Core.TextValue $X.label("Txt:");
 	txtIfElse                      @35  :Core.ChooseText $X.label("Txt:if:else:");
 	upper                          @36  :Core.MakeUppercase $X.label("Upper:");
 	var                            @37  :Core.Var $X.label("Var:");
@@ -296,7 +296,7 @@ struct TextListEvalImpl $X.desc("Statements which return a list of text.") {
 	sliceStart                     @9   :List.Slice $X.label("Slice:start:");
 	sliceStartEnd                  @10  :List.Slice $X.label("Slice:start:end:");
 	spliceStartRemoveInsert        @11  :List.Splice $X.label("Splice:start:remove:insert:");
-	txts                           @12  :Core.Texts $X.label("Txts:");
+	txts                           @12  :Core.TextList $X.label("Txts:");
 	var                            @13  :Core.Var $X.label("Var:");
   }
 }

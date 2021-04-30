@@ -1,9 +1,9 @@
-@0xac0522bccd6b09e7;
+@0xd042122a01e5f801;
 using Go = import "/go.capnp";
-using  X = import "../options.capnp";
+using  X = import "options.capnp";
 
 $Go.package("grammar");
-$Go.import("git.sr.ht/~ionous/dl/grammar");
+$Go.import("git.sr.ht/~ionous/iffy/idl/grammar");
 
 struct GrammarMaker { eval @0:AnyPointer; }
 struct ScannerMaker { eval @0:AnyPointer; }

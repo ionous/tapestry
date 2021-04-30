@@ -7,6 +7,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
+//go:generate capnp compile -I ../../../../../zombiezen.com/go/capnproto2/std -ogo:.. --src-prefix=../../idl ../../idl/core/core.capnp
 var Slots = []composer.Slot{{
 	Name: "list_target",
 	Type: (*ListTarget)(nil),

@@ -1,9 +1,9 @@
-@0x8b0ce93e1da846c5;
+@0x8167b37f5d971356;
 using Go = import "/go.capnp";
-using  X = import "../options.capnp";
+using  X = import "options.capnp";
 
-$Go.package("rt");
-$Go.import("git.sr.ht/~ionous/dl/rt");
+$Go.package("rtx");
+$Go.import("git.sr.ht/~ionous/iffy/idl/rtx");
 
 struct Assignment { eval @0:AnyPointer; }
 struct BoolEval { eval @0:AnyPointer; }
