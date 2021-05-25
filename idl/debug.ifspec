@@ -1,0 +1,18 @@
+{
+  "slots": {
+  },
+  "types": {
+    "do_nothing": {
+      "flow": "do_nothing {why%reason?text}",
+      "slots": "execute",
+      "desc": "Statement which does nothing.",
+      "group": "flow"
+    },
+    "log": {
+      "flow": "log {%level:int_32} {value:assignment}",
+      "slots": "execute",
+      "desc": "Debug log",
+      "group": "debug"
+    }
+  }
+}

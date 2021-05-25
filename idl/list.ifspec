@@ -1,0 +1,191 @@
+{
+  "slots": {
+    "list_iterator": "Helper for accessing lists.",
+    "list_source": "Helper for accessing lists.",
+    "list_target": "Helper for accessing lists."
+  },
+  "types": {
+    "as_num": {
+      "flow": "num {%var:variable}",
+      "slots": "list_iterator",
+      "desc": "Define the name of a number variable.",
+      "group": "misc"
+    },
+    "as_rec": {
+      "flow": "rec {%var:variable}",
+      "slots": "list_iterator",
+      "desc": "Define the name of a record variable.",
+      "group": "misc"
+    },
+    "as_txt": {
+      "flow": "txt {%var:variable}",
+      "slots": "list_iterator",
+      "desc": "Define the name of a text variable.",
+      "group": "misc"
+    },
+    "at": {
+      "flow": "get {%list:assignment} {index:number_eval}",
+      "slots": ["number_eval", "text_eval", "record_eval"],
+      "desc": "Get a value from a list. The first element is is index 1.",
+      "group": "list"
+    },
+    "each": {
+      "flow": "repeating {across%list:assignment} {as:list_iterator} {do:activity} {else?brancher}",
+      "slots": "execute",
+      "desc": "Loops over the elements in the passed list, or runs the 'else' activity if empty.",
+      "group": "list"
+    },
+    "erase_edge": {
+      "flow": "erase {%from:list_source} {at_edge:bool}",
+      "slots": "execute",
+      "desc": "Remove one or more values from a list",
+      "group": "misc"
+    },
+    "erase_index": {
+      "flow": "erase {%count:number_eval} {from:list_source} {at_index:number_eval}",
+      "slots": "execute",
+      "desc": "Remove one or more values from a list",
+      "group": "misc"
+    },
+    "erasing": {
+      "flow": "erasing {%count:number_eval} {from:list_source} {at_index:number_eval} {as:text} {do:activity}",
+      "slots": "execute",
+      "desc": "Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.",
+      "group": "list"
+    },
+    "erasing_edge": {
+      "flow": "erasing {%from:list_source} {at_edge:bool} {as:text} {do:activity} {else?brancher}",
+      "slots": "execute",
+      "desc": "Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.",
+      "group": "list"
+    },
+    "find": {
+      "flow": "find {%value:assignment} {list:assignment}",
+      "slots": ["bool_eval", "number_eval"],
+      "desc": "Search a list for a specific value.",
+      "group": "list"
+    },
+    "from_num_list": {
+      "flow": "nums {%var:variable}",
+      "slots": "list_source",
+      "desc": "Uses a list of numbers",
+      "group": "misc"
+    },
+    "from_rec_list": {
+      "flow": "recs {%var:variable}",
+      "slots": "list_source",
+      "desc": "Uses a list of records",
+      "group": "misc"
+    },
+    "from_txt_list": {
+      "flow": "txts {%var:variable}",
+      "slots": "list_source",
+      "desc": "Uses a list of text",
+      "group": "misc"
+    },
+    "gather": {
+      "flow": "gather {%var:variable} {from:list_source} {using:pattern}",
+      "desc": "Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.",
+      "group": "list"
+    },
+    "into_num_list": {
+      "flow": "nums {%var:variable}",
+      "slots": "list_target",
+      "desc": "Targets a list of numbers",
+      "group": "misc"
+    },
+    "into_rec_list": {
+      "flow": "recs {%var:variable}",
+      "slots": "list_target",
+      "desc": "Targets a list of records",
+      "group": "misc"
+    },
+    "into_txt_list": {
+      "flow": "txts {%var:variable}",
+      "slots": "list_target",
+      "desc": "Targets a list of text",
+      "group": "misc"
+    },
+    "len": {
+      "flow": "len {%list:assignment}",
+      "slots": "number_eval",
+      "desc": "Determines the number of values in a list.",
+      "group": "list"
+    },
+    "map": {
+      "flow": "map {%to_list:text} {from_list:assignment} {using%using_pattern:pattern}",
+      "slots": "execute",
+      "desc": "Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time.",
+      "group": "list"
+    },
+    "put_edge": {
+      "flow": "put {%from:assignment} {into:list_target} {at_edge:bool}",
+      "slots": "execute",
+      "desc": "Add a value to a list",
+      "group": "misc"
+    },
+    "put_index": {
+      "flow": "put {%from:assignment} {into:list_target} {at_index:number_eval}",
+      "slots": "execute",
+      "desc": "Replace one value in a list with another",
+      "group": "misc"
+    },
+    "range": {
+      "flow": "range {%to:number_eval} {from?number_eval} {by_step?number_eval}",
+      "slots": "num_list_eval",
+      "desc": "Generates a series of numbers.",
+      "group": "flow"
+    },
+    "reduce": {
+      "flow": "list_reduce {into%into_value:text} {from_list:assignment} {using%using_pattern:pattern}",
+      "slots": "execute",
+      "desc": "Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).",
+      "group": "list"
+    },
+    "reverse_list": {
+      "flow": "list_reverse {%list:list_source}",
+      "slots": "execute",
+      "desc": "Reverse a list.",
+      "group": "list"
+    },
+    "set": {
+      "flow": "list_set {%list:text} {index:number_eval} {from:assignment}",
+      "slots": "execute",
+      "desc": "Overwrite an existing value in a list.",
+      "group": "list"
+    },
+    "slice": {
+      "flow": "slice {%list:assignment} {start?number_eval} {end?number_eval}",
+      "slots": ["num_list_eval", "text_list_eval", "record_list_eval"],
+      "desc": "Create a new list from a section of another list.",
+      "group": "list"
+    },
+    "sort_by_field": {
+      "flow": "by_field {by%name:text}",
+      "group": "list"
+    },
+    "sort_numbers": {
+      "flow": "sort {%var:variable} {by_field:sort_by_field} {order:bool}",
+      "slots": "execute",
+      "group": "list"
+    },
+    "sort_records": {
+      "flow": "sort {%var:variable} {using:pattern}",
+      "slots": "execute",
+      "desc": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
+      "group": "list"
+    },
+    "sort_text": {
+      "flow": "sort {%var:variable} {by_field:sort_by_field} {order:bool} {case:bool}",
+      "slots": "execute",
+      "desc": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
+      "group": "list"
+    },
+    "splice": {
+      "flow": "splice {%var:variable} {start:number_eval} {remove:number_eval} {insert:assignment}",
+      "slots": ["execute", "num_list_eval", "text_list_eval", "record_list_eval"],
+      "desc": "Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.",
+      "group": "list"
+    }
+  }
+}

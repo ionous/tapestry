@@ -1,0 +1,32 @@
+{
+  "slots": {
+  },
+  "types": {
+    "render_field": {
+      "flow": "render_field {%name:text_eval}",
+      "slots": "from_source_fields",
+      "group": "internal"
+    },
+    "render_name": {
+      "flow": "render_name {%name:text}",
+      "slots": "text_eval",
+      "group": "internal"
+    },
+    "render_pattern": {
+      "flow": "render {%pattern:text} {:arguments}",
+      "slots": ["assignment", "execute", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
+      "group": "internal"
+    },
+    "render_ref": {
+      "flow": "render_ref {%name:variable} {flags:int_32}",
+      "slots": ["assignment", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
+      "group": "internal"
+    },
+    "render_template": {
+      "flow": "render_template {%expression:text_eval}",
+      "slots": "text_eval",
+      "desc": "Parse text using iffy templates. See: https://github.com/ionous/iffy/wiki/Templates",
+      "group": "format"
+    }
+  }
+}

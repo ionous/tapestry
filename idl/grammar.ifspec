@@ -1,0 +1,63 @@
+{
+  "slots": {
+    "grammar_maker": "Helper for defining parser grammars.",
+    "scanner_maker": "Helper for defining input scanners."
+  },
+  "types": {
+    "action": {
+      "flow": "as {%action:text}",
+      "slots": "scanner_maker",
+      "group": "grammar"
+    },
+    "alias": {
+      "flow": "alias {%names+text} {as_noun:text}",
+      "slots": "grammar_maker",
+      "group": "grammar"
+    },
+    "all_of": {
+      "flow": "all_of {%series+scanner_maker}",
+      "slots": "scanner_maker",
+      "group": "grammar"
+    },
+    "any_of": {
+      "flow": "any_of {%options+scanner_maker}",
+      "slots": "scanner_maker",
+      "group": "grammar"
+    },
+    "directive": {
+      "flow": "directive {%lede+text} {scans+scanner_maker}",
+      "slots": "grammar_maker",
+      "group": "grammar"
+    },
+    "grammar_decl": {
+      "flow": "grammar {%grammar:grammar_maker}",
+      "desc": "Read what the player types and turn it into actions.",
+      "group": "grammar"
+    },
+    "noun": {
+      "flow": "noun {%kind:text}",
+      "slots": "scanner_maker",
+      "group": "grammar"
+    },
+    "retarget": {
+      "flow": "retarget {%span+scanner_maker}",
+      "slots": "scanner_maker",
+      "group": "grammar"
+    },
+    "reverse": {
+      "flow": "reverse {%reverses+scanner_maker}",
+      "slots": "scanner_maker",
+      "group": "grammar"
+    },
+    "self": {
+      "flow": "self {%player:text}",
+      "slots": "scanner_maker",
+      "group": "grammar"
+    },
+    "words": {
+      "flow": "words {%words+text}",
+      "slots": "scanner_maker",
+      "group": "grammar"
+    }
+  }
+}
