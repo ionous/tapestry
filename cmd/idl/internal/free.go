@@ -111,9 +111,5 @@ func ImplementorsOf(slot interface{}) (ret []composer.Composer) {
 
 func PackageOf(rtype r.Type) string {
 	ns := strings.Split(rtype.PkgPath(), "/")
-	p := ns[len(ns)-1]
-	if p == "rt" {
-		p = "rtx"
-	}
-	return p
+	return ns[len(ns)-1]
 }

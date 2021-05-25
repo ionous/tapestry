@@ -5,14 +5,10 @@ import (
 	"io"
 )
 
-type SlotMessage struct {
+type Slot struct {
 	Name string // name of the message in pascal like text
 	Desc string
 	Sigs []Sig // list of fields
-}
-
-type SlatMessage struct {
-	*Cmd
 }
 
 // return a list of complete signatures
@@ -26,23 +22,8 @@ type Sig struct {
 	Package  string
 }
 
-// func (f *SlotMessage) Deps() (ret Deps) {
-// 	for _, x := range f.Sigs {
-// 		ret = ret.AddDep(x.Group)
-// 	}
-// 	return
-// }
-
-func (f *SlotMessage) Format() (ret string) {
+func (f *Slot) Format() (ret string) {
 	return "%-20s %-20s = 0x%09xd"
-}
-
-func (f *SlatMessage) Format() (ret string) {
-	return "%-20s %-20s = %3d"
-}
-
-func (f *SlatMessage) Camel() (ret string) {
-	return Camel(f.Lede)
 }
 
 func (x *Sig) Crc() uint32 {

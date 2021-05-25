@@ -4,19 +4,67 @@ import (
 	r "reflect"
 	"strconv"
 	"strings"
+
+	"git.sr.ht/~ionous/iffy/lang"
 )
 
-type Cmd struct {
+type Slat struct {
 	Type                    r.Type // a struct
 	Name, Lede, Group, Desc string
 	Places                  []Place
+	Slots                   []*Slot
 }
 
-func (c *Cmd) Package() string {
+func (c *Slat) FlowText() string {
+	var out strings.Builder
+	out.WriteString(lang.Underscore(c.Lede))
+	for _, p := range c.Places {
+		if !p.Internal {
+			str := p.FlowText()
+			out.WriteRune(' ')
+			out.WriteRune('{')
+			out.WriteString(str)
+			out.WriteRune('}')
+		}
+	}
+	return out.String()
+}
+
+func (c *Slat) SlotText() string {
+	var out strings.Builder
+	cnt := len(c.Slots)
+	if cnt != 1 {
+		out.WriteRune('[')
+	}
+	for i := 0; i < cnt; i++ {
+		if i > 0 {
+			out.WriteString(", ")
+		}
+		n := lang.Underscore(c.Slots[i].Name)
+		out.WriteRune('"')
+		out.WriteString(n)
+		out.WriteRune('"')
+
+	}
+	if cnt != 1 {
+		out.WriteRune(']')
+	}
+	return out.String()
+}
+
+func (f *Slat) Format() (ret string) {
+	return "%-20s %-20s = %3d"
+}
+
+func (f *Slat) Camel() (ret string) {
+	return Camel(f.Lede)
+}
+
+func (c *Slat) Package() string {
 	return PackageOf(c.Type)
 }
 
-func (c *Cmd) Signatures() []Sig {
+func (c *Slat) Signatures() []Sig {
 	// determines the total number of signature permutations
 	perms := 1
 	for _, p := range c.Places {

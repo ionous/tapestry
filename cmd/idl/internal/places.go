@@ -2,6 +2,7 @@ package internal
 
 import (
 	r "reflect"
+	"strings"
 	"unicode"
 
 	"git.sr.ht/~ionous/iffy/dl/composer"
@@ -11,7 +12,7 @@ import (
 )
 
 type Place struct {
-	Cmd                          *Cmd // parent
+	Slat                         *Slat // parent
 	Label                        string
 	Arg                          string
 	Index                        int
@@ -20,6 +21,38 @@ type Place struct {
 	// for flows, these would become an array;
 	// these would be arrays; optional a nil type.
 	Type r.Type
+}
+
+// skip internal fields
+// _%test:bool_eval
+func (p *Place) FlowText() (ret string) {
+	var out strings.Builder
+	arg := lang.Underscore(p.Arg)
+	label := lang.Underscore(p.Label)
+	typeName := lang.Underscore(p.SpecType())
+	//
+	if len(label) == 0 {
+		out.WriteRune('%')
+	} else if label != arg {
+		out.WriteString(label)
+		out.WriteRune('%')
+	}
+	if typeName != arg {
+		out.WriteString(arg)
+	}
+	if p.Repeated {
+		if p.Optional {
+			out.WriteRune('*')
+		} else {
+			out.WriteRune('+')
+		}
+	} else if p.Optional {
+		out.WriteRune('?')
+	} else {
+		out.WriteRune(':')
+	}
+	out.WriteString(typeName)
+	return out.String()
 }
 
 func (p *Place) Choices() (ret int) {
@@ -48,6 +81,33 @@ func (p *Place) CapLabel() (ret string) {
 	return p.Label // an empty label means anonymous runin
 }
 
+func (p *Place) SpecType() (ret string) {
+	if len(p.Pool) > 0 {
+		ret = lang.Underscore(p.Pool)
+	} else {
+		switch n := p.Type.Name(); n {
+		// fix? not exactly sure why these dont expand their content
+		case "Relation":
+			ret = "text"
+		case "string":
+			ret = "text"
+		case "Case", "Edge", "Order": // list case, list edge, list order
+			ret = "bool"
+		case "TryAsNoun", "Level": // debug level
+			ret = "number"
+		case "float64":
+			ret = "number"
+		default:
+			if len(n) == 0 {
+				panic("missing name")
+			} else {
+				ret = string(unicode.ToUpper(rune(n[0]))) + n[1:]
+			}
+		}
+	}
+	return
+}
+
 func (p *Place) CapType() (ret string) {
 	switch n := p.Type.Name(); n {
 	// fix? not exactly sure why these dont expand their content
@@ -69,7 +129,7 @@ func (p *Place) CapType() (ret string) {
 		}
 	}
 	//
-	pack := p.Cmd.Package()
+	pack := p.Slat.Package()
 	if n := PackageOf(p.Type); len(n) > 0 && n != pack {
 		ret = Pascal(n) + "." + ret
 	}
@@ -100,17 +160,17 @@ func (p *Place) ProtoType() (ret string) {
 	return
 }
 
-type Cmds map[string]*Cmd
+type Cmds map[string]*Slat
 
-func (cs *Cmds) Add(p *Cmd) *Cmd {
+func (cs *Cmds) Add(p *Slat) *Slat {
 	(*cs)[p.Name] = p
 	return p
 }
 
-func MakeCommand(c composer.Composer) (ret *Cmd) {
+func MakeCommand(c composer.Composer) (ret *Slat) {
 	rtype := r.TypeOf(c).Elem()
 	if rtype.Kind() == r.Struct {
-		cmd := Cmd{
+		cmd := Slat{
 			Name:  rtype.Name(),
 			Type:  rtype,
 			Lede:  makeLede(c),
@@ -120,9 +180,9 @@ func MakeCommand(c composer.Composer) (ret *Cmd) {
 		//
 		var inds Indicies
 		export.WalkProperties(rtype, func(f *r.StructField, path []int) (done bool) {
-			if inner := collapse(f.Type); inner != nil {
-				f = inner
-			}
+			// if inner := collapse(f.Type); inner != nil {
+			// 	f = inner
+			// }
 			tags := tag.ReadTag(f.Tag)
 			optional := tags.Exists("optional")
 			internal := tags.Exists("internal")
@@ -147,7 +207,7 @@ func MakeCommand(c composer.Composer) (ret *Cmd) {
 				}
 			}
 			place := Place{
-				Cmd:      &cmd,
+				Slat:     &cmd,
 				Label:    label,
 				Arg:      lang.Underscore(f.Name),
 				Index:    inds.makeIndex(f, tags),
@@ -166,23 +226,23 @@ func MakeCommand(c composer.Composer) (ret *Cmd) {
 }
 
 // should we collapse the target's field(s) directly into its parents?
-func collapse(el r.Type) (ret *r.StructField) {
-	if el.Kind() == r.Ptr {
-		el = el.Elem()
-	}
-	if el.Kind() == r.Struct {
-		export.WalkProperties(el, func(f *r.StructField, path []int) (done bool) {
-			tags := tag.ReadTag(f.Tag)
-			if !tags.Exists("internal") {
-				if ret == nil {
-					ret = f
-				} else {
-					ret = nil
-					done = true
-				}
-			}
-			return
-		})
-	}
-	return
-}
+// func collapse(el r.Type) (ret *r.StructField) {
+// 	if el.Kind() == r.Ptr {
+// 		el = el.Elem()
+// 	}
+// 	if el.Kind() == r.Struct {
+// 		export.WalkProperties(el, func(f *r.StructField, path []int) (done bool) {
+// 			tags := tag.ReadTag(f.Tag)
+// 			if !tags.Exists("internal") {
+// 				if ret == nil {
+// 					ret = f
+// 				} else {
+// 					ret = nil
+// 					done = true
+// 				}
+// 			}
+// 			return
+// 		})
+// 	}
+// 	return
+// }

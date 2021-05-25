@@ -1,9 +1,12 @@
 package internal
 
 import (
+	"encoding/json"
 	"io"
 	"strings"
 	"text/template"
+
+	"git.sr.ht/~ionous/iffy/lang"
 )
 
 type Entry struct {
@@ -20,26 +23,26 @@ func (x *Entry) Must(w io.Writer, data interface{}) {
 	}
 }
 
-var Proto = struct {
-	Ext                  string
-	Header, Slots, Slats Entry
+var Templates = struct {
+	Ext  string
+	Pack Entry
 }{
-	".proto",
-	Entry{name: "header", content: headerProto},
-	Entry{name: "slots", content: slotsProto},
-	Entry{name: "slats", content: slatsProto},
-}
-
-var Cap = struct {
-	Ext       string
-	Pack, All Entry
-}{
-	".capnp",
-	Entry{name: "pack", content: packCap},
-	Entry{name: "all", content: allCap},
+	".ifspec",
+	Entry{name: "packSpec", content: packSpec},
 }
 
 var funcMap = template.FuncMap{
 	// The name "title" is what the function will be called in the template text.
 	"title": strings.Title,
+	"under": lang.Underscore,
+	"esc":   escape,
+}
+
+func escape(i string) string {
+	b, err := json.Marshal(i)
+	if err != nil {
+		panic(err)
+	}
+	// Trim the beginning and trailing " character
+	return string(b[1 : len(b)-1])
 }

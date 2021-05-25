@@ -14,14 +14,14 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 )
 
-var temp = internal.Cap
+var temp = internal.Templates
 
 type Pack struct {
 	Name  string
 	Hash  string
 	Deps  internal.Deps
-	Slots []internal.SlotMessage
-	Slats []internal.SlatMessage
+	Slots []*internal.Slot
+	Slats []*internal.Slat
 }
 
 func (p *Pack) Sort() {
@@ -62,27 +62,27 @@ func main() {
 		}
 	}
 
-	{
-		fn := path.Join(dir, "allCmds"+temp.Ext)
-		if fp, e := os.Create(fn); e != nil {
-			panic(e)
-		} else {
-			var slots []internal.SlotMessage
-			var deps internal.Deps
-			for k, p := range all.Packages {
-				deps = deps.AddDep(k)
-				slots = append(slots, p.Slots...)
-			}
-			sort.Strings(deps)
-			sort.Slice(slots, func(i, j int) bool {
-				return slots[i].Name < slots[j].Name
-			})
-			temp.All.Must(fp, map[string]interface{}{
-				"Slots": slots,
-				"Deps":  deps,
-			})
-		}
-	}
+	// {
+	// 	fn := path.Join(dir, "allCmds"+temp.Ext)
+	// 	if fp, e := os.Create(fn); e != nil {
+	// 		panic(e)
+	// 	} else {
+	// 		var slots []internal.Slot
+	// 		var deps internal.Deps
+	// 		for k, p := range all.Packages {
+	// 			deps = deps.AddDep(k)
+	// 			slots = append(slots, p.Slots...)
+	// 		}
+	// 		sort.Strings(deps)
+	// 		sort.Slice(slots, func(i, j int) bool {
+	// 			return slots[i].Name < slots[j].Name
+	// 		})
+	// 		temp.All.Must(fp, map[string]interface{}{
+	// 			"Slots": slots,
+	// 			"Deps":  deps,
+	// 		})
+	// 	}
+	// }
 }
 
 var allCmds internal.Cmds = internal.MakeCommands()
@@ -91,22 +91,29 @@ func (all *All) makeSlots() {
 	// write slots
 	for _, slots := range iffy.AllSlots {
 		for _, slot := range slots {
+			name := internal.Pascal(composer.SlotName(slot))
+			msg := &internal.Slot{
+				Name: name,
+				Desc: internal.ClipDesc(slot.Desc),
+			}
 			var sigs []internal.Sig
 			for _, slat := range internal.ImplementorsOf(slot.Type) {
-				cmd := allCmds.Add(internal.MakeCommand(slat))
-				if cmd != nil {
-					sigs = append(sigs, cmd.Signatures()...)
+				rtype := r.TypeOf(slat).Elem()
+				if rtype.Kind() == r.Struct {
+					cmd := allCmds[rtype.Name()]
+					if cmd == nil {
+						cmd = allCmds.Add(internal.MakeCommand(slat))
+					}
+					if cmd != nil {
+						sigs = append(sigs, cmd.Signatures()...)
+						cmd.Slots = append(cmd.Slots, msg)
+					}
 				}
 			}
 			sort.Slice(sigs, func(i, j int) bool {
 				return sigs[i].Raw < sigs[j].Raw
 			})
-			name := internal.Pascal(composer.SlotName(slot))
-			msg := internal.SlotMessage{
-				Name: name,
-				Desc: internal.ClipDesc(slot.Desc),
-				Sigs: sigs,
-			}
+			msg.Sigs = sigs
 			//
 			pack := internal.PackageOf(r.TypeOf(slot.Type).Elem())
 			p := all.Packages[pack]
@@ -121,8 +128,7 @@ func (all *All) makeSlats() {
 		//
 		pack := internal.PackageOf(cmd.Type)
 		p := all.Packages[pack]
-		msg := internal.SlatMessage{cmd}
-		p.Slats = append(p.Slats, msg)
+		p.Slats = append(p.Slats, cmd)
 		// accumulate dependencies
 		for _, place := range cmd.Places {
 			inner := internal.PackageOf(place.Type)
