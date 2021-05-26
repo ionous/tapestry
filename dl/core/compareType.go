@@ -1,7 +1,5 @@
 package core
 
-import "git.sr.ht/~ionous/iffy/dl/composer"
-
 type CompareType int
 
 // Comparator generates comparison flags.
@@ -9,13 +7,6 @@ type CompareType int
 type Comparator interface {
 	Compare() CompareType
 }
-
-type EqualTo struct{}
-type NotEqualTo struct{}
-type GreaterThan struct{}
-type LessThan struct{}
-type GreaterOrEqual struct{}
-type LessOrEqual struct{}
 
 func (*EqualTo) Compare() CompareType {
 	return Compare_EqualTo
@@ -42,59 +33,3 @@ const (
 	Compare_GreaterThan
 	Compare_LessThan
 )
-
-func (*EqualTo) Compose() composer.Spec {
-	return composer.Spec{
-		Name:   "equal",
-		Spec:   "==",
-		Fluent: &composer.Fluid{Name: "equalTo", Role: composer.Selector},
-		Group:  "comparison",
-		Desc:   "Equal: Two values exactly match.",
-	}
-}
-
-func (*NotEqualTo) Compose() composer.Spec {
-	return composer.Spec{
-		Name:   "unequal",
-		Spec:   "<>",
-		Fluent: &composer.Fluid{Name: "otherThan", Role: composer.Selector},
-		Group:  "comparison",
-		Desc:   "Not Equal To: Two values don't match exactly.",
-	}
-}
-
-func (*GreaterThan) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "greater_than",
-		Spec:  ">",
-		Group: "comparison",
-		Desc:  "Greater Than: The first value is larger than the second value.",
-	}
-}
-
-func (*LessThan) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "less_than",
-		Spec:  "<",
-		Group: "comparison",
-		Desc:  "Less Than: The first value is less than the second value.",
-	}
-}
-
-func (*GreaterOrEqual) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "at_least",
-		Spec:  ">=",
-		Group: "comparison",
-		Desc:  "Greater Than or Equal To: The first value is larger than the second value.",
-	}
-}
-
-func (*LessOrEqual) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "at_most",
-		Spec:  "<=",
-		Group: "comparison",
-		Desc:  "Less Than or Equal To: The first value is larger than the second value.",
-	}
-}

@@ -1,594 +1,697 @@
 {
-  "slots": {
-    "brancher": "Helper for choose action.",
-    "comparator": "Helper for comparing values.",
-    "from_source_fields": "Helper for getting fields.",
-    "into_target_fields": "Helper for setting fields.",
-    "trigger": "Helper for counting values."
+  "brancher": {
+    "uses": "slot",
+    "desc": "Helper for choose action."
   },
-  "types": {
-    "activity": {
-      "flow": "act {do%exe+execute}",
-      "slots": "execute",
-      "group": "hidden"
-    },
-    "all_true": {
-      "flow": "all_of {%test+bool_eval}",
-      "slots": "bool_eval",
-      "desc": "Returns true if all of the evaluations are true.",
-      "group": "logic"
-    },
-    "always": {
-      "flow": "always",
-      "slots": "bool_eval",
-      "desc": "Returns true always.",
-      "group": "logic"
-    },
-    "any_true": {
-      "flow": "any_of {%test+bool_eval}",
-      "slots": "bool_eval",
-      "desc": "Returns true if any of the evaluations are true.",
-      "group": "logic"
-    },
-    "argument": {
-      "flow": "arg {%name:text} {from:assignment}",
-      "group": "patterns"
-    },
-    "arguments": {
-      "flow": "arguments {%args+argument}",
-      "group": "patterns"
-    },
-    "assign": {
-      "flow": "let {%var:variable} {be%from:assignment}",
-      "slots": "execute",
-      "desc": "Assigns a variable to a value.",
-      "group": "variables"
-    },
-    "bool_value": {
-      "flow": "bool {%:bool}",
-      "slots": "bool_eval",
-      "desc": "Specify an explicit true or false value.",
-      "group": "literals"
-    },
-    "bracket": {
-      "flow": "bracket_text {%do:activity}",
-      "slots": "text_eval",
-      "desc": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
-      "group": "printing"
-    },
-    "break": {
-      "flow": "break",
-      "slots": "execute",
-      "desc": "In a repeating loop, exit the loop.",
-      "group": "flow"
-    },
-    "buffer": {
-      "flow": "buffer_text {%do:activity}",
-      "slots": "text_eval",
-      "group": "printing"
-    },
-    "capitalize": {
-      "flow": "capitalize {%text:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns new text, with the first letter turned into uppercase.",
-      "group": "format"
-    },
-    "choose_action": {
-      "flow": "if {%if:bool_eval} {do:activity} {else?brancher}",
-      "slots": ["execute", "brancher"],
-      "desc": "An if statement.",
-      "group": "misc"
-    },
-    "choose_more": {
-      "flow": "else_if {%if:bool_eval} {do:activity} {else?brancher}",
-      "slots": "brancher",
-      "group": "misc"
-    },
-    "choose_more_value": {
-      "flow": "else_if {%assign:text} {from:assignment} {and%filter:bool_eval} {do:activity} {else?brancher}",
-      "slots": "brancher",
-      "group": "misc"
-    },
-    "choose_nothing_else": {
-      "flow": "else_do {%do:activity}",
-      "slots": "brancher",
-      "group": "misc"
-    },
-    "choose_num": {
-      "flow": "num {%true:number_eval} {if:bool_eval} {else%false:number_eval}",
-      "slots": "number_eval",
-      "desc": "Pick one of two numbers based on a boolean test.",
-      "group": "math"
-    },
-    "choose_text": {
-      "flow": "txt {%true:text_eval} {if:bool_eval} {else%false:text_eval}",
-      "slots": "text_eval",
-      "desc": "Pick one of two strings based on a boolean test.",
-      "group": "format"
-    },
-    "choose_value": {
-      "flow": "if {%assign:text} {from:assignment} {and%filter:bool_eval} {do:activity} {else?brancher}",
-      "slots": ["execute", "brancher"],
-      "desc": "An if statement with local assignment.",
-      "group": "misc"
-    },
-    "commas": {
-      "flow": "comma_text {%do:activity}",
-      "slots": "text_eval",
-      "desc": "Separates words with commas, and 'and'.",
-      "group": "printing"
-    },
-    "compare_num": {
-      "flow": "cmp {%a:number_eval} {is:comparator} {num%b:number_eval}",
-      "slots": "bool_eval",
-      "desc": "True if eq,ne,gt,lt,ge,le two numbers.",
-      "group": "logic"
-    },
-    "compare_text": {
-      "flow": "cmp {%a:text_eval} {is:comparator} {txt%b:text_eval}",
-      "slots": "bool_eval",
-      "desc": "True if eq,ne,gt,lt,ge,le two strings ( lexical. )",
-      "group": "logic"
-    },
-    "count_of": {
-      "flow": "trigger {%:trigger} {num:number_eval}",
-      "slots": "bool_eval",
-      "desc": "A guard which returns true based on a counter. Counters start at zero and are incremented every time the guard gets checked.",
-      "group": "logic"
-    },
-    "cycle_text": {
-      "flow": "cycle {%parts+text_eval}",
-      "slots": "text_eval",
-      "desc": "When called multiple times, returns each of its inputs in turn.",
-      "group": "output"
-    },
-    "determine": {
-      "flow": "determine {%pattern:text} {:arguments}",
-      "slots": ["execute", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
-      "desc": "Runs a pattern, and potentially returns a value.",
-      "group": "patterns"
-    },
-    "diff_of": {
-      "flow": "dec {%a:number_eval} {by%b?number_eval}",
-      "slots": "number_eval",
-      "desc": "Subtract two numbers.",
-      "group": "math"
-    },
-    "during": {
-      "flow": "during {%pattern:text}",
-      "slots": ["bool_eval", "number_eval"],
-      "desc": "Decide whether a pattern is running.",
-      "group": "patterns"
-    },
-    "equal_to": {
-      "flow": "equal_to",
-      "slots": "comparator",
-      "desc": "Two values exactly match.",
-      "group": "comparison"
-    },
-    "from_bool": {
-      "flow": "bool {%val:bool_eval}",
-      "slots": "assignment",
-      "desc": "Assigns the calculated boolean value.",
-      "group": "variables"
-    },
-    "from_num": {
-      "flow": "num {%val:number_eval}",
-      "slots": "assignment",
-      "desc": "Assigns the calculated number.",
-      "group": "variables"
-    },
-    "from_numbers": {
-      "flow": "nums {%vals:num_list_eval}",
-      "slots": "assignment",
-      "desc": "Assigns the calculated numbers.",
-      "group": "variables"
-    },
-    "from_obj": {
-      "flow": "obj {%object:text_eval}",
-      "slots": "from_source_fields",
-      "desc": "Targets an object with a computed name.",
-      "group": "misc"
-    },
-    "from_rec": {
-      "flow": "rec {%rec:record_eval}",
-      "slots": "from_source_fields",
-      "desc": "Targets a record stored in a record.",
-      "group": "misc"
-    },
-    "from_record": {
-      "flow": "rec {%val:record_eval}",
-      "slots": "assignment",
-      "desc": "Assigns the calculated record.",
-      "group": "variables"
-    },
-    "from_records": {
-      "flow": "recs {%vals:record_list_eval}",
-      "slots": "assignment",
-      "desc": "Assigns the calculated records.",
-      "group": "variables"
-    },
-    "from_text": {
-      "flow": "txt {%val:text_eval}",
-      "slots": "assignment",
-      "desc": "Assigns the calculated piece of text.",
-      "group": "variables"
-    },
-    "from_texts": {
-      "flow": "txts {%vals:text_list_eval}",
-      "slots": "assignment",
-      "desc": "Assigns the calculated texts.",
-      "group": "variables"
-    },
-    "from_var": {
-      "flow": "var {%var:variable}",
-      "slots": "from_source_fields",
-      "desc": "Targets a record stored in a variable.",
-      "group": "misc"
-    },
-    "get_at_field": {
-      "flow": "get {%field:text} {from:from_source_fields}",
-      "slots": ["assignment", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
-      "desc": "Get a value from a record.",
-      "group": "variables"
-    },
-    "greater_or_equal": {
-      "flow": "at_least",
-      "slots": "comparator",
-      "desc": "The first value is larger than the second value.",
-      "group": "comparison"
-    },
-    "greater_than": {
-      "flow": "greater_than",
-      "slots": "comparator",
-      "desc": "The first value is larger than the second value.",
-      "group": "comparison"
-    },
-    "has_dominion": {
-      "flow": "has_dominion {%domain:text}",
-      "slots": "bool_eval",
-      "group": "logic"
-    },
-    "has_trait": {
-      "flow": "get {obj%object:text_eval} {trait:text_eval}",
-      "slots": "bool_eval",
-      "desc": "Return true if the object is currently in the requested state.",
-      "group": "objects"
-    },
-    "id_of": {
-      "flow": "id_of {%object:text_eval}",
-      "slots": "text_eval",
-      "desc": "A unique object identifier.",
-      "group": "objects"
-    },
-    "includes": {
-      "flow": "contains {%text:text_eval} {part:text_eval}",
-      "slots": "bool_eval",
-      "desc": "True if text contains text.",
-      "group": "strings"
-    },
-    "into_obj": {
-      "flow": "obj {%object:text_eval}",
-      "slots": "into_target_fields",
-      "desc": "Targets an object with a computed name.",
-      "group": "misc"
-    },
-    "into_var": {
-      "flow": "var {%var:variable}",
-      "slots": "into_target_fields",
-      "desc": "Targets an object or record stored in a variable",
-      "group": "misc"
-    },
-    "is_empty": {
-      "flow": "is {empty%text:text_eval}",
-      "slots": "bool_eval",
-      "desc": "True if the text is empty.",
-      "group": "strings"
-    },
-    "is_exact_kind_of": {
-      "flow": "kind_of {%object:text_eval} {is_exactly%kind:text}",
-      "slots": "bool_eval",
-      "desc": "True if the object is exactly the named kind.",
-      "group": "objects"
-    },
-    "is_kind_of": {
-      "flow": "kind_of {%object:text_eval} {is%kind:text}",
-      "slots": "bool_eval",
-      "desc": "True if the object is compatible with the named kind.",
-      "group": "objects"
-    },
-    "is_not_true": {
-      "flow": "not {%test:bool_eval}",
-      "slots": "bool_eval",
-      "desc": "Returns the opposite value.",
-      "group": "logic"
-    },
-    "join": {
-      "flow": "join {%sep:text_eval} {parts+text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns multiple pieces of text as a single new piece of text.",
-      "group": "strings"
-    },
-    "kind_of": {
-      "flow": "kind_of {%object:text_eval}",
-      "slots": "text_eval",
-      "desc": "Friendly name of the object's kind.",
-      "group": "objects"
-    },
-    "kinds_of": {
-      "flow": "kinds_of {%kind:text}",
-      "slots": "text_list_eval",
-      "desc": "A list of compatible kinds.",
-      "group": "objects"
-    },
-    "less_or_equal": {
-      "flow": "at_most",
-      "slots": "comparator",
-      "desc": "The first value is larger than the second value.",
-      "group": "comparison"
-    },
-    "less_than": {
-      "flow": "less_than",
-      "slots": "comparator",
-      "desc": "The first value is less than the second value.",
-      "group": "comparison"
-    },
-    "lines": {
-      "flow": "here {%lines:text}",
-      "desc": "Specify one or more lines of text.",
-      "group": "literals"
-    },
-    "make": {
-      "flow": "make {%kind:text} {:arguments}",
-      "slots": "record_eval",
-      "group": "misc"
-    },
-    "make_lowercase": {
-      "flow": "lower {%text:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.",
-      "group": "format"
-    },
-    "make_plural": {
-      "flow": "plural {of%text:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns the plural form of a singular word. (ex. apples for apple. )",
-      "group": "format"
-    },
-    "make_reversed": {
-      "flow": "reverse {%text:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.",
-      "group": "format"
-    },
-    "make_sentence_case": {
-      "flow": "sentence {%text:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.",
-      "group": "format"
-    },
-    "make_singular": {
-      "flow": "singular {of%text:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns the singular form of a plural word. (ex. apple for apples )",
-      "group": "format"
-    },
-    "make_title_case": {
-      "flow": "title {%text:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.",
-      "group": "format"
-    },
-    "make_uppercase": {
-      "flow": "upper {%text:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.",
-      "group": "format"
-    },
-    "matches": {
-      "flow": "matches {%text:text_eval} {to%pattern:text}",
-      "slots": "bool_eval",
-      "desc": "Determine whether the specified text is similar to the specified regular expression.",
-      "group": "matching"
-    },
-    "name_of": {
-      "flow": "name_of {%object:text_eval}",
-      "slots": "text_eval",
-      "desc": "Full name of the object.",
-      "group": "objects"
-    },
-    "newline": {
-      "flow": "br",
-      "slots": "execute",
-      "desc": "Start a new line.",
-      "group": "printing"
-    },
-    "next": {
-      "flow": "next",
-      "slots": "execute",
-      "desc": "In a repeating loop, try the next iteration of the loop.",
-      "group": "flow"
-    },
-    "not_equal_to": {
-      "flow": "other_than",
-      "slots": "comparator",
-      "desc": "Two values don't match exactly.",
-      "group": "comparison"
-    },
-    "num_list": {
-      "flow": "nums {%values+number}",
-      "slots": "num_list_eval",
-      "desc": "Specify a list of multiple numbers.",
-      "group": "literals"
-    },
-    "num_value": {
-      "flow": "num {%num:number}",
-      "slots": "number_eval",
-      "desc": "Specify a particular number.",
-      "group": "literals"
-    },
-    "object_exists": {
-      "flow": "is {valid%object:text_eval}",
-      "slots": "bool_eval",
-      "desc": "Returns whether there is a object of the specified name.",
-      "group": "objects"
-    },
-    "paraline": {
-      "flow": "p",
-      "slots": "execute",
-      "desc": "Add a single blank line following some text.",
-      "group": "printing"
-    },
-    "print_num": {
-      "flow": "numeral {%num:number_eval}",
-      "slots": "text_eval",
-      "desc": "Writes a number using numerals, eg. '1'.",
-      "group": "printing"
-    },
-    "print_num_word": {
-      "flow": "numeral {words%num:number_eval}",
-      "slots": "text_eval",
-      "desc": "Writes a number in plain english: eg. 'one'",
-      "group": "printing"
-    },
-    "product_of": {
-      "flow": "mul {%a:number_eval} {by%b:number_eval}",
-      "slots": "number_eval",
-      "desc": "Multiply two numbers.",
-      "group": "math"
-    },
-    "put_at_field": {
-      "flow": "put {%into:into_target_fields} {from:assignment} {at%at_field:text}",
-      "slots": "execute",
-      "desc": "Put a value into the field of an record or object",
-      "group": "variables"
-    },
-    "quotient_of": {
-      "flow": "div {%a:number_eval} {by%b:number_eval}",
-      "slots": "number_eval",
-      "desc": "Divide one number by another.",
-      "group": "math"
-    },
-    "remainder_of": {
-      "flow": "mod {%a:number_eval} {by%b:number_eval}",
-      "slots": "number_eval",
-      "desc": "Divide one number by another, and return the remainder.",
-      "group": "math"
-    },
-    "response": {
-      "flow": "response {%name:text} {text?text_eval}",
-      "slots": "text_eval",
-      "desc": "Generate text in a replaceable manner.",
-      "group": "output"
-    },
-    "row": {
-      "flow": "row {%do:activity}",
-      "slots": "text_eval",
-      "desc": "A single line as part of a group of lines.",
-      "group": "printing"
-    },
-    "rows": {
-      "flow": "rows {%do:activity}",
-      "slots": "text_eval",
-      "desc": "Group text into successive lines.",
-      "group": "printing"
-    },
-    "say": {
-      "flow": "say_text {%text:text_eval}",
-      "slots": "execute",
-      "desc": "Print some bit of text to the player.",
-      "group": "printing"
-    },
-    "send": {
-      "flow": "send {%event:text} {to%path:text_list_eval} {:arguments}",
-      "slots": ["execute", "bool_eval"],
-      "desc": "Triggers a event, returns a true/false success value.",
-      "group": "events"
-    },
-    "set_trait": {
-      "flow": "put {obj%object:text_eval} {trait:text_eval}",
-      "slots": "execute",
-      "desc": "Put an object into a particular state.",
-      "group": "objects"
-    },
-    "shuffle_text": {
-      "flow": "shuffle {%parts+text_eval}",
-      "slots": "text_eval",
-      "desc": "When called multiple times returns its inputs at random.",
-      "group": "output"
-    },
-    "slash": {
-      "flow": "slash_text {%do:activity}",
-      "slots": "text_eval",
-      "desc": "Separates words with left-leaning slashes '/'.",
-      "group": "printing"
-    },
-    "softline": {
-      "flow": "wbr",
-      "slots": "execute",
-      "desc": "Start a new line ( if not already at a new line. )",
-      "group": "printing"
-    },
-    "span": {
-      "flow": "span_text {%do:activity}",
-      "slots": "text_eval",
-      "desc": "Writes text with spaces between words.",
-      "group": "printing"
-    },
-    "stopping_text": {
-      "flow": "stopping {%parts+text_eval}",
-      "slots": "text_eval",
-      "desc": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
-      "group": "output"
-    },
-    "sum_of": {
-      "flow": "inc {%a:number_eval} {by%b?number_eval}",
-      "slots": "number_eval",
-      "desc": "Add two numbers.",
-      "group": "math"
-    },
-    "text_list": {
-      "flow": "txts {%values+text}",
-      "slots": "text_list_eval",
-      "desc": "Specifies multiple string values.",
-      "group": "literals"
-    },
-    "text_value": {
-      "flow": "txt {%:text}",
-      "slots": "text_eval",
-      "desc": "Specify a small bit of text.",
-      "group": "literals"
-    },
-    "trigger_cycle": {
-      "flow": "every",
-      "slots": "trigger",
-      "group": "comparison"
-    },
-    "trigger_once": {
-      "flow": "at",
-      "slots": "trigger",
-      "group": "comparison"
-    },
-    "trigger_switch": {
-      "flow": "after",
-      "slots": "trigger",
-      "group": "comparison"
-    },
-    "var": {
-      "flow": "var {%name:variable}",
-      "slots": ["assignment", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
-      "desc": "Return the value of the named variable.",
-      "group": "variables"
-    },
-    "variable": {
-      "flow": "var {%str:text}",
-      "group": "misc"
-    },
-    "while": {
-      "flow": "repeating {%true:bool_eval} {do:activity}",
-      "slots": "execute",
-      "desc": "Keep running a series of actions while a condition is true.",
-      "group": "flow"
-    }
+  "comparator": {
+    "uses": "slot",
+    "desc": "Helper for comparing values."
+  },
+  "from_source_fields": {
+    "uses": "slot",
+    "desc": "Helper for getting fields."
+  },
+  "into_target_fields": {
+    "uses": "slot",
+    "desc": "Helper for setting fields."
+  },
+  "trigger": {
+    "uses": "slot",
+    "desc": "Helper for counting values."
+  },
+  "activity": {
+    "uses": "flow",
+    "spec": "act {do%exe+execute}",
+    "slots": "execute",
+    "group": "hidden"
+  },
+  "all_true": {
+    "uses": "flow",
+    "spec": "all_of {_%test+bool_eval}",
+    "slots": "bool_eval",
+    "desc": "Returns true if all of the evaluations are true.",
+    "group": "logic"
+  },
+  "always": {
+    "uses": "flow",
+    "spec": "always",
+    "slots": "bool_eval",
+    "desc": "Returns true always.",
+    "group": "logic"
+  },
+  "any_true": {
+    "uses": "flow",
+    "spec": "any_of {_%test+bool_eval}",
+    "slots": "bool_eval",
+    "desc": "Returns true if any of the evaluations are true.",
+    "group": "logic"
+  },
+  "argument": {
+    "uses": "flow",
+    "spec": "arg {_%name:text} {from:assignment}",
+    "group": "patterns"
+  },
+  "arguments": {
+    "uses": "flow",
+    "spec": "arguments {_%args+argument}",
+    "group": "patterns"
+  },
+  "assign": {
+    "uses": "flow",
+    "spec": "let {_%var:variable_name} {be%from:assignment}",
+    "slots": "execute",
+    "desc": "Assigns a variable to a value.",
+    "group": "variables"
+  },
+  "bool_value": {
+    "uses": "flow",
+    "spec": "bool {_%:bool}",
+    "slots": "bool_eval",
+    "desc": "Specify an explicit true or false value.",
+    "group": "literals"
+  },
+  "bracket": {
+    "uses": "flow",
+    "spec": "bracket_text {_%do:activity}",
+    "slots": "text_eval",
+    "desc": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
+    "group": "printing"
+  },
+  "break": {
+    "uses": "flow",
+    "spec": "break",
+    "slots": "execute",
+    "desc": "In a repeating loop, exit the loop.",
+    "group": "flow"
+  },
+  "buffer": {
+    "uses": "flow",
+    "spec": "buffer_text {_%do:activity}",
+    "slots": "text_eval",
+    "group": "printing"
+  },
+  "capitalize": {
+    "uses": "flow",
+    "spec": "capitalize {_%text:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns new text, with the first letter turned into uppercase.",
+    "group": "format"
+  },
+  "choose_action": {
+    "uses": "flow",
+    "spec": "if {_%if:bool_eval} {do:activity} {else?brancher}",
+    "slots": ["execute", "brancher"],
+    "desc": "An if statement.",
+    "group": "misc"
+  },
+  "choose_more": {
+    "uses": "flow",
+    "spec": "else_if {_%if:bool_eval} {do:activity} {else?brancher}",
+    "slots": "brancher",
+    "group": "misc"
+  },
+  "choose_more_value": {
+    "uses": "flow",
+    "spec": "else_if {_%assign:text} {from:assignment} {and%filter:bool_eval} {do:activity} {else?brancher}",
+    "slots": "brancher",
+    "group": "misc"
+  },
+  "choose_nothing_else": {
+    "uses": "flow",
+    "spec": "else_do {_%do:activity}",
+    "slots": "brancher",
+    "group": "misc"
+  },
+  "choose_num": {
+    "uses": "flow",
+    "spec": "num {_%true:number_eval} {if:bool_eval} {else%false:number_eval}",
+    "slots": "number_eval",
+    "desc": "Pick one of two numbers based on a boolean test.",
+    "group": "math"
+  },
+  "choose_text": {
+    "uses": "flow",
+    "spec": "txt {_%true:text_eval} {if:bool_eval} {else%false:text_eval}",
+    "slots": "text_eval",
+    "desc": "Pick one of two strings based on a boolean test.",
+    "group": "format"
+  },
+  "choose_value": {
+    "uses": "flow",
+    "spec": "if {_%assign:text} {from:assignment} {and%filter:bool_eval} {do:activity} {else?brancher}",
+    "slots": ["execute", "brancher"],
+    "desc": "An if statement with local assignment.",
+    "group": "misc"
+  },
+  "commas": {
+    "uses": "flow",
+    "spec": "comma_text {_%do:activity}",
+    "slots": "text_eval",
+    "desc": "Separates words with commas, and 'and'.",
+    "group": "printing"
+  },
+  "compare_num": {
+    "uses": "flow",
+    "spec": "cmp {_%a:number_eval} {is:comparator} {num%b:number_eval}",
+    "slots": "bool_eval",
+    "desc": "True if eq,ne,gt,lt,ge,le two numbers.",
+    "group": "logic"
+  },
+  "compare_text": {
+    "uses": "flow",
+    "spec": "cmp {_%a:text_eval} {is:comparator} {txt%b:text_eval}",
+    "slots": "bool_eval",
+    "desc": "True if eq,ne,gt,lt,ge,le two strings ( lexical. )",
+    "group": "logic"
+  },
+  "count_of": {
+    "uses": "flow",
+    "spec": "trigger {-%at:position} {_%:trigger} {num:number_eval}",
+    "slots": "bool_eval",
+    "desc": "A guard which returns true based on a counter. Counters start at zero and are incremented every time the guard gets checked.",
+    "group": "logic"
+  },
+  "cycle_text": {
+    "uses": "flow",
+    "spec": "cycle {-%at:position} {_%parts+text_eval}",
+    "slots": "text_eval",
+    "desc": "When called multiple times, returns each of its inputs in turn.",
+    "group": "output"
+  },
+  "determine": {
+    "uses": "flow",
+    "spec": "determine {_%pattern:text} {:arguments}",
+    "slots": ["execute", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
+    "desc": "Runs a pattern, and potentially returns a value.",
+    "group": "patterns"
+  },
+  "diff_of": {
+    "uses": "flow",
+    "spec": "dec {_%a:number_eval} {by%b?number_eval}",
+    "slots": "number_eval",
+    "desc": "Subtract two numbers.",
+    "group": "math"
+  },
+  "during": {
+    "uses": "flow",
+    "spec": "during {_%pattern:text}",
+    "slots": ["bool_eval", "number_eval"],
+    "desc": "Decide whether a pattern is running.",
+    "group": "patterns"
+  },
+  "equal_to": {
+    "uses": "flow",
+    "spec": "equal_to",
+    "slots": "comparator",
+    "desc": "Two values exactly match.",
+    "group": "comparison"
+  },
+  "from_bool": {
+    "uses": "flow",
+    "spec": "bool {_%val:bool_eval}",
+    "slots": "assignment",
+    "desc": "Assigns the calculated boolean value.",
+    "group": "variables"
+  },
+  "from_num": {
+    "uses": "flow",
+    "spec": "num {_%val:number_eval}",
+    "slots": "assignment",
+    "desc": "Assigns the calculated number.",
+    "group": "variables"
+  },
+  "from_numbers": {
+    "uses": "flow",
+    "spec": "nums {_%vals:num_list_eval}",
+    "slots": "assignment",
+    "desc": "Assigns the calculated numbers.",
+    "group": "variables"
+  },
+  "from_obj": {
+    "uses": "flow",
+    "spec": "obj {_%object:text_eval}",
+    "slots": "from_source_fields",
+    "desc": "Targets an object with a computed name.",
+    "group": "misc"
+  },
+  "from_rec": {
+    "uses": "flow",
+    "spec": "rec {_%rec:record_eval}",
+    "slots": "from_source_fields",
+    "desc": "Targets a record stored in a record.",
+    "group": "misc"
+  },
+  "from_record": {
+    "uses": "flow",
+    "spec": "rec {_%val:record_eval}",
+    "slots": "assignment",
+    "desc": "Assigns the calculated record.",
+    "group": "variables"
+  },
+  "from_records": {
+    "uses": "flow",
+    "spec": "recs {_%vals:record_list_eval}",
+    "slots": "assignment",
+    "desc": "Assigns the calculated records.",
+    "group": "variables"
+  },
+  "from_text": {
+    "uses": "flow",
+    "spec": "txt {_%val:text_eval}",
+    "slots": "assignment",
+    "desc": "Assigns the calculated piece of text.",
+    "group": "variables"
+  },
+  "from_texts": {
+    "uses": "flow",
+    "spec": "txts {_%vals:text_list_eval}",
+    "slots": "assignment",
+    "desc": "Assigns the calculated texts.",
+    "group": "variables"
+  },
+  "from_var": {
+    "uses": "flow",
+    "spec": "var {_%var:variable_name}",
+    "slots": "from_source_fields",
+    "desc": "Targets a record stored in a variable.",
+    "group": "misc"
+  },
+  "get_at_field": {
+    "uses": "flow",
+    "spec": "get {_%field:text} {from:from_source_fields}",
+    "slots": ["assignment", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
+    "desc": "Get a value from a record.",
+    "group": "variables"
+  },
+  "greater_or_equal": {
+    "uses": "flow",
+    "spec": "at_least",
+    "slots": "comparator",
+    "desc": "The first value is larger than the second value.",
+    "group": "comparison"
+  },
+  "greater_than": {
+    "uses": "flow",
+    "spec": "greater_than",
+    "slots": "comparator",
+    "desc": "The first value is larger than the second value.",
+    "group": "comparison"
+  },
+  "has_dominion": {
+    "uses": "flow",
+    "spec": "has_dominion {_%domain:text}",
+    "slots": "bool_eval",
+    "group": "logic"
+  },
+  "has_trait": {
+    "uses": "flow",
+    "spec": "get {obj%object:text_eval} {trait:text_eval}",
+    "slots": "bool_eval",
+    "desc": "Return true if the object is currently in the requested state.",
+    "group": "objects"
+  },
+  "id_of": {
+    "uses": "flow",
+    "spec": "id_of {_%object:text_eval}",
+    "slots": "text_eval",
+    "desc": "A unique object identifier.",
+    "group": "objects"
+  },
+  "includes": {
+    "uses": "flow",
+    "spec": "contains {_%text:text_eval} {part:text_eval}",
+    "slots": "bool_eval",
+    "desc": "True if text contains text.",
+    "group": "strings"
+  },
+  "into_obj": {
+    "uses": "flow",
+    "spec": "obj {_%object:text_eval}",
+    "slots": "into_target_fields",
+    "desc": "Targets an object with a computed name.",
+    "group": "misc"
+  },
+  "into_var": {
+    "uses": "flow",
+    "spec": "var {_%var:variable_name}",
+    "slots": "into_target_fields",
+    "desc": "Targets an object or record stored in a variable",
+    "group": "misc"
+  },
+  "is_empty": {
+    "uses": "flow",
+    "spec": "is {empty%text:text_eval}",
+    "slots": "bool_eval",
+    "desc": "True if the text is empty.",
+    "group": "strings"
+  },
+  "is_exact_kind_of": {
+    "uses": "flow",
+    "spec": "kind_of {_%object:text_eval} {is_exactly%kind:text}",
+    "slots": "bool_eval",
+    "desc": "True if the object is exactly the named kind.",
+    "group": "objects"
+  },
+  "is_kind_of": {
+    "uses": "flow",
+    "spec": "kind_of {_%object:text_eval} {is%kind:text}",
+    "slots": "bool_eval",
+    "desc": "True if the object is compatible with the named kind.",
+    "group": "objects"
+  },
+  "is_not_true": {
+    "uses": "flow",
+    "spec": "not {_%test:bool_eval}",
+    "slots": "bool_eval",
+    "desc": "Returns the opposite value.",
+    "group": "logic"
+  },
+  "join": {
+    "uses": "flow",
+    "spec": "join {_%sep:text_eval} {parts+text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns multiple pieces of text as a single new piece of text.",
+    "group": "strings"
+  },
+  "kind_of": {
+    "uses": "flow",
+    "spec": "kind_of {_%object:text_eval}",
+    "slots": "text_eval",
+    "desc": "Friendly name of the object's kind.",
+    "group": "objects"
+  },
+  "kinds_of": {
+    "uses": "flow",
+    "spec": "kinds_of {_%kind:text}",
+    "slots": "text_list_eval",
+    "desc": "A list of compatible kinds.",
+    "group": "objects"
+  },
+  "less_or_equal": {
+    "uses": "flow",
+    "spec": "at_most",
+    "slots": "comparator",
+    "desc": "The first value is larger than the second value.",
+    "group": "comparison"
+  },
+  "less_than": {
+    "uses": "flow",
+    "spec": "less_than",
+    "slots": "comparator",
+    "desc": "The first value is less than the second value.",
+    "group": "comparison"
+  },
+  "make": {
+    "uses": "flow",
+    "spec": "make {_%kind:text} {:arguments}",
+    "slots": "record_eval",
+    "group": "misc"
+  },
+  "make_lowercase": {
+    "uses": "flow",
+    "spec": "lower {_%text:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.",
+    "group": "format"
+  },
+  "make_plural": {
+    "uses": "flow",
+    "spec": "plural {of%text:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns the plural form of a singular word. (ex. apples for apple. )",
+    "group": "format"
+  },
+  "make_reversed": {
+    "uses": "flow",
+    "spec": "reverse {_%text:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.",
+    "group": "format"
+  },
+  "make_sentence_case": {
+    "uses": "flow",
+    "spec": "sentence {_%text:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.",
+    "group": "format"
+  },
+  "make_singular": {
+    "uses": "flow",
+    "spec": "singular {of%text:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns the singular form of a plural word. (ex. apple for apples )",
+    "group": "format"
+  },
+  "make_title_case": {
+    "uses": "flow",
+    "spec": "title {_%text:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.",
+    "group": "format"
+  },
+  "make_uppercase": {
+    "uses": "flow",
+    "spec": "upper {_%text:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.",
+    "group": "format"
+  },
+  "matches": {
+    "uses": "flow",
+    "spec": "matches {_%text:text_eval} {to%pattern:text} {-%cache:match_cache}",
+    "slots": "bool_eval",
+    "desc": "Determine whether the specified text is similar to the specified regular expression.",
+    "group": "matching"
+  },
+  "name_of": {
+    "uses": "flow",
+    "spec": "name_of {_%object:text_eval}",
+    "slots": "text_eval",
+    "desc": "Full name of the object.",
+    "group": "objects"
+  },
+  "newline": {
+    "uses": "flow",
+    "spec": "br",
+    "slots": "execute",
+    "desc": "Start a new line.",
+    "group": "printing"
+  },
+  "next": {
+    "uses": "flow",
+    "spec": "next",
+    "slots": "execute",
+    "desc": "In a repeating loop, try the next iteration of the loop.",
+    "group": "flow"
+  },
+  "not_equal_to": {
+    "uses": "flow",
+    "spec": "other_than",
+    "slots": "comparator",
+    "desc": "Two values don't match exactly.",
+    "group": "comparison"
+  },
+  "num_list": {
+    "uses": "flow",
+    "spec": "nums {_%values+number}",
+    "slots": "num_list_eval",
+    "desc": "Specify a list of multiple numbers.",
+    "group": "literals"
+  },
+  "num_value": {
+    "uses": "flow",
+    "spec": "num {_%num:number}",
+    "slots": "number_eval",
+    "desc": "Specify a particular number.",
+    "group": "literals"
+  },
+  "object_exists": {
+    "uses": "flow",
+    "spec": "is {valid%object:text_eval}",
+    "slots": "bool_eval",
+    "desc": "Returns whether there is a object of the specified name.",
+    "group": "objects"
+  },
+  "blankline": {
+    "uses": "flow",
+    "spec": "p",
+    "slots": "execute",
+    "desc": "Add a single blank line following some text.",
+    "group": "printing"
+  },
+  "print_num": {
+    "uses": "flow",
+    "spec": "numeral {_%num:number_eval}",
+    "slots": "text_eval",
+    "desc": "Writes a number using numerals, eg. '1'.",
+    "group": "printing"
+  },
+  "print_num_word": {
+    "uses": "flow",
+    "spec": "numeral {words%num:number_eval}",
+    "slots": "text_eval",
+    "desc": "Writes a number in plain english: eg. 'one'",
+    "group": "printing"
+  },
+  "product_of": {
+    "uses": "flow",
+    "spec": "mul {_%a:number_eval} {by%b:number_eval}",
+    "slots": "number_eval",
+    "desc": "Multiply two numbers.",
+    "group": "math"
+  },
+  "put_at_field": {
+    "uses": "flow",
+    "spec": "put {_%into:into_target_fields} {from:assignment} {at%at_field:text}",
+    "slots": "execute",
+    "desc": "Put a value into the field of an record or object",
+    "group": "variables"
+  },
+  "quotient_of": {
+    "uses": "flow",
+    "spec": "div {_%a:number_eval} {by%b:number_eval}",
+    "slots": "number_eval",
+    "desc": "Divide one number by another.",
+    "group": "math"
+  },
+  "remainder_of": {
+    "uses": "flow",
+    "spec": "mod {_%a:number_eval} {by%b:number_eval}",
+    "slots": "number_eval",
+    "desc": "Divide one number by another, and return the remainder.",
+    "group": "math"
+  },
+  "response": {
+    "uses": "flow",
+    "spec": "response {_%name:text} {text?text_eval}",
+    "slots": "text_eval",
+    "desc": "Generate text in a replaceable manner.",
+    "group": "output"
+  },
+  "row": {
+    "uses": "flow",
+    "spec": "row {_%do:activity}",
+    "slots": "text_eval",
+    "desc": "A single line as part of a group of lines.",
+    "group": "printing"
+  },
+  "rows": {
+    "uses": "flow",
+    "spec": "rows {_%do:activity}",
+    "slots": "text_eval",
+    "desc": "Group text into successive lines.",
+    "group": "printing"
+  },
+  "say": {
+    "uses": "flow",
+    "spec": "say_text {_%text:text_eval}",
+    "slots": "execute",
+    "desc": "Print some bit of text to the player.",
+    "group": "printing"
+  },
+  "send": {
+    "uses": "flow",
+    "spec": "send {_%event:text} {to%path:text_list_eval} {:arguments}",
+    "slots": ["execute", "bool_eval"],
+    "desc": "Triggers a event, returns a true/false success value.",
+    "group": "events"
+  },
+  "set_trait": {
+    "uses": "flow",
+    "spec": "put {obj%object:text_eval} {trait:text_eval}",
+    "slots": "execute",
+    "desc": "Put an object into a particular state.",
+    "group": "objects"
+  },
+  "shuffle_text": {
+    "uses": "flow",
+    "spec": "shuffle {-%at:position} {_%parts+text_eval} {-%indices:shuffler}",
+    "slots": "text_eval",
+    "desc": "When called multiple times returns its inputs at random.",
+    "group": "output"
+  },
+  "slash": {
+    "uses": "flow",
+    "spec": "slash_text {_%do:activity}",
+    "slots": "text_eval",
+    "desc": "Separates words with left-leaning slashes '/'.",
+    "group": "printing"
+  },
+  "softline": {
+    "uses": "flow",
+    "spec": "wbr",
+    "slots": "execute",
+    "desc": "Start a new line ( if not already at a new line. )",
+    "group": "printing"
+  },
+  "span": {
+    "uses": "flow",
+    "spec": "span_text {_%do:activity}",
+    "slots": "text_eval",
+    "desc": "Writes text with spaces between words.",
+    "group": "printing"
+  },
+  "stopping_text": {
+    "uses": "flow",
+    "spec": "stopping {-%at:position} {_%parts+text_eval}",
+    "slots": "text_eval",
+    "desc": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
+    "group": "output"
+  },
+  "sum_of": {
+    "uses": "flow",
+    "spec": "inc {_%a:number_eval} {by%b?number_eval}",
+    "slots": "number_eval",
+    "desc": "Add two numbers.",
+    "group": "math"
+  },
+  "text_list": {
+    "uses": "flow",
+    "spec": "txts {_%values+text}",
+    "slots": "text_list_eval",
+    "desc": "Specifies multiple string values.",
+    "group": "literals"
+  },
+  "text_value": {
+    "uses": "flow",
+    "spec": "txt {_%:text}",
+    "slots": "text_eval",
+    "desc": "Specify a small bit of text.",
+    "group": "literals"
+  },
+  "trigger_cycle": {
+    "uses": "flow",
+    "spec": "every",
+    "slots": "trigger",
+    "group": "comparison"
+  },
+  "trigger_once": {
+    "uses": "flow",
+    "spec": "at",
+    "slots": "trigger",
+    "group": "comparison"
+  },
+  "trigger_switch": {
+    "uses": "flow",
+    "spec": "after",
+    "slots": "trigger",
+    "group": "comparison"
+  },
+  "var": {
+    "uses": "flow",
+    "spec": "var {_%name:variable_name}",
+    "slots": ["assignment", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
+    "desc": "Return the value of the named variable.",
+    "group": "variables"
+  },
+  "variable_name": {
+    "uses": "str"
+  },
+  "while": {
+    "uses": "flow",
+    "spec": "repeating {_%true:bool_eval} {do:activity}",
+    "slots": "execute",
+    "desc": "Keep running a series of actions while a condition is true.",
+    "group": "flow"
   }
 }

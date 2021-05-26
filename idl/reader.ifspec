@@ -1,0 +1,12 @@
+{
+  "string": {
+  	"uses": "str",
+  	"group": "internal"
+  },
+  "position": {
+    "uses": "flow",
+    "spec": "src {_%offset:string} {in%source:string}",
+    "desc": "Identifies the location of a specific command ( ex. from an .if file ).",
+    "group": "internal"
+  }
+}

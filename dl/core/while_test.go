@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -14,8 +15,8 @@ func TestLoopBreak(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
 		&While{
-			&Bool{true}, MakeActivity(
-				&Assign{N("i"), &FromNum{&SumOf{V("i"), I(1)}}},
+			B(true), MakeActivity(
+				&Assign{"i", &FromNum{&SumOf{V("i"), I(1)}}},
 				&ChooseAction{
 					If: &CompareNum{V("i"), &GreaterOrEqual{}, I(4)},
 					Do: MakeActivity(
@@ -23,7 +24,7 @@ func TestLoopBreak(t *testing.T) {
 					),
 				},
 				// &Next{},
-				&Assign{N("j"), &FromNum{&SumOf{V("j"), I(1)}}},
+				&Assign{"j", &FromNum{&SumOf{V("j"), I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -36,8 +37,8 @@ func TestLoopNext(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
 		&While{
-			&Bool{true}, MakeActivity(
-				&Assign{N("i"), &FromNum{&SumOf{V("i"), I(1)}}},
+			B(true), MakeActivity(
+				&Assign{"i", &FromNum{&SumOf{V("i"), I(1)}}},
 				&ChooseAction{
 					If: &CompareNum{V("i"), &GreaterOrEqual{}, I(4)},
 					Do: MakeActivity(
@@ -45,7 +46,7 @@ func TestLoopNext(t *testing.T) {
 					),
 				},
 				&Next{},
-				&Assign{N("j"), &FromNum{&SumOf{V("j"), I(1)}}},
+				&Assign{"j", &FromNum{&SumOf{V("j"), I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -59,8 +60,8 @@ func TestLoopInfinite(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
 		&While{
-			&Bool{true}, MakeActivity(
-				&Assign{N("i"), &FromNum{&SumOf{V("i"), I(1)}}},
+			B(true), MakeActivity(
+				&Assign{"i", &FromNum{&SumOf{V("i"), I(1)}}},
 			)},
 	); !errors.Is(e, MaxLoopIterations) {
 		t.Fatal(e)
@@ -101,8 +102,8 @@ func (k *loopRuntime) SetField(target, field string, v g.Value) (err error) {
 	return
 }
 
-func V(i string) *Var        { return &Var{Name: i} }
-func N(n string) Variable    { return Variable{Str: n} }
-func T(s string) rt.TextEval { return &Text{s} }
-func I(n int) rt.NumberEval  { return &Number{float64(n)} }
-func B(b bool) rt.BoolEval   { return &Bool{b} }
+func V(i string) *Var           { return &Var{Name: i} }
+func T(s string) *TextValue     { return &TextValue{value.Text(s)} }
+func I(n int) rt.NumberEval     { return &NumValue{float64(n)} }
+func N(n float64) rt.NumberEval { return &NumValue{n} }
+func B(b bool) rt.BoolEval      { return &BoolValue{b} }

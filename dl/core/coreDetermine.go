@@ -4,29 +4,10 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/pattern"
 
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
-
-// Determine helps run a pattern.
-// It implements every core evaluation,
-// erroring if the value requested doesnt support the error returned.
-type Determine struct {
-	Pattern   pattern.PatternName `if:"pb=__pattern"` // a text eval here would be like a function pointer maybe...
-	Arguments *Arguments          // pattern args kept as a pointer for composer formatting...
-}
-
-func (*Determine) Compose() composer.Spec {
-	return composer.Spec{
-		Spec:  "{pattern%name:pattern_name}{?arguments}",
-		Group: "patterns",
-		Desc:  "Determine: Runs a pattern, and potentially returns a value.",
-		Stub:  true,
-	}
-}
 
 func (op *Determine) Execute(run rt.Runtime) error {
 	_, err := op.determine(run, "")
@@ -72,12 +53,11 @@ func (op *Determine) DetermineValue(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *Determine) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
 	var args []rt.Arg
-	if op.Arguments != nil { // FIX!!!!!!!!
-		for _, a := range op.Arguments.Args {
-			args = append(args, rt.Arg{a.Name, a.From})
-		}
+	// FIX THIS COPY!
+	for _, a := range op.Arguments.Args {
+		args = append(args, rt.Arg{a.Name.Value(), a.From})
 	}
-	name := op.Pattern.String()
+	name := op.Pattern.Value()
 	if v, e := run.Call(name, aff, args); e != nil && !errors.Is(e, rt.NoResult{}) {
 		err = cmdError(op, e)
 	} else {

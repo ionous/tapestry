@@ -1,26 +1,9 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-// ChooseAction runs one block of instructions or another based on the results of a conditional evaluation.
-// If:do:, If:do:else:
-type ChooseAction struct {
-	If   rt.BoolEval `if:"selector,placeholder=choose"`
-	Do   Activity
-	Else Brancher `if:"selector,optional"`
-}
-
-func (*ChooseAction) Compose() composer.Spec {
-	return composer.Spec{
-		Lede:   "if",
-		Fluent: &composer.Fluid{Name: "if", Role: composer.Command},
-		Desc:   "Choose action: an if statement.",
-	}
-}
 
 func (op *ChooseAction) Execute(run rt.Runtime) (err error) {
 	if e := op.ifDoElse(run); e != nil {

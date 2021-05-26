@@ -10,7 +10,7 @@ import (
 func TestCompareNumbers(t *testing.T) {
 	test := func(a float64, op Comparator, b float64, res bool) {
 		var run testutil.PanicRuntime
-		cmp := &CompareNum{&Number{a}, op, &Number{b}}
+		cmp := &CompareNum{A: N(a), Is: op, B: N(b)}
 		if ok, e := safe.GetBool(run, cmp); e != nil {
 			t.Fatal(e)
 		} else if res != ok.Bool() {
@@ -33,7 +33,7 @@ func TestCompareNumbers(t *testing.T) {
 func TestCompareText(t *testing.T) {
 	test := func(a string, op Comparator, b string, res bool) {
 		var run testutil.PanicRuntime
-		cmp := &CompareText{&Text{a}, op, &Text{b}}
+		cmp := &CompareText{A: T(a), Is: op, B: T(b)}
 		if ok, e := safe.GetBool(run, cmp); e != nil {
 			t.Fatal(e)
 		} else if res != ok.Bool() {

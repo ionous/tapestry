@@ -1,33 +1,10 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-// Choose one of two number evaluations based on a boolean test.
-type ChooseNum struct {
-	True  rt.NumberEval
-	If    rt.BoolEval
-	False rt.NumberEval `if:"pb=else"`
-}
-
-// Choose one of two text phrases based on a boolean test.
-type ChooseText struct {
-	True  rt.TextEval
-	If    rt.BoolEval
-	False rt.TextEval `if:"pb=else"`
-}
-
-func (*ChooseNum) Compose() composer.Spec {
-	return composer.Spec{
-		Lede:  "num",
-		Group: "math",
-		Desc:  "Choose Number: Pick one of two numbers based on a boolean test.",
-	}
-}
 
 func (op *ChooseNum) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 	if b, e := safe.GetBool(run, op.If); e != nil {
@@ -46,14 +23,6 @@ func (op *ChooseNum) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 		}
 	}
 	return
-}
-
-func (*ChooseText) Compose() composer.Spec {
-	return composer.Spec{
-		Lede:  "txt",
-		Group: "format",
-		Desc:  "Choose Text: Pick one of two strings based on a boolean test.",
-	}
 }
 
 func (op *ChooseText) GetText(run rt.Runtime) (ret g.Value, err error) {

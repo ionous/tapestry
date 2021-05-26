@@ -3,6 +3,7 @@ package core
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -13,56 +14,56 @@ func TestSequences(t *testing.T) {
 	t.Run("cycle none", func(t *testing.T) {
 		matchSequence(t, []string{
 			"",
-		}, &CycleText{Sequence{t.Name(),
-			nil,
-		}})
+		}, &CycleText{
+			reader.Position{Offset: t.Name()}, nil,
+		})
 	})
 	t.Run("cycle text", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "b", "c", "a", "b", "c", "a",
-		}, &CycleText{Sequence{t.Name(), []rt.TextEval{
-			&Text{"a"},
-			&Text{"b"},
-			&Text{"c"},
-		}}})
+		}, &CycleText{reader.Position{Offset: t.Name()}, []rt.TextEval{
+			T("a"),
+			T("b"),
+			T("c"),
+		}})
 	})
 	t.Run("stopping", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "b", "c", "c", "c", "c", "c",
-		}, &StoppingText{Sequence: Sequence{
-			t.Name(), []rt.TextEval{
-				&Text{"a"},
-				&Text{"b"},
-				&Text{"c"},
-			}}})
+		}, &StoppingText{
+			reader.Position{Offset: t.Name()}, []rt.TextEval{
+				T("a"),
+				T("b"),
+				T("c"),
+			}})
 	})
 	t.Run("once", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "", "", "", "",
-		}, &StoppingText{Sequence: Sequence{
-			t.Name(), []rt.TextEval{
-				&Text{"a"},
-			}}})
+		}, &StoppingText{
+			reader.Position{Offset: t.Name()}, []rt.TextEval{
+				T("a"),
+			}})
 	})
 	t.Run("shuffle one", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "a",
-		}, &ShuffleText{Sequence: Sequence{
-			t.Name(), []rt.TextEval{
-				&Text{"a"},
-			}}})
+		}, &ShuffleText{
+			At: reader.Position{Offset: t.Name()}, Parts: []rt.TextEval{
+				T("a"),
+			}})
 	})
 	t.Run("shuffle", func(t *testing.T) {
 		matchSequence(t, []string{
 			"c", "d", "b", "e", "a", "b", "e",
-		}, &ShuffleText{Sequence: Sequence{
-			t.Name(), []rt.TextEval{
-				&Text{"a"},
-				&Text{"b"},
-				&Text{"c"},
-				&Text{"d"},
-				&Text{"e"},
-			}}})
+		}, &ShuffleText{
+			At: reader.Position{Offset: t.Name()}, Parts: []rt.TextEval{
+				T("a"),
+				T("b"),
+				T("c"),
+				T("d"),
+				T("e"),
+			}})
 	})
 }
 

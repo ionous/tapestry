@@ -1,64 +1,17 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-type CountOf struct {
-	At  reader.Position `if:"internal"` // generated at import time to provide a unique counter for each sequence
-	Num rt.NumberEval   `if:"selector"`
-	Trigger
-}
-
-type TriggerOnce struct{}
-type TriggerCycle struct{}
-type TriggerSwitch struct{}
-
 type Trigger interface{ Trigger() Trigger }
 
 func (op *TriggerOnce) Trigger() Trigger   { return op }
 func (op *TriggerCycle) Trigger() Trigger  { return op }
 func (op *TriggerSwitch) Trigger() Trigger { return op }
-
-func (*TriggerOnce) Compose() composer.Spec {
-	return composer.Spec{
-		Lede:   "at",
-		Fluent: &composer.Fluid{Name: "once", Role: composer.Selector},
-		Group:  "comparison",
-	}
-}
-
-func (*TriggerCycle) Compose() composer.Spec {
-	return composer.Spec{
-		Lede:   "every",
-		Fluent: &composer.Fluid{Name: "cycle", Role: composer.Selector},
-		Group:  "comparison",
-	}
-}
-
-func (*TriggerSwitch) Compose() composer.Spec {
-	return composer.Spec{
-		Lede:   "after",
-		Fluent: &composer.Fluid{Name: "switch", Role: composer.Selector},
-		Group:  "comparison",
-	}
-}
-
-func (*CountOf) Compose() composer.Spec {
-	return composer.Spec{
-		// Lede:   "trigger",
-		Group:  "logic",
-		Fluent: &composer.Fluid{Name: "countOf", Role: composer.Function},
-		Desc: `CountOf: A guard which returns true based on a counter. 
-Counters start at zero and are incremented every time the guard gets checked.`,
-		Stub: true,
-	}
-}
 
 func (op *CountOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if ok, e := op.update(run); e != nil {

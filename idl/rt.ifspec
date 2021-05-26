@@ -1,15 +1,38 @@
 {
-  "slots": {
-    "assignment": "Helper for setting variables.",
-    "bool_eval": "Statements which return true/false values.",
-    "execute": "Run a series of statements.",
-    "num_list_eval": "Statements which return a list of numbers.",
-    "number_eval": "Statements which return a number.",
-    "record_eval": "Statements which return a record.",
-    "record_list_eval": "Statements which return a list of records.",
-    "text_eval": "Statements which return text.",
-    "text_list_eval": "Statements which return a list of text."
+  "assignment": {
+    "uses": "slot",
+    "desc": "Helper for setting variables."
   },
-  "types": {
+  "bool_eval": {
+    "uses": "slot",
+    "desc": "Statements which return true/false values."
+  },
+  "execute": {
+    "uses": "slot",
+    "desc": "Run a series of statements."
+  },
+  "num_list_eval": {
+    "uses": "slot",
+    "desc": "Statements which return a list of numbers."
+  },
+  "number_eval": {
+    "uses": "slot",
+    "desc": "Statements which return a number."
+  },
+  "record_eval": {
+    "uses": "slot",
+    "desc": "Statements which return a record."
+  },
+  "record_list_eval": {
+    "uses": "slot",
+    "desc": "Statements which return a list of records."
+  },
+  "text_eval": {
+    "uses": "slot",
+    "desc": "Statements which return text."
+  },
+  "text_list_eval": {
+    "uses": "slot",
+    "desc": "Statements which return a list of text."
   }
 }

@@ -1,27 +1,9 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-/**
- * put obj:at:txt: #apple #desc #delicious_for_sure
- */
-type PutAtField struct {
-	Into    IntoTargetFields `if:"selector"`
-	From    rt.Assignment    `if:"selector"`
-	AtField string           `if:"pb=at,selector"`
-}
-
-func (*PutAtField) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "put", Role: composer.Command},
-		Group:  "variables",
-		Desc:   "Put into field: put a value into the field of an record or object",
-	}
-}
 
 func (op *PutAtField) Execute(run rt.Runtime) (err error) {
 	if e := op.pack(run); e != nil {
@@ -36,7 +18,7 @@ func (op *PutAtField) pack(run rt.Runtime) (err error) {
 	} else if target, e := GetTargetFields(run, op.Into); e != nil {
 		err = e
 	} else {
-		err = target.SetFieldByName(op.AtField, val)
+		err = target.SetFieldByName(op.AtField.Value(), val)
 	}
 	return
 }

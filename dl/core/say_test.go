@@ -7,9 +7,9 @@ import (
 )
 
 var helloThereWorld = MakeActivity(
-	&Say{&Text{"hello"}},
-	&Say{&Text{"there"}},
-	&Say{&Text{"world"}},
+	&Say{Text: T("hello")},
+	&Say{Text: T("there")},
+	&Say{Text: T("world")},
 )
 
 func ExampleSpan() {
