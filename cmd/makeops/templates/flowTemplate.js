@@ -1,25 +1,14 @@
 // runTemplate.js
 'use strict';
-module.exports =
-`// {{Pascal name}} requires various parameters.
+module.exports =`
+// {{Pascal name}} {{desc.short}}
 type {{Pascal name}} struct {
-  At reader.Position \`if:"internal"\`
 {{#each with.params}}
-  {{Pascal @key}} {{{Lede this}}}{{Pascal type}}{{{Tail this}}}
+  {{NameOf @key this}} {{TypeOf this}} \`if:"
+  {{~#if (IsInternal label)}}internal{{else}}label={{label}}{{/if}}
+  {{~#if optional}},optional{{/if}}"\`
 {{/each}}
 }
 
 {{>spec spec=this}}
 `;
-
-
-// check that the struct implements its slots
-// this doesnt work for stubs....
-/*
-{{#if with.slots}}
-
-{{#each with.slots}}
-var _ {{Pascal this}}= (*{{Pascal ../name}})(nil)
-{{/each}}
-{{/if}}
-*/

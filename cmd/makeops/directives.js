@@ -149,7 +149,7 @@ module.exports = class Make {
   }
 
   newType(name, uses, desc, withspec=null) {
-    const group= this.currGroups.length && this.currGroups;
+    const group= this.currGroups ? this.currGroups.slice(): [];
     return this.types.newType(Object.assign(
       {name:name},
       desc&&{desc:Make.makeDesc(name, desc)},

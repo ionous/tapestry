@@ -5,8 +5,9 @@ module.exports =
 package {{package}}
 
 import (
-  "git.sr.ht/~ionous/iffy/dl/composer"
-  "git.sr.ht/~ionous/iffy/ephemera/reader"
-  "git.sr.ht/~ionous/iffy/rt"
+{{#each imports}}
+  "{{LocationOf this}}"
+{{/each}}
 )
+
 `
