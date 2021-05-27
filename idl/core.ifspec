@@ -65,7 +65,7 @@
   },
   "bool_value": {
     "uses": "flow",
-    "spec": "bool {_%:bool}",
+    "spec": "bool {_%bool}",
     "slots": "bool_eval",
     "desc": "Specify an explicit true or false value.",
     "group": "literals"
@@ -166,7 +166,7 @@
   },
   "count_of": {
     "uses": "flow",
-    "spec": "trigger {-%at:position} {_%:trigger} {num:number_eval}",
+    "spec": "trigger {-%at:position} {_%trigger} {num:number_eval}",
     "slots": "bool_eval",
     "desc": "A guard which returns true based on a counter. Counters start at zero and are incremented every time the guard gets checked.",
     "group": "logic"
@@ -180,7 +180,7 @@
   },
   "determine": {
     "uses": "flow",
-    "spec": "determine {_%pattern:text} {:arguments}",
+    "spec": "determine {_%pattern:pattern_name} {:arguments}",
     "slots": ["execute", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
     "desc": "Runs a pattern, and potentially returns a value.",
     "group": "patterns"
@@ -194,7 +194,7 @@
   },
   "during": {
     "uses": "flow",
-    "spec": "during {_%pattern:text}",
+    "spec": "during {_%pattern:pattern_name}",
     "slots": ["bool_eval", "number_eval"],
     "desc": "Decide whether a pattern is running.",
     "group": "patterns"
@@ -458,7 +458,7 @@
   },
   "matches": {
     "uses": "flow",
-    "spec": "matches {_%text:text_eval} {to%pattern:text} {-%cache:match_cache}",
+    "spec": "matches {_%text:text_eval} {to%pattern:pattern_name} {-%cache:match_cache}",
     "slots": "bool_eval",
     "desc": "Determine whether the specified text is similar to the specified regular expression.",
     "group": "matching"
@@ -654,7 +654,7 @@
   },
   "text_value": {
     "uses": "flow",
-    "spec": "txt {_%:text}",
+    "spec": "txt {_%text}",
     "slots": "text_eval",
     "desc": "Specify a small bit of text.",
     "group": "literals"
@@ -683,9 +683,6 @@
     "slots": ["assignment", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
     "desc": "Return the value of the named variable.",
     "group": "variables"
-  },
-  "variable_name": {
-    "uses": "str"
   },
   "while": {
     "uses": "flow",

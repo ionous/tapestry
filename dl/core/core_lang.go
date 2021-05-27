@@ -328,8 +328,8 @@ func (*CycleText) Compose() composer.Spec {
 
 // Determine Runs a pattern, and potentially returns a value.
 type Determine struct {
-	Pattern   value.Text `if:"label=_"`
-	Arguments Arguments  `if:"label=arguments"`
+	Pattern   string    `if:"label=_"`
+	Arguments Arguments `if:"label=arguments"`
 }
 
 func (*Determine) Compose() composer.Spec {
@@ -353,7 +353,7 @@ func (*DiffOf) Compose() composer.Spec {
 
 // During Decide whether a pattern is running.
 type During struct {
-	Pattern value.Text `if:"label=_"`
+	Pattern string `if:"label=_"`
 }
 
 func (*During) Compose() composer.Spec {
@@ -802,7 +802,7 @@ func (*MakeUppercase) Compose() composer.Spec {
 // Matches Determine whether the specified text is similar to the specified regular expression.
 type Matches struct {
 	Text    rt.TextEval `if:"label=_"`
-	Pattern value.Text  `if:"label=to"`
+	Pattern string      `if:"label=to"`
 	Cache   MatchCache  `if:"internal"`
 }
 

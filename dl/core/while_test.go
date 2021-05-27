@@ -102,7 +102,7 @@ func (k *loopRuntime) SetField(target, field string, v g.Value) (err error) {
 	return
 }
 
-func V(i string) *Var           { return &Var{Name: i} }
+func V(i string) *Var           { return &Var{i} }
 func T(s string) *TextValue     { return &TextValue{value.Text(s)} }
 func I(n int) rt.NumberEval     { return &NumValue{float64(n)} }
 func N(n float64) rt.NumberEval { return &NumValue{n} }

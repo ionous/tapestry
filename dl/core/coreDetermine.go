@@ -57,7 +57,7 @@ func (op *Determine) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value
 	for _, a := range op.Arguments.Args {
 		args = append(args, rt.Arg{a.Name.Value(), a.From})
 	}
-	name := op.Pattern.Value()
+	name := op.Pattern
 	if v, e := run.Call(name, aff, args); e != nil && !errors.Is(e, rt.NoResult{}) {
 		err = cmdError(op, e)
 	} else {

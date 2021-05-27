@@ -12,6 +12,11 @@ See also: lines.`);
 Paragraphs are a prime example. Generally lines are some piece of the story that will be displayed to the player.
 See also: text.`);
 
+    // not happy about these being here....
+    // but they are needed by core and story/modle
+    make.str("variable_name");
+    make.str("pattern_name");
+
   //     "lines": {
   //   "uses": "flow",
   //   "spec": "here {_%lines:text}",
@@ -21,7 +26,7 @@ See also: text.`);
 
   });
 
-  make.group("Model", function() {
+  make.group("Story Model", function() {
 
     make.group("Statements", function() {
       make.flow("story", "{*paragraph}");
@@ -131,7 +136,6 @@ See also: text.`);
         `Pattern variables: Storage for values used during the execution of a pattern.`);
 
       make.str("pattern_type", "{patterns}, {actions}, {events}, or {another pattern type%pattern_type}");
-      make.str("pattern_name");
 
       // fix: pattern return should be part of the declaration
       make.flow("pattern_actions", "story_statement",
@@ -258,7 +262,6 @@ For example: animals, containers, etc.`);
       make.str("are_being", "{are} or {is}");
       make.str("are_an", "{are}, {are a%area}, {are an%arean}, {is}, {is a%isa}, {is an%isan}");
       make.flow("variable_decl", "{an:determiner} {name:variable_name} ( {type:variable_type}  {comment?lines} )");
-      // make.str("variable_name"); // also declared in core.
 
       make.swap("variable_type", "a {simple value%primitive:primitive_type}, an {object:object_type}, or {other value%ext:ext_type}");
       make.flow("object_type", "{an:ana} {kind of%kind:singular_kind}");

@@ -63,6 +63,10 @@ Handlebars.registerHelper('NameOf', function(key, param) {
   return pascal(key) || pascal(param.type);
 });
 
+Handlebars.registerHelper('LabelOf', function(l) {
+  return l.replace(" ", "_");
+});
+
 Handlebars.registerHelper('TypeOf', function(param) {
   const name= param.type;
   const type = allTypes[name]; // the referenced type
@@ -126,6 +130,7 @@ Handlebars.registerHelper('DescOf', function (x) {
   let ret='';
   if (x.desc) {
     const desc= x.desc;
+
     if (typeof desc == 'string') {
       ret= desc;
     } else if (desc) {
@@ -162,6 +167,10 @@ templates['txt']= templates['str']; // FIX: txt shouldnt even exist i think
 // split types into different categories
 for (const typeName in allTypes) {
   const type= allTypes[typeName];
+  // fix: maybe carry through the lines the whole way?
+  if (Array.isArray(type.desc)) {
+    type.desc= type.desc.join("  ");
+    }
   //
   let group= type.group;
   if (!group)  {
