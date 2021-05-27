@@ -1,18 +1,18 @@
 {
-  "slots": {
+  "do_nothing": {
+    "uses": "flow",
+    "spec": "do_nothing {why%reason?text}",
+    "slots": "execute",
+    "desc": "Statement which does nothing."
   },
-  "types": {
-    "do_nothing": {
-      "flow": "do_nothing {why%reason?text}",
-      "slots": "execute",
-      "desc": "Statement which does nothing.",
-      "group": "flow"
-    },
-    "log": {
-      "flow": "log {%level:int_32} {value:assignment}",
-      "slots": "execute",
-      "desc": "Debug log",
-      "group": "debug"
-    }
+  "log": {
+    "uses": "flow",
+    "spec": "log {_%value:assignment} {as%level?logging_level}",
+    "slots": "execute",
+    "desc": "Debug log"
+  },
+  "logging_level": {
+    "uses": "str",
+    "spec": "{note} {to_do} {fix} {info} {warning} {error}"
   }
 }

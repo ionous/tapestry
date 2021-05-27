@@ -87,7 +87,7 @@ Handlebars.registerHelper('TypeOf', function(param) {
   let qualifier = "";
   if (param.repeats) {
     qualifier+= "[]";
-  } else if (param.optional && type.uses !== "slot") {
+  } else if (param.optional && type.uses !== "slot" && type.uses !== "str") {
     // re: slot, for go we dont need *interface{}
     qualifier+= "*";
   }
