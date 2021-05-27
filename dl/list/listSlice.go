@@ -2,35 +2,10 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-type Slice struct {
-	List       rt.Assignment
-	Start, End rt.NumberEval `if:"optional"` // from start to end (end not included)
-}
-
-// Start is optional, if omitted slice starts at the first element.
-// If start is greater the length, an empty array is returned.
-
-// Slice doesnt include the ending index.
-// Negatives indices indicates an offset from the end.
-
-// When end is omitted, copy up to and including the last element;
-// and do the same if the end is greater than the length
-
-func (*Slice) Compose() composer.Spec {
-	return composer.Spec{
-		Lede:  "slice",
-		Name:  "list_slice",
-		Group: "list",
-		Spec:  "slice {list:assignment} {from entry%start?number_eval} {ending before entry%end?number_eval}",
-		Desc:  "Slice of List: Create a new list from a section of another list.",
-	}
-}
 
 func (op *Slice) GetNumList(run rt.Runtime) (ret g.Value, err error) {
 	if v, _, e := op.sliceList(run, affine.NumList); e != nil {

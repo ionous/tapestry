@@ -4,32 +4,12 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
-
-type Each struct {
-	List rt.Assignment `if:"pb=across,selector=across"`
-	As   ListIterator  `if:"selector"`
-	Do   core.Activity
-	Else core.Brancher `if:"selector,optional"`
-}
-
-func (op *Each) Compose() composer.Spec {
-	return composer.Spec{
-		// fix: once the fluent interface is decided, rename the command, and remove the name.
-		// alt: the compact format could use the fluent names and then the actual command name doesnt matter much
-		Name:   "list_each",
-		Group:  "list",
-		Fluent: &composer.Fluid{Name: "repeating", Role: composer.Command},
-		Desc:   `Repeating over list: Loops over the elements in the passed list, or runs the 'else' activity if empty.`,
-		Locals: []string{"index", "first", "last"},
-	}
-}
 
 func (op *Each) Execute(run rt.Runtime) (err error) {
 	if e := op.forEach(run); e != nil {

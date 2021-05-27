@@ -2,33 +2,11 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
-
-// Range generates a series of integers r[i] = (start + step*i) where i>=0
-// Start and step default to 1, stop defaults to start;
-// the inputs are truncated to produce whole numbers;
-// a zero step returns an error.
-//
-// A positive step ends the series when the returned value would exceed stop.
-// while a negative step ends before generating a value less than stop.
-type Range struct {
-	To     rt.NumberEval `if:"selector"`
-	From   rt.NumberEval `if:"optional"`
-	ByStep rt.NumberEval `if:"optional"`
-}
-
-func (*Range) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Role: composer.Function},
-		Group:  "flow",
-		Desc:   "Range of numbers: Generates a series of numbers.",
-	}
-}
 
 func (op *Range) GetNumList(run rt.Runtime) (ret g.Value, err error) {
 	if vs, e := op.getNumList(run); e != nil {

@@ -2,26 +2,11 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
-
-type Find struct {
-	Value rt.Assignment `if:"selector"`
-	List  rt.Assignment `if:"selector=in"`
-}
-
-func (*Find) Compose() composer.Spec {
-	return composer.Spec{
-		Name:   "list_find",
-		Group:  "list",
-		Fluent: &composer.Fluid{Name: "find", Role: composer.Command},
-		Desc:   "Find in list: search a list for a specific value.",
-	}
-}
 
 func (op *Find) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if i, e := op.findIndex(run); e != nil {

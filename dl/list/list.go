@@ -7,65 +7,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-//go:generate capnp compile -I ../../../../../zombiezen.com/go/capnproto2/std -ogo:.. --src-prefix=../../idl ../../idl/core/core.capnp
-var Slots = []composer.Slot{{
-	Name: "list_target",
-	Type: (*ListTarget)(nil),
-	Desc: "List target: Helper for accessing lists.",
-}, {
-	Name: "list_source",
-	Type: (*ListSource)(nil),
-	Desc: "List source: Helper for accessing lists.",
-}, {
-	Name: "list_iterator",
-	Type: (*ListIterator)(nil),
-	Desc: "List iterator: Helper for accessing lists.",
-}}
-
-var Slats = []composer.Composer{
-	(*At)(nil),
-	(*Len)(nil),
-	(*Map)(nil),
-	(*Reduce)(nil),
-	(*ReverseList)(nil),
-	(*Set)(nil),
-	(*Slice)(nil),
-	(*Splice)(nil),
-	(*Find)(nil),
-	// flags:
-	(*Case)(nil),
-	(*Edge)(nil),
-	(*Order)(nil),
-	// each:
-	(*Each)(nil),
-	(*AsNum)(nil),
-	(*AsTxt)(nil),
-	(*AsRec)(nil),
-	// erase:
-	(*Erasing)(nil),
-	(*ErasingEdge)(nil),
-	(*EraseEdge)(nil),
-	(*EraseIndex)(nil),
-	(*FromNumList)(nil),
-	(*FromRecList)(nil),
-	(*FromTxtList)(nil),
-	// gather:
-	(*Gather)(nil),
-	// put:
-	(*PutEdge)(nil),
-	(*PutIndex)(nil),
-	(*IntoNumList)(nil),
-	(*IntoRecList)(nil),
-	(*IntoTxtList)(nil),
-	// range:
-	(*Range)(nil),
-	// sort:
-	(*SortNumbers)(nil),
-	(*SortText)(nil),
-	(*SortRecords)(nil),
-	(*SortByField)(nil),
-}
-
 func cmdError(op composer.Composer, err error) error {
 	return errutil.Append(err, &composer.CommandError{Cmd: op})
 }

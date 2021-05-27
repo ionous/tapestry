@@ -2,34 +2,10 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-type Splice struct {
-	Var           core.Variable `if:"selector"`
-	Start, Remove rt.NumberEval // from start
-	Insert        rt.Assignment
-}
-
-func (*Splice) Compose() composer.Spec {
-	return composer.Spec{
-		Lede:  "splice",
-		Name:  "list_splice",
-		Group: "list",
-		Spec:  "Splice {list:text} {at entry%start?number_eval} {removing%remove?number_eval} {inserting%insert?assignment}",
-		Desc: `Splice into list: Modify a list by adding and removing elements.
-Note: the type of the elements being added must match the type of the list. 
-Text cant be added to a list of numbers, numbers cant be added to a list of text.
-If the starting index is negative, it will begin that many elements from the end of the array.
-If list's length + the start is less than 0, it will begin from index 0.
-If the remove count is missing, it removes all elements from the start to the end; 
-if it is 0 or negative, no elements are removed.`,
-	}
-}
 
 func (op *Splice) Execute(run rt.Runtime) (err error) {
 	if _, _, e := op.spliceList(run, ""); e != nil {
@@ -72,7 +48,7 @@ func (op *Splice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *Splice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
-	if els, e := safe.List(run, op.Var.String()); e != nil {
+	if els, e := safe.List(run, op.Var); e != nil {
 		err = e
 	} else if e := safe.Check(els, aff); e != nil {
 		err = e

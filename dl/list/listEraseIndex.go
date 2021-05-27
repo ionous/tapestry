@@ -1,43 +1,28 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-/**
- * erase: numEval
- * from: varName,
- * atIndex: num,
- */
-type EraseIndex struct {
-	Count   rt.NumberEval `if:"selector"`
-	From    ListSource    `if:"selector"`
-	AtIndex rt.NumberEval
-}
-
-func (*EraseIndex) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "erase", Role: composer.Command},
-		Desc:   "Erase at index: remove one or more values from a list",
-	}
-}
-
 func (op *EraseIndex) Execute(run rt.Runtime) (err error) {
-	if _, e := op.pop(run); e != nil {
+	if _, e := eraseIndex(run, op.Count, op.From, op.AtIndex); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *EraseIndex) pop(run rt.Runtime) (ret g.Value, err error) {
-	if rub, e := safe.GetOptionalNumber(run, op.Count, 0); e != nil {
+func eraseIndex(run rt.Runtime,
+	count rt.NumberEval,
+	from ListSource,
+	atIndex rt.NumberEval,
+) (ret g.Value, err error) {
+	if rub, e := safe.GetOptionalNumber(run, count, 0); e != nil {
 		err = e
-	} else if els, e := GetListSource(run, op.From); e != nil {
+	} else if els, e := GetListSource(run, from); e != nil {
 		err = e
-	} else if startOne, e := safe.GetNumber(run, op.AtIndex); e != nil {
+	} else if startOne, e := safe.GetNumber(run, atIndex); e != nil {
 		err = e
 	} else {
 		start, listLen := startOne.Int(), els.Len()

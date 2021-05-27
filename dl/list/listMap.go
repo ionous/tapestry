@@ -2,29 +2,11 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/pattern"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
-
-type Map struct {
-	ToList       string
-	FromList     rt.Assignment
-	UsingPattern pattern.PatternName `if:"pb=using__pattern"`
-}
-
-func (*Map) Compose() composer.Spec {
-	return composer.Spec{
-		Lede:  "map",
-		Name:  "list_map",
-		Group: "list",
-		Desc: `Map list: Transform the values from one list and place the results in another list.
-		The designated pattern is called with each value from the "from list", one value at a time.`,
-	}
-}
 
 func (op *Map) Execute(run rt.Runtime) (err error) {
 	if e := op.remap(run); e != nil {
@@ -36,10 +18,10 @@ func (op *Map) Execute(run rt.Runtime) (err error) {
 func (op *Map) remap(run rt.Runtime) (err error) {
 	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
 		err = errutil.New("from_list:", op.FromList, e)
-	} else if toList, e := safe.List(run, op.ToList); e != nil {
-		err = errutil.New("to_list:", op.ToList, e)
+	} else if toList, e := safe.List(run, op.ToList.Value()); e != nil {
+		err = errutil.New("to_list:", op.ToList.Value(), e)
 	} else {
-		pat := op.UsingPattern.String()
+		pat := op.UsingPattern
 		aff := affine.Element(toList.Affinity())
 		//
 		for it := g.ListIt(fromList); it.HasNext(); {

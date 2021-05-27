@@ -37,8 +37,8 @@ func TestSort(t *testing.T) {
 	}
 	// sorts in place
 	sorter := &list.SortText{
-		Var:     core.Variable{Str: "objects"},
-		ByField: &list.SortByField{Name: "key"},
+		Var:     "objects",
+		ByField: "key",
 	}
 	if e := safe.Run(&lt, sorter); e != nil {
 		t.Fatal(e)
@@ -47,7 +47,7 @@ func TestSort(t *testing.T) {
 		t.Fatal(objectNames)
 	}
 	//
-	sorter.Case = true
+	sorter.UsingCase = &core.BoolValue{true}
 	if e := safe.Run(&lt, sorter); e != nil {
 		t.Fatal(e)
 	}
@@ -55,7 +55,7 @@ func TestSort(t *testing.T) {
 		t.Fatal(objectNames)
 	}
 	//
-	sorter.Order = true
+	sorter.Descending = &core.BoolValue{true}
 	if e := safe.Run(&lt, sorter); e != nil {
 		t.Fatal(e)
 	}

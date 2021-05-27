@@ -52,9 +52,9 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 	var visits []accum
 	each := &list.Each{
 		List: V("source"),
-		As:   &list.AsTxt{N("text")},
+		As:   &list.AsTxt{"text"},
 		Do:   core.MakeActivity(&visitEach{&visits}),
-		Else: &list.ElseIfEmpty{
+		Else: &core.ChooseNothingElse{
 			Do: core.MakeActivity(&Write{&out, T("x")}),
 		},
 	}

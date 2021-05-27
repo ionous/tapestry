@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testpat"
@@ -33,17 +34,20 @@ func newListTime(src []string, p testpat.Map) (ret rt.Runtime, vals *g.Record, e
 	return
 }
 
-func B(i bool) rt.BoolEval     { return &core.Bool{i} }
-func I(i int) rt.NumberEval    { return &core.Number{float64(i)} }
-func T(i string) rt.TextEval   { return &core.Text{i} }
-func V(i string) *core.Var     { return &core.Var{Name: i} }
-func N(n string) core.Variable { return core.Variable{Str: n} }
+func B(i bool) rt.BoolEval   { return &core.BoolValue{i} }
+func I(i int) rt.NumberEval  { return &core.NumValue{float64(i)} }
+func T(i string) rt.TextEval { return &core.TextValue{value.Text(i)} }
+func V(i string) *core.Var   { return &core.Var{Name: i} }
 
-func FromTs(vs []string) (ret rt.Assignment) {
+func FromTs(strs []string) (ret rt.Assignment) {
+	vs := make([]value.Text, len(strs))
+	for i, str := range strs {
+		vs[i] = value.Text(str)
+	}
 	if len(vs) == 1 {
-		ret = &core.FromText{&core.Text{vs[0]}}
+		ret = &core.FromText{&core.TextValue{vs[0]}}
 	} else {
-		ret = &core.FromTexts{&core.Texts{vs}}
+		ret = &core.FromTexts{&core.TextList{vs}}
 	}
 	return
 }

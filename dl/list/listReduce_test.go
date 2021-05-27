@@ -82,10 +82,10 @@ var reduceRecords = testpat.Pattern{
 	Labels: []string{"in", "out"},
 	Rules: []rt.Rule{{
 		Execute: &core.Assign{
-			Var: N("out"),
+			Var: "out",
 			From: &core.FromText{&core.Join{Sep: T(", "), Parts: []rt.TextEval{
 				V("out"),
-				&core.GetAtField{Field: "name", From: &core.FromVar{N("in")}},
+				&core.GetAtField{Field: "name", From: &core.FromVar{"in"}},
 			}}},
 		},
 	},
