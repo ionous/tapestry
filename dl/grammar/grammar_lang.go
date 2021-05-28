@@ -5,7 +5,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 )
 
-// Action
+// Action makes a parser scanner producing a script defined action.
 type Action struct {
 	Action string `if:"label=_"`
 }
@@ -17,7 +17,7 @@ func (*Action) Compose() composer.Spec {
 	}
 }
 
-// Alias
+// Alias allows the user to refer to a noun by one or more other terms.
 type Alias struct {
 	Names  []string `if:"label=_"`
 	AsNoun string   `if:"label=as_noun"`
@@ -29,7 +29,7 @@ func (*Alias) Compose() composer.Spec {
 	}
 }
 
-// AllOf
+// AllOf makes a parser scanner
 type AllOf struct {
 	Series []ScannerMaker `if:"label=_"`
 }
@@ -40,7 +40,7 @@ func (*AllOf) Compose() composer.Spec {
 	}
 }
 
-// AnyOf
+// AnyOf makes a parser scanner
 type AnyOf struct {
 	Options []ScannerMaker `if:"label=_"`
 }
@@ -51,7 +51,7 @@ func (*AnyOf) Compose() composer.Spec {
 	}
 }
 
-// Directive
+// Directive starts a parser scanner
 type Directive struct {
 	Lede  []string       `if:"label=_"`
 	Scans []ScannerMaker `if:"label=scans"`
@@ -75,7 +75,7 @@ func (*GrammarDecl) Compose() composer.Spec {
 	}
 }
 
-// Noun
+// Noun makes a parser scanner
 type Noun struct {
 	Kind string `if:"label=_"`
 }
@@ -86,7 +86,7 @@ func (*Noun) Compose() composer.Spec {
 	}
 }
 
-// Retarget
+// Retarget makes a parser scanner
 type Retarget struct {
 	Span []ScannerMaker `if:"label=_"`
 }
@@ -97,7 +97,7 @@ func (*Retarget) Compose() composer.Spec {
 	}
 }
 
-// Reverse
+// Reverse makes a parser scanner
 type Reverse struct {
 	Reverses []ScannerMaker `if:"label=_"`
 }
@@ -108,7 +108,7 @@ func (*Reverse) Compose() composer.Spec {
 	}
 }
 
-// Self
+// Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
 type Self struct {
 	Player string `if:"label=_"`
 }
@@ -119,7 +119,7 @@ func (*Self) Compose() composer.Spec {
 	}
 }
 
-// Words
+// Words makes a parser scanner
 type Words struct {
 	Words []string `if:"label=_"`
 }
