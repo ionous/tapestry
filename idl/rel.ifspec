@@ -1,40 +1,32 @@
 {
-  "slots": {
+  "reciprocal_of": {
+    "uses": "flow",
+    "spec": "reciprocal {_%via:relation_name} {object:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.)"
   },
-  "types": {
-    "reciprocal_of": {
-      "flow": "reciprocal {%via:text} {object:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.)",
-      "group": "relations"
-    },
-    "reciprocals_of": {
-      "flow": "reciprocals {%via:text} {object:text_eval}",
-      "slots": "text_list_eval",
-      "desc": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)",
-      "group": "relations"
-    },
-    "relate": {
-      "flow": "relate {%object:text_eval} {to%to_object:text_eval} {via:text}",
-      "slots": "execute",
-      "desc": "Relate two nouns.",
-      "group": "relations"
-    },
-    "relation": {
-      "flow": "relation_name {rel%str:relation}",
-      "group": "misc"
-    },
-    "relative_of": {
-      "flow": "relative {%via:text} {object:text_eval}",
-      "slots": "text_eval",
-      "desc": "Returns the relative of a noun (ex. the target of a one-to-one relation.)",
-      "group": "relations"
-    },
-    "relatives_of": {
-      "flow": "relatives {%via:text} {object:text_eval}",
-      "slots": "text_list_eval",
-      "desc": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
-      "group": "relations"
-    }
+  "reciprocals_of": {
+    "uses": "flow",
+    "spec": "reciprocals {_%via:relation_name} {object:text_eval}",
+    "slots": "text_list_eval",
+    "desc": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)"
+  },
+  "relate": {
+    "uses": "flow",
+    "spec": "relate {_%object:text_eval} {to%to_object:text_eval} {via:relation_name}",
+    "slots": "execute",
+    "desc": "Relate two nouns."
+  },
+  "relative_of": {
+    "uses": "flow",
+    "spec": "relative {_%via:relation_name} {object:text_eval}",
+    "slots": "text_eval",
+    "desc": "Returns the relative of a noun (ex. the target of a one-to-one relation.)"
+  },
+  "relatives_of": {
+    "uses": "flow",
+    "spec": "relatives {_%via:relation_name} {object:text_eval}",
+    "slots": "text_list_eval",
+    "desc": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation)."
   }
 }
