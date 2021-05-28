@@ -1,109 +1,11 @@
 package grammar
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/parser"
 )
 
 // ScannerMaker - creates parser scanners
 type ScannerMaker interface{ MakeScanner() parser.Scanner }
-
-// Action makes a parser scanner producing a script defined action.
-type Action struct {
-	Action string `if:"selector"`
-}
-
-// AllOf makes a parser scanner
-type AllOf struct {
-	Series []ScannerMaker `if:"selector"`
-}
-
-// AnyOf makes a parser scanner
-type AnyOf struct {
-	Options []ScannerMaker `if:"selector"`
-}
-
-// Noun makes a parser scanner
-type Noun struct {
-	Kind string `if:"selector"`
-}
-
-// Retarget makes a parser scanner
-type Retarget struct {
-	Span []ScannerMaker `if:"selector"`
-}
-
-// Reverse makes a parser scanner
-type Reverse struct {
-	Reverses []ScannerMaker `if:"selector"`
-}
-
-// Self makes a parser scanner which matches the player.
-// ( the player string is just to make the fluent display in the composer happy. )
-type Self struct {
-	Player string `if:"selector"`
-}
-
-// Words makes a parser scanner
-type Words struct {
-	Words []string `if:"selector"`
-}
-
-func (*Action) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "as", Role: composer.Function},
-		Group:  "grammar",
-	}
-}
-
-func (*AllOf) Compose() composer.Spec {
-	return composer.Spec{
-		Group:  "grammar",
-		Fluent: &composer.Fluid{Role: composer.Function},
-	}
-}
-
-func (*AnyOf) Compose() composer.Spec {
-	return composer.Spec{
-		Group:  "grammar",
-		Fluent: &composer.Fluid{Role: composer.Function},
-	}
-}
-
-func (*Noun) Compose() composer.Spec {
-	return composer.Spec{
-		Group:  "grammar",
-		Fluent: &composer.Fluid{Role: composer.Function},
-	}
-}
-
-func (*Retarget) Compose() composer.Spec {
-	return composer.Spec{
-		Group:  "grammar",
-		Fluent: &composer.Fluid{Role: composer.Function},
-	}
-}
-
-func (*Reverse) Compose() composer.Spec {
-	return composer.Spec{
-		Group:  "grammar",
-		Fluent: &composer.Fluid{Role: composer.Function},
-	}
-}
-
-func (*Self) Compose() composer.Spec {
-	return composer.Spec{
-		Group:  "grammar",
-		Fluent: &composer.Fluid{Role: composer.Function},
-	}
-}
-
-func (*Words) Compose() composer.Spec {
-	return composer.Spec{
-		Group:  "grammar",
-		Fluent: &composer.Fluid{Role: composer.Function},
-	}
-}
 
 func (op *Action) MakeScanner() parser.Scanner {
 	return &parser.Action{op.Action}
