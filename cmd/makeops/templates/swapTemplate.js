@@ -11,7 +11,7 @@ type {{Pascal name}} struct {
 func (*{{Pascal name}}) Choices() map[string]interface{} {
   return map[string]interface{} {
 {{#each with.params}}
-    "{{Lower @key}}": (*{{Pascal type}})(nil),
+    "{{Lower @key}}": (*{{TypeOf this}})(nil),
 {{/each}}
   }
 }

@@ -179,6 +179,10 @@ for (const typeName in allTypes) {
       console.log("no group", JSON.stringify(type, 0, 2));
     }
   } else {
+    // fix. i dont know.
+    if (type.uses === "txt") {
+      type.uses= "str";
+    }
     // ex. ["story statements"]=> "story"
     group = group[0].split(" ")[0];
     nameToGroup[typeName] = group;
@@ -197,15 +201,14 @@ for (const typeName in allTypes) {
       // just to have a string instead of a wrapper type requiring string access.
       if (type.uses === "str") {
         const { with: { tokens = [] } = {} } = type; // safely extract tokens
-        if (tokens.length == 1) {
+        const token = tokenize(typeName);
+        const closedChoices = tokens.indexOf(token) < 0;
+        if (!closedChoices && (tokens.length === 1)) {
           type.override = "string";
-        } else {
-          const token = tokenize(typeName);
-          const closedChoices = tokens.indexOf(token) < 0;
-          // console.log(name, token, tokens);
-          if (closedChoices && Object.keys(type.with.params).length === 2) {
-            type.override = "bool";
-          }
+        }
+        // console.log(name, token, tokens);
+        if (closedChoices && Object.keys(type.with.params).length === 2) {
+          type.override = "bool";
         }
       } else if (type.uses === "num") {
         const { with: { tokens = [] } = {} } = type; // safely extract tokens
@@ -219,7 +222,8 @@ for (const typeName in allTypes) {
   }
 }
 console.log("num groups", Object.keys(groups).length);
-// write by group
+
+// determine includes:
 for (currentGroup in groups) {
   const g = groups[currentGroup];
   // look up all the dependencies
@@ -228,10 +232,10 @@ for (currentGroup in groups) {
   for (const n of g.slats) {
     count++;
     const type = allTypes[n];
-    const ps = type && type.with && type.with.params;
-    if (ps && !type.override) {
-      for (const p in ps) {
-        const param = ps[p];
+    if (!type.override) {
+      const { with: { params = {} } = {} } = type; //safely extract params
+      for (const p in params) {
+        const param = params[p];
         const pt = allTypes[param.type];
         if (pt && !pt.override) {
           const o = nameToGroup[param.type];

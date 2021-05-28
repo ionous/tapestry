@@ -16,6 +16,7 @@ See also: text.`);
     // but they are needed by core and story/modle
     make.str("variable_name");
     make.str("pattern_name");
+
     make.str("relation_name");
 
   //     "lines": {
@@ -111,6 +112,7 @@ See also: text.`);
       make.flow("paired_action", "two {kinds:plural_kinds} ( the noun and other noun )");
 
       make.str("action_name");
+      make.str("abstract_action", "{nothing}");
 
       make.flow("event_block", "story_statement", "For {the target%target:event_target} {handlers+event_handler}",
         `Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen.`);

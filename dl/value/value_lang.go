@@ -5,19 +5,6 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 )
 
-// Lines requires a user-specified string.
-type Lines string
-
-func (*Lines) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
-func (*Lines) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "lines",
-	}
-}
-
 // Text requires a user-specified string.
 type Text string
 
