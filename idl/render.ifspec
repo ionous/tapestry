@@ -1,32 +1,93 @@
 {
-  "slots": {
-  },
-  "types": {
-    "render_field": {
-      "flow": "render_field {%name:text_eval}",
-      "slots": "from_source_fields",
-      "group": "internal"
+    "render_field":
+    {
+        "uses": "flow",
+        "spec": "render_field {_%name:text_eval}",
+        "slots": "from_source_fields",
+        "group": "internal",
+        "desc":
+        [
+            "in template phrases, picks between record variables, object variables, and named global objects.",
+            "ex. could be \"ringBearer\", \"SamWise\", or \"frodo\""
+        ]
     },
-    "render_name": {
-      "flow": "render_name {%name:text}",
-      "slots": "text_eval",
-      "group": "internal"
+    "render_name":
+    {
+        "uses": "flow",
+        "spec": "render_name {_%name:string}",
+        "slots": "text_eval",
+        "group": "internal",
+        "desc":
+        [
+            "handles changing a template like {.boombip} into text.",
+            "if the name is a variable containing an object name: return the printed object name ( via \"print name\" )",
+            "if the name is a variable with some other text: return that text.",
+            "if the name isn't a variable but refers to some object: return that object's printed object name.",
+            "otherwise, its an error."
+        ]
     },
-    "render_pattern": {
-      "flow": "render {%pattern:text} {:arguments}",
-      "slots": ["assignment", "execute", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
-      "group": "internal"
+    "render_pattern":
+    {
+        "uses": "flow",
+        "spec": "render {_%pattern:pattern_name} {:arguments}",
+        "slots":
+        [
+            "assignment",
+            "execute",
+            "bool_eval",
+            "number_eval",
+            "text_eval",
+            "record_eval",
+            "num_list_eval",
+            "text_list_eval",
+            "record_list_eval"
+        ],
+        "group": "internal",
+        "desc":
+        [
+            "printing is generally an activity b/c say is an activity",
+            "and we want the ability to say several things in series."
+        ]
     },
-    "render_ref": {
-      "flow": "render_ref {%name:variable} {flags:int_32}",
-      "slots": ["assignment", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
-      "group": "internal"
+    "render_flags":
+    {
+        "uses": "swap",
+        "spec": "{render_as_var}, {render_as_obj}, or {render_as_any}"
     },
-    "render_template": {
-      "flow": "render_template {%expression:text_eval}",
-      "slots": "text_eval",
-      "desc": "Parse text using iffy templates. See: https://github.com/ionous/iffy/wiki/Templates",
-      "group": "format"
+    "render_as_var": { "uses": "flow", "spec":"as_var" },
+    "render_as_obj": { "uses": "flow", "spec":"as_obj" },
+    "render_as_any": { "uses": "flow", "spec":"as_any" },
+    "render_ref":
+    {
+        "uses": "flow",
+        "spec": "render_ref {_%name:variable_name} {flags:render_flags}",
+        "slots":
+        [
+            "assignment",
+            "bool_eval",
+            "number_eval",
+            "text_eval",
+            "record_eval",
+            "num_list_eval",
+            "text_list_eval",
+            "record_list_eval"
+        ],
+        "group": "internal",
+        "desc": "returns the value of a variable or the id of an object."
+    },
+    "render_template":
+    {
+        "uses": "flow",
+        "spec": "render_template {_%expression:text_eval}",
+        "slots": "text_eval",
+        "desc": "Parse text using iffy templates. See: https://github.com/ionous/iffy/wiki/Templates",
+        "group": "format"
+    },
+    "try_as_noun":
+    {
+        "uses": "num",
+        "### spec": "{as variable:1} {as object:2} {as both:3}",
+        "desc": "internal or-able flags",
+        "group": "internal"
     }
-  }
 }

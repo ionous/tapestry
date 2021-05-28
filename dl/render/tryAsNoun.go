@@ -22,3 +22,15 @@ func (flags TryAsNoun) tryVariable() bool {
 func (flags TryAsNoun) tryObject() bool {
 	return flags&TryAsObject != 0
 }
+
+func (op *RenderFlags) ToFlags() (ret TryAsNoun) {
+	switch op.Opt.(type) {
+	case *RenderAsVar:
+		ret = TryAsVariable
+	case *RenderAsObj:
+		ret = TryAsObject
+	case *RenderAsAny:
+		ret = TryAsBoth
+	}
+	return
+}

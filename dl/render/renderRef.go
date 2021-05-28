@@ -2,26 +2,11 @@ package render
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
-
-// RenderRef returns the value of a variable or the id of an object.
-type RenderRef struct {
-	core.Var
-	Flags TryAsNoun
-}
-
-// Compose implements composer.Composer
-func (*RenderRef) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "internal",
-	}
-}
 
 func (op *RenderRef) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	if v, e := op.getAssignedValue(run); e != nil {
@@ -58,11 +43,12 @@ func (op *RenderRef) getText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *RenderRef) getAssignedValue(run rt.Runtime) (ret g.Value, err error) {
-	if val, e := getVariable(run, op.Name, op.Flags); e != nil {
+	flags := op.Flags.ToFlags()
+	if val, e := getVariable(run, op.Name, flags); e != nil {
 		err = e
 	} else if val != nil {
 		ret = val
-	} else if !op.Flags.tryObject() {
+	} else if !flags.tryObject() {
 		err = g.UnknownVariable(op.Name)
 	} else if obj, e := safe.ObjectFromString(run, op.Name); e != nil {
 		err = e

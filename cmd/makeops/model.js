@@ -62,10 +62,8 @@ fs.readdirSync(folderPath).filter(fn => fn.endsWith(".ifspec")).forEach(fn => {
         break;
       }
       case "swap": {
-        throw new Error("oh yeah?");
-        data.name = k;
-        data.group = [gopack].concat(data.group || []);
-        specs.push(data);
+        const d = m.swap(k, data.spec, data.desc);
+        specs.push(d);
         break;
       }
       case "flow": {
