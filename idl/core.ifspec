@@ -124,14 +124,14 @@
   },
   "choose_num": {
     "uses": "flow",
-    "spec": "num {_%true:number_eval} {if:bool_eval} {else%false:number_eval}",
+    "spec": "num {if:bool_eval} {then%true:number_eval} {else%false:number_eval}",
     "slots": "number_eval",
     "desc": "Pick one of two numbers based on a boolean test.",
     "group": "math"
   },
   "choose_text": {
     "uses": "flow",
-    "spec": "txt {_%true:text_eval} {if:bool_eval} {else%false:text_eval}",
+    "spec": "txt {if:bool_eval} {then%true:text_eval} {else%false:text_eval}",
     "slots": "text_eval",
     "desc": "Pick one of two strings based on a boolean test.",
     "group": "format"
@@ -359,7 +359,7 @@
     "desc": "True if the object is compatible with the named kind.",
     "group": "objects"
   },
-  "is_not_true": {
+  "not": {
     "uses": "flow",
     "spec": "not {_%test:bool_eval}",
     "slots": "bool_eval",

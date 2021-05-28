@@ -33,7 +33,7 @@ var FactorialStory = &story.Story{
 												&core.Argument{
 													Name: "num",
 													From: &core.FromNum{
-														Val: &core.Number{Num: 3}},
+														Val: &core.NumValue{Num: 3}},
 												}},
 										}},
 								}},
@@ -59,12 +59,12 @@ var FactorialStory = &story.Story{
 						Hook: story.ProgramHook{
 							Opt: &story.Activity{[]rt.Execute{
 								&core.Assign{
-									Var: core.Variable{Str: "num"},
+									Var: "num",
 									From: &core.FromNum{&core.ProductOf{
 										A: &core.Var{Name: "num"},
 										B: &core.DiffOf{
 											A: &core.Var{Name: "num"},
-											B: &core.Number{Num: 1}},
+											B: &core.NumValue{Num: 1}},
 									}},
 								},
 							}},
@@ -80,12 +80,12 @@ var FactorialStory = &story.Story{
 						Guard: &core.CompareNum{
 							A:  &core.Var{Name: "num"},
 							Is: &core.EqualTo{},
-							B:  &core.Number{}},
+							B:  &core.NumValue{}},
 						Hook: story.ProgramHook{
 							Opt: &story.Activity{[]rt.Execute{
 								&core.Assign{
-									Var:  core.Variable{Str: "num"},
-									From: &core.FromNum{&core.Number{Num: 1}},
+									Var:  "num",
+									From: &core.FromNum{&core.NumValue{Num: 1}},
 								}},
 							}}},
 					}},

@@ -10,7 +10,7 @@ import (
 )
 
 func SayIt(s string) rt.Execute {
-  return &core.Say{&core.Text{s}}
+  return &core.Say{&core.TextValue{s}}
 }
 
 type MatchNumber struct {
@@ -32,7 +32,7 @@ func DetermineSay(i int) *core.Determine {
     Pattern: "say_me",
     Arguments: core.NamedArgs(
       "num", &core.FromNum{
-        &core.Number{float64(i)},
+        &core.NumValue{float64(i)},
       }),
   }
 }
@@ -58,13 +58,13 @@ var SayPattern = testpat.Pattern{
 
 var SayHelloGoodbye = core.NewActivity(
   &core.ChooseAction{
-    If: &core.Bool{true},
+    If: &core.BoolValue{true},
     Do: core.MakeActivity(&core.Say{
-      Text: &core.Text{"hello"},
+      Text: &core.TextValue{"hello"},
     }),
     Else: &core.ChooseNothingElse{
       core.MakeActivity(&core.Say{
-        Text: &core.Text{"goodbye"},
+        Text: &core.TextValue{"goodbye"},
       }),
     },
   })

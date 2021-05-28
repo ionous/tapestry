@@ -36,7 +36,7 @@ var assignGrouping = testpat.Pattern{
 					Text:    &core.Var{Name: "in"},
 					Pattern: "^thing"},
 				Do: core.MakeActivity(
-					Put("out", "label", &core.FromText{&core.Text{"thingies"}}),
+					Put("out", "label", &core.FromText{&core.TextValue{"thingies"}}),
 				),
 			},
 		}}},

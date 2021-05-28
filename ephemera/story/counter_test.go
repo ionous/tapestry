@@ -17,7 +17,7 @@ func TestSearchForCounters(t *testing.T) {
 		if !searchForCounters(r.ValueOf(allTrue)) {
 			t.Fatal("all true")
 		} else {
-			not := &core.IsNotTrue{allTrue}
+			not := &core.Not{allTrue}
 			if !searchForCounters(r.ValueOf(not)) {
 				t.Fatal("not")
 			}

@@ -28,7 +28,7 @@ func TestObjects(t *testing.T) {
 		if e := testTrue(t, &run, &ObjectExists{Object: this}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{Test: &ObjectExists{Object: nothing}}); e != nil {
+		if e := testTrue(t, &run, &Not{Test: &ObjectExists{Object: nothing}}); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -50,7 +50,7 @@ func TestObjects(t *testing.T) {
 		if e := testTrue(t, &run, &IsKindOf{Object: that, Kind: derived.Text}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{&IsKindOf{this, derived.Text}}); e != nil {
+		if e := testTrue(t, &run, &Not{&IsKindOf{this, derived.Text}}); e != nil {
 			t.Fatal(e)
 		}
 	})

@@ -6,8 +6,9 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
+	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/pattern"
 	"git.sr.ht/~ionous/iffy/template"
 	"git.sr.ht/~ionous/iffy/template/postfix"
 	"git.sr.ht/~ionous/iffy/template/types"
@@ -102,7 +103,7 @@ func (c *Converter) buildCompare(cmp core.Comparator) (err error) {
 	return
 }
 
-func (c *Converter) buildSequence(cmd rt.TextEval, seq *core.Sequence, count int) (err error) {
+func (c *Converter) buildSequence(cmd rt.TextEval, pAt *reader.Position, pParts *[]rt.TextEval, count int) (err error) {
 	if args, e := c.stack.pop(count); e != nil {
 		err = e
 	} else {
@@ -120,8 +121,8 @@ func (c *Converter) buildSequence(cmd rt.TextEval, seq *core.Sequence, count int
 			c.autoCounter++
 			counter := "autoexp" + strconv.Itoa(c.autoCounter)
 			// seq is part of cmd
-			seq.Parts = parts
-			seq.Seq = counter
+			(*pParts) = parts
+			(*pAt).Offset = counter
 			// after filling out the cmd, we push it for later processing
 			c.buildOne(cmd)
 		}
@@ -157,8 +158,8 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 			if newa, e := newAssignment(arg); e != nil {
 				err = errutil.Append(e)
 			} else {
-				newp := &core.Argument{
-					Name: "$" + strconv.Itoa(i+1),
+				newp := core.Argument{
+					Name: value.Text("$" + strconv.Itoa(i+1)),
 					From: newa,
 				}
 				ps.Args = append(ps.Args, newp)
@@ -166,10 +167,8 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 		}
 		if err == nil {
 			c.buildOne(&render.RenderPattern{
-				core.Determine{
-					Pattern:   pattern.PatternName(name),
-					Arguments: &ps,
-				},
+				Pattern:   name,
+				Arguments: ps,
 			})
 		}
 	}
@@ -210,8 +209,8 @@ func (c *Converter) buildUnless(cmd interface{}, arity int) (err error) {
 		if a, ok := arg.Interface().(rt.BoolEval); !ok {
 			err = errutil.New("argument is not a bool")
 		} else {
-			args[0] = r.ValueOf(&core.IsNotTrue{a}) // rewrite the arg.
-			c.stack.push(args...)                   //
+			args[0] = r.ValueOf(&core.Not{a}) // rewrite the arg.
+			c.stack.push(args...)             //
 			err = c.buildCommand(cmd, arity)
 		}
 	}
@@ -295,7 +294,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 						fieldSet = &core.FromRec{getField}
 					}
 					getField = &core.GetAtField{
-						Field: field,
+						Field: value.Text(field),
 						From:  fieldSet,
 					}
 				}
@@ -314,13 +313,13 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 
 		case types.Stopping:
 			var seq core.StoppingText
-			err = c.buildSequence(&seq, &seq.Sequence, fn.ParameterCount)
+			err = c.buildSequence(&seq, &seq.At, &seq.Parts, fn.ParameterCount)
 		case types.Shuffle:
 			var seq core.ShuffleText
-			err = c.buildSequence(&seq, &seq.Sequence, fn.ParameterCount)
+			err = c.buildSequence(&seq, &seq.At, &seq.Parts, fn.ParameterCount)
 		case types.Cycle:
 			var seq core.CycleText
-			err = c.buildSequence(&seq, &seq.Sequence, fn.ParameterCount)
+			err = c.buildSequence(&seq, &seq.At, &seq.Parts, fn.ParameterCount)
 		case types.Span:
 			err = c.buildSpan(fn.ParameterCount)
 

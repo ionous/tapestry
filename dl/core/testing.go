@@ -26,8 +26,8 @@ func Args(from ...rt.Assignment) Arguments {
 	return p
 }
 
-func NamedArgs(name string, from rt.Assignment) *Arguments {
-	return &Arguments{Args: []Argument{{
+func NamedArgs(name string, from rt.Assignment) Arguments {
+	return Arguments{Args: []Argument{{
 		Name: value.Text(name),
 		From: from,
 	}}}

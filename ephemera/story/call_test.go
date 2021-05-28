@@ -16,7 +16,7 @@ func TestDetermineNum(t *testing.T) {
 	expect := core.Determine{
 		Pattern: "factorial", Arguments: core.NamedArgs(
 			"num", &core.FromNum{
-				&core.Number{3},
+				&core.NumValue{3},
 			})}
 	_, decoder, db := newImporter(t, testdb.Memory)
 	defer db.Close()

@@ -16,7 +16,7 @@ func TestText(t *testing.T) {
 		if e := testTrue(t, &run, B(true)); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{B(false)}); e != nil {
+		if e := testTrue(t, &run, &Not{B(false)}); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -25,7 +25,7 @@ func TestText(t *testing.T) {
 		if e := testTrue(t, &run, &IsEmpty{T("")}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{&IsEmpty{T("xxx")}}); e != nil {
+		if e := testTrue(t, &run, &Not{&IsEmpty{T("xxx")}}); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -37,7 +37,7 @@ func TestText(t *testing.T) {
 		}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{&Includes{
+		if e := testTrue(t, &run, &Not{&Includes{
 			T("full"),
 			T("bull"),
 		}}); e != nil {

@@ -32,12 +32,12 @@ var matchGroups = testpat.Pattern{
 	}, {
 		Filter: &core.CompareText{
 			&core.GetAtField{
-				From:  &core.FromVar{N("a")},
+				From:  &core.FromVar{"a"},
 				Field: "label",
 			},
 			&core.NotEqualTo{},
 			&core.GetAtField{
-				From:  &core.FromVar{N("b")},
+				From:  &core.FromVar{"b"},
 				Field: "label",
 			},
 		},
@@ -45,12 +45,12 @@ var matchGroups = testpat.Pattern{
 	}, {
 		Filter: &core.CompareText{
 			&core.GetAtField{
-				From:  &core.FromVar{N("a")},
+				From:  &core.FromVar{"a"},
 				Field: "innumerable",
 			},
 			&core.NotEqualTo{},
 			&core.GetAtField{
-				From:  &core.FromVar{N("b")},
+				From:  &core.FromVar{"b"},
 				Field: "innumerable",
 			},
 		},
@@ -58,12 +58,12 @@ var matchGroups = testpat.Pattern{
 	}, {
 		Filter: &core.CompareText{
 			&core.GetAtField{
-				From:  &core.FromVar{N("a")},
+				From:  &core.FromVar{"a"},
 				Field: "group_options",
 			},
 			&core.NotEqualTo{},
 			&core.GetAtField{
-				From:  &core.FromVar{N("b")},
+				From:  &core.FromVar{"b"},
 				Field: "group_options",
 			},
 		},
@@ -72,5 +72,5 @@ var matchGroups = testpat.Pattern{
 }
 
 func matches(b bool) rt.Execute {
-	return &core.Assign{core.Variable{Str: "matches"}, &core.FromBool{&core.Bool{b}}}
+	return &core.Assign{"matches", &core.FromBool{&core.BoolValue{b}}}
 }

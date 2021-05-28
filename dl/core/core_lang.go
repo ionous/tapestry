@@ -217,8 +217,8 @@ func (*ChooseNothingElse) Compose() composer.Spec {
 
 // ChooseNum Pick one of two numbers based on a boolean test.
 type ChooseNum struct {
-	True  rt.NumberEval `if:"label=_"`
 	If    rt.BoolEval   `if:"label=if"`
+	True  rt.NumberEval `if:"label=then"`
 	False rt.NumberEval `if:"label=else"`
 }
 
@@ -231,8 +231,8 @@ func (*ChooseNum) Compose() composer.Spec {
 
 // ChooseText Pick one of two strings based on a boolean test.
 type ChooseText struct {
-	True  rt.TextEval `if:"label=_"`
 	If    rt.BoolEval `if:"label=if"`
+	True  rt.TextEval `if:"label=then"`
 	False rt.TextEval `if:"label=else"`
 }
 
@@ -636,18 +636,6 @@ func (*IsKindOf) Compose() composer.Spec {
 	}
 }
 
-// IsNotTrue Returns the opposite value.
-type IsNotTrue struct {
-	Test rt.BoolEval `if:"label=_"`
-}
-
-func (*IsNotTrue) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "is_not_true",
-		Lede: "not",
-	}
-}
-
 // Join Returns multiple pieces of text as a single new piece of text.
 type Join struct {
 	Sep   rt.TextEval   `if:"label=_"`
@@ -841,6 +829,17 @@ type Next struct {
 func (*Next) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "next",
+	}
+}
+
+// Not Returns the opposite value.
+type Not struct {
+	Test rt.BoolEval `if:"label=_"`
+}
+
+func (*Not) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "not",
 	}
 }
 
@@ -1255,7 +1254,6 @@ var Flows = []interface{}{
 	(*IsEmpty)(nil),
 	(*IsExactKindOf)(nil),
 	(*IsKindOf)(nil),
-	(*IsNotTrue)(nil),
 	(*Join)(nil),
 	(*KindOf)(nil),
 	(*KindsOf)(nil),
@@ -1273,6 +1271,7 @@ var Flows = []interface{}{
 	(*NameOf)(nil),
 	(*Newline)(nil),
 	(*Next)(nil),
+	(*Not)(nil),
 	(*NotEqualTo)(nil),
 	(*NumList)(nil),
 	(*NumValue)(nil),
