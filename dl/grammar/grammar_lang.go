@@ -134,7 +134,7 @@ var Slots = []interface{}{
 	(*GrammarMaker)(nil),
 	(*ScannerMaker)(nil),
 }
-var Flows = []interface{}{
+var Slats = []interface{}{
 	(*Action)(nil),
 	(*Alias)(nil),
 	(*AllOf)(nil),

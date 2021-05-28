@@ -281,7 +281,7 @@ for (currentGroup in groups) {
     list: g.slats.map(n => allTypes[n]).filter(t => t.uses === "swap")
   }));
   fs.writeSync(fd, templates.regList({
-    which: "Flows",
+    which: "Slats",
     list: g.slats.map(n => allTypes[n]).filter(t => (t.uses === "flow" && !t.override))
   }));
   fs.closeSync(fd);

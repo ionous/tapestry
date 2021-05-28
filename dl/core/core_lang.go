@@ -1202,7 +1202,7 @@ var Slots = []interface{}{
 	(*IntoTargetFields)(nil),
 	(*Trigger)(nil),
 }
-var Flows = []interface{}{
+var Slats = []interface{}{
 	(*Activity)(nil),
 	(*AllTrue)(nil),
 	(*Always)(nil),

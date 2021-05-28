@@ -48,7 +48,7 @@ func (*LoggingLevel) Compose() composer.Spec {
 	}
 }
 
-var Flows = []interface{}{
+var Slats = []interface{}{
 	(*DoNothing)(nil),
 	(*Log)(nil),
 }

@@ -406,7 +406,7 @@ var Slots = []interface{}{
 	(*ListSource)(nil),
 	(*ListTarget)(nil),
 }
-var Flows = []interface{}{
+var Slats = []interface{}{
 	(*AsNum)(nil),
 	(*AsRec)(nil),
 	(*AsTxt)(nil),

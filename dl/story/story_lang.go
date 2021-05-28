@@ -1101,7 +1101,7 @@ var Swaps = []interface{}{
 	(*RelationCardinality)(nil),
 	(*VariableType)(nil),
 }
-var Flows = []interface{}{
+var Slats = []interface{}{
 	(*ActionContext)(nil),
 	(*ActionDecl)(nil),
 	(*AspectTraits)(nil),

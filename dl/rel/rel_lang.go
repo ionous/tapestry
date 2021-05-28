@@ -71,7 +71,7 @@ func (*RelativesOf) Compose() composer.Spec {
 	}
 }
 
-var Flows = []interface{}{
+var Slats = []interface{}{
 	(*ReciprocalOf)(nil),
 	(*ReciprocalsOf)(nil),
 	(*Relate)(nil),

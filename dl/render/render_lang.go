@@ -120,7 +120,7 @@ func (*RenderTemplate) Compose() composer.Spec {
 var Swaps = []interface{}{
 	(*RenderFlags)(nil),
 }
-var Flows = []interface{}{
+var Slats = []interface{}{
 	(*RenderAsAny)(nil),
 	(*RenderAsObj)(nil),
 	(*RenderAsVar)(nil),
