@@ -232,9 +232,12 @@ for (currentGroup in groups) {
     if (ps && !type.override) {
       for (const p in ps) {
         const param= ps[p];
-        const o= nameToGroup[param.type];
-        if (o && o !== currentGroup && inc.indexOf(o)<0) {
-          inc.push(o);
+        const pt= allTypes[param.type];
+        if (pt && !pt.override) {
+          const o= nameToGroup[param.type];
+          if (o && o !== currentGroup && inc.indexOf(o)<0) {
+            inc.push(o);
+          }
         }
       }
     }

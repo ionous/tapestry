@@ -16,6 +16,7 @@ See also: text.`);
     // but they are needed by core and story/modle
     make.str("variable_name");
     make.str("pattern_name");
+    make.str("relation_name");
 
   //     "lines": {
   //   "uses": "flow",
