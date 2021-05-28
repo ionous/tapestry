@@ -5,7 +5,7 @@ module.exports =`
 type {{Pascal name}} struct {
 {{#each with.params}}
   {{NameOf @key this}} {{TypeOf this}} \`if:"
-  {{~#if (IsInternal label)}}internal{{else}}label={{label}}{{/if}}
+  {{~#if (IsInternal label)}}internal{{else}}label={{LabelOf label}}{{/if}}
   {{~#if optional}},optional{{/if}}"\`
 {{/each}}
 }
