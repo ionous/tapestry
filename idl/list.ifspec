@@ -187,7 +187,7 @@
     "reduce":
     {
         "uses": "flow",
-        "spec": "list_reduce {into%into_value:text} {from_list:assignment} {using%using_pattern:pattern_name}",
+        "spec": "list_reduce {into%into_value:variable_name} {from_list:assignment} {using%using_pattern:pattern_name}",
         "slots": "execute",
         "desc": "Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record )."
     },
