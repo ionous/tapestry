@@ -2,6 +2,7 @@ package safe
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -16,8 +17,8 @@ func Check(v g.Value, want affine.Affinity) (err error) {
 }
 
 // resolve a requested variable name into a value of the desired affinity.
-func CheckVariable(run rt.Runtime, n string, aff affine.Affinity) (ret g.Value, err error) {
-	if v, e := run.GetField(object.Variables, n); e != nil {
+func CheckVariable(run rt.Runtime, n value.VariableName, aff affine.Affinity) (ret g.Value, err error) {
+	if v, e := run.GetField(object.Variables, n.String()); e != nil {
 		err = e
 	} else if e := Check(v, aff); e != nil {
 		err = e

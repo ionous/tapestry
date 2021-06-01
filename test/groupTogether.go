@@ -10,9 +10,10 @@ import (
 )
 
 var runGroupTogther = list.Map{
-	FromList:     &core.Var{Name: "objects"},
-	ToList:       "settings",
-	UsingPattern: "assign_grouping"}
+	FromList:     V("objects"),
+	ToList:       W("settings"),
+	UsingPattern: P("assign_grouping"),
+}
 
 type AssignGrouping struct {
 	In  string
@@ -33,10 +34,10 @@ var assignGrouping = testpat.Pattern{
 			Put("out", "name", V("in")),
 			&core.ChooseAction{
 				If: &core.Matches{
-					Text:    &core.Var{Name: "in"},
+					Text:    V("in"),
 					Pattern: "^thing"},
 				Do: core.MakeActivity(
-					Put("out", "label", &core.FromText{&core.TextValue{"thingies"}}),
+					Put("out", "label", &core.FromText{T("thingies")}),
 				),
 			},
 		}}},
