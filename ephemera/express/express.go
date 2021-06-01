@@ -6,7 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/template"
@@ -159,7 +158,7 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 				err = errutil.Append(e)
 			} else {
 				newp := core.Argument{
-					Name: value.Text("$" + strconv.Itoa(i+1)),
+					Name: W("$" + strconv.Itoa(i+1)),
 					From: newa,
 				}
 				ps.Args = append(ps.Args, newp)
@@ -167,7 +166,7 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 		}
 		if err == nil {
 			c.buildOne(&render.RenderPattern{
-				Pattern:   name,
+				Pattern:   P(name),
 				Arguments: ps,
 			})
 		}
@@ -252,7 +251,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 
 	case types.Number:
 		num := fn.Value()
-		c.buildOne(N(num))
+		c.buildOne(F(num))
 
 	case types.Bool:
 		b := fn.Value()
@@ -294,7 +293,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 						fieldSet = &core.FromRec{getField}
 					}
 					getField = &core.GetAtField{
-						Field: value.Text(field),
+						Field: W(field),
 						From:  fieldSet,
 					}
 				}

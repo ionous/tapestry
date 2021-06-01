@@ -19,7 +19,7 @@ var coreCache nameCache
 func (k *nameCache) get(n string) (ret interface{}, okay bool) {
 	if len(k.els) == 0 {
 		els := make(map[string]interface{})
-		for _, v := range core.Flows {
+		for _, v := range core.Slats {
 			spec := composer.SpecName(v.(composer.Composer))
 			n := lang.Breakcase(spec)
 			els[n] = v
