@@ -4,6 +4,7 @@ package render
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -83,8 +84,8 @@ func (*RenderName) Compose() composer.Spec {
 
 // RenderPattern printing is generally an activity b/c say is an activity,and we want the ability to say several things in series.
 type RenderPattern struct {
-	Pattern   string         `if:"label=_"`
-	Arguments core.Arguments `if:"label=arguments"`
+	Pattern   value.PatternName `if:"label=_"`
+	Arguments core.Arguments    `if:"label=arguments"`
 }
 
 func (*RenderPattern) Compose() composer.Spec {
@@ -96,8 +97,8 @@ func (*RenderPattern) Compose() composer.Spec {
 
 // RenderRef returns the value of a variable or the id of an object.
 type RenderRef struct {
-	Name  string      `if:"label=_"`
-	Flags RenderFlags `if:"label=flags"`
+	Name  value.VariableName `if:"label=_"`
+	Flags RenderFlags        `if:"label=flags"`
 }
 
 func (*RenderRef) Compose() composer.Spec {
@@ -120,7 +121,7 @@ func (*RenderTemplate) Compose() composer.Spec {
 var Swaps = []interface{}{
 	(*RenderFlags)(nil),
 }
-var Slats = []interface{}{
+var Slats = []composer.Composer{
 	(*RenderAsAny)(nil),
 	(*RenderAsObj)(nil),
 	(*RenderAsVar)(nil),

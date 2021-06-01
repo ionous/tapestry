@@ -11,7 +11,7 @@ import (
 // expressions would ideally adapt based on the pattern type
 // the assembler probably needs to work directly on tokens...
 func (op *RenderPattern) GetText(run rt.Runtime) (ret g.Value, err error) {
-	buf := core.Buffer{core.MakeActivity(&core.Determine{
+	buf := core.Buffer{core.MakeActivity(&core.CallPattern{
 		Pattern:   op.Pattern,
 		Arguments: op.Arguments,
 	})}
@@ -19,7 +19,7 @@ func (op *RenderPattern) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *RenderPattern) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
-	det := core.Determine{Pattern: op.Pattern, Arguments: op.Arguments}
+	det := core.CallPattern{Pattern: op.Pattern, Arguments: op.Arguments}
 	if v, e := det.DetermineValue(run); e != nil {
 		err = e
 	} else {

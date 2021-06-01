@@ -2,6 +2,7 @@ package render
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -74,8 +75,8 @@ func (op *RenderRef) getAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	} else if val != nil {
 		ret = val
 	} else if !flags.tryObject() {
-		err = g.UnknownVariable(op.Name)
-	} else if obj, e := safe.ObjectFromString(run, op.Name); e != nil {
+		err = g.UnknownVariable(op.Name.String())
+	} else if obj, e := safe.ObjectFromString(run, op.Name.String()); e != nil {
 		err = e
 	} else {
 		ret = obj
@@ -84,7 +85,7 @@ func (op *RenderRef) getAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 }
 
 // returns nil if the named variable doesnt exist; errors only on critical errors.
-func getVariable(run rt.Runtime, n string, flags TryAsNoun) (ret g.Value, err error) {
+func getVariable(run rt.Runtime, n value.VariableName, flags TryAsNoun) (ret g.Value, err error) {
 	if flags.tryVariable() {
 		ret, err = safe.CheckVariable(run, n, "")
 		if _, isUnknown := err.(g.Unknown); isUnknown {
