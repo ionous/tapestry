@@ -134,7 +134,7 @@ var Slots = []interface{}{
 	(*GrammarMaker)(nil),
 	(*ScannerMaker)(nil),
 }
-var Slats = []interface{}{
+var Slats = []composer.Composer{
 	(*Action)(nil),
 	(*Alias)(nil),
 	(*AllOf)(nil),

@@ -18,7 +18,7 @@ func (op *Relate) setRelation(run rt.Runtime) (err error) {
 	} else if b, e := safe.ObjectText(run, op.ToObject); e != nil {
 		err = e
 	} else {
-		err = run.RelateTo(a.String(), b.String(), op.Via)
+		err = run.RelateTo(a.String(), b.String(), op.Via.String())
 	}
 	return
 }

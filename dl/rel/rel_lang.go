@@ -3,13 +3,14 @@ package rel
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
 // ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.)
 type ReciprocalOf struct {
-	Via    string      `if:"label=_"`
-	Object rt.TextEval `if:"label=object"`
+	Via    value.RelationName `if:"label=_"`
+	Object rt.TextEval        `if:"label=object"`
 }
 
 func (*ReciprocalOf) Compose() composer.Spec {
@@ -21,8 +22,8 @@ func (*ReciprocalOf) Compose() composer.Spec {
 
 // ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)
 type ReciprocalsOf struct {
-	Via    string      `if:"label=_"`
-	Object rt.TextEval `if:"label=object"`
+	Via    value.RelationName `if:"label=_"`
+	Object rt.TextEval        `if:"label=object"`
 }
 
 func (*ReciprocalsOf) Compose() composer.Spec {
@@ -34,9 +35,9 @@ func (*ReciprocalsOf) Compose() composer.Spec {
 
 // Relate Relate two nouns.
 type Relate struct {
-	Object   rt.TextEval `if:"label=_"`
-	ToObject rt.TextEval `if:"label=to"`
-	Via      string      `if:"label=via"`
+	Object   rt.TextEval        `if:"label=_"`
+	ToObject rt.TextEval        `if:"label=to"`
+	Via      value.RelationName `if:"label=via"`
 }
 
 func (*Relate) Compose() composer.Spec {
@@ -47,8 +48,8 @@ func (*Relate) Compose() composer.Spec {
 
 // RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.)
 type RelativeOf struct {
-	Via    string      `if:"label=_"`
-	Object rt.TextEval `if:"label=object"`
+	Via    value.RelationName `if:"label=_"`
+	Object rt.TextEval        `if:"label=object"`
 }
 
 func (*RelativeOf) Compose() composer.Spec {
@@ -60,8 +61,8 @@ func (*RelativeOf) Compose() composer.Spec {
 
 // RelativesOf Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
 type RelativesOf struct {
-	Via    string      `if:"label=_"`
-	Object rt.TextEval `if:"label=object"`
+	Via    value.RelationName `if:"label=_"`
+	Object rt.TextEval        `if:"label=object"`
 }
 
 func (*RelativesOf) Compose() composer.Spec {
@@ -71,7 +72,7 @@ func (*RelativesOf) Compose() composer.Spec {
 	}
 }
 
-var Slats = []interface{}{
+var Slats = []composer.Composer{
 	(*ReciprocalOf)(nil),
 	(*ReciprocalsOf)(nil),
 	(*Relate)(nil),

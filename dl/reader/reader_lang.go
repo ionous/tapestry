@@ -18,6 +18,6 @@ func (*Position) Compose() composer.Spec {
 	}
 }
 
-var Slats = []interface{}{
+var Slats = []composer.Composer{
 	(*Position)(nil),
 }
