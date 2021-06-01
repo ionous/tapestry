@@ -20,7 +20,7 @@ func (op *During) GetBool(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *During) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	name := lang.Underscore(op.Pattern)
+	name := lang.Underscore(op.Pattern.String())
 	if depth, e := run.GetField(object.Running, name); e != nil {
 		err = cmdError(op, e)
 	} else {

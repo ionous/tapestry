@@ -18,7 +18,7 @@ func (op *PutAtField) pack(run rt.Runtime) (err error) {
 	} else if target, e := GetTargetFields(run, op.Into); e != nil {
 		err = e
 	} else {
-		err = target.SetFieldByName(op.AtField.Value(), val)
+		err = target.SetFieldByName(op.AtField.String(), val)
 	}
 	return
 }

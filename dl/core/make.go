@@ -18,7 +18,7 @@ func (op *Make) GetRecord(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *Make) makeRecord(run rt.Runtime) (ret *g.Record, err error) {
-	if k, e := run.GetKindByName(op.Kind.Value()); e != nil {
+	if k, e := run.GetKindByName(op.Kind.String()); e != nil {
 		err = e
 	} else {
 		out := k.NewRecord()
@@ -26,9 +26,9 @@ func (op *Make) makeRecord(run rt.Runtime) (ret *g.Record, err error) {
 			ret = out // return the empty record
 		} else {
 			for _, arg := range args.Args {
-				name := lang.Breakcase(arg.Name.Value())
+				name := lang.Breakcase(arg.Name.String())
 				if fin := k.FieldIndex(name); fin < 0 {
-					e := g.UnknownField(op.Kind.Value(), arg.Name.Value())
+					e := g.UnknownField(op.Kind.String(), arg.Name.String())
 					err = errutil.Append(err, e)
 				} else if val, e := safe.GetAssignedValue(run, arg.From); e != nil {
 					err = errutil.Append(err, e)

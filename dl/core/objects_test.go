@@ -3,7 +3,6 @@ package core
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -17,11 +16,11 @@ func TestObjects(t *testing.T) {
 
 	run := modelTest{objClass: map[string]string{
 		// objects:
-		"this": base.Text.Value(),
-		"that": derived.Text.Value(),
+		"this": base.Text.String(),
+		"that": derived.Text.String(),
 		// hierarchy:
-		"base":    base.Text.Value(),
-		"derived": derived.Text.Value() + "," + base.Text.Value(),
+		"base":    base.Text.String(),
+		"derived": derived.Text.String() + "," + base.Text.String(),
 	}}
 
 	t.Run("exists", func(t *testing.T) {
@@ -35,7 +34,7 @@ func TestObjects(t *testing.T) {
 	t.Run("kind_of", func(t *testing.T) {
 		if cls, e := safe.GetText(&run, &KindOf{Object: this}); e != nil {
 			t.Fatal(e)
-		} else if cls.String() != base.Text.Value() {
+		} else if cls.String() != base.Text.String() {
 			t.Fatal("unexpected", cls)
 		}
 	})
@@ -68,10 +67,6 @@ func TestObjects(t *testing.T) {
 			t.Fatal(e)
 		}
 	})
-}
-
-func named(n string) value.Text {
-	return value.Text(n)
 }
 
 type modelTest struct {

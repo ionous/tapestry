@@ -10,7 +10,7 @@ import (
 func TestCompareNumbers(t *testing.T) {
 	test := func(a float64, op Comparator, b float64, res bool) {
 		var run testutil.PanicRuntime
-		cmp := &CompareNum{A: N(a), Is: op, B: N(b)}
+		cmp := &CompareNum{A: F(a), Is: op, B: F(b)}
 		if ok, e := safe.GetBool(run, cmp); e != nil {
 			t.Fatal(e)
 		} else if res != ok.Bool() {

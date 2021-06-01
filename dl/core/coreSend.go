@@ -19,9 +19,9 @@ func (op *Send) send(run rt.Runtime, aff affine.Affinity) (ret g.Value, err erro
 	} else {
 		var args []rt.Arg
 		for _, a := range op.Arguments.Args {
-			args = append(args, rt.Arg{a.Name.Value(), a.From})
+			args = append(args, rt.Arg{a.Name.String(), a.From})
 		}
-		name, up := op.Event.Value(), path.Strings()
+		name, up := op.Event.String(), path.Strings()
 		if v, e := run.Send(name, up, args); e != nil {
 			err = cmdErrorCtx(op, name, e)
 		} else {

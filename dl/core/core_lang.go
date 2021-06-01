@@ -80,8 +80,8 @@ func (*Arguments) Compose() composer.Spec {
 
 // Assign Assigns a variable to a value.
 type Assign struct {
-	Var  string        `if:"label=_"`
-	From rt.Assignment `if:"label=be"`
+	Var  value.VariableName `if:"label=_"`
+	From rt.Assignment      `if:"label=be"`
 }
 
 func (*Assign) Compose() composer.Spec {
@@ -145,6 +145,19 @@ func (*Buffer) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "buffer",
 		Lede: "buffer_text",
+	}
+}
+
+// CallPattern Runs a pattern, and potentially returns a value.
+type CallPattern struct {
+	Pattern   value.PatternName `if:"label=_"`
+	Arguments Arguments         `if:"label=arguments"`
+}
+
+func (*CallPattern) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "call_pattern",
+		Lede: "determine",
 	}
 }
 
@@ -326,18 +339,6 @@ func (*CycleText) Compose() composer.Spec {
 	}
 }
 
-// Determine Runs a pattern, and potentially returns a value.
-type Determine struct {
-	Pattern   string    `if:"label=_"`
-	Arguments Arguments `if:"label=arguments"`
-}
-
-func (*Determine) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "determine",
-	}
-}
-
 // DiffOf Subtract two numbers.
 type DiffOf struct {
 	A rt.NumberEval `if:"label=_"`
@@ -353,7 +354,7 @@ func (*DiffOf) Compose() composer.Spec {
 
 // During Decide whether a pattern is running.
 type During struct {
-	Pattern string `if:"label=_"`
+	Pattern value.PatternName `if:"label=_"`
 }
 
 func (*During) Compose() composer.Spec {
@@ -482,7 +483,7 @@ func (*FromTexts) Compose() composer.Spec {
 
 // FromVar Targets a record stored in a variable.
 type FromVar struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*FromVar) Compose() composer.Spec {
@@ -588,7 +589,7 @@ func (*IntoObj) Compose() composer.Spec {
 
 // IntoVar Targets an object or record stored in a variable
 type IntoVar struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*IntoVar) Compose() composer.Spec {
@@ -1173,7 +1174,7 @@ func (*TriggerSwitch) Compose() composer.Spec {
 
 // Var Return the value of the named variable.
 type Var struct {
-	Name string `if:"label=_"`
+	Name value.VariableName `if:"label=_"`
 }
 
 func (*Var) Compose() composer.Spec {
@@ -1202,7 +1203,7 @@ var Slots = []interface{}{
 	(*IntoTargetFields)(nil),
 	(*Trigger)(nil),
 }
-var Slats = []interface{}{
+var Slats = []composer.Composer{
 	(*Activity)(nil),
 	(*AllTrue)(nil),
 	(*Always)(nil),
@@ -1215,6 +1216,7 @@ var Slats = []interface{}{
 	(*Bracket)(nil),
 	(*Break)(nil),
 	(*Buffer)(nil),
+	(*CallPattern)(nil),
 	(*Capitalize)(nil),
 	(*ChooseAction)(nil),
 	(*ChooseMore)(nil),
@@ -1228,7 +1230,6 @@ var Slats = []interface{}{
 	(*CompareText)(nil),
 	(*CountOf)(nil),
 	(*CycleText)(nil),
-	(*Determine)(nil),
 	(*DiffOf)(nil),
 	(*During)(nil),
 	(*EqualTo)(nil),

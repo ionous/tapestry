@@ -67,7 +67,7 @@ func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.False
 	} else {
-		kind := lang.Breakcase(op.Kind.Value())
+		kind := lang.Breakcase(op.Kind.String())
 		if objectPath, e := run.GetField(object.Kinds, obj); e != nil {
 			err = cmdError(op, e)
 		} else {
@@ -86,7 +86,7 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.False
 	} else {
-		kind := lang.Breakcase(op.Kind.Value())
+		kind := lang.Breakcase(op.Kind.String())
 		if objectPath, e := run.GetField(object.Kinds, obj); e != nil {
 			err = cmdError(op, e)
 		} else {
@@ -100,6 +100,6 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *KindsOf) GetTextList(run rt.Runtime) (g.Value, error) {
-	kind := lang.Breakcase(op.Kind.Value()) // fix: break case at assembly time.
+	kind := lang.Breakcase(op.Kind.String()) // fix: break case at assembly time.
 	return run.GetField(object.Nouns, kind)
 }

@@ -178,12 +178,12 @@
     "desc": "When called multiple times, returns each of its inputs in turn.",
     "group": "output"
   },
-  "determine": {
+  "call_pattern": {
     "uses": "flow",
     "spec": "determine {_%pattern:pattern_name} {:arguments}",
     "slots": ["execute", "bool_eval", "number_eval", "text_eval", "record_eval", "num_list_eval", "text_list_eval", "record_list_eval"],
     "desc": "Runs a pattern, and potentially returns a value.",
-    "group": "patterns"
+    "group": "internal"
   },
   "diff_of": {
     "uses": "flow",
@@ -458,7 +458,7 @@
   },
   "matches": {
     "uses": "flow",
-    "spec": "matches {_%text:text_eval} {to%pattern:pattern_name} {-%cache:match_cache}",
+    "spec": "matches {_%text:text_eval} {to%pattern:string} {-%cache:match_cache}",
     "slots": "bool_eval",
     "desc": "Determine whether the specified text is similar to the specified regular expression.",
     "group": "matching"

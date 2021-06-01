@@ -3,7 +3,6 @@ package core
 import (
 	"strconv"
 
-	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -19,7 +18,7 @@ func Args(from ...rt.Assignment) Arguments {
 	var p Arguments
 	for i, from := range from {
 		p.Args = append(p.Args, Argument{
-			Name: value.Text("$" + strconv.Itoa(i+1)),
+			Name: W("$" + strconv.Itoa(i+1)),
 			From: from,
 		})
 	}
@@ -28,7 +27,7 @@ func Args(from ...rt.Assignment) Arguments {
 
 func NamedArgs(name string, from rt.Assignment) Arguments {
 	return Arguments{Args: []Argument{{
-		Name: value.Text(name),
+		Name: W(name),
 		From: from,
 	}}}
 }

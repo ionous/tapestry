@@ -41,13 +41,13 @@ func (op *NumValue) String() string {
 
 // GetText implements interface TextEval providing the dl with a text literal.
 func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
-	ret = g.StringOf(op.Text.Value())
+	ret = g.StringOf(op.Text.String())
 	return
 }
 
 // String returns the text.
 func (op *TextValue) String() string {
-	return op.Text.Value()
+	return op.Text.String()
 }
 
 func (op *NumList) GetNumList(rt.Runtime) (ret g.Value, _ error) {
@@ -62,7 +62,7 @@ func (op *TextList) GetTextList(rt.Runtime) (ret g.Value, _ error) {
 	cnt := len(op.Values)
 	sts := make([]string, cnt)
 	for i, el := range op.Values {
-		sts[i] = el.Value()
+		sts[i] = el.String()
 	}
 	ret = g.StringsOf(sts)
 	return

@@ -26,7 +26,7 @@ func (op *IntoObj) GetTargetFields(run rt.Runtime) (ret g.Value, err error) {
 // GetTargetFields returns a record or object supporting field access.
 // ( see also FromVar )
 func (op *IntoVar) GetTargetFields(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := fieldsFromVar(run, op.Var); e != nil {
+	if v, e := fieldsFromVar(run, op.Var.String()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v

@@ -11,7 +11,7 @@ import (
 func (op *Var) Affinity() affine.Affinity { return "" }
 
 func (op *Var) String() string {
-	return op.Name
+	return op.Name.String()
 }
 
 // GetAssignedValue implements Assignment so we can SetXXX values from variables without a FromXXX statement in between.

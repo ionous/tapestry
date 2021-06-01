@@ -7,5 +7,5 @@ import (
 )
 
 func (op *HasDominion) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	return run.GetField(object.Domain, op.Domain.Value())
+	return run.GetField(object.Domain, op.Domain.String())
 }
