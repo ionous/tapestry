@@ -145,7 +145,20 @@ Handlebars.registerHelper('DescOf', function(x) {
 })
 
 const locationOf = function(x) {
-  return (x !== "rt") ? `git.sr.ht/~ionous/iffy/dl/${x}` : `git.sr.ht/~ionous/iffy/rt`
+  let where;
+  switch (x) {
+    case  "rt":
+      where= `git.sr.ht/~ionous/iffy/rt`;
+      break;
+    case "story":
+      // FIX: should move all the story files to the dl folder instead.
+      where= `git.sr.ht/~ionous/iffy/ephemera/story`;
+      break;
+    default:
+      where= `git.sr.ht/~ionous/iffy/dl/${x}`
+      break;
+  }
+  return where;
 }
 Handlebars.registerHelper('LocationOf', locationOf);
 
@@ -203,7 +216,7 @@ for (const typeName in allTypes) {
         const { with: { tokens = [] } = {} } = type; // safely extract tokens
         const token = tokenize(typeName);
         const closedChoices = tokens.indexOf(token) < 0;
-        if (!closedChoices && (tokens.length === 1)) {
+        if /*(!closedChoices && (tokens.length === 1)) */ (typeName === "string"){
           type.override = "string";
         }
         // console.log(name, token, tokens);
@@ -274,15 +287,18 @@ for (currentGroup in groups) {
   // write registration lists
   fs.writeSync(fd, templates.regList({
     which: "Slots",
-    list: g.slots.map(n => allTypes[n])
+    list: g.slots.map(n => allTypes[n]),
+    RegType: "interface{}",
   }));
   fs.writeSync(fd, templates.regList({
     which: "Swaps",
-    list: g.slats.map(n => allTypes[n]).filter(t => t.uses === "swap")
+    list: g.slats.map(n => allTypes[n]).filter(t => t.uses === "swap"),
+    RegType: "interface{}",
   }));
   fs.writeSync(fd, templates.regList({
     which: "Slats",
-    list: g.slats.map(n => allTypes[n]).filter(t => (t.uses === "flow" && !t.override))
+    list: g.slats.map(n => allTypes[n]).filter(t => (t.uses === "flow" && !t.override)),
+    RegType: "composer.Composer",
   }));
   fs.closeSync(fd);
   // re-format the file using go format.
