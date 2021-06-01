@@ -5,8 +5,86 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 )
 
+// Lines requires a user-specified string.
+type Lines struct {
+	Str string
+}
+
+func (op *Lines) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
+
+func (*Lines) Choices() (choices map[string]string) {
+	return map[string]string{}
+}
+
+func (*Lines) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        "lines",
+		OpenStrings: true,
+	}
+}
+
+// PatternName requires a user-specified string.
+type PatternName struct {
+	Str string
+}
+
+func (op *PatternName) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
+
+func (*PatternName) Choices() (choices map[string]string) {
+	return map[string]string{}
+}
+
+func (*PatternName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        "pattern_name",
+		OpenStrings: true,
+	}
+}
+
+// RelationName requires a user-specified string.
+type RelationName struct {
+	Str string
+}
+
+func (op *RelationName) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
+
+func (*RelationName) Choices() (choices map[string]string) {
+	return map[string]string{}
+}
+
+func (*RelationName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        "relation_name",
+		OpenStrings: true,
+	}
+}
+
 // Text requires a user-specified string.
-type Text string
+type Text struct {
+	Str string
+}
+
+func (op *Text) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
 
 func (*Text) Choices() (choices map[string]string) {
 	return map[string]string{
@@ -21,5 +99,28 @@ func (*Text) Compose() composer.Spec {
 		Strings: []string{
 			"empty",
 		},
+	}
+}
+
+// VariableName requires a user-specified string.
+type VariableName struct {
+	Str string
+}
+
+func (op *VariableName) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
+
+func (*VariableName) Choices() (choices map[string]string) {
+	return map[string]string{}
+}
+
+func (*VariableName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        "variable_name",
+		OpenStrings: true,
 	}
 }
