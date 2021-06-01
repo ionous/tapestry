@@ -18,8 +18,8 @@ func (op *Map) Execute(run rt.Runtime) (err error) {
 func (op *Map) remap(run rt.Runtime) (err error) {
 	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
 		err = errutil.New("from_list:", op.FromList, e)
-	} else if toList, e := safe.List(run, op.ToList.Value()); e != nil {
-		err = errutil.New("to_list:", op.ToList.Value(), e)
+	} else if toList, e := safe.List(run, op.ToList.String()); e != nil {
+		err = errutil.New("to_list:", op.ToList.String(), e)
 	} else {
 		pat := op.UsingPattern
 		aff := affine.Element(toList.Affinity())
@@ -29,7 +29,7 @@ func (op *Map) remap(run rt.Runtime) (err error) {
 				err = e
 				break
 			} else {
-				if newVal, e := run.Call(pat, aff, []rt.Arg{
+				if newVal, e := run.Call(pat.String(), aff, []rt.Arg{
 					{"$1", &fromVal{inVal}},
 				}); e != nil {
 					// note: we treat no result as an error because

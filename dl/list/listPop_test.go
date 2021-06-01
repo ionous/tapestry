@@ -34,8 +34,8 @@ func popTest(front bool, amt int, src ...string) []string {
 	pop := &list.Erasing{
 		Count:   I(1),
 		AtIndex: I(start),
-		From:    &list.FromTxtList{"source"},
-		As:      "text",
+		From:    &list.FromTxtList{N("source")},
+		As:      W("text"),
 		Do: core.MakeActivity(&core.ChooseAction{
 			If: &core.CompareNum{&list.Len{V("text")}, &core.EqualTo{}, I(0)},
 			Do: core.MakeActivity(&Write{&out, T("x")}),

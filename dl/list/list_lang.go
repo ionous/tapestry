@@ -10,7 +10,7 @@ import (
 
 // AsNum Define the name of a number variable.
 type AsNum struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*AsNum) Compose() composer.Spec {
@@ -22,7 +22,7 @@ func (*AsNum) Compose() composer.Spec {
 
 // AsRec Define the name of a record variable.
 type AsRec struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*AsRec) Compose() composer.Spec {
@@ -34,7 +34,7 @@ func (*AsRec) Compose() composer.Spec {
 
 // AsTxt Define the name of a text variable.
 type AsTxt struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*AsTxt) Compose() composer.Spec {
@@ -144,7 +144,7 @@ func (*Find) Compose() composer.Spec {
 
 // FromNumList Uses a list of numbers
 type FromNumList struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*FromNumList) Compose() composer.Spec {
@@ -156,7 +156,7 @@ func (*FromNumList) Compose() composer.Spec {
 
 // FromRecList Uses a list of records
 type FromRecList struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*FromRecList) Compose() composer.Spec {
@@ -168,7 +168,7 @@ func (*FromRecList) Compose() composer.Spec {
 
 // FromTxtList Uses a list of text
 type FromTxtList struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*FromTxtList) Compose() composer.Spec {
@@ -180,9 +180,9 @@ func (*FromTxtList) Compose() composer.Spec {
 
 // Gather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: &#x27;in&#x27; as each value from the list, and &#x27;out&#x27; as the var passed to the gather.
 type Gather struct {
-	Var     string     `if:"label=_"`
-	From    ListSource `if:"label=from"`
-	Pattern value.Text `if:"label=_"`
+	Var     value.VariableName `if:"label=_"`
+	From    ListSource         `if:"label=from"`
+	Pattern value.Text         `if:"label=_"`
 }
 
 func (*Gather) Compose() composer.Spec {
@@ -193,7 +193,7 @@ func (*Gather) Compose() composer.Spec {
 
 // IntoNumList Targets a list of numbers
 type IntoNumList struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*IntoNumList) Compose() composer.Spec {
@@ -205,7 +205,7 @@ func (*IntoNumList) Compose() composer.Spec {
 
 // IntoRecList Targets a list of records
 type IntoRecList struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*IntoRecList) Compose() composer.Spec {
@@ -217,7 +217,7 @@ func (*IntoRecList) Compose() composer.Spec {
 
 // IntoTxtList Targets a list of text
 type IntoTxtList struct {
-	Var string `if:"label=_"`
+	Var value.VariableName `if:"label=_"`
 }
 
 func (*IntoTxtList) Compose() composer.Spec {
@@ -240,9 +240,9 @@ func (*Len) Compose() composer.Spec {
 
 // Map Transform the values from one list and place the results in another list. The designated pattern is called with each value from the &#x27;from list&#x27;, one value at a time.
 type Map struct {
-	ToList       value.Text    `if:"label=_"`
-	FromList     rt.Assignment `if:"label=from_list"`
-	UsingPattern string        `if:"label=using"`
+	ToList       value.Text        `if:"label=_"`
+	FromList     rt.Assignment     `if:"label=from_list"`
+	UsingPattern value.PatternName `if:"label=using"`
 }
 
 func (*Map) Compose() composer.Spec {
@@ -294,9 +294,9 @@ func (*Range) Compose() composer.Spec {
 
 // Reduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: &#x27;in&#x27; ( each element of the list ) and &#x27;out&#x27; ( ex. a record ).
 type Reduce struct {
-	IntoValue    value.Text    `if:"label=into"`
-	FromList     rt.Assignment `if:"label=from_list"`
-	UsingPattern string        `if:"label=using"`
+	IntoValue    value.VariableName `if:"label=into"`
+	FromList     rt.Assignment      `if:"label=from_list"`
+	UsingPattern value.PatternName  `if:"label=using"`
 }
 
 func (*Reduce) Compose() composer.Spec {
@@ -347,9 +347,9 @@ func (*Slice) Compose() composer.Spec {
 
 // SortNumbers
 type SortNumbers struct {
-	Var        string      `if:"label=_"`
-	ByField    string      `if:"label=by_field"`
-	Descending rt.BoolEval `if:"label=descending,optional"`
+	Var        value.VariableName `if:"label=_"`
+	ByField    string             `if:"label=by_field"`
+	Descending rt.BoolEval        `if:"label=descending,optional"`
 }
 
 func (*SortNumbers) Compose() composer.Spec {
@@ -361,8 +361,8 @@ func (*SortNumbers) Compose() composer.Spec {
 
 // SortRecords Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type SortRecords struct {
-	Var   string `if:"label=_"`
-	Using string `if:"label=using"`
+	Var   value.VariableName `if:"label=_"`
+	Using value.PatternName  `if:"label=using"`
 }
 
 func (*SortRecords) Compose() composer.Spec {
@@ -374,10 +374,10 @@ func (*SortRecords) Compose() composer.Spec {
 
 // SortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type SortText struct {
-	Var        string      `if:"label=_"`
-	ByField    string      `if:"label=by_field"`
-	Descending rt.BoolEval `if:"label=descending,optional"`
-	UsingCase  rt.BoolEval `if:"label=using_case,optional"`
+	Var        value.VariableName `if:"label=_"`
+	ByField    string             `if:"label=by_field"`
+	Descending rt.BoolEval        `if:"label=descending,optional"`
+	UsingCase  rt.BoolEval        `if:"label=using_case,optional"`
 }
 
 func (*SortText) Compose() composer.Spec {
@@ -389,10 +389,10 @@ func (*SortText) Compose() composer.Spec {
 
 // Splice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
 type Splice struct {
-	Var    string        `if:"label=_"`
-	Start  rt.NumberEval `if:"label=start"`
-	Remove rt.NumberEval `if:"label=remove"`
-	Insert rt.Assignment `if:"label=insert"`
+	Var    value.VariableName `if:"label=_"`
+	Start  rt.NumberEval      `if:"label=start"`
+	Remove rt.NumberEval      `if:"label=remove"`
+	Insert rt.Assignment      `if:"label=insert"`
 }
 
 func (*Splice) Compose() composer.Spec {
@@ -406,7 +406,7 @@ var Slots = []interface{}{
 	(*ListSource)(nil),
 	(*ListTarget)(nil),
 }
-var Slats = []interface{}{
+var Slats = []composer.Composer{
 	(*AsNum)(nil),
 	(*AsRec)(nil),
 	(*AsTxt)(nil),

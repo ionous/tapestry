@@ -3,7 +3,6 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -37,7 +36,7 @@ func TestSort(t *testing.T) {
 	}
 	// sorts in place
 	sorter := &list.SortText{
-		Var:     "objects",
+		Var:     N("objects"),
 		ByField: "key",
 	}
 	if e := safe.Run(&lt, sorter); e != nil {
@@ -47,7 +46,7 @@ func TestSort(t *testing.T) {
 		t.Fatal(objectNames)
 	}
 	//
-	sorter.UsingCase = &core.BoolValue{true}
+	sorter.UsingCase = B(true)
 	if e := safe.Run(&lt, sorter); e != nil {
 		t.Fatal(e)
 	}
@@ -55,7 +54,7 @@ func TestSort(t *testing.T) {
 		t.Fatal(objectNames)
 	}
 	//
-	sorter.Descending = &core.BoolValue{true}
+	sorter.Descending = B(true)
 	if e := safe.Run(&lt, sorter); e != nil {
 		t.Fatal(e)
 	}

@@ -19,7 +19,7 @@ func (op *Reduce) Execute(run rt.Runtime) (err error) {
 func (op *Reduce) reduce(run rt.Runtime) (err error) {
 	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
 		err = e
-	} else if outVal, e := safe.CheckVariable(run, op.IntoValue.Value(), ""); e != nil {
+	} else if outVal, e := safe.CheckVariable(run, op.IntoValue, ""); e != nil {
 		err = e
 	} else {
 		pat := op.UsingPattern
@@ -29,7 +29,7 @@ func (op *Reduce) reduce(run rt.Runtime) (err error) {
 				err = e
 				break
 			} else {
-				if newVal, e := run.Call(pat, aff, []rt.Arg{
+				if newVal, e := run.Call(pat.String(), aff, []rt.Arg{
 					{"$1", &fromVal{inVal}},
 					{"$2", &fromVal{outVal}},
 				}); e == nil {
@@ -44,7 +44,7 @@ func (op *Reduce) reduce(run rt.Runtime) (err error) {
 			}
 			if err == nil {
 				// write back the completed value
-				err = run.SetField(object.Variables, op.IntoValue.Value(), outVal)
+				err = run.SetField(object.Variables, op.IntoValue.String(), outVal)
 			}
 		}
 	}

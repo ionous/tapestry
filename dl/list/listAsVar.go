@@ -12,15 +12,15 @@ type ListIterator interface {
 }
 
 func (op *AsNum) Name() string {
-	return op.Var
+	return op.Var.String()
 }
 
 func (op *AsRec) Name() string {
-	return op.Var
+	return op.Var.String()
 }
 
 func (op *AsTxt) Name() string {
-	return op.Var
+	return op.Var.String()
 }
 
 func (op *AsNum) Affinity() affine.Affinity {

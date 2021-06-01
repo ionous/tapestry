@@ -16,7 +16,7 @@ func (op *Erasing) popping(run rt.Runtime) (err error) {
 	if els, e := eraseIndex(run, op.Count, op.From, op.AtIndex); e != nil {
 		err = e
 	} else {
-		run.PushScope(scope.NewSingleValue(op.As.Value(), els))
+		run.PushScope(scope.NewSingleValue(op.As.String(), els))
 		err = op.Do.Execute(run)
 		run.PopScope()
 	}
@@ -36,7 +36,7 @@ func (op *ErasingEdge) popping(run rt.Runtime) (err error) {
 	} else if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {
 		err = otherwise.Branch(run)
 	} else if cnt > 0 {
-		run.PushScope(scope.NewSingleValue(op.As.Value(), vs.Index(0)))
+		run.PushScope(scope.NewSingleValue(op.As.String(), vs.Index(0)))
 		err = op.Do.Execute(run)
 		run.PopScope()
 	}

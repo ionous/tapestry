@@ -32,7 +32,7 @@ func (op *SortRecords) Execute(rt.Runtime) (err error) {
 }
 
 func (op *SortNumbers) sortByNum(run rt.Runtime) (err error) {
-	if v, e := run.GetField(object.Variables, op.Var); e != nil {
+	if v, e := run.GetField(object.Variables, op.Var.String()); e != nil {
 		err = e
 	} else {
 		name := lang.Breakcase(op.ByField)
@@ -51,7 +51,7 @@ func (op *SortNumbers) sortByNum(run rt.Runtime) (err error) {
 }
 
 func (op *SortText) sortByText(run rt.Runtime) (err error) {
-	if v, e := run.GetField(object.Variables, op.Var); e != nil {
+	if v, e := run.GetField(object.Variables, op.Var.String()); e != nil {
 		err = e
 	} else {
 		name := lang.Breakcase(op.ByField)
