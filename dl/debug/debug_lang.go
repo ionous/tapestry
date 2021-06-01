@@ -31,7 +31,16 @@ func (*Log) Compose() composer.Spec {
 }
 
 // LoggingLevel requires a user-specified string.
-type LoggingLevel string
+type LoggingLevel struct {
+	Str string
+}
+
+func (op *LoggingLevel) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
 
 func (*LoggingLevel) Choices() (choices map[string]string) {
 	return map[string]string{
@@ -48,7 +57,7 @@ func (*LoggingLevel) Compose() composer.Spec {
 	}
 }
 
-var Slats = []interface{}{
+var Slats = []composer.Composer{
 	(*DoNothing)(nil),
 	(*Log)(nil),
 }

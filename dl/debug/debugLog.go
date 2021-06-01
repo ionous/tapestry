@@ -61,7 +61,7 @@ func (op *Log) Execute(run rt.Runtime) (err error) {
 
 func (lvl LoggingLevel) Index() (ret int) {
 	// FIX: who comes up with this stuff?
-	if str := string(lvl); len(str) == 0 {
+	if str := lvl.String(); len(str) == 0 {
 		ret = -1
 	} else {
 		if val, ok := lvl.Choices()[str]; ok {
