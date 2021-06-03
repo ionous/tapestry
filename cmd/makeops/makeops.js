@@ -55,8 +55,10 @@ Handlebars.registerHelper('IsToken', function(str) {
 });
 
 Handlebars.registerHelper('LedeName', function(t) {
-  const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
-  return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
+  if (t.uses === "flow") {
+    const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
+    return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
+  }
 });
 
 Handlebars.registerHelper('NameOf', function(key, param) {
@@ -174,7 +176,8 @@ partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Par
 const templates = Object.fromEntries(sources.map(k => [k,
   Handlebars.compile(require(`./templates/${k}Template.js`))])
 );
-templates['txt'] = templates['str']; // FIX: txt shouldnt even exist i think
+templates['slat'] = templates['flow'];
+
 // console.log(templates.header({package:'story'}));
 
 // split types into different categories
@@ -246,6 +249,12 @@ for (currentGroup in groups) {
     count++;
     const type = allTypes[n];
     if (!type.override) {
+      if (type.uses === "str" || type.uses === "swap") {
+        const o= "reader"; // for forced str and swap position field
+        if (o && o !== currentGroup && inc.indexOf(o) < 0) {
+          inc.push(o);
+        }
+      }
       const { with: { params = {} } = {} } = type; //safely extract params
       for (const p in params) {
         const param = params[p];
@@ -297,7 +306,7 @@ for (currentGroup in groups) {
   }));
   fs.writeSync(fd, templates.regList({
     which: "Slats",
-    list: g.slats.map(n => allTypes[n]).filter(t => (t.uses === "flow" && !t.override)),
+    list: g.slats.map(n => allTypes[n]).filter(t => ((t.uses === "flow" || t.uses === "slat") && !t.override)),
     RegType: "composer.Composer",
   }));
   fs.closeSync(fd);

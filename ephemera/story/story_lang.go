@@ -461,7 +461,6 @@ type EventTarget struct {
 func (*EventTarget) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_target",
-		Lede: "the ",
 	}
 }
 
@@ -481,7 +480,6 @@ type ExtType struct {
 func (*ExtType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "ext_type",
-		Lede: "a list of ",
 	}
 }
 
@@ -1091,7 +1089,6 @@ type ProgramHook struct {
 func (*ProgramHook) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "program_hook",
-		Lede: "do ",
 	}
 }
 
@@ -1210,7 +1207,6 @@ type PropertyType struct {
 func (*PropertyType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "property_type",
-		Lede: "an ",
 	}
 }
 
@@ -1614,7 +1610,6 @@ type VariableType struct {
 func (*VariableType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "variable_type",
-		Lede: "a ",
 	}
 }
 
