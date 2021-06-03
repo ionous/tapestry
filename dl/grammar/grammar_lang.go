@@ -63,15 +63,14 @@ func (*Directive) Compose() composer.Spec {
 	}
 }
 
-// GrammarDecl Read what the player types and turn it into actions.
-type GrammarDecl struct {
+// Grammar Read what the player types and turn it into actions.
+type Grammar struct {
 	Grammar GrammarMaker `if:"label=_"`
 }
 
-func (*GrammarDecl) Compose() composer.Spec {
+func (*Grammar) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "grammar_decl",
-		Lede: "grammar",
+		Name: "grammar",
 	}
 }
 
@@ -140,7 +139,7 @@ var Slats = []composer.Composer{
 	(*AllOf)(nil),
 	(*AnyOf)(nil),
 	(*Directive)(nil),
-	(*GrammarDecl)(nil),
+	(*Grammar)(nil),
 	(*Noun)(nil),
 	(*Retarget)(nil),
 	(*Reverse)(nil),

@@ -18,11 +18,11 @@ func TestCheck(t *testing.T) {
 			&core.ChooseAction{
 				If: &core.BoolValue{true},
 				Do: core.MakeActivity(&core.Say{
-					Text: &core.TextValue{value.Text{"hello"}},
+					Text: &core.TextValue{value.Text{Str: "hello"}},
 				}),
 				Else: &core.ChooseNothingElse{
 					Do: core.MakeActivity(&core.Say{
-						Text: &core.TextValue{value.Text{"goodbye"}},
+						Text: &core.TextValue{value.Text{Str: "goodbye"}},
 					})},
 			}),
 	}

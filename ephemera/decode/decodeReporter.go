@@ -14,6 +14,6 @@ func (m *Decoder) SetSource(source string) *Decoder {
 	return m
 }
 func (m *Decoder) report(ofs string, err error) {
-	m.issueFn(reader.Position{m.source, ofs}, err)
+	m.issueFn(reader.Position{Source: m.source, Offset: ofs}, err)
 	m.IssueCount++
 }

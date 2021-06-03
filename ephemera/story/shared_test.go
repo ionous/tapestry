@@ -30,7 +30,7 @@ func newImporter(t *testing.T, where string) (ret *story.Importer, retDec *decod
 	})
 	k := story.NewImporterDecoder(db, dec).SetSource(t.Name())
 	dec.AddDefaultCallbacks(core.Slats)
-	k.AddModel(story.Model)
+	k.AddModel(story.Slats)
 	ret, retDec, retDB = k, dec, db
 	return
 }

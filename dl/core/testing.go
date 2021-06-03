@@ -14,10 +14,10 @@ func MakeActivity(exe ...rt.Execute) Activity {
 	return Activity{Exe: exe}
 }
 
-func Args(from ...rt.Assignment) Arguments {
-	var p Arguments
+func Args(from ...rt.Assignment) CallArgs {
+	var p CallArgs
 	for i, from := range from {
-		p.Args = append(p.Args, Argument{
+		p.Args = append(p.Args, CallArg{
 			Name: W("$" + strconv.Itoa(i+1)),
 			From: from,
 		})
@@ -25,8 +25,8 @@ func Args(from ...rt.Assignment) Arguments {
 	return p
 }
 
-func NamedArgs(name string, from rt.Assignment) Arguments {
-	return Arguments{Args: []Argument{{
+func NamedArgs(name string, from rt.Assignment) CallArgs {
+	return CallArgs{Args: []CallArg{{
 		Name: W(name),
 		From: from,
 	}}}

@@ -18,7 +18,7 @@ func TestMake(t *testing.T) {
 		testutil.Kinds
 	}
 	testTime.Kinds.AddKinds((*GroupSettings)(nil))
-	op := &core.Make{
+	op := &core.CallMake{
 		Kind:      W("group_settings"),
 		Arguments: core.NamedArgs("objects_with_articles", &core.FromBool{B(true)}),
 	}

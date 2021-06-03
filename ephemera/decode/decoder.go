@@ -100,7 +100,7 @@ func (dec *Decoder) ReadFields(at string, out r.Value, in reader.Map) {
 			if t := tag.ReadTag(f.Tag); t.Exists("internal") {
 				if f.Type == posType {
 					outAt := out.FieldByIndex(path)
-					outAt.Set(r.ValueOf(reader.Position{dec.source, at}))
+					outAt.Set(r.ValueOf(reader.Position{Source: dec.source, Offset: at}))
 				}
 			} else if !t.Exists("optional") {
 				// and even then only if its a fixed field

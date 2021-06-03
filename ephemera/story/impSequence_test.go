@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/kr/pretty"
@@ -14,18 +15,19 @@ func TestImportSequence(t *testing.T) {
 	defer db.Close()
 	if cmd, e := decoder.ReadSpec(_cycle_text); e != nil {
 		t.Fatal("failed to read sequence", e)
-	} else if diff := pretty.Diff(cmd, &core.CycleText{
-		Sequence: core.Sequence{
-			Seq: "seq_1", // COUNTER:#
-			Parts: []rt.TextEval{
-				&core.Text{Text: "a"},
-				&core.Text{Text: "b"},
-				&core.Text{Text: "c"},
-			},
-		},
-	}); len(diff) > 0 {
-		t.Fatal(pretty.Print(cmd))
+	} else if diff := pretty.Diff(cmd, _import_target); len(diff) > 0 {
+		t.Fatal(pretty.Print(_import_target, cmd))
 	}
+}
+
+// the cycle text data should look like this after import
+var _import_target = &core.CallCycle{
+	At: reader.Position{Offset: "seq_1"},
+	Parts: []rt.TextEval{
+		T("a"),
+		T("b"),
+		T("c"),
+	},
 }
 
 var _cycle_text = map[string]interface{}{

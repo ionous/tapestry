@@ -54,30 +54,6 @@ func (*AnyTrue) Compose() composer.Spec {
 	}
 }
 
-// Argument
-type Argument struct {
-	Name value.Text    `if:"label=_"`
-	From rt.Assignment `if:"label=from"`
-}
-
-func (*Argument) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "argument",
-		Lede: "arg",
-	}
-}
-
-// Arguments
-type Arguments struct {
-	Args []Argument `if:"label=_"`
-}
-
-func (*Arguments) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "arguments",
-	}
-}
-
 // Assign Assigns a variable to a value.
 type Assign struct {
 	Var  value.VariableName `if:"label=_"`
@@ -148,16 +124,120 @@ func (*Buffer) Compose() composer.Spec {
 	}
 }
 
-// CallPattern Runs a pattern, and potentially returns a value.
+// CallArg Runtime version of argument
+type CallArg struct {
+	Name value.Text    `if:"label=_"`
+	From rt.Assignment `if:"label=from"`
+}
+
+func (*CallArg) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "call_arg",
+		Lede: "inarg",
+	}
+}
+
+// CallArgs Runtime version of arguments
+type CallArgs struct {
+	Args []CallArg `if:"label=_"`
+}
+
+func (*CallArgs) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "call_args",
+		Lede: "inargs",
+	}
+}
+
+// CallCycle Runtime version of cycle_text
+type CallCycle struct {
+	At    reader.Position `if:"internal"`
+	Parts []rt.TextEval   `if:"label=_"`
+}
+
+func (*CallCycle) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "call_cycle",
+		Lede: "cycle",
+	}
+}
+
+// CallMake Runtime version of make
+type CallMake struct {
+	Kind      value.Text `if:"label=_"`
+	Arguments CallArgs   `if:"label=args"`
+}
+
+func (*CallMake) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "call_make",
+		Lede: "make",
+	}
+}
+
+// CallPattern Runtime version of determine
 type CallPattern struct {
 	Pattern   value.PatternName `if:"label=_"`
-	Arguments Arguments         `if:"label=arguments"`
+	Arguments CallArgs          `if:"label=args"`
 }
 
 func (*CallPattern) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_pattern",
-		Lede: "determine",
+	}
+}
+
+// CallSend Runtime version of send
+type CallSend struct {
+	Event     value.Text      `if:"label=_"`
+	Path      rt.TextListEval `if:"label=to"`
+	Arguments CallArgs        `if:"label=args"`
+}
+
+func (*CallSend) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "call_send",
+	}
+}
+
+// CallShuffle Runtime version of shuffle_text
+type CallShuffle struct {
+	At      reader.Position `if:"internal"`
+	Parts   []rt.TextEval   `if:"label=_"`
+	Indices Shuffler        `if:"internal"`
+}
+
+func (*CallShuffle) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "call_shuffle",
+		Lede: "shuffle",
+	}
+}
+
+// CallTerminal Runtime version of stopping_text
+type CallTerminal struct {
+	At    reader.Position `if:"internal"`
+	Parts []rt.TextEval   `if:"label=_"`
+}
+
+func (*CallTerminal) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "call_terminal",
+		Lede: "stopping",
+	}
+}
+
+// CallTrigger Runtime version of count_of
+type CallTrigger struct {
+	At      reader.Position `if:"internal"`
+	Trigger Trigger         `if:"label=_"`
+	Num     rt.NumberEval   `if:"label=num"`
+}
+
+func (*CallTrigger) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "call_trigger",
+		Lede: "trigger",
 	}
 }
 
@@ -309,33 +389,6 @@ func (*CompareText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "compare_text",
 		Lede: "cmp",
-	}
-}
-
-// CountOf A guard which returns true based on a counter. Counters start at zero and are incremented every time the guard gets checked.
-type CountOf struct {
-	At      reader.Position `if:"internal"`
-	Trigger Trigger         `if:"label=_"`
-	Num     rt.NumberEval   `if:"label=num"`
-}
-
-func (*CountOf) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "count_of",
-		Lede: "trigger",
-	}
-}
-
-// CycleText When called multiple times, returns each of its inputs in turn.
-type CycleText struct {
-	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=_"`
-}
-
-func (*CycleText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "cycle_text",
-		Lede: "cycle",
 	}
 }
 
@@ -692,18 +745,6 @@ func (*LessThan) Compose() composer.Spec {
 	}
 }
 
-// Make
-type Make struct {
-	Kind      value.Text `if:"label=_"`
-	Arguments Arguments  `if:"label=arguments"`
-}
-
-func (*Make) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "make",
-	}
-}
-
 // MakeLowercase Returns new text, with every letter turned into lowercase. For example, &#x27;shout&#x27; from &#x27;SHOUT&#x27;.
 type MakeLowercase struct {
 	Text rt.TextEval `if:"label=_"`
@@ -1002,28 +1043,15 @@ func (*Rows) Compose() composer.Spec {
 	}
 }
 
-// Say Print some bit of text to the player.
-type Say struct {
+// SayText Print some bit of text to the player.
+type SayText struct {
 	Text rt.TextEval `if:"label=_"`
 }
 
-func (*Say) Compose() composer.Spec {
+func (*SayText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "say",
-		Lede: "say_text",
-	}
-}
-
-// Send Triggers a event, returns a true/false success value.
-type Send struct {
-	Event     value.Text      `if:"label=_"`
-	Path      rt.TextListEval `if:"label=to"`
-	Arguments Arguments       `if:"label=arguments"`
-}
-
-func (*Send) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "send",
+		Name: "say_text",
+		Lede: "say",
 	}
 }
 
@@ -1037,20 +1065,6 @@ func (*SetTrait) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "set_trait",
 		Lede: "put",
-	}
-}
-
-// ShuffleText When called multiple times returns its inputs at random.
-type ShuffleText struct {
-	At      reader.Position `if:"internal"`
-	Parts   []rt.TextEval   `if:"label=_"`
-	Indices Shuffler        `if:"internal"`
-}
-
-func (*ShuffleText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "shuffle_text",
-		Lede: "shuffle",
 	}
 }
 
@@ -1086,19 +1100,6 @@ func (*Span) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "span",
 		Lede: "span_text",
-	}
-}
-
-// StoppingText When called multiple times returns each of its inputs in turn, sticking to the last one.
-type StoppingText struct {
-	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=_"`
-}
-
-func (*StoppingText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "stopping_text",
-		Lede: "stopping",
 	}
 }
 
@@ -1208,15 +1209,21 @@ var Slats = []composer.Composer{
 	(*AllTrue)(nil),
 	(*Always)(nil),
 	(*AnyTrue)(nil),
-	(*Argument)(nil),
-	(*Arguments)(nil),
 	(*Assign)(nil),
 	(*Blankline)(nil),
 	(*BoolValue)(nil),
 	(*Bracket)(nil),
 	(*Break)(nil),
 	(*Buffer)(nil),
+	(*CallArg)(nil),
+	(*CallArgs)(nil),
+	(*CallCycle)(nil),
+	(*CallMake)(nil),
 	(*CallPattern)(nil),
+	(*CallSend)(nil),
+	(*CallShuffle)(nil),
+	(*CallTerminal)(nil),
+	(*CallTrigger)(nil),
 	(*Capitalize)(nil),
 	(*ChooseAction)(nil),
 	(*ChooseMore)(nil),
@@ -1228,8 +1235,6 @@ var Slats = []composer.Composer{
 	(*Commas)(nil),
 	(*CompareNum)(nil),
 	(*CompareText)(nil),
-	(*CountOf)(nil),
-	(*CycleText)(nil),
 	(*DiffOf)(nil),
 	(*During)(nil),
 	(*EqualTo)(nil),
@@ -1260,7 +1265,6 @@ var Slats = []composer.Composer{
 	(*KindsOf)(nil),
 	(*LessOrEqual)(nil),
 	(*LessThan)(nil),
-	(*Make)(nil),
 	(*MakeLowercase)(nil),
 	(*MakePlural)(nil),
 	(*MakeReversed)(nil),
@@ -1286,14 +1290,11 @@ var Slats = []composer.Composer{
 	(*Response)(nil),
 	(*Row)(nil),
 	(*Rows)(nil),
-	(*Say)(nil),
-	(*Send)(nil),
+	(*SayText)(nil),
 	(*SetTrait)(nil),
-	(*ShuffleText)(nil),
 	(*Slash)(nil),
 	(*Softline)(nil),
 	(*Span)(nil),
-	(*StoppingText)(nil),
 	(*SumOf)(nil),
 	(*TextList)(nil),
 	(*TextValue)(nil),

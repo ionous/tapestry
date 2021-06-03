@@ -24,12 +24,12 @@ func (flags TryAsNoun) tryObject() bool {
 }
 
 func (op *RenderFlags) ToFlags() (ret TryAsNoun) {
-	switch op.Opt.(type) {
-	case *RenderAsVar:
+	switch op.String() {
+	case RenderFlags_RenderAsVar:
 		ret = TryAsVariable
-	case *RenderAsObj:
+	case RenderFlags_RenderAsObj:
 		ret = TryAsObject
-	case *RenderAsAny:
+	case RenderFlags_RenderAsAny:
 		ret = TryAsBoth
 	}
 	return

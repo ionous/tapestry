@@ -7,10 +7,10 @@ import (
 
 // ex. "cats are a kind of record"
 func (op *KindsOfRecord) ImportPhrase(k *Importer) (err error) {
-	if kind, e := op.RecordPlural.NewName(k); e != nil {
+	if kind, e := NewRecordPlural(k, op.RecordPlural); e != nil {
 		err = e
 	} else {
-		record := k.NewName("record", tables.NAMED_KIND, op.At.String())
+		record := k.NewName("record", tables.NAMED_KIND, op.RecordPlural.At.String())
 		k.NewKind(kind, record)
 	}
 	return
@@ -19,7 +19,7 @@ func (op *KindsOfRecord) ImportPhrase(k *Importer) (err error) {
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
 func (op *RecordsPossessProperties) ImportPhrase(k *Importer) (err error) {
-	if kind, e := op.RecordPlural.NewName(k); e != nil {
+	if kind, e := NewRecordPlural(k, op.RecordPlural); e != nil {
 		err = e
 	} else {
 		for _, n := range op.PropertyDecl {

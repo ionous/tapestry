@@ -19,12 +19,17 @@ func SpecName(c Composer) (ret string) {
 	return
 }
 
-func SlotName(c Slot) (ret string) {
-	if n := c.Name; len(n) > 0 {
-		ret = n
-	} else {
-		el := r.TypeOf(c.Type).Elem()
-		ret = lang.Underscore(el.Name())
-	}
-	return
+// func SlotName(c Slot) (ret string) {
+// 	if n := c.Name; len(n) > 0 {
+// 		ret = n
+// 	} else {
+// 		el := r.TypeOf(c.Type).Elem()
+// 		ret = lang.Underscore(el.Name())
+// 	}
+// 	return
+// }
+
+func SlotName(c interface{}) string {
+	el := r.TypeOf(c).Elem()
+	return lang.Underscore(el.Name())
 }

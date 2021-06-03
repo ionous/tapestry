@@ -13,7 +13,7 @@ func (op *TriggerOnce) Trigger() Trigger   { return op }
 func (op *TriggerCycle) Trigger() Trigger  { return op }
 func (op *TriggerSwitch) Trigger() Trigger { return op }
 
-func (op *CountOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *CallTrigger) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if ok, e := op.update(run); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -22,7 +22,7 @@ func (op *CountOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *CountOf) update(run rt.Runtime) (okay bool, err error) {
+func (op *CallTrigger) update(run rt.Runtime) (okay bool, err error) {
 	name := op.At.String()
 	if p, e := run.GetField(object.Counter, name); e != nil {
 		err = e

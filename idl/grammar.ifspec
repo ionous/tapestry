@@ -37,10 +37,11 @@
     "slots": "grammar_maker",
     "desc": "starts a parser scanner"
   },
-  "grammar_decl": {
+  "grammar": {
     "uses": "flow",
     "spec": "grammar {_%grammar:grammar_maker}",
-    "desc": "Read what the player types and turn it into actions."
+    "desc": "Read what the player types and turn it into actions.",
+    "group": "internal"
   },
   "noun": {
     "uses": "flow",

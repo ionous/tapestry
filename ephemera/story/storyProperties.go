@@ -9,7 +9,7 @@ import (
 )
 
 func (op *PropertyDecl) ImportProperty(k *Importer, kind ephemera.Named) (err error) {
-	if prop, e := op.Property.NewName(k); e != nil {
+	if prop, e := NewProperty(k, op.Property); e != nil {
 		err = e
 	} else {
 		err = op.PropertyType.ImportPropertyType(k, kind, prop)
@@ -46,7 +46,7 @@ func (op *PropertyAspect) ImportPropertyType(k *Importer, kind, prop ephemera.Na
 // "{a number%number}, {some text%text}, or {a true/false value%bool}");
 // bool properties become implicit aspects
 func (op *PrimitiveType) ImportPropertyType(k *Importer, kind, prop ephemera.Named) (err error) {
-	if op.Str != "$BOOL" {
+	if op.Str != PrimitiveType_Bool {
 		if primType, e := op.ImportPrimType(k); e != nil {
 			err = e
 		} else {
@@ -104,12 +104,12 @@ type primTypeImporter interface {
 	ImportPrimType(*Importer) (retType, retAff string, err error)
 }
 
-func (op *NumberList) ImportPrimType(k *Importer) (retType, retAff string, err error) {
+func (op *NumberListType) ImportPrimType(k *Importer) (retType, retAff string, err error) {
 	retType = affine.NumList.String()
 	return
 }
 
-func (op *TextList) ImportPrimType(k *Importer) (retType, retAff string, err error) {
+func (op *TextListType) ImportPrimType(k *Importer) (retType, retAff string, err error) {
 	retType = affine.TextList.String()
 	return
 }
@@ -120,7 +120,7 @@ func (op *RecordType) ImportPrimType(k *Importer) (retType, retAff string, err e
 	return
 }
 
-func (op *RecordList) ImportPrimType(k *Importer) (retType, retAff string, err error) {
+func (op *RecordListType) ImportPrimType(k *Importer) (retType, retAff string, err error) {
 	retType = lang.Breakcase(op.Kind.Str) // fix? not happy that this has to manually match NAMED_KIND munging
 	retAff = affine.RecordList.String()
 	return

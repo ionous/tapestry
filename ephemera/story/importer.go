@@ -6,7 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
+
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
@@ -44,11 +44,7 @@ func NewImporter(db *sql.DB, reporter decode.IssueReport) *Importer {
 	for _, slats := range iffy.AllSlats {
 		dec.AddDefaultCallbacks(slats)
 	}
-	dec.AddDefaultCallbacks(core.Slats)
-	// add ops from iffy.js, including golang generated stubs via stubs.js
-	// anything that implements ImportStub() will get processed during ReadSpec.
-	k.AddModel(Model)
-	//
+	dec.AddDefaultCallbacks(Slats)
 	return k
 }
 

@@ -11,59 +11,37 @@ const pascal = function(name, sep = " ") {
   return els.join(sep);
 };
 
-// load the language file; brings 'localLang()' into global scope.
-vm.runInThisContext(fs.readFileSync(`../compose/www/data/lang/iffy.js`));
-vm.runInThisContext(fs.readFileSync(`../compose/www/data/lang/spec.js`));
-
-// parse the idl
-// shouldnt really be here, but its fine for now.
-let m = new Make();
-const folderPath = "../../idl";
-const specs = [];
-fs.readdirSync(folderPath).filter(fn => fn.endsWith(".ifspec")).forEach(fn => {
-  const path = folderPath + '/' + fn;
-
-  const raw = fs.readFileSync(path);
-  let dict;
-  try {
-    dict = JSON.parse(raw);
-  }
-  catch (e) {
-    console.log(`couldnt't parse ${path}`);
-    throw e;
-  }
-  const gopack = fn.substring(0, fn.length - ".ifspec".length);
-  // m.currGroups.push( gopack );
-  specs.push({
-    "name": gopack,
-    "uses": "group"
-  });
-  console.log(`parsing ${path}`);
-  m.currGroups.unshift(gopack);
-
+const parseData = function(m, dict) {
   for (const k in dict) {
     const data = dict[k];
     switch (data.uses) {
       default:
-        throw new Error( `unknown or missing uses ${k} '${data.uses}'  in ${path}`);
+        throw new Error(`unknown or missing uses ${k}'`);
+      case "group": {
+        const p = data.specs;
+        m.group(k, data.desc || k, function() {
+          parseData(m, p);
+        });
+        break;
+      }
       case "str": {
-        const d = m.str(k, data.spec, data.desc);
-        specs.push(d);
+        m.str(k, data.spec, data.desc);
         break;
       }
       case "num": {
-        const d = m.num(k, data.spec, data.desc);
-        specs.push(d);
+        m.num(k, data.spec, data.desc);
         break;
       }
       case "slot": {
-        const d = m.slot(k, data.desc);
-        specs.push(d);
+        m.slot(k, data.desc);
         break;
       }
       case "swap": {
-        const d = m.swap(k, data.spec, data.desc);
-        specs.push(d);
+        m.swap(k, data.spec, data.desc);
+        break;
+      }
+      case "slat": {
+        m.slat(k, data.slots || [], data.spec, data.desc || "");
         break;
       }
       case "flow": {
@@ -75,31 +53,37 @@ fs.readdirSync(folderPath).filter(fn => fn.endsWith(".ifspec")).forEach(fn => {
 
         const tokens = [lede];
         if (!tags.keys) {
-          // console.log("no keys for", gopack, k);
+          // console.log("no keys for", k);
           // happens for things like "always", "equal_to", etc.
         } else {
           tags.keys.forEach((t, i) => {
-            const el = tags.args[t];
-            // '$STR': { label: 'rel', type: 'relation' },
-            if (el.label !== "_") {
-              if (i === 0) {
-                tokens.push(" ");
+            if (t.startsWith("$")) {
+              const el = tags.args[t];
+              if (!el) {
+                console.log(`couldnt find ${t} in ${k}`);
               } else {
-                tokens.push(", ");
+                // '$STR': { label: 'rel', type: 'relation' },
+                if (el.label !== "_") {
+                  if (i === 0) {
+                    tokens.push(" ");
+                  } else {
+                    tokens.push(", ");
+                  }
+                  tokens.push(el.label);
+                }
+                tokens.push(": ");
+                tokens.push(t);
               }
-              tokens.push(el.label);
             }
-            tokens.push(": ");
-            tokens.push(t);
           });
         }
-        const d = {
+        const d= {
           name: k,
           uses: "flow",
-          group: [gopack].concat(data.group || []),
+          group: m.currGroups.concat(data.group || []),
           with: {
             params: tags.args,
-            tokens,
+              tokens,
           }
           // todo: roles
         };
@@ -117,36 +101,37 @@ fs.readdirSync(folderPath).filter(fn => fn.endsWith(".ifspec")).forEach(fn => {
             short: desc,
           };
         }
-        specs.push(d);
+        m.newFromSpec(d);
+
         break;
       }
     }
   }
+};
+
+// parse the idl
+// shouldnt really be here, but its fine for now.
+let m = new Make();
+const folderPath = "../../idl";
+fs.readdirSync(folderPath).filter(fn => fn.endsWith(".ifspec")).forEach(fn => {
+  const path = folderPath + '/' + fn;
+
+  const raw = fs.readFileSync(path);
+  let dict;
+  try {
+    dict = JSON.parse(raw);
+  }
+  catch (e) {
+    console.log(`couldnt't parse ${path}`);
+    throw e;
+  }
+  const gopack = fn.substring(0, fn.length - ".ifspec".length);
+  console.log(`parsing ${path}`);
+  m.currGroups.unshift(gopack);
+  parseData(m, dict);
   m.currGroups.shift();
 });
 
-// avoid as many "redefining" errors as we can
-m = new Make();
-localLang(m);
-
-// console.log(JSON.stringify(specs, 0,2));
-specs.forEach((spec) => {
-  try {
-    m.newFromSpec(spec);
-  }
-  catch (e) {
-    console.log("newFromSpec:", e.message);
-  }
-});
-
-//
-// add stubs ( spec and stub are added by spec.js )
-// spec.forEach((spec)=> {
-//   if (stub.indexOf(spec.name) >= 0) {
-//   m.newFromSpec(spec);
-//   }
-// });
-//
 const sorted = {};
 Object.keys(m.types.all).sort().forEach((key) => {
   sorted[key] = m.types.all[key];

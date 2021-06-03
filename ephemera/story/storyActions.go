@@ -2,6 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
+
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -44,7 +45,7 @@ type actionImporter interface {
 }
 
 func (op *CommonAction) ImportAction(k *Importer, n ephemera.Named) (err error) {
-	if kind, e := op.Kind.NewName(k); e != nil {
+	if kind, e := NewSingularKind(k, op.Kind); e != nil {
 		err = e
 	} else {
 		noun := k.NewName(actionNoun, tables.NAMED_PARAMETER, op.At.String())
@@ -54,7 +55,7 @@ func (op *CommonAction) ImportAction(k *Importer, n ephemera.Named) (err error) 
 }
 
 func (op *ActionContext) ImportContext(k *Importer, n ephemera.Named) (err error) {
-	if kind, e := op.Kind.NewName(k); e != nil {
+	if kind, e := NewSingularKind(k, op.Kind); e != nil {
 		err = e
 	} else {
 		otherNoun := k.NewName(actionOtherNoun, tables.NAMED_PARAMETER, op.At.String())
@@ -68,7 +69,7 @@ const actionOtherNoun = "other_noun"
 
 func (op *PairedAction) ImportAction(k *Importer, n ephemera.Named) (err error) {
 	// inform calls the two objects "noun" and "second noun"
-	if kind, e := op.Kinds.FixPlurals(k); e != nil {
+	if kind, e := FixSingular(k, op.Kinds); e != nil {
 		err = e
 	} else {
 		for _, name := range []string{actionNoun, actionOtherNoun} {

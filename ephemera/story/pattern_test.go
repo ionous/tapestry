@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
@@ -12,23 +12,19 @@ import (
 
 func TestPatternVars(t *testing.T) {
 	patternVariables := &story.PatternVariablesDecl{
-		PatternName: story.PatternName{
-			Str: "corral",
-		},
+		PatternName: value.PatternName{Str: "corral"},
 		VariableDecl: []story.VariableDecl{{
 			Type: story.VariableType{
 				Opt: &story.ObjectType{
-					An: story.Ana{
-						Str: "$AN",
-					},
+					// An: story.Ana{
+					// 	Str: "$AN",
+					// },
 					Kind: story.SingularKind{
 						Str: "animal",
 					},
 				},
 			},
-			Name: story.VariableName{core.Variable{
-				Str: "pet",
-			}},
+			Name: N("pet"),
 		}},
 	}
 	k, _, db := newImporter(t, testdb.Memory)
@@ -55,11 +51,9 @@ func TestPatternVars(t *testing.T) {
 
 func TestPatternDecl(t *testing.T) {
 	patternDecl := &story.PatternDecl{
-		Name: story.PatternName{
-			Str: "corral",
-		},
+		Name: P("corral"),
 		Type: story.PatternType{
-			Str: "$PATTERNS",
+			Str: story.PatternType_Patterns,
 		},
 	}
 

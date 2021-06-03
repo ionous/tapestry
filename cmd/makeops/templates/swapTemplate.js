@@ -3,6 +3,7 @@
 module.exports =
 `// {{Pascal name}} swaps between various options
 type {{Pascal name}} struct {
+  At  reader.Position \`if:"internal"\`
   Opt interface{}
 }
 

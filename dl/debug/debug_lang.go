@@ -3,6 +3,7 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
@@ -32,6 +33,7 @@ func (*Log) Compose() composer.Spec {
 
 // LoggingLevel requires a user-specified string.
 type LoggingLevel struct {
+	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -42,9 +44,16 @@ func (op *LoggingLevel) String() (ret string) {
 	return
 }
 
+const LoggingLevel_Note = "$NOTE"
+const LoggingLevel_ToDo = "$TO_DO"
+const LoggingLevel_Fix = "$FIX"
+const LoggingLevel_Info = "$INFO"
+const LoggingLevel_Warning = "$WARNING"
+const LoggingLevel_Error = "$ERROR"
+
 func (*LoggingLevel) Choices() (choices map[string]string) {
 	return map[string]string{
-		"$NOTE": "note", "$TO_DO": "to_do", "$FIX": "fix", "$INFO": "info", "$WARNING": "warning", "$ERROR": "error",
+		LoggingLevel_Note: "note", LoggingLevel_ToDo: "to_do", LoggingLevel_Fix: "fix", LoggingLevel_Info: "info", LoggingLevel_Warning: "warning", LoggingLevel_Error: "error",
 	}
 }
 

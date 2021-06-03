@@ -9,7 +9,7 @@ import (
 )
 
 func TestSearchForCounters(t *testing.T) {
-	c := &core.CountOf{}
+	c := &core.CallTrigger{}
 	if !searchForCounters(r.ValueOf(c)) {
 		t.Fatal("core")
 	} else {

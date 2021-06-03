@@ -9,6 +9,16 @@ import (
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
+type Parameterizer interface{ Pack() []rt.Arg }
+
+func (op *CallArgs) Pack() (args []rt.Arg) {
+	// FIX THIS COPY!
+	for _, a := range op.Args {
+		args = append(args, rt.Arg{a.Name.String(), a.From})
+	}
+	return
+}
+
 func (op *CallPattern) Execute(run rt.Runtime) error {
 	_, err := op.determine(run, "")
 	return err
@@ -52,12 +62,7 @@ func (op *CallPattern) DetermineValue(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	var args []rt.Arg
-	// FIX THIS COPY!
-	for _, a := range op.Arguments.Args {
-		args = append(args, rt.Arg{a.Name.String(), a.From})
-	}
-	if v, e := run.Call(op.Pattern.String(), aff, args); e != nil && !errors.Is(e, rt.NoResult{}) {
+	if v, e := run.Call(op.Pattern.String(), aff, op.Arguments.Pack()); e != nil && !errors.Is(e, rt.NoResult{}) {
 		err = cmdError(op, e)
 	} else {
 		ret = v

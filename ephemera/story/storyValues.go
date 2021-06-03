@@ -1,9 +1,12 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"github.com/ionous/errutil"
 )
+
+type Lines = value.Lines
 
 func (op *Certainty) ImportString(k *Importer) (ret string, err error) {
 	if str, ok := decode.FindChoice(op, op.Str); !ok {
@@ -12,9 +15,4 @@ func (op *Certainty) ImportString(k *Importer) (ret string, err error) {
 		ret = str
 	}
 	return
-}
-
-// blocks of text might well be a template.
-func (op *Lines) ConvertText() (ret interface{}, err error) {
-	return convert_text_or_template(op.Str)
 }

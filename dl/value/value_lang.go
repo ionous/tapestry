@@ -3,10 +3,12 @@ package value
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/reader"
 )
 
 // Lines requires a user-specified string.
 type Lines struct {
+	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -30,6 +32,7 @@ func (*Lines) Compose() composer.Spec {
 
 // PatternName requires a user-specified string.
 type PatternName struct {
+	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -53,6 +56,7 @@ func (*PatternName) Compose() composer.Spec {
 
 // RelationName requires a user-specified string.
 type RelationName struct {
+	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -76,6 +80,7 @@ func (*RelationName) Compose() composer.Spec {
 
 // Text requires a user-specified string.
 type Text struct {
+	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -86,9 +91,11 @@ func (op *Text) String() (ret string) {
 	return
 }
 
+const Text_Empty = "$EMPTY"
+
 func (*Text) Choices() (choices map[string]string) {
 	return map[string]string{
-		"$EMPTY": "empty",
+		Text_Empty: "empty",
 	}
 }
 
@@ -104,6 +111,7 @@ func (*Text) Compose() composer.Spec {
 
 // VariableName requires a user-specified string.
 type VariableName struct {
+	At  reader.Position `if:"internal"`
 	Str string
 }
 

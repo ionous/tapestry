@@ -4,40 +4,19 @@ package render
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
-// RenderAsAny
-type RenderAsAny struct {
+// RenderExp
+type RenderExp struct {
+	Expression rt.TextEval `if:"label=_"`
 }
 
-func (*RenderAsAny) Compose() composer.Spec {
+func (*RenderExp) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "render_as_any",
-		Lede: "as_any",
-	}
-}
-
-// RenderAsObj
-type RenderAsObj struct {
-}
-
-func (*RenderAsObj) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "render_as_obj",
-		Lede: "as_obj",
-	}
-}
-
-// RenderAsVar
-type RenderAsVar struct {
-}
-
-func (*RenderAsVar) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "render_as_var",
-		Lede: "as_var",
+		Name: "render_exp",
 	}
 }
 
@@ -52,22 +31,35 @@ func (*RenderField) Compose() composer.Spec {
 	}
 }
 
-// RenderFlags swaps between various options
+// RenderFlags requires a user-specified string.
 type RenderFlags struct {
-	Opt interface{}
+	At  reader.Position `if:"internal"`
+	Str string
+}
+
+func (op *RenderFlags) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
+
+const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
+const RenderFlags_RenderAsObj = "$RENDER_AS_OBJ"
+const RenderFlags_RenderAsAny = "$RENDER_AS_ANY"
+
+func (*RenderFlags) Choices() (choices map[string]string) {
+	return map[string]string{
+		RenderFlags_RenderAsVar: "render_as_var", RenderFlags_RenderAsObj: "render_as_obj", RenderFlags_RenderAsAny: "render_as_any",
+	}
 }
 
 func (*RenderFlags) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_flags",
-	}
-}
-
-func (*RenderFlags) Choices() map[string]interface{} {
-	return map[string]interface{}{
-		"render_as_var": (*RenderAsVar)(nil),
-		"render_as_obj": (*RenderAsObj)(nil),
-		"render_as_any": (*RenderAsAny)(nil),
+		Strings: []string{
+			"render_as_var", "render_as_obj", "render_as_any",
+		},
 	}
 }
 
@@ -85,7 +77,7 @@ func (*RenderName) Compose() composer.Spec {
 // RenderPattern printing is generally an activity b/c say is an activity,and we want the ability to say several things in series.
 type RenderPattern struct {
 	Pattern   value.PatternName `if:"label=_"`
-	Arguments core.Arguments    `if:"label=arguments"`
+	Arguments core.CallArgs     `if:"label=args"`
 }
 
 func (*RenderPattern) Compose() composer.Spec {
@@ -107,27 +99,10 @@ func (*RenderRef) Compose() composer.Spec {
 	}
 }
 
-// RenderTemplate Parse text using iffy templates. See: https://github.com/ionous/iffy/wiki/Templates
-type RenderTemplate struct {
-	Expression rt.TextEval `if:"label=_"`
-}
-
-func (*RenderTemplate) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "render_template",
-	}
-}
-
-var Swaps = []interface{}{
-	(*RenderFlags)(nil),
-}
 var Slats = []composer.Composer{
-	(*RenderAsAny)(nil),
-	(*RenderAsObj)(nil),
-	(*RenderAsVar)(nil),
+	(*RenderExp)(nil),
 	(*RenderField)(nil),
 	(*RenderName)(nil),
 	(*RenderPattern)(nil),
 	(*RenderRef)(nil),
-	(*RenderTemplate)(nil),
 }

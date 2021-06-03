@@ -16,7 +16,7 @@ type StoryStatement interface {
 // story is a bunch of paragraphs
 func (op *Story) ImportStory(k *Importer) (err error) {
 	if els := op.Paragraph; els != nil {
-		for _, el := range *els {
+		for _, el := range els {
 			if e := el.ImportParagraph(k); e != nil {
 				err = errutil.Append(err, e)
 			}
@@ -28,7 +28,7 @@ func (op *Story) ImportStory(k *Importer) (err error) {
 // paragraph is a bunch of statements on the same line
 func (op *Paragraph) ImportParagraph(k *Importer) (err error) {
 	if els := op.StoryStatement; els != nil {
-		for _, el := range *els {
+		for _, el := range els {
 			if e := el.ImportPhrase(k); e != nil {
 				err = errutil.Append(err, e)
 			}
@@ -39,7 +39,7 @@ func (op *Paragraph) ImportParagraph(k *Importer) (err error) {
 
 // (the) colors are red, blue, or green.
 func (op *AspectTraits) ImportPhrase(k *Importer) (err error) {
-	if aspect, e := op.Aspect.NewName(k); e != nil {
+	if aspect, e := NewAspect(k, op.Aspect); e != nil {
 		err = e
 	} else {
 		err = op.TraitPhrase.ImportTraits(k, aspect)
@@ -51,9 +51,9 @@ func (op *AspectTraits) ImportPhrase(k *Importer) (err error) {
 func (op *Certainties) ImportPhrase(k *Importer) (err error) {
 	if certainty, e := op.Certainty.ImportString(k); e != nil {
 		err = e
-	} else if trait, e := op.Trait.NewName(k); e != nil {
+	} else if trait, e := NewTrait(k, op.Trait); e != nil {
 		err = e
-	} else if kind, e := op.PluralKinds.NewName(k); e != nil {
+	} else if kind, e := NewPluralKinds(k, op.PluralKinds); e != nil {
 		err = e
 	} else {
 		k.NewCertainty(certainty, trait, kind)
@@ -67,15 +67,15 @@ func (op *Comment) ImportPhrase(k *Importer) (err error) {
 }
 
 func (op *GrammarDecl) ImportPhrase(k *Importer) error {
-	_, e := k.NewGob("grammar", &grammar.GrammarDecl{op.Grammar})
+	_, e := k.NewGob("grammar", &grammar.Grammar{op.Grammar})
 	return e
 }
 
 // ex. The description of the nets is xxx
 func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
-	if prop, e := op.Property.NewName(k); e != nil {
+	if prop, e := NewProperty(k, op.Property); e != nil {
 		err = e
-	} else if text, e := op.Lines.ConvertText(); e != nil {
+	} else if text, e := ConvertText(op.Lines.String()); e != nil {
 		err = e
 	} else if e := k.Recent.Nouns.CollectSubjects(func() (err error) {
 		for _, n := range op.Nouns {
@@ -98,7 +98,7 @@ func (op *NounStatement) ImportPhrase(k *Importer) (err error) {
 		err = e
 	} else {
 		if els := op.Tail; els != nil {
-			for _, el := range *els {
+			for _, el := range els {
 				if e := el.Import(k); e != nil {
 					err = errutil.Append(err, e)
 				}
@@ -113,7 +113,7 @@ func (op *NounStatement) ImportPhrase(k *Importer) (err error) {
 
 // ex. On the beach are shells.
 func (op *RelativeToNoun) ImportPhrase(k *Importer) (err error) {
-	if relation, e := op.Relation.NewName(k); e != nil {
+	if relation, e := NewRelation(k, op.Relation); e != nil {
 		err = e
 	} else if e := k.Recent.Nouns.CollectObjects(func() error {
 		return ImportNamedNouns(k, op.Nouns)

@@ -7,7 +7,7 @@ import (
 )
 
 // RunTest returns an error on failure.
-func (op *RenderTemplate) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *RenderExp) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if v, e := safe.GetOptionalText(run, op.Expression, ""); e != nil {
 		err = cmdError(op, e)
 	} else {

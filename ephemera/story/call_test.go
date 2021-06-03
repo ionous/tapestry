@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/kr/pretty"
@@ -13,8 +14,8 @@ import (
 // test calling a pattern
 // note: the pattern is undefined.
 func TestDetermineNum(t *testing.T) {
-	expect := core.Determine{
-		Pattern: "factorial", Arguments: core.NamedArgs(
+	expect := core.CallPattern{
+		Pattern: value.PatternName{Str: "factorial"}, Arguments: core.NamedArgs(
 			"num", &core.FromNum{
 				&core.NumValue{3},
 			})}

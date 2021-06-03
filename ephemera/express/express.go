@@ -152,12 +152,12 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 	if args, e := c.stack.pop(arity); e != nil {
 		err = e
 	} else {
-		var ps core.Arguments
+		var ps core.CallArgs
 		for i, arg := range args {
 			if newa, e := newAssignment(arg); e != nil {
 				err = errutil.Append(e)
 			} else {
-				newp := core.Argument{
+				newp := core.CallArg{
 					Name: W("$" + strconv.Itoa(i+1)),
 					From: newa,
 				}
@@ -311,13 +311,13 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			err = c.buildUnless(&core.ChooseText{}, fn.ParameterCount)
 
 		case types.Stopping:
-			var seq core.StoppingText
+			var seq core.CallTerminal
 			err = c.buildSequence(&seq, &seq.At, &seq.Parts, fn.ParameterCount)
 		case types.Shuffle:
-			var seq core.ShuffleText
+			var seq core.CallShuffle
 			err = c.buildSequence(&seq, &seq.At, &seq.Parts, fn.ParameterCount)
 		case types.Cycle:
-			var seq core.CycleText
+			var seq core.CallCycle
 			err = c.buildSequence(&seq, &seq.At, &seq.Parts, fn.ParameterCount)
 		case types.Span:
 			err = c.buildSpan(fn.ParameterCount)

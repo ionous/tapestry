@@ -21,13 +21,13 @@ import (
 type dotName string
 
 func (on dotName) flags() (ret render.RenderFlags) {
-	var flag interface{}
+	var flag string
 	if name := string(on); lang.IsCapitalized(name) {
-		flag = &render.RenderAsObj{}
+		flag = render.RenderFlags_RenderAsObj
 	} else {
-		flag = &render.RenderAsAny{}
+		flag = render.RenderFlags_RenderAsAny
 	}
-	return render.RenderFlags{flag}
+	return render.RenderFlags{Str: flag}
 }
 
 // when dotted names are used as arguments to concrete functions
@@ -35,7 +35,7 @@ func (on dotName) flags() (ret render.RenderFlags) {
 // we cant know the type of the variable .count without keeping a name stack during compilation
 // but we can use the existing command Var which implements every eval type.
 func (on dotName) getValueNamed() *render.RenderRef {
-	return &render.RenderRef{value.VariableName{string(on)}, on.flags()}
+	return &render.RenderRef{value.VariableName{Str: string(on)}, on.flags()}
 }
 
 // when dotted names are as arguments to patterns:

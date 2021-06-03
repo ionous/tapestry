@@ -14,14 +14,14 @@ func TestSequences(t *testing.T) {
 	t.Run("cycle none", func(t *testing.T) {
 		matchSequence(t, []string{
 			"",
-		}, &CycleText{
+		}, &CallCycle{
 			reader.Position{Offset: t.Name()}, nil,
 		})
 	})
 	t.Run("cycle text", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "b", "c", "a", "b", "c", "a",
-		}, &CycleText{reader.Position{Offset: t.Name()}, []rt.TextEval{
+		}, &CallCycle{reader.Position{Offset: t.Name()}, []rt.TextEval{
 			T("a"),
 			T("b"),
 			T("c"),
@@ -30,7 +30,7 @@ func TestSequences(t *testing.T) {
 	t.Run("stopping", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "b", "c", "c", "c", "c", "c",
-		}, &StoppingText{
+		}, &CallTerminal{
 			reader.Position{Offset: t.Name()}, []rt.TextEval{
 				T("a"),
 				T("b"),
@@ -40,7 +40,7 @@ func TestSequences(t *testing.T) {
 	t.Run("once", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "", "", "", "",
-		}, &StoppingText{
+		}, &CallTerminal{
 			reader.Position{Offset: t.Name()}, []rt.TextEval{
 				T("a"),
 			}})
@@ -48,7 +48,7 @@ func TestSequences(t *testing.T) {
 	t.Run("shuffle one", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "a",
-		}, &ShuffleText{
+		}, &CallShuffle{
 			At: reader.Position{Offset: t.Name()}, Parts: []rt.TextEval{
 				T("a"),
 			}})
@@ -56,7 +56,7 @@ func TestSequences(t *testing.T) {
 	t.Run("shuffle", func(t *testing.T) {
 		matchSequence(t, []string{
 			"c", "d", "b", "e", "a", "b", "e",
-		}, &ShuffleText{
+		}, &CallShuffle{
 			At: reader.Position{Offset: t.Name()}, Parts: []rt.TextEval{
 				T("a"),
 				T("b"),

@@ -23,7 +23,7 @@ func (op *Lede) Import(k *Importer) (err error) {
 }
 
 func (op *Summary) Import(k *Importer) (err error) {
-	if text, e := op.Lines.ConvertText(); e != nil {
+	if text, e := ConvertText(op.Lines.String()); e != nil {
 		err = e
 	} else {
 		// give "things" an "description"
@@ -51,7 +51,7 @@ func (op *Tail) Import(k *Importer) (err error) {
 
 func (op *TraitPhrase) ImportTraits(k *Importer, aspect ephemera.Named) (err error) {
 	for rank, trait := range op.Trait {
-		if t, e := trait.NewName(k); e != nil {
+		if t, e := NewTrait(k, trait); e != nil {
 			err = errutil.Append(err, e)
 		} else {
 			k.NewTrait(t, aspect, rank)

@@ -19,14 +19,14 @@ func (op *RenderTemplate) ImportStub(k *Importer) (ret interface{}, err error) {
 	} else if eval, ok := got.(rt.TextEval); !ok {
 		err = errutil.Fmt("render template has unknown expression %T", got)
 	} else {
-		ret = &render.RenderTemplate{eval}
+		ret = &render.RenderExp{eval}
 		// pretty.Println(eval)
 	}
 	return
 }
 
 // returns a string or a FromText assignment as a slice of bytes
-func convert_text_or_template(str string) (ret interface{}, err error) {
+func ConvertText(str string) (ret interface{}, err error) {
 	if xs, e := template.Parse(str); e != nil {
 		err = e
 	} else if str, ok := getSimpleString(xs); ok {

@@ -3,6 +3,7 @@
 module.exports =
 `// {{Pascal name}} requires a user-specified string.
 type {{Pascal name}} struct {
+  At    reader.Position \`if:"internal"\`
   Str string
 }
 
@@ -13,9 +14,14 @@ func (op *{{Pascal name}}) String()(ret string) {
   return
 }
 
+{{#each (Choices @this)}}
+const {{Pascal ../name}}_{{Pascal this.token}}= "{{this.token}}";
+{{/each}}
+
 func (*{{Pascal name}}) Choices() (choices map[string]string) {
   return map[string]string{
-    {{#each (Choices @this)~}}"{{this.token}}": "{{this.value}}",{{#unless @last}} {{/unless}}{{/each}}
+    {{#each (Choices @this)~}}
+    {{Pascal ../name}}_{{Pascal this.token}}: "{{this.value}}",{{#unless @last}} {{/unless}}{{/each}}
   }
 }
 

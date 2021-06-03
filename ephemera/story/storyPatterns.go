@@ -4,6 +4,7 @@ import (
 	r "reflect"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/export"
@@ -13,7 +14,7 @@ import (
 )
 
 func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
-	if patternName, e := op.Name.NewName(k); e != nil {
+	if patternName, e := NewPatternName(k, op.Name); e != nil {
 		err = e
 	} else if e := op.PatternRules.ImportRules(k, patternName, ephemera.Named{}, 0); e != nil {
 		err = e
@@ -41,7 +42,7 @@ func (op *PatternReturn) ImportReturn(k *Importer, patternName ephemera.Named) (
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
-	if patternName, e := op.Name.NewName(k); e != nil {
+	if patternName, e := NewPatternName(k, op.Name); e != nil {
 		err = e
 	} else if patternType, e := op.Type.ImportType(k); e != nil {
 		err = e
@@ -66,7 +67,7 @@ func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
 }
 
 func (op *PatternVariablesDecl) ImportPhrase(k *Importer) (err error) {
-	if patternName, e := op.PatternName.NewName(k); e != nil {
+	if patternName, e := NewPatternName(k, op.PatternName); e != nil {
 		err = e
 	} else {
 		// fix: shouldnt this be called pattern parameters?
@@ -83,7 +84,7 @@ func (op *PatternVariablesDecl) ImportPhrase(k *Importer) (err error) {
 
 func (op *PatternRules) ImportRules(k *Importer, pattern, target ephemera.Named, flags rt.Flags) (err error) {
 	if els := op.PatternRule; els != nil {
-		for _, el := range *els {
+		for _, el := range els {
 			if e := el.ImportRule(k, pattern, target, flags); e != nil {
 				err = errutil.Append(err, e)
 			}
@@ -114,7 +115,7 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 		// check if this rule is declared inside a specific domain
 		if dom := k.Current.Domain.String(); len(dom) > 0 {
 			guard = &core.AllTrue{[]rt.BoolEval{
-				&core.HasDominion{dom},
+				&core.HasDominion{value.Text{Str: dom}},
 				guard,
 			}}
 		}
@@ -131,18 +132,18 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 }
 
 func (op *PatternFlags) ReadFlags() (ret rt.Flags, err error) {
-	if op != nil {
-		switch str := op.Str; str {
-		case "$BEFORE":
-			// run other matching patterns, and then run this pattern. other...this.
-			ret = rt.Postfix
-		case "$AFTER":
-			// keep going after running the current pattern. this...others.
-			ret = rt.Prefix
-		case "$TERMINATE":
-			ret = rt.Infix
-		default:
-			err = errutil.New("unknown pattern flags", str)
+	switch str := op.Str; str {
+	case PatternFlags_Before:
+		// run other matching patterns, and then run this pattern. other...this.
+		ret = rt.Postfix
+	case PatternFlags_After:
+		// keep going after running the current pattern. this...others.
+		ret = rt.Prefix
+	case PatternFlags_Terminate:
+		ret = rt.Infix
+	default:
+		if len(str) > 0 {
+			err = errutil.Fmt("unknown pattern flags %q", str)
 		}
 	}
 	return
@@ -179,7 +180,7 @@ func (op *PatternType) ImportType(k *Importer) (ret ephemera.Named, err error) {
 }
 
 func searchForCounters(rval r.Value) bool {
-	return searchForType(rval.Elem(), r.TypeOf((*core.CountOf)(nil)).Elem())
+	return searchForType(rval.Elem(), r.TypeOf((*core.CallTrigger)(nil)).Elem())
 }
 
 func searchForType(rval r.Value, match r.Type) (ret bool) {

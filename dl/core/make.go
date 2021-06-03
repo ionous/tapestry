@@ -8,7 +8,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (op *Make) GetRecord(run rt.Runtime) (ret g.Value, err error) {
+func (op *CallMake) GetRecord(run rt.Runtime) (ret g.Value, err error) {
 	if d, e := op.makeRecord(run); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -17,15 +17,15 @@ func (op *Make) GetRecord(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *Make) makeRecord(run rt.Runtime) (ret *g.Record, err error) {
+func (op *CallMake) makeRecord(run rt.Runtime) (ret *g.Record, err error) {
 	if k, e := run.GetKindByName(op.Kind.String()); e != nil {
 		err = e
 	} else {
 		out := k.NewRecord()
-		if args := op.Arguments; len(args.Args) == 0 {
+		if args := op.Arguments.Args; len(args) == 0 {
 			ret = out // return the empty record
 		} else {
-			for _, arg := range args.Args {
+			for _, arg := range args {
 				name := lang.Breakcase(arg.Name.String())
 				if fin := k.FieldIndex(name); fin < 0 {
 					e := g.UnknownField(op.Kind.String(), arg.Name.String())

@@ -8,7 +8,7 @@ import (
 
 func TestTriggers(t *testing.T) {
 	t.Run("trigger once", func(t *testing.T) {
-		if b := triggerTest(&CountOf{
+		if b := triggerTest(&CallTrigger{
 			At:      reader.Position{Source: t.Name()},
 			Num:     F(3),
 			Trigger: &TriggerOnce{},
@@ -17,7 +17,7 @@ func TestTriggers(t *testing.T) {
 		}
 	})
 	t.Run("trigger cycle", func(t *testing.T) {
-		if b := triggerTest(&CountOf{
+		if b := triggerTest(&CallTrigger{
 			At:      reader.Position{Source: t.Name()},
 			Num:     F(3),
 			Trigger: &TriggerCycle{},
@@ -26,7 +26,7 @@ func TestTriggers(t *testing.T) {
 		}
 	})
 	t.Run("trigger switch", func(t *testing.T) {
-		if b := triggerTest(&CountOf{
+		if b := triggerTest(&CallTrigger{
 			At:      reader.Position{Source: t.Name()},
 			Num:     F(3),
 			Trigger: &TriggerSwitch{},
@@ -36,7 +36,7 @@ func TestTriggers(t *testing.T) {
 	})
 }
 
-func triggerTest(op *CountOf) (ret int) {
+func triggerTest(op *CallTrigger) (ret int) {
 	run := seqTest{counters: make(map[string]int)}
 	for i := 0; i < 8; i++ {
 		if v, e := op.GetBool(&run); e != nil {

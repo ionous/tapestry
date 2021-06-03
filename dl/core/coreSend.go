@@ -9,20 +9,16 @@ import (
 )
 
 // GetBool returns the first matching bool evaluation.
-func (op *Send) GetBool(run rt.Runtime) (g.Value, error) {
+func (op *CallSend) GetBool(run rt.Runtime) (g.Value, error) {
 	return op.send(run, affine.Bool)
 }
 
-func (op *Send) send(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+func (op *CallSend) send(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
 	if path, e := safe.GetTextList(run, op.Path); e != nil {
 		err = e
 	} else {
-		var args []rt.Arg
-		for _, a := range op.Arguments.Args {
-			args = append(args, rt.Arg{a.Name.String(), a.From})
-		}
 		name, up := op.Event.String(), path.Strings()
-		if v, e := run.Send(name, up, args); e != nil {
+		if v, e := run.Send(name, up, op.Arguments.Pack()); e != nil {
 			err = cmdErrorCtx(op, name, e)
 		} else {
 			ret = v

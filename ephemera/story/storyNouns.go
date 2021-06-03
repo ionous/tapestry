@@ -69,19 +69,20 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 	if cnt > 1 {
 		baseName = lang.Singularize(baseName)
 	}
-	namedSingularKind := k.NewName(baseName, tables.NAMED_KIND, op.At.String())
+	at := op.Name.At.String()
+	namedSingularKind := k.NewName(baseName, tables.NAMED_KIND, at)
 
 	// ensure that there's a kind of this name. pluralKinds, singularParent
 	pluralKinds := lang.Pluralize(baseName)
-	k.NewKind(k.NewName(lang.Breakcase(pluralKinds), tables.NAMED_PLURAL_KINDS, op.At.String()),
-		k.NewName("thing", tables.NAMED_KIND, op.At.String()))
+	k.NewKind(k.NewName(lang.Breakcase(pluralKinds), tables.NAMED_PLURAL_KINDS, at),
+		k.NewName("thing", tables.NAMED_KIND, at))
 	//
-	countedTypeTrait := k.NewName("counted", tables.NAMED_TRAIT, op.At.String())
-	printedNameProp := k.NewName("printed_name", tables.NAMED_FIELD, op.At.String())
+	countedTypeTrait := k.NewName("counted", tables.NAMED_TRAIT, at)
+	printedNameProp := k.NewName("printed_name", tables.NAMED_FIELD, at)
 
 	for i := 0; i < cnt; i++ {
 		countedNoun := k.autoCounter.Next(baseName)
-		noun := k.NewName(countedNoun, "noun", op.At.String())
+		noun := k.NewName(countedNoun, "noun", at)
 		k.NewNoun(noun, namedSingularKind)
 		k.NewValue(noun, countedTypeTrait, true)
 		k.NewValue(noun, printedNameProp, baseName)
@@ -92,7 +93,7 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 }
 
 func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
-	if noun, e := op.Name.NewName(k); e != nil {
+	if noun, e := NewNounName(k, op.Name); e != nil {
 		err = e
 	} else {
 		k.Recent.Nouns.Add(noun)
@@ -107,14 +108,14 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 			}
 		}
 		if len(traitStr) > 0 {
-			typeTrait := k.NewName(traitStr, tables.NAMED_TRAIT, op.At.String())
+			typeTrait := k.NewName(traitStr, tables.NAMED_TRAIT, op.Name.At.String())
 			k.NewValue(noun, typeTrait, true)
 		}
 
 		// record any custom determiner
 		if !detFound {
 			// set the indefinite article field
-			article := k.NewName("indefinite_article", tables.NAMED_FIELD, op.At.String())
+			article := k.NewName("indefinite_article", tables.NAMED_FIELD, op.Name.At.String())
 			k.NewValue(noun, article, detStr)
 
 			// create a "indefinite article" field for all objects
@@ -131,14 +132,14 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 
 // ex. "[the box] (is a) (closed) (container) ((on) (the beach))"
 func (op *KindOfNoun) Import(k *Importer) (err error) {
-	if kind, e := op.Kind.NewName(k); e != nil {
+	if kind, e := NewSingularKind(k, op.Kind); e != nil {
 		err = e
 	} else {
 		//
 		var traits []ephemera.Named
 		if ts := op.Trait; ts != nil {
-			for _, t := range *ts {
-				if t, e := t.NewName(k); e != nil {
+			for _, t := range ts {
+				if t, e := NewTrait(k, t); e != nil {
 					err = errutil.Append(err, e)
 				} else {
 					traits = append(traits, t)
@@ -166,7 +167,7 @@ func (op *KindOfNoun) Import(k *Importer) (err error) {
 // ex. [the cat and the hat] (are) (in) (the book)
 // ex. [Hector and Maria] (are) (suspicious of) (Santa and Santana).
 func (op *NounRelation) Import(k *Importer) (err error) {
-	if rel, e := op.Relation.NewName(k); e != nil {
+	if rel, e := NewRelation(k, op.Relation); e != nil {
 		err = e
 	} else if e := k.Recent.Nouns.CollectObjects(func() (err error) {
 		return ImportNamedNouns(k, op.Nouns)
@@ -186,7 +187,7 @@ func (op *NounRelation) Import(k *Importer) (err error) {
 //
 func (op *NounTraits) Import(k *Importer) (err error) {
 	for _, t := range op.Trait {
-		if trait, e := t.NewName(k); e != nil {
+		if trait, e := NewTrait(k, t); e != nil {
 			err = e
 			break
 		} else {

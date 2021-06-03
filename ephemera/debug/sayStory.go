@@ -3,6 +3,7 @@ package debug
 import (
   "git.sr.ht/~ionous/iffy/affine"
   "git.sr.ht/~ionous/iffy/dl/core"
+  "git.sr.ht/~ionous/iffy/dl/value"
   "git.sr.ht/~ionous/iffy/rt"
   g "git.sr.ht/~ionous/iffy/rt/generic"
   "git.sr.ht/~ionous/iffy/rt/safe"
@@ -10,7 +11,7 @@ import (
 )
 
 func SayIt(s string) rt.Execute {
-  return &core.Say{&core.TextValue{s}}
+  return &core.Say{&core.TextValue{value.Text{Str: s}}}
 }
 
 type MatchNumber struct {
@@ -18,7 +19,7 @@ type MatchNumber struct {
 }
 
 func (m MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
-  if a, e := safe.CheckVariable(run, "num", affine.Number); e != nil {
+  if a, e := safe.CheckVariable(run, numVar, affine.Number); e != nil {
     err = e
   } else {
     n := a.Int()
@@ -27,9 +28,9 @@ func (m MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
   return
 }
 
-func DetermineSay(i int) *core.Determine {
-  return &core.Determine{
-    Pattern: "say_me",
+func DetermineSay(i int) *core.CallPattern {
+  return &core.CallPattern{
+    Pattern: value.PatternName{Str: "say_me"},
     Arguments: core.NamedArgs(
       "num", &core.FromNum{
         &core.NumValue{float64(i)},
@@ -60,11 +61,11 @@ var SayHelloGoodbye = core.NewActivity(
   &core.ChooseAction{
     If: &core.BoolValue{true},
     Do: core.MakeActivity(&core.Say{
-      Text: &core.TextValue{"hello"},
+      Text: &core.TextValue{value.Text{Str: "hello"}},
     }),
     Else: &core.ChooseNothingElse{
       core.MakeActivity(&core.Say{
-        Text: &core.TextValue{"goodbye"},
+        Text: &core.TextValue{value.Text{Str: "goodbye"}},
       }),
     },
   })

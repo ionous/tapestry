@@ -18,7 +18,7 @@ func AssembleGrammar(asm *Assembler) (err error) {
 		from eph_prog where progType='grammar'
 		order by rowid`,
 		func() (err error) {
-			var decl grammar.GrammarDecl
+			var decl grammar.Grammar
 			var name string // try to make a name for ourselves
 			if e := tables.DecodeGob(prog, &decl); e != nil {
 				err = e

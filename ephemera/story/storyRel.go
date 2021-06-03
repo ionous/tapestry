@@ -8,7 +8,7 @@ import (
 
 func (op *KindOfRelation) ImportPhrase(k *Importer) (err error) {
 	// rec.NewRelation(r, k, q, c)
-	if rel, e := op.Relation.NewName(k); e != nil {
+	if rel, e := NewRelation(k, op.Relation); e != nil {
 		err = e
 	} else if card, e := op.RelationCardinality.ImportCardinality(k); e != nil {
 		err = e
@@ -36,9 +36,9 @@ func (op *RelationCardinality) ImportCardinality(k *Importer) (ret importedCardi
 }
 
 func (op *OneToOne) ImportCardinality(k *Importer) (ret importedCardinality, err error) {
-	if first, e := op.Kind.FixPlurals(k); e != nil {
+	if first, e := FixPlurals(k, op.Kind); e != nil {
 		err = e
-	} else if second, e := op.OtherKind.FixPlurals(k); e != nil {
+	} else if second, e := FixPlurals(k, op.OtherKind); e != nil {
 		err = e
 	} else {
 		ret = importedCardinality{tables.ONE_TO_ONE, first, second}
@@ -46,9 +46,9 @@ func (op *OneToOne) ImportCardinality(k *Importer) (ret importedCardinality, err
 	return
 }
 func (op *OneToMany) ImportCardinality(k *Importer) (ret importedCardinality, err error) {
-	if first, e := op.Kind.FixPlurals(k); e != nil {
+	if first, e := FixPlurals(k, op.Kind); e != nil {
 		err = e
-	} else if second, e := op.Kinds.NewName(k); e != nil {
+	} else if second, e := NewPluralKinds(k, op.Kinds); e != nil {
 		err = e
 	} else {
 		ret = importedCardinality{tables.ONE_TO_MANY, first, second}
@@ -56,9 +56,9 @@ func (op *OneToMany) ImportCardinality(k *Importer) (ret importedCardinality, er
 	return
 }
 func (op *ManyToOne) ImportCardinality(k *Importer) (ret importedCardinality, err error) {
-	if first, e := op.Kinds.NewName(k); e != nil {
+	if first, e := NewPluralKinds(k, op.Kinds); e != nil {
 		err = e
-	} else if second, e := op.Kind.FixPlurals(k); e != nil {
+	} else if second, e := FixPlurals(k, op.Kind); e != nil {
 		err = e
 	} else {
 		ret = importedCardinality{tables.MANY_TO_ONE, first, second}
@@ -66,9 +66,9 @@ func (op *ManyToOne) ImportCardinality(k *Importer) (ret importedCardinality, er
 	return
 }
 func (op *ManyToMany) ImportCardinality(k *Importer) (ret importedCardinality, err error) {
-	if first, e := op.Kinds.NewName(k); e != nil {
+	if first, e := NewPluralKinds(k, op.Kinds); e != nil {
 		err = e
-	} else if second, e := op.OtherKinds.NewName(k); e != nil {
+	} else if second, e := NewPluralKinds(k, op.OtherKinds); e != nil {
 		err = e
 	} else {
 		ret = importedCardinality{tables.MANY_TO_MANY, first, second}
