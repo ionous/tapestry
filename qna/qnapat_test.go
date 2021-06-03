@@ -14,7 +14,7 @@ import (
 
 // manually add an assembled pattern to the database, test that it works as expected.
 func TestSayMe(t *testing.T) {
-	gob.Register((*core.Text)(nil))
+	gob.Register((*core.TextValue)(nil))
 	gob.Register((*debug.MatchNumber)(nil))
 
 	db := testdb.Open(t.Name(), testdb.Memory, assembly.SqlCustomDriver)
