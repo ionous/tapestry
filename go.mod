@@ -11,7 +11,4 @@ require (
 	github.com/kr/pretty v0.2.1
 	github.com/mattn/go-sqlite3 v1.14.6
 	github.com/reiver/go-porterstemmer v1.0.1
-	github.com/tinylib/msgp v1.1.5 // indirect
-	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781 // indirect
-	zombiezen.com/go/capnproto2 v2.18.0+incompatible
 )
