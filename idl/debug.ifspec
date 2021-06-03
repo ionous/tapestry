@@ -2,13 +2,13 @@
   "do_nothing": {
     "uses": "flow",
     "spec": "do_nothing {why%reason?text}",
-    "slots": "execute",
+    "slot": "execute",
     "desc": "Statement which does nothing."
   },
   "log": {
     "uses": "flow",
     "spec": "log {_%value:assignment} {as%level?logging_level}",
-    "slots": "execute",
+    "slot": "execute",
     "desc": "Debug log"
   },
   "logging_level": {

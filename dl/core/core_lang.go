@@ -33,8 +33,7 @@ func (*AllTrue) Compose() composer.Spec {
 }
 
 // Always Returns true always.
-type Always struct {
-}
+type Always struct{}
 
 func (*Always) Compose() composer.Spec {
 	return composer.Spec{
@@ -68,8 +67,7 @@ func (*Assign) Compose() composer.Spec {
 }
 
 // Blankline Add a single blank line following some text.
-type Blankline struct {
-}
+type Blankline struct{}
 
 func (*Blankline) Compose() composer.Spec {
 	return composer.Spec{
@@ -103,8 +101,7 @@ func (*Bracket) Compose() composer.Spec {
 }
 
 // Break In a repeating loop, exit the loop.
-type Break struct {
-}
+type Break struct{}
 
 func (*Break) Compose() composer.Spec {
 	return composer.Spec{
@@ -417,8 +414,7 @@ func (*During) Compose() composer.Spec {
 }
 
 // EqualTo Two values exactly match.
-type EqualTo struct {
-}
+type EqualTo struct{}
 
 func (*EqualTo) Compose() composer.Spec {
 	return composer.Spec{
@@ -560,8 +556,7 @@ func (*GetAtField) Compose() composer.Spec {
 }
 
 // GreaterOrEqual The first value is larger than the second value.
-type GreaterOrEqual struct {
-}
+type GreaterOrEqual struct{}
 
 func (*GreaterOrEqual) Compose() composer.Spec {
 	return composer.Spec{
@@ -571,8 +566,7 @@ func (*GreaterOrEqual) Compose() composer.Spec {
 }
 
 // GreaterThan The first value is larger than the second value.
-type GreaterThan struct {
-}
+type GreaterThan struct{}
 
 func (*GreaterThan) Compose() composer.Spec {
 	return composer.Spec{
@@ -725,8 +719,7 @@ func (*KindsOf) Compose() composer.Spec {
 }
 
 // LessOrEqual The first value is larger than the second value.
-type LessOrEqual struct {
-}
+type LessOrEqual struct{}
 
 func (*LessOrEqual) Compose() composer.Spec {
 	return composer.Spec{
@@ -736,8 +729,7 @@ func (*LessOrEqual) Compose() composer.Spec {
 }
 
 // LessThan The first value is less than the second value.
-type LessThan struct {
-}
+type LessThan struct{}
 
 func (*LessThan) Compose() composer.Spec {
 	return composer.Spec{
@@ -854,8 +846,7 @@ func (*NameOf) Compose() composer.Spec {
 }
 
 // Newline Start a new line.
-type Newline struct {
-}
+type Newline struct{}
 
 func (*Newline) Compose() composer.Spec {
 	return composer.Spec{
@@ -865,8 +856,7 @@ func (*Newline) Compose() composer.Spec {
 }
 
 // Next In a repeating loop, try the next iteration of the loop.
-type Next struct {
-}
+type Next struct{}
 
 func (*Next) Compose() composer.Spec {
 	return composer.Spec{
@@ -886,8 +876,7 @@ func (*Not) Compose() composer.Spec {
 }
 
 // NotEqualTo Two values don&#x27;t match exactly.
-type NotEqualTo struct {
-}
+type NotEqualTo struct{}
 
 func (*NotEqualTo) Compose() composer.Spec {
 	return composer.Spec{
@@ -1081,8 +1070,7 @@ func (*Slash) Compose() composer.Spec {
 }
 
 // Softline Start a new line ( if not already at a new line. )
-type Softline struct {
-}
+type Softline struct{}
 
 func (*Softline) Compose() composer.Spec {
 	return composer.Spec{
@@ -1141,8 +1129,7 @@ func (*TextValue) Compose() composer.Spec {
 }
 
 // TriggerCycle
-type TriggerCycle struct {
-}
+type TriggerCycle struct{}
 
 func (*TriggerCycle) Compose() composer.Spec {
 	return composer.Spec{
@@ -1152,8 +1139,7 @@ func (*TriggerCycle) Compose() composer.Spec {
 }
 
 // TriggerOnce
-type TriggerOnce struct {
-}
+type TriggerOnce struct{}
 
 func (*TriggerOnce) Compose() composer.Spec {
 	return composer.Spec{
@@ -1163,8 +1149,7 @@ func (*TriggerOnce) Compose() composer.Spec {
 }
 
 // TriggerSwitch
-type TriggerSwitch struct {
-}
+type TriggerSwitch struct{}
 
 func (*TriggerSwitch) Compose() composer.Spec {
 	return composer.Spec{

@@ -3,7 +3,6 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
@@ -33,7 +32,6 @@ func (*Log) Compose() composer.Spec {
 
 // LoggingLevel requires a user-specified string.
 type LoggingLevel struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 

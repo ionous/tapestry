@@ -101,7 +101,7 @@ module.exports = class Make {
         slots: slots,
         tokens: tags.keys,
         params: tags.args,
-        spec: tags.msg,
+        // spec: tags.msg,
     });
   }
 
@@ -115,7 +115,7 @@ module.exports = class Make {
     return this.newType(name, "swap", desc, {
         tokens: tags.keys,
         params: tags.args,
-        spec: tags.msg,
+        // spec: tags.msg,
     });
   }
   str( name, msg=null, desc= null ) {
@@ -135,7 +135,7 @@ module.exports = class Make {
     return this.newType(name, uses, desc, {
         tokens: tags.keys,
         params: tags.args,
-        spec: tags.msg,
+        // spec: tags.msg,
      });
   }
 
@@ -144,7 +144,7 @@ module.exports = class Make {
   }
 
   newType(name, uses, desc, withspec=null) {
-    const group= this.currGroups ? this.currGroups.slice(): [];
+    const group= this.currGroups.slice();
     return this.types.newType(Object.assign(
       {name:name},
       desc&&{desc:Make.makeDesc(name, desc)},
@@ -198,6 +198,7 @@ module.exports = class Make {
       w.tokens= tags.keys;
       w.params= tags.args;
       d["with"]= w;
+      delete d.spec;
     }
     this.types.newType(d);
   }

@@ -32,14 +32,17 @@
     },
     "variable_name":
     {
-        "uses": "str"
+        "uses": "str",
+        "group": "positioned"
     },
     "pattern_name":
     {
-        "uses": "str"
+        "uses": "str",
+        "group": "positioned"
     },
     "relation_name":
     {
-        "uses": "str"
+        "uses": "str",
+        "group": "positioned"
     }
 }

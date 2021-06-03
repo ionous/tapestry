@@ -3,7 +3,8 @@
 module.exports =
 `// {{Pascal name}} requires a user-specified string.
 type {{Pascal name}} struct {
-  At    reader.Position \`if:"internal"\`
+{{~#if (IsPositioned this)}}
+  At  reader.Position \`if:"internal"\`{{/if}}
   Str string
 }
 

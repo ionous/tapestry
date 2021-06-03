@@ -4,7 +4,6 @@ package render
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
@@ -33,7 +32,6 @@ func (*RenderField) Compose() composer.Spec {
 
 // RenderFlags requires a user-specified string.
 type RenderFlags struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 

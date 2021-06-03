@@ -12,7 +12,6 @@ import (
 
 // AbstractAction requires a user-specified string.
 type AbstractAction struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -92,7 +91,6 @@ func (*ActionName) Compose() composer.Spec {
 
 // ActionParams swaps between various options
 type ActionParams struct {
-	At  reader.Position `if:"internal"`
 	Opt interface{}
 }
 
@@ -112,7 +110,6 @@ func (*ActionParams) Choices() map[string]interface{} {
 
 // AreAn requires a user-specified string.
 type AreAn struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -338,7 +335,6 @@ func (*Determine) Compose() composer.Spec {
 
 // Determiner requires a user-specified string.
 type Determiner struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -422,7 +418,6 @@ func (*EventName) Compose() composer.Spec {
 
 // EventPhase requires a user-specified string.
 type EventPhase struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -454,7 +449,6 @@ func (*EventPhase) Compose() composer.Spec {
 
 // EventTarget swaps between various options
 type EventTarget struct {
-	At  reader.Position `if:"internal"`
 	Opt interface{}
 }
 
@@ -755,7 +749,6 @@ func (*NounTraits) Compose() composer.Spec {
 
 // NumberListType requires a user-specified string.
 type NumberListType struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -873,7 +866,6 @@ func (*PatternDecl) Compose() composer.Spec {
 
 // PatternFlags requires a user-specified string.
 type PatternFlags struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -1063,7 +1055,6 @@ func (*PrimitiveType) Compose() composer.Spec {
 
 // PrimitiveValue swaps between various options
 type PrimitiveValue struct {
-	At  reader.Position `if:"internal"`
 	Opt interface{}
 }
 
@@ -1100,7 +1091,6 @@ func (*ProgramHook) Choices() map[string]interface{} {
 
 // Pronoun requires a user-specified string.
 type Pronoun struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -1420,8 +1410,8 @@ func (*Story) Compose() composer.Spec {
 
 // Summary
 type Summary struct {
-	Lines value.Lines     `if:"label=summary"`
 	At    reader.Position `if:"internal"`
+	Lines value.Lines     `if:"label=summary"`
 }
 
 func (*Summary) Compose() composer.Spec {
@@ -1510,9 +1500,9 @@ func (*TestScene) Compose() composer.Spec {
 
 // TestStatement
 type TestStatement struct {
+	At       reader.Position `if:"internal"`
 	TestName TestName        `if:"label=test_name"`
 	Test     Testing         `if:"label=expectation"`
-	At       reader.Position `if:"internal"`
 }
 
 func (*TestStatement) Compose() composer.Spec {
@@ -1523,7 +1513,6 @@ func (*TestStatement) Compose() composer.Spec {
 
 // TextListType requires a user-specified string.
 type TextListType struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 

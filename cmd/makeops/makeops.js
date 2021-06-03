@@ -42,13 +42,26 @@ const isClosed = function(strType) {
   return tokens.indexOf(token) < 0;
 };
 
+const isPositioned= function(t) {
+  return Array.isArray(t.group) ? t.group.includes("positioned") : t.group ==="positioned";
+};
+
+const paramsOf = function(t) {
+  let { with: { params = {} } = {} } = t; //safely extract params
+  if (isPositioned(t)) {
+    params= Object.assign({"$AT":{"type":"position", "label":"-"}}, params);
+  }
+  return params;
+};
+
 const groups = {};
 const nameToGroup = {};
 let currentGroup;
 
 Handlebars.registerHelper('Pascal', pascal);
 Handlebars.registerHelper('Lower', lower);
-
+Handlebars.registerHelper('ParamsOf', paramsOf);
+Handlebars.registerHelper('IsPositioned', isPositioned);
 // does the passed string start with a $
 Handlebars.registerHelper('IsToken', function(str) {
   return (str && str[0] === '$');
@@ -191,9 +204,9 @@ for (const typeName in allTypes) {
   let group = type.group;
   if (!group) {
     // ironically, this happens on groups
-    if (type.uses !== "group") {
-      console.log("no group", JSON.stringify(type, 0, 2));
-    }
+    // if (type.uses !== "group") {
+    //   console.log("no group", JSON.stringify(type, 0, 2));
+    // }
   } else {
     // fix. i dont know.
     if (type.uses === "txt") {
@@ -249,13 +262,13 @@ for (currentGroup in groups) {
     count++;
     const type = allTypes[n];
     if (!type.override) {
-      if (type.uses === "str" || type.uses === "swap") {
+      if (isPositioned(type)) {
         const o= "reader"; // for forced str and swap position field
         if (o && o !== currentGroup && inc.indexOf(o) < 0) {
           inc.push(o);
         }
       }
-      const { with: { params = {} } = {} } = type; //safely extract params
+      const params= paramsOf(type);
       for (const p in params) {
         const param = params[p];
         const pt = allTypes[param.type];
@@ -268,6 +281,10 @@ for (currentGroup in groups) {
       }
     }
   }
+
+  // console.log(JSON.stringify(allTypes,0,2));
+  // return;
+
   //
   // 1. open a file
   const dir = path.join(process.env.GOPATH, "src", locationOf(currentGroup));

@@ -8,7 +8,6 @@ import (
 
 // Lines requires a user-specified string.
 type Lines struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -80,7 +79,6 @@ func (*RelationName) Compose() composer.Spec {
 
 // Text requires a user-specified string.
 type Text struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 

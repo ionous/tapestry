@@ -3,7 +3,7 @@
     {
         "uses": "flow",
         "spec": "render_field {_%name:text_eval}",
-        "slots": "from_source_fields",
+        "slot": "from_source_fields",
         "group": "internal",
         "desc":
         [
@@ -15,7 +15,7 @@
     {
         "uses": "flow",
         "spec": "render_name {_%name:string}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "group": "internal",
         "desc":
         [
@@ -30,7 +30,7 @@
     {
         "uses": "flow",
         "spec": "render {_%pattern:pattern_name} {args%arguments:call_args}",
-        "slots":
+        "slot":
         [
             "assignment",
             "execute",
@@ -58,7 +58,7 @@
     {
         "uses": "flow",
         "spec": "render_ref {_%name:variable_name} {flags:render_flags}",
-        "slots":
+        "slot":
         [
             "assignment",
             "bool_eval",
@@ -76,7 +76,7 @@
     {
         "uses": "flow",
         "spec": "render_exp {_%expression:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "group": "internal"
     },
     "try_as_noun":

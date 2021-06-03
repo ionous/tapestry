@@ -28,14 +28,14 @@
     {
         "uses": "flow",
         "spec": "act {do%exe+execute}",
-        "slots": "execute",
+        "slot": "execute",
         "group": "hidden"
     },
     "all_true":
     {
         "uses": "flow",
         "spec": "all_of {_%test+bool_eval}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "Returns true if all of the evaluations are true.",
         "group": "logic"
     },
@@ -43,7 +43,7 @@
     {
         "uses": "flow",
         "spec": "always",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "Returns true always.",
         "group": "logic"
     },
@@ -51,7 +51,7 @@
     {
         "uses": "flow",
         "spec": "any_of {_%test+bool_eval}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "Returns true if any of the evaluations are true.",
         "group": "logic"
     },
@@ -59,7 +59,7 @@
     {
         "uses": "flow",
         "spec": "let {_%var:variable_name} {be%from:assignment}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Assigns a variable to a value.",
         "group": "variables"
     },
@@ -67,7 +67,7 @@
     {
         "uses": "flow",
         "spec": "bool {_%bool}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "Specify an explicit true or false value.",
         "group": "literals"
     },
@@ -75,7 +75,7 @@
     {
         "uses": "flow",
         "spec": "bracket_text {_%do:activity}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
         "group": "printing"
     },
@@ -83,7 +83,7 @@
     {
         "uses": "flow",
         "spec": "break",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "In a repeating loop, exit the loop.",
         "group": "flow"
     },
@@ -91,7 +91,7 @@
     {
         "uses": "flow",
         "spec": "buffer_text {_%do:activity}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "group": "printing"
     },
     "call_arg":
@@ -113,7 +113,7 @@
         "uses": "flow",
         "spec": "call_pattern {_%pattern:pattern_name} {args%arguments:call_args}",
         "desc": "Runtime version of determine",
-        "slots":
+        "slot":
         [
             "execute",
             "bool_eval",
@@ -130,7 +130,7 @@
     {
         "uses": "flow",
         "spec": "capitalize {_%text:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Returns new text, with the first letter turned into uppercase.",
         "group": "format"
     },
@@ -138,7 +138,7 @@
     {
         "uses": "flow",
         "spec": "if {_%if:bool_eval} {do:activity} {else?brancher}",
-        "slots":
+        "slot":
         [
             "execute",
             "brancher"
@@ -150,28 +150,28 @@
     {
         "uses": "flow",
         "spec": "else_if {_%if:bool_eval} {do:activity} {else?brancher}",
-        "slots": "brancher",
+        "slot": "brancher",
         "group": "misc"
     },
     "choose_more_value":
     {
         "uses": "flow",
         "spec": "else_if {_%assign:text} {from:assignment} {and%filter:bool_eval} {do:activity} {else?brancher}",
-        "slots": "brancher",
+        "slot": "brancher",
         "group": "misc"
     },
     "choose_nothing_else":
     {
         "uses": "flow",
         "spec": "else_do {_%do:activity}",
-        "slots": "brancher",
+        "slot": "brancher",
         "group": "misc"
     },
     "choose_num":
     {
         "uses": "flow",
         "spec": "num {if:bool_eval} {then%true:number_eval} {else%false:number_eval}",
-        "slots": "number_eval",
+        "slot": "number_eval",
         "desc": "Pick one of two numbers based on a boolean test.",
         "group": "math"
     },
@@ -179,7 +179,7 @@
     {
         "uses": "flow",
         "spec": "txt {if:bool_eval} {then%true:text_eval} {else%false:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Pick one of two strings based on a boolean test.",
         "group": "format"
     },
@@ -187,7 +187,7 @@
     {
         "uses": "flow",
         "spec": "if {_%assign:text} {from:assignment} {and%filter:bool_eval} {do:activity} {else?brancher}",
-        "slots":
+        "slot":
         [
             "execute",
             "brancher"
@@ -199,7 +199,7 @@
     {
         "uses": "flow",
         "spec": "comma_text {_%do:activity}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Separates words with commas, and 'and'.",
         "group": "printing"
     },
@@ -207,7 +207,7 @@
     {
         "uses": "flow",
         "spec": "cmp {_%a:number_eval} {is:comparator} {num%b:number_eval}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "True if eq,ne,gt,lt,ge,le two numbers.",
         "group": "logic"
     },
@@ -215,47 +215,47 @@
     {
         "uses": "flow",
         "spec": "cmp {_%a:text_eval} {is:comparator} {txt%b:text_eval}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "True if eq,ne,gt,lt,ge,le two strings ( lexical. )",
         "group": "logic"
     },
     "call_cycle":
     {
         "uses": "flow",
-        "spec": "cycle {-%at:position} {_%parts+text_eval}",
-        "slots": "text_eval",
+        "spec": "cycle {_%parts+text_eval}",
+        "slot": "text_eval",
         "desc": "Runtime version of cycle_text",
-        "group": "internal"
+        "group": ["internal", "positioned"]
     },
     "call_shuffle":
     {
         "uses": "flow",
-        "spec": "shuffle {-%at:position} {_%parts+text_eval} {-%indices:shuffler}",
-        "slots": "text_eval",
+        "spec": "shuffle {_%parts+text_eval} {-%indices:shuffler}",
+        "slot": "text_eval",
         "desc": "Runtime version of shuffle_text",
-        "group": "internal"
+        "group": ["internal", "positioned"]
     },
     "call_terminal":
     {
         "uses": "flow",
-        "spec": "stopping {-%at:position} {_%parts+text_eval}",
-        "slots": "text_eval",
+        "spec": "stopping {_%parts+text_eval}",
+        "slot": "text_eval",
         "desc": "Runtime version of stopping_text",
-        "group": "internal"
+        "group": ["internal", "positioned"]
     },
     "call_trigger":
     {
         "uses": "flow",
-        "spec": "trigger {-%at:position} {_%trigger} {num:number_eval}",
-        "slots": "bool_eval",
+        "spec": "trigger {_%trigger} {num:number_eval}",
+        "slot": "bool_eval",
         "desc": "Runtime version of count_of",
-        "group": "internal"
+        "group": ["internal", "positioned"]
     },
     "diff_of":
     {
         "uses": "flow",
         "spec": "dec {_%a:number_eval} {by%b?number_eval}",
-        "slots": "number_eval",
+        "slot": "number_eval",
         "desc": "Subtract two numbers.",
         "group": "math"
     },
@@ -263,7 +263,7 @@
     {
         "uses": "flow",
         "spec": "during {_%pattern:pattern_name}",
-        "slots":
+        "slot":
         [
             "bool_eval",
             "number_eval"
@@ -275,7 +275,7 @@
     {
         "uses": "flow",
         "spec": "equal_to",
-        "slots": "comparator",
+        "slot": "comparator",
         "desc": "Two values exactly match.",
         "group": "comparison"
     },
@@ -283,7 +283,7 @@
     {
         "uses": "flow",
         "spec": "bool {_%val:bool_eval}",
-        "slots": "assignment",
+        "slot": "assignment",
         "desc": "Assigns the calculated boolean value.",
         "group": "variables"
     },
@@ -291,7 +291,7 @@
     {
         "uses": "flow",
         "spec": "num {_%val:number_eval}",
-        "slots": "assignment",
+        "slot": "assignment",
         "desc": "Assigns the calculated number.",
         "group": "variables"
     },
@@ -299,7 +299,7 @@
     {
         "uses": "flow",
         "spec": "nums {_%vals:num_list_eval}",
-        "slots": "assignment",
+        "slot": "assignment",
         "desc": "Assigns the calculated numbers.",
         "group": "variables"
     },
@@ -307,7 +307,7 @@
     {
         "uses": "flow",
         "spec": "obj {_%object:text_eval}",
-        "slots": "from_source_fields",
+        "slot": "from_source_fields",
         "desc": "Targets an object with a computed name.",
         "group": "misc"
     },
@@ -315,7 +315,7 @@
     {
         "uses": "flow",
         "spec": "rec {_%rec:record_eval}",
-        "slots": "from_source_fields",
+        "slot": "from_source_fields",
         "desc": "Targets a record stored in a record.",
         "group": "misc"
     },
@@ -323,7 +323,7 @@
     {
         "uses": "flow",
         "spec": "rec {_%val:record_eval}",
-        "slots": "assignment",
+        "slot": "assignment",
         "desc": "Assigns the calculated record.",
         "group": "variables"
     },
@@ -331,7 +331,7 @@
     {
         "uses": "flow",
         "spec": "recs {_%vals:record_list_eval}",
-        "slots": "assignment",
+        "slot": "assignment",
         "desc": "Assigns the calculated records.",
         "group": "variables"
     },
@@ -339,7 +339,7 @@
     {
         "uses": "flow",
         "spec": "txt {_%val:text_eval}",
-        "slots": "assignment",
+        "slot": "assignment",
         "desc": "Assigns the calculated piece of text.",
         "group": "variables"
     },
@@ -347,7 +347,7 @@
     {
         "uses": "flow",
         "spec": "txts {_%vals:text_list_eval}",
-        "slots": "assignment",
+        "slot": "assignment",
         "desc": "Assigns the calculated texts.",
         "group": "variables"
     },
@@ -355,7 +355,7 @@
     {
         "uses": "flow",
         "spec": "var {_%var:variable_name}",
-        "slots": "from_source_fields",
+        "slot": "from_source_fields",
         "desc": "Targets a record stored in a variable.",
         "group": "misc"
     },
@@ -363,7 +363,7 @@
     {
         "uses": "flow",
         "spec": "get {_%field:text} {from:from_source_fields}",
-        "slots":
+        "slot":
         [
             "assignment",
             "bool_eval",
@@ -381,7 +381,7 @@
     {
         "uses": "flow",
         "spec": "at_least",
-        "slots": "comparator",
+        "slot": "comparator",
         "desc": "The first value is larger than the second value.",
         "group": "comparison"
     },
@@ -389,7 +389,7 @@
     {
         "uses": "flow",
         "spec": "greater_than",
-        "slots": "comparator",
+        "slot": "comparator",
         "desc": "The first value is larger than the second value.",
         "group": "comparison"
     },
@@ -397,14 +397,14 @@
     {
         "uses": "flow",
         "spec": "has_dominion {_%domain:text}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "group": "logic"
     },
     "has_trait":
     {
         "uses": "flow",
         "spec": "get {obj%object:text_eval} {trait:text_eval}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "Return true if the object is currently in the requested state.",
         "group": "objects"
     },
@@ -412,7 +412,7 @@
     {
         "uses": "flow",
         "spec": "id_of {_%object:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "A unique object identifier.",
         "group": "objects"
     },
@@ -420,7 +420,7 @@
     {
         "uses": "flow",
         "spec": "contains {_%text:text_eval} {part:text_eval}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "True if text contains text.",
         "group": "strings"
     },
@@ -428,7 +428,7 @@
     {
         "uses": "flow",
         "spec": "obj {_%object:text_eval}",
-        "slots": "into_target_fields",
+        "slot": "into_target_fields",
         "desc": "Targets an object with a computed name.",
         "group": "misc"
     },
@@ -436,7 +436,7 @@
     {
         "uses": "flow",
         "spec": "var {_%var:variable_name}",
-        "slots": "into_target_fields",
+        "slot": "into_target_fields",
         "desc": "Targets an object or record stored in a variable",
         "group": "misc"
     },
@@ -444,7 +444,7 @@
     {
         "uses": "flow",
         "spec": "is {empty%text:text_eval}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "True if the text is empty.",
         "group": "strings"
     },
@@ -452,7 +452,7 @@
     {
         "uses": "flow",
         "spec": "kind_of {_%object:text_eval} {is_exactly%kind:text}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "True if the object is exactly the named kind.",
         "group": "objects"
     },
@@ -460,7 +460,7 @@
     {
         "uses": "flow",
         "spec": "kind_of {_%object:text_eval} {is%kind:text}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "True if the object is compatible with the named kind.",
         "group": "objects"
     },
@@ -468,7 +468,7 @@
     {
         "uses": "flow",
         "spec": "not {_%test:bool_eval}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "Returns the opposite value.",
         "group": "logic"
     },
@@ -476,7 +476,7 @@
     {
         "uses": "flow",
         "spec": "join {_%sep:text_eval} {parts+text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Returns multiple pieces of text as a single new piece of text.",
         "group": "strings"
     },
@@ -484,7 +484,7 @@
     {
         "uses": "flow",
         "spec": "kind_of {_%object:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Friendly name of the object's kind.",
         "group": "objects"
     },
@@ -492,7 +492,7 @@
     {
         "uses": "flow",
         "spec": "kinds_of {_%kind:text}",
-        "slots": "text_list_eval",
+        "slot": "text_list_eval",
         "desc": "A list of compatible kinds.",
         "group": "objects"
     },
@@ -500,7 +500,7 @@
     {
         "uses": "flow",
         "spec": "at_most",
-        "slots": "comparator",
+        "slot": "comparator",
         "desc": "The first value is larger than the second value.",
         "group": "comparison"
     },
@@ -508,7 +508,7 @@
     {
         "uses": "flow",
         "spec": "less_than",
-        "slots": "comparator",
+        "slot": "comparator",
         "desc": "The first value is less than the second value.",
         "group": "comparison"
     },
@@ -516,7 +516,7 @@
     {
         "uses": "flow",
         "spec": "make {_%kind:text} {args%arguments:call_args}",
-        "slots": "record_eval",
+        "slot": "record_eval",
         "desc": "Runtime version of make",
         "group": "internal"
     },
@@ -524,7 +524,7 @@
     {
         "uses": "flow",
         "spec": "lower {_%text:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.",
         "group": "format"
     },
@@ -532,7 +532,7 @@
     {
         "uses": "flow",
         "spec": "plural {of%text:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Returns the plural form of a singular word. (ex. apples for apple. )",
         "group": "format"
     },
@@ -540,7 +540,7 @@
     {
         "uses": "flow",
         "spec": "reverse {_%text:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.",
         "group": "format"
     },
@@ -548,7 +548,7 @@
     {
         "uses": "flow",
         "spec": "sentence {_%text:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.",
         "group": "format"
     },
@@ -556,7 +556,7 @@
     {
         "uses": "flow",
         "spec": "singular {of%text:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Returns the singular form of a plural word. (ex. apple for apples )",
         "group": "format"
     },
@@ -564,7 +564,7 @@
     {
         "uses": "flow",
         "spec": "title {_%text:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.",
         "group": "format"
     },
@@ -572,7 +572,7 @@
     {
         "uses": "flow",
         "spec": "upper {_%text:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.",
         "group": "format"
     },
@@ -580,7 +580,7 @@
     {
         "uses": "flow",
         "spec": "matches {_%text:text_eval} {to%pattern:string} {-%cache:match_cache}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "Determine whether the specified text is similar to the specified regular expression.",
         "group": "matching"
     },
@@ -588,7 +588,7 @@
     {
         "uses": "flow",
         "spec": "name_of {_%object:text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Full name of the object.",
         "group": "objects"
     },
@@ -596,7 +596,7 @@
     {
         "uses": "flow",
         "spec": "br",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Start a new line.",
         "group": "printing"
     },
@@ -604,7 +604,7 @@
     {
         "uses": "flow",
         "spec": "next",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "In a repeating loop, try the next iteration of the loop.",
         "group": "flow"
     },
@@ -612,7 +612,7 @@
     {
         "uses": "flow",
         "spec": "other_than",
-        "slots": "comparator",
+        "slot": "comparator",
         "desc": "Two values don't match exactly.",
         "group": "comparison"
     },
@@ -620,7 +620,7 @@
     {
         "uses": "flow",
         "spec": "nums {_%values+number}",
-        "slots": "num_list_eval",
+        "slot": "num_list_eval",
         "desc": "Specify a list of multiple numbers.",
         "group": "literals"
     },
@@ -628,7 +628,7 @@
     {
         "uses": "flow",
         "spec": "num {_%num:number}",
-        "slots": "number_eval",
+        "slot": "number_eval",
         "desc": "Specify a particular number.",
         "group": "literals"
     },
@@ -636,7 +636,7 @@
     {
         "uses": "flow",
         "spec": "is {valid%object:text_eval}",
-        "slots": "bool_eval",
+        "slot": "bool_eval",
         "desc": "Returns whether there is a object of the specified name.",
         "group": "objects"
     },
@@ -644,7 +644,7 @@
     {
         "uses": "flow",
         "spec": "p",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Add a single blank line following some text.",
         "group": "printing"
     },
@@ -652,7 +652,7 @@
     {
         "uses": "flow",
         "spec": "numeral {_%num:number_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Writes a number using numerals, eg. '1'.",
         "group": "printing"
     },
@@ -660,7 +660,7 @@
     {
         "uses": "flow",
         "spec": "numeral {words%num:number_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Writes a number in plain english: eg. 'one'",
         "group": "printing"
     },
@@ -668,7 +668,7 @@
     {
         "uses": "flow",
         "spec": "mul {_%a:number_eval} {by%b:number_eval}",
-        "slots": "number_eval",
+        "slot": "number_eval",
         "desc": "Multiply two numbers.",
         "group": "math"
     },
@@ -676,7 +676,7 @@
     {
         "uses": "flow",
         "spec": "put {_%into:into_target_fields} {from:assignment} {at%at_field:text}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Put a value into the field of an record or object",
         "group": "variables"
     },
@@ -684,7 +684,7 @@
     {
         "uses": "flow",
         "spec": "div {_%a:number_eval} {by%b:number_eval}",
-        "slots": "number_eval",
+        "slot": "number_eval",
         "desc": "Divide one number by another.",
         "group": "math"
     },
@@ -692,7 +692,7 @@
     {
         "uses": "flow",
         "spec": "mod {_%a:number_eval} {by%b:number_eval}",
-        "slots": "number_eval",
+        "slot": "number_eval",
         "desc": "Divide one number by another, and return the remainder.",
         "group": "math"
     },
@@ -700,7 +700,7 @@
     {
         "uses": "flow",
         "spec": "response {_%name:text} {text?text_eval}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Generate text in a replaceable manner.",
         "group": "output"
     },
@@ -708,7 +708,7 @@
     {
         "uses": "flow",
         "spec": "row {_%do:activity}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "A single line as part of a group of lines.",
         "group": "printing"
     },
@@ -716,7 +716,7 @@
     {
         "uses": "flow",
         "spec": "rows {_%do:activity}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Group text into successive lines.",
         "group": "printing"
     },
@@ -724,7 +724,7 @@
     {
         "uses": "flow",
         "spec": "say {_%text:text_eval}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Print some bit of text to the player.",
         "group": "printing"
     },
@@ -732,7 +732,7 @@
     {
         "uses": "flow",
         "spec": "call_send {_%event:text} {to%path:text_list_eval} {args%arguments:call_args}",
-        "slots":
+        "slot":
         [
             "execute",
             "bool_eval"
@@ -744,7 +744,7 @@
     {
         "uses": "flow",
         "spec": "put {obj%object:text_eval} {trait:text_eval}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Put an object into a particular state.",
         "group": "objects"
     },
@@ -752,7 +752,7 @@
     {
         "uses": "flow",
         "spec": "slash_text {_%do:activity}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Separates words with left-leaning slashes '/'.",
         "group": "printing"
     },
@@ -760,7 +760,7 @@
     {
         "uses": "flow",
         "spec": "wbr",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Start a new line ( if not already at a new line. )",
         "group": "printing"
     },
@@ -768,7 +768,7 @@
     {
         "uses": "flow",
         "spec": "span_text {_%do:activity}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Writes text with spaces between words.",
         "group": "printing"
     },
@@ -776,7 +776,7 @@
     {
         "uses": "flow",
         "spec": "inc {_%a:number_eval} {by%b?number_eval}",
-        "slots": "number_eval",
+        "slot": "number_eval",
         "desc": "Add two numbers.",
         "group": "math"
     },
@@ -784,7 +784,7 @@
     {
         "uses": "flow",
         "spec": "txts {_%values+text}",
-        "slots": "text_list_eval",
+        "slot": "text_list_eval",
         "desc": "Specifies multiple string values.",
         "group": "literals"
     },
@@ -792,7 +792,7 @@
     {
         "uses": "flow",
         "spec": "txt {_%text}",
-        "slots": "text_eval",
+        "slot": "text_eval",
         "desc": "Specify a small bit of text.",
         "group": "literals"
     },
@@ -800,28 +800,28 @@
     {
         "uses": "flow",
         "spec": "every",
-        "slots": "trigger",
+        "slot": "trigger",
         "group": "comparison"
     },
     "trigger_once":
     {
         "uses": "flow",
         "spec": "at",
-        "slots": "trigger",
+        "slot": "trigger",
         "group": "comparison"
     },
     "trigger_switch":
     {
         "uses": "flow",
         "spec": "after",
-        "slots": "trigger",
+        "slot": "trigger",
         "group": "comparison"
     },
     "var":
     {
         "uses": "flow",
         "spec": "var {_%name:variable_name}",
-        "slots":
+        "slot":
         [
             "assignment",
             "bool_eval",
@@ -839,7 +839,7 @@
     {
         "uses": "flow",
         "spec": "repeating {_%true:bool_eval} {do:activity}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Keep running a series of actions while a condition is true.",
         "group": "flow"
     }

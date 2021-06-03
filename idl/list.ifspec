@@ -18,28 +18,28 @@
     {
         "uses": "flow",
         "spec": "num {_%var:variable_name}",
-        "slots": "list_iterator",
+        "slot": "list_iterator",
         "desc": "Define the name of a number variable."
     },
     "as_rec":
     {
         "uses": "flow",
         "spec": "rec {_%var:variable_name}",
-        "slots": "list_iterator",
+        "slot": "list_iterator",
         "desc": "Define the name of a record variable."
     },
     "as_txt":
     {
         "uses": "flow",
         "spec": "txt {_%var:variable_name}",
-        "slots": "list_iterator",
+        "slot": "list_iterator",
         "desc": "Define the name of a text variable."
     },
     "at":
     {
         "uses": "flow",
         "spec": "get {_%list:assignment} {index:number_eval}",
-        "slots":
+        "slot":
         [
             "number_eval",
             "text_eval",
@@ -51,42 +51,42 @@
     {
         "uses": "flow",
         "spec": "repeating {across%list:assignment} {as:list_iterator} {do:activity} {else?brancher}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Loops over the elements in the passed list, or runs the 'else' activity if empty."
     },
     "erase_edge":
     {
         "uses": "flow",
         "spec": "erase {_%from:list_source} {at_front?bool_eval}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Remove one or more values from a list"
     },
     "erase_index":
     {
         "uses": "flow",
         "spec": "erase {_%count:number_eval} {from:list_source} {at_index:number_eval}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Remove one or more values from a list"
     },
     "erasing":
     {
         "uses": "flow",
         "spec": "erasing {_%count:number_eval} {from:list_source} {at_index:number_eval} {as:text} {do:activity}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased."
     },
     "erasing_edge":
     {
         "uses": "flow",
         "spec": "erasing {_%from:list_source} {at_front?bool_eval} {as:text} {do:activity} {else?brancher}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased."
     },
     "find":
     {
         "uses": "flow",
         "spec": "find {_%value:assignment} {list:assignment}",
-        "slots":
+        "slot":
         [
             "bool_eval",
             "number_eval"
@@ -97,21 +97,21 @@
     {
         "uses": "flow",
         "spec": "nums {_%var:variable_name}",
-        "slots": "list_source",
+        "slot": "list_source",
         "desc": "Uses a list of numbers"
     },
     "from_rec_list":
     {
         "uses": "flow",
         "spec": "recs {_%var:variable_name}",
-        "slots": "list_source",
+        "slot": "list_source",
         "desc": "Uses a list of records"
     },
     "from_txt_list":
     {
         "uses": "flow",
         "spec": "txts {_%var:variable_name}",
-        "slots": "list_source",
+        "slot": "list_source",
         "desc": "Uses a list of text"
     },
     "gather":
@@ -124,56 +124,56 @@
     {
         "uses": "flow",
         "spec": "nums {_%var:variable_name}",
-        "slots": "list_target",
+        "slot": "list_target",
         "desc": "Targets a list of numbers"
     },
     "into_rec_list":
     {
         "uses": "flow",
         "spec": "recs {_%var:variable_name}",
-        "slots": "list_target",
+        "slot": "list_target",
         "desc": "Targets a list of records"
     },
     "into_txt_list":
     {
         "uses": "flow",
         "spec": "txts {_%var:variable_name}",
-        "slots": "list_target",
+        "slot": "list_target",
         "desc": "Targets a list of text"
     },
     "len":
     {
         "uses": "flow",
         "spec": "len {_%list:assignment}",
-        "slots": "number_eval",
+        "slot": "number_eval",
         "desc": "Determines the number of values in a list."
     },
     "map":
     {
         "uses": "flow",
         "spec": "map {_%to_list:text} {from_list:assignment} {using%using_pattern:pattern_name}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time."
     },
     "put_edge":
     {
         "uses": "flow",
         "spec": "put {_%from:assignment} {into:list_target} {at_front?bool_eval}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Add a value to a list"
     },
     "put_index":
     {
         "uses": "flow",
         "spec": "put {_%from:assignment} {into:list_target} {at_index:number_eval}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Replace one value in a list with another"
     },
     "range":
     {
         "uses": "flow",
         "spec": "range {_%to:number_eval} {from?number_eval} {by_step?number_eval}",
-        "slots": "num_list_eval",
+        "slot": "num_list_eval",
         "desc":
         [
             "Generates a series of numbers r[i] = (start + step*i) where i>=0.",
@@ -188,28 +188,28 @@
     {
         "uses": "flow",
         "spec": "list_reduce {into%into_value:variable_name} {from_list:assignment} {using%using_pattern:pattern_name}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record )."
     },
     "reverse_list":
     {
         "uses": "flow",
         "spec": "list_reverse {_%list:list_source}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Reverse a list."
     },
     "set":
     {
         "uses": "flow",
         "spec": "list_set {_%list:text} {index:number_eval} {from:assignment}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Overwrite an existing value in a list."
     },
     "slice":
     {
         "uses": "flow",
         "spec": "slice {_%list:assignment} {start?number_eval} {end?number_eval}",
-        "slots":
+        "slot":
         [
             "num_list_eval",
             "text_list_eval",
@@ -230,27 +230,27 @@
     {
         "uses": "flow",
         "spec": "sort {_%var:variable_name} {by_field:string} {descending?bool_eval}",
-        "slots": "execute"
+        "slot": "execute"
     },
     "sort_records":
     {
         "uses": "flow",
         "spec": "sort {_%var:variable_name} {using:pattern_name}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
     },
     "sort_text":
     {
         "uses": "flow",
         "spec": "sort {_%var:variable_name} {by_field:string} {descending?bool_eval} {using_case?bool_eval}",
-        "slots": "execute",
+        "slot": "execute",
         "desc": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
     },
     "splice":
     {
         "uses": "flow",
         "spec": "splice {_%var:variable_name} {start:number_eval} {remove:number_eval} {insert:assignment}",
-        "slots":
+        "slot":
         [
             "execute",
             "num_list_eval",

@@ -14,6 +14,11 @@ const pascal = function(name, sep = " ") {
 const parseData = function(m, dict) {
   for (const k in dict) {
     const data = dict[k];
+    // ick.
+    const prevGroups= m.currGroups.length;
+    if (data.group) {
+      m.currGroups= m.currGroups.concat( Array.isArray( data.group )? data.group: data.group );
+    }
     switch (data.uses) {
       default:
         throw new Error(`unknown or missing uses ${k}'`);
@@ -41,7 +46,7 @@ const parseData = function(m, dict) {
         break;
       }
       case "slat": {
-        m.slat(k, data.slots || [], data.spec, data.desc || "");
+        m.slat(k, data.slot || [], data.spec, data.desc || "");
         break;
       }
       case "flow": {
@@ -80,18 +85,18 @@ const parseData = function(m, dict) {
         const d= {
           name: k,
           uses: "flow",
-          group: m.currGroups.concat(data.group || []),
+          group: m.currGroups.slice(),
           with: {
             params: tags.args,
               tokens,
           }
           // todo: roles
         };
-        if (data.slots) {
-          if (typeof data.slots === "string") {
-            d.slots = [data.slots];
+        if (data.slot) {
+          if (typeof data.slot === "string") {
+            d.with.slots = [data.slot];
           } else {
-            d.slots = data.slots;
+            d.with.slots = data.slot;
           }
         }
         const desc = data.desc;
@@ -102,9 +107,13 @@ const parseData = function(m, dict) {
           };
         }
         m.newFromSpec(d);
-
         break;
       }
+    }
+    // remove groups
+    const rub= m.currGroups.length - prevGroups;
+    if (rub) {
+      m.currGroups.splice(prevGroups, rub);
     }
   }
 };

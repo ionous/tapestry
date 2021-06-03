@@ -325,10 +325,13 @@ func (dec *Decoder) importValue(outAt r.Value, inVal interface{}) (err error) {
 	return
 }
 
+// fix: slow and ugly.
 func storeAt(m reader.Map, val r.Value) {
 	if at := reader.At(m); len(at) > 0 {
-		if v := val.FieldByName("At"); !v.IsValid() {
-			v.Set(r.ValueOf(at))
+		if v := val.FieldByName("At"); v.IsValid() {
+			if ofs := v.FieldByName("Offset"); ofs.IsValid() {
+				ofs.Set(r.ValueOf(at))
+			}
 		}
 	}
 }
