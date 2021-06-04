@@ -31,7 +31,7 @@ func (op *ErasingEdge) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ErasingEdge) popping(run rt.Runtime) (err error) {
-	if vs, e := eraseEdge(run, op.From, op.AtFront); e != nil {
+	if vs, e := eraseEdge(run, op.From, op.AtEdge); e != nil {
 		err = e
 	} else if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {
 		err = otherwise.Branch(run)

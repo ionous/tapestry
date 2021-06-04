@@ -20,27 +20,27 @@ func (op *Say) Execute(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *Buffer) GetText(run rt.Runtime) (g.Value, error) {
+func (op *BufferText) GetText(run rt.Runtime) (g.Value, error) {
 	var buf bytes.Buffer
 	return writeSpan(run, &buf, op, op.Do, &buf)
 }
 
-func (op *Span) GetText(run rt.Runtime) (g.Value, error) {
+func (op *SpanText) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate writes with spaces
 	return writeSpan(run, span, op, op.Do, span.ChunkOutput())
 }
 
-func (op *Bracket) GetText(run rt.Runtime) (g.Value, error) {
+func (op *BracketText) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.Parens()
 	return writeSpan(run, span, op, op.Do, span.ChunkOutput())
 }
 
-func (op *Slash) GetText(run rt.Runtime) (g.Value, error) {
+func (op *SlashText) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
 	return writeSpan(run, span, op, op.Do, print.Slash(span.ChunkOutput()))
 }
 
-func (op *Commas) GetText(run rt.Runtime) (g.Value, error) {
+func (op *CommaText) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
 	return writeSpan(run, span, op, op.Do, print.AndSeparator(span.ChunkOutput()))
 }

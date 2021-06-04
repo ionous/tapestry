@@ -20,7 +20,7 @@ func (op *PutEdge) push(run rt.Runtime) (err error) {
 	} else if !IsAppendable(ins, els) {
 		err = insertError{ins, els}
 	} else {
-		if atFront, e := safe.GetOptionalBool(run, op.AtFront, false); e != nil {
+		if atFront, e := safe.GetOptionalBool(run, op.AtEdge, false); e != nil {
 			err = e
 		} else if !atFront.Bool() {
 			els.Append(ins)

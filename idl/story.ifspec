@@ -553,7 +553,7 @@
                 "uses": "slat",
                 "spec": "a record of {kind%kind:record_singular}"
             },
-            "record_list_type":
+            "record_list":
             {
                 "uses": "slat",
                 "spec": "a list of {kind%kind:record_singular} records"
@@ -604,26 +604,28 @@
                 "uses": "str",
                 "spec": "{a number%number}, {some text%text}, or {a true/false value%bool}",
                 "group": "positioned"
-            },
+            },  
             "primitive_value":
             {
                 "uses": "swap",
                 "spec": "{text%boxed_text} or {number%boxed_number}"
             },
-            "text_list_type":
+            "text_list":
             {
                 "uses": "str",
-                "spec": "{a list of text%list}"
+                "spec": "{a list of text%list}",
+                "desc": "List of Text: Specifies the existence of a list of text values."
             },
-            "number_list_type":
+            "number_list":
             {
                 "uses": "str",
-                "spec": "{a list of numbers%list}"
+                "spec": "{a list of numbers%list}",
+                "desc": "List of Numbers: Specifies the existence of a list of numbers."
             },
             "ext_type":
             {
                 "uses": "swap",
-                "spec": "a list of {numbers:number_list_type}, a list of {text%text_list_type}, a {record:record_type} or a list of {records:record_list_type}.",
+                "spec": "a list of {numbers:number_list}, a list of {text%text_list}, a {record:record_type} or a list of {records:record_list}.",
                 "group": "positioned"
             }
         }
@@ -653,7 +655,7 @@
             "make":
             {
                 "uses": "flow",
-                "spec": "make {_%kind:text} {args%arguments}",
+                "spec": "make {_%name:text} {args%arguments}",
                 "slot": "record_eval",
                 "group": "misc"
             },

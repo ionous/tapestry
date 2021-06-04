@@ -10,7 +10,7 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-func (op *MakeSingular) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *Singularize) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
 	} else if t := t.String(); len(t) == 0 {
@@ -22,7 +22,7 @@ func (op *MakeSingular) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *MakePlural) GetText(run rt.Runtime) (ret g.Value, err error) {
+func (op *Pluralize) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
 	} else if t := t.String(); len(t) == 0 {

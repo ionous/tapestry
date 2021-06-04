@@ -58,9 +58,9 @@ var FactorialStory = &story.Story{
 								&core.Assign{
 									Var: numVar,
 									From: &core.FromNum{&core.ProductOf{
-										A: &core.Var{Name: numVar},
+										A: &core.GetVar{Name: numVar},
 										B: &core.DiffOf{
-											A: &core.Var{Name: numVar},
+											A: &core.GetVar{Name: numVar},
 											B: &core.NumValue{Num: 1}},
 									}},
 								},
@@ -73,8 +73,8 @@ var FactorialStory = &story.Story{
 				PatternRules: story.PatternRules{
 					PatternRule: []story.PatternRule{{
 						Guard: &core.CompareNum{
-							A:  &core.Var{Name: numVar},
-							Is: &core.EqualTo{},
+							A:  &core.GetVar{Name: numVar},
+							Is: &core.Equal{},
 							B:  &core.NumValue{}},
 						Hook: story.ProgramHook{
 							Opt: &core.Activity{[]rt.Execute{

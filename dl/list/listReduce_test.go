@@ -69,10 +69,10 @@ func TestReduce(t *testing.T) {
 	}
 }
 
-var reduce = list.Reduce{
+var reduce = list.ListReduce{
 	FromList:     &core.FromRecords{V("fruits")},
-	IntoValue:    N("results"),
-	UsingPattern: P("reduce"),
+	IntoValue:    W("results"),
+	UsingPattern: W("reduce"),
 }
 
 // join each record in turn

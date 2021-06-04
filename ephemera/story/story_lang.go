@@ -479,10 +479,10 @@ func (*ExtType) Compose() composer.Spec {
 
 func (*ExtType) Choices() map[string]interface{} {
 	return map[string]interface{}{
-		"numbers":        (*NumberListType)(nil),
-		"text_list_type": (*TextListType)(nil),
-		"record":         (*RecordType)(nil),
-		"records":        (*RecordListType)(nil),
+		"numbers":   (*NumberList)(nil),
+		"text_list": (*TextList)(nil),
+		"record":    (*RecordType)(nil),
+		"records":   (*RecordList)(nil),
 	}
 }
 
@@ -606,7 +606,7 @@ func (*LocalInit) Compose() composer.Spec {
 
 // Make
 type Make struct {
-	Kind      value.Text `if:"label=_"`
+	Name      value.Text `if:"label=_"`
 	Arguments Arguments  `if:"label=args"`
 }
 
@@ -747,29 +747,29 @@ func (*NounTraits) Compose() composer.Spec {
 	}
 }
 
-// NumberListType requires a user-specified string.
-type NumberListType struct {
+// NumberList requires a user-specified string.
+type NumberList struct {
 	Str string
 }
 
-func (op *NumberListType) String() (ret string) {
+func (op *NumberList) String() (ret string) {
 	if s := op.Str; s != "$EMPTY" {
 		ret = s
 	}
 	return
 }
 
-const NumberListType_List = "$LIST"
+const NumberList_List = "$LIST"
 
-func (*NumberListType) Choices() (choices map[string]string) {
+func (*NumberList) Choices() (choices map[string]string) {
 	return map[string]string{
-		NumberListType_List: "list",
+		NumberList_List: "list",
 	}
 }
 
-func (*NumberListType) Compose() composer.Spec {
+func (*NumberList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "number_list_type",
+		Name: "number_list",
 		Strings: []string{
 			"list",
 		},
@@ -1208,14 +1208,14 @@ func (*PropertyType) Choices() map[string]interface{} {
 	}
 }
 
-// RecordListType
-type RecordListType struct {
+// RecordList
+type RecordList struct {
 	Kind RecordSingular `if:"label=kind"`
 }
 
-func (*RecordListType) Compose() composer.Spec {
+func (*RecordList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "record_list_type",
+		Name: "record_list",
 	}
 }
 
@@ -1511,29 +1511,29 @@ func (*TestStatement) Compose() composer.Spec {
 	}
 }
 
-// TextListType requires a user-specified string.
-type TextListType struct {
+// TextList requires a user-specified string.
+type TextList struct {
 	Str string
 }
 
-func (op *TextListType) String() (ret string) {
+func (op *TextList) String() (ret string) {
 	if s := op.Str; s != "$EMPTY" {
 		ret = s
 	}
 	return
 }
 
-const TextListType_List = "$LIST"
+const TextList_List = "$LIST"
 
-func (*TextListType) Choices() (choices map[string]string) {
+func (*TextList) Choices() (choices map[string]string) {
 	return map[string]string{
-		TextListType_List: "list",
+		TextList_List: "list",
 	}
 }
 
-func (*TextListType) Compose() composer.Spec {
+func (*TextList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "text_list_type",
+		Name: "text_list",
 		Strings: []string{
 			"list",
 		},
@@ -1673,7 +1673,7 @@ var Slats = []composer.Composer{
 	(*PatternVariablesDecl)(nil),
 	(*PatternVariablesTail)(nil),
 	(*PropertyDecl)(nil),
-	(*RecordListType)(nil),
+	(*RecordList)(nil),
 	(*RecordType)(nil),
 	(*RecordsPossessProperties)(nil),
 	(*RelativeToNoun)(nil),

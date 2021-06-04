@@ -44,7 +44,15 @@
         "uses": "flow",
         "spec": "always",
         "slot": "bool_eval",
-        "desc": "Returns true always.",
+        "desc": "Returns true.",
+        "group": "logic"
+    },
+    "never":
+    {
+        "uses": "flow",
+        "spec": "always",
+        "slot": "bool_eval",
+        "desc": "Returns false.",
         "group": "logic"
     },
     "any_true":
@@ -71,10 +79,10 @@
         "desc": "Specify an explicit true or false value.",
         "group": "literals"
     },
-    "bracket":
+    "bracket_text":
     {
         "uses": "flow",
-        "spec": "bracket_text {_%do:activity}",
+        "spec": "brackets {_%do:activity}",
         "slot": "text_eval",
         "desc": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
         "group": "printing"
@@ -87,10 +95,10 @@
         "desc": "In a repeating loop, exit the loop.",
         "group": "flow"
     },
-    "buffer":
+    "buffer_text":
     {
         "uses": "flow",
-        "spec": "buffer_text {_%do:activity}",
+        "spec": "buffers {_%do:activity}",
         "slot": "text_eval",
         "group": "printing"
     },
@@ -195,10 +203,10 @@
         "desc": "An if statement with local assignment.",
         "group": "misc"
     },
-    "commas":
+    "comma_text":
     {
         "uses": "flow",
-        "spec": "comma_text {_%do:activity}",
+        "spec": "commas {_%do:activity}",
         "slot": "text_eval",
         "desc": "Separates words with commas, and 'and'.",
         "group": "printing"
@@ -271,10 +279,10 @@
         "desc": "Decide whether a pattern is running.",
         "group": "patterns"
     },
-    "equal_to":
+    "equal":
     {
         "uses": "flow",
-        "spec": "equal_to",
+        "spec": "equals",
         "slot": "comparator",
         "desc": "Two values exactly match.",
         "group": "comparison"
@@ -377,12 +385,12 @@
         "desc": "Get a value from a record.",
         "group": "variables"
     },
-    "greater_or_equal":
+    "at_least":
     {
         "uses": "flow",
         "spec": "at_least",
         "slot": "comparator",
-        "desc": "The first value is larger than the second value.",
+        "desc": "The first value is greater than or equal to the second value.",
         "group": "comparison"
     },
     "greater_than":
@@ -396,7 +404,7 @@
     "has_dominion":
     {
         "uses": "flow",
-        "spec": "has_dominion {_%domain:text}",
+        "spec": "has_dominion {_%name:text}",
         "slot": "bool_eval",
         "group": "logic"
     },
@@ -496,12 +504,12 @@
         "desc": "A list of compatible kinds.",
         "group": "objects"
     },
-    "less_or_equal":
+    "at_most":
     {
         "uses": "flow",
         "spec": "at_most",
         "slot": "comparator",
-        "desc": "The first value is larger than the second value.",
+        "desc": "The first value is less than or equal to the second value.",
         "group": "comparison"
     },
     "less_than":
@@ -528,7 +536,7 @@
         "desc": "Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.",
         "group": "format"
     },
-    "make_plural":
+    "pluralize":
     {
         "uses": "flow",
         "spec": "plural {of%text:text_eval}",
@@ -552,7 +560,7 @@
         "desc": "Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.",
         "group": "format"
     },
-    "make_singular":
+    "singularize":
     {
         "uses": "flow",
         "spec": "singular {of%text:text_eval}",
@@ -608,20 +616,20 @@
         "desc": "In a repeating loop, try the next iteration of the loop.",
         "group": "flow"
     },
-    "not_equal_to":
+    "unequal":
     {
         "uses": "flow",
         "spec": "other_than",
         "slot": "comparator",
-        "desc": "Two values don't match exactly.",
+        "desc": "The first value doesn't equal the second value.",
         "group": "comparison"
     },
-    "num_list":
+    "numbers":
     {
         "uses": "flow",
         "spec": "nums {_%values+number}",
         "slot": "num_list_eval",
-        "desc": "Specify a list of multiple numbers.",
+        "desc": "Number List: Specify a list of numbers.",
         "group": "literals"
     },
     "num_value":
@@ -748,10 +756,10 @@
         "desc": "Put an object into a particular state.",
         "group": "objects"
     },
-    "slash":
+    "slash_text":
     {
         "uses": "flow",
-        "spec": "slash_text {_%do:activity}",
+        "spec": "slashes {_%do:activity}",
         "slot": "text_eval",
         "desc": "Separates words with left-leaning slashes '/'.",
         "group": "printing"
@@ -764,10 +772,10 @@
         "desc": "Start a new line ( if not already at a new line. )",
         "group": "printing"
     },
-    "span":
+    "span_text":
     {
         "uses": "flow",
-        "spec": "span_text {_%do:activity}",
+        "spec": "spaces {_%do:activity}",
         "slot": "text_eval",
         "desc": "Writes text with spaces between words.",
         "group": "printing"
@@ -780,12 +788,12 @@
         "desc": "Add two numbers.",
         "group": "math"
     },
-    "text_list":
+    "texts":
     {
         "uses": "flow",
         "spec": "txts {_%values+text}",
         "slot": "text_list_eval",
-        "desc": "Specifies multiple string values.",
+        "desc": "Text List: Specifies a set of string values.",
         "group": "literals"
     },
     "text_value":
@@ -817,7 +825,7 @@
         "slot": "trigger",
         "group": "comparison"
     },
-    "var":
+    "get_var":
     {
         "uses": "flow",
         "spec": "var {_%name:variable_name}",
@@ -832,7 +840,7 @@
             "text_list_eval",
             "record_list_eval"
         ],
-        "desc": "Return the value of the named variable.",
+        "desc": "Get Variable: Return the value of the named variable.",
         "group": "variables"
     },
     "while":

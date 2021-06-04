@@ -3570,14 +3570,8 @@
                                             },
                                             "$BY_FIELD": {
                                               "id": "id-17798c5d676-12",
-                                              "type": "list_sort_by_field",
-                                              "value": {
-                                                "$NAME": {
-                                                  "id": "id-17798c5d676-13",
-                                                  "type": "text",
-                                                  "value": "grouping label"
-                                                }
-                                              }
+                                              "type": "string",
+                                              "value":  "grouping label"
                                             },
                                             "$ORDER": {
                                               "id": "id-17798c5d676-9",
@@ -3993,11 +3987,6 @@
                                                                                       }
                                                                                     }
                                                                                   }
-                                                                                },
-                                                                                "$AT_EDGE": {
-                                                                                  "id": "id-17799bae367-60",
-                                                                                  "type": "list_edge",
-                                                                                  "value": "$FALSE"
                                                                                 }
                                                                               }
                                                                             }

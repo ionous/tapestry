@@ -51,7 +51,7 @@ func pushBack(src []string, ins ...string) (ret string, err error) {
 func push(src []string, front bool, ins []string) (ret string, err error) {
 	if run, vals, e := newListTime(src, nil); e != nil {
 		err = e
-	} else if e := safe.Run(run, &list.PutEdge{Into: &list.IntoTxtList{N("source")}, From: FromTs(ins), AtFront: B(front)}); e != nil {
+	} else if e := safe.Run(run, &list.PutEdge{Into: &list.IntoTxtList{N("source")}, From: FromTs(ins), AtEdge: B(front)}); e != nil {
 		err = e
 	} else if strs, e := vals.GetNamedField("source"); e != nil {
 		err = e

@@ -5,14 +5,14 @@ import (
 )
 
 // A normal reduce would return a value, instead we accumulate into a variable
-func (op *ReverseList) Execute(run rt.Runtime) (err error) {
+func (op *ListReverse) Execute(run rt.Runtime) (err error) {
 	if e := op.reverse(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *ReverseList) reverse(run rt.Runtime) (err error) {
+func (op *ListReverse) reverse(run rt.Runtime) (err error) {
 	if els, e := GetListSource(run, op.List); e != nil {
 		err = e
 	} else {

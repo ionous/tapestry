@@ -5,9 +5,9 @@
     "slot": "execute",
     "desc": "Statement which does nothing."
   },
-  "log": {
+  "debug_log": {
     "uses": "flow",
-    "spec": "log {_%value:assignment} {as%level?logging_level}",
+    "spec": "log {_%value:assignment} {as%log_level?logging_level}",
     "slot": "execute",
     "desc": "Debug log"
   },

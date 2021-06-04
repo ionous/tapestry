@@ -190,9 +190,11 @@
                                               }
                                             },
                                             "$AT_EDGE": {
-                                              "id": "id-1781dd611ac-60",
-                                              "type": "list_edge",
-                                              "value": "$FALSE"
+                                              "type": "bool_eval",
+                                              "value": {
+                                                "type": "always",
+                                                "value": {}
+                                              }
                                             }
                                           }
                                         }
@@ -233,11 +235,6 @@
                                                   }
                                                 }
                                               }
-                                            },
-                                            "$AT_EDGE": {
-                                              "id": "id-1781dd611ac-189",
-                                              "type": "list_edge",
-                                              "value": "$FALSE"
                                             }
                                           }
                                         }
@@ -335,11 +332,13 @@
                                                             }
                                                           }
                                                         },
-                                                        "$AT_EDGE": {
-                                                          "id": "id-1781dd611ac-92",
-                                                          "type": "list_edge",
-                                                          "value": "$TRUE"
-                                                        },
+                                            "$AT_EDGE": {
+                                              "type": "bool_eval",
+                                              "value": {
+                                                "type": "always",
+                                                "value": {}
+                                              }
+                                            },
                                                         "$AS": {
                                                           "id": "id-1781dd611ac-93",
                                                           "type": "text",
@@ -472,11 +471,6 @@
                                                                                       }
                                                                                     }
                                                                                   }
-                                                                                },
-                                                                                "$AT_EDGE": {
-                                                                                  "id": "id-1781dd611ac-142",
-                                                                                  "type": "list_edge",
-                                                                                  "value": "$FALSE"
                                                                                 }
                                                                               }
                                                                             }
@@ -603,11 +597,6 @@
                                                                                                   }
                                                                                                 }
                                                                                               }
-                                                                                            },
-                                                                                            "$AT_EDGE": {
-                                                                                              "id": "id-1781dd611ac-173",
-                                                                                              "type": "list_edge",
-                                                                                              "value": "$FALSE"
                                                                                             }
                                                                                           }
                                                                                         }

@@ -104,12 +104,12 @@ type primTypeImporter interface {
 	ImportPrimType(*Importer) (retType, retAff string, err error)
 }
 
-func (op *NumberListType) ImportPrimType(k *Importer) (retType, retAff string, err error) {
+func (op *NumberList) ImportPrimType(k *Importer) (retType, retAff string, err error) {
 	retType = affine.NumList.String()
 	return
 }
 
-func (op *TextListType) ImportPrimType(k *Importer) (retType, retAff string, err error) {
+func (op *TextList) ImportPrimType(k *Importer) (retType, retAff string, err error) {
 	retType = affine.TextList.String()
 	return
 }
@@ -120,7 +120,7 @@ func (op *RecordType) ImportPrimType(k *Importer) (retType, retAff string, err e
 	return
 }
 
-func (op *RecordListType) ImportPrimType(k *Importer) (retType, retAff string, err error) {
+func (op *RecordList) ImportPrimType(k *Importer) (retType, retAff string, err error) {
 	retType = lang.Breakcase(op.Kind.Str) // fix? not happy that this has to manually match NAMED_KIND munging
 	retAff = affine.RecordList.String()
 	return

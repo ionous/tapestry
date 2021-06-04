@@ -78,12 +78,5 @@
         "spec": "render_exp {_%expression:text_eval}",
         "slot": "text_eval",
         "group": "internal"
-    },
-    "try_as_noun":
-    {
-        "uses": "num",
-        "### spec": "{as variable:1} {as object:2} {as both:3}",
-        "desc": "internal or-able flags",
-        "group": "internal"
     }
 }

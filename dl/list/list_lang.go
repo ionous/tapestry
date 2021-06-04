@@ -44,38 +44,10 @@ func (*AsTxt) Compose() composer.Spec {
 	}
 }
 
-// At Get a value from a list. The first element is is index 1.
-type At struct {
-	List  rt.Assignment `if:"label=_"`
-	Index rt.NumberEval `if:"label=index"`
-}
-
-func (*At) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "at",
-		Lede: "get",
-	}
-}
-
-// Each Loops over the elements in the passed list, or runs the &#x27;else&#x27; activity if empty.
-type Each struct {
-	List rt.Assignment `if:"label=across"`
-	As   ListIterator  `if:"label=as"`
-	Do   core.Activity `if:"label=do"`
-	Else core.Brancher `if:"label=else,optional"`
-}
-
-func (*Each) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "each",
-		Lede: "repeating",
-	}
-}
-
-// EraseEdge Remove one or more values from a list
+// EraseEdge Erase at edge: Remove one or more values from a list
 type EraseEdge struct {
-	From    ListSource  `if:"label=_"`
-	AtFront rt.BoolEval `if:"label=at_front,optional"`
+	From   ListSource  `if:"label=_"`
+	AtEdge rt.BoolEval `if:"label=at_front,optional"`
 }
 
 func (*EraseEdge) Compose() composer.Spec {
@@ -85,7 +57,7 @@ func (*EraseEdge) Compose() composer.Spec {
 	}
 }
 
-// EraseIndex Remove one or more values from a list
+// EraseIndex Erase at index: Remove one or more values from a list
 type EraseIndex struct {
 	Count   rt.NumberEval `if:"label=_"`
 	From    ListSource    `if:"label=from"`
@@ -116,29 +88,17 @@ func (*Erasing) Compose() composer.Spec {
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type ErasingEdge struct {
-	From    ListSource    `if:"label=_"`
-	AtFront rt.BoolEval   `if:"label=at_front,optional"`
-	As      value.Text    `if:"label=as"`
-	Do      core.Activity `if:"label=do"`
-	Else    core.Brancher `if:"label=else,optional"`
+	From   ListSource    `if:"label=_"`
+	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
+	As     value.Text    `if:"label=as"`
+	Do     core.Activity `if:"label=do"`
+	Else   core.Brancher `if:"label=else,optional"`
 }
 
 func (*ErasingEdge) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erasing_edge",
 		Lede: "erasing",
-	}
-}
-
-// Find Search a list for a specific value.
-type Find struct {
-	Value rt.Assignment `if:"label=_"`
-	List  rt.Assignment `if:"label=list"`
-}
-
-func (*Find) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "find",
 	}
 }
 
@@ -178,19 +138,6 @@ func (*FromTxtList) Compose() composer.Spec {
 	}
 }
 
-// Gather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: &#x27;in&#x27; as each value from the list, and &#x27;out&#x27; as the var passed to the gather.
-type Gather struct {
-	Var     value.VariableName `if:"label=_"`
-	From    ListSource         `if:"label=from"`
-	Pattern value.Text         `if:"label=_"`
-}
-
-func (*Gather) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "gather",
-	}
-}
-
 // IntoNumList Targets a list of numbers
 type IntoNumList struct {
 	Var value.VariableName `if:"label=_"`
@@ -227,35 +174,203 @@ func (*IntoTxtList) Compose() composer.Spec {
 	}
 }
 
-// Len Determines the number of values in a list.
-type Len struct {
-	List rt.Assignment `if:"label=_"`
+// ListAt Get a value from a list. The first element is is index 1.
+type ListAt struct {
+	List  rt.Assignment `if:"label=_"`
+	Index rt.NumberEval `if:"label=index"`
 }
 
-func (*Len) Compose() composer.Spec {
+func (*ListAt) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "len",
+		Name: "list_at",
+		Lede: "get",
 	}
 }
 
-// Map Transform the values from one list and place the results in another list. The designated pattern is called with each value from the &#x27;from list&#x27;, one value at a time.
-type Map struct {
-	ToList       value.Text        `if:"label=_"`
-	FromList     rt.Assignment     `if:"label=from_list"`
-	UsingPattern value.PatternName `if:"label=using"`
+// ListEach Loops over the elements in the passed list, or runs the &#x27;else&#x27; activity if empty.
+type ListEach struct {
+	List rt.Assignment `if:"label=across"`
+	As   ListIterator  `if:"label=as"`
+	Do   core.Activity `if:"label=do"`
+	Else core.Brancher `if:"label=else,optional"`
 }
 
-func (*Map) Compose() composer.Spec {
+func (*ListEach) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "map",
+		Name: "list_each",
+		Lede: "repeating",
+	}
+}
+
+// ListFind Search a list for a specific value.
+type ListFind struct {
+	Value rt.Assignment `if:"label=_"`
+	List  rt.Assignment `if:"label=list"`
+}
+
+func (*ListFind) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_find",
+		Lede: "find",
+	}
+}
+
+// ListGather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: &#x27;in&#x27; as each value from the list, and &#x27;out&#x27; as the var passed to the gather.
+type ListGather struct {
+	Var   value.VariableName `if:"label=_"`
+	From  ListSource         `if:"label=from"`
+	Using value.Text         `if:"label=_"`
+}
+
+func (*ListGather) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_gather",
+		Lede: "gather",
+	}
+}
+
+// ListLen Determines the number of values in a list.
+type ListLen struct {
+	List rt.Assignment `if:"label=_"`
+}
+
+func (*ListLen) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_len",
+		Lede: "len",
+	}
+}
+
+// ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the &#x27;from list&#x27;, one value at a time.
+type ListMap struct {
+	ToList       value.Text    `if:"label=_"`
+	FromList     rt.Assignment `if:"label=from_list"`
+	UsingPattern value.Text    `if:"label=using"`
+}
+
+func (*ListMap) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_map",
+		Lede: "map",
+	}
+}
+
+// ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: &#x27;in&#x27; ( each element of the list ) and &#x27;out&#x27; ( ex. a record ).
+type ListReduce struct {
+	IntoValue    value.Text    `if:"label=into"`
+	FromList     rt.Assignment `if:"label=from_list"`
+	UsingPattern value.Text    `if:"label=using"`
+}
+
+func (*ListReduce) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_reduce",
+		Lede: "reduce",
+	}
+}
+
+// ListReverse Reverse a list.
+type ListReverse struct {
+	List ListSource `if:"label=_"`
+}
+
+func (*ListReverse) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_reverse",
+		Lede: "reverse",
+	}
+}
+
+// ListSet Overwrite an existing value in a list.
+type ListSet struct {
+	List  value.Text    `if:"label=_"`
+	Index rt.NumberEval `if:"label=index"`
+	From  rt.Assignment `if:"label=from"`
+}
+
+func (*ListSet) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_set",
+		Lede: "set",
+	}
+}
+
+// ListSlice Create a new list from a section of another list.,Start is optional, if omitted slice starts at the first element.,If start is greater the length, an empty array is returned.,Slice doesnt include the ending index.,Negatives indices indicates an offset from the end.,When end is omitted, copy up to and including the last element;,and do the same if the end is greater than the length
+type ListSlice struct {
+	List  rt.Assignment `if:"label=_"`
+	Start rt.NumberEval `if:"label=start,optional"`
+	End   rt.NumberEval `if:"label=end,optional"`
+}
+
+func (*ListSlice) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_slice",
+		Lede: "slice",
+	}
+}
+
+// ListSortNumbers
+type ListSortNumbers struct {
+	Var        value.VariableName `if:"label=_"`
+	ByField    string             `if:"label=by_field"`
+	Descending rt.BoolEval        `if:"label=descending,optional"`
+}
+
+func (*ListSortNumbers) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_sort_numbers",
+		Lede: "sort",
+	}
+}
+
+// ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
+type ListSortText struct {
+	Var        value.VariableName `if:"label=_"`
+	ByField    string             `if:"label=by_field"`
+	Descending rt.BoolEval        `if:"label=descending,optional"`
+	UsingCase  rt.BoolEval        `if:"label=using_case,optional"`
+}
+
+func (*ListSortText) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_sort_text",
+		Lede: "sort",
+	}
+}
+
+// ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
+type ListSortUsing struct {
+	Var   value.VariableName `if:"label=_"`
+	Using value.Text         `if:"label=using"`
+}
+
+func (*ListSortUsing) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_sort_using",
+		Lede: "sort",
+	}
+}
+
+// ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
+type ListSplice struct {
+	List   value.Text    `if:"label=_"`
+	Start  rt.NumberEval `if:"label=start"`
+	Remove rt.NumberEval `if:"label=remove"`
+	Insert rt.Assignment `if:"label=insert"`
+}
+
+func (*ListSplice) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "list_splice",
+		Lede: "splice",
 	}
 }
 
 // PutEdge Add a value to a list
 type PutEdge struct {
-	From    rt.Assignment `if:"label=_"`
-	Into    ListTarget    `if:"label=into"`
-	AtFront rt.BoolEval   `if:"label=at_front,optional"`
+	From   rt.Assignment `if:"label=_"`
+	Into   ListTarget    `if:"label=into"`
+	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
 }
 
 func (*PutEdge) Compose() composer.Spec {
@@ -292,115 +407,6 @@ func (*Range) Compose() composer.Spec {
 	}
 }
 
-// Reduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: &#x27;in&#x27; ( each element of the list ) and &#x27;out&#x27; ( ex. a record ).
-type Reduce struct {
-	IntoValue    value.VariableName `if:"label=into"`
-	FromList     rt.Assignment      `if:"label=from_list"`
-	UsingPattern value.PatternName  `if:"label=using"`
-}
-
-func (*Reduce) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "reduce",
-		Lede: "list_reduce",
-	}
-}
-
-// ReverseList Reverse a list.
-type ReverseList struct {
-	List ListSource `if:"label=_"`
-}
-
-func (*ReverseList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "reverse_list",
-		Lede: "list_reverse",
-	}
-}
-
-// Set Overwrite an existing value in a list.
-type Set struct {
-	List  value.Text    `if:"label=_"`
-	Index rt.NumberEval `if:"label=index"`
-	From  rt.Assignment `if:"label=from"`
-}
-
-func (*Set) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "set",
-		Lede: "list_set",
-	}
-}
-
-// Slice Create a new list from a section of another list.,Start is optional, if omitted slice starts at the first element.,If start is greater the length, an empty array is returned.,Slice doesnt include the ending index.,Negatives indices indicates an offset from the end.,When end is omitted, copy up to and including the last element;,and do the same if the end is greater than the length
-type Slice struct {
-	List  rt.Assignment `if:"label=_"`
-	Start rt.NumberEval `if:"label=start,optional"`
-	End   rt.NumberEval `if:"label=end,optional"`
-}
-
-func (*Slice) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "slice",
-	}
-}
-
-// SortNumbers
-type SortNumbers struct {
-	Var        value.VariableName `if:"label=_"`
-	ByField    string             `if:"label=by_field"`
-	Descending rt.BoolEval        `if:"label=descending,optional"`
-}
-
-func (*SortNumbers) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "sort_numbers",
-		Lede: "sort",
-	}
-}
-
-// SortRecords Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
-type SortRecords struct {
-	Var   value.VariableName `if:"label=_"`
-	Using value.PatternName  `if:"label=using"`
-}
-
-func (*SortRecords) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "sort_records",
-		Lede: "sort",
-	}
-}
-
-// SortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
-type SortText struct {
-	Var        value.VariableName `if:"label=_"`
-	ByField    string             `if:"label=by_field"`
-	Descending rt.BoolEval        `if:"label=descending,optional"`
-	UsingCase  rt.BoolEval        `if:"label=using_case,optional"`
-}
-
-func (*SortText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "sort_text",
-		Lede: "sort",
-	}
-}
-
-// Splice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
-type Splice struct {
-	Var    value.VariableName `if:"label=_"`
-	Start  rt.NumberEval      `if:"label=start"`
-	Remove rt.NumberEval      `if:"label=remove"`
-	Insert rt.Assignment      `if:"label=insert"`
-}
-
-func (*Splice) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "splice",
-	}
-}
-
 var Slots = []interface{}{
 	(*ListIterator)(nil),
 	(*ListSource)(nil),
@@ -410,31 +416,31 @@ var Slats = []composer.Composer{
 	(*AsNum)(nil),
 	(*AsRec)(nil),
 	(*AsTxt)(nil),
-	(*At)(nil),
-	(*Each)(nil),
 	(*EraseEdge)(nil),
 	(*EraseIndex)(nil),
 	(*Erasing)(nil),
 	(*ErasingEdge)(nil),
-	(*Find)(nil),
 	(*FromNumList)(nil),
 	(*FromRecList)(nil),
 	(*FromTxtList)(nil),
-	(*Gather)(nil),
 	(*IntoNumList)(nil),
 	(*IntoRecList)(nil),
 	(*IntoTxtList)(nil),
-	(*Len)(nil),
-	(*Map)(nil),
+	(*ListAt)(nil),
+	(*ListEach)(nil),
+	(*ListFind)(nil),
+	(*ListGather)(nil),
+	(*ListLen)(nil),
+	(*ListMap)(nil),
+	(*ListReduce)(nil),
+	(*ListReverse)(nil),
+	(*ListSet)(nil),
+	(*ListSlice)(nil),
+	(*ListSortNumbers)(nil),
+	(*ListSortText)(nil),
+	(*ListSortUsing)(nil),
+	(*ListSplice)(nil),
 	(*PutEdge)(nil),
 	(*PutIndex)(nil),
 	(*Range)(nil),
-	(*Reduce)(nil),
-	(*ReverseList)(nil),
-	(*Set)(nil),
-	(*Slice)(nil),
-	(*SortNumbers)(nil),
-	(*SortRecords)(nil),
-	(*SortText)(nil),
-	(*Splice)(nil),
 }

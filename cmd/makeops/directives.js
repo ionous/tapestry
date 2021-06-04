@@ -97,12 +97,11 @@ module.exports = class Make {
         desc= d;
       }
     }
-    return this.newType(name, "slat", desc,  {
-        slots: slots,
-        tokens: tags.keys,
-        params: tags.args,
+    return this.newType(name, "slat", desc, Object.assign(
+      {tokens: tags.keys,
+       params: tags.args},
         // spec: tags.msg,
-    });
+      slots && {slots}));
   }
 
   slot( name, desc= null ) {

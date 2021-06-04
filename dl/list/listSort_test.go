@@ -35,7 +35,7 @@ func TestSort(t *testing.T) {
 		}
 	}
 	// sorts in place
-	sorter := &list.SortText{
+	sorter := &list.ListSortText{
 		Var:     N("objects"),
 		ByField: "key",
 	}

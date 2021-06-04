@@ -11,7 +11,7 @@ import (
 // expressions would ideally adapt based on the pattern type
 // the assembler probably needs to work directly on tokens...
 func (op *RenderPattern) GetText(run rt.Runtime) (ret g.Value, err error) {
-	buf := core.Buffer{core.MakeActivity(&core.CallPattern{
+	buf := core.BufferText{core.MakeActivity(&core.CallPattern{
 		Pattern:   op.Pattern,
 		Arguments: op.Arguments,
 	})}

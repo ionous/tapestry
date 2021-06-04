@@ -9,10 +9,10 @@ import (
 	"git.sr.ht/~ionous/iffy/test/testpat"
 )
 
-var runGroupTogther = list.Map{
+var runGroupTogther = list.ListMap{
 	FromList:     V("objects"),
 	ToList:       W("settings"),
-	UsingPattern: P("assign_grouping"),
+	UsingPattern: W("assign_grouping"),
 }
 
 type AssignGrouping struct {

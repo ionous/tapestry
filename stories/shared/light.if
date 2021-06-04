@@ -1227,11 +1227,6 @@
                                                               }
                                                             }
                                                           }
-                                                        },
-                                                        "$AT_EDGE": {
-                                                          "id": "id-177661f02fe-182",
-                                                          "type": "list_edge",
-                                                          "value": "$FALSE"
                                                         }
                                                       }
                                                     }
@@ -1788,11 +1783,6 @@
                                                   }
                                                 }
                                               }
-                                            },
-                                            "$AT_EDGE": {
-                                              "id": "id-177fe89b45e-56",
-                                              "type": "list_edge",
-                                              "value": "$FALSE"
                                             }
                                           }
                                         }
@@ -1889,11 +1879,6 @@
                                                               }
                                                             }
                                                           }
-                                                        },
-                                                        "$AT_EDGE": {
-                                                          "id": "id-177fb6fa17c-29",
-                                                          "type": "list_edge",
-                                                          "value": "$FALSE"
                                                         },
                                                         "$AS": {
                                                           "id": "id-177fb6fa17c-30",
@@ -2251,11 +2236,6 @@
                                                                                             }
                                                                                           }
                                                                                         }
-                                                                                      },
-                                                                                      "$AT_EDGE": {
-                                                                                        "id": "id-177fb7e29e7-36",
-                                                                                        "type": "list_edge",
-                                                                                        "value": "$FALSE"
                                                                                       }
                                                                                     }
                                                                                   }

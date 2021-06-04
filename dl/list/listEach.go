@@ -11,14 +11,14 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (op *Each) Execute(run rt.Runtime) (err error) {
+func (op *ListEach) Execute(run rt.Runtime) (err error) {
 	if e := op.forEach(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *Each) forEach(run rt.Runtime) (err error) {
+func (op *ListEach) forEach(run rt.Runtime) (err error) {
 	if vs, e := safe.GetAssignedValue(run, op.List); e != nil {
 		err = e
 	} else if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {

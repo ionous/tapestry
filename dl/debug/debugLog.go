@@ -17,7 +17,7 @@ import (
 // otherwise it logs only at the named level and higher.
 var LogLevel LoggingLevel
 
-func (op *Log) Execute(run rt.Runtime) (err error) {
+func (op *DebugLog) Execute(run rt.Runtime) (err error) {
 	// fix? at this time we cant guarantee a lack of side-effects
 	// so we always eval even if we don't print.
 	if v, e := safe.GetAssignedValue(run, op.Value); e != nil {
@@ -46,12 +46,12 @@ func (op *Log) Execute(run rt.Runtime) (err error) {
 			err = cmdError(op, e)
 		}
 		global := LogLevel.Index()
-		level := op.Level.Index()
+		level := op.LogLevel.Index()
 		if err == nil && ((global >= 0 && level >= global) || (global < 0 && level != 0)) {
 			if level < 0 {
 				level = 0
 			}
-			txt := op.Level.Compose().Strings[level]
+			txt := op.LogLevel.Compose().Strings[level]
 			header := strings.Repeat("#", 1+level)
 			log.Println(header, txt, i)
 		}

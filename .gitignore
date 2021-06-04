@@ -11,3 +11,4 @@ cmd/import/import
 cmd/play/play
 cmd/spec/spec
 cmd/stem/stem
+*.zip

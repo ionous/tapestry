@@ -341,17 +341,17 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			err = c.buildTwo(&core.DiffOf{})
 
 		case types.EQL:
-			err = c.buildCompare(&core.EqualTo{})
+			err = c.buildCompare(&core.Equal{})
 		case types.NEQ:
-			err = c.buildCompare(&core.NotEqualTo{})
+			err = c.buildCompare(&core.Unequal{})
 		case types.LSS:
 			err = c.buildCompare(&core.LessThan{})
 		case types.LEQ:
-			err = c.buildCompare(&core.LessOrEqual{})
+			err = c.buildCompare(&core.AtMost{})
 		case types.GTR:
 			err = c.buildCompare(&core.GreaterThan{})
 		case types.GEQ:
-			err = c.buildCompare(&core.GreaterOrEqual{})
+			err = c.buildCompare(&core.AtLeast{})
 
 		case types.LAND:
 			err = c.buildTwo(&core.AllTrue{})

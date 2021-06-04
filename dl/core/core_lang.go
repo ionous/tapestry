@@ -32,7 +32,7 @@ func (*AllTrue) Compose() composer.Spec {
 	}
 }
 
-// Always Returns true always.
+// Always Returns true.
 type Always struct{}
 
 func (*Always) Compose() composer.Spec {
@@ -66,6 +66,24 @@ func (*Assign) Compose() composer.Spec {
 	}
 }
 
+// AtLeast The first value is greater than or equal to the second value.
+type AtLeast struct{}
+
+func (*AtLeast) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "at_least",
+	}
+}
+
+// AtMost The first value is less than or equal to the second value.
+type AtMost struct{}
+
+func (*AtMost) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "at_most",
+	}
+}
+
 // Blankline Add a single blank line following some text.
 type Blankline struct{}
 
@@ -88,15 +106,15 @@ func (*BoolValue) Compose() composer.Spec {
 	}
 }
 
-// Bracket Sandwiches text printed during a block and puts them inside parenthesis &#x27;()&#x27;.
-type Bracket struct {
+// BracketText Sandwiches text printed during a block and puts them inside parenthesis &#x27;()&#x27;.
+type BracketText struct {
 	Do Activity `if:"label=_"`
 }
 
-func (*Bracket) Compose() composer.Spec {
+func (*BracketText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "bracket",
-		Lede: "bracket_text",
+		Name: "bracket_text",
+		Lede: "brackets",
 	}
 }
 
@@ -109,15 +127,15 @@ func (*Break) Compose() composer.Spec {
 	}
 }
 
-// Buffer
-type Buffer struct {
+// BufferText
+type BufferText struct {
 	Do Activity `if:"label=_"`
 }
 
-func (*Buffer) Compose() composer.Spec {
+func (*BufferText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "buffer",
-		Lede: "buffer_text",
+		Name: "buffer_text",
+		Lede: "buffers",
 	}
 }
 
@@ -349,15 +367,15 @@ func (*ChooseValue) Compose() composer.Spec {
 	}
 }
 
-// Commas Separates words with commas, and &#x27;and&#x27;.
-type Commas struct {
+// CommaText Separates words with commas, and &#x27;and&#x27;.
+type CommaText struct {
 	Do Activity `if:"label=_"`
 }
 
-func (*Commas) Compose() composer.Spec {
+func (*CommaText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "commas",
-		Lede: "comma_text",
+		Name: "comma_text",
+		Lede: "commas",
 	}
 }
 
@@ -413,12 +431,13 @@ func (*During) Compose() composer.Spec {
 	}
 }
 
-// EqualTo Two values exactly match.
-type EqualTo struct{}
+// Equal Two values exactly match.
+type Equal struct{}
 
-func (*EqualTo) Compose() composer.Spec {
+func (*Equal) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "equal_to",
+		Name: "equal",
+		Lede: "equals",
 	}
 }
 
@@ -555,13 +574,15 @@ func (*GetAtField) Compose() composer.Spec {
 	}
 }
 
-// GreaterOrEqual The first value is larger than the second value.
-type GreaterOrEqual struct{}
+// GetVar Get Variable: Return the value of the named variable.
+type GetVar struct {
+	Name value.VariableName `if:"label=_"`
+}
 
-func (*GreaterOrEqual) Compose() composer.Spec {
+func (*GetVar) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "greater_or_equal",
-		Lede: "at_least",
+		Name: "get_var",
+		Lede: "var",
 	}
 }
 
@@ -576,7 +597,7 @@ func (*GreaterThan) Compose() composer.Spec {
 
 // HasDominion
 type HasDominion struct {
-	Domain value.Text `if:"label=_"`
+	Name value.Text `if:"label=_"`
 }
 
 func (*HasDominion) Compose() composer.Spec {
@@ -718,16 +739,6 @@ func (*KindsOf) Compose() composer.Spec {
 	}
 }
 
-// LessOrEqual The first value is larger than the second value.
-type LessOrEqual struct{}
-
-func (*LessOrEqual) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "less_or_equal",
-		Lede: "at_most",
-	}
-}
-
 // LessThan The first value is less than the second value.
 type LessThan struct{}
 
@@ -746,18 +757,6 @@ func (*MakeLowercase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make_lowercase",
 		Lede: "lower",
-	}
-}
-
-// MakePlural Returns the plural form of a singular word. (ex. apples for apple. )
-type MakePlural struct {
-	Text rt.TextEval `if:"label=of"`
-}
-
-func (*MakePlural) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "make_plural",
-		Lede: "plural",
 	}
 }
 
@@ -782,18 +781,6 @@ func (*MakeSentenceCase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make_sentence_case",
 		Lede: "sentence",
-	}
-}
-
-// MakeSingular Returns the singular form of a plural word. (ex. apple for apples )
-type MakeSingular struct {
-	Text rt.TextEval `if:"label=of"`
-}
-
-func (*MakeSingular) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "make_singular",
-		Lede: "singular",
 	}
 }
 
@@ -845,6 +832,16 @@ func (*NameOf) Compose() composer.Spec {
 	}
 }
 
+// Never Returns false.
+type Never struct{}
+
+func (*Never) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "never",
+		Lede: "always",
+	}
+}
+
 // Newline Start a new line.
 type Newline struct{}
 
@@ -875,28 +872,6 @@ func (*Not) Compose() composer.Spec {
 	}
 }
 
-// NotEqualTo Two values don&#x27;t match exactly.
-type NotEqualTo struct{}
-
-func (*NotEqualTo) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "not_equal_to",
-		Lede: "other_than",
-	}
-}
-
-// NumList Specify a list of multiple numbers.
-type NumList struct {
-	Values []float64 `if:"label=_"`
-}
-
-func (*NumList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "num_list",
-		Lede: "nums",
-	}
-}
-
 // NumValue Specify a particular number.
 type NumValue struct {
 	Num float64 `if:"label=_"`
@@ -909,6 +884,18 @@ func (*NumValue) Compose() composer.Spec {
 	}
 }
 
+// Numbers Number List: Specify a list of numbers.
+type Numbers struct {
+	Values []float64 `if:"label=_"`
+}
+
+func (*Numbers) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "numbers",
+		Lede: "nums",
+	}
+}
+
 // ObjectExists Returns whether there is a object of the specified name.
 type ObjectExists struct {
 	Object rt.TextEval `if:"label=valid"`
@@ -918,6 +905,18 @@ func (*ObjectExists) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "object_exists",
 		Lede: "is",
+	}
+}
+
+// Pluralize Returns the plural form of a singular word. (ex. apples for apple. )
+type Pluralize struct {
+	Text rt.TextEval `if:"label=of"`
+}
+
+func (*Pluralize) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "pluralize",
+		Lede: "plural",
 	}
 }
 
@@ -1057,15 +1056,27 @@ func (*SetTrait) Compose() composer.Spec {
 	}
 }
 
-// Slash Separates words with left-leaning slashes &#x27;/&#x27;.
-type Slash struct {
+// Singularize Returns the singular form of a plural word. (ex. apple for apples )
+type Singularize struct {
+	Text rt.TextEval `if:"label=of"`
+}
+
+func (*Singularize) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "singularize",
+		Lede: "singular",
+	}
+}
+
+// SlashText Separates words with left-leaning slashes &#x27;/&#x27;.
+type SlashText struct {
 	Do Activity `if:"label=_"`
 }
 
-func (*Slash) Compose() composer.Spec {
+func (*SlashText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "slash",
-		Lede: "slash_text",
+		Name: "slash_text",
+		Lede: "slashes",
 	}
 }
 
@@ -1079,15 +1090,15 @@ func (*Softline) Compose() composer.Spec {
 	}
 }
 
-// Span Writes text with spaces between words.
-type Span struct {
+// SpanText Writes text with spaces between words.
+type SpanText struct {
 	Do Activity `if:"label=_"`
 }
 
-func (*Span) Compose() composer.Spec {
+func (*SpanText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "span",
-		Lede: "span_text",
+		Name: "span_text",
+		Lede: "spaces",
 	}
 }
 
@@ -1104,18 +1115,6 @@ func (*SumOf) Compose() composer.Spec {
 	}
 }
 
-// TextList Specifies multiple string values.
-type TextList struct {
-	Values []value.Text `if:"label=_"`
-}
-
-func (*TextList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "text_list",
-		Lede: "txts",
-	}
-}
-
 // TextValue Specify a small bit of text.
 type TextValue struct {
 	Text value.Text `if:"label=_"`
@@ -1125,6 +1124,18 @@ func (*TextValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "text_value",
 		Lede: "txt",
+	}
+}
+
+// Texts Text List: Specifies a set of string values.
+type Texts struct {
+	Values []value.Text `if:"label=_"`
+}
+
+func (*Texts) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "texts",
+		Lede: "txts",
 	}
 }
 
@@ -1158,14 +1169,13 @@ func (*TriggerSwitch) Compose() composer.Spec {
 	}
 }
 
-// Var Return the value of the named variable.
-type Var struct {
-	Name value.VariableName `if:"label=_"`
-}
+// Unequal The first value doesn&#x27;t equal the second value.
+type Unequal struct{}
 
-func (*Var) Compose() composer.Spec {
+func (*Unequal) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "var",
+		Name: "unequal",
+		Lede: "other_than",
 	}
 }
 
@@ -1195,11 +1205,13 @@ var Slats = []composer.Composer{
 	(*Always)(nil),
 	(*AnyTrue)(nil),
 	(*Assign)(nil),
+	(*AtLeast)(nil),
+	(*AtMost)(nil),
 	(*Blankline)(nil),
 	(*BoolValue)(nil),
-	(*Bracket)(nil),
+	(*BracketText)(nil),
 	(*Break)(nil),
-	(*Buffer)(nil),
+	(*BufferText)(nil),
 	(*CallArg)(nil),
 	(*CallArgs)(nil),
 	(*CallCycle)(nil),
@@ -1217,12 +1229,12 @@ var Slats = []composer.Composer{
 	(*ChooseNum)(nil),
 	(*ChooseText)(nil),
 	(*ChooseValue)(nil),
-	(*Commas)(nil),
+	(*CommaText)(nil),
 	(*CompareNum)(nil),
 	(*CompareText)(nil),
 	(*DiffOf)(nil),
 	(*During)(nil),
-	(*EqualTo)(nil),
+	(*Equal)(nil),
 	(*FromBool)(nil),
 	(*FromNum)(nil),
 	(*FromNumbers)(nil),
@@ -1234,7 +1246,7 @@ var Slats = []composer.Composer{
 	(*FromTexts)(nil),
 	(*FromVar)(nil),
 	(*GetAtField)(nil),
-	(*GreaterOrEqual)(nil),
+	(*GetVar)(nil),
 	(*GreaterThan)(nil),
 	(*HasDominion)(nil),
 	(*HasTrait)(nil),
@@ -1248,24 +1260,22 @@ var Slats = []composer.Composer{
 	(*Join)(nil),
 	(*KindOf)(nil),
 	(*KindsOf)(nil),
-	(*LessOrEqual)(nil),
 	(*LessThan)(nil),
 	(*MakeLowercase)(nil),
-	(*MakePlural)(nil),
 	(*MakeReversed)(nil),
 	(*MakeSentenceCase)(nil),
-	(*MakeSingular)(nil),
 	(*MakeTitleCase)(nil),
 	(*MakeUppercase)(nil),
 	(*Matches)(nil),
 	(*NameOf)(nil),
+	(*Never)(nil),
 	(*Newline)(nil),
 	(*Next)(nil),
 	(*Not)(nil),
-	(*NotEqualTo)(nil),
-	(*NumList)(nil),
 	(*NumValue)(nil),
+	(*Numbers)(nil),
 	(*ObjectExists)(nil),
+	(*Pluralize)(nil),
 	(*PrintNum)(nil),
 	(*PrintNumWord)(nil),
 	(*ProductOf)(nil),
@@ -1277,15 +1287,16 @@ var Slats = []composer.Composer{
 	(*Rows)(nil),
 	(*SayText)(nil),
 	(*SetTrait)(nil),
-	(*Slash)(nil),
+	(*Singularize)(nil),
+	(*SlashText)(nil),
 	(*Softline)(nil),
-	(*Span)(nil),
+	(*SpanText)(nil),
 	(*SumOf)(nil),
-	(*TextList)(nil),
 	(*TextValue)(nil),
+	(*Texts)(nil),
 	(*TriggerCycle)(nil),
 	(*TriggerOnce)(nil),
 	(*TriggerSwitch)(nil),
-	(*Var)(nil),
+	(*Unequal)(nil),
 	(*While)(nil),
 }

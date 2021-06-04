@@ -50,7 +50,7 @@ func TestEach(t *testing.T) {
 func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 	var out []string
 	var visits []accum
-	each := &list.Each{
+	each := &list.ListEach{
 		List: V("source"),
 		As:   &list.AsTxt{N("text")},
 		Do:   core.MakeActivity(&visitEach{&visits}),

@@ -8,6 +8,8 @@ const fs = require('fs'); // filesystem for loading iffy language file
 const child_process = require('child_process');
 const path = require('path');
 
+const overrides= {"string":"string"};
+
 // change to tokenized like name
 const tokenize = function(name) {
   return '$' + name.toUpperCase();
@@ -90,8 +92,9 @@ Handlebars.registerHelper('TypeOf', function(param) {
   }
   //
   let n = pascal(name);
-  if (type && type.override) {
-    n = type.override; // stuffed in during makeops startup.
+  const override= overrides[name];
+  if (override) {
+    n = override; // stuffed in during makeops startup.
   } else {
     const g = nameToGroup[name];
     if (g && g !== currentGroup) {
@@ -232,17 +235,14 @@ for (const typeName in allTypes) {
         const { with: { tokens = [] } = {} } = type; // safely extract tokens
         const token = tokenize(typeName);
         const closedChoices = tokens.indexOf(token) < 0;
-        if /*(!closedChoices && (tokens.length === 1)) */ (typeName === "string"){
-          type.override = "string";
-        }
         // console.log(name, token, tokens);
         if (closedChoices && Object.keys(type.with.params).length === 2) {
-          type.override = "bool";
+          overrides[typeName]= "bool";
         }
       } else if (type.uses === "num") {
         const { with: { tokens = [] } = {} } = type; // safely extract tokens
         if (tokens.length <= 1) {
-          type.override = "float64";
+          overrides[typeName]= "float64";
         }
       }
       g.slats.push(typeName);
@@ -260,8 +260,8 @@ for (currentGroup in groups) {
   let count = 0;
   for (const n of g.slats) {
     count++;
-    const type = allTypes[n];
-    if (!type.override) {
+    if (!overrides[n]) {
+      const type = allTypes[n];
       if (isPositioned(type)) {
         const o= "reader"; // for forced str and swap position field
         if (o && o !== currentGroup && inc.indexOf(o) < 0) {
@@ -271,8 +271,7 @@ for (currentGroup in groups) {
       const params= paramsOf(type);
       for (const p in params) {
         const param = params[p];
-        const pt = allTypes[param.type];
-        if (pt && !pt.override) {
+        if (param && !overrides[param.type]) {
           const o = nameToGroup[param.type];
           if (o && o !== currentGroup && inc.indexOf(o) < 0) {
             inc.push(o);
@@ -282,6 +281,7 @@ for (currentGroup in groups) {
     }
   }
 
+  // for looking at the full spec(s)
   // console.log(JSON.stringify(allTypes,0,2));
   // return;
 
@@ -306,7 +306,7 @@ for (currentGroup in groups) {
     const template = templates[type.uses];
     if (!template) {
       throw new Error(`unknown template for ${n}`);
-    } else if (!type.override) {
+    } else if (!overrides[n]) {
       fs.writeSync(fd, template(type));
     }
   }
@@ -323,7 +323,7 @@ for (currentGroup in groups) {
   }));
   fs.writeSync(fd, templates.regList({
     which: "Slats",
-    list: g.slats.map(n => allTypes[n]).filter(t => ((t.uses === "flow" || t.uses === "slat") && !t.override)),
+    list: g.slats.map(n => allTypes[n]).filter(t => ((t.uses === "flow" || t.uses === "slat") && !overrides[t.name])),
     RegType: "composer.Composer",
   }));
   fs.closeSync(fd);

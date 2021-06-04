@@ -16,7 +16,7 @@ func TestLoopBreak(t *testing.T) {
 			B(true), MakeActivity(
 				&Assign{N("i"), &FromNum{&SumOf{V("i"), I(1)}}},
 				&ChooseAction{
-					If: &CompareNum{V("i"), &GreaterOrEqual{}, I(4)},
+					If: &CompareNum{V("i"), &AtLeast{}, I(4)},
 					Do: MakeActivity(
 						&Break{},
 					),
@@ -38,7 +38,7 @@ func TestLoopNext(t *testing.T) {
 			B(true), MakeActivity(
 				&Assign{N("i"), &FromNum{&SumOf{V("i"), I(1)}}},
 				&ChooseAction{
-					If: &CompareNum{V("i"), &GreaterOrEqual{}, I(4)},
+					If: &CompareNum{V("i"), &AtLeast{}, I(4)},
 					Do: MakeActivity(
 						&Break{},
 					),

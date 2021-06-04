@@ -119,10 +119,10 @@ func TestMapRecords(t *testing.T) {
 	}
 }
 
-var remap = list.Map{
+var remap = list.ListMap{
 	FromList:     V("fruits"),
 	ToList:       W("results"),
-	UsingPattern: P("remap"),
+	UsingPattern: W("remap"),
 }
 
 var reverseRecords = testpat.Pattern{

@@ -1100,11 +1100,6 @@
                                                                           }
                                                                         }
                                                                       }
-                                                                    },
-                                                                    "$AT_EDGE": {
-                                                                      "id": "id-17800d49b33-82",
-                                                                      "type": "list_edge",
-                                                                      "value": "$FALSE"
                                                                     }
                                                                   }
                                                                 }

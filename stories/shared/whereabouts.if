@@ -724,11 +724,6 @@
                                                               }
                                                             }
                                                           }
-                                                        },
-                                                        "$AT_EDGE": {
-                                                          "id": "id-177da9d86c5-51",
-                                                          "type": "list_edge",
-                                                          "value": "$FALSE"
                                                         }
                                                       }
                                                     }

@@ -9,10 +9,10 @@ import (
 	"git.sr.ht/~ionous/iffy/test/testpat"
 )
 
-var runCollateGroups = list.Reduce{
+var runCollateGroups = list.ListReduce{
 	FromList:     V("settings"),
-	IntoValue:    N("collation"),
-	UsingPattern: P("collate_groups")}
+	IntoValue:    W("collation"),
+	UsingPattern: W("collate_groups")}
 
 type CollateGroups struct {
 	Settings  GroupSettings
@@ -43,7 +43,7 @@ var collateGroups = testpat.Pattern{
 				// &core.Unpack{V("collation"), "Groups"},
 				&core.GetAtField{From: &core.FromVar{N("collation")}, Field: W("groups")},
 			},
-			&list.Each{
+			&list.ListEach{
 				List: V("groups"),
 				As:   &list.AsRec{N("el")},
 				Do: core.MakeActivity(
@@ -67,7 +67,7 @@ var collateGroups = testpat.Pattern{
 			&core.ChooseAction{
 				If: &core.CompareNum{
 					A:  V("idx"),
-					Is: &core.EqualTo{},
+					Is: &core.Equal{},
 					B:  F(0),
 				},
 				// havent found a matching group?
@@ -88,7 +88,7 @@ var collateGroups = testpat.Pattern{
 				Else: &core.ChooseNothingElse{core.MakeActivity(
 					&core.Assign{
 						N("group"),
-						&core.FromRecord{&list.At{List: V("groups"), Index: V("idx")}}},
+						&core.FromRecord{&list.ListAt{List: V("groups"), Index: V("idx")}}},
 					&core.Assign{
 						N("names"),
 						// &core.Unpack{V("group"), "Objects"},
@@ -100,7 +100,7 @@ var collateGroups = testpat.Pattern{
 						From: &core.GetAtField{From: &core.FromVar{N("settings")}, Field: W("name")},
 					},
 					Put("group", "objects", V("names")),
-					&list.Set{List: W("groups"), Index: V("idx"), From: V("group")},
+					&list.ListSet{List: W("groups"), Index: V("idx"), From: V("group")},
 				), // end false
 				},
 			},

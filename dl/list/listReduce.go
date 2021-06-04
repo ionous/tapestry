@@ -3,23 +3,26 @@ package list
 import (
 	"errors"
 
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-func (op *Reduce) Execute(run rt.Runtime) (err error) {
+func (op *ListReduce) Execute(run rt.Runtime) (err error) {
 	if e := op.reduce(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *Reduce) reduce(run rt.Runtime) (err error) {
+func (op *ListReduce) reduce(run rt.Runtime) (err error) {
+
+	intoValue := value.VariableName{Str: op.IntoValue.Str} // fix
 	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
 		err = e
-	} else if outVal, e := safe.CheckVariable(run, op.IntoValue, ""); e != nil {
+	} else if outVal, e := safe.CheckVariable(run, intoValue, ""); e != nil {
 		err = e
 	} else {
 		pat := op.UsingPattern

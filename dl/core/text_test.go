@@ -50,7 +50,7 @@ func TestText(t *testing.T) {
 			&Join{Parts: []rt.TextEval{
 				T("one"), T("two"), T("three"),
 			}},
-			&EqualTo{},
+			&Equal{},
 			T("onetwothree"),
 		}); e != nil {
 			t.Fatal(e)
@@ -59,7 +59,7 @@ func TestText(t *testing.T) {
 			&Join{T(" "), []rt.TextEval{
 				T("one"), T("two"), T("three"),
 			}},
-			&EqualTo{},
+			&Equal{},
 			T("one two three"),
 		}); e != nil {
 			t.Fatal(e)

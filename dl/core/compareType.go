@@ -8,10 +8,10 @@ type Comparator interface {
 	Compare() CompareType
 }
 
-func (*EqualTo) Compare() CompareType {
+func (*Equal) Compare() CompareType {
 	return Compare_EqualTo
 }
-func (*NotEqualTo) Compare() CompareType {
+func (*Unequal) Compare() CompareType {
 	return Compare_GreaterThan | Compare_LessThan
 }
 func (*GreaterThan) Compare() CompareType {
@@ -20,10 +20,10 @@ func (*GreaterThan) Compare() CompareType {
 func (*LessThan) Compare() CompareType {
 	return Compare_LessThan
 }
-func (*GreaterOrEqual) Compare() CompareType {
+func (*AtLeast) Compare() CompareType {
 	return Compare_GreaterThan | Compare_EqualTo
 }
-func (*LessOrEqual) Compare() CompareType {
+func (*AtMost) Compare() CompareType {
 	return Compare_LessThan | Compare_EqualTo
 }
 

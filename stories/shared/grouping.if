@@ -2634,11 +2634,6 @@
                                                               }
                                                             }
                                                           }
-                                                        },
-                                                        "$AT_EDGE": {
-                                                          "id": "id-176f4124f37-30",
-                                                          "type": "list_edge",
-                                                          "value": "$FALSE"
                                                         }
                                                       }
                                                     }
@@ -2769,11 +2764,6 @@
                                                               }
                                                             }
                                                           }
-                                                        },
-                                                        "$AT_EDGE": {
-                                                          "id": "id-176f4124f37-34",
-                                                          "type": "list_edge",
-                                                          "value": "$FALSE"
                                                         }
                                                       }
                                                     }
@@ -2969,11 +2959,6 @@
                                                                     }
                                                                   }
                                                                 }
-                                                              },
-                                                              "$AT_EDGE": {
-                                                                "id": "id-176f4124f37-40",
-                                                                "type": "list_edge",
-                                                                "value": "$FALSE"
                                                               }
                                                             }
                                                           }

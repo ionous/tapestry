@@ -12,5 +12,5 @@ func F(n float64) rt.NumberEval     { return &core.NumValue{n} }
 func P(p string) value.PatternName  { return value.PatternName{Str: p} }
 func N(v string) value.VariableName { return value.VariableName{Str: v} }
 func T(s string) *core.TextValue    { return &core.TextValue{value.Text{Str: s}} }
-func V(i string) *core.Var          { return &core.Var{N(i)} }
+func V(i string) *core.GetVar       { return &core.GetVar{N(i)} }
 func W(v string) value.Text         { return value.Text{Str: v} }

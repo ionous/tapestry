@@ -7,7 +7,7 @@ import (
 )
 
 func (op *EraseEdge) Execute(run rt.Runtime) (err error) {
-	if _, e := eraseEdge(run, op.From, op.AtFront); e != nil {
+	if _, e := eraseEdge(run, op.From, op.AtEdge); e != nil {
 		err = cmdError(op, e)
 	}
 	return

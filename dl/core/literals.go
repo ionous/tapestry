@@ -50,14 +50,14 @@ func (op *TextValue) String() string {
 	return op.Text.String()
 }
 
-func (op *NumList) GetNumList(rt.Runtime) (ret g.Value, _ error) {
+func (op *Numbers) GetNumList(rt.Runtime) (ret g.Value, _ error) {
 	// note: this generates a new slice pointing to the op.Values memory;
 	// fix: should this be a copy? or, maybe mark this as read-only
 	ret = g.FloatsOf(op.Values)
 	return
 }
 
-func (op *TextList) GetTextList(rt.Runtime) (ret g.Value, _ error) {
+func (op *Texts) GetTextList(rt.Runtime) (ret g.Value, _ error) {
 	// FIX(!) -- key is probably getting rid of string $EMPTY
 	cnt := len(op.Values)
 	sts := make([]string, cnt)

@@ -5,14 +5,14 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-func (op *Set) Execute(run rt.Runtime) (err error) {
+func (op *ListSet) Execute(run rt.Runtime) (err error) {
 	if e := op.setAt(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *Set) setAt(run rt.Runtime) (err error) {
+func (op *ListSet) setAt(run rt.Runtime) (err error) {
 	if els, e := safe.List(run, op.List.String()); e != nil {
 		err = e
 	} else if onedex, e := safe.GetNumber(run, op.Index); e != nil {

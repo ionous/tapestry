@@ -7,14 +7,14 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-func (op *Splice) Execute(run rt.Runtime) (err error) {
+func (op *ListSplice) Execute(run rt.Runtime) (err error) {
 	if _, _, e := op.spliceList(run, ""); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *Splice) GetNumList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSplice) GetNumList(run rt.Runtime) (ret g.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.NumList); e != nil {
 		err = cmdError(op, e)
 	} else if v == nil {
@@ -25,7 +25,7 @@ func (op *Splice) GetNumList(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *Splice) GetTextList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSplice) GetTextList(run rt.Runtime) (ret g.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.TextList); e != nil {
 		err = cmdError(op, e)
 	} else if v == nil {
@@ -36,7 +36,7 @@ func (op *Splice) GetTextList(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *Splice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
+func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 	if v, t, e := op.spliceList(run, affine.RecordList); e != nil {
 		err = cmdError(op, e)
 	} else if v == nil {
@@ -47,8 +47,8 @@ func (op *Splice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *Splice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
-	if els, e := safe.List(run, op.Var.String()); e != nil {
+func (op *ListSplice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
+	if els, e := safe.List(run, op.List.String()); e != nil {
 		err = e
 	} else if e := safe.Check(els, aff); e != nil {
 		err = e
@@ -69,7 +69,7 @@ func (op *Splice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Valu
 	return
 }
 
-func (op *Splice) getIndices(run rt.Runtime, cnt int) (reti, retj int, err error) {
+func (op *ListSplice) getIndices(run rt.Runtime, cnt int) (reti, retj int, err error) {
 	if i, e := safe.GetOptionalNumber(run, op.Start, 0); e != nil {
 		err = e
 	} else if rng, e := safe.GetOptionalNumber(run, op.Remove, float64(cnt)); e != nil {

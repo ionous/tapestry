@@ -7,6 +7,19 @@ import (
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
+// DebugLog Debug log
+type DebugLog struct {
+	Value    rt.Assignment `if:"label=_"`
+	LogLevel LoggingLevel  `if:"label=as,optional"`
+}
+
+func (*DebugLog) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "debug_log",
+		Lede: "log",
+	}
+}
+
 // DoNothing Statement which does nothing.
 type DoNothing struct {
 	Reason value.Text `if:"label=why,optional"`
@@ -15,18 +28,6 @@ type DoNothing struct {
 func (*DoNothing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "do_nothing",
-	}
-}
-
-// Log Debug log
-type Log struct {
-	Value rt.Assignment `if:"label=_"`
-	Level LoggingLevel  `if:"label=as,optional"`
-}
-
-func (*Log) Compose() composer.Spec {
-	return composer.Spec{
-		Name: "log",
 	}
 }
 
@@ -65,6 +66,6 @@ func (*LoggingLevel) Compose() composer.Spec {
 }
 
 var Slats = []composer.Composer{
+	(*DebugLog)(nil),
 	(*DoNothing)(nil),
-	(*Log)(nil),
 }

@@ -7,19 +7,19 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-func (op *At) GetNumber(run rt.Runtime) (g.Value, error) {
+func (op *ListAt) GetNumber(run rt.Runtime) (g.Value, error) {
 	return op.getAt(run, affine.NumList)
 }
 
-func (op *At) GetText(run rt.Runtime) (g.Value, error) {
+func (op *ListAt) GetText(run rt.Runtime) (g.Value, error) {
 	return op.getAt(run, affine.TextList)
 }
 
-func (op *At) GetRecord(run rt.Runtime) (g.Value, error) {
+func (op *ListAt) GetRecord(run rt.Runtime) (g.Value, error) {
 	return op.getAt(run, affine.RecordList)
 }
 
-func (op *At) getAt(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+func (op *ListAt) getAt(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
 	if vs, e := safe.GetAssignedValue(run, op.List); e != nil {
 		err = cmdError(op, e)
 	} else if e := safe.Check(vs, aff); e != nil {

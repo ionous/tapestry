@@ -13,25 +13,25 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (op *SortNumbers) Execute(run rt.Runtime) (err error) {
+func (op *ListSortNumbers) Execute(run rt.Runtime) (err error) {
 	if e := op.sortByNum(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *SortText) Execute(run rt.Runtime) (err error) {
+func (op *ListSortText) Execute(run rt.Runtime) (err error) {
 	if e := op.sortByText(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *SortRecords) Execute(rt.Runtime) (err error) {
+func (op *ListSortUsing) Execute(rt.Runtime) (err error) {
 	return errutil.New("not implemented")
 }
 
-func (op *SortNumbers) sortByNum(run rt.Runtime) (err error) {
+func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
 	if v, e := run.GetField(object.Variables, op.Var.String()); e != nil {
 		err = e
 	} else {
@@ -50,7 +50,7 @@ func (op *SortNumbers) sortByNum(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *SortText) sortByText(run rt.Runtime) (err error) {
+func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
 	if v, e := run.GetField(object.Variables, op.Var.String()); e != nil {
 		err = e
 	} else {
@@ -71,7 +71,7 @@ func (op *SortText) sortByText(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *SortNumbers) numSorter(run rt.Runtime, a, b g.Value) (ret bool, err error) {
+func (op *ListSortNumbers) numSorter(run rt.Runtime, a, b g.Value) (ret bool, err error) {
 	aa, bb := a.Float(), b.Float()
 	if descending, e := safe.GetOptionalBool(run, op.Descending, false); e != nil {
 		err = e
@@ -83,7 +83,7 @@ func (op *SortNumbers) numSorter(run rt.Runtime, a, b g.Value) (ret bool, err er
 	return
 }
 
-func (op *SortText) textSorter(run rt.Runtime, a, b g.Value) (ret bool, err error) {
+func (op *ListSortText) textSorter(run rt.Runtime, a, b g.Value) (ret bool, err error) {
 	aa, bb := a.String(), b.String()
 	if sensitive, e := safe.GetOptionalBool(run, op.UsingCase, false); e != nil {
 		err = e
