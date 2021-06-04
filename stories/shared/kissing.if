@@ -1293,7 +1293,7 @@
                                                               "$TEMPLATE": {
                                                                 "id": "id-178e6001ce8-54",
                                                                 "type": "lines",
-                                                                "value": "{we:capitalize!} don't get much from that."
+                                                                "value": "{we:|capitalize!} don't get much from that."
                                                               }
                                                             }
                                                           }
