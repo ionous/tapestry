@@ -3572,16 +3572,6 @@
                                               "id": "id-17798c5d676-12",
                                               "type": "string",
                                               "value":  "grouping label"
-                                            },
-                                            "$ORDER": {
-                                              "id": "id-17798c5d676-9",
-                                              "type": "list_order",
-                                              "value": "$FALSE"
-                                            },
-                                            "$CASE": {
-                                              "id": "id-17798c5d676-10",
-                                              "type": "list_case",
-                                              "value": "$FALSE"
                                             }
                                           }
                                         }

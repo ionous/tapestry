@@ -33,14 +33,7 @@
         "slot":
         [
             "assignment",
-            "execute",
-            "bool_eval",
-            "number_eval",
-            "text_eval",
-            "record_eval",
-            "num_list_eval",
-            "text_list_eval",
-            "record_list_eval"
+            "text_eval"
         ],
         "group": "internal",
         "desc":
@@ -61,13 +54,8 @@
         "slot":
         [
             "assignment",
-            "bool_eval",
             "number_eval",
-            "text_eval",
-            "record_eval",
-            "num_list_eval",
-            "text_list_eval",
-            "record_list_eval"
+            "text_eval"
         ],
         "group": "internal",
         "desc": "returns the value of a variable or the id of an object."

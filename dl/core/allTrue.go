@@ -6,6 +6,11 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
+func (op *Never) GetBool(run rt.Runtime) (ret g.Value, err error) {
+	ret = g.BoolOf(false)
+	return
+}
+
 func (op *Always) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	ret = g.BoolOf(true)
 	return

@@ -9,8 +9,9 @@ import (
 )
 
 type MatchCache struct {
-	err error
-	exp *regexp.Regexp
+	GobNeedsOnePublicField int // https://github.com/golang/go/issues/19969
+	err                    error
+	exp                    *regexp.Regexp
 }
 
 func (op *Matches) GetBool(run rt.Runtime) (ret g.Value, err error) {

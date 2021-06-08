@@ -13,6 +13,8 @@ type RenderExp struct {
 	Expression rt.TextEval `if:"label=_"`
 }
 
+var _ rt.TextEval = (*RenderExp)(nil)
+
 func (*RenderExp) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_exp",
@@ -23,6 +25,8 @@ func (*RenderExp) Compose() composer.Spec {
 type RenderField struct {
 	Name rt.TextEval `if:"label=_"`
 }
+
+var _ core.FromSourceFields = (*RenderField)(nil)
 
 func (*RenderField) Compose() composer.Spec {
 	return composer.Spec{
@@ -66,6 +70,8 @@ type RenderName struct {
 	Name string `if:"label=_"`
 }
 
+var _ rt.TextEval = (*RenderName)(nil)
+
 func (*RenderName) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_name",
@@ -77,6 +83,9 @@ type RenderPattern struct {
 	Pattern   value.PatternName `if:"label=_"`
 	Arguments core.CallArgs     `if:"label=args"`
 }
+
+var _ rt.Assignment = (*RenderPattern)(nil)
+var _ rt.TextEval = (*RenderPattern)(nil)
 
 func (*RenderPattern) Compose() composer.Spec {
 	return composer.Spec{
@@ -90,6 +99,10 @@ type RenderRef struct {
 	Name  value.VariableName `if:"label=_"`
 	Flags RenderFlags        `if:"label=flags"`
 }
+
+var _ rt.Assignment = (*RenderRef)(nil)
+var _ rt.NumberEval = (*RenderRef)(nil)
+var _ rt.TextEval = (*RenderRef)(nil)
 
 func (*RenderRef) Compose() composer.Spec {
 	return composer.Spec{

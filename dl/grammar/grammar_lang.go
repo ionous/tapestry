@@ -10,6 +10,8 @@ type Action struct {
 	Action string `if:"label=_"`
 }
 
+var _ ScannerMaker = (*Action)(nil)
+
 func (*Action) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action",
@@ -23,6 +25,8 @@ type Alias struct {
 	AsNoun string   `if:"label=as_noun"`
 }
 
+var _ GrammarMaker = (*Alias)(nil)
+
 func (*Alias) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "alias",
@@ -33,6 +37,8 @@ func (*Alias) Compose() composer.Spec {
 type AllOf struct {
 	Series []ScannerMaker `if:"label=_"`
 }
+
+var _ ScannerMaker = (*AllOf)(nil)
 
 func (*AllOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -45,6 +51,8 @@ type AnyOf struct {
 	Options []ScannerMaker `if:"label=_"`
 }
 
+var _ ScannerMaker = (*AnyOf)(nil)
+
 func (*AnyOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "any_of",
@@ -56,6 +64,8 @@ type Directive struct {
 	Lede  []string       `if:"label=_"`
 	Scans []ScannerMaker `if:"label=scans"`
 }
+
+var _ GrammarMaker = (*Directive)(nil)
 
 func (*Directive) Compose() composer.Spec {
 	return composer.Spec{
@@ -79,6 +89,8 @@ type Noun struct {
 	Kind string `if:"label=_"`
 }
 
+var _ ScannerMaker = (*Noun)(nil)
+
 func (*Noun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun",
@@ -89,6 +101,8 @@ func (*Noun) Compose() composer.Spec {
 type Retarget struct {
 	Span []ScannerMaker `if:"label=_"`
 }
+
+var _ ScannerMaker = (*Retarget)(nil)
 
 func (*Retarget) Compose() composer.Spec {
 	return composer.Spec{
@@ -101,6 +115,8 @@ type Reverse struct {
 	Reverses []ScannerMaker `if:"label=_"`
 }
 
+var _ ScannerMaker = (*Reverse)(nil)
+
 func (*Reverse) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "reverse",
@@ -112,6 +128,8 @@ type Self struct {
 	Player string `if:"label=_"`
 }
 
+var _ ScannerMaker = (*Self)(nil)
+
 func (*Self) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "self",
@@ -122,6 +140,8 @@ func (*Self) Compose() composer.Spec {
 type Words struct {
 	Words []string `if:"label=_"`
 }
+
+var _ ScannerMaker = (*Words)(nil)
 
 func (*Words) Compose() composer.Spec {
 	return composer.Spec{

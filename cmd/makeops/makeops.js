@@ -75,22 +75,7 @@ Handlebars.registerHelper('LedeName', function(t) {
     return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
   }
 });
-
-Handlebars.registerHelper('NameOf', function(key, param) {
-  return pascal(key) || pascal(param.type);
-});
-
-Handlebars.registerHelper('LabelOf', function(l) {
-  return l.replace(" ", "_");
-});
-
-Handlebars.registerHelper('TypeOf', function(param) {
-  const name = param.type;
-  const type = allTypes[name]; // the referenced type
-  if (!type && param.label !== '-') {
-    throw new Error(`unknown type ${name}`);
-  }
-  //
+const scopedName= function(name) {
   let n = pascal(name);
   const override= overrides[name];
   if (override) {
@@ -101,6 +86,23 @@ Handlebars.registerHelper('TypeOf', function(param) {
       n = `${g}.${n}`;
     }
   }
+  return n;
+};
+Handlebars.registerHelper('ScopedNameOf', scopedName);
+
+Handlebars.registerHelper('ParamNameOf', function(key, param) {
+  return pascal(key) || pascal(param.type);
+});
+
+Handlebars.registerHelper('LabelOf', function(l) {
+  return l.replace(" ", "_");
+});
+Handlebars.registerHelper('TypeOf', function(param) {
+  const name = param.type;
+  const type = allTypes[name]; // the referenced type
+  if (!type && param.label !== '-') {
+    throw new Error(`unknown type ${name}`);
+  }
   //
   let qualifier = "";
   if (param.repeats) {
@@ -109,7 +111,7 @@ Handlebars.registerHelper('TypeOf', function(param) {
     // re: slot, for go we dont need *interface{}
     qualifier += "*";
   }
-  return qualifier + n;
+  return qualifier + scopedName(name);
 });
 
 // is the passed name a slot

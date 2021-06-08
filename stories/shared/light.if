@@ -2251,13 +2251,6 @@
                                                               }
                                                             ]
                                                           }
-                                                        },
-                                                        "$ELSE": {
-                                                          "id": "id-177ff976bc8-6",
-                                                          "type": "activity",
-                                                          "value": {
-                                                            "$EXE": []
-                                                          }
                                                         }
                                                       }
                                                     }

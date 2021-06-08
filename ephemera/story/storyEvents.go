@@ -6,11 +6,20 @@ import (
 	"github.com/ionous/errutil"
 )
 
+func (op *PluralKinds) NewName(k *Importer) (ret ephemera.Named, err error) {
+	return NewPluralKinds(k, *op)
+}
+
+func (op *NamedNoun) NewName(k *Importer) (ret ephemera.Named, err error) {
+	err = errutil.New("named noun for event block not implemented")
+	return
+}
+
 func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 	if opt, ok := op.Target.Opt.(interface {
 		NewName(*Importer) (ephemera.Named, error)
 	}); !ok {
-		err = errutil.Fmt("Unknown interface %T", opt)
+		err = errutil.Fmt("unknown event block target %T at %s", opt, op.At)
 	} else if tgt, e := opt.NewName(k); e != nil {
 		err = e
 	} else {

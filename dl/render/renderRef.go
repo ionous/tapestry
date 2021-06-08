@@ -21,6 +21,27 @@ func (op *RenderRef) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 func (op *RenderRef) Affinity() (ret affine.Affinity) { return }
 
 // GetText handles unpacking a text variable,
+func (op *RenderRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.getBool(run); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func (op *RenderRef) getBool(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.getAssignedValue(run); e != nil {
+		err = e
+	} else if aff := v.Affinity(); aff == affine.Bool {
+		ret = v
+	} else {
+		err = errutil.Fmt("unexpected %q", aff)
+	}
+	return
+}
+
+// GetText handles unpacking a text variable,
 // turning an object variable into an id, or
 // looking for an object of the passed name ( if no variable of the name exists. )
 func (op *RenderRef) GetNumber(run rt.Runtime) (ret g.Value, err error) {

@@ -13,6 +13,8 @@ type AsNum struct {
 	Var value.VariableName `if:"label=_"`
 }
 
+var _ ListIterator = (*AsNum)(nil)
+
 func (*AsNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "as_num",
@@ -25,6 +27,8 @@ type AsRec struct {
 	Var value.VariableName `if:"label=_"`
 }
 
+var _ ListIterator = (*AsRec)(nil)
+
 func (*AsRec) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "as_rec",
@@ -36,6 +40,8 @@ func (*AsRec) Compose() composer.Spec {
 type AsTxt struct {
 	Var value.VariableName `if:"label=_"`
 }
+
+var _ ListIterator = (*AsTxt)(nil)
 
 func (*AsTxt) Compose() composer.Spec {
 	return composer.Spec{
@@ -50,6 +56,8 @@ type EraseEdge struct {
 	AtEdge rt.BoolEval `if:"label=at_front,optional"`
 }
 
+var _ rt.Execute = (*EraseEdge)(nil)
+
 func (*EraseEdge) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erase_edge",
@@ -63,6 +71,8 @@ type EraseIndex struct {
 	From    ListSource    `if:"label=from"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
 }
+
+var _ rt.Execute = (*EraseIndex)(nil)
 
 func (*EraseIndex) Compose() composer.Spec {
 	return composer.Spec{
@@ -80,6 +90,8 @@ type Erasing struct {
 	Do      core.Activity `if:"label=do"`
 }
 
+var _ rt.Execute = (*Erasing)(nil)
+
 func (*Erasing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erasing",
@@ -95,6 +107,8 @@ type ErasingEdge struct {
 	Else   core.Brancher `if:"label=else,optional"`
 }
 
+var _ rt.Execute = (*ErasingEdge)(nil)
+
 func (*ErasingEdge) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erasing_edge",
@@ -106,6 +120,8 @@ func (*ErasingEdge) Compose() composer.Spec {
 type FromNumList struct {
 	Var value.VariableName `if:"label=_"`
 }
+
+var _ ListSource = (*FromNumList)(nil)
 
 func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
@@ -119,6 +135,8 @@ type FromRecList struct {
 	Var value.VariableName `if:"label=_"`
 }
 
+var _ ListSource = (*FromRecList)(nil)
+
 func (*FromRecList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_rec_list",
@@ -130,6 +148,8 @@ func (*FromRecList) Compose() composer.Spec {
 type FromTxtList struct {
 	Var value.VariableName `if:"label=_"`
 }
+
+var _ ListSource = (*FromTxtList)(nil)
 
 func (*FromTxtList) Compose() composer.Spec {
 	return composer.Spec{
@@ -143,6 +163,8 @@ type IntoNumList struct {
 	Var value.VariableName `if:"label=_"`
 }
 
+var _ ListTarget = (*IntoNumList)(nil)
+
 func (*IntoNumList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "into_num_list",
@@ -154,6 +176,8 @@ func (*IntoNumList) Compose() composer.Spec {
 type IntoRecList struct {
 	Var value.VariableName `if:"label=_"`
 }
+
+var _ ListTarget = (*IntoRecList)(nil)
 
 func (*IntoRecList) Compose() composer.Spec {
 	return composer.Spec{
@@ -167,6 +191,8 @@ type IntoTxtList struct {
 	Var value.VariableName `if:"label=_"`
 }
 
+var _ ListTarget = (*IntoTxtList)(nil)
+
 func (*IntoTxtList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "into_txt_list",
@@ -179,6 +205,10 @@ type ListAt struct {
 	List  rt.Assignment `if:"label=_"`
 	Index rt.NumberEval `if:"label=index"`
 }
+
+var _ rt.NumberEval = (*ListAt)(nil)
+var _ rt.TextEval = (*ListAt)(nil)
+var _ rt.RecordEval = (*ListAt)(nil)
 
 func (*ListAt) Compose() composer.Spec {
 	return composer.Spec{
@@ -195,6 +225,8 @@ type ListEach struct {
 	Else core.Brancher `if:"label=else,optional"`
 }
 
+var _ rt.Execute = (*ListEach)(nil)
+
 func (*ListEach) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_each",
@@ -207,6 +239,9 @@ type ListFind struct {
 	Value rt.Assignment `if:"label=_"`
 	List  rt.Assignment `if:"label=list"`
 }
+
+var _ rt.BoolEval = (*ListFind)(nil)
+var _ rt.NumberEval = (*ListFind)(nil)
 
 func (*ListFind) Compose() composer.Spec {
 	return composer.Spec{
@@ -234,6 +269,8 @@ type ListLen struct {
 	List rt.Assignment `if:"label=_"`
 }
 
+var _ rt.NumberEval = (*ListLen)(nil)
+
 func (*ListLen) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_len",
@@ -247,6 +284,8 @@ type ListMap struct {
 	FromList     rt.Assignment `if:"label=from_list"`
 	UsingPattern value.Text    `if:"label=using"`
 }
+
+var _ rt.Execute = (*ListMap)(nil)
 
 func (*ListMap) Compose() composer.Spec {
 	return composer.Spec{
@@ -262,6 +301,8 @@ type ListReduce struct {
 	UsingPattern value.Text    `if:"label=using"`
 }
 
+var _ rt.Execute = (*ListReduce)(nil)
+
 func (*ListReduce) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_reduce",
@@ -273,6 +314,8 @@ func (*ListReduce) Compose() composer.Spec {
 type ListReverse struct {
 	List ListSource `if:"label=_"`
 }
+
+var _ rt.Execute = (*ListReverse)(nil)
 
 func (*ListReverse) Compose() composer.Spec {
 	return composer.Spec{
@@ -288,6 +331,8 @@ type ListSet struct {
 	From  rt.Assignment `if:"label=from"`
 }
 
+var _ rt.Execute = (*ListSet)(nil)
+
 func (*ListSet) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_set",
@@ -302,6 +347,10 @@ type ListSlice struct {
 	End   rt.NumberEval `if:"label=end,optional"`
 }
 
+var _ rt.NumListEval = (*ListSlice)(nil)
+var _ rt.TextListEval = (*ListSlice)(nil)
+var _ rt.RecordListEval = (*ListSlice)(nil)
+
 func (*ListSlice) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_slice",
@@ -315,6 +364,8 @@ type ListSortNumbers struct {
 	ByField    string             `if:"label=by_field"`
 	Descending rt.BoolEval        `if:"label=descending,optional"`
 }
+
+var _ rt.Execute = (*ListSortNumbers)(nil)
 
 func (*ListSortNumbers) Compose() composer.Spec {
 	return composer.Spec{
@@ -331,6 +382,8 @@ type ListSortText struct {
 	UsingCase  rt.BoolEval        `if:"label=using_case,optional"`
 }
 
+var _ rt.Execute = (*ListSortText)(nil)
+
 func (*ListSortText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_sort_text",
@@ -343,6 +396,8 @@ type ListSortUsing struct {
 	Var   value.VariableName `if:"label=_"`
 	Using value.Text         `if:"label=using"`
 }
+
+var _ rt.Execute = (*ListSortUsing)(nil)
 
 func (*ListSortUsing) Compose() composer.Spec {
 	return composer.Spec{
@@ -359,6 +414,11 @@ type ListSplice struct {
 	Insert rt.Assignment `if:"label=insert"`
 }
 
+var _ rt.Execute = (*ListSplice)(nil)
+var _ rt.NumListEval = (*ListSplice)(nil)
+var _ rt.TextListEval = (*ListSplice)(nil)
+var _ rt.RecordListEval = (*ListSplice)(nil)
+
 func (*ListSplice) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_splice",
@@ -372,6 +432,8 @@ type PutEdge struct {
 	Into   ListTarget    `if:"label=into"`
 	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
 }
+
+var _ rt.Execute = (*PutEdge)(nil)
 
 func (*PutEdge) Compose() composer.Spec {
 	return composer.Spec{
@@ -387,6 +449,8 @@ type PutIndex struct {
 	AtIndex rt.NumberEval `if:"label=at_index"`
 }
 
+var _ rt.Execute = (*PutIndex)(nil)
+
 func (*PutIndex) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "put_index",
@@ -400,6 +464,8 @@ type Range struct {
 	From   rt.NumberEval `if:"label=from,optional"`
 	ByStep rt.NumberEval `if:"label=by_step,optional"`
 }
+
+var _ rt.NumListEval = (*Range)(nil)
 
 func (*Range) Compose() composer.Spec {
 	return composer.Spec{

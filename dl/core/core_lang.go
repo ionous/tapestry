@@ -13,6 +13,8 @@ type Activity struct {
 	Exe []rt.Execute `if:"label=do"`
 }
 
+var _ rt.Execute = (*Activity)(nil)
+
 func (*Activity) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "activity",
@@ -25,6 +27,8 @@ type AllTrue struct {
 	Test []rt.BoolEval `if:"label=_"`
 }
 
+var _ rt.BoolEval = (*AllTrue)(nil)
+
 func (*AllTrue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "all_true",
@@ -34,6 +38,8 @@ func (*AllTrue) Compose() composer.Spec {
 
 // Always Returns true.
 type Always struct{}
+
+var _ rt.BoolEval = (*Always)(nil)
 
 func (*Always) Compose() composer.Spec {
 	return composer.Spec{
@@ -45,6 +51,8 @@ func (*Always) Compose() composer.Spec {
 type AnyTrue struct {
 	Test []rt.BoolEval `if:"label=_"`
 }
+
+var _ rt.BoolEval = (*AnyTrue)(nil)
 
 func (*AnyTrue) Compose() composer.Spec {
 	return composer.Spec{
@@ -59,6 +67,8 @@ type Assign struct {
 	From rt.Assignment      `if:"label=be"`
 }
 
+var _ rt.Execute = (*Assign)(nil)
+
 func (*Assign) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "assign",
@@ -69,6 +79,8 @@ func (*Assign) Compose() composer.Spec {
 // AtLeast The first value is greater than or equal to the second value.
 type AtLeast struct{}
 
+var _ Comparator = (*AtLeast)(nil)
+
 func (*AtLeast) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "at_least",
@@ -78,6 +90,8 @@ func (*AtLeast) Compose() composer.Spec {
 // AtMost The first value is less than or equal to the second value.
 type AtMost struct{}
 
+var _ Comparator = (*AtMost)(nil)
+
 func (*AtMost) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "at_most",
@@ -86,6 +100,8 @@ func (*AtMost) Compose() composer.Spec {
 
 // Blankline Add a single blank line following some text.
 type Blankline struct{}
+
+var _ rt.Execute = (*Blankline)(nil)
 
 func (*Blankline) Compose() composer.Spec {
 	return composer.Spec{
@@ -99,6 +115,8 @@ type BoolValue struct {
 	Bool bool `if:"label=_"`
 }
 
+var _ rt.BoolEval = (*BoolValue)(nil)
+
 func (*BoolValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "bool_value",
@@ -111,6 +129,8 @@ type BracketText struct {
 	Do Activity `if:"label=_"`
 }
 
+var _ rt.TextEval = (*BracketText)(nil)
+
 func (*BracketText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "bracket_text",
@@ -120,6 +140,8 @@ func (*BracketText) Compose() composer.Spec {
 
 // Break In a repeating loop, exit the loop.
 type Break struct{}
+
+var _ rt.Execute = (*Break)(nil)
 
 func (*Break) Compose() composer.Spec {
 	return composer.Spec{
@@ -131,6 +153,8 @@ func (*Break) Compose() composer.Spec {
 type BufferText struct {
 	Do Activity `if:"label=_"`
 }
+
+var _ rt.TextEval = (*BufferText)(nil)
 
 func (*BufferText) Compose() composer.Spec {
 	return composer.Spec{
@@ -170,6 +194,8 @@ type CallCycle struct {
 	Parts []rt.TextEval   `if:"label=_"`
 }
 
+var _ rt.TextEval = (*CallCycle)(nil)
+
 func (*CallCycle) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_cycle",
@@ -183,10 +209,11 @@ type CallMake struct {
 	Arguments CallArgs   `if:"label=args"`
 }
 
+var _ rt.RecordEval = (*CallMake)(nil)
+
 func (*CallMake) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_make",
-		Lede: "make",
 	}
 }
 
@@ -195,6 +222,15 @@ type CallPattern struct {
 	Pattern   value.PatternName `if:"label=_"`
 	Arguments CallArgs          `if:"label=args"`
 }
+
+var _ rt.Execute = (*CallPattern)(nil)
+var _ rt.BoolEval = (*CallPattern)(nil)
+var _ rt.NumberEval = (*CallPattern)(nil)
+var _ rt.TextEval = (*CallPattern)(nil)
+var _ rt.RecordEval = (*CallPattern)(nil)
+var _ rt.NumListEval = (*CallPattern)(nil)
+var _ rt.TextListEval = (*CallPattern)(nil)
+var _ rt.RecordListEval = (*CallPattern)(nil)
 
 func (*CallPattern) Compose() composer.Spec {
 	return composer.Spec{
@@ -209,6 +245,9 @@ type CallSend struct {
 	Arguments CallArgs        `if:"label=args"`
 }
 
+var _ rt.Execute = (*CallSend)(nil)
+var _ rt.BoolEval = (*CallSend)(nil)
+
 func (*CallSend) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_send",
@@ -222,6 +261,8 @@ type CallShuffle struct {
 	Indices Shuffler        `if:"internal"`
 }
 
+var _ rt.TextEval = (*CallShuffle)(nil)
+
 func (*CallShuffle) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_shuffle",
@@ -234,6 +275,8 @@ type CallTerminal struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
 }
+
+var _ rt.TextEval = (*CallTerminal)(nil)
 
 func (*CallTerminal) Compose() composer.Spec {
 	return composer.Spec{
@@ -249,6 +292,8 @@ type CallTrigger struct {
 	Num     rt.NumberEval   `if:"label=num"`
 }
 
+var _ rt.BoolEval = (*CallTrigger)(nil)
+
 func (*CallTrigger) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_trigger",
@@ -260,6 +305,8 @@ func (*CallTrigger) Compose() composer.Spec {
 type Capitalize struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+var _ rt.TextEval = (*Capitalize)(nil)
 
 func (*Capitalize) Compose() composer.Spec {
 	return composer.Spec{
@@ -274,6 +321,9 @@ type ChooseAction struct {
 	Else Brancher    `if:"label=else,optional"`
 }
 
+var _ rt.Execute = (*ChooseAction)(nil)
+var _ Brancher = (*ChooseAction)(nil)
+
 func (*ChooseAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_action",
@@ -287,6 +337,8 @@ type ChooseMore struct {
 	Do   Activity    `if:"label=do"`
 	Else Brancher    `if:"label=else,optional"`
 }
+
+var _ Brancher = (*ChooseMore)(nil)
 
 func (*ChooseMore) Compose() composer.Spec {
 	return composer.Spec{
@@ -304,6 +356,8 @@ type ChooseMoreValue struct {
 	Else   Brancher      `if:"label=else,optional"`
 }
 
+var _ Brancher = (*ChooseMoreValue)(nil)
+
 func (*ChooseMoreValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_more_value",
@@ -315,6 +369,8 @@ func (*ChooseMoreValue) Compose() composer.Spec {
 type ChooseNothingElse struct {
 	Do Activity `if:"label=_"`
 }
+
+var _ Brancher = (*ChooseNothingElse)(nil)
 
 func (*ChooseNothingElse) Compose() composer.Spec {
 	return composer.Spec{
@@ -330,6 +386,8 @@ type ChooseNum struct {
 	False rt.NumberEval `if:"label=else"`
 }
 
+var _ rt.NumberEval = (*ChooseNum)(nil)
+
 func (*ChooseNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_num",
@@ -343,6 +401,8 @@ type ChooseText struct {
 	True  rt.TextEval `if:"label=then"`
 	False rt.TextEval `if:"label=else"`
 }
+
+var _ rt.TextEval = (*ChooseText)(nil)
 
 func (*ChooseText) Compose() composer.Spec {
 	return composer.Spec{
@@ -360,6 +420,9 @@ type ChooseValue struct {
 	Else   Brancher      `if:"label=else,optional"`
 }
 
+var _ rt.Execute = (*ChooseValue)(nil)
+var _ Brancher = (*ChooseValue)(nil)
+
 func (*ChooseValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_value",
@@ -371,6 +434,8 @@ func (*ChooseValue) Compose() composer.Spec {
 type CommaText struct {
 	Do Activity `if:"label=_"`
 }
+
+var _ rt.TextEval = (*CommaText)(nil)
 
 func (*CommaText) Compose() composer.Spec {
 	return composer.Spec{
@@ -386,6 +451,8 @@ type CompareNum struct {
 	B  rt.NumberEval `if:"label=num"`
 }
 
+var _ rt.BoolEval = (*CompareNum)(nil)
+
 func (*CompareNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "compare_num",
@@ -400,6 +467,8 @@ type CompareText struct {
 	B  rt.TextEval `if:"label=txt"`
 }
 
+var _ rt.BoolEval = (*CompareText)(nil)
+
 func (*CompareText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "compare_text",
@@ -413,6 +482,8 @@ type DiffOf struct {
 	B rt.NumberEval `if:"label=by,optional"`
 }
 
+var _ rt.NumberEval = (*DiffOf)(nil)
+
 func (*DiffOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "diff_of",
@@ -425,6 +496,9 @@ type During struct {
 	Pattern value.PatternName `if:"label=_"`
 }
 
+var _ rt.BoolEval = (*During)(nil)
+var _ rt.NumberEval = (*During)(nil)
+
 func (*During) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "during",
@@ -433,6 +507,8 @@ func (*During) Compose() composer.Spec {
 
 // Equal Two values exactly match.
 type Equal struct{}
+
+var _ Comparator = (*Equal)(nil)
 
 func (*Equal) Compose() composer.Spec {
 	return composer.Spec{
@@ -446,6 +522,8 @@ type FromBool struct {
 	Val rt.BoolEval `if:"label=_"`
 }
 
+var _ rt.Assignment = (*FromBool)(nil)
+
 func (*FromBool) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_bool",
@@ -457,6 +535,8 @@ func (*FromBool) Compose() composer.Spec {
 type FromNum struct {
 	Val rt.NumberEval `if:"label=_"`
 }
+
+var _ rt.Assignment = (*FromNum)(nil)
 
 func (*FromNum) Compose() composer.Spec {
 	return composer.Spec{
@@ -470,6 +550,8 @@ type FromNumbers struct {
 	Vals rt.NumListEval `if:"label=_"`
 }
 
+var _ rt.Assignment = (*FromNumbers)(nil)
+
 func (*FromNumbers) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_numbers",
@@ -481,6 +563,8 @@ func (*FromNumbers) Compose() composer.Spec {
 type FromObj struct {
 	Object rt.TextEval `if:"label=_"`
 }
+
+var _ FromSourceFields = (*FromObj)(nil)
 
 func (*FromObj) Compose() composer.Spec {
 	return composer.Spec{
@@ -494,6 +578,8 @@ type FromRec struct {
 	Rec rt.RecordEval `if:"label=_"`
 }
 
+var _ FromSourceFields = (*FromRec)(nil)
+
 func (*FromRec) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_rec",
@@ -505,6 +591,8 @@ func (*FromRec) Compose() composer.Spec {
 type FromRecord struct {
 	Val rt.RecordEval `if:"label=_"`
 }
+
+var _ rt.Assignment = (*FromRecord)(nil)
 
 func (*FromRecord) Compose() composer.Spec {
 	return composer.Spec{
@@ -518,6 +606,8 @@ type FromRecords struct {
 	Vals rt.RecordListEval `if:"label=_"`
 }
 
+var _ rt.Assignment = (*FromRecords)(nil)
+
 func (*FromRecords) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_records",
@@ -529,6 +619,8 @@ func (*FromRecords) Compose() composer.Spec {
 type FromText struct {
 	Val rt.TextEval `if:"label=_"`
 }
+
+var _ rt.Assignment = (*FromText)(nil)
 
 func (*FromText) Compose() composer.Spec {
 	return composer.Spec{
@@ -542,6 +634,8 @@ type FromTexts struct {
 	Vals rt.TextListEval `if:"label=_"`
 }
 
+var _ rt.Assignment = (*FromTexts)(nil)
+
 func (*FromTexts) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_texts",
@@ -553,6 +647,8 @@ func (*FromTexts) Compose() composer.Spec {
 type FromVar struct {
 	Var value.VariableName `if:"label=_"`
 }
+
+var _ FromSourceFields = (*FromVar)(nil)
 
 func (*FromVar) Compose() composer.Spec {
 	return composer.Spec{
@@ -567,6 +663,15 @@ type GetAtField struct {
 	From  FromSourceFields `if:"label=from"`
 }
 
+var _ rt.Assignment = (*GetAtField)(nil)
+var _ rt.BoolEval = (*GetAtField)(nil)
+var _ rt.NumberEval = (*GetAtField)(nil)
+var _ rt.TextEval = (*GetAtField)(nil)
+var _ rt.RecordEval = (*GetAtField)(nil)
+var _ rt.NumListEval = (*GetAtField)(nil)
+var _ rt.TextListEval = (*GetAtField)(nil)
+var _ rt.RecordListEval = (*GetAtField)(nil)
+
 func (*GetAtField) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "get_at_field",
@@ -579,6 +684,15 @@ type GetVar struct {
 	Name value.VariableName `if:"label=_"`
 }
 
+var _ rt.Assignment = (*GetVar)(nil)
+var _ rt.BoolEval = (*GetVar)(nil)
+var _ rt.NumberEval = (*GetVar)(nil)
+var _ rt.TextEval = (*GetVar)(nil)
+var _ rt.RecordEval = (*GetVar)(nil)
+var _ rt.NumListEval = (*GetVar)(nil)
+var _ rt.TextListEval = (*GetVar)(nil)
+var _ rt.RecordListEval = (*GetVar)(nil)
+
 func (*GetVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "get_var",
@@ -588,6 +702,8 @@ func (*GetVar) Compose() composer.Spec {
 
 // GreaterThan The first value is larger than the second value.
 type GreaterThan struct{}
+
+var _ Comparator = (*GreaterThan)(nil)
 
 func (*GreaterThan) Compose() composer.Spec {
 	return composer.Spec{
@@ -599,6 +715,8 @@ func (*GreaterThan) Compose() composer.Spec {
 type HasDominion struct {
 	Name value.Text `if:"label=_"`
 }
+
+var _ rt.BoolEval = (*HasDominion)(nil)
 
 func (*HasDominion) Compose() composer.Spec {
 	return composer.Spec{
@@ -612,6 +730,8 @@ type HasTrait struct {
 	Trait  rt.TextEval `if:"label=trait"`
 }
 
+var _ rt.BoolEval = (*HasTrait)(nil)
+
 func (*HasTrait) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "has_trait",
@@ -623,6 +743,8 @@ func (*HasTrait) Compose() composer.Spec {
 type IdOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
+
+var _ rt.TextEval = (*IdOf)(nil)
 
 func (*IdOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -636,6 +758,8 @@ type Includes struct {
 	Part rt.TextEval `if:"label=part"`
 }
 
+var _ rt.BoolEval = (*Includes)(nil)
+
 func (*Includes) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "includes",
@@ -647,6 +771,8 @@ func (*Includes) Compose() composer.Spec {
 type IntoObj struct {
 	Object rt.TextEval `if:"label=_"`
 }
+
+var _ IntoTargetFields = (*IntoObj)(nil)
 
 func (*IntoObj) Compose() composer.Spec {
 	return composer.Spec{
@@ -660,6 +786,8 @@ type IntoVar struct {
 	Var value.VariableName `if:"label=_"`
 }
 
+var _ IntoTargetFields = (*IntoVar)(nil)
+
 func (*IntoVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "into_var",
@@ -671,6 +799,8 @@ func (*IntoVar) Compose() composer.Spec {
 type IsEmpty struct {
 	Text rt.TextEval `if:"label=empty"`
 }
+
+var _ rt.BoolEval = (*IsEmpty)(nil)
 
 func (*IsEmpty) Compose() composer.Spec {
 	return composer.Spec{
@@ -685,6 +815,8 @@ type IsExactKindOf struct {
 	Kind   value.Text  `if:"label=is_exactly"`
 }
 
+var _ rt.BoolEval = (*IsExactKindOf)(nil)
+
 func (*IsExactKindOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "is_exact_kind_of",
@@ -697,6 +829,8 @@ type IsKindOf struct {
 	Object rt.TextEval `if:"label=_"`
 	Kind   value.Text  `if:"label=is"`
 }
+
+var _ rt.BoolEval = (*IsKindOf)(nil)
 
 func (*IsKindOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -711,6 +845,8 @@ type Join struct {
 	Parts []rt.TextEval `if:"label=parts"`
 }
 
+var _ rt.TextEval = (*Join)(nil)
+
 func (*Join) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "join",
@@ -721,6 +857,8 @@ func (*Join) Compose() composer.Spec {
 type KindOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
+
+var _ rt.TextEval = (*KindOf)(nil)
 
 func (*KindOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -733,6 +871,8 @@ type KindsOf struct {
 	Kind value.Text `if:"label=_"`
 }
 
+var _ rt.TextListEval = (*KindsOf)(nil)
+
 func (*KindsOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kinds_of",
@@ -741,6 +881,8 @@ func (*KindsOf) Compose() composer.Spec {
 
 // LessThan The first value is less than the second value.
 type LessThan struct{}
+
+var _ Comparator = (*LessThan)(nil)
 
 func (*LessThan) Compose() composer.Spec {
 	return composer.Spec{
@@ -752,6 +894,8 @@ func (*LessThan) Compose() composer.Spec {
 type MakeLowercase struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+var _ rt.TextEval = (*MakeLowercase)(nil)
 
 func (*MakeLowercase) Compose() composer.Spec {
 	return composer.Spec{
@@ -765,6 +909,8 @@ type MakeReversed struct {
 	Text rt.TextEval `if:"label=_"`
 }
 
+var _ rt.TextEval = (*MakeReversed)(nil)
+
 func (*MakeReversed) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make_reversed",
@@ -776,6 +922,8 @@ func (*MakeReversed) Compose() composer.Spec {
 type MakeSentenceCase struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+var _ rt.TextEval = (*MakeSentenceCase)(nil)
 
 func (*MakeSentenceCase) Compose() composer.Spec {
 	return composer.Spec{
@@ -789,6 +937,8 @@ type MakeTitleCase struct {
 	Text rt.TextEval `if:"label=_"`
 }
 
+var _ rt.TextEval = (*MakeTitleCase)(nil)
+
 func (*MakeTitleCase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make_title_case",
@@ -800,6 +950,8 @@ func (*MakeTitleCase) Compose() composer.Spec {
 type MakeUppercase struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+var _ rt.TextEval = (*MakeUppercase)(nil)
 
 func (*MakeUppercase) Compose() composer.Spec {
 	return composer.Spec{
@@ -815,6 +967,8 @@ type Matches struct {
 	Cache   MatchCache  `if:"internal"`
 }
 
+var _ rt.BoolEval = (*Matches)(nil)
+
 func (*Matches) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "matches",
@@ -826,6 +980,8 @@ type NameOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
 
+var _ rt.TextEval = (*NameOf)(nil)
+
 func (*NameOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "name_of",
@@ -834,6 +990,8 @@ func (*NameOf) Compose() composer.Spec {
 
 // Never Returns false.
 type Never struct{}
+
+var _ rt.BoolEval = (*Never)(nil)
 
 func (*Never) Compose() composer.Spec {
 	return composer.Spec{
@@ -845,6 +1003,8 @@ func (*Never) Compose() composer.Spec {
 // Newline Start a new line.
 type Newline struct{}
 
+var _ rt.Execute = (*Newline)(nil)
+
 func (*Newline) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "newline",
@@ -854,6 +1014,8 @@ func (*Newline) Compose() composer.Spec {
 
 // Next In a repeating loop, try the next iteration of the loop.
 type Next struct{}
+
+var _ rt.Execute = (*Next)(nil)
 
 func (*Next) Compose() composer.Spec {
 	return composer.Spec{
@@ -866,6 +1028,8 @@ type Not struct {
 	Test rt.BoolEval `if:"label=_"`
 }
 
+var _ rt.BoolEval = (*Not)(nil)
+
 func (*Not) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "not",
@@ -876,6 +1040,8 @@ func (*Not) Compose() composer.Spec {
 type NumValue struct {
 	Num float64 `if:"label=_"`
 }
+
+var _ rt.NumberEval = (*NumValue)(nil)
 
 func (*NumValue) Compose() composer.Spec {
 	return composer.Spec{
@@ -889,6 +1055,8 @@ type Numbers struct {
 	Values []float64 `if:"label=_"`
 }
 
+var _ rt.NumListEval = (*Numbers)(nil)
+
 func (*Numbers) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "numbers",
@@ -900,6 +1068,8 @@ func (*Numbers) Compose() composer.Spec {
 type ObjectExists struct {
 	Object rt.TextEval `if:"label=valid"`
 }
+
+var _ rt.BoolEval = (*ObjectExists)(nil)
 
 func (*ObjectExists) Compose() composer.Spec {
 	return composer.Spec{
@@ -913,6 +1083,8 @@ type Pluralize struct {
 	Text rt.TextEval `if:"label=of"`
 }
 
+var _ rt.TextEval = (*Pluralize)(nil)
+
 func (*Pluralize) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pluralize",
@@ -924,6 +1096,8 @@ func (*Pluralize) Compose() composer.Spec {
 type PrintNum struct {
 	Num rt.NumberEval `if:"label=_"`
 }
+
+var _ rt.TextEval = (*PrintNum)(nil)
 
 func (*PrintNum) Compose() composer.Spec {
 	return composer.Spec{
@@ -937,6 +1111,8 @@ type PrintNumWord struct {
 	Num rt.NumberEval `if:"label=words"`
 }
 
+var _ rt.TextEval = (*PrintNumWord)(nil)
+
 func (*PrintNumWord) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "print_num_word",
@@ -949,6 +1125,8 @@ type ProductOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
 }
+
+var _ rt.NumberEval = (*ProductOf)(nil)
 
 func (*ProductOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -964,6 +1142,8 @@ type PutAtField struct {
 	AtField value.Text       `if:"label=at"`
 }
 
+var _ rt.Execute = (*PutAtField)(nil)
+
 func (*PutAtField) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "put_at_field",
@@ -976,6 +1156,8 @@ type QuotientOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
 }
+
+var _ rt.NumberEval = (*QuotientOf)(nil)
 
 func (*QuotientOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -990,6 +1172,8 @@ type RemainderOf struct {
 	B rt.NumberEval `if:"label=by"`
 }
 
+var _ rt.NumberEval = (*RemainderOf)(nil)
+
 func (*RemainderOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "remainder_of",
@@ -1003,6 +1187,8 @@ type Response struct {
 	Text rt.TextEval `if:"label=text,optional"`
 }
 
+var _ rt.TextEval = (*Response)(nil)
+
 func (*Response) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "response",
@@ -1013,6 +1199,8 @@ func (*Response) Compose() composer.Spec {
 type Row struct {
 	Do Activity `if:"label=_"`
 }
+
+var _ rt.TextEval = (*Row)(nil)
 
 func (*Row) Compose() composer.Spec {
 	return composer.Spec{
@@ -1025,6 +1213,8 @@ type Rows struct {
 	Do Activity `if:"label=_"`
 }
 
+var _ rt.TextEval = (*Rows)(nil)
+
 func (*Rows) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "rows",
@@ -1035,6 +1225,8 @@ func (*Rows) Compose() composer.Spec {
 type SayText struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+var _ rt.Execute = (*SayText)(nil)
 
 func (*SayText) Compose() composer.Spec {
 	return composer.Spec{
@@ -1049,6 +1241,8 @@ type SetTrait struct {
 	Trait  rt.TextEval `if:"label=trait"`
 }
 
+var _ rt.Execute = (*SetTrait)(nil)
+
 func (*SetTrait) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "set_trait",
@@ -1060,6 +1254,8 @@ func (*SetTrait) Compose() composer.Spec {
 type Singularize struct {
 	Text rt.TextEval `if:"label=of"`
 }
+
+var _ rt.TextEval = (*Singularize)(nil)
 
 func (*Singularize) Compose() composer.Spec {
 	return composer.Spec{
@@ -1073,6 +1269,8 @@ type SlashText struct {
 	Do Activity `if:"label=_"`
 }
 
+var _ rt.TextEval = (*SlashText)(nil)
+
 func (*SlashText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "slash_text",
@@ -1082,6 +1280,8 @@ func (*SlashText) Compose() composer.Spec {
 
 // Softline Start a new line ( if not already at a new line. )
 type Softline struct{}
+
+var _ rt.Execute = (*Softline)(nil)
 
 func (*Softline) Compose() composer.Spec {
 	return composer.Spec{
@@ -1094,6 +1294,8 @@ func (*Softline) Compose() composer.Spec {
 type SpanText struct {
 	Do Activity `if:"label=_"`
 }
+
+var _ rt.TextEval = (*SpanText)(nil)
 
 func (*SpanText) Compose() composer.Spec {
 	return composer.Spec{
@@ -1108,6 +1310,8 @@ type SumOf struct {
 	B rt.NumberEval `if:"label=by,optional"`
 }
 
+var _ rt.NumberEval = (*SumOf)(nil)
+
 func (*SumOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "sum_of",
@@ -1119,6 +1323,8 @@ func (*SumOf) Compose() composer.Spec {
 type TextValue struct {
 	Text value.Text `if:"label=_"`
 }
+
+var _ rt.TextEval = (*TextValue)(nil)
 
 func (*TextValue) Compose() composer.Spec {
 	return composer.Spec{
@@ -1132,6 +1338,8 @@ type Texts struct {
 	Values []value.Text `if:"label=_"`
 }
 
+var _ rt.TextListEval = (*Texts)(nil)
+
 func (*Texts) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "texts",
@@ -1141,6 +1349,8 @@ func (*Texts) Compose() composer.Spec {
 
 // TriggerCycle
 type TriggerCycle struct{}
+
+var _ Trigger = (*TriggerCycle)(nil)
 
 func (*TriggerCycle) Compose() composer.Spec {
 	return composer.Spec{
@@ -1152,6 +1362,8 @@ func (*TriggerCycle) Compose() composer.Spec {
 // TriggerOnce
 type TriggerOnce struct{}
 
+var _ Trigger = (*TriggerOnce)(nil)
+
 func (*TriggerOnce) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "trigger_once",
@@ -1162,6 +1374,8 @@ func (*TriggerOnce) Compose() composer.Spec {
 // TriggerSwitch
 type TriggerSwitch struct{}
 
+var _ Trigger = (*TriggerSwitch)(nil)
+
 func (*TriggerSwitch) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "trigger_switch",
@@ -1171,6 +1385,8 @@ func (*TriggerSwitch) Compose() composer.Spec {
 
 // Unequal The first value doesn&#x27;t equal the second value.
 type Unequal struct{}
+
+var _ Comparator = (*Unequal)(nil)
 
 func (*Unequal) Compose() composer.Spec {
 	return composer.Spec{
@@ -1184,6 +1400,8 @@ type While struct {
 	True rt.BoolEval `if:"label=_"`
 	Do   Activity    `if:"label=do"`
 }
+
+var _ rt.Execute = (*While)(nil)
 
 func (*While) Compose() composer.Spec {
 	return composer.Spec{

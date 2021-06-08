@@ -4,11 +4,13 @@ module.exports =`
 // {{Pascal name}} {{desc.short}}
 type {{Pascal name}} struct {
 {{~#each (ParamsOf this)}}
-  {{NameOf @key this}} {{TypeOf this}} \`if:"
+  {{ParamNameOf @key this}} {{TypeOf this}} \`if:"
   {{~#if (IsInternal label)}}internal{{else}}label={{LabelOf label}}{{/if}}
   {{~#if optional}},optional{{/if}}"\`
 {{/each}}
 }
-
+{{#each this.with.slots}}
+var _ {{ScopedNameOf this}} = (*{{Pascal ../name}})(nil)
+{{/each}}
 {{>spec spec=this}}
 `;

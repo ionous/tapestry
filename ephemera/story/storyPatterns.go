@@ -108,24 +108,27 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 			flags = rt.Infix
 		}
 		// check if this rule is declared inside a specific domain
-		guard := op.Guard
-		if searchForCounters(r.ValueOf(guard)) {
-			flags |= rt.Filter
-		}
-		// check if this rule is declared inside a specific domain
-		if dom := k.Current.Domain.String(); len(dom) > 0 {
-			guard = &core.AllTrue{[]rt.BoolEval{
-				&core.HasDominion{value.Text{Str: dom}},
-				guard,
-			}}
-		}
-		// a token stream sure would be nice here -- then we could just strstr for countOf
-		rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: flags}
-		if patternProg, e := k.NewGob("rule", rule); e != nil {
-			err = e
+		if guard := op.Guard; guard == nil {
+			err = errutil.New("missing guard in", pattern.String(), "at", op.Hook.At.String())
 		} else {
-			// currentDomain returns "entire_game" when k.Current.Domain is the empty string.
-			k.NewPatternRule(pattern, target, k.currentDomain(), patternProg)
+			if searchForCounters(r.ValueOf(guard)) {
+				flags |= rt.Filter
+			}
+			// check if this rule is declared inside a specific domain
+			if dom := k.Current.Domain.String(); len(dom) > 0 {
+				guard = &core.AllTrue{[]rt.BoolEval{
+					&core.HasDominion{value.Text{Str: dom}},
+					guard,
+				}}
+			}
+			// a token stream sure would be nice here -- then we could just strstr for countOf
+			rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: flags}
+			if patternProg, e := k.NewGob("rule", rule); e != nil {
+				err = errutil.New(e, "while importing pattern rule", pattern.String())
+			} else {
+				// currentDomain returns "entire_game" when k.Current.Domain is the empty string.
+				k.NewPatternRule(pattern, target, k.currentDomain(), patternProg)
+			}
 		}
 	}
 	return

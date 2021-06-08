@@ -638,7 +638,7 @@
             "determine":
             {
                 "uses": "slat",
-                "spec": "determine {_%name:pattern_name} {args%arguments}",
+                "spec": "determine {_%name:pattern_name} {args%arguments?arguments}",
                 "slot":
                 [
                     "execute",
@@ -655,14 +655,14 @@
             "make":
             {
                 "uses": "flow",
-                "spec": "make {_%name:text} {args%arguments}",
+                "spec": "make {_%name:text} {args%arguments?arguments}",
                 "slot": "record_eval",
                 "group": "misc"
             },
             "send":
             {
                 "uses": "flow",
-                "spec": "send {_%event:text} {to%path:text_list_eval} {args%arguments:call_args}",
+                "spec": "send {_%event:text} {to%path:text_list_eval} {args%arguments?arguments}",
                 "slot":
                 [
                     "execute",

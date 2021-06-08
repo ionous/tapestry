@@ -857,11 +857,6 @@
                                                                   "id": "id-1783e75e512-6",
                                                                   "type": "debug_log",
                                                                   "value": {
-                                                                    "$LEVEL": {
-                                                                      "id": "id-1783e75e512-8",
-                                                                      "type": "number",
-                                                                      "value": -1
-                                                                    },
                                                                     "$VALUE": {
                                                                       "id": "id-1783e75e512-7",
                                                                       "type": "assignment",

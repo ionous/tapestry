@@ -13,6 +13,8 @@ type ReciprocalOf struct {
 	Object rt.TextEval        `if:"label=object"`
 }
 
+var _ rt.TextEval = (*ReciprocalOf)(nil)
+
 func (*ReciprocalOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "reciprocal_of",
@@ -25,6 +27,8 @@ type ReciprocalsOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
 }
+
+var _ rt.TextListEval = (*ReciprocalsOf)(nil)
 
 func (*ReciprocalsOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -40,6 +44,8 @@ type Relate struct {
 	Via      value.RelationName `if:"label=via"`
 }
 
+var _ rt.Execute = (*Relate)(nil)
+
 func (*Relate) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "relate",
@@ -51,6 +57,8 @@ type RelativeOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
 }
+
+var _ rt.TextEval = (*RelativeOf)(nil)
 
 func (*RelativeOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -64,6 +72,8 @@ type RelativesOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
 }
+
+var _ rt.TextListEval = (*RelativesOf)(nil)
 
 func (*RelativesOf) Compose() composer.Spec {
 	return composer.Spec{

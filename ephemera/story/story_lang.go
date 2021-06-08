@@ -59,6 +59,8 @@ type ActionDecl struct {
 	ActionParams ActionParams    `if:"label=action_params"`
 }
 
+var _ StoryStatement = (*ActionDecl)(nil)
+
 func (*ActionDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action_decl",
@@ -197,6 +199,8 @@ type AspectTraits struct {
 	TraitPhrase TraitPhrase `if:"label=trait_phrase"`
 }
 
+var _ StoryStatement = (*AspectTraits)(nil)
+
 func (*AspectTraits) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "aspect_traits",
@@ -232,6 +236,8 @@ type Certainties struct {
 	Certainty   Certainty   `if:"label=certainty"`
 	Trait       Trait       `if:"label=trait"`
 }
+
+var _ StoryStatement = (*Certainties)(nil)
 
 func (*Certainties) Compose() composer.Spec {
 	return composer.Spec{
@@ -277,6 +283,9 @@ type Comment struct {
 	Lines value.Lines `if:"label=comment"`
 }
 
+var _ StoryStatement = (*Comment)(nil)
+var _ rt.Execute = (*Comment)(nil)
+
 func (*Comment) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "comment",
@@ -303,6 +312,8 @@ type CountOf struct {
 	Num     rt.NumberEval   `if:"label=num"`
 }
 
+var _ rt.BoolEval = (*CountOf)(nil)
+
 func (*CountOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "count_of",
@@ -315,6 +326,8 @@ type CycleText struct {
 	Parts []rt.TextEval   `if:"label=_"`
 }
 
+var _ rt.TextEval = (*CycleText)(nil)
+
 func (*CycleText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "cycle_text",
@@ -324,8 +337,17 @@ func (*CycleText) Compose() composer.Spec {
 // Determine
 type Determine struct {
 	Name      value.PatternName `if:"label=_"`
-	Arguments Arguments         `if:"label=args"`
+	Arguments *Arguments        `if:"label=args,optional"`
 }
+
+var _ rt.Execute = (*Determine)(nil)
+var _ rt.BoolEval = (*Determine)(nil)
+var _ rt.NumberEval = (*Determine)(nil)
+var _ rt.TextEval = (*Determine)(nil)
+var _ rt.RecordEval = (*Determine)(nil)
+var _ rt.NumListEval = (*Determine)(nil)
+var _ rt.TextListEval = (*Determine)(nil)
+var _ rt.RecordListEval = (*Determine)(nil)
 
 func (*Determine) Compose() composer.Spec {
 	return composer.Spec{
@@ -368,9 +390,12 @@ func (*Determiner) Compose() composer.Spec {
 
 // EventBlock Listeners let objects in the game world react to changes before, during, or after they happen.
 type EventBlock struct {
-	Target   EventTarget    `if:"label=the_target"`
-	Handlers []EventHandler `if:"label=handlers"`
+	At       reader.Position `if:"internal"`
+	Target   EventTarget     `if:"label=the_target"`
+	Handlers []EventHandler  `if:"label=handlers"`
 }
+
+var _ StoryStatement = (*EventBlock)(nil)
 
 func (*EventBlock) Compose() composer.Spec {
 	return composer.Spec{
@@ -517,6 +542,8 @@ type KindOfRelation struct {
 	RelationCardinality RelationCardinality `if:"label=relation_cardinality"`
 }
 
+var _ StoryStatement = (*KindOfRelation)(nil)
+
 func (*KindOfRelation) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kind_of_relation",
@@ -527,6 +554,8 @@ func (*KindOfRelation) Compose() composer.Spec {
 type KindsOfAspect struct {
 	Aspect Aspect `if:"label=aspect"`
 }
+
+var _ StoryStatement = (*KindsOfAspect)(nil)
 
 func (*KindsOfAspect) Compose() composer.Spec {
 	return composer.Spec{
@@ -540,6 +569,8 @@ type KindsOfKind struct {
 	SingularKind SingularKind `if:"label=singular_kind"`
 }
 
+var _ StoryStatement = (*KindsOfKind)(nil)
+
 func (*KindsOfKind) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kinds_of_kind",
@@ -550,6 +581,8 @@ func (*KindsOfKind) Compose() composer.Spec {
 type KindsOfRecord struct {
 	RecordPlural RecordPlural `if:"label=records"`
 }
+
+var _ StoryStatement = (*KindsOfRecord)(nil)
 
 func (*KindsOfRecord) Compose() composer.Spec {
 	return composer.Spec{
@@ -562,6 +595,8 @@ type KindsPossessProperties struct {
 	PluralKinds  PluralKinds    `if:"label=plural_kinds"`
 	PropertyDecl []PropertyDecl `if:"label=property_decl"`
 }
+
+var _ StoryStatement = (*KindsPossessProperties)(nil)
 
 func (*KindsPossessProperties) Compose() composer.Spec {
 	return composer.Spec{
@@ -607,8 +642,10 @@ func (*LocalInit) Compose() composer.Spec {
 // Make
 type Make struct {
 	Name      value.Text `if:"label=_"`
-	Arguments Arguments  `if:"label=args"`
+	Arguments *Arguments `if:"label=args,optional"`
 }
+
+var _ rt.RecordEval = (*Make)(nil)
 
 func (*Make) Compose() composer.Spec {
 	return composer.Spec{
@@ -658,6 +695,8 @@ type NounAssignment struct {
 	Nouns    []NamedNoun `if:"label=nouns"`
 	Lines    value.Lines `if:"label=the_text"`
 }
+
+var _ StoryStatement = (*NounAssignment)(nil)
 
 func (*NounAssignment) Compose() composer.Spec {
 	return composer.Spec{
@@ -728,6 +767,8 @@ type NounStatement struct {
 	Tail    []Tail   `if:"label=tail,optional"`
 	Summary *Summary `if:"label=summary,optional"`
 }
+
+var _ StoryStatement = (*NounStatement)(nil)
 
 func (*NounStatement) Compose() composer.Spec {
 	return composer.Spec{
@@ -843,6 +884,8 @@ type PatternActions struct {
 	PatternRules  PatternRules      `if:"label=pattern_rules"`
 }
 
+var _ StoryStatement = (*PatternActions)(nil)
+
 func (*PatternActions) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_actions",
@@ -857,6 +900,8 @@ type PatternDecl struct {
 	PatternReturn *PatternReturn        `if:"label=pattern_return,optional"`
 	About         *Comment              `if:"label=about,optional"`
 }
+
+var _ StoryStatement = (*PatternDecl)(nil)
 
 func (*PatternDecl) Compose() composer.Spec {
 	return composer.Spec{
@@ -979,6 +1024,8 @@ type PatternVariablesDecl struct {
 	PatternName  value.PatternName `if:"label=pattern_name"`
 	VariableDecl []VariableDecl    `if:"label=variable_decl"`
 }
+
+var _ StoryStatement = (*PatternVariablesDecl)(nil)
 
 func (*PatternVariablesDecl) Compose() composer.Spec {
 	return composer.Spec{
@@ -1284,6 +1331,8 @@ type RecordsPossessProperties struct {
 	PropertyDecl []PropertyDecl `if:"label=property_decl"`
 }
 
+var _ StoryStatement = (*RecordsPossessProperties)(nil)
+
 func (*RecordsPossessProperties) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "records_possess_properties",
@@ -1319,6 +1368,8 @@ type RelativeToNoun struct {
 	Nouns1   []NamedNoun        `if:"label=nouns"`
 }
 
+var _ StoryStatement = (*RelativeToNoun)(nil)
+
 func (*RelativeToNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "relative_to_noun",
@@ -1330,6 +1381,8 @@ type RenderTemplate struct {
 	Template value.Lines `if:"label=_"`
 }
 
+var _ rt.TextEval = (*RenderTemplate)(nil)
+
 func (*RenderTemplate) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_template",
@@ -1340,8 +1393,11 @@ func (*RenderTemplate) Compose() composer.Spec {
 type Send struct {
 	Event     value.Text      `if:"label=_"`
 	Path      rt.TextListEval `if:"label=to"`
-	Arguments core.CallArgs   `if:"label=args"`
+	Arguments *Arguments      `if:"label=args,optional"`
 }
+
+var _ rt.Execute = (*Send)(nil)
+var _ rt.BoolEval = (*Send)(nil)
 
 func (*Send) Compose() composer.Spec {
 	return composer.Spec{
@@ -1354,6 +1410,8 @@ type ShuffleText struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
 }
+
+var _ rt.TextEval = (*ShuffleText)(nil)
 
 func (*ShuffleText) Compose() composer.Spec {
 	return composer.Spec{
@@ -1390,6 +1448,8 @@ type StoppingText struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
 }
+
+var _ rt.TextEval = (*StoppingText)(nil)
 
 func (*StoppingText) Compose() composer.Spec {
 	return composer.Spec{
@@ -1468,6 +1528,8 @@ type TestOutput struct {
 	Lines value.Lines `if:"label=lines"`
 }
 
+var _ Testing = (*TestOutput)(nil)
+
 func (*TestOutput) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "test_output",
@@ -1479,6 +1541,8 @@ type TestRule struct {
 	TestName TestName    `if:"label=test_name"`
 	Hook     ProgramHook `if:"label=do"`
 }
+
+var _ StoryStatement = (*TestRule)(nil)
 
 func (*TestRule) Compose() composer.Spec {
 	return composer.Spec{
@@ -1492,6 +1556,8 @@ type TestScene struct {
 	Story    Story    `if:"label=story"`
 }
 
+var _ StoryStatement = (*TestScene)(nil)
+
 func (*TestScene) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "test_scene",
@@ -1504,6 +1570,8 @@ type TestStatement struct {
 	TestName TestName        `if:"label=test_name"`
 	Test     Testing         `if:"label=expectation"`
 }
+
+var _ StoryStatement = (*TestStatement)(nil)
 
 func (*TestStatement) Compose() composer.Spec {
 	return composer.Spec{

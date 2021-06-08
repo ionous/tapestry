@@ -40,11 +40,10 @@ func NewImporter(db *sql.DB, reporter decode.IssueReport) *Importer {
 	iffy.RegisterGobs()
 	dec := decode.NewDecoderReporter(reporter)
 	k := NewImporterDecoder(db, dec)
-	//
 	for _, slats := range iffy.AllSlats {
 		dec.AddDefaultCallbacks(slats)
 	}
-	dec.AddDefaultCallbacks(Slats)
+	k.AddModel(Slats) // add story slats
 	return k
 }
 
@@ -68,7 +67,8 @@ func (k *Importer) SetSource(s string) *Importer {
 	return k
 }
 
-//
+// Add all the story modeling statements
+// convert any that implement "ImportStub"
 func (k *Importer) AddModel(model []composer.Composer) {
 	type stubImporter interface {
 		ImportStub(k *Importer) (ret interface{}, err error)
