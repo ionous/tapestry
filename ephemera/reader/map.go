@@ -47,3 +47,9 @@ func (m Map) Has(key, want string) (okay bool) {
 	}
 	return
 }
+
+// Has true if the value at "key" equals "want".
+func (m Map) Contains(key string) (okay bool) {
+	_, okay = m[key]
+	return
+}

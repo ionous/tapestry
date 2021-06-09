@@ -18,6 +18,7 @@ var _ rt.TextEval = (*RenderExp)(nil)
 func (*RenderExp) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_exp",
+		Uses: "flow",
 	}
 }
 
@@ -31,6 +32,7 @@ var _ core.FromSourceFields = (*RenderField)(nil)
 func (*RenderField) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_field",
+		Uses: "flow",
 	}
 }
 
@@ -50,15 +52,13 @@ const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
 const RenderFlags_RenderAsObj = "$RENDER_AS_OBJ"
 const RenderFlags_RenderAsAny = "$RENDER_AS_ANY"
 
-func (*RenderFlags) Choices() (choices map[string]string) {
-	return map[string]string{
-		RenderFlags_RenderAsVar: "render_as_var", RenderFlags_RenderAsObj: "render_as_obj", RenderFlags_RenderAsAny: "render_as_any",
-	}
-}
-
 func (*RenderFlags) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_flags",
+		Uses: "str",
+		Choices: []string{
+			RenderFlags_RenderAsVar, RenderFlags_RenderAsObj, RenderFlags_RenderAsAny,
+		},
 		Strings: []string{
 			"render_as_var", "render_as_obj", "render_as_any",
 		},
@@ -67,7 +67,7 @@ func (*RenderFlags) Compose() composer.Spec {
 
 // RenderName handles changing a template like {.boombip} into text.,if the name is a variable containing an object name: return the printed object name ( via &quot;print name&quot; ),if the name is a variable with some other text: return that text.,if the name isn&#x27;t a variable but refers to some object: return that object&#x27;s printed object name.,otherwise, its an error.
 type RenderName struct {
-	Name string `if:"label=_"`
+	Name string `if:"label=_,type=string"`
 }
 
 var _ rt.TextEval = (*RenderName)(nil)
@@ -75,6 +75,7 @@ var _ rt.TextEval = (*RenderName)(nil)
 func (*RenderName) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_name",
+		Uses: "flow",
 	}
 }
 
@@ -90,6 +91,7 @@ var _ rt.TextEval = (*RenderPattern)(nil)
 func (*RenderPattern) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_pattern",
+		Uses: "flow",
 		Lede: "render",
 	}
 }
@@ -107,12 +109,14 @@ var _ rt.TextEval = (*RenderRef)(nil)
 func (*RenderRef) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_ref",
+		Uses: "flow",
 	}
 }
 
 var Slats = []composer.Composer{
 	(*RenderExp)(nil),
 	(*RenderField)(nil),
+	(*RenderFlags)(nil),
 	(*RenderName)(nil),
 	(*RenderPattern)(nil),
 	(*RenderRef)(nil),

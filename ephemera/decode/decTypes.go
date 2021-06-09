@@ -2,27 +2,19 @@ package decode
 
 import "git.sr.ht/~ionous/iffy/dl/composer"
 
-type SwapType interface {
+type swapType interface {
 	composer.Composer
 	Choices() (nameToType map[string]interface{})
-}
-type StrType interface {
-	composer.Composer
-	Choices() (tokenToValue map[string]string)
-}
-
-type NumType interface {
-	composer.Composer
-	Choices() []float64
 }
 
 // translate a choice, typically a $TOKEN, to a value.
 // note: go-code doesnt currently have a way to find a string's label.
-func FindChoice(op StrType, choice string) (ret string, found bool) {
-	spec, keys := op.Compose(), op.Choices()
-	if str, ok := keys[choice]; ok {
-		ret, found = str, ok
-	} else if !ok && spec.OpenStrings {
+func FindChoice(op composer.Composer, choice string) (ret string, found bool) {
+	spec := op.Compose()
+	if s, i := spec.IndexOfChoice(choice); i >= 0 {
+		ret = s
+		found = true
+	} else if spec.OpenStrings {
 		ret = choice
 	}
 	return

@@ -6,6 +6,34 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/reader"
 )
 
+// Bool requires a user-specified string.
+type Bool struct {
+	Str string
+}
+
+func (op *Bool) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
+
+const Bool_True = "$TRUE"
+const Bool_False = "$FALSE"
+
+func (*Bool) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "bool",
+		Uses: "str",
+		Choices: []string{
+			Bool_True, Bool_False,
+		},
+		Strings: []string{
+			"true", "false",
+		},
+	}
+}
+
 // Lines requires a user-specified string.
 type Lines struct {
 	Str string
@@ -18,14 +46,25 @@ func (op *Lines) String() (ret string) {
 	return
 }
 
-func (*Lines) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*Lines) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "lines",
+		Uses:        "str",
 		OpenStrings: true,
+	}
+}
+
+// Number requires a user-specified number.
+type Number float64
+
+func (*Number) Choices() []float64 {
+	return []float64{}
+}
+
+func (*Number) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "number",
+		Uses: "num",
 	}
 }
 
@@ -42,13 +81,10 @@ func (op *PatternName) String() (ret string) {
 	return
 }
 
-func (*PatternName) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*PatternName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "pattern_name",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
@@ -66,13 +102,10 @@ func (op *RelationName) String() (ret string) {
 	return
 }
 
-func (*RelationName) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*RelationName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "relation_name",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
@@ -91,16 +124,14 @@ func (op *Text) String() (ret string) {
 
 const Text_Empty = "$EMPTY"
 
-func (*Text) Choices() (choices map[string]string) {
-	return map[string]string{
-		Text_Empty: "empty",
-	}
-}
-
 func (*Text) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "text",
+		Uses:        "str",
 		OpenStrings: true,
+		Choices: []string{
+			Text_Empty,
+		},
 		Strings: []string{
 			"empty",
 		},
@@ -120,13 +151,20 @@ func (op *VariableName) String() (ret string) {
 	return
 }
 
-func (*VariableName) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*VariableName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "variable_name",
+		Uses:        "str",
 		OpenStrings: true,
 	}
+}
+
+var Slats = []composer.Composer{
+	(*Bool)(nil),
+	(*Lines)(nil),
+	(*Number)(nil),
+	(*PatternName)(nil),
+	(*RelationName)(nil),
+	(*Text)(nil),
+	(*VariableName)(nil),
 }

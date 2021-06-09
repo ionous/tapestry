@@ -3,18 +3,16 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"flag"
-	"io"
 	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime/pprof"
-	"strings"
 
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/export"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -80,92 +78,22 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 			if e := tables.CreateEphemera(db); e != nil {
 				err = errutil.New("couldn't create tables", outFile, e)
 			} else {
-				if storyFiles, e := readPath(inFile); e != nil {
+				if fps, e := export.ReadPaths(inFile); e != nil {
 					err = errutil.New("couldn't import  file", inFile, e)
 				} else {
 					k := story.NewImporter(db, ds.Report)
-					for _, storyFile := range storyFiles {
-						if v, e := storyFile.importStory(k); e != nil {
+					for _, fp := range fps {
+						log.Println("importing", fp.Path)
+						if v, e := k.ImportStory(fp.Path, fp.Data); e != nil {
 							err = errutil.Append(err, e)
 						} else {
 							ret = append(ret, v)
 						}
 					}
-
 					reader.PrintDilemmas(log.Writer(), ds)
 				}
 			}
 		}
 	}
 	return
-}
-
-// read a comma-separated list of files and directories
-func readPath(filePaths string) (ret []storyFile, err error) {
-	split := strings.Split(filePaths, ",")
-	for _, filePath := range split {
-		if info, e := os.Stat(filePath); e != nil {
-			err = e
-		} else {
-			if !info.IsDir() {
-				if one, e := readOne(filePath); e != nil {
-					err = e
-				} else {
-					ret = append(ret, one)
-				}
-			} else {
-				if many, e := readMany(filePath); e != nil {
-					err = e
-				} else {
-					ret = append(ret, many...)
-				}
-			}
-		}
-	}
-	return
-}
-
-func readMany(path string) (ret []storyFile, err error) {
-	if !strings.HasSuffix(path, "/") {
-		path += "/" // for opening symbolic directories
-	}
-	err = filepath.Walk(path, func(path string, info os.FileInfo, e error) (err error) {
-		if e != nil {
-			err = e
-		} else if !info.IsDir() && filepath.Ext(path) == ".if" {
-			if one, e := readOne(path); e != nil {
-				err = errutil.New("error reading", path, e)
-			} else {
-				ret = append(ret, one)
-			}
-		}
-		return
-	})
-	return
-}
-
-func readOne(filePath string) (ret storyFile, err error) {
-	log.Println("reading", filePath)
-	if f, e := os.Open(filePath); e != nil {
-		err = e
-	} else {
-		defer f.Close()
-		var one reader.Map
-		if e := json.NewDecoder(f).Decode(&one); e != nil && e != io.EOF {
-			err = e
-		} else {
-			ret = storyFile{filePath, one}
-		}
-	}
-	return
-}
-
-type storyFile struct {
-	path string
-	data reader.Map
-}
-
-func (fp *storyFile) importStory(k *story.Importer) (ret *story.Story, err error) {
-	log.Println("importing", fp.path)
-	return k.ImportStory(fp.path, fp.data)
 }

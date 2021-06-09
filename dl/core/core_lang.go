@@ -10,7 +10,7 @@ import (
 
 // Activity
 type Activity struct {
-	Exe []rt.Execute `if:"label=do"`
+	Exe []rt.Execute `if:"label=_"`
 }
 
 var _ rt.Execute = (*Activity)(nil)
@@ -18,6 +18,7 @@ var _ rt.Execute = (*Activity)(nil)
 func (*Activity) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "activity",
+		Uses: "flow",
 		Lede: "act",
 	}
 }
@@ -32,6 +33,7 @@ var _ rt.BoolEval = (*AllTrue)(nil)
 func (*AllTrue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "all_true",
+		Uses: "flow",
 		Lede: "all_of",
 	}
 }
@@ -44,6 +46,7 @@ var _ rt.BoolEval = (*Always)(nil)
 func (*Always) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "always",
+		Uses: "flow",
 	}
 }
 
@@ -57,6 +60,7 @@ var _ rt.BoolEval = (*AnyTrue)(nil)
 func (*AnyTrue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "any_true",
+		Uses: "flow",
 		Lede: "any_of",
 	}
 }
@@ -72,6 +76,7 @@ var _ rt.Execute = (*Assign)(nil)
 func (*Assign) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "assign",
+		Uses: "flow",
 		Lede: "let",
 	}
 }
@@ -84,6 +89,7 @@ var _ Comparator = (*AtLeast)(nil)
 func (*AtLeast) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "at_least",
+		Uses: "flow",
 	}
 }
 
@@ -95,6 +101,7 @@ var _ Comparator = (*AtMost)(nil)
 func (*AtMost) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "at_most",
+		Uses: "flow",
 	}
 }
 
@@ -106,13 +113,14 @@ var _ rt.Execute = (*Blankline)(nil)
 func (*Blankline) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "blankline",
+		Uses: "flow",
 		Lede: "p",
 	}
 }
 
 // BoolValue Specify an explicit true or false value.
 type BoolValue struct {
-	Bool bool `if:"label=_"`
+	Bool bool `if:"label=_,type=bool"`
 }
 
 var _ rt.BoolEval = (*BoolValue)(nil)
@@ -120,6 +128,7 @@ var _ rt.BoolEval = (*BoolValue)(nil)
 func (*BoolValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "bool_value",
+		Uses: "flow",
 		Lede: "bool",
 	}
 }
@@ -134,6 +143,7 @@ var _ rt.TextEval = (*BracketText)(nil)
 func (*BracketText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "bracket_text",
+		Uses: "flow",
 		Lede: "brackets",
 	}
 }
@@ -146,6 +156,7 @@ var _ rt.Execute = (*Break)(nil)
 func (*Break) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "break",
+		Uses: "flow",
 	}
 }
 
@@ -159,6 +170,7 @@ var _ rt.TextEval = (*BufferText)(nil)
 func (*BufferText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "buffer_text",
+		Uses: "flow",
 		Lede: "buffers",
 	}
 }
@@ -172,6 +184,7 @@ type CallArg struct {
 func (*CallArg) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_arg",
+		Uses: "flow",
 		Lede: "inarg",
 	}
 }
@@ -184,6 +197,7 @@ type CallArgs struct {
 func (*CallArgs) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_args",
+		Uses: "flow",
 		Lede: "inargs",
 	}
 }
@@ -199,6 +213,7 @@ var _ rt.TextEval = (*CallCycle)(nil)
 func (*CallCycle) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_cycle",
+		Uses: "flow",
 		Lede: "cycle",
 	}
 }
@@ -214,6 +229,7 @@ var _ rt.RecordEval = (*CallMake)(nil)
 func (*CallMake) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_make",
+		Uses: "flow",
 	}
 }
 
@@ -235,6 +251,7 @@ var _ rt.RecordListEval = (*CallPattern)(nil)
 func (*CallPattern) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_pattern",
+		Uses: "flow",
 	}
 }
 
@@ -251,6 +268,7 @@ var _ rt.BoolEval = (*CallSend)(nil)
 func (*CallSend) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_send",
+		Uses: "flow",
 	}
 }
 
@@ -266,6 +284,7 @@ var _ rt.TextEval = (*CallShuffle)(nil)
 func (*CallShuffle) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_shuffle",
+		Uses: "flow",
 		Lede: "shuffle",
 	}
 }
@@ -281,6 +300,7 @@ var _ rt.TextEval = (*CallTerminal)(nil)
 func (*CallTerminal) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_terminal",
+		Uses: "flow",
 		Lede: "stopping",
 	}
 }
@@ -297,6 +317,7 @@ var _ rt.BoolEval = (*CallTrigger)(nil)
 func (*CallTrigger) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "call_trigger",
+		Uses: "flow",
 		Lede: "trigger",
 	}
 }
@@ -311,6 +332,7 @@ var _ rt.TextEval = (*Capitalize)(nil)
 func (*Capitalize) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "capitalize",
+		Uses: "flow",
 	}
 }
 
@@ -327,6 +349,7 @@ var _ Brancher = (*ChooseAction)(nil)
 func (*ChooseAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_action",
+		Uses: "flow",
 		Lede: "if",
 	}
 }
@@ -343,6 +366,7 @@ var _ Brancher = (*ChooseMore)(nil)
 func (*ChooseMore) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_more",
+		Uses: "flow",
 		Lede: "else_if",
 	}
 }
@@ -361,6 +385,7 @@ var _ Brancher = (*ChooseMoreValue)(nil)
 func (*ChooseMoreValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_more_value",
+		Uses: "flow",
 		Lede: "else_if",
 	}
 }
@@ -375,6 +400,7 @@ var _ Brancher = (*ChooseNothingElse)(nil)
 func (*ChooseNothingElse) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_nothing_else",
+		Uses: "flow",
 		Lede: "else_do",
 	}
 }
@@ -391,6 +417,7 @@ var _ rt.NumberEval = (*ChooseNum)(nil)
 func (*ChooseNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_num",
+		Uses: "flow",
 		Lede: "num",
 	}
 }
@@ -407,6 +434,7 @@ var _ rt.TextEval = (*ChooseText)(nil)
 func (*ChooseText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_text",
+		Uses: "flow",
 		Lede: "txt",
 	}
 }
@@ -426,6 +454,7 @@ var _ Brancher = (*ChooseValue)(nil)
 func (*ChooseValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "choose_value",
+		Uses: "flow",
 		Lede: "if",
 	}
 }
@@ -440,6 +469,7 @@ var _ rt.TextEval = (*CommaText)(nil)
 func (*CommaText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "comma_text",
+		Uses: "flow",
 		Lede: "commas",
 	}
 }
@@ -456,6 +486,7 @@ var _ rt.BoolEval = (*CompareNum)(nil)
 func (*CompareNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "compare_num",
+		Uses: "flow",
 		Lede: "cmp",
 	}
 }
@@ -472,6 +503,7 @@ var _ rt.BoolEval = (*CompareText)(nil)
 func (*CompareText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "compare_text",
+		Uses: "flow",
 		Lede: "cmp",
 	}
 }
@@ -487,6 +519,7 @@ var _ rt.NumberEval = (*DiffOf)(nil)
 func (*DiffOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "diff_of",
+		Uses: "flow",
 		Lede: "dec",
 	}
 }
@@ -502,6 +535,7 @@ var _ rt.NumberEval = (*During)(nil)
 func (*During) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "during",
+		Uses: "flow",
 	}
 }
 
@@ -513,6 +547,7 @@ var _ Comparator = (*Equal)(nil)
 func (*Equal) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "equal",
+		Uses: "flow",
 		Lede: "equals",
 	}
 }
@@ -527,7 +562,7 @@ var _ rt.Assignment = (*FromBool)(nil)
 func (*FromBool) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_bool",
-		Lede: "bool",
+		Uses: "flow",
 	}
 }
 
@@ -541,7 +576,7 @@ var _ rt.Assignment = (*FromNum)(nil)
 func (*FromNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_num",
-		Lede: "num",
+		Uses: "flow",
 	}
 }
 
@@ -555,7 +590,8 @@ var _ rt.Assignment = (*FromNumbers)(nil)
 func (*FromNumbers) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_numbers",
-		Lede: "nums",
+		Uses: "flow",
+		Lede: "from_nums",
 	}
 }
 
@@ -569,7 +605,7 @@ var _ FromSourceFields = (*FromObj)(nil)
 func (*FromObj) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_obj",
-		Lede: "obj",
+		Uses: "flow",
 	}
 }
 
@@ -583,7 +619,7 @@ var _ FromSourceFields = (*FromRec)(nil)
 func (*FromRec) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_rec",
-		Lede: "rec",
+		Uses: "flow",
 	}
 }
 
@@ -597,7 +633,8 @@ var _ rt.Assignment = (*FromRecord)(nil)
 func (*FromRecord) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_record",
-		Lede: "rec",
+		Uses: "flow",
+		Lede: "from_rec",
 	}
 }
 
@@ -611,7 +648,8 @@ var _ rt.Assignment = (*FromRecords)(nil)
 func (*FromRecords) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_records",
-		Lede: "recs",
+		Uses: "flow",
+		Lede: "from_recs",
 	}
 }
 
@@ -625,7 +663,8 @@ var _ rt.Assignment = (*FromText)(nil)
 func (*FromText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_text",
-		Lede: "txt",
+		Uses: "flow",
+		Lede: "from_txt",
 	}
 }
 
@@ -639,7 +678,8 @@ var _ rt.Assignment = (*FromTexts)(nil)
 func (*FromTexts) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_texts",
-		Lede: "txts",
+		Uses: "flow",
+		Lede: "from_txts",
 	}
 }
 
@@ -653,7 +693,7 @@ var _ FromSourceFields = (*FromVar)(nil)
 func (*FromVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_var",
-		Lede: "var",
+		Uses: "flow",
 	}
 }
 
@@ -675,6 +715,7 @@ var _ rt.RecordListEval = (*GetAtField)(nil)
 func (*GetAtField) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "get_at_field",
+		Uses: "flow",
 		Lede: "get",
 	}
 }
@@ -696,6 +737,7 @@ var _ rt.RecordListEval = (*GetVar)(nil)
 func (*GetVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "get_var",
+		Uses: "flow",
 		Lede: "var",
 	}
 }
@@ -708,6 +750,7 @@ var _ Comparator = (*GreaterThan)(nil)
 func (*GreaterThan) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "greater_than",
+		Uses: "flow",
 	}
 }
 
@@ -721,6 +764,7 @@ var _ rt.BoolEval = (*HasDominion)(nil)
 func (*HasDominion) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "has_dominion",
+		Uses: "flow",
 	}
 }
 
@@ -735,6 +779,7 @@ var _ rt.BoolEval = (*HasTrait)(nil)
 func (*HasTrait) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "has_trait",
+		Uses: "flow",
 		Lede: "get",
 	}
 }
@@ -749,6 +794,7 @@ var _ rt.TextEval = (*IdOf)(nil)
 func (*IdOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "id_of",
+		Uses: "flow",
 	}
 }
 
@@ -763,6 +809,7 @@ var _ rt.BoolEval = (*Includes)(nil)
 func (*Includes) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "includes",
+		Uses: "flow",
 		Lede: "contains",
 	}
 }
@@ -777,6 +824,7 @@ var _ IntoTargetFields = (*IntoObj)(nil)
 func (*IntoObj) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "into_obj",
+		Uses: "flow",
 		Lede: "obj",
 	}
 }
@@ -791,6 +839,7 @@ var _ IntoTargetFields = (*IntoVar)(nil)
 func (*IntoVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "into_var",
+		Uses: "flow",
 		Lede: "var",
 	}
 }
@@ -805,6 +854,7 @@ var _ rt.BoolEval = (*IsEmpty)(nil)
 func (*IsEmpty) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "is_empty",
+		Uses: "flow",
 		Lede: "is",
 	}
 }
@@ -820,6 +870,7 @@ var _ rt.BoolEval = (*IsExactKindOf)(nil)
 func (*IsExactKindOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "is_exact_kind_of",
+		Uses: "flow",
 		Lede: "kind_of",
 	}
 }
@@ -835,6 +886,7 @@ var _ rt.BoolEval = (*IsKindOf)(nil)
 func (*IsKindOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "is_kind_of",
+		Uses: "flow",
 		Lede: "kind_of",
 	}
 }
@@ -850,6 +902,7 @@ var _ rt.TextEval = (*Join)(nil)
 func (*Join) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "join",
+		Uses: "flow",
 	}
 }
 
@@ -863,6 +916,7 @@ var _ rt.TextEval = (*KindOf)(nil)
 func (*KindOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kind_of",
+		Uses: "flow",
 	}
 }
 
@@ -876,6 +930,7 @@ var _ rt.TextListEval = (*KindsOf)(nil)
 func (*KindsOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kinds_of",
+		Uses: "flow",
 	}
 }
 
@@ -887,6 +942,7 @@ var _ Comparator = (*LessThan)(nil)
 func (*LessThan) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "less_than",
+		Uses: "flow",
 	}
 }
 
@@ -900,6 +956,7 @@ var _ rt.TextEval = (*MakeLowercase)(nil)
 func (*MakeLowercase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make_lowercase",
+		Uses: "flow",
 		Lede: "lower",
 	}
 }
@@ -914,6 +971,7 @@ var _ rt.TextEval = (*MakeReversed)(nil)
 func (*MakeReversed) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make_reversed",
+		Uses: "flow",
 		Lede: "reverse",
 	}
 }
@@ -928,6 +986,7 @@ var _ rt.TextEval = (*MakeSentenceCase)(nil)
 func (*MakeSentenceCase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make_sentence_case",
+		Uses: "flow",
 		Lede: "sentence",
 	}
 }
@@ -942,6 +1001,7 @@ var _ rt.TextEval = (*MakeTitleCase)(nil)
 func (*MakeTitleCase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make_title_case",
+		Uses: "flow",
 		Lede: "title",
 	}
 }
@@ -956,6 +1016,7 @@ var _ rt.TextEval = (*MakeUppercase)(nil)
 func (*MakeUppercase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make_uppercase",
+		Uses: "flow",
 		Lede: "upper",
 	}
 }
@@ -963,7 +1024,7 @@ func (*MakeUppercase) Compose() composer.Spec {
 // Matches Determine whether the specified text is similar to the specified regular expression.
 type Matches struct {
 	Text    rt.TextEval `if:"label=_"`
-	Pattern string      `if:"label=to"`
+	Pattern string      `if:"label=to,type=string"`
 	Cache   MatchCache  `if:"internal"`
 }
 
@@ -972,6 +1033,7 @@ var _ rt.BoolEval = (*Matches)(nil)
 func (*Matches) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "matches",
+		Uses: "flow",
 	}
 }
 
@@ -985,6 +1047,7 @@ var _ rt.TextEval = (*NameOf)(nil)
 func (*NameOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "name_of",
+		Uses: "flow",
 	}
 }
 
@@ -996,6 +1059,7 @@ var _ rt.BoolEval = (*Never)(nil)
 func (*Never) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "never",
+		Uses: "flow",
 		Lede: "always",
 	}
 }
@@ -1008,6 +1072,7 @@ var _ rt.Execute = (*Newline)(nil)
 func (*Newline) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "newline",
+		Uses: "flow",
 		Lede: "br",
 	}
 }
@@ -1020,6 +1085,7 @@ var _ rt.Execute = (*Next)(nil)
 func (*Next) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "next",
+		Uses: "flow",
 	}
 }
 
@@ -1033,12 +1099,13 @@ var _ rt.BoolEval = (*Not)(nil)
 func (*Not) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "not",
+		Uses: "flow",
 	}
 }
 
 // NumValue Specify a particular number.
 type NumValue struct {
-	Num float64 `if:"label=_"`
+	Num float64 `if:"label=_,type=number"`
 }
 
 var _ rt.NumberEval = (*NumValue)(nil)
@@ -1046,13 +1113,14 @@ var _ rt.NumberEval = (*NumValue)(nil)
 func (*NumValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "num_value",
+		Uses: "flow",
 		Lede: "num",
 	}
 }
 
 // Numbers Number List: Specify a list of numbers.
 type Numbers struct {
-	Values []float64 `if:"label=_"`
+	Values []float64 `if:"label=_,type=number"`
 }
 
 var _ rt.NumListEval = (*Numbers)(nil)
@@ -1060,6 +1128,7 @@ var _ rt.NumListEval = (*Numbers)(nil)
 func (*Numbers) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "numbers",
+		Uses: "flow",
 		Lede: "nums",
 	}
 }
@@ -1074,6 +1143,7 @@ var _ rt.BoolEval = (*ObjectExists)(nil)
 func (*ObjectExists) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "object_exists",
+		Uses: "flow",
 		Lede: "is",
 	}
 }
@@ -1088,6 +1158,7 @@ var _ rt.TextEval = (*Pluralize)(nil)
 func (*Pluralize) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pluralize",
+		Uses: "flow",
 		Lede: "plural",
 	}
 }
@@ -1102,6 +1173,7 @@ var _ rt.TextEval = (*PrintNum)(nil)
 func (*PrintNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "print_num",
+		Uses: "flow",
 		Lede: "numeral",
 	}
 }
@@ -1116,6 +1188,7 @@ var _ rt.TextEval = (*PrintNumWord)(nil)
 func (*PrintNumWord) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "print_num_word",
+		Uses: "flow",
 		Lede: "numeral",
 	}
 }
@@ -1131,6 +1204,7 @@ var _ rt.NumberEval = (*ProductOf)(nil)
 func (*ProductOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "product_of",
+		Uses: "flow",
 		Lede: "mul",
 	}
 }
@@ -1147,6 +1221,7 @@ var _ rt.Execute = (*PutAtField)(nil)
 func (*PutAtField) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "put_at_field",
+		Uses: "flow",
 		Lede: "put",
 	}
 }
@@ -1162,6 +1237,7 @@ var _ rt.NumberEval = (*QuotientOf)(nil)
 func (*QuotientOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "quotient_of",
+		Uses: "flow",
 		Lede: "div",
 	}
 }
@@ -1177,6 +1253,7 @@ var _ rt.NumberEval = (*RemainderOf)(nil)
 func (*RemainderOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "remainder_of",
+		Uses: "flow",
 		Lede: "mod",
 	}
 }
@@ -1192,6 +1269,7 @@ var _ rt.TextEval = (*Response)(nil)
 func (*Response) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "response",
+		Uses: "flow",
 	}
 }
 
@@ -1205,6 +1283,7 @@ var _ rt.TextEval = (*Row)(nil)
 func (*Row) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "row",
+		Uses: "flow",
 	}
 }
 
@@ -1218,6 +1297,7 @@ var _ rt.TextEval = (*Rows)(nil)
 func (*Rows) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "rows",
+		Uses: "flow",
 	}
 }
 
@@ -1231,6 +1311,7 @@ var _ rt.Execute = (*SayText)(nil)
 func (*SayText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "say_text",
+		Uses: "flow",
 		Lede: "say",
 	}
 }
@@ -1246,6 +1327,7 @@ var _ rt.Execute = (*SetTrait)(nil)
 func (*SetTrait) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "set_trait",
+		Uses: "flow",
 		Lede: "put",
 	}
 }
@@ -1260,6 +1342,7 @@ var _ rt.TextEval = (*Singularize)(nil)
 func (*Singularize) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "singularize",
+		Uses: "flow",
 		Lede: "singular",
 	}
 }
@@ -1274,6 +1357,7 @@ var _ rt.TextEval = (*SlashText)(nil)
 func (*SlashText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "slash_text",
+		Uses: "flow",
 		Lede: "slashes",
 	}
 }
@@ -1286,6 +1370,7 @@ var _ rt.Execute = (*Softline)(nil)
 func (*Softline) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "softline",
+		Uses: "flow",
 		Lede: "wbr",
 	}
 }
@@ -1300,6 +1385,7 @@ var _ rt.TextEval = (*SpanText)(nil)
 func (*SpanText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "span_text",
+		Uses: "flow",
 		Lede: "spaces",
 	}
 }
@@ -1315,6 +1401,7 @@ var _ rt.NumberEval = (*SumOf)(nil)
 func (*SumOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "sum_of",
+		Uses: "flow",
 		Lede: "inc",
 	}
 }
@@ -1329,6 +1416,7 @@ var _ rt.TextEval = (*TextValue)(nil)
 func (*TextValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "text_value",
+		Uses: "flow",
 		Lede: "txt",
 	}
 }
@@ -1343,6 +1431,7 @@ var _ rt.TextListEval = (*Texts)(nil)
 func (*Texts) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "texts",
+		Uses: "flow",
 		Lede: "txts",
 	}
 }
@@ -1355,6 +1444,7 @@ var _ Trigger = (*TriggerCycle)(nil)
 func (*TriggerCycle) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "trigger_cycle",
+		Uses: "flow",
 		Lede: "every",
 	}
 }
@@ -1367,6 +1457,7 @@ var _ Trigger = (*TriggerOnce)(nil)
 func (*TriggerOnce) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "trigger_once",
+		Uses: "flow",
 		Lede: "at",
 	}
 }
@@ -1379,6 +1470,7 @@ var _ Trigger = (*TriggerSwitch)(nil)
 func (*TriggerSwitch) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "trigger_switch",
+		Uses: "flow",
 		Lede: "after",
 	}
 }
@@ -1391,6 +1483,7 @@ var _ Comparator = (*Unequal)(nil)
 func (*Unequal) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "unequal",
+		Uses: "flow",
 		Lede: "other_than",
 	}
 }
@@ -1406,6 +1499,7 @@ var _ rt.Execute = (*While)(nil)
 func (*While) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "while",
+		Uses: "flow",
 		Lede: "repeating",
 	}
 }

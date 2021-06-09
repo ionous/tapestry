@@ -45,12 +45,12 @@ const parseData = function(m, dict) {
         m.swap(k, data.spec, data.desc);
         break;
       }
-      case "slat": {
-        m.slat(k, data.slot || [], data.spec, data.desc || "");
-        break;
-      }
       case "flow": {
-        // note: doesnt use the "maker" -- manually expands it.
+        if (m.currGroups.includes("modeling")) {
+          m.flow(k, data.slot || [], data.spec, data.desc || "");
+          break;
+        }
+        // note: doesnt use the "maker" for now
         const parts = data.spec.split(" ").filter(p => p.length);
         const lede = parts[0];
         const fmt = parts.filter((p, i) => i > 0).join("")
@@ -88,7 +88,7 @@ const parseData = function(m, dict) {
           group: m.currGroups.slice(),
           with: {
             params: tags.args,
-              tokens,
+            tokens,
           }
           // todo: roles
         };

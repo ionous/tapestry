@@ -59,6 +59,7 @@ const paramsOf = function(t) {
 const groups = {};
 const nameToGroup = {};
 let currentGroup;
+let currentType;
 
 Handlebars.registerHelper('Pascal', pascal);
 Handlebars.registerHelper('Lower', lower);
@@ -70,7 +71,8 @@ Handlebars.registerHelper('IsToken', function(str) {
 });
 
 Handlebars.registerHelper('LedeName', function(t) {
-  if (t.uses === "flow") {
+  const m= t.group.includes("modeling");
+  if (!m && t.uses === "flow") {
     const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
     return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
   }
@@ -88,14 +90,20 @@ const scopedName= function(name) {
   }
   return n;
 };
+
 Handlebars.registerHelper('ScopedNameOf', scopedName);
 
 Handlebars.registerHelper('ParamNameOf', function(key, param) {
   return pascal(key) || pascal(param.type);
 });
 
-Handlebars.registerHelper('LabelOf', function(l) {
-  return l.replace(" ", "_");
+Handlebars.registerHelper('LabelOf', function(key, param, index) {
+  const m= currentType.group.includes("modeling");
+  return m? (index? lower(key): '_') : param.label.replaceAll(" ", "_");
+});
+Handlebars.registerHelper('Override', function(param) {
+  const name = param.type;
+  return overrides[name]? name:false;
 });
 Handlebars.registerHelper('TypeOf', function(param) {
   const name = param.type;
@@ -194,7 +202,7 @@ partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Par
 const templates = Object.fromEntries(sources.map(k => [k,
   Handlebars.compile(require(`./templates/${k}Template.js`))])
 );
-templates['slat'] = templates['flow'];
+templates['phrase'] = templates['flow'];
 
 // console.log(templates.header({package:'story'}));
 
@@ -308,7 +316,8 @@ for (currentGroup in groups) {
     const template = templates[type.uses];
     if (!template) {
       throw new Error(`unknown template for ${n}`);
-    } else if (!overrides[n]) {
+    } else {
+      currentType= type;
       fs.writeSync(fd, template(type));
     }
   }
@@ -318,14 +327,14 @@ for (currentGroup in groups) {
     list: g.slots.map(n => allTypes[n]),
     RegType: "interface{}",
   }));
-  fs.writeSync(fd, templates.regList({
-    which: "Swaps",
-    list: g.slats.map(n => allTypes[n]).filter(t => t.uses === "swap"),
-    RegType: "interface{}",
-  }));
+  // fs.writeSync(fd, templates.regList({
+  //   which: "Swaps",
+  //   list: g.slats.map(n => allTypes[n]).filter(t => t.uses === "swap"),
+  //   RegType: "interface{}",
+  // }));
   fs.writeSync(fd, templates.regList({
     which: "Slats",
-    list: g.slats.map(n => allTypes[n]).filter(t => ((t.uses === "flow" || t.uses === "slat") && !overrides[t.name])),
+    list: g.slats.map(n => allTypes[n]).filter(t => (t.uses !== "slot")),
     RegType: "composer.Composer",
   }));
   fs.closeSync(fd);

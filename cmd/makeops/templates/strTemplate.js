@@ -19,12 +19,6 @@ func (op *{{Pascal name}}) String()(ret string) {
 const {{Pascal ../name}}_{{Pascal this.token}}= "{{this.token}}";
 {{/each}}
 
-func (*{{Pascal name}}) Choices() (choices map[string]string) {
-  return map[string]string{
-    {{#each (Choices @this)~}}
-    {{Pascal ../name}}_{{Pascal this.token}}: "{{this.value}}",{{#unless @last}} {{/unless}}{{/each}}
-  }
-}
 
 {{>spec spec=this}}
 `;

@@ -6,14 +6,16 @@
         {
             "story":
             {
-                "uses": "slat",
-                "spec": "{*paragraph}"
+                "uses": "flow",
+                "spec": "{*paragraph}",
+                "group": "modeling"
             },
             "paragraph":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "{*story_statement}",
-                "desc": "Phrases"
+                "desc": "Phrases",
+                "group": "modeling"
             },
             "story_statement":
             {
@@ -22,21 +24,23 @@
             },
             "noun_statement":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "{:lede} {*tail} {?summary}",
-                "desc": "Declare a noun: Describes people, places, or things."
+                "desc": "Declare a noun: Describes people, places, or things.",
+                "group": "modeling"
             },
             "comment":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot":
                 [
                     "story_statement",
                     "execute"
                 ],
                 "spec": "Note: {comment%lines}",
-                "desc": "Add a note: Information about the story for you and other authors."
+                "desc": "Add a note: Information about the story for you and other authors.",
+                "group": "modeling"
             }
         }
     },
@@ -52,38 +56,49 @@
             },
             "test_statement":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "Expect {test_name} to {expectation%test:testing}",
                 "desc": "Describe test results",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "test_scene":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "While testing {test_name}: {story}",
-                "desc": "Create a scene for testing"
+                "desc": "Create a scene for testing",
+                "group": "modeling"
             },
             "test_rule":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "To test {test_name}: {do%hook:program_hook}",
-                "desc": "Add actions to a test"
+                "desc": "Add actions to a test",
+                "group": "modeling"
             },
             "test_output":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "testing",
                 "spec": "output {lines|quote}.",
-                "desc": "Test Output: Expect that a test uses 'Say' to print some specific text."
+                "desc": "Test Output: Expect that a test uses 'Say' to print some specific text.",
+                "group": "modeling"
             },
             "test_name":
             {
                 "uses": "str",
                 "spec": "{the test%current_test}, or {test name%test_name}",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             }
         }
     },
@@ -94,37 +109,49 @@
         {
             "lede":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "{nouns+named_noun|comma-and} {noun_phrase}.",
-                "desc": "Leading statement: Describes one or more nouns."
+                "desc": "Leading statement: Describes one or more nouns.",
+                "group": "modeling"
             },
             "tail":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "{pronoun} {noun_phrase}.",
-                "desc": "Trailing statement: Adds details about the preceding noun or nouns."
+                "desc": "Trailing statement: Adds details about the preceding noun or nouns.",
+                "group": "modeling"
             },
             "summary":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "The summary is: {summary%lines|quote}",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "noun_phrase":
             {
                 "uses": "swap",
                 "spec": "{is a kind%kind_of_noun}, {noun_traits}, or {noun_relation}",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "kind_of_noun":
             {
-                "uses": "slat",
-                "spec": "{are_an} {*trait|comma-and} {kind:singular_kind} {?noun_relation}"
+                "uses": "flow",
+                "spec": "{are_an} {*trait|comma-and} {kind:singular_kind} {?noun_relation}",
+                "group": "modeling"
             },
             "named_noun":
             {
-                "uses": "slat",
-                "spec": "{determiner} {name:noun_name}"
+                "uses": "flow",
+                "spec": "{determiner} {name:noun_name}",
+                "group": "modeling"
             },
             "determiner":
             {
@@ -134,7 +161,8 @@
                 [
                     "Determiners: modify a word they are associated to designate specificity or, sometimes, a count.",
                     "For instance: \"some\" fish hooks, \"a\" pineapple, \"75\" triangles, \"our\" Trevor."
-                ]
+                ],
+                "group": "modeling"
             },
             "noun_name":
             {
@@ -146,12 +174,17 @@
                     "Common names are usually not capitalized. For example, maybe: 'table', 'chair', or 'dog park'.",
                     "A set of duplicate object uses their kind. For instance: twelve 'cats'.`"
                 ],
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "pronoun":
             {
                 "uses": "str",
-                "spec": "{it}, {they}, or {pronoun}"
+                "spec": "{it}, {they}, or {pronoun}",
+                "group": "modeling"
             }
         }
     },
@@ -162,7 +195,7 @@
         {
             "action_decl":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "Agents can {act%event:event_name} and {acting%action:action_name} requires {action_params}.",
                 "desc":
@@ -170,67 +203,101 @@
                     "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.",
                     "Activities involve either the player or an npc and possibly one or two other objects."
                 ],
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "action_params":
             {
                 "uses": "swap",
-                "spec": "{one or more objects%common:common_action}, or {two similar objects%dual:paired_action}, or {nothing%none:abstract_action}"
+                "spec": "{one or more objects%common:common_action}, or {two similar objects%dual:paired_action}, or {nothing%none:abstract_action}",
+                "group": "modeling"
             },
             "common_action":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "one {kind:singular_kind} ( the noun ) {?action_context}",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "action_context":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "and one {kind:singular_kind} ( the other noun )",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "paired_action":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "two {kinds:plural_kinds} ( the noun and other noun )",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "action_name":
             {
                 "uses": "str",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "abstract_action":
             {
                 "uses": "str",
-                "spec": "{nothing}"
+                "spec": "{nothing}",
+                "group": "modeling"
             },
             "event_block":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "For {the target%target:event_target} {handlers+event_handler}",
-                "desc": "Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen."
+                "desc": "Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen.",
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "event_handler":
             {
-                "uses": "slat",
-                "spec": "{event_phase} {the event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}"
+                "uses": "flow",
+                "spec": "{event_phase} {the event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}",
+                "group": "modeling"
             },
             "event_phase":
             {
                 "uses": "str",
-                "spec": "{before}, {during%while}, or {after}"
+                "spec": "{before}, {during%while}, or {after}",
+                "group": "modeling"
             },
             "event_name":
             {
                 "uses": "str",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "event_target":
             {
                 "uses": "swap",
-                "spec": "the {kinds:plural_kinds} or {named_noun}"
+                "spec": "the {kinds:plural_kinds} or {named_noun}",
+                "group": "modeling"
             }
         }
     },
@@ -241,84 +308,103 @@
         {
             "pattern_decl":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "{type:pattern_type} determine {name:pattern_name|quote} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
                 "desc":
                 [
                     "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.",
                     "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."
-                ]
+                ],
+                "group": "modeling"
             },
             "pattern_variables_decl":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "The pattern {pattern_name|quote} requires {+variable_decl|comma-and}.",
-                "desc": "Add parameters to a pattern: Values provided when calling a pattern."
+                "desc": "Add parameters to a pattern: Values provided when calling a pattern.",
+                "group": "modeling"
             },
             "pattern_variables_tail":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "It requires {+variable_decl|comma-and}",
-                "desc": "Pattern variables: Storage for values used during the execution of a pattern."
+                "desc": "Pattern variables: Storage for values used during the execution of a pattern.",
+                "group": "modeling"
             },
             "pattern_type":
             {
                 "uses": "str",
                 "spec": "{patterns}, {actions}, {events}, or {another pattern type%pattern_type}",
-                "group":"positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "pattern_actions":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "To determine {pattern name%name:pattern_name} {?pattern_locals} {?pattern_return} do:{pattern_rules}",
-                "desc": "Add actions to a pattern: Actions to take when using a pattern."
+                "desc": "Add actions to a pattern: Actions to take when using a pattern.",
+                "group": "modeling"
             },
             "pattern_rules":
             {
-                "uses": "slat",
-                "spec": "{*pattern_rule}"
+                "uses": "flow",
+                "spec": "{*pattern_rule}",
+                "group": "modeling"
             },
             "pattern_rule":
             {
-                "uses": "slat",
-                "spec": "When {conditions are met%guard:bool_eval}{ continue%flags?pattern_flags}, then: {do%hook:program_hook}",
-                "desc": "Rule"
+                "uses": "flow",
+                "spec": "When {conditions are met%guard:bool_eval}{continue%flags?pattern_flags}, then: {do%hook:program_hook}",
+                "desc": "Rule",
+                "group": "modeling"
             },
             "pattern_flags":
             {
                 "uses": "str",
-                "spec": "{continue before%before}, {continue after%after}, {terminate}"
+                "spec": "{continue before%before}, {continue after%after}, {terminate}",
+                "group": "modeling"
             },
             "pattern_locals":
             {
-                "uses": "slat",
-                "spec": "{+local_decl|comma-and}"
+                "uses": "flow",
+                "spec": "{+local_decl|comma-and}",
+                "group": "modeling"
             },
             "local_decl":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "using {variable_decl} {starting as%value?local_init}",
-                "desc": "Local variables can use the parameters of a pattern to compute temporary values."
+                "desc": "Local variables can use the parameters of a pattern to compute temporary values.",
+                "group": "modeling"
             },
             "local_init":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "starting as {value:assignment}",
-                "desc": "Local variables can use the parameters of a pattern to compute temporary values."
+                "desc": "Local variables can use the parameters of a pattern to compute temporary values.",
+                "group": "modeling"
             },
             "program_hook":
             {
                 "uses": "swap",
                 "spec": "do {actions%activity}",
-                "group":"positioned"
+                "group":
+                [
+                    "positioned",
+                    "modeling"
+                ]
             },
             "pattern_return":
             {
-                "uses": "slat",
-                "spec": "returning {result:variable_decl}"
+                "uses": "flow",
+                "spec": "returning {result:variable_decl}",
+                "group": "modeling"
             }
         }
     },
@@ -329,47 +415,58 @@
         {
             "kind_of_relation":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
-                "spec": "{relation:relation_name} relates {relation_cardinality}"
+                "spec": "{relation:relation_name} relates {relation_cardinality}",
+                "group": "modeling"
             },
             "relation_cardinality":
             {
                 "uses": "swap",
                 "spec": "{one_to_one}, {one_to_many}, {many_to_one}, or {many_to_many}",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "one_to_one":
             {
-                "uses": "slat",
-                "spec": "one {kind:singular_kind} to one {other_kind:singular_kind}"
+                "uses": "flow",
+                "spec": "one {kind:singular_kind} to one {other_kind:singular_kind}",
+                "group": "modeling"
             },
             "one_to_many":
             {
-                "uses": "slat",
-                "spec": "one {kind:singular_kind} to many {kinds:plural_kinds}"
+                "uses": "flow",
+                "spec": "one {kind:singular_kind} to many {kinds:plural_kinds}",
+                "group": "modeling"
             },
             "many_to_one":
             {
-                "uses": "slat",
-                "spec": "many {kinds:plural_kinds} to one {kind:singular_kind}"
+                "uses": "flow",
+                "spec": "many {kinds:plural_kinds} to one {kind:singular_kind}",
+                "group": "modeling"
             },
             "many_to_many":
             {
-                "uses": "slat",
-                "spec": "many {kinds:plural_kinds} to many {other_kinds:plural_kinds}"
+                "uses": "flow",
+                "spec": "many {kinds:plural_kinds} to many {other_kinds:plural_kinds}",
+                "group": "modeling"
             },
             "noun_relation":
             {
-                "uses": "slat",
-                "spec": "{?are_being} {relation:relation_name} {nouns+named_noun|comma-and}"
+                "uses": "flow",
+                "spec": "{?are_being} {relation:relation_name} {nouns+named_noun|comma-and}",
+                "group": "modeling"
             },
             "relative_to_noun":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "The {relation:relation_name} of {nouns+named_noun|comma-and} {are_being} {nouns+named_noun|comma-and}.",
-                "desc": "Relate nouns to each other"
+                "desc": "Relate nouns to each other",
+                "group": "modeling"
             }
         }
     },
@@ -380,17 +477,19 @@
         {
             "kinds_of_kind":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "{plural_kinds} are a kind of {singular_kind}.",
-                "desc": "Declare a kind"
+                "desc": "Declare a kind",
+                "group": "modeling"
             },
             "kinds_possess_properties":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "{plural_kinds} have {+property_decl|comma-and}.",
-                "desc": "Add properties to a kind"
+                "desc": "Add properties to a kind",
+                "group": "modeling"
             },
             "singular_kind":
             {
@@ -400,7 +499,11 @@
                     "Describes a type of similar nouns.",
                     "For example: an animal, a container, etc."
                 ],
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "plural_kinds":
             {
@@ -410,7 +513,11 @@
                     "The plural name of a type of similar nouns.",
                     "For example: animals, containers, etc."
                 ],
-                "group":"positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             }
         }
     },
@@ -421,29 +528,32 @@
         {
             "kinds_of_record":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "{records%record_plural} are a kind of record.",
-                "desc": "Declare a record"
+                "desc": "Declare a record",
+                "group": "modeling"
             },
             "records_possess_properties":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "{records%record_plural} have {+property_decl|comma-and}.",
-                "desc": "Add properties to a record"
+                "desc": "Add properties to a record",
+                "group": "modeling"
             },
             "record_singular":
             {
                 "uses": "str",
                 "desc": "Record: Describes a common set of properties.",
-                "group":"positioned"
+                "group": ["modeling","positioned"]
             },
             "record_plural":
             {
                 "uses": "str",
                 "desc": "Records: The plural name for a record.",
-                "group":"positioned"
+                "group": "modeling",
+                "group": ["modeling","positioned"]
             }
         }
     },
@@ -454,37 +564,49 @@
         {
             "kinds_of_aspect":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "{aspect} is a kind of value.",
-                "dsec": "Declare an aspect"
+                "dsec": "Declare an aspect",
+                "group": "modeling"
             },
             "aspect_traits":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "{aspect} {trait_phrase}",
-                "desc": "Add traits to an aspect"
+                "desc": "Add traits to an aspect",
+                "group": "modeling"
             },
             "trait_phrase":
             {
-                "uses": "slat",
-                "spec": "{are_either} {+trait|comma-or}."
+                "uses": "flow",
+                "spec": "{are_either} {+trait|comma-or}.",
+                "group": "modeling"
             },
             "noun_traits":
             {
-                "uses": "slat",
-                "spec": "{are_being} {+trait|comma-and}"
+                "uses": "flow",
+                "spec": "{are_being} {+trait|comma-and}",
+                "group": "modeling"
             },
             "aspect":
             {
                 "uses": "str",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "trait":
             {
                 "uses": "str",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             }
         }
     },
@@ -495,51 +617,71 @@
         {
             "noun_assignment":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "The {property} of {nouns+named_noun} is {the text%lines|quote}",
-                "desc": "Assign text to a noun: Assign text. Gives a noun one or more lines of text."
+                "desc": "Assign text to a noun: Assign text. Gives a noun one or more lines of text.",
+                "group": "modeling"
             },
             "property_decl":
             {
-                "uses": "slat",
-                "spec": "{an:determiner} {property} ( {property_type} {comment?lines} )"
+                "uses": "flow",
+                "spec": "{an:determiner} {property} ( {property_type} {comment?lines} )",
+                "group": "modeling"
             },
             "property_type":
             {
                 "uses": "swap",
                 "spec": "an {aspect%property_aspect}, {simple value%primitive:primitive_type}, or {other value%ext:ext_type}",
-                "group":"positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "property_aspect":
             {
                 "uses": "str",
                 "spec": "{an aspect%aspect}",
-                "group":"positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "certainties":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "slot": "story_statement",
                 "spec": "{plural_kinds} {are_being} {certainty} {trait}.",
-                "desc": "Give a kind a trait"
+                "desc": "Give a kind a trait",
+                "group": "modeling"
             },
             "are_either":
             {
                 "uses": "str",
-                "spec": "{can be%canbe} {are either%either}"
+                "spec": "{can be%canbe} {are either%either}",
+                "group": "modeling"
             },
             "certainty":
             {
                 "uses": "str",
                 "spec": "{usually}, {always}, {seldom}, or {never}",
                 "desc": "Certainty: Whether an trait applies to a kind of noun.",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "property":
             {
                 "uses": "str",
-                "group":"positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             }
         }
     },
@@ -550,83 +692,107 @@
         {
             "record_type":
             {
-                "uses": "slat",
-                "spec": "a record of {kind%kind:record_singular}"
+                "uses": "flow",
+                "spec": "a record of {kind%kind:record_singular}",
+                "group": "modeling"
             },
             "record_list":
             {
-                "uses": "slat",
-                "spec": "a list of {kind%kind:record_singular} records"
+                "uses": "flow",
+                "spec": "a list of {kind%kind:record_singular} records",
+                "group": "modeling"
             },
             "boxed_text":
             {
-                "uses": "slat",
-                "spec": "{text}"
+                "uses": "flow",
+                "spec": "{text}",
+                "group": "modeling"
             },
             "boxed_number":
             {
-                "uses": "slat",
-                "spec": "{number}"
+                "uses": "flow",
+                "spec": "{number}",
+                "group": "modeling"
             },
             "ana":
             {
                 "uses": "str",
-                "spec": "{a} or {an}"
+                "spec": "{a} or {an}",
+                "group": "modeling"
             },
             "are_being":
             {
                 "uses": "str",
-                "spec": "{are} or {is}"
+                "spec": "{are} or {is}",
+                "group": "modeling"
             },
             "are_an":
             {
                 "uses": "str",
-                "spec": "{are}, {are a%area}, {are an%arean}, {is}, {is a%isa}, {is an%isan}"
+                "spec": "{are}, {are a%area}, {are an%arean}, {is}, {is a%isa}, {is an%isan}",
+                "group": "modeling"
             },
             "variable_decl":
             {
-                "uses": "slat",
-                "spec": "{an:determiner} {name:variable_name} ( {type:variable_type}  {comment?lines} )"
+                "uses": "flow",
+                "spec": "{an:determiner} {name:variable_name} ( {type:variable_type}  {comment?lines} )",
+                "group": "modeling"
             },
             "variable_type":
             {
                 "uses": "swap",
                 "spec": "a {simple value%primitive:primitive_type}, an {object:object_type}, or {other value%ext:ext_type}",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             },
             "object_type":
             {
-                "uses": "slat",
-                "spec": "{an:ana} {kind of%kind:singular_kind}"
+                "uses": "flow",
+                "spec": "{an:ana} {kind of%kind:singular_kind}",
+                "group": "modeling"
             },
             "primitive_type":
             {
                 "uses": "str",
                 "spec": "{a number%number}, {some text%text}, or {a true/false value%bool}",
-                "group": "positioned"
-            },  
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
+            },
             "primitive_value":
             {
                 "uses": "swap",
-                "spec": "{text%boxed_text} or {number%boxed_number}"
+                "spec": "{text%boxed_text} or {number%boxed_number}",
+                "group": "modeling"
             },
             "text_list":
             {
                 "uses": "str",
                 "spec": "{a list of text%list}",
-                "desc": "List of Text: Specifies the existence of a list of text values."
+                "desc": "List of Text: Specifies the existence of a list of text values.",
+                "group": "modeling"
             },
             "number_list":
             {
                 "uses": "str",
                 "spec": "{a list of numbers%list}",
-                "desc": "List of Numbers: Specifies the existence of a list of numbers."
+                "desc": "List of Numbers: Specifies the existence of a list of numbers.",
+                "group": "modeling"
             },
             "ext_type":
             {
                 "uses": "swap",
                 "spec": "a list of {numbers:number_list}, a list of {text%text_list}, a {record:record_type} or a list of {records:record_list}.",
-                "group": "positioned"
+                "group":
+                [
+                    "modeling",
+                    "positioned"
+                ]
             }
         }
     },
@@ -637,7 +803,7 @@
         {
             "determine":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "determine {_%name:pattern_name} {args%arguments?arguments}",
                 "slot":
                 [
@@ -650,14 +816,19 @@
                     "text_list_eval",
                     "record_list_eval"
                 ],
-                "desc": "Runs a pattern, and potentially returns a value."
+                "desc": "Runs a pattern, and potentially returns a value.",
+                "group": "modeling"
             },
             "make":
             {
                 "uses": "flow",
                 "spec": "make {_%name:text} {args%arguments?arguments}",
                 "slot": "record_eval",
-                "group": "misc"
+                "group":
+                [
+                    "modeling",
+                    "misc"
+                ]
             },
             "send":
             {
@@ -669,66 +840,103 @@
                     "bool_eval"
                 ],
                 "desc": "Triggers a event, returns a true/false success value.",
-                "group": "internal"
+                "group":
+                [
+                    "modeling",
+                    "internal"
+                ]
             },
             "argument":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "arg {_%name:text} {from:assignment}",
-                "group": "positioned"
+                "group":
+                [   "positioned"
+                ]
             },
             "arguments":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "args {_%args+argument}",
-                "group": "positioned"
+                "group":
+                [
+                    "positioned"
+                ]
             },
             "render_template":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "render_template {_%template:lines}",
                 "slot": "text_eval",
                 "desc": "Parse text using iffy templates. See: https://github.com/ionous/iffy/wiki/Templates",
-                "group": "format"
+                "group":
+                [
+                    "modeling",
+                    "format"
+                ]
             },
             "count_of":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "trigger {_%trigger} {num:number_eval}",
                 "slot": "bool_eval",
                 "desc": "A guard which returns true based on a counter. Counters start at zero and are incremented every time the guard gets checked.",
-                "group": ["logic", "positioned"]
+                "group":
+                [
+                    "modeling",
+                    "logic",
+                    "positioned"
+                ]
             },
             "cycle_text":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "cycle {_%parts+text_eval}",
                 "slot": "text_eval",
                 "desc": "When called multiple times, returns each of its inputs in turn.",
-                "group": ["output", "positioned"]
+                "group":
+                [
+                    "output",
+                    "modeling",
+                    "positioned"
+                ]
             },
             "shuffle_text":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "shuffle {_%parts+text_eval}",
                 "slot": "text_eval",
                 "desc": "When called multiple times returns its inputs at random.",
-                "group": ["output", "positioned"]
+                "group":
+                [
+                    "output",
+                    "modeling",
+                    "positioned"
+                ]
             },
             "stopping_text":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "stopping {_%parts+text_eval}",
                 "slot": "text_eval",
                 "desc": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
-                "group": ["output", "positioned"]
+                "group":
+                [
+                    "output",
+                    "modeling",
+                    "positioned"
+                ]
             },
             "grammar_decl":
             {
-                "uses": "slat",
+                "uses": "flow",
                 "spec": "understand {_%grammar:grammar_maker}",
                 "desc": "Read what the player types and turn it into actions.",
-                "group": "grammar"
+                "group":
+                [
+                    "grammar",
+                    "modeling"
+                ]
             }
         }
     }

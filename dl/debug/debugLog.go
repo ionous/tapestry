@@ -64,14 +64,8 @@ func (lvl LoggingLevel) Index() (ret int) {
 	if str := lvl.String(); len(str) == 0 {
 		ret = -1
 	} else {
-		if val, ok := lvl.Choices()[str]; ok {
-			for idx, v := range lvl.Compose().Strings {
-				if v == val {
-					ret = idx
-					return
-				}
-			}
-		}
+		spec := lvl.Compose()
+		_, ret = spec.IndexOfChoice(str)
 	}
 	return
 }

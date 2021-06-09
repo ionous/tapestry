@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/rel"
 	"git.sr.ht/~ionous/iffy/dl/render"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -29,6 +30,7 @@ var AllSlats = [][]composer.Composer{
 	reader.Slats,
 	rel.Slats,
 	render.Slats,
+	value.Slats,
 	// story.Slats,
 }
 

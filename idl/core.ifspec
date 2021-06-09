@@ -27,7 +27,7 @@
     "activity":
     {
         "uses": "flow",
-        "spec": "act {do%exe+execute}",
+        "spec": "act {_%exe+execute}",
         "slot": "execute",
         "group": "hidden"
     },
@@ -290,7 +290,7 @@
     "from_bool":
     {
         "uses": "flow",
-        "spec": "bool {_%val:bool_eval}",
+        "spec": "from_bool {_%val:bool_eval}",
         "slot": "assignment",
         "desc": "Assigns the calculated boolean value.",
         "group": "variables"
@@ -298,7 +298,7 @@
     "from_num":
     {
         "uses": "flow",
-        "spec": "num {_%val:number_eval}",
+        "spec": "from_num {_%val:number_eval}",
         "slot": "assignment",
         "desc": "Assigns the calculated number.",
         "group": "variables"
@@ -306,7 +306,7 @@
     "from_numbers":
     {
         "uses": "flow",
-        "spec": "nums {_%vals:num_list_eval}",
+        "spec": "from_nums {_%vals:num_list_eval}",
         "slot": "assignment",
         "desc": "Assigns the calculated numbers.",
         "group": "variables"
@@ -314,7 +314,7 @@
     "from_obj":
     {
         "uses": "flow",
-        "spec": "obj {_%object:text_eval}",
+        "spec": "from_obj {_%object:text_eval}",
         "slot": "from_source_fields",
         "desc": "Targets an object with a computed name.",
         "group": "misc"
@@ -322,7 +322,7 @@
     "from_rec":
     {
         "uses": "flow",
-        "spec": "rec {_%rec:record_eval}",
+        "spec": "from_rec {_%rec:record_eval}",
         "slot": "from_source_fields",
         "desc": "Targets a record stored in a record.",
         "group": "misc"
@@ -330,7 +330,7 @@
     "from_record":
     {
         "uses": "flow",
-        "spec": "rec {_%val:record_eval}",
+        "spec": "from_rec {_%val:record_eval}",
         "slot": "assignment",
         "desc": "Assigns the calculated record.",
         "group": "variables"
@@ -338,7 +338,7 @@
     "from_records":
     {
         "uses": "flow",
-        "spec": "recs {_%vals:record_list_eval}",
+        "spec": "from_recs {_%vals:record_list_eval}",
         "slot": "assignment",
         "desc": "Assigns the calculated records.",
         "group": "variables"
@@ -346,7 +346,7 @@
     "from_text":
     {
         "uses": "flow",
-        "spec": "txt {_%val:text_eval}",
+        "spec": "from_txt {_%val:text_eval}",
         "slot": "assignment",
         "desc": "Assigns the calculated piece of text.",
         "group": "variables"
@@ -354,7 +354,7 @@
     "from_texts":
     {
         "uses": "flow",
-        "spec": "txts {_%vals:text_list_eval}",
+        "spec": "from_txts {_%vals:text_list_eval}",
         "slot": "assignment",
         "desc": "Assigns the calculated texts.",
         "group": "variables"
@@ -362,7 +362,7 @@
     "from_var":
     {
         "uses": "flow",
-        "spec": "var {_%var:variable_name}",
+        "spec": "from_var {_%var:variable_name}",
         "slot": "from_source_fields",
         "desc": "Targets a record stored in a variable.",
         "group": "misc"

@@ -24,15 +24,13 @@ func (op *AbstractAction) String() (ret string) {
 
 const AbstractAction_Nothing = "$NOTHING"
 
-func (*AbstractAction) Choices() (choices map[string]string) {
-	return map[string]string{
-		AbstractAction_Nothing: "nothing",
-	}
-}
-
 func (*AbstractAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "abstract_action",
+		Uses: "str",
+		Choices: []string{
+			AbstractAction_Nothing,
+		},
 		Strings: []string{
 			"nothing",
 		},
@@ -48,14 +46,15 @@ type ActionContext struct {
 func (*ActionContext) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action_context",
+		Uses: "flow",
 	}
 }
 
 // ActionDecl
 type ActionDecl struct {
 	At           reader.Position `if:"internal"`
-	Event        EventName       `if:"label=act"`
-	Action       ActionName      `if:"label=acting"`
+	Event        EventName       `if:"label=event"`
+	Action       ActionName      `if:"label=action"`
 	ActionParams ActionParams    `if:"label=action_params"`
 }
 
@@ -64,6 +63,7 @@ var _ StoryStatement = (*ActionDecl)(nil)
 func (*ActionDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action_decl",
+		Uses: "flow",
 	}
 }
 
@@ -80,13 +80,10 @@ func (op *ActionName) String() (ret string) {
 	return
 }
 
-func (*ActionName) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*ActionName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "action_name",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
@@ -99,6 +96,7 @@ type ActionParams struct {
 func (*ActionParams) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action_params",
+		Uses: "swap",
 	}
 }
 
@@ -107,6 +105,34 @@ func (*ActionParams) Choices() map[string]interface{} {
 		"common": (*CommonAction)(nil),
 		"dual":   (*PairedAction)(nil),
 		"none":   (*AbstractAction)(nil),
+	}
+}
+
+// Ana requires a user-specified string.
+type Ana struct {
+	Str string
+}
+
+func (op *Ana) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
+
+const Ana_A = "$A"
+const Ana_An = "$AN"
+
+func (*Ana) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "ana",
+		Uses: "str",
+		Choices: []string{
+			Ana_A, Ana_An,
+		},
+		Strings: []string{
+			"a", "an",
+		},
 	}
 }
 
@@ -129,17 +155,71 @@ const AreAn_Is = "$IS"
 const AreAn_Isa = "$ISA"
 const AreAn_Isan = "$ISAN"
 
-func (*AreAn) Choices() (choices map[string]string) {
-	return map[string]string{
-		AreAn_Are: "are", AreAn_Area: "area", AreAn_Arean: "arean", AreAn_Is: "is", AreAn_Isa: "isa", AreAn_Isan: "isan",
-	}
-}
-
 func (*AreAn) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "are_an",
+		Uses: "str",
+		Choices: []string{
+			AreAn_Are, AreAn_Area, AreAn_Arean, AreAn_Is, AreAn_Isa, AreAn_Isan,
+		},
 		Strings: []string{
 			"are", "area", "arean", "is", "isa", "isan",
+		},
+	}
+}
+
+// AreBeing requires a user-specified string.
+type AreBeing struct {
+	Str string
+}
+
+func (op *AreBeing) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
+
+const AreBeing_Are = "$ARE"
+const AreBeing_Is = "$IS"
+
+func (*AreBeing) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "are_being",
+		Uses: "str",
+		Choices: []string{
+			AreBeing_Are, AreBeing_Is,
+		},
+		Strings: []string{
+			"are", "is",
+		},
+	}
+}
+
+// AreEither requires a user-specified string.
+type AreEither struct {
+	Str string
+}
+
+func (op *AreEither) String() (ret string) {
+	if s := op.Str; s != "$EMPTY" {
+		ret = s
+	}
+	return
+}
+
+const AreEither_Canbe = "$CANBE"
+const AreEither_Either = "$EITHER"
+
+func (*AreEither) Compose() composer.Spec {
+	return composer.Spec{
+		Name: "are_either",
+		Uses: "str",
+		Choices: []string{
+			AreEither_Canbe, AreEither_Either,
+		},
+		Strings: []string{
+			"canbe", "either",
 		},
 	}
 }
@@ -154,6 +234,8 @@ type Argument struct {
 func (*Argument) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "argument",
+		Uses: "flow",
+		Lede: "arg",
 	}
 }
 
@@ -166,6 +248,8 @@ type Arguments struct {
 func (*Arguments) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "arguments",
+		Uses: "flow",
+		Lede: "args",
 	}
 }
 
@@ -182,20 +266,17 @@ func (op *Aspect) String() (ret string) {
 	return
 }
 
-func (*Aspect) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*Aspect) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "aspect",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
 
 // AspectTraits
 type AspectTraits struct {
-	Aspect      Aspect      `if:"label=aspect"`
+	Aspect      Aspect      `if:"label=_"`
 	TraitPhrase TraitPhrase `if:"label=trait_phrase"`
 }
 
@@ -204,35 +285,38 @@ var _ StoryStatement = (*AspectTraits)(nil)
 func (*AspectTraits) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "aspect_traits",
+		Uses: "flow",
 	}
 }
 
 // BoxedNumber
 type BoxedNumber struct {
-	Number float64 `if:"label=number"`
+	Number float64 `if:"label=_,type=number"`
 }
 
 func (*BoxedNumber) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "boxed_number",
+		Uses: "flow",
 	}
 }
 
 // BoxedText
 type BoxedText struct {
-	Text value.Text `if:"label=text"`
+	Text value.Text `if:"label=_"`
 }
 
 func (*BoxedText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "boxed_text",
+		Uses: "flow",
 	}
 }
 
 // Certainties
 type Certainties struct {
-	PluralKinds PluralKinds `if:"label=plural_kinds"`
-	AreBeing    bool        `if:"label=are_being"`
+	PluralKinds PluralKinds `if:"label=_"`
+	AreBeing    bool        `if:"label=are_being,type=are_being"`
 	Certainty   Certainty   `if:"label=certainty"`
 	Trait       Trait       `if:"label=trait"`
 }
@@ -242,6 +326,7 @@ var _ StoryStatement = (*Certainties)(nil)
 func (*Certainties) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "certainties",
+		Uses: "flow",
 	}
 }
 
@@ -263,15 +348,13 @@ const Certainty_Always = "$ALWAYS"
 const Certainty_Seldom = "$SELDOM"
 const Certainty_Never = "$NEVER"
 
-func (*Certainty) Choices() (choices map[string]string) {
-	return map[string]string{
-		Certainty_Usually: "usually", Certainty_Always: "always", Certainty_Seldom: "seldom", Certainty_Never: "never",
-	}
-}
-
 func (*Certainty) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "certainty",
+		Uses: "str",
+		Choices: []string{
+			Certainty_Usually, Certainty_Always, Certainty_Seldom, Certainty_Never,
+		},
 		Strings: []string{
 			"usually", "always", "seldom", "never",
 		},
@@ -280,7 +363,7 @@ func (*Certainty) Compose() composer.Spec {
 
 // Comment Information about the story for you and other authors.
 type Comment struct {
-	Lines value.Lines `if:"label=comment"`
+	Lines value.Lines `if:"label=_"`
 }
 
 var _ StoryStatement = (*Comment)(nil)
@@ -289,6 +372,7 @@ var _ rt.Execute = (*Comment)(nil)
 func (*Comment) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "comment",
+		Uses: "flow",
 	}
 }
 
@@ -302,13 +386,14 @@ type CommonAction struct {
 func (*CommonAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "common_action",
+		Uses: "flow",
 	}
 }
 
 // CountOf A guard which returns true based on a counter.
 type CountOf struct {
 	At      reader.Position `if:"internal"`
-	Trigger core.Trigger    `if:"label=_"`
+	Trigger core.Trigger    `if:"label=trigger"`
 	Num     rt.NumberEval   `if:"label=num"`
 }
 
@@ -317,13 +402,14 @@ var _ rt.BoolEval = (*CountOf)(nil)
 func (*CountOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "count_of",
+		Uses: "flow",
 	}
 }
 
 // CycleText
 type CycleText struct {
 	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=_"`
+	Parts []rt.TextEval   `if:"label=parts"`
 }
 
 var _ rt.TextEval = (*CycleText)(nil)
@@ -331,13 +417,14 @@ var _ rt.TextEval = (*CycleText)(nil)
 func (*CycleText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "cycle_text",
+		Uses: "flow",
 	}
 }
 
 // Determine
 type Determine struct {
 	Name      value.PatternName `if:"label=_"`
-	Arguments *Arguments        `if:"label=args,optional"`
+	Arguments *Arguments        `if:"label=arguments,optional"`
 }
 
 var _ rt.Execute = (*Determine)(nil)
@@ -352,6 +439,7 @@ var _ rt.RecordListEval = (*Determine)(nil)
 func (*Determine) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "determine",
+		Uses: "flow",
 	}
 }
 
@@ -372,16 +460,14 @@ const Determiner_An = "$AN"
 const Determiner_The = "$THE"
 const Determiner_Our = "$OUR"
 
-func (*Determiner) Choices() (choices map[string]string) {
-	return map[string]string{
-		Determiner_A: "a", Determiner_An: "an", Determiner_The: "the", Determiner_Our: "our",
-	}
-}
-
 func (*Determiner) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "determiner",
+		Uses:        "str",
 		OpenStrings: true,
+		Choices: []string{
+			Determiner_A, Determiner_An, Determiner_The, Determiner_Our,
+		},
 		Strings: []string{
 			"a", "an", "the", "our",
 		},
@@ -391,7 +477,7 @@ func (*Determiner) Compose() composer.Spec {
 // EventBlock Listeners let objects in the game world react to changes before, during, or after they happen.
 type EventBlock struct {
 	At       reader.Position `if:"internal"`
-	Target   EventTarget     `if:"label=the_target"`
+	Target   EventTarget     `if:"label=target"`
 	Handlers []EventHandler  `if:"label=handlers"`
 }
 
@@ -400,20 +486,22 @@ var _ StoryStatement = (*EventBlock)(nil)
 func (*EventBlock) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_block",
+		Uses: "flow",
 	}
 }
 
 // EventHandler
 type EventHandler struct {
-	EventPhase   EventPhase     `if:"label=event_phase"`
-	Event        EventName      `if:"label=the_event"`
-	Locals       *PatternLocals `if:"label=with_locals,optional"`
+	EventPhase   EventPhase     `if:"label=_"`
+	Event        EventName      `if:"label=event"`
+	Locals       *PatternLocals `if:"label=locals,optional"`
 	PatternRules PatternRules   `if:"label=pattern_rules"`
 }
 
 func (*EventHandler) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_handler",
+		Uses: "flow",
 	}
 }
 
@@ -430,13 +518,10 @@ func (op *EventName) String() (ret string) {
 	return
 }
 
-func (*EventName) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*EventName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "event_name",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
@@ -457,15 +542,13 @@ const EventPhase_Before = "$BEFORE"
 const EventPhase_While = "$WHILE"
 const EventPhase_After = "$AFTER"
 
-func (*EventPhase) Choices() (choices map[string]string) {
-	return map[string]string{
-		EventPhase_Before: "before", EventPhase_While: "while", EventPhase_After: "after",
-	}
-}
-
 func (*EventPhase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_phase",
+		Uses: "str",
+		Choices: []string{
+			EventPhase_Before, EventPhase_While, EventPhase_After,
+		},
 		Strings: []string{
 			"before", "while", "after",
 		},
@@ -480,6 +563,7 @@ type EventTarget struct {
 func (*EventTarget) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_target",
+		Uses: "swap",
 	}
 }
 
@@ -499,6 +583,7 @@ type ExtType struct {
 func (*ExtType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "ext_type",
+		Uses: "swap",
 	}
 }
 
@@ -519,12 +604,13 @@ type GrammarDecl struct {
 func (*GrammarDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "grammar_decl",
+		Uses: "flow",
 	}
 }
 
 // KindOfNoun
 type KindOfNoun struct {
-	AreAn        AreAn         `if:"label=are_an"`
+	AreAn        AreAn         `if:"label=_"`
 	Trait        []Trait       `if:"label=trait,optional"`
 	Kind         SingularKind  `if:"label=kind"`
 	NounRelation *NounRelation `if:"label=noun_relation,optional"`
@@ -533,12 +619,13 @@ type KindOfNoun struct {
 func (*KindOfNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kind_of_noun",
+		Uses: "flow",
 	}
 }
 
 // KindOfRelation
 type KindOfRelation struct {
-	Relation            value.RelationName  `if:"label=relation"`
+	Relation            value.RelationName  `if:"label=_"`
 	RelationCardinality RelationCardinality `if:"label=relation_cardinality"`
 }
 
@@ -547,12 +634,13 @@ var _ StoryStatement = (*KindOfRelation)(nil)
 func (*KindOfRelation) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kind_of_relation",
+		Uses: "flow",
 	}
 }
 
 // KindsOfAspect
 type KindsOfAspect struct {
-	Aspect Aspect `if:"label=aspect"`
+	Aspect Aspect `if:"label=_"`
 }
 
 var _ StoryStatement = (*KindsOfAspect)(nil)
@@ -560,12 +648,13 @@ var _ StoryStatement = (*KindsOfAspect)(nil)
 func (*KindsOfAspect) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kinds_of_aspect",
+		Uses: "flow",
 	}
 }
 
 // KindsOfKind
 type KindsOfKind struct {
-	PluralKinds  PluralKinds  `if:"label=plural_kinds"`
+	PluralKinds  PluralKinds  `if:"label=_"`
 	SingularKind SingularKind `if:"label=singular_kind"`
 }
 
@@ -574,12 +663,13 @@ var _ StoryStatement = (*KindsOfKind)(nil)
 func (*KindsOfKind) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kinds_of_kind",
+		Uses: "flow",
 	}
 }
 
 // KindsOfRecord
 type KindsOfRecord struct {
-	RecordPlural RecordPlural `if:"label=records"`
+	RecordPlural RecordPlural `if:"label=_"`
 }
 
 var _ StoryStatement = (*KindsOfRecord)(nil)
@@ -587,12 +677,13 @@ var _ StoryStatement = (*KindsOfRecord)(nil)
 func (*KindsOfRecord) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kinds_of_record",
+		Uses: "flow",
 	}
 }
 
 // KindsPossessProperties
 type KindsPossessProperties struct {
-	PluralKinds  PluralKinds    `if:"label=plural_kinds"`
+	PluralKinds  PluralKinds    `if:"label=_"`
 	PropertyDecl []PropertyDecl `if:"label=property_decl"`
 }
 
@@ -601,48 +692,52 @@ var _ StoryStatement = (*KindsPossessProperties)(nil)
 func (*KindsPossessProperties) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "kinds_possess_properties",
+		Uses: "flow",
 	}
 }
 
 // Lede Describes one or more nouns.
 type Lede struct {
-	Nouns      []NamedNoun `if:"label=nouns"`
+	Nouns      []NamedNoun `if:"label=_"`
 	NounPhrase NounPhrase  `if:"label=noun_phrase"`
 }
 
 func (*Lede) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "lede",
+		Uses: "flow",
 	}
 }
 
 // LocalDecl
 type LocalDecl struct {
-	VariableDecl VariableDecl `if:"label=variable_decl"`
-	Value        *LocalInit   `if:"label=starting_as,optional"`
+	VariableDecl VariableDecl `if:"label=_"`
+	Value        *LocalInit   `if:"label=value,optional"`
 }
 
 func (*LocalDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "local_decl",
+		Uses: "flow",
 	}
 }
 
 // LocalInit
 type LocalInit struct {
-	Value rt.Assignment `if:"label=value"`
+	Value rt.Assignment `if:"label=_"`
 }
 
 func (*LocalInit) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "local_init",
+		Uses: "flow",
 	}
 }
 
 // Make
 type Make struct {
 	Name      value.Text `if:"label=_"`
-	Arguments *Arguments `if:"label=args,optional"`
+	Arguments *Arguments `if:"label=arguments,optional"`
 }
 
 var _ rt.RecordEval = (*Make)(nil)
@@ -650,50 +745,54 @@ var _ rt.RecordEval = (*Make)(nil)
 func (*Make) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "make",
+		Uses: "flow",
 	}
 }
 
 // ManyToMany
 type ManyToMany struct {
-	Kinds      PluralKinds `if:"label=kinds"`
+	Kinds      PluralKinds `if:"label=_"`
 	OtherKinds PluralKinds `if:"label=other_kinds"`
 }
 
 func (*ManyToMany) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "many_to_many",
+		Uses: "flow",
 	}
 }
 
 // ManyToOne
 type ManyToOne struct {
-	Kinds PluralKinds  `if:"label=kinds"`
+	Kinds PluralKinds  `if:"label=_"`
 	Kind  SingularKind `if:"label=kind"`
 }
 
 func (*ManyToOne) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "many_to_one",
+		Uses: "flow",
 	}
 }
 
 // NamedNoun
 type NamedNoun struct {
-	Determiner Determiner `if:"label=determiner"`
+	Determiner Determiner `if:"label=_"`
 	Name       NounName   `if:"label=name"`
 }
 
 func (*NamedNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "named_noun",
+		Uses: "flow",
 	}
 }
 
 // NounAssignment Assign text.
 type NounAssignment struct {
-	Property Property    `if:"label=property"`
+	Property Property    `if:"label=_"`
 	Nouns    []NamedNoun `if:"label=nouns"`
-	Lines    value.Lines `if:"label=the_text"`
+	Lines    value.Lines `if:"label=lines"`
 }
 
 var _ StoryStatement = (*NounAssignment)(nil)
@@ -701,6 +800,7 @@ var _ StoryStatement = (*NounAssignment)(nil)
 func (*NounAssignment) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun_assignment",
+		Uses: "flow",
 	}
 }
 
@@ -717,13 +817,10 @@ func (op *NounName) String() (ret string) {
 	return
 }
 
-func (*NounName) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*NounName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "noun_name",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
@@ -737,6 +834,7 @@ type NounPhrase struct {
 func (*NounPhrase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun_phrase",
+		Uses: "swap",
 	}
 }
 
@@ -750,7 +848,7 @@ func (*NounPhrase) Choices() map[string]interface{} {
 
 // NounRelation
 type NounRelation struct {
-	AreBeing bool               `if:"label=are_being,optional"`
+	AreBeing bool               `if:"label=_,optional,type=are_being"`
 	Relation value.RelationName `if:"label=relation"`
 	Nouns    []NamedNoun        `if:"label=nouns"`
 }
@@ -758,12 +856,13 @@ type NounRelation struct {
 func (*NounRelation) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun_relation",
+		Uses: "flow",
 	}
 }
 
 // NounStatement Describes people, places, or things.
 type NounStatement struct {
-	Lede    Lede     `if:"label=lede"`
+	Lede    Lede     `if:"label=_"`
 	Tail    []Tail   `if:"label=tail,optional"`
 	Summary *Summary `if:"label=summary,optional"`
 }
@@ -773,18 +872,20 @@ var _ StoryStatement = (*NounStatement)(nil)
 func (*NounStatement) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun_statement",
+		Uses: "flow",
 	}
 }
 
 // NounTraits
 type NounTraits struct {
-	AreBeing bool    `if:"label=are_being"`
+	AreBeing bool    `if:"label=_,type=are_being"`
 	Trait    []Trait `if:"label=trait"`
 }
 
 func (*NounTraits) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun_traits",
+		Uses: "flow",
 	}
 }
 
@@ -802,15 +903,13 @@ func (op *NumberList) String() (ret string) {
 
 const NumberList_List = "$LIST"
 
-func (*NumberList) Choices() (choices map[string]string) {
-	return map[string]string{
-		NumberList_List: "list",
-	}
-}
-
 func (*NumberList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "number_list",
+		Uses: "str",
+		Choices: []string{
+			NumberList_List,
+		},
 		Strings: []string{
 			"list",
 		},
@@ -819,37 +918,40 @@ func (*NumberList) Compose() composer.Spec {
 
 // ObjectType
 type ObjectType struct {
-	An   bool         `if:"label=an"`
-	Kind SingularKind `if:"label=kind_of"`
+	An   bool         `if:"label=_,type=ana"`
+	Kind SingularKind `if:"label=kind"`
 }
 
 func (*ObjectType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "object_type",
+		Uses: "flow",
 	}
 }
 
 // OneToMany
 type OneToMany struct {
-	Kind  SingularKind `if:"label=kind"`
+	Kind  SingularKind `if:"label=_"`
 	Kinds PluralKinds  `if:"label=kinds"`
 }
 
 func (*OneToMany) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "one_to_many",
+		Uses: "flow",
 	}
 }
 
 // OneToOne
 type OneToOne struct {
-	Kind      SingularKind `if:"label=kind"`
+	Kind      SingularKind `if:"label=_"`
 	OtherKind SingularKind `if:"label=other_kind"`
 }
 
 func (*OneToOne) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "one_to_one",
+		Uses: "flow",
 	}
 }
 
@@ -862,23 +964,25 @@ type PairedAction struct {
 func (*PairedAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "paired_action",
+		Uses: "flow",
 	}
 }
 
 // Paragraph
 type Paragraph struct {
-	StoryStatement []StoryStatement `if:"label=story_statement,optional"`
+	StoryStatement []StoryStatement `if:"label=_,optional"`
 }
 
 func (*Paragraph) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "paragraph",
+		Uses: "flow",
 	}
 }
 
 // PatternActions Actions to take when using a pattern.
 type PatternActions struct {
-	Name          value.PatternName `if:"label=pattern_name"`
+	Name          value.PatternName `if:"label=_"`
 	PatternLocals *PatternLocals    `if:"label=pattern_locals,optional"`
 	PatternReturn *PatternReturn    `if:"label=pattern_return,optional"`
 	PatternRules  PatternRules      `if:"label=pattern_rules"`
@@ -889,14 +993,15 @@ var _ StoryStatement = (*PatternActions)(nil)
 func (*PatternActions) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_actions",
+		Uses: "flow",
 	}
 }
 
 // PatternDecl
 type PatternDecl struct {
-	Type          PatternType           `if:"label=type"`
+	Type          PatternType           `if:"label=_"`
 	Name          value.PatternName     `if:"label=name"`
-	Optvars       *PatternVariablesTail `if:"label=parameters,optional"`
+	Optvars       *PatternVariablesTail `if:"label=optvars,optional"`
 	PatternReturn *PatternReturn        `if:"label=pattern_return,optional"`
 	About         *Comment              `if:"label=about,optional"`
 }
@@ -906,6 +1011,7 @@ var _ StoryStatement = (*PatternDecl)(nil)
 func (*PatternDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_decl",
+		Uses: "flow",
 	}
 }
 
@@ -925,15 +1031,13 @@ const PatternFlags_Before = "$BEFORE"
 const PatternFlags_After = "$AFTER"
 const PatternFlags_Terminate = "$TERMINATE"
 
-func (*PatternFlags) Choices() (choices map[string]string) {
-	return map[string]string{
-		PatternFlags_Before: "before", PatternFlags_After: "after", PatternFlags_Terminate: "terminate",
-	}
-}
-
 func (*PatternFlags) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_flags",
+		Uses: "str",
+		Choices: []string{
+			PatternFlags_Before, PatternFlags_After, PatternFlags_Terminate,
+		},
 		Strings: []string{
 			"before", "after", "terminate",
 		},
@@ -942,47 +1046,51 @@ func (*PatternFlags) Compose() composer.Spec {
 
 // PatternLocals
 type PatternLocals struct {
-	LocalDecl []LocalDecl `if:"label=local_decl"`
+	LocalDecl []LocalDecl `if:"label=_"`
 }
 
 func (*PatternLocals) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_locals",
+		Uses: "flow",
 	}
 }
 
 // PatternReturn
 type PatternReturn struct {
-	Result VariableDecl `if:"label=result"`
+	Result VariableDecl `if:"label=_"`
 }
 
 func (*PatternReturn) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_return",
+		Uses: "flow",
 	}
 }
 
 // PatternRule
 type PatternRule struct {
-	Guard rt.BoolEval  `if:"label=conditions_are met"`
-	Flags PatternFlags `if:"label=continue,optional"`
-	Hook  ProgramHook  `if:"label=do"`
+	Guard rt.BoolEval  `if:"label=_"`
+	Flags PatternFlags `if:"label=flags,optional"`
+	Hook  ProgramHook  `if:"label=hook"`
 }
 
 func (*PatternRule) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_rule",
+		Uses: "flow",
 	}
 }
 
 // PatternRules
 type PatternRules struct {
-	PatternRule []PatternRule `if:"label=pattern_rule,optional"`
+	PatternRule []PatternRule `if:"label=_,optional"`
 }
 
 func (*PatternRules) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_rules",
+		Uses: "flow",
 	}
 }
 
@@ -1003,16 +1111,14 @@ const PatternType_Patterns = "$PATTERNS"
 const PatternType_Actions = "$ACTIONS"
 const PatternType_Events = "$EVENTS"
 
-func (*PatternType) Choices() (choices map[string]string) {
-	return map[string]string{
-		PatternType_Patterns: "patterns", PatternType_Actions: "actions", PatternType_Events: "events",
-	}
-}
-
 func (*PatternType) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "pattern_type",
+		Uses:        "str",
 		OpenStrings: true,
+		Choices: []string{
+			PatternType_Patterns, PatternType_Actions, PatternType_Events,
+		},
 		Strings: []string{
 			"patterns", "actions", "events",
 		},
@@ -1021,7 +1127,7 @@ func (*PatternType) Compose() composer.Spec {
 
 // PatternVariablesDecl Values provided when calling a pattern.
 type PatternVariablesDecl struct {
-	PatternName  value.PatternName `if:"label=pattern_name"`
+	PatternName  value.PatternName `if:"label=_"`
 	VariableDecl []VariableDecl    `if:"label=variable_decl"`
 }
 
@@ -1030,17 +1136,19 @@ var _ StoryStatement = (*PatternVariablesDecl)(nil)
 func (*PatternVariablesDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_variables_decl",
+		Uses: "flow",
 	}
 }
 
 // PatternVariablesTail Storage for values used during the execution of a pattern.
 type PatternVariablesTail struct {
-	VariableDecl []VariableDecl `if:"label=variable_decl"`
+	VariableDecl []VariableDecl `if:"label=_"`
 }
 
 func (*PatternVariablesTail) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "pattern_variables_tail",
+		Uses: "flow",
 	}
 }
 
@@ -1057,13 +1165,10 @@ func (op *PluralKinds) String() (ret string) {
 	return
 }
 
-func (*PluralKinds) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*PluralKinds) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "plural_kinds",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
@@ -1085,15 +1190,13 @@ const PrimitiveType_Number = "$NUMBER"
 const PrimitiveType_Text = "$TEXT"
 const PrimitiveType_Bool = "$BOOL"
 
-func (*PrimitiveType) Choices() (choices map[string]string) {
-	return map[string]string{
-		PrimitiveType_Number: "number", PrimitiveType_Text: "text", PrimitiveType_Bool: "bool",
-	}
-}
-
 func (*PrimitiveType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "primitive_type",
+		Uses: "str",
+		Choices: []string{
+			PrimitiveType_Number, PrimitiveType_Text, PrimitiveType_Bool,
+		},
 		Strings: []string{
 			"number", "text", "bool",
 		},
@@ -1108,6 +1211,7 @@ type PrimitiveValue struct {
 func (*PrimitiveValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "primitive_value",
+		Uses: "swap",
 	}
 }
 
@@ -1127,6 +1231,7 @@ type ProgramHook struct {
 func (*ProgramHook) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "program_hook",
+		Uses: "swap",
 	}
 }
 
@@ -1151,16 +1256,14 @@ func (op *Pronoun) String() (ret string) {
 const Pronoun_It = "$IT"
 const Pronoun_They = "$THEY"
 
-func (*Pronoun) Choices() (choices map[string]string) {
-	return map[string]string{
-		Pronoun_It: "it", Pronoun_They: "they",
-	}
-}
-
 func (*Pronoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "pronoun",
+		Uses:        "str",
 		OpenStrings: true,
+		Choices: []string{
+			Pronoun_It, Pronoun_They,
+		},
 		Strings: []string{
 			"it", "they",
 		},
@@ -1180,13 +1283,10 @@ func (op *Property) String() (ret string) {
 	return
 }
 
-func (*Property) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*Property) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "property",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
@@ -1206,15 +1306,13 @@ func (op *PropertyAspect) String() (ret string) {
 
 const PropertyAspect_Aspect = "$ASPECT"
 
-func (*PropertyAspect) Choices() (choices map[string]string) {
-	return map[string]string{
-		PropertyAspect_Aspect: "aspect",
-	}
-}
-
 func (*PropertyAspect) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "property_aspect",
+		Uses: "str",
+		Choices: []string{
+			PropertyAspect_Aspect,
+		},
 		Strings: []string{
 			"aspect",
 		},
@@ -1223,7 +1321,7 @@ func (*PropertyAspect) Compose() composer.Spec {
 
 // PropertyDecl
 type PropertyDecl struct {
-	An           Determiner   `if:"label=an"`
+	An           Determiner   `if:"label=_"`
 	Property     Property     `if:"label=property"`
 	PropertyType PropertyType `if:"label=property_type"`
 	Comment      value.Lines  `if:"label=comment,optional"`
@@ -1232,6 +1330,7 @@ type PropertyDecl struct {
 func (*PropertyDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "property_decl",
+		Uses: "flow",
 	}
 }
 
@@ -1244,6 +1343,7 @@ type PropertyType struct {
 func (*PropertyType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "property_type",
+		Uses: "swap",
 	}
 }
 
@@ -1257,12 +1357,13 @@ func (*PropertyType) Choices() map[string]interface{} {
 
 // RecordList
 type RecordList struct {
-	Kind RecordSingular `if:"label=kind"`
+	Kind RecordSingular `if:"label=_"`
 }
 
 func (*RecordList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "record_list",
+		Uses: "flow",
 	}
 }
 
@@ -1279,13 +1380,10 @@ func (op *RecordPlural) String() (ret string) {
 	return
 }
 
-func (*RecordPlural) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*RecordPlural) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "record_plural",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
@@ -1303,31 +1401,29 @@ func (op *RecordSingular) String() (ret string) {
 	return
 }
 
-func (*RecordSingular) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*RecordSingular) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "record_singular",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
 
 // RecordType
 type RecordType struct {
-	Kind RecordSingular `if:"label=kind"`
+	Kind RecordSingular `if:"label=_"`
 }
 
 func (*RecordType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "record_type",
+		Uses: "flow",
 	}
 }
 
 // RecordsPossessProperties
 type RecordsPossessProperties struct {
-	RecordPlural RecordPlural   `if:"label=records"`
+	RecordPlural RecordPlural   `if:"label=_"`
 	PropertyDecl []PropertyDecl `if:"label=property_decl"`
 }
 
@@ -1336,6 +1432,7 @@ var _ StoryStatement = (*RecordsPossessProperties)(nil)
 func (*RecordsPossessProperties) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "records_possess_properties",
+		Uses: "flow",
 	}
 }
 
@@ -1348,6 +1445,7 @@ type RelationCardinality struct {
 func (*RelationCardinality) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "relation_cardinality",
+		Uses: "swap",
 	}
 }
 
@@ -1362,10 +1460,10 @@ func (*RelationCardinality) Choices() map[string]interface{} {
 
 // RelativeToNoun
 type RelativeToNoun struct {
-	Relation value.RelationName `if:"label=relation"`
+	Relation value.RelationName `if:"label=_"`
 	Nouns    []NamedNoun        `if:"label=nouns"`
-	AreBeing bool               `if:"label=are_being"`
-	Nouns1   []NamedNoun        `if:"label=nouns"`
+	AreBeing bool               `if:"label=are_being,type=are_being"`
+	Nouns1   []NamedNoun        `if:"label=nouns1"`
 }
 
 var _ StoryStatement = (*RelativeToNoun)(nil)
@@ -1373,6 +1471,7 @@ var _ StoryStatement = (*RelativeToNoun)(nil)
 func (*RelativeToNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "relative_to_noun",
+		Uses: "flow",
 	}
 }
 
@@ -1386,14 +1485,15 @@ var _ rt.TextEval = (*RenderTemplate)(nil)
 func (*RenderTemplate) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_template",
+		Uses: "flow",
 	}
 }
 
-// Send Triggers a event, returns a true/false success value.
+// Send
 type Send struct {
 	Event     value.Text      `if:"label=_"`
-	Path      rt.TextListEval `if:"label=to"`
-	Arguments *Arguments      `if:"label=args,optional"`
+	Path      rt.TextListEval `if:"label=path"`
+	Arguments *Arguments      `if:"label=arguments,optional"`
 }
 
 var _ rt.Execute = (*Send)(nil)
@@ -1402,13 +1502,14 @@ var _ rt.BoolEval = (*Send)(nil)
 func (*Send) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "send",
+		Uses: "flow",
 	}
 }
 
 // ShuffleText
 type ShuffleText struct {
 	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=_"`
+	Parts []rt.TextEval   `if:"label=parts"`
 }
 
 var _ rt.TextEval = (*ShuffleText)(nil)
@@ -1416,6 +1517,7 @@ var _ rt.TextEval = (*ShuffleText)(nil)
 func (*ShuffleText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "shuffle_text",
+		Uses: "flow",
 	}
 }
 
@@ -1432,13 +1534,10 @@ func (op *SingularKind) String() (ret string) {
 	return
 }
 
-func (*SingularKind) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*SingularKind) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "singular_kind",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
@@ -1446,7 +1545,7 @@ func (*SingularKind) Compose() composer.Spec {
 // StoppingText
 type StoppingText struct {
 	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=_"`
+	Parts []rt.TextEval   `if:"label=parts"`
 }
 
 var _ rt.TextEval = (*StoppingText)(nil)
@@ -1454,41 +1553,45 @@ var _ rt.TextEval = (*StoppingText)(nil)
 func (*StoppingText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "stopping_text",
+		Uses: "flow",
 	}
 }
 
 // Story
 type Story struct {
-	Paragraph []Paragraph `if:"label=paragraph,optional"`
+	Paragraph []Paragraph `if:"label=_,optional"`
 }
 
 func (*Story) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "story",
+		Uses: "flow",
 	}
 }
 
 // Summary
 type Summary struct {
 	At    reader.Position `if:"internal"`
-	Lines value.Lines     `if:"label=summary"`
+	Lines value.Lines     `if:"label=lines"`
 }
 
 func (*Summary) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "summary",
+		Uses: "flow",
 	}
 }
 
 // Tail Adds details about the preceding noun or nouns.
 type Tail struct {
-	Pronoun    Pronoun    `if:"label=pronoun"`
+	Pronoun    Pronoun    `if:"label=_"`
 	NounPhrase NounPhrase `if:"label=noun_phrase"`
 }
 
 func (*Tail) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "tail",
+		Uses: "flow",
 	}
 }
 
@@ -1507,16 +1610,14 @@ func (op *TestName) String() (ret string) {
 
 const TestName_CurrentTest = "$CURRENT_TEST"
 
-func (*TestName) Choices() (choices map[string]string) {
-	return map[string]string{
-		TestName_CurrentTest: "current_test",
-	}
-}
-
 func (*TestName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "test_name",
+		Uses:        "str",
 		OpenStrings: true,
+		Choices: []string{
+			TestName_CurrentTest,
+		},
 		Strings: []string{
 			"current_test",
 		},
@@ -1525,7 +1626,7 @@ func (*TestName) Compose() composer.Spec {
 
 // TestOutput Expect that a test uses &#x27;Say&#x27; to print some specific text.
 type TestOutput struct {
-	Lines value.Lines `if:"label=lines"`
+	Lines value.Lines `if:"label=_"`
 }
 
 var _ Testing = (*TestOutput)(nil)
@@ -1533,13 +1634,14 @@ var _ Testing = (*TestOutput)(nil)
 func (*TestOutput) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "test_output",
+		Uses: "flow",
 	}
 }
 
 // TestRule
 type TestRule struct {
-	TestName TestName    `if:"label=test_name"`
-	Hook     ProgramHook `if:"label=do"`
+	TestName TestName    `if:"label=_"`
+	Hook     ProgramHook `if:"label=hook"`
 }
 
 var _ StoryStatement = (*TestRule)(nil)
@@ -1547,12 +1649,13 @@ var _ StoryStatement = (*TestRule)(nil)
 func (*TestRule) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "test_rule",
+		Uses: "flow",
 	}
 }
 
 // TestScene
 type TestScene struct {
-	TestName TestName `if:"label=test_name"`
+	TestName TestName `if:"label=_"`
 	Story    Story    `if:"label=story"`
 }
 
@@ -1561,6 +1664,7 @@ var _ StoryStatement = (*TestScene)(nil)
 func (*TestScene) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "test_scene",
+		Uses: "flow",
 	}
 }
 
@@ -1568,7 +1672,7 @@ func (*TestScene) Compose() composer.Spec {
 type TestStatement struct {
 	At       reader.Position `if:"internal"`
 	TestName TestName        `if:"label=test_name"`
-	Test     Testing         `if:"label=expectation"`
+	Test     Testing         `if:"label=test"`
 }
 
 var _ StoryStatement = (*TestStatement)(nil)
@@ -1576,6 +1680,7 @@ var _ StoryStatement = (*TestStatement)(nil)
 func (*TestStatement) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "test_statement",
+		Uses: "flow",
 	}
 }
 
@@ -1593,15 +1698,13 @@ func (op *TextList) String() (ret string) {
 
 const TextList_List = "$LIST"
 
-func (*TextList) Choices() (choices map[string]string) {
-	return map[string]string{
-		TextList_List: "list",
-	}
-}
-
 func (*TextList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "text_list",
+		Uses: "str",
+		Choices: []string{
+			TextList_List,
+		},
 		Strings: []string{
 			"list",
 		},
@@ -1621,32 +1724,30 @@ func (op *Trait) String() (ret string) {
 	return
 }
 
-func (*Trait) Choices() (choices map[string]string) {
-	return map[string]string{}
-}
-
 func (*Trait) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "trait",
+		Uses:        "str",
 		OpenStrings: true,
 	}
 }
 
 // TraitPhrase
 type TraitPhrase struct {
-	AreEither bool    `if:"label=are_either"`
+	AreEither bool    `if:"label=_,type=are_either"`
 	Trait     []Trait `if:"label=trait"`
 }
 
 func (*TraitPhrase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "trait_phrase",
+		Uses: "flow",
 	}
 }
 
 // VariableDecl
 type VariableDecl struct {
-	An      Determiner         `if:"label=an"`
+	An      Determiner         `if:"label=_"`
 	Name    value.VariableName `if:"label=name"`
 	Type    VariableType       `if:"label=type"`
 	Comment value.Lines        `if:"label=comment,optional"`
@@ -1655,6 +1756,7 @@ type VariableDecl struct {
 func (*VariableDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "variable_decl",
+		Uses: "flow",
 	}
 }
 
@@ -1667,6 +1769,7 @@ type VariableType struct {
 func (*VariableType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "variable_type",
+		Uses: "swap",
 	}
 }
 
@@ -1682,33 +1785,36 @@ var Slots = []interface{}{
 	(*StoryStatement)(nil),
 	(*Testing)(nil),
 }
-var Swaps = []interface{}{
-	(*ActionParams)(nil),
-	(*EventTarget)(nil),
-	(*ExtType)(nil),
-	(*NounPhrase)(nil),
-	(*PrimitiveValue)(nil),
-	(*ProgramHook)(nil),
-	(*PropertyType)(nil),
-	(*RelationCardinality)(nil),
-	(*VariableType)(nil),
-}
 var Slats = []composer.Composer{
+	(*AbstractAction)(nil),
 	(*ActionContext)(nil),
 	(*ActionDecl)(nil),
+	(*ActionName)(nil),
+	(*ActionParams)(nil),
+	(*Ana)(nil),
+	(*AreAn)(nil),
+	(*AreBeing)(nil),
+	(*AreEither)(nil),
 	(*Argument)(nil),
 	(*Arguments)(nil),
+	(*Aspect)(nil),
 	(*AspectTraits)(nil),
 	(*BoxedNumber)(nil),
 	(*BoxedText)(nil),
 	(*Certainties)(nil),
+	(*Certainty)(nil),
 	(*Comment)(nil),
 	(*CommonAction)(nil),
 	(*CountOf)(nil),
 	(*CycleText)(nil),
 	(*Determine)(nil),
+	(*Determiner)(nil),
 	(*EventBlock)(nil),
 	(*EventHandler)(nil),
+	(*EventName)(nil),
+	(*EventPhase)(nil),
+	(*EventTarget)(nil),
+	(*ExtType)(nil),
 	(*GrammarDecl)(nil),
 	(*KindOfNoun)(nil),
 	(*KindOfRelation)(nil),
@@ -1724,9 +1830,12 @@ var Slats = []composer.Composer{
 	(*ManyToOne)(nil),
 	(*NamedNoun)(nil),
 	(*NounAssignment)(nil),
+	(*NounName)(nil),
+	(*NounPhrase)(nil),
 	(*NounRelation)(nil),
 	(*NounStatement)(nil),
 	(*NounTraits)(nil),
+	(*NumberList)(nil),
 	(*ObjectType)(nil),
 	(*OneToMany)(nil),
 	(*OneToOne)(nil),
@@ -1734,28 +1843,46 @@ var Slats = []composer.Composer{
 	(*Paragraph)(nil),
 	(*PatternActions)(nil),
 	(*PatternDecl)(nil),
+	(*PatternFlags)(nil),
 	(*PatternLocals)(nil),
 	(*PatternReturn)(nil),
 	(*PatternRule)(nil),
 	(*PatternRules)(nil),
+	(*PatternType)(nil),
 	(*PatternVariablesDecl)(nil),
 	(*PatternVariablesTail)(nil),
+	(*PluralKinds)(nil),
+	(*PrimitiveType)(nil),
+	(*PrimitiveValue)(nil),
+	(*ProgramHook)(nil),
+	(*Pronoun)(nil),
+	(*Property)(nil),
+	(*PropertyAspect)(nil),
 	(*PropertyDecl)(nil),
+	(*PropertyType)(nil),
 	(*RecordList)(nil),
+	(*RecordPlural)(nil),
+	(*RecordSingular)(nil),
 	(*RecordType)(nil),
 	(*RecordsPossessProperties)(nil),
+	(*RelationCardinality)(nil),
 	(*RelativeToNoun)(nil),
 	(*RenderTemplate)(nil),
 	(*Send)(nil),
 	(*ShuffleText)(nil),
+	(*SingularKind)(nil),
 	(*StoppingText)(nil),
 	(*Story)(nil),
 	(*Summary)(nil),
 	(*Tail)(nil),
+	(*TestName)(nil),
 	(*TestOutput)(nil),
 	(*TestRule)(nil),
 	(*TestScene)(nil),
 	(*TestStatement)(nil),
+	(*TextList)(nil),
+	(*Trait)(nil),
 	(*TraitPhrase)(nil),
 	(*VariableDecl)(nil),
+	(*VariableType)(nil),
 }

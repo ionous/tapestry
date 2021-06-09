@@ -18,6 +18,7 @@ var _ ListIterator = (*AsNum)(nil)
 func (*AsNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "as_num",
+		Uses: "flow",
 		Lede: "num",
 	}
 }
@@ -32,6 +33,7 @@ var _ ListIterator = (*AsRec)(nil)
 func (*AsRec) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "as_rec",
+		Uses: "flow",
 		Lede: "rec",
 	}
 }
@@ -46,6 +48,7 @@ var _ ListIterator = (*AsTxt)(nil)
 func (*AsTxt) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "as_txt",
+		Uses: "flow",
 		Lede: "txt",
 	}
 }
@@ -61,6 +64,7 @@ var _ rt.Execute = (*EraseEdge)(nil)
 func (*EraseEdge) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erase_edge",
+		Uses: "flow",
 		Lede: "erase",
 	}
 }
@@ -77,6 +81,7 @@ var _ rt.Execute = (*EraseIndex)(nil)
 func (*EraseIndex) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erase_index",
+		Uses: "flow",
 		Lede: "erase",
 	}
 }
@@ -95,6 +100,7 @@ var _ rt.Execute = (*Erasing)(nil)
 func (*Erasing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erasing",
+		Uses: "flow",
 	}
 }
 
@@ -112,6 +118,7 @@ var _ rt.Execute = (*ErasingEdge)(nil)
 func (*ErasingEdge) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erasing_edge",
+		Uses: "flow",
 		Lede: "erasing",
 	}
 }
@@ -126,6 +133,7 @@ var _ ListSource = (*FromNumList)(nil)
 func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_num_list",
+		Uses: "flow",
 		Lede: "nums",
 	}
 }
@@ -140,6 +148,7 @@ var _ ListSource = (*FromRecList)(nil)
 func (*FromRecList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_rec_list",
+		Uses: "flow",
 		Lede: "recs",
 	}
 }
@@ -154,6 +163,7 @@ var _ ListSource = (*FromTxtList)(nil)
 func (*FromTxtList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "from_txt_list",
+		Uses: "flow",
 		Lede: "txts",
 	}
 }
@@ -168,6 +178,7 @@ var _ ListTarget = (*IntoNumList)(nil)
 func (*IntoNumList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "into_num_list",
+		Uses: "flow",
 		Lede: "nums",
 	}
 }
@@ -182,6 +193,7 @@ var _ ListTarget = (*IntoRecList)(nil)
 func (*IntoRecList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "into_rec_list",
+		Uses: "flow",
 		Lede: "recs",
 	}
 }
@@ -196,6 +208,7 @@ var _ ListTarget = (*IntoTxtList)(nil)
 func (*IntoTxtList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "into_txt_list",
+		Uses: "flow",
 		Lede: "txts",
 	}
 }
@@ -213,6 +226,7 @@ var _ rt.RecordEval = (*ListAt)(nil)
 func (*ListAt) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_at",
+		Uses: "flow",
 		Lede: "get",
 	}
 }
@@ -230,6 +244,7 @@ var _ rt.Execute = (*ListEach)(nil)
 func (*ListEach) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_each",
+		Uses: "flow",
 		Lede: "repeating",
 	}
 }
@@ -246,6 +261,7 @@ var _ rt.NumberEval = (*ListFind)(nil)
 func (*ListFind) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_find",
+		Uses: "flow",
 		Lede: "find",
 	}
 }
@@ -260,6 +276,7 @@ type ListGather struct {
 func (*ListGather) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_gather",
+		Uses: "flow",
 		Lede: "gather",
 	}
 }
@@ -274,6 +291,7 @@ var _ rt.NumberEval = (*ListLen)(nil)
 func (*ListLen) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_len",
+		Uses: "flow",
 		Lede: "len",
 	}
 }
@@ -290,6 +308,7 @@ var _ rt.Execute = (*ListMap)(nil)
 func (*ListMap) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_map",
+		Uses: "flow",
 		Lede: "map",
 	}
 }
@@ -306,6 +325,7 @@ var _ rt.Execute = (*ListReduce)(nil)
 func (*ListReduce) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_reduce",
+		Uses: "flow",
 		Lede: "reduce",
 	}
 }
@@ -320,6 +340,7 @@ var _ rt.Execute = (*ListReverse)(nil)
 func (*ListReverse) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_reverse",
+		Uses: "flow",
 		Lede: "reverse",
 	}
 }
@@ -336,6 +357,7 @@ var _ rt.Execute = (*ListSet)(nil)
 func (*ListSet) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_set",
+		Uses: "flow",
 		Lede: "set",
 	}
 }
@@ -354,6 +376,7 @@ var _ rt.RecordListEval = (*ListSlice)(nil)
 func (*ListSlice) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_slice",
+		Uses: "flow",
 		Lede: "slice",
 	}
 }
@@ -361,7 +384,7 @@ func (*ListSlice) Compose() composer.Spec {
 // ListSortNumbers
 type ListSortNumbers struct {
 	Var        value.VariableName `if:"label=_"`
-	ByField    string             `if:"label=by_field"`
+	ByField    string             `if:"label=by_field,type=string"`
 	Descending rt.BoolEval        `if:"label=descending,optional"`
 }
 
@@ -370,6 +393,7 @@ var _ rt.Execute = (*ListSortNumbers)(nil)
 func (*ListSortNumbers) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_sort_numbers",
+		Uses: "flow",
 		Lede: "sort",
 	}
 }
@@ -377,7 +401,7 @@ func (*ListSortNumbers) Compose() composer.Spec {
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortText struct {
 	Var        value.VariableName `if:"label=_"`
-	ByField    string             `if:"label=by_field"`
+	ByField    string             `if:"label=by_field,type=string"`
 	Descending rt.BoolEval        `if:"label=descending,optional"`
 	UsingCase  rt.BoolEval        `if:"label=using_case,optional"`
 }
@@ -387,6 +411,7 @@ var _ rt.Execute = (*ListSortText)(nil)
 func (*ListSortText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_sort_text",
+		Uses: "flow",
 		Lede: "sort",
 	}
 }
@@ -402,6 +427,7 @@ var _ rt.Execute = (*ListSortUsing)(nil)
 func (*ListSortUsing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_sort_using",
+		Uses: "flow",
 		Lede: "sort",
 	}
 }
@@ -422,6 +448,7 @@ var _ rt.RecordListEval = (*ListSplice)(nil)
 func (*ListSplice) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_splice",
+		Uses: "flow",
 		Lede: "splice",
 	}
 }
@@ -438,6 +465,7 @@ var _ rt.Execute = (*PutEdge)(nil)
 func (*PutEdge) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "put_edge",
+		Uses: "flow",
 		Lede: "put",
 	}
 }
@@ -454,6 +482,7 @@ var _ rt.Execute = (*PutIndex)(nil)
 func (*PutIndex) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "put_index",
+		Uses: "flow",
 		Lede: "put",
 	}
 }
@@ -470,6 +499,7 @@ var _ rt.NumListEval = (*Range)(nil)
 func (*Range) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "range",
+		Uses: "flow",
 	}
 }
 

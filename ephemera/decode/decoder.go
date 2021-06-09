@@ -190,8 +190,9 @@ func (dec *Decoder) importValue(outAt r.Value, inVal interface{}) (err error) {
 	case r.Struct:
 		// b/c of the way optional values are specified,
 		// going from r.Struct is easier than from r.Ptr.
-		switch spec := outAt.Addr().Interface().(type) {
-		case StrType:
+		c := outAt.Addr().Interface().(composer.Composer)
+		switch spec := c.Compose(); spec.Uses {
+		case "str":
 			if e := dec.unpack(inVal, func(p reader.Map, v interface{}) (err error) {
 				if str, ok := v.(string); !ok {
 					err = errutil.Fmt("expected string, got %T(%v)", v, v)
@@ -206,7 +207,7 @@ func (dec *Decoder) importValue(outAt r.Value, inVal interface{}) (err error) {
 				err = e
 			}
 
-		case NumType:
+		case "num":
 			if e := dec.unpack(inVal, func(p reader.Map, v interface{}) (err error) {
 				if num, ok := v.(float64); !ok {
 					err = errutil.Fmt("expected float, got %T(%v)", v, v)
@@ -222,13 +223,13 @@ func (dec *Decoder) importValue(outAt r.Value, inVal interface{}) (err error) {
 				err = e
 			}
 
-		case SwapType:
+		case "swap":
 			if e := dec.unpack(inVal, func(p reader.Map, v interface{}) (err error) {
 				if data, ok := v.(map[string]interface{}); !ok {
 					err = errutil.Fmt("expected swap, got %T(%v)", v, v)
 				} else {
 					found := false
-					for k, typePtr := range spec.Choices() {
+					for k, typePtr := range c.(swapType).Choices() {
 						token := "$" + strings.ToUpper(k)
 						if contents, ok := data[token]; ok {
 							ptr := r.New(r.TypeOf(typePtr).Elem())

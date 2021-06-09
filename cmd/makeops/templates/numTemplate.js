@@ -4,11 +4,5 @@ module.exports =
 `// {{Pascal name}} requires a user-specified number.
 type {{Pascal name}} float64
 
-func (*{{Pascal name}}) Choices()  []float64 {
-    return []float64{
-    {{#each (Choices @this)~}}"{{this}}",{{/each}}
-  }
-}
-
 {{>spec spec=this}}
 `;

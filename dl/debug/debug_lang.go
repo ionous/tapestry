@@ -18,6 +18,7 @@ var _ rt.Execute = (*DebugLog)(nil)
 func (*DebugLog) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "debug_log",
+		Uses: "flow",
 		Lede: "log",
 	}
 }
@@ -32,6 +33,7 @@ var _ rt.Execute = (*DoNothing)(nil)
 func (*DoNothing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "do_nothing",
+		Uses: "flow",
 	}
 }
 
@@ -54,15 +56,13 @@ const LoggingLevel_Info = "$INFO"
 const LoggingLevel_Warning = "$WARNING"
 const LoggingLevel_Error = "$ERROR"
 
-func (*LoggingLevel) Choices() (choices map[string]string) {
-	return map[string]string{
-		LoggingLevel_Note: "note", LoggingLevel_ToDo: "to_do", LoggingLevel_Fix: "fix", LoggingLevel_Info: "info", LoggingLevel_Warning: "warning", LoggingLevel_Error: "error",
-	}
-}
-
 func (*LoggingLevel) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "logging_level",
+		Uses: "str",
+		Choices: []string{
+			LoggingLevel_Note, LoggingLevel_ToDo, LoggingLevel_Fix, LoggingLevel_Info, LoggingLevel_Warning, LoggingLevel_Error,
+		},
 		Strings: []string{
 			"note", "to_do", "fix", "info", "warning", "error",
 		},
@@ -72,4 +72,5 @@ func (*LoggingLevel) Compose() composer.Spec {
 var Slats = []composer.Composer{
 	(*DebugLog)(nil),
 	(*DoNothing)(nil),
+	(*LoggingLevel)(nil),
 }

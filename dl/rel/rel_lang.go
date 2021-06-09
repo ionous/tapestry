@@ -18,6 +18,7 @@ var _ rt.TextEval = (*ReciprocalOf)(nil)
 func (*ReciprocalOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "reciprocal_of",
+		Uses: "flow",
 		Lede: "reciprocal",
 	}
 }
@@ -33,6 +34,7 @@ var _ rt.TextListEval = (*ReciprocalsOf)(nil)
 func (*ReciprocalsOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "reciprocals_of",
+		Uses: "flow",
 		Lede: "reciprocals",
 	}
 }
@@ -49,6 +51,7 @@ var _ rt.Execute = (*Relate)(nil)
 func (*Relate) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "relate",
+		Uses: "flow",
 	}
 }
 
@@ -63,6 +66,7 @@ var _ rt.TextEval = (*RelativeOf)(nil)
 func (*RelativeOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "relative_of",
+		Uses: "flow",
 		Lede: "relative",
 	}
 }
@@ -78,6 +82,7 @@ var _ rt.TextListEval = (*RelativesOf)(nil)
 func (*RelativesOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "relatives_of",
+		Uses: "flow",
 		Lede: "relatives",
 	}
 }

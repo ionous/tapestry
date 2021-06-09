@@ -8,43 +8,44 @@ type Slot struct {
 	Group string // display group(s)
 }
 
-// Spec definition for display in composer.
-type Spec struct {
-	Name, Spec, Group, Desc string
-	Lede                    string // for protobuffer trials
-	Slots                   []string
-	OpenStrings             bool     // for str types, whether any value is permitted
-	Strings                 []string // values for str types, generates tokens, labels, and selectors.
-	Stub                    bool     // generate a custom loading struct.
-	Locals                  []string
-	Fluent                  *Fluid
-}
-
-func (x *Spec) UsesStr() bool {
-	return x.OpenStrings || len(x.Strings) > 0
-}
-
 type Composer interface {
 	Compose() Spec
 }
 
-// for highlighting info
-// while this could be determined algorithmically, it would be a bunch of extra code
-type Role int
+// Spec definition for display in composer.
+type Spec struct {
+	Name        string
+	Uses        string
+	Lede        string   // indicates a fluent style command
+	OpenStrings bool     // for str types, whether any value is permitted
+	Strings     []string // values for str types, generates tokens, labels, and selectors.
+	Choices     []string
+}
 
-//go:generate stringer -type=Role
-const (
-	// a top-level function, basically execute
-	Command Role = iota + 1
-	// a non-top level command, basically any eval
-	Function
-	// commands that fill interfaces only in a small set of cases
-	// example. the elseIf in an if.
-	Selector
-)
+func (spec *Spec) UsesStr() bool {
+	return spec.OpenStrings || len(spec.Strings) > 0
+}
 
-// Fluid provide extra info for displaying fluent commands.
-type Fluid struct {
-	Name string // if empty, use the type name
-	Role Role
+func (spec *Spec) FindChoice(choice string) (ret string, okay bool) {
+	if choice[0] != '$' {
+		if spec.OpenStrings {
+			ret = choice
+			okay = true
+		}
+	} else if s, i := spec.IndexOfChoice(choice); i >= 0 {
+		ret = s
+		okay = true
+	}
+	return
+}
+
+func (spec *Spec) IndexOfChoice(choice string) (retStr string, retInd int) {
+	retInd = -1 // provisionally
+	for i, c := range spec.Choices {
+		if c == choice {
+			retStr, retInd = spec.Strings[i], i
+			break
+		}
+	}
+	return
 }
