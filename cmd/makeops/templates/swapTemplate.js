@@ -10,11 +10,8 @@ type {{Pascal name}} struct {
 
 {{>spec spec=this}}
 
-func (*{{Pascal name}}) Choices() map[string]interface{} {
-  return map[string]interface{} {
 {{#each with.params}}
-    "{{Lower @key}}": (*{{TypeOf this}})(nil),
+const {{Pascal ../name}}_{{Pascal @key}}= "{{@key}}";
 {{/each}}
-  }
-}
+
 `;

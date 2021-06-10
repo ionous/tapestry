@@ -12,8 +12,6 @@ type DebugLog struct {
 	LogLevel LoggingLevel  `if:"label=as,optional"`
 }
 
-var _ rt.Execute = (*DebugLog)(nil)
-
 func (*DebugLog) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "debug_log",
@@ -22,12 +20,12 @@ func (*DebugLog) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*DebugLog)(nil)
+
 // DoNothing Statement which does nothing.
 type DoNothing struct {
 	Reason string `if:"label=why,optional,type=text"`
 }
-
-var _ rt.Execute = (*DoNothing)(nil)
 
 func (*DoNothing) Compose() composer.Spec {
 	return composer.Spec{
@@ -35,6 +33,8 @@ func (*DoNothing) Compose() composer.Spec {
 		Uses: "flow",
 	}
 }
+
+var _ rt.Execute = (*DoNothing)(nil)
 
 // LoggingLevel requires a user-specified string.
 type LoggingLevel struct {

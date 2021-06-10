@@ -10,8 +10,8 @@ type {{Pascal name}} struct {
   {{~#if (Override this)}},type={{Override this}}{{/if}}"\`
 {{/each}}
 }
+{{>spec spec=this}}
 {{#each this.with.slots}}
 var _ {{ScopedNameOf this}} = (*{{Pascal ../name}})(nil)
 {{/each}}
-{{>spec spec=this}}
 `;

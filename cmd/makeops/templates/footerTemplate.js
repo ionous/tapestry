@@ -2,7 +2,7 @@
 'use strict';
 module.exports =
 `var Slots = []composer.Slot{
-{{~#each allTypes}}{{#if (IsSlot name)}}
+{{~#each allTypes}}{{#if (Uses "slot")}}
   {
     Name: "{{name}}",
     Type: (*{{Pascal name}})(nil),

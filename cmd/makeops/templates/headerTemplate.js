@@ -5,6 +5,10 @@ module.exports =
 package {{package}}
 
 import (
+{{#if (Marshal)}}
+  "encoding/json"
+
+{{/if}}
 {{#each imports}}
   "{{LocationOf this}}"
 {{/each}}

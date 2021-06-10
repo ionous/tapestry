@@ -13,8 +13,6 @@ type RenderExp struct {
 	Expression rt.TextEval `if:"label=_"`
 }
 
-var _ rt.TextEval = (*RenderExp)(nil)
-
 func (*RenderExp) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_exp",
@@ -22,12 +20,12 @@ func (*RenderExp) Compose() composer.Spec {
 	}
 }
 
+var _ rt.TextEval = (*RenderExp)(nil)
+
 // RenderField in template phrases, picks between record variables, object variables, and named global objects.,ex. could be &quot;ringBearer&quot;, &quot;SamWise&quot;, or &quot;frodo&quot;
 type RenderField struct {
 	Name rt.TextEval `if:"label=_"`
 }
-
-var _ core.FromSourceFields = (*RenderField)(nil)
 
 func (*RenderField) Compose() composer.Spec {
 	return composer.Spec{
@@ -35,6 +33,8 @@ func (*RenderField) Compose() composer.Spec {
 		Uses: "flow",
 	}
 }
+
+var _ core.FromSourceFields = (*RenderField)(nil)
 
 // RenderFlags requires a user-specified string.
 type RenderFlags struct {
@@ -67,8 +67,6 @@ type RenderName struct {
 	Name string `if:"label=_,type=text"`
 }
 
-var _ rt.TextEval = (*RenderName)(nil)
-
 func (*RenderName) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "render_name",
@@ -76,14 +74,13 @@ func (*RenderName) Compose() composer.Spec {
 	}
 }
 
+var _ rt.TextEval = (*RenderName)(nil)
+
 // RenderPattern printing is generally an activity b/c say is an activity,and we want the ability to say several things in series.
 type RenderPattern struct {
 	Pattern   value.PatternName `if:"label=_"`
 	Arguments core.CallArgs     `if:"label=args"`
 }
-
-var _ rt.Assignment = (*RenderPattern)(nil)
-var _ rt.TextEval = (*RenderPattern)(nil)
 
 func (*RenderPattern) Compose() composer.Spec {
 	return composer.Spec{
@@ -93,15 +90,14 @@ func (*RenderPattern) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Assignment = (*RenderPattern)(nil)
+var _ rt.TextEval = (*RenderPattern)(nil)
+
 // RenderRef returns the value of a variable or the id of an object.
 type RenderRef struct {
 	Name  value.VariableName `if:"label=_"`
 	Flags RenderFlags        `if:"label=flags"`
 }
-
-var _ rt.Assignment = (*RenderRef)(nil)
-var _ rt.NumberEval = (*RenderRef)(nil)
-var _ rt.TextEval = (*RenderRef)(nil)
 
 func (*RenderRef) Compose() composer.Spec {
 	return composer.Spec{
@@ -110,6 +106,9 @@ func (*RenderRef) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Assignment = (*RenderRef)(nil)
+var _ rt.NumberEval = (*RenderRef)(nil)
+var _ rt.TextEval = (*RenderRef)(nil)
 var Slats = []composer.Composer{
 	(*RenderExp)(nil),
 	(*RenderField)(nil),

@@ -13,8 +13,6 @@ type AsNum struct {
 	Var value.VariableName `if:"label=_"`
 }
 
-var _ ListIterator = (*AsNum)(nil)
-
 func (*AsNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "as_num",
@@ -23,12 +21,12 @@ func (*AsNum) Compose() composer.Spec {
 	}
 }
 
+var _ ListIterator = (*AsNum)(nil)
+
 // AsRec Define the name of a record variable.
 type AsRec struct {
 	Var value.VariableName `if:"label=_"`
 }
-
-var _ ListIterator = (*AsRec)(nil)
 
 func (*AsRec) Compose() composer.Spec {
 	return composer.Spec{
@@ -38,12 +36,12 @@ func (*AsRec) Compose() composer.Spec {
 	}
 }
 
+var _ ListIterator = (*AsRec)(nil)
+
 // AsTxt Define the name of a text variable.
 type AsTxt struct {
 	Var value.VariableName `if:"label=_"`
 }
-
-var _ ListIterator = (*AsTxt)(nil)
 
 func (*AsTxt) Compose() composer.Spec {
 	return composer.Spec{
@@ -53,13 +51,13 @@ func (*AsTxt) Compose() composer.Spec {
 	}
 }
 
+var _ ListIterator = (*AsTxt)(nil)
+
 // EraseEdge Erase at edge: Remove one or more values from a list
 type EraseEdge struct {
 	From   ListSource  `if:"label=_"`
 	AtEdge rt.BoolEval `if:"label=at_front,optional"`
 }
-
-var _ rt.Execute = (*EraseEdge)(nil)
 
 func (*EraseEdge) Compose() composer.Spec {
 	return composer.Spec{
@@ -69,14 +67,14 @@ func (*EraseEdge) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*EraseEdge)(nil)
+
 // EraseIndex Erase at index: Remove one or more values from a list
 type EraseIndex struct {
 	Count   rt.NumberEval `if:"label=_"`
 	From    ListSource    `if:"label=from"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
 }
-
-var _ rt.Execute = (*EraseIndex)(nil)
 
 func (*EraseIndex) Compose() composer.Spec {
 	return composer.Spec{
@@ -85,6 +83,8 @@ func (*EraseIndex) Compose() composer.Spec {
 		Lede: "erase",
 	}
 }
+
+var _ rt.Execute = (*EraseIndex)(nil)
 
 // Erasing Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type Erasing struct {
@@ -95,14 +95,14 @@ type Erasing struct {
 	Do      core.Activity `if:"label=do"`
 }
 
-var _ rt.Execute = (*Erasing)(nil)
-
 func (*Erasing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erasing",
 		Uses: "flow",
 	}
 }
+
+var _ rt.Execute = (*Erasing)(nil)
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type ErasingEdge struct {
@@ -113,8 +113,6 @@ type ErasingEdge struct {
 	Else   core.Brancher `if:"label=else,optional"`
 }
 
-var _ rt.Execute = (*ErasingEdge)(nil)
-
 func (*ErasingEdge) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "erasing_edge",
@@ -123,12 +121,12 @@ func (*ErasingEdge) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ErasingEdge)(nil)
+
 // FromNumList Uses a list of numbers
 type FromNumList struct {
 	Var value.VariableName `if:"label=_"`
 }
-
-var _ ListSource = (*FromNumList)(nil)
 
 func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
@@ -138,12 +136,12 @@ func (*FromNumList) Compose() composer.Spec {
 	}
 }
 
+var _ ListSource = (*FromNumList)(nil)
+
 // FromRecList Uses a list of records
 type FromRecList struct {
 	Var value.VariableName `if:"label=_"`
 }
-
-var _ ListSource = (*FromRecList)(nil)
 
 func (*FromRecList) Compose() composer.Spec {
 	return composer.Spec{
@@ -153,12 +151,12 @@ func (*FromRecList) Compose() composer.Spec {
 	}
 }
 
+var _ ListSource = (*FromRecList)(nil)
+
 // FromTxtList Uses a list of text
 type FromTxtList struct {
 	Var value.VariableName `if:"label=_"`
 }
-
-var _ ListSource = (*FromTxtList)(nil)
 
 func (*FromTxtList) Compose() composer.Spec {
 	return composer.Spec{
@@ -168,12 +166,12 @@ func (*FromTxtList) Compose() composer.Spec {
 	}
 }
 
+var _ ListSource = (*FromTxtList)(nil)
+
 // IntoNumList Targets a list of numbers
 type IntoNumList struct {
 	Var value.VariableName `if:"label=_"`
 }
-
-var _ ListTarget = (*IntoNumList)(nil)
 
 func (*IntoNumList) Compose() composer.Spec {
 	return composer.Spec{
@@ -183,12 +181,12 @@ func (*IntoNumList) Compose() composer.Spec {
 	}
 }
 
+var _ ListTarget = (*IntoNumList)(nil)
+
 // IntoRecList Targets a list of records
 type IntoRecList struct {
 	Var value.VariableName `if:"label=_"`
 }
-
-var _ ListTarget = (*IntoRecList)(nil)
 
 func (*IntoRecList) Compose() composer.Spec {
 	return composer.Spec{
@@ -198,12 +196,12 @@ func (*IntoRecList) Compose() composer.Spec {
 	}
 }
 
+var _ ListTarget = (*IntoRecList)(nil)
+
 // IntoTxtList Targets a list of text
 type IntoTxtList struct {
 	Var value.VariableName `if:"label=_"`
 }
-
-var _ ListTarget = (*IntoTxtList)(nil)
 
 func (*IntoTxtList) Compose() composer.Spec {
 	return composer.Spec{
@@ -213,15 +211,13 @@ func (*IntoTxtList) Compose() composer.Spec {
 	}
 }
 
+var _ ListTarget = (*IntoTxtList)(nil)
+
 // ListAt Get a value from a list. The first element is is index 1.
 type ListAt struct {
 	List  rt.Assignment `if:"label=_"`
 	Index rt.NumberEval `if:"label=index"`
 }
-
-var _ rt.NumberEval = (*ListAt)(nil)
-var _ rt.TextEval = (*ListAt)(nil)
-var _ rt.RecordEval = (*ListAt)(nil)
 
 func (*ListAt) Compose() composer.Spec {
 	return composer.Spec{
@@ -231,6 +227,10 @@ func (*ListAt) Compose() composer.Spec {
 	}
 }
 
+var _ rt.NumberEval = (*ListAt)(nil)
+var _ rt.TextEval = (*ListAt)(nil)
+var _ rt.RecordEval = (*ListAt)(nil)
+
 // ListEach Loops over the elements in the passed list, or runs the &#x27;else&#x27; activity if empty.
 type ListEach struct {
 	List rt.Assignment `if:"label=across"`
@@ -238,8 +238,6 @@ type ListEach struct {
 	Do   core.Activity `if:"label=do"`
 	Else core.Brancher `if:"label=else,optional"`
 }
-
-var _ rt.Execute = (*ListEach)(nil)
 
 func (*ListEach) Compose() composer.Spec {
 	return composer.Spec{
@@ -249,14 +247,13 @@ func (*ListEach) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ListEach)(nil)
+
 // ListFind Search a list for a specific value.
 type ListFind struct {
 	Value rt.Assignment `if:"label=_"`
 	List  rt.Assignment `if:"label=list"`
 }
-
-var _ rt.BoolEval = (*ListFind)(nil)
-var _ rt.NumberEval = (*ListFind)(nil)
 
 func (*ListFind) Compose() composer.Spec {
 	return composer.Spec{
@@ -265,6 +262,9 @@ func (*ListFind) Compose() composer.Spec {
 		Lede: "find",
 	}
 }
+
+var _ rt.BoolEval = (*ListFind)(nil)
+var _ rt.NumberEval = (*ListFind)(nil)
 
 // ListGather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: &#x27;in&#x27; as each value from the list, and &#x27;out&#x27; as the var passed to the gather.
 type ListGather struct {
@@ -286,8 +286,6 @@ type ListLen struct {
 	List rt.Assignment `if:"label=_"`
 }
 
-var _ rt.NumberEval = (*ListLen)(nil)
-
 func (*ListLen) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "list_len",
@@ -296,14 +294,14 @@ func (*ListLen) Compose() composer.Spec {
 	}
 }
 
+var _ rt.NumberEval = (*ListLen)(nil)
+
 // ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the &#x27;from list&#x27;, one value at a time.
 type ListMap struct {
 	ToList       string        `if:"label=_,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
 	UsingPattern string        `if:"label=using,type=text"`
 }
-
-var _ rt.Execute = (*ListMap)(nil)
 
 func (*ListMap) Compose() composer.Spec {
 	return composer.Spec{
@@ -313,14 +311,14 @@ func (*ListMap) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ListMap)(nil)
+
 // ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: &#x27;in&#x27; ( each element of the list ) and &#x27;out&#x27; ( ex. a record ).
 type ListReduce struct {
 	IntoValue    string        `if:"label=into,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
 	UsingPattern string        `if:"label=using,type=text"`
 }
-
-var _ rt.Execute = (*ListReduce)(nil)
 
 func (*ListReduce) Compose() composer.Spec {
 	return composer.Spec{
@@ -330,12 +328,12 @@ func (*ListReduce) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ListReduce)(nil)
+
 // ListReverse Reverse a list.
 type ListReverse struct {
 	List ListSource `if:"label=_"`
 }
-
-var _ rt.Execute = (*ListReverse)(nil)
 
 func (*ListReverse) Compose() composer.Spec {
 	return composer.Spec{
@@ -345,14 +343,14 @@ func (*ListReverse) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ListReverse)(nil)
+
 // ListSet Overwrite an existing value in a list.
 type ListSet struct {
 	List  string        `if:"label=_,type=text"`
 	Index rt.NumberEval `if:"label=index"`
 	From  rt.Assignment `if:"label=from"`
 }
-
-var _ rt.Execute = (*ListSet)(nil)
 
 func (*ListSet) Compose() composer.Spec {
 	return composer.Spec{
@@ -362,16 +360,14 @@ func (*ListSet) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ListSet)(nil)
+
 // ListSlice Create a new list from a section of another list.,Start is optional, if omitted slice starts at the first element.,If start is greater the length, an empty array is returned.,Slice doesnt include the ending index.,Negatives indices indicates an offset from the end.,When end is omitted, copy up to and including the last element;,and do the same if the end is greater than the length
 type ListSlice struct {
 	List  rt.Assignment `if:"label=_"`
 	Start rt.NumberEval `if:"label=start,optional"`
 	End   rt.NumberEval `if:"label=end,optional"`
 }
-
-var _ rt.NumListEval = (*ListSlice)(nil)
-var _ rt.TextListEval = (*ListSlice)(nil)
-var _ rt.RecordListEval = (*ListSlice)(nil)
 
 func (*ListSlice) Compose() composer.Spec {
 	return composer.Spec{
@@ -381,14 +377,16 @@ func (*ListSlice) Compose() composer.Spec {
 	}
 }
 
+var _ rt.NumListEval = (*ListSlice)(nil)
+var _ rt.TextListEval = (*ListSlice)(nil)
+var _ rt.RecordListEval = (*ListSlice)(nil)
+
 // ListSortNumbers
 type ListSortNumbers struct {
 	Var        value.VariableName `if:"label=_"`
 	ByField    string             `if:"label=by_field,type=text"`
 	Descending rt.BoolEval        `if:"label=descending,optional"`
 }
-
-var _ rt.Execute = (*ListSortNumbers)(nil)
 
 func (*ListSortNumbers) Compose() composer.Spec {
 	return composer.Spec{
@@ -398,6 +396,8 @@ func (*ListSortNumbers) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ListSortNumbers)(nil)
+
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortText struct {
 	Var        value.VariableName `if:"label=_"`
@@ -405,8 +405,6 @@ type ListSortText struct {
 	Descending rt.BoolEval        `if:"label=descending,optional"`
 	UsingCase  rt.BoolEval        `if:"label=using_case,optional"`
 }
-
-var _ rt.Execute = (*ListSortText)(nil)
 
 func (*ListSortText) Compose() composer.Spec {
 	return composer.Spec{
@@ -416,13 +414,13 @@ func (*ListSortText) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ListSortText)(nil)
+
 // ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortUsing struct {
 	Var   value.VariableName `if:"label=_"`
 	Using string             `if:"label=using,type=text"`
 }
-
-var _ rt.Execute = (*ListSortUsing)(nil)
 
 func (*ListSortUsing) Compose() composer.Spec {
 	return composer.Spec{
@@ -432,6 +430,8 @@ func (*ListSortUsing) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ListSortUsing)(nil)
+
 // ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
 type ListSplice struct {
 	List   string        `if:"label=_,type=text"`
@@ -439,11 +439,6 @@ type ListSplice struct {
 	Remove rt.NumberEval `if:"label=remove"`
 	Insert rt.Assignment `if:"label=insert"`
 }
-
-var _ rt.Execute = (*ListSplice)(nil)
-var _ rt.NumListEval = (*ListSplice)(nil)
-var _ rt.TextListEval = (*ListSplice)(nil)
-var _ rt.RecordListEval = (*ListSplice)(nil)
 
 func (*ListSplice) Compose() composer.Spec {
 	return composer.Spec{
@@ -453,14 +448,17 @@ func (*ListSplice) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*ListSplice)(nil)
+var _ rt.NumListEval = (*ListSplice)(nil)
+var _ rt.TextListEval = (*ListSplice)(nil)
+var _ rt.RecordListEval = (*ListSplice)(nil)
+
 // PutEdge Add a value to a list
 type PutEdge struct {
 	From   rt.Assignment `if:"label=_"`
 	Into   ListTarget    `if:"label=into"`
 	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
 }
-
-var _ rt.Execute = (*PutEdge)(nil)
 
 func (*PutEdge) Compose() composer.Spec {
 	return composer.Spec{
@@ -470,14 +468,14 @@ func (*PutEdge) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*PutEdge)(nil)
+
 // PutIndex Replace one value in a list with another
 type PutIndex struct {
 	From    rt.Assignment `if:"label=_"`
 	Into    ListTarget    `if:"label=into"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
 }
-
-var _ rt.Execute = (*PutIndex)(nil)
 
 func (*PutIndex) Compose() composer.Spec {
 	return composer.Spec{
@@ -487,14 +485,14 @@ func (*PutIndex) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*PutIndex)(nil)
+
 // Range Generates a series of numbers r[i] &#x3D; (start + step*i) where i&gt;&#x3D;0.,Start and step default to 1, stop defaults to start;,the inputs are truncated to produce whole numbers;,a zero step returns an error.,A positive step ends the series when the returned value would exceed stop,while a negative step ends before generating a value less than stop.
 type Range struct {
 	To     rt.NumberEval `if:"label=_"`
 	From   rt.NumberEval `if:"label=from,optional"`
 	ByStep rt.NumberEval `if:"label=by_step,optional"`
 }
-
-var _ rt.NumListEval = (*Range)(nil)
 
 func (*Range) Compose() composer.Spec {
 	return composer.Spec{
@@ -503,6 +501,7 @@ func (*Range) Compose() composer.Spec {
 	}
 }
 
+var _ rt.NumListEval = (*Range)(nil)
 var Slots = []interface{}{
 	(*ListIterator)(nil),
 	(*ListSource)(nil),

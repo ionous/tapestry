@@ -2,7 +2,6 @@ package decode
 
 import (
 	r "reflect"
-	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
@@ -229,9 +228,9 @@ func (dec *Decoder) importValue(outAt r.Value, inVal interface{}) (err error) {
 					err = errutil.Fmt("expected swap, got %T(%v)", v, v)
 				} else {
 					found := false
-					for k, typePtr := range c.(swapType).Choices() {
-						token := "$" + strings.ToUpper(k)
+					for i, token := range spec.Choices {
 						if contents, ok := data[token]; ok {
+							typePtr := spec.Swaps[i]
 							ptr := r.New(r.TypeOf(typePtr).Elem())
 							if e := dec.importValue(ptr.Elem(), contents); e != nil {
 								err = e

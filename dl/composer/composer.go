@@ -20,6 +20,7 @@ type Spec struct {
 	OpenStrings bool     // for str types, whether any value is permitted
 	Strings     []string // values for str types, generates tokens, labels, and selectors.
 	Choices     []string
+	Swaps       []interface{}
 }
 
 func (spec *Spec) UsesStr() bool {

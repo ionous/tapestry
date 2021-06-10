@@ -13,8 +13,6 @@ type ReciprocalOf struct {
 	Object rt.TextEval        `if:"label=object"`
 }
 
-var _ rt.TextEval = (*ReciprocalOf)(nil)
-
 func (*ReciprocalOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "reciprocal_of",
@@ -23,13 +21,13 @@ func (*ReciprocalOf) Compose() composer.Spec {
 	}
 }
 
+var _ rt.TextEval = (*ReciprocalOf)(nil)
+
 // ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)
 type ReciprocalsOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
 }
-
-var _ rt.TextListEval = (*ReciprocalsOf)(nil)
 
 func (*ReciprocalsOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -39,14 +37,14 @@ func (*ReciprocalsOf) Compose() composer.Spec {
 	}
 }
 
+var _ rt.TextListEval = (*ReciprocalsOf)(nil)
+
 // Relate Relate two nouns.
 type Relate struct {
 	Object   rt.TextEval        `if:"label=_"`
 	ToObject rt.TextEval        `if:"label=to"`
 	Via      value.RelationName `if:"label=via"`
 }
-
-var _ rt.Execute = (*Relate)(nil)
 
 func (*Relate) Compose() composer.Spec {
 	return composer.Spec{
@@ -55,13 +53,13 @@ func (*Relate) Compose() composer.Spec {
 	}
 }
 
+var _ rt.Execute = (*Relate)(nil)
+
 // RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.)
 type RelativeOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
 }
-
-var _ rt.TextEval = (*RelativeOf)(nil)
 
 func (*RelativeOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -71,13 +69,13 @@ func (*RelativeOf) Compose() composer.Spec {
 	}
 }
 
+var _ rt.TextEval = (*RelativeOf)(nil)
+
 // RelativesOf Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
 type RelativesOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
 }
-
-var _ rt.TextListEval = (*RelativesOf)(nil)
 
 func (*RelativesOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -87,6 +85,7 @@ func (*RelativesOf) Compose() composer.Spec {
 	}
 }
 
+var _ rt.TextListEval = (*RelativesOf)(nil)
 var Slats = []composer.Composer{
 	(*ReciprocalOf)(nil),
 	(*ReciprocalsOf)(nil),

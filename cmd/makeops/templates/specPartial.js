@@ -7,7 +7,7 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
 {{#if (LedeName this)}}
     Lede: "{{LedeName this}}",
 {{/if}}
-{{#if (IsStr name)}}
+{{#if (Uses name "str")}}
 {{#unless (IsClosed this)}}
     OpenStrings: true,
 {{/unless}}
@@ -19,6 +19,16 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
       {{#each (Choices @this)~}}"{{this.value}}",{{#unless @last}} {{/unless}}{{/each}}
     },
 {{/if}}
+{{/if}}
+{{#if (Uses name "swap")}}
+    Choices: []string {
+      {{#each (Swaps @this)~}}{{Pascal ../name}}_{{Pascal this.token}},{{#unless @last}} {{/unless}}{{/each}}
+     },
+    Swaps: []interface{} {
+{{#each with.params}}
+      (*{{TypeOf this}})(nil),
+{{/each}}
+    },
 {{/if}}
   }
 }

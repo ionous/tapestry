@@ -10,8 +10,6 @@ type Action struct {
 	Action string `if:"label=_,type=text"`
 }
 
-var _ ScannerMaker = (*Action)(nil)
-
 func (*Action) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "action",
@@ -20,13 +18,13 @@ func (*Action) Compose() composer.Spec {
 	}
 }
 
+var _ ScannerMaker = (*Action)(nil)
+
 // Alias allows the user to refer to a noun by one or more other terms.
 type Alias struct {
 	Names  []string `if:"label=_,type=text"`
 	AsNoun string   `if:"label=as_noun,type=text"`
 }
-
-var _ GrammarMaker = (*Alias)(nil)
 
 func (*Alias) Compose() composer.Spec {
 	return composer.Spec{
@@ -35,12 +33,12 @@ func (*Alias) Compose() composer.Spec {
 	}
 }
 
+var _ GrammarMaker = (*Alias)(nil)
+
 // AllOf makes a parser scanner
 type AllOf struct {
 	Series []ScannerMaker `if:"label=_"`
 }
-
-var _ ScannerMaker = (*AllOf)(nil)
 
 func (*AllOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -49,12 +47,12 @@ func (*AllOf) Compose() composer.Spec {
 	}
 }
 
+var _ ScannerMaker = (*AllOf)(nil)
+
 // AnyOf makes a parser scanner
 type AnyOf struct {
 	Options []ScannerMaker `if:"label=_"`
 }
-
-var _ ScannerMaker = (*AnyOf)(nil)
 
 func (*AnyOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -63,13 +61,13 @@ func (*AnyOf) Compose() composer.Spec {
 	}
 }
 
+var _ ScannerMaker = (*AnyOf)(nil)
+
 // Directive starts a parser scanner
 type Directive struct {
 	Lede  []string       `if:"label=_,type=text"`
 	Scans []ScannerMaker `if:"label=scans"`
 }
-
-var _ GrammarMaker = (*Directive)(nil)
 
 func (*Directive) Compose() composer.Spec {
 	return composer.Spec{
@@ -77,6 +75,8 @@ func (*Directive) Compose() composer.Spec {
 		Uses: "flow",
 	}
 }
+
+var _ GrammarMaker = (*Directive)(nil)
 
 // Grammar Read what the player types and turn it into actions.
 type Grammar struct {
@@ -95,8 +95,6 @@ type Noun struct {
 	Kind string `if:"label=_,type=text"`
 }
 
-var _ ScannerMaker = (*Noun)(nil)
-
 func (*Noun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun",
@@ -104,12 +102,12 @@ func (*Noun) Compose() composer.Spec {
 	}
 }
 
+var _ ScannerMaker = (*Noun)(nil)
+
 // Retarget makes a parser scanner
 type Retarget struct {
 	Span []ScannerMaker `if:"label=_"`
 }
-
-var _ ScannerMaker = (*Retarget)(nil)
 
 func (*Retarget) Compose() composer.Spec {
 	return composer.Spec{
@@ -118,12 +116,12 @@ func (*Retarget) Compose() composer.Spec {
 	}
 }
 
+var _ ScannerMaker = (*Retarget)(nil)
+
 // Reverse makes a parser scanner
 type Reverse struct {
 	Reverses []ScannerMaker `if:"label=_"`
 }
-
-var _ ScannerMaker = (*Reverse)(nil)
 
 func (*Reverse) Compose() composer.Spec {
 	return composer.Spec{
@@ -132,12 +130,12 @@ func (*Reverse) Compose() composer.Spec {
 	}
 }
 
+var _ ScannerMaker = (*Reverse)(nil)
+
 // Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
 type Self struct {
 	Player string `if:"label=_,type=text"`
 }
-
-var _ ScannerMaker = (*Self)(nil)
 
 func (*Self) Compose() composer.Spec {
 	return composer.Spec{
@@ -146,12 +144,12 @@ func (*Self) Compose() composer.Spec {
 	}
 }
 
+var _ ScannerMaker = (*Self)(nil)
+
 // Words makes a parser scanner
 type Words struct {
 	Words []string `if:"label=_,type=text"`
 }
-
-var _ ScannerMaker = (*Words)(nil)
 
 func (*Words) Compose() composer.Spec {
 	return composer.Spec{
@@ -160,6 +158,7 @@ func (*Words) Compose() composer.Spec {
 	}
 }
 
+var _ ScannerMaker = (*Words)(nil)
 var Slots = []interface{}{
 	(*GrammarMaker)(nil),
 	(*ScannerMaker)(nil),

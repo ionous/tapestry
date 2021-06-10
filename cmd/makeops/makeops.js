@@ -60,7 +60,9 @@ const groups = {};
 const nameToGroup = {};
 let currentGroup;
 let currentType;
+const marshalling= false;
 
+Handlebars.registerHelper('Marshal', ()=>marshalling);
 Handlebars.registerHelper('Pascal', pascal);
 Handlebars.registerHelper('Lower', lower);
 Handlebars.registerHelper('ParamsOf', paramsOf);
@@ -122,20 +124,14 @@ Handlebars.registerHelper('TypeOf', function(param) {
   return qualifier + scopedName(name);
 });
 
-// is the passed name a slot
-Handlebars.registerHelper('IsSlot', function(name) {
-  const { uses } = allTypes[name];
-  return uses === 'slot';
-});
-
 Handlebars.registerHelper('IsSlat', function(name) {
   const { uses } = allTypes[name];
   return uses !== 'slot' && uses !== 'group';
 });
 
-Handlebars.registerHelper('IsStr', function(name) {
+Handlebars.registerHelper('Uses', function(name, test) {
   const { uses } = allTypes[name];
-  return uses === 'str';
+  return uses === test;
 });
 
 Handlebars.registerHelper('IsInternal', function(label) {
@@ -149,6 +145,11 @@ Handlebars.registerHelper('IsClosed', function(strType) {
 
 // for uses='str'
 Handlebars.registerHelper('Choices', function(strType) {
+  const token = tokenize(strType.name);
+  return strChoices(token, strType);
+});
+// for uses='str'
+Handlebars.registerHelper('Swaps', function(strType) {
   const token = tokenize(strType.name);
   return strChoices(token, strType);
 });
