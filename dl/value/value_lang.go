@@ -2,6 +2,7 @@
 package value
 
 import (
+	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/reader"
 )
@@ -13,6 +14,13 @@ type Bool struct {
 
 func (op *Bool) String() (ret string) {
 	return op.Str
+}
+
+func (op *Bool) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "bool",
+		"value": op.Str,
+	})
 }
 
 const Bool_True = "$TRUE"
@@ -40,6 +48,13 @@ func (op *Lines) String() (ret string) {
 	return op.Str
 }
 
+func (op *Lines) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "lines",
+		"value": op.Str,
+	})
+}
+
 func (*Lines) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "lines",
@@ -49,7 +64,16 @@ func (*Lines) Compose() composer.Spec {
 }
 
 // Number requires a user-specified number.
-type Number float64
+type Number struct {
+	Value float64
+}
+
+func (op *Number) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "number",
+		"value": op.Value,
+	})
+}
 
 func (*Number) Compose() composer.Spec {
 	return composer.Spec{
@@ -66,6 +90,13 @@ type PatternName struct {
 
 func (op *PatternName) String() (ret string) {
 	return op.Str
+}
+
+func (op *PatternName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "pattern_name",
+		"value": op.Str,
+	})
 }
 
 func (*PatternName) Compose() composer.Spec {
@@ -86,6 +117,13 @@ func (op *RelationName) String() (ret string) {
 	return op.Str
 }
 
+func (op *RelationName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "relation_name",
+		"value": op.Str,
+	})
+}
+
 func (*RelationName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "relation_name",
@@ -101,6 +139,13 @@ type Text struct {
 
 func (op *Text) String() (ret string) {
 	return op.Str
+}
+
+func (op *Text) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "text",
+		"value": op.Str,
+	})
 }
 
 func (*Text) Compose() composer.Spec {
@@ -119,6 +164,13 @@ type VariableName struct {
 
 func (op *VariableName) String() (ret string) {
 	return op.Str
+}
+
+func (op *VariableName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "variable_name",
+		"value": op.Str,
+	})
 }
 
 func (*VariableName) Compose() composer.Spec {

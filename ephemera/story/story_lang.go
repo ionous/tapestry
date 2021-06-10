@@ -2,12 +2,14 @@
 package story
 
 import (
+	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/grammar"
 	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 // AbstractAction requires a user-specified string.
@@ -17,6 +19,13 @@ type AbstractAction struct {
 
 func (op *AbstractAction) String() (ret string) {
 	return op.Str
+}
+
+func (op *AbstractAction) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "abstract_action",
+		"value": op.Str,
+	})
 }
 
 const AbstractAction_Nothing = "$NOTHING"
@@ -47,6 +56,25 @@ func (*ActionContext) Compose() composer.Spec {
 	}
 }
 
+func (op *ActionContext) MarshalJSON() (ret []byte, err error) {
+	if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "action_context",
+			"value": map[string]json.RawMessage{
+				"$KIND": jsonKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *ActionContext) MarshalJSONKind() ([]byte, error) {
+	return op.Kind.MarshalJSON()
+}
+
 // ActionDecl
 type ActionDecl struct {
 	At           reader.Position `if:"internal"`
@@ -62,7 +90,38 @@ func (*ActionDecl) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*ActionDecl)(nil)
+func (op *ActionDecl) MarshalJSON() (ret []byte, err error) {
+	if jsonEvent, e := op.MarshalJSONEvent(); e != nil {
+		err = e
+	} else if jsonAction, e := op.MarshalJSONAction(); e != nil {
+		err = e
+	} else if jsonActionParams, e := op.MarshalJSONActionParams(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "action_decl",
+			"value": map[string]json.RawMessage{
+				"$EVENT":         jsonEvent,
+				"$ACTION":        jsonAction,
+				"$ACTION_PARAMS": jsonActionParams,
+			},
+		})
+	}
+	return
+}
+
+func (op *ActionDecl) MarshalJSONEvent() ([]byte, error) {
+	return op.Event.MarshalJSON()
+}
+
+func (op *ActionDecl) MarshalJSONAction() ([]byte, error) {
+	return op.Action.MarshalJSON()
+}
+
+func (op *ActionDecl) MarshalJSONActionParams() ([]byte, error) {
+	return op.ActionParams.MarshalJSON()
+}
 
 // ActionName requires a user-specified string.
 type ActionName struct {
@@ -72,6 +131,13 @@ type ActionName struct {
 
 func (op *ActionName) String() (ret string) {
 	return op.Str
+}
+
+func (op *ActionName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "action_name",
+		"value": op.Str,
+	})
 }
 
 func (*ActionName) Compose() composer.Spec {
@@ -86,6 +152,10 @@ func (*ActionName) Compose() composer.Spec {
 type ActionParams struct {
 	Opt interface{}
 }
+
+const ActionParams_Common = "$COMMON"
+const ActionParams_Dual = "$DUAL"
+const ActionParams_None = "$NONE"
 
 func (*ActionParams) Compose() composer.Spec {
 	return composer.Spec{
@@ -102,9 +172,44 @@ func (*ActionParams) Compose() composer.Spec {
 	}
 }
 
-const ActionParams_Common = "$COMMON"
-const ActionParams_Dual = "$DUAL"
-const ActionParams_None = "$NONE"
+func (op *ActionParams) MarshalJSON() (ret []byte, err error) {
+	if val, e := op.MarshalChoice(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "action_params",
+			"value": val,
+		})
+	}
+	return
+}
+
+func (op *ActionParams) MarshalChoice() (ret map[string]json.RawMessage, err error) {
+	if kid, e := json.Marshal(op.Opt); e != nil {
+		err = e
+	} else if pick, ok := op.GetChoice(); !ok {
+		err = errutil.Fmt("unknown choice %T in %T", op.Opt, op)
+	} else if len(pick) > 0 {
+		ret = map[string]json.RawMessage{
+			pick: kid,
+		}
+	}
+	return
+}
+
+func (op *ActionParams) GetChoice() (ret string, okay bool) {
+	switch op.Opt.(type) {
+	case nil:
+		okay = true
+	case *CommonAction:
+		ret, okay = ActionParams_Common, true
+	case *PairedAction:
+		ret, okay = ActionParams_Dual, true
+	case *AbstractAction:
+		ret, okay = ActionParams_None, true
+	}
+	return
+}
 
 // Ana requires a user-specified string.
 type Ana struct {
@@ -113,6 +218,13 @@ type Ana struct {
 
 func (op *Ana) String() (ret string) {
 	return op.Str
+}
+
+func (op *Ana) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "ana",
+		"value": op.Str,
+	})
 }
 
 const Ana_A = "$A"
@@ -138,6 +250,13 @@ type AreAn struct {
 
 func (op *AreAn) String() (ret string) {
 	return op.Str
+}
+
+func (op *AreAn) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "are_an",
+		"value": op.Str,
+	})
 }
 
 const AreAn_Are = "$ARE"
@@ -169,6 +288,13 @@ func (op *AreBeing) String() (ret string) {
 	return op.Str
 }
 
+func (op *AreBeing) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "are_being",
+		"value": op.Str,
+	})
+}
+
 const AreBeing_Are = "$ARE"
 const AreBeing_Is = "$IS"
 
@@ -192,6 +318,13 @@ type AreEither struct {
 
 func (op *AreEither) String() (ret string) {
 	return op.Str
+}
+
+func (op *AreEither) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "are_either",
+		"value": op.Str,
+	})
 }
 
 const AreEither_Canbe = "$CANBE"
@@ -225,6 +358,35 @@ func (*Argument) Compose() composer.Spec {
 	}
 }
 
+func (op *Argument) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "argument",
+			"value": map[string]json.RawMessage{
+				"$NAME": jsonName,
+				"$FROM": jsonFrom,
+			},
+		})
+	}
+	return
+}
+
+func (op *Argument) MarshalJSONName() ([]byte, error) {
+	// type override
+	m := value.Text{op.Name}
+	return m.MarshalJSON()
+}
+
+func (op *Argument) MarshalJSONFrom() ([]byte, error) {
+	m := op.From.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
 // Arguments
 type Arguments struct {
 	At   reader.Position `if:"internal"`
@@ -239,6 +401,25 @@ func (*Arguments) Compose() composer.Spec {
 	}
 }
 
+func (op *Arguments) MarshalJSON() (ret []byte, err error) {
+	if jsonArgs, e := op.MarshalJSONArgs(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "arguments",
+			"value": map[string]json.RawMessage{
+				"$ARGS": jsonArgs,
+			},
+		})
+	}
+	return
+}
+
+func (op *Arguments) MarshalJSONArgs() ([]byte, error) {
+	return json.Marshal(op.Args)
+}
+
 // Aspect requires a user-specified string.
 type Aspect struct {
 	At  reader.Position `if:"internal"`
@@ -247,6 +428,13 @@ type Aspect struct {
 
 func (op *Aspect) String() (ret string) {
 	return op.Str
+}
+
+func (op *Aspect) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "aspect",
+		"value": op.Str,
+	})
 }
 
 func (*Aspect) Compose() composer.Spec {
@@ -270,7 +458,30 @@ func (*AspectTraits) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*AspectTraits)(nil)
+func (op *AspectTraits) MarshalJSON() (ret []byte, err error) {
+	if jsonAspect, e := op.MarshalJSONAspect(); e != nil {
+		err = e
+	} else if jsonTraitPhrase, e := op.MarshalJSONTraitPhrase(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "aspect_traits",
+			"value": map[string]json.RawMessage{
+				"$ASPECT":       jsonAspect,
+				"$TRAIT_PHRASE": jsonTraitPhrase,
+			},
+		})
+	}
+	return
+}
+
+func (op *AspectTraits) MarshalJSONAspect() ([]byte, error) {
+	return op.Aspect.MarshalJSON()
+}
+
+func (op *AspectTraits) MarshalJSONTraitPhrase() ([]byte, error) {
+	return op.TraitPhrase.MarshalJSON()
+}
 
 // BoxedNumber
 type BoxedNumber struct {
@@ -284,6 +495,26 @@ func (*BoxedNumber) Compose() composer.Spec {
 	}
 }
 
+func (op *BoxedNumber) MarshalJSON() (ret []byte, err error) {
+	if jsonNumber, e := op.MarshalJSONNumber(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "boxed_number",
+			"value": map[string]json.RawMessage{
+				"$NUMBER": jsonNumber,
+			},
+		})
+	}
+	return
+}
+
+func (op *BoxedNumber) MarshalJSONNumber() ([]byte, error) {
+	// type override
+	m := value.Number{op.Number}
+	return m.MarshalJSON()
+}
+
 // BoxedText
 type BoxedText struct {
 	Text string `if:"label=_,type=text"`
@@ -294,6 +525,26 @@ func (*BoxedText) Compose() composer.Spec {
 		Name: "boxed_text",
 		Uses: "flow",
 	}
+}
+
+func (op *BoxedText) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "boxed_text",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *BoxedText) MarshalJSONText() ([]byte, error) {
+	// type override
+	m := value.Text{op.Text}
+	return m.MarshalJSON()
 }
 
 // Certainties
@@ -311,7 +562,52 @@ func (*Certainties) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*Certainties)(nil)
+func (op *Certainties) MarshalJSON() (ret []byte, err error) {
+	if jsonPluralKinds, e := op.MarshalJSONPluralKinds(); e != nil {
+		err = e
+	} else if jsonAreBeing, e := op.MarshalJSONAreBeing(); e != nil {
+		err = e
+	} else if jsonCertainty, e := op.MarshalJSONCertainty(); e != nil {
+		err = e
+	} else if jsonTrait, e := op.MarshalJSONTrait(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "certainties",
+			"value": map[string]json.RawMessage{
+				"$PLURAL_KINDS": jsonPluralKinds,
+				"$ARE_BEING":    jsonAreBeing,
+				"$CERTAINTY":    jsonCertainty,
+				"$TRAIT":        jsonTrait,
+			},
+		})
+	}
+	return
+}
+
+func (op *Certainties) MarshalJSONPluralKinds() ([]byte, error) {
+	return op.PluralKinds.MarshalJSON()
+}
+
+func (op *Certainties) MarshalJSONAreBeing() ([]byte, error) {
+	// bool override
+	var str string
+	if op.AreBeing {
+		str = value.Bool_True
+	} else {
+		str = value.Bool_False
+	}
+	m := value.Bool{str}
+	return m.MarshalJSON()
+}
+
+func (op *Certainties) MarshalJSONCertainty() ([]byte, error) {
+	return op.Certainty.MarshalJSON()
+}
+
+func (op *Certainties) MarshalJSONTrait() ([]byte, error) {
+	return op.Trait.MarshalJSON()
+}
 
 // Certainty requires a user-specified string.
 type Certainty struct {
@@ -321,6 +617,13 @@ type Certainty struct {
 
 func (op *Certainty) String() (ret string) {
 	return op.Str
+}
+
+func (op *Certainty) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "certainty",
+		"value": op.Str,
+	})
 }
 
 const Certainty_Usually = "$USUALLY"
@@ -353,8 +656,23 @@ func (*Comment) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*Comment)(nil)
-var _ rt.Execute = (*Comment)(nil)
+func (op *Comment) MarshalJSON() (ret []byte, err error) {
+	if jsonLines, e := op.MarshalJSONLines(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "comment",
+			"value": map[string]json.RawMessage{
+				"$LINES": jsonLines,
+			},
+		})
+	}
+	return
+}
+
+func (op *Comment) MarshalJSONLines() ([]byte, error) {
+	return op.Lines.MarshalJSON()
+}
 
 // CommonAction
 type CommonAction struct {
@@ -368,6 +686,32 @@ func (*CommonAction) Compose() composer.Spec {
 		Name: "common_action",
 		Uses: "flow",
 	}
+}
+
+func (op *CommonAction) MarshalJSON() (ret []byte, err error) {
+	if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else if jsonActionContext, e := op.MarshalJSONActionContext(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "common_action",
+			"value": map[string]json.RawMessage{
+				"$KIND":           jsonKind,
+				"$ACTION_CONTEXT": jsonActionContext,
+			},
+		})
+	}
+	return
+}
+
+func (op *CommonAction) MarshalJSONKind() ([]byte, error) {
+	return op.Kind.MarshalJSON()
+}
+
+func (op *CommonAction) MarshalJSONActionContext() ([]byte, error) {
+	return op.ActionContext.MarshalJSON()
 }
 
 // CountOf A guard which returns true based on a counter.
@@ -384,7 +728,33 @@ func (*CountOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*CountOf)(nil)
+func (op *CountOf) MarshalJSON() (ret []byte, err error) {
+	if jsonTrigger, e := op.MarshalJSONTrigger(); e != nil {
+		err = e
+	} else if jsonNum, e := op.MarshalJSONNum(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "count_of",
+			"value": map[string]json.RawMessage{
+				"$TRIGGER": jsonTrigger,
+				"$NUM":     jsonNum,
+			},
+		})
+	}
+	return
+}
+
+func (op *CountOf) MarshalJSONTrigger() ([]byte, error) {
+	m := op.Trigger.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *CountOf) MarshalJSONNum() ([]byte, error) {
+	m := op.Num.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // CycleText
 type CycleText struct {
@@ -399,7 +769,24 @@ func (*CycleText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*CycleText)(nil)
+func (op *CycleText) MarshalJSON() (ret []byte, err error) {
+	if jsonParts, e := op.MarshalJSONParts(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "cycle_text",
+			"value": map[string]json.RawMessage{
+				"$PARTS": jsonParts,
+			},
+		})
+	}
+	return
+}
+
+func (op *CycleText) MarshalJSONParts() ([]byte, error) {
+	return json.Marshal(op.Parts)
+}
 
 // Determine
 type Determine struct {
@@ -414,14 +801,30 @@ func (*Determine) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*Determine)(nil)
-var _ rt.BoolEval = (*Determine)(nil)
-var _ rt.NumberEval = (*Determine)(nil)
-var _ rt.TextEval = (*Determine)(nil)
-var _ rt.RecordEval = (*Determine)(nil)
-var _ rt.NumListEval = (*Determine)(nil)
-var _ rt.TextListEval = (*Determine)(nil)
-var _ rt.RecordListEval = (*Determine)(nil)
+func (op *Determine) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else if jsonArguments, e := op.MarshalJSONArguments(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "determine",
+			"value": map[string]json.RawMessage{
+				"$NAME":      jsonName,
+				"$ARGUMENTS": jsonArguments,
+			},
+		})
+	}
+	return
+}
+
+func (op *Determine) MarshalJSONName() ([]byte, error) {
+	return op.Name.MarshalJSON()
+}
+
+func (op *Determine) MarshalJSONArguments() ([]byte, error) {
+	return op.Arguments.MarshalJSON()
+}
 
 // Determiner requires a user-specified string.
 type Determiner struct {
@@ -430,6 +833,13 @@ type Determiner struct {
 
 func (op *Determiner) String() (ret string) {
 	return op.Str
+}
+
+func (op *Determiner) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "determiner",
+		"value": op.Str,
+	})
 }
 
 const Determiner_A = "$A"
@@ -465,7 +875,31 @@ func (*EventBlock) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*EventBlock)(nil)
+func (op *EventBlock) MarshalJSON() (ret []byte, err error) {
+	if jsonTarget, e := op.MarshalJSONTarget(); e != nil {
+		err = e
+	} else if jsonHandlers, e := op.MarshalJSONHandlers(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "event_block",
+			"value": map[string]json.RawMessage{
+				"$TARGET":   jsonTarget,
+				"$HANDLERS": jsonHandlers,
+			},
+		})
+	}
+	return
+}
+
+func (op *EventBlock) MarshalJSONTarget() ([]byte, error) {
+	return op.Target.MarshalJSON()
+}
+
+func (op *EventBlock) MarshalJSONHandlers() ([]byte, error) {
+	return json.Marshal(op.Handlers)
+}
 
 // EventHandler
 type EventHandler struct {
@@ -482,6 +916,45 @@ func (*EventHandler) Compose() composer.Spec {
 	}
 }
 
+func (op *EventHandler) MarshalJSON() (ret []byte, err error) {
+	if jsonEventPhase, e := op.MarshalJSONEventPhase(); e != nil {
+		err = e
+	} else if jsonEvent, e := op.MarshalJSONEvent(); e != nil {
+		err = e
+	} else if jsonLocals, e := op.MarshalJSONLocals(); e != nil {
+		err = e
+	} else if jsonPatternRules, e := op.MarshalJSONPatternRules(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "event_handler",
+			"value": map[string]json.RawMessage{
+				"$EVENT_PHASE":   jsonEventPhase,
+				"$EVENT":         jsonEvent,
+				"$LOCALS":        jsonLocals,
+				"$PATTERN_RULES": jsonPatternRules,
+			},
+		})
+	}
+	return
+}
+
+func (op *EventHandler) MarshalJSONEventPhase() ([]byte, error) {
+	return op.EventPhase.MarshalJSON()
+}
+
+func (op *EventHandler) MarshalJSONEvent() ([]byte, error) {
+	return op.Event.MarshalJSON()
+}
+
+func (op *EventHandler) MarshalJSONLocals() ([]byte, error) {
+	return op.Locals.MarshalJSON()
+}
+
+func (op *EventHandler) MarshalJSONPatternRules() ([]byte, error) {
+	return op.PatternRules.MarshalJSON()
+}
+
 // EventName requires a user-specified string.
 type EventName struct {
 	At  reader.Position `if:"internal"`
@@ -490,6 +963,13 @@ type EventName struct {
 
 func (op *EventName) String() (ret string) {
 	return op.Str
+}
+
+func (op *EventName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "event_name",
+		"value": op.Str,
+	})
 }
 
 func (*EventName) Compose() composer.Spec {
@@ -507,6 +987,13 @@ type EventPhase struct {
 
 func (op *EventPhase) String() (ret string) {
 	return op.Str
+}
+
+func (op *EventPhase) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "event_phase",
+		"value": op.Str,
+	})
 }
 
 const EventPhase_Before = "$BEFORE"
@@ -531,6 +1018,9 @@ type EventTarget struct {
 	Opt interface{}
 }
 
+const EventTarget_Kinds = "$KINDS"
+const EventTarget_NamedNoun = "$NAMED_NOUN"
+
 func (*EventTarget) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "event_target",
@@ -545,14 +1035,53 @@ func (*EventTarget) Compose() composer.Spec {
 	}
 }
 
-const EventTarget_Kinds = "$KINDS"
-const EventTarget_NamedNoun = "$NAMED_NOUN"
+func (op *EventTarget) MarshalJSON() (ret []byte, err error) {
+	if val, e := op.MarshalChoice(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "event_target",
+			"value": val,
+		})
+	}
+	return
+}
+
+func (op *EventTarget) MarshalChoice() (ret map[string]json.RawMessage, err error) {
+	if kid, e := json.Marshal(op.Opt); e != nil {
+		err = e
+	} else if pick, ok := op.GetChoice(); !ok {
+		err = errutil.Fmt("unknown choice %T in %T", op.Opt, op)
+	} else if len(pick) > 0 {
+		ret = map[string]json.RawMessage{
+			pick: kid,
+		}
+	}
+	return
+}
+
+func (op *EventTarget) GetChoice() (ret string, okay bool) {
+	switch op.Opt.(type) {
+	case nil:
+		okay = true
+	case *PluralKinds:
+		ret, okay = EventTarget_Kinds, true
+	case *NamedNoun:
+		ret, okay = EventTarget_NamedNoun, true
+	}
+	return
+}
 
 // ExtType swaps between various options
 type ExtType struct {
 	At  reader.Position `if:"internal"`
 	Opt interface{}
 }
+
+const ExtType_Numbers = "$NUMBERS"
+const ExtType_TextList = "$TEXT_LIST"
+const ExtType_Record = "$RECORD"
+const ExtType_Records = "$RECORDS"
 
 func (*ExtType) Compose() composer.Spec {
 	return composer.Spec{
@@ -570,10 +1099,46 @@ func (*ExtType) Compose() composer.Spec {
 	}
 }
 
-const ExtType_Numbers = "$NUMBERS"
-const ExtType_TextList = "$TEXT_LIST"
-const ExtType_Record = "$RECORD"
-const ExtType_Records = "$RECORDS"
+func (op *ExtType) MarshalJSON() (ret []byte, err error) {
+	if val, e := op.MarshalChoice(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{"id": op.At.Offset,
+			"type":  "ext_type",
+			"value": val,
+		})
+	}
+	return
+}
+
+func (op *ExtType) MarshalChoice() (ret map[string]json.RawMessage, err error) {
+	if kid, e := json.Marshal(op.Opt); e != nil {
+		err = e
+	} else if pick, ok := op.GetChoice(); !ok {
+		err = errutil.Fmt("unknown choice %T in %T", op.Opt, op)
+	} else if len(pick) > 0 {
+		ret = map[string]json.RawMessage{
+			pick: kid,
+		}
+	}
+	return
+}
+
+func (op *ExtType) GetChoice() (ret string, okay bool) {
+	switch op.Opt.(type) {
+	case nil:
+		okay = true
+	case *NumberList:
+		ret, okay = ExtType_Numbers, true
+	case *TextList:
+		ret, okay = ExtType_TextList, true
+	case *RecordType:
+		ret, okay = ExtType_Record, true
+	case *RecordList:
+		ret, okay = ExtType_Records, true
+	}
+	return
+}
 
 // GrammarDecl
 type GrammarDecl struct {
@@ -585,6 +1150,25 @@ func (*GrammarDecl) Compose() composer.Spec {
 		Name: "grammar_decl",
 		Uses: "flow",
 	}
+}
+
+func (op *GrammarDecl) MarshalJSON() (ret []byte, err error) {
+	if jsonGrammar, e := op.MarshalJSONGrammar(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "grammar_decl",
+			"value": map[string]json.RawMessage{
+				"$GRAMMAR": jsonGrammar,
+			},
+		})
+	}
+	return
+}
+
+func (op *GrammarDecl) MarshalJSONGrammar() ([]byte, error) {
+	m := op.Grammar.(json.Marshaler)
+	return m.MarshalJSON()
 }
 
 // KindOfNoun
@@ -602,6 +1186,45 @@ func (*KindOfNoun) Compose() composer.Spec {
 	}
 }
 
+func (op *KindOfNoun) MarshalJSON() (ret []byte, err error) {
+	if jsonAreAn, e := op.MarshalJSONAreAn(); e != nil {
+		err = e
+	} else if jsonTrait, e := op.MarshalJSONTrait(); e != nil {
+		err = e
+	} else if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else if jsonNounRelation, e := op.MarshalJSONNounRelation(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "kind_of_noun",
+			"value": map[string]json.RawMessage{
+				"$ARE_AN":        jsonAreAn,
+				"$TRAIT":         jsonTrait,
+				"$KIND":          jsonKind,
+				"$NOUN_RELATION": jsonNounRelation,
+			},
+		})
+	}
+	return
+}
+
+func (op *KindOfNoun) MarshalJSONAreAn() ([]byte, error) {
+	return op.AreAn.MarshalJSON()
+}
+
+func (op *KindOfNoun) MarshalJSONTrait() ([]byte, error) {
+	return json.Marshal(op.Trait)
+}
+
+func (op *KindOfNoun) MarshalJSONKind() ([]byte, error) {
+	return op.Kind.MarshalJSON()
+}
+
+func (op *KindOfNoun) MarshalJSONNounRelation() ([]byte, error) {
+	return op.NounRelation.MarshalJSON()
+}
+
 // KindOfRelation
 type KindOfRelation struct {
 	Relation            value.RelationName  `if:"label=_"`
@@ -615,7 +1238,30 @@ func (*KindOfRelation) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*KindOfRelation)(nil)
+func (op *KindOfRelation) MarshalJSON() (ret []byte, err error) {
+	if jsonRelation, e := op.MarshalJSONRelation(); e != nil {
+		err = e
+	} else if jsonRelationCardinality, e := op.MarshalJSONRelationCardinality(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "kind_of_relation",
+			"value": map[string]json.RawMessage{
+				"$RELATION":             jsonRelation,
+				"$RELATION_CARDINALITY": jsonRelationCardinality,
+			},
+		})
+	}
+	return
+}
+
+func (op *KindOfRelation) MarshalJSONRelation() ([]byte, error) {
+	return op.Relation.MarshalJSON()
+}
+
+func (op *KindOfRelation) MarshalJSONRelationCardinality() ([]byte, error) {
+	return op.RelationCardinality.MarshalJSON()
+}
 
 // KindsOfAspect
 type KindsOfAspect struct {
@@ -629,7 +1275,23 @@ func (*KindsOfAspect) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*KindsOfAspect)(nil)
+func (op *KindsOfAspect) MarshalJSON() (ret []byte, err error) {
+	if jsonAspect, e := op.MarshalJSONAspect(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "kinds_of_aspect",
+			"value": map[string]json.RawMessage{
+				"$ASPECT": jsonAspect,
+			},
+		})
+	}
+	return
+}
+
+func (op *KindsOfAspect) MarshalJSONAspect() ([]byte, error) {
+	return op.Aspect.MarshalJSON()
+}
 
 // KindsOfKind
 type KindsOfKind struct {
@@ -644,7 +1306,30 @@ func (*KindsOfKind) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*KindsOfKind)(nil)
+func (op *KindsOfKind) MarshalJSON() (ret []byte, err error) {
+	if jsonPluralKinds, e := op.MarshalJSONPluralKinds(); e != nil {
+		err = e
+	} else if jsonSingularKind, e := op.MarshalJSONSingularKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "kinds_of_kind",
+			"value": map[string]json.RawMessage{
+				"$PLURAL_KINDS":  jsonPluralKinds,
+				"$SINGULAR_KIND": jsonSingularKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *KindsOfKind) MarshalJSONPluralKinds() ([]byte, error) {
+	return op.PluralKinds.MarshalJSON()
+}
+
+func (op *KindsOfKind) MarshalJSONSingularKind() ([]byte, error) {
+	return op.SingularKind.MarshalJSON()
+}
 
 // KindsOfRecord
 type KindsOfRecord struct {
@@ -658,7 +1343,23 @@ func (*KindsOfRecord) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*KindsOfRecord)(nil)
+func (op *KindsOfRecord) MarshalJSON() (ret []byte, err error) {
+	if jsonRecordPlural, e := op.MarshalJSONRecordPlural(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "kinds_of_record",
+			"value": map[string]json.RawMessage{
+				"$RECORD_PLURAL": jsonRecordPlural,
+			},
+		})
+	}
+	return
+}
+
+func (op *KindsOfRecord) MarshalJSONRecordPlural() ([]byte, error) {
+	return op.RecordPlural.MarshalJSON()
+}
 
 // KindsPossessProperties
 type KindsPossessProperties struct {
@@ -673,7 +1374,30 @@ func (*KindsPossessProperties) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*KindsPossessProperties)(nil)
+func (op *KindsPossessProperties) MarshalJSON() (ret []byte, err error) {
+	if jsonPluralKinds, e := op.MarshalJSONPluralKinds(); e != nil {
+		err = e
+	} else if jsonPropertyDecl, e := op.MarshalJSONPropertyDecl(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "kinds_possess_properties",
+			"value": map[string]json.RawMessage{
+				"$PLURAL_KINDS":  jsonPluralKinds,
+				"$PROPERTY_DECL": jsonPropertyDecl,
+			},
+		})
+	}
+	return
+}
+
+func (op *KindsPossessProperties) MarshalJSONPluralKinds() ([]byte, error) {
+	return op.PluralKinds.MarshalJSON()
+}
+
+func (op *KindsPossessProperties) MarshalJSONPropertyDecl() ([]byte, error) {
+	return json.Marshal(op.PropertyDecl)
+}
 
 // Lede Describes one or more nouns.
 type Lede struct {
@@ -686,6 +1410,31 @@ func (*Lede) Compose() composer.Spec {
 		Name: "lede",
 		Uses: "flow",
 	}
+}
+
+func (op *Lede) MarshalJSON() (ret []byte, err error) {
+	if jsonNouns, e := op.MarshalJSONNouns(); e != nil {
+		err = e
+	} else if jsonNounPhrase, e := op.MarshalJSONNounPhrase(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "lede",
+			"value": map[string]json.RawMessage{
+				"$NOUNS":       jsonNouns,
+				"$NOUN_PHRASE": jsonNounPhrase,
+			},
+		})
+	}
+	return
+}
+
+func (op *Lede) MarshalJSONNouns() ([]byte, error) {
+	return json.Marshal(op.Nouns)
+}
+
+func (op *Lede) MarshalJSONNounPhrase() ([]byte, error) {
+	return op.NounPhrase.MarshalJSON()
 }
 
 // LocalDecl
@@ -701,6 +1450,31 @@ func (*LocalDecl) Compose() composer.Spec {
 	}
 }
 
+func (op *LocalDecl) MarshalJSON() (ret []byte, err error) {
+	if jsonVariableDecl, e := op.MarshalJSONVariableDecl(); e != nil {
+		err = e
+	} else if jsonValue, e := op.MarshalJSONValue(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "local_decl",
+			"value": map[string]json.RawMessage{
+				"$VARIABLE_DECL": jsonVariableDecl,
+				"$VALUE":         jsonValue,
+			},
+		})
+	}
+	return
+}
+
+func (op *LocalDecl) MarshalJSONVariableDecl() ([]byte, error) {
+	return op.VariableDecl.MarshalJSON()
+}
+
+func (op *LocalDecl) MarshalJSONValue() ([]byte, error) {
+	return op.Value.MarshalJSON()
+}
+
 // LocalInit
 type LocalInit struct {
 	Value rt.Assignment `if:"label=_"`
@@ -711,6 +1485,25 @@ func (*LocalInit) Compose() composer.Spec {
 		Name: "local_init",
 		Uses: "flow",
 	}
+}
+
+func (op *LocalInit) MarshalJSON() (ret []byte, err error) {
+	if jsonValue, e := op.MarshalJSONValue(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "local_init",
+			"value": map[string]json.RawMessage{
+				"$VALUE": jsonValue,
+			},
+		})
+	}
+	return
+}
+
+func (op *LocalInit) MarshalJSONValue() ([]byte, error) {
+	m := op.Value.(json.Marshaler)
+	return m.MarshalJSON()
 }
 
 // Make
@@ -726,7 +1519,32 @@ func (*Make) Compose() composer.Spec {
 	}
 }
 
-var _ rt.RecordEval = (*Make)(nil)
+func (op *Make) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else if jsonArguments, e := op.MarshalJSONArguments(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "make",
+			"value": map[string]json.RawMessage{
+				"$NAME":      jsonName,
+				"$ARGUMENTS": jsonArguments,
+			},
+		})
+	}
+	return
+}
+
+func (op *Make) MarshalJSONName() ([]byte, error) {
+	// type override
+	m := value.Text{op.Name}
+	return m.MarshalJSON()
+}
+
+func (op *Make) MarshalJSONArguments() ([]byte, error) {
+	return op.Arguments.MarshalJSON()
+}
 
 // ManyToMany
 type ManyToMany struct {
@@ -739,6 +1557,31 @@ func (*ManyToMany) Compose() composer.Spec {
 		Name: "many_to_many",
 		Uses: "flow",
 	}
+}
+
+func (op *ManyToMany) MarshalJSON() (ret []byte, err error) {
+	if jsonKinds, e := op.MarshalJSONKinds(); e != nil {
+		err = e
+	} else if jsonOtherKinds, e := op.MarshalJSONOtherKinds(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "many_to_many",
+			"value": map[string]json.RawMessage{
+				"$KINDS":       jsonKinds,
+				"$OTHER_KINDS": jsonOtherKinds,
+			},
+		})
+	}
+	return
+}
+
+func (op *ManyToMany) MarshalJSONKinds() ([]byte, error) {
+	return op.Kinds.MarshalJSON()
+}
+
+func (op *ManyToMany) MarshalJSONOtherKinds() ([]byte, error) {
+	return op.OtherKinds.MarshalJSON()
 }
 
 // ManyToOne
@@ -754,6 +1597,31 @@ func (*ManyToOne) Compose() composer.Spec {
 	}
 }
 
+func (op *ManyToOne) MarshalJSON() (ret []byte, err error) {
+	if jsonKinds, e := op.MarshalJSONKinds(); e != nil {
+		err = e
+	} else if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "many_to_one",
+			"value": map[string]json.RawMessage{
+				"$KINDS": jsonKinds,
+				"$KIND":  jsonKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *ManyToOne) MarshalJSONKinds() ([]byte, error) {
+	return op.Kinds.MarshalJSON()
+}
+
+func (op *ManyToOne) MarshalJSONKind() ([]byte, error) {
+	return op.Kind.MarshalJSON()
+}
+
 // NamedNoun
 type NamedNoun struct {
 	Determiner Determiner `if:"label=_"`
@@ -765,6 +1633,31 @@ func (*NamedNoun) Compose() composer.Spec {
 		Name: "named_noun",
 		Uses: "flow",
 	}
+}
+
+func (op *NamedNoun) MarshalJSON() (ret []byte, err error) {
+	if jsonDeterminer, e := op.MarshalJSONDeterminer(); e != nil {
+		err = e
+	} else if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "named_noun",
+			"value": map[string]json.RawMessage{
+				"$DETERMINER": jsonDeterminer,
+				"$NAME":       jsonName,
+			},
+		})
+	}
+	return
+}
+
+func (op *NamedNoun) MarshalJSONDeterminer() ([]byte, error) {
+	return op.Determiner.MarshalJSON()
+}
+
+func (op *NamedNoun) MarshalJSONName() ([]byte, error) {
+	return op.Name.MarshalJSON()
 }
 
 // NounAssignment Assign text.
@@ -781,7 +1674,37 @@ func (*NounAssignment) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*NounAssignment)(nil)
+func (op *NounAssignment) MarshalJSON() (ret []byte, err error) {
+	if jsonProperty, e := op.MarshalJSONProperty(); e != nil {
+		err = e
+	} else if jsonNouns, e := op.MarshalJSONNouns(); e != nil {
+		err = e
+	} else if jsonLines, e := op.MarshalJSONLines(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "noun_assignment",
+			"value": map[string]json.RawMessage{
+				"$PROPERTY": jsonProperty,
+				"$NOUNS":    jsonNouns,
+				"$LINES":    jsonLines,
+			},
+		})
+	}
+	return
+}
+
+func (op *NounAssignment) MarshalJSONProperty() ([]byte, error) {
+	return op.Property.MarshalJSON()
+}
+
+func (op *NounAssignment) MarshalJSONNouns() ([]byte, error) {
+	return json.Marshal(op.Nouns)
+}
+
+func (op *NounAssignment) MarshalJSONLines() ([]byte, error) {
+	return op.Lines.MarshalJSON()
+}
 
 // NounName requires a user-specified string.
 type NounName struct {
@@ -791,6 +1714,13 @@ type NounName struct {
 
 func (op *NounName) String() (ret string) {
 	return op.Str
+}
+
+func (op *NounName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "noun_name",
+		"value": op.Str,
+	})
 }
 
 func (*NounName) Compose() composer.Spec {
@@ -807,6 +1737,10 @@ type NounPhrase struct {
 	Opt interface{}
 }
 
+const NounPhrase_KindOfNoun = "$KIND_OF_NOUN"
+const NounPhrase_NounTraits = "$NOUN_TRAITS"
+const NounPhrase_NounRelation = "$NOUN_RELATION"
+
 func (*NounPhrase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "noun_phrase",
@@ -822,9 +1756,44 @@ func (*NounPhrase) Compose() composer.Spec {
 	}
 }
 
-const NounPhrase_KindOfNoun = "$KIND_OF_NOUN"
-const NounPhrase_NounTraits = "$NOUN_TRAITS"
-const NounPhrase_NounRelation = "$NOUN_RELATION"
+func (op *NounPhrase) MarshalJSON() (ret []byte, err error) {
+	if val, e := op.MarshalChoice(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{"id": op.At.Offset,
+			"type":  "noun_phrase",
+			"value": val,
+		})
+	}
+	return
+}
+
+func (op *NounPhrase) MarshalChoice() (ret map[string]json.RawMessage, err error) {
+	if kid, e := json.Marshal(op.Opt); e != nil {
+		err = e
+	} else if pick, ok := op.GetChoice(); !ok {
+		err = errutil.Fmt("unknown choice %T in %T", op.Opt, op)
+	} else if len(pick) > 0 {
+		ret = map[string]json.RawMessage{
+			pick: kid,
+		}
+	}
+	return
+}
+
+func (op *NounPhrase) GetChoice() (ret string, okay bool) {
+	switch op.Opt.(type) {
+	case nil:
+		okay = true
+	case *KindOfNoun:
+		ret, okay = NounPhrase_KindOfNoun, true
+	case *NounTraits:
+		ret, okay = NounPhrase_NounTraits, true
+	case *NounRelation:
+		ret, okay = NounPhrase_NounRelation, true
+	}
+	return
+}
 
 // NounRelation
 type NounRelation struct {
@@ -838,6 +1807,46 @@ func (*NounRelation) Compose() composer.Spec {
 		Name: "noun_relation",
 		Uses: "flow",
 	}
+}
+
+func (op *NounRelation) MarshalJSON() (ret []byte, err error) {
+	if jsonAreBeing, e := op.MarshalJSONAreBeing(); e != nil {
+		err = e
+	} else if jsonRelation, e := op.MarshalJSONRelation(); e != nil {
+		err = e
+	} else if jsonNouns, e := op.MarshalJSONNouns(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "noun_relation",
+			"value": map[string]json.RawMessage{
+				"$ARE_BEING": jsonAreBeing,
+				"$RELATION":  jsonRelation,
+				"$NOUNS":     jsonNouns,
+			},
+		})
+	}
+	return
+}
+
+func (op *NounRelation) MarshalJSONAreBeing() ([]byte, error) {
+	// bool override
+	var str string
+	if op.AreBeing {
+		str = value.Bool_True
+	} else {
+		str = value.Bool_False
+	}
+	m := value.Bool{str}
+	return m.MarshalJSON()
+}
+
+func (op *NounRelation) MarshalJSONRelation() ([]byte, error) {
+	return op.Relation.MarshalJSON()
+}
+
+func (op *NounRelation) MarshalJSONNouns() ([]byte, error) {
+	return json.Marshal(op.Nouns)
 }
 
 // NounStatement Describes people, places, or things.
@@ -854,7 +1863,37 @@ func (*NounStatement) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*NounStatement)(nil)
+func (op *NounStatement) MarshalJSON() (ret []byte, err error) {
+	if jsonLede, e := op.MarshalJSONLede(); e != nil {
+		err = e
+	} else if jsonTail, e := op.MarshalJSONTail(); e != nil {
+		err = e
+	} else if jsonSummary, e := op.MarshalJSONSummary(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "noun_statement",
+			"value": map[string]json.RawMessage{
+				"$LEDE":    jsonLede,
+				"$TAIL":    jsonTail,
+				"$SUMMARY": jsonSummary,
+			},
+		})
+	}
+	return
+}
+
+func (op *NounStatement) MarshalJSONLede() ([]byte, error) {
+	return op.Lede.MarshalJSON()
+}
+
+func (op *NounStatement) MarshalJSONTail() ([]byte, error) {
+	return json.Marshal(op.Tail)
+}
+
+func (op *NounStatement) MarshalJSONSummary() ([]byte, error) {
+	return op.Summary.MarshalJSON()
+}
 
 // NounTraits
 type NounTraits struct {
@@ -869,6 +1908,39 @@ func (*NounTraits) Compose() composer.Spec {
 	}
 }
 
+func (op *NounTraits) MarshalJSON() (ret []byte, err error) {
+	if jsonAreBeing, e := op.MarshalJSONAreBeing(); e != nil {
+		err = e
+	} else if jsonTrait, e := op.MarshalJSONTrait(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "noun_traits",
+			"value": map[string]json.RawMessage{
+				"$ARE_BEING": jsonAreBeing,
+				"$TRAIT":     jsonTrait,
+			},
+		})
+	}
+	return
+}
+
+func (op *NounTraits) MarshalJSONAreBeing() ([]byte, error) {
+	// bool override
+	var str string
+	if op.AreBeing {
+		str = value.Bool_True
+	} else {
+		str = value.Bool_False
+	}
+	m := value.Bool{str}
+	return m.MarshalJSON()
+}
+
+func (op *NounTraits) MarshalJSONTrait() ([]byte, error) {
+	return json.Marshal(op.Trait)
+}
+
 // NumberList requires a user-specified string.
 type NumberList struct {
 	Str string
@@ -876,6 +1948,13 @@ type NumberList struct {
 
 func (op *NumberList) String() (ret string) {
 	return op.Str
+}
+
+func (op *NumberList) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "number_list",
+		"value": op.Str,
+	})
 }
 
 const NumberList_List = "$LIST"
@@ -906,6 +1985,39 @@ func (*ObjectType) Compose() composer.Spec {
 	}
 }
 
+func (op *ObjectType) MarshalJSON() (ret []byte, err error) {
+	if jsonAn, e := op.MarshalJSONAn(); e != nil {
+		err = e
+	} else if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "object_type",
+			"value": map[string]json.RawMessage{
+				"$AN":   jsonAn,
+				"$KIND": jsonKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *ObjectType) MarshalJSONAn() ([]byte, error) {
+	// bool override
+	var str string
+	if op.An {
+		str = value.Bool_True
+	} else {
+		str = value.Bool_False
+	}
+	m := value.Bool{str}
+	return m.MarshalJSON()
+}
+
+func (op *ObjectType) MarshalJSONKind() ([]byte, error) {
+	return op.Kind.MarshalJSON()
+}
+
 // OneToMany
 type OneToMany struct {
 	Kind  SingularKind `if:"label=_"`
@@ -917,6 +2029,31 @@ func (*OneToMany) Compose() composer.Spec {
 		Name: "one_to_many",
 		Uses: "flow",
 	}
+}
+
+func (op *OneToMany) MarshalJSON() (ret []byte, err error) {
+	if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else if jsonKinds, e := op.MarshalJSONKinds(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "one_to_many",
+			"value": map[string]json.RawMessage{
+				"$KIND":  jsonKind,
+				"$KINDS": jsonKinds,
+			},
+		})
+	}
+	return
+}
+
+func (op *OneToMany) MarshalJSONKind() ([]byte, error) {
+	return op.Kind.MarshalJSON()
+}
+
+func (op *OneToMany) MarshalJSONKinds() ([]byte, error) {
+	return op.Kinds.MarshalJSON()
 }
 
 // OneToOne
@@ -932,6 +2069,31 @@ func (*OneToOne) Compose() composer.Spec {
 	}
 }
 
+func (op *OneToOne) MarshalJSON() (ret []byte, err error) {
+	if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else if jsonOtherKind, e := op.MarshalJSONOtherKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "one_to_one",
+			"value": map[string]json.RawMessage{
+				"$KIND":       jsonKind,
+				"$OTHER_KIND": jsonOtherKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *OneToOne) MarshalJSONKind() ([]byte, error) {
+	return op.Kind.MarshalJSON()
+}
+
+func (op *OneToOne) MarshalJSONOtherKind() ([]byte, error) {
+	return op.OtherKind.MarshalJSON()
+}
+
 // PairedAction
 type PairedAction struct {
 	At    reader.Position `if:"internal"`
@@ -945,6 +2107,25 @@ func (*PairedAction) Compose() composer.Spec {
 	}
 }
 
+func (op *PairedAction) MarshalJSON() (ret []byte, err error) {
+	if jsonKinds, e := op.MarshalJSONKinds(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "paired_action",
+			"value": map[string]json.RawMessage{
+				"$KINDS": jsonKinds,
+			},
+		})
+	}
+	return
+}
+
+func (op *PairedAction) MarshalJSONKinds() ([]byte, error) {
+	return op.Kinds.MarshalJSON()
+}
+
 // Paragraph
 type Paragraph struct {
 	StoryStatement []StoryStatement `if:"label=_,optional"`
@@ -955,6 +2136,24 @@ func (*Paragraph) Compose() composer.Spec {
 		Name: "paragraph",
 		Uses: "flow",
 	}
+}
+
+func (op *Paragraph) MarshalJSON() (ret []byte, err error) {
+	if jsonStoryStatement, e := op.MarshalJSONStoryStatement(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "paragraph",
+			"value": map[string]json.RawMessage{
+				"$STORY_STATEMENT": jsonStoryStatement,
+			},
+		})
+	}
+	return
+}
+
+func (op *Paragraph) MarshalJSONStoryStatement() ([]byte, error) {
+	return json.Marshal(op.StoryStatement)
 }
 
 // PatternActions Actions to take when using a pattern.
@@ -972,7 +2171,44 @@ func (*PatternActions) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*PatternActions)(nil)
+func (op *PatternActions) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else if jsonPatternLocals, e := op.MarshalJSONPatternLocals(); e != nil {
+		err = e
+	} else if jsonPatternReturn, e := op.MarshalJSONPatternReturn(); e != nil {
+		err = e
+	} else if jsonPatternRules, e := op.MarshalJSONPatternRules(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "pattern_actions",
+			"value": map[string]json.RawMessage{
+				"$NAME":           jsonName,
+				"$PATTERN_LOCALS": jsonPatternLocals,
+				"$PATTERN_RETURN": jsonPatternReturn,
+				"$PATTERN_RULES":  jsonPatternRules,
+			},
+		})
+	}
+	return
+}
+
+func (op *PatternActions) MarshalJSONName() ([]byte, error) {
+	return op.Name.MarshalJSON()
+}
+
+func (op *PatternActions) MarshalJSONPatternLocals() ([]byte, error) {
+	return op.PatternLocals.MarshalJSON()
+}
+
+func (op *PatternActions) MarshalJSONPatternReturn() ([]byte, error) {
+	return op.PatternReturn.MarshalJSON()
+}
+
+func (op *PatternActions) MarshalJSONPatternRules() ([]byte, error) {
+	return op.PatternRules.MarshalJSON()
+}
 
 // PatternDecl
 type PatternDecl struct {
@@ -990,7 +2226,51 @@ func (*PatternDecl) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*PatternDecl)(nil)
+func (op *PatternDecl) MarshalJSON() (ret []byte, err error) {
+	if jsonType, e := op.MarshalJSONType(); e != nil {
+		err = e
+	} else if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else if jsonOptvars, e := op.MarshalJSONOptvars(); e != nil {
+		err = e
+	} else if jsonPatternReturn, e := op.MarshalJSONPatternReturn(); e != nil {
+		err = e
+	} else if jsonAbout, e := op.MarshalJSONAbout(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "pattern_decl",
+			"value": map[string]json.RawMessage{
+				"$TYPE":           jsonType,
+				"$NAME":           jsonName,
+				"$OPTVARS":        jsonOptvars,
+				"$PATTERN_RETURN": jsonPatternReturn,
+				"$ABOUT":          jsonAbout,
+			},
+		})
+	}
+	return
+}
+
+func (op *PatternDecl) MarshalJSONType() ([]byte, error) {
+	return op.Type.MarshalJSON()
+}
+
+func (op *PatternDecl) MarshalJSONName() ([]byte, error) {
+	return op.Name.MarshalJSON()
+}
+
+func (op *PatternDecl) MarshalJSONOptvars() ([]byte, error) {
+	return op.Optvars.MarshalJSON()
+}
+
+func (op *PatternDecl) MarshalJSONPatternReturn() ([]byte, error) {
+	return op.PatternReturn.MarshalJSON()
+}
+
+func (op *PatternDecl) MarshalJSONAbout() ([]byte, error) {
+	return op.About.MarshalJSON()
+}
 
 // PatternFlags requires a user-specified string.
 type PatternFlags struct {
@@ -999,6 +2279,13 @@ type PatternFlags struct {
 
 func (op *PatternFlags) String() (ret string) {
 	return op.Str
+}
+
+func (op *PatternFlags) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "pattern_flags",
+		"value": op.Str,
+	})
 }
 
 const PatternFlags_Before = "$BEFORE"
@@ -1030,6 +2317,24 @@ func (*PatternLocals) Compose() composer.Spec {
 	}
 }
 
+func (op *PatternLocals) MarshalJSON() (ret []byte, err error) {
+	if jsonLocalDecl, e := op.MarshalJSONLocalDecl(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "pattern_locals",
+			"value": map[string]json.RawMessage{
+				"$LOCAL_DECL": jsonLocalDecl,
+			},
+		})
+	}
+	return
+}
+
+func (op *PatternLocals) MarshalJSONLocalDecl() ([]byte, error) {
+	return json.Marshal(op.LocalDecl)
+}
+
 // PatternReturn
 type PatternReturn struct {
 	Result VariableDecl `if:"label=_"`
@@ -1040,6 +2345,24 @@ func (*PatternReturn) Compose() composer.Spec {
 		Name: "pattern_return",
 		Uses: "flow",
 	}
+}
+
+func (op *PatternReturn) MarshalJSON() (ret []byte, err error) {
+	if jsonResult, e := op.MarshalJSONResult(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "pattern_return",
+			"value": map[string]json.RawMessage{
+				"$RESULT": jsonResult,
+			},
+		})
+	}
+	return
+}
+
+func (op *PatternReturn) MarshalJSONResult() ([]byte, error) {
+	return op.Result.MarshalJSON()
 }
 
 // PatternRule
@@ -1056,6 +2379,39 @@ func (*PatternRule) Compose() composer.Spec {
 	}
 }
 
+func (op *PatternRule) MarshalJSON() (ret []byte, err error) {
+	if jsonGuard, e := op.MarshalJSONGuard(); e != nil {
+		err = e
+	} else if jsonFlags, e := op.MarshalJSONFlags(); e != nil {
+		err = e
+	} else if jsonHook, e := op.MarshalJSONHook(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "pattern_rule",
+			"value": map[string]json.RawMessage{
+				"$GUARD": jsonGuard,
+				"$FLAGS": jsonFlags,
+				"$HOOK":  jsonHook,
+			},
+		})
+	}
+	return
+}
+
+func (op *PatternRule) MarshalJSONGuard() ([]byte, error) {
+	m := op.Guard.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *PatternRule) MarshalJSONFlags() ([]byte, error) {
+	return op.Flags.MarshalJSON()
+}
+
+func (op *PatternRule) MarshalJSONHook() ([]byte, error) {
+	return op.Hook.MarshalJSON()
+}
+
 // PatternRules
 type PatternRules struct {
 	PatternRule []PatternRule `if:"label=_,optional"`
@@ -1068,6 +2424,24 @@ func (*PatternRules) Compose() composer.Spec {
 	}
 }
 
+func (op *PatternRules) MarshalJSON() (ret []byte, err error) {
+	if jsonPatternRule, e := op.MarshalJSONPatternRule(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "pattern_rules",
+			"value": map[string]json.RawMessage{
+				"$PATTERN_RULE": jsonPatternRule,
+			},
+		})
+	}
+	return
+}
+
+func (op *PatternRules) MarshalJSONPatternRule() ([]byte, error) {
+	return json.Marshal(op.PatternRule)
+}
+
 // PatternType requires a user-specified string.
 type PatternType struct {
 	At  reader.Position `if:"internal"`
@@ -1076,6 +2450,13 @@ type PatternType struct {
 
 func (op *PatternType) String() (ret string) {
 	return op.Str
+}
+
+func (op *PatternType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "pattern_type",
+		"value": op.Str,
+	})
 }
 
 const PatternType_Patterns = "$PATTERNS"
@@ -1109,7 +2490,30 @@ func (*PatternVariablesDecl) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*PatternVariablesDecl)(nil)
+func (op *PatternVariablesDecl) MarshalJSON() (ret []byte, err error) {
+	if jsonPatternName, e := op.MarshalJSONPatternName(); e != nil {
+		err = e
+	} else if jsonVariableDecl, e := op.MarshalJSONVariableDecl(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "pattern_variables_decl",
+			"value": map[string]json.RawMessage{
+				"$PATTERN_NAME":  jsonPatternName,
+				"$VARIABLE_DECL": jsonVariableDecl,
+			},
+		})
+	}
+	return
+}
+
+func (op *PatternVariablesDecl) MarshalJSONPatternName() ([]byte, error) {
+	return op.PatternName.MarshalJSON()
+}
+
+func (op *PatternVariablesDecl) MarshalJSONVariableDecl() ([]byte, error) {
+	return json.Marshal(op.VariableDecl)
+}
 
 // PatternVariablesTail Storage for values used during the execution of a pattern.
 type PatternVariablesTail struct {
@@ -1123,6 +2527,24 @@ func (*PatternVariablesTail) Compose() composer.Spec {
 	}
 }
 
+func (op *PatternVariablesTail) MarshalJSON() (ret []byte, err error) {
+	if jsonVariableDecl, e := op.MarshalJSONVariableDecl(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "pattern_variables_tail",
+			"value": map[string]json.RawMessage{
+				"$VARIABLE_DECL": jsonVariableDecl,
+			},
+		})
+	}
+	return
+}
+
+func (op *PatternVariablesTail) MarshalJSONVariableDecl() ([]byte, error) {
+	return json.Marshal(op.VariableDecl)
+}
+
 // PluralKinds requires a user-specified string.
 type PluralKinds struct {
 	At  reader.Position `if:"internal"`
@@ -1131,6 +2553,13 @@ type PluralKinds struct {
 
 func (op *PluralKinds) String() (ret string) {
 	return op.Str
+}
+
+func (op *PluralKinds) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "plural_kinds",
+		"value": op.Str,
+	})
 }
 
 func (*PluralKinds) Compose() composer.Spec {
@@ -1149,6 +2578,13 @@ type PrimitiveType struct {
 
 func (op *PrimitiveType) String() (ret string) {
 	return op.Str
+}
+
+func (op *PrimitiveType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "primitive_type",
+		"value": op.Str,
+	})
 }
 
 const PrimitiveType_Number = "$NUMBER"
@@ -1173,6 +2609,9 @@ type PrimitiveValue struct {
 	Opt interface{}
 }
 
+const PrimitiveValue_BoxedText = "$BOXED_TEXT"
+const PrimitiveValue_BoxedNumber = "$BOXED_NUMBER"
+
 func (*PrimitiveValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: "primitive_value",
@@ -1187,14 +2626,50 @@ func (*PrimitiveValue) Compose() composer.Spec {
 	}
 }
 
-const PrimitiveValue_BoxedText = "$BOXED_TEXT"
-const PrimitiveValue_BoxedNumber = "$BOXED_NUMBER"
+func (op *PrimitiveValue) MarshalJSON() (ret []byte, err error) {
+	if val, e := op.MarshalChoice(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "primitive_value",
+			"value": val,
+		})
+	}
+	return
+}
+
+func (op *PrimitiveValue) MarshalChoice() (ret map[string]json.RawMessage, err error) {
+	if kid, e := json.Marshal(op.Opt); e != nil {
+		err = e
+	} else if pick, ok := op.GetChoice(); !ok {
+		err = errutil.Fmt("unknown choice %T in %T", op.Opt, op)
+	} else if len(pick) > 0 {
+		ret = map[string]json.RawMessage{
+			pick: kid,
+		}
+	}
+	return
+}
+
+func (op *PrimitiveValue) GetChoice() (ret string, okay bool) {
+	switch op.Opt.(type) {
+	case nil:
+		okay = true
+	case *BoxedText:
+		ret, okay = PrimitiveValue_BoxedText, true
+	case *BoxedNumber:
+		ret, okay = PrimitiveValue_BoxedNumber, true
+	}
+	return
+}
 
 // ProgramHook swaps between various options
 type ProgramHook struct {
 	At  reader.Position `if:"internal"`
 	Opt interface{}
 }
+
+const ProgramHook_Activity = "$ACTIVITY"
 
 func (*ProgramHook) Compose() composer.Spec {
 	return composer.Spec{
@@ -1209,7 +2684,40 @@ func (*ProgramHook) Compose() composer.Spec {
 	}
 }
 
-const ProgramHook_Activity = "$ACTIVITY"
+func (op *ProgramHook) MarshalJSON() (ret []byte, err error) {
+	if val, e := op.MarshalChoice(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{"id": op.At.Offset,
+			"type":  "program_hook",
+			"value": val,
+		})
+	}
+	return
+}
+
+func (op *ProgramHook) MarshalChoice() (ret map[string]json.RawMessage, err error) {
+	if kid, e := json.Marshal(op.Opt); e != nil {
+		err = e
+	} else if pick, ok := op.GetChoice(); !ok {
+		err = errutil.Fmt("unknown choice %T in %T", op.Opt, op)
+	} else if len(pick) > 0 {
+		ret = map[string]json.RawMessage{
+			pick: kid,
+		}
+	}
+	return
+}
+
+func (op *ProgramHook) GetChoice() (ret string, okay bool) {
+	switch op.Opt.(type) {
+	case nil:
+		okay = true
+	case *core.Activity:
+		ret, okay = ProgramHook_Activity, true
+	}
+	return
+}
 
 // Pronoun requires a user-specified string.
 type Pronoun struct {
@@ -1218,6 +2726,13 @@ type Pronoun struct {
 
 func (op *Pronoun) String() (ret string) {
 	return op.Str
+}
+
+func (op *Pronoun) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "pronoun",
+		"value": op.Str,
+	})
 }
 
 const Pronoun_It = "$IT"
@@ -1247,6 +2762,13 @@ func (op *Property) String() (ret string) {
 	return op.Str
 }
 
+func (op *Property) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "property",
+		"value": op.Str,
+	})
+}
+
 func (*Property) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "property",
@@ -1263,6 +2785,13 @@ type PropertyAspect struct {
 
 func (op *PropertyAspect) String() (ret string) {
 	return op.Str
+}
+
+func (op *PropertyAspect) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "property_aspect",
+		"value": op.Str,
+	})
 }
 
 const PropertyAspect_Aspect = "$ASPECT"
@@ -1295,11 +2824,54 @@ func (*PropertyDecl) Compose() composer.Spec {
 	}
 }
 
+func (op *PropertyDecl) MarshalJSON() (ret []byte, err error) {
+	if jsonAn, e := op.MarshalJSONAn(); e != nil {
+		err = e
+	} else if jsonProperty, e := op.MarshalJSONProperty(); e != nil {
+		err = e
+	} else if jsonPropertyType, e := op.MarshalJSONPropertyType(); e != nil {
+		err = e
+	} else if jsonComment, e := op.MarshalJSONComment(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "property_decl",
+			"value": map[string]json.RawMessage{
+				"$AN":            jsonAn,
+				"$PROPERTY":      jsonProperty,
+				"$PROPERTY_TYPE": jsonPropertyType,
+				"$COMMENT":       jsonComment,
+			},
+		})
+	}
+	return
+}
+
+func (op *PropertyDecl) MarshalJSONAn() ([]byte, error) {
+	return op.An.MarshalJSON()
+}
+
+func (op *PropertyDecl) MarshalJSONProperty() ([]byte, error) {
+	return op.Property.MarshalJSON()
+}
+
+func (op *PropertyDecl) MarshalJSONPropertyType() ([]byte, error) {
+	return op.PropertyType.MarshalJSON()
+}
+
+func (op *PropertyDecl) MarshalJSONComment() ([]byte, error) {
+	return op.Comment.MarshalJSON()
+}
+
 // PropertyType swaps between various options
 type PropertyType struct {
 	At  reader.Position `if:"internal"`
 	Opt interface{}
 }
+
+const PropertyType_PropertyAspect = "$PROPERTY_ASPECT"
+const PropertyType_Primitive = "$PRIMITIVE"
+const PropertyType_Ext = "$EXT"
 
 func (*PropertyType) Compose() composer.Spec {
 	return composer.Spec{
@@ -1316,9 +2888,44 @@ func (*PropertyType) Compose() composer.Spec {
 	}
 }
 
-const PropertyType_PropertyAspect = "$PROPERTY_ASPECT"
-const PropertyType_Primitive = "$PRIMITIVE"
-const PropertyType_Ext = "$EXT"
+func (op *PropertyType) MarshalJSON() (ret []byte, err error) {
+	if val, e := op.MarshalChoice(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{"id": op.At.Offset,
+			"type":  "property_type",
+			"value": val,
+		})
+	}
+	return
+}
+
+func (op *PropertyType) MarshalChoice() (ret map[string]json.RawMessage, err error) {
+	if kid, e := json.Marshal(op.Opt); e != nil {
+		err = e
+	} else if pick, ok := op.GetChoice(); !ok {
+		err = errutil.Fmt("unknown choice %T in %T", op.Opt, op)
+	} else if len(pick) > 0 {
+		ret = map[string]json.RawMessage{
+			pick: kid,
+		}
+	}
+	return
+}
+
+func (op *PropertyType) GetChoice() (ret string, okay bool) {
+	switch op.Opt.(type) {
+	case nil:
+		okay = true
+	case *PropertyAspect:
+		ret, okay = PropertyType_PropertyAspect, true
+	case *PrimitiveType:
+		ret, okay = PropertyType_Primitive, true
+	case *ExtType:
+		ret, okay = PropertyType_Ext, true
+	}
+	return
+}
 
 // RecordList
 type RecordList struct {
@@ -1332,6 +2939,24 @@ func (*RecordList) Compose() composer.Spec {
 	}
 }
 
+func (op *RecordList) MarshalJSON() (ret []byte, err error) {
+	if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "record_list",
+			"value": map[string]json.RawMessage{
+				"$KIND": jsonKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *RecordList) MarshalJSONKind() ([]byte, error) {
+	return op.Kind.MarshalJSON()
+}
+
 // RecordPlural requires a user-specified string.
 type RecordPlural struct {
 	At  reader.Position `if:"internal"`
@@ -1340,6 +2965,13 @@ type RecordPlural struct {
 
 func (op *RecordPlural) String() (ret string) {
 	return op.Str
+}
+
+func (op *RecordPlural) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "record_plural",
+		"value": op.Str,
+	})
 }
 
 func (*RecordPlural) Compose() composer.Spec {
@@ -1358,6 +2990,13 @@ type RecordSingular struct {
 
 func (op *RecordSingular) String() (ret string) {
 	return op.Str
+}
+
+func (op *RecordSingular) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "record_singular",
+		"value": op.Str,
+	})
 }
 
 func (*RecordSingular) Compose() composer.Spec {
@@ -1380,6 +3019,24 @@ func (*RecordType) Compose() composer.Spec {
 	}
 }
 
+func (op *RecordType) MarshalJSON() (ret []byte, err error) {
+	if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "record_type",
+			"value": map[string]json.RawMessage{
+				"$KIND": jsonKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *RecordType) MarshalJSONKind() ([]byte, error) {
+	return op.Kind.MarshalJSON()
+}
+
 // RecordsPossessProperties
 type RecordsPossessProperties struct {
 	RecordPlural RecordPlural   `if:"label=_"`
@@ -1393,13 +3050,41 @@ func (*RecordsPossessProperties) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*RecordsPossessProperties)(nil)
+func (op *RecordsPossessProperties) MarshalJSON() (ret []byte, err error) {
+	if jsonRecordPlural, e := op.MarshalJSONRecordPlural(); e != nil {
+		err = e
+	} else if jsonPropertyDecl, e := op.MarshalJSONPropertyDecl(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "records_possess_properties",
+			"value": map[string]json.RawMessage{
+				"$RECORD_PLURAL": jsonRecordPlural,
+				"$PROPERTY_DECL": jsonPropertyDecl,
+			},
+		})
+	}
+	return
+}
+
+func (op *RecordsPossessProperties) MarshalJSONRecordPlural() ([]byte, error) {
+	return op.RecordPlural.MarshalJSON()
+}
+
+func (op *RecordsPossessProperties) MarshalJSONPropertyDecl() ([]byte, error) {
+	return json.Marshal(op.PropertyDecl)
+}
 
 // RelationCardinality swaps between various options
 type RelationCardinality struct {
 	At  reader.Position `if:"internal"`
 	Opt interface{}
 }
+
+const RelationCardinality_OneToOne = "$ONE_TO_ONE"
+const RelationCardinality_OneToMany = "$ONE_TO_MANY"
+const RelationCardinality_ManyToOne = "$MANY_TO_ONE"
+const RelationCardinality_ManyToMany = "$MANY_TO_MANY"
 
 func (*RelationCardinality) Compose() composer.Spec {
 	return composer.Spec{
@@ -1417,10 +3102,46 @@ func (*RelationCardinality) Compose() composer.Spec {
 	}
 }
 
-const RelationCardinality_OneToOne = "$ONE_TO_ONE"
-const RelationCardinality_OneToMany = "$ONE_TO_MANY"
-const RelationCardinality_ManyToOne = "$MANY_TO_ONE"
-const RelationCardinality_ManyToMany = "$MANY_TO_MANY"
+func (op *RelationCardinality) MarshalJSON() (ret []byte, err error) {
+	if val, e := op.MarshalChoice(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{"id": op.At.Offset,
+			"type":  "relation_cardinality",
+			"value": val,
+		})
+	}
+	return
+}
+
+func (op *RelationCardinality) MarshalChoice() (ret map[string]json.RawMessage, err error) {
+	if kid, e := json.Marshal(op.Opt); e != nil {
+		err = e
+	} else if pick, ok := op.GetChoice(); !ok {
+		err = errutil.Fmt("unknown choice %T in %T", op.Opt, op)
+	} else if len(pick) > 0 {
+		ret = map[string]json.RawMessage{
+			pick: kid,
+		}
+	}
+	return
+}
+
+func (op *RelationCardinality) GetChoice() (ret string, okay bool) {
+	switch op.Opt.(type) {
+	case nil:
+		okay = true
+	case *OneToOne:
+		ret, okay = RelationCardinality_OneToOne, true
+	case *OneToMany:
+		ret, okay = RelationCardinality_OneToMany, true
+	case *ManyToOne:
+		ret, okay = RelationCardinality_ManyToOne, true
+	case *ManyToMany:
+		ret, okay = RelationCardinality_ManyToMany, true
+	}
+	return
+}
 
 // RelativeToNoun
 type RelativeToNoun struct {
@@ -1437,7 +3158,52 @@ func (*RelativeToNoun) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*RelativeToNoun)(nil)
+func (op *RelativeToNoun) MarshalJSON() (ret []byte, err error) {
+	if jsonRelation, e := op.MarshalJSONRelation(); e != nil {
+		err = e
+	} else if jsonNouns, e := op.MarshalJSONNouns(); e != nil {
+		err = e
+	} else if jsonAreBeing, e := op.MarshalJSONAreBeing(); e != nil {
+		err = e
+	} else if jsonNouns1, e := op.MarshalJSONNouns1(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "relative_to_noun",
+			"value": map[string]json.RawMessage{
+				"$RELATION":  jsonRelation,
+				"$NOUNS":     jsonNouns,
+				"$ARE_BEING": jsonAreBeing,
+				"$NOUNS1":    jsonNouns1,
+			},
+		})
+	}
+	return
+}
+
+func (op *RelativeToNoun) MarshalJSONRelation() ([]byte, error) {
+	return op.Relation.MarshalJSON()
+}
+
+func (op *RelativeToNoun) MarshalJSONNouns() ([]byte, error) {
+	return json.Marshal(op.Nouns)
+}
+
+func (op *RelativeToNoun) MarshalJSONAreBeing() ([]byte, error) {
+	// bool override
+	var str string
+	if op.AreBeing {
+		str = value.Bool_True
+	} else {
+		str = value.Bool_False
+	}
+	m := value.Bool{str}
+	return m.MarshalJSON()
+}
+
+func (op *RelativeToNoun) MarshalJSONNouns1() ([]byte, error) {
+	return json.Marshal(op.Nouns1)
+}
 
 // RenderTemplate Parse text using iffy templates.
 type RenderTemplate struct {
@@ -1451,7 +3217,23 @@ func (*RenderTemplate) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*RenderTemplate)(nil)
+func (op *RenderTemplate) MarshalJSON() (ret []byte, err error) {
+	if jsonTemplate, e := op.MarshalJSONTemplate(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "render_template",
+			"value": map[string]json.RawMessage{
+				"$TEMPLATE": jsonTemplate,
+			},
+		})
+	}
+	return
+}
+
+func (op *RenderTemplate) MarshalJSONTemplate() ([]byte, error) {
+	return op.Template.MarshalJSON()
+}
 
 // Send
 type Send struct {
@@ -1467,8 +3249,40 @@ func (*Send) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*Send)(nil)
-var _ rt.BoolEval = (*Send)(nil)
+func (op *Send) MarshalJSON() (ret []byte, err error) {
+	if jsonEvent, e := op.MarshalJSONEvent(); e != nil {
+		err = e
+	} else if jsonPath, e := op.MarshalJSONPath(); e != nil {
+		err = e
+	} else if jsonArguments, e := op.MarshalJSONArguments(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "send",
+			"value": map[string]json.RawMessage{
+				"$EVENT":     jsonEvent,
+				"$PATH":      jsonPath,
+				"$ARGUMENTS": jsonArguments,
+			},
+		})
+	}
+	return
+}
+
+func (op *Send) MarshalJSONEvent() ([]byte, error) {
+	// type override
+	m := value.Text{op.Event}
+	return m.MarshalJSON()
+}
+
+func (op *Send) MarshalJSONPath() ([]byte, error) {
+	m := op.Path.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *Send) MarshalJSONArguments() ([]byte, error) {
+	return op.Arguments.MarshalJSON()
+}
 
 // ShuffleText
 type ShuffleText struct {
@@ -1483,7 +3297,24 @@ func (*ShuffleText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*ShuffleText)(nil)
+func (op *ShuffleText) MarshalJSON() (ret []byte, err error) {
+	if jsonParts, e := op.MarshalJSONParts(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "shuffle_text",
+			"value": map[string]json.RawMessage{
+				"$PARTS": jsonParts,
+			},
+		})
+	}
+	return
+}
+
+func (op *ShuffleText) MarshalJSONParts() ([]byte, error) {
+	return json.Marshal(op.Parts)
+}
 
 // SingularKind requires a user-specified string.
 type SingularKind struct {
@@ -1493,6 +3324,13 @@ type SingularKind struct {
 
 func (op *SingularKind) String() (ret string) {
 	return op.Str
+}
+
+func (op *SingularKind) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "singular_kind",
+		"value": op.Str,
+	})
 }
 
 func (*SingularKind) Compose() composer.Spec {
@@ -1516,7 +3354,24 @@ func (*StoppingText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*StoppingText)(nil)
+func (op *StoppingText) MarshalJSON() (ret []byte, err error) {
+	if jsonParts, e := op.MarshalJSONParts(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "stopping_text",
+			"value": map[string]json.RawMessage{
+				"$PARTS": jsonParts,
+			},
+		})
+	}
+	return
+}
+
+func (op *StoppingText) MarshalJSONParts() ([]byte, error) {
+	return json.Marshal(op.Parts)
+}
 
 // Story
 type Story struct {
@@ -1528,6 +3383,24 @@ func (*Story) Compose() composer.Spec {
 		Name: "story",
 		Uses: "flow",
 	}
+}
+
+func (op *Story) MarshalJSON() (ret []byte, err error) {
+	if jsonParagraph, e := op.MarshalJSONParagraph(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "story",
+			"value": map[string]json.RawMessage{
+				"$PARAGRAPH": jsonParagraph,
+			},
+		})
+	}
+	return
+}
+
+func (op *Story) MarshalJSONParagraph() ([]byte, error) {
+	return json.Marshal(op.Paragraph)
 }
 
 // Summary
@@ -1543,6 +3416,25 @@ func (*Summary) Compose() composer.Spec {
 	}
 }
 
+func (op *Summary) MarshalJSON() (ret []byte, err error) {
+	if jsonLines, e := op.MarshalJSONLines(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "summary",
+			"value": map[string]json.RawMessage{
+				"$LINES": jsonLines,
+			},
+		})
+	}
+	return
+}
+
+func (op *Summary) MarshalJSONLines() ([]byte, error) {
+	return op.Lines.MarshalJSON()
+}
+
 // Tail Adds details about the preceding noun or nouns.
 type Tail struct {
 	Pronoun    Pronoun    `if:"label=_"`
@@ -1556,6 +3448,31 @@ func (*Tail) Compose() composer.Spec {
 	}
 }
 
+func (op *Tail) MarshalJSON() (ret []byte, err error) {
+	if jsonPronoun, e := op.MarshalJSONPronoun(); e != nil {
+		err = e
+	} else if jsonNounPhrase, e := op.MarshalJSONNounPhrase(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "tail",
+			"value": map[string]json.RawMessage{
+				"$PRONOUN":     jsonPronoun,
+				"$NOUN_PHRASE": jsonNounPhrase,
+			},
+		})
+	}
+	return
+}
+
+func (op *Tail) MarshalJSONPronoun() ([]byte, error) {
+	return op.Pronoun.MarshalJSON()
+}
+
+func (op *Tail) MarshalJSONNounPhrase() ([]byte, error) {
+	return op.NounPhrase.MarshalJSON()
+}
+
 // TestName requires a user-specified string.
 type TestName struct {
 	At  reader.Position `if:"internal"`
@@ -1564,6 +3481,13 @@ type TestName struct {
 
 func (op *TestName) String() (ret string) {
 	return op.Str
+}
+
+func (op *TestName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "test_name",
+		"value": op.Str,
+	})
 }
 
 const TestName_CurrentTest = "$CURRENT_TEST"
@@ -1594,7 +3518,23 @@ func (*TestOutput) Compose() composer.Spec {
 	}
 }
 
-var _ Testing = (*TestOutput)(nil)
+func (op *TestOutput) MarshalJSON() (ret []byte, err error) {
+	if jsonLines, e := op.MarshalJSONLines(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "test_output",
+			"value": map[string]json.RawMessage{
+				"$LINES": jsonLines,
+			},
+		})
+	}
+	return
+}
+
+func (op *TestOutput) MarshalJSONLines() ([]byte, error) {
+	return op.Lines.MarshalJSON()
+}
 
 // TestRule
 type TestRule struct {
@@ -1609,7 +3549,30 @@ func (*TestRule) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*TestRule)(nil)
+func (op *TestRule) MarshalJSON() (ret []byte, err error) {
+	if jsonTestName, e := op.MarshalJSONTestName(); e != nil {
+		err = e
+	} else if jsonHook, e := op.MarshalJSONHook(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "test_rule",
+			"value": map[string]json.RawMessage{
+				"$TEST_NAME": jsonTestName,
+				"$HOOK":      jsonHook,
+			},
+		})
+	}
+	return
+}
+
+func (op *TestRule) MarshalJSONTestName() ([]byte, error) {
+	return op.TestName.MarshalJSON()
+}
+
+func (op *TestRule) MarshalJSONHook() ([]byte, error) {
+	return op.Hook.MarshalJSON()
+}
 
 // TestScene
 type TestScene struct {
@@ -1624,7 +3587,30 @@ func (*TestScene) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*TestScene)(nil)
+func (op *TestScene) MarshalJSON() (ret []byte, err error) {
+	if jsonTestName, e := op.MarshalJSONTestName(); e != nil {
+		err = e
+	} else if jsonStory, e := op.MarshalJSONStory(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "test_scene",
+			"value": map[string]json.RawMessage{
+				"$TEST_NAME": jsonTestName,
+				"$STORY":     jsonStory,
+			},
+		})
+	}
+	return
+}
+
+func (op *TestScene) MarshalJSONTestName() ([]byte, error) {
+	return op.TestName.MarshalJSON()
+}
+
+func (op *TestScene) MarshalJSONStory() ([]byte, error) {
+	return op.Story.MarshalJSON()
+}
 
 // TestStatement
 type TestStatement struct {
@@ -1640,7 +3626,32 @@ func (*TestStatement) Compose() composer.Spec {
 	}
 }
 
-var _ StoryStatement = (*TestStatement)(nil)
+func (op *TestStatement) MarshalJSON() (ret []byte, err error) {
+	if jsonTestName, e := op.MarshalJSONTestName(); e != nil {
+		err = e
+	} else if jsonTest, e := op.MarshalJSONTest(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "test_statement",
+			"value": map[string]json.RawMessage{
+				"$TEST_NAME": jsonTestName,
+				"$TEST":      jsonTest,
+			},
+		})
+	}
+	return
+}
+
+func (op *TestStatement) MarshalJSONTestName() ([]byte, error) {
+	return op.TestName.MarshalJSON()
+}
+
+func (op *TestStatement) MarshalJSONTest() ([]byte, error) {
+	m := op.Test.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // TextList requires a user-specified string.
 type TextList struct {
@@ -1649,6 +3660,13 @@ type TextList struct {
 
 func (op *TextList) String() (ret string) {
 	return op.Str
+}
+
+func (op *TextList) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "text_list",
+		"value": op.Str,
+	})
 }
 
 const TextList_List = "$LIST"
@@ -1676,6 +3694,13 @@ func (op *Trait) String() (ret string) {
 	return op.Str
 }
 
+func (op *Trait) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
+		"type":  "trait",
+		"value": op.Str,
+	})
+}
+
 func (*Trait) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "trait",
@@ -1697,6 +3722,39 @@ func (*TraitPhrase) Compose() composer.Spec {
 	}
 }
 
+func (op *TraitPhrase) MarshalJSON() (ret []byte, err error) {
+	if jsonAreEither, e := op.MarshalJSONAreEither(); e != nil {
+		err = e
+	} else if jsonTrait, e := op.MarshalJSONTrait(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "trait_phrase",
+			"value": map[string]json.RawMessage{
+				"$ARE_EITHER": jsonAreEither,
+				"$TRAIT":      jsonTrait,
+			},
+		})
+	}
+	return
+}
+
+func (op *TraitPhrase) MarshalJSONAreEither() ([]byte, error) {
+	// bool override
+	var str string
+	if op.AreEither {
+		str = value.Bool_True
+	} else {
+		str = value.Bool_False
+	}
+	m := value.Bool{str}
+	return m.MarshalJSON()
+}
+
+func (op *TraitPhrase) MarshalJSONTrait() ([]byte, error) {
+	return json.Marshal(op.Trait)
+}
+
 // VariableDecl
 type VariableDecl struct {
 	An      Determiner         `if:"label=_"`
@@ -1712,11 +3770,54 @@ func (*VariableDecl) Compose() composer.Spec {
 	}
 }
 
+func (op *VariableDecl) MarshalJSON() (ret []byte, err error) {
+	if jsonAn, e := op.MarshalJSONAn(); e != nil {
+		err = e
+	} else if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else if jsonType, e := op.MarshalJSONType(); e != nil {
+		err = e
+	} else if jsonComment, e := op.MarshalJSONComment(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "variable_decl",
+			"value": map[string]json.RawMessage{
+				"$AN":      jsonAn,
+				"$NAME":    jsonName,
+				"$TYPE":    jsonType,
+				"$COMMENT": jsonComment,
+			},
+		})
+	}
+	return
+}
+
+func (op *VariableDecl) MarshalJSONAn() ([]byte, error) {
+	return op.An.MarshalJSON()
+}
+
+func (op *VariableDecl) MarshalJSONName() ([]byte, error) {
+	return op.Name.MarshalJSON()
+}
+
+func (op *VariableDecl) MarshalJSONType() ([]byte, error) {
+	return op.Type.MarshalJSON()
+}
+
+func (op *VariableDecl) MarshalJSONComment() ([]byte, error) {
+	return op.Comment.MarshalJSON()
+}
+
 // VariableType swaps between various options
 type VariableType struct {
 	At  reader.Position `if:"internal"`
 	Opt interface{}
 }
+
+const VariableType_Primitive = "$PRIMITIVE"
+const VariableType_Object = "$OBJECT"
+const VariableType_Ext = "$EXT"
 
 func (*VariableType) Compose() composer.Spec {
 	return composer.Spec{
@@ -1733,9 +3834,44 @@ func (*VariableType) Compose() composer.Spec {
 	}
 }
 
-const VariableType_Primitive = "$PRIMITIVE"
-const VariableType_Object = "$OBJECT"
-const VariableType_Ext = "$EXT"
+func (op *VariableType) MarshalJSON() (ret []byte, err error) {
+	if val, e := op.MarshalChoice(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{"id": op.At.Offset,
+			"type":  "variable_type",
+			"value": val,
+		})
+	}
+	return
+}
+
+func (op *VariableType) MarshalChoice() (ret map[string]json.RawMessage, err error) {
+	if kid, e := json.Marshal(op.Opt); e != nil {
+		err = e
+	} else if pick, ok := op.GetChoice(); !ok {
+		err = errutil.Fmt("unknown choice %T in %T", op.Opt, op)
+	} else if len(pick) > 0 {
+		ret = map[string]json.RawMessage{
+			pick: kid,
+		}
+	}
+	return
+}
+
+func (op *VariableType) GetChoice() (ret string, okay bool) {
+	switch op.Opt.(type) {
+	case nil:
+		okay = true
+	case *PrimitiveType:
+		ret, okay = VariableType_Primitive, true
+	case *ObjectType:
+		ret, okay = VariableType_Object, true
+	case *ExtType:
+		ret, okay = VariableType_Ext, true
+	}
+	return
+}
 
 var Slots = []interface{}{
 	(*StoryStatement)(nil),

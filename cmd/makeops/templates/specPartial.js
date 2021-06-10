@@ -22,7 +22,7 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
 {{/if}}
 {{#if (Uses name "swap")}}
     Choices: []string {
-      {{#each (Swaps @this)~}}{{Pascal ../name}}_{{Pascal this.token}},{{#unless @last}} {{/unless}}{{/each}}
+      {{#each (Choices @this)~}}{{Pascal ../name}}_{{Pascal this.token}},{{#unless @last}} {{/unless}}{{/each}}
      },
     Swaps: []interface{} {
 {{#each with.params}}

@@ -2,6 +2,7 @@
 package render
 
 import (
+	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
@@ -20,7 +21,24 @@ func (*RenderExp) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*RenderExp)(nil)
+func (op *RenderExp) MarshalJSON() (ret []byte, err error) {
+	if jsonExpression, e := op.MarshalJSONExpression(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "render_exp",
+			"value": map[string]json.RawMessage{
+				"$EXPRESSION": jsonExpression,
+			},
+		})
+	}
+	return
+}
+
+func (op *RenderExp) MarshalJSONExpression() ([]byte, error) {
+	m := op.Expression.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // RenderField in template phrases, picks between record variables, object variables, and named global objects.,ex. could be &quot;ringBearer&quot;, &quot;SamWise&quot;, or &quot;frodo&quot;
 type RenderField struct {
@@ -34,7 +52,24 @@ func (*RenderField) Compose() composer.Spec {
 	}
 }
 
-var _ core.FromSourceFields = (*RenderField)(nil)
+func (op *RenderField) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "render_field",
+			"value": map[string]json.RawMessage{
+				"$NAME": jsonName,
+			},
+		})
+	}
+	return
+}
+
+func (op *RenderField) MarshalJSONName() ([]byte, error) {
+	m := op.Name.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // RenderFlags requires a user-specified string.
 type RenderFlags struct {
@@ -43,6 +78,13 @@ type RenderFlags struct {
 
 func (op *RenderFlags) String() (ret string) {
 	return op.Str
+}
+
+func (op *RenderFlags) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "render_flags",
+		"value": op.Str,
+	})
 }
 
 const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
@@ -74,7 +116,25 @@ func (*RenderName) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*RenderName)(nil)
+func (op *RenderName) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "render_name",
+			"value": map[string]json.RawMessage{
+				"$NAME": jsonName,
+			},
+		})
+	}
+	return
+}
+
+func (op *RenderName) MarshalJSONName() ([]byte, error) {
+	// type override
+	m := value.Text{op.Name}
+	return m.MarshalJSON()
+}
 
 // RenderPattern printing is generally an activity b/c say is an activity,and we want the ability to say several things in series.
 type RenderPattern struct {
@@ -90,8 +150,30 @@ func (*RenderPattern) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*RenderPattern)(nil)
-var _ rt.TextEval = (*RenderPattern)(nil)
+func (op *RenderPattern) MarshalJSON() (ret []byte, err error) {
+	if jsonPattern, e := op.MarshalJSONPattern(); e != nil {
+		err = e
+	} else if jsonArguments, e := op.MarshalJSONArguments(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "render_pattern",
+			"value": map[string]json.RawMessage{
+				"$PATTERN":   jsonPattern,
+				"$ARGUMENTS": jsonArguments,
+			},
+		})
+	}
+	return
+}
+
+func (op *RenderPattern) MarshalJSONPattern() ([]byte, error) {
+	return op.Pattern.MarshalJSON()
+}
+
+func (op *RenderPattern) MarshalJSONArguments() ([]byte, error) {
+	return op.Arguments.MarshalJSON()
+}
 
 // RenderRef returns the value of a variable or the id of an object.
 type RenderRef struct {
@@ -106,9 +188,31 @@ func (*RenderRef) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*RenderRef)(nil)
-var _ rt.NumberEval = (*RenderRef)(nil)
-var _ rt.TextEval = (*RenderRef)(nil)
+func (op *RenderRef) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else if jsonFlags, e := op.MarshalJSONFlags(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "render_ref",
+			"value": map[string]json.RawMessage{
+				"$NAME":  jsonName,
+				"$FLAGS": jsonFlags,
+			},
+		})
+	}
+	return
+}
+
+func (op *RenderRef) MarshalJSONName() ([]byte, error) {
+	return op.Name.MarshalJSON()
+}
+
+func (op *RenderRef) MarshalJSONFlags() ([]byte, error) {
+	return op.Flags.MarshalJSON()
+}
+
 var Slats = []composer.Composer{
 	(*RenderExp)(nil),
 	(*RenderField)(nil),

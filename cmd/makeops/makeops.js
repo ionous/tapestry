@@ -60,11 +60,8 @@ const groups = {};
 const nameToGroup = {};
 let currentGroup;
 let currentType;
-const marshalling= false;
 
-Handlebars.registerHelper('Marshal', ()=>marshalling);
 Handlebars.registerHelper('Pascal', pascal);
-Handlebars.registerHelper('Lower', lower);
 Handlebars.registerHelper('ParamsOf', paramsOf);
 Handlebars.registerHelper('IsPositioned', isPositioned);
 // does the passed string start with a $
@@ -79,9 +76,9 @@ Handlebars.registerHelper('LedeName', function(t) {
     return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
   }
 });
-const scopedName= function(name) {
+const scopedName= function(name, ignoreOverride) {
   let n = pascal(name);
-  const override= overrides[name];
+  const override= !ignoreOverride && overrides[name];
   if (override) {
     n = override; // stuffed in during makeops startup.
   } else {
@@ -93,10 +90,11 @@ const scopedName= function(name) {
   return n;
 };
 
-Handlebars.registerHelper('ScopedNameOf', scopedName);
+Handlebars.registerHelper('OriginalTypeOf', (param) => scopedName(param.type, true));
 
-Handlebars.registerHelper('ParamNameOf', function(key, param) {
-  return pascal(key) || pascal(param.type);
+Handlebars.registerHelper('LowerNameOf', function(key, param) {
+  const el= pascal(key) || pascal(param.type);
+  return el.charAt(0).toLowerCase() + el.slice(1);
 });
 
 Handlebars.registerHelper('LabelOf', function(key, param, index) {
@@ -106,6 +104,11 @@ Handlebars.registerHelper('LabelOf', function(key, param, index) {
 Handlebars.registerHelper('Override', function(param) {
   const name = param.type;
   return overrides[name]? name:false;
+});
+
+Handlebars.registerHelper('IsBool', function(param) {
+  const name = param.type;
+  return overrides[name] === 'bool';
 });
 Handlebars.registerHelper('TypeOf', function(param) {
   const name = param.type;
@@ -143,16 +146,12 @@ Handlebars.registerHelper('IsClosed', function(strType) {
   return isClosed(strType);
 });
 
-// for uses='str'
+// for uses='str' or 'swap'
 Handlebars.registerHelper('Choices', function(strType) {
   const token = tokenize(strType.name);
   return strChoices(token, strType);
 });
-// for uses='str'
-Handlebars.registerHelper('Swaps', function(strType) {
-  const token = tokenize(strType.name);
-  return strChoices(token, strType);
-});
+
 
 // flatten desc
 Handlebars.registerHelper('DescOf', function(x) {
@@ -175,17 +174,21 @@ Handlebars.registerHelper('DescOf', function(x) {
 
 const locationOf = function(x) {
   let where;
-  switch (x) {
-    case  "rt":
-      where= `git.sr.ht/~ionous/iffy/rt`;
-      break;
-    case "story":
-      // FIX: should move all the story files to the dl folder instead.
-      where= `git.sr.ht/~ionous/iffy/ephemera/story`;
-      break;
-    default:
-      where= `git.sr.ht/~ionous/iffy/dl/${x}`
-      break;
+  if (x.includes("/")) {
+    where= x;
+  } else {
+    switch (x) {
+      case  "rt":
+        where= `git.sr.ht/~ionous/iffy/rt`;
+        break;
+      case "story":
+        // FIX: should move all the story files to the dl folder instead.
+        where= `git.sr.ht/~ionous/iffy/ephemera/story`;
+        break;
+      default:
+        where= `git.sr.ht/~ionous/iffy/dl/${x}`
+        break;
+    }
   }
   return where;
 }
@@ -203,9 +206,6 @@ partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Par
 const templates = Object.fromEntries(sources.map(k => [k,
   Handlebars.compile(require(`./templates/${k}Template.js`))])
 );
-templates['phrase'] = templates['flow'];
-
-// console.log(templates.header({package:'story'}));
 
 // split types into different categories
 for (const typeName in allTypes) {
@@ -265,9 +265,10 @@ console.log("num groups", Object.keys(groups).length);
 
 // determine includes:
 for (currentGroup in groups) {
+  const marshal= currentGroup!=="reader";
   const g = groups[currentGroup];
   // look up all the dependencies
-  const inc = [];
+  const inc = new Set();
   let count = 0;
   for (const n of g.slats) {
     count++;
@@ -275,17 +276,22 @@ for (currentGroup in groups) {
       const type = allTypes[n];
       if (isPositioned(type)) {
         const o= "reader"; // for forced str and swap position field
-        if (o && o !== currentGroup && inc.indexOf(o) < 0) {
-          inc.push(o);
+        if (o && o !== currentGroup) {
+          inc.add(o);
         }
+      }
+      if (type.uses === "swap") {
+        inc.add("github.com/ionous/errutil")
       }
       const params= paramsOf(type);
       for (const p in params) {
         const param = params[p];
-        if (param && !overrides[param.type]) {
+        // when we are marshaling we need to include all types
+        // otherwise we only need to include the types we dont override out of existence
+        if (param && (marshal || !overrides[param.type])) {
           const o = nameToGroup[param.type];
-          if (o && o !== currentGroup && inc.indexOf(o) < 0) {
-            inc.push(o);
+          if (o && o !== currentGroup) {
+            inc.add(o);
           }
         }
       }
@@ -296,7 +302,6 @@ for (currentGroup in groups) {
   // console.log(JSON.stringify(allTypes,0,2));
   // return;
 
-  //
   // 1. open a file
   const dir = path.join(process.env.GOPATH, "src", locationOf(currentGroup));
   const filepath = path.join(dir, `${currentGroup}_lang.go`);
@@ -304,12 +309,15 @@ for (currentGroup in groups) {
   fs.mkdirSync(dir, { recursive: true });
   const fd = fs.openSync(filepath, 'w');
   if (g.slats.length) {
-    inc.push("composer");
+    inc.add("composer");
+    if (marshal) {
+      inc.add("encoding/json");
+    }
   }
   // 2. write the header ( with package name and inc )
   fs.writeSync(fd, templates.header({
     package: currentGroup,
-    imports: inc.sort(),
+    imports: Array.from(inc.values()).sort(),
   }));
   // #. write slats ( if any )
   for (const n of g.slats) {
@@ -319,20 +327,18 @@ for (currentGroup in groups) {
       throw new Error(`unknown template for ${n}`);
     } else {
       currentType= type;
-      fs.writeSync(fd, template(type));
+      fs.writeSync(fd, template({
+        marshal,
+        type:type
+      }));
     }
   }
-  // write registration lists
+  // 3. write registration lists
   fs.writeSync(fd, templates.regList({
     which: "Slots",
     list: g.slots.map(n => allTypes[n]),
     RegType: "interface{}",
   }));
-  // fs.writeSync(fd, templates.regList({
-  //   which: "Swaps",
-  //   list: g.slats.map(n => allTypes[n]).filter(t => t.uses === "swap"),
-  //   RegType: "interface{}",
-  // }));
   fs.writeSync(fd, templates.regList({
     which: "Slats",
     list: g.slats.map(n => allTypes[n]).filter(t => (t.uses !== "slot")),

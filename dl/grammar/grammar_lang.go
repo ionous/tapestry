@@ -2,7 +2,9 @@
 package grammar
 
 import (
+	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/value"
 )
 
 // Action makes a parser scanner producing a script defined action.
@@ -18,7 +20,25 @@ func (*Action) Compose() composer.Spec {
 	}
 }
 
-var _ ScannerMaker = (*Action)(nil)
+func (op *Action) MarshalJSON() (ret []byte, err error) {
+	if jsonAction, e := op.MarshalJSONAction(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "action",
+			"value": map[string]json.RawMessage{
+				"$ACTION": jsonAction,
+			},
+		})
+	}
+	return
+}
+
+func (op *Action) MarshalJSONAction() ([]byte, error) {
+	// type override
+	m := value.Text{op.Action}
+	return m.MarshalJSON()
+}
 
 // Alias allows the user to refer to a noun by one or more other terms.
 type Alias struct {
@@ -33,7 +53,32 @@ func (*Alias) Compose() composer.Spec {
 	}
 }
 
-var _ GrammarMaker = (*Alias)(nil)
+func (op *Alias) MarshalJSON() (ret []byte, err error) {
+	if jsonNames, e := op.MarshalJSONNames(); e != nil {
+		err = e
+	} else if jsonAsNoun, e := op.MarshalJSONAsNoun(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "alias",
+			"value": map[string]json.RawMessage{
+				"$NAMES":   jsonNames,
+				"$AS_NOUN": jsonAsNoun,
+			},
+		})
+	}
+	return
+}
+
+func (op *Alias) MarshalJSONNames() ([]byte, error) {
+	return json.Marshal(op.Names)
+}
+
+func (op *Alias) MarshalJSONAsNoun() ([]byte, error) {
+	// type override
+	m := value.Text{op.AsNoun}
+	return m.MarshalJSON()
+}
 
 // AllOf makes a parser scanner
 type AllOf struct {
@@ -47,7 +92,23 @@ func (*AllOf) Compose() composer.Spec {
 	}
 }
 
-var _ ScannerMaker = (*AllOf)(nil)
+func (op *AllOf) MarshalJSON() (ret []byte, err error) {
+	if jsonSeries, e := op.MarshalJSONSeries(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "all_of",
+			"value": map[string]json.RawMessage{
+				"$SERIES": jsonSeries,
+			},
+		})
+	}
+	return
+}
+
+func (op *AllOf) MarshalJSONSeries() ([]byte, error) {
+	return json.Marshal(op.Series)
+}
 
 // AnyOf makes a parser scanner
 type AnyOf struct {
@@ -61,7 +122,23 @@ func (*AnyOf) Compose() composer.Spec {
 	}
 }
 
-var _ ScannerMaker = (*AnyOf)(nil)
+func (op *AnyOf) MarshalJSON() (ret []byte, err error) {
+	if jsonOptions, e := op.MarshalJSONOptions(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "any_of",
+			"value": map[string]json.RawMessage{
+				"$OPTIONS": jsonOptions,
+			},
+		})
+	}
+	return
+}
+
+func (op *AnyOf) MarshalJSONOptions() ([]byte, error) {
+	return json.Marshal(op.Options)
+}
 
 // Directive starts a parser scanner
 type Directive struct {
@@ -76,7 +153,30 @@ func (*Directive) Compose() composer.Spec {
 	}
 }
 
-var _ GrammarMaker = (*Directive)(nil)
+func (op *Directive) MarshalJSON() (ret []byte, err error) {
+	if jsonLede, e := op.MarshalJSONLede(); e != nil {
+		err = e
+	} else if jsonScans, e := op.MarshalJSONScans(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "directive",
+			"value": map[string]json.RawMessage{
+				"$LEDE":  jsonLede,
+				"$SCANS": jsonScans,
+			},
+		})
+	}
+	return
+}
+
+func (op *Directive) MarshalJSONLede() ([]byte, error) {
+	return json.Marshal(op.Lede)
+}
+
+func (op *Directive) MarshalJSONScans() ([]byte, error) {
+	return json.Marshal(op.Scans)
+}
 
 // Grammar Read what the player types and turn it into actions.
 type Grammar struct {
@@ -88,6 +188,25 @@ func (*Grammar) Compose() composer.Spec {
 		Name: "grammar",
 		Uses: "flow",
 	}
+}
+
+func (op *Grammar) MarshalJSON() (ret []byte, err error) {
+	if jsonGrammar, e := op.MarshalJSONGrammar(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "grammar",
+			"value": map[string]json.RawMessage{
+				"$GRAMMAR": jsonGrammar,
+			},
+		})
+	}
+	return
+}
+
+func (op *Grammar) MarshalJSONGrammar() ([]byte, error) {
+	m := op.Grammar.(json.Marshaler)
+	return m.MarshalJSON()
 }
 
 // Noun makes a parser scanner
@@ -102,7 +221,25 @@ func (*Noun) Compose() composer.Spec {
 	}
 }
 
-var _ ScannerMaker = (*Noun)(nil)
+func (op *Noun) MarshalJSON() (ret []byte, err error) {
+	if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "noun",
+			"value": map[string]json.RawMessage{
+				"$KIND": jsonKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *Noun) MarshalJSONKind() ([]byte, error) {
+	// type override
+	m := value.Text{op.Kind}
+	return m.MarshalJSON()
+}
 
 // Retarget makes a parser scanner
 type Retarget struct {
@@ -116,7 +253,23 @@ func (*Retarget) Compose() composer.Spec {
 	}
 }
 
-var _ ScannerMaker = (*Retarget)(nil)
+func (op *Retarget) MarshalJSON() (ret []byte, err error) {
+	if jsonSpan, e := op.MarshalJSONSpan(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "retarget",
+			"value": map[string]json.RawMessage{
+				"$SPAN": jsonSpan,
+			},
+		})
+	}
+	return
+}
+
+func (op *Retarget) MarshalJSONSpan() ([]byte, error) {
+	return json.Marshal(op.Span)
+}
 
 // Reverse makes a parser scanner
 type Reverse struct {
@@ -130,7 +283,23 @@ func (*Reverse) Compose() composer.Spec {
 	}
 }
 
-var _ ScannerMaker = (*Reverse)(nil)
+func (op *Reverse) MarshalJSON() (ret []byte, err error) {
+	if jsonReverses, e := op.MarshalJSONReverses(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "reverse",
+			"value": map[string]json.RawMessage{
+				"$REVERSES": jsonReverses,
+			},
+		})
+	}
+	return
+}
+
+func (op *Reverse) MarshalJSONReverses() ([]byte, error) {
+	return json.Marshal(op.Reverses)
+}
 
 // Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
 type Self struct {
@@ -144,7 +313,25 @@ func (*Self) Compose() composer.Spec {
 	}
 }
 
-var _ ScannerMaker = (*Self)(nil)
+func (op *Self) MarshalJSON() (ret []byte, err error) {
+	if jsonPlayer, e := op.MarshalJSONPlayer(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "self",
+			"value": map[string]json.RawMessage{
+				"$PLAYER": jsonPlayer,
+			},
+		})
+	}
+	return
+}
+
+func (op *Self) MarshalJSONPlayer() ([]byte, error) {
+	// type override
+	m := value.Text{op.Player}
+	return m.MarshalJSON()
+}
 
 // Words makes a parser scanner
 type Words struct {
@@ -158,7 +345,24 @@ func (*Words) Compose() composer.Spec {
 	}
 }
 
-var _ ScannerMaker = (*Words)(nil)
+func (op *Words) MarshalJSON() (ret []byte, err error) {
+	if jsonWords, e := op.MarshalJSONWords(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "words",
+			"value": map[string]json.RawMessage{
+				"$WORDS": jsonWords,
+			},
+		})
+	}
+	return
+}
+
+func (op *Words) MarshalJSONWords() ([]byte, error) {
+	return json.Marshal(op.Words)
+}
+
 var Slots = []interface{}{
 	(*GrammarMaker)(nil),
 	(*ScannerMaker)(nil),

@@ -2,6 +2,7 @@
 package core
 
 import (
+	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/value"
@@ -21,7 +22,23 @@ func (*Activity) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*Activity)(nil)
+func (op *Activity) MarshalJSON() (ret []byte, err error) {
+	if jsonExe, e := op.MarshalJSONExe(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "activity",
+			"value": map[string]json.RawMessage{
+				"$EXE": jsonExe,
+			},
+		})
+	}
+	return
+}
+
+func (op *Activity) MarshalJSONExe() ([]byte, error) {
+	return json.Marshal(op.Exe)
+}
 
 // AllTrue Returns true if all of the evaluations are true.
 type AllTrue struct {
@@ -36,10 +53,27 @@ func (*AllTrue) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*AllTrue)(nil)
+func (op *AllTrue) MarshalJSON() (ret []byte, err error) {
+	if jsonTest, e := op.MarshalJSONTest(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "all_true",
+			"value": map[string]json.RawMessage{
+				"$TEST": jsonTest,
+			},
+		})
+	}
+	return
+}
+
+func (op *AllTrue) MarshalJSONTest() ([]byte, error) {
+	return json.Marshal(op.Test)
+}
 
 // Always Returns true.
-type Always struct{}
+type Always struct {
+}
 
 func (*Always) Compose() composer.Spec {
 	return composer.Spec{
@@ -48,7 +82,15 @@ func (*Always) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*Always)(nil)
+func (op *Always) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "always",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // AnyTrue Returns true if any of the evaluations are true.
 type AnyTrue struct {
@@ -63,7 +105,23 @@ func (*AnyTrue) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*AnyTrue)(nil)
+func (op *AnyTrue) MarshalJSON() (ret []byte, err error) {
+	if jsonTest, e := op.MarshalJSONTest(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "any_true",
+			"value": map[string]json.RawMessage{
+				"$TEST": jsonTest,
+			},
+		})
+	}
+	return
+}
+
+func (op *AnyTrue) MarshalJSONTest() ([]byte, error) {
+	return json.Marshal(op.Test)
+}
 
 // Assign Assigns a variable to a value.
 type Assign struct {
@@ -79,10 +137,35 @@ func (*Assign) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*Assign)(nil)
+func (op *Assign) MarshalJSON() (ret []byte, err error) {
+	if jsonVar, e := op.MarshalJSONVar(); e != nil {
+		err = e
+	} else if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "assign",
+			"value": map[string]json.RawMessage{
+				"$VAR":  jsonVar,
+				"$FROM": jsonFrom,
+			},
+		})
+	}
+	return
+}
+
+func (op *Assign) MarshalJSONVar() ([]byte, error) {
+	return op.Var.MarshalJSON()
+}
+
+func (op *Assign) MarshalJSONFrom() ([]byte, error) {
+	m := op.From.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // AtLeast The first value is greater than or equal to the second value.
-type AtLeast struct{}
+type AtLeast struct {
+}
 
 func (*AtLeast) Compose() composer.Spec {
 	return composer.Spec{
@@ -91,10 +174,19 @@ func (*AtLeast) Compose() composer.Spec {
 	}
 }
 
-var _ Comparator = (*AtLeast)(nil)
+func (op *AtLeast) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "at_least",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // AtMost The first value is less than or equal to the second value.
-type AtMost struct{}
+type AtMost struct {
+}
 
 func (*AtMost) Compose() composer.Spec {
 	return composer.Spec{
@@ -103,10 +195,19 @@ func (*AtMost) Compose() composer.Spec {
 	}
 }
 
-var _ Comparator = (*AtMost)(nil)
+func (op *AtMost) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "at_most",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // Blankline Add a single blank line following some text.
-type Blankline struct{}
+type Blankline struct {
+}
 
 func (*Blankline) Compose() composer.Spec {
 	return composer.Spec{
@@ -116,7 +217,15 @@ func (*Blankline) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*Blankline)(nil)
+func (op *Blankline) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "blankline",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // BoolValue Specify an explicit true or false value.
 type BoolValue struct {
@@ -131,7 +240,31 @@ func (*BoolValue) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*BoolValue)(nil)
+func (op *BoolValue) MarshalJSON() (ret []byte, err error) {
+	if jsonBool, e := op.MarshalJSONBool(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "bool_value",
+			"value": map[string]json.RawMessage{
+				"$BOOL": jsonBool,
+			},
+		})
+	}
+	return
+}
+
+func (op *BoolValue) MarshalJSONBool() ([]byte, error) {
+	// bool override
+	var str string
+	if op.Bool {
+		str = value.Bool_True
+	} else {
+		str = value.Bool_False
+	}
+	m := value.Bool{str}
+	return m.MarshalJSON()
+}
 
 // BracketText Sandwiches text printed during a block and puts them inside parenthesis &#x27;()&#x27;.
 type BracketText struct {
@@ -146,10 +279,27 @@ func (*BracketText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*BracketText)(nil)
+func (op *BracketText) MarshalJSON() (ret []byte, err error) {
+	if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "bracket_text",
+			"value": map[string]json.RawMessage{
+				"$DO": jsonDo,
+			},
+		})
+	}
+	return
+}
+
+func (op *BracketText) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
 
 // Break In a repeating loop, exit the loop.
-type Break struct{}
+type Break struct {
+}
 
 func (*Break) Compose() composer.Spec {
 	return composer.Spec{
@@ -158,7 +308,15 @@ func (*Break) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*Break)(nil)
+func (op *Break) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "break",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // BufferText
 type BufferText struct {
@@ -173,7 +331,23 @@ func (*BufferText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*BufferText)(nil)
+func (op *BufferText) MarshalJSON() (ret []byte, err error) {
+	if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "buffer_text",
+			"value": map[string]json.RawMessage{
+				"$DO": jsonDo,
+			},
+		})
+	}
+	return
+}
+
+func (op *BufferText) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
 
 // CallArg Runtime version of argument
 type CallArg struct {
@@ -189,6 +363,34 @@ func (*CallArg) Compose() composer.Spec {
 	}
 }
 
+func (op *CallArg) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "call_arg",
+			"value": map[string]json.RawMessage{
+				"$NAME": jsonName,
+				"$FROM": jsonFrom,
+			},
+		})
+	}
+	return
+}
+
+func (op *CallArg) MarshalJSONName() ([]byte, error) {
+	// type override
+	m := value.Text{op.Name}
+	return m.MarshalJSON()
+}
+
+func (op *CallArg) MarshalJSONFrom() ([]byte, error) {
+	m := op.From.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
 // CallArgs Runtime version of arguments
 type CallArgs struct {
 	Args []CallArg `if:"label=_"`
@@ -200,6 +402,24 @@ func (*CallArgs) Compose() composer.Spec {
 		Uses: "flow",
 		Lede: "inargs",
 	}
+}
+
+func (op *CallArgs) MarshalJSON() (ret []byte, err error) {
+	if jsonArgs, e := op.MarshalJSONArgs(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "call_args",
+			"value": map[string]json.RawMessage{
+				"$ARGS": jsonArgs,
+			},
+		})
+	}
+	return
+}
+
+func (op *CallArgs) MarshalJSONArgs() ([]byte, error) {
+	return json.Marshal(op.Args)
 }
 
 // CallCycle Runtime version of cycle_text
@@ -216,7 +436,24 @@ func (*CallCycle) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*CallCycle)(nil)
+func (op *CallCycle) MarshalJSON() (ret []byte, err error) {
+	if jsonParts, e := op.MarshalJSONParts(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "call_cycle",
+			"value": map[string]json.RawMessage{
+				"$PARTS": jsonParts,
+			},
+		})
+	}
+	return
+}
+
+func (op *CallCycle) MarshalJSONParts() ([]byte, error) {
+	return json.Marshal(op.Parts)
+}
 
 // CallMake Runtime version of make
 type CallMake struct {
@@ -231,7 +468,32 @@ func (*CallMake) Compose() composer.Spec {
 	}
 }
 
-var _ rt.RecordEval = (*CallMake)(nil)
+func (op *CallMake) MarshalJSON() (ret []byte, err error) {
+	if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else if jsonArguments, e := op.MarshalJSONArguments(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "call_make",
+			"value": map[string]json.RawMessage{
+				"$KIND":      jsonKind,
+				"$ARGUMENTS": jsonArguments,
+			},
+		})
+	}
+	return
+}
+
+func (op *CallMake) MarshalJSONKind() ([]byte, error) {
+	// type override
+	m := value.Text{op.Kind}
+	return m.MarshalJSON()
+}
+
+func (op *CallMake) MarshalJSONArguments() ([]byte, error) {
+	return op.Arguments.MarshalJSON()
+}
 
 // CallPattern Runtime version of determine
 type CallPattern struct {
@@ -246,14 +508,30 @@ func (*CallPattern) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*CallPattern)(nil)
-var _ rt.BoolEval = (*CallPattern)(nil)
-var _ rt.NumberEval = (*CallPattern)(nil)
-var _ rt.TextEval = (*CallPattern)(nil)
-var _ rt.RecordEval = (*CallPattern)(nil)
-var _ rt.NumListEval = (*CallPattern)(nil)
-var _ rt.TextListEval = (*CallPattern)(nil)
-var _ rt.RecordListEval = (*CallPattern)(nil)
+func (op *CallPattern) MarshalJSON() (ret []byte, err error) {
+	if jsonPattern, e := op.MarshalJSONPattern(); e != nil {
+		err = e
+	} else if jsonArguments, e := op.MarshalJSONArguments(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "call_pattern",
+			"value": map[string]json.RawMessage{
+				"$PATTERN":   jsonPattern,
+				"$ARGUMENTS": jsonArguments,
+			},
+		})
+	}
+	return
+}
+
+func (op *CallPattern) MarshalJSONPattern() ([]byte, error) {
+	return op.Pattern.MarshalJSON()
+}
+
+func (op *CallPattern) MarshalJSONArguments() ([]byte, error) {
+	return op.Arguments.MarshalJSON()
+}
 
 // CallSend Runtime version of send
 type CallSend struct {
@@ -269,8 +547,40 @@ func (*CallSend) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*CallSend)(nil)
-var _ rt.BoolEval = (*CallSend)(nil)
+func (op *CallSend) MarshalJSON() (ret []byte, err error) {
+	if jsonEvent, e := op.MarshalJSONEvent(); e != nil {
+		err = e
+	} else if jsonPath, e := op.MarshalJSONPath(); e != nil {
+		err = e
+	} else if jsonArguments, e := op.MarshalJSONArguments(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "call_send",
+			"value": map[string]json.RawMessage{
+				"$EVENT":     jsonEvent,
+				"$PATH":      jsonPath,
+				"$ARGUMENTS": jsonArguments,
+			},
+		})
+	}
+	return
+}
+
+func (op *CallSend) MarshalJSONEvent() ([]byte, error) {
+	// type override
+	m := value.Text{op.Event}
+	return m.MarshalJSON()
+}
+
+func (op *CallSend) MarshalJSONPath() ([]byte, error) {
+	m := op.Path.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *CallSend) MarshalJSONArguments() ([]byte, error) {
+	return op.Arguments.MarshalJSON()
+}
 
 // CallShuffle Runtime version of shuffle_text
 type CallShuffle struct {
@@ -287,7 +597,24 @@ func (*CallShuffle) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*CallShuffle)(nil)
+func (op *CallShuffle) MarshalJSON() (ret []byte, err error) {
+	if jsonParts, e := op.MarshalJSONParts(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "call_shuffle",
+			"value": map[string]json.RawMessage{
+				"$PARTS": jsonParts,
+			},
+		})
+	}
+	return
+}
+
+func (op *CallShuffle) MarshalJSONParts() ([]byte, error) {
+	return json.Marshal(op.Parts)
+}
 
 // CallTerminal Runtime version of stopping_text
 type CallTerminal struct {
@@ -303,7 +630,24 @@ func (*CallTerminal) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*CallTerminal)(nil)
+func (op *CallTerminal) MarshalJSON() (ret []byte, err error) {
+	if jsonParts, e := op.MarshalJSONParts(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "call_terminal",
+			"value": map[string]json.RawMessage{
+				"$PARTS": jsonParts,
+			},
+		})
+	}
+	return
+}
+
+func (op *CallTerminal) MarshalJSONParts() ([]byte, error) {
+	return json.Marshal(op.Parts)
+}
 
 // CallTrigger Runtime version of count_of
 type CallTrigger struct {
@@ -320,7 +664,33 @@ func (*CallTrigger) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*CallTrigger)(nil)
+func (op *CallTrigger) MarshalJSON() (ret []byte, err error) {
+	if jsonTrigger, e := op.MarshalJSONTrigger(); e != nil {
+		err = e
+	} else if jsonNum, e := op.MarshalJSONNum(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"id":   op.At.Offset,
+			"type": "call_trigger",
+			"value": map[string]json.RawMessage{
+				"$TRIGGER": jsonTrigger,
+				"$NUM":     jsonNum,
+			},
+		})
+	}
+	return
+}
+
+func (op *CallTrigger) MarshalJSONTrigger() ([]byte, error) {
+	m := op.Trigger.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *CallTrigger) MarshalJSONNum() ([]byte, error) {
+	m := op.Num.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // Capitalize Returns new text, with the first letter turned into uppercase.
 type Capitalize struct {
@@ -334,7 +704,24 @@ func (*Capitalize) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*Capitalize)(nil)
+func (op *Capitalize) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "capitalize",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *Capitalize) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // ChooseAction An if statement.
 type ChooseAction struct {
@@ -351,8 +738,39 @@ func (*ChooseAction) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*ChooseAction)(nil)
-var _ Brancher = (*ChooseAction)(nil)
+func (op *ChooseAction) MarshalJSON() (ret []byte, err error) {
+	if jsonIf, e := op.MarshalJSONIf(); e != nil {
+		err = e
+	} else if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else if jsonElse, e := op.MarshalJSONElse(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "choose_action",
+			"value": map[string]json.RawMessage{
+				"$IF":   jsonIf,
+				"$DO":   jsonDo,
+				"$ELSE": jsonElse,
+			},
+		})
+	}
+	return
+}
+
+func (op *ChooseAction) MarshalJSONIf() ([]byte, error) {
+	m := op.If.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseAction) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
+
+func (op *ChooseAction) MarshalJSONElse() ([]byte, error) {
+	m := op.Else.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // ChooseMore
 type ChooseMore struct {
@@ -369,7 +787,39 @@ func (*ChooseMore) Compose() composer.Spec {
 	}
 }
 
-var _ Brancher = (*ChooseMore)(nil)
+func (op *ChooseMore) MarshalJSON() (ret []byte, err error) {
+	if jsonIf, e := op.MarshalJSONIf(); e != nil {
+		err = e
+	} else if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else if jsonElse, e := op.MarshalJSONElse(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "choose_more",
+			"value": map[string]json.RawMessage{
+				"$IF":   jsonIf,
+				"$DO":   jsonDo,
+				"$ELSE": jsonElse,
+			},
+		})
+	}
+	return
+}
+
+func (op *ChooseMore) MarshalJSONIf() ([]byte, error) {
+	m := op.If.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseMore) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
+
+func (op *ChooseMore) MarshalJSONElse() ([]byte, error) {
+	m := op.Else.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // ChooseMoreValue
 type ChooseMoreValue struct {
@@ -388,7 +838,56 @@ func (*ChooseMoreValue) Compose() composer.Spec {
 	}
 }
 
-var _ Brancher = (*ChooseMoreValue)(nil)
+func (op *ChooseMoreValue) MarshalJSON() (ret []byte, err error) {
+	if jsonAssign, e := op.MarshalJSONAssign(); e != nil {
+		err = e
+	} else if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
+		err = e
+	} else if jsonFilter, e := op.MarshalJSONFilter(); e != nil {
+		err = e
+	} else if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else if jsonElse, e := op.MarshalJSONElse(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "choose_more_value",
+			"value": map[string]json.RawMessage{
+				"$ASSIGN": jsonAssign,
+				"$FROM":   jsonFrom,
+				"$FILTER": jsonFilter,
+				"$DO":     jsonDo,
+				"$ELSE":   jsonElse,
+			},
+		})
+	}
+	return
+}
+
+func (op *ChooseMoreValue) MarshalJSONAssign() ([]byte, error) {
+	// type override
+	m := value.Text{op.Assign}
+	return m.MarshalJSON()
+}
+
+func (op *ChooseMoreValue) MarshalJSONFrom() ([]byte, error) {
+	m := op.From.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseMoreValue) MarshalJSONFilter() ([]byte, error) {
+	m := op.Filter.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseMoreValue) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
+
+func (op *ChooseMoreValue) MarshalJSONElse() ([]byte, error) {
+	m := op.Else.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // ChooseNothingElse
 type ChooseNothingElse struct {
@@ -403,7 +902,23 @@ func (*ChooseNothingElse) Compose() composer.Spec {
 	}
 }
 
-var _ Brancher = (*ChooseNothingElse)(nil)
+func (op *ChooseNothingElse) MarshalJSON() (ret []byte, err error) {
+	if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "choose_nothing_else",
+			"value": map[string]json.RawMessage{
+				"$DO": jsonDo,
+			},
+		})
+	}
+	return
+}
+
+func (op *ChooseNothingElse) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
 
 // ChooseNum Pick one of two numbers based on a boolean test.
 type ChooseNum struct {
@@ -420,7 +935,40 @@ func (*ChooseNum) Compose() composer.Spec {
 	}
 }
 
-var _ rt.NumberEval = (*ChooseNum)(nil)
+func (op *ChooseNum) MarshalJSON() (ret []byte, err error) {
+	if jsonIf, e := op.MarshalJSONIf(); e != nil {
+		err = e
+	} else if jsonTrue, e := op.MarshalJSONTrue(); e != nil {
+		err = e
+	} else if jsonFalse, e := op.MarshalJSONFalse(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "choose_num",
+			"value": map[string]json.RawMessage{
+				"$IF":    jsonIf,
+				"$TRUE":  jsonTrue,
+				"$FALSE": jsonFalse,
+			},
+		})
+	}
+	return
+}
+
+func (op *ChooseNum) MarshalJSONIf() ([]byte, error) {
+	m := op.If.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseNum) MarshalJSONTrue() ([]byte, error) {
+	m := op.True.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseNum) MarshalJSONFalse() ([]byte, error) {
+	m := op.False.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // ChooseText Pick one of two strings based on a boolean test.
 type ChooseText struct {
@@ -437,7 +985,40 @@ func (*ChooseText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*ChooseText)(nil)
+func (op *ChooseText) MarshalJSON() (ret []byte, err error) {
+	if jsonIf, e := op.MarshalJSONIf(); e != nil {
+		err = e
+	} else if jsonTrue, e := op.MarshalJSONTrue(); e != nil {
+		err = e
+	} else if jsonFalse, e := op.MarshalJSONFalse(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "choose_text",
+			"value": map[string]json.RawMessage{
+				"$IF":    jsonIf,
+				"$TRUE":  jsonTrue,
+				"$FALSE": jsonFalse,
+			},
+		})
+	}
+	return
+}
+
+func (op *ChooseText) MarshalJSONIf() ([]byte, error) {
+	m := op.If.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseText) MarshalJSONTrue() ([]byte, error) {
+	m := op.True.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseText) MarshalJSONFalse() ([]byte, error) {
+	m := op.False.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // ChooseValue An if statement with local assignment.
 type ChooseValue struct {
@@ -456,8 +1037,56 @@ func (*ChooseValue) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*ChooseValue)(nil)
-var _ Brancher = (*ChooseValue)(nil)
+func (op *ChooseValue) MarshalJSON() (ret []byte, err error) {
+	if jsonAssign, e := op.MarshalJSONAssign(); e != nil {
+		err = e
+	} else if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
+		err = e
+	} else if jsonFilter, e := op.MarshalJSONFilter(); e != nil {
+		err = e
+	} else if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else if jsonElse, e := op.MarshalJSONElse(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "choose_value",
+			"value": map[string]json.RawMessage{
+				"$ASSIGN": jsonAssign,
+				"$FROM":   jsonFrom,
+				"$FILTER": jsonFilter,
+				"$DO":     jsonDo,
+				"$ELSE":   jsonElse,
+			},
+		})
+	}
+	return
+}
+
+func (op *ChooseValue) MarshalJSONAssign() ([]byte, error) {
+	// type override
+	m := value.Text{op.Assign}
+	return m.MarshalJSON()
+}
+
+func (op *ChooseValue) MarshalJSONFrom() ([]byte, error) {
+	m := op.From.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseValue) MarshalJSONFilter() ([]byte, error) {
+	m := op.Filter.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ChooseValue) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
+
+func (op *ChooseValue) MarshalJSONElse() ([]byte, error) {
+	m := op.Else.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // CommaText Separates words with commas, and &#x27;and&#x27;.
 type CommaText struct {
@@ -472,7 +1101,23 @@ func (*CommaText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*CommaText)(nil)
+func (op *CommaText) MarshalJSON() (ret []byte, err error) {
+	if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "comma_text",
+			"value": map[string]json.RawMessage{
+				"$DO": jsonDo,
+			},
+		})
+	}
+	return
+}
+
+func (op *CommaText) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
 
 // CompareNum True if eq,ne,gt,lt,ge,le two numbers.
 type CompareNum struct {
@@ -489,7 +1134,40 @@ func (*CompareNum) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*CompareNum)(nil)
+func (op *CompareNum) MarshalJSON() (ret []byte, err error) {
+	if jsonA, e := op.MarshalJSONA(); e != nil {
+		err = e
+	} else if jsonIs, e := op.MarshalJSONIs(); e != nil {
+		err = e
+	} else if jsonB, e := op.MarshalJSONB(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "compare_num",
+			"value": map[string]json.RawMessage{
+				"$A":  jsonA,
+				"$IS": jsonIs,
+				"$B":  jsonB,
+			},
+		})
+	}
+	return
+}
+
+func (op *CompareNum) MarshalJSONA() ([]byte, error) {
+	m := op.A.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *CompareNum) MarshalJSONIs() ([]byte, error) {
+	m := op.Is.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *CompareNum) MarshalJSONB() ([]byte, error) {
+	m := op.B.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // CompareText True if eq,ne,gt,lt,ge,le two strings ( lexical. )
 type CompareText struct {
@@ -506,7 +1184,40 @@ func (*CompareText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*CompareText)(nil)
+func (op *CompareText) MarshalJSON() (ret []byte, err error) {
+	if jsonA, e := op.MarshalJSONA(); e != nil {
+		err = e
+	} else if jsonIs, e := op.MarshalJSONIs(); e != nil {
+		err = e
+	} else if jsonB, e := op.MarshalJSONB(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "compare_text",
+			"value": map[string]json.RawMessage{
+				"$A":  jsonA,
+				"$IS": jsonIs,
+				"$B":  jsonB,
+			},
+		})
+	}
+	return
+}
+
+func (op *CompareText) MarshalJSONA() ([]byte, error) {
+	m := op.A.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *CompareText) MarshalJSONIs() ([]byte, error) {
+	m := op.Is.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *CompareText) MarshalJSONB() ([]byte, error) {
+	m := op.B.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // DiffOf Subtract two numbers.
 type DiffOf struct {
@@ -522,7 +1233,32 @@ func (*DiffOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.NumberEval = (*DiffOf)(nil)
+func (op *DiffOf) MarshalJSON() (ret []byte, err error) {
+	if jsonA, e := op.MarshalJSONA(); e != nil {
+		err = e
+	} else if jsonB, e := op.MarshalJSONB(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "diff_of",
+			"value": map[string]json.RawMessage{
+				"$A": jsonA,
+				"$B": jsonB,
+			},
+		})
+	}
+	return
+}
+
+func (op *DiffOf) MarshalJSONA() ([]byte, error) {
+	m := op.A.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *DiffOf) MarshalJSONB() ([]byte, error) {
+	m := op.B.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // During Decide whether a pattern is running.
 type During struct {
@@ -536,11 +1272,27 @@ func (*During) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*During)(nil)
-var _ rt.NumberEval = (*During)(nil)
+func (op *During) MarshalJSON() (ret []byte, err error) {
+	if jsonPattern, e := op.MarshalJSONPattern(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "during",
+			"value": map[string]json.RawMessage{
+				"$PATTERN": jsonPattern,
+			},
+		})
+	}
+	return
+}
+
+func (op *During) MarshalJSONPattern() ([]byte, error) {
+	return op.Pattern.MarshalJSON()
+}
 
 // Equal Two values exactly match.
-type Equal struct{}
+type Equal struct {
+}
 
 func (*Equal) Compose() composer.Spec {
 	return composer.Spec{
@@ -550,7 +1302,15 @@ func (*Equal) Compose() composer.Spec {
 	}
 }
 
-var _ Comparator = (*Equal)(nil)
+func (op *Equal) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "equal",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // FromBool Assigns the calculated boolean value.
 type FromBool struct {
@@ -564,7 +1324,24 @@ func (*FromBool) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*FromBool)(nil)
+func (op *FromBool) MarshalJSON() (ret []byte, err error) {
+	if jsonVal, e := op.MarshalJSONVal(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_bool",
+			"value": map[string]json.RawMessage{
+				"$VAL": jsonVal,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromBool) MarshalJSONVal() ([]byte, error) {
+	m := op.Val.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // FromNum Assigns the calculated number.
 type FromNum struct {
@@ -578,7 +1355,24 @@ func (*FromNum) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*FromNum)(nil)
+func (op *FromNum) MarshalJSON() (ret []byte, err error) {
+	if jsonVal, e := op.MarshalJSONVal(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_num",
+			"value": map[string]json.RawMessage{
+				"$VAL": jsonVal,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromNum) MarshalJSONVal() ([]byte, error) {
+	m := op.Val.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // FromNumbers Assigns the calculated numbers.
 type FromNumbers struct {
@@ -593,7 +1387,24 @@ func (*FromNumbers) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*FromNumbers)(nil)
+func (op *FromNumbers) MarshalJSON() (ret []byte, err error) {
+	if jsonVals, e := op.MarshalJSONVals(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_numbers",
+			"value": map[string]json.RawMessage{
+				"$VALS": jsonVals,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromNumbers) MarshalJSONVals() ([]byte, error) {
+	m := op.Vals.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // FromObj Targets an object with a computed name.
 type FromObj struct {
@@ -607,7 +1418,24 @@ func (*FromObj) Compose() composer.Spec {
 	}
 }
 
-var _ FromSourceFields = (*FromObj)(nil)
+func (op *FromObj) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_obj",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromObj) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // FromRec Targets a record stored in a record.
 type FromRec struct {
@@ -621,7 +1449,24 @@ func (*FromRec) Compose() composer.Spec {
 	}
 }
 
-var _ FromSourceFields = (*FromRec)(nil)
+func (op *FromRec) MarshalJSON() (ret []byte, err error) {
+	if jsonRec, e := op.MarshalJSONRec(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_rec",
+			"value": map[string]json.RawMessage{
+				"$REC": jsonRec,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromRec) MarshalJSONRec() ([]byte, error) {
+	m := op.Rec.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // FromRecord Assigns the calculated record.
 type FromRecord struct {
@@ -636,7 +1481,24 @@ func (*FromRecord) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*FromRecord)(nil)
+func (op *FromRecord) MarshalJSON() (ret []byte, err error) {
+	if jsonVal, e := op.MarshalJSONVal(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_record",
+			"value": map[string]json.RawMessage{
+				"$VAL": jsonVal,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromRecord) MarshalJSONVal() ([]byte, error) {
+	m := op.Val.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // FromRecords Assigns the calculated records.
 type FromRecords struct {
@@ -651,7 +1513,24 @@ func (*FromRecords) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*FromRecords)(nil)
+func (op *FromRecords) MarshalJSON() (ret []byte, err error) {
+	if jsonVals, e := op.MarshalJSONVals(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_records",
+			"value": map[string]json.RawMessage{
+				"$VALS": jsonVals,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromRecords) MarshalJSONVals() ([]byte, error) {
+	m := op.Vals.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // FromText Assigns the calculated piece of text.
 type FromText struct {
@@ -666,7 +1545,24 @@ func (*FromText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*FromText)(nil)
+func (op *FromText) MarshalJSON() (ret []byte, err error) {
+	if jsonVal, e := op.MarshalJSONVal(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_text",
+			"value": map[string]json.RawMessage{
+				"$VAL": jsonVal,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromText) MarshalJSONVal() ([]byte, error) {
+	m := op.Val.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // FromTexts Assigns the calculated texts.
 type FromTexts struct {
@@ -681,7 +1577,24 @@ func (*FromTexts) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*FromTexts)(nil)
+func (op *FromTexts) MarshalJSON() (ret []byte, err error) {
+	if jsonVals, e := op.MarshalJSONVals(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_texts",
+			"value": map[string]json.RawMessage{
+				"$VALS": jsonVals,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromTexts) MarshalJSONVals() ([]byte, error) {
+	m := op.Vals.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // FromVar Targets a record stored in a variable.
 type FromVar struct {
@@ -695,7 +1608,23 @@ func (*FromVar) Compose() composer.Spec {
 	}
 }
 
-var _ FromSourceFields = (*FromVar)(nil)
+func (op *FromVar) MarshalJSON() (ret []byte, err error) {
+	if jsonVar, e := op.MarshalJSONVar(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "from_var",
+			"value": map[string]json.RawMessage{
+				"$VAR": jsonVar,
+			},
+		})
+	}
+	return
+}
+
+func (op *FromVar) MarshalJSONVar() ([]byte, error) {
+	return op.Var.MarshalJSON()
+}
 
 // GetAtField Get a value from a record.
 type GetAtField struct {
@@ -711,14 +1640,33 @@ func (*GetAtField) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*GetAtField)(nil)
-var _ rt.BoolEval = (*GetAtField)(nil)
-var _ rt.NumberEval = (*GetAtField)(nil)
-var _ rt.TextEval = (*GetAtField)(nil)
-var _ rt.RecordEval = (*GetAtField)(nil)
-var _ rt.NumListEval = (*GetAtField)(nil)
-var _ rt.TextListEval = (*GetAtField)(nil)
-var _ rt.RecordListEval = (*GetAtField)(nil)
+func (op *GetAtField) MarshalJSON() (ret []byte, err error) {
+	if jsonField, e := op.MarshalJSONField(); e != nil {
+		err = e
+	} else if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "get_at_field",
+			"value": map[string]json.RawMessage{
+				"$FIELD": jsonField,
+				"$FROM":  jsonFrom,
+			},
+		})
+	}
+	return
+}
+
+func (op *GetAtField) MarshalJSONField() ([]byte, error) {
+	// type override
+	m := value.Text{op.Field}
+	return m.MarshalJSON()
+}
+
+func (op *GetAtField) MarshalJSONFrom() ([]byte, error) {
+	m := op.From.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // GetVar Get Variable: Return the value of the named variable.
 type GetVar struct {
@@ -733,17 +1681,27 @@ func (*GetVar) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Assignment = (*GetVar)(nil)
-var _ rt.BoolEval = (*GetVar)(nil)
-var _ rt.NumberEval = (*GetVar)(nil)
-var _ rt.TextEval = (*GetVar)(nil)
-var _ rt.RecordEval = (*GetVar)(nil)
-var _ rt.NumListEval = (*GetVar)(nil)
-var _ rt.TextListEval = (*GetVar)(nil)
-var _ rt.RecordListEval = (*GetVar)(nil)
+func (op *GetVar) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "get_var",
+			"value": map[string]json.RawMessage{
+				"$NAME": jsonName,
+			},
+		})
+	}
+	return
+}
+
+func (op *GetVar) MarshalJSONName() ([]byte, error) {
+	return op.Name.MarshalJSON()
+}
 
 // GreaterThan The first value is larger than the second value.
-type GreaterThan struct{}
+type GreaterThan struct {
+}
 
 func (*GreaterThan) Compose() composer.Spec {
 	return composer.Spec{
@@ -752,7 +1710,15 @@ func (*GreaterThan) Compose() composer.Spec {
 	}
 }
 
-var _ Comparator = (*GreaterThan)(nil)
+func (op *GreaterThan) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "greater_than",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // HasDominion
 type HasDominion struct {
@@ -766,7 +1732,25 @@ func (*HasDominion) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*HasDominion)(nil)
+func (op *HasDominion) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "has_dominion",
+			"value": map[string]json.RawMessage{
+				"$NAME": jsonName,
+			},
+		})
+	}
+	return
+}
+
+func (op *HasDominion) MarshalJSONName() ([]byte, error) {
+	// type override
+	m := value.Text{op.Name}
+	return m.MarshalJSON()
+}
 
 // HasTrait Return true if the object is currently in the requested state.
 type HasTrait struct {
@@ -782,7 +1766,32 @@ func (*HasTrait) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*HasTrait)(nil)
+func (op *HasTrait) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else if jsonTrait, e := op.MarshalJSONTrait(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "has_trait",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+				"$TRAIT":  jsonTrait,
+			},
+		})
+	}
+	return
+}
+
+func (op *HasTrait) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *HasTrait) MarshalJSONTrait() ([]byte, error) {
+	m := op.Trait.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // IdOf A unique object identifier.
 type IdOf struct {
@@ -796,7 +1805,24 @@ func (*IdOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*IdOf)(nil)
+func (op *IdOf) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "id_of",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+			},
+		})
+	}
+	return
+}
+
+func (op *IdOf) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // Includes True if text contains text.
 type Includes struct {
@@ -812,7 +1838,32 @@ func (*Includes) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*Includes)(nil)
+func (op *Includes) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else if jsonPart, e := op.MarshalJSONPart(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "includes",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+				"$PART": jsonPart,
+			},
+		})
+	}
+	return
+}
+
+func (op *Includes) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *Includes) MarshalJSONPart() ([]byte, error) {
+	m := op.Part.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // IntoObj Targets an object with a computed name.
 type IntoObj struct {
@@ -827,7 +1878,24 @@ func (*IntoObj) Compose() composer.Spec {
 	}
 }
 
-var _ IntoTargetFields = (*IntoObj)(nil)
+func (op *IntoObj) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "into_obj",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+			},
+		})
+	}
+	return
+}
+
+func (op *IntoObj) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // IntoVar Targets an object or record stored in a variable
 type IntoVar struct {
@@ -842,7 +1910,23 @@ func (*IntoVar) Compose() composer.Spec {
 	}
 }
 
-var _ IntoTargetFields = (*IntoVar)(nil)
+func (op *IntoVar) MarshalJSON() (ret []byte, err error) {
+	if jsonVar, e := op.MarshalJSONVar(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "into_var",
+			"value": map[string]json.RawMessage{
+				"$VAR": jsonVar,
+			},
+		})
+	}
+	return
+}
+
+func (op *IntoVar) MarshalJSONVar() ([]byte, error) {
+	return op.Var.MarshalJSON()
+}
 
 // IsEmpty True if the text is empty.
 type IsEmpty struct {
@@ -857,7 +1941,24 @@ func (*IsEmpty) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*IsEmpty)(nil)
+func (op *IsEmpty) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "is_empty",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *IsEmpty) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // IsExactKindOf True if the object is exactly the named kind.
 type IsExactKindOf struct {
@@ -873,7 +1974,33 @@ func (*IsExactKindOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*IsExactKindOf)(nil)
+func (op *IsExactKindOf) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "is_exact_kind_of",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+				"$KIND":   jsonKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *IsExactKindOf) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *IsExactKindOf) MarshalJSONKind() ([]byte, error) {
+	// type override
+	m := value.Text{op.Kind}
+	return m.MarshalJSON()
+}
 
 // IsKindOf True if the object is compatible with the named kind.
 type IsKindOf struct {
@@ -889,7 +2016,33 @@ func (*IsKindOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*IsKindOf)(nil)
+func (op *IsKindOf) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "is_kind_of",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+				"$KIND":   jsonKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *IsKindOf) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *IsKindOf) MarshalJSONKind() ([]byte, error) {
+	// type override
+	m := value.Text{op.Kind}
+	return m.MarshalJSON()
+}
 
 // Join Returns multiple pieces of text as a single new piece of text.
 type Join struct {
@@ -904,7 +2057,31 @@ func (*Join) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*Join)(nil)
+func (op *Join) MarshalJSON() (ret []byte, err error) {
+	if jsonSep, e := op.MarshalJSONSep(); e != nil {
+		err = e
+	} else if jsonParts, e := op.MarshalJSONParts(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "join",
+			"value": map[string]json.RawMessage{
+				"$SEP":   jsonSep,
+				"$PARTS": jsonParts,
+			},
+		})
+	}
+	return
+}
+
+func (op *Join) MarshalJSONSep() ([]byte, error) {
+	m := op.Sep.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *Join) MarshalJSONParts() ([]byte, error) {
+	return json.Marshal(op.Parts)
+}
 
 // KindOf Friendly name of the object&#x27;s kind.
 type KindOf struct {
@@ -918,7 +2095,24 @@ func (*KindOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*KindOf)(nil)
+func (op *KindOf) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "kind_of",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+			},
+		})
+	}
+	return
+}
+
+func (op *KindOf) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // KindsOf A list of compatible kinds.
 type KindsOf struct {
@@ -932,10 +2126,29 @@ func (*KindsOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextListEval = (*KindsOf)(nil)
+func (op *KindsOf) MarshalJSON() (ret []byte, err error) {
+	if jsonKind, e := op.MarshalJSONKind(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "kinds_of",
+			"value": map[string]json.RawMessage{
+				"$KIND": jsonKind,
+			},
+		})
+	}
+	return
+}
+
+func (op *KindsOf) MarshalJSONKind() ([]byte, error) {
+	// type override
+	m := value.Text{op.Kind}
+	return m.MarshalJSON()
+}
 
 // LessThan The first value is less than the second value.
-type LessThan struct{}
+type LessThan struct {
+}
 
 func (*LessThan) Compose() composer.Spec {
 	return composer.Spec{
@@ -944,7 +2157,15 @@ func (*LessThan) Compose() composer.Spec {
 	}
 }
 
-var _ Comparator = (*LessThan)(nil)
+func (op *LessThan) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "less_than",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // MakeLowercase Returns new text, with every letter turned into lowercase. For example, &#x27;shout&#x27; from &#x27;SHOUT&#x27;.
 type MakeLowercase struct {
@@ -959,7 +2180,24 @@ func (*MakeLowercase) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*MakeLowercase)(nil)
+func (op *MakeLowercase) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "make_lowercase",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *MakeLowercase) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // MakeReversed Returns new text flipped back to front. For example, &#x27;elppA&#x27; from &#x27;Apple&#x27;, or &#x27;noon&#x27; from &#x27;noon&#x27;.
 type MakeReversed struct {
@@ -974,7 +2212,24 @@ func (*MakeReversed) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*MakeReversed)(nil)
+func (op *MakeReversed) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "make_reversed",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *MakeReversed) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // MakeSentenceCase Returns new text, start each sentence with a capital letter. For example, &#x27;Empire Apple.&#x27; from &#x27;Empire apple.&#x27;.
 type MakeSentenceCase struct {
@@ -989,7 +2244,24 @@ func (*MakeSentenceCase) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*MakeSentenceCase)(nil)
+func (op *MakeSentenceCase) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "make_sentence_case",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *MakeSentenceCase) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // MakeTitleCase Returns new text, starting each word with a capital letter. For example, &#x27;Empire Apple&#x27; from &#x27;empire apple&#x27;.
 type MakeTitleCase struct {
@@ -1004,7 +2276,24 @@ func (*MakeTitleCase) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*MakeTitleCase)(nil)
+func (op *MakeTitleCase) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "make_title_case",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *MakeTitleCase) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // MakeUppercase Returns new text, with every letter turned into uppercase. For example, &#x27;APPLE&#x27; from &#x27;apple&#x27;.
 type MakeUppercase struct {
@@ -1019,7 +2308,24 @@ func (*MakeUppercase) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*MakeUppercase)(nil)
+func (op *MakeUppercase) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "make_uppercase",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *MakeUppercase) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // Matches Determine whether the specified text is similar to the specified regular expression.
 type Matches struct {
@@ -1035,7 +2341,33 @@ func (*Matches) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*Matches)(nil)
+func (op *Matches) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else if jsonPattern, e := op.MarshalJSONPattern(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "matches",
+			"value": map[string]json.RawMessage{
+				"$TEXT":    jsonText,
+				"$PATTERN": jsonPattern,
+			},
+		})
+	}
+	return
+}
+
+func (op *Matches) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *Matches) MarshalJSONPattern() ([]byte, error) {
+	// type override
+	m := value.Text{op.Pattern}
+	return m.MarshalJSON()
+}
 
 // NameOf Full name of the object.
 type NameOf struct {
@@ -1049,10 +2381,28 @@ func (*NameOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*NameOf)(nil)
+func (op *NameOf) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "name_of",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+			},
+		})
+	}
+	return
+}
+
+func (op *NameOf) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // Never Returns false.
-type Never struct{}
+type Never struct {
+}
 
 func (*Never) Compose() composer.Spec {
 	return composer.Spec{
@@ -1062,10 +2412,19 @@ func (*Never) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*Never)(nil)
+func (op *Never) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "never",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // Newline Start a new line.
-type Newline struct{}
+type Newline struct {
+}
 
 func (*Newline) Compose() composer.Spec {
 	return composer.Spec{
@@ -1075,10 +2434,19 @@ func (*Newline) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*Newline)(nil)
+func (op *Newline) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "newline",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // Next In a repeating loop, try the next iteration of the loop.
-type Next struct{}
+type Next struct {
+}
 
 func (*Next) Compose() composer.Spec {
 	return composer.Spec{
@@ -1087,7 +2455,15 @@ func (*Next) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*Next)(nil)
+func (op *Next) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "next",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // Not Returns the opposite value.
 type Not struct {
@@ -1101,7 +2477,24 @@ func (*Not) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*Not)(nil)
+func (op *Not) MarshalJSON() (ret []byte, err error) {
+	if jsonTest, e := op.MarshalJSONTest(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "not",
+			"value": map[string]json.RawMessage{
+				"$TEST": jsonTest,
+			},
+		})
+	}
+	return
+}
+
+func (op *Not) MarshalJSONTest() ([]byte, error) {
+	m := op.Test.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // NumValue Specify a particular number.
 type NumValue struct {
@@ -1116,7 +2509,25 @@ func (*NumValue) Compose() composer.Spec {
 	}
 }
 
-var _ rt.NumberEval = (*NumValue)(nil)
+func (op *NumValue) MarshalJSON() (ret []byte, err error) {
+	if jsonNum, e := op.MarshalJSONNum(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "num_value",
+			"value": map[string]json.RawMessage{
+				"$NUM": jsonNum,
+			},
+		})
+	}
+	return
+}
+
+func (op *NumValue) MarshalJSONNum() ([]byte, error) {
+	// type override
+	m := value.Number{op.Num}
+	return m.MarshalJSON()
+}
 
 // Numbers Number List: Specify a list of numbers.
 type Numbers struct {
@@ -1131,7 +2542,23 @@ func (*Numbers) Compose() composer.Spec {
 	}
 }
 
-var _ rt.NumListEval = (*Numbers)(nil)
+func (op *Numbers) MarshalJSON() (ret []byte, err error) {
+	if jsonValues, e := op.MarshalJSONValues(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "numbers",
+			"value": map[string]json.RawMessage{
+				"$VALUES": jsonValues,
+			},
+		})
+	}
+	return
+}
+
+func (op *Numbers) MarshalJSONValues() ([]byte, error) {
+	return json.Marshal(op.Values)
+}
 
 // ObjectExists Returns whether there is a object of the specified name.
 type ObjectExists struct {
@@ -1146,7 +2573,24 @@ func (*ObjectExists) Compose() composer.Spec {
 	}
 }
 
-var _ rt.BoolEval = (*ObjectExists)(nil)
+func (op *ObjectExists) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "object_exists",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+			},
+		})
+	}
+	return
+}
+
+func (op *ObjectExists) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // Pluralize Returns the plural form of a singular word. (ex. apples for apple. )
 type Pluralize struct {
@@ -1161,7 +2605,24 @@ func (*Pluralize) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*Pluralize)(nil)
+func (op *Pluralize) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "pluralize",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *Pluralize) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // PrintNum Writes a number using numerals, eg. &#x27;1&#x27;.
 type PrintNum struct {
@@ -1176,7 +2637,24 @@ func (*PrintNum) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*PrintNum)(nil)
+func (op *PrintNum) MarshalJSON() (ret []byte, err error) {
+	if jsonNum, e := op.MarshalJSONNum(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "print_num",
+			"value": map[string]json.RawMessage{
+				"$NUM": jsonNum,
+			},
+		})
+	}
+	return
+}
+
+func (op *PrintNum) MarshalJSONNum() ([]byte, error) {
+	m := op.Num.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // PrintNumWord Writes a number in plain english: eg. &#x27;one&#x27;
 type PrintNumWord struct {
@@ -1191,7 +2669,24 @@ func (*PrintNumWord) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*PrintNumWord)(nil)
+func (op *PrintNumWord) MarshalJSON() (ret []byte, err error) {
+	if jsonNum, e := op.MarshalJSONNum(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "print_num_word",
+			"value": map[string]json.RawMessage{
+				"$NUM": jsonNum,
+			},
+		})
+	}
+	return
+}
+
+func (op *PrintNumWord) MarshalJSONNum() ([]byte, error) {
+	m := op.Num.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // ProductOf Multiply two numbers.
 type ProductOf struct {
@@ -1207,7 +2702,32 @@ func (*ProductOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.NumberEval = (*ProductOf)(nil)
+func (op *ProductOf) MarshalJSON() (ret []byte, err error) {
+	if jsonA, e := op.MarshalJSONA(); e != nil {
+		err = e
+	} else if jsonB, e := op.MarshalJSONB(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "product_of",
+			"value": map[string]json.RawMessage{
+				"$A": jsonA,
+				"$B": jsonB,
+			},
+		})
+	}
+	return
+}
+
+func (op *ProductOf) MarshalJSONA() ([]byte, error) {
+	m := op.A.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *ProductOf) MarshalJSONB() ([]byte, error) {
+	m := op.B.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // PutAtField Put a value into the field of an record or object
 type PutAtField struct {
@@ -1224,7 +2744,41 @@ func (*PutAtField) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*PutAtField)(nil)
+func (op *PutAtField) MarshalJSON() (ret []byte, err error) {
+	if jsonInto, e := op.MarshalJSONInto(); e != nil {
+		err = e
+	} else if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
+		err = e
+	} else if jsonAtField, e := op.MarshalJSONAtField(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "put_at_field",
+			"value": map[string]json.RawMessage{
+				"$INTO":     jsonInto,
+				"$FROM":     jsonFrom,
+				"$AT_FIELD": jsonAtField,
+			},
+		})
+	}
+	return
+}
+
+func (op *PutAtField) MarshalJSONInto() ([]byte, error) {
+	m := op.Into.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *PutAtField) MarshalJSONFrom() ([]byte, error) {
+	m := op.From.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *PutAtField) MarshalJSONAtField() ([]byte, error) {
+	// type override
+	m := value.Text{op.AtField}
+	return m.MarshalJSON()
+}
 
 // QuotientOf Divide one number by another.
 type QuotientOf struct {
@@ -1240,7 +2794,32 @@ func (*QuotientOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.NumberEval = (*QuotientOf)(nil)
+func (op *QuotientOf) MarshalJSON() (ret []byte, err error) {
+	if jsonA, e := op.MarshalJSONA(); e != nil {
+		err = e
+	} else if jsonB, e := op.MarshalJSONB(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "quotient_of",
+			"value": map[string]json.RawMessage{
+				"$A": jsonA,
+				"$B": jsonB,
+			},
+		})
+	}
+	return
+}
+
+func (op *QuotientOf) MarshalJSONA() ([]byte, error) {
+	m := op.A.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *QuotientOf) MarshalJSONB() ([]byte, error) {
+	m := op.B.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // RemainderOf Divide one number by another, and return the remainder.
 type RemainderOf struct {
@@ -1256,7 +2835,32 @@ func (*RemainderOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.NumberEval = (*RemainderOf)(nil)
+func (op *RemainderOf) MarshalJSON() (ret []byte, err error) {
+	if jsonA, e := op.MarshalJSONA(); e != nil {
+		err = e
+	} else if jsonB, e := op.MarshalJSONB(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "remainder_of",
+			"value": map[string]json.RawMessage{
+				"$A": jsonA,
+				"$B": jsonB,
+			},
+		})
+	}
+	return
+}
+
+func (op *RemainderOf) MarshalJSONA() ([]byte, error) {
+	m := op.A.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *RemainderOf) MarshalJSONB() ([]byte, error) {
+	m := op.B.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // Response Generate text in a replaceable manner.
 type Response struct {
@@ -1271,7 +2875,33 @@ func (*Response) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*Response)(nil)
+func (op *Response) MarshalJSON() (ret []byte, err error) {
+	if jsonName, e := op.MarshalJSONName(); e != nil {
+		err = e
+	} else if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "response",
+			"value": map[string]json.RawMessage{
+				"$NAME": jsonName,
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *Response) MarshalJSONName() ([]byte, error) {
+	// type override
+	m := value.Text{op.Name}
+	return m.MarshalJSON()
+}
+
+func (op *Response) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // Row A single line as part of a group of lines.
 type Row struct {
@@ -1285,7 +2915,23 @@ func (*Row) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*Row)(nil)
+func (op *Row) MarshalJSON() (ret []byte, err error) {
+	if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "row",
+			"value": map[string]json.RawMessage{
+				"$DO": jsonDo,
+			},
+		})
+	}
+	return
+}
+
+func (op *Row) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
 
 // Rows Group text into successive lines.
 type Rows struct {
@@ -1299,7 +2945,23 @@ func (*Rows) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*Rows)(nil)
+func (op *Rows) MarshalJSON() (ret []byte, err error) {
+	if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "rows",
+			"value": map[string]json.RawMessage{
+				"$DO": jsonDo,
+			},
+		})
+	}
+	return
+}
+
+func (op *Rows) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
 
 // SayText Print some bit of text to the player.
 type SayText struct {
@@ -1314,7 +2976,24 @@ func (*SayText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*SayText)(nil)
+func (op *SayText) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "say_text",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *SayText) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // SetTrait Put an object into a particular state.
 type SetTrait struct {
@@ -1330,7 +3009,32 @@ func (*SetTrait) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*SetTrait)(nil)
+func (op *SetTrait) MarshalJSON() (ret []byte, err error) {
+	if jsonObject, e := op.MarshalJSONObject(); e != nil {
+		err = e
+	} else if jsonTrait, e := op.MarshalJSONTrait(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "set_trait",
+			"value": map[string]json.RawMessage{
+				"$OBJECT": jsonObject,
+				"$TRAIT":  jsonTrait,
+			},
+		})
+	}
+	return
+}
+
+func (op *SetTrait) MarshalJSONObject() ([]byte, error) {
+	m := op.Object.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *SetTrait) MarshalJSONTrait() ([]byte, error) {
+	m := op.Trait.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // Singularize Returns the singular form of a plural word. (ex. apple for apples )
 type Singularize struct {
@@ -1345,7 +3049,24 @@ func (*Singularize) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*Singularize)(nil)
+func (op *Singularize) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "singularize",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *Singularize) MarshalJSONText() ([]byte, error) {
+	m := op.Text.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // SlashText Separates words with left-leaning slashes &#x27;/&#x27;.
 type SlashText struct {
@@ -1360,10 +3081,27 @@ func (*SlashText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*SlashText)(nil)
+func (op *SlashText) MarshalJSON() (ret []byte, err error) {
+	if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "slash_text",
+			"value": map[string]json.RawMessage{
+				"$DO": jsonDo,
+			},
+		})
+	}
+	return
+}
+
+func (op *SlashText) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
 
 // Softline Start a new line ( if not already at a new line. )
-type Softline struct{}
+type Softline struct {
+}
 
 func (*Softline) Compose() composer.Spec {
 	return composer.Spec{
@@ -1373,7 +3111,15 @@ func (*Softline) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*Softline)(nil)
+func (op *Softline) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "softline",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // SpanText Writes text with spaces between words.
 type SpanText struct {
@@ -1388,7 +3134,23 @@ func (*SpanText) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*SpanText)(nil)
+func (op *SpanText) MarshalJSON() (ret []byte, err error) {
+	if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "span_text",
+			"value": map[string]json.RawMessage{
+				"$DO": jsonDo,
+			},
+		})
+	}
+	return
+}
+
+func (op *SpanText) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
 
 // SumOf Add two numbers.
 type SumOf struct {
@@ -1404,7 +3166,32 @@ func (*SumOf) Compose() composer.Spec {
 	}
 }
 
-var _ rt.NumberEval = (*SumOf)(nil)
+func (op *SumOf) MarshalJSON() (ret []byte, err error) {
+	if jsonA, e := op.MarshalJSONA(); e != nil {
+		err = e
+	} else if jsonB, e := op.MarshalJSONB(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "sum_of",
+			"value": map[string]json.RawMessage{
+				"$A": jsonA,
+				"$B": jsonB,
+			},
+		})
+	}
+	return
+}
+
+func (op *SumOf) MarshalJSONA() ([]byte, error) {
+	m := op.A.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *SumOf) MarshalJSONB() ([]byte, error) {
+	m := op.B.(json.Marshaler)
+	return m.MarshalJSON()
+}
 
 // TextValue Specify a small bit of text.
 type TextValue struct {
@@ -1419,7 +3206,25 @@ func (*TextValue) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextEval = (*TextValue)(nil)
+func (op *TextValue) MarshalJSON() (ret []byte, err error) {
+	if jsonText, e := op.MarshalJSONText(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "text_value",
+			"value": map[string]json.RawMessage{
+				"$TEXT": jsonText,
+			},
+		})
+	}
+	return
+}
+
+func (op *TextValue) MarshalJSONText() ([]byte, error) {
+	// type override
+	m := value.Text{op.Text}
+	return m.MarshalJSON()
+}
 
 // Texts Text List: Specifies a set of string values.
 type Texts struct {
@@ -1434,10 +3239,27 @@ func (*Texts) Compose() composer.Spec {
 	}
 }
 
-var _ rt.TextListEval = (*Texts)(nil)
+func (op *Texts) MarshalJSON() (ret []byte, err error) {
+	if jsonValues, e := op.MarshalJSONValues(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "texts",
+			"value": map[string]json.RawMessage{
+				"$VALUES": jsonValues,
+			},
+		})
+	}
+	return
+}
+
+func (op *Texts) MarshalJSONValues() ([]byte, error) {
+	return json.Marshal(op.Values)
+}
 
 // TriggerCycle
-type TriggerCycle struct{}
+type TriggerCycle struct {
+}
 
 func (*TriggerCycle) Compose() composer.Spec {
 	return composer.Spec{
@@ -1447,10 +3269,19 @@ func (*TriggerCycle) Compose() composer.Spec {
 	}
 }
 
-var _ Trigger = (*TriggerCycle)(nil)
+func (op *TriggerCycle) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "trigger_cycle",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // TriggerOnce
-type TriggerOnce struct{}
+type TriggerOnce struct {
+}
 
 func (*TriggerOnce) Compose() composer.Spec {
 	return composer.Spec{
@@ -1460,10 +3291,19 @@ func (*TriggerOnce) Compose() composer.Spec {
 	}
 }
 
-var _ Trigger = (*TriggerOnce)(nil)
+func (op *TriggerOnce) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "trigger_once",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // TriggerSwitch
-type TriggerSwitch struct{}
+type TriggerSwitch struct {
+}
 
 func (*TriggerSwitch) Compose() composer.Spec {
 	return composer.Spec{
@@ -1473,10 +3313,19 @@ func (*TriggerSwitch) Compose() composer.Spec {
 	}
 }
 
-var _ Trigger = (*TriggerSwitch)(nil)
+func (op *TriggerSwitch) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "trigger_switch",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // Unequal The first value doesn&#x27;t equal the second value.
-type Unequal struct{}
+type Unequal struct {
+}
 
 func (*Unequal) Compose() composer.Spec {
 	return composer.Spec{
@@ -1486,7 +3335,15 @@ func (*Unequal) Compose() composer.Spec {
 	}
 }
 
-var _ Comparator = (*Unequal)(nil)
+func (op *Unequal) MarshalJSON() (ret []byte, err error) {
+	{
+		ret, err = json.Marshal(map[string]interface{}{
+			"type":  "unequal",
+			"value": map[string]json.RawMessage{},
+		})
+	}
+	return
+}
 
 // While Keep running a series of actions while a condition is true.
 type While struct {
@@ -1502,7 +3359,32 @@ func (*While) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*While)(nil)
+func (op *While) MarshalJSON() (ret []byte, err error) {
+	if jsonTrue, e := op.MarshalJSONTrue(); e != nil {
+		err = e
+	} else if jsonDo, e := op.MarshalJSONDo(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "while",
+			"value": map[string]json.RawMessage{
+				"$TRUE": jsonTrue,
+				"$DO":   jsonDo,
+			},
+		})
+	}
+	return
+}
+
+func (op *While) MarshalJSONTrue() ([]byte, error) {
+	m := op.True.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *While) MarshalJSONDo() ([]byte, error) {
+	return op.Do.MarshalJSON()
+}
+
 var Slots = []interface{}{
 	(*Brancher)(nil),
 	(*Comparator)(nil),

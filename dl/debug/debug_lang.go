@@ -2,7 +2,9 @@
 package debug
 
 import (
+	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -20,7 +22,31 @@ func (*DebugLog) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*DebugLog)(nil)
+func (op *DebugLog) MarshalJSON() (ret []byte, err error) {
+	if jsonValue, e := op.MarshalJSONValue(); e != nil {
+		err = e
+	} else if jsonLogLevel, e := op.MarshalJSONLogLevel(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "debug_log",
+			"value": map[string]json.RawMessage{
+				"$VALUE":     jsonValue,
+				"$LOG_LEVEL": jsonLogLevel,
+			},
+		})
+	}
+	return
+}
+
+func (op *DebugLog) MarshalJSONValue() ([]byte, error) {
+	m := op.Value.(json.Marshaler)
+	return m.MarshalJSON()
+}
+
+func (op *DebugLog) MarshalJSONLogLevel() ([]byte, error) {
+	return op.LogLevel.MarshalJSON()
+}
 
 // DoNothing Statement which does nothing.
 type DoNothing struct {
@@ -34,7 +60,25 @@ func (*DoNothing) Compose() composer.Spec {
 	}
 }
 
-var _ rt.Execute = (*DoNothing)(nil)
+func (op *DoNothing) MarshalJSON() (ret []byte, err error) {
+	if jsonReason, e := op.MarshalJSONReason(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(map[string]interface{}{
+			"type": "do_nothing",
+			"value": map[string]json.RawMessage{
+				"$REASON": jsonReason,
+			},
+		})
+	}
+	return
+}
+
+func (op *DoNothing) MarshalJSONReason() ([]byte, error) {
+	// type override
+	m := value.Text{op.Reason}
+	return m.MarshalJSON()
+}
 
 // LoggingLevel requires a user-specified string.
 type LoggingLevel struct {
@@ -43,6 +87,13 @@ type LoggingLevel struct {
 
 func (op *LoggingLevel) String() (ret string) {
 	return op.Str
+}
+
+func (op *LoggingLevel) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"type":  "logging_level",
+		"value": op.Str,
+	})
 }
 
 const LoggingLevel_Note = "$NOTE"
