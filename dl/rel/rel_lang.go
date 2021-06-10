@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/export/jsonexp"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -16,11 +17,13 @@ type ReciprocalOf struct {
 
 func (*ReciprocalOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "reciprocal_of",
+		Name: Type_ReciprocalOf,
 		Uses: "flow",
 		Lede: "reciprocal",
 	}
 }
+
+var Type_ReciprocalOf = "reciprocal_of"
 
 func (op *ReciprocalOf) MarshalJSON() (ret []byte, err error) {
 	if jsonVia, e := op.MarshalJSONVia(); e != nil {
@@ -28,9 +31,9 @@ func (op *ReciprocalOf) MarshalJSON() (ret []byte, err error) {
 	} else if jsonObject, e := op.MarshalJSONObject(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "reciprocal_of",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ReciprocalOf,
+			Value: map[string]json.RawMessage{
 				"$VIA":    jsonVia,
 				"$OBJECT": jsonObject,
 			},
@@ -39,13 +42,21 @@ func (op *ReciprocalOf) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ReciprocalOf) MarshalJSONVia() ([]byte, error) {
-	return op.Via.MarshalJSON()
+func (op *ReciprocalOf) MarshalJSONVia() (ret []byte, err error) {
+	ret, err = op.Via.MarshalJSON()
+	return
 }
 
-func (op *ReciprocalOf) MarshalJSONObject() ([]byte, error) {
-	m := op.Object.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ReciprocalOf) MarshalJSONObject() (ret []byte, err error) {
+	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_TextEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)
@@ -56,11 +67,13 @@ type ReciprocalsOf struct {
 
 func (*ReciprocalsOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "reciprocals_of",
+		Name: Type_ReciprocalsOf,
 		Uses: "flow",
 		Lede: "reciprocals",
 	}
 }
+
+var Type_ReciprocalsOf = "reciprocals_of"
 
 func (op *ReciprocalsOf) MarshalJSON() (ret []byte, err error) {
 	if jsonVia, e := op.MarshalJSONVia(); e != nil {
@@ -68,9 +81,9 @@ func (op *ReciprocalsOf) MarshalJSON() (ret []byte, err error) {
 	} else if jsonObject, e := op.MarshalJSONObject(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "reciprocals_of",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ReciprocalsOf,
+			Value: map[string]json.RawMessage{
 				"$VIA":    jsonVia,
 				"$OBJECT": jsonObject,
 			},
@@ -79,13 +92,21 @@ func (op *ReciprocalsOf) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ReciprocalsOf) MarshalJSONVia() ([]byte, error) {
-	return op.Via.MarshalJSON()
+func (op *ReciprocalsOf) MarshalJSONVia() (ret []byte, err error) {
+	ret, err = op.Via.MarshalJSON()
+	return
 }
 
-func (op *ReciprocalsOf) MarshalJSONObject() ([]byte, error) {
-	m := op.Object.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ReciprocalsOf) MarshalJSONObject() (ret []byte, err error) {
+	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_TextEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // Relate Relate two nouns.
@@ -97,10 +118,12 @@ type Relate struct {
 
 func (*Relate) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "relate",
+		Name: Type_Relate,
 		Uses: "flow",
 	}
 }
+
+var Type_Relate = "relate"
 
 func (op *Relate) MarshalJSON() (ret []byte, err error) {
 	if jsonObject, e := op.MarshalJSONObject(); e != nil {
@@ -110,9 +133,9 @@ func (op *Relate) MarshalJSON() (ret []byte, err error) {
 	} else if jsonVia, e := op.MarshalJSONVia(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "relate",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Relate,
+			Value: map[string]json.RawMessage{
 				"$OBJECT":    jsonObject,
 				"$TO_OBJECT": jsonToObject,
 				"$VIA":       jsonVia,
@@ -122,18 +145,33 @@ func (op *Relate) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Relate) MarshalJSONObject() ([]byte, error) {
-	m := op.Object.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *Relate) MarshalJSONObject() (ret []byte, err error) {
+	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_TextEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *Relate) MarshalJSONToObject() ([]byte, error) {
-	m := op.ToObject.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *Relate) MarshalJSONToObject() (ret []byte, err error) {
+	if v, e := op.ToObject.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_TextEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *Relate) MarshalJSONVia() ([]byte, error) {
-	return op.Via.MarshalJSON()
+func (op *Relate) MarshalJSONVia() (ret []byte, err error) {
+	ret, err = op.Via.MarshalJSON()
+	return
 }
 
 // RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.)
@@ -144,11 +182,13 @@ type RelativeOf struct {
 
 func (*RelativeOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "relative_of",
+		Name: Type_RelativeOf,
 		Uses: "flow",
 		Lede: "relative",
 	}
 }
+
+var Type_RelativeOf = "relative_of"
 
 func (op *RelativeOf) MarshalJSON() (ret []byte, err error) {
 	if jsonVia, e := op.MarshalJSONVia(); e != nil {
@@ -156,9 +196,9 @@ func (op *RelativeOf) MarshalJSON() (ret []byte, err error) {
 	} else if jsonObject, e := op.MarshalJSONObject(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "relative_of",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_RelativeOf,
+			Value: map[string]json.RawMessage{
 				"$VIA":    jsonVia,
 				"$OBJECT": jsonObject,
 			},
@@ -167,13 +207,21 @@ func (op *RelativeOf) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *RelativeOf) MarshalJSONVia() ([]byte, error) {
-	return op.Via.MarshalJSON()
+func (op *RelativeOf) MarshalJSONVia() (ret []byte, err error) {
+	ret, err = op.Via.MarshalJSON()
+	return
 }
 
-func (op *RelativeOf) MarshalJSONObject() ([]byte, error) {
-	m := op.Object.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *RelativeOf) MarshalJSONObject() (ret []byte, err error) {
+	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_TextEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // RelativesOf Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
@@ -184,11 +232,13 @@ type RelativesOf struct {
 
 func (*RelativesOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "relatives_of",
+		Name: Type_RelativesOf,
 		Uses: "flow",
 		Lede: "relatives",
 	}
 }
+
+var Type_RelativesOf = "relatives_of"
 
 func (op *RelativesOf) MarshalJSON() (ret []byte, err error) {
 	if jsonVia, e := op.MarshalJSONVia(); e != nil {
@@ -196,9 +246,9 @@ func (op *RelativesOf) MarshalJSON() (ret []byte, err error) {
 	} else if jsonObject, e := op.MarshalJSONObject(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "relatives_of",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_RelativesOf,
+			Value: map[string]json.RawMessage{
 				"$VIA":    jsonVia,
 				"$OBJECT": jsonObject,
 			},
@@ -207,13 +257,21 @@ func (op *RelativesOf) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *RelativesOf) MarshalJSONVia() ([]byte, error) {
-	return op.Via.MarshalJSON()
+func (op *RelativesOf) MarshalJSONVia() (ret []byte, err error) {
+	ret, err = op.Via.MarshalJSON()
+	return
 }
 
-func (op *RelativesOf) MarshalJSONObject() ([]byte, error) {
-	m := op.Object.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *RelativesOf) MarshalJSONObject() (ret []byte, err error) {
+	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_TextEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 var Slats = []composer.Composer{

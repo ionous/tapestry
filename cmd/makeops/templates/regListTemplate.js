@@ -1,7 +1,7 @@
 // slotTemplate.js
 'use strict';
-module.exports =
-`{{#if list.length}}
+module.exports =`
+{{#if list.length}}
 var {{which}} = []{{RegType}}{
 {{#each list}}
   (*{{Pascal name}})(nil),

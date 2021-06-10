@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/export/jsonexp"
 )
 
 // Action makes a parser scanner producing a script defined action.
@@ -14,19 +15,21 @@ type Action struct {
 
 func (*Action) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "action",
+		Name: Type_Action,
 		Uses: "flow",
 		Lede: "as",
 	}
 }
 
+var Type_Action = "action"
+
 func (op *Action) MarshalJSON() (ret []byte, err error) {
 	if jsonAction, e := op.MarshalJSONAction(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "action",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Action,
+			Value: map[string]json.RawMessage{
 				"$ACTION": jsonAction,
 			},
 		})
@@ -34,10 +37,11 @@ func (op *Action) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Action) MarshalJSONAction() ([]byte, error) {
+func (op *Action) MarshalJSONAction() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.Action}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
 // Alias allows the user to refer to a noun by one or more other terms.
@@ -48,10 +52,12 @@ type Alias struct {
 
 func (*Alias) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "alias",
+		Name: Type_Alias,
 		Uses: "flow",
 	}
 }
+
+var Type_Alias = "alias"
 
 func (op *Alias) MarshalJSON() (ret []byte, err error) {
 	if jsonNames, e := op.MarshalJSONNames(); e != nil {
@@ -59,9 +65,9 @@ func (op *Alias) MarshalJSON() (ret []byte, err error) {
 	} else if jsonAsNoun, e := op.MarshalJSONAsNoun(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "alias",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Alias,
+			Value: map[string]json.RawMessage{
 				"$NAMES":   jsonNames,
 				"$AS_NOUN": jsonAsNoun,
 			},
@@ -70,14 +76,16 @@ func (op *Alias) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Alias) MarshalJSONNames() ([]byte, error) {
-	return json.Marshal(op.Names)
+func (op *Alias) MarshalJSONNames() (ret []byte, err error) {
+	ret, err = json.Marshal(op.Names)
+	return
 }
 
-func (op *Alias) MarshalJSONAsNoun() ([]byte, error) {
+func (op *Alias) MarshalJSONAsNoun() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.AsNoun}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
 // AllOf makes a parser scanner
@@ -87,18 +95,20 @@ type AllOf struct {
 
 func (*AllOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "all_of",
+		Name: Type_AllOf,
 		Uses: "flow",
 	}
 }
+
+var Type_AllOf = "all_of"
 
 func (op *AllOf) MarshalJSON() (ret []byte, err error) {
 	if jsonSeries, e := op.MarshalJSONSeries(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "all_of",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_AllOf,
+			Value: map[string]json.RawMessage{
 				"$SERIES": jsonSeries,
 			},
 		})
@@ -106,8 +116,9 @@ func (op *AllOf) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *AllOf) MarshalJSONSeries() ([]byte, error) {
-	return json.Marshal(op.Series)
+func (op *AllOf) MarshalJSONSeries() (ret []byte, err error) {
+	ret, err = json.Marshal(op.Series)
+	return
 }
 
 // AnyOf makes a parser scanner
@@ -117,18 +128,20 @@ type AnyOf struct {
 
 func (*AnyOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "any_of",
+		Name: Type_AnyOf,
 		Uses: "flow",
 	}
 }
+
+var Type_AnyOf = "any_of"
 
 func (op *AnyOf) MarshalJSON() (ret []byte, err error) {
 	if jsonOptions, e := op.MarshalJSONOptions(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "any_of",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_AnyOf,
+			Value: map[string]json.RawMessage{
 				"$OPTIONS": jsonOptions,
 			},
 		})
@@ -136,8 +149,9 @@ func (op *AnyOf) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *AnyOf) MarshalJSONOptions() ([]byte, error) {
-	return json.Marshal(op.Options)
+func (op *AnyOf) MarshalJSONOptions() (ret []byte, err error) {
+	ret, err = json.Marshal(op.Options)
+	return
 }
 
 // Directive starts a parser scanner
@@ -148,10 +162,12 @@ type Directive struct {
 
 func (*Directive) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "directive",
+		Name: Type_Directive,
 		Uses: "flow",
 	}
 }
+
+var Type_Directive = "directive"
 
 func (op *Directive) MarshalJSON() (ret []byte, err error) {
 	if jsonLede, e := op.MarshalJSONLede(); e != nil {
@@ -159,9 +175,9 @@ func (op *Directive) MarshalJSON() (ret []byte, err error) {
 	} else if jsonScans, e := op.MarshalJSONScans(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "directive",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Directive,
+			Value: map[string]json.RawMessage{
 				"$LEDE":  jsonLede,
 				"$SCANS": jsonScans,
 			},
@@ -170,12 +186,14 @@ func (op *Directive) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Directive) MarshalJSONLede() ([]byte, error) {
-	return json.Marshal(op.Lede)
+func (op *Directive) MarshalJSONLede() (ret []byte, err error) {
+	ret, err = json.Marshal(op.Lede)
+	return
 }
 
-func (op *Directive) MarshalJSONScans() ([]byte, error) {
-	return json.Marshal(op.Scans)
+func (op *Directive) MarshalJSONScans() (ret []byte, err error) {
+	ret, err = json.Marshal(op.Scans)
+	return
 }
 
 // Grammar Read what the player types and turn it into actions.
@@ -185,18 +203,20 @@ type Grammar struct {
 
 func (*Grammar) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "grammar",
+		Name: Type_Grammar,
 		Uses: "flow",
 	}
 }
+
+var Type_Grammar = "grammar"
 
 func (op *Grammar) MarshalJSON() (ret []byte, err error) {
 	if jsonGrammar, e := op.MarshalJSONGrammar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "grammar",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Grammar,
+			Value: map[string]json.RawMessage{
 				"$GRAMMAR": jsonGrammar,
 			},
 		})
@@ -204,10 +224,19 @@ func (op *Grammar) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Grammar) MarshalJSONGrammar() ([]byte, error) {
-	m := op.Grammar.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *Grammar) MarshalJSONGrammar() (ret []byte, err error) {
+	if v, e := op.Grammar.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_GrammarMaker,
+			Value: v,
+		})
+	}
+	return
 }
+
+const Type_GrammarMaker = "grammar_maker"
 
 // Noun makes a parser scanner
 type Noun struct {
@@ -216,18 +245,20 @@ type Noun struct {
 
 func (*Noun) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "noun",
+		Name: Type_Noun,
 		Uses: "flow",
 	}
 }
+
+var Type_Noun = "noun"
 
 func (op *Noun) MarshalJSON() (ret []byte, err error) {
 	if jsonKind, e := op.MarshalJSONKind(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "noun",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Noun,
+			Value: map[string]json.RawMessage{
 				"$KIND": jsonKind,
 			},
 		})
@@ -235,10 +266,11 @@ func (op *Noun) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Noun) MarshalJSONKind() ([]byte, error) {
+func (op *Noun) MarshalJSONKind() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.Kind}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
 // Retarget makes a parser scanner
@@ -248,18 +280,20 @@ type Retarget struct {
 
 func (*Retarget) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "retarget",
+		Name: Type_Retarget,
 		Uses: "flow",
 	}
 }
+
+var Type_Retarget = "retarget"
 
 func (op *Retarget) MarshalJSON() (ret []byte, err error) {
 	if jsonSpan, e := op.MarshalJSONSpan(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "retarget",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Retarget,
+			Value: map[string]json.RawMessage{
 				"$SPAN": jsonSpan,
 			},
 		})
@@ -267,8 +301,9 @@ func (op *Retarget) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Retarget) MarshalJSONSpan() ([]byte, error) {
-	return json.Marshal(op.Span)
+func (op *Retarget) MarshalJSONSpan() (ret []byte, err error) {
+	ret, err = json.Marshal(op.Span)
+	return
 }
 
 // Reverse makes a parser scanner
@@ -278,18 +313,20 @@ type Reverse struct {
 
 func (*Reverse) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "reverse",
+		Name: Type_Reverse,
 		Uses: "flow",
 	}
 }
+
+var Type_Reverse = "reverse"
 
 func (op *Reverse) MarshalJSON() (ret []byte, err error) {
 	if jsonReverses, e := op.MarshalJSONReverses(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "reverse",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Reverse,
+			Value: map[string]json.RawMessage{
 				"$REVERSES": jsonReverses,
 			},
 		})
@@ -297,9 +334,12 @@ func (op *Reverse) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Reverse) MarshalJSONReverses() ([]byte, error) {
-	return json.Marshal(op.Reverses)
+func (op *Reverse) MarshalJSONReverses() (ret []byte, err error) {
+	ret, err = json.Marshal(op.Reverses)
+	return
 }
+
+const Type_ScannerMaker = "scanner_maker"
 
 // Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
 type Self struct {
@@ -308,18 +348,20 @@ type Self struct {
 
 func (*Self) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "self",
+		Name: Type_Self,
 		Uses: "flow",
 	}
 }
+
+var Type_Self = "self"
 
 func (op *Self) MarshalJSON() (ret []byte, err error) {
 	if jsonPlayer, e := op.MarshalJSONPlayer(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "self",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Self,
+			Value: map[string]json.RawMessage{
 				"$PLAYER": jsonPlayer,
 			},
 		})
@@ -327,10 +369,11 @@ func (op *Self) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Self) MarshalJSONPlayer() ([]byte, error) {
+func (op *Self) MarshalJSONPlayer() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.Player}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
 // Words makes a parser scanner
@@ -340,18 +383,20 @@ type Words struct {
 
 func (*Words) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "words",
+		Name: Type_Words,
 		Uses: "flow",
 	}
 }
+
+var Type_Words = "words"
 
 func (op *Words) MarshalJSON() (ret []byte, err error) {
 	if jsonWords, e := op.MarshalJSONWords(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "words",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Words,
+			Value: map[string]json.RawMessage{
 				"$WORDS": jsonWords,
 			},
 		})
@@ -359,14 +404,16 @@ func (op *Words) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Words) MarshalJSONWords() ([]byte, error) {
-	return json.Marshal(op.Words)
+func (op *Words) MarshalJSONWords() (ret []byte, err error) {
+	ret, err = json.Marshal(op.Words)
+	return
 }
 
 var Slots = []interface{}{
 	(*GrammarMaker)(nil),
 	(*ScannerMaker)(nil),
 }
+
 var Slats = []composer.Composer{
 	(*Action)(nil),
 	(*Alias)(nil),

@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/export/jsonexp"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -16,18 +17,20 @@ type RenderExp struct {
 
 func (*RenderExp) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "render_exp",
+		Name: Type_RenderExp,
 		Uses: "flow",
 	}
 }
+
+var Type_RenderExp = "render_exp"
 
 func (op *RenderExp) MarshalJSON() (ret []byte, err error) {
 	if jsonExpression, e := op.MarshalJSONExpression(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "render_exp",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_RenderExp,
+			Value: map[string]json.RawMessage{
 				"$EXPRESSION": jsonExpression,
 			},
 		})
@@ -35,9 +38,16 @@ func (op *RenderExp) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *RenderExp) MarshalJSONExpression() ([]byte, error) {
-	m := op.Expression.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *RenderExp) MarshalJSONExpression() (ret []byte, err error) {
+	if v, e := op.Expression.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_TextEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // RenderField in template phrases, picks between record variables, object variables, and named global objects.,ex. could be &quot;ringBearer&quot;, &quot;SamWise&quot;, or &quot;frodo&quot;
@@ -47,18 +57,20 @@ type RenderField struct {
 
 func (*RenderField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "render_field",
+		Name: Type_RenderField,
 		Uses: "flow",
 	}
 }
+
+var Type_RenderField = "render_field"
 
 func (op *RenderField) MarshalJSON() (ret []byte, err error) {
 	if jsonName, e := op.MarshalJSONName(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "render_field",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_RenderField,
+			Value: map[string]json.RawMessage{
 				"$NAME": jsonName,
 			},
 		})
@@ -66,9 +78,16 @@ func (op *RenderField) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *RenderField) MarshalJSONName() ([]byte, error) {
-	m := op.Name.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *RenderField) MarshalJSONName() (ret []byte, err error) {
+	if v, e := op.Name.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_TextEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // RenderFlags requires a user-specified string.
@@ -80,20 +99,9 @@ func (op *RenderFlags) String() (ret string) {
 	return op.Str
 }
 
-func (op *RenderFlags) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}{
-		"type":  "render_flags",
-		"value": op.Str,
-	})
-}
-
-const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
-const RenderFlags_RenderAsObj = "$RENDER_AS_OBJ"
-const RenderFlags_RenderAsAny = "$RENDER_AS_ANY"
-
 func (*RenderFlags) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "render_flags",
+		Name: Type_RenderFlags,
 		Uses: "str",
 		Choices: []string{
 			RenderFlags_RenderAsVar, RenderFlags_RenderAsObj, RenderFlags_RenderAsAny,
@@ -104,6 +112,29 @@ func (*RenderFlags) Compose() composer.Spec {
 	}
 }
 
+var Type_RenderFlags = "render_flags"
+
+func (op *RenderFlags) MarshalJSON() ([]byte, error) {
+	return json.Marshal(jsonexp.String{
+		Type:  Type_RenderFlags,
+		Value: op.Str,
+	})
+}
+
+func (op *RenderFlags) UnmarshalJSON(b []byte) (err error) {
+	var d jsonexp.String
+	if e := json.Unmarshal(b, &d); e != nil {
+		err = e
+	} else {
+		op.Str = d.Value
+	}
+	return
+}
+
+const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
+const RenderFlags_RenderAsObj = "$RENDER_AS_OBJ"
+const RenderFlags_RenderAsAny = "$RENDER_AS_ANY"
+
 // RenderName handles changing a template like {.boombip} into text.,if the name is a variable containing an object name: return the printed object name ( via &quot;print name&quot; ),if the name is a variable with some other text: return that text.,if the name isn&#x27;t a variable but refers to some object: return that object&#x27;s printed object name.,otherwise, its an error.
 type RenderName struct {
 	Name string `if:"label=_,type=text"`
@@ -111,18 +142,20 @@ type RenderName struct {
 
 func (*RenderName) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "render_name",
+		Name: Type_RenderName,
 		Uses: "flow",
 	}
 }
+
+var Type_RenderName = "render_name"
 
 func (op *RenderName) MarshalJSON() (ret []byte, err error) {
 	if jsonName, e := op.MarshalJSONName(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "render_name",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_RenderName,
+			Value: map[string]json.RawMessage{
 				"$NAME": jsonName,
 			},
 		})
@@ -130,10 +163,11 @@ func (op *RenderName) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *RenderName) MarshalJSONName() ([]byte, error) {
+func (op *RenderName) MarshalJSONName() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.Name}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
 // RenderPattern printing is generally an activity b/c say is an activity,and we want the ability to say several things in series.
@@ -144,11 +178,13 @@ type RenderPattern struct {
 
 func (*RenderPattern) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "render_pattern",
+		Name: Type_RenderPattern,
 		Uses: "flow",
 		Lede: "render",
 	}
 }
+
+var Type_RenderPattern = "render_pattern"
 
 func (op *RenderPattern) MarshalJSON() (ret []byte, err error) {
 	if jsonPattern, e := op.MarshalJSONPattern(); e != nil {
@@ -156,9 +192,9 @@ func (op *RenderPattern) MarshalJSON() (ret []byte, err error) {
 	} else if jsonArguments, e := op.MarshalJSONArguments(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "render_pattern",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_RenderPattern,
+			Value: map[string]json.RawMessage{
 				"$PATTERN":   jsonPattern,
 				"$ARGUMENTS": jsonArguments,
 			},
@@ -167,12 +203,14 @@ func (op *RenderPattern) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *RenderPattern) MarshalJSONPattern() ([]byte, error) {
-	return op.Pattern.MarshalJSON()
+func (op *RenderPattern) MarshalJSONPattern() (ret []byte, err error) {
+	ret, err = op.Pattern.MarshalJSON()
+	return
 }
 
-func (op *RenderPattern) MarshalJSONArguments() ([]byte, error) {
-	return op.Arguments.MarshalJSON()
+func (op *RenderPattern) MarshalJSONArguments() (ret []byte, err error) {
+	ret, err = op.Arguments.MarshalJSON()
+	return
 }
 
 // RenderRef returns the value of a variable or the id of an object.
@@ -183,10 +221,12 @@ type RenderRef struct {
 
 func (*RenderRef) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "render_ref",
+		Name: Type_RenderRef,
 		Uses: "flow",
 	}
 }
+
+var Type_RenderRef = "render_ref"
 
 func (op *RenderRef) MarshalJSON() (ret []byte, err error) {
 	if jsonName, e := op.MarshalJSONName(); e != nil {
@@ -194,9 +234,9 @@ func (op *RenderRef) MarshalJSON() (ret []byte, err error) {
 	} else if jsonFlags, e := op.MarshalJSONFlags(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "render_ref",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_RenderRef,
+			Value: map[string]json.RawMessage{
 				"$NAME":  jsonName,
 				"$FLAGS": jsonFlags,
 			},
@@ -205,12 +245,14 @@ func (op *RenderRef) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *RenderRef) MarshalJSONName() ([]byte, error) {
-	return op.Name.MarshalJSON()
+func (op *RenderRef) MarshalJSONName() (ret []byte, err error) {
+	ret, err = op.Name.MarshalJSON()
+	return
 }
 
-func (op *RenderRef) MarshalJSONFlags() ([]byte, error) {
-	return op.Flags.MarshalJSON()
+func (op *RenderRef) MarshalJSONFlags() (ret []byte, err error) {
+	ret, err = op.Flags.MarshalJSON()
+	return
 }
 
 var Slats = []composer.Composer{

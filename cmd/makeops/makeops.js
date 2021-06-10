@@ -76,21 +76,28 @@ Handlebars.registerHelper('LedeName', function(t) {
     return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
   }
 });
+
+const scopeOf= function(name) {
+  let n="";
+  const g = nameToGroup[name];
+  if (g && g !== currentGroup) {
+    n = `${g}.`;
+  }
+  return n;
+};
+
 const scopedName= function(name, ignoreOverride) {
   let n = pascal(name);
   const override= !ignoreOverride && overrides[name];
   if (override) {
     n = override; // stuffed in during makeops startup.
   } else {
-    const g = nameToGroup[name];
-    if (g && g !== currentGroup) {
-      n = `${g}.${n}`;
-    }
+    n= scopeOf(name)+n;
   }
   return n;
 };
 
-Handlebars.registerHelper('OriginalTypeOf', (param) => scopedName(param.type, true));
+Handlebars.registerHelper('ScopeOf', scopeOf);
 
 Handlebars.registerHelper('LowerNameOf', function(key, param) {
   const el= pascal(key) || pascal(param.type);
@@ -101,6 +108,7 @@ Handlebars.registerHelper('LabelOf', function(key, param, index) {
   const m= currentType.group.includes("modeling");
   return m? (index? lower(key): '_') : param.label.replaceAll(" ", "_");
 });
+
 Handlebars.registerHelper('Override', function(param) {
   const name = param.type;
   return overrides[name]? name:false;
@@ -201,7 +209,7 @@ Handlebars.registerHelper('GroupOf', function(desc) {
 
 // load each js file as a handlebars template
 const partials = ['spec'];
-const sources = ['header', 'num', 'swap', 'flow', 'str', 'footer', 'regList'];
+const sources = ['header', 'slot', 'num', 'swap', 'flow', 'str', 'footer', 'regList'];
 partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Partial.js`)));
 const templates = Object.fromEntries(sources.map(k => [k,
   Handlebars.compile(require(`./templates/${k}Template.js`))])
@@ -222,10 +230,6 @@ for (const typeName in allTypes) {
     //   console.log("no group", JSON.stringify(type, 0, 2));
     // }
   } else {
-    // fix. i dont know.
-    if (type.uses === "txt") {
-      type.uses= "str";
-    }
     // ex. ["story statements"]=> "story"
     group = group[0].split(" ")[0];
     nameToGroup[typeName] = group;
@@ -234,6 +238,7 @@ for (const typeName in allTypes) {
       g = {
         slots: [],
         slats: [],
+        all: [],
       };
     }
     if (type.uses === "slot") {
@@ -258,6 +263,7 @@ for (const typeName in allTypes) {
       }
       g.slats.push(typeName);
     }
+    g.all.push(typeName);
     groups[group] = g;
   }
 }
@@ -280,8 +286,16 @@ for (currentGroup in groups) {
           inc.add(o);
         }
       }
-      if (type.uses === "swap") {
+      switch (type.uses) {
+        case "swap":
         inc.add("github.com/ionous/errutil")
+        break;
+        case "str":
+        case "flow":
+          if (marshal) {
+            inc.add("git.sr.ht/~ionous/iffy/export/jsonexp");
+          }
+          break;
       }
       const params= paramsOf(type);
       for (const p in params) {
@@ -320,12 +334,11 @@ for (currentGroup in groups) {
     imports: Array.from(inc.values()).sort(),
   }));
   // #. write slats ( if any )
-  for (const n of g.slats) {
+  for (const n of g.all) {
     const type = allTypes[n];
     const template = templates[type.uses];
-    if (!template) {
-      throw new Error(`unknown template for ${n}`);
-    } else {
+    if (template) {
+
       currentType= type;
       fs.writeSync(fd, template({
         marshal,

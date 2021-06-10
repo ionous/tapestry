@@ -2,7 +2,7 @@
 'use strict';
 module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
   return composer.Spec{
-    Name: "{{name}}",
+    Name: Type_{{Pascal name}},
     Uses: "{{uses}}",
 {{#if (LedeName this)}}
     Lede: "{{LedeName this}}",
@@ -32,4 +32,6 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
 {{/if}}
   }
 }
+
+var Type_{{Pascal name}} = "{{name}}";
 `;

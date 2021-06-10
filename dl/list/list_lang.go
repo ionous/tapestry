@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/export/jsonexp"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -16,19 +17,21 @@ type AsNum struct {
 
 func (*AsNum) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "as_num",
+		Name: Type_AsNum,
 		Uses: "flow",
 		Lede: "num",
 	}
 }
 
+var Type_AsNum = "as_num"
+
 func (op *AsNum) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "as_num",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_AsNum,
+			Value: map[string]json.RawMessage{
 				"$VAR": jsonVar,
 			},
 		})
@@ -36,8 +39,9 @@ func (op *AsNum) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *AsNum) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *AsNum) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
 // AsRec Define the name of a record variable.
@@ -47,19 +51,21 @@ type AsRec struct {
 
 func (*AsRec) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "as_rec",
+		Name: Type_AsRec,
 		Uses: "flow",
 		Lede: "rec",
 	}
 }
 
+var Type_AsRec = "as_rec"
+
 func (op *AsRec) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "as_rec",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_AsRec,
+			Value: map[string]json.RawMessage{
 				"$VAR": jsonVar,
 			},
 		})
@@ -67,8 +73,9 @@ func (op *AsRec) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *AsRec) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *AsRec) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
 // AsTxt Define the name of a text variable.
@@ -78,19 +85,21 @@ type AsTxt struct {
 
 func (*AsTxt) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "as_txt",
+		Name: Type_AsTxt,
 		Uses: "flow",
 		Lede: "txt",
 	}
 }
 
+var Type_AsTxt = "as_txt"
+
 func (op *AsTxt) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "as_txt",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_AsTxt,
+			Value: map[string]json.RawMessage{
 				"$VAR": jsonVar,
 			},
 		})
@@ -98,8 +107,9 @@ func (op *AsTxt) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *AsTxt) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *AsTxt) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
 // EraseEdge Erase at edge: Remove one or more values from a list
@@ -110,11 +120,13 @@ type EraseEdge struct {
 
 func (*EraseEdge) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "erase_edge",
+		Name: Type_EraseEdge,
 		Uses: "flow",
 		Lede: "erase",
 	}
 }
+
+var Type_EraseEdge = "erase_edge"
 
 func (op *EraseEdge) MarshalJSON() (ret []byte, err error) {
 	if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
@@ -122,9 +134,9 @@ func (op *EraseEdge) MarshalJSON() (ret []byte, err error) {
 	} else if jsonAtEdge, e := op.MarshalJSONAtEdge(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "erase_edge",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_EraseEdge,
+			Value: map[string]json.RawMessage{
 				"$FROM":    jsonFrom,
 				"$AT_EDGE": jsonAtEdge,
 			},
@@ -133,14 +145,28 @@ func (op *EraseEdge) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *EraseEdge) MarshalJSONFrom() ([]byte, error) {
-	m := op.From.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *EraseEdge) MarshalJSONFrom() (ret []byte, err error) {
+	if v, e := op.From.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_ListSource,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *EraseEdge) MarshalJSONAtEdge() ([]byte, error) {
-	m := op.AtEdge.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *EraseEdge) MarshalJSONAtEdge() (ret []byte, err error) {
+	if v, e := op.AtEdge.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_BoolEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // EraseIndex Erase at index: Remove one or more values from a list
@@ -152,11 +178,13 @@ type EraseIndex struct {
 
 func (*EraseIndex) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "erase_index",
+		Name: Type_EraseIndex,
 		Uses: "flow",
 		Lede: "erase",
 	}
 }
+
+var Type_EraseIndex = "erase_index"
 
 func (op *EraseIndex) MarshalJSON() (ret []byte, err error) {
 	if jsonCount, e := op.MarshalJSONCount(); e != nil {
@@ -166,9 +194,9 @@ func (op *EraseIndex) MarshalJSON() (ret []byte, err error) {
 	} else if jsonAtIndex, e := op.MarshalJSONAtIndex(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "erase_index",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_EraseIndex,
+			Value: map[string]json.RawMessage{
 				"$COUNT":    jsonCount,
 				"$FROM":     jsonFrom,
 				"$AT_INDEX": jsonAtIndex,
@@ -178,19 +206,40 @@ func (op *EraseIndex) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *EraseIndex) MarshalJSONCount() ([]byte, error) {
-	m := op.Count.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *EraseIndex) MarshalJSONCount() (ret []byte, err error) {
+	if v, e := op.Count.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *EraseIndex) MarshalJSONFrom() ([]byte, error) {
-	m := op.From.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *EraseIndex) MarshalJSONFrom() (ret []byte, err error) {
+	if v, e := op.From.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_ListSource,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *EraseIndex) MarshalJSONAtIndex() ([]byte, error) {
-	m := op.AtIndex.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *EraseIndex) MarshalJSONAtIndex() (ret []byte, err error) {
+	if v, e := op.AtIndex.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // Erasing Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
@@ -204,10 +253,12 @@ type Erasing struct {
 
 func (*Erasing) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "erasing",
+		Name: Type_Erasing,
 		Uses: "flow",
 	}
 }
+
+var Type_Erasing = "erasing"
 
 func (op *Erasing) MarshalJSON() (ret []byte, err error) {
 	if jsonCount, e := op.MarshalJSONCount(); e != nil {
@@ -221,9 +272,9 @@ func (op *Erasing) MarshalJSON() (ret []byte, err error) {
 	} else if jsonDo, e := op.MarshalJSONDo(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "erasing",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Erasing,
+			Value: map[string]json.RawMessage{
 				"$COUNT":    jsonCount,
 				"$FROM":     jsonFrom,
 				"$AT_INDEX": jsonAtIndex,
@@ -235,29 +286,52 @@ func (op *Erasing) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Erasing) MarshalJSONCount() ([]byte, error) {
-	m := op.Count.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *Erasing) MarshalJSONCount() (ret []byte, err error) {
+	if v, e := op.Count.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *Erasing) MarshalJSONFrom() ([]byte, error) {
-	m := op.From.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *Erasing) MarshalJSONFrom() (ret []byte, err error) {
+	if v, e := op.From.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_ListSource,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *Erasing) MarshalJSONAtIndex() ([]byte, error) {
-	m := op.AtIndex.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *Erasing) MarshalJSONAtIndex() (ret []byte, err error) {
+	if v, e := op.AtIndex.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *Erasing) MarshalJSONAs() ([]byte, error) {
+func (op *Erasing) MarshalJSONAs() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.As}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
-func (op *Erasing) MarshalJSONDo() ([]byte, error) {
-	return op.Do.MarshalJSON()
+func (op *Erasing) MarshalJSONDo() (ret []byte, err error) {
+	ret, err = op.Do.MarshalJSON()
+	return
 }
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
@@ -271,11 +345,13 @@ type ErasingEdge struct {
 
 func (*ErasingEdge) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "erasing_edge",
+		Name: Type_ErasingEdge,
 		Uses: "flow",
 		Lede: "erasing",
 	}
 }
+
+var Type_ErasingEdge = "erasing_edge"
 
 func (op *ErasingEdge) MarshalJSON() (ret []byte, err error) {
 	if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
@@ -289,9 +365,9 @@ func (op *ErasingEdge) MarshalJSON() (ret []byte, err error) {
 	} else if jsonElse, e := op.MarshalJSONElse(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "erasing_edge",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ErasingEdge,
+			Value: map[string]json.RawMessage{
 				"$FROM":    jsonFrom,
 				"$AT_EDGE": jsonAtEdge,
 				"$AS":      jsonAs,
@@ -303,29 +379,52 @@ func (op *ErasingEdge) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ErasingEdge) MarshalJSONFrom() ([]byte, error) {
-	m := op.From.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ErasingEdge) MarshalJSONFrom() (ret []byte, err error) {
+	if v, e := op.From.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_ListSource,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ErasingEdge) MarshalJSONAtEdge() ([]byte, error) {
-	m := op.AtEdge.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ErasingEdge) MarshalJSONAtEdge() (ret []byte, err error) {
+	if v, e := op.AtEdge.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_BoolEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ErasingEdge) MarshalJSONAs() ([]byte, error) {
+func (op *ErasingEdge) MarshalJSONAs() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.As}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
-func (op *ErasingEdge) MarshalJSONDo() ([]byte, error) {
-	return op.Do.MarshalJSON()
+func (op *ErasingEdge) MarshalJSONDo() (ret []byte, err error) {
+	ret, err = op.Do.MarshalJSON()
+	return
 }
 
-func (op *ErasingEdge) MarshalJSONElse() ([]byte, error) {
-	m := op.Else.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ErasingEdge) MarshalJSONElse() (ret []byte, err error) {
+	if v, e := op.Else.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  core.Type_Brancher,
+			Value: v,
+		})
+	}
+	return
 }
 
 // FromNumList Uses a list of numbers
@@ -335,19 +434,21 @@ type FromNumList struct {
 
 func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "from_num_list",
+		Name: Type_FromNumList,
 		Uses: "flow",
 		Lede: "nums",
 	}
 }
 
+var Type_FromNumList = "from_num_list"
+
 func (op *FromNumList) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "from_num_list",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_FromNumList,
+			Value: map[string]json.RawMessage{
 				"$VAR": jsonVar,
 			},
 		})
@@ -355,8 +456,9 @@ func (op *FromNumList) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *FromNumList) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *FromNumList) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
 // FromRecList Uses a list of records
@@ -366,19 +468,21 @@ type FromRecList struct {
 
 func (*FromRecList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "from_rec_list",
+		Name: Type_FromRecList,
 		Uses: "flow",
 		Lede: "recs",
 	}
 }
 
+var Type_FromRecList = "from_rec_list"
+
 func (op *FromRecList) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "from_rec_list",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_FromRecList,
+			Value: map[string]json.RawMessage{
 				"$VAR": jsonVar,
 			},
 		})
@@ -386,8 +490,9 @@ func (op *FromRecList) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *FromRecList) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *FromRecList) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
 // FromTxtList Uses a list of text
@@ -397,19 +502,21 @@ type FromTxtList struct {
 
 func (*FromTxtList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "from_txt_list",
+		Name: Type_FromTxtList,
 		Uses: "flow",
 		Lede: "txts",
 	}
 }
 
+var Type_FromTxtList = "from_txt_list"
+
 func (op *FromTxtList) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "from_txt_list",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_FromTxtList,
+			Value: map[string]json.RawMessage{
 				"$VAR": jsonVar,
 			},
 		})
@@ -417,8 +524,9 @@ func (op *FromTxtList) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *FromTxtList) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *FromTxtList) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
 // IntoNumList Targets a list of numbers
@@ -428,19 +536,21 @@ type IntoNumList struct {
 
 func (*IntoNumList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "into_num_list",
+		Name: Type_IntoNumList,
 		Uses: "flow",
 		Lede: "nums",
 	}
 }
 
+var Type_IntoNumList = "into_num_list"
+
 func (op *IntoNumList) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "into_num_list",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_IntoNumList,
+			Value: map[string]json.RawMessage{
 				"$VAR": jsonVar,
 			},
 		})
@@ -448,8 +558,9 @@ func (op *IntoNumList) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *IntoNumList) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *IntoNumList) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
 // IntoRecList Targets a list of records
@@ -459,19 +570,21 @@ type IntoRecList struct {
 
 func (*IntoRecList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "into_rec_list",
+		Name: Type_IntoRecList,
 		Uses: "flow",
 		Lede: "recs",
 	}
 }
 
+var Type_IntoRecList = "into_rec_list"
+
 func (op *IntoRecList) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "into_rec_list",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_IntoRecList,
+			Value: map[string]json.RawMessage{
 				"$VAR": jsonVar,
 			},
 		})
@@ -479,8 +592,9 @@ func (op *IntoRecList) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *IntoRecList) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *IntoRecList) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
 // IntoTxtList Targets a list of text
@@ -490,19 +604,21 @@ type IntoTxtList struct {
 
 func (*IntoTxtList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "into_txt_list",
+		Name: Type_IntoTxtList,
 		Uses: "flow",
 		Lede: "txts",
 	}
 }
 
+var Type_IntoTxtList = "into_txt_list"
+
 func (op *IntoTxtList) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "into_txt_list",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_IntoTxtList,
+			Value: map[string]json.RawMessage{
 				"$VAR": jsonVar,
 			},
 		})
@@ -510,8 +626,9 @@ func (op *IntoTxtList) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *IntoTxtList) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *IntoTxtList) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
 // ListAt Get a value from a list. The first element is is index 1.
@@ -522,11 +639,13 @@ type ListAt struct {
 
 func (*ListAt) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_at",
+		Name: Type_ListAt,
 		Uses: "flow",
 		Lede: "get",
 	}
 }
+
+var Type_ListAt = "list_at"
 
 func (op *ListAt) MarshalJSON() (ret []byte, err error) {
 	if jsonList, e := op.MarshalJSONList(); e != nil {
@@ -534,9 +653,9 @@ func (op *ListAt) MarshalJSON() (ret []byte, err error) {
 	} else if jsonIndex, e := op.MarshalJSONIndex(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_at",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListAt,
+			Value: map[string]json.RawMessage{
 				"$LIST":  jsonList,
 				"$INDEX": jsonIndex,
 			},
@@ -545,14 +664,28 @@ func (op *ListAt) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListAt) MarshalJSONList() ([]byte, error) {
-	m := op.List.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListAt) MarshalJSONList() (ret []byte, err error) {
+	if v, e := op.List.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListAt) MarshalJSONIndex() ([]byte, error) {
-	m := op.Index.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListAt) MarshalJSONIndex() (ret []byte, err error) {
+	if v, e := op.Index.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ListEach Loops over the elements in the passed list, or runs the &#x27;else&#x27; activity if empty.
@@ -565,11 +698,13 @@ type ListEach struct {
 
 func (*ListEach) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_each",
+		Name: Type_ListEach,
 		Uses: "flow",
 		Lede: "repeating",
 	}
 }
+
+var Type_ListEach = "list_each"
 
 func (op *ListEach) MarshalJSON() (ret []byte, err error) {
 	if jsonList, e := op.MarshalJSONList(); e != nil {
@@ -581,9 +716,9 @@ func (op *ListEach) MarshalJSON() (ret []byte, err error) {
 	} else if jsonElse, e := op.MarshalJSONElse(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_each",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListEach,
+			Value: map[string]json.RawMessage{
 				"$LIST": jsonList,
 				"$AS":   jsonAs,
 				"$DO":   jsonDo,
@@ -594,23 +729,45 @@ func (op *ListEach) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListEach) MarshalJSONList() ([]byte, error) {
-	m := op.List.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListEach) MarshalJSONList() (ret []byte, err error) {
+	if v, e := op.List.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListEach) MarshalJSONAs() ([]byte, error) {
-	m := op.As.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListEach) MarshalJSONAs() (ret []byte, err error) {
+	if v, e := op.As.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_ListIterator,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListEach) MarshalJSONDo() ([]byte, error) {
-	return op.Do.MarshalJSON()
+func (op *ListEach) MarshalJSONDo() (ret []byte, err error) {
+	ret, err = op.Do.MarshalJSON()
+	return
 }
 
-func (op *ListEach) MarshalJSONElse() ([]byte, error) {
-	m := op.Else.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListEach) MarshalJSONElse() (ret []byte, err error) {
+	if v, e := op.Else.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  core.Type_Brancher,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ListFind Search a list for a specific value.
@@ -621,11 +778,13 @@ type ListFind struct {
 
 func (*ListFind) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_find",
+		Name: Type_ListFind,
 		Uses: "flow",
 		Lede: "find",
 	}
 }
+
+var Type_ListFind = "list_find"
 
 func (op *ListFind) MarshalJSON() (ret []byte, err error) {
 	if jsonValue, e := op.MarshalJSONValue(); e != nil {
@@ -633,9 +792,9 @@ func (op *ListFind) MarshalJSON() (ret []byte, err error) {
 	} else if jsonList, e := op.MarshalJSONList(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_find",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListFind,
+			Value: map[string]json.RawMessage{
 				"$VALUE": jsonValue,
 				"$LIST":  jsonList,
 			},
@@ -644,14 +803,28 @@ func (op *ListFind) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListFind) MarshalJSONValue() ([]byte, error) {
-	m := op.Value.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListFind) MarshalJSONValue() (ret []byte, err error) {
+	if v, e := op.Value.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListFind) MarshalJSONList() ([]byte, error) {
-	m := op.List.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListFind) MarshalJSONList() (ret []byte, err error) {
+	if v, e := op.List.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ListGather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: &#x27;in&#x27; as each value from the list, and &#x27;out&#x27; as the var passed to the gather.
@@ -663,11 +836,13 @@ type ListGather struct {
 
 func (*ListGather) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_gather",
+		Name: Type_ListGather,
 		Uses: "flow",
 		Lede: "gather",
 	}
 }
+
+var Type_ListGather = "list_gather"
 
 func (op *ListGather) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
@@ -677,9 +852,9 @@ func (op *ListGather) MarshalJSON() (ret []byte, err error) {
 	} else if jsonUsing, e := op.MarshalJSONUsing(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_gather",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListGather,
+			Value: map[string]json.RawMessage{
 				"$VAR":   jsonVar,
 				"$FROM":  jsonFrom,
 				"$USING": jsonUsing,
@@ -689,20 +864,31 @@ func (op *ListGather) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListGather) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *ListGather) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
-func (op *ListGather) MarshalJSONFrom() ([]byte, error) {
-	m := op.From.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListGather) MarshalJSONFrom() (ret []byte, err error) {
+	if v, e := op.From.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_ListSource,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListGather) MarshalJSONUsing() ([]byte, error) {
+func (op *ListGather) MarshalJSONUsing() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.Using}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
+
+const Type_ListIterator = "list_iterator"
 
 // ListLen Determines the number of values in a list.
 type ListLen struct {
@@ -711,19 +897,21 @@ type ListLen struct {
 
 func (*ListLen) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_len",
+		Name: Type_ListLen,
 		Uses: "flow",
 		Lede: "len",
 	}
 }
 
+var Type_ListLen = "list_len"
+
 func (op *ListLen) MarshalJSON() (ret []byte, err error) {
 	if jsonList, e := op.MarshalJSONList(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_len",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListLen,
+			Value: map[string]json.RawMessage{
 				"$LIST": jsonList,
 			},
 		})
@@ -731,9 +919,16 @@ func (op *ListLen) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListLen) MarshalJSONList() ([]byte, error) {
-	m := op.List.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListLen) MarshalJSONList() (ret []byte, err error) {
+	if v, e := op.List.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the &#x27;from list&#x27;, one value at a time.
@@ -745,11 +940,13 @@ type ListMap struct {
 
 func (*ListMap) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_map",
+		Name: Type_ListMap,
 		Uses: "flow",
 		Lede: "map",
 	}
 }
+
+var Type_ListMap = "list_map"
 
 func (op *ListMap) MarshalJSON() (ret []byte, err error) {
 	if jsonToList, e := op.MarshalJSONToList(); e != nil {
@@ -759,9 +956,9 @@ func (op *ListMap) MarshalJSON() (ret []byte, err error) {
 	} else if jsonUsingPattern, e := op.MarshalJSONUsingPattern(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_map",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListMap,
+			Value: map[string]json.RawMessage{
 				"$TO_LIST":       jsonToList,
 				"$FROM_LIST":     jsonFromList,
 				"$USING_PATTERN": jsonUsingPattern,
@@ -771,21 +968,30 @@ func (op *ListMap) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListMap) MarshalJSONToList() ([]byte, error) {
+func (op *ListMap) MarshalJSONToList() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.ToList}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
-func (op *ListMap) MarshalJSONFromList() ([]byte, error) {
-	m := op.FromList.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListMap) MarshalJSONFromList() (ret []byte, err error) {
+	if v, e := op.FromList.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListMap) MarshalJSONUsingPattern() ([]byte, error) {
+func (op *ListMap) MarshalJSONUsingPattern() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.UsingPattern}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
 // ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: &#x27;in&#x27; ( each element of the list ) and &#x27;out&#x27; ( ex. a record ).
@@ -797,11 +1003,13 @@ type ListReduce struct {
 
 func (*ListReduce) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_reduce",
+		Name: Type_ListReduce,
 		Uses: "flow",
 		Lede: "reduce",
 	}
 }
+
+var Type_ListReduce = "list_reduce"
 
 func (op *ListReduce) MarshalJSON() (ret []byte, err error) {
 	if jsonIntoValue, e := op.MarshalJSONIntoValue(); e != nil {
@@ -811,9 +1019,9 @@ func (op *ListReduce) MarshalJSON() (ret []byte, err error) {
 	} else if jsonUsingPattern, e := op.MarshalJSONUsingPattern(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_reduce",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListReduce,
+			Value: map[string]json.RawMessage{
 				"$INTO_VALUE":    jsonIntoValue,
 				"$FROM_LIST":     jsonFromList,
 				"$USING_PATTERN": jsonUsingPattern,
@@ -823,21 +1031,30 @@ func (op *ListReduce) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListReduce) MarshalJSONIntoValue() ([]byte, error) {
+func (op *ListReduce) MarshalJSONIntoValue() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.IntoValue}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
-func (op *ListReduce) MarshalJSONFromList() ([]byte, error) {
-	m := op.FromList.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListReduce) MarshalJSONFromList() (ret []byte, err error) {
+	if v, e := op.FromList.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListReduce) MarshalJSONUsingPattern() ([]byte, error) {
+func (op *ListReduce) MarshalJSONUsingPattern() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.UsingPattern}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
 // ListReverse Reverse a list.
@@ -847,19 +1064,21 @@ type ListReverse struct {
 
 func (*ListReverse) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_reverse",
+		Name: Type_ListReverse,
 		Uses: "flow",
 		Lede: "reverse",
 	}
 }
 
+var Type_ListReverse = "list_reverse"
+
 func (op *ListReverse) MarshalJSON() (ret []byte, err error) {
 	if jsonList, e := op.MarshalJSONList(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_reverse",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListReverse,
+			Value: map[string]json.RawMessage{
 				"$LIST": jsonList,
 			},
 		})
@@ -867,9 +1086,16 @@ func (op *ListReverse) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListReverse) MarshalJSONList() ([]byte, error) {
-	m := op.List.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListReverse) MarshalJSONList() (ret []byte, err error) {
+	if v, e := op.List.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_ListSource,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ListSet Overwrite an existing value in a list.
@@ -881,11 +1107,13 @@ type ListSet struct {
 
 func (*ListSet) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_set",
+		Name: Type_ListSet,
 		Uses: "flow",
 		Lede: "set",
 	}
 }
+
+var Type_ListSet = "list_set"
 
 func (op *ListSet) MarshalJSON() (ret []byte, err error) {
 	if jsonList, e := op.MarshalJSONList(); e != nil {
@@ -895,9 +1123,9 @@ func (op *ListSet) MarshalJSON() (ret []byte, err error) {
 	} else if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_set",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListSet,
+			Value: map[string]json.RawMessage{
 				"$LIST":  jsonList,
 				"$INDEX": jsonIndex,
 				"$FROM":  jsonFrom,
@@ -907,20 +1135,35 @@ func (op *ListSet) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListSet) MarshalJSONList() ([]byte, error) {
+func (op *ListSet) MarshalJSONList() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.List}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
-func (op *ListSet) MarshalJSONIndex() ([]byte, error) {
-	m := op.Index.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSet) MarshalJSONIndex() (ret []byte, err error) {
+	if v, e := op.Index.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListSet) MarshalJSONFrom() ([]byte, error) {
-	m := op.From.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSet) MarshalJSONFrom() (ret []byte, err error) {
+	if v, e := op.From.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ListSlice Create a new list from a section of another list.,Start is optional, if omitted slice starts at the first element.,If start is greater the length, an empty array is returned.,Slice doesnt include the ending index.,Negatives indices indicates an offset from the end.,When end is omitted, copy up to and including the last element;,and do the same if the end is greater than the length
@@ -932,11 +1175,13 @@ type ListSlice struct {
 
 func (*ListSlice) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_slice",
+		Name: Type_ListSlice,
 		Uses: "flow",
 		Lede: "slice",
 	}
 }
+
+var Type_ListSlice = "list_slice"
 
 func (op *ListSlice) MarshalJSON() (ret []byte, err error) {
 	if jsonList, e := op.MarshalJSONList(); e != nil {
@@ -946,9 +1191,9 @@ func (op *ListSlice) MarshalJSON() (ret []byte, err error) {
 	} else if jsonEnd, e := op.MarshalJSONEnd(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_slice",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListSlice,
+			Value: map[string]json.RawMessage{
 				"$LIST":  jsonList,
 				"$START": jsonStart,
 				"$END":   jsonEnd,
@@ -958,19 +1203,40 @@ func (op *ListSlice) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListSlice) MarshalJSONList() ([]byte, error) {
-	m := op.List.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSlice) MarshalJSONList() (ret []byte, err error) {
+	if v, e := op.List.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListSlice) MarshalJSONStart() ([]byte, error) {
-	m := op.Start.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSlice) MarshalJSONStart() (ret []byte, err error) {
+	if v, e := op.Start.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListSlice) MarshalJSONEnd() ([]byte, error) {
-	m := op.End.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSlice) MarshalJSONEnd() (ret []byte, err error) {
+	if v, e := op.End.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ListSortNumbers
@@ -982,11 +1248,13 @@ type ListSortNumbers struct {
 
 func (*ListSortNumbers) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_sort_numbers",
+		Name: Type_ListSortNumbers,
 		Uses: "flow",
 		Lede: "sort",
 	}
 }
+
+var Type_ListSortNumbers = "list_sort_numbers"
 
 func (op *ListSortNumbers) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
@@ -996,9 +1264,9 @@ func (op *ListSortNumbers) MarshalJSON() (ret []byte, err error) {
 	} else if jsonDescending, e := op.MarshalJSONDescending(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_sort_numbers",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListSortNumbers,
+			Value: map[string]json.RawMessage{
 				"$VAR":        jsonVar,
 				"$BY_FIELD":   jsonByField,
 				"$DESCENDING": jsonDescending,
@@ -1008,19 +1276,28 @@ func (op *ListSortNumbers) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListSortNumbers) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *ListSortNumbers) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
-func (op *ListSortNumbers) MarshalJSONByField() ([]byte, error) {
+func (op *ListSortNumbers) MarshalJSONByField() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.ByField}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
-func (op *ListSortNumbers) MarshalJSONDescending() ([]byte, error) {
-	m := op.Descending.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSortNumbers) MarshalJSONDescending() (ret []byte, err error) {
+	if v, e := op.Descending.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_BoolEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
@@ -1033,11 +1310,13 @@ type ListSortText struct {
 
 func (*ListSortText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_sort_text",
+		Name: Type_ListSortText,
 		Uses: "flow",
 		Lede: "sort",
 	}
 }
+
+var Type_ListSortText = "list_sort_text"
 
 func (op *ListSortText) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
@@ -1049,9 +1328,9 @@ func (op *ListSortText) MarshalJSON() (ret []byte, err error) {
 	} else if jsonUsingCase, e := op.MarshalJSONUsingCase(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_sort_text",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListSortText,
+			Value: map[string]json.RawMessage{
 				"$VAR":        jsonVar,
 				"$BY_FIELD":   jsonByField,
 				"$DESCENDING": jsonDescending,
@@ -1062,24 +1341,40 @@ func (op *ListSortText) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListSortText) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *ListSortText) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
-func (op *ListSortText) MarshalJSONByField() ([]byte, error) {
+func (op *ListSortText) MarshalJSONByField() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.ByField}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
-func (op *ListSortText) MarshalJSONDescending() ([]byte, error) {
-	m := op.Descending.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSortText) MarshalJSONDescending() (ret []byte, err error) {
+	if v, e := op.Descending.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_BoolEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListSortText) MarshalJSONUsingCase() ([]byte, error) {
-	m := op.UsingCase.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSortText) MarshalJSONUsingCase() (ret []byte, err error) {
+	if v, e := op.UsingCase.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_BoolEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
@@ -1090,11 +1385,13 @@ type ListSortUsing struct {
 
 func (*ListSortUsing) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_sort_using",
+		Name: Type_ListSortUsing,
 		Uses: "flow",
 		Lede: "sort",
 	}
 }
+
+var Type_ListSortUsing = "list_sort_using"
 
 func (op *ListSortUsing) MarshalJSON() (ret []byte, err error) {
 	if jsonVar, e := op.MarshalJSONVar(); e != nil {
@@ -1102,9 +1399,9 @@ func (op *ListSortUsing) MarshalJSON() (ret []byte, err error) {
 	} else if jsonUsing, e := op.MarshalJSONUsing(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_sort_using",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListSortUsing,
+			Value: map[string]json.RawMessage{
 				"$VAR":   jsonVar,
 				"$USING": jsonUsing,
 			},
@@ -1113,15 +1410,19 @@ func (op *ListSortUsing) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListSortUsing) MarshalJSONVar() ([]byte, error) {
-	return op.Var.MarshalJSON()
+func (op *ListSortUsing) MarshalJSONVar() (ret []byte, err error) {
+	ret, err = op.Var.MarshalJSON()
+	return
 }
 
-func (op *ListSortUsing) MarshalJSONUsing() ([]byte, error) {
+func (op *ListSortUsing) MarshalJSONUsing() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.Using}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
+
+const Type_ListSource = "list_source"
 
 // ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
 type ListSplice struct {
@@ -1133,11 +1434,13 @@ type ListSplice struct {
 
 func (*ListSplice) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "list_splice",
+		Name: Type_ListSplice,
 		Uses: "flow",
 		Lede: "splice",
 	}
 }
+
+var Type_ListSplice = "list_splice"
 
 func (op *ListSplice) MarshalJSON() (ret []byte, err error) {
 	if jsonList, e := op.MarshalJSONList(); e != nil {
@@ -1149,9 +1452,9 @@ func (op *ListSplice) MarshalJSON() (ret []byte, err error) {
 	} else if jsonInsert, e := op.MarshalJSONInsert(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "list_splice",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_ListSplice,
+			Value: map[string]json.RawMessage{
 				"$LIST":   jsonList,
 				"$START":  jsonStart,
 				"$REMOVE": jsonRemove,
@@ -1162,26 +1465,50 @@ func (op *ListSplice) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *ListSplice) MarshalJSONList() ([]byte, error) {
+func (op *ListSplice) MarshalJSONList() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.List}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
-func (op *ListSplice) MarshalJSONStart() ([]byte, error) {
-	m := op.Start.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSplice) MarshalJSONStart() (ret []byte, err error) {
+	if v, e := op.Start.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListSplice) MarshalJSONRemove() ([]byte, error) {
-	m := op.Remove.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSplice) MarshalJSONRemove() (ret []byte, err error) {
+	if v, e := op.Remove.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *ListSplice) MarshalJSONInsert() ([]byte, error) {
-	m := op.Insert.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *ListSplice) MarshalJSONInsert() (ret []byte, err error) {
+	if v, e := op.Insert.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
+
+const Type_ListTarget = "list_target"
 
 // PutEdge Add a value to a list
 type PutEdge struct {
@@ -1192,11 +1519,13 @@ type PutEdge struct {
 
 func (*PutEdge) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "put_edge",
+		Name: Type_PutEdge,
 		Uses: "flow",
 		Lede: "put",
 	}
 }
+
+var Type_PutEdge = "put_edge"
 
 func (op *PutEdge) MarshalJSON() (ret []byte, err error) {
 	if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
@@ -1206,9 +1535,9 @@ func (op *PutEdge) MarshalJSON() (ret []byte, err error) {
 	} else if jsonAtEdge, e := op.MarshalJSONAtEdge(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "put_edge",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_PutEdge,
+			Value: map[string]json.RawMessage{
 				"$FROM":    jsonFrom,
 				"$INTO":    jsonInto,
 				"$AT_EDGE": jsonAtEdge,
@@ -1218,19 +1547,40 @@ func (op *PutEdge) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *PutEdge) MarshalJSONFrom() ([]byte, error) {
-	m := op.From.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *PutEdge) MarshalJSONFrom() (ret []byte, err error) {
+	if v, e := op.From.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *PutEdge) MarshalJSONInto() ([]byte, error) {
-	m := op.Into.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *PutEdge) MarshalJSONInto() (ret []byte, err error) {
+	if v, e := op.Into.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_ListTarget,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *PutEdge) MarshalJSONAtEdge() ([]byte, error) {
-	m := op.AtEdge.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *PutEdge) MarshalJSONAtEdge() (ret []byte, err error) {
+	if v, e := op.AtEdge.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_BoolEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // PutIndex Replace one value in a list with another
@@ -1242,11 +1592,13 @@ type PutIndex struct {
 
 func (*PutIndex) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "put_index",
+		Name: Type_PutIndex,
 		Uses: "flow",
 		Lede: "put",
 	}
 }
+
+var Type_PutIndex = "put_index"
 
 func (op *PutIndex) MarshalJSON() (ret []byte, err error) {
 	if jsonFrom, e := op.MarshalJSONFrom(); e != nil {
@@ -1256,9 +1608,9 @@ func (op *PutIndex) MarshalJSON() (ret []byte, err error) {
 	} else if jsonAtIndex, e := op.MarshalJSONAtIndex(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "put_index",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_PutIndex,
+			Value: map[string]json.RawMessage{
 				"$FROM":     jsonFrom,
 				"$INTO":     jsonInto,
 				"$AT_INDEX": jsonAtIndex,
@@ -1268,19 +1620,40 @@ func (op *PutIndex) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *PutIndex) MarshalJSONFrom() ([]byte, error) {
-	m := op.From.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *PutIndex) MarshalJSONFrom() (ret []byte, err error) {
+	if v, e := op.From.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *PutIndex) MarshalJSONInto() ([]byte, error) {
-	m := op.Into.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *PutIndex) MarshalJSONInto() (ret []byte, err error) {
+	if v, e := op.Into.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  Type_ListTarget,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *PutIndex) MarshalJSONAtIndex() ([]byte, error) {
-	m := op.AtIndex.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *PutIndex) MarshalJSONAtIndex() (ret []byte, err error) {
+	if v, e := op.AtIndex.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 // Range Generates a series of numbers r[i] &#x3D; (start + step*i) where i&gt;&#x3D;0.,Start and step default to 1, stop defaults to start;,the inputs are truncated to produce whole numbers;,a zero step returns an error.,A positive step ends the series when the returned value would exceed stop,while a negative step ends before generating a value less than stop.
@@ -1292,10 +1665,12 @@ type Range struct {
 
 func (*Range) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "range",
+		Name: Type_Range,
 		Uses: "flow",
 	}
 }
+
+var Type_Range = "range"
 
 func (op *Range) MarshalJSON() (ret []byte, err error) {
 	if jsonTo, e := op.MarshalJSONTo(); e != nil {
@@ -1305,9 +1680,9 @@ func (op *Range) MarshalJSON() (ret []byte, err error) {
 	} else if jsonByStep, e := op.MarshalJSONByStep(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "range",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_Range,
+			Value: map[string]json.RawMessage{
 				"$TO":      jsonTo,
 				"$FROM":    jsonFrom,
 				"$BY_STEP": jsonByStep,
@@ -1317,19 +1692,40 @@ func (op *Range) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *Range) MarshalJSONTo() ([]byte, error) {
-	m := op.To.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *Range) MarshalJSONTo() (ret []byte, err error) {
+	if v, e := op.To.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *Range) MarshalJSONFrom() ([]byte, error) {
-	m := op.From.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *Range) MarshalJSONFrom() (ret []byte, err error) {
+	if v, e := op.From.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *Range) MarshalJSONByStep() ([]byte, error) {
-	m := op.ByStep.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *Range) MarshalJSONByStep() (ret []byte, err error) {
+	if v, e := op.ByStep.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_NumberEval,
+			Value: v,
+		})
+	}
+	return
 }
 
 var Slots = []interface{}{
@@ -1337,6 +1733,7 @@ var Slots = []interface{}{
 	(*ListSource)(nil),
 	(*ListTarget)(nil),
 }
+
 var Slats = []composer.Composer{
 	(*AsNum)(nil),
 	(*AsRec)(nil),

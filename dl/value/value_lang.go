@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/reader"
+	"git.sr.ht/~ionous/iffy/export/jsonexp"
 )
 
 // Bool requires a user-specified string.
@@ -16,19 +17,9 @@ func (op *Bool) String() (ret string) {
 	return op.Str
 }
 
-func (op *Bool) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}{
-		"type":  "bool",
-		"value": op.Str,
-	})
-}
-
-const Bool_True = "$TRUE"
-const Bool_False = "$FALSE"
-
 func (*Bool) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "bool",
+		Name: Type_Bool,
 		Uses: "str",
 		Choices: []string{
 			Bool_True, Bool_False,
@@ -39,6 +30,28 @@ func (*Bool) Compose() composer.Spec {
 	}
 }
 
+var Type_Bool = "bool"
+
+func (op *Bool) MarshalJSON() ([]byte, error) {
+	return json.Marshal(jsonexp.String{
+		Type:  Type_Bool,
+		Value: op.Str,
+	})
+}
+
+func (op *Bool) UnmarshalJSON(b []byte) (err error) {
+	var d jsonexp.String
+	if e := json.Unmarshal(b, &d); e != nil {
+		err = e
+	} else {
+		op.Str = d.Value
+	}
+	return
+}
+
+const Bool_True = "$TRUE"
+const Bool_False = "$FALSE"
+
 // Lines requires a user-specified string.
 type Lines struct {
 	Str string
@@ -48,19 +61,31 @@ func (op *Lines) String() (ret string) {
 	return op.Str
 }
 
-func (op *Lines) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}{
-		"type":  "lines",
-		"value": op.Str,
-	})
-}
-
 func (*Lines) Compose() composer.Spec {
 	return composer.Spec{
-		Name:        "lines",
+		Name:        Type_Lines,
 		Uses:        "str",
 		OpenStrings: true,
 	}
+}
+
+var Type_Lines = "lines"
+
+func (op *Lines) MarshalJSON() ([]byte, error) {
+	return json.Marshal(jsonexp.String{
+		Type:  Type_Lines,
+		Value: op.Str,
+	})
+}
+
+func (op *Lines) UnmarshalJSON(b []byte) (err error) {
+	var d jsonexp.String
+	if e := json.Unmarshal(b, &d); e != nil {
+		err = e
+	} else {
+		op.Str = d.Value
+	}
+	return
 }
 
 // Number requires a user-specified number.
@@ -69,18 +94,30 @@ type Number struct {
 }
 
 func (op *Number) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}{
-		"type":  "number",
-		"value": op.Value,
+	return json.Marshal(jsonexp.Float{
+		Type:  Type_Number,
+		Value: op.Value,
 	})
+}
+
+func (op *Number) UnmarshalJSON(b []byte) (err error) {
+	var d jsonexp.Float
+	if e := json.Unmarshal(b, &d); e != nil {
+		err = e
+	} else {
+		op.Value = d.Value
+	}
+	return
 }
 
 func (*Number) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "number",
+		Name: Type_Number,
 		Uses: "num",
 	}
 }
+
+var Type_Number = "number"
 
 // PatternName requires a user-specified string.
 type PatternName struct {
@@ -92,19 +129,33 @@ func (op *PatternName) String() (ret string) {
 	return op.Str
 }
 
-func (op *PatternName) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
-		"type":  "pattern_name",
-		"value": op.Str,
-	})
-}
-
 func (*PatternName) Compose() composer.Spec {
 	return composer.Spec{
-		Name:        "pattern_name",
+		Name:        Type_PatternName,
 		Uses:        "str",
 		OpenStrings: true,
 	}
+}
+
+var Type_PatternName = "pattern_name"
+
+func (op *PatternName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(jsonexp.String{
+		Id:    op.At.Offset,
+		Type:  Type_PatternName,
+		Value: op.Str,
+	})
+}
+
+func (op *PatternName) UnmarshalJSON(b []byte) (err error) {
+	var d jsonexp.String
+	if e := json.Unmarshal(b, &d); e != nil {
+		err = e
+	} else {
+		op.At.Offset = d.Id
+		op.Str = d.Value
+	}
+	return
 }
 
 // RelationName requires a user-specified string.
@@ -117,19 +168,33 @@ func (op *RelationName) String() (ret string) {
 	return op.Str
 }
 
-func (op *RelationName) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
-		"type":  "relation_name",
-		"value": op.Str,
-	})
-}
-
 func (*RelationName) Compose() composer.Spec {
 	return composer.Spec{
-		Name:        "relation_name",
+		Name:        Type_RelationName,
 		Uses:        "str",
 		OpenStrings: true,
 	}
+}
+
+var Type_RelationName = "relation_name"
+
+func (op *RelationName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(jsonexp.String{
+		Id:    op.At.Offset,
+		Type:  Type_RelationName,
+		Value: op.Str,
+	})
+}
+
+func (op *RelationName) UnmarshalJSON(b []byte) (err error) {
+	var d jsonexp.String
+	if e := json.Unmarshal(b, &d); e != nil {
+		err = e
+	} else {
+		op.At.Offset = d.Id
+		op.Str = d.Value
+	}
+	return
 }
 
 // Text requires a user-specified string.
@@ -141,19 +206,31 @@ func (op *Text) String() (ret string) {
 	return op.Str
 }
 
-func (op *Text) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}{
-		"type":  "text",
-		"value": op.Str,
-	})
-}
-
 func (*Text) Compose() composer.Spec {
 	return composer.Spec{
-		Name:        "text",
+		Name:        Type_Text,
 		Uses:        "str",
 		OpenStrings: true,
 	}
+}
+
+var Type_Text = "text"
+
+func (op *Text) MarshalJSON() ([]byte, error) {
+	return json.Marshal(jsonexp.String{
+		Type:  Type_Text,
+		Value: op.Str,
+	})
+}
+
+func (op *Text) UnmarshalJSON(b []byte) (err error) {
+	var d jsonexp.String
+	if e := json.Unmarshal(b, &d); e != nil {
+		err = e
+	} else {
+		op.Str = d.Value
+	}
+	return
 }
 
 // VariableName requires a user-specified string.
@@ -166,19 +243,33 @@ func (op *VariableName) String() (ret string) {
 	return op.Str
 }
 
-func (op *VariableName) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}{"id": op.At.Offset,
-		"type":  "variable_name",
-		"value": op.Str,
-	})
-}
-
 func (*VariableName) Compose() composer.Spec {
 	return composer.Spec{
-		Name:        "variable_name",
+		Name:        Type_VariableName,
 		Uses:        "str",
 		OpenStrings: true,
 	}
+}
+
+var Type_VariableName = "variable_name"
+
+func (op *VariableName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(jsonexp.String{
+		Id:    op.At.Offset,
+		Type:  Type_VariableName,
+		Value: op.Str,
+	})
+}
+
+func (op *VariableName) UnmarshalJSON(b []byte) (err error) {
+	var d jsonexp.String
+	if e := json.Unmarshal(b, &d); e != nil {
+		err = e
+	} else {
+		op.At.Offset = d.Id
+		op.Str = d.Value
+	}
+	return
 }
 
 var Slats = []composer.Composer{

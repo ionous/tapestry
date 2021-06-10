@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/export/jsonexp"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -16,11 +17,13 @@ type DebugLog struct {
 
 func (*DebugLog) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "debug_log",
+		Name: Type_DebugLog,
 		Uses: "flow",
 		Lede: "log",
 	}
 }
+
+var Type_DebugLog = "debug_log"
 
 func (op *DebugLog) MarshalJSON() (ret []byte, err error) {
 	if jsonValue, e := op.MarshalJSONValue(); e != nil {
@@ -28,9 +31,9 @@ func (op *DebugLog) MarshalJSON() (ret []byte, err error) {
 	} else if jsonLogLevel, e := op.MarshalJSONLogLevel(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "debug_log",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_DebugLog,
+			Value: map[string]json.RawMessage{
 				"$VALUE":     jsonValue,
 				"$LOG_LEVEL": jsonLogLevel,
 			},
@@ -39,13 +42,21 @@ func (op *DebugLog) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *DebugLog) MarshalJSONValue() ([]byte, error) {
-	m := op.Value.(json.Marshaler)
-	return m.MarshalJSON()
+func (op *DebugLog) MarshalJSONValue() (ret []byte, err error) {
+	if v, e := op.Value.(json.Marshaler).MarshalJSON(); e != nil {
+		err = e
+	} else {
+		ret, err = json.Marshal(jsonexp.Slot{
+			Type:  rt.Type_Assignment,
+			Value: v,
+		})
+	}
+	return
 }
 
-func (op *DebugLog) MarshalJSONLogLevel() ([]byte, error) {
-	return op.LogLevel.MarshalJSON()
+func (op *DebugLog) MarshalJSONLogLevel() (ret []byte, err error) {
+	ret, err = op.LogLevel.MarshalJSON()
+	return
 }
 
 // DoNothing Statement which does nothing.
@@ -55,18 +66,20 @@ type DoNothing struct {
 
 func (*DoNothing) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "do_nothing",
+		Name: Type_DoNothing,
 		Uses: "flow",
 	}
 }
+
+var Type_DoNothing = "do_nothing"
 
 func (op *DoNothing) MarshalJSON() (ret []byte, err error) {
 	if jsonReason, e := op.MarshalJSONReason(); e != nil {
 		err = e
 	} else {
-		ret, err = json.Marshal(map[string]interface{}{
-			"type": "do_nothing",
-			"value": map[string]json.RawMessage{
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type: Type_DoNothing,
+			Value: map[string]json.RawMessage{
 				"$REASON": jsonReason,
 			},
 		})
@@ -74,10 +87,11 @@ func (op *DoNothing) MarshalJSON() (ret []byte, err error) {
 	return
 }
 
-func (op *DoNothing) MarshalJSONReason() ([]byte, error) {
+func (op *DoNothing) MarshalJSONReason() (ret []byte, err error) {
 	// type override
 	m := value.Text{op.Reason}
-	return m.MarshalJSON()
+	ret, err = m.MarshalJSON()
+	return
 }
 
 // LoggingLevel requires a user-specified string.
@@ -89,23 +103,9 @@ func (op *LoggingLevel) String() (ret string) {
 	return op.Str
 }
 
-func (op *LoggingLevel) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}{
-		"type":  "logging_level",
-		"value": op.Str,
-	})
-}
-
-const LoggingLevel_Note = "$NOTE"
-const LoggingLevel_ToDo = "$TO_DO"
-const LoggingLevel_Fix = "$FIX"
-const LoggingLevel_Info = "$INFO"
-const LoggingLevel_Warning = "$WARNING"
-const LoggingLevel_Error = "$ERROR"
-
 func (*LoggingLevel) Compose() composer.Spec {
 	return composer.Spec{
-		Name: "logging_level",
+		Name: Type_LoggingLevel,
 		Uses: "str",
 		Choices: []string{
 			LoggingLevel_Note, LoggingLevel_ToDo, LoggingLevel_Fix, LoggingLevel_Info, LoggingLevel_Warning, LoggingLevel_Error,
@@ -115,6 +115,32 @@ func (*LoggingLevel) Compose() composer.Spec {
 		},
 	}
 }
+
+var Type_LoggingLevel = "logging_level"
+
+func (op *LoggingLevel) MarshalJSON() ([]byte, error) {
+	return json.Marshal(jsonexp.String{
+		Type:  Type_LoggingLevel,
+		Value: op.Str,
+	})
+}
+
+func (op *LoggingLevel) UnmarshalJSON(b []byte) (err error) {
+	var d jsonexp.String
+	if e := json.Unmarshal(b, &d); e != nil {
+		err = e
+	} else {
+		op.Str = d.Value
+	}
+	return
+}
+
+const LoggingLevel_Note = "$NOTE"
+const LoggingLevel_ToDo = "$TO_DO"
+const LoggingLevel_Fix = "$FIX"
+const LoggingLevel_Info = "$INFO"
+const LoggingLevel_Warning = "$WARNING"
+const LoggingLevel_Error = "$ERROR"
 
 var Slats = []composer.Composer{
 	(*DebugLog)(nil),

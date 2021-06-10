@@ -21,11 +21,11 @@ func (op *{{Pascal name}}) MarshalJSON() (ret []byte, err error) {
     err = e
   } else {{/unless}}{{/each~}}
   {
-    ret, err= json.Marshal(map[string]interface{}{
+    ret, err= json.Marshal(jsonexp.Flow{
 {{#if (IsPositioned this)}}
-      "id": op.At.Offset,
-{{/if}}      "type":  "{{name}}",
-      "value": map[string]json.RawMessage{
+      Id: op.At.Offset,
+{{/if}}      Type:  Type_{{Pascal name}},
+      Value: map[string]json.RawMessage{
 {{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
         "{{@key}}": json{{Pascal @key}},
 {{~/unless}}{{~/each}}
@@ -36,9 +36,9 @@ func (op *{{Pascal name}}) MarshalJSON() (ret []byte, err error) {
 }
 
 {{#each (ParamsOf this)}}{{#unless (IsInternal label)}}
-func (op *{{Pascal ../name}}) MarshalJSON{{Pascal @key}}() ([]byte, error) {
+func (op *{{Pascal ../name}}) MarshalJSON{{Pascal @key}}() (ret []byte, err error) {
 {{#if repeats}}
-  return json.Marshal( op.{{Pascal @key}} )
+  ret, err= json.Marshal( op.{{Pascal @key}} )
 {{else if (IsBool this)}}
   // bool override
   var str string
@@ -48,17 +48,24 @@ func (op *{{Pascal ../name}}) MarshalJSON{{Pascal @key}}() ([]byte, error) {
      str= value.Bool_False
   }
   m:= value.Bool{ str }
-  return m.MarshalJSON()
+  ret, err= m.MarshalJSON()
 {{else if (Override this)}}
   // type override
-   m:= {{OriginalTypeOf this}} { op.{{Pascal @key}} }
-   return m.MarshalJSON()
+   m:= {{ScopeOf type}}{{Pascal type}} { op.{{Pascal @key}} }
+   ret, err= m.MarshalJSON()
 {{else if (Uses type 'slot')}}
-  m:= op.{{Pascal @key}}.(json.Marshaler)
-  return m.MarshalJSON()
+  if v, e:= op.{{Pascal @key}}.(json.Marshaler).MarshalJSON(); e!= nil {
+    err= e
+  } else {
+    ret, err= json.Marshal(jsonexp.Slot{
+      Type:  {{ScopeOf type}}Type_{{Pascal type}},
+      Value: v,
+    })
+  }
 {{else}}
-  return op.{{Pascal @key}}.MarshalJSON()
+  ret, err= op.{{Pascal @key}}.MarshalJSON()
 {{/if}}
+  return
 }
 {{/unless}}{{/each}}{{/if}}
 {{/with}}

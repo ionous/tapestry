@@ -13,14 +13,30 @@ func (op *{{Pascal name}}) String()(ret string) {
   return op.Str
 }
 
+{{>spec spec=this}}
+
 {{#if ../marshal}}
 func (op *{{Pascal name}}) MarshalJSON() ([]byte, error) {
-  return json.Marshal(map[string]interface{}{
-{{~#if (IsPositioned this)}}
-    "id": op.At.Offset,{{/if}}
-    "type": "{{name}}",
-    "value": op.Str,
+  return json.Marshal(jsonexp.String{
+{{#if (IsPositioned this)}}
+    Id: op.At.Offset,
+{{/if}}
+    Type:  Type_{{Pascal name}},
+    Value: op.Str,
   })
+}
+
+func (op *{{Pascal name}}) UnmarshalJSON(b []byte) (err error) {
+  var d jsonexp.String;
+  if e := json.Unmarshal(b, &d); e != nil {
+    err= e
+  } else {
+{{#if (IsPositioned this)}}
+    op.At.Offset= d.Id;
+{{/if}}
+    op.Str= d.Value;
+  }
+  return
 }
 {{/if}}
 
@@ -28,6 +44,5 @@ func (op *{{Pascal name}}) MarshalJSON() ([]byte, error) {
 const {{Pascal ../name}}_{{Pascal this.token}}= "{{this.token}}";
 {{/each~}}
 
-{{>spec spec=this}}
 {{/with}}
 `;
