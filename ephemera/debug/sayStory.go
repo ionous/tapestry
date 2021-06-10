@@ -11,7 +11,7 @@ import (
 )
 
 func SayIt(s string) rt.Execute {
-  return &core.Say{&core.TextValue{value.Text{Str: s}}}
+  return &core.Say{&core.TextValue{s}}
 }
 
 type MatchNumber struct {
@@ -61,11 +61,11 @@ var SayHelloGoodbye = core.NewActivity(
   &core.ChooseAction{
     If: &core.BoolValue{true},
     Do: core.MakeActivity(&core.Say{
-      Text: &core.TextValue{value.Text{Str: "hello"}},
+      Text: &core.TextValue{"hello"},
     }),
     Else: &core.ChooseNothingElse{
       core.MakeActivity(&core.Say{
-        Text: &core.TextValue{value.Text{Str: "goodbye"}},
+        Text: &core.TextValue{"goodbye"},
       }),
     },
   })

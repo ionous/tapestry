@@ -24,7 +24,7 @@ func (op *ChooseValue) ifDoElse(run rt.Runtime) (err error) {
 	if v, e := safe.GetAssignedValue(run, op.From); e != nil {
 		err = e
 	} else {
-		run.PushScope(scope.NewSingleValue(op.Assign.String(), v))
+		run.PushScope(scope.NewSingleValue(op.Assign, v))
 		//
 		if ok, e := safe.GetOptionalBool(run, op.Filter, true); e != nil {
 			err = e

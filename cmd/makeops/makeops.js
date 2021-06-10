@@ -8,7 +8,7 @@ const fs = require('fs'); // filesystem for loading iffy language file
 const child_process = require('child_process');
 const path = require('path');
 
-const overrides= {"string":"string"};
+const overrides= {"text":"string"};
 
 // change to tokenized like name
 const tokenize = function(name) {

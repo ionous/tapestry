@@ -42,10 +42,7 @@ type RenderFlags struct {
 }
 
 func (op *RenderFlags) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
@@ -67,7 +64,7 @@ func (*RenderFlags) Compose() composer.Spec {
 
 // RenderName handles changing a template like {.boombip} into text.,if the name is a variable containing an object name: return the printed object name ( via &quot;print name&quot; ),if the name is a variable with some other text: return that text.,if the name isn&#x27;t a variable but refers to some object: return that object&#x27;s printed object name.,otherwise, its an error.
 type RenderName struct {
-	Name string `if:"label=_,type=string"`
+	Name string `if:"label=_,type=text"`
 }
 
 var _ rt.TextEval = (*RenderName)(nil)

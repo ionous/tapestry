@@ -3,7 +3,6 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
@@ -25,7 +24,7 @@ func (*DebugLog) Compose() composer.Spec {
 
 // DoNothing Statement which does nothing.
 type DoNothing struct {
-	Reason value.Text `if:"label=why,optional"`
+	Reason string `if:"label=why,optional,type=text"`
 }
 
 var _ rt.Execute = (*DoNothing)(nil)
@@ -43,10 +42,7 @@ type LoggingLevel struct {
 }
 
 func (op *LoggingLevel) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const LoggingLevel_Note = "$NOTE"

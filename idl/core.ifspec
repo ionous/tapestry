@@ -587,7 +587,7 @@
     "matches":
     {
         "uses": "flow",
-        "spec": "matches {_%text:text_eval} {to%pattern:string} {-%cache:match_cache}",
+        "spec": "matches {_%text:text_eval} {to%pattern:text} {-%cache:match_cache}",
         "slot": "bool_eval",
         "desc": "Determine whether the specified text is similar to the specified regular expression.",
         "group": "matching"

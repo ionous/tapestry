@@ -7,8 +7,8 @@ import (
 
 // Position Identifies the location of a specific command ( ex. from an .if file ).
 type Position struct {
-	Offset string `if:"label=_,type=string"`
-	Source string `if:"label=in,type=string"`
+	Offset string `if:"label=_,type=text"`
+	Source string `if:"label=in,type=text"`
 }
 
 func (*Position) Compose() composer.Spec {
@@ -19,27 +19,6 @@ func (*Position) Compose() composer.Spec {
 	}
 }
 
-// String requires a user-specified string.
-type String struct {
-	Str string
-}
-
-func (op *String) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
-}
-
-func (*String) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        "string",
-		Uses:        "str",
-		OpenStrings: true,
-	}
-}
-
 var Slats = []composer.Composer{
 	(*Position)(nil),
-	(*String)(nil),
 }

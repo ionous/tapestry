@@ -766,7 +766,7 @@
                                         "$TEXT": {
                                           "id": "id-174941fde22-25",
                                           "type": "text",
-                                          "value": "$EMPTY"
+                                          "value": null
                                         }
                                       }
                                     }

@@ -12,10 +12,7 @@ type Bool struct {
 }
 
 func (op *Bool) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const Bool_True = "$TRUE"
@@ -40,10 +37,7 @@ type Lines struct {
 }
 
 func (op *Lines) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*Lines) Compose() composer.Spec {
@@ -56,10 +50,6 @@ func (*Lines) Compose() composer.Spec {
 
 // Number requires a user-specified number.
 type Number float64
-
-func (*Number) Choices() []float64 {
-	return []float64{}
-}
 
 func (*Number) Compose() composer.Spec {
 	return composer.Spec{
@@ -75,10 +65,7 @@ type PatternName struct {
 }
 
 func (op *PatternName) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*PatternName) Compose() composer.Spec {
@@ -96,10 +83,7 @@ type RelationName struct {
 }
 
 func (op *RelationName) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*RelationName) Compose() composer.Spec {
@@ -116,25 +100,14 @@ type Text struct {
 }
 
 func (op *Text) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
-
-const Text_Empty = "$EMPTY"
 
 func (*Text) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        "text",
 		Uses:        "str",
 		OpenStrings: true,
-		Choices: []string{
-			Text_Empty,
-		},
-		Strings: []string{
-			"empty",
-		},
 	}
 }
 
@@ -145,10 +118,7 @@ type VariableName struct {
 }
 
 func (op *VariableName) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*VariableName) Compose() composer.Spec {

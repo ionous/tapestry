@@ -3,7 +3,6 @@ package story
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/debug"
-	"git.sr.ht/~ionous/iffy/dl/value"
 )
 
 func (op *Comment) ImportStub(k *Importer) (ret interface{}, err error) {
@@ -12,7 +11,7 @@ func (op *Comment) ImportStub(k *Importer) (ret interface{}, err error) {
 	} else {
 		ret = &debug.DebugLog{
 			&core.FromText{
-				&core.TextValue{value.Text{op.Lines.String()}},
+				&core.TextValue{op.Lines.String()},
 			},
 			debug.LoggingLevel{
 				debug.LoggingLevel_Note,

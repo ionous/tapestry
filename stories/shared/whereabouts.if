@@ -2387,7 +2387,7 @@
                                                                                       "$TEXT": {
                                                                                         "id": "id-17703f5400a-248",
                                                                                         "type": "text",
-                                                                                        "value": "$EMPTY"
+                                                                                        "value": null
                                                                                       }
                                                                                     }
                                                                                   }
@@ -2634,7 +2634,7 @@
                                                                           "$TEXT": {
                                                                             "id": "id-17703f5400a-189",
                                                                             "type": "text",
-                                                                            "value": "$EMPTY"
+                                                                            "value": null
                                                                           }
                                                                         }
                                                                       }
@@ -3256,7 +3256,7 @@
                                                                           "$TEXT": {
                                                                             "id": "id-17703f5400a-458",
                                                                             "type": "text",
-                                                                            "value": "$EMPTY"
+                                                                            "value": null
                                                                           }
                                                                         }
                                                                       }

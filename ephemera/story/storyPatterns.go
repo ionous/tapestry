@@ -4,7 +4,6 @@ import (
 	r "reflect"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/export"
@@ -117,7 +116,7 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 			// check if this rule is declared inside a specific domain
 			if dom := k.Current.Domain.String(); len(dom) > 0 {
 				guard = &core.AllTrue{[]rt.BoolEval{
-					&core.HasDominion{value.Text{Str: dom}},
+					&core.HasDominion{dom},
 					guard,
 				}}
 			}

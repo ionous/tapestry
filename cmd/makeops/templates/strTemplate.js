@@ -9,10 +9,7 @@ type {{Pascal name}} struct {
 }
 
 func (op *{{Pascal name}}) String()(ret string) {
-  if s := op.Str; s != "$EMPTY" {
-    ret = s
-  }
-  return
+  return op.Str
 }
 
 {{#each (Choices @this)}}

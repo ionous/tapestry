@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/value"
 )
 
 func TestLog(t *testing.T) {
@@ -17,7 +16,7 @@ func TestLog(t *testing.T) {
 	//
 	lo := DebugLog{
 		LogLevel: LoggingLevel{Str: LoggingLevel_Error},
-		Value:    &core.FromText{&core.TextValue{value.Text{Str: "hello"}}}}
+		Value:    &core.FromText{&core.TextValue{"hello"}}}
 	if e := lo.Execute(nil); e != nil {
 		t.Fatal(e)
 	} else if got := b.String(); !strings.HasSuffix(got, " ###### error hello\n") {

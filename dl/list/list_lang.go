@@ -91,7 +91,7 @@ type Erasing struct {
 	Count   rt.NumberEval `if:"label=_"`
 	From    ListSource    `if:"label=from"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
-	As      value.Text    `if:"label=as"`
+	As      string        `if:"label=as,type=text"`
 	Do      core.Activity `if:"label=do"`
 }
 
@@ -108,7 +108,7 @@ func (*Erasing) Compose() composer.Spec {
 type ErasingEdge struct {
 	From   ListSource    `if:"label=_"`
 	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
-	As     value.Text    `if:"label=as"`
+	As     string        `if:"label=as,type=text"`
 	Do     core.Activity `if:"label=do"`
 	Else   core.Brancher `if:"label=else,optional"`
 }
@@ -270,7 +270,7 @@ func (*ListFind) Compose() composer.Spec {
 type ListGather struct {
 	Var   value.VariableName `if:"label=_"`
 	From  ListSource         `if:"label=from"`
-	Using value.Text         `if:"label=_"`
+	Using string             `if:"label=_,type=text"`
 }
 
 func (*ListGather) Compose() composer.Spec {
@@ -298,9 +298,9 @@ func (*ListLen) Compose() composer.Spec {
 
 // ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the &#x27;from list&#x27;, one value at a time.
 type ListMap struct {
-	ToList       value.Text    `if:"label=_"`
+	ToList       string        `if:"label=_,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
-	UsingPattern value.Text    `if:"label=using"`
+	UsingPattern string        `if:"label=using,type=text"`
 }
 
 var _ rt.Execute = (*ListMap)(nil)
@@ -315,9 +315,9 @@ func (*ListMap) Compose() composer.Spec {
 
 // ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: &#x27;in&#x27; ( each element of the list ) and &#x27;out&#x27; ( ex. a record ).
 type ListReduce struct {
-	IntoValue    value.Text    `if:"label=into"`
+	IntoValue    string        `if:"label=into,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
-	UsingPattern value.Text    `if:"label=using"`
+	UsingPattern string        `if:"label=using,type=text"`
 }
 
 var _ rt.Execute = (*ListReduce)(nil)
@@ -347,7 +347,7 @@ func (*ListReverse) Compose() composer.Spec {
 
 // ListSet Overwrite an existing value in a list.
 type ListSet struct {
-	List  value.Text    `if:"label=_"`
+	List  string        `if:"label=_,type=text"`
 	Index rt.NumberEval `if:"label=index"`
 	From  rt.Assignment `if:"label=from"`
 }
@@ -384,7 +384,7 @@ func (*ListSlice) Compose() composer.Spec {
 // ListSortNumbers
 type ListSortNumbers struct {
 	Var        value.VariableName `if:"label=_"`
-	ByField    string             `if:"label=by_field,type=string"`
+	ByField    string             `if:"label=by_field,type=text"`
 	Descending rt.BoolEval        `if:"label=descending,optional"`
 }
 
@@ -401,7 +401,7 @@ func (*ListSortNumbers) Compose() composer.Spec {
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortText struct {
 	Var        value.VariableName `if:"label=_"`
-	ByField    string             `if:"label=by_field,type=string"`
+	ByField    string             `if:"label=by_field,type=text"`
 	Descending rt.BoolEval        `if:"label=descending,optional"`
 	UsingCase  rt.BoolEval        `if:"label=using_case,optional"`
 }
@@ -419,7 +419,7 @@ func (*ListSortText) Compose() composer.Spec {
 // ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortUsing struct {
 	Var   value.VariableName `if:"label=_"`
-	Using value.Text         `if:"label=using"`
+	Using string             `if:"label=using,type=text"`
 }
 
 var _ rt.Execute = (*ListSortUsing)(nil)
@@ -434,7 +434,7 @@ func (*ListSortUsing) Compose() composer.Spec {
 
 // ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
 type ListSplice struct {
-	List   value.Text    `if:"label=_"`
+	List   string        `if:"label=_,type=text"`
 	Start  rt.NumberEval `if:"label=start"`
 	Remove rt.NumberEval `if:"label=remove"`
 	Insert rt.Assignment `if:"label=insert"`

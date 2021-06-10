@@ -953,7 +953,7 @@
                                                         "$TEXT": {
                                                           "id": "id-177661f02fe-43",
                                                           "type": "text",
-                                                          "value": "$EMPTY"
+                                                          "value": null
                                                         }
                                                       }
                                                     }

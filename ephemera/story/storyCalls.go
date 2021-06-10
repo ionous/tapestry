@@ -32,12 +32,12 @@ func (op *Make) ImportStub(k *Importer) (ret interface{}, err error) {
 }
 
 func (op *Send) ImportStub(k *Importer) (ret interface{}, err error) {
-	pn := value.PatternName{Str: op.Event.String()}
+	pn := value.PatternName{Str: op.Event}
 	if p, args, e := importCall(k, "actions", pn, op.Arguments); e != nil {
 		err = &OpError{Op: op, Err: e}
 	} else {
 		// event, path ( list ), args
-		ret = &core.CallSend{Event: value.Text{Str: p.String()}, Path: op.Path, Arguments: args}
+		ret = &core.CallSend{Event: p.String(), Path: op.Path, Arguments: args}
 	}
 	return
 }
@@ -62,7 +62,7 @@ func importArgs(k *Importer, p ephemera.Named, stubs *Arguments,
 	if stubs != nil {
 		var argList []core.CallArg
 		for _, stub := range stubs.Args {
-			paramName := k.NewName(stub.Name.String(), tables.NAMED_ARGUMENT, stub.At.String())
+			paramName := k.NewName(stub.Name, tables.NAMED_ARGUMENT, stub.At.String())
 
 			if aff := stub.From.Affinity(); p.IsValid() && len(aff) > 0 {
 				// fix: this shouldnt be "eval" here.

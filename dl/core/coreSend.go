@@ -23,7 +23,7 @@ func (op *CallSend) send(run rt.Runtime, aff affine.Affinity) (ret g.Value, err 
 	if path, e := safe.GetTextList(run, op.Path); e != nil {
 		err = e
 	} else {
-		name, up := op.Event.String(), path.Strings()
+		name, up := op.Event, path.Strings()
 		if v, e := run.Send(name, up, op.Arguments.Pack()); e != nil {
 			err = cmdErrorCtx(op, name, e)
 		} else {

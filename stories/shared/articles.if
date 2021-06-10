@@ -1269,7 +1269,7 @@
                                         "$TEXT": {
                                           "id": "id-174f0910998-91",
                                           "type": "text",
-                                          "value": "$EMPTY"
+                                          "value": null
                                         }
                                       }
                                     }
@@ -1363,7 +1363,7 @@
                                         "$TEXT": {
                                           "id": "id-174f0910998-115",
                                           "type": "text",
-                                          "value": "$EMPTY"
+                                          "value": null
                                         }
                                       }
                                     }

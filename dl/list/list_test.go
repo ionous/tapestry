@@ -13,13 +13,9 @@ func P(p string) value.PatternName  { return value.PatternName{Str: p} }
 func N(v string) value.VariableName { return value.VariableName{Str: v} }
 func T(s string) *core.TextValue    { return &core.TextValue{W(s)} }
 func V(i string) *core.GetVar       { return &core.GetVar{N(i)} }
-func W(v string) value.Text         { return value.Text{Str: v} }
+func W(v string) string             { return v }
 
-func FromTs(strs []string) (ret rt.Assignment) {
-	vs := make([]value.Text, len(strs))
-	for i, str := range strs {
-		vs[i] = W(str)
-	}
+func FromTs(vs []string) (ret rt.Assignment) {
 	if len(vs) == 1 {
 		ret = &core.FromText{&core.TextValue{vs[0]}}
 	} else {

@@ -13,7 +13,7 @@ func (op *ListSet) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListSet) setAt(run rt.Runtime) (err error) {
-	if els, e := safe.List(run, op.List.String()); e != nil {
+	if els, e := safe.List(run, op.List); e != nil {
 		err = e
 	} else if onedex, e := safe.GetNumber(run, op.Index); e != nil {
 		err = e

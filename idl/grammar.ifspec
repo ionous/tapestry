@@ -9,13 +9,13 @@
   },
   "action": {
     "uses": "flow",
-    "spec": "as {_%action:string}",
+    "spec": "as {_%action:text}",
     "slot": "scanner_maker",
     "desc": "makes a parser scanner producing a script defined action."
   },
   "alias": {
     "uses": "flow",
-    "spec": "alias {_%names+string} {as_noun:string}",
+    "spec": "alias {_%names+text} {as_noun:text}",
     "slot": "grammar_maker",
     "desc": "allows the user to refer to a noun by one or more other terms."
   },
@@ -33,7 +33,7 @@
   },
   "directive": {
     "uses": "flow",
-    "spec": "directive {_%lede+string} {scans+scanner_maker}",
+    "spec": "directive {_%lede+text} {scans+scanner_maker}",
     "slot": "grammar_maker",
     "desc": "starts a parser scanner"
   },
@@ -45,7 +45,7 @@
   },
   "noun": {
     "uses": "flow",
-    "spec": "noun {_%kind:string}",
+    "spec": "noun {_%kind:text}",
     "slot": "scanner_maker",
     "desc": "makes a parser scanner"
   },
@@ -63,13 +63,13 @@
   },
   "self": {
     "uses": "flow",
-    "spec": "self {_%player:string}",
+    "spec": "self {_%player:text}",
     "slot": "scanner_maker",
     "desc": "makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )"
   },
   "words": {
     "uses": "flow",
-    "spec": "words {_%words+string}",
+    "spec": "words {_%words+text}",
     "slot": "scanner_maker",
     "desc": "makes a parser scanner"
   }

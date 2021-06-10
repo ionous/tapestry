@@ -16,11 +16,11 @@ func TestObjects(t *testing.T) {
 
 	run := modelTest{objClass: map[string]string{
 		// objects:
-		"this": base.Text.String(),
-		"that": derived.Text.String(),
+		"this": base.Text,
+		"that": derived.Text,
 		// hierarchy:
-		"base":    base.Text.String(),
-		"derived": derived.Text.String() + "," + base.Text.String(),
+		"base":    base.Text,
+		"derived": derived.Text + "," + base.Text,
 	}}
 
 	t.Run("exists", func(t *testing.T) {
@@ -34,7 +34,7 @@ func TestObjects(t *testing.T) {
 	t.Run("kind_of", func(t *testing.T) {
 		if cls, e := safe.GetText(&run, &KindOf{Object: this}); e != nil {
 			t.Fatal(e)
-		} else if cls.String() != base.Text.String() {
+		} else if cls.String() != base.Text {
 			t.Fatal("unexpected", cls)
 		}
 	})

@@ -229,7 +229,7 @@
     "list_sort_numbers":
     {
         "uses": "flow",
-        "spec": "sort {_%var:variable_name} {by_field:string} {descending?bool_eval}",
+        "spec": "sort {_%var:variable_name} {by_field:text} {descending?bool_eval}",
         "slot": "execute"
     },
     "list_sort_using":
@@ -242,7 +242,7 @@
     "list_sort_text":
     {
         "uses": "flow",
-        "spec": "sort {_%var:variable_name} {by_field:string} {descending?bool_eval} {using_case?bool_eval}",
+        "spec": "sort {_%var:variable_name} {by_field:text} {descending?bool_eval} {using_case?bool_eval}",
         "slot": "execute",
         "desc": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
     },

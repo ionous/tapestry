@@ -10,7 +10,7 @@ import (
 
 func (op *Response) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if safe.GetFlag(run, object.PrintResponseNames) {
-		ret = g.StringOf(op.Name.String())
+		ret = g.StringOf(op.Name)
 	} else if op.Text == nil {
 		err = cmdError(op, errutil.New("response doesnt have external lookup yet"))
 	} else {

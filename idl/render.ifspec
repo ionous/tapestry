@@ -14,7 +14,7 @@
     "render_name":
     {
         "uses": "flow",
-        "spec": "render_name {_%name:string}",
+        "spec": "render_name {_%name:text}",
         "slot": "text_eval",
         "group": "internal",
         "desc":

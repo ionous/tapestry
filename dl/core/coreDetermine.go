@@ -14,7 +14,7 @@ type Parameterizer interface{ Pack() []rt.Arg }
 func (op *CallArgs) Pack() (args []rt.Arg) {
 	// FIX THIS COPY!
 	for _, a := range op.Args {
-		args = append(args, rt.Arg{a.Name.String(), a.From})
+		args = append(args, rt.Arg{a.Name, a.From})
 	}
 	return
 }

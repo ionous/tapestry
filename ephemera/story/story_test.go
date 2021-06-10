@@ -19,6 +19,7 @@ func TestImportStory(t *testing.T) {
 	defer db.Close()
 	//
 	var in reader.Map
+
 	if e := json.Unmarshal([]byte(debug.Blob), &in); e != nil {
 		t.Fatal("read json", e)
 	} else if e := tables.CreateEphemera(db); e != nil {
@@ -42,4 +43,4 @@ func P(p string) value.PatternName  { return value.PatternName{Str: p} }
 func N(v string) value.VariableName { return value.VariableName{Str: v} }
 func T(s string) *core.TextValue    { return &core.TextValue{W(s)} }
 func V(i string) *core.GetVar       { return &core.GetVar{N(i)} }
-func W(v string) value.Text         { return value.Text{Str: v} }
+func W(v string) string             { return v }

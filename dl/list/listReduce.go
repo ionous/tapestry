@@ -19,7 +19,7 @@ func (op *ListReduce) Execute(run rt.Runtime) (err error) {
 
 func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 
-	intoValue := value.VariableName{Str: op.IntoValue.Str} // fix
+	intoValue := value.VariableName{Str: op.IntoValue} // fix
 	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
 		err = e
 	} else if outVal, e := safe.CheckVariable(run, intoValue, ""); e != nil {
@@ -32,7 +32,7 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 				err = e
 				break
 			} else {
-				if newVal, e := run.Call(pat.String(), aff, []rt.Arg{
+				if newVal, e := run.Call(pat, aff, []rt.Arg{
 					{"$1", &fromVal{inVal}},
 					{"$2", &fromVal{outVal}},
 				}); e == nil {
@@ -47,7 +47,7 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 			}
 			if err == nil {
 				// write back the completed value
-				err = run.SetField(object.Variables, op.IntoValue.String(), outVal)
+				err = run.SetField(object.Variables, op.IntoValue, outVal)
 			}
 		}
 	}

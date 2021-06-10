@@ -41,29 +41,27 @@ func (op *NumValue) String() string {
 
 // GetText implements interface TextEval providing the dl with a text literal.
 func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
-	ret = g.StringOf(op.Text.String())
+	ret = g.StringOf(op.Text)
 	return
 }
 
 // String returns the text.
 func (op *TextValue) String() string {
-	return op.Text.String()
+	return op.Text
 }
 
 func (op *Numbers) GetNumList(rt.Runtime) (ret g.Value, _ error) {
-	// note: this generates a new slice pointing to the op.Values memory;
-	// fix: should this be a copy? or, maybe mark this as read-only
-	ret = g.FloatsOf(op.Values)
+	// fix: would aliasing be better?
+	dst := make([]float64, len(op.Values))
+	copy(dst, op.Values)
+	ret = g.FloatsOf(dst)
 	return
 }
 
 func (op *Texts) GetTextList(rt.Runtime) (ret g.Value, _ error) {
-	// FIX(!) -- key is probably getting rid of string $EMPTY
-	cnt := len(op.Values)
-	sts := make([]string, cnt)
-	for i, el := range op.Values {
-		sts[i] = el.String()
-	}
-	ret = g.StringsOf(sts)
+	// fix: would aliasing be better?
+	dst := make([]string, len(op.Values))
+	copy(dst, op.Values)
+	ret = g.StringsOf(dst)
 	return
 }

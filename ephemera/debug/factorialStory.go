@@ -32,7 +32,7 @@ var FactorialStory = &story.Story{
 										Arguments: core.CallArgs{
 											Args: []core.CallArg{
 												core.CallArg{
-													Name: value.Text{Str: "num"},
+													Name: "num",
 													From: &core.FromNum{
 														Val: &core.NumValue{Num: 3}},
 												}},

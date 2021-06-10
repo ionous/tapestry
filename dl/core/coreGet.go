@@ -46,8 +46,8 @@ func (op *GetAtField) GetRecordList(run rt.Runtime) (g.Value, error) {
 func (op *GetAtField) unpack(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
 	if src, e := GetSourceFields(run, op.From); e != nil {
 		err = cmdError(op, e)
-	} else if v, e := safe.Unpack(src, op.Field.String(), aff); e != nil {
-		err = errutil.Fmt("trying field %q %w", op.Field.String(), cmdError(op, e))
+	} else if v, e := safe.Unpack(src, op.Field, aff); e != nil {
+		err = errutil.Fmt("trying field %q %w", op.Field, cmdError(op, e))
 	} else {
 		ret = v
 	}

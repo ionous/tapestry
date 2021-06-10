@@ -1263,7 +1263,7 @@
                                                                         "$TEXT": {
                                                                           "id": "id-17861748e02-102",
                                                                           "type": "text",
-                                                                          "value": "$EMPTY"
+                                                                          "value": null
                                                                         }
                                                                       }
                                                                     }

@@ -16,10 +16,7 @@ type AbstractAction struct {
 }
 
 func (op *AbstractAction) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const AbstractAction_Nothing = "$NOTHING"
@@ -74,10 +71,7 @@ type ActionName struct {
 }
 
 func (op *ActionName) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*ActionName) Compose() composer.Spec {
@@ -114,10 +108,7 @@ type Ana struct {
 }
 
 func (op *Ana) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const Ana_A = "$A"
@@ -142,10 +133,7 @@ type AreAn struct {
 }
 
 func (op *AreAn) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const AreAn_Are = "$ARE"
@@ -174,10 +162,7 @@ type AreBeing struct {
 }
 
 func (op *AreBeing) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const AreBeing_Are = "$ARE"
@@ -202,10 +187,7 @@ type AreEither struct {
 }
 
 func (op *AreEither) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const AreEither_Canbe = "$CANBE"
@@ -227,7 +209,7 @@ func (*AreEither) Compose() composer.Spec {
 // Argument
 type Argument struct {
 	At   reader.Position `if:"internal"`
-	Name value.Text      `if:"label=_"`
+	Name string          `if:"label=_,type=text"`
 	From rt.Assignment   `if:"label=from"`
 }
 
@@ -260,10 +242,7 @@ type Aspect struct {
 }
 
 func (op *Aspect) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*Aspect) Compose() composer.Spec {
@@ -303,7 +282,7 @@ func (*BoxedNumber) Compose() composer.Spec {
 
 // BoxedText
 type BoxedText struct {
-	Text value.Text `if:"label=_"`
+	Text string `if:"label=_,type=text"`
 }
 
 func (*BoxedText) Compose() composer.Spec {
@@ -337,10 +316,7 @@ type Certainty struct {
 }
 
 func (op *Certainty) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const Certainty_Usually = "$USUALLY"
@@ -449,10 +425,7 @@ type Determiner struct {
 }
 
 func (op *Determiner) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const Determiner_A = "$A"
@@ -512,10 +485,7 @@ type EventName struct {
 }
 
 func (op *EventName) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*EventName) Compose() composer.Spec {
@@ -532,10 +502,7 @@ type EventPhase struct {
 }
 
 func (op *EventPhase) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const EventPhase_Before = "$BEFORE"
@@ -736,7 +703,7 @@ func (*LocalInit) Compose() composer.Spec {
 
 // Make
 type Make struct {
-	Name      value.Text `if:"label=_"`
+	Name      string     `if:"label=_,type=text"`
 	Arguments *Arguments `if:"label=arguments,optional"`
 }
 
@@ -811,10 +778,7 @@ type NounName struct {
 }
 
 func (op *NounName) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*NounName) Compose() composer.Spec {
@@ -895,10 +859,7 @@ type NumberList struct {
 }
 
 func (op *NumberList) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const NumberList_List = "$LIST"
@@ -1021,10 +982,7 @@ type PatternFlags struct {
 }
 
 func (op *PatternFlags) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const PatternFlags_Before = "$BEFORE"
@@ -1101,10 +1059,7 @@ type PatternType struct {
 }
 
 func (op *PatternType) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const PatternType_Patterns = "$PATTERNS"
@@ -1159,10 +1114,7 @@ type PluralKinds struct {
 }
 
 func (op *PluralKinds) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*PluralKinds) Compose() composer.Spec {
@@ -1180,10 +1132,7 @@ type PrimitiveType struct {
 }
 
 func (op *PrimitiveType) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const PrimitiveType_Number = "$NUMBER"
@@ -1247,10 +1196,7 @@ type Pronoun struct {
 }
 
 func (op *Pronoun) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const Pronoun_It = "$IT"
@@ -1277,10 +1223,7 @@ type Property struct {
 }
 
 func (op *Property) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*Property) Compose() composer.Spec {
@@ -1298,10 +1241,7 @@ type PropertyAspect struct {
 }
 
 func (op *PropertyAspect) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const PropertyAspect_Aspect = "$ASPECT"
@@ -1374,10 +1314,7 @@ type RecordPlural struct {
 }
 
 func (op *RecordPlural) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*RecordPlural) Compose() composer.Spec {
@@ -1395,10 +1332,7 @@ type RecordSingular struct {
 }
 
 func (op *RecordSingular) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*RecordSingular) Compose() composer.Spec {
@@ -1491,7 +1425,7 @@ func (*RenderTemplate) Compose() composer.Spec {
 
 // Send
 type Send struct {
-	Event     value.Text      `if:"label=_"`
+	Event     string          `if:"label=_,type=text"`
 	Path      rt.TextListEval `if:"label=path"`
 	Arguments *Arguments      `if:"label=arguments,optional"`
 }
@@ -1528,10 +1462,7 @@ type SingularKind struct {
 }
 
 func (op *SingularKind) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*SingularKind) Compose() composer.Spec {
@@ -1602,10 +1533,7 @@ type TestName struct {
 }
 
 func (op *TestName) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const TestName_CurrentTest = "$CURRENT_TEST"
@@ -1690,10 +1618,7 @@ type TextList struct {
 }
 
 func (op *TextList) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 const TextList_List = "$LIST"
@@ -1718,10 +1643,7 @@ type Trait struct {
 }
 
 func (op *Trait) String() (ret string) {
-	if s := op.Str; s != "$EMPTY" {
-		ret = s
-	}
-	return
+	return op.Str
 }
 
 func (*Trait) Compose() composer.Spec {

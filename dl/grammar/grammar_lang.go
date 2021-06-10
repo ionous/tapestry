@@ -7,7 +7,7 @@ import (
 
 // Action makes a parser scanner producing a script defined action.
 type Action struct {
-	Action string `if:"label=_,type=string"`
+	Action string `if:"label=_,type=text"`
 }
 
 var _ ScannerMaker = (*Action)(nil)
@@ -22,8 +22,8 @@ func (*Action) Compose() composer.Spec {
 
 // Alias allows the user to refer to a noun by one or more other terms.
 type Alias struct {
-	Names  []string `if:"label=_,type=string"`
-	AsNoun string   `if:"label=as_noun,type=string"`
+	Names  []string `if:"label=_,type=text"`
+	AsNoun string   `if:"label=as_noun,type=text"`
 }
 
 var _ GrammarMaker = (*Alias)(nil)
@@ -65,7 +65,7 @@ func (*AnyOf) Compose() composer.Spec {
 
 // Directive starts a parser scanner
 type Directive struct {
-	Lede  []string       `if:"label=_,type=string"`
+	Lede  []string       `if:"label=_,type=text"`
 	Scans []ScannerMaker `if:"label=scans"`
 }
 
@@ -92,7 +92,7 @@ func (*Grammar) Compose() composer.Spec {
 
 // Noun makes a parser scanner
 type Noun struct {
-	Kind string `if:"label=_,type=string"`
+	Kind string `if:"label=_,type=text"`
 }
 
 var _ ScannerMaker = (*Noun)(nil)
@@ -134,7 +134,7 @@ func (*Reverse) Compose() composer.Spec {
 
 // Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
 type Self struct {
-	Player string `if:"label=_,type=string"`
+	Player string `if:"label=_,type=text"`
 }
 
 var _ ScannerMaker = (*Self)(nil)
@@ -148,7 +148,7 @@ func (*Self) Compose() composer.Spec {
 
 // Words makes a parser scanner
 type Words struct {
-	Words []string `if:"label=_,type=string"`
+	Words []string `if:"label=_,type=text"`
 }
 
 var _ ScannerMaker = (*Words)(nil)

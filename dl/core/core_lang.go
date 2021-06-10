@@ -177,7 +177,7 @@ func (*BufferText) Compose() composer.Spec {
 
 // CallArg Runtime version of argument
 type CallArg struct {
-	Name value.Text    `if:"label=_"`
+	Name string        `if:"label=_,type=text"`
 	From rt.Assignment `if:"label=from"`
 }
 
@@ -220,8 +220,8 @@ func (*CallCycle) Compose() composer.Spec {
 
 // CallMake Runtime version of make
 type CallMake struct {
-	Kind      value.Text `if:"label=_"`
-	Arguments CallArgs   `if:"label=args"`
+	Kind      string   `if:"label=_,type=text"`
+	Arguments CallArgs `if:"label=args"`
 }
 
 var _ rt.RecordEval = (*CallMake)(nil)
@@ -257,7 +257,7 @@ func (*CallPattern) Compose() composer.Spec {
 
 // CallSend Runtime version of send
 type CallSend struct {
-	Event     value.Text      `if:"label=_"`
+	Event     string          `if:"label=_,type=text"`
 	Path      rt.TextListEval `if:"label=to"`
 	Arguments CallArgs        `if:"label=args"`
 }
@@ -373,7 +373,7 @@ func (*ChooseMore) Compose() composer.Spec {
 
 // ChooseMoreValue
 type ChooseMoreValue struct {
-	Assign value.Text    `if:"label=_"`
+	Assign string        `if:"label=_,type=text"`
 	From   rt.Assignment `if:"label=from"`
 	Filter rt.BoolEval   `if:"label=and"`
 	Do     Activity      `if:"label=do"`
@@ -441,7 +441,7 @@ func (*ChooseText) Compose() composer.Spec {
 
 // ChooseValue An if statement with local assignment.
 type ChooseValue struct {
-	Assign value.Text    `if:"label=_"`
+	Assign string        `if:"label=_,type=text"`
 	From   rt.Assignment `if:"label=from"`
 	Filter rt.BoolEval   `if:"label=and"`
 	Do     Activity      `if:"label=do"`
@@ -699,7 +699,7 @@ func (*FromVar) Compose() composer.Spec {
 
 // GetAtField Get a value from a record.
 type GetAtField struct {
-	Field value.Text       `if:"label=_"`
+	Field string           `if:"label=_,type=text"`
 	From  FromSourceFields `if:"label=from"`
 }
 
@@ -756,7 +756,7 @@ func (*GreaterThan) Compose() composer.Spec {
 
 // HasDominion
 type HasDominion struct {
-	Name value.Text `if:"label=_"`
+	Name string `if:"label=_,type=text"`
 }
 
 var _ rt.BoolEval = (*HasDominion)(nil)
@@ -862,7 +862,7 @@ func (*IsEmpty) Compose() composer.Spec {
 // IsExactKindOf True if the object is exactly the named kind.
 type IsExactKindOf struct {
 	Object rt.TextEval `if:"label=_"`
-	Kind   value.Text  `if:"label=is_exactly"`
+	Kind   string      `if:"label=is_exactly,type=text"`
 }
 
 var _ rt.BoolEval = (*IsExactKindOf)(nil)
@@ -878,7 +878,7 @@ func (*IsExactKindOf) Compose() composer.Spec {
 // IsKindOf True if the object is compatible with the named kind.
 type IsKindOf struct {
 	Object rt.TextEval `if:"label=_"`
-	Kind   value.Text  `if:"label=is"`
+	Kind   string      `if:"label=is,type=text"`
 }
 
 var _ rt.BoolEval = (*IsKindOf)(nil)
@@ -922,7 +922,7 @@ func (*KindOf) Compose() composer.Spec {
 
 // KindsOf A list of compatible kinds.
 type KindsOf struct {
-	Kind value.Text `if:"label=_"`
+	Kind string `if:"label=_,type=text"`
 }
 
 var _ rt.TextListEval = (*KindsOf)(nil)
@@ -1024,7 +1024,7 @@ func (*MakeUppercase) Compose() composer.Spec {
 // Matches Determine whether the specified text is similar to the specified regular expression.
 type Matches struct {
 	Text    rt.TextEval `if:"label=_"`
-	Pattern string      `if:"label=to,type=string"`
+	Pattern string      `if:"label=to,type=text"`
 	Cache   MatchCache  `if:"internal"`
 }
 
@@ -1213,7 +1213,7 @@ func (*ProductOf) Compose() composer.Spec {
 type PutAtField struct {
 	Into    IntoTargetFields `if:"label=_"`
 	From    rt.Assignment    `if:"label=from"`
-	AtField value.Text       `if:"label=at"`
+	AtField string           `if:"label=at,type=text"`
 }
 
 var _ rt.Execute = (*PutAtField)(nil)
@@ -1260,7 +1260,7 @@ func (*RemainderOf) Compose() composer.Spec {
 
 // Response Generate text in a replaceable manner.
 type Response struct {
-	Name value.Text  `if:"label=_"`
+	Name string      `if:"label=_,type=text"`
 	Text rt.TextEval `if:"label=text,optional"`
 }
 
@@ -1408,7 +1408,7 @@ func (*SumOf) Compose() composer.Spec {
 
 // TextValue Specify a small bit of text.
 type TextValue struct {
-	Text value.Text `if:"label=_"`
+	Text string `if:"label=_,type=text"`
 }
 
 var _ rt.TextEval = (*TextValue)(nil)
@@ -1423,7 +1423,7 @@ func (*TextValue) Compose() composer.Spec {
 
 // Texts Text List: Specifies a set of string values.
 type Texts struct {
-	Values []value.Text `if:"label=_"`
+	Values []string `if:"label=_,type=text"`
 }
 
 var _ rt.TextListEval = (*Texts)(nil)

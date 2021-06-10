@@ -282,7 +282,7 @@
                                         "$TEXT": {
                                           "id": "id-17494737044-33",
                                           "type": "text",
-                                          "value": "$EMPTY"
+                                          "value": null
                                         }
                                       }
                                     }

@@ -48,7 +48,7 @@ func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *ListSplice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
-	if els, e := safe.List(run, op.List.String()); e != nil {
+	if els, e := safe.List(run, op.List); e != nil {
 		err = e
 	} else if e := safe.Check(els, aff); e != nil {
 		err = e
