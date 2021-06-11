@@ -14,12 +14,14 @@ type Position struct {
 func (*Position) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Position,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 		Lede: "src",
 	}
 }
 
-var Type_Position = "position"
+const Type_Position = "position"
+const Position_Offset = "$OFFSET"
+const Position_Source = "$SOURCE"
 
 var Slats = []composer.Composer{
 	(*Position)(nil),

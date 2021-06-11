@@ -17,10 +17,13 @@ func (op *Bool) String() (ret string) {
 	return op.Str
 }
 
+const Bool_True = "$TRUE"
+const Bool_False = "$FALSE"
+
 func (*Bool) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Bool,
-		Uses: "str",
+		Uses: composer.Type_Str,
 		Choices: []string{
 			Bool_True, Bool_False,
 		},
@@ -30,27 +33,50 @@ func (*Bool) Compose() composer.Spec {
 	}
 }
 
-var Type_Bool = "bool"
+const Type_Bool = "bool"
 
-func (op *Bool) MarshalJSON() ([]byte, error) {
-	return json.Marshal(jsonexp.String{
-		Type:  Type_Bool,
-		Value: op.Str,
-	})
+func (op *Bool) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Bool_Detailed_Marshal(n, op)
+}
+func (op *Bool) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Bool_Detailed_Unmarshal(n, b, op)
 }
 
-func (op *Bool) UnmarshalJSON(b []byte) (err error) {
-	var d jsonexp.String
-	if e := json.Unmarshal(b, &d); e != nil {
+func Bool_Detailed_Override_Marshal(n jsonexp.Context, val *bool) ([]byte, error) {
+	var out string
+	if *val {
+		out = Bool_True
+	} else {
+		out = Bool_False
+	}
+	return Bool_Detailed_Marshal(n, &Bool{out})
+}
+
+func Bool_Detailed_Override_Unmarshal(n jsonexp.Context, b []byte, out *bool) (err error) {
+	var msg Bool
+	if e := Bool_Detailed_Unmarshal(n, b, &msg); e != nil {
 		err = e
 	} else {
-		op.Str = d.Value
+		*out = msg.Str == Bool_True
 	}
 	return
 }
+func Bool_Detailed_Marshal(n jsonexp.Context, val *Bool) ([]byte, error) {
+	return json.Marshal(jsonexp.Str{
+		Type:  Type_Bool,
+		Value: val.Str,
+	})
+}
 
-const Bool_True = "$TRUE"
-const Bool_False = "$FALSE"
+func Bool_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Bool) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
+		err = e
+	}
+	return
+}
 
 // Lines requires a user-specified string.
 type Lines struct {
@@ -64,60 +90,157 @@ func (op *Lines) String() (ret string) {
 func (*Lines) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        Type_Lines,
-		Uses:        "str",
+		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
 }
 
-var Type_Lines = "lines"
+const Type_Lines = "lines"
 
-func (op *Lines) MarshalJSON() ([]byte, error) {
-	return json.Marshal(jsonexp.String{
+func (op *Lines) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Lines_Detailed_Marshal(n, op)
+}
+func (op *Lines) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Lines_Detailed_Unmarshal(n, b, op)
+}
+func Lines_Detailed_Marshal(n jsonexp.Context, val *Lines) ([]byte, error) {
+	return json.Marshal(jsonexp.Str{
 		Type:  Type_Lines,
-		Value: op.Str,
+		Value: val.Str,
 	})
 }
 
-func (op *Lines) UnmarshalJSON(b []byte) (err error) {
-	var d jsonexp.String
-	if e := json.Unmarshal(b, &d); e != nil {
+func Lines_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Lines) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
 		err = e
-	} else {
-		op.Str = d.Value
+	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
+		err = e
 	}
 	return
 }
 
-// Number requires a user-specified number.
+// Number requires a user-specified string.
 type Number struct {
-	Value float64
-}
-
-func (op *Number) MarshalJSON() ([]byte, error) {
-	return json.Marshal(jsonexp.Float{
-		Type:  Type_Number,
-		Value: op.Value,
-	})
-}
-
-func (op *Number) UnmarshalJSON(b []byte) (err error) {
-	var d jsonexp.Float
-	if e := json.Unmarshal(b, &d); e != nil {
-		err = e
-	} else {
-		op.Value = d.Value
-	}
-	return
+	Num float64
 }
 
 func (*Number) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Number,
-		Uses: "num",
+		Uses: composer.Type_Num,
 	}
 }
 
-var Type_Number = "number"
+const Type_Number = "number"
+
+func (op *Number) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Number_Detailed_Marshal(n, op)
+}
+func (op *Number) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Number_Detailed_Unmarshal(n, b, op)
+}
+
+func Number_Detailed_Override_Marshal(n jsonexp.Context, val *float64) ([]byte, error) {
+	return Number_Detailed_Marshal(n, &Number{*val})
+}
+
+func Number_Detailed_Override_Unmarshal(n jsonexp.Context, b []byte, out *float64) (err error) {
+	var msg Number
+	if e := Number_Detailed_Unmarshal(n, b, &msg); e != nil {
+		err = e
+	} else {
+		*out = msg.Num
+	}
+	return
+}
+func Number_Detailed_Override_Repeats_Marshal(n jsonexp.Context, vals *[]float64) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	msgs = make([]json.RawMessage, len(*vals))
+	for i, el := range *vals {
+		if b, e := Number_Detailed_Override_Marshal(n, &el); e != nil {
+			err = e
+			break
+		} else {
+			msgs[i] = b
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Number_Detailed_Override_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]float64) (err error) {
+	var msgs []json.RawMessage
+	if e := json.Unmarshal(b, &msgs); e != nil {
+		err = e
+	} else {
+		vals := make([]float64, len(msgs))
+		for i, msg := range msgs {
+			if e := Number_Detailed_Override_Unmarshal(n, msg, &vals[i]); e != nil {
+				err = e
+				break
+			}
+		}
+		if err == nil {
+			*out = vals
+		}
+	}
+	return
+}
+func Number_Detailed_Marshal(n jsonexp.Context, val *Number) ([]byte, error) {
+	return json.Marshal(jsonexp.Num{
+		Type:  Type_Number,
+		Value: val.Num,
+	})
+}
+
+func Number_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Number) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := json.Unmarshal(msg.Value, &out.Num); e != nil {
+		err = e
+	}
+	return
+}
+
+func Number_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Number) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	msgs = make([]json.RawMessage, len(*vals))
+	for i, el := range *vals {
+		if b, e := Number_Detailed_Marshal(n, &el); e != nil {
+			err = e
+			break
+		} else {
+			msgs[i] = b
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Number_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Number) (err error) {
+	var msgs []json.RawMessage
+	if e := json.Unmarshal(b, &msgs); e != nil {
+		err = e
+	} else {
+		vals := make([]Number, len(msgs))
+		for i, msg := range msgs {
+			if e := Number_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
+				err = e
+				break
+			}
+		}
+		if err == nil {
+			*out = vals
+		}
+	}
+	return
+}
 
 // PatternName requires a user-specified string.
 type PatternName struct {
@@ -132,28 +255,35 @@ func (op *PatternName) String() (ret string) {
 func (*PatternName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        Type_PatternName,
-		Uses:        "str",
+		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
 }
 
-var Type_PatternName = "pattern_name"
+const Type_PatternName = "pattern_name"
 
-func (op *PatternName) MarshalJSON() ([]byte, error) {
-	return json.Marshal(jsonexp.String{
-		Id:    op.At.Offset,
+func (op *PatternName) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return PatternName_Detailed_Marshal(n, op)
+}
+func (op *PatternName) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return PatternName_Detailed_Unmarshal(n, b, op)
+}
+func PatternName_Detailed_Marshal(n jsonexp.Context, val *PatternName) ([]byte, error) {
+	return json.Marshal(jsonexp.Str{
+		Id:    val.At.Offset,
 		Type:  Type_PatternName,
-		Value: op.Str,
+		Value: val.Str,
 	})
 }
 
-func (op *PatternName) UnmarshalJSON(b []byte) (err error) {
-	var d jsonexp.String
-	if e := json.Unmarshal(b, &d); e != nil {
+func PatternName_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PatternName) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
 		err = e
 	} else {
-		op.At.Offset = d.Id
-		op.Str = d.Value
+		out.At = reader.Position{Source: n.Source, Offset: msg.Id}
 	}
 	return
 }
@@ -171,28 +301,35 @@ func (op *RelationName) String() (ret string) {
 func (*RelationName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        Type_RelationName,
-		Uses:        "str",
+		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
 }
 
-var Type_RelationName = "relation_name"
+const Type_RelationName = "relation_name"
 
-func (op *RelationName) MarshalJSON() ([]byte, error) {
-	return json.Marshal(jsonexp.String{
-		Id:    op.At.Offset,
+func (op *RelationName) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return RelationName_Detailed_Marshal(n, op)
+}
+func (op *RelationName) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return RelationName_Detailed_Unmarshal(n, b, op)
+}
+func RelationName_Detailed_Marshal(n jsonexp.Context, val *RelationName) ([]byte, error) {
+	return json.Marshal(jsonexp.Str{
+		Id:    val.At.Offset,
 		Type:  Type_RelationName,
-		Value: op.Str,
+		Value: val.Str,
 	})
 }
 
-func (op *RelationName) UnmarshalJSON(b []byte) (err error) {
-	var d jsonexp.String
-	if e := json.Unmarshal(b, &d); e != nil {
+func RelationName_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RelationName) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
 		err = e
 	} else {
-		op.At.Offset = d.Id
-		op.Str = d.Value
+		out.At = reader.Position{Source: n.Source, Offset: msg.Id}
 	}
 	return
 }
@@ -209,26 +346,117 @@ func (op *Text) String() (ret string) {
 func (*Text) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        Type_Text,
-		Uses:        "str",
+		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
 }
 
-var Type_Text = "text"
+const Type_Text = "text"
 
-func (op *Text) MarshalJSON() ([]byte, error) {
-	return json.Marshal(jsonexp.String{
+func (op *Text) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Text_Detailed_Marshal(n, op)
+}
+func (op *Text) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Text_Detailed_Unmarshal(n, b, op)
+}
+
+func Text_Detailed_Override_Marshal(n jsonexp.Context, val *string) ([]byte, error) {
+	return Text_Detailed_Marshal(n, &Text{*val})
+}
+
+func Text_Detailed_Override_Unmarshal(n jsonexp.Context, b []byte, out *string) (err error) {
+	var msg Text
+	if e := Text_Detailed_Unmarshal(n, b, &msg); e != nil {
+		err = e
+	} else {
+		*out = msg.Str
+	}
+	return
+}
+func Text_Detailed_Override_Repeats_Marshal(n jsonexp.Context, vals *[]string) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	msgs = make([]json.RawMessage, len(*vals))
+	for i, el := range *vals {
+		if b, e := Text_Detailed_Override_Marshal(n, &el); e != nil {
+			err = e
+			break
+		} else {
+			msgs[i] = b
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Text_Detailed_Override_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]string) (err error) {
+	var msgs []json.RawMessage
+	if e := json.Unmarshal(b, &msgs); e != nil {
+		err = e
+	} else {
+		vals := make([]string, len(msgs))
+		for i, msg := range msgs {
+			if e := Text_Detailed_Override_Unmarshal(n, msg, &vals[i]); e != nil {
+				err = e
+				break
+			}
+		}
+		if err == nil {
+			*out = vals
+		}
+	}
+	return
+}
+func Text_Detailed_Marshal(n jsonexp.Context, val *Text) ([]byte, error) {
+	return json.Marshal(jsonexp.Str{
 		Type:  Type_Text,
-		Value: op.Str,
+		Value: val.Str,
 	})
 }
 
-func (op *Text) UnmarshalJSON(b []byte) (err error) {
-	var d jsonexp.String
-	if e := json.Unmarshal(b, &d); e != nil {
+func Text_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Text) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
+		err = e
+	}
+	return
+}
+
+func Text_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Text) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	msgs = make([]json.RawMessage, len(*vals))
+	for i, el := range *vals {
+		if b, e := Text_Detailed_Marshal(n, &el); e != nil {
+			err = e
+			break
+		} else {
+			msgs[i] = b
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Text_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Text) (err error) {
+	var msgs []json.RawMessage
+	if e := json.Unmarshal(b, &msgs); e != nil {
 		err = e
 	} else {
-		op.Str = d.Value
+		vals := make([]Text, len(msgs))
+		for i, msg := range msgs {
+			if e := Text_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
+				err = e
+				break
+			}
+		}
+		if err == nil {
+			*out = vals
+		}
 	}
 	return
 }
@@ -246,28 +474,35 @@ func (op *VariableName) String() (ret string) {
 func (*VariableName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        Type_VariableName,
-		Uses:        "str",
+		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
 }
 
-var Type_VariableName = "variable_name"
+const Type_VariableName = "variable_name"
 
-func (op *VariableName) MarshalJSON() ([]byte, error) {
-	return json.Marshal(jsonexp.String{
-		Id:    op.At.Offset,
+func (op *VariableName) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return VariableName_Detailed_Marshal(n, op)
+}
+func (op *VariableName) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return VariableName_Detailed_Unmarshal(n, b, op)
+}
+func VariableName_Detailed_Marshal(n jsonexp.Context, val *VariableName) ([]byte, error) {
+	return json.Marshal(jsonexp.Str{
+		Id:    val.At.Offset,
 		Type:  Type_VariableName,
-		Value: op.Str,
+		Value: val.Str,
 	})
 }
 
-func (op *VariableName) UnmarshalJSON(b []byte) (err error) {
-	var d jsonexp.String
-	if e := json.Unmarshal(b, &d); e != nil {
+func VariableName_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *VariableName) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
 		err = e
 	} else {
-		op.At.Offset = d.Id
-		op.Str = d.Value
+		out.At = reader.Position{Source: n.Source, Offset: msg.Id}
 	}
 	return
 }

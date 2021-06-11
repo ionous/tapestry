@@ -67,13 +67,13 @@ func (dec *Compacter) readItem(m reader.Map) (ret interface{}, err error) {
 	} else {
 		spec := cmd.Compose()
 		switch use := spec.Uses; use {
-		case "flow":
+		case composer.Type_Flow:
 			ret = dec.readFields(cmd, itemAt, m.MapOf(reader.ItemValue))
-		case "swap":
+		case composer.Type_Swap:
 			ret, err = dec.readSwap(cmd, m)
-		case "str":
+		case composer.Type_Str:
 			ret, err = dec.readString(spec, m)
-		case "num":
+		case composer.Type_Num:
 			ret, err = dec.readFloat(spec, m)
 		default:
 			err = errutil.New("unhandled", use, "at", itemAt)

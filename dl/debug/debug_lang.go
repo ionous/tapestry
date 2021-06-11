@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/export/jsonexp"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 // DebugLog Debug log
@@ -18,44 +19,70 @@ type DebugLog struct {
 func (*DebugLog) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_DebugLog,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 		Lede: "log",
 	}
 }
 
-var Type_DebugLog = "debug_log"
+const Type_DebugLog = "debug_log"
+const DebugLog_Value = "$VALUE"
+const DebugLog_LogLevel = "$LOG_LEVEL"
 
-func (op *DebugLog) MarshalJSON() (ret []byte, err error) {
-	if jsonValue, e := op.MarshalJSONValue(); e != nil {
-		err = e
-	} else if jsonLogLevel, e := op.MarshalJSONLogLevel(); e != nil {
-		err = e
-	} else {
+func (op *DebugLog) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return DebugLog_Detailed_Marshal(n, op)
+}
+func (op *DebugLog) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return DebugLog_Detailed_Unmarshal(n, b, op)
+}
+
+func DebugLog_Detailed_Marshal(n jsonexp.Context, val *DebugLog) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := rt.Assignment_Detailed_Marshal(n, &val.Value); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[DebugLog_Value] = b
+	}
+	if b, e := LoggingLevel_Detailed_Marshal(n, &val.LogLevel); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[DebugLog_LogLevel] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_DebugLog,
-			Value: map[string]json.RawMessage{
-				"$VALUE":     jsonValue,
-				"$LOG_LEVEL": jsonLogLevel,
-			},
+			Type:   Type_DebugLog,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *DebugLog) MarshalJSONValue() (ret []byte, err error) {
-	if v, e := op.Value.(json.Marshaler).MarshalJSON(); e != nil {
+func DebugLog_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *DebugLog) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
 		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  rt.Type_Assignment,
-			Value: v,
-		})
+	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[DebugLog_Value], &out.Value); e != nil {
+		err = e
+	} else if e := LoggingLevel_Detailed_Unmarshal(n, msg.Fields[DebugLog_LogLevel], &out.LogLevel); e != nil {
+		err = e
 	}
 	return
 }
 
-func (op *DebugLog) MarshalJSONLogLevel() (ret []byte, err error) {
-	ret, err = op.LogLevel.MarshalJSON()
+func DebugLog_Detailed_Optional_Marshal(n jsonexp.Context, val **DebugLog) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = DebugLog_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func DebugLog_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DebugLog) (err error) {
+	if len(b) > 0 {
+		var el DebugLog
+		if e := DebugLog_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -67,30 +94,61 @@ type DoNothing struct {
 func (*DoNothing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_DoNothing,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_DoNothing = "do_nothing"
+const Type_DoNothing = "do_nothing"
+const DoNothing_Reason = "$REASON"
 
-func (op *DoNothing) MarshalJSON() (ret []byte, err error) {
-	if jsonReason, e := op.MarshalJSONReason(); e != nil {
-		err = e
-	} else {
+func (op *DoNothing) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return DoNothing_Detailed_Marshal(n, op)
+}
+func (op *DoNothing) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return DoNothing_Detailed_Unmarshal(n, b, op)
+}
+
+func DoNothing_Detailed_Marshal(n jsonexp.Context, val *DoNothing) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Reason); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[DoNothing_Reason] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_DoNothing,
-			Value: map[string]json.RawMessage{
-				"$REASON": jsonReason,
-			},
+			Type:   Type_DoNothing,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *DoNothing) MarshalJSONReason() (ret []byte, err error) {
-	// type override
-	m := value.Text{op.Reason}
-	ret, err = m.MarshalJSON()
+func DoNothing_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *DoNothing) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[DoNothing_Reason], &out.Reason); e != nil {
+		err = e
+	}
+	return
+}
+
+func DoNothing_Detailed_Optional_Marshal(n jsonexp.Context, val **DoNothing) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = DoNothing_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func DoNothing_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DoNothing) (err error) {
+	if len(b) > 0 {
+		var el DoNothing
+		if e := DoNothing_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -103,10 +161,17 @@ func (op *LoggingLevel) String() (ret string) {
 	return op.Str
 }
 
+const LoggingLevel_Note = "$NOTE"
+const LoggingLevel_ToDo = "$TO_DO"
+const LoggingLevel_Fix = "$FIX"
+const LoggingLevel_Info = "$INFO"
+const LoggingLevel_Warning = "$WARNING"
+const LoggingLevel_Error = "$ERROR"
+
 func (*LoggingLevel) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_LoggingLevel,
-		Uses: "str",
+		Uses: composer.Type_Str,
 		Choices: []string{
 			LoggingLevel_Note, LoggingLevel_ToDo, LoggingLevel_Fix, LoggingLevel_Info, LoggingLevel_Warning, LoggingLevel_Error,
 		},
@@ -116,31 +181,30 @@ func (*LoggingLevel) Compose() composer.Spec {
 	}
 }
 
-var Type_LoggingLevel = "logging_level"
+const Type_LoggingLevel = "logging_level"
 
-func (op *LoggingLevel) MarshalJSON() ([]byte, error) {
-	return json.Marshal(jsonexp.String{
+func (op *LoggingLevel) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return LoggingLevel_Detailed_Marshal(n, op)
+}
+func (op *LoggingLevel) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return LoggingLevel_Detailed_Unmarshal(n, b, op)
+}
+func LoggingLevel_Detailed_Marshal(n jsonexp.Context, val *LoggingLevel) ([]byte, error) {
+	return json.Marshal(jsonexp.Str{
 		Type:  Type_LoggingLevel,
-		Value: op.Str,
+		Value: val.Str,
 	})
 }
 
-func (op *LoggingLevel) UnmarshalJSON(b []byte) (err error) {
-	var d jsonexp.String
-	if e := json.Unmarshal(b, &d); e != nil {
+func LoggingLevel_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *LoggingLevel) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
 		err = e
-	} else {
-		op.Str = d.Value
+	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
+		err = e
 	}
 	return
 }
-
-const LoggingLevel_Note = "$NOTE"
-const LoggingLevel_ToDo = "$TO_DO"
-const LoggingLevel_Fix = "$FIX"
-const LoggingLevel_Info = "$INFO"
-const LoggingLevel_Warning = "$WARNING"
-const LoggingLevel_Error = "$ERROR"
 
 var Slats = []composer.Composer{
 	(*DebugLog)(nil),

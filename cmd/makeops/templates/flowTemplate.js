@@ -8,65 +8,53 @@ type {{Pascal name}} struct {
   {{Pascal @key}} {{TypeOf this}} \`if:"
   {{~#if (IsInternal label)}}internal{{else}}label={{LabelOf @key this @index}}{{/if}}
   {{~#if optional}},optional{{/if}}\
-  {{~#if (Override this)}},type={{Override this}}{{/if}}"\`
+  {{~#if (OverrideOf type)}},type={{type}}{{/if}}"\`
 {{/each}}
 }
 
-{{>spec spec=this}}
-
-{{#if ../marshal}}
-func (op *{{Pascal name}}) MarshalJSON() (ret []byte, err error) {
+{{>spec spec=this~}}
 {{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
-  if json{{Pascal @key}}, e:= op.MarshalJSON{{Pascal @key}}(); e!= nil {
-    err = e
-  } else {{/unless}}{{/each~}}
-  {
-    ret, err= json.Marshal(jsonexp.Flow{
-{{#if (IsPositioned this)}}
-      Id: op.At.Offset,
-{{/if}}      Type:  Type_{{Pascal name}},
-      Value: map[string]json.RawMessage{
-{{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
-        "{{@key}}": json{{Pascal @key}},
+const {{Pascal ../name}}_{{Pascal @key}}= "{{@key}}";
 {{~/unless}}{{~/each}}
-      },
+{{#if ../marshal}}
+{{>sig sig=this}}
+
+func {{Pascal name}}_Detailed_Marshal(n jsonexp.Context, val *{{Pascal name}}) (ret []byte, err error) {
+  var fields jsonexp.Fields
+{{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
+  if b, e:= {{ScopeOf type}}{{Pascal type}}_Detailed{{#if (OverrideOf type)}}_Override{{/if}}{{ModOf this}}_Marshal(n, &val.{{Pascal @key}}); e!= nil {
+    err = errutil.Append(err, e)
+  } else if len(b) > 0 {
+      fields[{{Pascal ../name}}_{{Pascal @key}}]= b
+  }{{/unless}}{{/each}}
+  if err== nil {
+    ret, err= json.Marshal(jsonexp.Flow{
+{{~#if (IsPositioned this)}}
+    Id: val.At.Offset,{{/if}}
+      Type:  Type_{{Pascal name}},
+      Fields: fields,
     })
   }
   return
 }
 
-{{#each (ParamsOf this)}}{{#unless (IsInternal label)}}
-func (op *{{Pascal ../name}}) MarshalJSON{{Pascal @key}}() (ret []byte, err error) {
-{{#if repeats}}
-  ret, err= json.Marshal( op.{{Pascal @key}} )
-{{else if (IsBool this)}}
-  // bool override
-  var str string
-  if op.{{Pascal @key}} {
-    str= value.Bool_True
-  } else {
-     str= value.Bool_False
-  }
-  m:= value.Bool{ str }
-  ret, err= m.MarshalJSON()
-{{else if (Override this)}}
-  // type override
-   m:= {{ScopeOf type}}{{Pascal type}} { op.{{Pascal @key}} }
-   ret, err= m.MarshalJSON()
-{{else if (Uses type 'slot')}}
-  if v, e:= op.{{Pascal @key}}.(json.Marshaler).MarshalJSON(); e!= nil {
-    err= e
-  } else {
-    ret, err= json.Marshal(jsonexp.Slot{
-      Type:  {{ScopeOf type}}Type_{{Pascal type}},
-      Value: v,
-    })
-  }
-{{else}}
-  ret, err= op.{{Pascal @key}}.MarshalJSON()
-{{/if}}
+func {{Pascal name}}_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *{{Pascal name}}) (err error) {
+  var msg jsonexp.Flow
+  if e:= json.Unmarshal(b, &msg); e!= nil {
+    err = e
+  } {{#each (ParamsOf this)}}{{#unless (IsInternal label)~}}
+  else if e:= {{ScopeOf type}}{{Pascal type}}_Detailed{{#if (OverrideOf type)}}_Override{{/if}}{{ModOf this}}_Unmarshal(n, msg.Fields[{{Pascal ../name}}_{{Pascal @key}}], &out.{{Pascal @key}}); e!= nil {
+    err = e
+  } {{/unless}}{{/each~}}
+{{~#if (IsPositioned this)~}}
+  else {
+      out.At = reader.Position{Source:n.Source, Offset: msg.Id}
+  }{{/if}}
   return
 }
-{{/unless}}{{/each}}{{/if}}
-{{/with}}
+{{/if}}{{/with}}
+{{#if marshal}}
+{{>repeat repeat=this}}
+{{>optional optional=this}}
+{{/if}}
 `;

@@ -3,7 +3,7 @@
 module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
   return composer.Spec{
     Name: Type_{{Pascal name}},
-    Uses: "{{uses}}",
+    Uses: composer.Type_{{Pascal uses}},
 {{#if (LedeName this)}}
     Lede: "{{LedeName this}}",
 {{/if}}
@@ -33,5 +33,4 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
   }
 }
 
-var Type_{{Pascal name}} = "{{name}}";
-`;
+const Type_{{Pascal name}} = "{{name}}";`;

@@ -1,5 +1,13 @@
 package composer
 
+const (
+	Type_Slot = "slot"
+	Type_Swap = "swap"
+	Type_Flow = "flow"
+	Type_Str  = "str"
+	Type_Num  = "num"
+)
+
 // Slot definition for display in the composer.
 type Slot struct {
 	Name  string

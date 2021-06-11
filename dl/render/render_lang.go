@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/export/jsonexp"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 // RenderExp
@@ -18,34 +19,60 @@ type RenderExp struct {
 func (*RenderExp) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_RenderExp,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_RenderExp = "render_exp"
+const Type_RenderExp = "render_exp"
+const RenderExp_Expression = "$EXPRESSION"
 
-func (op *RenderExp) MarshalJSON() (ret []byte, err error) {
-	if jsonExpression, e := op.MarshalJSONExpression(); e != nil {
-		err = e
-	} else {
+func (op *RenderExp) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return RenderExp_Detailed_Marshal(n, op)
+}
+func (op *RenderExp) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return RenderExp_Detailed_Unmarshal(n, b, op)
+}
+
+func RenderExp_Detailed_Marshal(n jsonexp.Context, val *RenderExp) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Expression); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RenderExp_Expression] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_RenderExp,
-			Value: map[string]json.RawMessage{
-				"$EXPRESSION": jsonExpression,
-			},
+			Type:   Type_RenderExp,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *RenderExp) MarshalJSONExpression() (ret []byte, err error) {
-	if v, e := op.Expression.(json.Marshaler).MarshalJSON(); e != nil {
+func RenderExp_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderExp) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
 		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  rt.Type_TextEval,
-			Value: v,
-		})
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RenderExp_Expression], &out.Expression); e != nil {
+		err = e
+	}
+	return
+}
+
+func RenderExp_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderExp) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = RenderExp_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func RenderExp_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderExp) (err error) {
+	if len(b) > 0 {
+		var el RenderExp
+		if e := RenderExp_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
 	}
 	return
 }
@@ -58,34 +85,60 @@ type RenderField struct {
 func (*RenderField) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_RenderField,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_RenderField = "render_field"
+const Type_RenderField = "render_field"
+const RenderField_Name = "$NAME"
 
-func (op *RenderField) MarshalJSON() (ret []byte, err error) {
-	if jsonName, e := op.MarshalJSONName(); e != nil {
-		err = e
-	} else {
+func (op *RenderField) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return RenderField_Detailed_Marshal(n, op)
+}
+func (op *RenderField) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return RenderField_Detailed_Unmarshal(n, b, op)
+}
+
+func RenderField_Detailed_Marshal(n jsonexp.Context, val *RenderField) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RenderField_Name] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_RenderField,
-			Value: map[string]json.RawMessage{
-				"$NAME": jsonName,
-			},
+			Type:   Type_RenderField,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *RenderField) MarshalJSONName() (ret []byte, err error) {
-	if v, e := op.Name.(json.Marshaler).MarshalJSON(); e != nil {
+func RenderField_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderField) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
 		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  rt.Type_TextEval,
-			Value: v,
-		})
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RenderField_Name], &out.Name); e != nil {
+		err = e
+	}
+	return
+}
+
+func RenderField_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderField) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = RenderField_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func RenderField_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderField) (err error) {
+	if len(b) > 0 {
+		var el RenderField
+		if e := RenderField_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
 	}
 	return
 }
@@ -99,10 +152,14 @@ func (op *RenderFlags) String() (ret string) {
 	return op.Str
 }
 
+const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
+const RenderFlags_RenderAsObj = "$RENDER_AS_OBJ"
+const RenderFlags_RenderAsAny = "$RENDER_AS_ANY"
+
 func (*RenderFlags) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_RenderFlags,
-		Uses: "str",
+		Uses: composer.Type_Str,
 		Choices: []string{
 			RenderFlags_RenderAsVar, RenderFlags_RenderAsObj, RenderFlags_RenderAsAny,
 		},
@@ -112,28 +169,30 @@ func (*RenderFlags) Compose() composer.Spec {
 	}
 }
 
-var Type_RenderFlags = "render_flags"
+const Type_RenderFlags = "render_flags"
 
-func (op *RenderFlags) MarshalJSON() ([]byte, error) {
-	return json.Marshal(jsonexp.String{
+func (op *RenderFlags) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return RenderFlags_Detailed_Marshal(n, op)
+}
+func (op *RenderFlags) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return RenderFlags_Detailed_Unmarshal(n, b, op)
+}
+func RenderFlags_Detailed_Marshal(n jsonexp.Context, val *RenderFlags) ([]byte, error) {
+	return json.Marshal(jsonexp.Str{
 		Type:  Type_RenderFlags,
-		Value: op.Str,
+		Value: val.Str,
 	})
 }
 
-func (op *RenderFlags) UnmarshalJSON(b []byte) (err error) {
-	var d jsonexp.String
-	if e := json.Unmarshal(b, &d); e != nil {
+func RenderFlags_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderFlags) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
 		err = e
-	} else {
-		op.Str = d.Value
+	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
+		err = e
 	}
 	return
 }
-
-const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
-const RenderFlags_RenderAsObj = "$RENDER_AS_OBJ"
-const RenderFlags_RenderAsAny = "$RENDER_AS_ANY"
 
 // RenderName handles changing a template like {.boombip} into text.,if the name is a variable containing an object name: return the printed object name ( via &quot;print name&quot; ),if the name is a variable with some other text: return that text.,if the name isn&#x27;t a variable but refers to some object: return that object&#x27;s printed object name.,otherwise, its an error.
 type RenderName struct {
@@ -143,30 +202,61 @@ type RenderName struct {
 func (*RenderName) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_RenderName,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_RenderName = "render_name"
+const Type_RenderName = "render_name"
+const RenderName_Name = "$NAME"
 
-func (op *RenderName) MarshalJSON() (ret []byte, err error) {
-	if jsonName, e := op.MarshalJSONName(); e != nil {
-		err = e
-	} else {
+func (op *RenderName) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return RenderName_Detailed_Marshal(n, op)
+}
+func (op *RenderName) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return RenderName_Detailed_Unmarshal(n, b, op)
+}
+
+func RenderName_Detailed_Marshal(n jsonexp.Context, val *RenderName) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RenderName_Name] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_RenderName,
-			Value: map[string]json.RawMessage{
-				"$NAME": jsonName,
-			},
+			Type:   Type_RenderName,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *RenderName) MarshalJSONName() (ret []byte, err error) {
-	// type override
-	m := value.Text{op.Name}
-	ret, err = m.MarshalJSON()
+func RenderName_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderName) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[RenderName_Name], &out.Name); e != nil {
+		err = e
+	}
+	return
+}
+
+func RenderName_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderName) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = RenderName_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func RenderName_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderName) (err error) {
+	if len(b) > 0 {
+		var el RenderName
+		if e := RenderName_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -179,37 +269,70 @@ type RenderPattern struct {
 func (*RenderPattern) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_RenderPattern,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 		Lede: "render",
 	}
 }
 
-var Type_RenderPattern = "render_pattern"
+const Type_RenderPattern = "render_pattern"
+const RenderPattern_Pattern = "$PATTERN"
+const RenderPattern_Arguments = "$ARGUMENTS"
 
-func (op *RenderPattern) MarshalJSON() (ret []byte, err error) {
-	if jsonPattern, e := op.MarshalJSONPattern(); e != nil {
-		err = e
-	} else if jsonArguments, e := op.MarshalJSONArguments(); e != nil {
-		err = e
-	} else {
+func (op *RenderPattern) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return RenderPattern_Detailed_Marshal(n, op)
+}
+func (op *RenderPattern) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return RenderPattern_Detailed_Unmarshal(n, b, op)
+}
+
+func RenderPattern_Detailed_Marshal(n jsonexp.Context, val *RenderPattern) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.PatternName_Detailed_Marshal(n, &val.Pattern); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RenderPattern_Pattern] = b
+	}
+	if b, e := core.CallArgs_Detailed_Marshal(n, &val.Arguments); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RenderPattern_Arguments] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_RenderPattern,
-			Value: map[string]json.RawMessage{
-				"$PATTERN":   jsonPattern,
-				"$ARGUMENTS": jsonArguments,
-			},
+			Type:   Type_RenderPattern,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *RenderPattern) MarshalJSONPattern() (ret []byte, err error) {
-	ret, err = op.Pattern.MarshalJSON()
+func RenderPattern_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderPattern) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.PatternName_Detailed_Unmarshal(n, msg.Fields[RenderPattern_Pattern], &out.Pattern); e != nil {
+		err = e
+	} else if e := core.CallArgs_Detailed_Unmarshal(n, msg.Fields[RenderPattern_Arguments], &out.Arguments); e != nil {
+		err = e
+	}
 	return
 }
 
-func (op *RenderPattern) MarshalJSONArguments() (ret []byte, err error) {
-	ret, err = op.Arguments.MarshalJSON()
+func RenderPattern_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderPattern) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = RenderPattern_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func RenderPattern_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderPattern) (err error) {
+	if len(b) > 0 {
+		var el RenderPattern
+		if e := RenderPattern_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -222,36 +345,69 @@ type RenderRef struct {
 func (*RenderRef) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_RenderRef,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_RenderRef = "render_ref"
+const Type_RenderRef = "render_ref"
+const RenderRef_Name = "$NAME"
+const RenderRef_Flags = "$FLAGS"
 
-func (op *RenderRef) MarshalJSON() (ret []byte, err error) {
-	if jsonName, e := op.MarshalJSONName(); e != nil {
-		err = e
-	} else if jsonFlags, e := op.MarshalJSONFlags(); e != nil {
-		err = e
-	} else {
+func (op *RenderRef) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return RenderRef_Detailed_Marshal(n, op)
+}
+func (op *RenderRef) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return RenderRef_Detailed_Unmarshal(n, b, op)
+}
+
+func RenderRef_Detailed_Marshal(n jsonexp.Context, val *RenderRef) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.VariableName_Detailed_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RenderRef_Name] = b
+	}
+	if b, e := RenderFlags_Detailed_Marshal(n, &val.Flags); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RenderRef_Flags] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_RenderRef,
-			Value: map[string]json.RawMessage{
-				"$NAME":  jsonName,
-				"$FLAGS": jsonFlags,
-			},
+			Type:   Type_RenderRef,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *RenderRef) MarshalJSONName() (ret []byte, err error) {
-	ret, err = op.Name.MarshalJSON()
+func RenderRef_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderRef) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[RenderRef_Name], &out.Name); e != nil {
+		err = e
+	} else if e := RenderFlags_Detailed_Unmarshal(n, msg.Fields[RenderRef_Flags], &out.Flags); e != nil {
+		err = e
+	}
 	return
 }
 
-func (op *RenderRef) MarshalJSONFlags() (ret []byte, err error) {
-	ret, err = op.Flags.MarshalJSON()
+func RenderRef_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderRef) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = RenderRef_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func RenderRef_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderRef) (err error) {
+	if len(b) > 0 {
+		var el RenderRef
+		if e := RenderRef_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 

@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/export/jsonexp"
+	"github.com/ionous/errutil"
 )
 
 // Action makes a parser scanner producing a script defined action.
@@ -16,31 +17,62 @@ type Action struct {
 func (*Action) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Action,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 		Lede: "as",
 	}
 }
 
-var Type_Action = "action"
+const Type_Action = "action"
+const Action_Action = "$ACTION"
 
-func (op *Action) MarshalJSON() (ret []byte, err error) {
-	if jsonAction, e := op.MarshalJSONAction(); e != nil {
-		err = e
-	} else {
+func (op *Action) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Action_Detailed_Marshal(n, op)
+}
+func (op *Action) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Action_Detailed_Unmarshal(n, b, op)
+}
+
+func Action_Detailed_Marshal(n jsonexp.Context, val *Action) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Action); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Action_Action] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Action,
-			Value: map[string]json.RawMessage{
-				"$ACTION": jsonAction,
-			},
+			Type:   Type_Action,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Action) MarshalJSONAction() (ret []byte, err error) {
-	// type override
-	m := value.Text{op.Action}
-	ret, err = m.MarshalJSON()
+func Action_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Action) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[Action_Action], &out.Action); e != nil {
+		err = e
+	}
+	return
+}
+
+func Action_Detailed_Optional_Marshal(n jsonexp.Context, val **Action) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Action_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Action_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Action) (err error) {
+	if len(b) > 0 {
+		var el Action
+		if e := Action_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -53,38 +85,69 @@ type Alias struct {
 func (*Alias) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Alias,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_Alias = "alias"
+const Type_Alias = "alias"
+const Alias_Names = "$NAMES"
+const Alias_AsNoun = "$AS_NOUN"
 
-func (op *Alias) MarshalJSON() (ret []byte, err error) {
-	if jsonNames, e := op.MarshalJSONNames(); e != nil {
-		err = e
-	} else if jsonAsNoun, e := op.MarshalJSONAsNoun(); e != nil {
-		err = e
-	} else {
+func (op *Alias) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Alias_Detailed_Marshal(n, op)
+}
+func (op *Alias) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Alias_Detailed_Unmarshal(n, b, op)
+}
+
+func Alias_Detailed_Marshal(n jsonexp.Context, val *Alias) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.Text_Detailed_Override_Repeats_Marshal(n, &val.Names); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Alias_Names] = b
+	}
+	if b, e := value.Text_Detailed_Override_Marshal(n, &val.AsNoun); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Alias_AsNoun] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Alias,
-			Value: map[string]json.RawMessage{
-				"$NAMES":   jsonNames,
-				"$AS_NOUN": jsonAsNoun,
-			},
+			Type:   Type_Alias,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Alias) MarshalJSONNames() (ret []byte, err error) {
-	ret, err = json.Marshal(op.Names)
+func Alias_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Alias) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.Text_Detailed_Override_Repeats_Unmarshal(n, msg.Fields[Alias_Names], &out.Names); e != nil {
+		err = e
+	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[Alias_AsNoun], &out.AsNoun); e != nil {
+		err = e
+	}
 	return
 }
 
-func (op *Alias) MarshalJSONAsNoun() (ret []byte, err error) {
-	// type override
-	m := value.Text{op.AsNoun}
-	ret, err = m.MarshalJSON()
+func Alias_Detailed_Optional_Marshal(n jsonexp.Context, val **Alias) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Alias_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Alias_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Alias) (err error) {
+	if len(b) > 0 {
+		var el Alias
+		if e := Alias_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -96,28 +159,61 @@ type AllOf struct {
 func (*AllOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_AllOf,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_AllOf = "all_of"
+const Type_AllOf = "all_of"
+const AllOf_Series = "$SERIES"
 
-func (op *AllOf) MarshalJSON() (ret []byte, err error) {
-	if jsonSeries, e := op.MarshalJSONSeries(); e != nil {
-		err = e
-	} else {
+func (op *AllOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return AllOf_Detailed_Marshal(n, op)
+}
+func (op *AllOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return AllOf_Detailed_Unmarshal(n, b, op)
+}
+
+func AllOf_Detailed_Marshal(n jsonexp.Context, val *AllOf) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := ScannerMaker_Detailed_Repeats_Marshal(n, &val.Series); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[AllOf_Series] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_AllOf,
-			Value: map[string]json.RawMessage{
-				"$SERIES": jsonSeries,
-			},
+			Type:   Type_AllOf,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *AllOf) MarshalJSONSeries() (ret []byte, err error) {
-	ret, err = json.Marshal(op.Series)
+func AllOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AllOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := ScannerMaker_Detailed_Repeats_Unmarshal(n, msg.Fields[AllOf_Series], &out.Series); e != nil {
+		err = e
+	}
+	return
+}
+
+func AllOf_Detailed_Optional_Marshal(n jsonexp.Context, val **AllOf) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = AllOf_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func AllOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AllOf) (err error) {
+	if len(b) > 0 {
+		var el AllOf
+		if e := AllOf_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -129,28 +225,61 @@ type AnyOf struct {
 func (*AnyOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_AnyOf,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_AnyOf = "any_of"
+const Type_AnyOf = "any_of"
+const AnyOf_Options = "$OPTIONS"
 
-func (op *AnyOf) MarshalJSON() (ret []byte, err error) {
-	if jsonOptions, e := op.MarshalJSONOptions(); e != nil {
-		err = e
-	} else {
+func (op *AnyOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return AnyOf_Detailed_Marshal(n, op)
+}
+func (op *AnyOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return AnyOf_Detailed_Unmarshal(n, b, op)
+}
+
+func AnyOf_Detailed_Marshal(n jsonexp.Context, val *AnyOf) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := ScannerMaker_Detailed_Repeats_Marshal(n, &val.Options); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[AnyOf_Options] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_AnyOf,
-			Value: map[string]json.RawMessage{
-				"$OPTIONS": jsonOptions,
-			},
+			Type:   Type_AnyOf,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *AnyOf) MarshalJSONOptions() (ret []byte, err error) {
-	ret, err = json.Marshal(op.Options)
+func AnyOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AnyOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := ScannerMaker_Detailed_Repeats_Unmarshal(n, msg.Fields[AnyOf_Options], &out.Options); e != nil {
+		err = e
+	}
+	return
+}
+
+func AnyOf_Detailed_Optional_Marshal(n jsonexp.Context, val **AnyOf) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = AnyOf_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func AnyOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AnyOf) (err error) {
+	if len(b) > 0 {
+		var el AnyOf
+		if e := AnyOf_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -163,36 +292,69 @@ type Directive struct {
 func (*Directive) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Directive,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_Directive = "directive"
+const Type_Directive = "directive"
+const Directive_Lede = "$LEDE"
+const Directive_Scans = "$SCANS"
 
-func (op *Directive) MarshalJSON() (ret []byte, err error) {
-	if jsonLede, e := op.MarshalJSONLede(); e != nil {
-		err = e
-	} else if jsonScans, e := op.MarshalJSONScans(); e != nil {
-		err = e
-	} else {
+func (op *Directive) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Directive_Detailed_Marshal(n, op)
+}
+func (op *Directive) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Directive_Detailed_Unmarshal(n, b, op)
+}
+
+func Directive_Detailed_Marshal(n jsonexp.Context, val *Directive) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.Text_Detailed_Override_Repeats_Marshal(n, &val.Lede); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Directive_Lede] = b
+	}
+	if b, e := ScannerMaker_Detailed_Repeats_Marshal(n, &val.Scans); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Directive_Scans] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Directive,
-			Value: map[string]json.RawMessage{
-				"$LEDE":  jsonLede,
-				"$SCANS": jsonScans,
-			},
+			Type:   Type_Directive,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Directive) MarshalJSONLede() (ret []byte, err error) {
-	ret, err = json.Marshal(op.Lede)
+func Directive_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Directive) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.Text_Detailed_Override_Repeats_Unmarshal(n, msg.Fields[Directive_Lede], &out.Lede); e != nil {
+		err = e
+	} else if e := ScannerMaker_Detailed_Repeats_Unmarshal(n, msg.Fields[Directive_Scans], &out.Scans); e != nil {
+		err = e
+	}
 	return
 }
 
-func (op *Directive) MarshalJSONScans() (ret []byte, err error) {
-	ret, err = json.Marshal(op.Scans)
+func Directive_Detailed_Optional_Marshal(n jsonexp.Context, val **Directive) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Directive_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Directive_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Directive) (err error) {
+	if len(b) > 0 {
+		var el Directive
+		if e := Directive_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -204,39 +366,93 @@ type Grammar struct {
 func (*Grammar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Grammar,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_Grammar = "grammar"
+const Type_Grammar = "grammar"
+const Grammar_Grammar = "$GRAMMAR"
 
-func (op *Grammar) MarshalJSON() (ret []byte, err error) {
-	if jsonGrammar, e := op.MarshalJSONGrammar(); e != nil {
-		err = e
-	} else {
+func (op *Grammar) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Grammar_Detailed_Marshal(n, op)
+}
+func (op *Grammar) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Grammar_Detailed_Unmarshal(n, b, op)
+}
+
+func Grammar_Detailed_Marshal(n jsonexp.Context, val *Grammar) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := GrammarMaker_Detailed_Marshal(n, &val.Grammar); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Grammar_Grammar] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Grammar,
-			Value: map[string]json.RawMessage{
-				"$GRAMMAR": jsonGrammar,
-			},
+			Type:   Type_Grammar,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Grammar) MarshalJSONGrammar() (ret []byte, err error) {
-	if v, e := op.Grammar.(json.Marshaler).MarshalJSON(); e != nil {
+func Grammar_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Grammar) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
 		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  Type_GrammarMaker,
-			Value: v,
-		})
+	} else if e := GrammarMaker_Detailed_Unmarshal(n, msg.Fields[Grammar_Grammar], &out.Grammar); e != nil {
+		err = e
+	}
+	return
+}
+
+func Grammar_Detailed_Optional_Marshal(n jsonexp.Context, val **Grammar) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Grammar_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Grammar_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Grammar) (err error) {
+	if len(b) > 0 {
+		var el Grammar
+		if e := Grammar_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
 	}
 	return
 }
 
 const Type_GrammarMaker = "grammar_maker"
+
+func GrammarMaker_Detailed_Marshal(n jsonexp.Context, ptr *GrammarMaker) (ret []byte, err error) {
+	var b []byte
+	if slot := *ptr; slot != nil {
+		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	}
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Node{
+			Type:  Type_GrammarMaker,
+			Value: b,
+		})
+	}
+	return
+}
+
+func GrammarMaker_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *GrammarMaker) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if ptr, e := n.NewType(msg.Type); e != nil {
+		err = e
+	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
+		err = e
+	} else {
+		(*out) = ptr.(GrammarMaker)
+	}
+	return
+}
 
 // Noun makes a parser scanner
 type Noun struct {
@@ -246,30 +462,61 @@ type Noun struct {
 func (*Noun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Noun,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_Noun = "noun"
+const Type_Noun = "noun"
+const Noun_Kind = "$KIND"
 
-func (op *Noun) MarshalJSON() (ret []byte, err error) {
-	if jsonKind, e := op.MarshalJSONKind(); e != nil {
-		err = e
-	} else {
+func (op *Noun) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Noun_Detailed_Marshal(n, op)
+}
+func (op *Noun) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Noun_Detailed_Unmarshal(n, b, op)
+}
+
+func Noun_Detailed_Marshal(n jsonexp.Context, val *Noun) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Kind); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Noun_Kind] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Noun,
-			Value: map[string]json.RawMessage{
-				"$KIND": jsonKind,
-			},
+			Type:   Type_Noun,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Noun) MarshalJSONKind() (ret []byte, err error) {
-	// type override
-	m := value.Text{op.Kind}
-	ret, err = m.MarshalJSON()
+func Noun_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Noun) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[Noun_Kind], &out.Kind); e != nil {
+		err = e
+	}
+	return
+}
+
+func Noun_Detailed_Optional_Marshal(n jsonexp.Context, val **Noun) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Noun_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Noun_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Noun) (err error) {
+	if len(b) > 0 {
+		var el Noun
+		if e := Noun_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -281,28 +528,61 @@ type Retarget struct {
 func (*Retarget) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Retarget,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_Retarget = "retarget"
+const Type_Retarget = "retarget"
+const Retarget_Span = "$SPAN"
 
-func (op *Retarget) MarshalJSON() (ret []byte, err error) {
-	if jsonSpan, e := op.MarshalJSONSpan(); e != nil {
-		err = e
-	} else {
+func (op *Retarget) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Retarget_Detailed_Marshal(n, op)
+}
+func (op *Retarget) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Retarget_Detailed_Unmarshal(n, b, op)
+}
+
+func Retarget_Detailed_Marshal(n jsonexp.Context, val *Retarget) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := ScannerMaker_Detailed_Repeats_Marshal(n, &val.Span); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Retarget_Span] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Retarget,
-			Value: map[string]json.RawMessage{
-				"$SPAN": jsonSpan,
-			},
+			Type:   Type_Retarget,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Retarget) MarshalJSONSpan() (ret []byte, err error) {
-	ret, err = json.Marshal(op.Span)
+func Retarget_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Retarget) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := ScannerMaker_Detailed_Repeats_Unmarshal(n, msg.Fields[Retarget_Span], &out.Span); e != nil {
+		err = e
+	}
+	return
+}
+
+func Retarget_Detailed_Optional_Marshal(n jsonexp.Context, val **Retarget) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Retarget_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Retarget_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Retarget) (err error) {
+	if len(b) > 0 {
+		var el Retarget
+		if e := Retarget_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -314,32 +594,129 @@ type Reverse struct {
 func (*Reverse) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Reverse,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_Reverse = "reverse"
+const Type_Reverse = "reverse"
+const Reverse_Reverses = "$REVERSES"
 
-func (op *Reverse) MarshalJSON() (ret []byte, err error) {
-	if jsonReverses, e := op.MarshalJSONReverses(); e != nil {
-		err = e
-	} else {
+func (op *Reverse) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Reverse_Detailed_Marshal(n, op)
+}
+func (op *Reverse) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Reverse_Detailed_Unmarshal(n, b, op)
+}
+
+func Reverse_Detailed_Marshal(n jsonexp.Context, val *Reverse) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := ScannerMaker_Detailed_Repeats_Marshal(n, &val.Reverses); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Reverse_Reverses] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Reverse,
-			Value: map[string]json.RawMessage{
-				"$REVERSES": jsonReverses,
-			},
+			Type:   Type_Reverse,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Reverse) MarshalJSONReverses() (ret []byte, err error) {
-	ret, err = json.Marshal(op.Reverses)
+func Reverse_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Reverse) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := ScannerMaker_Detailed_Repeats_Unmarshal(n, msg.Fields[Reverse_Reverses], &out.Reverses); e != nil {
+		err = e
+	}
+	return
+}
+
+func Reverse_Detailed_Optional_Marshal(n jsonexp.Context, val **Reverse) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Reverse_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Reverse_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Reverse) (err error) {
+	if len(b) > 0 {
+		var el Reverse
+		if e := Reverse_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
 const Type_ScannerMaker = "scanner_maker"
+
+func ScannerMaker_Detailed_Marshal(n jsonexp.Context, ptr *ScannerMaker) (ret []byte, err error) {
+	var b []byte
+	if slot := *ptr; slot != nil {
+		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	}
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Node{
+			Type:  Type_ScannerMaker,
+			Value: b,
+		})
+	}
+	return
+}
+
+func ScannerMaker_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ScannerMaker) (err error) {
+	var msg jsonexp.Node
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if ptr, e := n.NewType(msg.Type); e != nil {
+		err = e
+	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
+		err = e
+	} else {
+		(*out) = ptr.(ScannerMaker)
+	}
+	return
+}
+
+func ScannerMaker_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ScannerMaker) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	msgs = make([]json.RawMessage, len(*vals))
+	for i, el := range *vals {
+		if b, e := ScannerMaker_Detailed_Marshal(n, &el); e != nil {
+			err = e
+			break
+		} else {
+			msgs[i] = b
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ScannerMaker_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ScannerMaker) (err error) {
+	var msgs []json.RawMessage
+	if e := json.Unmarshal(b, &msgs); e != nil {
+		err = e
+	} else {
+		vals := make([]ScannerMaker, len(msgs))
+		for i, msg := range msgs {
+			if e := ScannerMaker_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
+				err = e
+				break
+			}
+		}
+		if err == nil {
+			*out = vals
+		}
+	}
+	return
+}
 
 // Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
 type Self struct {
@@ -349,30 +726,61 @@ type Self struct {
 func (*Self) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Self,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_Self = "self"
+const Type_Self = "self"
+const Self_Player = "$PLAYER"
 
-func (op *Self) MarshalJSON() (ret []byte, err error) {
-	if jsonPlayer, e := op.MarshalJSONPlayer(); e != nil {
-		err = e
-	} else {
+func (op *Self) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Self_Detailed_Marshal(n, op)
+}
+func (op *Self) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Self_Detailed_Unmarshal(n, b, op)
+}
+
+func Self_Detailed_Marshal(n jsonexp.Context, val *Self) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Player); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Self_Player] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Self,
-			Value: map[string]json.RawMessage{
-				"$PLAYER": jsonPlayer,
-			},
+			Type:   Type_Self,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Self) MarshalJSONPlayer() (ret []byte, err error) {
-	// type override
-	m := value.Text{op.Player}
-	ret, err = m.MarshalJSON()
+func Self_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Self) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[Self_Player], &out.Player); e != nil {
+		err = e
+	}
+	return
+}
+
+func Self_Detailed_Optional_Marshal(n jsonexp.Context, val **Self) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Self_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Self_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Self) (err error) {
+	if len(b) > 0 {
+		var el Self
+		if e := Self_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -384,28 +792,61 @@ type Words struct {
 func (*Words) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Words,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_Words = "words"
+const Type_Words = "words"
+const Words_Words = "$WORDS"
 
-func (op *Words) MarshalJSON() (ret []byte, err error) {
-	if jsonWords, e := op.MarshalJSONWords(); e != nil {
-		err = e
-	} else {
+func (op *Words) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Words_Detailed_Marshal(n, op)
+}
+func (op *Words) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Words_Detailed_Unmarshal(n, b, op)
+}
+
+func Words_Detailed_Marshal(n jsonexp.Context, val *Words) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.Text_Detailed_Override_Repeats_Marshal(n, &val.Words); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Words_Words] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Words,
-			Value: map[string]json.RawMessage{
-				"$WORDS": jsonWords,
-			},
+			Type:   Type_Words,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Words) MarshalJSONWords() (ret []byte, err error) {
-	ret, err = json.Marshal(op.Words)
+func Words_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Words) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.Text_Detailed_Override_Repeats_Unmarshal(n, msg.Fields[Words_Words], &out.Words); e != nil {
+		err = e
+	}
+	return
+}
+
+func Words_Detailed_Optional_Marshal(n jsonexp.Context, val **Words) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Words_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Words_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Words) (err error) {
+	if len(b) > 0 {
+		var el Words
+		if e := Words_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 

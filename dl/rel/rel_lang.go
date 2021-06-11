@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/export/jsonexp"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 // ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.)
@@ -18,43 +19,69 @@ type ReciprocalOf struct {
 func (*ReciprocalOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_ReciprocalOf,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 		Lede: "reciprocal",
 	}
 }
 
-var Type_ReciprocalOf = "reciprocal_of"
+const Type_ReciprocalOf = "reciprocal_of"
+const ReciprocalOf_Via = "$VIA"
+const ReciprocalOf_Object = "$OBJECT"
 
-func (op *ReciprocalOf) MarshalJSON() (ret []byte, err error) {
-	if jsonVia, e := op.MarshalJSONVia(); e != nil {
-		err = e
-	} else if jsonObject, e := op.MarshalJSONObject(); e != nil {
-		err = e
-	} else {
+func (op *ReciprocalOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return ReciprocalOf_Detailed_Marshal(n, op)
+}
+func (op *ReciprocalOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return ReciprocalOf_Detailed_Unmarshal(n, b, op)
+}
+
+func ReciprocalOf_Detailed_Marshal(n jsonexp.Context, val *ReciprocalOf) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.RelationName_Detailed_Marshal(n, &val.Via); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[ReciprocalOf_Via] = b
+	}
+	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[ReciprocalOf_Object] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_ReciprocalOf,
-			Value: map[string]json.RawMessage{
-				"$VIA":    jsonVia,
-				"$OBJECT": jsonObject,
-			},
+			Type:   Type_ReciprocalOf,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *ReciprocalOf) MarshalJSONVia() (ret []byte, err error) {
-	ret, err = op.Via.MarshalJSON()
+func ReciprocalOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ReciprocalOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[ReciprocalOf_Via], &out.Via); e != nil {
+		err = e
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ReciprocalOf_Object], &out.Object); e != nil {
+		err = e
+	}
 	return
 }
 
-func (op *ReciprocalOf) MarshalJSONObject() (ret []byte, err error) {
-	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
-		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  rt.Type_TextEval,
-			Value: v,
-		})
+func ReciprocalOf_Detailed_Optional_Marshal(n jsonexp.Context, val **ReciprocalOf) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = ReciprocalOf_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func ReciprocalOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ReciprocalOf) (err error) {
+	if len(b) > 0 {
+		var el ReciprocalOf
+		if e := ReciprocalOf_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
 	}
 	return
 }
@@ -68,43 +95,69 @@ type ReciprocalsOf struct {
 func (*ReciprocalsOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_ReciprocalsOf,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 		Lede: "reciprocals",
 	}
 }
 
-var Type_ReciprocalsOf = "reciprocals_of"
+const Type_ReciprocalsOf = "reciprocals_of"
+const ReciprocalsOf_Via = "$VIA"
+const ReciprocalsOf_Object = "$OBJECT"
 
-func (op *ReciprocalsOf) MarshalJSON() (ret []byte, err error) {
-	if jsonVia, e := op.MarshalJSONVia(); e != nil {
-		err = e
-	} else if jsonObject, e := op.MarshalJSONObject(); e != nil {
-		err = e
-	} else {
+func (op *ReciprocalsOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return ReciprocalsOf_Detailed_Marshal(n, op)
+}
+func (op *ReciprocalsOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return ReciprocalsOf_Detailed_Unmarshal(n, b, op)
+}
+
+func ReciprocalsOf_Detailed_Marshal(n jsonexp.Context, val *ReciprocalsOf) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.RelationName_Detailed_Marshal(n, &val.Via); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[ReciprocalsOf_Via] = b
+	}
+	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[ReciprocalsOf_Object] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_ReciprocalsOf,
-			Value: map[string]json.RawMessage{
-				"$VIA":    jsonVia,
-				"$OBJECT": jsonObject,
-			},
+			Type:   Type_ReciprocalsOf,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *ReciprocalsOf) MarshalJSONVia() (ret []byte, err error) {
-	ret, err = op.Via.MarshalJSON()
+func ReciprocalsOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ReciprocalsOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[ReciprocalsOf_Via], &out.Via); e != nil {
+		err = e
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ReciprocalsOf_Object], &out.Object); e != nil {
+		err = e
+	}
 	return
 }
 
-func (op *ReciprocalsOf) MarshalJSONObject() (ret []byte, err error) {
-	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
-		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  rt.Type_TextEval,
-			Value: v,
-		})
+func ReciprocalsOf_Detailed_Optional_Marshal(n jsonexp.Context, val **ReciprocalsOf) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = ReciprocalsOf_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func ReciprocalsOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ReciprocalsOf) (err error) {
+	if len(b) > 0 {
+		var el ReciprocalsOf
+		if e := ReciprocalsOf_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
 	}
 	return
 }
@@ -119,58 +172,77 @@ type Relate struct {
 func (*Relate) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_Relate,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 	}
 }
 
-var Type_Relate = "relate"
+const Type_Relate = "relate"
+const Relate_Object = "$OBJECT"
+const Relate_ToObject = "$TO_OBJECT"
+const Relate_Via = "$VIA"
 
-func (op *Relate) MarshalJSON() (ret []byte, err error) {
-	if jsonObject, e := op.MarshalJSONObject(); e != nil {
-		err = e
-	} else if jsonToObject, e := op.MarshalJSONToObject(); e != nil {
-		err = e
-	} else if jsonVia, e := op.MarshalJSONVia(); e != nil {
-		err = e
-	} else {
+func (op *Relate) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Relate_Detailed_Marshal(n, op)
+}
+func (op *Relate) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Relate_Detailed_Unmarshal(n, b, op)
+}
+
+func Relate_Detailed_Marshal(n jsonexp.Context, val *Relate) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Relate_Object] = b
+	}
+	if b, e := rt.TextEval_Detailed_Marshal(n, &val.ToObject); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Relate_ToObject] = b
+	}
+	if b, e := value.RelationName_Detailed_Marshal(n, &val.Via); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Relate_Via] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_Relate,
-			Value: map[string]json.RawMessage{
-				"$OBJECT":    jsonObject,
-				"$TO_OBJECT": jsonToObject,
-				"$VIA":       jsonVia,
-			},
+			Type:   Type_Relate,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *Relate) MarshalJSONObject() (ret []byte, err error) {
-	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
+func Relate_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Relate) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
 		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  rt.Type_TextEval,
-			Value: v,
-		})
-	}
-	return
-}
-
-func (op *Relate) MarshalJSONToObject() (ret []byte, err error) {
-	if v, e := op.ToObject.(json.Marshaler).MarshalJSON(); e != nil {
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Relate_Object], &out.Object); e != nil {
 		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  rt.Type_TextEval,
-			Value: v,
-		})
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Relate_ToObject], &out.ToObject); e != nil {
+		err = e
+	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[Relate_Via], &out.Via); e != nil {
+		err = e
 	}
 	return
 }
 
-func (op *Relate) MarshalJSONVia() (ret []byte, err error) {
-	ret, err = op.Via.MarshalJSON()
+func Relate_Detailed_Optional_Marshal(n jsonexp.Context, val **Relate) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = Relate_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func Relate_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Relate) (err error) {
+	if len(b) > 0 {
+		var el Relate
+		if e := Relate_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
+	}
 	return
 }
 
@@ -183,43 +255,69 @@ type RelativeOf struct {
 func (*RelativeOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_RelativeOf,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 		Lede: "relative",
 	}
 }
 
-var Type_RelativeOf = "relative_of"
+const Type_RelativeOf = "relative_of"
+const RelativeOf_Via = "$VIA"
+const RelativeOf_Object = "$OBJECT"
 
-func (op *RelativeOf) MarshalJSON() (ret []byte, err error) {
-	if jsonVia, e := op.MarshalJSONVia(); e != nil {
-		err = e
-	} else if jsonObject, e := op.MarshalJSONObject(); e != nil {
-		err = e
-	} else {
+func (op *RelativeOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return RelativeOf_Detailed_Marshal(n, op)
+}
+func (op *RelativeOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return RelativeOf_Detailed_Unmarshal(n, b, op)
+}
+
+func RelativeOf_Detailed_Marshal(n jsonexp.Context, val *RelativeOf) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.RelationName_Detailed_Marshal(n, &val.Via); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RelativeOf_Via] = b
+	}
+	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RelativeOf_Object] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_RelativeOf,
-			Value: map[string]json.RawMessage{
-				"$VIA":    jsonVia,
-				"$OBJECT": jsonObject,
-			},
+			Type:   Type_RelativeOf,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *RelativeOf) MarshalJSONVia() (ret []byte, err error) {
-	ret, err = op.Via.MarshalJSON()
+func RelativeOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RelativeOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[RelativeOf_Via], &out.Via); e != nil {
+		err = e
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RelativeOf_Object], &out.Object); e != nil {
+		err = e
+	}
 	return
 }
 
-func (op *RelativeOf) MarshalJSONObject() (ret []byte, err error) {
-	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
-		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  rt.Type_TextEval,
-			Value: v,
-		})
+func RelativeOf_Detailed_Optional_Marshal(n jsonexp.Context, val **RelativeOf) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = RelativeOf_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func RelativeOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativeOf) (err error) {
+	if len(b) > 0 {
+		var el RelativeOf
+		if e := RelativeOf_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
 	}
 	return
 }
@@ -233,43 +331,69 @@ type RelativesOf struct {
 func (*RelativesOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Type_RelativesOf,
-		Uses: "flow",
+		Uses: composer.Type_Flow,
 		Lede: "relatives",
 	}
 }
 
-var Type_RelativesOf = "relatives_of"
+const Type_RelativesOf = "relatives_of"
+const RelativesOf_Via = "$VIA"
+const RelativesOf_Object = "$OBJECT"
 
-func (op *RelativesOf) MarshalJSON() (ret []byte, err error) {
-	if jsonVia, e := op.MarshalJSONVia(); e != nil {
-		err = e
-	} else if jsonObject, e := op.MarshalJSONObject(); e != nil {
-		err = e
-	} else {
+func (op *RelativesOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return RelativesOf_Detailed_Marshal(n, op)
+}
+func (op *RelativesOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return RelativesOf_Detailed_Unmarshal(n, b, op)
+}
+
+func RelativesOf_Detailed_Marshal(n jsonexp.Context, val *RelativesOf) (ret []byte, err error) {
+	var fields jsonexp.Fields
+	if b, e := value.RelationName_Detailed_Marshal(n, &val.Via); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RelativesOf_Via] = b
+	}
+	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[RelativesOf_Object] = b
+	}
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type: Type_RelativesOf,
-			Value: map[string]json.RawMessage{
-				"$VIA":    jsonVia,
-				"$OBJECT": jsonObject,
-			},
+			Type:   Type_RelativesOf,
+			Fields: fields,
 		})
 	}
 	return
 }
 
-func (op *RelativesOf) MarshalJSONVia() (ret []byte, err error) {
-	ret, err = op.Via.MarshalJSON()
+func RelativesOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RelativesOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = e
+	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[RelativesOf_Via], &out.Via); e != nil {
+		err = e
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RelativesOf_Object], &out.Object); e != nil {
+		err = e
+	}
 	return
 }
 
-func (op *RelativesOf) MarshalJSONObject() (ret []byte, err error) {
-	if v, e := op.Object.(json.Marshaler).MarshalJSON(); e != nil {
-		err = e
-	} else {
-		ret, err = json.Marshal(jsonexp.Slot{
-			Type:  rt.Type_TextEval,
-			Value: v,
-		})
+func RelativesOf_Detailed_Optional_Marshal(n jsonexp.Context, val **RelativesOf) (ret []byte, err error) {
+	if ptr := *val; ptr != nil {
+		ret, err = RelativesOf_Detailed_Marshal(n, ptr)
+	}
+	return
+}
+func RelativesOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativesOf) (err error) {
+	if len(b) > 0 {
+		var el RelativesOf
+		if e := RelativesOf_Detailed_Unmarshal(n, b, &el); e != nil {
+			err = e
+		} else {
+			*out = &el
+		}
 	}
 	return
 }

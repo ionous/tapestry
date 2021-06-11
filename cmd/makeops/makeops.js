@@ -8,7 +8,10 @@ const fs = require('fs'); // filesystem for loading iffy language file
 const child_process = require('child_process');
 const path = require('path');
 
-const overrides= {"text":"string"};
+// when we see the key'd type name, replace it with the associated primitive value.
+const overrides = { "text": "string", "bool": "bool" };
+const optionals = new Set();
+const repeats = new Set();
 
 // change to tokenized like name
 const tokenize = function(name) {
@@ -44,14 +47,14 @@ const isClosed = function(strType) {
   return tokens.indexOf(token) < 0;
 };
 
-const isPositioned= function(t) {
-  return Array.isArray(t.group) ? t.group.includes("positioned") : t.group ==="positioned";
+const isPositioned = function(t) {
+  return Array.isArray(t.group) ? t.group.includes("positioned") : t.group === "positioned";
 };
 
 const paramsOf = function(t) {
   let { with: { params = {} } = {} } = t; //safely extract params
   if (isPositioned(t)) {
-    params= Object.assign({"$AT":{"type":"position", "label":"-"}}, params);
+    params = Object.assign({ "$AT": { "type": "position", "label": "-" } }, params);
   }
   return params;
 };
@@ -70,15 +73,15 @@ Handlebars.registerHelper('IsToken', function(str) {
 });
 
 Handlebars.registerHelper('LedeName', function(t) {
-  const m= t.group.includes("modeling");
+  const m = t.group.includes("modeling");
   if (!m && t.uses === "flow") {
     const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
     return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
   }
 });
 
-const scopeOf= function(name) {
-  let n="";
+const scopeOf = function(name) {
+  let n = "";
   const g = nameToGroup[name];
   if (g && g !== currentGroup) {
     n = `${g}.`;
@@ -86,36 +89,38 @@ const scopeOf= function(name) {
   return n;
 };
 
-const scopedName= function(name, ignoreOverride) {
+const scopedName = function(name, ignoreOverride) {
   let n = pascal(name);
-  const override= !ignoreOverride && overrides[name];
+  const override = !ignoreOverride && overrides[name];
   if (override) {
     n = override; // stuffed in during makeops startup.
   } else {
-    n= scopeOf(name)+n;
+    n = scopeOf(name) + n;
   }
   return n;
 };
 
 Handlebars.registerHelper('ScopeOf', scopeOf);
+Handlebars.registerHelper('ModOf', function(param) {
+ return param.repeats? "_Repeats":
+   (param.optional && (allTypes[param.type].uses === "flow"))?
+     "_Optional": "";
+});
 
 Handlebars.registerHelper('LowerNameOf', function(key, param) {
-  const el= pascal(key) || pascal(param.type);
+  const el = pascal(key) || pascal(param.type);
   return el.charAt(0).toLowerCase() + el.slice(1);
 });
 
 Handlebars.registerHelper('LabelOf', function(key, param, index) {
-  const m= currentType.group.includes("modeling");
-  return m? (index? lower(key): '_') : param.label.replaceAll(" ", "_");
+  const m = currentType.group.includes("modeling");
+  return m ? (index ? lower(key) : '_') : param.label.replaceAll(" ", "_");
 });
 
-Handlebars.registerHelper('Override', function(param) {
-  const name = param.type;
-  return overrides[name]? name:false;
+Handlebars.registerHelper('OverrideOf', function(name) {
+  return overrides[name];
 });
-
-Handlebars.registerHelper('IsBool', function(param) {
-  const name = param.type;
+Handlebars.registerHelper('IsBool', function(name) {
   return overrides[name] === 'bool';
 });
 Handlebars.registerHelper('TypeOf', function(param) {
@@ -128,8 +133,9 @@ Handlebars.registerHelper('TypeOf', function(param) {
   let qualifier = "";
   if (param.repeats) {
     qualifier += "[]";
-  } else if (param.optional && type.uses !== "slot" && type.uses !== "str") {
-    // re: slot, for go we dont need *interface{}
+  } else if (param.optional && type.uses === "flow") {
+    // re: slot, we dont need *interface{}
+    // and its okay enough i think if we accidentally collapse empty strings/numbers into unspecified values
     qualifier += "*";
   }
   return qualifier + scopedName(name);
@@ -166,7 +172,6 @@ Handlebars.registerHelper('DescOf', function(x) {
   let ret = '';
   if (x.desc) {
     const desc = x.desc;
-
     if (typeof desc == 'string') {
       ret = desc;
     } else if (desc) {
@@ -183,18 +188,18 @@ Handlebars.registerHelper('DescOf', function(x) {
 const locationOf = function(x) {
   let where;
   if (x.includes("/")) {
-    where= x;
+    where = x;
   } else {
     switch (x) {
-      case  "rt":
-        where= `git.sr.ht/~ionous/iffy/rt`;
+      case "rt":
+        where = `git.sr.ht/~ionous/iffy/rt`;
         break;
       case "story":
         // FIX: should move all the story files to the dl folder instead.
-        where= `git.sr.ht/~ionous/iffy/ephemera/story`;
+        where = `git.sr.ht/~ionous/iffy/ephemera/story`;
         break;
       default:
-        where= `git.sr.ht/~ionous/iffy/dl/${x}`
+        where = `git.sr.ht/~ionous/iffy/dl/${x}`
         break;
     }
   }
@@ -208,12 +213,13 @@ Handlebars.registerHelper('GroupOf', function(desc) {
 })
 
 // load each js file as a handlebars template
-const partials = ['spec'];
-const sources = ['header', 'slot', 'num', 'swap', 'flow', 'str', 'footer', 'regList'];
-partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Partial.js`)));
+const partials = ['spec', 'repeat', 'optional', 'sig'];
+const sources = ['header', 'slot', 'prim', 'swap', 'flow', 'footer', 'regList'];
+partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Template.js`)));
 const templates = Object.fromEntries(sources.map(k => [k,
   Handlebars.compile(require(`./templates/${k}Template.js`))])
 );
+templates["str"] = templates["num"] = templates["prim"];
 
 // split types into different categories
 for (const typeName in allTypes) {
@@ -223,42 +229,30 @@ for (const typeName in allTypes) {
     type.desc = type.desc.join("  ");
   }
   //
-  let group = type.group;
-  if (!group) {
-    // ironically, this happens on groups
-    // if (type.uses !== "group") {
-    //   console.log("no group", JSON.stringify(type, 0, 2));
-    // }
-  } else {
+  if (type.uses !== "group") {
     // ex. ["story statements"]=> "story"
-    group = group[0].split(" ")[0];
+    const group = type.group[0].split(" ")[0];
     nameToGroup[typeName] = group;
-    let g = groups[group];
-    if (!g) {
-      g = {
-        slots: [],
-        slats: [],
-        all: [],
-      };
-    }
+    const g = groups[group] || { slots: [], slats: [], all: [] };
     if (type.uses === "slot") {
       g.slots.push(typeName);
     } else if (type.uses !== "group") {
-      // do a bunch of work to figure out whether to "expand" the type
+      // do a bunch of work to figure out whether to "override" the type
       // go is pretty strict about its typedefs, and sometimes its nicer
       // just to have a string instead of a wrapper type requiring string access.
-      if (type.uses === "str") {
-        const { with: { tokens = [] } = {} } = type; // safely extract tokens
-        const token = tokenize(typeName);
-        const closedChoices = tokens.indexOf(token) < 0;
-        // console.log(name, token, tokens);
-        if (closedChoices && Object.keys(type.with.params).length === 2) {
-          overrides[typeName]= "bool";
-        }
-      } else if (type.uses === "num") {
+      // if (type.uses === "str") {
+        // const { with: { tokens = [] } = {} } = type; // safely extract tokens
+        // const token = tokenize(typeName);
+        // const closedChoices = tokens.indexOf(token) < 0;
+
+        // if (closedChoices && Object.keys(type.with.params).length === 2) {
+        //   overrides[typeName] = "bool";
+        // }
+      // } else
+      if (type.uses === "num") {
         const { with: { tokens = [] } = {} } = type; // safely extract tokens
         if (tokens.length <= 1) {
-          overrides[typeName]= "float64";
+          overrides[typeName] = "float64";
         }
       }
       g.slats.push(typeName);
@@ -271,42 +265,35 @@ console.log("num groups", Object.keys(groups).length);
 
 // determine includes:
 for (currentGroup in groups) {
-  const marshal= currentGroup!=="reader";
+  const marshal = currentGroup !== "reader";
   const g = groups[currentGroup];
   // look up all the dependencies
   const inc = new Set();
-  let count = 0;
-  for (const n of g.slats) {
-    count++;
-    if (!overrides[n]) {
-      const type = allTypes[n];
-      if (isPositioned(type)) {
-        const o= "reader"; // for forced str and swap position field
+  for (const typeName of g.slats.filter(n=> !overrides[n])) {
+    const type = allTypes[typeName];
+    if (isPositioned(type)) {
+      const o = "reader"; // for forced str and swap position field
+      if (o && o !== currentGroup) {
+        inc.add(o);
+      }
+    }
+    if (marshal && ["swap", "flow"].includes(type.uses)) {
+        inc.add("github.com/ionous/errutil")
+    }
+    const params = paramsOf(type);
+    for (const p in params) {
+      const param = params[p];
+      if (param.repeats) {
+        repeats.add(param.type);
+      } else if (param.optional) {
+        optionals.add(param.type);
+      }
+      // when we are marshaling we need to include all types
+      // otherwise we only need to include the types we dont override out of existence
+      if (param && (marshal || !overrides[param.type])) {
+        const o = nameToGroup[param.type];
         if (o && o !== currentGroup) {
           inc.add(o);
-        }
-      }
-      switch (type.uses) {
-        case "swap":
-        inc.add("github.com/ionous/errutil")
-        break;
-        case "str":
-        case "flow":
-          if (marshal) {
-            inc.add("git.sr.ht/~ionous/iffy/export/jsonexp");
-          }
-          break;
-      }
-      const params= paramsOf(type);
-      for (const p in params) {
-        const param = params[p];
-        // when we are marshaling we need to include all types
-        // otherwise we only need to include the types we dont override out of existence
-        if (param && (marshal || !overrides[param.type])) {
-          const o = nameToGroup[param.type];
-          if (o && o !== currentGroup) {
-            inc.add(o);
-          }
         }
       }
     }
@@ -319,30 +306,34 @@ for (currentGroup in groups) {
   // 1. open a file
   const dir = path.join(process.env.GOPATH, "src", locationOf(currentGroup));
   const filepath = path.join(dir, `${currentGroup}_lang.go`);
-  console.log("creating", dir, "with", count, "cmds");
+  console.log("creating", dir, "with", g.slats.length, "cmds");
   fs.mkdirSync(dir, { recursive: true });
   const fd = fs.openSync(filepath, 'w');
   if (g.slats.length) {
     inc.add("composer");
-    if (marshal) {
-      inc.add("encoding/json");
-    }
   }
+  if (marshal) {
+    inc.add("encoding/json");
+    inc.add("git.sr.ht/~ionous/iffy/export/jsonexp");
+  }
+
   // 2. write the header ( with package name and inc )
   fs.writeSync(fd, templates.header({
     package: currentGroup,
     imports: Array.from(inc.values()).sort(),
   }));
   // #. write slats ( if any )
-  for (const n of g.all) {
-    const type = allTypes[n];
+  for (const typeName of g.all) {
+    const type = allTypes[typeName];
     const template = templates[type.uses];
     if (template) {
-
-      currentType= type;
+      currentType = type;
+      // console.log(type.uses);
       fs.writeSync(fd, template({
         marshal,
-        type:type
+        optional: optionals.has(typeName),
+        repeats: repeats.has(typeName),
+        type: type,
       }));
     }
   }
@@ -354,7 +345,7 @@ for (currentGroup in groups) {
   }));
   fs.writeSync(fd, templates.regList({
     which: "Slats",
-    list: g.slats.map(n => allTypes[n]).filter(t => (t.uses !== "slot")),
+    list: g.slats.map(n => allTypes[n]),
     RegType: "composer.Composer",
   }));
   fs.closeSync(fd);
