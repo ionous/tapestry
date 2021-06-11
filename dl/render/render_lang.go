@@ -35,6 +35,7 @@ func (op *RenderExp) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func RenderExp_Detailed_Marshal(n jsonexp.Context, val *RenderExp) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Expression); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -52,9 +53,9 @@ func RenderExp_Detailed_Marshal(n jsonexp.Context, val *RenderExp) (ret []byte, 
 func RenderExp_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderExp) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderExp, e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RenderExp_Expression], &out.Expression); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderExp, rt.Type_TextEval, e)
 	}
 	return
 }
@@ -69,7 +70,7 @@ func RenderExp_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Re
 	if len(b) > 0 {
 		var el RenderExp
 		if e := RenderExp_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_RenderExp, e)
 		} else {
 			*out = &el
 		}
@@ -101,6 +102,7 @@ func (op *RenderField) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func RenderField_Detailed_Marshal(n jsonexp.Context, val *RenderField) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -118,9 +120,9 @@ func RenderField_Detailed_Marshal(n jsonexp.Context, val *RenderField) (ret []by
 func RenderField_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderField) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderField, e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RenderField_Name], &out.Name); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderField, rt.Type_TextEval, e)
 	}
 	return
 }
@@ -135,7 +137,7 @@ func RenderField_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el RenderField
 		if e := RenderField_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_RenderField, e)
 		} else {
 			*out = &el
 		}
@@ -185,11 +187,11 @@ func RenderFlags_Detailed_Marshal(n jsonexp.Context, val *RenderFlags) ([]byte, 
 }
 
 func RenderFlags_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderFlags) (err error) {
-	var msg jsonexp.Node
+	var msg jsonexp.Str
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderFlags, e)
+	} else {
+		out.Str = msg.Value
 	}
 	return
 }
@@ -218,6 +220,7 @@ func (op *RenderName) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func RenderName_Detailed_Marshal(n jsonexp.Context, val *RenderName) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -235,9 +238,9 @@ func RenderName_Detailed_Marshal(n jsonexp.Context, val *RenderName) (ret []byte
 func RenderName_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderName) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderName, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[RenderName_Name], &out.Name); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderName, value.Type_Text, e)
 	}
 	return
 }
@@ -252,7 +255,7 @@ func RenderName_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **R
 	if len(b) > 0 {
 		var el RenderName
 		if e := RenderName_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_RenderName, e)
 		} else {
 			*out = &el
 		}
@@ -287,6 +290,7 @@ func (op *RenderPattern) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func RenderPattern_Detailed_Marshal(n jsonexp.Context, val *RenderPattern) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.PatternName_Detailed_Marshal(n, &val.Pattern); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -309,11 +313,11 @@ func RenderPattern_Detailed_Marshal(n jsonexp.Context, val *RenderPattern) (ret 
 func RenderPattern_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderPattern) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderPattern, e)
 	} else if e := value.PatternName_Detailed_Unmarshal(n, msg.Fields[RenderPattern_Pattern], &out.Pattern); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderPattern, value.Type_PatternName, e)
 	} else if e := core.CallArgs_Detailed_Unmarshal(n, msg.Fields[RenderPattern_Arguments], &out.Arguments); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderPattern, core.Type_CallArgs, e)
 	}
 	return
 }
@@ -328,7 +332,7 @@ func RenderPattern_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out 
 	if len(b) > 0 {
 		var el RenderPattern
 		if e := RenderPattern_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_RenderPattern, e)
 		} else {
 			*out = &el
 		}
@@ -362,6 +366,7 @@ func (op *RenderRef) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func RenderRef_Detailed_Marshal(n jsonexp.Context, val *RenderRef) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -384,11 +389,11 @@ func RenderRef_Detailed_Marshal(n jsonexp.Context, val *RenderRef) (ret []byte, 
 func RenderRef_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderRef) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderRef, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[RenderRef_Name], &out.Name); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderRef, value.Type_VariableName, e)
 	} else if e := RenderFlags_Detailed_Unmarshal(n, msg.Fields[RenderRef_Flags], &out.Flags); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_RenderRef, Type_RenderFlags, e)
 	}
 	return
 }
@@ -403,7 +408,7 @@ func RenderRef_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Re
 	if len(b) > 0 {
 		var el RenderRef
 		if e := RenderRef_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_RenderRef, e)
 		} else {
 			*out = &el
 		}

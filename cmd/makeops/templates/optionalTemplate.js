@@ -11,7 +11,7 @@ func {{Pascal name}}_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, ou
   if len(b) > 0 {
     var el {{Pascal name}}
     if e := {{Pascal name}}_Detailed_Unmarshal(n, b, &el); e!= nil {
-      err = e
+      err = errutil.New("unmarshaling", Type_{{Pascal name}}, e)
     } else {
       *out = &el
     }

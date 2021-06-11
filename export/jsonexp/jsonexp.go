@@ -1,6 +1,8 @@
 package jsonexp
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type Str struct {
 	Id    string `json:"id,omitempty"`
@@ -26,17 +28,20 @@ type Flow struct {
 	Fields Fields `json:"value"`
 }
 
+type Slot struct {
+	Id   string `json:"id,omitempty"`
+	Type string `json:"type"`
+	Slat *Node  `json:"value"`
+}
+
 // note: single values are represented by node,
 // repeating elements are represented by an array of nodes.
 // that means that unmarshal functions have to open each message.
 type Fields map[string]json.RawMessage
 
-type Context struct {
-	Source string
-}
-
-func (ctx *Context) NewType(string) (ret DetailedMarshaler, err error) {
-	return // lookup by name and return a new element
+type Context interface {
+	Source() string                              // filename, etc.
+	NewType(t string) (DetailedMarshaler, error) // new by name
 }
 
 type DetailedMarshaler interface {

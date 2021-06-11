@@ -37,6 +37,7 @@ func (op *DebugLog) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func DebugLog_Detailed_Marshal(n jsonexp.Context, val *DebugLog) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.Value); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -59,11 +60,11 @@ func DebugLog_Detailed_Marshal(n jsonexp.Context, val *DebugLog) (ret []byte, er
 func DebugLog_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *DebugLog) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_DebugLog, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[DebugLog_Value], &out.Value); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_DebugLog, rt.Type_Assignment, e)
 	} else if e := LoggingLevel_Detailed_Unmarshal(n, msg.Fields[DebugLog_LogLevel], &out.LogLevel); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_DebugLog, Type_LoggingLevel, e)
 	}
 	return
 }
@@ -78,7 +79,7 @@ func DebugLog_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Deb
 	if len(b) > 0 {
 		var el DebugLog
 		if e := DebugLog_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_DebugLog, e)
 		} else {
 			*out = &el
 		}
@@ -110,6 +111,7 @@ func (op *DoNothing) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func DoNothing_Detailed_Marshal(n jsonexp.Context, val *DoNothing) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Reason); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -127,9 +129,9 @@ func DoNothing_Detailed_Marshal(n jsonexp.Context, val *DoNothing) (ret []byte, 
 func DoNothing_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *DoNothing) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_DoNothing, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[DoNothing_Reason], &out.Reason); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_DoNothing, value.Type_Text, e)
 	}
 	return
 }
@@ -144,7 +146,7 @@ func DoNothing_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Do
 	if len(b) > 0 {
 		var el DoNothing
 		if e := DoNothing_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_DoNothing, e)
 		} else {
 			*out = &el
 		}
@@ -197,11 +199,11 @@ func LoggingLevel_Detailed_Marshal(n jsonexp.Context, val *LoggingLevel) ([]byte
 }
 
 func LoggingLevel_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *LoggingLevel) (err error) {
-	var msg jsonexp.Node
+	var msg jsonexp.Str
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if e := json.Unmarshal(msg.Value, &out.Str); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_LoggingLevel, e)
+	} else {
+		out.Str = msg.Value
 	}
 	return
 }

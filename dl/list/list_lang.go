@@ -36,6 +36,7 @@ func (op *AsNum) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func AsNum_Detailed_Marshal(n jsonexp.Context, val *AsNum) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -53,9 +54,9 @@ func AsNum_Detailed_Marshal(n jsonexp.Context, val *AsNum) (ret []byte, err erro
 func AsNum_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AsNum) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_AsNum, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[AsNum_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_AsNum, value.Type_VariableName, e)
 	}
 	return
 }
@@ -70,7 +71,7 @@ func AsNum_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AsNum)
 	if len(b) > 0 {
 		var el AsNum
 		if e := AsNum_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_AsNum, e)
 		} else {
 			*out = &el
 		}
@@ -103,6 +104,7 @@ func (op *AsRec) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func AsRec_Detailed_Marshal(n jsonexp.Context, val *AsRec) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -120,9 +122,9 @@ func AsRec_Detailed_Marshal(n jsonexp.Context, val *AsRec) (ret []byte, err erro
 func AsRec_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AsRec) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_AsRec, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[AsRec_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_AsRec, value.Type_VariableName, e)
 	}
 	return
 }
@@ -137,7 +139,7 @@ func AsRec_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AsRec)
 	if len(b) > 0 {
 		var el AsRec
 		if e := AsRec_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_AsRec, e)
 		} else {
 			*out = &el
 		}
@@ -170,6 +172,7 @@ func (op *AsTxt) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func AsTxt_Detailed_Marshal(n jsonexp.Context, val *AsTxt) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -187,9 +190,9 @@ func AsTxt_Detailed_Marshal(n jsonexp.Context, val *AsTxt) (ret []byte, err erro
 func AsTxt_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AsTxt) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_AsTxt, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[AsTxt_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_AsTxt, value.Type_VariableName, e)
 	}
 	return
 }
@@ -204,7 +207,7 @@ func AsTxt_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AsTxt)
 	if len(b) > 0 {
 		var el AsTxt
 		if e := AsTxt_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_AsTxt, e)
 		} else {
 			*out = &el
 		}
@@ -239,6 +242,7 @@ func (op *EraseEdge) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func EraseEdge_Detailed_Marshal(n jsonexp.Context, val *EraseEdge) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := ListSource_Detailed_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -261,11 +265,11 @@ func EraseEdge_Detailed_Marshal(n jsonexp.Context, val *EraseEdge) (ret []byte, 
 func EraseEdge_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *EraseEdge) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_EraseEdge, e)
 	} else if e := ListSource_Detailed_Unmarshal(n, msg.Fields[EraseEdge_From], &out.From); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_EraseEdge, Type_ListSource, e)
 	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[EraseEdge_AtEdge], &out.AtEdge); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_EraseEdge, rt.Type_BoolEval, e)
 	}
 	return
 }
@@ -280,7 +284,7 @@ func EraseEdge_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Er
 	if len(b) > 0 {
 		var el EraseEdge
 		if e := EraseEdge_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_EraseEdge, e)
 		} else {
 			*out = &el
 		}
@@ -317,6 +321,7 @@ func (op *EraseIndex) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func EraseIndex_Detailed_Marshal(n jsonexp.Context, val *EraseIndex) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.Count); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -344,13 +349,13 @@ func EraseIndex_Detailed_Marshal(n jsonexp.Context, val *EraseIndex) (ret []byte
 func EraseIndex_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *EraseIndex) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_EraseIndex, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[EraseIndex_Count], &out.Count); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_EraseIndex, rt.Type_NumberEval, e)
 	} else if e := ListSource_Detailed_Unmarshal(n, msg.Fields[EraseIndex_From], &out.From); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_EraseIndex, Type_ListSource, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[EraseIndex_AtIndex], &out.AtIndex); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_EraseIndex, rt.Type_NumberEval, e)
 	}
 	return
 }
@@ -365,7 +370,7 @@ func EraseIndex_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **E
 	if len(b) > 0 {
 		var el EraseIndex
 		if e := EraseIndex_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_EraseIndex, e)
 		} else {
 			*out = &el
 		}
@@ -405,6 +410,7 @@ func (op *Erasing) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func Erasing_Detailed_Marshal(n jsonexp.Context, val *Erasing) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.Count); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -442,17 +448,17 @@ func Erasing_Detailed_Marshal(n jsonexp.Context, val *Erasing) (ret []byte, err 
 func Erasing_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Erasing) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Erasing, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[Erasing_Count], &out.Count); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Erasing, rt.Type_NumberEval, e)
 	} else if e := ListSource_Detailed_Unmarshal(n, msg.Fields[Erasing_From], &out.From); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Erasing, Type_ListSource, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[Erasing_AtIndex], &out.AtIndex); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Erasing, rt.Type_NumberEval, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[Erasing_As], &out.As); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Erasing, value.Type_Text, e)
 	} else if e := core.Activity_Detailed_Unmarshal(n, msg.Fields[Erasing_Do], &out.Do); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Erasing, core.Type_Activity, e)
 	}
 	return
 }
@@ -467,7 +473,7 @@ func Erasing_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Eras
 	if len(b) > 0 {
 		var el Erasing
 		if e := Erasing_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_Erasing, e)
 		} else {
 			*out = &el
 		}
@@ -508,6 +514,7 @@ func (op *ErasingEdge) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ErasingEdge_Detailed_Marshal(n jsonexp.Context, val *ErasingEdge) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := ListSource_Detailed_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -545,17 +552,17 @@ func ErasingEdge_Detailed_Marshal(n jsonexp.Context, val *ErasingEdge) (ret []by
 func ErasingEdge_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ErasingEdge) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ErasingEdge, e)
 	} else if e := ListSource_Detailed_Unmarshal(n, msg.Fields[ErasingEdge_From], &out.From); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ErasingEdge, Type_ListSource, e)
 	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ErasingEdge_AtEdge], &out.AtEdge); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ErasingEdge, rt.Type_BoolEval, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ErasingEdge_As], &out.As); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ErasingEdge, value.Type_Text, e)
 	} else if e := core.Activity_Detailed_Unmarshal(n, msg.Fields[ErasingEdge_Do], &out.Do); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ErasingEdge, core.Type_Activity, e)
 	} else if e := core.Brancher_Detailed_Unmarshal(n, msg.Fields[ErasingEdge_Else], &out.Else); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ErasingEdge, core.Type_Brancher, e)
 	}
 	return
 }
@@ -570,7 +577,7 @@ func ErasingEdge_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el ErasingEdge
 		if e := ErasingEdge_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ErasingEdge, e)
 		} else {
 			*out = &el
 		}
@@ -603,6 +610,7 @@ func (op *FromNumList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func FromNumList_Detailed_Marshal(n jsonexp.Context, val *FromNumList) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -620,9 +628,9 @@ func FromNumList_Detailed_Marshal(n jsonexp.Context, val *FromNumList) (ret []by
 func FromNumList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromNumList) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_FromNumList, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[FromNumList_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_FromNumList, value.Type_VariableName, e)
 	}
 	return
 }
@@ -637,7 +645,7 @@ func FromNumList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el FromNumList
 		if e := FromNumList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_FromNumList, e)
 		} else {
 			*out = &el
 		}
@@ -670,6 +678,7 @@ func (op *FromRecList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func FromRecList_Detailed_Marshal(n jsonexp.Context, val *FromRecList) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -687,9 +696,9 @@ func FromRecList_Detailed_Marshal(n jsonexp.Context, val *FromRecList) (ret []by
 func FromRecList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromRecList) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_FromRecList, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[FromRecList_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_FromRecList, value.Type_VariableName, e)
 	}
 	return
 }
@@ -704,7 +713,7 @@ func FromRecList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el FromRecList
 		if e := FromRecList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_FromRecList, e)
 		} else {
 			*out = &el
 		}
@@ -737,6 +746,7 @@ func (op *FromTxtList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func FromTxtList_Detailed_Marshal(n jsonexp.Context, val *FromTxtList) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -754,9 +764,9 @@ func FromTxtList_Detailed_Marshal(n jsonexp.Context, val *FromTxtList) (ret []by
 func FromTxtList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromTxtList) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_FromTxtList, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[FromTxtList_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_FromTxtList, value.Type_VariableName, e)
 	}
 	return
 }
@@ -771,7 +781,7 @@ func FromTxtList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el FromTxtList
 		if e := FromTxtList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_FromTxtList, e)
 		} else {
 			*out = &el
 		}
@@ -804,6 +814,7 @@ func (op *IntoNumList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func IntoNumList_Detailed_Marshal(n jsonexp.Context, val *IntoNumList) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -821,9 +832,9 @@ func IntoNumList_Detailed_Marshal(n jsonexp.Context, val *IntoNumList) (ret []by
 func IntoNumList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoNumList) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_IntoNumList, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[IntoNumList_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_IntoNumList, value.Type_VariableName, e)
 	}
 	return
 }
@@ -838,7 +849,7 @@ func IntoNumList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el IntoNumList
 		if e := IntoNumList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_IntoNumList, e)
 		} else {
 			*out = &el
 		}
@@ -871,6 +882,7 @@ func (op *IntoRecList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func IntoRecList_Detailed_Marshal(n jsonexp.Context, val *IntoRecList) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -888,9 +900,9 @@ func IntoRecList_Detailed_Marshal(n jsonexp.Context, val *IntoRecList) (ret []by
 func IntoRecList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoRecList) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_IntoRecList, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[IntoRecList_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_IntoRecList, value.Type_VariableName, e)
 	}
 	return
 }
@@ -905,7 +917,7 @@ func IntoRecList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el IntoRecList
 		if e := IntoRecList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_IntoRecList, e)
 		} else {
 			*out = &el
 		}
@@ -938,6 +950,7 @@ func (op *IntoTxtList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func IntoTxtList_Detailed_Marshal(n jsonexp.Context, val *IntoTxtList) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -955,9 +968,9 @@ func IntoTxtList_Detailed_Marshal(n jsonexp.Context, val *IntoTxtList) (ret []by
 func IntoTxtList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoTxtList) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_IntoTxtList, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[IntoTxtList_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_IntoTxtList, value.Type_VariableName, e)
 	}
 	return
 }
@@ -972,7 +985,7 @@ func IntoTxtList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el IntoTxtList
 		if e := IntoTxtList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_IntoTxtList, e)
 		} else {
 			*out = &el
 		}
@@ -1007,6 +1020,7 @@ func (op *ListAt) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListAt_Detailed_Marshal(n jsonexp.Context, val *ListAt) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1029,11 +1043,11 @@ func ListAt_Detailed_Marshal(n jsonexp.Context, val *ListAt) (ret []byte, err er
 func ListAt_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListAt) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListAt, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListAt_List], &out.List); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListAt, rt.Type_Assignment, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ListAt_Index], &out.Index); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListAt, rt.Type_NumberEval, e)
 	}
 	return
 }
@@ -1048,7 +1062,7 @@ func ListAt_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListA
 	if len(b) > 0 {
 		var el ListAt
 		if e := ListAt_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListAt, e)
 		} else {
 			*out = &el
 		}
@@ -1087,6 +1101,7 @@ func (op *ListEach) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListEach_Detailed_Marshal(n jsonexp.Context, val *ListEach) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1119,15 +1134,15 @@ func ListEach_Detailed_Marshal(n jsonexp.Context, val *ListEach) (ret []byte, er
 func ListEach_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListEach) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListEach, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListEach_List], &out.List); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListEach, rt.Type_Assignment, e)
 	} else if e := ListIterator_Detailed_Unmarshal(n, msg.Fields[ListEach_As], &out.As); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListEach, Type_ListIterator, e)
 	} else if e := core.Activity_Detailed_Unmarshal(n, msg.Fields[ListEach_Do], &out.Do); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListEach, core.Type_Activity, e)
 	} else if e := core.Brancher_Detailed_Unmarshal(n, msg.Fields[ListEach_Else], &out.Else); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListEach, core.Type_Brancher, e)
 	}
 	return
 }
@@ -1142,7 +1157,7 @@ func ListEach_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Lis
 	if len(b) > 0 {
 		var el ListEach
 		if e := ListEach_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListEach, e)
 		} else {
 			*out = &el
 		}
@@ -1177,6 +1192,7 @@ func (op *ListFind) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListFind_Detailed_Marshal(n jsonexp.Context, val *ListFind) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.Value); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1199,11 +1215,11 @@ func ListFind_Detailed_Marshal(n jsonexp.Context, val *ListFind) (ret []byte, er
 func ListFind_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListFind) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListFind, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListFind_Value], &out.Value); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListFind, rt.Type_Assignment, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListFind_List], &out.List); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListFind, rt.Type_Assignment, e)
 	}
 	return
 }
@@ -1218,7 +1234,7 @@ func ListFind_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Lis
 	if len(b) > 0 {
 		var el ListFind
 		if e := ListFind_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListFind, e)
 		} else {
 			*out = &el
 		}
@@ -1255,6 +1271,7 @@ func (op *ListGather) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListGather_Detailed_Marshal(n jsonexp.Context, val *ListGather) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1282,13 +1299,13 @@ func ListGather_Detailed_Marshal(n jsonexp.Context, val *ListGather) (ret []byte
 func ListGather_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListGather) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListGather, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[ListGather_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListGather, value.Type_VariableName, e)
 	} else if e := ListSource_Detailed_Unmarshal(n, msg.Fields[ListGather_From], &out.From); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListGather, Type_ListSource, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListGather_Using], &out.Using); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListGather, value.Type_Text, e)
 	}
 	return
 }
@@ -1303,7 +1320,7 @@ func ListGather_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **L
 	if len(b) > 0 {
 		var el ListGather
 		if e := ListGather_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListGather, e)
 		} else {
 			*out = &el
 		}
@@ -1315,8 +1332,8 @@ const Type_ListIterator = "list_iterator"
 
 func ListIterator_Detailed_Marshal(n jsonexp.Context, ptr *ListIterator) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -1330,13 +1347,18 @@ func ListIterator_Detailed_Marshal(n jsonexp.Context, ptr *ListIterator) (ret []
 func ListIterator_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListIterator) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(ListIterator)
+		err = errutil.New("unmarshaling", Type_ListIterator, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_ListIterator, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_ListIterator, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_ListIterator, e)
+		} else {
+			(*out) = ptr.(ListIterator)
+		}
 	}
 	return
 }
@@ -1366,6 +1388,7 @@ func (op *ListLen) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListLen_Detailed_Marshal(n jsonexp.Context, val *ListLen) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1383,9 +1406,9 @@ func ListLen_Detailed_Marshal(n jsonexp.Context, val *ListLen) (ret []byte, err 
 func ListLen_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListLen) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListLen, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListLen_List], &out.List); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListLen, rt.Type_Assignment, e)
 	}
 	return
 }
@@ -1400,7 +1423,7 @@ func ListLen_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **List
 	if len(b) > 0 {
 		var el ListLen
 		if e := ListLen_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListLen, e)
 		} else {
 			*out = &el
 		}
@@ -1437,6 +1460,7 @@ func (op *ListMap) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListMap_Detailed_Marshal(n jsonexp.Context, val *ListMap) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.ToList); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1464,13 +1488,13 @@ func ListMap_Detailed_Marshal(n jsonexp.Context, val *ListMap) (ret []byte, err 
 func ListMap_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListMap) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListMap, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListMap_ToList], &out.ToList); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListMap, value.Type_Text, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListMap_FromList], &out.FromList); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListMap, rt.Type_Assignment, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListMap_UsingPattern], &out.UsingPattern); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListMap, value.Type_Text, e)
 	}
 	return
 }
@@ -1485,7 +1509,7 @@ func ListMap_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **List
 	if len(b) > 0 {
 		var el ListMap
 		if e := ListMap_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListMap, e)
 		} else {
 			*out = &el
 		}
@@ -1522,6 +1546,7 @@ func (op *ListReduce) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListReduce_Detailed_Marshal(n jsonexp.Context, val *ListReduce) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.IntoValue); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1549,13 +1574,13 @@ func ListReduce_Detailed_Marshal(n jsonexp.Context, val *ListReduce) (ret []byte
 func ListReduce_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListReduce) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListReduce, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListReduce_IntoValue], &out.IntoValue); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListReduce, value.Type_Text, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListReduce_FromList], &out.FromList); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListReduce, rt.Type_Assignment, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListReduce_UsingPattern], &out.UsingPattern); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListReduce, value.Type_Text, e)
 	}
 	return
 }
@@ -1570,7 +1595,7 @@ func ListReduce_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **L
 	if len(b) > 0 {
 		var el ListReduce
 		if e := ListReduce_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListReduce, e)
 		} else {
 			*out = &el
 		}
@@ -1603,6 +1628,7 @@ func (op *ListReverse) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListReverse_Detailed_Marshal(n jsonexp.Context, val *ListReverse) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := ListSource_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1620,9 +1646,9 @@ func ListReverse_Detailed_Marshal(n jsonexp.Context, val *ListReverse) (ret []by
 func ListReverse_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListReverse) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListReverse, e)
 	} else if e := ListSource_Detailed_Unmarshal(n, msg.Fields[ListReverse_List], &out.List); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListReverse, Type_ListSource, e)
 	}
 	return
 }
@@ -1637,7 +1663,7 @@ func ListReverse_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el ListReverse
 		if e := ListReverse_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListReverse, e)
 		} else {
 			*out = &el
 		}
@@ -1674,6 +1700,7 @@ func (op *ListSet) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListSet_Detailed_Marshal(n jsonexp.Context, val *ListSet) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1701,13 +1728,13 @@ func ListSet_Detailed_Marshal(n jsonexp.Context, val *ListSet) (ret []byte, err 
 func ListSet_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSet) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSet, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListSet_List], &out.List); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSet, value.Type_Text, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ListSet_Index], &out.Index); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSet, rt.Type_NumberEval, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListSet_From], &out.From); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSet, rt.Type_Assignment, e)
 	}
 	return
 }
@@ -1722,7 +1749,7 @@ func ListSet_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **List
 	if len(b) > 0 {
 		var el ListSet
 		if e := ListSet_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListSet, e)
 		} else {
 			*out = &el
 		}
@@ -1759,6 +1786,7 @@ func (op *ListSlice) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListSlice_Detailed_Marshal(n jsonexp.Context, val *ListSlice) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1786,13 +1814,13 @@ func ListSlice_Detailed_Marshal(n jsonexp.Context, val *ListSlice) (ret []byte, 
 func ListSlice_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSlice) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSlice, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListSlice_List], &out.List); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSlice, rt.Type_Assignment, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ListSlice_Start], &out.Start); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSlice, rt.Type_NumberEval, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ListSlice_End], &out.End); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSlice, rt.Type_NumberEval, e)
 	}
 	return
 }
@@ -1807,7 +1835,7 @@ func ListSlice_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Li
 	if len(b) > 0 {
 		var el ListSlice
 		if e := ListSlice_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListSlice, e)
 		} else {
 			*out = &el
 		}
@@ -1844,6 +1872,7 @@ func (op *ListSortNumbers) UnmarshalDetailed(n jsonexp.Context, b []byte) error 
 
 func ListSortNumbers_Detailed_Marshal(n jsonexp.Context, val *ListSortNumbers) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1871,13 +1900,13 @@ func ListSortNumbers_Detailed_Marshal(n jsonexp.Context, val *ListSortNumbers) (
 func ListSortNumbers_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSortNumbers) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortNumbers, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[ListSortNumbers_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortNumbers, value.Type_VariableName, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListSortNumbers_ByField], &out.ByField); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortNumbers, value.Type_Text, e)
 	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ListSortNumbers_Descending], &out.Descending); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortNumbers, rt.Type_BoolEval, e)
 	}
 	return
 }
@@ -1892,7 +1921,7 @@ func ListSortNumbers_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, ou
 	if len(b) > 0 {
 		var el ListSortNumbers
 		if e := ListSortNumbers_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListSortNumbers, e)
 		} else {
 			*out = &el
 		}
@@ -1931,6 +1960,7 @@ func (op *ListSortText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListSortText_Detailed_Marshal(n jsonexp.Context, val *ListSortText) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1963,15 +1993,15 @@ func ListSortText_Detailed_Marshal(n jsonexp.Context, val *ListSortText) (ret []
 func ListSortText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSortText) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortText, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[ListSortText_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortText, value.Type_VariableName, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListSortText_ByField], &out.ByField); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortText, value.Type_Text, e)
 	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ListSortText_Descending], &out.Descending); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortText, rt.Type_BoolEval, e)
 	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ListSortText_UsingCase], &out.UsingCase); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortText, rt.Type_BoolEval, e)
 	}
 	return
 }
@@ -1986,7 +2016,7 @@ func ListSortText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out *
 	if len(b) > 0 {
 		var el ListSortText
 		if e := ListSortText_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListSortText, e)
 		} else {
 			*out = &el
 		}
@@ -2021,6 +2051,7 @@ func (op *ListSortUsing) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListSortUsing_Detailed_Marshal(n jsonexp.Context, val *ListSortUsing) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2043,11 +2074,11 @@ func ListSortUsing_Detailed_Marshal(n jsonexp.Context, val *ListSortUsing) (ret 
 func ListSortUsing_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSortUsing) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortUsing, e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[ListSortUsing_Var], &out.Var); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortUsing, value.Type_VariableName, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListSortUsing_Using], &out.Using); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSortUsing, value.Type_Text, e)
 	}
 	return
 }
@@ -2062,7 +2093,7 @@ func ListSortUsing_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out 
 	if len(b) > 0 {
 		var el ListSortUsing
 		if e := ListSortUsing_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListSortUsing, e)
 		} else {
 			*out = &el
 		}
@@ -2074,8 +2105,8 @@ const Type_ListSource = "list_source"
 
 func ListSource_Detailed_Marshal(n jsonexp.Context, ptr *ListSource) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -2089,13 +2120,18 @@ func ListSource_Detailed_Marshal(n jsonexp.Context, ptr *ListSource) (ret []byte
 func ListSource_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSource) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(ListSource)
+		err = errutil.New("unmarshaling", Type_ListSource, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_ListSource, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_ListSource, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_ListSource, e)
+		} else {
+			(*out) = ptr.(ListSource)
+		}
 	}
 	return
 }
@@ -2131,6 +2167,7 @@ func (op *ListSplice) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func ListSplice_Detailed_Marshal(n jsonexp.Context, val *ListSplice) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2163,15 +2200,15 @@ func ListSplice_Detailed_Marshal(n jsonexp.Context, val *ListSplice) (ret []byte
 func ListSplice_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSplice) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSplice, e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListSplice_List], &out.List); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSplice, value.Type_Text, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ListSplice_Start], &out.Start); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSplice, rt.Type_NumberEval, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ListSplice_Remove], &out.Remove); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSplice, rt.Type_NumberEval, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListSplice_Insert], &out.Insert); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_ListSplice, rt.Type_Assignment, e)
 	}
 	return
 }
@@ -2186,7 +2223,7 @@ func ListSplice_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **L
 	if len(b) > 0 {
 		var el ListSplice
 		if e := ListSplice_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_ListSplice, e)
 		} else {
 			*out = &el
 		}
@@ -2198,8 +2235,8 @@ const Type_ListTarget = "list_target"
 
 func ListTarget_Detailed_Marshal(n jsonexp.Context, ptr *ListTarget) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -2213,13 +2250,18 @@ func ListTarget_Detailed_Marshal(n jsonexp.Context, ptr *ListTarget) (ret []byte
 func ListTarget_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListTarget) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(ListTarget)
+		err = errutil.New("unmarshaling", Type_ListTarget, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_ListTarget, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_ListTarget, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_ListTarget, e)
+		} else {
+			(*out) = ptr.(ListTarget)
+		}
 	}
 	return
 }
@@ -2253,6 +2295,7 @@ func (op *PutEdge) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func PutEdge_Detailed_Marshal(n jsonexp.Context, val *PutEdge) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2280,13 +2323,13 @@ func PutEdge_Detailed_Marshal(n jsonexp.Context, val *PutEdge) (ret []byte, err 
 func PutEdge_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PutEdge) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_PutEdge, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[PutEdge_From], &out.From); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_PutEdge, rt.Type_Assignment, e)
 	} else if e := ListTarget_Detailed_Unmarshal(n, msg.Fields[PutEdge_Into], &out.Into); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_PutEdge, Type_ListTarget, e)
 	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[PutEdge_AtEdge], &out.AtEdge); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_PutEdge, rt.Type_BoolEval, e)
 	}
 	return
 }
@@ -2301,7 +2344,7 @@ func PutEdge_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PutE
 	if len(b) > 0 {
 		var el PutEdge
 		if e := PutEdge_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_PutEdge, e)
 		} else {
 			*out = &el
 		}
@@ -2338,6 +2381,7 @@ func (op *PutIndex) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func PutIndex_Detailed_Marshal(n jsonexp.Context, val *PutIndex) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2365,13 +2409,13 @@ func PutIndex_Detailed_Marshal(n jsonexp.Context, val *PutIndex) (ret []byte, er
 func PutIndex_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PutIndex) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_PutIndex, e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[PutIndex_From], &out.From); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_PutIndex, rt.Type_Assignment, e)
 	} else if e := ListTarget_Detailed_Unmarshal(n, msg.Fields[PutIndex_Into], &out.Into); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_PutIndex, Type_ListTarget, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[PutIndex_AtIndex], &out.AtIndex); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_PutIndex, rt.Type_NumberEval, e)
 	}
 	return
 }
@@ -2386,7 +2430,7 @@ func PutIndex_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Put
 	if len(b) > 0 {
 		var el PutIndex
 		if e := PutIndex_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_PutIndex, e)
 		} else {
 			*out = &el
 		}
@@ -2422,6 +2466,7 @@ func (op *Range) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 
 func Range_Detailed_Marshal(n jsonexp.Context, val *Range) (ret []byte, err error) {
 	var fields jsonexp.Fields
+	fields = make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.To); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2449,13 +2494,13 @@ func Range_Detailed_Marshal(n jsonexp.Context, val *Range) (ret []byte, err erro
 func Range_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Range) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Range, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[Range_To], &out.To); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Range, rt.Type_NumberEval, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[Range_From], &out.From); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Range, rt.Type_NumberEval, e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[Range_ByStep], &out.ByStep); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Range, rt.Type_NumberEval, e)
 	}
 	return
 }
@@ -2470,7 +2515,7 @@ func Range_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Range)
 	if len(b) > 0 {
 		var el Range
 		if e := Range_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = e
+			err = errutil.New("unmarshaling", Type_Range, e)
 		} else {
 			*out = &el
 		}

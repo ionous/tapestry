@@ -41,7 +41,7 @@ func {{Pascal name}}_Detailed_Override_Marshal(n jsonexp.Context, val *{{Overrid
 func {{Pascal name}}_Detailed_Override_Unmarshal(n jsonexp.Context, b []byte, out *{{OverrideOf name}}) (err error) {
   var msg {{Pascal name}}
   if e:= {{Pascal name}}_Detailed_Unmarshal(n, b, &msg); e!= nil {
-    err = e
+    err = errutil.New("unmarshaling", Type_{{Pascal name}}, e)
   } else {
 {{#unless (IsBool name)}}
     *out= msg.{{Pascal uses}}
@@ -57,7 +57,7 @@ func {{Pascal name}}_Detailed_Override_Repeats_Marshal(n jsonexp.Context, vals *
   msgs= make([]json.RawMessage, len(*vals))
   for i, el:= range *vals {
     if b, e:= {{Pascal name}}_Detailed_Override_Marshal(n, &el); e!= nil {
-      err= e
+      err = errutil.New("marshaling", Type_{{Pascal name}}, "at", i, e)
       break
     } else {
       msgs[i]= b
@@ -72,12 +72,12 @@ func {{Pascal name}}_Detailed_Override_Repeats_Marshal(n jsonexp.Context, vals *
 func {{Pascal name}}_Detailed_Override_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]{{OverrideOf name}}) (err error) {
   var msgs []json.RawMessage
   if e:= json.Unmarshal(b, &msgs); e!= nil  {
-    err= e
+    err = errutil.New("unmarshaling", Type_{{Pascal name}}, e)
   } else {
     vals:= make([]{{OverrideOf name}}, len(msgs))
     for i, msg:= range msgs {
       if e:= {{Pascal name}}_Detailed_Override_Unmarshal(n, msg, &vals[i]); e!= nil {
-        err= e
+        err = errutil.New("unmarshaling", Type_{{Pascal name}}, "at", i, e)
         break
       }
     }
@@ -101,15 +101,15 @@ func {{Pascal name}}_Detailed_Marshal(n jsonexp.Context, val *{{Pascal name}}) (
 }
 
 func {{Pascal name}}_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *{{Pascal name}}) (err error) {
-  var msg jsonexp.Node
+  var msg jsonexp.{{Pascal uses}}
   if e:= json.Unmarshal(b, &msg); e!= nil {
-    err = e
-  } else if e:= json.Unmarshal(msg.Value, &out.{{Pascal uses}}); e != nil {
-    err = e
-  } {{#if (IsPositioned this)~}}
-  else {
-    out.At = reader.Position{ Source:n.Source, Offset: msg.Id }
-  }{{/if}}
+    err =  errutil.New("unmarshaling", Type_{{Pascal name}}, e)
+  } else {
+{{#if (IsPositioned this)~}}
+    out.At = reader.Position{ Source:n.Source(), Offset: msg.Id }
+{{/if}}
+    out.{{Pascal uses}}= msg.Value
+  }
   return
 }
 {{/if}}

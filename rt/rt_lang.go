@@ -4,14 +4,15 @@ package rt
 import (
 	"encoding/json"
 	"git.sr.ht/~ionous/iffy/export/jsonexp"
+	"github.com/ionous/errutil"
 )
 
 const Type_Assignment = "assignment"
 
 func Assignment_Detailed_Marshal(n jsonexp.Context, ptr *Assignment) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -25,13 +26,18 @@ func Assignment_Detailed_Marshal(n jsonexp.Context, ptr *Assignment) (ret []byte
 func Assignment_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Assignment) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(Assignment)
+		err = errutil.New("unmarshaling", Type_Assignment, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_Assignment, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_Assignment, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_Assignment, e)
+		} else {
+			(*out) = ptr.(Assignment)
+		}
 	}
 	return
 }
@@ -40,8 +46,8 @@ const Type_BoolEval = "bool_eval"
 
 func BoolEval_Detailed_Marshal(n jsonexp.Context, ptr *BoolEval) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -55,13 +61,18 @@ func BoolEval_Detailed_Marshal(n jsonexp.Context, ptr *BoolEval) (ret []byte, er
 func BoolEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BoolEval) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(BoolEval)
+		err = errutil.New("unmarshaling", Type_BoolEval, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_BoolEval, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_BoolEval, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_BoolEval, e)
+		} else {
+			(*out) = ptr.(BoolEval)
+		}
 	}
 	return
 }
@@ -71,7 +82,7 @@ func BoolEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]BoolEval) (ret
 	msgs = make([]json.RawMessage, len(*vals))
 	for i, el := range *vals {
 		if b, e := BoolEval_Detailed_Marshal(n, &el); e != nil {
-			err = e
+			err = errutil.New("marshaling", Type_BoolEval, "at", i, e)
 			break
 		} else {
 			msgs[i] = b
@@ -86,12 +97,12 @@ func BoolEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]BoolEval) (ret
 func BoolEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BoolEval) (err error) {
 	var msgs []json.RawMessage
 	if e := json.Unmarshal(b, &msgs); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_BoolEval, e)
 	} else {
 		vals := make([]BoolEval, len(msgs))
 		for i, msg := range msgs {
 			if e := BoolEval_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
-				err = e
+				err = errutil.New("unmarshaling", Type_BoolEval, "at", i, e)
 				break
 			}
 		}
@@ -106,8 +117,8 @@ const Type_Execute = "execute"
 
 func Execute_Detailed_Marshal(n jsonexp.Context, ptr *Execute) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -121,13 +132,18 @@ func Execute_Detailed_Marshal(n jsonexp.Context, ptr *Execute) (ret []byte, err 
 func Execute_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Execute) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(Execute)
+		err = errutil.New("unmarshaling", Type_Execute, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_Execute, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_Execute, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_Execute, e)
+		} else {
+			(*out) = ptr.(Execute)
+		}
 	}
 	return
 }
@@ -137,7 +153,7 @@ func Execute_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Execute) (ret [
 	msgs = make([]json.RawMessage, len(*vals))
 	for i, el := range *vals {
 		if b, e := Execute_Detailed_Marshal(n, &el); e != nil {
-			err = e
+			err = errutil.New("marshaling", Type_Execute, "at", i, e)
 			break
 		} else {
 			msgs[i] = b
@@ -152,12 +168,12 @@ func Execute_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Execute) (ret [
 func Execute_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Execute) (err error) {
 	var msgs []json.RawMessage
 	if e := json.Unmarshal(b, &msgs); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_Execute, e)
 	} else {
 		vals := make([]Execute, len(msgs))
 		for i, msg := range msgs {
 			if e := Execute_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
-				err = e
+				err = errutil.New("unmarshaling", Type_Execute, "at", i, e)
 				break
 			}
 		}
@@ -172,8 +188,8 @@ const Type_NumListEval = "num_list_eval"
 
 func NumListEval_Detailed_Marshal(n jsonexp.Context, ptr *NumListEval) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -187,13 +203,18 @@ func NumListEval_Detailed_Marshal(n jsonexp.Context, ptr *NumListEval) (ret []by
 func NumListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NumListEval) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(NumListEval)
+		err = errutil.New("unmarshaling", Type_NumListEval, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_NumListEval, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_NumListEval, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_NumListEval, e)
+		} else {
+			(*out) = ptr.(NumListEval)
+		}
 	}
 	return
 }
@@ -202,8 +223,8 @@ const Type_NumberEval = "number_eval"
 
 func NumberEval_Detailed_Marshal(n jsonexp.Context, ptr *NumberEval) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -217,13 +238,18 @@ func NumberEval_Detailed_Marshal(n jsonexp.Context, ptr *NumberEval) (ret []byte
 func NumberEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NumberEval) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(NumberEval)
+		err = errutil.New("unmarshaling", Type_NumberEval, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_NumberEval, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_NumberEval, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_NumberEval, e)
+		} else {
+			(*out) = ptr.(NumberEval)
+		}
 	}
 	return
 }
@@ -232,8 +258,8 @@ const Type_RecordEval = "record_eval"
 
 func RecordEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordEval) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -247,13 +273,18 @@ func RecordEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordEval) (ret []byte
 func RecordEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordEval) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(RecordEval)
+		err = errutil.New("unmarshaling", Type_RecordEval, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_RecordEval, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_RecordEval, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_RecordEval, e)
+		} else {
+			(*out) = ptr.(RecordEval)
+		}
 	}
 	return
 }
@@ -262,8 +293,8 @@ const Type_RecordListEval = "record_list_eval"
 
 func RecordListEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordListEval) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -277,13 +308,18 @@ func RecordListEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordListEval) (re
 func RecordListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordListEval) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(RecordListEval)
+		err = errutil.New("unmarshaling", Type_RecordListEval, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_RecordListEval, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_RecordListEval, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_RecordListEval, e)
+		} else {
+			(*out) = ptr.(RecordListEval)
+		}
 	}
 	return
 }
@@ -292,8 +328,8 @@ const Type_TextEval = "text_eval"
 
 func TextEval_Detailed_Marshal(n jsonexp.Context, ptr *TextEval) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -307,13 +343,18 @@ func TextEval_Detailed_Marshal(n jsonexp.Context, ptr *TextEval) (ret []byte, er
 func TextEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TextEval) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(TextEval)
+		err = errutil.New("unmarshaling", Type_TextEval, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_TextEval, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_TextEval, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_TextEval, e)
+		} else {
+			(*out) = ptr.(TextEval)
+		}
 	}
 	return
 }
@@ -323,7 +364,7 @@ func TextEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TextEval) (ret
 	msgs = make([]json.RawMessage, len(*vals))
 	for i, el := range *vals {
 		if b, e := TextEval_Detailed_Marshal(n, &el); e != nil {
-			err = e
+			err = errutil.New("marshaling", Type_TextEval, "at", i, e)
 			break
 		} else {
 			msgs[i] = b
@@ -338,12 +379,12 @@ func TextEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TextEval) (ret
 func TextEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextEval) (err error) {
 	var msgs []json.RawMessage
 	if e := json.Unmarshal(b, &msgs); e != nil {
-		err = e
+		err = errutil.New("unmarshaling", Type_TextEval, e)
 	} else {
 		vals := make([]TextEval, len(msgs))
 		for i, msg := range msgs {
 			if e := TextEval_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
-				err = e
+				err = errutil.New("unmarshaling", Type_TextEval, "at", i, e)
 				break
 			}
 		}
@@ -358,8 +399,8 @@ const Type_TextListEval = "text_list_eval"
 
 func TextListEval_Detailed_Marshal(n jsonexp.Context, ptr *TextListEval) (ret []byte, err error) {
 	var b []byte
-	if slot := *ptr; slot != nil {
-		b, err = slot.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	if slat := *ptr; slat != nil {
+		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Node{
@@ -373,13 +414,18 @@ func TextListEval_Detailed_Marshal(n jsonexp.Context, ptr *TextListEval) (ret []
 func TextListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TextListEval) (err error) {
 	var msg jsonexp.Node
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = e
-	} else if ptr, e := n.NewType(msg.Type); e != nil {
-		err = e
-	} else if e := ptr.UnmarshalDetailed(n, msg.Value); e != nil {
-		err = e
-	} else {
-		(*out) = ptr.(TextListEval)
+		err = errutil.New("unmarshaling", Type_TextListEval, e)
+	} else if contents := msg.Value; len(contents) > 0 {
+		var inner jsonexp.Node // peek to create the appropriate type
+		if e := json.Unmarshal(contents, &inner); e != nil {
+			err = errutil.New("unmarshaling inner", Type_TextListEval, e)
+		} else if ptr, e := n.NewType(inner.Type); e != nil {
+			err = errutil.New("unmarshaling", Type_TextListEval, e)
+		} else if e := ptr.UnmarshalDetailed(n, contents); e != nil {
+			err = errutil.New("unmarshaling", Type_TextListEval, e)
+		} else {
+			(*out) = ptr.(TextListEval)
+		}
 	}
 	return
 }

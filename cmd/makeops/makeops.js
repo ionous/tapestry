@@ -277,9 +277,6 @@ for (currentGroup in groups) {
         inc.add(o);
       }
     }
-    if (marshal && ["swap", "flow"].includes(type.uses)) {
-        inc.add("github.com/ionous/errutil")
-    }
     const params = paramsOf(type);
     for (const p in params) {
       const param = params[p];
@@ -315,6 +312,7 @@ for (currentGroup in groups) {
   if (marshal) {
     inc.add("encoding/json");
     inc.add("git.sr.ht/~ionous/iffy/export/jsonexp");
+    inc.add("github.com/ionous/errutil")
   }
 
   // 2. write the header ( with package name and inc )

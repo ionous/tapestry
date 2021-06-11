@@ -6,7 +6,7 @@ func {{Pascal name}}_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]{{Pasca
   msgs= make([]json.RawMessage, len(*vals))
   for i, el:= range *vals {
     if b, e:= {{Pascal name}}_Detailed_Marshal(n, &el); e!= nil {
-      err= e
+      err =  errutil.New("marshaling", Type_{{Pascal name}}, "at", i, e)
       break
     } else {
       msgs[i]= b
@@ -21,12 +21,12 @@ func {{Pascal name}}_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]{{Pasca
 func {{Pascal name}}_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]{{Pascal name}}) (err error) {
   var msgs []json.RawMessage
   if e:= json.Unmarshal(b, &msgs); e!= nil  {
-    err= e
+    err =  errutil.New("unmarshaling", Type_{{Pascal name}}, e)
   } else {
     vals:= make([]{{Pascal name}}, len(msgs))
     for i, msg:= range msgs {
       if e:= {{Pascal name}}_Detailed_Unmarshal(n, msg, &vals[i]); e!= nil {
-        err= e
+        err =  errutil.New("unmarshaling", Type_{{Pascal name}}, "at", i, e)
         break
       }
     }
