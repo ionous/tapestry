@@ -34,12 +34,6 @@ func (m Map) MapOf(key string) (ret Map) {
 	return ret
 }
 
-// SliceOf the value at the passed key as a slice of interfaces.
-func (m Map) SliceOf(key string) []interface{} {
-	ret, _ := m[key].([]interface{})
-	return ret
-}
-
 // Has true if the value at "key" equals "want".
 func (m Map) Has(key, want string) (okay bool) {
 	if have, ok := m[key]; ok && want == have {
