@@ -19,17 +19,20 @@ func SpecName(c Composer) (ret string) {
 	return
 }
 
-// func SlotName(c Slot) (ret string) {
-// 	if n := c.Name; len(n) > 0 {
-// 		ret = n
-// 	} else {
-// 		el := r.TypeOf(c.Type).Elem()
-// 		ret = lang.Underscore(el.Name())
-// 	}
-// 	return
-// }
-
 func SlotName(c interface{}) string {
 	el := r.TypeOf(c).Elem()
 	return lang.Underscore(el.Name())
+}
+
+// translate a choice, typically a $TOKEN, to a value.
+// note: go-code doesnt currently have a way to find a string's label.
+func FindChoice(op Composer, choice string) (ret string, found bool) {
+	spec := op.Compose()
+	if s, i := spec.IndexOfChoice(choice); i >= 0 {
+		ret = s
+		found = true
+	} else if spec.OpenStrings {
+		ret = choice
+	}
+	return
 }

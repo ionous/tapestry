@@ -27,7 +27,7 @@ func TestPatternVars(t *testing.T) {
 			Name: N("pet"),
 		}},
 	}
-	k, _, db := newImporter(t, testdb.Memory)
+	k, db := newImporter(t, testdb.Memory)
 	defer db.Close()
 
 	if e := patternVariables.ImportPhrase(k); e != nil {
@@ -57,7 +57,7 @@ func TestPatternDecl(t *testing.T) {
 		},
 	}
 
-	k, _, db := newImporter(t, testdb.Memory)
+	k, db := newImporter(t, testdb.Memory)
 	defer db.Close()
 	if e := patternDecl.ImportPhrase(k); e != nil {
 		t.Fatal(e)

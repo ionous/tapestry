@@ -2,8 +2,8 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/ephemera"
-	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -44,7 +44,7 @@ func (op *ObjectType) ImportVariableType(k *Importer) (retType ephemera.Named, r
 }
 
 func (op *PrimitiveType) ImportPrimType(k *Importer) (ret string, err error) {
-	if str, ok := decode.FindChoice(op, op.Str); !ok {
+	if str, ok := composer.FindChoice(op, op.Str); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w %q", InvalidValue, op.Str))
 	} else {
 		ret = str

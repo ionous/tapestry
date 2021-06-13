@@ -4,8 +4,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/ephemera"
-	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -101,7 +101,7 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 		// fix: implicitly generated facts should be considered preliminary
 		// so that authors can override them.
 		var traitStr string
-		detStr, detFound := decode.FindChoice(&op.Determiner, op.Determiner.Str)
+		detStr, detFound := composer.FindChoice(&op.Determiner, op.Determiner.Str)
 		if detStr == "our" {
 			if first, _ := utf8.DecodeRuneInString(noun.String()); unicode.ToUpper(first) == first {
 				traitStr = "proper_named"

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
-	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
@@ -18,7 +17,8 @@ func TestFactorialStory(t *testing.T) {
 	if e := tables.CreateEphemera(db); e != nil {
 		t.Fatal("create tables", e)
 	} else {
-		k := story.NewImporterDecoder(db, decode.NewDecoder()).SetSource(t.Name())
+		k := story.NewImporter(db)
+		k.SetSource(t.Name())
 		//
 		if e := debug.FactorialStory.ImportStory(k); e != nil {
 			t.Fatal(e)

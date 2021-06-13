@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/assembly"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
-	"git.sr.ht/~ionous/iffy/ephemera/decode"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -24,7 +23,8 @@ func TestFullFactorial(t *testing.T) {
 	if e := tables.CreateAll(db); e != nil {
 		t.Fatal("couldn't create tables", e)
 	} else {
-		k := story.NewImporterDecoder(db, decode.NewDecoder()).SetSource(t.Name())
+		k := story.NewImporter(db)
+		k.SetSource(t.Name())
 		//
 		if e := debug.FactorialStory.ImportStory(k); e != nil {
 			t.Fatal("couldn't import story", e)

@@ -9,7 +9,6 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
-	"git.sr.ht/~ionous/iffy/export/jsonexp"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -44,7 +43,11 @@ func (ctx *Ctx) Source() string {
 	return ctx.Name
 }
 
-func (ctx *Ctx) NewType(t string) (ret jsonexp.DetailedMarshaler, err error) {
+func (ctx *Ctx) Finalize(ptr interface{}) (interface{}, error) {
+	return ptr, nil
+}
+
+func (ctx *Ctx) NewType(t string) (ret interface{}, err error) {
 	if s := newType(t, story.Slats); s != nil {
 		ret = s
 	} else if s := newType(t, core.Slats); s != nil {
@@ -55,10 +58,10 @@ func (ctx *Ctx) NewType(t string) (ret jsonexp.DetailedMarshaler, err error) {
 	return
 }
 
-func newType(t string, cs []composer.Composer) (ret jsonexp.DetailedMarshaler) {
+func newType(t string, cs []composer.Composer) (ret interface{}) {
 	for _, c := range cs {
 		if c.Compose().Name == t {
-			ret = r.New(r.TypeOf(c).Elem()).Interface().(jsonexp.DetailedMarshaler)
+			ret = r.New(r.TypeOf(c).Elem()).Interface()
 			break
 		}
 	}

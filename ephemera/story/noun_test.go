@@ -11,7 +11,7 @@ import (
 )
 
 func TestImportNamedNouns(t *testing.T) {
-	k, _, db := newImporter(t, testdb.Memory)
+	k, db := newImporter(t, testdb.Memory)
 	defer db.Close()
 	//
 	nouns := []string{

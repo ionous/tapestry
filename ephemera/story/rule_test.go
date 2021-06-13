@@ -1,11 +1,12 @@
 package story_test
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
-	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/print"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"git.sr.ht/~ionous/iffy/rt/writer"
@@ -16,18 +17,19 @@ import (
 )
 
 func TestPatternActivity(t *testing.T) {
-	_, decoder, db := newImporter(t, testdb.Memory)
+	k, db := newImporter(t, testdb.Memory)
 	defer db.Close()
-	if prog, e := decoder.ReadSpec(_pattern_activity); e != nil {
+	var prog core.Activity
+	if b, e := json.Marshal(_pattern_activity); e != nil {
 		t.Fatal(e)
-	} else if exe, ok := prog.(rt.Execute); !ok {
-		t.Fatalf("cant cast %T to execute", exe)
+	} else if e := prog.UnmarshalDetailed(k, b); e != nil {
+		t.Fatal(e)
 	} else {
 		var run testRuntime
 		out := print.NewLines()
 		run.SetWriter(out)
 		// should this call/test buildRule
-		if e := safe.Run(&run, exe); e != nil {
+		if e := safe.Run(&run, &prog); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out.Lines(), []string{"hello", "hello"}); len(diff) > 0 {
 			t.Fatal(diff)
@@ -35,14 +37,15 @@ func TestPatternActivity(t *testing.T) {
 	}
 }
 
-func TestPatternRule(t *testing.T) {
-	k, decoder, db := newImporter(t, testdb.Memory)
+func TestPatternActions(t *testing.T) {
+	k, db := newImporter(t, testdb.Memory)
 	defer db.Close()
-	if i, e := decoder.ReadSpec(_pattern_actions); e != nil {
+	var prog story.PatternActions
+	if b, e := json.Marshal(_pattern_actions); e != nil {
 		t.Fatal(e)
-	} else if act, ok := i.(*story.PatternActions); !ok {
-		t.Fatalf("cant cast %T to pattern actions", i)
-	} else if e := act.ImportPhrase(k); e != nil {
+	} else if e := prog.UnmarshalDetailed(k, b); e != nil {
+		t.Fatal(e)
+	} else if e := prog.ImportPhrase(k); e != nil {
 		t.Fatal(e)
 	} else {
 		var buf strings.Builder
@@ -86,7 +89,6 @@ var _pattern_actions = map[string]interface{}{
 									"type":  "always",
 									"value": map[string]interface{}{},
 								}},
-
 							"$HOOK": map[string]interface{}{
 								"type": "program_hook",
 								"value": map[string]interface{}{

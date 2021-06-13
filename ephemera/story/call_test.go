@@ -1,11 +1,13 @@
 package story_test
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/kr/pretty"
@@ -15,16 +17,24 @@ import (
 // note: the pattern is undefined.
 func TestDetermineNum(t *testing.T) {
 	expect := core.CallPattern{
-		Pattern: value.PatternName{Str: "factorial"}, Arguments: core.NamedArgs(
-			"num", &core.FromNum{
-				&core.NumValue{3},
-			})}
-	_, decoder, db := newImporter(t, testdb.Memory)
+		Pattern: value.PatternName{Str: "factorial"},
+		Arguments: core.CallArgs{
+			Args: []core.CallArg{{
+				Name: "num",
+				From: &core.FromNum{
+					&core.NumValue{3},
+				}}}}}
+	k, db := newImporter(t, testdb.Memory)
 	defer db.Close()
 	//
-	if rule, e := decoder.ReadSpec(factorialDetermine); e != nil {
+	var rule story.Determine
+	if b, e := json.Marshal(factorialDetermine); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(rule, &expect); len(diff) != 0 {
+	} else if e := rule.UnmarshalDetailed(k, b); e != nil {
+		t.Fatal(e)
+	} else if ptr, e := rule.ImportStub(k); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(ptr, &expect); len(diff) != 0 {
 		t.Fatal(diff)
 	} else {
 		var buf strings.Builder

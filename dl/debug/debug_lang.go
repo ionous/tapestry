@@ -60,11 +60,11 @@ func DebugLog_Detailed_Marshal(n jsonexp.Context, val *DebugLog) (ret []byte, er
 func DebugLog_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *DebugLog) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New("unmarshaling", Type_DebugLog, e)
+		err = errutil.New(Type_DebugLog, "-", e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[DebugLog_Value], &out.Value); e != nil {
-		err = errutil.New("unmarshaling", Type_DebugLog, rt.Type_Assignment, e)
+		err = errutil.New(Type_DebugLog+"."+DebugLog_Value, "-", e)
 	} else if e := LoggingLevel_Detailed_Unmarshal(n, msg.Fields[DebugLog_LogLevel], &out.LogLevel); e != nil {
-		err = errutil.New("unmarshaling", Type_DebugLog, Type_LoggingLevel, e)
+		err = errutil.New(Type_DebugLog+"."+DebugLog_LogLevel, "-", e)
 	}
 	return
 }
@@ -79,7 +79,7 @@ func DebugLog_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Deb
 	if len(b) > 0 {
 		var el DebugLog
 		if e := DebugLog_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New("unmarshaling", Type_DebugLog, e)
+			err = errutil.New(Type_DebugLog, "-", e)
 		} else {
 			*out = &el
 		}
@@ -129,9 +129,9 @@ func DoNothing_Detailed_Marshal(n jsonexp.Context, val *DoNothing) (ret []byte, 
 func DoNothing_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *DoNothing) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New("unmarshaling", Type_DoNothing, e)
+		err = errutil.New(Type_DoNothing, "-", e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[DoNothing_Reason], &out.Reason); e != nil {
-		err = errutil.New("unmarshaling", Type_DoNothing, value.Type_Text, e)
+		err = errutil.New(Type_DoNothing+"."+DoNothing_Reason, "-", e)
 	}
 	return
 }
@@ -146,7 +146,7 @@ func DoNothing_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Do
 	if len(b) > 0 {
 		var el DoNothing
 		if e := DoNothing_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New("unmarshaling", Type_DoNothing, e)
+			err = errutil.New(Type_DoNothing, "-", e)
 		} else {
 			*out = &el
 		}
@@ -200,9 +200,12 @@ func LoggingLevel_Detailed_Marshal(n jsonexp.Context, val *LoggingLevel) ([]byte
 
 func LoggingLevel_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *LoggingLevel) (err error) {
 	var msg jsonexp.Str
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New("unmarshaling", Type_LoggingLevel, e)
-	} else {
+	if len(b) > 0 { // generated code collapses optional and empty.
+		if e := json.Unmarshal(b, &msg); e != nil {
+			err = errutil.New(Type_LoggingLevel, "-", e)
+		}
+	}
+	if err == nil {
 		out.Str = msg.Value
 	}
 	return

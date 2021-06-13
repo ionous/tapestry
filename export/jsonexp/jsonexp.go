@@ -39,9 +39,12 @@ type Slot struct {
 // that means that unmarshal functions have to open each message.
 type Fields map[string]json.RawMessage
 
+// NewType and Finalize are the first and last stages of reading a slot;
+// sandwiched between is the de-serialization of the slat which fills it.
 type Context interface {
-	Source() string                              // filename, etc.
-	NewType(t string) (DetailedMarshaler, error) // new by name
+	Source() string                            // filename, etc.
+	NewType(t string) (interface{}, error)     // new by name
+	Finalize(interface{}) (interface{}, error) // do something with the passed ptr
 }
 
 type DetailedMarshaler interface {

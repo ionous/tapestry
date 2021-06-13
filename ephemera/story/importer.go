@@ -8,8 +8,6 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 
 	"git.sr.ht/~ionous/iffy/ephemera"
-	"git.sr.ht/~ionous/iffy/ephemera/decode"
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/ident"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -20,78 +18,58 @@ type Importer struct {
 	*ephemera.Recorder
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime     map[string]bool
-	decoder     *decode.Decoder
 	autoCounter ident.Counters
 	entireGame  ephemera.Named
 	StoryEnv
+	// jsonExp.importerExporter
+	source string
+	cmds   map[string]r.Type
+	path   programPath
 }
 
 // low level
-func NewImporterDecoder(db *sql.DB, dec *decode.Decoder) *Importer {
-	return &Importer{
+func NewImporter(db *sql.DB) *Importer {
+	iffy.RegisterGobs()
+	k := &Importer{
 		Recorder:    ephemera.NewRecorder(db),
 		oneTime:     make(map[string]bool),
-		decoder:     dec,
 		autoCounter: make(ident.Counters),
 	}
-}
-
-func NewImporter(db *sql.DB, reporter decode.IssueReport) *Importer {
-	iffy.RegisterGobs()
-	dec := decode.NewDecoderReporter(reporter)
-	k := NewImporterDecoder(db, dec)
 	for _, slats := range iffy.AllSlats {
-		dec.AddDefaultCallbacks(slats)
+		k.RegisterTypes(slats)
 	}
-	k.AddModel(Slats) // add story slats
+	k.RegisterTypes(Slats) // add story slats
 	return k
 }
 
-func (k *Importer) ImportStory(src string, m reader.Map) (ret *Story, err error) {
-	k.SetSource(src)
-	if i, e := k.decoder.ReadSpec(m); e != nil {
+func (i *Importer) RegisterTypes(cmds []composer.Composer) {
+	if i.cmds == nil {
+		i.cmds = make(map[string]r.Type)
+	}
+	for _, cmd := range cmds {
+		if spec := cmd.Compose(); len(spec.Name) == 0 {
+			panic(errutil.Sprintf("Missing type name %T", cmd))
+		} else if was, exists := i.cmds[spec.Name]; exists {
+			panic(errutil.Sprintf("Duplicate type name %q now: %T, was: %s", spec.Name, cmd, was.String()))
+		} else {
+			i.cmds[spec.Name] = r.TypeOf(cmd).Elem()
+		}
+	}
+}
+
+func (k *Importer) ImportStory(src string, b []byte) (ret *Story, err error) {
+	k.source = src
+	k.Recorder.SetSource(src)
+	//
+	story := new(Story)
+	if e := story.UnmarshalDetailed(k, b); e != nil {
 		err = e
-	} else if story, ok := i.(*Story); !ok {
-		err = errutil.Fmt("imported spec wasn't a story %T", i)
 	} else if e := story.ImportStory(k); e != nil {
 		err = e
 	} else {
 		ret = story
 	}
 	return
-}
-
-func (k *Importer) SetSource(s string) *Importer {
-	k.Recorder.SetSource(s)
-	k.decoder.SetSource(s)
-	return k
-}
-
-// Add all the story modeling statements
-// convert any that implement "ImportStub"
-func (k *Importer) AddModel(model []composer.Composer) {
-	type stubImporter interface {
-		ImportStub(k *Importer) (ret interface{}, err error)
-	}
-	dec := k.decoder
-	for _, cmd := range model {
-		if _, ok := cmd.(stubImporter); !ok {
-			dec.AddCallback(cmd, nil)
-		} else {
-			// need to pin the loop variable for the callback
-			// so pin the type. why not.
-			rtype := r.TypeOf(cmd).Elem()
-			dec.AddCallback(cmd, func(m reader.Map) (ret interface{}, err error) {
-				// create an instance of the stub
-				op, at := r.New(rtype), reader.At(m)
-				// read it in
-				dec.ReadFields(at, op.Elem(), m.MapOf(reader.ItemValue))
-				// convert it
-				stub := op.Interface().(stubImporter)
-				return stub.ImportStub(k)
-			})
-		}
-	}
 }
 
 //

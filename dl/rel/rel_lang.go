@@ -60,11 +60,11 @@ func ReciprocalOf_Detailed_Marshal(n jsonexp.Context, val *ReciprocalOf) (ret []
 func ReciprocalOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ReciprocalOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New("unmarshaling", Type_ReciprocalOf, e)
+		err = errutil.New(Type_ReciprocalOf, "-", e)
 	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[ReciprocalOf_Via], &out.Via); e != nil {
-		err = errutil.New("unmarshaling", Type_ReciprocalOf, value.Type_RelationName, e)
+		err = errutil.New(Type_ReciprocalOf+"."+ReciprocalOf_Via, "-", e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ReciprocalOf_Object], &out.Object); e != nil {
-		err = errutil.New("unmarshaling", Type_ReciprocalOf, rt.Type_TextEval, e)
+		err = errutil.New(Type_ReciprocalOf+"."+ReciprocalOf_Object, "-", e)
 	}
 	return
 }
@@ -79,7 +79,7 @@ func ReciprocalOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out *
 	if len(b) > 0 {
 		var el ReciprocalOf
 		if e := ReciprocalOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New("unmarshaling", Type_ReciprocalOf, e)
+			err = errutil.New(Type_ReciprocalOf, "-", e)
 		} else {
 			*out = &el
 		}
@@ -137,11 +137,11 @@ func ReciprocalsOf_Detailed_Marshal(n jsonexp.Context, val *ReciprocalsOf) (ret 
 func ReciprocalsOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ReciprocalsOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New("unmarshaling", Type_ReciprocalsOf, e)
+		err = errutil.New(Type_ReciprocalsOf, "-", e)
 	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[ReciprocalsOf_Via], &out.Via); e != nil {
-		err = errutil.New("unmarshaling", Type_ReciprocalsOf, value.Type_RelationName, e)
+		err = errutil.New(Type_ReciprocalsOf+"."+ReciprocalsOf_Via, "-", e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ReciprocalsOf_Object], &out.Object); e != nil {
-		err = errutil.New("unmarshaling", Type_ReciprocalsOf, rt.Type_TextEval, e)
+		err = errutil.New(Type_ReciprocalsOf+"."+ReciprocalsOf_Object, "-", e)
 	}
 	return
 }
@@ -156,7 +156,7 @@ func ReciprocalsOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out 
 	if len(b) > 0 {
 		var el ReciprocalsOf
 		if e := ReciprocalsOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New("unmarshaling", Type_ReciprocalsOf, e)
+			err = errutil.New(Type_ReciprocalsOf, "-", e)
 		} else {
 			*out = &el
 		}
@@ -220,13 +220,13 @@ func Relate_Detailed_Marshal(n jsonexp.Context, val *Relate) (ret []byte, err er
 func Relate_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Relate) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New("unmarshaling", Type_Relate, e)
+		err = errutil.New(Type_Relate, "-", e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Relate_Object], &out.Object); e != nil {
-		err = errutil.New("unmarshaling", Type_Relate, rt.Type_TextEval, e)
+		err = errutil.New(Type_Relate+"."+Relate_Object, "-", e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Relate_ToObject], &out.ToObject); e != nil {
-		err = errutil.New("unmarshaling", Type_Relate, rt.Type_TextEval, e)
+		err = errutil.New(Type_Relate+"."+Relate_ToObject, "-", e)
 	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[Relate_Via], &out.Via); e != nil {
-		err = errutil.New("unmarshaling", Type_Relate, value.Type_RelationName, e)
+		err = errutil.New(Type_Relate+"."+Relate_Via, "-", e)
 	}
 	return
 }
@@ -241,7 +241,7 @@ func Relate_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Relat
 	if len(b) > 0 {
 		var el Relate
 		if e := Relate_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New("unmarshaling", Type_Relate, e)
+			err = errutil.New(Type_Relate, "-", e)
 		} else {
 			*out = &el
 		}
@@ -299,11 +299,11 @@ func RelativeOf_Detailed_Marshal(n jsonexp.Context, val *RelativeOf) (ret []byte
 func RelativeOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RelativeOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New("unmarshaling", Type_RelativeOf, e)
+		err = errutil.New(Type_RelativeOf, "-", e)
 	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[RelativeOf_Via], &out.Via); e != nil {
-		err = errutil.New("unmarshaling", Type_RelativeOf, value.Type_RelationName, e)
+		err = errutil.New(Type_RelativeOf+"."+RelativeOf_Via, "-", e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RelativeOf_Object], &out.Object); e != nil {
-		err = errutil.New("unmarshaling", Type_RelativeOf, rt.Type_TextEval, e)
+		err = errutil.New(Type_RelativeOf+"."+RelativeOf_Object, "-", e)
 	}
 	return
 }
@@ -318,7 +318,7 @@ func RelativeOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **R
 	if len(b) > 0 {
 		var el RelativeOf
 		if e := RelativeOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New("unmarshaling", Type_RelativeOf, e)
+			err = errutil.New(Type_RelativeOf, "-", e)
 		} else {
 			*out = &el
 		}
@@ -376,11 +376,11 @@ func RelativesOf_Detailed_Marshal(n jsonexp.Context, val *RelativesOf) (ret []by
 func RelativesOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RelativesOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New("unmarshaling", Type_RelativesOf, e)
+		err = errutil.New(Type_RelativesOf, "-", e)
 	} else if e := value.RelationName_Detailed_Unmarshal(n, msg.Fields[RelativesOf_Via], &out.Via); e != nil {
-		err = errutil.New("unmarshaling", Type_RelativesOf, value.Type_RelationName, e)
+		err = errutil.New(Type_RelativesOf+"."+RelativesOf_Via, "-", e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RelativesOf_Object], &out.Object); e != nil {
-		err = errutil.New("unmarshaling", Type_RelativesOf, rt.Type_TextEval, e)
+		err = errutil.New(Type_RelativesOf+"."+RelativesOf_Object, "-", e)
 	}
 	return
 }
@@ -395,7 +395,7 @@ func RelativesOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **
 	if len(b) > 0 {
 		var el RelativesOf
 		if e := RelativesOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New("unmarshaling", Type_RelativesOf, e)
+			err = errutil.New(Type_RelativesOf, "-", e)
 		} else {
 			*out = &el
 		}

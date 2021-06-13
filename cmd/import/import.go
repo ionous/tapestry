@@ -4,15 +4,15 @@ package main
 import (
 	"database/sql"
 	"flag"
+	"io"
 	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime/pprof"
+	"strings"
 
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
-	"git.sr.ht/~ionous/iffy/export"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -73,27 +73,81 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 		if db, e := sql.Open(tables.DefaultDriver, outFile); e != nil {
 			err = errutil.New("couldn't create output file", outFile, e)
 		} else {
-			var ds reader.Dilemmas
 			defer db.Close()
 			if e := tables.CreateEphemera(db); e != nil {
 				err = errutil.New("couldn't create tables", outFile, e)
 			} else {
-				if fps, e := export.ReadPaths(inFile); e != nil {
+				fs := make(Files)
+				if e := fs.ReadPaths(inFile); e != nil {
 					err = errutil.New("couldn't import  file", inFile, e)
 				} else {
-					k := story.NewImporter(db, ds.Report)
-					for _, fp := range fps {
-						log.Println("importing", fp.Path)
-						if v, e := k.ImportStory(fp.Path, fp.Data); e != nil {
+					k := story.NewImporter(db)
+					for path, data := range fs {
+						log.Println("importing", path)
+						if v, e := k.ImportStory(path, data); e != nil {
 							err = errutil.Append(err, e)
 						} else {
 							ret = append(ret, v)
 						}
 					}
-					reader.PrintDilemmas(log.Writer(), ds)
 				}
 			}
 		}
+	}
+	return
+}
+
+type Files map[string][]byte
+
+// read a comma-separated list of files and directories
+func (fs *Files) ReadPaths(filePaths string) (err error) {
+	split := strings.Split(filePaths, ",")
+	for _, filePath := range split {
+		if info, e := os.Stat(filePath); e != nil {
+			err = errutil.Append(err, e)
+		} else {
+			if info.IsDir() {
+				if e := fs.readMany(filePath); e != nil {
+					err = errutil.Append(err, e)
+				}
+			} else {
+				if b, e := readOne(filePath); e != nil {
+					err = errutil.Append(err, e)
+				} else {
+					(*fs)[filePath] = b
+				}
+			}
+		}
+	}
+	return
+}
+
+func (fs *Files) readMany(path string) (err error) {
+	if !strings.HasSuffix(path, "/") {
+		path += "/" // for opening symbolic directories
+	}
+	err = filepath.Walk(path, func(path string, info os.FileInfo, e error) (err error) {
+		if e != nil {
+			err = e
+		} else if !info.IsDir() && filepath.Ext(path) == ".if" {
+			if b, e := readOne(path); e != nil {
+				err = errutil.New("error reading", path, e)
+			} else {
+				(*fs)[path] = b
+			}
+		}
+		return
+	})
+	return
+}
+
+func readOne(filePath string) (ret []byte, err error) {
+	log.Println("reading", filePath)
+	if fp, e := os.Open(filePath); e != nil {
+		err = e
+	} else {
+		ret, err = io.ReadAll(fp)
+		fp.Close()
 	}
 	return
 }

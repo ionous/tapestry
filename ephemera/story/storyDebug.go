@@ -6,7 +6,7 @@ import (
 )
 
 func (op *Comment) ImportStub(k *Importer) (ret interface{}, err error) {
-	if !inProg(k) {
+	if !k.InProgram() {
 		ret = op
 	} else {
 		ret = &debug.DebugLog{
@@ -22,12 +22,6 @@ func (op *Comment) ImportStub(k *Importer) (ret interface{}, err error) {
 }
 
 // a hopefully temporary hack
-func inProg(k *Importer) (ret bool) {
-	for _, k := range k.decoder.Path {
-		if k == "core.Activity" {
-			ret = true
-			break
-		}
-	}
-	return
+func (k *Importer) InProgram() (ret bool) {
+	return k.path.inProg()
 }
