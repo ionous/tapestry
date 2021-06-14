@@ -447,26 +447,12 @@ func GrammarMaker_Detailed_Marshal(n jsonexp.Context, ptr *GrammarMaker) (ret []
 }
 
 func GrammarMaker_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *GrammarMaker) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_GrammarMaker, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_GrammarMaker, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_GrammarMaker, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_GrammarMaker, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_GrammarMaker, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(GrammarMaker); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_GrammarMaker)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(GrammarMaker); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_GrammarMaker)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -689,26 +675,12 @@ func ScannerMaker_Detailed_Marshal(n jsonexp.Context, ptr *ScannerMaker) (ret []
 }
 
 func ScannerMaker_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ScannerMaker) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ScannerMaker, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_ScannerMaker, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_ScannerMaker, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_ScannerMaker, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_ScannerMaker, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(ScannerMaker); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_ScannerMaker)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(ScannerMaker); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_ScannerMaker)
+	} else {
+		(*out) = store
 	}
 	return
 }

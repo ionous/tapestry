@@ -47,7 +47,7 @@ func (ctx *Ctx) Finalize(ptr interface{}) (interface{}, error) {
 	return ptr, nil
 }
 
-func (ctx *Ctx) NewType(t string) (ret interface{}, err error) {
+func (ctx *Ctx) NewType(s, t string) (ret interface{}, err error) {
 	if s := newType(t, story.Slats); s != nil {
 		ret = s
 	} else if s := newType(t, core.Slats); s != nil {

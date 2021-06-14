@@ -1345,26 +1345,12 @@ func ListIterator_Detailed_Marshal(n jsonexp.Context, ptr *ListIterator) (ret []
 }
 
 func ListIterator_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListIterator) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ListIterator, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_ListIterator, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_ListIterator, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_ListIterator, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_ListIterator, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(ListIterator); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_ListIterator)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(ListIterator); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_ListIterator)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -2124,26 +2110,12 @@ func ListSource_Detailed_Marshal(n jsonexp.Context, ptr *ListSource) (ret []byte
 }
 
 func ListSource_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSource) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ListSource, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_ListSource, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_ListSource, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_ListSource, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_ListSource, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(ListSource); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_ListSource)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(ListSource); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_ListSource)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -2260,26 +2232,12 @@ func ListTarget_Detailed_Marshal(n jsonexp.Context, ptr *ListTarget) (ret []byte
 }
 
 func ListTarget_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListTarget) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ListTarget, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_ListTarget, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_ListTarget, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_ListTarget, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_ListTarget, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(ListTarget); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_ListTarget)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(ListTarget); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_ListTarget)
+	} else {
+		(*out) = store
 	}
 	return
 }

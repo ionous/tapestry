@@ -24,26 +24,12 @@ func Assignment_Detailed_Marshal(n jsonexp.Context, ptr *Assignment) (ret []byte
 }
 
 func Assignment_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Assignment) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Assignment, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_Assignment, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_Assignment, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_Assignment, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_Assignment, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(Assignment); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_Assignment)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Assignment); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Assignment)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -65,26 +51,12 @@ func BoolEval_Detailed_Marshal(n jsonexp.Context, ptr *BoolEval) (ret []byte, er
 }
 
 func BoolEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BoolEval) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_BoolEval, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_BoolEval, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_BoolEval, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_BoolEval, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_BoolEval, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(BoolEval); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_BoolEval)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(BoolEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_BoolEval)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -145,26 +117,12 @@ func Execute_Detailed_Marshal(n jsonexp.Context, ptr *Execute) (ret []byte, err 
 }
 
 func Execute_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Execute) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Execute, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_Execute, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_Execute, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_Execute, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_Execute, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(Execute); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_Execute)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Execute); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Execute)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -225,26 +183,12 @@ func NumListEval_Detailed_Marshal(n jsonexp.Context, ptr *NumListEval) (ret []by
 }
 
 func NumListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NumListEval) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_NumListEval, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_NumListEval, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_NumListEval, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_NumListEval, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_NumListEval, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(NumListEval); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_NumListEval)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(NumListEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_NumListEval)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -266,26 +210,12 @@ func NumberEval_Detailed_Marshal(n jsonexp.Context, ptr *NumberEval) (ret []byte
 }
 
 func NumberEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NumberEval) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_NumberEval, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_NumberEval, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_NumberEval, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_NumberEval, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_NumberEval, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(NumberEval); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_NumberEval)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(NumberEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_NumberEval)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -307,26 +237,12 @@ func RecordEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordEval) (ret []byte
 }
 
 func RecordEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordEval) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_RecordEval, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_RecordEval, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_RecordEval, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_RecordEval, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_RecordEval, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(RecordEval); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_RecordEval)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(RecordEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_RecordEval)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -348,26 +264,12 @@ func RecordListEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordListEval) (re
 }
 
 func RecordListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordListEval) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_RecordListEval, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_RecordListEval, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_RecordListEval, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_RecordListEval, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_RecordListEval, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(RecordListEval); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_RecordListEval)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(RecordListEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_RecordListEval)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -389,26 +291,12 @@ func TextEval_Detailed_Marshal(n jsonexp.Context, ptr *TextEval) (ret []byte, er
 }
 
 func TextEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TextEval) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_TextEval, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_TextEval, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_TextEval, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_TextEval, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_TextEval, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(TextEval); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_TextEval)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(TextEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_TextEval)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -469,26 +357,12 @@ func TextListEval_Detailed_Marshal(n jsonexp.Context, ptr *TextListEval) (ret []
 }
 
 func TextListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TextListEval) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_TextListEval, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_TextListEval, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_TextListEval, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_TextListEval, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_TextListEval, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(TextListEval); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_TextListEval)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(TextListEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_TextListEval)
+	} else {
+		(*out) = store
 	}
 	return
 }

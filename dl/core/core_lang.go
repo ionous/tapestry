@@ -678,26 +678,12 @@ func Brancher_Detailed_Marshal(n jsonexp.Context, ptr *Brancher) (ret []byte, er
 }
 
 func Brancher_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Brancher) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Brancher, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_Brancher, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_Brancher, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_Brancher, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_Brancher, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(Brancher); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_Brancher)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Brancher); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Brancher)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -2315,26 +2301,12 @@ func Comparator_Detailed_Marshal(n jsonexp.Context, ptr *Comparator) (ret []byte
 }
 
 func Comparator_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Comparator) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Comparator, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_Comparator, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_Comparator, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_Comparator, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_Comparator, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(Comparator); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_Comparator)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Comparator); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Comparator)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -3203,26 +3175,12 @@ func FromSourceFields_Detailed_Marshal(n jsonexp.Context, ptr *FromSourceFields)
 }
 
 func FromSourceFields_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromSourceFields) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromSourceFields, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_FromSourceFields, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_FromSourceFields, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_FromSourceFields, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_FromSourceFields, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(FromSourceFields); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_FromSourceFields)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(FromSourceFields); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_FromSourceFields)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -4006,26 +3964,12 @@ func IntoTargetFields_Detailed_Marshal(n jsonexp.Context, ptr *IntoTargetFields)
 }
 
 func IntoTargetFields_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoTargetFields) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_IntoTargetFields, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_IntoTargetFields, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_IntoTargetFields, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_IntoTargetFields, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_IntoTargetFields, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(IntoTargetFields); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_IntoTargetFields)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(IntoTargetFields); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_IntoTargetFields)
+	} else {
+		(*out) = store
 	}
 	return
 }
@@ -6888,26 +6832,12 @@ func Trigger_Detailed_Marshal(n jsonexp.Context, ptr *Trigger) (ret []byte, err 
 }
 
 func Trigger_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Trigger) (err error) {
-	var msg jsonexp.Node
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Trigger, "-", e)
-	} else if contents := msg.Value; len(contents) > 0 {
-		var inner jsonexp.Node // peek to create the appropriate type
-		if e := json.Unmarshal(contents, &inner); e != nil {
-			err = errutil.New("value of", Type_Trigger, "-", e)
-		} else if ptr, e := n.NewType(inner.Type); e != nil {
-			err = errutil.New(Type_Trigger, "-", e)
-		} else if imp, ok := ptr.(jsonexp.DetailedMarshaler); !ok {
-			err = errutil.New("casting slot", Type_Trigger, "-", e)
-		} else if e := imp.UnmarshalDetailed(n, contents); e != nil {
-			err = errutil.New("contents of", Type_Trigger, "-", e)
-		} else if fini, e := n.Finalize(ptr); e != nil {
-			err = e
-		} else if store, ok := fini.(Trigger); !ok {
-			err = errutil.Fmt("couldnt store %T into %s", fini, Type_Trigger)
-		} else {
-			(*out) = store
-		}
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Trigger); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Trigger)
+	} else {
+		(*out) = store
 	}
 	return
 }

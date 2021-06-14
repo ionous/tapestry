@@ -43,8 +43,8 @@ type Fields map[string]json.RawMessage
 // sandwiched between is the de-serialization of the slat which fills it.
 type Context interface {
 	Source() string                            // filename, etc.
-	NewType(t string) (interface{}, error)     // new by name
-	Finalize(interface{}) (interface{}, error) // do something with the passed ptr
+	NewType(s, t string) (interface{}, error)  // new by name: slot and slat.
+	Finalize(interface{}) (interface{}, error) // do something with the passed ptr.
 }
 
 type DetailedMarshaler interface {
