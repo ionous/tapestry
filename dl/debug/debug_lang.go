@@ -36,8 +36,7 @@ func (op *DebugLog) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func DebugLog_Detailed_Marshal(n jsonexp.Context, val *DebugLog) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.Value); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -110,8 +109,7 @@ func (op *DoNothing) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func DoNothing_Detailed_Marshal(n jsonexp.Context, val *DoNothing) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Reason); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {

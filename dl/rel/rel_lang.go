@@ -36,8 +36,7 @@ func (op *ReciprocalOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ReciprocalOf_Detailed_Marshal(n jsonexp.Context, val *ReciprocalOf) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.RelationName_Detailed_Marshal(n, &val.Via); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -113,8 +112,7 @@ func (op *ReciprocalsOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ReciprocalsOf_Detailed_Marshal(n jsonexp.Context, val *ReciprocalsOf) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.RelationName_Detailed_Marshal(n, &val.Via); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -191,8 +189,7 @@ func (op *Relate) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Relate_Detailed_Marshal(n jsonexp.Context, val *Relate) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -275,8 +272,7 @@ func (op *RelativeOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RelativeOf_Detailed_Marshal(n jsonexp.Context, val *RelativeOf) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.RelationName_Detailed_Marshal(n, &val.Via); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -352,8 +348,7 @@ func (op *RelativesOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RelativesOf_Detailed_Marshal(n jsonexp.Context, val *RelativesOf) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.RelationName_Detailed_Marshal(n, &val.Via); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {

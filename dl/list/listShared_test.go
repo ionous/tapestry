@@ -1,7 +1,6 @@
 package list_test
 
 import (
-	"strconv"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/rt"
@@ -44,15 +43,6 @@ func (op *Write) Execute(run rt.Runtime) (err error) {
 		err = e
 	} else {
 		(*op.out) = append((*op.out), t.String())
-	}
-	return
-}
-
-func getNum(run rt.Runtime, op rt.NumberEval) (ret string) {
-	if v, e := op.GetNumber(run); e != nil {
-		ret = e.Error()
-	} else {
-		ret = strconv.FormatFloat(v.Float(), 'g', -1, 64)
 	}
 	return
 }

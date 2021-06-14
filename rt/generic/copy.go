@@ -82,7 +82,7 @@ func copyRecords(src []*Record) []*Record {
 // panics on error because it assumes all records are copyable.
 func copyRecord(v *Record) (ret *Record) {
 	cnt := v.kind.NumField()
-	values := make([]Value, cnt, cnt)
+	values := make([]Value, cnt)
 	for i := 0; i < cnt; i++ {
 		if el, e := v.GetIndexedField(i); e != nil {
 			panic(e)

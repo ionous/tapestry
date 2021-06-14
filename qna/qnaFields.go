@@ -33,7 +33,6 @@ type Fields struct {
 	relativeKinds,
 	relativesOf,
 	rulesFor,
-	startOf,
 	traitsFor,
 	typeOf,
 	updatePairs,

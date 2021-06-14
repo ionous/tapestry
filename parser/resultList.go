@@ -24,7 +24,6 @@ func (rs *ResultList) addResult(r Result) {
 		rs.list = append(rs.list, r)
 		rs.count += r.WordsMatched()
 	}
-	return
 }
 
 // WordsMatched returns the number of words matched.

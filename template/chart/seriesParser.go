@@ -75,15 +75,3 @@ func (p *SeriesParser) operator(r rune) (ret State) {
 		return
 	}))
 }
-
-// looks for the end of sub-expressions before handling the next state.
-func (p *SeriesParser) closing(r rune, next State) (ret State) {
-	switch {
-	case isCloseParen(r):
-		p.out.EndSubExpression()
-		ret = MakeChain(spaces, next)
-	default:
-		ret = next.NewRune(r)
-	}
-	return
-}

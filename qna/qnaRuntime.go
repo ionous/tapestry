@@ -124,12 +124,11 @@ func (run *Runner) RelateTo(a, b, relation string) (err error) {
 		err = errutil.Fmt("relation %s expects %s doesnt support %s ( a kind of %s )", relation, rel.kind, a, ak.String())
 	} else if !compatibleKind(bk.String(), rel.otherKind) {
 		err = errutil.Fmt("relation %s expects %s doesnt support %s ( a kind of %s )", relation, rel.otherKind, b, bk.String())
-	} else if res, e := run.fields.relateTo.Exec(a, b, relation, rel.cardinality); e != nil {
+	} else if _, e := run.fields.relateTo.Exec(a, b, relation, rel.cardinality); e != nil {
 		err = e
-	} else {
-		res = res
-		// log.Println(tables.RowsAffected(res), "rows affected relating", a, "to", b, "via", relation)
-	}
+	} /* else {
+		log.Println(tables.RowsAffected(res), "rows affected relating", a, "to", b, "via", relation)
+	} */
 	return
 }
 

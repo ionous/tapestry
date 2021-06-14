@@ -5,28 +5,28 @@ import (
 )
 
 func TestQuotes(t *testing.T) {
-	if e, x := testQ(t, "'singles'", "singles"); e != nil {
-		t.Fatal(e, x)
+	if x, e := testQ(t, "'singles'", "singles"); e != nil {
+		t.Fatal(x, e)
 	}
-	if e, x := testQ(t, `"doubles"`, "doubles"); e != nil {
-		t.Fatal(e, x)
+	if x, e := testQ(t, `"doubles"`, "doubles"); e != nil {
+		t.Fatal(x, e)
 	}
-	if e, x := testQ(t, "'escape\"'", "escape\""); e != nil {
-		t.Fatal(e, x)
+	if x, e := testQ(t, "'escape\"'", "escape\""); e != nil {
+		t.Fatal(x, e)
 	}
-	if e, x := testQ(t, `"\\"`, "\\"); e != nil {
-		t.Fatal(e, x)
+	if x, e := testQ(t, `"\\"`, "\\"); e != nil {
+		t.Fatal(x, e)
 	}
-	if e, x := testQ(t, string([]rune{'"', '\\', 'a', '"'}), "\a"); e != nil {
-		t.Fatal(e, x)
+	if x, e := testQ(t, string([]rune{'"', '\\', 'a', '"'}), "\a"); e != nil {
+		t.Fatal(x, e)
 	}
-	if e, _ := testQ(t, string([]rune{'"', '\\', 'g', '"'}),
+	if _, e := testQ(t, string([]rune{'"', '\\', 'g', '"'}),
 		ignoreResult); e == nil {
 		t.Fatal(e)
 	}
 }
 
-func testQ(t *testing.T, str, want string) (err error, ret interface{}) {
+func testQ(t *testing.T, str, want string) (ret interface{}, err error) {
 	t.Log("test:", str)
 	var p QuoteParser
 	if e := Parse(&p, str); e != nil {
@@ -40,5 +40,5 @@ func testQ(t *testing.T, str, want string) (err error, ret interface{}) {
 			t.Log("ok", got)
 		}
 	}
-	return err, str
+	return str, err
 }

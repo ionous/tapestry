@@ -34,10 +34,10 @@ func {{Pascal name}}_Detailed_Marshal(n jsonexp.Context, val *{{Pascal name}}) (
   if pick, ok := val.GetChoice(); !ok {
     err = errutil.Fmt("unknown choice %T in %s", val.Opt, Type_{{Pascal name}})
   } else if slat := val.Opt; len(pick) > 0 {
-    if b, e := slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n); e!= nil {
+    if b, e := slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n); e != nil {
       err =  errutil.New(Type_{{Pascal name}}, "-", e)
     } else {
-      ret, err= json.Marshal(
+      ret, err = json.Marshal(
       jsonexp.Flow{
 {{~#if (IsPositioned this)}}
         Id: val.At.Offset,{{/if}}
@@ -71,7 +71,7 @@ func {{Pascal name}}_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *{{Pasc
       break
     }
     if ptr == nil {
-      err= errutil.New("missing choice", n.Source(), msg.Id)
+      err = errutil.New("missing choice", n.Source(), msg.Id)
     } else if err == nil {
       if e := ptr.UnmarshalDetailed(n, raw); e != nil {
         err =  errutil.New("contents of", Type_{{Pascal name}}, "-", e)

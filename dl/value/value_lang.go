@@ -163,13 +163,15 @@ func Number_Detailed_Override_Unmarshal(n jsonexp.Context, b []byte, out *float6
 }
 func Number_Detailed_Override_Repeats_Marshal(n jsonexp.Context, vals *[]float64) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := Number_Detailed_Override_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_Number, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 {
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := Number_Detailed_Override_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_Number, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -183,11 +185,14 @@ func Number_Detailed_Override_Repeats_Unmarshal(n jsonexp.Context, b []byte, out
 	if e := json.Unmarshal(b, &msgs); e != nil {
 		err = errutil.New(Type_Number, "-", e)
 	} else {
-		vals := make([]float64, len(msgs))
-		for i, msg := range msgs {
-			if e := Number_Detailed_Override_Unmarshal(n, msg, &vals[i]); e != nil {
-				err = errutil.New(Type_Number, "at", i, "-", e)
-				break
+		var vals []float64
+		if cnt := len(msgs); cnt > 0 {
+			vals = make([]float64, cnt)
+			for i, msg := range msgs {
+				if e := Number_Detailed_Override_Unmarshal(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Type_Number, "at", i, "-", e)
+					break
+				}
 			}
 		}
 		if err == nil {
@@ -218,13 +223,15 @@ func Number_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Number) (err er
 
 func Number_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Number) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := Number_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_Number, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := Number_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_Number, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -392,13 +399,15 @@ func Text_Detailed_Override_Unmarshal(n jsonexp.Context, b []byte, out *string) 
 }
 func Text_Detailed_Override_Repeats_Marshal(n jsonexp.Context, vals *[]string) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := Text_Detailed_Override_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_Text, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 {
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := Text_Detailed_Override_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_Text, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -412,11 +421,14 @@ func Text_Detailed_Override_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *
 	if e := json.Unmarshal(b, &msgs); e != nil {
 		err = errutil.New(Type_Text, "-", e)
 	} else {
-		vals := make([]string, len(msgs))
-		for i, msg := range msgs {
-			if e := Text_Detailed_Override_Unmarshal(n, msg, &vals[i]); e != nil {
-				err = errutil.New(Type_Text, "at", i, "-", e)
-				break
+		var vals []string
+		if cnt := len(msgs); cnt > 0 {
+			vals = make([]string, cnt)
+			for i, msg := range msgs {
+				if e := Text_Detailed_Override_Unmarshal(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Type_Text, "at", i, "-", e)
+					break
+				}
 			}
 		}
 		if err == nil {
@@ -447,13 +459,15 @@ func Text_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Text) (err error)
 
 func Text_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Text) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := Text_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_Text, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := Text_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_Text, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {

@@ -63,13 +63,15 @@ func BoolEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BoolEval) (er
 
 func BoolEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]BoolEval) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := BoolEval_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_BoolEval, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := BoolEval_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_BoolEval, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -129,13 +131,15 @@ func Execute_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Execute) (err 
 
 func Execute_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Execute) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := Execute_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_Execute, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := Execute_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_Execute, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -303,13 +307,15 @@ func TextEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TextEval) (er
 
 func TextEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TextEval) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := TextEval_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_TextEval, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := TextEval_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_TextEval, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {

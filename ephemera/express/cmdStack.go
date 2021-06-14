@@ -42,14 +42,14 @@ func (k *cmdStack) pop(cnt int) (ret []r.Value, err error) {
 }
 
 // returns a section of the stack without changing the stack.
-func (k *cmdStack) peek(cnt int) (ret []r.Value, err error) {
-	if end := len(k.els) - cnt; end < 0 {
-		err = underflow(end)
-	} else {
-		ret = k.els[end:]
-	}
-	return
-}
+// func (k *cmdStack) peek(cnt int) (ret []r.Value, err error) {
+// 	if end := len(k.els) - cnt; end < 0 {
+// 		err = underflow(end)
+// 	} else {
+// 		ret = k.els[end:]
+// 	}
+// 	return
+// }
 
 type underflow int
 

@@ -114,7 +114,7 @@ func (k *Kind) ensureTraits() {
 			}
 		}
 		if len(ts) == 0 {
-			ts = make([]trait, 0, 0)
+			ts = make([]trait, 0)
 		} else {
 			sortTraits(ts)
 		}

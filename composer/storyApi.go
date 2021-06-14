@@ -2,35 +2,14 @@ package composer
 
 import (
 	"context"
-	"encoding/json"
 	"io"
 	"log"
-	"os"
 	"os/exec"
 	"path"
 	"strings"
 
 	"github.com/ionous/errutil"
 )
-
-// write the contents to the passed filename but only if the file doesnt already exist
-func ensureFile(fullPath string, contents map[string]interface{}) (err error) {
-	if n, e := os.Stat(fullPath); os.IsNotExist(e) {
-		dir := path.Dir(fullPath)
-		if e := os.MkdirAll(dir, 0755); e != nil {
-			err = e
-		} else if b, e := json.MarshalIndent(contents, "", "  "); e != nil {
-			err = e
-		} else {
-			err = os.WriteFile(fullPath, b, 0644)
-		}
-	} else if e != nil {
-		err = e
-	} else if n.IsDir() {
-		err = errutil.New("unexpected conflicting directory")
-	}
-	return
-}
 
 // uses the command line tool versions for now....
 func tempTest(ctx context.Context, file string, in io.Reader) (err error) {

@@ -35,8 +35,7 @@ func (op *AsNum) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func AsNum_Detailed_Marshal(n jsonexp.Context, val *AsNum) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -103,8 +102,7 @@ func (op *AsRec) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func AsRec_Detailed_Marshal(n jsonexp.Context, val *AsRec) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -171,8 +169,7 @@ func (op *AsTxt) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func AsTxt_Detailed_Marshal(n jsonexp.Context, val *AsTxt) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -241,8 +238,7 @@ func (op *EraseEdge) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func EraseEdge_Detailed_Marshal(n jsonexp.Context, val *EraseEdge) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := ListSource_Detailed_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -320,8 +316,7 @@ func (op *EraseIndex) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func EraseIndex_Detailed_Marshal(n jsonexp.Context, val *EraseIndex) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.Count); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -409,8 +404,7 @@ func (op *Erasing) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Erasing_Detailed_Marshal(n jsonexp.Context, val *Erasing) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.Count); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -513,8 +507,7 @@ func (op *ErasingEdge) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ErasingEdge_Detailed_Marshal(n jsonexp.Context, val *ErasingEdge) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := ListSource_Detailed_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -609,8 +602,7 @@ func (op *FromNumList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func FromNumList_Detailed_Marshal(n jsonexp.Context, val *FromNumList) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -677,8 +669,7 @@ func (op *FromRecList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func FromRecList_Detailed_Marshal(n jsonexp.Context, val *FromRecList) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -745,8 +736,7 @@ func (op *FromTxtList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func FromTxtList_Detailed_Marshal(n jsonexp.Context, val *FromTxtList) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -813,8 +803,7 @@ func (op *IntoNumList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func IntoNumList_Detailed_Marshal(n jsonexp.Context, val *IntoNumList) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -881,8 +870,7 @@ func (op *IntoRecList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func IntoRecList_Detailed_Marshal(n jsonexp.Context, val *IntoRecList) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -949,8 +937,7 @@ func (op *IntoTxtList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func IntoTxtList_Detailed_Marshal(n jsonexp.Context, val *IntoTxtList) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1019,8 +1006,7 @@ func (op *ListAt) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListAt_Detailed_Marshal(n jsonexp.Context, val *ListAt) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1100,8 +1086,7 @@ func (op *ListEach) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListEach_Detailed_Marshal(n jsonexp.Context, val *ListEach) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1191,8 +1176,7 @@ func (op *ListFind) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListFind_Detailed_Marshal(n jsonexp.Context, val *ListFind) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.Value); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1270,8 +1254,7 @@ func (op *ListGather) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListGather_Detailed_Marshal(n jsonexp.Context, val *ListGather) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1379,8 +1362,7 @@ func (op *ListLen) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListLen_Detailed_Marshal(n jsonexp.Context, val *ListLen) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1451,8 +1433,7 @@ func (op *ListMap) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListMap_Detailed_Marshal(n jsonexp.Context, val *ListMap) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.ToList); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1537,8 +1518,7 @@ func (op *ListReduce) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListReduce_Detailed_Marshal(n jsonexp.Context, val *ListReduce) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.IntoValue); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1619,8 +1599,7 @@ func (op *ListReverse) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListReverse_Detailed_Marshal(n jsonexp.Context, val *ListReverse) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := ListSource_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1691,8 +1670,7 @@ func (op *ListSet) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListSet_Detailed_Marshal(n jsonexp.Context, val *ListSet) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1777,8 +1755,7 @@ func (op *ListSlice) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListSlice_Detailed_Marshal(n jsonexp.Context, val *ListSlice) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1863,8 +1840,7 @@ func (op *ListSortNumbers) UnmarshalDetailed(n jsonexp.Context, b []byte) error 
 }
 
 func ListSortNumbers_Detailed_Marshal(n jsonexp.Context, val *ListSortNumbers) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1951,8 +1927,7 @@ func (op *ListSortText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListSortText_Detailed_Marshal(n jsonexp.Context, val *ListSortText) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2042,8 +2017,7 @@ func (op *ListSortUsing) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListSortUsing_Detailed_Marshal(n jsonexp.Context, val *ListSortUsing) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2150,8 +2124,7 @@ func (op *ListSplice) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ListSplice_Detailed_Marshal(n jsonexp.Context, val *ListSplice) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2270,8 +2243,7 @@ func (op *PutEdge) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PutEdge_Detailed_Marshal(n jsonexp.Context, val *PutEdge) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2356,8 +2328,7 @@ func (op *PutIndex) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PutIndex_Detailed_Marshal(n jsonexp.Context, val *PutIndex) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2441,8 +2412,7 @@ func (op *Range) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Range_Detailed_Marshal(n jsonexp.Context, val *Range) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.To); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {

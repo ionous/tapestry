@@ -89,8 +89,7 @@ func (op *ActionContext) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ActionContext_Detailed_Marshal(n jsonexp.Context, val *ActionContext) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := SingularKind_Detailed_Marshal(n, &val.Kind); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -163,8 +162,7 @@ func (op *ActionDecl) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ActionDecl_Detailed_Marshal(n jsonexp.Context, val *ActionDecl) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := EventName_Detailed_Marshal(n, &val.Event); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -613,8 +611,7 @@ func (op *Argument) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Argument_Detailed_Marshal(n jsonexp.Context, val *Argument) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -650,13 +647,15 @@ func Argument_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Argument) (er
 
 func Argument_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Argument) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := Argument_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_Argument, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := Argument_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_Argument, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -730,8 +729,7 @@ func (op *Arguments) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Arguments_Detailed_Marshal(n jsonexp.Context, val *Arguments) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Argument_Detailed_Repeats_Marshal(n, &val.Args); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -849,8 +847,7 @@ func (op *AspectTraits) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func AspectTraits_Detailed_Marshal(n jsonexp.Context, val *AspectTraits) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Aspect_Detailed_Marshal(n, &val.Aspect); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -923,8 +920,7 @@ func (op *BoxedNumber) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func BoxedNumber_Detailed_Marshal(n jsonexp.Context, val *BoxedNumber) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Number_Detailed_Override_Marshal(n, &val.Number); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -990,8 +986,7 @@ func (op *BoxedText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func BoxedText_Detailed_Marshal(n jsonexp.Context, val *BoxedText) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1063,8 +1058,7 @@ func (op *Certainties) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Certainties_Detailed_Marshal(n jsonexp.Context, val *Certainties) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := PluralKinds_Detailed_Marshal(n, &val.PluralKinds); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1209,8 +1203,7 @@ func (op *Comment) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Comment_Detailed_Marshal(n jsonexp.Context, val *Comment) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Lines_Detailed_Marshal(n, &val.Lines); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1279,8 +1272,7 @@ func (op *CommonAction) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func CommonAction_Detailed_Marshal(n jsonexp.Context, val *CommonAction) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := SingularKind_Detailed_Marshal(n, &val.Kind); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1358,8 +1350,7 @@ func (op *CountOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func CountOf_Detailed_Marshal(n jsonexp.Context, val *CountOf) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := core.Trigger_Detailed_Marshal(n, &val.Trigger); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1435,8 +1426,7 @@ func (op *CycleText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func CycleText_Detailed_Marshal(n jsonexp.Context, val *CycleText) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Repeats_Marshal(n, &val.Parts); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1506,8 +1496,7 @@ func (op *Determine) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Determine_Detailed_Marshal(n jsonexp.Context, val *Determine) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.PatternName_Detailed_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1639,8 +1628,7 @@ func (op *EventBlock) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func EventBlock_Detailed_Marshal(n jsonexp.Context, val *EventBlock) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := EventTarget_Detailed_Marshal(n, &val.Target); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1721,8 +1709,7 @@ func (op *EventHandler) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func EventHandler_Detailed_Marshal(n jsonexp.Context, val *EventHandler) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := EventPhase_Detailed_Marshal(n, &val.EventPhase); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -1770,13 +1757,15 @@ func EventHandler_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *EventHand
 
 func EventHandler_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]EventHandler) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := EventHandler_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_EventHandler, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := EventHandler_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_EventHandler, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -2150,8 +2139,7 @@ func (op *GrammarDecl) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func GrammarDecl_Detailed_Marshal(n jsonexp.Context, val *GrammarDecl) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := grammar.GrammarMaker_Detailed_Marshal(n, &val.Grammar); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2223,8 +2211,7 @@ func (op *KindOfNoun) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func KindOfNoun_Detailed_Marshal(n jsonexp.Context, val *KindOfNoun) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := AreAn_Detailed_Marshal(n, &val.AreAn); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2313,8 +2300,7 @@ func (op *KindOfRelation) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func KindOfRelation_Detailed_Marshal(n jsonexp.Context, val *KindOfRelation) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.RelationName_Detailed_Marshal(n, &val.Relation); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2387,8 +2373,7 @@ func (op *KindsOfAspect) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func KindsOfAspect_Detailed_Marshal(n jsonexp.Context, val *KindsOfAspect) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Aspect_Detailed_Marshal(n, &val.Aspect); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2456,8 +2441,7 @@ func (op *KindsOfKind) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func KindsOfKind_Detailed_Marshal(n jsonexp.Context, val *KindsOfKind) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := PluralKinds_Detailed_Marshal(n, &val.PluralKinds); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2530,8 +2514,7 @@ func (op *KindsOfRecord) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func KindsOfRecord_Detailed_Marshal(n jsonexp.Context, val *KindsOfRecord) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := RecordPlural_Detailed_Marshal(n, &val.RecordPlural); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2599,8 +2582,7 @@ func (op *KindsPossessProperties) UnmarshalDetailed(n jsonexp.Context, b []byte)
 }
 
 func KindsPossessProperties_Detailed_Marshal(n jsonexp.Context, val *KindsPossessProperties) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := PluralKinds_Detailed_Marshal(n, &val.PluralKinds); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2675,8 +2657,7 @@ func (op *Lede) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Lede_Detailed_Marshal(n jsonexp.Context, val *Lede) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := NamedNoun_Detailed_Repeats_Marshal(n, &val.Nouns); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2751,8 +2732,7 @@ func (op *LocalDecl) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func LocalDecl_Detailed_Marshal(n jsonexp.Context, val *LocalDecl) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := VariableDecl_Detailed_Marshal(n, &val.VariableDecl); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2786,13 +2766,15 @@ func LocalDecl_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *LocalDecl) (
 
 func LocalDecl_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]LocalDecl) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := LocalDecl_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_LocalDecl, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := LocalDecl_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_LocalDecl, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -2864,8 +2846,7 @@ func (op *LocalInit) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func LocalInit_Detailed_Marshal(n jsonexp.Context, val *LocalInit) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.Value); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -2933,8 +2914,7 @@ func (op *Make) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Make_Detailed_Marshal(n jsonexp.Context, val *Make) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3009,8 +2989,7 @@ func (op *ManyToMany) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ManyToMany_Detailed_Marshal(n jsonexp.Context, val *ManyToMany) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := PluralKinds_Detailed_Marshal(n, &val.Kinds); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3085,8 +3064,7 @@ func (op *ManyToOne) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ManyToOne_Detailed_Marshal(n jsonexp.Context, val *ManyToOne) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := PluralKinds_Detailed_Marshal(n, &val.Kinds); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3161,8 +3139,7 @@ func (op *NamedNoun) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func NamedNoun_Detailed_Marshal(n jsonexp.Context, val *NamedNoun) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Determiner_Detailed_Marshal(n, &val.Determiner); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3196,13 +3173,15 @@ func NamedNoun_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NamedNoun) (
 
 func NamedNoun_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]NamedNoun) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := NamedNoun_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_NamedNoun, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := NamedNoun_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_NamedNoun, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -3278,8 +3257,7 @@ func (op *NounAssignment) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func NounAssignment_Detailed_Marshal(n jsonexp.Context, val *NounAssignment) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Property_Detailed_Marshal(n, &val.Property); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3512,8 +3490,7 @@ func (op *NounRelation) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func NounRelation_Detailed_Marshal(n jsonexp.Context, val *NounRelation) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := AreBeing_Detailed_Marshal(n, &val.AreBeing); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3597,8 +3574,7 @@ func (op *NounStatement) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func NounStatement_Detailed_Marshal(n jsonexp.Context, val *NounStatement) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Lede_Detailed_Marshal(n, &val.Lede); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3680,8 +3656,7 @@ func (op *NounTraits) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func NounTraits_Detailed_Marshal(n jsonexp.Context, val *NounTraits) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := AreBeing_Detailed_Marshal(n, &val.AreBeing); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3808,8 +3783,7 @@ func (op *ObjectType) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ObjectType_Detailed_Marshal(n jsonexp.Context, val *ObjectType) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Ana_Detailed_Marshal(n, &val.An); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3884,8 +3858,7 @@ func (op *OneToMany) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func OneToMany_Detailed_Marshal(n jsonexp.Context, val *OneToMany) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := SingularKind_Detailed_Marshal(n, &val.Kind); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -3960,8 +3933,7 @@ func (op *OneToOne) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func OneToOne_Detailed_Marshal(n jsonexp.Context, val *OneToOne) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := SingularKind_Detailed_Marshal(n, &val.Kind); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4035,8 +4007,7 @@ func (op *PairedAction) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PairedAction_Detailed_Marshal(n jsonexp.Context, val *PairedAction) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := PluralKinds_Detailed_Marshal(n, &val.Kinds); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4104,8 +4075,7 @@ func (op *Paragraph) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Paragraph_Detailed_Marshal(n jsonexp.Context, val *Paragraph) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := StoryStatement_Detailed_Repeats_Marshal(n, &val.StoryStatement); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4132,13 +4102,15 @@ func Paragraph_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Paragraph) (
 
 func Paragraph_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Paragraph) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := Paragraph_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_Paragraph, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := Paragraph_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_Paragraph, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -4216,8 +4188,7 @@ func (op *PatternActions) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PatternActions_Detailed_Marshal(n jsonexp.Context, val *PatternActions) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.PatternName_Detailed_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4312,8 +4283,7 @@ func (op *PatternDecl) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PatternDecl_Detailed_Marshal(n jsonexp.Context, val *PatternDecl) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := PatternType_Detailed_Marshal(n, &val.Type); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4461,8 +4431,7 @@ func (op *PatternLocals) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PatternLocals_Detailed_Marshal(n jsonexp.Context, val *PatternLocals) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := LocalDecl_Detailed_Repeats_Marshal(n, &val.LocalDecl); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4528,8 +4497,7 @@ func (op *PatternReturn) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PatternReturn_Detailed_Marshal(n jsonexp.Context, val *PatternReturn) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := VariableDecl_Detailed_Marshal(n, &val.Result); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4599,8 +4567,7 @@ func (op *PatternRule) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PatternRule_Detailed_Marshal(n jsonexp.Context, val *PatternRule) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.Guard); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4641,13 +4608,15 @@ func PatternRule_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PatternRul
 
 func PatternRule_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]PatternRule) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := PatternRule_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_PatternRule, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := PatternRule_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_PatternRule, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -4719,8 +4688,7 @@ func (op *PatternRules) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PatternRules_Detailed_Marshal(n jsonexp.Context, val *PatternRules) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := PatternRule_Detailed_Repeats_Marshal(n, &val.PatternRule); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4846,8 +4814,7 @@ func (op *PatternVariablesDecl) UnmarshalDetailed(n jsonexp.Context, b []byte) e
 }
 
 func PatternVariablesDecl_Detailed_Marshal(n jsonexp.Context, val *PatternVariablesDecl) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.PatternName_Detailed_Marshal(n, &val.PatternName); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -4920,8 +4887,7 @@ func (op *PatternVariablesTail) UnmarshalDetailed(n jsonexp.Context, b []byte) e
 }
 
 func PatternVariablesTail_Detailed_Marshal(n jsonexp.Context, val *PatternVariablesTail) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := VariableDecl_Detailed_Repeats_Marshal(n, &val.VariableDecl); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -5437,8 +5403,7 @@ func (op *PropertyDecl) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func PropertyDecl_Detailed_Marshal(n jsonexp.Context, val *PropertyDecl) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Determiner_Detailed_Marshal(n, &val.An); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -5486,13 +5451,15 @@ func PropertyDecl_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PropertyD
 
 func PropertyDecl_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]PropertyDecl) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := PropertyDecl_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_PropertyDecl, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := PropertyDecl_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_PropertyDecl, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -5665,8 +5632,7 @@ func (op *RecordList) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RecordList_Detailed_Marshal(n jsonexp.Context, val *RecordList) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := RecordSingular_Detailed_Marshal(n, &val.Kind); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -5828,8 +5794,7 @@ func (op *RecordType) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RecordType_Detailed_Marshal(n jsonexp.Context, val *RecordType) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := RecordSingular_Detailed_Marshal(n, &val.Kind); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -5897,8 +5862,7 @@ func (op *RecordsPossessProperties) UnmarshalDetailed(n jsonexp.Context, b []byt
 }
 
 func RecordsPossessProperties_Detailed_Marshal(n jsonexp.Context, val *RecordsPossessProperties) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := RecordPlural_Detailed_Marshal(n, &val.RecordPlural); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6084,8 +6048,7 @@ func (op *RelativeToNoun) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RelativeToNoun_Detailed_Marshal(n jsonexp.Context, val *RelativeToNoun) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.RelationName_Detailed_Marshal(n, &val.Relation); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6172,8 +6135,7 @@ func (op *RenderTemplate) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RenderTemplate_Detailed_Marshal(n jsonexp.Context, val *RenderTemplate) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Lines_Detailed_Marshal(n, &val.Template); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6243,8 +6205,7 @@ func (op *Send) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Send_Detailed_Marshal(n jsonexp.Context, val *Send) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Event); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6325,8 +6286,7 @@ func (op *ShuffleText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func ShuffleText_Detailed_Marshal(n jsonexp.Context, val *ShuffleText) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Repeats_Marshal(n, &val.Parts); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6443,8 +6403,7 @@ func (op *StoppingText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func StoppingText_Detailed_Marshal(n jsonexp.Context, val *StoppingText) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Repeats_Marshal(n, &val.Parts); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6512,8 +6471,7 @@ func (op *Story) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Story_Detailed_Marshal(n jsonexp.Context, val *Story) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Paragraph_Detailed_Repeats_Marshal(n, &val.Paragraph); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6585,13 +6543,15 @@ func StoryStatement_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *StorySt
 
 func StoryStatement_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]StoryStatement) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := StoryStatement_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_StoryStatement, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := StoryStatement_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_StoryStatement, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -6646,8 +6606,7 @@ func (op *Summary) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Summary_Detailed_Marshal(n jsonexp.Context, val *Summary) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Lines_Detailed_Marshal(n, &val.Lines); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6717,8 +6676,7 @@ func (op *Tail) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func Tail_Detailed_Marshal(n jsonexp.Context, val *Tail) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Pronoun_Detailed_Marshal(n, &val.Pronoun); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6752,13 +6710,15 @@ func Tail_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Tail) (err error)
 
 func Tail_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Tail) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := Tail_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_Tail, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := Tail_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_Tail, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -6886,8 +6846,7 @@ func (op *TestOutput) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func TestOutput_Detailed_Marshal(n jsonexp.Context, val *TestOutput) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Lines_Detailed_Marshal(n, &val.Lines); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -6955,8 +6914,7 @@ func (op *TestRule) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func TestRule_Detailed_Marshal(n jsonexp.Context, val *TestRule) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := TestName_Detailed_Marshal(n, &val.TestName); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -7031,8 +6989,7 @@ func (op *TestScene) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func TestScene_Detailed_Marshal(n jsonexp.Context, val *TestScene) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := TestName_Detailed_Marshal(n, &val.TestName); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -7108,8 +7065,7 @@ func (op *TestStatement) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func TestStatement_Detailed_Marshal(n jsonexp.Context, val *TestStatement) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := TestName_Detailed_Marshal(n, &val.TestName); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -7290,13 +7246,15 @@ func Trait_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Trait) (err erro
 
 func Trait_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Trait) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := Trait_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_Trait, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := Trait_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_Trait, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {
@@ -7352,8 +7310,7 @@ func (op *TraitPhrase) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func TraitPhrase_Detailed_Marshal(n jsonexp.Context, val *TraitPhrase) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := AreEither_Detailed_Marshal(n, &val.AreEither); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -7432,8 +7389,7 @@ func (op *VariableDecl) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func VariableDecl_Detailed_Marshal(n jsonexp.Context, val *VariableDecl) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := Determiner_Detailed_Marshal(n, &val.An); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -7481,13 +7437,15 @@ func VariableDecl_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *VariableD
 
 func VariableDecl_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]VariableDecl) (ret []byte, err error) {
 	var msgs []json.RawMessage
-	msgs = make([]json.RawMessage, len(*vals))
-	for i, el := range *vals {
-		if b, e := VariableDecl_Detailed_Marshal(n, &el); e != nil {
-			err = errutil.New(Type_VariableDecl, "at", i, "-", e)
-			break
-		} else {
-			msgs[i] = b
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := VariableDecl_Detailed_Marshal(n, &el); e != nil {
+				err = errutil.New(Type_VariableDecl, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
 		}
 	}
 	if err == nil {

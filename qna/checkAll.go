@@ -25,7 +25,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string) (ret int, err error) {
 		where type='CheckOutput'
 		order by name`,
 		func() (err error) {
-			if len(actuallyJustThisOne) == 0 || strings.Index(actuallyJustThisOne, name+";") >= 0 {
+			if len(actuallyJustThisOne) == 0 || strings.Contains(actuallyJustThisOne, name+";") {
 				var curr check.CheckOutput
 				if e := tables.DecodeGob(prog, &curr); e != nil {
 					err = e

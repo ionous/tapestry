@@ -24,10 +24,12 @@ func eraseEdge(run rt.Runtime,
 			var at int
 			if atFront, e := safe.GetOptionalBool(run, atFront, false); e != nil {
 				err = e
-			} else if !atFront.Bool() {
-				at = cnt - 1
+			} else {
+				if !atFront.Bool() {
+					at = cnt - 1
+				}
+				ret, err = vs.Splice(at, at+1, nil)
 			}
-			ret, err = vs.Splice(at, at+1, nil)
 		}
 	}
 	return

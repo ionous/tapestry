@@ -22,11 +22,6 @@ func makeKey(target, field string) keyType {
 	return keyType{target, field}
 }
 
-// FIX: remove.
-func makeKeyForEval(obj, typeName string) keyType {
-	return keyType{obj, typeName}
-}
-
 // return an error saying that the value of this key is unknown
 func (k *keyType) unknown() (err error) {
 	if k.target == object.Value {

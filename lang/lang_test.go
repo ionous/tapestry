@@ -25,8 +25,7 @@ func TestStripArticle(t *testing.T) {
 			t.Fatalf("text: '%s'", p.src)
 		}
 	}
-
-	if "article" != StripArticle("the article") {
+	if StripArticle("the article") != "article" {
 		t.Fatal("article")
 	}
 }

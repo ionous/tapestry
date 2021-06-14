@@ -16,10 +16,6 @@ import (
 
 type IssueReport func(pos reader.Position, msg string)
 
-func cat(str ...string) string {
-	return strings.Join(str, " ")
-}
-
 func NewAssembler(db *sql.DB) *Assembler {
 	reportNothing := func(reader.Position, string) {}
 	return NewAssemblerReporter(db, reportNothing)
@@ -211,16 +207,18 @@ func (m *Assembler) WriteVerb(relation, verb string) (err error) {
 
 var mdl_aspect = tables.Insert("mdl_aspect", "aspect", "trait", "rank")
 var mdl_check = tables.Insert("mdl_check", "name", "type", "expect")
-var mdl_domain = tables.Insert("mdl_domain", "domain", "path")
 var mdl_field = tables.Insert("mdl_field", "kind", "field", "type", "affinity")
 var mdl_kind = tables.Insert("mdl_kind", "kind", "path")
 var mdl_name = tables.Insert("mdl_name", "noun", "name", "rank")
 var mdl_noun = tables.Insert("mdl_noun", "noun", "kind")
-var mdl_pair = tables.Insert("mdl_pair", "noun", "relation", "otherNoun", "domain")
 var mdl_pat = tables.Insert("mdl_pat", "name", "result", "labels")
 var mdl_plural = tables.Insert("mdl_plural", "one", "many")
 var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes")
 var mdl_rel = tables.Insert("mdl_rel", "relation", "kind", "cardinality", "otherKind")
 var mdl_rule = tables.Insert("mdl_rule", "owner", "target", "domain", "phase", "prog", "name")
-var mdl_spec = tables.Insert("mdl_spec", "type", "name", "spec")
 var mdl_start = tables.Insert("mdl_start", "owner", "field", "value")
+
+// inserted with sql statements, not go statements
+// var mdl_domain = tables.Insert("mdl_domain", "domain", "path")
+// var mdl_pair = tables.Insert("mdl_pair", "noun", "relation", "otherNoun", "domain")
+// var mdl_spec = tables.Insert("mdl_spec", "type", "name", "spec")

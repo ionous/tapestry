@@ -109,7 +109,7 @@ func (dec *Compacter) readFields(cmd composer.Composer, at string, srcData reade
 		return
 	})
 	// report on keys that are in the src data but not our list of tokens.
-	for key, _ := range srcData {
+	for key := range srcData {
 		i, cnt := 0, len(tokens)
 		for ; i < len(tokens); i++ {
 			if key == tokens[i] {
@@ -292,19 +292,6 @@ func (dec *Compacter) readSlots(slots []interface{}) (ret []interface{}, err err
 			err = errutil.Append(err, e)
 		} else {
 			ret = append(ret, v)
-		}
-	}
-	return
-}
-
-// cast inVal to a map, and call setter with contents of "value"
-func (dec *Compacter) read(inVal interface{}, setter func(reader.Map, interface{}) error) (err error) {
-	if item, ok := inVal.(map[string]interface{}); !ok {
-		err = errutil.New("expected an item, got:", inVal)
-	} else {
-		val := item[reader.ItemValue]
-		if e := setter(item, val); e != nil {
-			dec.report(reader.At(item), e)
 		}
 	}
 	return

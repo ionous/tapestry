@@ -34,8 +34,7 @@ func (op *RenderExp) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RenderExp_Detailed_Marshal(n jsonexp.Context, val *RenderExp) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Expression); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -101,8 +100,7 @@ func (op *RenderField) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RenderField_Detailed_Marshal(n jsonexp.Context, val *RenderField) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -222,8 +220,7 @@ func (op *RenderName) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RenderName_Detailed_Marshal(n jsonexp.Context, val *RenderName) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -292,8 +289,7 @@ func (op *RenderPattern) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RenderPattern_Detailed_Marshal(n jsonexp.Context, val *RenderPattern) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.PatternName_Detailed_Marshal(n, &val.Pattern); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
@@ -368,8 +364,7 @@ func (op *RenderRef) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 }
 
 func RenderRef_Detailed_Marshal(n jsonexp.Context, val *RenderRef) (ret []byte, err error) {
-	var fields jsonexp.Fields
-	fields = make(jsonexp.Fields)
+	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {

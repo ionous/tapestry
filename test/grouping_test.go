@@ -69,7 +69,3 @@ func TestGrouping(t *testing.T) {
 		}
 	}
 }
-
-func logGroups(t *testing.T, groups []*g.Record) {
-	t.Log("groups", len(groups), pretty.Sprint(g.RecordsToValue(groups)))
-}
