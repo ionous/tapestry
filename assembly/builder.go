@@ -112,10 +112,12 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 			// fix: need to handle conflicting prog definitions
 			// fix: should watch for locals which shadow parameter names ( i think, ideally merge them )
 			if last == nil || last.patternName != inPat {
-				last = &patternEntry{patternName: inPat, patternType: inType}
+				last = &patternEntry{patternName: inPat}
 				out[inPat] = last
 			}
-			if err == nil && inParam != inPat {
+			if inParam == inPat {
+				out[inPat].patternType = inType
+			} else {
 				// fix: these should probably be tables.PRIM_ names
 				// ie. "text" not "text_eval" -- tests and other things have to be adjusted
 				// it also seems a bad time to be camelizing things.
