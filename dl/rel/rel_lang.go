@@ -68,24 +68,6 @@ func ReciprocalOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Reciproca
 	return
 }
 
-func ReciprocalOf_Detailed_Optional_Marshal(n jsonexp.Context, val **ReciprocalOf) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ReciprocalOf_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ReciprocalOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ReciprocalOf) (err error) {
-	if len(b) > 0 {
-		var el ReciprocalOf
-		if e := ReciprocalOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ReciprocalOf, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)
 type ReciprocalsOf struct {
 	Via    value.RelationName `if:"label=_"`
@@ -140,24 +122,6 @@ func ReciprocalsOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Reciproc
 		err = errutil.New(Type_ReciprocalsOf+"."+ReciprocalsOf_Via, "-", e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ReciprocalsOf_Object], &out.Object); e != nil {
 		err = errutil.New(Type_ReciprocalsOf+"."+ReciprocalsOf_Object, "-", e)
-	}
-	return
-}
-
-func ReciprocalsOf_Detailed_Optional_Marshal(n jsonexp.Context, val **ReciprocalsOf) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ReciprocalsOf_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ReciprocalsOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ReciprocalsOf) (err error) {
-	if len(b) > 0 {
-		var el ReciprocalsOf
-		if e := ReciprocalsOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ReciprocalsOf, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -228,24 +192,6 @@ func Relate_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Relate) (err er
 	return
 }
 
-func Relate_Detailed_Optional_Marshal(n jsonexp.Context, val **Relate) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Relate_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Relate_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Relate) (err error) {
-	if len(b) > 0 {
-		var el Relate
-		if e := Relate_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Relate, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.)
 type RelativeOf struct {
 	Via    value.RelationName `if:"label=_"`
@@ -304,24 +250,6 @@ func RelativeOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RelativeOf)
 	return
 }
 
-func RelativeOf_Detailed_Optional_Marshal(n jsonexp.Context, val **RelativeOf) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RelativeOf_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RelativeOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativeOf) (err error) {
-	if len(b) > 0 {
-		var el RelativeOf
-		if e := RelativeOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RelativeOf, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // RelativesOf Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
 type RelativesOf struct {
 	Via    value.RelationName `if:"label=_"`
@@ -376,24 +304,6 @@ func RelativesOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RelativesO
 		err = errutil.New(Type_RelativesOf+"."+RelativesOf_Via, "-", e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RelativesOf_Object], &out.Object); e != nil {
 		err = errutil.New(Type_RelativesOf+"."+RelativesOf_Object, "-", e)
-	}
-	return
-}
-
-func RelativesOf_Detailed_Optional_Marshal(n jsonexp.Context, val **RelativesOf) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RelativesOf_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RelativesOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativesOf) (err error) {
-	if len(b) > 0 {
-		var el RelativesOf
-		if e := RelativesOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RelativesOf, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }

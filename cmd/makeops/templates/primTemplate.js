@@ -18,9 +18,9 @@ func (op *{{Pascal name}}) String()(ret string) {
 const {{Pascal ../name}}_{{Pascal this.token}}= "{{this.token}}";
 {{/each~}}
 
-{{>spec spec=this}}
+{{>spec}}
 {{#if ../marshal}}
-{{>sig sig=this}}
+{{>sig}}
 
 {{~#if (OverrideOf name)}}
 
@@ -122,7 +122,5 @@ func {{Pascal name}}_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *{{Pasc
 }
 {{/if}}
 {{/with}}
-{{#if marshal}}
-{{>repeat spec=this}}
-{{/if}}
+{{#if repeats}}{{>repeat type}}{{/if}}
 `;

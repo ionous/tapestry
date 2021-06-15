@@ -203,24 +203,6 @@ func ActionDecl_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ActionDecl)
 	return
 }
 
-func ActionDecl_Detailed_Optional_Marshal(n jsonexp.Context, val **ActionDecl) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ActionDecl_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ActionDecl_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ActionDecl) (err error) {
-	if len(b) > 0 {
-		var el ActionDecl
-		if e := ActionDecl_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ActionDecl, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ActionName requires a user-specified string.
 type ActionName struct {
 	At  reader.Position `if:"internal"`
@@ -686,24 +668,6 @@ func Argument_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Arg
 	return
 }
 
-func Argument_Detailed_Optional_Marshal(n jsonexp.Context, val **Argument) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Argument_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Argument_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Argument) (err error) {
-	if len(b) > 0 {
-		var el Argument
-		if e := Argument_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Argument, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // Arguments
 type Arguments struct {
 	At   reader.Position `if:"internal"`
@@ -879,24 +843,6 @@ func AspectTraits_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AspectTra
 	return
 }
 
-func AspectTraits_Detailed_Optional_Marshal(n jsonexp.Context, val **AspectTraits) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = AspectTraits_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func AspectTraits_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AspectTraits) (err error) {
-	if len(b) > 0 {
-		var el AspectTraits
-		if e := AspectTraits_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_AspectTraits, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // BoxedNumber
 type BoxedNumber struct {
 	Number float64 `if:"label=_,type=number"`
@@ -945,24 +891,6 @@ func BoxedNumber_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BoxedNumbe
 	return
 }
 
-func BoxedNumber_Detailed_Optional_Marshal(n jsonexp.Context, val **BoxedNumber) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = BoxedNumber_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func BoxedNumber_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BoxedNumber) (err error) {
-	if len(b) > 0 {
-		var el BoxedNumber
-		if e := BoxedNumber_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_BoxedNumber, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // BoxedText
 type BoxedText struct {
 	Text string `if:"label=_,type=text"`
@@ -1007,24 +935,6 @@ func BoxedText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BoxedText) (
 		err = errutil.New(Type_BoxedText, "-", e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[BoxedText_Text], &out.Text); e != nil {
 		err = errutil.New(Type_BoxedText+"."+BoxedText_Text, "-", e)
-	}
-	return
-}
-
-func BoxedText_Detailed_Optional_Marshal(n jsonexp.Context, val **BoxedText) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = BoxedText_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func BoxedText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BoxedText) (err error) {
-	if len(b) > 0 {
-		var el BoxedText
-		if e := BoxedText_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_BoxedText, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1100,24 +1010,6 @@ func Certainties_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Certaintie
 		err = errutil.New(Type_Certainties+"."+Certainties_Certainty, "-", e)
 	} else if e := Trait_Detailed_Unmarshal(n, msg.Fields[Certainties_Trait], &out.Trait); e != nil {
 		err = errutil.New(Type_Certainties+"."+Certainties_Trait, "-", e)
-	}
-	return
-}
-
-func Certainties_Detailed_Optional_Marshal(n jsonexp.Context, val **Certainties) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Certainties_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Certainties_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Certainties) (err error) {
-	if len(b) > 0 {
-		var el Certainties
-		if e := Certainties_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Certainties, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1306,24 +1198,6 @@ func CommonAction_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CommonAct
 	return
 }
 
-func CommonAction_Detailed_Optional_Marshal(n jsonexp.Context, val **CommonAction) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = CommonAction_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func CommonAction_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CommonAction) (err error) {
-	if len(b) > 0 {
-		var el CommonAction
-		if e := CommonAction_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_CommonAction, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // CountOf A guard which returns true based on a counter.
 type CountOf struct {
 	At      reader.Position `if:"internal"`
@@ -1384,24 +1258,6 @@ func CountOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CountOf) (err 
 	return
 }
 
-func CountOf_Detailed_Optional_Marshal(n jsonexp.Context, val **CountOf) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = CountOf_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func CountOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CountOf) (err error) {
-	if len(b) > 0 {
-		var el CountOf
-		if e := CountOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_CountOf, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // CycleText
 type CycleText struct {
 	At    reader.Position `if:"internal"`
@@ -1449,24 +1305,6 @@ func CycleText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CycleText) (
 		err = errutil.New(Type_CycleText+"."+CycleText_Parts, "-", e)
 	} else {
 		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
-	}
-	return
-}
-
-func CycleText_Detailed_Optional_Marshal(n jsonexp.Context, val **CycleText) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = CycleText_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func CycleText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CycleText) (err error) {
-	if len(b) > 0 {
-		var el CycleText
-		if e := CycleText_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_CycleText, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1524,24 +1362,6 @@ func Determine_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Determine) (
 		err = errutil.New(Type_Determine+"."+Determine_Name, "-", e)
 	} else if e := Arguments_Detailed_Optional_Unmarshal(n, msg.Fields[Determine_Arguments], &out.Arguments); e != nil {
 		err = errutil.New(Type_Determine+"."+Determine_Arguments, "-", e)
-	}
-	return
-}
-
-func Determine_Detailed_Optional_Marshal(n jsonexp.Context, val **Determine) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Determine_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Determine_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Determine) (err error) {
-	if len(b) > 0 {
-		var el Determine
-		if e := Determine_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Determine, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1662,24 +1482,6 @@ func EventBlock_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *EventBlock)
 	return
 }
 
-func EventBlock_Detailed_Optional_Marshal(n jsonexp.Context, val **EventBlock) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = EventBlock_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func EventBlock_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **EventBlock) (err error) {
-	if len(b) > 0 {
-		var el EventBlock
-		if e := EventBlock_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_EventBlock, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // EventHandler
 type EventHandler struct {
 	EventPhase   EventPhase     `if:"label=_"`
@@ -1792,24 +1594,6 @@ func EventHandler_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[
 	}
 	if err == nil {
 		*out = vals
-	}
-	return
-}
-
-func EventHandler_Detailed_Optional_Marshal(n jsonexp.Context, val **EventHandler) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = EventHandler_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func EventHandler_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **EventHandler) (err error) {
-	if len(b) > 0 {
-		var el EventHandler
-		if e := EventHandler_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_EventHandler, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -2164,24 +1948,6 @@ func GrammarDecl_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *GrammarDec
 	return
 }
 
-func GrammarDecl_Detailed_Optional_Marshal(n jsonexp.Context, val **GrammarDecl) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = GrammarDecl_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func GrammarDecl_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **GrammarDecl) (err error) {
-	if len(b) > 0 {
-		var el GrammarDecl
-		if e := GrammarDecl_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_GrammarDecl, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // KindOfNoun
 type KindOfNoun struct {
 	AreAn        AreAn         `if:"label=_"`
@@ -2257,24 +2023,6 @@ func KindOfNoun_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *KindOfNoun)
 	return
 }
 
-func KindOfNoun_Detailed_Optional_Marshal(n jsonexp.Context, val **KindOfNoun) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = KindOfNoun_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func KindOfNoun_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindOfNoun) (err error) {
-	if len(b) > 0 {
-		var el KindOfNoun
-		if e := KindOfNoun_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_KindOfNoun, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // KindOfRelation
 type KindOfRelation struct {
 	Relation            value.RelationName  `if:"label=_"`
@@ -2332,24 +2080,6 @@ func KindOfRelation_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *KindOfR
 	return
 }
 
-func KindOfRelation_Detailed_Optional_Marshal(n jsonexp.Context, val **KindOfRelation) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = KindOfRelation_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func KindOfRelation_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindOfRelation) (err error) {
-	if len(b) > 0 {
-		var el KindOfRelation
-		if e := KindOfRelation_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_KindOfRelation, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // KindsOfAspect
 type KindsOfAspect struct {
 	Aspect Aspect `if:"label=_"`
@@ -2394,24 +2124,6 @@ func KindsOfAspect_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *KindsOfA
 		err = errutil.New(Type_KindsOfAspect, "-", e)
 	} else if e := Aspect_Detailed_Unmarshal(n, msg.Fields[KindsOfAspect_Aspect], &out.Aspect); e != nil {
 		err = errutil.New(Type_KindsOfAspect+"."+KindsOfAspect_Aspect, "-", e)
-	}
-	return
-}
-
-func KindsOfAspect_Detailed_Optional_Marshal(n jsonexp.Context, val **KindsOfAspect) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = KindsOfAspect_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func KindsOfAspect_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOfAspect) (err error) {
-	if len(b) > 0 {
-		var el KindsOfAspect
-		if e := KindsOfAspect_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_KindsOfAspect, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -2473,24 +2185,6 @@ func KindsOfKind_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *KindsOfKin
 	return
 }
 
-func KindsOfKind_Detailed_Optional_Marshal(n jsonexp.Context, val **KindsOfKind) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = KindsOfKind_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func KindsOfKind_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOfKind) (err error) {
-	if len(b) > 0 {
-		var el KindsOfKind
-		if e := KindsOfKind_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_KindsOfKind, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // KindsOfRecord
 type KindsOfRecord struct {
 	RecordPlural RecordPlural `if:"label=_"`
@@ -2535,24 +2229,6 @@ func KindsOfRecord_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *KindsOfR
 		err = errutil.New(Type_KindsOfRecord, "-", e)
 	} else if e := RecordPlural_Detailed_Unmarshal(n, msg.Fields[KindsOfRecord_RecordPlural], &out.RecordPlural); e != nil {
 		err = errutil.New(Type_KindsOfRecord+"."+KindsOfRecord_RecordPlural, "-", e)
-	}
-	return
-}
-
-func KindsOfRecord_Detailed_Optional_Marshal(n jsonexp.Context, val **KindsOfRecord) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = KindsOfRecord_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func KindsOfRecord_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOfRecord) (err error) {
-	if len(b) > 0 {
-		var el KindsOfRecord
-		if e := KindsOfRecord_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_KindsOfRecord, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -2614,24 +2290,6 @@ func KindsPossessProperties_Detailed_Unmarshal(n jsonexp.Context, b []byte, out 
 	return
 }
 
-func KindsPossessProperties_Detailed_Optional_Marshal(n jsonexp.Context, val **KindsPossessProperties) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = KindsPossessProperties_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func KindsPossessProperties_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsPossessProperties) (err error) {
-	if len(b) > 0 {
-		var el KindsPossessProperties
-		if e := KindsPossessProperties_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_KindsPossessProperties, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // Lede Describes one or more nouns.
 type Lede struct {
 	Nouns      []NamedNoun `if:"label=_"`
@@ -2685,24 +2343,6 @@ func Lede_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Lede) (err error)
 		err = errutil.New(Type_Lede+"."+Lede_Nouns, "-", e)
 	} else if e := NounPhrase_Detailed_Unmarshal(n, msg.Fields[Lede_NounPhrase], &out.NounPhrase); e != nil {
 		err = errutil.New(Type_Lede+"."+Lede_NounPhrase, "-", e)
-	}
-	return
-}
-
-func Lede_Detailed_Optional_Marshal(n jsonexp.Context, val **Lede) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Lede_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Lede_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Lede) (err error) {
-	if len(b) > 0 {
-		var el Lede
-		if e := Lede_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Lede, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -2801,24 +2441,6 @@ func LocalDecl_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Lo
 	}
 	if err == nil {
 		*out = vals
-	}
-	return
-}
-
-func LocalDecl_Detailed_Optional_Marshal(n jsonexp.Context, val **LocalDecl) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = LocalDecl_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func LocalDecl_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **LocalDecl) (err error) {
-	if len(b) > 0 {
-		var el LocalDecl
-		if e := LocalDecl_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_LocalDecl, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -2946,24 +2568,6 @@ func Make_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Make) (err error)
 	return
 }
 
-func Make_Detailed_Optional_Marshal(n jsonexp.Context, val **Make) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Make_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Make_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Make) (err error) {
-	if len(b) > 0 {
-		var el Make
-		if e := Make_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Make, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ManyToMany
 type ManyToMany struct {
 	Kinds      PluralKinds `if:"label=_"`
@@ -3021,24 +2625,6 @@ func ManyToMany_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ManyToMany)
 	return
 }
 
-func ManyToMany_Detailed_Optional_Marshal(n jsonexp.Context, val **ManyToMany) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ManyToMany_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ManyToMany_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ManyToMany) (err error) {
-	if len(b) > 0 {
-		var el ManyToMany
-		if e := ManyToMany_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ManyToMany, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ManyToOne
 type ManyToOne struct {
 	Kinds PluralKinds  `if:"label=_"`
@@ -3092,24 +2678,6 @@ func ManyToOne_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ManyToOne) (
 		err = errutil.New(Type_ManyToOne+"."+ManyToOne_Kinds, "-", e)
 	} else if e := SingularKind_Detailed_Unmarshal(n, msg.Fields[ManyToOne_Kind], &out.Kind); e != nil {
 		err = errutil.New(Type_ManyToOne+"."+ManyToOne_Kind, "-", e)
-	}
-	return
-}
-
-func ManyToOne_Detailed_Optional_Marshal(n jsonexp.Context, val **ManyToOne) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ManyToOne_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ManyToOne_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ManyToOne) (err error) {
-	if len(b) > 0 {
-		var el ManyToOne
-		if e := ManyToOne_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ManyToOne, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -3212,24 +2780,6 @@ func NamedNoun_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Na
 	return
 }
 
-func NamedNoun_Detailed_Optional_Marshal(n jsonexp.Context, val **NamedNoun) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = NamedNoun_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func NamedNoun_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NamedNoun) (err error) {
-	if len(b) > 0 {
-		var el NamedNoun
-		if e := NamedNoun_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_NamedNoun, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // NounAssignment Assign text.
 type NounAssignment struct {
 	Property Property    `if:"label=_"`
@@ -3292,24 +2842,6 @@ func NounAssignment_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NounAss
 		err = errutil.New(Type_NounAssignment+"."+NounAssignment_Nouns, "-", e)
 	} else if e := value.Lines_Detailed_Unmarshal(n, msg.Fields[NounAssignment_Lines], &out.Lines); e != nil {
 		err = errutil.New(Type_NounAssignment+"."+NounAssignment_Lines, "-", e)
-	}
-	return
-}
-
-func NounAssignment_Detailed_Optional_Marshal(n jsonexp.Context, val **NounAssignment) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = NounAssignment_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func NounAssignment_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounAssignment) (err error) {
-	if len(b) > 0 {
-		var el NounAssignment
-		if e := NounAssignment_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_NounAssignment, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -3613,24 +3145,6 @@ func NounStatement_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NounStat
 	return
 }
 
-func NounStatement_Detailed_Optional_Marshal(n jsonexp.Context, val **NounStatement) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = NounStatement_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func NounStatement_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounStatement) (err error) {
-	if len(b) > 0 {
-		var el NounStatement
-		if e := NounStatement_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_NounStatement, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // NounTraits
 type NounTraits struct {
 	AreBeing AreBeing `if:"label=_"`
@@ -3684,24 +3198,6 @@ func NounTraits_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NounTraits)
 		err = errutil.New(Type_NounTraits+"."+NounTraits_AreBeing, "-", e)
 	} else if e := Trait_Detailed_Repeats_Unmarshal(n, msg.Fields[NounTraits_Trait], &out.Trait); e != nil {
 		err = errutil.New(Type_NounTraits+"."+NounTraits_Trait, "-", e)
-	}
-	return
-}
-
-func NounTraits_Detailed_Optional_Marshal(n jsonexp.Context, val **NounTraits) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = NounTraits_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func NounTraits_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounTraits) (err error) {
-	if len(b) > 0 {
-		var el NounTraits
-		if e := NounTraits_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_NounTraits, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -3815,24 +3311,6 @@ func ObjectType_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ObjectType)
 	return
 }
 
-func ObjectType_Detailed_Optional_Marshal(n jsonexp.Context, val **ObjectType) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ObjectType_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ObjectType_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ObjectType) (err error) {
-	if len(b) > 0 {
-		var el ObjectType
-		if e := ObjectType_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ObjectType, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // OneToMany
 type OneToMany struct {
 	Kind  SingularKind `if:"label=_"`
@@ -3886,24 +3364,6 @@ func OneToMany_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *OneToMany) (
 		err = errutil.New(Type_OneToMany+"."+OneToMany_Kind, "-", e)
 	} else if e := PluralKinds_Detailed_Unmarshal(n, msg.Fields[OneToMany_Kinds], &out.Kinds); e != nil {
 		err = errutil.New(Type_OneToMany+"."+OneToMany_Kinds, "-", e)
-	}
-	return
-}
-
-func OneToMany_Detailed_Optional_Marshal(n jsonexp.Context, val **OneToMany) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = OneToMany_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func OneToMany_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **OneToMany) (err error) {
-	if len(b) > 0 {
-		var el OneToMany
-		if e := OneToMany_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_OneToMany, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -3965,24 +3425,6 @@ func OneToOne_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *OneToOne) (er
 	return
 }
 
-func OneToOne_Detailed_Optional_Marshal(n jsonexp.Context, val **OneToOne) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = OneToOne_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func OneToOne_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **OneToOne) (err error) {
-	if len(b) > 0 {
-		var el OneToOne
-		if e := OneToOne_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_OneToOne, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // PairedAction
 type PairedAction struct {
 	At    reader.Position `if:"internal"`
@@ -4030,24 +3472,6 @@ func PairedAction_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PairedAct
 		err = errutil.New(Type_PairedAction+"."+PairedAction_Kinds, "-", e)
 	} else {
 		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
-	}
-	return
-}
-
-func PairedAction_Detailed_Optional_Marshal(n jsonexp.Context, val **PairedAction) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = PairedAction_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func PairedAction_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PairedAction) (err error) {
-	if len(b) > 0 {
-		var el PairedAction
-		if e := PairedAction_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_PairedAction, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -4141,24 +3565,6 @@ func Paragraph_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Pa
 	return
 }
 
-func Paragraph_Detailed_Optional_Marshal(n jsonexp.Context, val **Paragraph) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Paragraph_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Paragraph_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Paragraph) (err error) {
-	if len(b) > 0 {
-		var el Paragraph
-		if e := Paragraph_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Paragraph, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // PatternActions Actions to take when using a pattern.
 type PatternActions struct {
 	Name          value.PatternName `if:"label=_"`
@@ -4230,24 +3636,6 @@ func PatternActions_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Pattern
 		err = errutil.New(Type_PatternActions+"."+PatternActions_PatternReturn, "-", e)
 	} else if e := PatternRules_Detailed_Unmarshal(n, msg.Fields[PatternActions_PatternRules], &out.PatternRules); e != nil {
 		err = errutil.New(Type_PatternActions+"."+PatternActions_PatternRules, "-", e)
-	}
-	return
-}
-
-func PatternActions_Detailed_Optional_Marshal(n jsonexp.Context, val **PatternActions) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = PatternActions_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func PatternActions_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternActions) (err error) {
-	if len(b) > 0 {
-		var el PatternActions
-		if e := PatternActions_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_PatternActions, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -4332,24 +3720,6 @@ func PatternDecl_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PatternDec
 		err = errutil.New(Type_PatternDecl+"."+PatternDecl_PatternReturn, "-", e)
 	} else if e := Comment_Detailed_Optional_Unmarshal(n, msg.Fields[PatternDecl_About], &out.About); e != nil {
 		err = errutil.New(Type_PatternDecl+"."+PatternDecl_About, "-", e)
-	}
-	return
-}
-
-func PatternDecl_Detailed_Optional_Marshal(n jsonexp.Context, val **PatternDecl) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = PatternDecl_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func PatternDecl_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternDecl) (err error) {
-	if len(b) > 0 {
-		var el PatternDecl
-		if e := PatternDecl_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_PatternDecl, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -4647,24 +4017,6 @@ func PatternRule_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]
 	return
 }
 
-func PatternRule_Detailed_Optional_Marshal(n jsonexp.Context, val **PatternRule) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = PatternRule_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func PatternRule_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternRule) (err error) {
-	if len(b) > 0 {
-		var el PatternRule
-		if e := PatternRule_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_PatternRule, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // PatternRules
 type PatternRules struct {
 	PatternRule []PatternRule `if:"label=_,optional"`
@@ -4709,24 +4061,6 @@ func PatternRules_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PatternRu
 		err = errutil.New(Type_PatternRules, "-", e)
 	} else if e := PatternRule_Detailed_Repeats_Unmarshal(n, msg.Fields[PatternRules_PatternRule], &out.PatternRule); e != nil {
 		err = errutil.New(Type_PatternRules+"."+PatternRules_PatternRule, "-", e)
-	}
-	return
-}
-
-func PatternRules_Detailed_Optional_Marshal(n jsonexp.Context, val **PatternRules) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = PatternRules_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func PatternRules_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternRules) (err error) {
-	if len(b) > 0 {
-		var el PatternRules
-		if e := PatternRules_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_PatternRules, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -4842,24 +4176,6 @@ func PatternVariablesDecl_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *P
 		err = errutil.New(Type_PatternVariablesDecl+"."+PatternVariablesDecl_PatternName, "-", e)
 	} else if e := VariableDecl_Detailed_Repeats_Unmarshal(n, msg.Fields[PatternVariablesDecl_VariableDecl], &out.VariableDecl); e != nil {
 		err = errutil.New(Type_PatternVariablesDecl+"."+PatternVariablesDecl_VariableDecl, "-", e)
-	}
-	return
-}
-
-func PatternVariablesDecl_Detailed_Optional_Marshal(n jsonexp.Context, val **PatternVariablesDecl) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = PatternVariablesDecl_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func PatternVariablesDecl_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternVariablesDecl) (err error) {
-	if len(b) > 0 {
-		var el PatternVariablesDecl
-		if e := PatternVariablesDecl_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_PatternVariablesDecl, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -5490,24 +4806,6 @@ func PropertyDecl_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[
 	return
 }
 
-func PropertyDecl_Detailed_Optional_Marshal(n jsonexp.Context, val **PropertyDecl) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = PropertyDecl_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func PropertyDecl_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PropertyDecl) (err error) {
-	if len(b) > 0 {
-		var el PropertyDecl
-		if e := PropertyDecl_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_PropertyDecl, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // PropertyType swaps between various options
 type PropertyType struct {
 	At  reader.Position `if:"internal"`
@@ -5657,24 +4955,6 @@ func RecordList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordList)
 	return
 }
 
-func RecordList_Detailed_Optional_Marshal(n jsonexp.Context, val **RecordList) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RecordList_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RecordList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RecordList) (err error) {
-	if len(b) > 0 {
-		var el RecordList
-		if e := RecordList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RecordList, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // RecordPlural requires a user-specified string.
 type RecordPlural struct {
 	At  reader.Position `if:"internal"`
@@ -5819,24 +5099,6 @@ func RecordType_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordType)
 	return
 }
 
-func RecordType_Detailed_Optional_Marshal(n jsonexp.Context, val **RecordType) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RecordType_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RecordType_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RecordType) (err error) {
-	if len(b) > 0 {
-		var el RecordType
-		if e := RecordType_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RecordType, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // RecordsPossessProperties
 type RecordsPossessProperties struct {
 	RecordPlural RecordPlural   `if:"label=_"`
@@ -5890,24 +5152,6 @@ func RecordsPossessProperties_Detailed_Unmarshal(n jsonexp.Context, b []byte, ou
 		err = errutil.New(Type_RecordsPossessProperties+"."+RecordsPossessProperties_RecordPlural, "-", e)
 	} else if e := PropertyDecl_Detailed_Repeats_Unmarshal(n, msg.Fields[RecordsPossessProperties_PropertyDecl], &out.PropertyDecl); e != nil {
 		err = errutil.New(Type_RecordsPossessProperties+"."+RecordsPossessProperties_PropertyDecl, "-", e)
-	}
-	return
-}
-
-func RecordsPossessProperties_Detailed_Optional_Marshal(n jsonexp.Context, val **RecordsPossessProperties) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RecordsPossessProperties_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RecordsPossessProperties_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RecordsPossessProperties) (err error) {
-	if len(b) > 0 {
-		var el RecordsPossessProperties
-		if e := RecordsPossessProperties_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RecordsPossessProperties, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -6094,24 +5338,6 @@ func RelativeToNoun_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Relativ
 	return
 }
 
-func RelativeToNoun_Detailed_Optional_Marshal(n jsonexp.Context, val **RelativeToNoun) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RelativeToNoun_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RelativeToNoun_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativeToNoun) (err error) {
-	if len(b) > 0 {
-		var el RelativeToNoun
-		if e := RelativeToNoun_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RelativeToNoun, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // RenderTemplate Parse text using iffy templates.
 type RenderTemplate struct {
 	Template value.Lines `if:"label=_"`
@@ -6156,24 +5382,6 @@ func RenderTemplate_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderT
 		err = errutil.New(Type_RenderTemplate, "-", e)
 	} else if e := value.Lines_Detailed_Unmarshal(n, msg.Fields[RenderTemplate_Template], &out.Template); e != nil {
 		err = errutil.New(Type_RenderTemplate+"."+RenderTemplate_Template, "-", e)
-	}
-	return
-}
-
-func RenderTemplate_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderTemplate) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RenderTemplate_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RenderTemplate_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderTemplate) (err error) {
-	if len(b) > 0 {
-		var el RenderTemplate
-		if e := RenderTemplate_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RenderTemplate, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -6244,24 +5452,6 @@ func Send_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Send) (err error)
 	return
 }
 
-func Send_Detailed_Optional_Marshal(n jsonexp.Context, val **Send) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Send_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Send_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Send) (err error) {
-	if len(b) > 0 {
-		var el Send
-		if e := Send_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Send, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ShuffleText
 type ShuffleText struct {
 	At    reader.Position `if:"internal"`
@@ -6309,24 +5499,6 @@ func ShuffleText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ShuffleTex
 		err = errutil.New(Type_ShuffleText+"."+ShuffleText_Parts, "-", e)
 	} else {
 		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
-	}
-	return
-}
-
-func ShuffleText_Detailed_Optional_Marshal(n jsonexp.Context, val **ShuffleText) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ShuffleText_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ShuffleText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ShuffleText) (err error) {
-	if len(b) > 0 {
-		var el ShuffleText
-		if e := ShuffleText_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ShuffleText, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -6430,24 +5602,6 @@ func StoppingText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *StoppingT
 	return
 }
 
-func StoppingText_Detailed_Optional_Marshal(n jsonexp.Context, val **StoppingText) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = StoppingText_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func StoppingText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **StoppingText) (err error) {
-	if len(b) > 0 {
-		var el StoppingText
-		if e := StoppingText_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_StoppingText, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // Story
 type Story struct {
 	Paragraph []Paragraph `if:"label=_,optional"`
@@ -6492,24 +5646,6 @@ func Story_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Story) (err erro
 		err = errutil.New(Type_Story, "-", e)
 	} else if e := Paragraph_Detailed_Repeats_Unmarshal(n, msg.Fields[Story_Paragraph], &out.Paragraph); e != nil {
 		err = errutil.New(Type_Story+"."+Story_Paragraph, "-", e)
-	}
-	return
-}
-
-func Story_Detailed_Optional_Marshal(n jsonexp.Context, val **Story) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Story_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Story_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Story) (err error) {
-	if len(b) > 0 {
-		var el Story
-		if e := Story_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Story, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -6749,24 +5885,6 @@ func Tail_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Tail) (
 	return
 }
 
-func Tail_Detailed_Optional_Marshal(n jsonexp.Context, val **Tail) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Tail_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Tail_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Tail) (err error) {
-	if len(b) > 0 {
-		var el Tail
-		if e := Tail_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Tail, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // TestName requires a user-specified string.
 type TestName struct {
 	At  reader.Position `if:"internal"`
@@ -6871,24 +5989,6 @@ func TestOutput_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TestOutput)
 	return
 }
 
-func TestOutput_Detailed_Optional_Marshal(n jsonexp.Context, val **TestOutput) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = TestOutput_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func TestOutput_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestOutput) (err error) {
-	if len(b) > 0 {
-		var el TestOutput
-		if e := TestOutput_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_TestOutput, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // TestRule
 type TestRule struct {
 	TestName TestName    `if:"label=_"`
@@ -6942,24 +6042,6 @@ func TestRule_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TestRule) (er
 		err = errutil.New(Type_TestRule+"."+TestRule_TestName, "-", e)
 	} else if e := ProgramHook_Detailed_Unmarshal(n, msg.Fields[TestRule_Hook], &out.Hook); e != nil {
 		err = errutil.New(Type_TestRule+"."+TestRule_Hook, "-", e)
-	}
-	return
-}
-
-func TestRule_Detailed_Optional_Marshal(n jsonexp.Context, val **TestRule) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = TestRule_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func TestRule_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestRule) (err error) {
-	if len(b) > 0 {
-		var el TestRule
-		if e := TestRule_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_TestRule, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -7021,24 +6103,6 @@ func TestScene_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TestScene) (
 	return
 }
 
-func TestScene_Detailed_Optional_Marshal(n jsonexp.Context, val **TestScene) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = TestScene_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func TestScene_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestScene) (err error) {
-	if len(b) > 0 {
-		var el TestScene
-		if e := TestScene_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_TestScene, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // TestStatement
 type TestStatement struct {
 	At       reader.Position `if:"internal"`
@@ -7095,24 +6159,6 @@ func TestStatement_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TestStat
 		err = errutil.New(Type_TestStatement+"."+TestStatement_Test, "-", e)
 	} else {
 		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
-	}
-	return
-}
-
-func TestStatement_Detailed_Optional_Marshal(n jsonexp.Context, val **TestStatement) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = TestStatement_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func TestStatement_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestStatement) (err error) {
-	if len(b) > 0 {
-		var el TestStatement
-		if e := TestStatement_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_TestStatement, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -7342,24 +6388,6 @@ func TraitPhrase_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TraitPhras
 	return
 }
 
-func TraitPhrase_Detailed_Optional_Marshal(n jsonexp.Context, val **TraitPhrase) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = TraitPhrase_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func TraitPhrase_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TraitPhrase) (err error) {
-	if len(b) > 0 {
-		var el TraitPhrase
-		if e := TraitPhrase_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_TraitPhrase, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // VariableDecl
 type VariableDecl struct {
 	An      Determiner         `if:"label=_"`
@@ -7472,24 +6500,6 @@ func VariableDecl_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[
 	}
 	if err == nil {
 		*out = vals
-	}
-	return
-}
-
-func VariableDecl_Detailed_Optional_Marshal(n jsonexp.Context, val **VariableDecl) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = VariableDecl_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func VariableDecl_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **VariableDecl) (err error) {
-	if len(b) > 0 {
-		var el VariableDecl
-		if e := VariableDecl_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_VariableDecl, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }

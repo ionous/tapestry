@@ -68,24 +68,6 @@ func DebugLog_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *DebugLog) (er
 	return
 }
 
-func DebugLog_Detailed_Optional_Marshal(n jsonexp.Context, val **DebugLog) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = DebugLog_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func DebugLog_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DebugLog) (err error) {
-	if len(b) > 0 {
-		var el DebugLog
-		if e := DebugLog_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_DebugLog, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // DoNothing Statement which does nothing.
 type DoNothing struct {
 	Reason string `if:"label=why,optional,type=text"`
@@ -130,24 +112,6 @@ func DoNothing_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *DoNothing) (
 		err = errutil.New(Type_DoNothing, "-", e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[DoNothing_Reason], &out.Reason); e != nil {
 		err = errutil.New(Type_DoNothing+"."+DoNothing_Reason, "-", e)
-	}
-	return
-}
-
-func DoNothing_Detailed_Optional_Marshal(n jsonexp.Context, val **DoNothing) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = DoNothing_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func DoNothing_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DoNothing) (err error) {
-	if len(b) > 0 {
-		var el DoNothing
-		if e := DoNothing_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_DoNothing, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }

@@ -1,6 +1,6 @@
 // repeatsPartial.js
 'use strict';
-module.exports =`{{#if repeats}}{{#with type}}
+module.exports =`
 func {{Pascal name}}_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]{{Pascal name}}) (ret []byte,err error) {
   var msgs []json.RawMessage
   if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
@@ -41,4 +41,4 @@ func {{Pascal name}}_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out
   }
   return
 }
-{{/with}}{{/if}}`;
+`;

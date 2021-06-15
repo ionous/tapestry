@@ -58,24 +58,6 @@ func Action_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Action) (err er
 	return
 }
 
-func Action_Detailed_Optional_Marshal(n jsonexp.Context, val **Action) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Action_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Action_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Action) (err error) {
-	if len(b) > 0 {
-		var el Action
-		if e := Action_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Action, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // Alias allows the user to refer to a noun by one or more other terms.
 type Alias struct {
 	Names  []string `if:"label=_,type=text"`
@@ -133,24 +115,6 @@ func Alias_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Alias) (err erro
 	return
 }
 
-func Alias_Detailed_Optional_Marshal(n jsonexp.Context, val **Alias) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Alias_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Alias_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Alias) (err error) {
-	if len(b) > 0 {
-		var el Alias
-		if e := Alias_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Alias, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // AllOf makes a parser scanner
 type AllOf struct {
 	Series []ScannerMaker `if:"label=_"`
@@ -199,24 +163,6 @@ func AllOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AllOf) (err erro
 	return
 }
 
-func AllOf_Detailed_Optional_Marshal(n jsonexp.Context, val **AllOf) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = AllOf_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func AllOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AllOf) (err error) {
-	if len(b) > 0 {
-		var el AllOf
-		if e := AllOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_AllOf, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // AnyOf makes a parser scanner
 type AnyOf struct {
 	Options []ScannerMaker `if:"label=_"`
@@ -261,24 +207,6 @@ func AnyOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AnyOf) (err erro
 		err = errutil.New(Type_AnyOf, "-", e)
 	} else if e := ScannerMaker_Detailed_Repeats_Unmarshal(n, msg.Fields[AnyOf_Options], &out.Options); e != nil {
 		err = errutil.New(Type_AnyOf+"."+AnyOf_Options, "-", e)
-	}
-	return
-}
-
-func AnyOf_Detailed_Optional_Marshal(n jsonexp.Context, val **AnyOf) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = AnyOf_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func AnyOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AnyOf) (err error) {
-	if len(b) > 0 {
-		var el AnyOf
-		if e := AnyOf_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_AnyOf, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -340,24 +268,6 @@ func Directive_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Directive) (
 	return
 }
 
-func Directive_Detailed_Optional_Marshal(n jsonexp.Context, val **Directive) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Directive_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Directive_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Directive) (err error) {
-	if len(b) > 0 {
-		var el Directive
-		if e := Directive_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Directive, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // Grammar Read what the player types and turn it into actions.
 type Grammar struct {
 	Grammar GrammarMaker `if:"label=_"`
@@ -402,24 +312,6 @@ func Grammar_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Grammar) (err 
 		err = errutil.New(Type_Grammar, "-", e)
 	} else if e := GrammarMaker_Detailed_Unmarshal(n, msg.Fields[Grammar_Grammar], &out.Grammar); e != nil {
 		err = errutil.New(Type_Grammar+"."+Grammar_Grammar, "-", e)
-	}
-	return
-}
-
-func Grammar_Detailed_Optional_Marshal(n jsonexp.Context, val **Grammar) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Grammar_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Grammar_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Grammar) (err error) {
-	if len(b) > 0 {
-		var el Grammar
-		if e := Grammar_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Grammar, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -499,24 +391,6 @@ func Noun_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Noun) (err error)
 	return
 }
 
-func Noun_Detailed_Optional_Marshal(n jsonexp.Context, val **Noun) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Noun_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Noun_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Noun) (err error) {
-	if len(b) > 0 {
-		var el Noun
-		if e := Noun_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Noun, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // Retarget makes a parser scanner
 type Retarget struct {
 	Span []ScannerMaker `if:"label=_"`
@@ -565,24 +439,6 @@ func Retarget_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Retarget) (er
 	return
 }
 
-func Retarget_Detailed_Optional_Marshal(n jsonexp.Context, val **Retarget) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Retarget_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Retarget_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Retarget) (err error) {
-	if len(b) > 0 {
-		var el Retarget
-		if e := Retarget_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Retarget, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // Reverse makes a parser scanner
 type Reverse struct {
 	Reverses []ScannerMaker `if:"label=_"`
@@ -627,24 +483,6 @@ func Reverse_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Reverse) (err 
 		err = errutil.New(Type_Reverse, "-", e)
 	} else if e := ScannerMaker_Detailed_Repeats_Unmarshal(n, msg.Fields[Reverse_Reverses], &out.Reverses); e != nil {
 		err = errutil.New(Type_Reverse+"."+Reverse_Reverses, "-", e)
-	}
-	return
-}
-
-func Reverse_Detailed_Optional_Marshal(n jsonexp.Context, val **Reverse) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Reverse_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Reverse_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Reverse) (err error) {
-	if len(b) > 0 {
-		var el Reverse
-		if e := Reverse_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Reverse, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -765,24 +603,6 @@ func Self_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Self) (err error)
 	return
 }
 
-func Self_Detailed_Optional_Marshal(n jsonexp.Context, val **Self) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Self_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Self_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Self) (err error) {
-	if len(b) > 0 {
-		var el Self
-		if e := Self_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Self, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // Words makes a parser scanner
 type Words struct {
 	Words []string `if:"label=_,type=text"`
@@ -827,24 +647,6 @@ func Words_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Words) (err erro
 		err = errutil.New(Type_Words, "-", e)
 	} else if e := value.Text_Detailed_Override_Repeats_Unmarshal(n, msg.Fields[Words_Words], &out.Words); e != nil {
 		err = errutil.New(Type_Words+"."+Words_Words, "-", e)
-	}
-	return
-}
-
-func Words_Detailed_Optional_Marshal(n jsonexp.Context, val **Words) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Words_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Words_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Words) (err error) {
-	if len(b) > 0 {
-		var el Words
-		if e := Words_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Words, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }

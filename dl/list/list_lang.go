@@ -60,24 +60,6 @@ func AsNum_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AsNum) (err erro
 	return
 }
 
-func AsNum_Detailed_Optional_Marshal(n jsonexp.Context, val **AsNum) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = AsNum_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func AsNum_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AsNum) (err error) {
-	if len(b) > 0 {
-		var el AsNum
-		if e := AsNum_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_AsNum, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // AsRec Define the name of a record variable.
 type AsRec struct {
 	Var value.VariableName `if:"label=_"`
@@ -127,24 +109,6 @@ func AsRec_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AsRec) (err erro
 	return
 }
 
-func AsRec_Detailed_Optional_Marshal(n jsonexp.Context, val **AsRec) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = AsRec_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func AsRec_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AsRec) (err error) {
-	if len(b) > 0 {
-		var el AsRec
-		if e := AsRec_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_AsRec, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // AsTxt Define the name of a text variable.
 type AsTxt struct {
 	Var value.VariableName `if:"label=_"`
@@ -190,24 +154,6 @@ func AsTxt_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AsTxt) (err erro
 		err = errutil.New(Type_AsTxt, "-", e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[AsTxt_Var], &out.Var); e != nil {
 		err = errutil.New(Type_AsTxt+"."+AsTxt_Var, "-", e)
-	}
-	return
-}
-
-func AsTxt_Detailed_Optional_Marshal(n jsonexp.Context, val **AsTxt) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = AsTxt_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func AsTxt_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AsTxt) (err error) {
-	if len(b) > 0 {
-		var el AsTxt
-		if e := AsTxt_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_AsTxt, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -266,24 +212,6 @@ func EraseEdge_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *EraseEdge) (
 		err = errutil.New(Type_EraseEdge+"."+EraseEdge_From, "-", e)
 	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[EraseEdge_AtEdge], &out.AtEdge); e != nil {
 		err = errutil.New(Type_EraseEdge+"."+EraseEdge_AtEdge, "-", e)
-	}
-	return
-}
-
-func EraseEdge_Detailed_Optional_Marshal(n jsonexp.Context, val **EraseEdge) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = EraseEdge_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func EraseEdge_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **EraseEdge) (err error) {
-	if len(b) > 0 {
-		var el EraseEdge
-		if e := EraseEdge_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_EraseEdge, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -351,24 +279,6 @@ func EraseIndex_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *EraseIndex)
 		err = errutil.New(Type_EraseIndex+"."+EraseIndex_From, "-", e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[EraseIndex_AtIndex], &out.AtIndex); e != nil {
 		err = errutil.New(Type_EraseIndex+"."+EraseIndex_AtIndex, "-", e)
-	}
-	return
-}
-
-func EraseIndex_Detailed_Optional_Marshal(n jsonexp.Context, val **EraseIndex) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = EraseIndex_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func EraseIndex_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **EraseIndex) (err error) {
-	if len(b) > 0 {
-		var el EraseIndex
-		if e := EraseIndex_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_EraseIndex, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -453,24 +363,6 @@ func Erasing_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Erasing) (err 
 		err = errutil.New(Type_Erasing+"."+Erasing_As, "-", e)
 	} else if e := core.Activity_Detailed_Unmarshal(n, msg.Fields[Erasing_Do], &out.Do); e != nil {
 		err = errutil.New(Type_Erasing+"."+Erasing_Do, "-", e)
-	}
-	return
-}
-
-func Erasing_Detailed_Optional_Marshal(n jsonexp.Context, val **Erasing) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Erasing_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Erasing_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Erasing) (err error) {
-	if len(b) > 0 {
-		var el Erasing
-		if e := Erasing_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Erasing, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -560,24 +452,6 @@ func ErasingEdge_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ErasingEdg
 	return
 }
 
-func ErasingEdge_Detailed_Optional_Marshal(n jsonexp.Context, val **ErasingEdge) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ErasingEdge_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ErasingEdge_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ErasingEdge) (err error) {
-	if len(b) > 0 {
-		var el ErasingEdge
-		if e := ErasingEdge_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ErasingEdge, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // FromNumList Uses a list of numbers
 type FromNumList struct {
 	Var value.VariableName `if:"label=_"`
@@ -623,24 +497,6 @@ func FromNumList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromNumLis
 		err = errutil.New(Type_FromNumList, "-", e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[FromNumList_Var], &out.Var); e != nil {
 		err = errutil.New(Type_FromNumList+"."+FromNumList_Var, "-", e)
-	}
-	return
-}
-
-func FromNumList_Detailed_Optional_Marshal(n jsonexp.Context, val **FromNumList) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = FromNumList_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func FromNumList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromNumList) (err error) {
-	if len(b) > 0 {
-		var el FromNumList
-		if e := FromNumList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_FromNumList, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -694,24 +550,6 @@ func FromRecList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromRecLis
 	return
 }
 
-func FromRecList_Detailed_Optional_Marshal(n jsonexp.Context, val **FromRecList) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = FromRecList_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func FromRecList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromRecList) (err error) {
-	if len(b) > 0 {
-		var el FromRecList
-		if e := FromRecList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_FromRecList, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // FromTxtList Uses a list of text
 type FromTxtList struct {
 	Var value.VariableName `if:"label=_"`
@@ -757,24 +595,6 @@ func FromTxtList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromTxtLis
 		err = errutil.New(Type_FromTxtList, "-", e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[FromTxtList_Var], &out.Var); e != nil {
 		err = errutil.New(Type_FromTxtList+"."+FromTxtList_Var, "-", e)
-	}
-	return
-}
-
-func FromTxtList_Detailed_Optional_Marshal(n jsonexp.Context, val **FromTxtList) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = FromTxtList_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func FromTxtList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromTxtList) (err error) {
-	if len(b) > 0 {
-		var el FromTxtList
-		if e := FromTxtList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_FromTxtList, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -828,24 +648,6 @@ func IntoNumList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoNumLis
 	return
 }
 
-func IntoNumList_Detailed_Optional_Marshal(n jsonexp.Context, val **IntoNumList) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = IntoNumList_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func IntoNumList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IntoNumList) (err error) {
-	if len(b) > 0 {
-		var el IntoNumList
-		if e := IntoNumList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_IntoNumList, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // IntoRecList Targets a list of records
 type IntoRecList struct {
 	Var value.VariableName `if:"label=_"`
@@ -895,24 +697,6 @@ func IntoRecList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoRecLis
 	return
 }
 
-func IntoRecList_Detailed_Optional_Marshal(n jsonexp.Context, val **IntoRecList) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = IntoRecList_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func IntoRecList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IntoRecList) (err error) {
-	if len(b) > 0 {
-		var el IntoRecList
-		if e := IntoRecList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_IntoRecList, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // IntoTxtList Targets a list of text
 type IntoTxtList struct {
 	Var value.VariableName `if:"label=_"`
@@ -958,24 +742,6 @@ func IntoTxtList_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoTxtLis
 		err = errutil.New(Type_IntoTxtList, "-", e)
 	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[IntoTxtList_Var], &out.Var); e != nil {
 		err = errutil.New(Type_IntoTxtList+"."+IntoTxtList_Var, "-", e)
-	}
-	return
-}
-
-func IntoTxtList_Detailed_Optional_Marshal(n jsonexp.Context, val **IntoTxtList) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = IntoTxtList_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func IntoTxtList_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IntoTxtList) (err error) {
-	if len(b) > 0 {
-		var el IntoTxtList
-		if e := IntoTxtList_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_IntoTxtList, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1034,24 +800,6 @@ func ListAt_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListAt) (err er
 		err = errutil.New(Type_ListAt+"."+ListAt_List, "-", e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ListAt_Index], &out.Index); e != nil {
 		err = errutil.New(Type_ListAt+"."+ListAt_Index, "-", e)
-	}
-	return
-}
-
-func ListAt_Detailed_Optional_Marshal(n jsonexp.Context, val **ListAt) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListAt_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListAt_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListAt) (err error) {
-	if len(b) > 0 {
-		var el ListAt
-		if e := ListAt_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListAt, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1132,24 +880,6 @@ func ListEach_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListEach) (er
 	return
 }
 
-func ListEach_Detailed_Optional_Marshal(n jsonexp.Context, val **ListEach) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListEach_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListEach_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListEach) (err error) {
-	if len(b) > 0 {
-		var el ListEach
-		if e := ListEach_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListEach, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ListFind Search a list for a specific value.
 type ListFind struct {
 	Value rt.Assignment `if:"label=_"`
@@ -1204,24 +934,6 @@ func ListFind_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListFind) (er
 		err = errutil.New(Type_ListFind+"."+ListFind_Value, "-", e)
 	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ListFind_List], &out.List); e != nil {
 		err = errutil.New(Type_ListFind+"."+ListFind_List, "-", e)
-	}
-	return
-}
-
-func ListFind_Detailed_Optional_Marshal(n jsonexp.Context, val **ListFind) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListFind_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListFind_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListFind) (err error) {
-	if len(b) > 0 {
-		var el ListFind
-		if e := ListFind_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListFind, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1289,24 +1001,6 @@ func ListGather_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListGather)
 		err = errutil.New(Type_ListGather+"."+ListGather_From, "-", e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListGather_Using], &out.Using); e != nil {
 		err = errutil.New(Type_ListGather+"."+ListGather_Using, "-", e)
-	}
-	return
-}
-
-func ListGather_Detailed_Optional_Marshal(n jsonexp.Context, val **ListGather) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListGather_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListGather_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListGather) (err error) {
-	if len(b) > 0 {
-		var el ListGather
-		if e := ListGather_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListGather, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1387,24 +1081,6 @@ func ListLen_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListLen) (err 
 	return
 }
 
-func ListLen_Detailed_Optional_Marshal(n jsonexp.Context, val **ListLen) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListLen_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListLen_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListLen) (err error) {
-	if len(b) > 0 {
-		var el ListLen
-		if e := ListLen_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListLen, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the &#x27;from list&#x27;, one value at a time.
 type ListMap struct {
 	ToList       string        `if:"label=_,type=text"`
@@ -1468,24 +1144,6 @@ func ListMap_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListMap) (err 
 		err = errutil.New(Type_ListMap+"."+ListMap_FromList, "-", e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListMap_UsingPattern], &out.UsingPattern); e != nil {
 		err = errutil.New(Type_ListMap+"."+ListMap_UsingPattern, "-", e)
-	}
-	return
-}
-
-func ListMap_Detailed_Optional_Marshal(n jsonexp.Context, val **ListMap) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListMap_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListMap_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListMap) (err error) {
-	if len(b) > 0 {
-		var el ListMap
-		if e := ListMap_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListMap, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1557,24 +1215,6 @@ func ListReduce_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListReduce)
 	return
 }
 
-func ListReduce_Detailed_Optional_Marshal(n jsonexp.Context, val **ListReduce) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListReduce_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListReduce_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListReduce) (err error) {
-	if len(b) > 0 {
-		var el ListReduce
-		if e := ListReduce_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListReduce, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ListReverse Reverse a list.
 type ListReverse struct {
 	List ListSource `if:"label=_"`
@@ -1620,24 +1260,6 @@ func ListReverse_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListRevers
 		err = errutil.New(Type_ListReverse, "-", e)
 	} else if e := ListSource_Detailed_Unmarshal(n, msg.Fields[ListReverse_List], &out.List); e != nil {
 		err = errutil.New(Type_ListReverse+"."+ListReverse_List, "-", e)
-	}
-	return
-}
-
-func ListReverse_Detailed_Optional_Marshal(n jsonexp.Context, val **ListReverse) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListReverse_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListReverse_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListReverse) (err error) {
-	if len(b) > 0 {
-		var el ListReverse
-		if e := ListReverse_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListReverse, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1709,24 +1331,6 @@ func ListSet_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSet) (err 
 	return
 }
 
-func ListSet_Detailed_Optional_Marshal(n jsonexp.Context, val **ListSet) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListSet_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListSet_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListSet) (err error) {
-	if len(b) > 0 {
-		var el ListSet
-		if e := ListSet_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListSet, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ListSlice Create a new list from a section of another list.,Start is optional, if omitted slice starts at the first element.,If start is greater the length, an empty array is returned.,Slice doesnt include the ending index.,Negatives indices indicates an offset from the end.,When end is omitted, copy up to and including the last element;,and do the same if the end is greater than the length
 type ListSlice struct {
 	List  rt.Assignment `if:"label=_"`
@@ -1794,24 +1398,6 @@ func ListSlice_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSlice) (
 	return
 }
 
-func ListSlice_Detailed_Optional_Marshal(n jsonexp.Context, val **ListSlice) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListSlice_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListSlice_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListSlice) (err error) {
-	if len(b) > 0 {
-		var el ListSlice
-		if e := ListSlice_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListSlice, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ListSortNumbers
 type ListSortNumbers struct {
 	Var        value.VariableName `if:"label=_"`
@@ -1875,24 +1461,6 @@ func ListSortNumbers_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSo
 		err = errutil.New(Type_ListSortNumbers+"."+ListSortNumbers_ByField, "-", e)
 	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ListSortNumbers_Descending], &out.Descending); e != nil {
 		err = errutil.New(Type_ListSortNumbers+"."+ListSortNumbers_Descending, "-", e)
-	}
-	return
-}
-
-func ListSortNumbers_Detailed_Optional_Marshal(n jsonexp.Context, val **ListSortNumbers) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListSortNumbers_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListSortNumbers_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListSortNumbers) (err error) {
-	if len(b) > 0 {
-		var el ListSortNumbers
-		if e := ListSortNumbers_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListSortNumbers, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -1973,24 +1541,6 @@ func ListSortText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSortT
 	return
 }
 
-func ListSortText_Detailed_Optional_Marshal(n jsonexp.Context, val **ListSortText) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListSortText_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListSortText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListSortText) (err error) {
-	if len(b) > 0 {
-		var el ListSortText
-		if e := ListSortText_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListSortText, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortUsing struct {
 	Var   value.VariableName `if:"label=_"`
@@ -2045,24 +1595,6 @@ func ListSortUsing_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSort
 		err = errutil.New(Type_ListSortUsing+"."+ListSortUsing_Var, "-", e)
 	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ListSortUsing_Using], &out.Using); e != nil {
 		err = errutil.New(Type_ListSortUsing+"."+ListSortUsing_Using, "-", e)
-	}
-	return
-}
-
-func ListSortUsing_Detailed_Optional_Marshal(n jsonexp.Context, val **ListSortUsing) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListSortUsing_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListSortUsing_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListSortUsing) (err error) {
-	if len(b) > 0 {
-		var el ListSortUsing
-		if e := ListSortUsing_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListSortUsing, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -2170,24 +1702,6 @@ func ListSplice_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ListSplice)
 	return
 }
 
-func ListSplice_Detailed_Optional_Marshal(n jsonexp.Context, val **ListSplice) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = ListSplice_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func ListSplice_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ListSplice) (err error) {
-	if len(b) > 0 {
-		var el ListSplice
-		if e := ListSplice_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_ListSplice, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 const Type_ListTarget = "list_target"
 
 func ListTarget_Detailed_Marshal(n jsonexp.Context, ptr *ListTarget) (ret []byte, err error) {
@@ -2282,24 +1796,6 @@ func PutEdge_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PutEdge) (err 
 	return
 }
 
-func PutEdge_Detailed_Optional_Marshal(n jsonexp.Context, val **PutEdge) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = PutEdge_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func PutEdge_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PutEdge) (err error) {
-	if len(b) > 0 {
-		var el PutEdge
-		if e := PutEdge_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_PutEdge, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // PutIndex Replace one value in a list with another
 type PutIndex struct {
 	From    rt.Assignment `if:"label=_"`
@@ -2367,24 +1863,6 @@ func PutIndex_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PutIndex) (er
 	return
 }
 
-func PutIndex_Detailed_Optional_Marshal(n jsonexp.Context, val **PutIndex) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = PutIndex_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func PutIndex_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PutIndex) (err error) {
-	if len(b) > 0 {
-		var el PutIndex
-		if e := PutIndex_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_PutIndex, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // Range Generates a series of numbers r[i] &#x3D; (start + step*i) where i&gt;&#x3D;0.,Start and step default to 1, stop defaults to start;,the inputs are truncated to produce whole numbers;,a zero step returns an error.,A positive step ends the series when the returned value would exceed stop,while a negative step ends before generating a value less than stop.
 type Range struct {
 	To     rt.NumberEval `if:"label=_"`
@@ -2447,24 +1925,6 @@ func Range_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Range) (err erro
 		err = errutil.New(Type_Range+"."+Range_From, "-", e)
 	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[Range_ByStep], &out.ByStep); e != nil {
 		err = errutil.New(Type_Range+"."+Range_ByStep, "-", e)
-	}
-	return
-}
-
-func Range_Detailed_Optional_Marshal(n jsonexp.Context, val **Range) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = Range_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func Range_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Range) (err error) {
-	if len(b) > 0 {
-		var el Range
-		if e := Range_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_Range, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }

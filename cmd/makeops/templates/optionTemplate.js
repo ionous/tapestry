@@ -1,6 +1,6 @@
 // optionalTemplate.js
 'use strict';
-module.exports =`{{#if optional}}{{#with type}}
+module.exports =`
 func {{Pascal name}}_Detailed_Optional_Marshal(n jsonexp.Context, val **{{Pascal name}}) (ret []byte,err error) {
   if ptr := *val; ptr != nil {
     ret, err = {{Pascal name}}_Detailed_Marshal(n, ptr)
@@ -18,4 +18,4 @@ func {{Pascal name}}_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, ou
   }
   return
 }
-{{/with}}{{/if}}`;
+`;

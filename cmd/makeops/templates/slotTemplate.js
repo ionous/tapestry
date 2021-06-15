@@ -31,7 +31,5 @@ func {{Pascal name}}_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *{{Pasc
 }
 {{/if}}
 {{/with}}
-{{#if marshal}}
-{{>repeat spec=this}}
-{{/if}}
+{{#if repeats}}{{>repeat this.type}}{{/if}}
 `;

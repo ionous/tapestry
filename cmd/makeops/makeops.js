@@ -23,7 +23,7 @@ const lower = function(name) {
   if (name && name[0] === '$') {
     name = name.slice(1);
   }
-  return name.toLowerCase();
+  return name? name.toLowerCase(): "xxxx";
 };
 
 // change to pascal-cased ( golang public )
@@ -213,7 +213,7 @@ Handlebars.registerHelper('GroupOf', function(desc) {
 })
 
 // load each js file as a handlebars template
-const partials = ['spec', 'repeat', 'optional', 'sig'];
+const partials = ['spec', 'repeat', 'option', 'sig', 'flowDetails'];
 const sources = ['header', 'slot', 'prim', 'swap', 'flow', 'footer', 'regList'];
 partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Template.js`)));
 const templates = Object.fromEntries(sources.map(k => [k,

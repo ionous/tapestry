@@ -1,5 +1,5 @@
 // sigTemplate.js
-module.exports = `
+ module.exports = `
 func (op* {{Pascal name}}) MarshalDetailed(n jsonexp.Context) (ret []byte,err error) {
   return {{Pascal name}}_Detailed_Marshal(n, op)
 }

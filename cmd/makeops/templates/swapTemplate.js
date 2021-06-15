@@ -13,7 +13,7 @@ type {{Pascal name}} struct {
 const {{Pascal ../name}}_{{Pascal @key}}= "{{@key}}";
 {{/each}}
 
-{{>spec spec=this}}
+{{>spec}}
 
 func (op* {{Pascal name}}) GetChoice() (ret string, okay bool) {
   switch op.Opt.(type) {
@@ -28,7 +28,7 @@ func (op* {{Pascal name}}) GetChoice() (ret string, okay bool) {
 }
 
 {{~#if ../marshal}}
-{{>sig sig=this}}
+{{>sig}}
 
 func {{Pascal name}}_Detailed_Marshal(n jsonexp.Context, val *{{Pascal name}}) (ret []byte,err error) {
   if pick, ok := val.GetChoice(); !ok {
@@ -87,7 +87,5 @@ func {{Pascal name}}_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *{{Pasc
 }
 {{/if}}
 {{/with}}
-{{#if marshal}}
-{{>repeat spec=this}}
-{{/if}}
+{{#if repeats}}{{>repeat type}}{{/if}}
 `;

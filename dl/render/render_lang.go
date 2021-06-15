@@ -59,24 +59,6 @@ func RenderExp_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderExp) (
 	return
 }
 
-func RenderExp_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderExp) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RenderExp_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RenderExp_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderExp) (err error) {
-	if len(b) > 0 {
-		var el RenderExp
-		if e := RenderExp_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RenderExp, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // RenderField in template phrases, picks between record variables, object variables, and named global objects.,ex. could be &quot;ringBearer&quot;, &quot;SamWise&quot;, or &quot;frodo&quot;
 type RenderField struct {
 	Name rt.TextEval `if:"label=_"`
@@ -121,24 +103,6 @@ func RenderField_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderFiel
 		err = errutil.New(Type_RenderField, "-", e)
 	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[RenderField_Name], &out.Name); e != nil {
 		err = errutil.New(Type_RenderField+"."+RenderField_Name, "-", e)
-	}
-	return
-}
-
-func RenderField_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderField) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RenderField_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RenderField_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderField) (err error) {
-	if len(b) > 0 {
-		var el RenderField
-		if e := RenderField_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RenderField, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
@@ -245,24 +209,6 @@ func RenderName_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderName)
 	return
 }
 
-func RenderName_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderName) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RenderName_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RenderName_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderName) (err error) {
-	if len(b) > 0 {
-		var el RenderName
-		if e := RenderName_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RenderName, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // RenderPattern printing is generally an activity b/c say is an activity,and we want the ability to say several things in series.
 type RenderPattern struct {
 	Pattern   value.PatternName `if:"label=_"`
@@ -321,24 +267,6 @@ func RenderPattern_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderPa
 	return
 }
 
-func RenderPattern_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderPattern) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RenderPattern_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RenderPattern_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderPattern) (err error) {
-	if len(b) > 0 {
-		var el RenderPattern
-		if e := RenderPattern_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RenderPattern, "-", e)
-		} else {
-			*out = &el
-		}
-	}
-	return
-}
-
 // RenderRef returns the value of a variable or the id of an object.
 type RenderRef struct {
 	Name  value.VariableName `if:"label=_"`
@@ -392,24 +320,6 @@ func RenderRef_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderRef) (
 		err = errutil.New(Type_RenderRef+"."+RenderRef_Name, "-", e)
 	} else if e := RenderFlags_Detailed_Unmarshal(n, msg.Fields[RenderRef_Flags], &out.Flags); e != nil {
 		err = errutil.New(Type_RenderRef+"."+RenderRef_Flags, "-", e)
-	}
-	return
-}
-
-func RenderRef_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderRef) (ret []byte, err error) {
-	if ptr := *val; ptr != nil {
-		ret, err = RenderRef_Detailed_Marshal(n, ptr)
-	}
-	return
-}
-func RenderRef_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderRef) (err error) {
-	if len(b) > 0 {
-		var el RenderRef
-		if e := RenderRef_Detailed_Unmarshal(n, b, &el); e != nil {
-			err = errutil.New(Type_RenderRef, "-", e)
-		} else {
-			*out = &el
-		}
 	}
 	return
 }
