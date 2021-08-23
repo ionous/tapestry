@@ -102,27 +102,20 @@ func ReciprocalOf_Compact_Optional_Marshal(n jsonexp.Context, val **ReciprocalOf
 	return
 }
 func ReciprocalOf_Compact_Marshal(n jsonexp.Context, val *ReciprocalOf) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ReciprocalOf_Lede)
 	if b, e := value.RelationName_Compact_Marshal(n, &val.Via); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("object")
-		fields = append(fields, b)
+		sig.AddMsg("object", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -294,27 +287,20 @@ func ReciprocalsOf_Compact_Optional_Marshal(n jsonexp.Context, val **Reciprocals
 	return
 }
 func ReciprocalsOf_Compact_Marshal(n jsonexp.Context, val *ReciprocalsOf) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ReciprocalsOf_Lede)
 	if b, e := value.RelationName_Compact_Marshal(n, &val.Via); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("object")
-		fields = append(fields, b)
+		sig.AddMsg("object", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -487,34 +473,25 @@ func Relate_Compact_Optional_Marshal(n jsonexp.Context, val **Relate) (ret []byt
 	return
 }
 func Relate_Compact_Marshal(n jsonexp.Context, val *Relate) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(Relate_Lede)
 	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.TextEval_Compact_Marshal(n, &val.ToObject); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("to")
-		fields = append(fields, b)
+		sig.AddMsg("to", b)
 	}
-
 	if b, e := value.RelationName_Compact_Marshal(n, &val.Via); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("via")
-		fields = append(fields, b)
+		sig.AddMsg("via", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -696,27 +673,20 @@ func RelativeOf_Compact_Optional_Marshal(n jsonexp.Context, val **RelativeOf) (r
 	return
 }
 func RelativeOf_Compact_Marshal(n jsonexp.Context, val *RelativeOf) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(RelativeOf_Lede)
 	if b, e := value.RelationName_Compact_Marshal(n, &val.Via); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("object")
-		fields = append(fields, b)
+		sig.AddMsg("object", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -888,27 +858,20 @@ func RelativesOf_Compact_Optional_Marshal(n jsonexp.Context, val **RelativesOf) 
 	return
 }
 func RelativesOf_Compact_Marshal(n jsonexp.Context, val *RelativesOf) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(RelativesOf_Lede)
 	if b, e := value.RelationName_Compact_Marshal(n, &val.Via); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("object")
-		fields = append(fields, b)
+		sig.AddMsg("object", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }

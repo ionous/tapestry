@@ -102,27 +102,20 @@ func DebugLog_Compact_Optional_Marshal(n jsonexp.Context, val **DebugLog) (ret [
 	return
 }
 func DebugLog_Compact_Marshal(n jsonexp.Context, val *DebugLog) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(DebugLog_Lede)
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.Value); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := LoggingLevel_Compact_Optional_Marshal(n, &val.LogLevel); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("as")
-		fields = append(fields, b)
+		sig.AddMsg("as", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -291,20 +284,15 @@ func DoNothing_Compact_Optional_Marshal(n jsonexp.Context, val **DoNothing) (ret
 	return
 }
 func DoNothing_Compact_Marshal(n jsonexp.Context, val *DoNothing) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(DoNothing_Lede)
 	if b, e := value.Text_Override_Compact_Optional_Marshal(n, &val.Reason); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("why")
-		fields = append(fields, b)
+		sig.AddMsg("why", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }

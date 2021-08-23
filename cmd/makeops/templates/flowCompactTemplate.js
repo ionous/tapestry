@@ -12,23 +12,28 @@ func {{Pascal name}}_Compact_Optional_Marshal(n jsonexp.Context, val **{{Pascal 
   return
 }
 func {{Pascal name}}_Compact_Marshal(n jsonexp.Context, val *{{Pascal name}}) (ret []byte, err error) {
-  var sig jsonexp.Sig
-  var fields []json.RawMessage
+  var sig jsonexp.CompactFlow
   sig.WriteLede({{Pascal name}}_Lede)
 {{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
   if b, e := {{ScopeOf type}}{{Pascal type}}{{#if (OverrideOf type)}}_Override{{/if}}_Compact{{#if repeats}}_Repeats{{else if optional}}_Optional{{/if}}_Marshal(n, &val.{{Pascal @key}}); e != nil {
     err = errutil.Append(err, e)
   } else{{#if optional}} if len(b) > 0{{/if}} {
-    sig.WriteLabel("{{SelectorOf @key this @index}}")
-    fields = append(fields, b)
+    sig.AddMsg("{{SelectorOf @key this @index}}", b)
   }
-{{/unless}}{{/each}}
+{{~/unless}}{{/each}}
   if err == nil {
-    ret, err = json.Marshal(map[string]interface{}{
-{{~#if (IsPositioned this)}}{{#if val.At.Offset}}
-    "id": val.At.Offset,{{/if}}{{/if}}
-      sig.String(): fields,
-    })
+{{#unless (IsPositioned this)}}
+    ret, err = sig.MarshalJSON()
+{{else}}
+    if len(val.At.Offset) > 0  {
+      ret, err = json.Marshal(map[string]interface{}{
+      "id": val.At.Offset,
+        sig.String(): sig.Fields,
+      })
+    } else {
+      ret, err = sig.MarshalJSON()
+    }
+{{~/unless}}
   }
   return
 }

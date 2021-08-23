@@ -101,20 +101,15 @@ func AsNum_Compact_Optional_Marshal(n jsonexp.Context, val **AsNum) (ret []byte,
 	return
 }
 func AsNum_Compact_Marshal(n jsonexp.Context, val *AsNum) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(AsNum_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -274,20 +269,15 @@ func AsRec_Compact_Optional_Marshal(n jsonexp.Context, val **AsRec) (ret []byte,
 	return
 }
 func AsRec_Compact_Marshal(n jsonexp.Context, val *AsRec) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(AsRec_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -447,20 +437,15 @@ func AsTxt_Compact_Optional_Marshal(n jsonexp.Context, val **AsTxt) (ret []byte,
 	return
 }
 func AsTxt_Compact_Marshal(n jsonexp.Context, val *AsTxt) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(AsTxt_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -622,27 +607,20 @@ func EraseEdge_Compact_Optional_Marshal(n jsonexp.Context, val **EraseEdge) (ret
 	return
 }
 func EraseEdge_Compact_Marshal(n jsonexp.Context, val *EraseEdge) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(EraseEdge_Lede)
 	if b, e := ListSource_Compact_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.BoolEval_Compact_Optional_Marshal(n, &val.AtEdge); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("at_front")
-		fields = append(fields, b)
+		sig.AddMsg("at_front", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -816,34 +794,25 @@ func EraseIndex_Compact_Optional_Marshal(n jsonexp.Context, val **EraseIndex) (r
 	return
 }
 func EraseIndex_Compact_Marshal(n jsonexp.Context, val *EraseIndex) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(EraseIndex_Lede)
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Count); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := ListSource_Compact_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("from")
-		fields = append(fields, b)
+		sig.AddMsg("from", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.AtIndex); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("at_index")
-		fields = append(fields, b)
+		sig.AddMsg("at_index", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -1030,48 +999,35 @@ func Erasing_Compact_Optional_Marshal(n jsonexp.Context, val **Erasing) (ret []b
 	return
 }
 func Erasing_Compact_Marshal(n jsonexp.Context, val *Erasing) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(Erasing_Lede)
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Count); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := ListSource_Compact_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("from")
-		fields = append(fields, b)
+		sig.AddMsg("from", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.AtIndex); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("at_index")
-		fields = append(fields, b)
+		sig.AddMsg("at_index", b)
 	}
-
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.As); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("as")
-		fields = append(fields, b)
+		sig.AddMsg("as", b)
 	}
-
 	if b, e := core.Activity_Compact_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("do")
-		fields = append(fields, b)
+		sig.AddMsg("do", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -1279,48 +1235,35 @@ func ErasingEdge_Compact_Optional_Marshal(n jsonexp.Context, val **ErasingEdge) 
 	return
 }
 func ErasingEdge_Compact_Marshal(n jsonexp.Context, val *ErasingEdge) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ErasingEdge_Lede)
 	if b, e := ListSource_Compact_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.BoolEval_Compact_Optional_Marshal(n, &val.AtEdge); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("at_front")
-		fields = append(fields, b)
+		sig.AddMsg("at_front", b)
 	}
-
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.As); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("as")
-		fields = append(fields, b)
+		sig.AddMsg("as", b)
 	}
-
 	if b, e := core.Activity_Compact_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("do")
-		fields = append(fields, b)
+		sig.AddMsg("do", b)
 	}
-
 	if b, e := core.Brancher_Compact_Optional_Marshal(n, &val.Else); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("else")
-		fields = append(fields, b)
+		sig.AddMsg("else", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -1520,20 +1463,15 @@ func FromNumList_Compact_Optional_Marshal(n jsonexp.Context, val **FromNumList) 
 	return
 }
 func FromNumList_Compact_Marshal(n jsonexp.Context, val *FromNumList) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(FromNumList_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -1693,20 +1631,15 @@ func FromRecList_Compact_Optional_Marshal(n jsonexp.Context, val **FromRecList) 
 	return
 }
 func FromRecList_Compact_Marshal(n jsonexp.Context, val *FromRecList) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(FromRecList_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -1866,20 +1799,15 @@ func FromTxtList_Compact_Optional_Marshal(n jsonexp.Context, val **FromTxtList) 
 	return
 }
 func FromTxtList_Compact_Marshal(n jsonexp.Context, val *FromTxtList) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(FromTxtList_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -2039,20 +1967,15 @@ func IntoNumList_Compact_Optional_Marshal(n jsonexp.Context, val **IntoNumList) 
 	return
 }
 func IntoNumList_Compact_Marshal(n jsonexp.Context, val *IntoNumList) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(IntoNumList_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -2212,20 +2135,15 @@ func IntoRecList_Compact_Optional_Marshal(n jsonexp.Context, val **IntoRecList) 
 	return
 }
 func IntoRecList_Compact_Marshal(n jsonexp.Context, val *IntoRecList) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(IntoRecList_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -2385,20 +2303,15 @@ func IntoTxtList_Compact_Optional_Marshal(n jsonexp.Context, val **IntoTxtList) 
 	return
 }
 func IntoTxtList_Compact_Marshal(n jsonexp.Context, val *IntoTxtList) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(IntoTxtList_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -2560,27 +2473,20 @@ func ListAt_Compact_Optional_Marshal(n jsonexp.Context, val **ListAt) (ret []byt
 	return
 }
 func ListAt_Compact_Marshal(n jsonexp.Context, val *ListAt) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListAt_Lede)
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Index); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("index")
-		fields = append(fields, b)
+		sig.AddMsg("index", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -2756,41 +2662,30 @@ func ListEach_Compact_Optional_Marshal(n jsonexp.Context, val **ListEach) (ret [
 	return
 }
 func ListEach_Compact_Marshal(n jsonexp.Context, val *ListEach) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListEach_Lede)
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("across")
-		fields = append(fields, b)
+		sig.AddMsg("across", b)
 	}
-
 	if b, e := ListIterator_Compact_Marshal(n, &val.As); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("as")
-		fields = append(fields, b)
+		sig.AddMsg("as", b)
 	}
-
 	if b, e := core.Activity_Compact_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("do")
-		fields = append(fields, b)
+		sig.AddMsg("do", b)
 	}
-
 	if b, e := core.Brancher_Compact_Optional_Marshal(n, &val.Else); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("else")
-		fields = append(fields, b)
+		sig.AddMsg("else", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -2982,27 +2877,20 @@ func ListFind_Compact_Optional_Marshal(n jsonexp.Context, val **ListFind) (ret [
 	return
 }
 func ListFind_Compact_Marshal(n jsonexp.Context, val *ListFind) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListFind_Lede)
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.Value); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("list")
-		fields = append(fields, b)
+		sig.AddMsg("list", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -3176,34 +3064,25 @@ func ListGather_Compact_Optional_Marshal(n jsonexp.Context, val **ListGather) (r
 	return
 }
 func ListGather_Compact_Marshal(n jsonexp.Context, val *ListGather) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListGather_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := ListSource_Compact_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("from")
-		fields = append(fields, b)
+		sig.AddMsg("from", b)
 	}
-
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.Using); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -3480,20 +3359,15 @@ func ListLen_Compact_Optional_Marshal(n jsonexp.Context, val **ListLen) (ret []b
 	return
 }
 func ListLen_Compact_Marshal(n jsonexp.Context, val *ListLen) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListLen_Lede)
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -3657,34 +3531,25 @@ func ListMap_Compact_Optional_Marshal(n jsonexp.Context, val **ListMap) (ret []b
 	return
 }
 func ListMap_Compact_Marshal(n jsonexp.Context, val *ListMap) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListMap_Lede)
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.ToList); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.FromList); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("from_list")
-		fields = append(fields, b)
+		sig.AddMsg("from_list", b)
 	}
-
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.UsingPattern); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("using")
-		fields = append(fields, b)
+		sig.AddMsg("using", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -3868,34 +3733,25 @@ func ListReduce_Compact_Optional_Marshal(n jsonexp.Context, val **ListReduce) (r
 	return
 }
 func ListReduce_Compact_Marshal(n jsonexp.Context, val *ListReduce) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListReduce_Lede)
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.IntoValue); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("into")
-		fields = append(fields, b)
+		sig.AddMsg("into", b)
 	}
-
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.FromList); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("from_list")
-		fields = append(fields, b)
+		sig.AddMsg("from_list", b)
 	}
-
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.UsingPattern); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("using")
-		fields = append(fields, b)
+		sig.AddMsg("using", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -4075,20 +3931,15 @@ func ListReverse_Compact_Optional_Marshal(n jsonexp.Context, val **ListReverse) 
 	return
 }
 func ListReverse_Compact_Marshal(n jsonexp.Context, val *ListReverse) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListReverse_Lede)
 	if b, e := ListSource_Compact_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -4252,34 +4103,25 @@ func ListSet_Compact_Optional_Marshal(n jsonexp.Context, val **ListSet) (ret []b
 	return
 }
 func ListSet_Compact_Marshal(n jsonexp.Context, val *ListSet) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListSet_Lede)
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Index); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("index")
-		fields = append(fields, b)
+		sig.AddMsg("index", b)
 	}
-
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("from")
-		fields = append(fields, b)
+		sig.AddMsg("from", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -4463,34 +4305,25 @@ func ListSlice_Compact_Optional_Marshal(n jsonexp.Context, val **ListSlice) (ret
 	return
 }
 func ListSlice_Compact_Marshal(n jsonexp.Context, val *ListSlice) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListSlice_Lede)
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Optional_Marshal(n, &val.Start); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("start")
-		fields = append(fields, b)
+		sig.AddMsg("start", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Optional_Marshal(n, &val.End); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("end")
-		fields = append(fields, b)
+		sig.AddMsg("end", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -4674,34 +4507,25 @@ func ListSortNumbers_Compact_Optional_Marshal(n jsonexp.Context, val **ListSortN
 	return
 }
 func ListSortNumbers_Compact_Marshal(n jsonexp.Context, val *ListSortNumbers) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListSortNumbers_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.ByField); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("by_field")
-		fields = append(fields, b)
+		sig.AddMsg("by_field", b)
 	}
-
 	if b, e := rt.BoolEval_Compact_Optional_Marshal(n, &val.Descending); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("descending")
-		fields = append(fields, b)
+		sig.AddMsg("descending", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -4887,41 +4711,30 @@ func ListSortText_Compact_Optional_Marshal(n jsonexp.Context, val **ListSortText
 	return
 }
 func ListSortText_Compact_Marshal(n jsonexp.Context, val *ListSortText) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListSortText_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.ByField); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("by_field")
-		fields = append(fields, b)
+		sig.AddMsg("by_field", b)
 	}
-
 	if b, e := rt.BoolEval_Compact_Optional_Marshal(n, &val.Descending); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("descending")
-		fields = append(fields, b)
+		sig.AddMsg("descending", b)
 	}
-
 	if b, e := rt.BoolEval_Compact_Optional_Marshal(n, &val.UsingCase); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("using_case")
-		fields = append(fields, b)
+		sig.AddMsg("using_case", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -5113,27 +4926,20 @@ func ListSortUsing_Compact_Optional_Marshal(n jsonexp.Context, val **ListSortUsi
 	return
 }
 func ListSortUsing_Compact_Marshal(n jsonexp.Context, val *ListSortUsing) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListSortUsing_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.Using); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("using")
-		fields = append(fields, b)
+		sig.AddMsg("using", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -5406,41 +5212,30 @@ func ListSplice_Compact_Optional_Marshal(n jsonexp.Context, val **ListSplice) (r
 	return
 }
 func ListSplice_Compact_Marshal(n jsonexp.Context, val *ListSplice) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(ListSplice_Lede)
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.List); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Start); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("start")
-		fields = append(fields, b)
+		sig.AddMsg("start", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Remove); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("remove")
-		fields = append(fields, b)
+		sig.AddMsg("remove", b)
 	}
-
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.Insert); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("insert")
-		fields = append(fields, b)
+		sig.AddMsg("insert", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -5731,34 +5526,25 @@ func PutEdge_Compact_Optional_Marshal(n jsonexp.Context, val **PutEdge) (ret []b
 	return
 }
 func PutEdge_Compact_Marshal(n jsonexp.Context, val *PutEdge) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(PutEdge_Lede)
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := ListTarget_Compact_Marshal(n, &val.Into); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("into")
-		fields = append(fields, b)
+		sig.AddMsg("into", b)
 	}
-
 	if b, e := rt.BoolEval_Compact_Optional_Marshal(n, &val.AtEdge); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("at_front")
-		fields = append(fields, b)
+		sig.AddMsg("at_front", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -5942,34 +5728,25 @@ func PutIndex_Compact_Optional_Marshal(n jsonexp.Context, val **PutIndex) (ret [
 	return
 }
 func PutIndex_Compact_Marshal(n jsonexp.Context, val *PutIndex) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(PutIndex_Lede)
 	if b, e := rt.Assignment_Compact_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := ListTarget_Compact_Marshal(n, &val.Into); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("into")
-		fields = append(fields, b)
+		sig.AddMsg("into", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.AtIndex); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("at_index")
-		fields = append(fields, b)
+		sig.AddMsg("at_index", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -6152,34 +5929,25 @@ func Range_Compact_Optional_Marshal(n jsonexp.Context, val **Range) (ret []byte,
 	return
 }
 func Range_Compact_Marshal(n jsonexp.Context, val *Range) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(Range_Lede)
 	if b, e := rt.NumberEval_Compact_Marshal(n, &val.To); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Optional_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("from")
-		fields = append(fields, b)
+		sig.AddMsg("from", b)
 	}
-
 	if b, e := rt.NumberEval_Compact_Optional_Marshal(n, &val.ByStep); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		sig.WriteLabel("by_step")
-		fields = append(fields, b)
+		sig.AddMsg("by_step", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }

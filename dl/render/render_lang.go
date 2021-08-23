@@ -100,20 +100,15 @@ func RenderExp_Compact_Optional_Marshal(n jsonexp.Context, val **RenderExp) (ret
 	return
 }
 func RenderExp_Compact_Marshal(n jsonexp.Context, val *RenderExp) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderExp_Lede)
 	if b, e := rt.TextEval_Compact_Marshal(n, &val.Expression); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -272,20 +267,15 @@ func RenderField_Compact_Optional_Marshal(n jsonexp.Context, val **RenderField) 
 	return
 }
 func RenderField_Compact_Marshal(n jsonexp.Context, val *RenderField) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderField_Lede)
 	if b, e := rt.TextEval_Compact_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -605,20 +595,15 @@ func RenderName_Compact_Optional_Marshal(n jsonexp.Context, val **RenderName) (r
 	return
 }
 func RenderName_Compact_Marshal(n jsonexp.Context, val *RenderName) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderName_Lede)
 	if b, e := value.Text_Override_Compact_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -780,27 +765,20 @@ func RenderPattern_Compact_Optional_Marshal(n jsonexp.Context, val **RenderPatte
 	return
 }
 func RenderPattern_Compact_Marshal(n jsonexp.Context, val *RenderPattern) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderPattern_Lede)
 	if b, e := value.PatternName_Compact_Marshal(n, &val.Pattern); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := core.CallArgs_Compact_Marshal(n, &val.Arguments); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("args")
-		fields = append(fields, b)
+		sig.AddMsg("args", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
@@ -971,27 +949,20 @@ func RenderRef_Compact_Optional_Marshal(n jsonexp.Context, val **RenderRef) (ret
 	return
 }
 func RenderRef_Compact_Marshal(n jsonexp.Context, val *RenderRef) (ret []byte, err error) {
-	var sig jsonexp.Sig
-	var fields []json.RawMessage
+	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderRef_Lede)
 	if b, e := value.VariableName_Compact_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("")
-		fields = append(fields, b)
+		sig.AddMsg("", b)
 	}
-
 	if b, e := RenderFlags_Compact_Marshal(n, &val.Flags); e != nil {
 		err = errutil.Append(err, e)
 	} else {
-		sig.WriteLabel("flags")
-		fields = append(fields, b)
+		sig.AddMsg("flags", b)
 	}
-
 	if err == nil {
-		ret, err = json.Marshal(map[string]interface{}{
-			sig.String(): fields,
-		})
+		ret, err = sig.MarshalJSON()
 	}
 	return
 }
