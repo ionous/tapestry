@@ -7,18 +7,35 @@ import (
 	"github.com/ionous/errutil"
 )
 
-const Type_Assignment = "assignment"
+const Assignment_Type = "assignment"
+
+var Assignment_Compact_Optional_Marshal = Assignment_Compact_Marshal
+var Assignment_Compact_Optional_Unmarshal = Assignment_Compact_Unmarshal
+
+func Assignment_Compact_Marshal(n jsonexp.Context, ptr *Assignment) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func Assignment_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Assignment) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Assignment); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Assignment_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var Assignment_Detailed_Optional_Marshal = Assignment_Detailed_Marshal
+var Assignment_Detailed_Optional_Unmarshal = Assignment_Detailed_Unmarshal
 
 func Assignment_Detailed_Marshal(n jsonexp.Context, ptr *Assignment) (ret []byte, err error) {
-	var b []byte
 	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_Assignment,
-			Value: b,
-		})
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	return
 }
@@ -27,25 +44,95 @@ func Assignment_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Assignment)
 	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
 		err = e
 	} else if store, ok := ptr.(Assignment); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Assignment)
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Assignment_Type)
 	} else {
 		(*out) = store
 	}
 	return
 }
 
-const Type_BoolEval = "bool_eval"
-
-func BoolEval_Detailed_Marshal(n jsonexp.Context, ptr *BoolEval) (ret []byte, err error) {
-	var b []byte
-	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+func Assignment_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Assignment) ([]byte, error) {
+	return Assignment_Repeats_Marshal(n, vals, Assignment_Compact_Marshal)
+}
+func Assignment_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Assignment) ([]byte, error) {
+	return Assignment_Repeats_Marshal(n, vals, Assignment_Detailed_Marshal)
+}
+func Assignment_Repeats_Marshal(n jsonexp.Context, vals *[]Assignment, marshEl func(jsonexp.Context, *Assignment) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Assignment_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_BoolEval,
-			Value: b,
-		})
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Assignment_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Assignment) error {
+	return Assignment_Repeats_Unmarshal(n, b, out, Assignment_Compact_Unmarshal)
+}
+func Assignment_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Assignment) error {
+	return Assignment_Repeats_Unmarshal(n, b, out, Assignment_Detailed_Unmarshal)
+}
+func Assignment_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Assignment, unmarshEl func(jsonexp.Context, []byte, *Assignment) error) (err error) {
+	var vals []Assignment
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Assignment_Type, "-", e)
+		} else {
+			vals = make([]Assignment, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Assignment_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+const BoolEval_Type = "bool_eval"
+
+var BoolEval_Compact_Optional_Marshal = BoolEval_Compact_Marshal
+var BoolEval_Compact_Optional_Unmarshal = BoolEval_Compact_Unmarshal
+
+func BoolEval_Compact_Marshal(n jsonexp.Context, ptr *BoolEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func BoolEval_Compact_Unmarshal(n jsonexp.Context, b []byte, out *BoolEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(BoolEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, BoolEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var BoolEval_Detailed_Optional_Marshal = BoolEval_Detailed_Marshal
+var BoolEval_Detailed_Optional_Unmarshal = BoolEval_Detailed_Unmarshal
+
+func BoolEval_Detailed_Marshal(n jsonexp.Context, ptr *BoolEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	return
 }
@@ -54,20 +141,26 @@ func BoolEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BoolEval) (er
 	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
 		err = e
 	} else if store, ok := ptr.(BoolEval); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_BoolEval)
+		err = errutil.Fmt("couldnt store %T into %s", ptr, BoolEval_Type)
 	} else {
 		(*out) = store
 	}
 	return
 }
 
-func BoolEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]BoolEval) (ret []byte, err error) {
+func BoolEval_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]BoolEval) ([]byte, error) {
+	return BoolEval_Repeats_Marshal(n, vals, BoolEval_Compact_Marshal)
+}
+func BoolEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]BoolEval) ([]byte, error) {
+	return BoolEval_Repeats_Marshal(n, vals, BoolEval_Detailed_Marshal)
+}
+func BoolEval_Repeats_Marshal(n jsonexp.Context, vals *[]BoolEval, marshEl func(jsonexp.Context, *BoolEval) ([]byte, error)) (ret []byte, err error) {
 	var msgs []json.RawMessage
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
 		msgs = make([]json.RawMessage, cnt)
 		for i, el := range *vals {
-			if b, e := BoolEval_Detailed_Marshal(n, &el); e != nil {
-				err = errutil.New(Type_BoolEval, "at", i, "-", e)
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(BoolEval_Type, "at", i, "-", e)
 				break
 			} else {
 				msgs[i] = b
@@ -80,17 +173,23 @@ func BoolEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]BoolEval) (ret
 	return
 }
 
-func BoolEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BoolEval) (err error) {
+func BoolEval_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BoolEval) error {
+	return BoolEval_Repeats_Unmarshal(n, b, out, BoolEval_Compact_Unmarshal)
+}
+func BoolEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BoolEval) error {
+	return BoolEval_Repeats_Unmarshal(n, b, out, BoolEval_Detailed_Unmarshal)
+}
+func BoolEval_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BoolEval, unmarshEl func(jsonexp.Context, []byte, *BoolEval) error) (err error) {
 	var vals []BoolEval
 	if len(b) > 0 { // generated code collapses optional and empty.
 		var msgs []json.RawMessage
 		if e := json.Unmarshal(b, &msgs); e != nil {
-			err = errutil.New(Type_BoolEval, "-", e)
+			err = errutil.New(BoolEval_Type, "-", e)
 		} else {
 			vals = make([]BoolEval, len(msgs))
 			for i, msg := range msgs {
-				if e := BoolEval_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
-					err = errutil.New(Type_BoolEval, "at", i, "-", e)
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(BoolEval_Type, "at", i, "-", e)
 					break
 				}
 			}
@@ -102,18 +201,35 @@ func BoolEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Boo
 	return
 }
 
-const Type_Execute = "execute"
+const Execute_Type = "execute"
+
+var Execute_Compact_Optional_Marshal = Execute_Compact_Marshal
+var Execute_Compact_Optional_Unmarshal = Execute_Compact_Unmarshal
+
+func Execute_Compact_Marshal(n jsonexp.Context, ptr *Execute) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func Execute_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Execute) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Execute); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Execute_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var Execute_Detailed_Optional_Marshal = Execute_Detailed_Marshal
+var Execute_Detailed_Optional_Unmarshal = Execute_Detailed_Unmarshal
 
 func Execute_Detailed_Marshal(n jsonexp.Context, ptr *Execute) (ret []byte, err error) {
-	var b []byte
 	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_Execute,
-			Value: b,
-		})
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	return
 }
@@ -122,20 +238,26 @@ func Execute_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Execute) (err 
 	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
 		err = e
 	} else if store, ok := ptr.(Execute); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Execute)
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Execute_Type)
 	} else {
 		(*out) = store
 	}
 	return
 }
 
-func Execute_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Execute) (ret []byte, err error) {
+func Execute_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Execute) ([]byte, error) {
+	return Execute_Repeats_Marshal(n, vals, Execute_Compact_Marshal)
+}
+func Execute_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Execute) ([]byte, error) {
+	return Execute_Repeats_Marshal(n, vals, Execute_Detailed_Marshal)
+}
+func Execute_Repeats_Marshal(n jsonexp.Context, vals *[]Execute, marshEl func(jsonexp.Context, *Execute) ([]byte, error)) (ret []byte, err error) {
 	var msgs []json.RawMessage
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
 		msgs = make([]json.RawMessage, cnt)
 		for i, el := range *vals {
-			if b, e := Execute_Detailed_Marshal(n, &el); e != nil {
-				err = errutil.New(Type_Execute, "at", i, "-", e)
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Execute_Type, "at", i, "-", e)
 				break
 			} else {
 				msgs[i] = b
@@ -148,17 +270,23 @@ func Execute_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Execute) (ret [
 	return
 }
 
-func Execute_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Execute) (err error) {
+func Execute_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Execute) error {
+	return Execute_Repeats_Unmarshal(n, b, out, Execute_Compact_Unmarshal)
+}
+func Execute_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Execute) error {
+	return Execute_Repeats_Unmarshal(n, b, out, Execute_Detailed_Unmarshal)
+}
+func Execute_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Execute, unmarshEl func(jsonexp.Context, []byte, *Execute) error) (err error) {
 	var vals []Execute
 	if len(b) > 0 { // generated code collapses optional and empty.
 		var msgs []json.RawMessage
 		if e := json.Unmarshal(b, &msgs); e != nil {
-			err = errutil.New(Type_Execute, "-", e)
+			err = errutil.New(Execute_Type, "-", e)
 		} else {
 			vals = make([]Execute, len(msgs))
 			for i, msg := range msgs {
-				if e := Execute_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
-					err = errutil.New(Type_Execute, "at", i, "-", e)
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Execute_Type, "at", i, "-", e)
 					break
 				}
 			}
@@ -170,18 +298,35 @@ func Execute_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Exec
 	return
 }
 
-const Type_NumListEval = "num_list_eval"
+const NumListEval_Type = "num_list_eval"
+
+var NumListEval_Compact_Optional_Marshal = NumListEval_Compact_Marshal
+var NumListEval_Compact_Optional_Unmarshal = NumListEval_Compact_Unmarshal
+
+func NumListEval_Compact_Marshal(n jsonexp.Context, ptr *NumListEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func NumListEval_Compact_Unmarshal(n jsonexp.Context, b []byte, out *NumListEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(NumListEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, NumListEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var NumListEval_Detailed_Optional_Marshal = NumListEval_Detailed_Marshal
+var NumListEval_Detailed_Optional_Unmarshal = NumListEval_Detailed_Unmarshal
 
 func NumListEval_Detailed_Marshal(n jsonexp.Context, ptr *NumListEval) (ret []byte, err error) {
-	var b []byte
 	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_NumListEval,
-			Value: b,
-		})
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	return
 }
@@ -190,128 +335,26 @@ func NumListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NumListEva
 	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
 		err = e
 	} else if store, ok := ptr.(NumListEval); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_NumListEval)
+		err = errutil.Fmt("couldnt store %T into %s", ptr, NumListEval_Type)
 	} else {
 		(*out) = store
 	}
 	return
 }
 
-const Type_NumberEval = "number_eval"
-
-func NumberEval_Detailed_Marshal(n jsonexp.Context, ptr *NumberEval) (ret []byte, err error) {
-	var b []byte
-	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_NumberEval,
-			Value: b,
-		})
-	}
-	return
+func NumListEval_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]NumListEval) ([]byte, error) {
+	return NumListEval_Repeats_Marshal(n, vals, NumListEval_Compact_Marshal)
 }
-
-func NumberEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NumberEval) (err error) {
-	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
-		err = e
-	} else if store, ok := ptr.(NumberEval); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_NumberEval)
-	} else {
-		(*out) = store
-	}
-	return
+func NumListEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]NumListEval) ([]byte, error) {
+	return NumListEval_Repeats_Marshal(n, vals, NumListEval_Detailed_Marshal)
 }
-
-const Type_RecordEval = "record_eval"
-
-func RecordEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordEval) (ret []byte, err error) {
-	var b []byte
-	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_RecordEval,
-			Value: b,
-		})
-	}
-	return
-}
-
-func RecordEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordEval) (err error) {
-	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
-		err = e
-	} else if store, ok := ptr.(RecordEval); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_RecordEval)
-	} else {
-		(*out) = store
-	}
-	return
-}
-
-const Type_RecordListEval = "record_list_eval"
-
-func RecordListEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordListEval) (ret []byte, err error) {
-	var b []byte
-	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_RecordListEval,
-			Value: b,
-		})
-	}
-	return
-}
-
-func RecordListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordListEval) (err error) {
-	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
-		err = e
-	} else if store, ok := ptr.(RecordListEval); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_RecordListEval)
-	} else {
-		(*out) = store
-	}
-	return
-}
-
-const Type_TextEval = "text_eval"
-
-func TextEval_Detailed_Marshal(n jsonexp.Context, ptr *TextEval) (ret []byte, err error) {
-	var b []byte
-	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_TextEval,
-			Value: b,
-		})
-	}
-	return
-}
-
-func TextEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TextEval) (err error) {
-	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
-		err = e
-	} else if store, ok := ptr.(TextEval); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_TextEval)
-	} else {
-		(*out) = store
-	}
-	return
-}
-
-func TextEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TextEval) (ret []byte, err error) {
+func NumListEval_Repeats_Marshal(n jsonexp.Context, vals *[]NumListEval, marshEl func(jsonexp.Context, *NumListEval) ([]byte, error)) (ret []byte, err error) {
 	var msgs []json.RawMessage
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
 		msgs = make([]json.RawMessage, cnt)
 		for i, el := range *vals {
-			if b, e := TextEval_Detailed_Marshal(n, &el); e != nil {
-				err = errutil.New(Type_TextEval, "at", i, "-", e)
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(NumListEval_Type, "at", i, "-", e)
 				break
 			} else {
 				msgs[i] = b
@@ -324,17 +367,23 @@ func TextEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TextEval) (ret
 	return
 }
 
-func TextEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextEval) (err error) {
-	var vals []TextEval
+func NumListEval_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NumListEval) error {
+	return NumListEval_Repeats_Unmarshal(n, b, out, NumListEval_Compact_Unmarshal)
+}
+func NumListEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NumListEval) error {
+	return NumListEval_Repeats_Unmarshal(n, b, out, NumListEval_Detailed_Unmarshal)
+}
+func NumListEval_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NumListEval, unmarshEl func(jsonexp.Context, []byte, *NumListEval) error) (err error) {
+	var vals []NumListEval
 	if len(b) > 0 { // generated code collapses optional and empty.
 		var msgs []json.RawMessage
 		if e := json.Unmarshal(b, &msgs); e != nil {
-			err = errutil.New(Type_TextEval, "-", e)
+			err = errutil.New(NumListEval_Type, "-", e)
 		} else {
-			vals = make([]TextEval, len(msgs))
+			vals = make([]NumListEval, len(msgs))
 			for i, msg := range msgs {
-				if e := TextEval_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
-					err = errutil.New(Type_TextEval, "at", i, "-", e)
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(NumListEval_Type, "at", i, "-", e)
 					break
 				}
 			}
@@ -346,18 +395,423 @@ func TextEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Tex
 	return
 }
 
-const Type_TextListEval = "text_list_eval"
+const NumberEval_Type = "number_eval"
 
-func TextListEval_Detailed_Marshal(n jsonexp.Context, ptr *TextListEval) (ret []byte, err error) {
-	var b []byte
+var NumberEval_Compact_Optional_Marshal = NumberEval_Compact_Marshal
+var NumberEval_Compact_Optional_Unmarshal = NumberEval_Compact_Unmarshal
+
+func NumberEval_Compact_Marshal(n jsonexp.Context, ptr *NumberEval) (ret []byte, err error) {
 	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func NumberEval_Compact_Unmarshal(n jsonexp.Context, b []byte, out *NumberEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(NumberEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, NumberEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var NumberEval_Detailed_Optional_Marshal = NumberEval_Detailed_Marshal
+var NumberEval_Detailed_Optional_Unmarshal = NumberEval_Detailed_Unmarshal
+
+func NumberEval_Detailed_Marshal(n jsonexp.Context, ptr *NumberEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	}
+	return
+}
+
+func NumberEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NumberEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(NumberEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, NumberEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+func NumberEval_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]NumberEval) ([]byte, error) {
+	return NumberEval_Repeats_Marshal(n, vals, NumberEval_Compact_Marshal)
+}
+func NumberEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]NumberEval) ([]byte, error) {
+	return NumberEval_Repeats_Marshal(n, vals, NumberEval_Detailed_Marshal)
+}
+func NumberEval_Repeats_Marshal(n jsonexp.Context, vals *[]NumberEval, marshEl func(jsonexp.Context, *NumberEval) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(NumberEval_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_TextListEval,
-			Value: b,
-		})
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func NumberEval_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NumberEval) error {
+	return NumberEval_Repeats_Unmarshal(n, b, out, NumberEval_Compact_Unmarshal)
+}
+func NumberEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NumberEval) error {
+	return NumberEval_Repeats_Unmarshal(n, b, out, NumberEval_Detailed_Unmarshal)
+}
+func NumberEval_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NumberEval, unmarshEl func(jsonexp.Context, []byte, *NumberEval) error) (err error) {
+	var vals []NumberEval
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(NumberEval_Type, "-", e)
+		} else {
+			vals = make([]NumberEval, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(NumberEval_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+const RecordEval_Type = "record_eval"
+
+var RecordEval_Compact_Optional_Marshal = RecordEval_Compact_Marshal
+var RecordEval_Compact_Optional_Unmarshal = RecordEval_Compact_Unmarshal
+
+func RecordEval_Compact_Marshal(n jsonexp.Context, ptr *RecordEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func RecordEval_Compact_Unmarshal(n jsonexp.Context, b []byte, out *RecordEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(RecordEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, RecordEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var RecordEval_Detailed_Optional_Marshal = RecordEval_Detailed_Marshal
+var RecordEval_Detailed_Optional_Unmarshal = RecordEval_Detailed_Unmarshal
+
+func RecordEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	}
+	return
+}
+
+func RecordEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(RecordEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, RecordEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+func RecordEval_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]RecordEval) ([]byte, error) {
+	return RecordEval_Repeats_Marshal(n, vals, RecordEval_Compact_Marshal)
+}
+func RecordEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]RecordEval) ([]byte, error) {
+	return RecordEval_Repeats_Marshal(n, vals, RecordEval_Detailed_Marshal)
+}
+func RecordEval_Repeats_Marshal(n jsonexp.Context, vals *[]RecordEval, marshEl func(jsonexp.Context, *RecordEval) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(RecordEval_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func RecordEval_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]RecordEval) error {
+	return RecordEval_Repeats_Unmarshal(n, b, out, RecordEval_Compact_Unmarshal)
+}
+func RecordEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]RecordEval) error {
+	return RecordEval_Repeats_Unmarshal(n, b, out, RecordEval_Detailed_Unmarshal)
+}
+func RecordEval_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]RecordEval, unmarshEl func(jsonexp.Context, []byte, *RecordEval) error) (err error) {
+	var vals []RecordEval
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(RecordEval_Type, "-", e)
+		} else {
+			vals = make([]RecordEval, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(RecordEval_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+const RecordListEval_Type = "record_list_eval"
+
+var RecordListEval_Compact_Optional_Marshal = RecordListEval_Compact_Marshal
+var RecordListEval_Compact_Optional_Unmarshal = RecordListEval_Compact_Unmarshal
+
+func RecordListEval_Compact_Marshal(n jsonexp.Context, ptr *RecordListEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func RecordListEval_Compact_Unmarshal(n jsonexp.Context, b []byte, out *RecordListEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(RecordListEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, RecordListEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var RecordListEval_Detailed_Optional_Marshal = RecordListEval_Detailed_Marshal
+var RecordListEval_Detailed_Optional_Unmarshal = RecordListEval_Detailed_Unmarshal
+
+func RecordListEval_Detailed_Marshal(n jsonexp.Context, ptr *RecordListEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	}
+	return
+}
+
+func RecordListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RecordListEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(RecordListEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, RecordListEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+func RecordListEval_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]RecordListEval) ([]byte, error) {
+	return RecordListEval_Repeats_Marshal(n, vals, RecordListEval_Compact_Marshal)
+}
+func RecordListEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]RecordListEval) ([]byte, error) {
+	return RecordListEval_Repeats_Marshal(n, vals, RecordListEval_Detailed_Marshal)
+}
+func RecordListEval_Repeats_Marshal(n jsonexp.Context, vals *[]RecordListEval, marshEl func(jsonexp.Context, *RecordListEval) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(RecordListEval_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func RecordListEval_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]RecordListEval) error {
+	return RecordListEval_Repeats_Unmarshal(n, b, out, RecordListEval_Compact_Unmarshal)
+}
+func RecordListEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]RecordListEval) error {
+	return RecordListEval_Repeats_Unmarshal(n, b, out, RecordListEval_Detailed_Unmarshal)
+}
+func RecordListEval_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]RecordListEval, unmarshEl func(jsonexp.Context, []byte, *RecordListEval) error) (err error) {
+	var vals []RecordListEval
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(RecordListEval_Type, "-", e)
+		} else {
+			vals = make([]RecordListEval, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(RecordListEval_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+const TextEval_Type = "text_eval"
+
+var TextEval_Compact_Optional_Marshal = TextEval_Compact_Marshal
+var TextEval_Compact_Optional_Unmarshal = TextEval_Compact_Unmarshal
+
+func TextEval_Compact_Marshal(n jsonexp.Context, ptr *TextEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func TextEval_Compact_Unmarshal(n jsonexp.Context, b []byte, out *TextEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(TextEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, TextEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var TextEval_Detailed_Optional_Marshal = TextEval_Detailed_Marshal
+var TextEval_Detailed_Optional_Unmarshal = TextEval_Detailed_Unmarshal
+
+func TextEval_Detailed_Marshal(n jsonexp.Context, ptr *TextEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	}
+	return
+}
+
+func TextEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TextEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(TextEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, TextEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+func TextEval_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]TextEval) ([]byte, error) {
+	return TextEval_Repeats_Marshal(n, vals, TextEval_Compact_Marshal)
+}
+func TextEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TextEval) ([]byte, error) {
+	return TextEval_Repeats_Marshal(n, vals, TextEval_Detailed_Marshal)
+}
+func TextEval_Repeats_Marshal(n jsonexp.Context, vals *[]TextEval, marshEl func(jsonexp.Context, *TextEval) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(TextEval_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func TextEval_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextEval) error {
+	return TextEval_Repeats_Unmarshal(n, b, out, TextEval_Compact_Unmarshal)
+}
+func TextEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextEval) error {
+	return TextEval_Repeats_Unmarshal(n, b, out, TextEval_Detailed_Unmarshal)
+}
+func TextEval_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextEval, unmarshEl func(jsonexp.Context, []byte, *TextEval) error) (err error) {
+	var vals []TextEval
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(TextEval_Type, "-", e)
+		} else {
+			vals = make([]TextEval, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(TextEval_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+const TextListEval_Type = "text_list_eval"
+
+var TextListEval_Compact_Optional_Marshal = TextListEval_Compact_Marshal
+var TextListEval_Compact_Optional_Unmarshal = TextListEval_Compact_Unmarshal
+
+func TextListEval_Compact_Marshal(n jsonexp.Context, ptr *TextListEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func TextListEval_Compact_Unmarshal(n jsonexp.Context, b []byte, out *TextListEval) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(TextListEval); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, TextListEval_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var TextListEval_Detailed_Optional_Marshal = TextListEval_Detailed_Marshal
+var TextListEval_Detailed_Optional_Unmarshal = TextListEval_Detailed_Unmarshal
+
+func TextListEval_Detailed_Marshal(n jsonexp.Context, ptr *TextListEval) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	return
 }
@@ -366,9 +820,62 @@ func TextListEval_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TextListE
 	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
 		err = e
 	} else if store, ok := ptr.(TextListEval); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_TextListEval)
+		err = errutil.Fmt("couldnt store %T into %s", ptr, TextListEval_Type)
 	} else {
 		(*out) = store
+	}
+	return
+}
+
+func TextListEval_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]TextListEval) ([]byte, error) {
+	return TextListEval_Repeats_Marshal(n, vals, TextListEval_Compact_Marshal)
+}
+func TextListEval_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TextListEval) ([]byte, error) {
+	return TextListEval_Repeats_Marshal(n, vals, TextListEval_Detailed_Marshal)
+}
+func TextListEval_Repeats_Marshal(n jsonexp.Context, vals *[]TextListEval, marshEl func(jsonexp.Context, *TextListEval) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(TextListEval_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func TextListEval_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextListEval) error {
+	return TextListEval_Repeats_Unmarshal(n, b, out, TextListEval_Compact_Unmarshal)
+}
+func TextListEval_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextListEval) error {
+	return TextListEval_Repeats_Unmarshal(n, b, out, TextListEval_Detailed_Unmarshal)
+}
+func TextListEval_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextListEval, unmarshEl func(jsonexp.Context, []byte, *TextListEval) error) (err error) {
+	var vals []TextListEval
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(TextListEval_Type, "-", e)
+		} else {
+			vals = make([]TextListEval, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(TextListEval_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
 	}
 	return
 }

@@ -10,7 +10,7 @@ func (op *KindOfRelation) ImportPhrase(k *Importer) (err error) {
 	// rec.NewRelation(r, k, q, c)
 	if rel, e := NewRelation(k, op.Relation); e != nil {
 		err = e
-	} else if card, e := op.RelationCardinality.ImportCardinality(k); e != nil {
+	} else if card, e := op.Cardinality.ImportCardinality(k); e != nil {
 		err = e
 	} else {
 		k.NewRelation(rel, card.firstKind, card.secondKind, card.cardinality)

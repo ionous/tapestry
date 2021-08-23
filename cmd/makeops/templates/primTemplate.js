@@ -9,7 +9,7 @@ type {{Pascal name}} struct {
   {{Pascal uses}} {{#if (Uses name 'num')}}float64{{else}}string{{/if}}
 }
 {{#if (Uses name 'str')}}
-func (op *{{Pascal name}}) String()(ret string) {
+func (op *{{Pascal name}}) String() string {
   return op.Str
 }
 {{/if}}
@@ -19,108 +19,28 @@ const {{Pascal ../name}}_{{Pascal this.token}}= "{{this.token}}";
 {{/each~}}
 
 {{>spec}}
-{{#if ../marshal}}
-{{>sig}}
 
-{{~#if (OverrideOf name)}}
-
-func {{Pascal name}}_Detailed_Override_Marshal(n jsonexp.Context, val *{{OverrideOf name}}) ([]byte, error) {
-{{#unless (IsBool name)}}
-  return {{Pascal name}}_Detailed_Marshal(n, &{{Pascal name}}{*val})
-{{else}}
-  var out string
-  if *val {
-    out = Bool_True
-  } else {
-    out = Bool_False
-  }
-  return {{Pascal name}}_Detailed_Marshal(n, &{{Pascal name}}{out})
-{{/unless}}
+func {{Pascal name}}_Exists(val *{{Pascal name}}) bool {
+  var zero {{Pascal name}}
+  return val.{{Pascal uses}} != zero.{{Pascal uses}}
 }
-
-func {{Pascal name}}_Detailed_Override_Unmarshal(n jsonexp.Context, b []byte, out *{{OverrideOf name}}) (err error) {
-  var msg {{Pascal name}}
-  if e := {{Pascal name}}_Detailed_Unmarshal(n, b, &msg); e != nil {
-    err = errutil.New(Type_{{Pascal name}}, "-", e)
-  } else {
-{{#unless (IsBool name)}}
-    *out= msg.{{Pascal uses}}
-{{else}}
-    *out = msg.{{Pascal uses}} == Bool_True
-{{/unless}}
-  }
-  return
-}
-{{#if ../repeats}}
-func {{Pascal name}}_Detailed_Override_Repeats_Marshal(n jsonexp.Context, vals *[]{{OverrideOf name}}) (ret []byte,err error) {
-  var msgs []json.RawMessage
-  if cnt := len(*vals); cnt > 0 {
-    msgs = make([]json.RawMessage, cnt)
-    for i, el := range *vals {
-      if b,e := {{Pascal name}}_Detailed_Override_Marshal(n, &el); e != nil {
-        err = errutil.New(Type_{{Pascal name}}, "at", i, "-", e)
-        break
-      } else {
-        msgs[i] = b
-      }
-    }
-  }
-  if err == nil {
-    ret, err = json.Marshal(msgs)
-  }
-  return
-}
-
-func {{Pascal name}}_Detailed_Override_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]{{OverrideOf name}}) (err error) {
-  var msgs []json.RawMessage
-  if e := json.Unmarshal(b, &msgs); e != nil  {
-    err = errutil.New(Type_{{Pascal name}}, "-", e)
-  } else {
-    var vals []{{OverrideOf name}}
-    if cnt := len(msgs); cnt > 0 {
-      vals = make([]{{OverrideOf name}}, cnt)
-      for i, msg := range msgs {
-        if e := {{Pascal name}}_Detailed_Override_Unmarshal(n, msg, &vals[i]); e != nil {
-          err = errutil.New(Type_{{Pascal name}}, "at", i, "-", e)
-          break
-        }
-      }
-    }
-    if err == nil {
-      *out= vals
-    }
-  }
-  return
-}
-{{/if}}
-{{/if~}}
-
-func {{Pascal name}}_Detailed_Marshal(n jsonexp.Context, val *{{Pascal name}}) ([]byte, error) {
-  return json.Marshal(jsonexp.{{Pascal uses}}{
-{{#if (IsPositioned this)}}
-    Id: val.At.Offset,
-{{/if}}
-    Type:  Type_{{Pascal name}},
-    Value: val.{{Pascal uses}},
-  })
-}
-
-func {{Pascal name}}_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *{{Pascal name}}) (err error) {
-  var msg jsonexp.{{Pascal uses}}
-  if len(b) > 0 { // generated code collapses optional and empty.
-    if e := json.Unmarshal(b, &msg); e != nil {
-      err =  errutil.New(Type_{{Pascal name}}, "-", e)
-    }
-  }
-  if err == nil {
-{{#if (IsPositioned this)~}}
-    out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
-{{/if}}
-    out.{{Pascal uses}} = msg.Value
-  }
-  return
+{{#if (OverrideOf name)}}
+func {{Pascal name}}_Override_Exists(val *{{OverrideOf name}}) bool {
+  var zero {{OverrideOf name}}
+  return *val != zero
 }
 {{/if}}
 {{/with}}
-{{#if repeats}}{{>repeat type}}{{/if}}
+{{#if marshal}}
+{{>sig type}}
+{{~#if (OverrideOf type.name)}}
+{{>override type fmt="Compact"}}
+{{>override type fmt="Detailed"}}
+{{>repeat name=(Pascal type.name) mod="_Override" el=(OverrideOf type.name)}}
+{{/if}}
+{{>primCompact type}}
+{{>primDetails type}}
+{{/if}}
+
+{{>repeat name=(Pascal type.name) el=(Pascal type.name)}}
 `;

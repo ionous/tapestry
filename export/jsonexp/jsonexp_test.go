@@ -1,7 +1,9 @@
 package jsonexp_test
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	r "reflect"
 	"testing"
 
@@ -33,6 +35,23 @@ func TestDetails(t *testing.T) {
 				t.Fatal(diff)
 				// did everything check out?
 			}
+		}
+	}
+}
+
+func TestCompact(t *testing.T) {
+	n := Ctx{Name: ""}
+	src := debug.FactorialStory
+	// save the story into bytes
+	if b, e := src.MarshalCompact(&n); e != nil {
+		t.Fatal(e)
+	} else {
+		// load the story into a map just for fun
+		var prettyJSON bytes.Buffer
+		if e := json.Indent(&prettyJSON, b, "", "  "); e != nil {
+			t.Fatal(e)
+		} else {
+			fmt.Println(prettyJSON.String())
 		}
 	}
 }

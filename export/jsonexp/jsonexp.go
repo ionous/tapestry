@@ -51,3 +51,8 @@ type DetailedMarshaler interface {
 	UnmarshalDetailed(Context, []byte) error
 	MarshalDetailed(Context) ([]byte, error)
 }
+
+type CompactMarshaler interface {
+	UnmarshalCompact(Context, []byte) error
+	MarshalCompact(Context) ([]byte, error)
+}

@@ -18,15 +18,22 @@ type Activity struct {
 
 func (*Activity) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Activity,
+		Name: Activity_Type,
 		Uses: composer.Type_Flow,
 		Lede: "act",
 	}
 }
 
-const Type_Activity = "activity"
-const Activity_Exe = "$EXE"
+const Activity_Type = "activity"
+const Activity_Lede = "act"
+const Activity_Field_Exe = "$EXE"
 
+func (op *Activity) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Activity_Compact_Marshal(n, op)
+}
+func (op *Activity) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Activity_Compact_Unmarshal(n, b, op)
+}
 func (op *Activity) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Activity_Detailed_Marshal(n, op)
 }
@@ -34,623 +41,19 @@ func (op *Activity) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Activity_Detailed_Unmarshal(n, b, op)
 }
 
-func Activity_Detailed_Marshal(n jsonexp.Context, val *Activity) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := rt.Execute_Detailed_Repeats_Marshal(n, &val.Exe); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Activity_Exe] = b
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Activity,
-			Fields: fields,
-		})
-	}
-	return
+func Activity_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Activity) ([]byte, error) {
+	return Activity_Repeats_Marshal(n, vals, Activity_Compact_Marshal)
 }
-
-func Activity_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Activity) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Activity, "-", e)
-	} else if e := rt.Execute_Detailed_Repeats_Unmarshal(n, msg.Fields[Activity_Exe], &out.Exe); e != nil {
-		err = errutil.New(Type_Activity+"."+Activity_Exe, "-", e)
-	}
-	return
+func Activity_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Activity) ([]byte, error) {
+	return Activity_Repeats_Marshal(n, vals, Activity_Detailed_Marshal)
 }
-
-// AllTrue Returns true if all of the evaluations are true.
-type AllTrue struct {
-	Test []rt.BoolEval `if:"label=_"`
-}
-
-func (*AllTrue) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_AllTrue,
-		Uses: composer.Type_Flow,
-		Lede: "all_of",
-	}
-}
-
-const Type_AllTrue = "all_true"
-const AllTrue_Test = "$TEST"
-
-func (op *AllTrue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return AllTrue_Detailed_Marshal(n, op)
-}
-func (op *AllTrue) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return AllTrue_Detailed_Unmarshal(n, b, op)
-}
-
-func AllTrue_Detailed_Marshal(n jsonexp.Context, val *AllTrue) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := rt.BoolEval_Detailed_Repeats_Marshal(n, &val.Test); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[AllTrue_Test] = b
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_AllTrue,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func AllTrue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AllTrue) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_AllTrue, "-", e)
-	} else if e := rt.BoolEval_Detailed_Repeats_Unmarshal(n, msg.Fields[AllTrue_Test], &out.Test); e != nil {
-		err = errutil.New(Type_AllTrue+"."+AllTrue_Test, "-", e)
-	}
-	return
-}
-
-// Always Returns true.
-type Always struct {
-}
-
-func (*Always) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_Always,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Type_Always = "always"
-
-func (op *Always) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return Always_Detailed_Marshal(n, op)
-}
-func (op *Always) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return Always_Detailed_Unmarshal(n, b, op)
-}
-
-func Always_Detailed_Marshal(n jsonexp.Context, val *Always) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Always,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func Always_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Always) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Always, "-", e)
-	}
-	return
-}
-
-// AnyTrue Returns true if any of the evaluations are true.
-type AnyTrue struct {
-	Test []rt.BoolEval `if:"label=_"`
-}
-
-func (*AnyTrue) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_AnyTrue,
-		Uses: composer.Type_Flow,
-		Lede: "any_of",
-	}
-}
-
-const Type_AnyTrue = "any_true"
-const AnyTrue_Test = "$TEST"
-
-func (op *AnyTrue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return AnyTrue_Detailed_Marshal(n, op)
-}
-func (op *AnyTrue) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return AnyTrue_Detailed_Unmarshal(n, b, op)
-}
-
-func AnyTrue_Detailed_Marshal(n jsonexp.Context, val *AnyTrue) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := rt.BoolEval_Detailed_Repeats_Marshal(n, &val.Test); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[AnyTrue_Test] = b
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_AnyTrue,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func AnyTrue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AnyTrue) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_AnyTrue, "-", e)
-	} else if e := rt.BoolEval_Detailed_Repeats_Unmarshal(n, msg.Fields[AnyTrue_Test], &out.Test); e != nil {
-		err = errutil.New(Type_AnyTrue+"."+AnyTrue_Test, "-", e)
-	}
-	return
-}
-
-// Assign Assigns a variable to a value.
-type Assign struct {
-	Var  value.VariableName `if:"label=_"`
-	From rt.Assignment      `if:"label=be"`
-}
-
-func (*Assign) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_Assign,
-		Uses: composer.Type_Flow,
-		Lede: "let",
-	}
-}
-
-const Type_Assign = "assign"
-const Assign_Var = "$VAR"
-const Assign_From = "$FROM"
-
-func (op *Assign) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return Assign_Detailed_Marshal(n, op)
-}
-func (op *Assign) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return Assign_Detailed_Unmarshal(n, b, op)
-}
-
-func Assign_Detailed_Marshal(n jsonexp.Context, val *Assign) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Assign_Var] = b
-	}
-	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Assign_From] = b
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Assign,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func Assign_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Assign) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Assign, "-", e)
-	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[Assign_Var], &out.Var); e != nil {
-		err = errutil.New(Type_Assign+"."+Assign_Var, "-", e)
-	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[Assign_From], &out.From); e != nil {
-		err = errutil.New(Type_Assign+"."+Assign_From, "-", e)
-	}
-	return
-}
-
-// AtLeast The first value is greater than or equal to the second value.
-type AtLeast struct {
-}
-
-func (*AtLeast) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_AtLeast,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Type_AtLeast = "at_least"
-
-func (op *AtLeast) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return AtLeast_Detailed_Marshal(n, op)
-}
-func (op *AtLeast) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return AtLeast_Detailed_Unmarshal(n, b, op)
-}
-
-func AtLeast_Detailed_Marshal(n jsonexp.Context, val *AtLeast) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_AtLeast,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func AtLeast_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AtLeast) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_AtLeast, "-", e)
-	}
-	return
-}
-
-// AtMost The first value is less than or equal to the second value.
-type AtMost struct {
-}
-
-func (*AtMost) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_AtMost,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Type_AtMost = "at_most"
-
-func (op *AtMost) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return AtMost_Detailed_Marshal(n, op)
-}
-func (op *AtMost) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return AtMost_Detailed_Unmarshal(n, b, op)
-}
-
-func AtMost_Detailed_Marshal(n jsonexp.Context, val *AtMost) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_AtMost,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func AtMost_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AtMost) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_AtMost, "-", e)
-	}
-	return
-}
-
-// Blankline Add a single blank line following some text.
-type Blankline struct {
-}
-
-func (*Blankline) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_Blankline,
-		Uses: composer.Type_Flow,
-		Lede: "p",
-	}
-}
-
-const Type_Blankline = "blankline"
-
-func (op *Blankline) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return Blankline_Detailed_Marshal(n, op)
-}
-func (op *Blankline) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return Blankline_Detailed_Unmarshal(n, b, op)
-}
-
-func Blankline_Detailed_Marshal(n jsonexp.Context, val *Blankline) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Blankline,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func Blankline_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Blankline) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Blankline, "-", e)
-	}
-	return
-}
-
-// BoolValue Specify an explicit true or false value.
-type BoolValue struct {
-	Bool bool `if:"label=_,type=bool"`
-}
-
-func (*BoolValue) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_BoolValue,
-		Uses: composer.Type_Flow,
-		Lede: "bool",
-	}
-}
-
-const Type_BoolValue = "bool_value"
-const BoolValue_Bool = "$BOOL"
-
-func (op *BoolValue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return BoolValue_Detailed_Marshal(n, op)
-}
-func (op *BoolValue) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return BoolValue_Detailed_Unmarshal(n, b, op)
-}
-
-func BoolValue_Detailed_Marshal(n jsonexp.Context, val *BoolValue) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Bool_Detailed_Override_Marshal(n, &val.Bool); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[BoolValue_Bool] = b
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_BoolValue,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func BoolValue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BoolValue) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_BoolValue, "-", e)
-	} else if e := value.Bool_Detailed_Override_Unmarshal(n, msg.Fields[BoolValue_Bool], &out.Bool); e != nil {
-		err = errutil.New(Type_BoolValue+"."+BoolValue_Bool, "-", e)
-	}
-	return
-}
-
-// BracketText Sandwiches text printed during a block and puts them inside parenthesis &#x27;()&#x27;.
-type BracketText struct {
-	Do Activity `if:"label=_"`
-}
-
-func (*BracketText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_BracketText,
-		Uses: composer.Type_Flow,
-		Lede: "brackets",
-	}
-}
-
-const Type_BracketText = "bracket_text"
-const BracketText_Do = "$DO"
-
-func (op *BracketText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return BracketText_Detailed_Marshal(n, op)
-}
-func (op *BracketText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return BracketText_Detailed_Unmarshal(n, b, op)
-}
-
-func BracketText_Detailed_Marshal(n jsonexp.Context, val *BracketText) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[BracketText_Do] = b
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_BracketText,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func BracketText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BracketText) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_BracketText, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[BracketText_Do], &out.Do); e != nil {
-		err = errutil.New(Type_BracketText+"."+BracketText_Do, "-", e)
-	}
-	return
-}
-
-const Type_Brancher = "brancher"
-
-func Brancher_Detailed_Marshal(n jsonexp.Context, ptr *Brancher) (ret []byte, err error) {
-	var b []byte
-	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_Brancher,
-			Value: b,
-		})
-	}
-	return
-}
-
-func Brancher_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Brancher) (err error) {
-	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
-		err = e
-	} else if store, ok := ptr.(Brancher); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Brancher)
-	} else {
-		(*out) = store
-	}
-	return
-}
-
-// Break In a repeating loop, exit the loop.
-type Break struct {
-}
-
-func (*Break) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_Break,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Type_Break = "break"
-
-func (op *Break) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return Break_Detailed_Marshal(n, op)
-}
-func (op *Break) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return Break_Detailed_Unmarshal(n, b, op)
-}
-
-func Break_Detailed_Marshal(n jsonexp.Context, val *Break) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Break,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func Break_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Break) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Break, "-", e)
-	}
-	return
-}
-
-// BufferText
-type BufferText struct {
-	Do Activity `if:"label=_"`
-}
-
-func (*BufferText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_BufferText,
-		Uses: composer.Type_Flow,
-		Lede: "buffers",
-	}
-}
-
-const Type_BufferText = "buffer_text"
-const BufferText_Do = "$DO"
-
-func (op *BufferText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return BufferText_Detailed_Marshal(n, op)
-}
-func (op *BufferText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return BufferText_Detailed_Unmarshal(n, b, op)
-}
-
-func BufferText_Detailed_Marshal(n jsonexp.Context, val *BufferText) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[BufferText_Do] = b
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_BufferText,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func BufferText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BufferText) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_BufferText, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[BufferText_Do], &out.Do); e != nil {
-		err = errutil.New(Type_BufferText+"."+BufferText_Do, "-", e)
-	}
-	return
-}
-
-// CallArg Runtime version of argument
-type CallArg struct {
-	Name string        `if:"label=_,type=text"`
-	From rt.Assignment `if:"label=from"`
-}
-
-func (*CallArg) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Type_CallArg,
-		Uses: composer.Type_Flow,
-		Lede: "inarg",
-	}
-}
-
-const Type_CallArg = "call_arg"
-const CallArg_Name = "$NAME"
-const CallArg_From = "$FROM"
-
-func (op *CallArg) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
-	return CallArg_Detailed_Marshal(n, op)
-}
-func (op *CallArg) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
-	return CallArg_Detailed_Unmarshal(n, b, op)
-}
-
-func CallArg_Detailed_Marshal(n jsonexp.Context, val *CallArg) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Name); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallArg_Name] = b
-	}
-	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallArg_From] = b
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_CallArg,
-			Fields: fields,
-		})
-	}
-	return
-}
-
-func CallArg_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallArg) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CallArg, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[CallArg_Name], &out.Name); e != nil {
-		err = errutil.New(Type_CallArg+"."+CallArg_Name, "-", e)
-	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[CallArg_From], &out.From); e != nil {
-		err = errutil.New(Type_CallArg+"."+CallArg_From, "-", e)
-	}
-	return
-}
-
-func CallArg_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallArg) (ret []byte, err error) {
+func Activity_Repeats_Marshal(n jsonexp.Context, vals *[]Activity, marshEl func(jsonexp.Context, *Activity) ([]byte, error)) (ret []byte, err error) {
 	var msgs []json.RawMessage
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
 		msgs = make([]json.RawMessage, cnt)
 		for i, el := range *vals {
-			if b, e := CallArg_Detailed_Marshal(n, &el); e != nil {
-				err = errutil.New(Type_CallArg, "at", i, "-", e)
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Activity_Type, "at", i, "-", e)
 				break
 			} else {
 				msgs[i] = b
@@ -663,17 +66,23 @@ func CallArg_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallArg) (ret [
 	return
 }
 
-func CallArg_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallArg) (err error) {
-	var vals []CallArg
+func Activity_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Activity) error {
+	return Activity_Repeats_Unmarshal(n, b, out, Activity_Compact_Unmarshal)
+}
+func Activity_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Activity) error {
+	return Activity_Repeats_Unmarshal(n, b, out, Activity_Detailed_Unmarshal)
+}
+func Activity_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Activity, unmarshEl func(jsonexp.Context, []byte, *Activity) error) (err error) {
+	var vals []Activity
 	if len(b) > 0 { // generated code collapses optional and empty.
 		var msgs []json.RawMessage
 		if e := json.Unmarshal(b, &msgs); e != nil {
-			err = errutil.New(Type_CallArg, "-", e)
+			err = errutil.New(Activity_Type, "-", e)
 		} else {
-			vals = make([]CallArg, len(msgs))
+			vals = make([]Activity, len(msgs))
 			for i, msg := range msgs {
-				if e := CallArg_Detailed_Unmarshal(n, msg, &vals[i]); e != nil {
-					err = errutil.New(Type_CallArg, "at", i, "-", e)
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Activity_Type, "at", i, "-", e)
 					break
 				}
 			}
@@ -685,6 +94,2208 @@ func CallArg_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Call
 	return
 }
 
+func Activity_Compact_Optional_Marshal(n jsonexp.Context, val **Activity) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Activity_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Activity_Compact_Marshal(n jsonexp.Context, val *Activity) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Activity_Lede)
+	if b, e := rt.Execute_Compact_Repeats_Marshal(n, &val.Exe); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Activity_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Activity) (err error) {
+	if len(b) > 0 {
+		var val Activity
+		if e := Activity_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Activity_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Activity) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Activity_Type, "-", e)
+	} else if e := rt.Execute_Compact_Repeats_Unmarshal(n, msg.Fields[Activity_Field_Exe], &out.Exe); e != nil {
+		err = errutil.New(Activity_Type+"."+Activity_Field_Exe, "-", e)
+	}
+	return
+}
+
+func Activity_Detailed_Optional_Marshal(n jsonexp.Context, val **Activity) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Activity_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func Activity_Detailed_Marshal(n jsonexp.Context, val *Activity) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := rt.Execute_Detailed_Repeats_Marshal(n, &val.Exe); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[Activity_Field_Exe] = b
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   Activity_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func Activity_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Activity) (err error) {
+	if len(b) > 0 {
+		var val Activity
+		if e := Activity_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Activity_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Activity) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Activity_Type, "-", e)
+	} else if e := rt.Execute_Detailed_Repeats_Unmarshal(n, msg.Fields[Activity_Field_Exe], &out.Exe); e != nil {
+		err = errutil.New(Activity_Type+"."+Activity_Field_Exe, "-", e)
+	}
+	return
+}
+
+// AllTrue Returns true if all of the evaluations are true.
+type AllTrue struct {
+	Test []rt.BoolEval `if:"label=_"`
+}
+
+func (*AllTrue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: AllTrue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "all_of",
+	}
+}
+
+const AllTrue_Type = "all_true"
+const AllTrue_Lede = "all_of"
+const AllTrue_Field_Test = "$TEST"
+
+func (op *AllTrue) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return AllTrue_Compact_Marshal(n, op)
+}
+func (op *AllTrue) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return AllTrue_Compact_Unmarshal(n, b, op)
+}
+func (op *AllTrue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return AllTrue_Detailed_Marshal(n, op)
+}
+func (op *AllTrue) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return AllTrue_Detailed_Unmarshal(n, b, op)
+}
+
+func AllTrue_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]AllTrue) ([]byte, error) {
+	return AllTrue_Repeats_Marshal(n, vals, AllTrue_Compact_Marshal)
+}
+func AllTrue_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]AllTrue) ([]byte, error) {
+	return AllTrue_Repeats_Marshal(n, vals, AllTrue_Detailed_Marshal)
+}
+func AllTrue_Repeats_Marshal(n jsonexp.Context, vals *[]AllTrue, marshEl func(jsonexp.Context, *AllTrue) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(AllTrue_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func AllTrue_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AllTrue) error {
+	return AllTrue_Repeats_Unmarshal(n, b, out, AllTrue_Compact_Unmarshal)
+}
+func AllTrue_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AllTrue) error {
+	return AllTrue_Repeats_Unmarshal(n, b, out, AllTrue_Detailed_Unmarshal)
+}
+func AllTrue_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AllTrue, unmarshEl func(jsonexp.Context, []byte, *AllTrue) error) (err error) {
+	var vals []AllTrue
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(AllTrue_Type, "-", e)
+		} else {
+			vals = make([]AllTrue, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(AllTrue_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func AllTrue_Compact_Optional_Marshal(n jsonexp.Context, val **AllTrue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = AllTrue_Compact_Marshal(n, *val)
+	}
+	return
+}
+func AllTrue_Compact_Marshal(n jsonexp.Context, val *AllTrue) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(AllTrue_Lede)
+	if b, e := rt.BoolEval_Compact_Repeats_Marshal(n, &val.Test); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func AllTrue_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AllTrue) (err error) {
+	if len(b) > 0 {
+		var val AllTrue
+		if e := AllTrue_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func AllTrue_Compact_Unmarshal(n jsonexp.Context, b []byte, out *AllTrue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(AllTrue_Type, "-", e)
+	} else if e := rt.BoolEval_Compact_Repeats_Unmarshal(n, msg.Fields[AllTrue_Field_Test], &out.Test); e != nil {
+		err = errutil.New(AllTrue_Type+"."+AllTrue_Field_Test, "-", e)
+	}
+	return
+}
+
+func AllTrue_Detailed_Optional_Marshal(n jsonexp.Context, val **AllTrue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = AllTrue_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func AllTrue_Detailed_Marshal(n jsonexp.Context, val *AllTrue) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := rt.BoolEval_Detailed_Repeats_Marshal(n, &val.Test); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[AllTrue_Field_Test] = b
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   AllTrue_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func AllTrue_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AllTrue) (err error) {
+	if len(b) > 0 {
+		var val AllTrue
+		if e := AllTrue_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func AllTrue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AllTrue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(AllTrue_Type, "-", e)
+	} else if e := rt.BoolEval_Detailed_Repeats_Unmarshal(n, msg.Fields[AllTrue_Field_Test], &out.Test); e != nil {
+		err = errutil.New(AllTrue_Type+"."+AllTrue_Field_Test, "-", e)
+	}
+	return
+}
+
+// Always Returns true.
+type Always struct {
+}
+
+func (*Always) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Always_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Always_Type = "always"
+const Always_Lede = Always_Type
+
+func (op *Always) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Always_Compact_Marshal(n, op)
+}
+func (op *Always) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Always_Compact_Unmarshal(n, b, op)
+}
+func (op *Always) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Always_Detailed_Marshal(n, op)
+}
+func (op *Always) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Always_Detailed_Unmarshal(n, b, op)
+}
+
+func Always_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Always) ([]byte, error) {
+	return Always_Repeats_Marshal(n, vals, Always_Compact_Marshal)
+}
+func Always_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Always) ([]byte, error) {
+	return Always_Repeats_Marshal(n, vals, Always_Detailed_Marshal)
+}
+func Always_Repeats_Marshal(n jsonexp.Context, vals *[]Always, marshEl func(jsonexp.Context, *Always) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Always_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Always_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Always) error {
+	return Always_Repeats_Unmarshal(n, b, out, Always_Compact_Unmarshal)
+}
+func Always_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Always) error {
+	return Always_Repeats_Unmarshal(n, b, out, Always_Detailed_Unmarshal)
+}
+func Always_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Always, unmarshEl func(jsonexp.Context, []byte, *Always) error) (err error) {
+	var vals []Always
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Always_Type, "-", e)
+		} else {
+			vals = make([]Always, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Always_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Always_Compact_Optional_Marshal(n jsonexp.Context, val **Always) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Always_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Always_Compact_Marshal(n jsonexp.Context, val *Always) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Always_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Always_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Always) (err error) {
+	if len(b) > 0 {
+		var val Always
+		if e := Always_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Always_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Always) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Always_Type, "-", e)
+	}
+	return
+}
+
+func Always_Detailed_Optional_Marshal(n jsonexp.Context, val **Always) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Always_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func Always_Detailed_Marshal(n jsonexp.Context, val *Always) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   Always_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func Always_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Always) (err error) {
+	if len(b) > 0 {
+		var val Always
+		if e := Always_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Always_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Always) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Always_Type, "-", e)
+	}
+	return
+}
+
+// AnyTrue Returns true if any of the evaluations are true.
+type AnyTrue struct {
+	Test []rt.BoolEval `if:"label=_"`
+}
+
+func (*AnyTrue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: AnyTrue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "any_of",
+	}
+}
+
+const AnyTrue_Type = "any_true"
+const AnyTrue_Lede = "any_of"
+const AnyTrue_Field_Test = "$TEST"
+
+func (op *AnyTrue) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return AnyTrue_Compact_Marshal(n, op)
+}
+func (op *AnyTrue) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return AnyTrue_Compact_Unmarshal(n, b, op)
+}
+func (op *AnyTrue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return AnyTrue_Detailed_Marshal(n, op)
+}
+func (op *AnyTrue) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return AnyTrue_Detailed_Unmarshal(n, b, op)
+}
+
+func AnyTrue_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]AnyTrue) ([]byte, error) {
+	return AnyTrue_Repeats_Marshal(n, vals, AnyTrue_Compact_Marshal)
+}
+func AnyTrue_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]AnyTrue) ([]byte, error) {
+	return AnyTrue_Repeats_Marshal(n, vals, AnyTrue_Detailed_Marshal)
+}
+func AnyTrue_Repeats_Marshal(n jsonexp.Context, vals *[]AnyTrue, marshEl func(jsonexp.Context, *AnyTrue) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(AnyTrue_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func AnyTrue_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AnyTrue) error {
+	return AnyTrue_Repeats_Unmarshal(n, b, out, AnyTrue_Compact_Unmarshal)
+}
+func AnyTrue_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AnyTrue) error {
+	return AnyTrue_Repeats_Unmarshal(n, b, out, AnyTrue_Detailed_Unmarshal)
+}
+func AnyTrue_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AnyTrue, unmarshEl func(jsonexp.Context, []byte, *AnyTrue) error) (err error) {
+	var vals []AnyTrue
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(AnyTrue_Type, "-", e)
+		} else {
+			vals = make([]AnyTrue, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(AnyTrue_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func AnyTrue_Compact_Optional_Marshal(n jsonexp.Context, val **AnyTrue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = AnyTrue_Compact_Marshal(n, *val)
+	}
+	return
+}
+func AnyTrue_Compact_Marshal(n jsonexp.Context, val *AnyTrue) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(AnyTrue_Lede)
+	if b, e := rt.BoolEval_Compact_Repeats_Marshal(n, &val.Test); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func AnyTrue_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AnyTrue) (err error) {
+	if len(b) > 0 {
+		var val AnyTrue
+		if e := AnyTrue_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func AnyTrue_Compact_Unmarshal(n jsonexp.Context, b []byte, out *AnyTrue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(AnyTrue_Type, "-", e)
+	} else if e := rt.BoolEval_Compact_Repeats_Unmarshal(n, msg.Fields[AnyTrue_Field_Test], &out.Test); e != nil {
+		err = errutil.New(AnyTrue_Type+"."+AnyTrue_Field_Test, "-", e)
+	}
+	return
+}
+
+func AnyTrue_Detailed_Optional_Marshal(n jsonexp.Context, val **AnyTrue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = AnyTrue_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func AnyTrue_Detailed_Marshal(n jsonexp.Context, val *AnyTrue) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := rt.BoolEval_Detailed_Repeats_Marshal(n, &val.Test); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[AnyTrue_Field_Test] = b
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   AnyTrue_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func AnyTrue_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AnyTrue) (err error) {
+	if len(b) > 0 {
+		var val AnyTrue
+		if e := AnyTrue_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func AnyTrue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AnyTrue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(AnyTrue_Type, "-", e)
+	} else if e := rt.BoolEval_Detailed_Repeats_Unmarshal(n, msg.Fields[AnyTrue_Field_Test], &out.Test); e != nil {
+		err = errutil.New(AnyTrue_Type+"."+AnyTrue_Field_Test, "-", e)
+	}
+	return
+}
+
+// Assign Assigns a variable to a value.
+type Assign struct {
+	Var  value.VariableName `if:"label=_"`
+	From rt.Assignment      `if:"label=be"`
+}
+
+func (*Assign) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Assign_Type,
+		Uses: composer.Type_Flow,
+		Lede: "let",
+	}
+}
+
+const Assign_Type = "assign"
+const Assign_Lede = "let"
+const Assign_Field_Var = "$VAR"
+const Assign_Field_From = "$FROM"
+
+func (op *Assign) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Assign_Compact_Marshal(n, op)
+}
+func (op *Assign) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Assign_Compact_Unmarshal(n, b, op)
+}
+func (op *Assign) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Assign_Detailed_Marshal(n, op)
+}
+func (op *Assign) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Assign_Detailed_Unmarshal(n, b, op)
+}
+
+func Assign_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Assign) ([]byte, error) {
+	return Assign_Repeats_Marshal(n, vals, Assign_Compact_Marshal)
+}
+func Assign_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Assign) ([]byte, error) {
+	return Assign_Repeats_Marshal(n, vals, Assign_Detailed_Marshal)
+}
+func Assign_Repeats_Marshal(n jsonexp.Context, vals *[]Assign, marshEl func(jsonexp.Context, *Assign) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Assign_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Assign_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Assign) error {
+	return Assign_Repeats_Unmarshal(n, b, out, Assign_Compact_Unmarshal)
+}
+func Assign_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Assign) error {
+	return Assign_Repeats_Unmarshal(n, b, out, Assign_Detailed_Unmarshal)
+}
+func Assign_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Assign, unmarshEl func(jsonexp.Context, []byte, *Assign) error) (err error) {
+	var vals []Assign
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Assign_Type, "-", e)
+		} else {
+			vals = make([]Assign, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Assign_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Assign_Compact_Optional_Marshal(n jsonexp.Context, val **Assign) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Assign_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Assign_Compact_Marshal(n jsonexp.Context, val *Assign) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Assign_Lede)
+	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.Assignment_Compact_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("be")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Assign_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Assign) (err error) {
+	if len(b) > 0 {
+		var val Assign
+		if e := Assign_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Assign_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Assign) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Assign_Type, "-", e)
+	} else if e := value.VariableName_Compact_Unmarshal(n, msg.Fields[Assign_Field_Var], &out.Var); e != nil {
+		err = errutil.New(Assign_Type+"."+Assign_Field_Var, "-", e)
+	} else if e := rt.Assignment_Compact_Unmarshal(n, msg.Fields[Assign_Field_From], &out.From); e != nil {
+		err = errutil.New(Assign_Type+"."+Assign_Field_From, "-", e)
+	}
+	return
+}
+
+func Assign_Detailed_Optional_Marshal(n jsonexp.Context, val **Assign) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Assign_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func Assign_Detailed_Marshal(n jsonexp.Context, val *Assign) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[Assign_Field_Var] = b
+	}
+
+	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[Assign_Field_From] = b
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   Assign_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func Assign_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Assign) (err error) {
+	if len(b) > 0 {
+		var val Assign
+		if e := Assign_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Assign_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Assign) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Assign_Type, "-", e)
+	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[Assign_Field_Var], &out.Var); e != nil {
+		err = errutil.New(Assign_Type+"."+Assign_Field_Var, "-", e)
+	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[Assign_Field_From], &out.From); e != nil {
+		err = errutil.New(Assign_Type+"."+Assign_Field_From, "-", e)
+	}
+	return
+}
+
+// AtLeast The first value is greater than or equal to the second value.
+type AtLeast struct {
+}
+
+func (*AtLeast) Compose() composer.Spec {
+	return composer.Spec{
+		Name: AtLeast_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const AtLeast_Type = "at_least"
+const AtLeast_Lede = AtLeast_Type
+
+func (op *AtLeast) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return AtLeast_Compact_Marshal(n, op)
+}
+func (op *AtLeast) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return AtLeast_Compact_Unmarshal(n, b, op)
+}
+func (op *AtLeast) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return AtLeast_Detailed_Marshal(n, op)
+}
+func (op *AtLeast) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return AtLeast_Detailed_Unmarshal(n, b, op)
+}
+
+func AtLeast_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]AtLeast) ([]byte, error) {
+	return AtLeast_Repeats_Marshal(n, vals, AtLeast_Compact_Marshal)
+}
+func AtLeast_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]AtLeast) ([]byte, error) {
+	return AtLeast_Repeats_Marshal(n, vals, AtLeast_Detailed_Marshal)
+}
+func AtLeast_Repeats_Marshal(n jsonexp.Context, vals *[]AtLeast, marshEl func(jsonexp.Context, *AtLeast) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(AtLeast_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func AtLeast_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AtLeast) error {
+	return AtLeast_Repeats_Unmarshal(n, b, out, AtLeast_Compact_Unmarshal)
+}
+func AtLeast_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AtLeast) error {
+	return AtLeast_Repeats_Unmarshal(n, b, out, AtLeast_Detailed_Unmarshal)
+}
+func AtLeast_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AtLeast, unmarshEl func(jsonexp.Context, []byte, *AtLeast) error) (err error) {
+	var vals []AtLeast
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(AtLeast_Type, "-", e)
+		} else {
+			vals = make([]AtLeast, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(AtLeast_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func AtLeast_Compact_Optional_Marshal(n jsonexp.Context, val **AtLeast) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = AtLeast_Compact_Marshal(n, *val)
+	}
+	return
+}
+func AtLeast_Compact_Marshal(n jsonexp.Context, val *AtLeast) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(AtLeast_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func AtLeast_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AtLeast) (err error) {
+	if len(b) > 0 {
+		var val AtLeast
+		if e := AtLeast_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func AtLeast_Compact_Unmarshal(n jsonexp.Context, b []byte, out *AtLeast) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(AtLeast_Type, "-", e)
+	}
+	return
+}
+
+func AtLeast_Detailed_Optional_Marshal(n jsonexp.Context, val **AtLeast) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = AtLeast_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func AtLeast_Detailed_Marshal(n jsonexp.Context, val *AtLeast) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   AtLeast_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func AtLeast_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AtLeast) (err error) {
+	if len(b) > 0 {
+		var val AtLeast
+		if e := AtLeast_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func AtLeast_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AtLeast) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(AtLeast_Type, "-", e)
+	}
+	return
+}
+
+// AtMost The first value is less than or equal to the second value.
+type AtMost struct {
+}
+
+func (*AtMost) Compose() composer.Spec {
+	return composer.Spec{
+		Name: AtMost_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const AtMost_Type = "at_most"
+const AtMost_Lede = AtMost_Type
+
+func (op *AtMost) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return AtMost_Compact_Marshal(n, op)
+}
+func (op *AtMost) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return AtMost_Compact_Unmarshal(n, b, op)
+}
+func (op *AtMost) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return AtMost_Detailed_Marshal(n, op)
+}
+func (op *AtMost) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return AtMost_Detailed_Unmarshal(n, b, op)
+}
+
+func AtMost_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]AtMost) ([]byte, error) {
+	return AtMost_Repeats_Marshal(n, vals, AtMost_Compact_Marshal)
+}
+func AtMost_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]AtMost) ([]byte, error) {
+	return AtMost_Repeats_Marshal(n, vals, AtMost_Detailed_Marshal)
+}
+func AtMost_Repeats_Marshal(n jsonexp.Context, vals *[]AtMost, marshEl func(jsonexp.Context, *AtMost) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(AtMost_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func AtMost_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AtMost) error {
+	return AtMost_Repeats_Unmarshal(n, b, out, AtMost_Compact_Unmarshal)
+}
+func AtMost_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AtMost) error {
+	return AtMost_Repeats_Unmarshal(n, b, out, AtMost_Detailed_Unmarshal)
+}
+func AtMost_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]AtMost, unmarshEl func(jsonexp.Context, []byte, *AtMost) error) (err error) {
+	var vals []AtMost
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(AtMost_Type, "-", e)
+		} else {
+			vals = make([]AtMost, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(AtMost_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func AtMost_Compact_Optional_Marshal(n jsonexp.Context, val **AtMost) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = AtMost_Compact_Marshal(n, *val)
+	}
+	return
+}
+func AtMost_Compact_Marshal(n jsonexp.Context, val *AtMost) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(AtMost_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func AtMost_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AtMost) (err error) {
+	if len(b) > 0 {
+		var val AtMost
+		if e := AtMost_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func AtMost_Compact_Unmarshal(n jsonexp.Context, b []byte, out *AtMost) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(AtMost_Type, "-", e)
+	}
+	return
+}
+
+func AtMost_Detailed_Optional_Marshal(n jsonexp.Context, val **AtMost) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = AtMost_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func AtMost_Detailed_Marshal(n jsonexp.Context, val *AtMost) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   AtMost_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func AtMost_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AtMost) (err error) {
+	if len(b) > 0 {
+		var val AtMost
+		if e := AtMost_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func AtMost_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *AtMost) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(AtMost_Type, "-", e)
+	}
+	return
+}
+
+// Blankline Add a single blank line following some text.
+type Blankline struct {
+}
+
+func (*Blankline) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Blankline_Type,
+		Uses: composer.Type_Flow,
+		Lede: "p",
+	}
+}
+
+const Blankline_Type = "blankline"
+const Blankline_Lede = "p"
+
+func (op *Blankline) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Blankline_Compact_Marshal(n, op)
+}
+func (op *Blankline) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Blankline_Compact_Unmarshal(n, b, op)
+}
+func (op *Blankline) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Blankline_Detailed_Marshal(n, op)
+}
+func (op *Blankline) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Blankline_Detailed_Unmarshal(n, b, op)
+}
+
+func Blankline_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Blankline) ([]byte, error) {
+	return Blankline_Repeats_Marshal(n, vals, Blankline_Compact_Marshal)
+}
+func Blankline_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Blankline) ([]byte, error) {
+	return Blankline_Repeats_Marshal(n, vals, Blankline_Detailed_Marshal)
+}
+func Blankline_Repeats_Marshal(n jsonexp.Context, vals *[]Blankline, marshEl func(jsonexp.Context, *Blankline) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Blankline_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Blankline_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Blankline) error {
+	return Blankline_Repeats_Unmarshal(n, b, out, Blankline_Compact_Unmarshal)
+}
+func Blankline_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Blankline) error {
+	return Blankline_Repeats_Unmarshal(n, b, out, Blankline_Detailed_Unmarshal)
+}
+func Blankline_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Blankline, unmarshEl func(jsonexp.Context, []byte, *Blankline) error) (err error) {
+	var vals []Blankline
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Blankline_Type, "-", e)
+		} else {
+			vals = make([]Blankline, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Blankline_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Blankline_Compact_Optional_Marshal(n jsonexp.Context, val **Blankline) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Blankline_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Blankline_Compact_Marshal(n jsonexp.Context, val *Blankline) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Blankline_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Blankline_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Blankline) (err error) {
+	if len(b) > 0 {
+		var val Blankline
+		if e := Blankline_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Blankline_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Blankline) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Blankline_Type, "-", e)
+	}
+	return
+}
+
+func Blankline_Detailed_Optional_Marshal(n jsonexp.Context, val **Blankline) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Blankline_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func Blankline_Detailed_Marshal(n jsonexp.Context, val *Blankline) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   Blankline_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func Blankline_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Blankline) (err error) {
+	if len(b) > 0 {
+		var val Blankline
+		if e := Blankline_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Blankline_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Blankline) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Blankline_Type, "-", e)
+	}
+	return
+}
+
+// BoolValue Specify an explicit true or false value.
+type BoolValue struct {
+	Bool bool `if:"label=_,type=bool"`
+}
+
+func (*BoolValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: BoolValue_Type,
+		Uses: composer.Type_Flow,
+		Lede: "bool",
+	}
+}
+
+const BoolValue_Type = "bool_value"
+const BoolValue_Lede = "bool"
+const BoolValue_Field_Bool = "$BOOL"
+
+func (op *BoolValue) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return BoolValue_Compact_Marshal(n, op)
+}
+func (op *BoolValue) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return BoolValue_Compact_Unmarshal(n, b, op)
+}
+func (op *BoolValue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return BoolValue_Detailed_Marshal(n, op)
+}
+func (op *BoolValue) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return BoolValue_Detailed_Unmarshal(n, b, op)
+}
+
+func BoolValue_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]BoolValue) ([]byte, error) {
+	return BoolValue_Repeats_Marshal(n, vals, BoolValue_Compact_Marshal)
+}
+func BoolValue_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]BoolValue) ([]byte, error) {
+	return BoolValue_Repeats_Marshal(n, vals, BoolValue_Detailed_Marshal)
+}
+func BoolValue_Repeats_Marshal(n jsonexp.Context, vals *[]BoolValue, marshEl func(jsonexp.Context, *BoolValue) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(BoolValue_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func BoolValue_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BoolValue) error {
+	return BoolValue_Repeats_Unmarshal(n, b, out, BoolValue_Compact_Unmarshal)
+}
+func BoolValue_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BoolValue) error {
+	return BoolValue_Repeats_Unmarshal(n, b, out, BoolValue_Detailed_Unmarshal)
+}
+func BoolValue_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BoolValue, unmarshEl func(jsonexp.Context, []byte, *BoolValue) error) (err error) {
+	var vals []BoolValue
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(BoolValue_Type, "-", e)
+		} else {
+			vals = make([]BoolValue, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(BoolValue_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func BoolValue_Compact_Optional_Marshal(n jsonexp.Context, val **BoolValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = BoolValue_Compact_Marshal(n, *val)
+	}
+	return
+}
+func BoolValue_Compact_Marshal(n jsonexp.Context, val *BoolValue) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(BoolValue_Lede)
+	if b, e := value.Bool_Override_Compact_Marshal(n, &val.Bool); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func BoolValue_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BoolValue) (err error) {
+	if len(b) > 0 {
+		var val BoolValue
+		if e := BoolValue_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func BoolValue_Compact_Unmarshal(n jsonexp.Context, b []byte, out *BoolValue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(BoolValue_Type, "-", e)
+	} else if e := value.Bool_Override_Compact_Unmarshal(n, msg.Fields[BoolValue_Field_Bool], &out.Bool); e != nil {
+		err = errutil.New(BoolValue_Type+"."+BoolValue_Field_Bool, "-", e)
+	}
+	return
+}
+
+func BoolValue_Detailed_Optional_Marshal(n jsonexp.Context, val **BoolValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = BoolValue_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func BoolValue_Detailed_Marshal(n jsonexp.Context, val *BoolValue) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Bool_Override_Detailed_Marshal(n, &val.Bool); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[BoolValue_Field_Bool] = b
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   BoolValue_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func BoolValue_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BoolValue) (err error) {
+	if len(b) > 0 {
+		var val BoolValue
+		if e := BoolValue_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func BoolValue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BoolValue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(BoolValue_Type, "-", e)
+	} else if e := value.Bool_Override_Detailed_Unmarshal(n, msg.Fields[BoolValue_Field_Bool], &out.Bool); e != nil {
+		err = errutil.New(BoolValue_Type+"."+BoolValue_Field_Bool, "-", e)
+	}
+	return
+}
+
+// BracketText Sandwiches text printed during a block and puts them inside parenthesis &#x27;()&#x27;.
+type BracketText struct {
+	Do Activity `if:"label=_"`
+}
+
+func (*BracketText) Compose() composer.Spec {
+	return composer.Spec{
+		Name: BracketText_Type,
+		Uses: composer.Type_Flow,
+		Lede: "brackets",
+	}
+}
+
+const BracketText_Type = "bracket_text"
+const BracketText_Lede = "brackets"
+const BracketText_Field_Do = "$DO"
+
+func (op *BracketText) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return BracketText_Compact_Marshal(n, op)
+}
+func (op *BracketText) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return BracketText_Compact_Unmarshal(n, b, op)
+}
+func (op *BracketText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return BracketText_Detailed_Marshal(n, op)
+}
+func (op *BracketText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return BracketText_Detailed_Unmarshal(n, b, op)
+}
+
+func BracketText_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]BracketText) ([]byte, error) {
+	return BracketText_Repeats_Marshal(n, vals, BracketText_Compact_Marshal)
+}
+func BracketText_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]BracketText) ([]byte, error) {
+	return BracketText_Repeats_Marshal(n, vals, BracketText_Detailed_Marshal)
+}
+func BracketText_Repeats_Marshal(n jsonexp.Context, vals *[]BracketText, marshEl func(jsonexp.Context, *BracketText) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(BracketText_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func BracketText_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BracketText) error {
+	return BracketText_Repeats_Unmarshal(n, b, out, BracketText_Compact_Unmarshal)
+}
+func BracketText_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BracketText) error {
+	return BracketText_Repeats_Unmarshal(n, b, out, BracketText_Detailed_Unmarshal)
+}
+func BracketText_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BracketText, unmarshEl func(jsonexp.Context, []byte, *BracketText) error) (err error) {
+	var vals []BracketText
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(BracketText_Type, "-", e)
+		} else {
+			vals = make([]BracketText, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(BracketText_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func BracketText_Compact_Optional_Marshal(n jsonexp.Context, val **BracketText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = BracketText_Compact_Marshal(n, *val)
+	}
+	return
+}
+func BracketText_Compact_Marshal(n jsonexp.Context, val *BracketText) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(BracketText_Lede)
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func BracketText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BracketText) (err error) {
+	if len(b) > 0 {
+		var val BracketText
+		if e := BracketText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func BracketText_Compact_Unmarshal(n jsonexp.Context, b []byte, out *BracketText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(BracketText_Type, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[BracketText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(BracketText_Type+"."+BracketText_Field_Do, "-", e)
+	}
+	return
+}
+
+func BracketText_Detailed_Optional_Marshal(n jsonexp.Context, val **BracketText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = BracketText_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func BracketText_Detailed_Marshal(n jsonexp.Context, val *BracketText) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[BracketText_Field_Do] = b
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   BracketText_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func BracketText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BracketText) (err error) {
+	if len(b) > 0 {
+		var val BracketText
+		if e := BracketText_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func BracketText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BracketText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(BracketText_Type, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[BracketText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(BracketText_Type+"."+BracketText_Field_Do, "-", e)
+	}
+	return
+}
+
+const Brancher_Type = "brancher"
+
+var Brancher_Compact_Optional_Marshal = Brancher_Compact_Marshal
+var Brancher_Compact_Optional_Unmarshal = Brancher_Compact_Unmarshal
+
+func Brancher_Compact_Marshal(n jsonexp.Context, ptr *Brancher) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func Brancher_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Brancher) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Brancher); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Brancher_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var Brancher_Detailed_Optional_Marshal = Brancher_Detailed_Marshal
+var Brancher_Detailed_Optional_Unmarshal = Brancher_Detailed_Unmarshal
+
+func Brancher_Detailed_Marshal(n jsonexp.Context, ptr *Brancher) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
+	}
+	return
+}
+
+func Brancher_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Brancher) (err error) {
+	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Brancher); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Brancher_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+func Brancher_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Brancher) ([]byte, error) {
+	return Brancher_Repeats_Marshal(n, vals, Brancher_Compact_Marshal)
+}
+func Brancher_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Brancher) ([]byte, error) {
+	return Brancher_Repeats_Marshal(n, vals, Brancher_Detailed_Marshal)
+}
+func Brancher_Repeats_Marshal(n jsonexp.Context, vals *[]Brancher, marshEl func(jsonexp.Context, *Brancher) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Brancher_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Brancher_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Brancher) error {
+	return Brancher_Repeats_Unmarshal(n, b, out, Brancher_Compact_Unmarshal)
+}
+func Brancher_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Brancher) error {
+	return Brancher_Repeats_Unmarshal(n, b, out, Brancher_Detailed_Unmarshal)
+}
+func Brancher_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Brancher, unmarshEl func(jsonexp.Context, []byte, *Brancher) error) (err error) {
+	var vals []Brancher
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Brancher_Type, "-", e)
+		} else {
+			vals = make([]Brancher, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Brancher_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+// Break In a repeating loop, exit the loop.
+type Break struct {
+}
+
+func (*Break) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Break_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Break_Type = "break"
+const Break_Lede = Break_Type
+
+func (op *Break) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Break_Compact_Marshal(n, op)
+}
+func (op *Break) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Break_Compact_Unmarshal(n, b, op)
+}
+func (op *Break) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return Break_Detailed_Marshal(n, op)
+}
+func (op *Break) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return Break_Detailed_Unmarshal(n, b, op)
+}
+
+func Break_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Break) ([]byte, error) {
+	return Break_Repeats_Marshal(n, vals, Break_Compact_Marshal)
+}
+func Break_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Break) ([]byte, error) {
+	return Break_Repeats_Marshal(n, vals, Break_Detailed_Marshal)
+}
+func Break_Repeats_Marshal(n jsonexp.Context, vals *[]Break, marshEl func(jsonexp.Context, *Break) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Break_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Break_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Break) error {
+	return Break_Repeats_Unmarshal(n, b, out, Break_Compact_Unmarshal)
+}
+func Break_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Break) error {
+	return Break_Repeats_Unmarshal(n, b, out, Break_Detailed_Unmarshal)
+}
+func Break_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Break, unmarshEl func(jsonexp.Context, []byte, *Break) error) (err error) {
+	var vals []Break
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Break_Type, "-", e)
+		} else {
+			vals = make([]Break, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Break_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Break_Compact_Optional_Marshal(n jsonexp.Context, val **Break) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Break_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Break_Compact_Marshal(n jsonexp.Context, val *Break) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Break_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Break_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Break) (err error) {
+	if len(b) > 0 {
+		var val Break
+		if e := Break_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Break_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Break) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Break_Type, "-", e)
+	}
+	return
+}
+
+func Break_Detailed_Optional_Marshal(n jsonexp.Context, val **Break) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Break_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func Break_Detailed_Marshal(n jsonexp.Context, val *Break) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   Break_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func Break_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Break) (err error) {
+	if len(b) > 0 {
+		var val Break
+		if e := Break_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Break_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Break) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Break_Type, "-", e)
+	}
+	return
+}
+
+// BufferText
+type BufferText struct {
+	Do Activity `if:"label=_"`
+}
+
+func (*BufferText) Compose() composer.Spec {
+	return composer.Spec{
+		Name: BufferText_Type,
+		Uses: composer.Type_Flow,
+		Lede: "buffers",
+	}
+}
+
+const BufferText_Type = "buffer_text"
+const BufferText_Lede = "buffers"
+const BufferText_Field_Do = "$DO"
+
+func (op *BufferText) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return BufferText_Compact_Marshal(n, op)
+}
+func (op *BufferText) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return BufferText_Compact_Unmarshal(n, b, op)
+}
+func (op *BufferText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return BufferText_Detailed_Marshal(n, op)
+}
+func (op *BufferText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return BufferText_Detailed_Unmarshal(n, b, op)
+}
+
+func BufferText_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]BufferText) ([]byte, error) {
+	return BufferText_Repeats_Marshal(n, vals, BufferText_Compact_Marshal)
+}
+func BufferText_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]BufferText) ([]byte, error) {
+	return BufferText_Repeats_Marshal(n, vals, BufferText_Detailed_Marshal)
+}
+func BufferText_Repeats_Marshal(n jsonexp.Context, vals *[]BufferText, marshEl func(jsonexp.Context, *BufferText) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(BufferText_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func BufferText_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BufferText) error {
+	return BufferText_Repeats_Unmarshal(n, b, out, BufferText_Compact_Unmarshal)
+}
+func BufferText_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BufferText) error {
+	return BufferText_Repeats_Unmarshal(n, b, out, BufferText_Detailed_Unmarshal)
+}
+func BufferText_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]BufferText, unmarshEl func(jsonexp.Context, []byte, *BufferText) error) (err error) {
+	var vals []BufferText
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(BufferText_Type, "-", e)
+		} else {
+			vals = make([]BufferText, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(BufferText_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func BufferText_Compact_Optional_Marshal(n jsonexp.Context, val **BufferText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = BufferText_Compact_Marshal(n, *val)
+	}
+	return
+}
+func BufferText_Compact_Marshal(n jsonexp.Context, val *BufferText) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(BufferText_Lede)
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func BufferText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BufferText) (err error) {
+	if len(b) > 0 {
+		var val BufferText
+		if e := BufferText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func BufferText_Compact_Unmarshal(n jsonexp.Context, b []byte, out *BufferText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(BufferText_Type, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[BufferText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(BufferText_Type+"."+BufferText_Field_Do, "-", e)
+	}
+	return
+}
+
+func BufferText_Detailed_Optional_Marshal(n jsonexp.Context, val **BufferText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = BufferText_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func BufferText_Detailed_Marshal(n jsonexp.Context, val *BufferText) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[BufferText_Field_Do] = b
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   BufferText_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func BufferText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BufferText) (err error) {
+	if len(b) > 0 {
+		var val BufferText
+		if e := BufferText_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func BufferText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *BufferText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(BufferText_Type, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[BufferText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(BufferText_Type+"."+BufferText_Field_Do, "-", e)
+	}
+	return
+}
+
+// CallArg Runtime version of argument
+type CallArg struct {
+	Name string        `if:"label=_,type=text"`
+	From rt.Assignment `if:"label=from"`
+}
+
+func (*CallArg) Compose() composer.Spec {
+	return composer.Spec{
+		Name: CallArg_Type,
+		Uses: composer.Type_Flow,
+		Lede: "inarg",
+	}
+}
+
+const CallArg_Type = "call_arg"
+const CallArg_Lede = "inarg"
+const CallArg_Field_Name = "$NAME"
+const CallArg_Field_From = "$FROM"
+
+func (op *CallArg) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CallArg_Compact_Marshal(n, op)
+}
+func (op *CallArg) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CallArg_Compact_Unmarshal(n, b, op)
+}
+func (op *CallArg) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
+	return CallArg_Detailed_Marshal(n, op)
+}
+func (op *CallArg) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
+	return CallArg_Detailed_Unmarshal(n, b, op)
+}
+
+func CallArg_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CallArg) ([]byte, error) {
+	return CallArg_Repeats_Marshal(n, vals, CallArg_Compact_Marshal)
+}
+func CallArg_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallArg) ([]byte, error) {
+	return CallArg_Repeats_Marshal(n, vals, CallArg_Detailed_Marshal)
+}
+func CallArg_Repeats_Marshal(n jsonexp.Context, vals *[]CallArg, marshEl func(jsonexp.Context, *CallArg) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CallArg_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CallArg_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallArg) error {
+	return CallArg_Repeats_Unmarshal(n, b, out, CallArg_Compact_Unmarshal)
+}
+func CallArg_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallArg) error {
+	return CallArg_Repeats_Unmarshal(n, b, out, CallArg_Detailed_Unmarshal)
+}
+func CallArg_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallArg, unmarshEl func(jsonexp.Context, []byte, *CallArg) error) (err error) {
+	var vals []CallArg
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CallArg_Type, "-", e)
+		} else {
+			vals = make([]CallArg, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CallArg_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CallArg_Compact_Optional_Marshal(n jsonexp.Context, val **CallArg) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallArg_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CallArg_Compact_Marshal(n jsonexp.Context, val *CallArg) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CallArg_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.Assignment_Compact_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("from")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CallArg_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallArg) (err error) {
+	if len(b) > 0 {
+		var val CallArg
+		if e := CallArg_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallArg_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CallArg) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallArg_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[CallArg_Field_Name], &out.Name); e != nil {
+		err = errutil.New(CallArg_Type+"."+CallArg_Field_Name, "-", e)
+	} else if e := rt.Assignment_Compact_Unmarshal(n, msg.Fields[CallArg_Field_From], &out.From); e != nil {
+		err = errutil.New(CallArg_Type+"."+CallArg_Field_From, "-", e)
+	}
+	return
+}
+
+func CallArg_Detailed_Optional_Marshal(n jsonexp.Context, val **CallArg) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallArg_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func CallArg_Detailed_Marshal(n jsonexp.Context, val *CallArg) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[CallArg_Field_Name] = b
+	}
+
+	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[CallArg_Field_From] = b
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(jsonexp.Flow{
+			Type:   CallArg_Type,
+			Fields: fields,
+		})
+	}
+	return
+}
+
+func CallArg_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallArg) (err error) {
+	if len(b) > 0 {
+		var val CallArg
+		if e := CallArg_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallArg_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallArg) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallArg_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[CallArg_Field_Name], &out.Name); e != nil {
+		err = errutil.New(CallArg_Type+"."+CallArg_Field_Name, "-", e)
+	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[CallArg_Field_From], &out.From); e != nil {
+		err = errutil.New(CallArg_Type+"."+CallArg_Field_From, "-", e)
+	}
+	return
+}
+
 // CallArgs Runtime version of arguments
 type CallArgs struct {
 	Args []CallArg `if:"label=_"`
@@ -692,15 +2303,22 @@ type CallArgs struct {
 
 func (*CallArgs) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CallArgs,
+		Name: CallArgs_Type,
 		Uses: composer.Type_Flow,
 		Lede: "inargs",
 	}
 }
 
-const Type_CallArgs = "call_args"
-const CallArgs_Args = "$ARGS"
+const CallArgs_Type = "call_args"
+const CallArgs_Lede = "inargs"
+const CallArgs_Field_Args = "$ARGS"
 
+func (op *CallArgs) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CallArgs_Compact_Marshal(n, op)
+}
+func (op *CallArgs) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CallArgs_Compact_Unmarshal(n, b, op)
+}
 func (op *CallArgs) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CallArgs_Detailed_Marshal(n, op)
 }
@@ -708,28 +2326,145 @@ func (op *CallArgs) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CallArgs_Detailed_Unmarshal(n, b, op)
 }
 
+func CallArgs_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CallArgs) ([]byte, error) {
+	return CallArgs_Repeats_Marshal(n, vals, CallArgs_Compact_Marshal)
+}
+func CallArgs_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallArgs) ([]byte, error) {
+	return CallArgs_Repeats_Marshal(n, vals, CallArgs_Detailed_Marshal)
+}
+func CallArgs_Repeats_Marshal(n jsonexp.Context, vals *[]CallArgs, marshEl func(jsonexp.Context, *CallArgs) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CallArgs_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CallArgs_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallArgs) error {
+	return CallArgs_Repeats_Unmarshal(n, b, out, CallArgs_Compact_Unmarshal)
+}
+func CallArgs_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallArgs) error {
+	return CallArgs_Repeats_Unmarshal(n, b, out, CallArgs_Detailed_Unmarshal)
+}
+func CallArgs_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallArgs, unmarshEl func(jsonexp.Context, []byte, *CallArgs) error) (err error) {
+	var vals []CallArgs
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CallArgs_Type, "-", e)
+		} else {
+			vals = make([]CallArgs, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CallArgs_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CallArgs_Compact_Optional_Marshal(n jsonexp.Context, val **CallArgs) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallArgs_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CallArgs_Compact_Marshal(n jsonexp.Context, val *CallArgs) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CallArgs_Lede)
+	if b, e := CallArg_Compact_Repeats_Marshal(n, &val.Args); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CallArgs_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallArgs) (err error) {
+	if len(b) > 0 {
+		var val CallArgs
+		if e := CallArgs_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallArgs_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CallArgs) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallArgs_Type, "-", e)
+	} else if e := CallArg_Compact_Repeats_Unmarshal(n, msg.Fields[CallArgs_Field_Args], &out.Args); e != nil {
+		err = errutil.New(CallArgs_Type+"."+CallArgs_Field_Args, "-", e)
+	}
+	return
+}
+
+func CallArgs_Detailed_Optional_Marshal(n jsonexp.Context, val **CallArgs) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallArgs_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func CallArgs_Detailed_Marshal(n jsonexp.Context, val *CallArgs) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := CallArg_Detailed_Repeats_Marshal(n, &val.Args); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallArgs_Args] = b
+	} else {
+		fields[CallArgs_Field_Args] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_CallArgs,
+			Type:   CallArgs_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CallArgs_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallArgs) (err error) {
+	if len(b) > 0 {
+		var val CallArgs
+		if e := CallArgs_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CallArgs_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallArgs) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CallArgs, "-", e)
-	} else if e := CallArg_Detailed_Repeats_Unmarshal(n, msg.Fields[CallArgs_Args], &out.Args); e != nil {
-		err = errutil.New(Type_CallArgs+"."+CallArgs_Args, "-", e)
+		err = errutil.New(CallArgs_Type, "-", e)
+	} else if e := CallArg_Detailed_Repeats_Unmarshal(n, msg.Fields[CallArgs_Field_Args], &out.Args); e != nil {
+		err = errutil.New(CallArgs_Type+"."+CallArgs_Field_Args, "-", e)
 	}
 	return
 }
@@ -742,15 +2477,22 @@ type CallCycle struct {
 
 func (*CallCycle) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CallCycle,
+		Name: CallCycle_Type,
 		Uses: composer.Type_Flow,
 		Lede: "cycle",
 	}
 }
 
-const Type_CallCycle = "call_cycle"
-const CallCycle_Parts = "$PARTS"
+const CallCycle_Type = "call_cycle"
+const CallCycle_Lede = "cycle"
+const CallCycle_Field_Parts = "$PARTS"
 
+func (op *CallCycle) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CallCycle_Compact_Marshal(n, op)
+}
+func (op *CallCycle) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CallCycle_Compact_Unmarshal(n, b, op)
+}
 func (op *CallCycle) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CallCycle_Detailed_Marshal(n, op)
 }
@@ -758,28 +2500,147 @@ func (op *CallCycle) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CallCycle_Detailed_Unmarshal(n, b, op)
 }
 
+func CallCycle_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CallCycle) ([]byte, error) {
+	return CallCycle_Repeats_Marshal(n, vals, CallCycle_Compact_Marshal)
+}
+func CallCycle_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallCycle) ([]byte, error) {
+	return CallCycle_Repeats_Marshal(n, vals, CallCycle_Detailed_Marshal)
+}
+func CallCycle_Repeats_Marshal(n jsonexp.Context, vals *[]CallCycle, marshEl func(jsonexp.Context, *CallCycle) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CallCycle_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CallCycle_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallCycle) error {
+	return CallCycle_Repeats_Unmarshal(n, b, out, CallCycle_Compact_Unmarshal)
+}
+func CallCycle_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallCycle) error {
+	return CallCycle_Repeats_Unmarshal(n, b, out, CallCycle_Detailed_Unmarshal)
+}
+func CallCycle_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallCycle, unmarshEl func(jsonexp.Context, []byte, *CallCycle) error) (err error) {
+	var vals []CallCycle
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CallCycle_Type, "-", e)
+		} else {
+			vals = make([]CallCycle, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CallCycle_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CallCycle_Compact_Optional_Marshal(n jsonexp.Context, val **CallCycle) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallCycle_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CallCycle_Compact_Marshal(n jsonexp.Context, val *CallCycle) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CallCycle_Lede)
+	if b, e := rt.TextEval_Compact_Repeats_Marshal(n, &val.Parts); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CallCycle_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallCycle) (err error) {
+	if len(b) > 0 {
+		var val CallCycle
+		if e := CallCycle_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallCycle_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CallCycle) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallCycle_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Repeats_Unmarshal(n, msg.Fields[CallCycle_Field_Parts], &out.Parts); e != nil {
+		err = errutil.New(CallCycle_Type+"."+CallCycle_Field_Parts, "-", e)
+	} else {
+		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
+	}
+	return
+}
+
+func CallCycle_Detailed_Optional_Marshal(n jsonexp.Context, val **CallCycle) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallCycle_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func CallCycle_Detailed_Marshal(n jsonexp.Context, val *CallCycle) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Repeats_Marshal(n, &val.Parts); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallCycle_Parts] = b
+	} else {
+		fields[CallCycle_Field_Parts] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{Id: val.At.Offset,
-			Type:   Type_CallCycle,
+			Type:   CallCycle_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CallCycle_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallCycle) (err error) {
+	if len(b) > 0 {
+		var val CallCycle
+		if e := CallCycle_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CallCycle_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallCycle) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CallCycle, "-", e)
-	} else if e := rt.TextEval_Detailed_Repeats_Unmarshal(n, msg.Fields[CallCycle_Parts], &out.Parts); e != nil {
-		err = errutil.New(Type_CallCycle+"."+CallCycle_Parts, "-", e)
+		err = errutil.New(CallCycle_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Repeats_Unmarshal(n, msg.Fields[CallCycle_Field_Parts], &out.Parts); e != nil {
+		err = errutil.New(CallCycle_Type+"."+CallCycle_Field_Parts, "-", e)
 	} else {
 		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
 	}
@@ -794,15 +2655,22 @@ type CallMake struct {
 
 func (*CallMake) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CallMake,
+		Name: CallMake_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_CallMake = "call_make"
-const CallMake_Kind = "$KIND"
-const CallMake_Arguments = "$ARGUMENTS"
+const CallMake_Type = "call_make"
+const CallMake_Lede = CallMake_Type
+const CallMake_Field_Kind = "$KIND"
+const CallMake_Field_Arguments = "$ARGUMENTS"
 
+func (op *CallMake) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CallMake_Compact_Marshal(n, op)
+}
+func (op *CallMake) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CallMake_Compact_Unmarshal(n, b, op)
+}
 func (op *CallMake) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CallMake_Detailed_Marshal(n, op)
 }
@@ -810,35 +2678,162 @@ func (op *CallMake) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CallMake_Detailed_Unmarshal(n, b, op)
 }
 
-func CallMake_Detailed_Marshal(n jsonexp.Context, val *CallMake) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Kind); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallMake_Kind] = b
-	}
-	if b, e := CallArgs_Detailed_Marshal(n, &val.Arguments); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallMake_Arguments] = b
+func CallMake_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CallMake) ([]byte, error) {
+	return CallMake_Repeats_Marshal(n, vals, CallMake_Compact_Marshal)
+}
+func CallMake_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallMake) ([]byte, error) {
+	return CallMake_Repeats_Marshal(n, vals, CallMake_Detailed_Marshal)
+}
+func CallMake_Repeats_Marshal(n jsonexp.Context, vals *[]CallMake, marshEl func(jsonexp.Context, *CallMake) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CallMake_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CallMake_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallMake) error {
+	return CallMake_Repeats_Unmarshal(n, b, out, CallMake_Compact_Unmarshal)
+}
+func CallMake_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallMake) error {
+	return CallMake_Repeats_Unmarshal(n, b, out, CallMake_Detailed_Unmarshal)
+}
+func CallMake_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallMake, unmarshEl func(jsonexp.Context, []byte, *CallMake) error) (err error) {
+	var vals []CallMake
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CallMake_Type, "-", e)
+		} else {
+			vals = make([]CallMake, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CallMake_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CallMake_Compact_Optional_Marshal(n jsonexp.Context, val **CallMake) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallMake_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CallMake_Compact_Marshal(n jsonexp.Context, val *CallMake) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CallMake_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Kind); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := CallArgs_Compact_Marshal(n, &val.Arguments); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("args")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CallMake_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallMake) (err error) {
+	if len(b) > 0 {
+		var val CallMake
+		if e := CallMake_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallMake_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CallMake) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallMake_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[CallMake_Field_Kind], &out.Kind); e != nil {
+		err = errutil.New(CallMake_Type+"."+CallMake_Field_Kind, "-", e)
+	} else if e := CallArgs_Compact_Unmarshal(n, msg.Fields[CallMake_Field_Arguments], &out.Arguments); e != nil {
+		err = errutil.New(CallMake_Type+"."+CallMake_Field_Arguments, "-", e)
+	}
+	return
+}
+
+func CallMake_Detailed_Optional_Marshal(n jsonexp.Context, val **CallMake) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallMake_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func CallMake_Detailed_Marshal(n jsonexp.Context, val *CallMake) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Kind); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[CallMake_Field_Kind] = b
+	}
+
+	if b, e := CallArgs_Detailed_Marshal(n, &val.Arguments); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[CallMake_Field_Arguments] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_CallMake,
+			Type:   CallMake_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CallMake_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallMake) (err error) {
+	if len(b) > 0 {
+		var val CallMake
+		if e := CallMake_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CallMake_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallMake) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CallMake, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[CallMake_Kind], &out.Kind); e != nil {
-		err = errutil.New(Type_CallMake+"."+CallMake_Kind, "-", e)
-	} else if e := CallArgs_Detailed_Unmarshal(n, msg.Fields[CallMake_Arguments], &out.Arguments); e != nil {
-		err = errutil.New(Type_CallMake+"."+CallMake_Arguments, "-", e)
+		err = errutil.New(CallMake_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[CallMake_Field_Kind], &out.Kind); e != nil {
+		err = errutil.New(CallMake_Type+"."+CallMake_Field_Kind, "-", e)
+	} else if e := CallArgs_Detailed_Unmarshal(n, msg.Fields[CallMake_Field_Arguments], &out.Arguments); e != nil {
+		err = errutil.New(CallMake_Type+"."+CallMake_Field_Arguments, "-", e)
 	}
 	return
 }
@@ -851,15 +2846,22 @@ type CallPattern struct {
 
 func (*CallPattern) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CallPattern,
+		Name: CallPattern_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_CallPattern = "call_pattern"
-const CallPattern_Pattern = "$PATTERN"
-const CallPattern_Arguments = "$ARGUMENTS"
+const CallPattern_Type = "call_pattern"
+const CallPattern_Lede = CallPattern_Type
+const CallPattern_Field_Pattern = "$PATTERN"
+const CallPattern_Field_Arguments = "$ARGUMENTS"
 
+func (op *CallPattern) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CallPattern_Compact_Marshal(n, op)
+}
+func (op *CallPattern) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CallPattern_Compact_Unmarshal(n, b, op)
+}
 func (op *CallPattern) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CallPattern_Detailed_Marshal(n, op)
 }
@@ -867,35 +2869,162 @@ func (op *CallPattern) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CallPattern_Detailed_Unmarshal(n, b, op)
 }
 
+func CallPattern_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CallPattern) ([]byte, error) {
+	return CallPattern_Repeats_Marshal(n, vals, CallPattern_Compact_Marshal)
+}
+func CallPattern_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallPattern) ([]byte, error) {
+	return CallPattern_Repeats_Marshal(n, vals, CallPattern_Detailed_Marshal)
+}
+func CallPattern_Repeats_Marshal(n jsonexp.Context, vals *[]CallPattern, marshEl func(jsonexp.Context, *CallPattern) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CallPattern_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CallPattern_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallPattern) error {
+	return CallPattern_Repeats_Unmarshal(n, b, out, CallPattern_Compact_Unmarshal)
+}
+func CallPattern_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallPattern) error {
+	return CallPattern_Repeats_Unmarshal(n, b, out, CallPattern_Detailed_Unmarshal)
+}
+func CallPattern_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallPattern, unmarshEl func(jsonexp.Context, []byte, *CallPattern) error) (err error) {
+	var vals []CallPattern
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CallPattern_Type, "-", e)
+		} else {
+			vals = make([]CallPattern, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CallPattern_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CallPattern_Compact_Optional_Marshal(n jsonexp.Context, val **CallPattern) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallPattern_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CallPattern_Compact_Marshal(n jsonexp.Context, val *CallPattern) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CallPattern_Lede)
+	if b, e := value.PatternName_Compact_Marshal(n, &val.Pattern); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := CallArgs_Compact_Marshal(n, &val.Arguments); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("args")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CallPattern_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallPattern) (err error) {
+	if len(b) > 0 {
+		var val CallPattern
+		if e := CallPattern_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallPattern_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CallPattern) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallPattern_Type, "-", e)
+	} else if e := value.PatternName_Compact_Unmarshal(n, msg.Fields[CallPattern_Field_Pattern], &out.Pattern); e != nil {
+		err = errutil.New(CallPattern_Type+"."+CallPattern_Field_Pattern, "-", e)
+	} else if e := CallArgs_Compact_Unmarshal(n, msg.Fields[CallPattern_Field_Arguments], &out.Arguments); e != nil {
+		err = errutil.New(CallPattern_Type+"."+CallPattern_Field_Arguments, "-", e)
+	}
+	return
+}
+
+func CallPattern_Detailed_Optional_Marshal(n jsonexp.Context, val **CallPattern) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallPattern_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func CallPattern_Detailed_Marshal(n jsonexp.Context, val *CallPattern) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := value.PatternName_Detailed_Marshal(n, &val.Pattern); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallPattern_Pattern] = b
+	} else {
+		fields[CallPattern_Field_Pattern] = b
 	}
+
 	if b, e := CallArgs_Detailed_Marshal(n, &val.Arguments); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallPattern_Arguments] = b
+	} else {
+		fields[CallPattern_Field_Arguments] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_CallPattern,
+			Type:   CallPattern_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CallPattern_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallPattern) (err error) {
+	if len(b) > 0 {
+		var val CallPattern
+		if e := CallPattern_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CallPattern_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallPattern) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CallPattern, "-", e)
-	} else if e := value.PatternName_Detailed_Unmarshal(n, msg.Fields[CallPattern_Pattern], &out.Pattern); e != nil {
-		err = errutil.New(Type_CallPattern+"."+CallPattern_Pattern, "-", e)
-	} else if e := CallArgs_Detailed_Unmarshal(n, msg.Fields[CallPattern_Arguments], &out.Arguments); e != nil {
-		err = errutil.New(Type_CallPattern+"."+CallPattern_Arguments, "-", e)
+		err = errutil.New(CallPattern_Type, "-", e)
+	} else if e := value.PatternName_Detailed_Unmarshal(n, msg.Fields[CallPattern_Field_Pattern], &out.Pattern); e != nil {
+		err = errutil.New(CallPattern_Type+"."+CallPattern_Field_Pattern, "-", e)
+	} else if e := CallArgs_Detailed_Unmarshal(n, msg.Fields[CallPattern_Field_Arguments], &out.Arguments); e != nil {
+		err = errutil.New(CallPattern_Type+"."+CallPattern_Field_Arguments, "-", e)
 	}
 	return
 }
@@ -909,16 +3038,23 @@ type CallSend struct {
 
 func (*CallSend) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CallSend,
+		Name: CallSend_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_CallSend = "call_send"
-const CallSend_Event = "$EVENT"
-const CallSend_Path = "$PATH"
-const CallSend_Arguments = "$ARGUMENTS"
+const CallSend_Type = "call_send"
+const CallSend_Lede = CallSend_Type
+const CallSend_Field_Event = "$EVENT"
+const CallSend_Field_Path = "$PATH"
+const CallSend_Field_Arguments = "$ARGUMENTS"
 
+func (op *CallSend) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CallSend_Compact_Marshal(n, op)
+}
+func (op *CallSend) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CallSend_Compact_Unmarshal(n, b, op)
+}
 func (op *CallSend) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CallSend_Detailed_Marshal(n, op)
 }
@@ -926,42 +3062,179 @@ func (op *CallSend) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CallSend_Detailed_Unmarshal(n, b, op)
 }
 
-func CallSend_Detailed_Marshal(n jsonexp.Context, val *CallSend) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Event); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallSend_Event] = b
-	}
-	if b, e := rt.TextListEval_Detailed_Marshal(n, &val.Path); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallSend_Path] = b
-	}
-	if b, e := CallArgs_Detailed_Marshal(n, &val.Arguments); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallSend_Arguments] = b
+func CallSend_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CallSend) ([]byte, error) {
+	return CallSend_Repeats_Marshal(n, vals, CallSend_Compact_Marshal)
+}
+func CallSend_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallSend) ([]byte, error) {
+	return CallSend_Repeats_Marshal(n, vals, CallSend_Detailed_Marshal)
+}
+func CallSend_Repeats_Marshal(n jsonexp.Context, vals *[]CallSend, marshEl func(jsonexp.Context, *CallSend) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CallSend_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CallSend_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallSend) error {
+	return CallSend_Repeats_Unmarshal(n, b, out, CallSend_Compact_Unmarshal)
+}
+func CallSend_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallSend) error {
+	return CallSend_Repeats_Unmarshal(n, b, out, CallSend_Detailed_Unmarshal)
+}
+func CallSend_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallSend, unmarshEl func(jsonexp.Context, []byte, *CallSend) error) (err error) {
+	var vals []CallSend
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CallSend_Type, "-", e)
+		} else {
+			vals = make([]CallSend, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CallSend_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CallSend_Compact_Optional_Marshal(n jsonexp.Context, val **CallSend) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallSend_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CallSend_Compact_Marshal(n jsonexp.Context, val *CallSend) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CallSend_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Event); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.TextListEval_Compact_Marshal(n, &val.Path); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("to")
+		fields = append(fields, b)
+	}
+
+	if b, e := CallArgs_Compact_Marshal(n, &val.Arguments); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("args")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CallSend_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallSend) (err error) {
+	if len(b) > 0 {
+		var val CallSend
+		if e := CallSend_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallSend_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CallSend) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallSend_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[CallSend_Field_Event], &out.Event); e != nil {
+		err = errutil.New(CallSend_Type+"."+CallSend_Field_Event, "-", e)
+	} else if e := rt.TextListEval_Compact_Unmarshal(n, msg.Fields[CallSend_Field_Path], &out.Path); e != nil {
+		err = errutil.New(CallSend_Type+"."+CallSend_Field_Path, "-", e)
+	} else if e := CallArgs_Compact_Unmarshal(n, msg.Fields[CallSend_Field_Arguments], &out.Arguments); e != nil {
+		err = errutil.New(CallSend_Type+"."+CallSend_Field_Arguments, "-", e)
+	}
+	return
+}
+
+func CallSend_Detailed_Optional_Marshal(n jsonexp.Context, val **CallSend) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallSend_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func CallSend_Detailed_Marshal(n jsonexp.Context, val *CallSend) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Event); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[CallSend_Field_Event] = b
+	}
+
+	if b, e := rt.TextListEval_Detailed_Marshal(n, &val.Path); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[CallSend_Field_Path] = b
+	}
+
+	if b, e := CallArgs_Detailed_Marshal(n, &val.Arguments); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[CallSend_Field_Arguments] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_CallSend,
+			Type:   CallSend_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CallSend_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallSend) (err error) {
+	if len(b) > 0 {
+		var val CallSend
+		if e := CallSend_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CallSend_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallSend) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CallSend, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[CallSend_Event], &out.Event); e != nil {
-		err = errutil.New(Type_CallSend+"."+CallSend_Event, "-", e)
-	} else if e := rt.TextListEval_Detailed_Unmarshal(n, msg.Fields[CallSend_Path], &out.Path); e != nil {
-		err = errutil.New(Type_CallSend+"."+CallSend_Path, "-", e)
-	} else if e := CallArgs_Detailed_Unmarshal(n, msg.Fields[CallSend_Arguments], &out.Arguments); e != nil {
-		err = errutil.New(Type_CallSend+"."+CallSend_Arguments, "-", e)
+		err = errutil.New(CallSend_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[CallSend_Field_Event], &out.Event); e != nil {
+		err = errutil.New(CallSend_Type+"."+CallSend_Field_Event, "-", e)
+	} else if e := rt.TextListEval_Detailed_Unmarshal(n, msg.Fields[CallSend_Field_Path], &out.Path); e != nil {
+		err = errutil.New(CallSend_Type+"."+CallSend_Field_Path, "-", e)
+	} else if e := CallArgs_Detailed_Unmarshal(n, msg.Fields[CallSend_Field_Arguments], &out.Arguments); e != nil {
+		err = errutil.New(CallSend_Type+"."+CallSend_Field_Arguments, "-", e)
 	}
 	return
 }
@@ -975,15 +3248,22 @@ type CallShuffle struct {
 
 func (*CallShuffle) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CallShuffle,
+		Name: CallShuffle_Type,
 		Uses: composer.Type_Flow,
 		Lede: "shuffle",
 	}
 }
 
-const Type_CallShuffle = "call_shuffle"
-const CallShuffle_Parts = "$PARTS"
+const CallShuffle_Type = "call_shuffle"
+const CallShuffle_Lede = "shuffle"
+const CallShuffle_Field_Parts = "$PARTS"
 
+func (op *CallShuffle) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CallShuffle_Compact_Marshal(n, op)
+}
+func (op *CallShuffle) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CallShuffle_Compact_Unmarshal(n, b, op)
+}
 func (op *CallShuffle) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CallShuffle_Detailed_Marshal(n, op)
 }
@@ -991,28 +3271,147 @@ func (op *CallShuffle) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CallShuffle_Detailed_Unmarshal(n, b, op)
 }
 
+func CallShuffle_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CallShuffle) ([]byte, error) {
+	return CallShuffle_Repeats_Marshal(n, vals, CallShuffle_Compact_Marshal)
+}
+func CallShuffle_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallShuffle) ([]byte, error) {
+	return CallShuffle_Repeats_Marshal(n, vals, CallShuffle_Detailed_Marshal)
+}
+func CallShuffle_Repeats_Marshal(n jsonexp.Context, vals *[]CallShuffle, marshEl func(jsonexp.Context, *CallShuffle) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CallShuffle_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CallShuffle_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallShuffle) error {
+	return CallShuffle_Repeats_Unmarshal(n, b, out, CallShuffle_Compact_Unmarshal)
+}
+func CallShuffle_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallShuffle) error {
+	return CallShuffle_Repeats_Unmarshal(n, b, out, CallShuffle_Detailed_Unmarshal)
+}
+func CallShuffle_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallShuffle, unmarshEl func(jsonexp.Context, []byte, *CallShuffle) error) (err error) {
+	var vals []CallShuffle
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CallShuffle_Type, "-", e)
+		} else {
+			vals = make([]CallShuffle, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CallShuffle_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CallShuffle_Compact_Optional_Marshal(n jsonexp.Context, val **CallShuffle) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallShuffle_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CallShuffle_Compact_Marshal(n jsonexp.Context, val *CallShuffle) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CallShuffle_Lede)
+	if b, e := rt.TextEval_Compact_Repeats_Marshal(n, &val.Parts); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CallShuffle_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallShuffle) (err error) {
+	if len(b) > 0 {
+		var val CallShuffle
+		if e := CallShuffle_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallShuffle_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CallShuffle) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallShuffle_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Repeats_Unmarshal(n, msg.Fields[CallShuffle_Field_Parts], &out.Parts); e != nil {
+		err = errutil.New(CallShuffle_Type+"."+CallShuffle_Field_Parts, "-", e)
+	} else {
+		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
+	}
+	return
+}
+
+func CallShuffle_Detailed_Optional_Marshal(n jsonexp.Context, val **CallShuffle) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallShuffle_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func CallShuffle_Detailed_Marshal(n jsonexp.Context, val *CallShuffle) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Repeats_Marshal(n, &val.Parts); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallShuffle_Parts] = b
+	} else {
+		fields[CallShuffle_Field_Parts] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{Id: val.At.Offset,
-			Type:   Type_CallShuffle,
+			Type:   CallShuffle_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CallShuffle_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallShuffle) (err error) {
+	if len(b) > 0 {
+		var val CallShuffle
+		if e := CallShuffle_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CallShuffle_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallShuffle) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CallShuffle, "-", e)
-	} else if e := rt.TextEval_Detailed_Repeats_Unmarshal(n, msg.Fields[CallShuffle_Parts], &out.Parts); e != nil {
-		err = errutil.New(Type_CallShuffle+"."+CallShuffle_Parts, "-", e)
+		err = errutil.New(CallShuffle_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Repeats_Unmarshal(n, msg.Fields[CallShuffle_Field_Parts], &out.Parts); e != nil {
+		err = errutil.New(CallShuffle_Type+"."+CallShuffle_Field_Parts, "-", e)
 	} else {
 		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
 	}
@@ -1027,15 +3426,22 @@ type CallTerminal struct {
 
 func (*CallTerminal) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CallTerminal,
+		Name: CallTerminal_Type,
 		Uses: composer.Type_Flow,
 		Lede: "stopping",
 	}
 }
 
-const Type_CallTerminal = "call_terminal"
-const CallTerminal_Parts = "$PARTS"
+const CallTerminal_Type = "call_terminal"
+const CallTerminal_Lede = "stopping"
+const CallTerminal_Field_Parts = "$PARTS"
 
+func (op *CallTerminal) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CallTerminal_Compact_Marshal(n, op)
+}
+func (op *CallTerminal) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CallTerminal_Compact_Unmarshal(n, b, op)
+}
 func (op *CallTerminal) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CallTerminal_Detailed_Marshal(n, op)
 }
@@ -1043,28 +3449,147 @@ func (op *CallTerminal) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CallTerminal_Detailed_Unmarshal(n, b, op)
 }
 
+func CallTerminal_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CallTerminal) ([]byte, error) {
+	return CallTerminal_Repeats_Marshal(n, vals, CallTerminal_Compact_Marshal)
+}
+func CallTerminal_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallTerminal) ([]byte, error) {
+	return CallTerminal_Repeats_Marshal(n, vals, CallTerminal_Detailed_Marshal)
+}
+func CallTerminal_Repeats_Marshal(n jsonexp.Context, vals *[]CallTerminal, marshEl func(jsonexp.Context, *CallTerminal) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CallTerminal_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CallTerminal_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallTerminal) error {
+	return CallTerminal_Repeats_Unmarshal(n, b, out, CallTerminal_Compact_Unmarshal)
+}
+func CallTerminal_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallTerminal) error {
+	return CallTerminal_Repeats_Unmarshal(n, b, out, CallTerminal_Detailed_Unmarshal)
+}
+func CallTerminal_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallTerminal, unmarshEl func(jsonexp.Context, []byte, *CallTerminal) error) (err error) {
+	var vals []CallTerminal
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CallTerminal_Type, "-", e)
+		} else {
+			vals = make([]CallTerminal, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CallTerminal_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CallTerminal_Compact_Optional_Marshal(n jsonexp.Context, val **CallTerminal) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallTerminal_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CallTerminal_Compact_Marshal(n jsonexp.Context, val *CallTerminal) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CallTerminal_Lede)
+	if b, e := rt.TextEval_Compact_Repeats_Marshal(n, &val.Parts); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CallTerminal_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallTerminal) (err error) {
+	if len(b) > 0 {
+		var val CallTerminal
+		if e := CallTerminal_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallTerminal_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CallTerminal) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallTerminal_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Repeats_Unmarshal(n, msg.Fields[CallTerminal_Field_Parts], &out.Parts); e != nil {
+		err = errutil.New(CallTerminal_Type+"."+CallTerminal_Field_Parts, "-", e)
+	} else {
+		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
+	}
+	return
+}
+
+func CallTerminal_Detailed_Optional_Marshal(n jsonexp.Context, val **CallTerminal) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallTerminal_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func CallTerminal_Detailed_Marshal(n jsonexp.Context, val *CallTerminal) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Repeats_Marshal(n, &val.Parts); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallTerminal_Parts] = b
+	} else {
+		fields[CallTerminal_Field_Parts] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{Id: val.At.Offset,
-			Type:   Type_CallTerminal,
+			Type:   CallTerminal_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CallTerminal_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallTerminal) (err error) {
+	if len(b) > 0 {
+		var val CallTerminal
+		if e := CallTerminal_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CallTerminal_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallTerminal) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CallTerminal, "-", e)
-	} else if e := rt.TextEval_Detailed_Repeats_Unmarshal(n, msg.Fields[CallTerminal_Parts], &out.Parts); e != nil {
-		err = errutil.New(Type_CallTerminal+"."+CallTerminal_Parts, "-", e)
+		err = errutil.New(CallTerminal_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Repeats_Unmarshal(n, msg.Fields[CallTerminal_Field_Parts], &out.Parts); e != nil {
+		err = errutil.New(CallTerminal_Type+"."+CallTerminal_Field_Parts, "-", e)
 	} else {
 		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
 	}
@@ -1080,16 +3605,23 @@ type CallTrigger struct {
 
 func (*CallTrigger) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CallTrigger,
+		Name: CallTrigger_Type,
 		Uses: composer.Type_Flow,
 		Lede: "trigger",
 	}
 }
 
-const Type_CallTrigger = "call_trigger"
-const CallTrigger_Trigger = "$TRIGGER"
-const CallTrigger_Num = "$NUM"
+const CallTrigger_Type = "call_trigger"
+const CallTrigger_Lede = "trigger"
+const CallTrigger_Field_Trigger = "$TRIGGER"
+const CallTrigger_Field_Num = "$NUM"
 
+func (op *CallTrigger) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CallTrigger_Compact_Marshal(n, op)
+}
+func (op *CallTrigger) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CallTrigger_Compact_Unmarshal(n, b, op)
+}
 func (op *CallTrigger) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CallTrigger_Detailed_Marshal(n, op)
 }
@@ -1097,35 +3629,164 @@ func (op *CallTrigger) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CallTrigger_Detailed_Unmarshal(n, b, op)
 }
 
+func CallTrigger_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CallTrigger) ([]byte, error) {
+	return CallTrigger_Repeats_Marshal(n, vals, CallTrigger_Compact_Marshal)
+}
+func CallTrigger_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CallTrigger) ([]byte, error) {
+	return CallTrigger_Repeats_Marshal(n, vals, CallTrigger_Detailed_Marshal)
+}
+func CallTrigger_Repeats_Marshal(n jsonexp.Context, vals *[]CallTrigger, marshEl func(jsonexp.Context, *CallTrigger) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CallTrigger_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CallTrigger_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallTrigger) error {
+	return CallTrigger_Repeats_Unmarshal(n, b, out, CallTrigger_Compact_Unmarshal)
+}
+func CallTrigger_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallTrigger) error {
+	return CallTrigger_Repeats_Unmarshal(n, b, out, CallTrigger_Detailed_Unmarshal)
+}
+func CallTrigger_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CallTrigger, unmarshEl func(jsonexp.Context, []byte, *CallTrigger) error) (err error) {
+	var vals []CallTrigger
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CallTrigger_Type, "-", e)
+		} else {
+			vals = make([]CallTrigger, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CallTrigger_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CallTrigger_Compact_Optional_Marshal(n jsonexp.Context, val **CallTrigger) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallTrigger_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CallTrigger_Compact_Marshal(n jsonexp.Context, val *CallTrigger) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CallTrigger_Lede)
+	if b, e := Trigger_Compact_Marshal(n, &val.Trigger); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Num); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("num")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CallTrigger_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallTrigger) (err error) {
+	if len(b) > 0 {
+		var val CallTrigger
+		if e := CallTrigger_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CallTrigger_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CallTrigger) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CallTrigger_Type, "-", e)
+	} else if e := Trigger_Compact_Unmarshal(n, msg.Fields[CallTrigger_Field_Trigger], &out.Trigger); e != nil {
+		err = errutil.New(CallTrigger_Type+"."+CallTrigger_Field_Trigger, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[CallTrigger_Field_Num], &out.Num); e != nil {
+		err = errutil.New(CallTrigger_Type+"."+CallTrigger_Field_Num, "-", e)
+	} else {
+		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
+	}
+	return
+}
+
+func CallTrigger_Detailed_Optional_Marshal(n jsonexp.Context, val **CallTrigger) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CallTrigger_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func CallTrigger_Detailed_Marshal(n jsonexp.Context, val *CallTrigger) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := Trigger_Detailed_Marshal(n, &val.Trigger); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallTrigger_Trigger] = b
+	} else {
+		fields[CallTrigger_Field_Trigger] = b
 	}
+
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.Num); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CallTrigger_Num] = b
+	} else {
+		fields[CallTrigger_Field_Num] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{Id: val.At.Offset,
-			Type:   Type_CallTrigger,
+			Type:   CallTrigger_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CallTrigger_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CallTrigger) (err error) {
+	if len(b) > 0 {
+		var val CallTrigger
+		if e := CallTrigger_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CallTrigger_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CallTrigger) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CallTrigger, "-", e)
-	} else if e := Trigger_Detailed_Unmarshal(n, msg.Fields[CallTrigger_Trigger], &out.Trigger); e != nil {
-		err = errutil.New(Type_CallTrigger+"."+CallTrigger_Trigger, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[CallTrigger_Num], &out.Num); e != nil {
-		err = errutil.New(Type_CallTrigger+"."+CallTrigger_Num, "-", e)
+		err = errutil.New(CallTrigger_Type, "-", e)
+	} else if e := Trigger_Detailed_Unmarshal(n, msg.Fields[CallTrigger_Field_Trigger], &out.Trigger); e != nil {
+		err = errutil.New(CallTrigger_Type+"."+CallTrigger_Field_Trigger, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[CallTrigger_Field_Num], &out.Num); e != nil {
+		err = errutil.New(CallTrigger_Type+"."+CallTrigger_Field_Num, "-", e)
 	} else {
 		out.At = reader.Position{Source: n.Source(), Offset: msg.Id}
 	}
@@ -1139,14 +3800,21 @@ type Capitalize struct {
 
 func (*Capitalize) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Capitalize,
+		Name: Capitalize_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_Capitalize = "capitalize"
-const Capitalize_Text = "$TEXT"
+const Capitalize_Type = "capitalize"
+const Capitalize_Lede = Capitalize_Type
+const Capitalize_Field_Text = "$TEXT"
 
+func (op *Capitalize) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Capitalize_Compact_Marshal(n, op)
+}
+func (op *Capitalize) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Capitalize_Compact_Unmarshal(n, b, op)
+}
 func (op *Capitalize) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Capitalize_Detailed_Marshal(n, op)
 }
@@ -1154,28 +3822,145 @@ func (op *Capitalize) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Capitalize_Detailed_Unmarshal(n, b, op)
 }
 
+func Capitalize_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Capitalize) ([]byte, error) {
+	return Capitalize_Repeats_Marshal(n, vals, Capitalize_Compact_Marshal)
+}
+func Capitalize_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Capitalize) ([]byte, error) {
+	return Capitalize_Repeats_Marshal(n, vals, Capitalize_Detailed_Marshal)
+}
+func Capitalize_Repeats_Marshal(n jsonexp.Context, vals *[]Capitalize, marshEl func(jsonexp.Context, *Capitalize) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Capitalize_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Capitalize_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Capitalize) error {
+	return Capitalize_Repeats_Unmarshal(n, b, out, Capitalize_Compact_Unmarshal)
+}
+func Capitalize_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Capitalize) error {
+	return Capitalize_Repeats_Unmarshal(n, b, out, Capitalize_Detailed_Unmarshal)
+}
+func Capitalize_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Capitalize, unmarshEl func(jsonexp.Context, []byte, *Capitalize) error) (err error) {
+	var vals []Capitalize
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Capitalize_Type, "-", e)
+		} else {
+			vals = make([]Capitalize, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Capitalize_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Capitalize_Compact_Optional_Marshal(n jsonexp.Context, val **Capitalize) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Capitalize_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Capitalize_Compact_Marshal(n jsonexp.Context, val *Capitalize) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Capitalize_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Capitalize_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Capitalize) (err error) {
+	if len(b) > 0 {
+		var val Capitalize
+		if e := Capitalize_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Capitalize_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Capitalize) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Capitalize_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[Capitalize_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Capitalize_Type+"."+Capitalize_Field_Text, "-", e)
+	}
+	return
+}
+
+func Capitalize_Detailed_Optional_Marshal(n jsonexp.Context, val **Capitalize) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Capitalize_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Capitalize_Detailed_Marshal(n jsonexp.Context, val *Capitalize) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Capitalize_Text] = b
+	} else {
+		fields[Capitalize_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Capitalize,
+			Type:   Capitalize_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Capitalize_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Capitalize) (err error) {
+	if len(b) > 0 {
+		var val Capitalize
+		if e := Capitalize_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Capitalize_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Capitalize) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Capitalize, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Capitalize_Text], &out.Text); e != nil {
-		err = errutil.New(Type_Capitalize+"."+Capitalize_Text, "-", e)
+		err = errutil.New(Capitalize_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Capitalize_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Capitalize_Type+"."+Capitalize_Field_Text, "-", e)
 	}
 	return
 }
@@ -1189,17 +3974,24 @@ type ChooseAction struct {
 
 func (*ChooseAction) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_ChooseAction,
+		Name: ChooseAction_Type,
 		Uses: composer.Type_Flow,
 		Lede: "if",
 	}
 }
 
-const Type_ChooseAction = "choose_action"
-const ChooseAction_If = "$IF"
-const ChooseAction_Do = "$DO"
-const ChooseAction_Else = "$ELSE"
+const ChooseAction_Type = "choose_action"
+const ChooseAction_Lede = "if"
+const ChooseAction_Field_If = "$IF"
+const ChooseAction_Field_Do = "$DO"
+const ChooseAction_Field_Else = "$ELSE"
 
+func (op *ChooseAction) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return ChooseAction_Compact_Marshal(n, op)
+}
+func (op *ChooseAction) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return ChooseAction_Compact_Unmarshal(n, b, op)
+}
 func (op *ChooseAction) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return ChooseAction_Detailed_Marshal(n, op)
 }
@@ -1207,42 +3999,179 @@ func (op *ChooseAction) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return ChooseAction_Detailed_Unmarshal(n, b, op)
 }
 
+func ChooseAction_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseAction) ([]byte, error) {
+	return ChooseAction_Repeats_Marshal(n, vals, ChooseAction_Compact_Marshal)
+}
+func ChooseAction_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseAction) ([]byte, error) {
+	return ChooseAction_Repeats_Marshal(n, vals, ChooseAction_Detailed_Marshal)
+}
+func ChooseAction_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseAction, marshEl func(jsonexp.Context, *ChooseAction) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(ChooseAction_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ChooseAction_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseAction) error {
+	return ChooseAction_Repeats_Unmarshal(n, b, out, ChooseAction_Compact_Unmarshal)
+}
+func ChooseAction_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseAction) error {
+	return ChooseAction_Repeats_Unmarshal(n, b, out, ChooseAction_Detailed_Unmarshal)
+}
+func ChooseAction_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseAction, unmarshEl func(jsonexp.Context, []byte, *ChooseAction) error) (err error) {
+	var vals []ChooseAction
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(ChooseAction_Type, "-", e)
+		} else {
+			vals = make([]ChooseAction, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(ChooseAction_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func ChooseAction_Compact_Optional_Marshal(n jsonexp.Context, val **ChooseAction) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseAction_Compact_Marshal(n, *val)
+	}
+	return
+}
+func ChooseAction_Compact_Marshal(n jsonexp.Context, val *ChooseAction) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(ChooseAction_Lede)
+	if b, e := rt.BoolEval_Compact_Marshal(n, &val.If); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("do")
+		fields = append(fields, b)
+	}
+
+	if b, e := Brancher_Compact_Optional_Marshal(n, &val.Else); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		sig.WriteLabel("else")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func ChooseAction_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseAction) (err error) {
+	if len(b) > 0 {
+		var val ChooseAction
+		if e := ChooseAction_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func ChooseAction_Compact_Unmarshal(n jsonexp.Context, b []byte, out *ChooseAction) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(ChooseAction_Type, "-", e)
+	} else if e := rt.BoolEval_Compact_Unmarshal(n, msg.Fields[ChooseAction_Field_If], &out.If); e != nil {
+		err = errutil.New(ChooseAction_Type+"."+ChooseAction_Field_If, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[ChooseAction_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseAction_Type+"."+ChooseAction_Field_Do, "-", e)
+	} else if e := Brancher_Compact_Optional_Unmarshal(n, msg.Fields[ChooseAction_Field_Else], &out.Else); e != nil {
+		err = errutil.New(ChooseAction_Type+"."+ChooseAction_Field_Else, "-", e)
+	}
+	return
+}
+
+func ChooseAction_Detailed_Optional_Marshal(n jsonexp.Context, val **ChooseAction) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseAction_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func ChooseAction_Detailed_Marshal(n jsonexp.Context, val *ChooseAction) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.If); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseAction_If] = b
+	} else {
+		fields[ChooseAction_Field_If] = b
 	}
+
 	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseAction_Do] = b
+	} else {
+		fields[ChooseAction_Field_Do] = b
 	}
-	if b, e := Brancher_Detailed_Marshal(n, &val.Else); e != nil {
+
+	if b, e := Brancher_Detailed_Optional_Marshal(n, &val.Else); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		fields[ChooseAction_Else] = b
+		fields[ChooseAction_Field_Else] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_ChooseAction,
+			Type:   ChooseAction_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func ChooseAction_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseAction) (err error) {
+	if len(b) > 0 {
+		var val ChooseAction
+		if e := ChooseAction_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func ChooseAction_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ChooseAction) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ChooseAction, "-", e)
-	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseAction_If], &out.If); e != nil {
-		err = errutil.New(Type_ChooseAction+"."+ChooseAction_If, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseAction_Do], &out.Do); e != nil {
-		err = errutil.New(Type_ChooseAction+"."+ChooseAction_Do, "-", e)
-	} else if e := Brancher_Detailed_Unmarshal(n, msg.Fields[ChooseAction_Else], &out.Else); e != nil {
-		err = errutil.New(Type_ChooseAction+"."+ChooseAction_Else, "-", e)
+		err = errutil.New(ChooseAction_Type, "-", e)
+	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseAction_Field_If], &out.If); e != nil {
+		err = errutil.New(ChooseAction_Type+"."+ChooseAction_Field_If, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseAction_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseAction_Type+"."+ChooseAction_Field_Do, "-", e)
+	} else if e := Brancher_Detailed_Optional_Unmarshal(n, msg.Fields[ChooseAction_Field_Else], &out.Else); e != nil {
+		err = errutil.New(ChooseAction_Type+"."+ChooseAction_Field_Else, "-", e)
 	}
 	return
 }
@@ -1256,17 +4185,24 @@ type ChooseMore struct {
 
 func (*ChooseMore) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_ChooseMore,
+		Name: ChooseMore_Type,
 		Uses: composer.Type_Flow,
 		Lede: "else_if",
 	}
 }
 
-const Type_ChooseMore = "choose_more"
-const ChooseMore_If = "$IF"
-const ChooseMore_Do = "$DO"
-const ChooseMore_Else = "$ELSE"
+const ChooseMore_Type = "choose_more"
+const ChooseMore_Lede = "else_if"
+const ChooseMore_Field_If = "$IF"
+const ChooseMore_Field_Do = "$DO"
+const ChooseMore_Field_Else = "$ELSE"
 
+func (op *ChooseMore) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return ChooseMore_Compact_Marshal(n, op)
+}
+func (op *ChooseMore) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return ChooseMore_Compact_Unmarshal(n, b, op)
+}
 func (op *ChooseMore) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return ChooseMore_Detailed_Marshal(n, op)
 }
@@ -1274,42 +4210,179 @@ func (op *ChooseMore) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return ChooseMore_Detailed_Unmarshal(n, b, op)
 }
 
+func ChooseMore_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseMore) ([]byte, error) {
+	return ChooseMore_Repeats_Marshal(n, vals, ChooseMore_Compact_Marshal)
+}
+func ChooseMore_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseMore) ([]byte, error) {
+	return ChooseMore_Repeats_Marshal(n, vals, ChooseMore_Detailed_Marshal)
+}
+func ChooseMore_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseMore, marshEl func(jsonexp.Context, *ChooseMore) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(ChooseMore_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ChooseMore_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseMore) error {
+	return ChooseMore_Repeats_Unmarshal(n, b, out, ChooseMore_Compact_Unmarshal)
+}
+func ChooseMore_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseMore) error {
+	return ChooseMore_Repeats_Unmarshal(n, b, out, ChooseMore_Detailed_Unmarshal)
+}
+func ChooseMore_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseMore, unmarshEl func(jsonexp.Context, []byte, *ChooseMore) error) (err error) {
+	var vals []ChooseMore
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(ChooseMore_Type, "-", e)
+		} else {
+			vals = make([]ChooseMore, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(ChooseMore_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func ChooseMore_Compact_Optional_Marshal(n jsonexp.Context, val **ChooseMore) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseMore_Compact_Marshal(n, *val)
+	}
+	return
+}
+func ChooseMore_Compact_Marshal(n jsonexp.Context, val *ChooseMore) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(ChooseMore_Lede)
+	if b, e := rt.BoolEval_Compact_Marshal(n, &val.If); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("do")
+		fields = append(fields, b)
+	}
+
+	if b, e := Brancher_Compact_Optional_Marshal(n, &val.Else); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		sig.WriteLabel("else")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func ChooseMore_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseMore) (err error) {
+	if len(b) > 0 {
+		var val ChooseMore
+		if e := ChooseMore_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func ChooseMore_Compact_Unmarshal(n jsonexp.Context, b []byte, out *ChooseMore) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(ChooseMore_Type, "-", e)
+	} else if e := rt.BoolEval_Compact_Unmarshal(n, msg.Fields[ChooseMore_Field_If], &out.If); e != nil {
+		err = errutil.New(ChooseMore_Type+"."+ChooseMore_Field_If, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[ChooseMore_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseMore_Type+"."+ChooseMore_Field_Do, "-", e)
+	} else if e := Brancher_Compact_Optional_Unmarshal(n, msg.Fields[ChooseMore_Field_Else], &out.Else); e != nil {
+		err = errutil.New(ChooseMore_Type+"."+ChooseMore_Field_Else, "-", e)
+	}
+	return
+}
+
+func ChooseMore_Detailed_Optional_Marshal(n jsonexp.Context, val **ChooseMore) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseMore_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func ChooseMore_Detailed_Marshal(n jsonexp.Context, val *ChooseMore) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.If); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseMore_If] = b
+	} else {
+		fields[ChooseMore_Field_If] = b
 	}
+
 	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseMore_Do] = b
+	} else {
+		fields[ChooseMore_Field_Do] = b
 	}
-	if b, e := Brancher_Detailed_Marshal(n, &val.Else); e != nil {
+
+	if b, e := Brancher_Detailed_Optional_Marshal(n, &val.Else); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		fields[ChooseMore_Else] = b
+		fields[ChooseMore_Field_Else] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_ChooseMore,
+			Type:   ChooseMore_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func ChooseMore_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseMore) (err error) {
+	if len(b) > 0 {
+		var val ChooseMore
+		if e := ChooseMore_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func ChooseMore_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ChooseMore) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ChooseMore, "-", e)
-	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseMore_If], &out.If); e != nil {
-		err = errutil.New(Type_ChooseMore+"."+ChooseMore_If, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseMore_Do], &out.Do); e != nil {
-		err = errutil.New(Type_ChooseMore+"."+ChooseMore_Do, "-", e)
-	} else if e := Brancher_Detailed_Unmarshal(n, msg.Fields[ChooseMore_Else], &out.Else); e != nil {
-		err = errutil.New(Type_ChooseMore+"."+ChooseMore_Else, "-", e)
+		err = errutil.New(ChooseMore_Type, "-", e)
+	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseMore_Field_If], &out.If); e != nil {
+		err = errutil.New(ChooseMore_Type+"."+ChooseMore_Field_If, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseMore_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseMore_Type+"."+ChooseMore_Field_Do, "-", e)
+	} else if e := Brancher_Detailed_Optional_Unmarshal(n, msg.Fields[ChooseMore_Field_Else], &out.Else); e != nil {
+		err = errutil.New(ChooseMore_Type+"."+ChooseMore_Field_Else, "-", e)
 	}
 	return
 }
@@ -1325,19 +4398,26 @@ type ChooseMoreValue struct {
 
 func (*ChooseMoreValue) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_ChooseMoreValue,
+		Name: ChooseMoreValue_Type,
 		Uses: composer.Type_Flow,
 		Lede: "else_if",
 	}
 }
 
-const Type_ChooseMoreValue = "choose_more_value"
-const ChooseMoreValue_Assign = "$ASSIGN"
-const ChooseMoreValue_From = "$FROM"
-const ChooseMoreValue_Filter = "$FILTER"
-const ChooseMoreValue_Do = "$DO"
-const ChooseMoreValue_Else = "$ELSE"
+const ChooseMoreValue_Type = "choose_more_value"
+const ChooseMoreValue_Lede = "else_if"
+const ChooseMoreValue_Field_Assign = "$ASSIGN"
+const ChooseMoreValue_Field_From = "$FROM"
+const ChooseMoreValue_Field_Filter = "$FILTER"
+const ChooseMoreValue_Field_Do = "$DO"
+const ChooseMoreValue_Field_Else = "$ELSE"
 
+func (op *ChooseMoreValue) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return ChooseMoreValue_Compact_Marshal(n, op)
+}
+func (op *ChooseMoreValue) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return ChooseMoreValue_Compact_Unmarshal(n, b, op)
+}
 func (op *ChooseMoreValue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return ChooseMoreValue_Detailed_Marshal(n, op)
 }
@@ -1345,56 +4425,213 @@ func (op *ChooseMoreValue) UnmarshalDetailed(n jsonexp.Context, b []byte) error 
 	return ChooseMoreValue_Detailed_Unmarshal(n, b, op)
 }
 
-func ChooseMoreValue_Detailed_Marshal(n jsonexp.Context, val *ChooseMoreValue) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Assign); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseMoreValue_Assign] = b
-	}
-	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseMoreValue_From] = b
-	}
-	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.Filter); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseMoreValue_Filter] = b
-	}
-	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseMoreValue_Do] = b
-	}
-	if b, e := Brancher_Detailed_Marshal(n, &val.Else); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseMoreValue_Else] = b
+func ChooseMoreValue_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseMoreValue) ([]byte, error) {
+	return ChooseMoreValue_Repeats_Marshal(n, vals, ChooseMoreValue_Compact_Marshal)
+}
+func ChooseMoreValue_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseMoreValue) ([]byte, error) {
+	return ChooseMoreValue_Repeats_Marshal(n, vals, ChooseMoreValue_Detailed_Marshal)
+}
+func ChooseMoreValue_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseMoreValue, marshEl func(jsonexp.Context, *ChooseMoreValue) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(ChooseMoreValue_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ChooseMoreValue_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseMoreValue) error {
+	return ChooseMoreValue_Repeats_Unmarshal(n, b, out, ChooseMoreValue_Compact_Unmarshal)
+}
+func ChooseMoreValue_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseMoreValue) error {
+	return ChooseMoreValue_Repeats_Unmarshal(n, b, out, ChooseMoreValue_Detailed_Unmarshal)
+}
+func ChooseMoreValue_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseMoreValue, unmarshEl func(jsonexp.Context, []byte, *ChooseMoreValue) error) (err error) {
+	var vals []ChooseMoreValue
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(ChooseMoreValue_Type, "-", e)
+		} else {
+			vals = make([]ChooseMoreValue, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(ChooseMoreValue_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func ChooseMoreValue_Compact_Optional_Marshal(n jsonexp.Context, val **ChooseMoreValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseMoreValue_Compact_Marshal(n, *val)
+	}
+	return
+}
+func ChooseMoreValue_Compact_Marshal(n jsonexp.Context, val *ChooseMoreValue) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(ChooseMoreValue_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Assign); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.Assignment_Compact_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("from")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.BoolEval_Compact_Marshal(n, &val.Filter); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("and")
+		fields = append(fields, b)
+	}
+
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("do")
+		fields = append(fields, b)
+	}
+
+	if b, e := Brancher_Compact_Optional_Marshal(n, &val.Else); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		sig.WriteLabel("else")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func ChooseMoreValue_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseMoreValue) (err error) {
+	if len(b) > 0 {
+		var val ChooseMoreValue
+		if e := ChooseMoreValue_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func ChooseMoreValue_Compact_Unmarshal(n jsonexp.Context, b []byte, out *ChooseMoreValue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(ChooseMoreValue_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_Assign], &out.Assign); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_Assign, "-", e)
+	} else if e := rt.Assignment_Compact_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_From], &out.From); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_From, "-", e)
+	} else if e := rt.BoolEval_Compact_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_Filter], &out.Filter); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_Filter, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_Do, "-", e)
+	} else if e := Brancher_Compact_Optional_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_Else], &out.Else); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_Else, "-", e)
+	}
+	return
+}
+
+func ChooseMoreValue_Detailed_Optional_Marshal(n jsonexp.Context, val **ChooseMoreValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseMoreValue_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func ChooseMoreValue_Detailed_Marshal(n jsonexp.Context, val *ChooseMoreValue) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Assign); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[ChooseMoreValue_Field_Assign] = b
+	}
+
+	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[ChooseMoreValue_Field_From] = b
+	}
+
+	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.Filter); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[ChooseMoreValue_Field_Filter] = b
+	}
+
+	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[ChooseMoreValue_Field_Do] = b
+	}
+
+	if b, e := Brancher_Detailed_Optional_Marshal(n, &val.Else); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[ChooseMoreValue_Field_Else] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_ChooseMoreValue,
+			Type:   ChooseMoreValue_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func ChooseMoreValue_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseMoreValue) (err error) {
+	if len(b) > 0 {
+		var val ChooseMoreValue
+		if e := ChooseMoreValue_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func ChooseMoreValue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ChooseMoreValue) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ChooseMoreValue, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ChooseMoreValue_Assign], &out.Assign); e != nil {
-		err = errutil.New(Type_ChooseMoreValue+"."+ChooseMoreValue_Assign, "-", e)
-	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ChooseMoreValue_From], &out.From); e != nil {
-		err = errutil.New(Type_ChooseMoreValue+"."+ChooseMoreValue_From, "-", e)
-	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseMoreValue_Filter], &out.Filter); e != nil {
-		err = errutil.New(Type_ChooseMoreValue+"."+ChooseMoreValue_Filter, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseMoreValue_Do], &out.Do); e != nil {
-		err = errutil.New(Type_ChooseMoreValue+"."+ChooseMoreValue_Do, "-", e)
-	} else if e := Brancher_Detailed_Unmarshal(n, msg.Fields[ChooseMoreValue_Else], &out.Else); e != nil {
-		err = errutil.New(Type_ChooseMoreValue+"."+ChooseMoreValue_Else, "-", e)
+		err = errutil.New(ChooseMoreValue_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_Assign], &out.Assign); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_Assign, "-", e)
+	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_From], &out.From); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_From, "-", e)
+	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_Filter], &out.Filter); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_Filter, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_Do, "-", e)
+	} else if e := Brancher_Detailed_Optional_Unmarshal(n, msg.Fields[ChooseMoreValue_Field_Else], &out.Else); e != nil {
+		err = errutil.New(ChooseMoreValue_Type+"."+ChooseMoreValue_Field_Else, "-", e)
 	}
 	return
 }
@@ -1406,15 +4643,22 @@ type ChooseNothingElse struct {
 
 func (*ChooseNothingElse) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_ChooseNothingElse,
+		Name: ChooseNothingElse_Type,
 		Uses: composer.Type_Flow,
 		Lede: "else_do",
 	}
 }
 
-const Type_ChooseNothingElse = "choose_nothing_else"
-const ChooseNothingElse_Do = "$DO"
+const ChooseNothingElse_Type = "choose_nothing_else"
+const ChooseNothingElse_Lede = "else_do"
+const ChooseNothingElse_Field_Do = "$DO"
 
+func (op *ChooseNothingElse) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return ChooseNothingElse_Compact_Marshal(n, op)
+}
+func (op *ChooseNothingElse) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return ChooseNothingElse_Compact_Unmarshal(n, b, op)
+}
 func (op *ChooseNothingElse) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return ChooseNothingElse_Detailed_Marshal(n, op)
 }
@@ -1422,28 +4666,145 @@ func (op *ChooseNothingElse) UnmarshalDetailed(n jsonexp.Context, b []byte) erro
 	return ChooseNothingElse_Detailed_Unmarshal(n, b, op)
 }
 
+func ChooseNothingElse_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseNothingElse) ([]byte, error) {
+	return ChooseNothingElse_Repeats_Marshal(n, vals, ChooseNothingElse_Compact_Marshal)
+}
+func ChooseNothingElse_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseNothingElse) ([]byte, error) {
+	return ChooseNothingElse_Repeats_Marshal(n, vals, ChooseNothingElse_Detailed_Marshal)
+}
+func ChooseNothingElse_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseNothingElse, marshEl func(jsonexp.Context, *ChooseNothingElse) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(ChooseNothingElse_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ChooseNothingElse_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseNothingElse) error {
+	return ChooseNothingElse_Repeats_Unmarshal(n, b, out, ChooseNothingElse_Compact_Unmarshal)
+}
+func ChooseNothingElse_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseNothingElse) error {
+	return ChooseNothingElse_Repeats_Unmarshal(n, b, out, ChooseNothingElse_Detailed_Unmarshal)
+}
+func ChooseNothingElse_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseNothingElse, unmarshEl func(jsonexp.Context, []byte, *ChooseNothingElse) error) (err error) {
+	var vals []ChooseNothingElse
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(ChooseNothingElse_Type, "-", e)
+		} else {
+			vals = make([]ChooseNothingElse, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(ChooseNothingElse_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func ChooseNothingElse_Compact_Optional_Marshal(n jsonexp.Context, val **ChooseNothingElse) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseNothingElse_Compact_Marshal(n, *val)
+	}
+	return
+}
+func ChooseNothingElse_Compact_Marshal(n jsonexp.Context, val *ChooseNothingElse) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(ChooseNothingElse_Lede)
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func ChooseNothingElse_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseNothingElse) (err error) {
+	if len(b) > 0 {
+		var val ChooseNothingElse
+		if e := ChooseNothingElse_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func ChooseNothingElse_Compact_Unmarshal(n jsonexp.Context, b []byte, out *ChooseNothingElse) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(ChooseNothingElse_Type, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[ChooseNothingElse_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseNothingElse_Type+"."+ChooseNothingElse_Field_Do, "-", e)
+	}
+	return
+}
+
+func ChooseNothingElse_Detailed_Optional_Marshal(n jsonexp.Context, val **ChooseNothingElse) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseNothingElse_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func ChooseNothingElse_Detailed_Marshal(n jsonexp.Context, val *ChooseNothingElse) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseNothingElse_Do] = b
+	} else {
+		fields[ChooseNothingElse_Field_Do] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_ChooseNothingElse,
+			Type:   ChooseNothingElse_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func ChooseNothingElse_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseNothingElse) (err error) {
+	if len(b) > 0 {
+		var val ChooseNothingElse
+		if e := ChooseNothingElse_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func ChooseNothingElse_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ChooseNothingElse) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ChooseNothingElse, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseNothingElse_Do], &out.Do); e != nil {
-		err = errutil.New(Type_ChooseNothingElse+"."+ChooseNothingElse_Do, "-", e)
+		err = errutil.New(ChooseNothingElse_Type, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseNothingElse_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseNothingElse_Type+"."+ChooseNothingElse_Field_Do, "-", e)
 	}
 	return
 }
@@ -1457,17 +4818,24 @@ type ChooseNum struct {
 
 func (*ChooseNum) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_ChooseNum,
+		Name: ChooseNum_Type,
 		Uses: composer.Type_Flow,
 		Lede: "num",
 	}
 }
 
-const Type_ChooseNum = "choose_num"
-const ChooseNum_If = "$IF"
-const ChooseNum_True = "$TRUE"
-const ChooseNum_False = "$FALSE"
+const ChooseNum_Type = "choose_num"
+const ChooseNum_Lede = "num"
+const ChooseNum_Field_If = "$IF"
+const ChooseNum_Field_True = "$TRUE"
+const ChooseNum_Field_False = "$FALSE"
 
+func (op *ChooseNum) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return ChooseNum_Compact_Marshal(n, op)
+}
+func (op *ChooseNum) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return ChooseNum_Compact_Unmarshal(n, b, op)
+}
 func (op *ChooseNum) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return ChooseNum_Detailed_Marshal(n, op)
 }
@@ -1475,42 +4843,179 @@ func (op *ChooseNum) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return ChooseNum_Detailed_Unmarshal(n, b, op)
 }
 
+func ChooseNum_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseNum) ([]byte, error) {
+	return ChooseNum_Repeats_Marshal(n, vals, ChooseNum_Compact_Marshal)
+}
+func ChooseNum_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseNum) ([]byte, error) {
+	return ChooseNum_Repeats_Marshal(n, vals, ChooseNum_Detailed_Marshal)
+}
+func ChooseNum_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseNum, marshEl func(jsonexp.Context, *ChooseNum) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(ChooseNum_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ChooseNum_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseNum) error {
+	return ChooseNum_Repeats_Unmarshal(n, b, out, ChooseNum_Compact_Unmarshal)
+}
+func ChooseNum_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseNum) error {
+	return ChooseNum_Repeats_Unmarshal(n, b, out, ChooseNum_Detailed_Unmarshal)
+}
+func ChooseNum_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseNum, unmarshEl func(jsonexp.Context, []byte, *ChooseNum) error) (err error) {
+	var vals []ChooseNum
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(ChooseNum_Type, "-", e)
+		} else {
+			vals = make([]ChooseNum, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(ChooseNum_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func ChooseNum_Compact_Optional_Marshal(n jsonexp.Context, val **ChooseNum) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseNum_Compact_Marshal(n, *val)
+	}
+	return
+}
+func ChooseNum_Compact_Marshal(n jsonexp.Context, val *ChooseNum) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(ChooseNum_Lede)
+	if b, e := rt.BoolEval_Compact_Marshal(n, &val.If); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("if")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.True); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("then")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.False); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("else")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func ChooseNum_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseNum) (err error) {
+	if len(b) > 0 {
+		var val ChooseNum
+		if e := ChooseNum_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func ChooseNum_Compact_Unmarshal(n jsonexp.Context, b []byte, out *ChooseNum) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(ChooseNum_Type, "-", e)
+	} else if e := rt.BoolEval_Compact_Unmarshal(n, msg.Fields[ChooseNum_Field_If], &out.If); e != nil {
+		err = errutil.New(ChooseNum_Type+"."+ChooseNum_Field_If, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[ChooseNum_Field_True], &out.True); e != nil {
+		err = errutil.New(ChooseNum_Type+"."+ChooseNum_Field_True, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[ChooseNum_Field_False], &out.False); e != nil {
+		err = errutil.New(ChooseNum_Type+"."+ChooseNum_Field_False, "-", e)
+	}
+	return
+}
+
+func ChooseNum_Detailed_Optional_Marshal(n jsonexp.Context, val **ChooseNum) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseNum_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func ChooseNum_Detailed_Marshal(n jsonexp.Context, val *ChooseNum) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.If); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseNum_If] = b
+	} else {
+		fields[ChooseNum_Field_If] = b
 	}
+
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.True); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseNum_True] = b
+	} else {
+		fields[ChooseNum_Field_True] = b
 	}
+
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.False); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseNum_False] = b
+	} else {
+		fields[ChooseNum_Field_False] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_ChooseNum,
+			Type:   ChooseNum_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func ChooseNum_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseNum) (err error) {
+	if len(b) > 0 {
+		var val ChooseNum
+		if e := ChooseNum_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func ChooseNum_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ChooseNum) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ChooseNum, "-", e)
-	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseNum_If], &out.If); e != nil {
-		err = errutil.New(Type_ChooseNum+"."+ChooseNum_If, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ChooseNum_True], &out.True); e != nil {
-		err = errutil.New(Type_ChooseNum+"."+ChooseNum_True, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ChooseNum_False], &out.False); e != nil {
-		err = errutil.New(Type_ChooseNum+"."+ChooseNum_False, "-", e)
+		err = errutil.New(ChooseNum_Type, "-", e)
+	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseNum_Field_If], &out.If); e != nil {
+		err = errutil.New(ChooseNum_Type+"."+ChooseNum_Field_If, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ChooseNum_Field_True], &out.True); e != nil {
+		err = errutil.New(ChooseNum_Type+"."+ChooseNum_Field_True, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ChooseNum_Field_False], &out.False); e != nil {
+		err = errutil.New(ChooseNum_Type+"."+ChooseNum_Field_False, "-", e)
 	}
 	return
 }
@@ -1524,17 +5029,24 @@ type ChooseText struct {
 
 func (*ChooseText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_ChooseText,
+		Name: ChooseText_Type,
 		Uses: composer.Type_Flow,
 		Lede: "txt",
 	}
 }
 
-const Type_ChooseText = "choose_text"
-const ChooseText_If = "$IF"
-const ChooseText_True = "$TRUE"
-const ChooseText_False = "$FALSE"
+const ChooseText_Type = "choose_text"
+const ChooseText_Lede = "txt"
+const ChooseText_Field_If = "$IF"
+const ChooseText_Field_True = "$TRUE"
+const ChooseText_Field_False = "$FALSE"
 
+func (op *ChooseText) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return ChooseText_Compact_Marshal(n, op)
+}
+func (op *ChooseText) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return ChooseText_Compact_Unmarshal(n, b, op)
+}
 func (op *ChooseText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return ChooseText_Detailed_Marshal(n, op)
 }
@@ -1542,42 +5054,179 @@ func (op *ChooseText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return ChooseText_Detailed_Unmarshal(n, b, op)
 }
 
+func ChooseText_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseText) ([]byte, error) {
+	return ChooseText_Repeats_Marshal(n, vals, ChooseText_Compact_Marshal)
+}
+func ChooseText_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseText) ([]byte, error) {
+	return ChooseText_Repeats_Marshal(n, vals, ChooseText_Detailed_Marshal)
+}
+func ChooseText_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseText, marshEl func(jsonexp.Context, *ChooseText) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(ChooseText_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ChooseText_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseText) error {
+	return ChooseText_Repeats_Unmarshal(n, b, out, ChooseText_Compact_Unmarshal)
+}
+func ChooseText_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseText) error {
+	return ChooseText_Repeats_Unmarshal(n, b, out, ChooseText_Detailed_Unmarshal)
+}
+func ChooseText_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseText, unmarshEl func(jsonexp.Context, []byte, *ChooseText) error) (err error) {
+	var vals []ChooseText
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(ChooseText_Type, "-", e)
+		} else {
+			vals = make([]ChooseText, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(ChooseText_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func ChooseText_Compact_Optional_Marshal(n jsonexp.Context, val **ChooseText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseText_Compact_Marshal(n, *val)
+	}
+	return
+}
+func ChooseText_Compact_Marshal(n jsonexp.Context, val *ChooseText) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(ChooseText_Lede)
+	if b, e := rt.BoolEval_Compact_Marshal(n, &val.If); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("if")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.True); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("then")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.False); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("else")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func ChooseText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseText) (err error) {
+	if len(b) > 0 {
+		var val ChooseText
+		if e := ChooseText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func ChooseText_Compact_Unmarshal(n jsonexp.Context, b []byte, out *ChooseText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(ChooseText_Type, "-", e)
+	} else if e := rt.BoolEval_Compact_Unmarshal(n, msg.Fields[ChooseText_Field_If], &out.If); e != nil {
+		err = errutil.New(ChooseText_Type+"."+ChooseText_Field_If, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[ChooseText_Field_True], &out.True); e != nil {
+		err = errutil.New(ChooseText_Type+"."+ChooseText_Field_True, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[ChooseText_Field_False], &out.False); e != nil {
+		err = errutil.New(ChooseText_Type+"."+ChooseText_Field_False, "-", e)
+	}
+	return
+}
+
+func ChooseText_Detailed_Optional_Marshal(n jsonexp.Context, val **ChooseText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseText_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func ChooseText_Detailed_Marshal(n jsonexp.Context, val *ChooseText) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.If); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseText_If] = b
+	} else {
+		fields[ChooseText_Field_If] = b
 	}
+
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.True); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseText_True] = b
+	} else {
+		fields[ChooseText_Field_True] = b
 	}
+
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.False); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseText_False] = b
+	} else {
+		fields[ChooseText_Field_False] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_ChooseText,
+			Type:   ChooseText_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func ChooseText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseText) (err error) {
+	if len(b) > 0 {
+		var val ChooseText
+		if e := ChooseText_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func ChooseText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ChooseText) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ChooseText, "-", e)
-	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseText_If], &out.If); e != nil {
-		err = errutil.New(Type_ChooseText+"."+ChooseText_If, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ChooseText_True], &out.True); e != nil {
-		err = errutil.New(Type_ChooseText+"."+ChooseText_True, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ChooseText_False], &out.False); e != nil {
-		err = errutil.New(Type_ChooseText+"."+ChooseText_False, "-", e)
+		err = errutil.New(ChooseText_Type, "-", e)
+	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseText_Field_If], &out.If); e != nil {
+		err = errutil.New(ChooseText_Type+"."+ChooseText_Field_If, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ChooseText_Field_True], &out.True); e != nil {
+		err = errutil.New(ChooseText_Type+"."+ChooseText_Field_True, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ChooseText_Field_False], &out.False); e != nil {
+		err = errutil.New(ChooseText_Type+"."+ChooseText_Field_False, "-", e)
 	}
 	return
 }
@@ -1593,19 +5242,26 @@ type ChooseValue struct {
 
 func (*ChooseValue) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_ChooseValue,
+		Name: ChooseValue_Type,
 		Uses: composer.Type_Flow,
 		Lede: "if",
 	}
 }
 
-const Type_ChooseValue = "choose_value"
-const ChooseValue_Assign = "$ASSIGN"
-const ChooseValue_From = "$FROM"
-const ChooseValue_Filter = "$FILTER"
-const ChooseValue_Do = "$DO"
-const ChooseValue_Else = "$ELSE"
+const ChooseValue_Type = "choose_value"
+const ChooseValue_Lede = "if"
+const ChooseValue_Field_Assign = "$ASSIGN"
+const ChooseValue_Field_From = "$FROM"
+const ChooseValue_Field_Filter = "$FILTER"
+const ChooseValue_Field_Do = "$DO"
+const ChooseValue_Field_Else = "$ELSE"
 
+func (op *ChooseValue) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return ChooseValue_Compact_Marshal(n, op)
+}
+func (op *ChooseValue) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return ChooseValue_Compact_Unmarshal(n, b, op)
+}
 func (op *ChooseValue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return ChooseValue_Detailed_Marshal(n, op)
 }
@@ -1613,56 +5269,213 @@ func (op *ChooseValue) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return ChooseValue_Detailed_Unmarshal(n, b, op)
 }
 
-func ChooseValue_Detailed_Marshal(n jsonexp.Context, val *ChooseValue) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Assign); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseValue_Assign] = b
-	}
-	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseValue_From] = b
-	}
-	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.Filter); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseValue_Filter] = b
-	}
-	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseValue_Do] = b
-	}
-	if b, e := Brancher_Detailed_Marshal(n, &val.Else); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ChooseValue_Else] = b
+func ChooseValue_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseValue) ([]byte, error) {
+	return ChooseValue_Repeats_Marshal(n, vals, ChooseValue_Compact_Marshal)
+}
+func ChooseValue_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseValue) ([]byte, error) {
+	return ChooseValue_Repeats_Marshal(n, vals, ChooseValue_Detailed_Marshal)
+}
+func ChooseValue_Repeats_Marshal(n jsonexp.Context, vals *[]ChooseValue, marshEl func(jsonexp.Context, *ChooseValue) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(ChooseValue_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ChooseValue_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseValue) error {
+	return ChooseValue_Repeats_Unmarshal(n, b, out, ChooseValue_Compact_Unmarshal)
+}
+func ChooseValue_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseValue) error {
+	return ChooseValue_Repeats_Unmarshal(n, b, out, ChooseValue_Detailed_Unmarshal)
+}
+func ChooseValue_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ChooseValue, unmarshEl func(jsonexp.Context, []byte, *ChooseValue) error) (err error) {
+	var vals []ChooseValue
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(ChooseValue_Type, "-", e)
+		} else {
+			vals = make([]ChooseValue, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(ChooseValue_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func ChooseValue_Compact_Optional_Marshal(n jsonexp.Context, val **ChooseValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseValue_Compact_Marshal(n, *val)
+	}
+	return
+}
+func ChooseValue_Compact_Marshal(n jsonexp.Context, val *ChooseValue) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(ChooseValue_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Assign); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.Assignment_Compact_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("from")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.BoolEval_Compact_Marshal(n, &val.Filter); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("and")
+		fields = append(fields, b)
+	}
+
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("do")
+		fields = append(fields, b)
+	}
+
+	if b, e := Brancher_Compact_Optional_Marshal(n, &val.Else); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		sig.WriteLabel("else")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func ChooseValue_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseValue) (err error) {
+	if len(b) > 0 {
+		var val ChooseValue
+		if e := ChooseValue_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func ChooseValue_Compact_Unmarshal(n jsonexp.Context, b []byte, out *ChooseValue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(ChooseValue_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[ChooseValue_Field_Assign], &out.Assign); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_Assign, "-", e)
+	} else if e := rt.Assignment_Compact_Unmarshal(n, msg.Fields[ChooseValue_Field_From], &out.From); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_From, "-", e)
+	} else if e := rt.BoolEval_Compact_Unmarshal(n, msg.Fields[ChooseValue_Field_Filter], &out.Filter); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_Filter, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[ChooseValue_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_Do, "-", e)
+	} else if e := Brancher_Compact_Optional_Unmarshal(n, msg.Fields[ChooseValue_Field_Else], &out.Else); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_Else, "-", e)
+	}
+	return
+}
+
+func ChooseValue_Detailed_Optional_Marshal(n jsonexp.Context, val **ChooseValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ChooseValue_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func ChooseValue_Detailed_Marshal(n jsonexp.Context, val *ChooseValue) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Assign); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[ChooseValue_Field_Assign] = b
+	}
+
+	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[ChooseValue_Field_From] = b
+	}
+
+	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.Filter); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[ChooseValue_Field_Filter] = b
+	}
+
+	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[ChooseValue_Field_Do] = b
+	}
+
+	if b, e := Brancher_Detailed_Optional_Marshal(n, &val.Else); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[ChooseValue_Field_Else] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_ChooseValue,
+			Type:   ChooseValue_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func ChooseValue_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ChooseValue) (err error) {
+	if len(b) > 0 {
+		var val ChooseValue
+		if e := ChooseValue_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func ChooseValue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ChooseValue) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ChooseValue, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[ChooseValue_Assign], &out.Assign); e != nil {
-		err = errutil.New(Type_ChooseValue+"."+ChooseValue_Assign, "-", e)
-	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ChooseValue_From], &out.From); e != nil {
-		err = errutil.New(Type_ChooseValue+"."+ChooseValue_From, "-", e)
-	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseValue_Filter], &out.Filter); e != nil {
-		err = errutil.New(Type_ChooseValue+"."+ChooseValue_Filter, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseValue_Do], &out.Do); e != nil {
-		err = errutil.New(Type_ChooseValue+"."+ChooseValue_Do, "-", e)
-	} else if e := Brancher_Detailed_Unmarshal(n, msg.Fields[ChooseValue_Else], &out.Else); e != nil {
-		err = errutil.New(Type_ChooseValue+"."+ChooseValue_Else, "-", e)
+		err = errutil.New(ChooseValue_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[ChooseValue_Field_Assign], &out.Assign); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_Assign, "-", e)
+	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[ChooseValue_Field_From], &out.From); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_From, "-", e)
+	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[ChooseValue_Field_Filter], &out.Filter); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_Filter, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[ChooseValue_Field_Do], &out.Do); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_Do, "-", e)
+	} else if e := Brancher_Detailed_Optional_Unmarshal(n, msg.Fields[ChooseValue_Field_Else], &out.Else); e != nil {
+		err = errutil.New(ChooseValue_Type+"."+ChooseValue_Field_Else, "-", e)
 	}
 	return
 }
@@ -1674,15 +5487,22 @@ type CommaText struct {
 
 func (*CommaText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CommaText,
+		Name: CommaText_Type,
 		Uses: composer.Type_Flow,
 		Lede: "commas",
 	}
 }
 
-const Type_CommaText = "comma_text"
-const CommaText_Do = "$DO"
+const CommaText_Type = "comma_text"
+const CommaText_Lede = "commas"
+const CommaText_Field_Do = "$DO"
 
+func (op *CommaText) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CommaText_Compact_Marshal(n, op)
+}
+func (op *CommaText) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CommaText_Compact_Unmarshal(n, b, op)
+}
 func (op *CommaText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CommaText_Detailed_Marshal(n, op)
 }
@@ -1690,44 +5510,178 @@ func (op *CommaText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CommaText_Detailed_Unmarshal(n, b, op)
 }
 
+func CommaText_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CommaText) ([]byte, error) {
+	return CommaText_Repeats_Marshal(n, vals, CommaText_Compact_Marshal)
+}
+func CommaText_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CommaText) ([]byte, error) {
+	return CommaText_Repeats_Marshal(n, vals, CommaText_Detailed_Marshal)
+}
+func CommaText_Repeats_Marshal(n jsonexp.Context, vals *[]CommaText, marshEl func(jsonexp.Context, *CommaText) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CommaText_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CommaText_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CommaText) error {
+	return CommaText_Repeats_Unmarshal(n, b, out, CommaText_Compact_Unmarshal)
+}
+func CommaText_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CommaText) error {
+	return CommaText_Repeats_Unmarshal(n, b, out, CommaText_Detailed_Unmarshal)
+}
+func CommaText_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CommaText, unmarshEl func(jsonexp.Context, []byte, *CommaText) error) (err error) {
+	var vals []CommaText
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CommaText_Type, "-", e)
+		} else {
+			vals = make([]CommaText, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CommaText_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CommaText_Compact_Optional_Marshal(n jsonexp.Context, val **CommaText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CommaText_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CommaText_Compact_Marshal(n jsonexp.Context, val *CommaText) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CommaText_Lede)
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CommaText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CommaText) (err error) {
+	if len(b) > 0 {
+		var val CommaText
+		if e := CommaText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CommaText_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CommaText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CommaText_Type, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[CommaText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(CommaText_Type+"."+CommaText_Field_Do, "-", e)
+	}
+	return
+}
+
+func CommaText_Detailed_Optional_Marshal(n jsonexp.Context, val **CommaText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CommaText_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func CommaText_Detailed_Marshal(n jsonexp.Context, val *CommaText) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CommaText_Do] = b
+	} else {
+		fields[CommaText_Field_Do] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_CommaText,
+			Type:   CommaText_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CommaText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CommaText) (err error) {
+	if len(b) > 0 {
+		var val CommaText
+		if e := CommaText_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CommaText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CommaText) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CommaText, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[CommaText_Do], &out.Do); e != nil {
-		err = errutil.New(Type_CommaText+"."+CommaText_Do, "-", e)
+		err = errutil.New(CommaText_Type, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[CommaText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(CommaText_Type+"."+CommaText_Field_Do, "-", e)
 	}
 	return
 }
 
-const Type_Comparator = "comparator"
+const Comparator_Type = "comparator"
+
+var Comparator_Compact_Optional_Marshal = Comparator_Compact_Marshal
+var Comparator_Compact_Optional_Unmarshal = Comparator_Compact_Unmarshal
+
+func Comparator_Compact_Marshal(n jsonexp.Context, ptr *Comparator) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func Comparator_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Comparator) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Comparator); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Comparator_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var Comparator_Detailed_Optional_Marshal = Comparator_Detailed_Marshal
+var Comparator_Detailed_Optional_Unmarshal = Comparator_Detailed_Unmarshal
 
 func Comparator_Detailed_Marshal(n jsonexp.Context, ptr *Comparator) (ret []byte, err error) {
-	var b []byte
 	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_Comparator,
-			Value: b,
-		})
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	return
 }
@@ -1736,9 +5690,62 @@ func Comparator_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Comparator)
 	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
 		err = e
 	} else if store, ok := ptr.(Comparator); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Comparator)
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Comparator_Type)
 	} else {
 		(*out) = store
+	}
+	return
+}
+
+func Comparator_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Comparator) ([]byte, error) {
+	return Comparator_Repeats_Marshal(n, vals, Comparator_Compact_Marshal)
+}
+func Comparator_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Comparator) ([]byte, error) {
+	return Comparator_Repeats_Marshal(n, vals, Comparator_Detailed_Marshal)
+}
+func Comparator_Repeats_Marshal(n jsonexp.Context, vals *[]Comparator, marshEl func(jsonexp.Context, *Comparator) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Comparator_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Comparator_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Comparator) error {
+	return Comparator_Repeats_Unmarshal(n, b, out, Comparator_Compact_Unmarshal)
+}
+func Comparator_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Comparator) error {
+	return Comparator_Repeats_Unmarshal(n, b, out, Comparator_Detailed_Unmarshal)
+}
+func Comparator_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Comparator, unmarshEl func(jsonexp.Context, []byte, *Comparator) error) (err error) {
+	var vals []Comparator
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Comparator_Type, "-", e)
+		} else {
+			vals = make([]Comparator, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Comparator_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
 	}
 	return
 }
@@ -1752,17 +5759,24 @@ type CompareNum struct {
 
 func (*CompareNum) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CompareNum,
+		Name: CompareNum_Type,
 		Uses: composer.Type_Flow,
 		Lede: "cmp",
 	}
 }
 
-const Type_CompareNum = "compare_num"
-const CompareNum_A = "$A"
-const CompareNum_Is = "$IS"
-const CompareNum_B = "$B"
+const CompareNum_Type = "compare_num"
+const CompareNum_Lede = "cmp"
+const CompareNum_Field_A = "$A"
+const CompareNum_Field_Is = "$IS"
+const CompareNum_Field_B = "$B"
 
+func (op *CompareNum) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CompareNum_Compact_Marshal(n, op)
+}
+func (op *CompareNum) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CompareNum_Compact_Unmarshal(n, b, op)
+}
 func (op *CompareNum) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CompareNum_Detailed_Marshal(n, op)
 }
@@ -1770,42 +5784,179 @@ func (op *CompareNum) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CompareNum_Detailed_Unmarshal(n, b, op)
 }
 
+func CompareNum_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CompareNum) ([]byte, error) {
+	return CompareNum_Repeats_Marshal(n, vals, CompareNum_Compact_Marshal)
+}
+func CompareNum_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CompareNum) ([]byte, error) {
+	return CompareNum_Repeats_Marshal(n, vals, CompareNum_Detailed_Marshal)
+}
+func CompareNum_Repeats_Marshal(n jsonexp.Context, vals *[]CompareNum, marshEl func(jsonexp.Context, *CompareNum) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CompareNum_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CompareNum_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CompareNum) error {
+	return CompareNum_Repeats_Unmarshal(n, b, out, CompareNum_Compact_Unmarshal)
+}
+func CompareNum_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CompareNum) error {
+	return CompareNum_Repeats_Unmarshal(n, b, out, CompareNum_Detailed_Unmarshal)
+}
+func CompareNum_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CompareNum, unmarshEl func(jsonexp.Context, []byte, *CompareNum) error) (err error) {
+	var vals []CompareNum
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CompareNum_Type, "-", e)
+		} else {
+			vals = make([]CompareNum, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CompareNum_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CompareNum_Compact_Optional_Marshal(n jsonexp.Context, val **CompareNum) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CompareNum_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CompareNum_Compact_Marshal(n jsonexp.Context, val *CompareNum) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CompareNum_Lede)
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.A); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := Comparator_Compact_Marshal(n, &val.Is); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("is")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.B); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("num")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CompareNum_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CompareNum) (err error) {
+	if len(b) > 0 {
+		var val CompareNum
+		if e := CompareNum_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CompareNum_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CompareNum) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CompareNum_Type, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[CompareNum_Field_A], &out.A); e != nil {
+		err = errutil.New(CompareNum_Type+"."+CompareNum_Field_A, "-", e)
+	} else if e := Comparator_Compact_Unmarshal(n, msg.Fields[CompareNum_Field_Is], &out.Is); e != nil {
+		err = errutil.New(CompareNum_Type+"."+CompareNum_Field_Is, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[CompareNum_Field_B], &out.B); e != nil {
+		err = errutil.New(CompareNum_Type+"."+CompareNum_Field_B, "-", e)
+	}
+	return
+}
+
+func CompareNum_Detailed_Optional_Marshal(n jsonexp.Context, val **CompareNum) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CompareNum_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func CompareNum_Detailed_Marshal(n jsonexp.Context, val *CompareNum) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.A); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CompareNum_A] = b
+	} else {
+		fields[CompareNum_Field_A] = b
 	}
+
 	if b, e := Comparator_Detailed_Marshal(n, &val.Is); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CompareNum_Is] = b
+	} else {
+		fields[CompareNum_Field_Is] = b
 	}
+
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.B); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CompareNum_B] = b
+	} else {
+		fields[CompareNum_Field_B] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_CompareNum,
+			Type:   CompareNum_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CompareNum_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CompareNum) (err error) {
+	if len(b) > 0 {
+		var val CompareNum
+		if e := CompareNum_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CompareNum_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CompareNum) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CompareNum, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[CompareNum_A], &out.A); e != nil {
-		err = errutil.New(Type_CompareNum+"."+CompareNum_A, "-", e)
-	} else if e := Comparator_Detailed_Unmarshal(n, msg.Fields[CompareNum_Is], &out.Is); e != nil {
-		err = errutil.New(Type_CompareNum+"."+CompareNum_Is, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[CompareNum_B], &out.B); e != nil {
-		err = errutil.New(Type_CompareNum+"."+CompareNum_B, "-", e)
+		err = errutil.New(CompareNum_Type, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[CompareNum_Field_A], &out.A); e != nil {
+		err = errutil.New(CompareNum_Type+"."+CompareNum_Field_A, "-", e)
+	} else if e := Comparator_Detailed_Unmarshal(n, msg.Fields[CompareNum_Field_Is], &out.Is); e != nil {
+		err = errutil.New(CompareNum_Type+"."+CompareNum_Field_Is, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[CompareNum_Field_B], &out.B); e != nil {
+		err = errutil.New(CompareNum_Type+"."+CompareNum_Field_B, "-", e)
 	}
 	return
 }
@@ -1819,17 +5970,24 @@ type CompareText struct {
 
 func (*CompareText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_CompareText,
+		Name: CompareText_Type,
 		Uses: composer.Type_Flow,
 		Lede: "cmp",
 	}
 }
 
-const Type_CompareText = "compare_text"
-const CompareText_A = "$A"
-const CompareText_Is = "$IS"
-const CompareText_B = "$B"
+const CompareText_Type = "compare_text"
+const CompareText_Lede = "cmp"
+const CompareText_Field_A = "$A"
+const CompareText_Field_Is = "$IS"
+const CompareText_Field_B = "$B"
 
+func (op *CompareText) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return CompareText_Compact_Marshal(n, op)
+}
+func (op *CompareText) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return CompareText_Compact_Unmarshal(n, b, op)
+}
 func (op *CompareText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return CompareText_Detailed_Marshal(n, op)
 }
@@ -1837,42 +5995,179 @@ func (op *CompareText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return CompareText_Detailed_Unmarshal(n, b, op)
 }
 
+func CompareText_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]CompareText) ([]byte, error) {
+	return CompareText_Repeats_Marshal(n, vals, CompareText_Compact_Marshal)
+}
+func CompareText_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]CompareText) ([]byte, error) {
+	return CompareText_Repeats_Marshal(n, vals, CompareText_Detailed_Marshal)
+}
+func CompareText_Repeats_Marshal(n jsonexp.Context, vals *[]CompareText, marshEl func(jsonexp.Context, *CompareText) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(CompareText_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func CompareText_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CompareText) error {
+	return CompareText_Repeats_Unmarshal(n, b, out, CompareText_Compact_Unmarshal)
+}
+func CompareText_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CompareText) error {
+	return CompareText_Repeats_Unmarshal(n, b, out, CompareText_Detailed_Unmarshal)
+}
+func CompareText_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]CompareText, unmarshEl func(jsonexp.Context, []byte, *CompareText) error) (err error) {
+	var vals []CompareText
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(CompareText_Type, "-", e)
+		} else {
+			vals = make([]CompareText, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(CompareText_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func CompareText_Compact_Optional_Marshal(n jsonexp.Context, val **CompareText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CompareText_Compact_Marshal(n, *val)
+	}
+	return
+}
+func CompareText_Compact_Marshal(n jsonexp.Context, val *CompareText) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(CompareText_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.A); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := Comparator_Compact_Marshal(n, &val.Is); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("is")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.B); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("txt")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func CompareText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CompareText) (err error) {
+	if len(b) > 0 {
+		var val CompareText
+		if e := CompareText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func CompareText_Compact_Unmarshal(n jsonexp.Context, b []byte, out *CompareText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(CompareText_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[CompareText_Field_A], &out.A); e != nil {
+		err = errutil.New(CompareText_Type+"."+CompareText_Field_A, "-", e)
+	} else if e := Comparator_Compact_Unmarshal(n, msg.Fields[CompareText_Field_Is], &out.Is); e != nil {
+		err = errutil.New(CompareText_Type+"."+CompareText_Field_Is, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[CompareText_Field_B], &out.B); e != nil {
+		err = errutil.New(CompareText_Type+"."+CompareText_Field_B, "-", e)
+	}
+	return
+}
+
+func CompareText_Detailed_Optional_Marshal(n jsonexp.Context, val **CompareText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = CompareText_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func CompareText_Detailed_Marshal(n jsonexp.Context, val *CompareText) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.A); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CompareText_A] = b
+	} else {
+		fields[CompareText_Field_A] = b
 	}
+
 	if b, e := Comparator_Detailed_Marshal(n, &val.Is); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CompareText_Is] = b
+	} else {
+		fields[CompareText_Field_Is] = b
 	}
+
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.B); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[CompareText_B] = b
+	} else {
+		fields[CompareText_Field_B] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_CompareText,
+			Type:   CompareText_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func CompareText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CompareText) (err error) {
+	if len(b) > 0 {
+		var val CompareText
+		if e := CompareText_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func CompareText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *CompareText) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_CompareText, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[CompareText_A], &out.A); e != nil {
-		err = errutil.New(Type_CompareText+"."+CompareText_A, "-", e)
-	} else if e := Comparator_Detailed_Unmarshal(n, msg.Fields[CompareText_Is], &out.Is); e != nil {
-		err = errutil.New(Type_CompareText+"."+CompareText_Is, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[CompareText_B], &out.B); e != nil {
-		err = errutil.New(Type_CompareText+"."+CompareText_B, "-", e)
+		err = errutil.New(CompareText_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[CompareText_Field_A], &out.A); e != nil {
+		err = errutil.New(CompareText_Type+"."+CompareText_Field_A, "-", e)
+	} else if e := Comparator_Detailed_Unmarshal(n, msg.Fields[CompareText_Field_Is], &out.Is); e != nil {
+		err = errutil.New(CompareText_Type+"."+CompareText_Field_Is, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[CompareText_Field_B], &out.B); e != nil {
+		err = errutil.New(CompareText_Type+"."+CompareText_Field_B, "-", e)
 	}
 	return
 }
@@ -1885,16 +6180,23 @@ type DiffOf struct {
 
 func (*DiffOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_DiffOf,
+		Name: DiffOf_Type,
 		Uses: composer.Type_Flow,
 		Lede: "dec",
 	}
 }
 
-const Type_DiffOf = "diff_of"
-const DiffOf_A = "$A"
-const DiffOf_B = "$B"
+const DiffOf_Type = "diff_of"
+const DiffOf_Lede = "dec"
+const DiffOf_Field_A = "$A"
+const DiffOf_Field_B = "$B"
 
+func (op *DiffOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return DiffOf_Compact_Marshal(n, op)
+}
+func (op *DiffOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return DiffOf_Compact_Unmarshal(n, b, op)
+}
 func (op *DiffOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return DiffOf_Detailed_Marshal(n, op)
 }
@@ -1902,35 +6204,162 @@ func (op *DiffOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return DiffOf_Detailed_Unmarshal(n, b, op)
 }
 
+func DiffOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]DiffOf) ([]byte, error) {
+	return DiffOf_Repeats_Marshal(n, vals, DiffOf_Compact_Marshal)
+}
+func DiffOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]DiffOf) ([]byte, error) {
+	return DiffOf_Repeats_Marshal(n, vals, DiffOf_Detailed_Marshal)
+}
+func DiffOf_Repeats_Marshal(n jsonexp.Context, vals *[]DiffOf, marshEl func(jsonexp.Context, *DiffOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(DiffOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func DiffOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]DiffOf) error {
+	return DiffOf_Repeats_Unmarshal(n, b, out, DiffOf_Compact_Unmarshal)
+}
+func DiffOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]DiffOf) error {
+	return DiffOf_Repeats_Unmarshal(n, b, out, DiffOf_Detailed_Unmarshal)
+}
+func DiffOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]DiffOf, unmarshEl func(jsonexp.Context, []byte, *DiffOf) error) (err error) {
+	var vals []DiffOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(DiffOf_Type, "-", e)
+		} else {
+			vals = make([]DiffOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(DiffOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func DiffOf_Compact_Optional_Marshal(n jsonexp.Context, val **DiffOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = DiffOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func DiffOf_Compact_Marshal(n jsonexp.Context, val *DiffOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(DiffOf_Lede)
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.A); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.NumberEval_Compact_Optional_Marshal(n, &val.B); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		sig.WriteLabel("by")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func DiffOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DiffOf) (err error) {
+	if len(b) > 0 {
+		var val DiffOf
+		if e := DiffOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func DiffOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *DiffOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(DiffOf_Type, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[DiffOf_Field_A], &out.A); e != nil {
+		err = errutil.New(DiffOf_Type+"."+DiffOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Compact_Optional_Unmarshal(n, msg.Fields[DiffOf_Field_B], &out.B); e != nil {
+		err = errutil.New(DiffOf_Type+"."+DiffOf_Field_B, "-", e)
+	}
+	return
+}
+
+func DiffOf_Detailed_Optional_Marshal(n jsonexp.Context, val **DiffOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = DiffOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func DiffOf_Detailed_Marshal(n jsonexp.Context, val *DiffOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.A); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[DiffOf_A] = b
+	} else {
+		fields[DiffOf_Field_A] = b
 	}
-	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.B); e != nil {
+
+	if b, e := rt.NumberEval_Detailed_Optional_Marshal(n, &val.B); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		fields[DiffOf_B] = b
+		fields[DiffOf_Field_B] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_DiffOf,
+			Type:   DiffOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func DiffOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DiffOf) (err error) {
+	if len(b) > 0 {
+		var val DiffOf
+		if e := DiffOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func DiffOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *DiffOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_DiffOf, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[DiffOf_A], &out.A); e != nil {
-		err = errutil.New(Type_DiffOf+"."+DiffOf_A, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[DiffOf_B], &out.B); e != nil {
-		err = errutil.New(Type_DiffOf+"."+DiffOf_B, "-", e)
+		err = errutil.New(DiffOf_Type, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[DiffOf_Field_A], &out.A); e != nil {
+		err = errutil.New(DiffOf_Type+"."+DiffOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Detailed_Optional_Unmarshal(n, msg.Fields[DiffOf_Field_B], &out.B); e != nil {
+		err = errutil.New(DiffOf_Type+"."+DiffOf_Field_B, "-", e)
 	}
 	return
 }
@@ -1942,14 +6371,21 @@ type During struct {
 
 func (*During) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_During,
+		Name: During_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_During = "during"
-const During_Pattern = "$PATTERN"
+const During_Type = "during"
+const During_Lede = During_Type
+const During_Field_Pattern = "$PATTERN"
 
+func (op *During) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return During_Compact_Marshal(n, op)
+}
+func (op *During) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return During_Compact_Unmarshal(n, b, op)
+}
 func (op *During) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return During_Detailed_Marshal(n, op)
 }
@@ -1957,28 +6393,145 @@ func (op *During) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return During_Detailed_Unmarshal(n, b, op)
 }
 
+func During_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]During) ([]byte, error) {
+	return During_Repeats_Marshal(n, vals, During_Compact_Marshal)
+}
+func During_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]During) ([]byte, error) {
+	return During_Repeats_Marshal(n, vals, During_Detailed_Marshal)
+}
+func During_Repeats_Marshal(n jsonexp.Context, vals *[]During, marshEl func(jsonexp.Context, *During) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(During_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func During_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]During) error {
+	return During_Repeats_Unmarshal(n, b, out, During_Compact_Unmarshal)
+}
+func During_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]During) error {
+	return During_Repeats_Unmarshal(n, b, out, During_Detailed_Unmarshal)
+}
+func During_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]During, unmarshEl func(jsonexp.Context, []byte, *During) error) (err error) {
+	var vals []During
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(During_Type, "-", e)
+		} else {
+			vals = make([]During, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(During_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func During_Compact_Optional_Marshal(n jsonexp.Context, val **During) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = During_Compact_Marshal(n, *val)
+	}
+	return
+}
+func During_Compact_Marshal(n jsonexp.Context, val *During) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(During_Lede)
+	if b, e := value.PatternName_Compact_Marshal(n, &val.Pattern); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func During_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **During) (err error) {
+	if len(b) > 0 {
+		var val During
+		if e := During_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func During_Compact_Unmarshal(n jsonexp.Context, b []byte, out *During) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(During_Type, "-", e)
+	} else if e := value.PatternName_Compact_Unmarshal(n, msg.Fields[During_Field_Pattern], &out.Pattern); e != nil {
+		err = errutil.New(During_Type+"."+During_Field_Pattern, "-", e)
+	}
+	return
+}
+
+func During_Detailed_Optional_Marshal(n jsonexp.Context, val **During) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = During_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func During_Detailed_Marshal(n jsonexp.Context, val *During) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := value.PatternName_Detailed_Marshal(n, &val.Pattern); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[During_Pattern] = b
+	} else {
+		fields[During_Field_Pattern] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_During,
+			Type:   During_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func During_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **During) (err error) {
+	if len(b) > 0 {
+		var val During
+		if e := During_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func During_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *During) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_During, "-", e)
-	} else if e := value.PatternName_Detailed_Unmarshal(n, msg.Fields[During_Pattern], &out.Pattern); e != nil {
-		err = errutil.New(Type_During+"."+During_Pattern, "-", e)
+		err = errutil.New(During_Type, "-", e)
+	} else if e := value.PatternName_Detailed_Unmarshal(n, msg.Fields[During_Field_Pattern], &out.Pattern); e != nil {
+		err = errutil.New(During_Type+"."+During_Field_Pattern, "-", e)
 	}
 	return
 }
@@ -1989,14 +6542,21 @@ type Equal struct {
 
 func (*Equal) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Equal,
+		Name: Equal_Type,
 		Uses: composer.Type_Flow,
 		Lede: "equals",
 	}
 }
 
-const Type_Equal = "equal"
+const Equal_Type = "equal"
+const Equal_Lede = "equals"
 
+func (op *Equal) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Equal_Compact_Marshal(n, op)
+}
+func (op *Equal) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Equal_Compact_Unmarshal(n, b, op)
+}
 func (op *Equal) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Equal_Detailed_Marshal(n, op)
 }
@@ -2004,21 +6564,128 @@ func (op *Equal) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Equal_Detailed_Unmarshal(n, b, op)
 }
 
+func Equal_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Equal) ([]byte, error) {
+	return Equal_Repeats_Marshal(n, vals, Equal_Compact_Marshal)
+}
+func Equal_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Equal) ([]byte, error) {
+	return Equal_Repeats_Marshal(n, vals, Equal_Detailed_Marshal)
+}
+func Equal_Repeats_Marshal(n jsonexp.Context, vals *[]Equal, marshEl func(jsonexp.Context, *Equal) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Equal_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Equal_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Equal) error {
+	return Equal_Repeats_Unmarshal(n, b, out, Equal_Compact_Unmarshal)
+}
+func Equal_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Equal) error {
+	return Equal_Repeats_Unmarshal(n, b, out, Equal_Detailed_Unmarshal)
+}
+func Equal_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Equal, unmarshEl func(jsonexp.Context, []byte, *Equal) error) (err error) {
+	var vals []Equal
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Equal_Type, "-", e)
+		} else {
+			vals = make([]Equal, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Equal_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Equal_Compact_Optional_Marshal(n jsonexp.Context, val **Equal) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Equal_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Equal_Compact_Marshal(n jsonexp.Context, val *Equal) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Equal_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Equal_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Equal) (err error) {
+	if len(b) > 0 {
+		var val Equal
+		if e := Equal_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Equal_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Equal) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Equal_Type, "-", e)
+	}
+	return
+}
+
+func Equal_Detailed_Optional_Marshal(n jsonexp.Context, val **Equal) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Equal_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Equal_Detailed_Marshal(n jsonexp.Context, val *Equal) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Equal,
+			Type:   Equal_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Equal_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Equal) (err error) {
+	if len(b) > 0 {
+		var val Equal
+		if e := Equal_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Equal_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Equal) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Equal, "-", e)
+		err = errutil.New(Equal_Type, "-", e)
 	}
 	return
 }
@@ -2030,14 +6697,21 @@ type FromBool struct {
 
 func (*FromBool) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromBool,
+		Name: FromBool_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_FromBool = "from_bool"
-const FromBool_Val = "$VAL"
+const FromBool_Type = "from_bool"
+const FromBool_Lede = FromBool_Type
+const FromBool_Field_Val = "$VAL"
 
+func (op *FromBool) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromBool_Compact_Marshal(n, op)
+}
+func (op *FromBool) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromBool_Compact_Unmarshal(n, b, op)
+}
 func (op *FromBool) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromBool_Detailed_Marshal(n, op)
 }
@@ -2045,28 +6719,145 @@ func (op *FromBool) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromBool_Detailed_Unmarshal(n, b, op)
 }
 
+func FromBool_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromBool) ([]byte, error) {
+	return FromBool_Repeats_Marshal(n, vals, FromBool_Compact_Marshal)
+}
+func FromBool_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromBool) ([]byte, error) {
+	return FromBool_Repeats_Marshal(n, vals, FromBool_Detailed_Marshal)
+}
+func FromBool_Repeats_Marshal(n jsonexp.Context, vals *[]FromBool, marshEl func(jsonexp.Context, *FromBool) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromBool_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromBool_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromBool) error {
+	return FromBool_Repeats_Unmarshal(n, b, out, FromBool_Compact_Unmarshal)
+}
+func FromBool_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromBool) error {
+	return FromBool_Repeats_Unmarshal(n, b, out, FromBool_Detailed_Unmarshal)
+}
+func FromBool_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromBool, unmarshEl func(jsonexp.Context, []byte, *FromBool) error) (err error) {
+	var vals []FromBool
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromBool_Type, "-", e)
+		} else {
+			vals = make([]FromBool, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromBool_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromBool_Compact_Optional_Marshal(n jsonexp.Context, val **FromBool) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromBool_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromBool_Compact_Marshal(n jsonexp.Context, val *FromBool) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromBool_Lede)
+	if b, e := rt.BoolEval_Compact_Marshal(n, &val.Val); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromBool_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromBool) (err error) {
+	if len(b) > 0 {
+		var val FromBool
+		if e := FromBool_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromBool_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromBool) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromBool_Type, "-", e)
+	} else if e := rt.BoolEval_Compact_Unmarshal(n, msg.Fields[FromBool_Field_Val], &out.Val); e != nil {
+		err = errutil.New(FromBool_Type+"."+FromBool_Field_Val, "-", e)
+	}
+	return
+}
+
+func FromBool_Detailed_Optional_Marshal(n jsonexp.Context, val **FromBool) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromBool_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromBool_Detailed_Marshal(n jsonexp.Context, val *FromBool) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.Val); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromBool_Val] = b
+	} else {
+		fields[FromBool_Field_Val] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromBool,
+			Type:   FromBool_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromBool_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromBool) (err error) {
+	if len(b) > 0 {
+		var val FromBool
+		if e := FromBool_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromBool_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromBool) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromBool, "-", e)
-	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[FromBool_Val], &out.Val); e != nil {
-		err = errutil.New(Type_FromBool+"."+FromBool_Val, "-", e)
+		err = errutil.New(FromBool_Type, "-", e)
+	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[FromBool_Field_Val], &out.Val); e != nil {
+		err = errutil.New(FromBool_Type+"."+FromBool_Field_Val, "-", e)
 	}
 	return
 }
@@ -2078,14 +6869,21 @@ type FromNum struct {
 
 func (*FromNum) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromNum,
+		Name: FromNum_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_FromNum = "from_num"
-const FromNum_Val = "$VAL"
+const FromNum_Type = "from_num"
+const FromNum_Lede = FromNum_Type
+const FromNum_Field_Val = "$VAL"
 
+func (op *FromNum) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromNum_Compact_Marshal(n, op)
+}
+func (op *FromNum) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromNum_Compact_Unmarshal(n, b, op)
+}
 func (op *FromNum) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromNum_Detailed_Marshal(n, op)
 }
@@ -2093,28 +6891,145 @@ func (op *FromNum) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromNum_Detailed_Unmarshal(n, b, op)
 }
 
+func FromNum_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromNum) ([]byte, error) {
+	return FromNum_Repeats_Marshal(n, vals, FromNum_Compact_Marshal)
+}
+func FromNum_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromNum) ([]byte, error) {
+	return FromNum_Repeats_Marshal(n, vals, FromNum_Detailed_Marshal)
+}
+func FromNum_Repeats_Marshal(n jsonexp.Context, vals *[]FromNum, marshEl func(jsonexp.Context, *FromNum) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromNum_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromNum_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromNum) error {
+	return FromNum_Repeats_Unmarshal(n, b, out, FromNum_Compact_Unmarshal)
+}
+func FromNum_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromNum) error {
+	return FromNum_Repeats_Unmarshal(n, b, out, FromNum_Detailed_Unmarshal)
+}
+func FromNum_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromNum, unmarshEl func(jsonexp.Context, []byte, *FromNum) error) (err error) {
+	var vals []FromNum
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromNum_Type, "-", e)
+		} else {
+			vals = make([]FromNum, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromNum_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromNum_Compact_Optional_Marshal(n jsonexp.Context, val **FromNum) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromNum_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromNum_Compact_Marshal(n jsonexp.Context, val *FromNum) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromNum_Lede)
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Val); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromNum_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromNum) (err error) {
+	if len(b) > 0 {
+		var val FromNum
+		if e := FromNum_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromNum_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromNum) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromNum_Type, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[FromNum_Field_Val], &out.Val); e != nil {
+		err = errutil.New(FromNum_Type+"."+FromNum_Field_Val, "-", e)
+	}
+	return
+}
+
+func FromNum_Detailed_Optional_Marshal(n jsonexp.Context, val **FromNum) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromNum_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromNum_Detailed_Marshal(n jsonexp.Context, val *FromNum) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.Val); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromNum_Val] = b
+	} else {
+		fields[FromNum_Field_Val] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromNum,
+			Type:   FromNum_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromNum_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromNum) (err error) {
+	if len(b) > 0 {
+		var val FromNum
+		if e := FromNum_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromNum_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromNum) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromNum, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[FromNum_Val], &out.Val); e != nil {
-		err = errutil.New(Type_FromNum+"."+FromNum_Val, "-", e)
+		err = errutil.New(FromNum_Type, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[FromNum_Field_Val], &out.Val); e != nil {
+		err = errutil.New(FromNum_Type+"."+FromNum_Field_Val, "-", e)
 	}
 	return
 }
@@ -2126,15 +7041,22 @@ type FromNumbers struct {
 
 func (*FromNumbers) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromNumbers,
+		Name: FromNumbers_Type,
 		Uses: composer.Type_Flow,
 		Lede: "from_nums",
 	}
 }
 
-const Type_FromNumbers = "from_numbers"
-const FromNumbers_Vals = "$VALS"
+const FromNumbers_Type = "from_numbers"
+const FromNumbers_Lede = "from_nums"
+const FromNumbers_Field_Vals = "$VALS"
 
+func (op *FromNumbers) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromNumbers_Compact_Marshal(n, op)
+}
+func (op *FromNumbers) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromNumbers_Compact_Unmarshal(n, b, op)
+}
 func (op *FromNumbers) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromNumbers_Detailed_Marshal(n, op)
 }
@@ -2142,28 +7064,145 @@ func (op *FromNumbers) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromNumbers_Detailed_Unmarshal(n, b, op)
 }
 
+func FromNumbers_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromNumbers) ([]byte, error) {
+	return FromNumbers_Repeats_Marshal(n, vals, FromNumbers_Compact_Marshal)
+}
+func FromNumbers_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromNumbers) ([]byte, error) {
+	return FromNumbers_Repeats_Marshal(n, vals, FromNumbers_Detailed_Marshal)
+}
+func FromNumbers_Repeats_Marshal(n jsonexp.Context, vals *[]FromNumbers, marshEl func(jsonexp.Context, *FromNumbers) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromNumbers_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromNumbers_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromNumbers) error {
+	return FromNumbers_Repeats_Unmarshal(n, b, out, FromNumbers_Compact_Unmarshal)
+}
+func FromNumbers_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromNumbers) error {
+	return FromNumbers_Repeats_Unmarshal(n, b, out, FromNumbers_Detailed_Unmarshal)
+}
+func FromNumbers_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromNumbers, unmarshEl func(jsonexp.Context, []byte, *FromNumbers) error) (err error) {
+	var vals []FromNumbers
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromNumbers_Type, "-", e)
+		} else {
+			vals = make([]FromNumbers, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromNumbers_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromNumbers_Compact_Optional_Marshal(n jsonexp.Context, val **FromNumbers) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromNumbers_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromNumbers_Compact_Marshal(n jsonexp.Context, val *FromNumbers) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromNumbers_Lede)
+	if b, e := rt.NumListEval_Compact_Marshal(n, &val.Vals); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromNumbers_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromNumbers) (err error) {
+	if len(b) > 0 {
+		var val FromNumbers
+		if e := FromNumbers_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromNumbers_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromNumbers) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromNumbers_Type, "-", e)
+	} else if e := rt.NumListEval_Compact_Unmarshal(n, msg.Fields[FromNumbers_Field_Vals], &out.Vals); e != nil {
+		err = errutil.New(FromNumbers_Type+"."+FromNumbers_Field_Vals, "-", e)
+	}
+	return
+}
+
+func FromNumbers_Detailed_Optional_Marshal(n jsonexp.Context, val **FromNumbers) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromNumbers_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromNumbers_Detailed_Marshal(n jsonexp.Context, val *FromNumbers) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumListEval_Detailed_Marshal(n, &val.Vals); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromNumbers_Vals] = b
+	} else {
+		fields[FromNumbers_Field_Vals] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromNumbers,
+			Type:   FromNumbers_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromNumbers_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromNumbers) (err error) {
+	if len(b) > 0 {
+		var val FromNumbers
+		if e := FromNumbers_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromNumbers_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromNumbers) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromNumbers, "-", e)
-	} else if e := rt.NumListEval_Detailed_Unmarshal(n, msg.Fields[FromNumbers_Vals], &out.Vals); e != nil {
-		err = errutil.New(Type_FromNumbers+"."+FromNumbers_Vals, "-", e)
+		err = errutil.New(FromNumbers_Type, "-", e)
+	} else if e := rt.NumListEval_Detailed_Unmarshal(n, msg.Fields[FromNumbers_Field_Vals], &out.Vals); e != nil {
+		err = errutil.New(FromNumbers_Type+"."+FromNumbers_Field_Vals, "-", e)
 	}
 	return
 }
@@ -2175,14 +7214,21 @@ type FromObj struct {
 
 func (*FromObj) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromObj,
+		Name: FromObj_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_FromObj = "from_obj"
-const FromObj_Object = "$OBJECT"
+const FromObj_Type = "from_obj"
+const FromObj_Lede = FromObj_Type
+const FromObj_Field_Object = "$OBJECT"
 
+func (op *FromObj) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromObj_Compact_Marshal(n, op)
+}
+func (op *FromObj) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromObj_Compact_Unmarshal(n, b, op)
+}
 func (op *FromObj) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromObj_Detailed_Marshal(n, op)
 }
@@ -2190,28 +7236,145 @@ func (op *FromObj) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromObj_Detailed_Unmarshal(n, b, op)
 }
 
+func FromObj_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromObj) ([]byte, error) {
+	return FromObj_Repeats_Marshal(n, vals, FromObj_Compact_Marshal)
+}
+func FromObj_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromObj) ([]byte, error) {
+	return FromObj_Repeats_Marshal(n, vals, FromObj_Detailed_Marshal)
+}
+func FromObj_Repeats_Marshal(n jsonexp.Context, vals *[]FromObj, marshEl func(jsonexp.Context, *FromObj) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromObj_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromObj_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromObj) error {
+	return FromObj_Repeats_Unmarshal(n, b, out, FromObj_Compact_Unmarshal)
+}
+func FromObj_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromObj) error {
+	return FromObj_Repeats_Unmarshal(n, b, out, FromObj_Detailed_Unmarshal)
+}
+func FromObj_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromObj, unmarshEl func(jsonexp.Context, []byte, *FromObj) error) (err error) {
+	var vals []FromObj
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromObj_Type, "-", e)
+		} else {
+			vals = make([]FromObj, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromObj_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromObj_Compact_Optional_Marshal(n jsonexp.Context, val **FromObj) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromObj_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromObj_Compact_Marshal(n jsonexp.Context, val *FromObj) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromObj_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromObj_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromObj) (err error) {
+	if len(b) > 0 {
+		var val FromObj
+		if e := FromObj_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromObj_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromObj) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromObj_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[FromObj_Field_Object], &out.Object); e != nil {
+		err = errutil.New(FromObj_Type+"."+FromObj_Field_Object, "-", e)
+	}
+	return
+}
+
+func FromObj_Detailed_Optional_Marshal(n jsonexp.Context, val **FromObj) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromObj_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromObj_Detailed_Marshal(n jsonexp.Context, val *FromObj) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromObj_Object] = b
+	} else {
+		fields[FromObj_Field_Object] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromObj,
+			Type:   FromObj_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromObj_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromObj) (err error) {
+	if len(b) > 0 {
+		var val FromObj
+		if e := FromObj_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromObj_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromObj) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromObj, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[FromObj_Object], &out.Object); e != nil {
-		err = errutil.New(Type_FromObj+"."+FromObj_Object, "-", e)
+		err = errutil.New(FromObj_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[FromObj_Field_Object], &out.Object); e != nil {
+		err = errutil.New(FromObj_Type+"."+FromObj_Field_Object, "-", e)
 	}
 	return
 }
@@ -2223,14 +7386,21 @@ type FromRec struct {
 
 func (*FromRec) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromRec,
+		Name: FromRec_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_FromRec = "from_rec"
-const FromRec_Rec = "$REC"
+const FromRec_Type = "from_rec"
+const FromRec_Lede = FromRec_Type
+const FromRec_Field_Rec = "$REC"
 
+func (op *FromRec) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromRec_Compact_Marshal(n, op)
+}
+func (op *FromRec) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromRec_Compact_Unmarshal(n, b, op)
+}
 func (op *FromRec) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromRec_Detailed_Marshal(n, op)
 }
@@ -2238,28 +7408,145 @@ func (op *FromRec) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromRec_Detailed_Unmarshal(n, b, op)
 }
 
+func FromRec_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromRec) ([]byte, error) {
+	return FromRec_Repeats_Marshal(n, vals, FromRec_Compact_Marshal)
+}
+func FromRec_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromRec) ([]byte, error) {
+	return FromRec_Repeats_Marshal(n, vals, FromRec_Detailed_Marshal)
+}
+func FromRec_Repeats_Marshal(n jsonexp.Context, vals *[]FromRec, marshEl func(jsonexp.Context, *FromRec) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromRec_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromRec_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromRec) error {
+	return FromRec_Repeats_Unmarshal(n, b, out, FromRec_Compact_Unmarshal)
+}
+func FromRec_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromRec) error {
+	return FromRec_Repeats_Unmarshal(n, b, out, FromRec_Detailed_Unmarshal)
+}
+func FromRec_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromRec, unmarshEl func(jsonexp.Context, []byte, *FromRec) error) (err error) {
+	var vals []FromRec
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromRec_Type, "-", e)
+		} else {
+			vals = make([]FromRec, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromRec_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromRec_Compact_Optional_Marshal(n jsonexp.Context, val **FromRec) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromRec_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromRec_Compact_Marshal(n jsonexp.Context, val *FromRec) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromRec_Lede)
+	if b, e := rt.RecordEval_Compact_Marshal(n, &val.Rec); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromRec_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromRec) (err error) {
+	if len(b) > 0 {
+		var val FromRec
+		if e := FromRec_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromRec_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromRec) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromRec_Type, "-", e)
+	} else if e := rt.RecordEval_Compact_Unmarshal(n, msg.Fields[FromRec_Field_Rec], &out.Rec); e != nil {
+		err = errutil.New(FromRec_Type+"."+FromRec_Field_Rec, "-", e)
+	}
+	return
+}
+
+func FromRec_Detailed_Optional_Marshal(n jsonexp.Context, val **FromRec) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromRec_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromRec_Detailed_Marshal(n jsonexp.Context, val *FromRec) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.RecordEval_Detailed_Marshal(n, &val.Rec); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromRec_Rec] = b
+	} else {
+		fields[FromRec_Field_Rec] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromRec,
+			Type:   FromRec_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromRec_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromRec) (err error) {
+	if len(b) > 0 {
+		var val FromRec
+		if e := FromRec_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromRec_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromRec) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromRec, "-", e)
-	} else if e := rt.RecordEval_Detailed_Unmarshal(n, msg.Fields[FromRec_Rec], &out.Rec); e != nil {
-		err = errutil.New(Type_FromRec+"."+FromRec_Rec, "-", e)
+		err = errutil.New(FromRec_Type, "-", e)
+	} else if e := rt.RecordEval_Detailed_Unmarshal(n, msg.Fields[FromRec_Field_Rec], &out.Rec); e != nil {
+		err = errutil.New(FromRec_Type+"."+FromRec_Field_Rec, "-", e)
 	}
 	return
 }
@@ -2271,15 +7558,22 @@ type FromRecord struct {
 
 func (*FromRecord) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromRecord,
+		Name: FromRecord_Type,
 		Uses: composer.Type_Flow,
 		Lede: "from_rec",
 	}
 }
 
-const Type_FromRecord = "from_record"
-const FromRecord_Val = "$VAL"
+const FromRecord_Type = "from_record"
+const FromRecord_Lede = "from_rec"
+const FromRecord_Field_Val = "$VAL"
 
+func (op *FromRecord) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromRecord_Compact_Marshal(n, op)
+}
+func (op *FromRecord) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromRecord_Compact_Unmarshal(n, b, op)
+}
 func (op *FromRecord) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromRecord_Detailed_Marshal(n, op)
 }
@@ -2287,28 +7581,145 @@ func (op *FromRecord) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromRecord_Detailed_Unmarshal(n, b, op)
 }
 
+func FromRecord_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromRecord) ([]byte, error) {
+	return FromRecord_Repeats_Marshal(n, vals, FromRecord_Compact_Marshal)
+}
+func FromRecord_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromRecord) ([]byte, error) {
+	return FromRecord_Repeats_Marshal(n, vals, FromRecord_Detailed_Marshal)
+}
+func FromRecord_Repeats_Marshal(n jsonexp.Context, vals *[]FromRecord, marshEl func(jsonexp.Context, *FromRecord) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromRecord_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromRecord_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromRecord) error {
+	return FromRecord_Repeats_Unmarshal(n, b, out, FromRecord_Compact_Unmarshal)
+}
+func FromRecord_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromRecord) error {
+	return FromRecord_Repeats_Unmarshal(n, b, out, FromRecord_Detailed_Unmarshal)
+}
+func FromRecord_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromRecord, unmarshEl func(jsonexp.Context, []byte, *FromRecord) error) (err error) {
+	var vals []FromRecord
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromRecord_Type, "-", e)
+		} else {
+			vals = make([]FromRecord, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromRecord_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromRecord_Compact_Optional_Marshal(n jsonexp.Context, val **FromRecord) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromRecord_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromRecord_Compact_Marshal(n jsonexp.Context, val *FromRecord) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromRecord_Lede)
+	if b, e := rt.RecordEval_Compact_Marshal(n, &val.Val); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromRecord_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromRecord) (err error) {
+	if len(b) > 0 {
+		var val FromRecord
+		if e := FromRecord_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromRecord_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromRecord) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromRecord_Type, "-", e)
+	} else if e := rt.RecordEval_Compact_Unmarshal(n, msg.Fields[FromRecord_Field_Val], &out.Val); e != nil {
+		err = errutil.New(FromRecord_Type+"."+FromRecord_Field_Val, "-", e)
+	}
+	return
+}
+
+func FromRecord_Detailed_Optional_Marshal(n jsonexp.Context, val **FromRecord) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromRecord_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromRecord_Detailed_Marshal(n jsonexp.Context, val *FromRecord) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.RecordEval_Detailed_Marshal(n, &val.Val); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromRecord_Val] = b
+	} else {
+		fields[FromRecord_Field_Val] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromRecord,
+			Type:   FromRecord_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromRecord_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromRecord) (err error) {
+	if len(b) > 0 {
+		var val FromRecord
+		if e := FromRecord_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromRecord_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromRecord) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromRecord, "-", e)
-	} else if e := rt.RecordEval_Detailed_Unmarshal(n, msg.Fields[FromRecord_Val], &out.Val); e != nil {
-		err = errutil.New(Type_FromRecord+"."+FromRecord_Val, "-", e)
+		err = errutil.New(FromRecord_Type, "-", e)
+	} else if e := rt.RecordEval_Detailed_Unmarshal(n, msg.Fields[FromRecord_Field_Val], &out.Val); e != nil {
+		err = errutil.New(FromRecord_Type+"."+FromRecord_Field_Val, "-", e)
 	}
 	return
 }
@@ -2320,15 +7731,22 @@ type FromRecords struct {
 
 func (*FromRecords) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromRecords,
+		Name: FromRecords_Type,
 		Uses: composer.Type_Flow,
 		Lede: "from_recs",
 	}
 }
 
-const Type_FromRecords = "from_records"
-const FromRecords_Vals = "$VALS"
+const FromRecords_Type = "from_records"
+const FromRecords_Lede = "from_recs"
+const FromRecords_Field_Vals = "$VALS"
 
+func (op *FromRecords) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromRecords_Compact_Marshal(n, op)
+}
+func (op *FromRecords) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromRecords_Compact_Unmarshal(n, b, op)
+}
 func (op *FromRecords) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromRecords_Detailed_Marshal(n, op)
 }
@@ -2336,44 +7754,178 @@ func (op *FromRecords) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromRecords_Detailed_Unmarshal(n, b, op)
 }
 
+func FromRecords_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromRecords) ([]byte, error) {
+	return FromRecords_Repeats_Marshal(n, vals, FromRecords_Compact_Marshal)
+}
+func FromRecords_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromRecords) ([]byte, error) {
+	return FromRecords_Repeats_Marshal(n, vals, FromRecords_Detailed_Marshal)
+}
+func FromRecords_Repeats_Marshal(n jsonexp.Context, vals *[]FromRecords, marshEl func(jsonexp.Context, *FromRecords) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromRecords_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromRecords_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromRecords) error {
+	return FromRecords_Repeats_Unmarshal(n, b, out, FromRecords_Compact_Unmarshal)
+}
+func FromRecords_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromRecords) error {
+	return FromRecords_Repeats_Unmarshal(n, b, out, FromRecords_Detailed_Unmarshal)
+}
+func FromRecords_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromRecords, unmarshEl func(jsonexp.Context, []byte, *FromRecords) error) (err error) {
+	var vals []FromRecords
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromRecords_Type, "-", e)
+		} else {
+			vals = make([]FromRecords, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromRecords_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromRecords_Compact_Optional_Marshal(n jsonexp.Context, val **FromRecords) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromRecords_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromRecords_Compact_Marshal(n jsonexp.Context, val *FromRecords) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromRecords_Lede)
+	if b, e := rt.RecordListEval_Compact_Marshal(n, &val.Vals); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromRecords_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromRecords) (err error) {
+	if len(b) > 0 {
+		var val FromRecords
+		if e := FromRecords_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromRecords_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromRecords) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromRecords_Type, "-", e)
+	} else if e := rt.RecordListEval_Compact_Unmarshal(n, msg.Fields[FromRecords_Field_Vals], &out.Vals); e != nil {
+		err = errutil.New(FromRecords_Type+"."+FromRecords_Field_Vals, "-", e)
+	}
+	return
+}
+
+func FromRecords_Detailed_Optional_Marshal(n jsonexp.Context, val **FromRecords) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromRecords_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromRecords_Detailed_Marshal(n jsonexp.Context, val *FromRecords) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.RecordListEval_Detailed_Marshal(n, &val.Vals); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromRecords_Vals] = b
+	} else {
+		fields[FromRecords_Field_Vals] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromRecords,
+			Type:   FromRecords_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromRecords_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromRecords) (err error) {
+	if len(b) > 0 {
+		var val FromRecords
+		if e := FromRecords_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromRecords_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromRecords) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromRecords, "-", e)
-	} else if e := rt.RecordListEval_Detailed_Unmarshal(n, msg.Fields[FromRecords_Vals], &out.Vals); e != nil {
-		err = errutil.New(Type_FromRecords+"."+FromRecords_Vals, "-", e)
+		err = errutil.New(FromRecords_Type, "-", e)
+	} else if e := rt.RecordListEval_Detailed_Unmarshal(n, msg.Fields[FromRecords_Field_Vals], &out.Vals); e != nil {
+		err = errutil.New(FromRecords_Type+"."+FromRecords_Field_Vals, "-", e)
 	}
 	return
 }
 
-const Type_FromSourceFields = "from_source_fields"
+const FromSourceFields_Type = "from_source_fields"
+
+var FromSourceFields_Compact_Optional_Marshal = FromSourceFields_Compact_Marshal
+var FromSourceFields_Compact_Optional_Unmarshal = FromSourceFields_Compact_Unmarshal
+
+func FromSourceFields_Compact_Marshal(n jsonexp.Context, ptr *FromSourceFields) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func FromSourceFields_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromSourceFields) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(FromSourceFields); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, FromSourceFields_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var FromSourceFields_Detailed_Optional_Marshal = FromSourceFields_Detailed_Marshal
+var FromSourceFields_Detailed_Optional_Unmarshal = FromSourceFields_Detailed_Unmarshal
 
 func FromSourceFields_Detailed_Marshal(n jsonexp.Context, ptr *FromSourceFields) (ret []byte, err error) {
-	var b []byte
 	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_FromSourceFields,
-			Value: b,
-		})
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	return
 }
@@ -2382,9 +7934,62 @@ func FromSourceFields_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromS
 	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
 		err = e
 	} else if store, ok := ptr.(FromSourceFields); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_FromSourceFields)
+		err = errutil.Fmt("couldnt store %T into %s", ptr, FromSourceFields_Type)
 	} else {
 		(*out) = store
+	}
+	return
+}
+
+func FromSourceFields_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromSourceFields) ([]byte, error) {
+	return FromSourceFields_Repeats_Marshal(n, vals, FromSourceFields_Compact_Marshal)
+}
+func FromSourceFields_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromSourceFields) ([]byte, error) {
+	return FromSourceFields_Repeats_Marshal(n, vals, FromSourceFields_Detailed_Marshal)
+}
+func FromSourceFields_Repeats_Marshal(n jsonexp.Context, vals *[]FromSourceFields, marshEl func(jsonexp.Context, *FromSourceFields) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromSourceFields_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromSourceFields_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromSourceFields) error {
+	return FromSourceFields_Repeats_Unmarshal(n, b, out, FromSourceFields_Compact_Unmarshal)
+}
+func FromSourceFields_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromSourceFields) error {
+	return FromSourceFields_Repeats_Unmarshal(n, b, out, FromSourceFields_Detailed_Unmarshal)
+}
+func FromSourceFields_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromSourceFields, unmarshEl func(jsonexp.Context, []byte, *FromSourceFields) error) (err error) {
+	var vals []FromSourceFields
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromSourceFields_Type, "-", e)
+		} else {
+			vals = make([]FromSourceFields, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromSourceFields_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
 	}
 	return
 }
@@ -2396,15 +8001,22 @@ type FromText struct {
 
 func (*FromText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromText,
+		Name: FromText_Type,
 		Uses: composer.Type_Flow,
 		Lede: "from_txt",
 	}
 }
 
-const Type_FromText = "from_text"
-const FromText_Val = "$VAL"
+const FromText_Type = "from_text"
+const FromText_Lede = "from_txt"
+const FromText_Field_Val = "$VAL"
 
+func (op *FromText) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromText_Compact_Marshal(n, op)
+}
+func (op *FromText) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromText_Compact_Unmarshal(n, b, op)
+}
 func (op *FromText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromText_Detailed_Marshal(n, op)
 }
@@ -2412,28 +8024,145 @@ func (op *FromText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromText_Detailed_Unmarshal(n, b, op)
 }
 
+func FromText_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromText) ([]byte, error) {
+	return FromText_Repeats_Marshal(n, vals, FromText_Compact_Marshal)
+}
+func FromText_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromText) ([]byte, error) {
+	return FromText_Repeats_Marshal(n, vals, FromText_Detailed_Marshal)
+}
+func FromText_Repeats_Marshal(n jsonexp.Context, vals *[]FromText, marshEl func(jsonexp.Context, *FromText) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromText_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromText_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromText) error {
+	return FromText_Repeats_Unmarshal(n, b, out, FromText_Compact_Unmarshal)
+}
+func FromText_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromText) error {
+	return FromText_Repeats_Unmarshal(n, b, out, FromText_Detailed_Unmarshal)
+}
+func FromText_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromText, unmarshEl func(jsonexp.Context, []byte, *FromText) error) (err error) {
+	var vals []FromText
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromText_Type, "-", e)
+		} else {
+			vals = make([]FromText, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromText_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromText_Compact_Optional_Marshal(n jsonexp.Context, val **FromText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromText_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromText_Compact_Marshal(n jsonexp.Context, val *FromText) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromText_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Val); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromText) (err error) {
+	if len(b) > 0 {
+		var val FromText
+		if e := FromText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromText_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromText_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[FromText_Field_Val], &out.Val); e != nil {
+		err = errutil.New(FromText_Type+"."+FromText_Field_Val, "-", e)
+	}
+	return
+}
+
+func FromText_Detailed_Optional_Marshal(n jsonexp.Context, val **FromText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromText_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromText_Detailed_Marshal(n jsonexp.Context, val *FromText) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Val); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromText_Val] = b
+	} else {
+		fields[FromText_Field_Val] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromText,
+			Type:   FromText_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromText) (err error) {
+	if len(b) > 0 {
+		var val FromText
+		if e := FromText_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromText) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromText, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[FromText_Val], &out.Val); e != nil {
-		err = errutil.New(Type_FromText+"."+FromText_Val, "-", e)
+		err = errutil.New(FromText_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[FromText_Field_Val], &out.Val); e != nil {
+		err = errutil.New(FromText_Type+"."+FromText_Field_Val, "-", e)
 	}
 	return
 }
@@ -2445,15 +8174,22 @@ type FromTexts struct {
 
 func (*FromTexts) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromTexts,
+		Name: FromTexts_Type,
 		Uses: composer.Type_Flow,
 		Lede: "from_txts",
 	}
 }
 
-const Type_FromTexts = "from_texts"
-const FromTexts_Vals = "$VALS"
+const FromTexts_Type = "from_texts"
+const FromTexts_Lede = "from_txts"
+const FromTexts_Field_Vals = "$VALS"
 
+func (op *FromTexts) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromTexts_Compact_Marshal(n, op)
+}
+func (op *FromTexts) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromTexts_Compact_Unmarshal(n, b, op)
+}
 func (op *FromTexts) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromTexts_Detailed_Marshal(n, op)
 }
@@ -2461,28 +8197,145 @@ func (op *FromTexts) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromTexts_Detailed_Unmarshal(n, b, op)
 }
 
+func FromTexts_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromTexts) ([]byte, error) {
+	return FromTexts_Repeats_Marshal(n, vals, FromTexts_Compact_Marshal)
+}
+func FromTexts_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromTexts) ([]byte, error) {
+	return FromTexts_Repeats_Marshal(n, vals, FromTexts_Detailed_Marshal)
+}
+func FromTexts_Repeats_Marshal(n jsonexp.Context, vals *[]FromTexts, marshEl func(jsonexp.Context, *FromTexts) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromTexts_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromTexts_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromTexts) error {
+	return FromTexts_Repeats_Unmarshal(n, b, out, FromTexts_Compact_Unmarshal)
+}
+func FromTexts_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromTexts) error {
+	return FromTexts_Repeats_Unmarshal(n, b, out, FromTexts_Detailed_Unmarshal)
+}
+func FromTexts_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromTexts, unmarshEl func(jsonexp.Context, []byte, *FromTexts) error) (err error) {
+	var vals []FromTexts
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromTexts_Type, "-", e)
+		} else {
+			vals = make([]FromTexts, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromTexts_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromTexts_Compact_Optional_Marshal(n jsonexp.Context, val **FromTexts) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromTexts_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromTexts_Compact_Marshal(n jsonexp.Context, val *FromTexts) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromTexts_Lede)
+	if b, e := rt.TextListEval_Compact_Marshal(n, &val.Vals); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromTexts_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromTexts) (err error) {
+	if len(b) > 0 {
+		var val FromTexts
+		if e := FromTexts_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromTexts_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromTexts) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromTexts_Type, "-", e)
+	} else if e := rt.TextListEval_Compact_Unmarshal(n, msg.Fields[FromTexts_Field_Vals], &out.Vals); e != nil {
+		err = errutil.New(FromTexts_Type+"."+FromTexts_Field_Vals, "-", e)
+	}
+	return
+}
+
+func FromTexts_Detailed_Optional_Marshal(n jsonexp.Context, val **FromTexts) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromTexts_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromTexts_Detailed_Marshal(n jsonexp.Context, val *FromTexts) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextListEval_Detailed_Marshal(n, &val.Vals); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromTexts_Vals] = b
+	} else {
+		fields[FromTexts_Field_Vals] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromTexts,
+			Type:   FromTexts_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromTexts_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromTexts) (err error) {
+	if len(b) > 0 {
+		var val FromTexts
+		if e := FromTexts_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromTexts_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromTexts) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromTexts, "-", e)
-	} else if e := rt.TextListEval_Detailed_Unmarshal(n, msg.Fields[FromTexts_Vals], &out.Vals); e != nil {
-		err = errutil.New(Type_FromTexts+"."+FromTexts_Vals, "-", e)
+		err = errutil.New(FromTexts_Type, "-", e)
+	} else if e := rt.TextListEval_Detailed_Unmarshal(n, msg.Fields[FromTexts_Field_Vals], &out.Vals); e != nil {
+		err = errutil.New(FromTexts_Type+"."+FromTexts_Field_Vals, "-", e)
 	}
 	return
 }
@@ -2494,14 +8347,21 @@ type FromVar struct {
 
 func (*FromVar) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_FromVar,
+		Name: FromVar_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_FromVar = "from_var"
-const FromVar_Var = "$VAR"
+const FromVar_Type = "from_var"
+const FromVar_Lede = FromVar_Type
+const FromVar_Field_Var = "$VAR"
 
+func (op *FromVar) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return FromVar_Compact_Marshal(n, op)
+}
+func (op *FromVar) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return FromVar_Compact_Unmarshal(n, b, op)
+}
 func (op *FromVar) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return FromVar_Detailed_Marshal(n, op)
 }
@@ -2509,28 +8369,145 @@ func (op *FromVar) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return FromVar_Detailed_Unmarshal(n, b, op)
 }
 
+func FromVar_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]FromVar) ([]byte, error) {
+	return FromVar_Repeats_Marshal(n, vals, FromVar_Compact_Marshal)
+}
+func FromVar_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]FromVar) ([]byte, error) {
+	return FromVar_Repeats_Marshal(n, vals, FromVar_Detailed_Marshal)
+}
+func FromVar_Repeats_Marshal(n jsonexp.Context, vals *[]FromVar, marshEl func(jsonexp.Context, *FromVar) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(FromVar_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func FromVar_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromVar) error {
+	return FromVar_Repeats_Unmarshal(n, b, out, FromVar_Compact_Unmarshal)
+}
+func FromVar_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromVar) error {
+	return FromVar_Repeats_Unmarshal(n, b, out, FromVar_Detailed_Unmarshal)
+}
+func FromVar_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]FromVar, unmarshEl func(jsonexp.Context, []byte, *FromVar) error) (err error) {
+	var vals []FromVar
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(FromVar_Type, "-", e)
+		} else {
+			vals = make([]FromVar, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(FromVar_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func FromVar_Compact_Optional_Marshal(n jsonexp.Context, val **FromVar) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromVar_Compact_Marshal(n, *val)
+	}
+	return
+}
+func FromVar_Compact_Marshal(n jsonexp.Context, val *FromVar) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(FromVar_Lede)
+	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func FromVar_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromVar) (err error) {
+	if len(b) > 0 {
+		var val FromVar
+		if e := FromVar_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func FromVar_Compact_Unmarshal(n jsonexp.Context, b []byte, out *FromVar) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(FromVar_Type, "-", e)
+	} else if e := value.VariableName_Compact_Unmarshal(n, msg.Fields[FromVar_Field_Var], &out.Var); e != nil {
+		err = errutil.New(FromVar_Type+"."+FromVar_Field_Var, "-", e)
+	}
+	return
+}
+
+func FromVar_Detailed_Optional_Marshal(n jsonexp.Context, val **FromVar) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = FromVar_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func FromVar_Detailed_Marshal(n jsonexp.Context, val *FromVar) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[FromVar_Var] = b
+	} else {
+		fields[FromVar_Field_Var] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_FromVar,
+			Type:   FromVar_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func FromVar_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **FromVar) (err error) {
+	if len(b) > 0 {
+		var val FromVar
+		if e := FromVar_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func FromVar_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *FromVar) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_FromVar, "-", e)
-	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[FromVar_Var], &out.Var); e != nil {
-		err = errutil.New(Type_FromVar+"."+FromVar_Var, "-", e)
+		err = errutil.New(FromVar_Type, "-", e)
+	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[FromVar_Field_Var], &out.Var); e != nil {
+		err = errutil.New(FromVar_Type+"."+FromVar_Field_Var, "-", e)
 	}
 	return
 }
@@ -2543,16 +8520,23 @@ type GetAtField struct {
 
 func (*GetAtField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_GetAtField,
+		Name: GetAtField_Type,
 		Uses: composer.Type_Flow,
 		Lede: "get",
 	}
 }
 
-const Type_GetAtField = "get_at_field"
-const GetAtField_Field = "$FIELD"
-const GetAtField_From = "$FROM"
+const GetAtField_Type = "get_at_field"
+const GetAtField_Lede = "get"
+const GetAtField_Field_Field = "$FIELD"
+const GetAtField_Field_From = "$FROM"
 
+func (op *GetAtField) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return GetAtField_Compact_Marshal(n, op)
+}
+func (op *GetAtField) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return GetAtField_Compact_Unmarshal(n, b, op)
+}
 func (op *GetAtField) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return GetAtField_Detailed_Marshal(n, op)
 }
@@ -2560,35 +8544,162 @@ func (op *GetAtField) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return GetAtField_Detailed_Unmarshal(n, b, op)
 }
 
-func GetAtField_Detailed_Marshal(n jsonexp.Context, val *GetAtField) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Field); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[GetAtField_Field] = b
-	}
-	if b, e := FromSourceFields_Detailed_Marshal(n, &val.From); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[GetAtField_From] = b
+func GetAtField_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]GetAtField) ([]byte, error) {
+	return GetAtField_Repeats_Marshal(n, vals, GetAtField_Compact_Marshal)
+}
+func GetAtField_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]GetAtField) ([]byte, error) {
+	return GetAtField_Repeats_Marshal(n, vals, GetAtField_Detailed_Marshal)
+}
+func GetAtField_Repeats_Marshal(n jsonexp.Context, vals *[]GetAtField, marshEl func(jsonexp.Context, *GetAtField) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(GetAtField_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func GetAtField_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]GetAtField) error {
+	return GetAtField_Repeats_Unmarshal(n, b, out, GetAtField_Compact_Unmarshal)
+}
+func GetAtField_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]GetAtField) error {
+	return GetAtField_Repeats_Unmarshal(n, b, out, GetAtField_Detailed_Unmarshal)
+}
+func GetAtField_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]GetAtField, unmarshEl func(jsonexp.Context, []byte, *GetAtField) error) (err error) {
+	var vals []GetAtField
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(GetAtField_Type, "-", e)
+		} else {
+			vals = make([]GetAtField, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(GetAtField_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func GetAtField_Compact_Optional_Marshal(n jsonexp.Context, val **GetAtField) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = GetAtField_Compact_Marshal(n, *val)
+	}
+	return
+}
+func GetAtField_Compact_Marshal(n jsonexp.Context, val *GetAtField) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(GetAtField_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Field); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := FromSourceFields_Compact_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("from")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func GetAtField_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **GetAtField) (err error) {
+	if len(b) > 0 {
+		var val GetAtField
+		if e := GetAtField_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func GetAtField_Compact_Unmarshal(n jsonexp.Context, b []byte, out *GetAtField) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(GetAtField_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[GetAtField_Field_Field], &out.Field); e != nil {
+		err = errutil.New(GetAtField_Type+"."+GetAtField_Field_Field, "-", e)
+	} else if e := FromSourceFields_Compact_Unmarshal(n, msg.Fields[GetAtField_Field_From], &out.From); e != nil {
+		err = errutil.New(GetAtField_Type+"."+GetAtField_Field_From, "-", e)
+	}
+	return
+}
+
+func GetAtField_Detailed_Optional_Marshal(n jsonexp.Context, val **GetAtField) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = GetAtField_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func GetAtField_Detailed_Marshal(n jsonexp.Context, val *GetAtField) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Field); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[GetAtField_Field_Field] = b
+	}
+
+	if b, e := FromSourceFields_Detailed_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[GetAtField_Field_From] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_GetAtField,
+			Type:   GetAtField_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func GetAtField_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **GetAtField) (err error) {
+	if len(b) > 0 {
+		var val GetAtField
+		if e := GetAtField_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func GetAtField_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *GetAtField) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_GetAtField, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[GetAtField_Field], &out.Field); e != nil {
-		err = errutil.New(Type_GetAtField+"."+GetAtField_Field, "-", e)
-	} else if e := FromSourceFields_Detailed_Unmarshal(n, msg.Fields[GetAtField_From], &out.From); e != nil {
-		err = errutil.New(Type_GetAtField+"."+GetAtField_From, "-", e)
+		err = errutil.New(GetAtField_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[GetAtField_Field_Field], &out.Field); e != nil {
+		err = errutil.New(GetAtField_Type+"."+GetAtField_Field_Field, "-", e)
+	} else if e := FromSourceFields_Detailed_Unmarshal(n, msg.Fields[GetAtField_Field_From], &out.From); e != nil {
+		err = errutil.New(GetAtField_Type+"."+GetAtField_Field_From, "-", e)
 	}
 	return
 }
@@ -2600,15 +8711,22 @@ type GetVar struct {
 
 func (*GetVar) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_GetVar,
+		Name: GetVar_Type,
 		Uses: composer.Type_Flow,
 		Lede: "var",
 	}
 }
 
-const Type_GetVar = "get_var"
-const GetVar_Name = "$NAME"
+const GetVar_Type = "get_var"
+const GetVar_Lede = "var"
+const GetVar_Field_Name = "$NAME"
 
+func (op *GetVar) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return GetVar_Compact_Marshal(n, op)
+}
+func (op *GetVar) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return GetVar_Compact_Unmarshal(n, b, op)
+}
 func (op *GetVar) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return GetVar_Detailed_Marshal(n, op)
 }
@@ -2616,28 +8734,145 @@ func (op *GetVar) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return GetVar_Detailed_Unmarshal(n, b, op)
 }
 
+func GetVar_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]GetVar) ([]byte, error) {
+	return GetVar_Repeats_Marshal(n, vals, GetVar_Compact_Marshal)
+}
+func GetVar_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]GetVar) ([]byte, error) {
+	return GetVar_Repeats_Marshal(n, vals, GetVar_Detailed_Marshal)
+}
+func GetVar_Repeats_Marshal(n jsonexp.Context, vals *[]GetVar, marshEl func(jsonexp.Context, *GetVar) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(GetVar_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func GetVar_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]GetVar) error {
+	return GetVar_Repeats_Unmarshal(n, b, out, GetVar_Compact_Unmarshal)
+}
+func GetVar_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]GetVar) error {
+	return GetVar_Repeats_Unmarshal(n, b, out, GetVar_Detailed_Unmarshal)
+}
+func GetVar_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]GetVar, unmarshEl func(jsonexp.Context, []byte, *GetVar) error) (err error) {
+	var vals []GetVar
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(GetVar_Type, "-", e)
+		} else {
+			vals = make([]GetVar, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(GetVar_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func GetVar_Compact_Optional_Marshal(n jsonexp.Context, val **GetVar) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = GetVar_Compact_Marshal(n, *val)
+	}
+	return
+}
+func GetVar_Compact_Marshal(n jsonexp.Context, val *GetVar) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(GetVar_Lede)
+	if b, e := value.VariableName_Compact_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func GetVar_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **GetVar) (err error) {
+	if len(b) > 0 {
+		var val GetVar
+		if e := GetVar_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func GetVar_Compact_Unmarshal(n jsonexp.Context, b []byte, out *GetVar) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(GetVar_Type, "-", e)
+	} else if e := value.VariableName_Compact_Unmarshal(n, msg.Fields[GetVar_Field_Name], &out.Name); e != nil {
+		err = errutil.New(GetVar_Type+"."+GetVar_Field_Name, "-", e)
+	}
+	return
+}
+
+func GetVar_Detailed_Optional_Marshal(n jsonexp.Context, val **GetVar) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = GetVar_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func GetVar_Detailed_Marshal(n jsonexp.Context, val *GetVar) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Name); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[GetVar_Name] = b
+	} else {
+		fields[GetVar_Field_Name] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_GetVar,
+			Type:   GetVar_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func GetVar_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **GetVar) (err error) {
+	if len(b) > 0 {
+		var val GetVar
+		if e := GetVar_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func GetVar_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *GetVar) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_GetVar, "-", e)
-	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[GetVar_Name], &out.Name); e != nil {
-		err = errutil.New(Type_GetVar+"."+GetVar_Name, "-", e)
+		err = errutil.New(GetVar_Type, "-", e)
+	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[GetVar_Field_Name], &out.Name); e != nil {
+		err = errutil.New(GetVar_Type+"."+GetVar_Field_Name, "-", e)
 	}
 	return
 }
@@ -2648,13 +8883,20 @@ type GreaterThan struct {
 
 func (*GreaterThan) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_GreaterThan,
+		Name: GreaterThan_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_GreaterThan = "greater_than"
+const GreaterThan_Type = "greater_than"
+const GreaterThan_Lede = GreaterThan_Type
 
+func (op *GreaterThan) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return GreaterThan_Compact_Marshal(n, op)
+}
+func (op *GreaterThan) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return GreaterThan_Compact_Unmarshal(n, b, op)
+}
 func (op *GreaterThan) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return GreaterThan_Detailed_Marshal(n, op)
 }
@@ -2662,21 +8904,128 @@ func (op *GreaterThan) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return GreaterThan_Detailed_Unmarshal(n, b, op)
 }
 
+func GreaterThan_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]GreaterThan) ([]byte, error) {
+	return GreaterThan_Repeats_Marshal(n, vals, GreaterThan_Compact_Marshal)
+}
+func GreaterThan_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]GreaterThan) ([]byte, error) {
+	return GreaterThan_Repeats_Marshal(n, vals, GreaterThan_Detailed_Marshal)
+}
+func GreaterThan_Repeats_Marshal(n jsonexp.Context, vals *[]GreaterThan, marshEl func(jsonexp.Context, *GreaterThan) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(GreaterThan_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func GreaterThan_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]GreaterThan) error {
+	return GreaterThan_Repeats_Unmarshal(n, b, out, GreaterThan_Compact_Unmarshal)
+}
+func GreaterThan_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]GreaterThan) error {
+	return GreaterThan_Repeats_Unmarshal(n, b, out, GreaterThan_Detailed_Unmarshal)
+}
+func GreaterThan_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]GreaterThan, unmarshEl func(jsonexp.Context, []byte, *GreaterThan) error) (err error) {
+	var vals []GreaterThan
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(GreaterThan_Type, "-", e)
+		} else {
+			vals = make([]GreaterThan, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(GreaterThan_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func GreaterThan_Compact_Optional_Marshal(n jsonexp.Context, val **GreaterThan) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = GreaterThan_Compact_Marshal(n, *val)
+	}
+	return
+}
+func GreaterThan_Compact_Marshal(n jsonexp.Context, val *GreaterThan) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(GreaterThan_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func GreaterThan_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **GreaterThan) (err error) {
+	if len(b) > 0 {
+		var val GreaterThan
+		if e := GreaterThan_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func GreaterThan_Compact_Unmarshal(n jsonexp.Context, b []byte, out *GreaterThan) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(GreaterThan_Type, "-", e)
+	}
+	return
+}
+
+func GreaterThan_Detailed_Optional_Marshal(n jsonexp.Context, val **GreaterThan) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = GreaterThan_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func GreaterThan_Detailed_Marshal(n jsonexp.Context, val *GreaterThan) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_GreaterThan,
+			Type:   GreaterThan_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func GreaterThan_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **GreaterThan) (err error) {
+	if len(b) > 0 {
+		var val GreaterThan
+		if e := GreaterThan_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func GreaterThan_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *GreaterThan) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_GreaterThan, "-", e)
+		err = errutil.New(GreaterThan_Type, "-", e)
 	}
 	return
 }
@@ -2688,14 +9037,21 @@ type HasDominion struct {
 
 func (*HasDominion) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_HasDominion,
+		Name: HasDominion_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_HasDominion = "has_dominion"
-const HasDominion_Name = "$NAME"
+const HasDominion_Type = "has_dominion"
+const HasDominion_Lede = HasDominion_Type
+const HasDominion_Field_Name = "$NAME"
 
+func (op *HasDominion) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return HasDominion_Compact_Marshal(n, op)
+}
+func (op *HasDominion) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return HasDominion_Compact_Unmarshal(n, b, op)
+}
 func (op *HasDominion) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return HasDominion_Detailed_Marshal(n, op)
 }
@@ -2703,28 +9059,145 @@ func (op *HasDominion) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return HasDominion_Detailed_Unmarshal(n, b, op)
 }
 
-func HasDominion_Detailed_Marshal(n jsonexp.Context, val *HasDominion) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Name); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[HasDominion_Name] = b
+func HasDominion_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]HasDominion) ([]byte, error) {
+	return HasDominion_Repeats_Marshal(n, vals, HasDominion_Compact_Marshal)
+}
+func HasDominion_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]HasDominion) ([]byte, error) {
+	return HasDominion_Repeats_Marshal(n, vals, HasDominion_Detailed_Marshal)
+}
+func HasDominion_Repeats_Marshal(n jsonexp.Context, vals *[]HasDominion, marshEl func(jsonexp.Context, *HasDominion) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(HasDominion_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func HasDominion_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]HasDominion) error {
+	return HasDominion_Repeats_Unmarshal(n, b, out, HasDominion_Compact_Unmarshal)
+}
+func HasDominion_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]HasDominion) error {
+	return HasDominion_Repeats_Unmarshal(n, b, out, HasDominion_Detailed_Unmarshal)
+}
+func HasDominion_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]HasDominion, unmarshEl func(jsonexp.Context, []byte, *HasDominion) error) (err error) {
+	var vals []HasDominion
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(HasDominion_Type, "-", e)
+		} else {
+			vals = make([]HasDominion, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(HasDominion_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func HasDominion_Compact_Optional_Marshal(n jsonexp.Context, val **HasDominion) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = HasDominion_Compact_Marshal(n, *val)
+	}
+	return
+}
+func HasDominion_Compact_Marshal(n jsonexp.Context, val *HasDominion) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(HasDominion_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func HasDominion_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **HasDominion) (err error) {
+	if len(b) > 0 {
+		var val HasDominion
+		if e := HasDominion_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func HasDominion_Compact_Unmarshal(n jsonexp.Context, b []byte, out *HasDominion) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(HasDominion_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[HasDominion_Field_Name], &out.Name); e != nil {
+		err = errutil.New(HasDominion_Type+"."+HasDominion_Field_Name, "-", e)
+	}
+	return
+}
+
+func HasDominion_Detailed_Optional_Marshal(n jsonexp.Context, val **HasDominion) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = HasDominion_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func HasDominion_Detailed_Marshal(n jsonexp.Context, val *HasDominion) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[HasDominion_Field_Name] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_HasDominion,
+			Type:   HasDominion_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func HasDominion_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **HasDominion) (err error) {
+	if len(b) > 0 {
+		var val HasDominion
+		if e := HasDominion_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func HasDominion_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *HasDominion) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_HasDominion, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[HasDominion_Name], &out.Name); e != nil {
-		err = errutil.New(Type_HasDominion+"."+HasDominion_Name, "-", e)
+		err = errutil.New(HasDominion_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[HasDominion_Field_Name], &out.Name); e != nil {
+		err = errutil.New(HasDominion_Type+"."+HasDominion_Field_Name, "-", e)
 	}
 	return
 }
@@ -2737,16 +9210,23 @@ type HasTrait struct {
 
 func (*HasTrait) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_HasTrait,
+		Name: HasTrait_Type,
 		Uses: composer.Type_Flow,
 		Lede: "get",
 	}
 }
 
-const Type_HasTrait = "has_trait"
-const HasTrait_Object = "$OBJECT"
-const HasTrait_Trait = "$TRAIT"
+const HasTrait_Type = "has_trait"
+const HasTrait_Lede = "get"
+const HasTrait_Field_Object = "$OBJECT"
+const HasTrait_Field_Trait = "$TRAIT"
 
+func (op *HasTrait) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return HasTrait_Compact_Marshal(n, op)
+}
+func (op *HasTrait) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return HasTrait_Compact_Unmarshal(n, b, op)
+}
 func (op *HasTrait) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return HasTrait_Detailed_Marshal(n, op)
 }
@@ -2754,35 +9234,162 @@ func (op *HasTrait) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return HasTrait_Detailed_Unmarshal(n, b, op)
 }
 
+func HasTrait_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]HasTrait) ([]byte, error) {
+	return HasTrait_Repeats_Marshal(n, vals, HasTrait_Compact_Marshal)
+}
+func HasTrait_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]HasTrait) ([]byte, error) {
+	return HasTrait_Repeats_Marshal(n, vals, HasTrait_Detailed_Marshal)
+}
+func HasTrait_Repeats_Marshal(n jsonexp.Context, vals *[]HasTrait, marshEl func(jsonexp.Context, *HasTrait) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(HasTrait_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func HasTrait_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]HasTrait) error {
+	return HasTrait_Repeats_Unmarshal(n, b, out, HasTrait_Compact_Unmarshal)
+}
+func HasTrait_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]HasTrait) error {
+	return HasTrait_Repeats_Unmarshal(n, b, out, HasTrait_Detailed_Unmarshal)
+}
+func HasTrait_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]HasTrait, unmarshEl func(jsonexp.Context, []byte, *HasTrait) error) (err error) {
+	var vals []HasTrait
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(HasTrait_Type, "-", e)
+		} else {
+			vals = make([]HasTrait, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(HasTrait_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func HasTrait_Compact_Optional_Marshal(n jsonexp.Context, val **HasTrait) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = HasTrait_Compact_Marshal(n, *val)
+	}
+	return
+}
+func HasTrait_Compact_Marshal(n jsonexp.Context, val *HasTrait) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(HasTrait_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("obj")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Trait); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("trait")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func HasTrait_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **HasTrait) (err error) {
+	if len(b) > 0 {
+		var val HasTrait
+		if e := HasTrait_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func HasTrait_Compact_Unmarshal(n jsonexp.Context, b []byte, out *HasTrait) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(HasTrait_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[HasTrait_Field_Object], &out.Object); e != nil {
+		err = errutil.New(HasTrait_Type+"."+HasTrait_Field_Object, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[HasTrait_Field_Trait], &out.Trait); e != nil {
+		err = errutil.New(HasTrait_Type+"."+HasTrait_Field_Trait, "-", e)
+	}
+	return
+}
+
+func HasTrait_Detailed_Optional_Marshal(n jsonexp.Context, val **HasTrait) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = HasTrait_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func HasTrait_Detailed_Marshal(n jsonexp.Context, val *HasTrait) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[HasTrait_Object] = b
+	} else {
+		fields[HasTrait_Field_Object] = b
 	}
+
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Trait); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[HasTrait_Trait] = b
+	} else {
+		fields[HasTrait_Field_Trait] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_HasTrait,
+			Type:   HasTrait_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func HasTrait_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **HasTrait) (err error) {
+	if len(b) > 0 {
+		var val HasTrait
+		if e := HasTrait_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func HasTrait_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *HasTrait) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_HasTrait, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[HasTrait_Object], &out.Object); e != nil {
-		err = errutil.New(Type_HasTrait+"."+HasTrait_Object, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[HasTrait_Trait], &out.Trait); e != nil {
-		err = errutil.New(Type_HasTrait+"."+HasTrait_Trait, "-", e)
+		err = errutil.New(HasTrait_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[HasTrait_Field_Object], &out.Object); e != nil {
+		err = errutil.New(HasTrait_Type+"."+HasTrait_Field_Object, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[HasTrait_Field_Trait], &out.Trait); e != nil {
+		err = errutil.New(HasTrait_Type+"."+HasTrait_Field_Trait, "-", e)
 	}
 	return
 }
@@ -2794,14 +9401,21 @@ type IdOf struct {
 
 func (*IdOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_IdOf,
+		Name: IdOf_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_IdOf = "id_of"
-const IdOf_Object = "$OBJECT"
+const IdOf_Type = "id_of"
+const IdOf_Lede = IdOf_Type
+const IdOf_Field_Object = "$OBJECT"
 
+func (op *IdOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return IdOf_Compact_Marshal(n, op)
+}
+func (op *IdOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return IdOf_Compact_Unmarshal(n, b, op)
+}
 func (op *IdOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return IdOf_Detailed_Marshal(n, op)
 }
@@ -2809,28 +9423,145 @@ func (op *IdOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return IdOf_Detailed_Unmarshal(n, b, op)
 }
 
+func IdOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]IdOf) ([]byte, error) {
+	return IdOf_Repeats_Marshal(n, vals, IdOf_Compact_Marshal)
+}
+func IdOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]IdOf) ([]byte, error) {
+	return IdOf_Repeats_Marshal(n, vals, IdOf_Detailed_Marshal)
+}
+func IdOf_Repeats_Marshal(n jsonexp.Context, vals *[]IdOf, marshEl func(jsonexp.Context, *IdOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(IdOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func IdOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IdOf) error {
+	return IdOf_Repeats_Unmarshal(n, b, out, IdOf_Compact_Unmarshal)
+}
+func IdOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IdOf) error {
+	return IdOf_Repeats_Unmarshal(n, b, out, IdOf_Detailed_Unmarshal)
+}
+func IdOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IdOf, unmarshEl func(jsonexp.Context, []byte, *IdOf) error) (err error) {
+	var vals []IdOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(IdOf_Type, "-", e)
+		} else {
+			vals = make([]IdOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(IdOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func IdOf_Compact_Optional_Marshal(n jsonexp.Context, val **IdOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IdOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func IdOf_Compact_Marshal(n jsonexp.Context, val *IdOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(IdOf_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func IdOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IdOf) (err error) {
+	if len(b) > 0 {
+		var val IdOf
+		if e := IdOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func IdOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *IdOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(IdOf_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[IdOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(IdOf_Type+"."+IdOf_Field_Object, "-", e)
+	}
+	return
+}
+
+func IdOf_Detailed_Optional_Marshal(n jsonexp.Context, val **IdOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IdOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func IdOf_Detailed_Marshal(n jsonexp.Context, val *IdOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[IdOf_Object] = b
+	} else {
+		fields[IdOf_Field_Object] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_IdOf,
+			Type:   IdOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func IdOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IdOf) (err error) {
+	if len(b) > 0 {
+		var val IdOf
+		if e := IdOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func IdOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IdOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_IdOf, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IdOf_Object], &out.Object); e != nil {
-		err = errutil.New(Type_IdOf+"."+IdOf_Object, "-", e)
+		err = errutil.New(IdOf_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IdOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(IdOf_Type+"."+IdOf_Field_Object, "-", e)
 	}
 	return
 }
@@ -2843,16 +9574,23 @@ type Includes struct {
 
 func (*Includes) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Includes,
+		Name: Includes_Type,
 		Uses: composer.Type_Flow,
 		Lede: "contains",
 	}
 }
 
-const Type_Includes = "includes"
-const Includes_Text = "$TEXT"
-const Includes_Part = "$PART"
+const Includes_Type = "includes"
+const Includes_Lede = "contains"
+const Includes_Field_Text = "$TEXT"
+const Includes_Field_Part = "$PART"
 
+func (op *Includes) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Includes_Compact_Marshal(n, op)
+}
+func (op *Includes) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Includes_Compact_Unmarshal(n, b, op)
+}
 func (op *Includes) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Includes_Detailed_Marshal(n, op)
 }
@@ -2860,35 +9598,162 @@ func (op *Includes) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Includes_Detailed_Unmarshal(n, b, op)
 }
 
+func Includes_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Includes) ([]byte, error) {
+	return Includes_Repeats_Marshal(n, vals, Includes_Compact_Marshal)
+}
+func Includes_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Includes) ([]byte, error) {
+	return Includes_Repeats_Marshal(n, vals, Includes_Detailed_Marshal)
+}
+func Includes_Repeats_Marshal(n jsonexp.Context, vals *[]Includes, marshEl func(jsonexp.Context, *Includes) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Includes_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Includes_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Includes) error {
+	return Includes_Repeats_Unmarshal(n, b, out, Includes_Compact_Unmarshal)
+}
+func Includes_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Includes) error {
+	return Includes_Repeats_Unmarshal(n, b, out, Includes_Detailed_Unmarshal)
+}
+func Includes_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Includes, unmarshEl func(jsonexp.Context, []byte, *Includes) error) (err error) {
+	var vals []Includes
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Includes_Type, "-", e)
+		} else {
+			vals = make([]Includes, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Includes_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Includes_Compact_Optional_Marshal(n jsonexp.Context, val **Includes) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Includes_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Includes_Compact_Marshal(n jsonexp.Context, val *Includes) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Includes_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Part); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("part")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Includes_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Includes) (err error) {
+	if len(b) > 0 {
+		var val Includes
+		if e := Includes_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Includes_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Includes) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Includes_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[Includes_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Includes_Type+"."+Includes_Field_Text, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[Includes_Field_Part], &out.Part); e != nil {
+		err = errutil.New(Includes_Type+"."+Includes_Field_Part, "-", e)
+	}
+	return
+}
+
+func Includes_Detailed_Optional_Marshal(n jsonexp.Context, val **Includes) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Includes_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Includes_Detailed_Marshal(n jsonexp.Context, val *Includes) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Includes_Text] = b
+	} else {
+		fields[Includes_Field_Text] = b
 	}
+
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Part); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Includes_Part] = b
+	} else {
+		fields[Includes_Field_Part] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Includes,
+			Type:   Includes_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Includes_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Includes) (err error) {
+	if len(b) > 0 {
+		var val Includes
+		if e := Includes_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Includes_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Includes) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Includes, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Includes_Text], &out.Text); e != nil {
-		err = errutil.New(Type_Includes+"."+Includes_Text, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Includes_Part], &out.Part); e != nil {
-		err = errutil.New(Type_Includes+"."+Includes_Part, "-", e)
+		err = errutil.New(Includes_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Includes_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Includes_Type+"."+Includes_Field_Text, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Includes_Field_Part], &out.Part); e != nil {
+		err = errutil.New(Includes_Type+"."+Includes_Field_Part, "-", e)
 	}
 	return
 }
@@ -2900,15 +9765,22 @@ type IntoObj struct {
 
 func (*IntoObj) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_IntoObj,
+		Name: IntoObj_Type,
 		Uses: composer.Type_Flow,
 		Lede: "obj",
 	}
 }
 
-const Type_IntoObj = "into_obj"
-const IntoObj_Object = "$OBJECT"
+const IntoObj_Type = "into_obj"
+const IntoObj_Lede = "obj"
+const IntoObj_Field_Object = "$OBJECT"
 
+func (op *IntoObj) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return IntoObj_Compact_Marshal(n, op)
+}
+func (op *IntoObj) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return IntoObj_Compact_Unmarshal(n, b, op)
+}
 func (op *IntoObj) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return IntoObj_Detailed_Marshal(n, op)
 }
@@ -2916,44 +9788,178 @@ func (op *IntoObj) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return IntoObj_Detailed_Unmarshal(n, b, op)
 }
 
+func IntoObj_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]IntoObj) ([]byte, error) {
+	return IntoObj_Repeats_Marshal(n, vals, IntoObj_Compact_Marshal)
+}
+func IntoObj_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]IntoObj) ([]byte, error) {
+	return IntoObj_Repeats_Marshal(n, vals, IntoObj_Detailed_Marshal)
+}
+func IntoObj_Repeats_Marshal(n jsonexp.Context, vals *[]IntoObj, marshEl func(jsonexp.Context, *IntoObj) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(IntoObj_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func IntoObj_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IntoObj) error {
+	return IntoObj_Repeats_Unmarshal(n, b, out, IntoObj_Compact_Unmarshal)
+}
+func IntoObj_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IntoObj) error {
+	return IntoObj_Repeats_Unmarshal(n, b, out, IntoObj_Detailed_Unmarshal)
+}
+func IntoObj_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IntoObj, unmarshEl func(jsonexp.Context, []byte, *IntoObj) error) (err error) {
+	var vals []IntoObj
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(IntoObj_Type, "-", e)
+		} else {
+			vals = make([]IntoObj, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(IntoObj_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func IntoObj_Compact_Optional_Marshal(n jsonexp.Context, val **IntoObj) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IntoObj_Compact_Marshal(n, *val)
+	}
+	return
+}
+func IntoObj_Compact_Marshal(n jsonexp.Context, val *IntoObj) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(IntoObj_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func IntoObj_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IntoObj) (err error) {
+	if len(b) > 0 {
+		var val IntoObj
+		if e := IntoObj_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func IntoObj_Compact_Unmarshal(n jsonexp.Context, b []byte, out *IntoObj) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(IntoObj_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[IntoObj_Field_Object], &out.Object); e != nil {
+		err = errutil.New(IntoObj_Type+"."+IntoObj_Field_Object, "-", e)
+	}
+	return
+}
+
+func IntoObj_Detailed_Optional_Marshal(n jsonexp.Context, val **IntoObj) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IntoObj_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func IntoObj_Detailed_Marshal(n jsonexp.Context, val *IntoObj) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[IntoObj_Object] = b
+	} else {
+		fields[IntoObj_Field_Object] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_IntoObj,
+			Type:   IntoObj_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func IntoObj_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IntoObj) (err error) {
+	if len(b) > 0 {
+		var val IntoObj
+		if e := IntoObj_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func IntoObj_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoObj) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_IntoObj, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IntoObj_Object], &out.Object); e != nil {
-		err = errutil.New(Type_IntoObj+"."+IntoObj_Object, "-", e)
+		err = errutil.New(IntoObj_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IntoObj_Field_Object], &out.Object); e != nil {
+		err = errutil.New(IntoObj_Type+"."+IntoObj_Field_Object, "-", e)
 	}
 	return
 }
 
-const Type_IntoTargetFields = "into_target_fields"
+const IntoTargetFields_Type = "into_target_fields"
+
+var IntoTargetFields_Compact_Optional_Marshal = IntoTargetFields_Compact_Marshal
+var IntoTargetFields_Compact_Optional_Unmarshal = IntoTargetFields_Compact_Unmarshal
+
+func IntoTargetFields_Compact_Marshal(n jsonexp.Context, ptr *IntoTargetFields) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func IntoTargetFields_Compact_Unmarshal(n jsonexp.Context, b []byte, out *IntoTargetFields) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(IntoTargetFields); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, IntoTargetFields_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var IntoTargetFields_Detailed_Optional_Marshal = IntoTargetFields_Detailed_Marshal
+var IntoTargetFields_Detailed_Optional_Unmarshal = IntoTargetFields_Detailed_Unmarshal
 
 func IntoTargetFields_Detailed_Marshal(n jsonexp.Context, ptr *IntoTargetFields) (ret []byte, err error) {
-	var b []byte
 	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_IntoTargetFields,
-			Value: b,
-		})
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	return
 }
@@ -2962,9 +9968,62 @@ func IntoTargetFields_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoT
 	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
 		err = e
 	} else if store, ok := ptr.(IntoTargetFields); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_IntoTargetFields)
+		err = errutil.Fmt("couldnt store %T into %s", ptr, IntoTargetFields_Type)
 	} else {
 		(*out) = store
+	}
+	return
+}
+
+func IntoTargetFields_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]IntoTargetFields) ([]byte, error) {
+	return IntoTargetFields_Repeats_Marshal(n, vals, IntoTargetFields_Compact_Marshal)
+}
+func IntoTargetFields_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]IntoTargetFields) ([]byte, error) {
+	return IntoTargetFields_Repeats_Marshal(n, vals, IntoTargetFields_Detailed_Marshal)
+}
+func IntoTargetFields_Repeats_Marshal(n jsonexp.Context, vals *[]IntoTargetFields, marshEl func(jsonexp.Context, *IntoTargetFields) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(IntoTargetFields_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func IntoTargetFields_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IntoTargetFields) error {
+	return IntoTargetFields_Repeats_Unmarshal(n, b, out, IntoTargetFields_Compact_Unmarshal)
+}
+func IntoTargetFields_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IntoTargetFields) error {
+	return IntoTargetFields_Repeats_Unmarshal(n, b, out, IntoTargetFields_Detailed_Unmarshal)
+}
+func IntoTargetFields_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IntoTargetFields, unmarshEl func(jsonexp.Context, []byte, *IntoTargetFields) error) (err error) {
+	var vals []IntoTargetFields
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(IntoTargetFields_Type, "-", e)
+		} else {
+			vals = make([]IntoTargetFields, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(IntoTargetFields_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
 	}
 	return
 }
@@ -2976,15 +10035,22 @@ type IntoVar struct {
 
 func (*IntoVar) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_IntoVar,
+		Name: IntoVar_Type,
 		Uses: composer.Type_Flow,
 		Lede: "var",
 	}
 }
 
-const Type_IntoVar = "into_var"
-const IntoVar_Var = "$VAR"
+const IntoVar_Type = "into_var"
+const IntoVar_Lede = "var"
+const IntoVar_Field_Var = "$VAR"
 
+func (op *IntoVar) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return IntoVar_Compact_Marshal(n, op)
+}
+func (op *IntoVar) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return IntoVar_Compact_Unmarshal(n, b, op)
+}
 func (op *IntoVar) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return IntoVar_Detailed_Marshal(n, op)
 }
@@ -2992,28 +10058,145 @@ func (op *IntoVar) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return IntoVar_Detailed_Unmarshal(n, b, op)
 }
 
+func IntoVar_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]IntoVar) ([]byte, error) {
+	return IntoVar_Repeats_Marshal(n, vals, IntoVar_Compact_Marshal)
+}
+func IntoVar_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]IntoVar) ([]byte, error) {
+	return IntoVar_Repeats_Marshal(n, vals, IntoVar_Detailed_Marshal)
+}
+func IntoVar_Repeats_Marshal(n jsonexp.Context, vals *[]IntoVar, marshEl func(jsonexp.Context, *IntoVar) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(IntoVar_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func IntoVar_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IntoVar) error {
+	return IntoVar_Repeats_Unmarshal(n, b, out, IntoVar_Compact_Unmarshal)
+}
+func IntoVar_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IntoVar) error {
+	return IntoVar_Repeats_Unmarshal(n, b, out, IntoVar_Detailed_Unmarshal)
+}
+func IntoVar_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IntoVar, unmarshEl func(jsonexp.Context, []byte, *IntoVar) error) (err error) {
+	var vals []IntoVar
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(IntoVar_Type, "-", e)
+		} else {
+			vals = make([]IntoVar, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(IntoVar_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func IntoVar_Compact_Optional_Marshal(n jsonexp.Context, val **IntoVar) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IntoVar_Compact_Marshal(n, *val)
+	}
+	return
+}
+func IntoVar_Compact_Marshal(n jsonexp.Context, val *IntoVar) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(IntoVar_Lede)
+	if b, e := value.VariableName_Compact_Marshal(n, &val.Var); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func IntoVar_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IntoVar) (err error) {
+	if len(b) > 0 {
+		var val IntoVar
+		if e := IntoVar_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func IntoVar_Compact_Unmarshal(n jsonexp.Context, b []byte, out *IntoVar) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(IntoVar_Type, "-", e)
+	} else if e := value.VariableName_Compact_Unmarshal(n, msg.Fields[IntoVar_Field_Var], &out.Var); e != nil {
+		err = errutil.New(IntoVar_Type+"."+IntoVar_Field_Var, "-", e)
+	}
+	return
+}
+
+func IntoVar_Detailed_Optional_Marshal(n jsonexp.Context, val **IntoVar) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IntoVar_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func IntoVar_Detailed_Marshal(n jsonexp.Context, val *IntoVar) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := value.VariableName_Detailed_Marshal(n, &val.Var); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[IntoVar_Var] = b
+	} else {
+		fields[IntoVar_Field_Var] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_IntoVar,
+			Type:   IntoVar_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func IntoVar_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IntoVar) (err error) {
+	if len(b) > 0 {
+		var val IntoVar
+		if e := IntoVar_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func IntoVar_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IntoVar) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_IntoVar, "-", e)
-	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[IntoVar_Var], &out.Var); e != nil {
-		err = errutil.New(Type_IntoVar+"."+IntoVar_Var, "-", e)
+		err = errutil.New(IntoVar_Type, "-", e)
+	} else if e := value.VariableName_Detailed_Unmarshal(n, msg.Fields[IntoVar_Field_Var], &out.Var); e != nil {
+		err = errutil.New(IntoVar_Type+"."+IntoVar_Field_Var, "-", e)
 	}
 	return
 }
@@ -3025,15 +10208,22 @@ type IsEmpty struct {
 
 func (*IsEmpty) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_IsEmpty,
+		Name: IsEmpty_Type,
 		Uses: composer.Type_Flow,
 		Lede: "is",
 	}
 }
 
-const Type_IsEmpty = "is_empty"
-const IsEmpty_Text = "$TEXT"
+const IsEmpty_Type = "is_empty"
+const IsEmpty_Lede = "is"
+const IsEmpty_Field_Text = "$TEXT"
 
+func (op *IsEmpty) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return IsEmpty_Compact_Marshal(n, op)
+}
+func (op *IsEmpty) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return IsEmpty_Compact_Unmarshal(n, b, op)
+}
 func (op *IsEmpty) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return IsEmpty_Detailed_Marshal(n, op)
 }
@@ -3041,28 +10231,145 @@ func (op *IsEmpty) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return IsEmpty_Detailed_Unmarshal(n, b, op)
 }
 
+func IsEmpty_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]IsEmpty) ([]byte, error) {
+	return IsEmpty_Repeats_Marshal(n, vals, IsEmpty_Compact_Marshal)
+}
+func IsEmpty_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]IsEmpty) ([]byte, error) {
+	return IsEmpty_Repeats_Marshal(n, vals, IsEmpty_Detailed_Marshal)
+}
+func IsEmpty_Repeats_Marshal(n jsonexp.Context, vals *[]IsEmpty, marshEl func(jsonexp.Context, *IsEmpty) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(IsEmpty_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func IsEmpty_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IsEmpty) error {
+	return IsEmpty_Repeats_Unmarshal(n, b, out, IsEmpty_Compact_Unmarshal)
+}
+func IsEmpty_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IsEmpty) error {
+	return IsEmpty_Repeats_Unmarshal(n, b, out, IsEmpty_Detailed_Unmarshal)
+}
+func IsEmpty_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IsEmpty, unmarshEl func(jsonexp.Context, []byte, *IsEmpty) error) (err error) {
+	var vals []IsEmpty
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(IsEmpty_Type, "-", e)
+		} else {
+			vals = make([]IsEmpty, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(IsEmpty_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func IsEmpty_Compact_Optional_Marshal(n jsonexp.Context, val **IsEmpty) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IsEmpty_Compact_Marshal(n, *val)
+	}
+	return
+}
+func IsEmpty_Compact_Marshal(n jsonexp.Context, val *IsEmpty) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(IsEmpty_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("empty")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func IsEmpty_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IsEmpty) (err error) {
+	if len(b) > 0 {
+		var val IsEmpty
+		if e := IsEmpty_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func IsEmpty_Compact_Unmarshal(n jsonexp.Context, b []byte, out *IsEmpty) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(IsEmpty_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[IsEmpty_Field_Text], &out.Text); e != nil {
+		err = errutil.New(IsEmpty_Type+"."+IsEmpty_Field_Text, "-", e)
+	}
+	return
+}
+
+func IsEmpty_Detailed_Optional_Marshal(n jsonexp.Context, val **IsEmpty) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IsEmpty_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func IsEmpty_Detailed_Marshal(n jsonexp.Context, val *IsEmpty) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[IsEmpty_Text] = b
+	} else {
+		fields[IsEmpty_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_IsEmpty,
+			Type:   IsEmpty_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func IsEmpty_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IsEmpty) (err error) {
+	if len(b) > 0 {
+		var val IsEmpty
+		if e := IsEmpty_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func IsEmpty_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IsEmpty) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_IsEmpty, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IsEmpty_Text], &out.Text); e != nil {
-		err = errutil.New(Type_IsEmpty+"."+IsEmpty_Text, "-", e)
+		err = errutil.New(IsEmpty_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IsEmpty_Field_Text], &out.Text); e != nil {
+		err = errutil.New(IsEmpty_Type+"."+IsEmpty_Field_Text, "-", e)
 	}
 	return
 }
@@ -3075,16 +10382,23 @@ type IsExactKindOf struct {
 
 func (*IsExactKindOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_IsExactKindOf,
+		Name: IsExactKindOf_Type,
 		Uses: composer.Type_Flow,
 		Lede: "kind_of",
 	}
 }
 
-const Type_IsExactKindOf = "is_exact_kind_of"
-const IsExactKindOf_Object = "$OBJECT"
-const IsExactKindOf_Kind = "$KIND"
+const IsExactKindOf_Type = "is_exact_kind_of"
+const IsExactKindOf_Lede = "kind_of"
+const IsExactKindOf_Field_Object = "$OBJECT"
+const IsExactKindOf_Field_Kind = "$KIND"
 
+func (op *IsExactKindOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return IsExactKindOf_Compact_Marshal(n, op)
+}
+func (op *IsExactKindOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return IsExactKindOf_Compact_Unmarshal(n, b, op)
+}
 func (op *IsExactKindOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return IsExactKindOf_Detailed_Marshal(n, op)
 }
@@ -3092,35 +10406,162 @@ func (op *IsExactKindOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return IsExactKindOf_Detailed_Unmarshal(n, b, op)
 }
 
+func IsExactKindOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]IsExactKindOf) ([]byte, error) {
+	return IsExactKindOf_Repeats_Marshal(n, vals, IsExactKindOf_Compact_Marshal)
+}
+func IsExactKindOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]IsExactKindOf) ([]byte, error) {
+	return IsExactKindOf_Repeats_Marshal(n, vals, IsExactKindOf_Detailed_Marshal)
+}
+func IsExactKindOf_Repeats_Marshal(n jsonexp.Context, vals *[]IsExactKindOf, marshEl func(jsonexp.Context, *IsExactKindOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(IsExactKindOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func IsExactKindOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IsExactKindOf) error {
+	return IsExactKindOf_Repeats_Unmarshal(n, b, out, IsExactKindOf_Compact_Unmarshal)
+}
+func IsExactKindOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IsExactKindOf) error {
+	return IsExactKindOf_Repeats_Unmarshal(n, b, out, IsExactKindOf_Detailed_Unmarshal)
+}
+func IsExactKindOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IsExactKindOf, unmarshEl func(jsonexp.Context, []byte, *IsExactKindOf) error) (err error) {
+	var vals []IsExactKindOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(IsExactKindOf_Type, "-", e)
+		} else {
+			vals = make([]IsExactKindOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(IsExactKindOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func IsExactKindOf_Compact_Optional_Marshal(n jsonexp.Context, val **IsExactKindOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IsExactKindOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func IsExactKindOf_Compact_Marshal(n jsonexp.Context, val *IsExactKindOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(IsExactKindOf_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Kind); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("is_exactly")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func IsExactKindOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IsExactKindOf) (err error) {
+	if len(b) > 0 {
+		var val IsExactKindOf
+		if e := IsExactKindOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func IsExactKindOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *IsExactKindOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(IsExactKindOf_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[IsExactKindOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(IsExactKindOf_Type+"."+IsExactKindOf_Field_Object, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[IsExactKindOf_Field_Kind], &out.Kind); e != nil {
+		err = errutil.New(IsExactKindOf_Type+"."+IsExactKindOf_Field_Kind, "-", e)
+	}
+	return
+}
+
+func IsExactKindOf_Detailed_Optional_Marshal(n jsonexp.Context, val **IsExactKindOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IsExactKindOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func IsExactKindOf_Detailed_Marshal(n jsonexp.Context, val *IsExactKindOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[IsExactKindOf_Object] = b
+	} else {
+		fields[IsExactKindOf_Field_Object] = b
 	}
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Kind); e != nil {
+
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Kind); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[IsExactKindOf_Kind] = b
+	} else {
+		fields[IsExactKindOf_Field_Kind] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_IsExactKindOf,
+			Type:   IsExactKindOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func IsExactKindOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IsExactKindOf) (err error) {
+	if len(b) > 0 {
+		var val IsExactKindOf
+		if e := IsExactKindOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func IsExactKindOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IsExactKindOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_IsExactKindOf, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IsExactKindOf_Object], &out.Object); e != nil {
-		err = errutil.New(Type_IsExactKindOf+"."+IsExactKindOf_Object, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[IsExactKindOf_Kind], &out.Kind); e != nil {
-		err = errutil.New(Type_IsExactKindOf+"."+IsExactKindOf_Kind, "-", e)
+		err = errutil.New(IsExactKindOf_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IsExactKindOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(IsExactKindOf_Type+"."+IsExactKindOf_Field_Object, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[IsExactKindOf_Field_Kind], &out.Kind); e != nil {
+		err = errutil.New(IsExactKindOf_Type+"."+IsExactKindOf_Field_Kind, "-", e)
 	}
 	return
 }
@@ -3133,16 +10574,23 @@ type IsKindOf struct {
 
 func (*IsKindOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_IsKindOf,
+		Name: IsKindOf_Type,
 		Uses: composer.Type_Flow,
 		Lede: "kind_of",
 	}
 }
 
-const Type_IsKindOf = "is_kind_of"
-const IsKindOf_Object = "$OBJECT"
-const IsKindOf_Kind = "$KIND"
+const IsKindOf_Type = "is_kind_of"
+const IsKindOf_Lede = "kind_of"
+const IsKindOf_Field_Object = "$OBJECT"
+const IsKindOf_Field_Kind = "$KIND"
 
+func (op *IsKindOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return IsKindOf_Compact_Marshal(n, op)
+}
+func (op *IsKindOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return IsKindOf_Compact_Unmarshal(n, b, op)
+}
 func (op *IsKindOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return IsKindOf_Detailed_Marshal(n, op)
 }
@@ -3150,35 +10598,162 @@ func (op *IsKindOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return IsKindOf_Detailed_Unmarshal(n, b, op)
 }
 
+func IsKindOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]IsKindOf) ([]byte, error) {
+	return IsKindOf_Repeats_Marshal(n, vals, IsKindOf_Compact_Marshal)
+}
+func IsKindOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]IsKindOf) ([]byte, error) {
+	return IsKindOf_Repeats_Marshal(n, vals, IsKindOf_Detailed_Marshal)
+}
+func IsKindOf_Repeats_Marshal(n jsonexp.Context, vals *[]IsKindOf, marshEl func(jsonexp.Context, *IsKindOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(IsKindOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func IsKindOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IsKindOf) error {
+	return IsKindOf_Repeats_Unmarshal(n, b, out, IsKindOf_Compact_Unmarshal)
+}
+func IsKindOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IsKindOf) error {
+	return IsKindOf_Repeats_Unmarshal(n, b, out, IsKindOf_Detailed_Unmarshal)
+}
+func IsKindOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]IsKindOf, unmarshEl func(jsonexp.Context, []byte, *IsKindOf) error) (err error) {
+	var vals []IsKindOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(IsKindOf_Type, "-", e)
+		} else {
+			vals = make([]IsKindOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(IsKindOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func IsKindOf_Compact_Optional_Marshal(n jsonexp.Context, val **IsKindOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IsKindOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func IsKindOf_Compact_Marshal(n jsonexp.Context, val *IsKindOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(IsKindOf_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Kind); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("is")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func IsKindOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IsKindOf) (err error) {
+	if len(b) > 0 {
+		var val IsKindOf
+		if e := IsKindOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func IsKindOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *IsKindOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(IsKindOf_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[IsKindOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(IsKindOf_Type+"."+IsKindOf_Field_Object, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[IsKindOf_Field_Kind], &out.Kind); e != nil {
+		err = errutil.New(IsKindOf_Type+"."+IsKindOf_Field_Kind, "-", e)
+	}
+	return
+}
+
+func IsKindOf_Detailed_Optional_Marshal(n jsonexp.Context, val **IsKindOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = IsKindOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func IsKindOf_Detailed_Marshal(n jsonexp.Context, val *IsKindOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[IsKindOf_Object] = b
+	} else {
+		fields[IsKindOf_Field_Object] = b
 	}
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Kind); e != nil {
+
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Kind); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[IsKindOf_Kind] = b
+	} else {
+		fields[IsKindOf_Field_Kind] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_IsKindOf,
+			Type:   IsKindOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func IsKindOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **IsKindOf) (err error) {
+	if len(b) > 0 {
+		var val IsKindOf
+		if e := IsKindOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func IsKindOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *IsKindOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_IsKindOf, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IsKindOf_Object], &out.Object); e != nil {
-		err = errutil.New(Type_IsKindOf+"."+IsKindOf_Object, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[IsKindOf_Kind], &out.Kind); e != nil {
-		err = errutil.New(Type_IsKindOf+"."+IsKindOf_Kind, "-", e)
+		err = errutil.New(IsKindOf_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[IsKindOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(IsKindOf_Type+"."+IsKindOf_Field_Object, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[IsKindOf_Field_Kind], &out.Kind); e != nil {
+		err = errutil.New(IsKindOf_Type+"."+IsKindOf_Field_Kind, "-", e)
 	}
 	return
 }
@@ -3191,15 +10766,22 @@ type Join struct {
 
 func (*Join) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Join,
+		Name: Join_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_Join = "join"
-const Join_Sep = "$SEP"
-const Join_Parts = "$PARTS"
+const Join_Type = "join"
+const Join_Lede = Join_Type
+const Join_Field_Sep = "$SEP"
+const Join_Field_Parts = "$PARTS"
 
+func (op *Join) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Join_Compact_Marshal(n, op)
+}
+func (op *Join) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Join_Compact_Unmarshal(n, b, op)
+}
 func (op *Join) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Join_Detailed_Marshal(n, op)
 }
@@ -3207,35 +10789,162 @@ func (op *Join) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Join_Detailed_Unmarshal(n, b, op)
 }
 
+func Join_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Join) ([]byte, error) {
+	return Join_Repeats_Marshal(n, vals, Join_Compact_Marshal)
+}
+func Join_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Join) ([]byte, error) {
+	return Join_Repeats_Marshal(n, vals, Join_Detailed_Marshal)
+}
+func Join_Repeats_Marshal(n jsonexp.Context, vals *[]Join, marshEl func(jsonexp.Context, *Join) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Join_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Join_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Join) error {
+	return Join_Repeats_Unmarshal(n, b, out, Join_Compact_Unmarshal)
+}
+func Join_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Join) error {
+	return Join_Repeats_Unmarshal(n, b, out, Join_Detailed_Unmarshal)
+}
+func Join_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Join, unmarshEl func(jsonexp.Context, []byte, *Join) error) (err error) {
+	var vals []Join
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Join_Type, "-", e)
+		} else {
+			vals = make([]Join, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Join_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Join_Compact_Optional_Marshal(n jsonexp.Context, val **Join) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Join_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Join_Compact_Marshal(n jsonexp.Context, val *Join) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Join_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Sep); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.TextEval_Compact_Repeats_Marshal(n, &val.Parts); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("parts")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Join_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Join) (err error) {
+	if len(b) > 0 {
+		var val Join
+		if e := Join_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Join_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Join) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Join_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[Join_Field_Sep], &out.Sep); e != nil {
+		err = errutil.New(Join_Type+"."+Join_Field_Sep, "-", e)
+	} else if e := rt.TextEval_Compact_Repeats_Unmarshal(n, msg.Fields[Join_Field_Parts], &out.Parts); e != nil {
+		err = errutil.New(Join_Type+"."+Join_Field_Parts, "-", e)
+	}
+	return
+}
+
+func Join_Detailed_Optional_Marshal(n jsonexp.Context, val **Join) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Join_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Join_Detailed_Marshal(n jsonexp.Context, val *Join) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Sep); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Join_Sep] = b
+	} else {
+		fields[Join_Field_Sep] = b
 	}
+
 	if b, e := rt.TextEval_Detailed_Repeats_Marshal(n, &val.Parts); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Join_Parts] = b
+	} else {
+		fields[Join_Field_Parts] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Join,
+			Type:   Join_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Join_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Join) (err error) {
+	if len(b) > 0 {
+		var val Join
+		if e := Join_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Join_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Join) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Join, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Join_Sep], &out.Sep); e != nil {
-		err = errutil.New(Type_Join+"."+Join_Sep, "-", e)
-	} else if e := rt.TextEval_Detailed_Repeats_Unmarshal(n, msg.Fields[Join_Parts], &out.Parts); e != nil {
-		err = errutil.New(Type_Join+"."+Join_Parts, "-", e)
+		err = errutil.New(Join_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Join_Field_Sep], &out.Sep); e != nil {
+		err = errutil.New(Join_Type+"."+Join_Field_Sep, "-", e)
+	} else if e := rt.TextEval_Detailed_Repeats_Unmarshal(n, msg.Fields[Join_Field_Parts], &out.Parts); e != nil {
+		err = errutil.New(Join_Type+"."+Join_Field_Parts, "-", e)
 	}
 	return
 }
@@ -3247,14 +10956,21 @@ type KindOf struct {
 
 func (*KindOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_KindOf,
+		Name: KindOf_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_KindOf = "kind_of"
-const KindOf_Object = "$OBJECT"
+const KindOf_Type = "kind_of"
+const KindOf_Lede = KindOf_Type
+const KindOf_Field_Object = "$OBJECT"
 
+func (op *KindOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return KindOf_Compact_Marshal(n, op)
+}
+func (op *KindOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return KindOf_Compact_Unmarshal(n, b, op)
+}
 func (op *KindOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return KindOf_Detailed_Marshal(n, op)
 }
@@ -3262,28 +10978,145 @@ func (op *KindOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return KindOf_Detailed_Unmarshal(n, b, op)
 }
 
+func KindOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]KindOf) ([]byte, error) {
+	return KindOf_Repeats_Marshal(n, vals, KindOf_Compact_Marshal)
+}
+func KindOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]KindOf) ([]byte, error) {
+	return KindOf_Repeats_Marshal(n, vals, KindOf_Detailed_Marshal)
+}
+func KindOf_Repeats_Marshal(n jsonexp.Context, vals *[]KindOf, marshEl func(jsonexp.Context, *KindOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(KindOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func KindOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]KindOf) error {
+	return KindOf_Repeats_Unmarshal(n, b, out, KindOf_Compact_Unmarshal)
+}
+func KindOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]KindOf) error {
+	return KindOf_Repeats_Unmarshal(n, b, out, KindOf_Detailed_Unmarshal)
+}
+func KindOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]KindOf, unmarshEl func(jsonexp.Context, []byte, *KindOf) error) (err error) {
+	var vals []KindOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(KindOf_Type, "-", e)
+		} else {
+			vals = make([]KindOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(KindOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func KindOf_Compact_Optional_Marshal(n jsonexp.Context, val **KindOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = KindOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func KindOf_Compact_Marshal(n jsonexp.Context, val *KindOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(KindOf_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func KindOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindOf) (err error) {
+	if len(b) > 0 {
+		var val KindOf
+		if e := KindOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func KindOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *KindOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(KindOf_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[KindOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(KindOf_Type+"."+KindOf_Field_Object, "-", e)
+	}
+	return
+}
+
+func KindOf_Detailed_Optional_Marshal(n jsonexp.Context, val **KindOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = KindOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func KindOf_Detailed_Marshal(n jsonexp.Context, val *KindOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[KindOf_Object] = b
+	} else {
+		fields[KindOf_Field_Object] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_KindOf,
+			Type:   KindOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func KindOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindOf) (err error) {
+	if len(b) > 0 {
+		var val KindOf
+		if e := KindOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func KindOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *KindOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_KindOf, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[KindOf_Object], &out.Object); e != nil {
-		err = errutil.New(Type_KindOf+"."+KindOf_Object, "-", e)
+		err = errutil.New(KindOf_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[KindOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(KindOf_Type+"."+KindOf_Field_Object, "-", e)
 	}
 	return
 }
@@ -3295,14 +11128,21 @@ type KindsOf struct {
 
 func (*KindsOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_KindsOf,
+		Name: KindsOf_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_KindsOf = "kinds_of"
-const KindsOf_Kind = "$KIND"
+const KindsOf_Type = "kinds_of"
+const KindsOf_Lede = KindsOf_Type
+const KindsOf_Field_Kind = "$KIND"
 
+func (op *KindsOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return KindsOf_Compact_Marshal(n, op)
+}
+func (op *KindsOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return KindsOf_Compact_Unmarshal(n, b, op)
+}
 func (op *KindsOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return KindsOf_Detailed_Marshal(n, op)
 }
@@ -3310,28 +11150,145 @@ func (op *KindsOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return KindsOf_Detailed_Unmarshal(n, b, op)
 }
 
-func KindsOf_Detailed_Marshal(n jsonexp.Context, val *KindsOf) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Kind); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[KindsOf_Kind] = b
+func KindsOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]KindsOf) ([]byte, error) {
+	return KindsOf_Repeats_Marshal(n, vals, KindsOf_Compact_Marshal)
+}
+func KindsOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]KindsOf) ([]byte, error) {
+	return KindsOf_Repeats_Marshal(n, vals, KindsOf_Detailed_Marshal)
+}
+func KindsOf_Repeats_Marshal(n jsonexp.Context, vals *[]KindsOf, marshEl func(jsonexp.Context, *KindsOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(KindsOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func KindsOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]KindsOf) error {
+	return KindsOf_Repeats_Unmarshal(n, b, out, KindsOf_Compact_Unmarshal)
+}
+func KindsOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]KindsOf) error {
+	return KindsOf_Repeats_Unmarshal(n, b, out, KindsOf_Detailed_Unmarshal)
+}
+func KindsOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]KindsOf, unmarshEl func(jsonexp.Context, []byte, *KindsOf) error) (err error) {
+	var vals []KindsOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(KindsOf_Type, "-", e)
+		} else {
+			vals = make([]KindsOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(KindsOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func KindsOf_Compact_Optional_Marshal(n jsonexp.Context, val **KindsOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = KindsOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func KindsOf_Compact_Marshal(n jsonexp.Context, val *KindsOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(KindsOf_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Kind); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func KindsOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOf) (err error) {
+	if len(b) > 0 {
+		var val KindsOf
+		if e := KindsOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func KindsOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *KindsOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(KindsOf_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[KindsOf_Field_Kind], &out.Kind); e != nil {
+		err = errutil.New(KindsOf_Type+"."+KindsOf_Field_Kind, "-", e)
+	}
+	return
+}
+
+func KindsOf_Detailed_Optional_Marshal(n jsonexp.Context, val **KindsOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = KindsOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func KindsOf_Detailed_Marshal(n jsonexp.Context, val *KindsOf) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Kind); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[KindsOf_Field_Kind] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_KindsOf,
+			Type:   KindsOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func KindsOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOf) (err error) {
+	if len(b) > 0 {
+		var val KindsOf
+		if e := KindsOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func KindsOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *KindsOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_KindsOf, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[KindsOf_Kind], &out.Kind); e != nil {
-		err = errutil.New(Type_KindsOf+"."+KindsOf_Kind, "-", e)
+		err = errutil.New(KindsOf_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[KindsOf_Field_Kind], &out.Kind); e != nil {
+		err = errutil.New(KindsOf_Type+"."+KindsOf_Field_Kind, "-", e)
 	}
 	return
 }
@@ -3342,13 +11299,20 @@ type LessThan struct {
 
 func (*LessThan) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_LessThan,
+		Name: LessThan_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_LessThan = "less_than"
+const LessThan_Type = "less_than"
+const LessThan_Lede = LessThan_Type
 
+func (op *LessThan) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return LessThan_Compact_Marshal(n, op)
+}
+func (op *LessThan) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return LessThan_Compact_Unmarshal(n, b, op)
+}
 func (op *LessThan) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return LessThan_Detailed_Marshal(n, op)
 }
@@ -3356,21 +11320,128 @@ func (op *LessThan) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return LessThan_Detailed_Unmarshal(n, b, op)
 }
 
+func LessThan_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]LessThan) ([]byte, error) {
+	return LessThan_Repeats_Marshal(n, vals, LessThan_Compact_Marshal)
+}
+func LessThan_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]LessThan) ([]byte, error) {
+	return LessThan_Repeats_Marshal(n, vals, LessThan_Detailed_Marshal)
+}
+func LessThan_Repeats_Marshal(n jsonexp.Context, vals *[]LessThan, marshEl func(jsonexp.Context, *LessThan) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(LessThan_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func LessThan_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]LessThan) error {
+	return LessThan_Repeats_Unmarshal(n, b, out, LessThan_Compact_Unmarshal)
+}
+func LessThan_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]LessThan) error {
+	return LessThan_Repeats_Unmarshal(n, b, out, LessThan_Detailed_Unmarshal)
+}
+func LessThan_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]LessThan, unmarshEl func(jsonexp.Context, []byte, *LessThan) error) (err error) {
+	var vals []LessThan
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(LessThan_Type, "-", e)
+		} else {
+			vals = make([]LessThan, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(LessThan_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func LessThan_Compact_Optional_Marshal(n jsonexp.Context, val **LessThan) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = LessThan_Compact_Marshal(n, *val)
+	}
+	return
+}
+func LessThan_Compact_Marshal(n jsonexp.Context, val *LessThan) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(LessThan_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func LessThan_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **LessThan) (err error) {
+	if len(b) > 0 {
+		var val LessThan
+		if e := LessThan_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func LessThan_Compact_Unmarshal(n jsonexp.Context, b []byte, out *LessThan) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(LessThan_Type, "-", e)
+	}
+	return
+}
+
+func LessThan_Detailed_Optional_Marshal(n jsonexp.Context, val **LessThan) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = LessThan_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func LessThan_Detailed_Marshal(n jsonexp.Context, val *LessThan) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_LessThan,
+			Type:   LessThan_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func LessThan_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **LessThan) (err error) {
+	if len(b) > 0 {
+		var val LessThan
+		if e := LessThan_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func LessThan_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *LessThan) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_LessThan, "-", e)
+		err = errutil.New(LessThan_Type, "-", e)
 	}
 	return
 }
@@ -3382,15 +11453,22 @@ type MakeLowercase struct {
 
 func (*MakeLowercase) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_MakeLowercase,
+		Name: MakeLowercase_Type,
 		Uses: composer.Type_Flow,
 		Lede: "lower",
 	}
 }
 
-const Type_MakeLowercase = "make_lowercase"
-const MakeLowercase_Text = "$TEXT"
+const MakeLowercase_Type = "make_lowercase"
+const MakeLowercase_Lede = "lower"
+const MakeLowercase_Field_Text = "$TEXT"
 
+func (op *MakeLowercase) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return MakeLowercase_Compact_Marshal(n, op)
+}
+func (op *MakeLowercase) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return MakeLowercase_Compact_Unmarshal(n, b, op)
+}
 func (op *MakeLowercase) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return MakeLowercase_Detailed_Marshal(n, op)
 }
@@ -3398,28 +11476,145 @@ func (op *MakeLowercase) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return MakeLowercase_Detailed_Unmarshal(n, b, op)
 }
 
+func MakeLowercase_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]MakeLowercase) ([]byte, error) {
+	return MakeLowercase_Repeats_Marshal(n, vals, MakeLowercase_Compact_Marshal)
+}
+func MakeLowercase_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]MakeLowercase) ([]byte, error) {
+	return MakeLowercase_Repeats_Marshal(n, vals, MakeLowercase_Detailed_Marshal)
+}
+func MakeLowercase_Repeats_Marshal(n jsonexp.Context, vals *[]MakeLowercase, marshEl func(jsonexp.Context, *MakeLowercase) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(MakeLowercase_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func MakeLowercase_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeLowercase) error {
+	return MakeLowercase_Repeats_Unmarshal(n, b, out, MakeLowercase_Compact_Unmarshal)
+}
+func MakeLowercase_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeLowercase) error {
+	return MakeLowercase_Repeats_Unmarshal(n, b, out, MakeLowercase_Detailed_Unmarshal)
+}
+func MakeLowercase_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeLowercase, unmarshEl func(jsonexp.Context, []byte, *MakeLowercase) error) (err error) {
+	var vals []MakeLowercase
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(MakeLowercase_Type, "-", e)
+		} else {
+			vals = make([]MakeLowercase, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(MakeLowercase_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func MakeLowercase_Compact_Optional_Marshal(n jsonexp.Context, val **MakeLowercase) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeLowercase_Compact_Marshal(n, *val)
+	}
+	return
+}
+func MakeLowercase_Compact_Marshal(n jsonexp.Context, val *MakeLowercase) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(MakeLowercase_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func MakeLowercase_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeLowercase) (err error) {
+	if len(b) > 0 {
+		var val MakeLowercase
+		if e := MakeLowercase_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func MakeLowercase_Compact_Unmarshal(n jsonexp.Context, b []byte, out *MakeLowercase) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(MakeLowercase_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[MakeLowercase_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeLowercase_Type+"."+MakeLowercase_Field_Text, "-", e)
+	}
+	return
+}
+
+func MakeLowercase_Detailed_Optional_Marshal(n jsonexp.Context, val **MakeLowercase) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeLowercase_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func MakeLowercase_Detailed_Marshal(n jsonexp.Context, val *MakeLowercase) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[MakeLowercase_Text] = b
+	} else {
+		fields[MakeLowercase_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_MakeLowercase,
+			Type:   MakeLowercase_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func MakeLowercase_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeLowercase) (err error) {
+	if len(b) > 0 {
+		var val MakeLowercase
+		if e := MakeLowercase_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func MakeLowercase_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *MakeLowercase) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_MakeLowercase, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeLowercase_Text], &out.Text); e != nil {
-		err = errutil.New(Type_MakeLowercase+"."+MakeLowercase_Text, "-", e)
+		err = errutil.New(MakeLowercase_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeLowercase_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeLowercase_Type+"."+MakeLowercase_Field_Text, "-", e)
 	}
 	return
 }
@@ -3431,15 +11626,22 @@ type MakeReversed struct {
 
 func (*MakeReversed) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_MakeReversed,
+		Name: MakeReversed_Type,
 		Uses: composer.Type_Flow,
 		Lede: "reverse",
 	}
 }
 
-const Type_MakeReversed = "make_reversed"
-const MakeReversed_Text = "$TEXT"
+const MakeReversed_Type = "make_reversed"
+const MakeReversed_Lede = "reverse"
+const MakeReversed_Field_Text = "$TEXT"
 
+func (op *MakeReversed) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return MakeReversed_Compact_Marshal(n, op)
+}
+func (op *MakeReversed) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return MakeReversed_Compact_Unmarshal(n, b, op)
+}
 func (op *MakeReversed) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return MakeReversed_Detailed_Marshal(n, op)
 }
@@ -3447,28 +11649,145 @@ func (op *MakeReversed) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return MakeReversed_Detailed_Unmarshal(n, b, op)
 }
 
+func MakeReversed_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]MakeReversed) ([]byte, error) {
+	return MakeReversed_Repeats_Marshal(n, vals, MakeReversed_Compact_Marshal)
+}
+func MakeReversed_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]MakeReversed) ([]byte, error) {
+	return MakeReversed_Repeats_Marshal(n, vals, MakeReversed_Detailed_Marshal)
+}
+func MakeReversed_Repeats_Marshal(n jsonexp.Context, vals *[]MakeReversed, marshEl func(jsonexp.Context, *MakeReversed) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(MakeReversed_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func MakeReversed_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeReversed) error {
+	return MakeReversed_Repeats_Unmarshal(n, b, out, MakeReversed_Compact_Unmarshal)
+}
+func MakeReversed_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeReversed) error {
+	return MakeReversed_Repeats_Unmarshal(n, b, out, MakeReversed_Detailed_Unmarshal)
+}
+func MakeReversed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeReversed, unmarshEl func(jsonexp.Context, []byte, *MakeReversed) error) (err error) {
+	var vals []MakeReversed
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(MakeReversed_Type, "-", e)
+		} else {
+			vals = make([]MakeReversed, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(MakeReversed_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func MakeReversed_Compact_Optional_Marshal(n jsonexp.Context, val **MakeReversed) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeReversed_Compact_Marshal(n, *val)
+	}
+	return
+}
+func MakeReversed_Compact_Marshal(n jsonexp.Context, val *MakeReversed) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(MakeReversed_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func MakeReversed_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeReversed) (err error) {
+	if len(b) > 0 {
+		var val MakeReversed
+		if e := MakeReversed_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func MakeReversed_Compact_Unmarshal(n jsonexp.Context, b []byte, out *MakeReversed) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(MakeReversed_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[MakeReversed_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeReversed_Type+"."+MakeReversed_Field_Text, "-", e)
+	}
+	return
+}
+
+func MakeReversed_Detailed_Optional_Marshal(n jsonexp.Context, val **MakeReversed) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeReversed_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func MakeReversed_Detailed_Marshal(n jsonexp.Context, val *MakeReversed) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[MakeReversed_Text] = b
+	} else {
+		fields[MakeReversed_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_MakeReversed,
+			Type:   MakeReversed_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func MakeReversed_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeReversed) (err error) {
+	if len(b) > 0 {
+		var val MakeReversed
+		if e := MakeReversed_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func MakeReversed_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *MakeReversed) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_MakeReversed, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeReversed_Text], &out.Text); e != nil {
-		err = errutil.New(Type_MakeReversed+"."+MakeReversed_Text, "-", e)
+		err = errutil.New(MakeReversed_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeReversed_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeReversed_Type+"."+MakeReversed_Field_Text, "-", e)
 	}
 	return
 }
@@ -3480,15 +11799,22 @@ type MakeSentenceCase struct {
 
 func (*MakeSentenceCase) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_MakeSentenceCase,
+		Name: MakeSentenceCase_Type,
 		Uses: composer.Type_Flow,
 		Lede: "sentence",
 	}
 }
 
-const Type_MakeSentenceCase = "make_sentence_case"
-const MakeSentenceCase_Text = "$TEXT"
+const MakeSentenceCase_Type = "make_sentence_case"
+const MakeSentenceCase_Lede = "sentence"
+const MakeSentenceCase_Field_Text = "$TEXT"
 
+func (op *MakeSentenceCase) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return MakeSentenceCase_Compact_Marshal(n, op)
+}
+func (op *MakeSentenceCase) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return MakeSentenceCase_Compact_Unmarshal(n, b, op)
+}
 func (op *MakeSentenceCase) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return MakeSentenceCase_Detailed_Marshal(n, op)
 }
@@ -3496,28 +11822,145 @@ func (op *MakeSentenceCase) UnmarshalDetailed(n jsonexp.Context, b []byte) error
 	return MakeSentenceCase_Detailed_Unmarshal(n, b, op)
 }
 
+func MakeSentenceCase_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]MakeSentenceCase) ([]byte, error) {
+	return MakeSentenceCase_Repeats_Marshal(n, vals, MakeSentenceCase_Compact_Marshal)
+}
+func MakeSentenceCase_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]MakeSentenceCase) ([]byte, error) {
+	return MakeSentenceCase_Repeats_Marshal(n, vals, MakeSentenceCase_Detailed_Marshal)
+}
+func MakeSentenceCase_Repeats_Marshal(n jsonexp.Context, vals *[]MakeSentenceCase, marshEl func(jsonexp.Context, *MakeSentenceCase) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(MakeSentenceCase_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func MakeSentenceCase_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeSentenceCase) error {
+	return MakeSentenceCase_Repeats_Unmarshal(n, b, out, MakeSentenceCase_Compact_Unmarshal)
+}
+func MakeSentenceCase_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeSentenceCase) error {
+	return MakeSentenceCase_Repeats_Unmarshal(n, b, out, MakeSentenceCase_Detailed_Unmarshal)
+}
+func MakeSentenceCase_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeSentenceCase, unmarshEl func(jsonexp.Context, []byte, *MakeSentenceCase) error) (err error) {
+	var vals []MakeSentenceCase
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(MakeSentenceCase_Type, "-", e)
+		} else {
+			vals = make([]MakeSentenceCase, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(MakeSentenceCase_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func MakeSentenceCase_Compact_Optional_Marshal(n jsonexp.Context, val **MakeSentenceCase) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeSentenceCase_Compact_Marshal(n, *val)
+	}
+	return
+}
+func MakeSentenceCase_Compact_Marshal(n jsonexp.Context, val *MakeSentenceCase) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(MakeSentenceCase_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func MakeSentenceCase_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeSentenceCase) (err error) {
+	if len(b) > 0 {
+		var val MakeSentenceCase
+		if e := MakeSentenceCase_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func MakeSentenceCase_Compact_Unmarshal(n jsonexp.Context, b []byte, out *MakeSentenceCase) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(MakeSentenceCase_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[MakeSentenceCase_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeSentenceCase_Type+"."+MakeSentenceCase_Field_Text, "-", e)
+	}
+	return
+}
+
+func MakeSentenceCase_Detailed_Optional_Marshal(n jsonexp.Context, val **MakeSentenceCase) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeSentenceCase_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func MakeSentenceCase_Detailed_Marshal(n jsonexp.Context, val *MakeSentenceCase) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[MakeSentenceCase_Text] = b
+	} else {
+		fields[MakeSentenceCase_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_MakeSentenceCase,
+			Type:   MakeSentenceCase_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func MakeSentenceCase_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeSentenceCase) (err error) {
+	if len(b) > 0 {
+		var val MakeSentenceCase
+		if e := MakeSentenceCase_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func MakeSentenceCase_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *MakeSentenceCase) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_MakeSentenceCase, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeSentenceCase_Text], &out.Text); e != nil {
-		err = errutil.New(Type_MakeSentenceCase+"."+MakeSentenceCase_Text, "-", e)
+		err = errutil.New(MakeSentenceCase_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeSentenceCase_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeSentenceCase_Type+"."+MakeSentenceCase_Field_Text, "-", e)
 	}
 	return
 }
@@ -3529,15 +11972,22 @@ type MakeTitleCase struct {
 
 func (*MakeTitleCase) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_MakeTitleCase,
+		Name: MakeTitleCase_Type,
 		Uses: composer.Type_Flow,
 		Lede: "title",
 	}
 }
 
-const Type_MakeTitleCase = "make_title_case"
-const MakeTitleCase_Text = "$TEXT"
+const MakeTitleCase_Type = "make_title_case"
+const MakeTitleCase_Lede = "title"
+const MakeTitleCase_Field_Text = "$TEXT"
 
+func (op *MakeTitleCase) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return MakeTitleCase_Compact_Marshal(n, op)
+}
+func (op *MakeTitleCase) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return MakeTitleCase_Compact_Unmarshal(n, b, op)
+}
 func (op *MakeTitleCase) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return MakeTitleCase_Detailed_Marshal(n, op)
 }
@@ -3545,28 +11995,145 @@ func (op *MakeTitleCase) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return MakeTitleCase_Detailed_Unmarshal(n, b, op)
 }
 
+func MakeTitleCase_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]MakeTitleCase) ([]byte, error) {
+	return MakeTitleCase_Repeats_Marshal(n, vals, MakeTitleCase_Compact_Marshal)
+}
+func MakeTitleCase_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]MakeTitleCase) ([]byte, error) {
+	return MakeTitleCase_Repeats_Marshal(n, vals, MakeTitleCase_Detailed_Marshal)
+}
+func MakeTitleCase_Repeats_Marshal(n jsonexp.Context, vals *[]MakeTitleCase, marshEl func(jsonexp.Context, *MakeTitleCase) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(MakeTitleCase_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func MakeTitleCase_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeTitleCase) error {
+	return MakeTitleCase_Repeats_Unmarshal(n, b, out, MakeTitleCase_Compact_Unmarshal)
+}
+func MakeTitleCase_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeTitleCase) error {
+	return MakeTitleCase_Repeats_Unmarshal(n, b, out, MakeTitleCase_Detailed_Unmarshal)
+}
+func MakeTitleCase_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeTitleCase, unmarshEl func(jsonexp.Context, []byte, *MakeTitleCase) error) (err error) {
+	var vals []MakeTitleCase
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(MakeTitleCase_Type, "-", e)
+		} else {
+			vals = make([]MakeTitleCase, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(MakeTitleCase_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func MakeTitleCase_Compact_Optional_Marshal(n jsonexp.Context, val **MakeTitleCase) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeTitleCase_Compact_Marshal(n, *val)
+	}
+	return
+}
+func MakeTitleCase_Compact_Marshal(n jsonexp.Context, val *MakeTitleCase) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(MakeTitleCase_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func MakeTitleCase_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeTitleCase) (err error) {
+	if len(b) > 0 {
+		var val MakeTitleCase
+		if e := MakeTitleCase_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func MakeTitleCase_Compact_Unmarshal(n jsonexp.Context, b []byte, out *MakeTitleCase) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(MakeTitleCase_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[MakeTitleCase_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeTitleCase_Type+"."+MakeTitleCase_Field_Text, "-", e)
+	}
+	return
+}
+
+func MakeTitleCase_Detailed_Optional_Marshal(n jsonexp.Context, val **MakeTitleCase) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeTitleCase_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func MakeTitleCase_Detailed_Marshal(n jsonexp.Context, val *MakeTitleCase) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[MakeTitleCase_Text] = b
+	} else {
+		fields[MakeTitleCase_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_MakeTitleCase,
+			Type:   MakeTitleCase_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func MakeTitleCase_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeTitleCase) (err error) {
+	if len(b) > 0 {
+		var val MakeTitleCase
+		if e := MakeTitleCase_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func MakeTitleCase_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *MakeTitleCase) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_MakeTitleCase, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeTitleCase_Text], &out.Text); e != nil {
-		err = errutil.New(Type_MakeTitleCase+"."+MakeTitleCase_Text, "-", e)
+		err = errutil.New(MakeTitleCase_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeTitleCase_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeTitleCase_Type+"."+MakeTitleCase_Field_Text, "-", e)
 	}
 	return
 }
@@ -3578,15 +12145,22 @@ type MakeUppercase struct {
 
 func (*MakeUppercase) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_MakeUppercase,
+		Name: MakeUppercase_Type,
 		Uses: composer.Type_Flow,
 		Lede: "upper",
 	}
 }
 
-const Type_MakeUppercase = "make_uppercase"
-const MakeUppercase_Text = "$TEXT"
+const MakeUppercase_Type = "make_uppercase"
+const MakeUppercase_Lede = "upper"
+const MakeUppercase_Field_Text = "$TEXT"
 
+func (op *MakeUppercase) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return MakeUppercase_Compact_Marshal(n, op)
+}
+func (op *MakeUppercase) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return MakeUppercase_Compact_Unmarshal(n, b, op)
+}
 func (op *MakeUppercase) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return MakeUppercase_Detailed_Marshal(n, op)
 }
@@ -3594,28 +12168,145 @@ func (op *MakeUppercase) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return MakeUppercase_Detailed_Unmarshal(n, b, op)
 }
 
+func MakeUppercase_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]MakeUppercase) ([]byte, error) {
+	return MakeUppercase_Repeats_Marshal(n, vals, MakeUppercase_Compact_Marshal)
+}
+func MakeUppercase_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]MakeUppercase) ([]byte, error) {
+	return MakeUppercase_Repeats_Marshal(n, vals, MakeUppercase_Detailed_Marshal)
+}
+func MakeUppercase_Repeats_Marshal(n jsonexp.Context, vals *[]MakeUppercase, marshEl func(jsonexp.Context, *MakeUppercase) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(MakeUppercase_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func MakeUppercase_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeUppercase) error {
+	return MakeUppercase_Repeats_Unmarshal(n, b, out, MakeUppercase_Compact_Unmarshal)
+}
+func MakeUppercase_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeUppercase) error {
+	return MakeUppercase_Repeats_Unmarshal(n, b, out, MakeUppercase_Detailed_Unmarshal)
+}
+func MakeUppercase_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]MakeUppercase, unmarshEl func(jsonexp.Context, []byte, *MakeUppercase) error) (err error) {
+	var vals []MakeUppercase
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(MakeUppercase_Type, "-", e)
+		} else {
+			vals = make([]MakeUppercase, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(MakeUppercase_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func MakeUppercase_Compact_Optional_Marshal(n jsonexp.Context, val **MakeUppercase) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeUppercase_Compact_Marshal(n, *val)
+	}
+	return
+}
+func MakeUppercase_Compact_Marshal(n jsonexp.Context, val *MakeUppercase) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(MakeUppercase_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func MakeUppercase_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeUppercase) (err error) {
+	if len(b) > 0 {
+		var val MakeUppercase
+		if e := MakeUppercase_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func MakeUppercase_Compact_Unmarshal(n jsonexp.Context, b []byte, out *MakeUppercase) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(MakeUppercase_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[MakeUppercase_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeUppercase_Type+"."+MakeUppercase_Field_Text, "-", e)
+	}
+	return
+}
+
+func MakeUppercase_Detailed_Optional_Marshal(n jsonexp.Context, val **MakeUppercase) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = MakeUppercase_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func MakeUppercase_Detailed_Marshal(n jsonexp.Context, val *MakeUppercase) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[MakeUppercase_Text] = b
+	} else {
+		fields[MakeUppercase_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_MakeUppercase,
+			Type:   MakeUppercase_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func MakeUppercase_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **MakeUppercase) (err error) {
+	if len(b) > 0 {
+		var val MakeUppercase
+		if e := MakeUppercase_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func MakeUppercase_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *MakeUppercase) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_MakeUppercase, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeUppercase_Text], &out.Text); e != nil {
-		err = errutil.New(Type_MakeUppercase+"."+MakeUppercase_Text, "-", e)
+		err = errutil.New(MakeUppercase_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[MakeUppercase_Field_Text], &out.Text); e != nil {
+		err = errutil.New(MakeUppercase_Type+"."+MakeUppercase_Field_Text, "-", e)
 	}
 	return
 }
@@ -3629,15 +12320,22 @@ type Matches struct {
 
 func (*Matches) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Matches,
+		Name: Matches_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_Matches = "matches"
-const Matches_Text = "$TEXT"
-const Matches_Pattern = "$PATTERN"
+const Matches_Type = "matches"
+const Matches_Lede = Matches_Type
+const Matches_Field_Text = "$TEXT"
+const Matches_Field_Pattern = "$PATTERN"
 
+func (op *Matches) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Matches_Compact_Marshal(n, op)
+}
+func (op *Matches) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Matches_Compact_Unmarshal(n, b, op)
+}
 func (op *Matches) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Matches_Detailed_Marshal(n, op)
 }
@@ -3645,35 +12343,162 @@ func (op *Matches) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Matches_Detailed_Unmarshal(n, b, op)
 }
 
+func Matches_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Matches) ([]byte, error) {
+	return Matches_Repeats_Marshal(n, vals, Matches_Compact_Marshal)
+}
+func Matches_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Matches) ([]byte, error) {
+	return Matches_Repeats_Marshal(n, vals, Matches_Detailed_Marshal)
+}
+func Matches_Repeats_Marshal(n jsonexp.Context, vals *[]Matches, marshEl func(jsonexp.Context, *Matches) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Matches_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Matches_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Matches) error {
+	return Matches_Repeats_Unmarshal(n, b, out, Matches_Compact_Unmarshal)
+}
+func Matches_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Matches) error {
+	return Matches_Repeats_Unmarshal(n, b, out, Matches_Detailed_Unmarshal)
+}
+func Matches_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Matches, unmarshEl func(jsonexp.Context, []byte, *Matches) error) (err error) {
+	var vals []Matches
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Matches_Type, "-", e)
+		} else {
+			vals = make([]Matches, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Matches_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Matches_Compact_Optional_Marshal(n jsonexp.Context, val **Matches) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Matches_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Matches_Compact_Marshal(n jsonexp.Context, val *Matches) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Matches_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Pattern); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("to")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Matches_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Matches) (err error) {
+	if len(b) > 0 {
+		var val Matches
+		if e := Matches_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Matches_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Matches) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Matches_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[Matches_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Matches_Type+"."+Matches_Field_Text, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[Matches_Field_Pattern], &out.Pattern); e != nil {
+		err = errutil.New(Matches_Type+"."+Matches_Field_Pattern, "-", e)
+	}
+	return
+}
+
+func Matches_Detailed_Optional_Marshal(n jsonexp.Context, val **Matches) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Matches_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Matches_Detailed_Marshal(n jsonexp.Context, val *Matches) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Matches_Text] = b
+	} else {
+		fields[Matches_Field_Text] = b
 	}
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Pattern); e != nil {
+
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Pattern); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Matches_Pattern] = b
+	} else {
+		fields[Matches_Field_Pattern] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Matches,
+			Type:   Matches_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Matches_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Matches) (err error) {
+	if len(b) > 0 {
+		var val Matches
+		if e := Matches_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Matches_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Matches) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Matches, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Matches_Text], &out.Text); e != nil {
-		err = errutil.New(Type_Matches+"."+Matches_Text, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[Matches_Pattern], &out.Pattern); e != nil {
-		err = errutil.New(Type_Matches+"."+Matches_Pattern, "-", e)
+		err = errutil.New(Matches_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Matches_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Matches_Type+"."+Matches_Field_Text, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[Matches_Field_Pattern], &out.Pattern); e != nil {
+		err = errutil.New(Matches_Type+"."+Matches_Field_Pattern, "-", e)
 	}
 	return
 }
@@ -3685,14 +12510,21 @@ type NameOf struct {
 
 func (*NameOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_NameOf,
+		Name: NameOf_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_NameOf = "name_of"
-const NameOf_Object = "$OBJECT"
+const NameOf_Type = "name_of"
+const NameOf_Lede = NameOf_Type
+const NameOf_Field_Object = "$OBJECT"
 
+func (op *NameOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return NameOf_Compact_Marshal(n, op)
+}
+func (op *NameOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return NameOf_Compact_Unmarshal(n, b, op)
+}
 func (op *NameOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return NameOf_Detailed_Marshal(n, op)
 }
@@ -3700,28 +12532,145 @@ func (op *NameOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return NameOf_Detailed_Unmarshal(n, b, op)
 }
 
+func NameOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]NameOf) ([]byte, error) {
+	return NameOf_Repeats_Marshal(n, vals, NameOf_Compact_Marshal)
+}
+func NameOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]NameOf) ([]byte, error) {
+	return NameOf_Repeats_Marshal(n, vals, NameOf_Detailed_Marshal)
+}
+func NameOf_Repeats_Marshal(n jsonexp.Context, vals *[]NameOf, marshEl func(jsonexp.Context, *NameOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(NameOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func NameOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NameOf) error {
+	return NameOf_Repeats_Unmarshal(n, b, out, NameOf_Compact_Unmarshal)
+}
+func NameOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NameOf) error {
+	return NameOf_Repeats_Unmarshal(n, b, out, NameOf_Detailed_Unmarshal)
+}
+func NameOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NameOf, unmarshEl func(jsonexp.Context, []byte, *NameOf) error) (err error) {
+	var vals []NameOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(NameOf_Type, "-", e)
+		} else {
+			vals = make([]NameOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(NameOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func NameOf_Compact_Optional_Marshal(n jsonexp.Context, val **NameOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = NameOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func NameOf_Compact_Marshal(n jsonexp.Context, val *NameOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(NameOf_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func NameOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NameOf) (err error) {
+	if len(b) > 0 {
+		var val NameOf
+		if e := NameOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func NameOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *NameOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(NameOf_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[NameOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(NameOf_Type+"."+NameOf_Field_Object, "-", e)
+	}
+	return
+}
+
+func NameOf_Detailed_Optional_Marshal(n jsonexp.Context, val **NameOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = NameOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func NameOf_Detailed_Marshal(n jsonexp.Context, val *NameOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[NameOf_Object] = b
+	} else {
+		fields[NameOf_Field_Object] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_NameOf,
+			Type:   NameOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func NameOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NameOf) (err error) {
+	if len(b) > 0 {
+		var val NameOf
+		if e := NameOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func NameOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NameOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_NameOf, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[NameOf_Object], &out.Object); e != nil {
-		err = errutil.New(Type_NameOf+"."+NameOf_Object, "-", e)
+		err = errutil.New(NameOf_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[NameOf_Field_Object], &out.Object); e != nil {
+		err = errutil.New(NameOf_Type+"."+NameOf_Field_Object, "-", e)
 	}
 	return
 }
@@ -3732,14 +12681,21 @@ type Never struct {
 
 func (*Never) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Never,
+		Name: Never_Type,
 		Uses: composer.Type_Flow,
 		Lede: "always",
 	}
 }
 
-const Type_Never = "never"
+const Never_Type = "never"
+const Never_Lede = "always"
 
+func (op *Never) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Never_Compact_Marshal(n, op)
+}
+func (op *Never) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Never_Compact_Unmarshal(n, b, op)
+}
 func (op *Never) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Never_Detailed_Marshal(n, op)
 }
@@ -3747,21 +12703,128 @@ func (op *Never) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Never_Detailed_Unmarshal(n, b, op)
 }
 
+func Never_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Never) ([]byte, error) {
+	return Never_Repeats_Marshal(n, vals, Never_Compact_Marshal)
+}
+func Never_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Never) ([]byte, error) {
+	return Never_Repeats_Marshal(n, vals, Never_Detailed_Marshal)
+}
+func Never_Repeats_Marshal(n jsonexp.Context, vals *[]Never, marshEl func(jsonexp.Context, *Never) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Never_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Never_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Never) error {
+	return Never_Repeats_Unmarshal(n, b, out, Never_Compact_Unmarshal)
+}
+func Never_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Never) error {
+	return Never_Repeats_Unmarshal(n, b, out, Never_Detailed_Unmarshal)
+}
+func Never_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Never, unmarshEl func(jsonexp.Context, []byte, *Never) error) (err error) {
+	var vals []Never
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Never_Type, "-", e)
+		} else {
+			vals = make([]Never, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Never_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Never_Compact_Optional_Marshal(n jsonexp.Context, val **Never) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Never_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Never_Compact_Marshal(n jsonexp.Context, val *Never) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Never_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Never_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Never) (err error) {
+	if len(b) > 0 {
+		var val Never
+		if e := Never_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Never_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Never) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Never_Type, "-", e)
+	}
+	return
+}
+
+func Never_Detailed_Optional_Marshal(n jsonexp.Context, val **Never) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Never_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Never_Detailed_Marshal(n jsonexp.Context, val *Never) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Never,
+			Type:   Never_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Never_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Never) (err error) {
+	if len(b) > 0 {
+		var val Never
+		if e := Never_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Never_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Never) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Never, "-", e)
+		err = errutil.New(Never_Type, "-", e)
 	}
 	return
 }
@@ -3772,14 +12835,21 @@ type Newline struct {
 
 func (*Newline) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Newline,
+		Name: Newline_Type,
 		Uses: composer.Type_Flow,
 		Lede: "br",
 	}
 }
 
-const Type_Newline = "newline"
+const Newline_Type = "newline"
+const Newline_Lede = "br"
 
+func (op *Newline) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Newline_Compact_Marshal(n, op)
+}
+func (op *Newline) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Newline_Compact_Unmarshal(n, b, op)
+}
 func (op *Newline) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Newline_Detailed_Marshal(n, op)
 }
@@ -3787,21 +12857,128 @@ func (op *Newline) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Newline_Detailed_Unmarshal(n, b, op)
 }
 
+func Newline_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Newline) ([]byte, error) {
+	return Newline_Repeats_Marshal(n, vals, Newline_Compact_Marshal)
+}
+func Newline_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Newline) ([]byte, error) {
+	return Newline_Repeats_Marshal(n, vals, Newline_Detailed_Marshal)
+}
+func Newline_Repeats_Marshal(n jsonexp.Context, vals *[]Newline, marshEl func(jsonexp.Context, *Newline) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Newline_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Newline_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Newline) error {
+	return Newline_Repeats_Unmarshal(n, b, out, Newline_Compact_Unmarshal)
+}
+func Newline_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Newline) error {
+	return Newline_Repeats_Unmarshal(n, b, out, Newline_Detailed_Unmarshal)
+}
+func Newline_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Newline, unmarshEl func(jsonexp.Context, []byte, *Newline) error) (err error) {
+	var vals []Newline
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Newline_Type, "-", e)
+		} else {
+			vals = make([]Newline, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Newline_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Newline_Compact_Optional_Marshal(n jsonexp.Context, val **Newline) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Newline_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Newline_Compact_Marshal(n jsonexp.Context, val *Newline) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Newline_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Newline_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Newline) (err error) {
+	if len(b) > 0 {
+		var val Newline
+		if e := Newline_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Newline_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Newline) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Newline_Type, "-", e)
+	}
+	return
+}
+
+func Newline_Detailed_Optional_Marshal(n jsonexp.Context, val **Newline) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Newline_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Newline_Detailed_Marshal(n jsonexp.Context, val *Newline) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Newline,
+			Type:   Newline_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Newline_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Newline) (err error) {
+	if len(b) > 0 {
+		var val Newline
+		if e := Newline_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Newline_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Newline) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Newline, "-", e)
+		err = errutil.New(Newline_Type, "-", e)
 	}
 	return
 }
@@ -3812,13 +12989,20 @@ type Next struct {
 
 func (*Next) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Next,
+		Name: Next_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_Next = "next"
+const Next_Type = "next"
+const Next_Lede = Next_Type
 
+func (op *Next) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Next_Compact_Marshal(n, op)
+}
+func (op *Next) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Next_Compact_Unmarshal(n, b, op)
+}
 func (op *Next) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Next_Detailed_Marshal(n, op)
 }
@@ -3826,21 +13010,128 @@ func (op *Next) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Next_Detailed_Unmarshal(n, b, op)
 }
 
+func Next_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Next) ([]byte, error) {
+	return Next_Repeats_Marshal(n, vals, Next_Compact_Marshal)
+}
+func Next_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Next) ([]byte, error) {
+	return Next_Repeats_Marshal(n, vals, Next_Detailed_Marshal)
+}
+func Next_Repeats_Marshal(n jsonexp.Context, vals *[]Next, marshEl func(jsonexp.Context, *Next) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Next_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Next_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Next) error {
+	return Next_Repeats_Unmarshal(n, b, out, Next_Compact_Unmarshal)
+}
+func Next_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Next) error {
+	return Next_Repeats_Unmarshal(n, b, out, Next_Detailed_Unmarshal)
+}
+func Next_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Next, unmarshEl func(jsonexp.Context, []byte, *Next) error) (err error) {
+	var vals []Next
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Next_Type, "-", e)
+		} else {
+			vals = make([]Next, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Next_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Next_Compact_Optional_Marshal(n jsonexp.Context, val **Next) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Next_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Next_Compact_Marshal(n jsonexp.Context, val *Next) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Next_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Next_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Next) (err error) {
+	if len(b) > 0 {
+		var val Next
+		if e := Next_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Next_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Next) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Next_Type, "-", e)
+	}
+	return
+}
+
+func Next_Detailed_Optional_Marshal(n jsonexp.Context, val **Next) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Next_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Next_Detailed_Marshal(n jsonexp.Context, val *Next) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Next,
+			Type:   Next_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Next_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Next) (err error) {
+	if len(b) > 0 {
+		var val Next
+		if e := Next_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Next_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Next) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Next, "-", e)
+		err = errutil.New(Next_Type, "-", e)
 	}
 	return
 }
@@ -3852,14 +13143,21 @@ type Not struct {
 
 func (*Not) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Not,
+		Name: Not_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_Not = "not"
-const Not_Test = "$TEST"
+const Not_Type = "not"
+const Not_Lede = Not_Type
+const Not_Field_Test = "$TEST"
 
+func (op *Not) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Not_Compact_Marshal(n, op)
+}
+func (op *Not) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Not_Compact_Unmarshal(n, b, op)
+}
 func (op *Not) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Not_Detailed_Marshal(n, op)
 }
@@ -3867,28 +13165,145 @@ func (op *Not) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Not_Detailed_Unmarshal(n, b, op)
 }
 
+func Not_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Not) ([]byte, error) {
+	return Not_Repeats_Marshal(n, vals, Not_Compact_Marshal)
+}
+func Not_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Not) ([]byte, error) {
+	return Not_Repeats_Marshal(n, vals, Not_Detailed_Marshal)
+}
+func Not_Repeats_Marshal(n jsonexp.Context, vals *[]Not, marshEl func(jsonexp.Context, *Not) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Not_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Not_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Not) error {
+	return Not_Repeats_Unmarshal(n, b, out, Not_Compact_Unmarshal)
+}
+func Not_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Not) error {
+	return Not_Repeats_Unmarshal(n, b, out, Not_Detailed_Unmarshal)
+}
+func Not_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Not, unmarshEl func(jsonexp.Context, []byte, *Not) error) (err error) {
+	var vals []Not
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Not_Type, "-", e)
+		} else {
+			vals = make([]Not, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Not_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Not_Compact_Optional_Marshal(n jsonexp.Context, val **Not) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Not_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Not_Compact_Marshal(n jsonexp.Context, val *Not) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Not_Lede)
+	if b, e := rt.BoolEval_Compact_Marshal(n, &val.Test); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Not_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Not) (err error) {
+	if len(b) > 0 {
+		var val Not
+		if e := Not_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Not_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Not) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Not_Type, "-", e)
+	} else if e := rt.BoolEval_Compact_Unmarshal(n, msg.Fields[Not_Field_Test], &out.Test); e != nil {
+		err = errutil.New(Not_Type+"."+Not_Field_Test, "-", e)
+	}
+	return
+}
+
+func Not_Detailed_Optional_Marshal(n jsonexp.Context, val **Not) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Not_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Not_Detailed_Marshal(n jsonexp.Context, val *Not) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.Test); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Not_Test] = b
+	} else {
+		fields[Not_Field_Test] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Not,
+			Type:   Not_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Not_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Not) (err error) {
+	if len(b) > 0 {
+		var val Not
+		if e := Not_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Not_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Not) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Not, "-", e)
-	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[Not_Test], &out.Test); e != nil {
-		err = errutil.New(Type_Not+"."+Not_Test, "-", e)
+		err = errutil.New(Not_Type, "-", e)
+	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[Not_Field_Test], &out.Test); e != nil {
+		err = errutil.New(Not_Type+"."+Not_Field_Test, "-", e)
 	}
 	return
 }
@@ -3900,15 +13315,22 @@ type NumValue struct {
 
 func (*NumValue) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_NumValue,
+		Name: NumValue_Type,
 		Uses: composer.Type_Flow,
 		Lede: "num",
 	}
 }
 
-const Type_NumValue = "num_value"
-const NumValue_Num = "$NUM"
+const NumValue_Type = "num_value"
+const NumValue_Lede = "num"
+const NumValue_Field_Num = "$NUM"
 
+func (op *NumValue) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return NumValue_Compact_Marshal(n, op)
+}
+func (op *NumValue) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return NumValue_Compact_Unmarshal(n, b, op)
+}
 func (op *NumValue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return NumValue_Detailed_Marshal(n, op)
 }
@@ -3916,28 +13338,145 @@ func (op *NumValue) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return NumValue_Detailed_Unmarshal(n, b, op)
 }
 
-func NumValue_Detailed_Marshal(n jsonexp.Context, val *NumValue) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Number_Detailed_Override_Marshal(n, &val.Num); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[NumValue_Num] = b
+func NumValue_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]NumValue) ([]byte, error) {
+	return NumValue_Repeats_Marshal(n, vals, NumValue_Compact_Marshal)
+}
+func NumValue_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]NumValue) ([]byte, error) {
+	return NumValue_Repeats_Marshal(n, vals, NumValue_Detailed_Marshal)
+}
+func NumValue_Repeats_Marshal(n jsonexp.Context, vals *[]NumValue, marshEl func(jsonexp.Context, *NumValue) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(NumValue_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func NumValue_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NumValue) error {
+	return NumValue_Repeats_Unmarshal(n, b, out, NumValue_Compact_Unmarshal)
+}
+func NumValue_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NumValue) error {
+	return NumValue_Repeats_Unmarshal(n, b, out, NumValue_Detailed_Unmarshal)
+}
+func NumValue_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]NumValue, unmarshEl func(jsonexp.Context, []byte, *NumValue) error) (err error) {
+	var vals []NumValue
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(NumValue_Type, "-", e)
+		} else {
+			vals = make([]NumValue, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(NumValue_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func NumValue_Compact_Optional_Marshal(n jsonexp.Context, val **NumValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = NumValue_Compact_Marshal(n, *val)
+	}
+	return
+}
+func NumValue_Compact_Marshal(n jsonexp.Context, val *NumValue) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(NumValue_Lede)
+	if b, e := value.Number_Override_Compact_Marshal(n, &val.Num); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func NumValue_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NumValue) (err error) {
+	if len(b) > 0 {
+		var val NumValue
+		if e := NumValue_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func NumValue_Compact_Unmarshal(n jsonexp.Context, b []byte, out *NumValue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(NumValue_Type, "-", e)
+	} else if e := value.Number_Override_Compact_Unmarshal(n, msg.Fields[NumValue_Field_Num], &out.Num); e != nil {
+		err = errutil.New(NumValue_Type+"."+NumValue_Field_Num, "-", e)
+	}
+	return
+}
+
+func NumValue_Detailed_Optional_Marshal(n jsonexp.Context, val **NumValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = NumValue_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func NumValue_Detailed_Marshal(n jsonexp.Context, val *NumValue) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Number_Override_Detailed_Marshal(n, &val.Num); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[NumValue_Field_Num] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_NumValue,
+			Type:   NumValue_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func NumValue_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NumValue) (err error) {
+	if len(b) > 0 {
+		var val NumValue
+		if e := NumValue_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func NumValue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *NumValue) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_NumValue, "-", e)
-	} else if e := value.Number_Detailed_Override_Unmarshal(n, msg.Fields[NumValue_Num], &out.Num); e != nil {
-		err = errutil.New(Type_NumValue+"."+NumValue_Num, "-", e)
+		err = errutil.New(NumValue_Type, "-", e)
+	} else if e := value.Number_Override_Detailed_Unmarshal(n, msg.Fields[NumValue_Field_Num], &out.Num); e != nil {
+		err = errutil.New(NumValue_Type+"."+NumValue_Field_Num, "-", e)
 	}
 	return
 }
@@ -3949,15 +13488,22 @@ type Numbers struct {
 
 func (*Numbers) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Numbers,
+		Name: Numbers_Type,
 		Uses: composer.Type_Flow,
 		Lede: "nums",
 	}
 }
 
-const Type_Numbers = "numbers"
-const Numbers_Values = "$VALUES"
+const Numbers_Type = "numbers"
+const Numbers_Lede = "nums"
+const Numbers_Field_Values = "$VALUES"
 
+func (op *Numbers) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Numbers_Compact_Marshal(n, op)
+}
+func (op *Numbers) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Numbers_Compact_Unmarshal(n, b, op)
+}
 func (op *Numbers) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Numbers_Detailed_Marshal(n, op)
 }
@@ -3965,28 +13511,145 @@ func (op *Numbers) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Numbers_Detailed_Unmarshal(n, b, op)
 }
 
-func Numbers_Detailed_Marshal(n jsonexp.Context, val *Numbers) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Number_Detailed_Override_Repeats_Marshal(n, &val.Values); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Numbers_Values] = b
+func Numbers_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Numbers) ([]byte, error) {
+	return Numbers_Repeats_Marshal(n, vals, Numbers_Compact_Marshal)
+}
+func Numbers_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Numbers) ([]byte, error) {
+	return Numbers_Repeats_Marshal(n, vals, Numbers_Detailed_Marshal)
+}
+func Numbers_Repeats_Marshal(n jsonexp.Context, vals *[]Numbers, marshEl func(jsonexp.Context, *Numbers) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Numbers_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Numbers_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Numbers) error {
+	return Numbers_Repeats_Unmarshal(n, b, out, Numbers_Compact_Unmarshal)
+}
+func Numbers_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Numbers) error {
+	return Numbers_Repeats_Unmarshal(n, b, out, Numbers_Detailed_Unmarshal)
+}
+func Numbers_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Numbers, unmarshEl func(jsonexp.Context, []byte, *Numbers) error) (err error) {
+	var vals []Numbers
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Numbers_Type, "-", e)
+		} else {
+			vals = make([]Numbers, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Numbers_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Numbers_Compact_Optional_Marshal(n jsonexp.Context, val **Numbers) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Numbers_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Numbers_Compact_Marshal(n jsonexp.Context, val *Numbers) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Numbers_Lede)
+	if b, e := value.Number_Override_Compact_Repeats_Marshal(n, &val.Values); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Numbers_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Numbers) (err error) {
+	if len(b) > 0 {
+		var val Numbers
+		if e := Numbers_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Numbers_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Numbers) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Numbers_Type, "-", e)
+	} else if e := value.Number_Override_Compact_Repeats_Unmarshal(n, msg.Fields[Numbers_Field_Values], &out.Values); e != nil {
+		err = errutil.New(Numbers_Type+"."+Numbers_Field_Values, "-", e)
+	}
+	return
+}
+
+func Numbers_Detailed_Optional_Marshal(n jsonexp.Context, val **Numbers) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Numbers_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func Numbers_Detailed_Marshal(n jsonexp.Context, val *Numbers) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Number_Override_Detailed_Repeats_Marshal(n, &val.Values); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[Numbers_Field_Values] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Numbers,
+			Type:   Numbers_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Numbers_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Numbers) (err error) {
+	if len(b) > 0 {
+		var val Numbers
+		if e := Numbers_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Numbers_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Numbers) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Numbers, "-", e)
-	} else if e := value.Number_Detailed_Override_Repeats_Unmarshal(n, msg.Fields[Numbers_Values], &out.Values); e != nil {
-		err = errutil.New(Type_Numbers+"."+Numbers_Values, "-", e)
+		err = errutil.New(Numbers_Type, "-", e)
+	} else if e := value.Number_Override_Detailed_Repeats_Unmarshal(n, msg.Fields[Numbers_Field_Values], &out.Values); e != nil {
+		err = errutil.New(Numbers_Type+"."+Numbers_Field_Values, "-", e)
 	}
 	return
 }
@@ -3998,15 +13661,22 @@ type ObjectExists struct {
 
 func (*ObjectExists) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_ObjectExists,
+		Name: ObjectExists_Type,
 		Uses: composer.Type_Flow,
 		Lede: "is",
 	}
 }
 
-const Type_ObjectExists = "object_exists"
-const ObjectExists_Object = "$OBJECT"
+const ObjectExists_Type = "object_exists"
+const ObjectExists_Lede = "is"
+const ObjectExists_Field_Object = "$OBJECT"
 
+func (op *ObjectExists) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return ObjectExists_Compact_Marshal(n, op)
+}
+func (op *ObjectExists) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return ObjectExists_Compact_Unmarshal(n, b, op)
+}
 func (op *ObjectExists) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return ObjectExists_Detailed_Marshal(n, op)
 }
@@ -4014,28 +13684,145 @@ func (op *ObjectExists) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return ObjectExists_Detailed_Unmarshal(n, b, op)
 }
 
+func ObjectExists_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]ObjectExists) ([]byte, error) {
+	return ObjectExists_Repeats_Marshal(n, vals, ObjectExists_Compact_Marshal)
+}
+func ObjectExists_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ObjectExists) ([]byte, error) {
+	return ObjectExists_Repeats_Marshal(n, vals, ObjectExists_Detailed_Marshal)
+}
+func ObjectExists_Repeats_Marshal(n jsonexp.Context, vals *[]ObjectExists, marshEl func(jsonexp.Context, *ObjectExists) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(ObjectExists_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ObjectExists_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ObjectExists) error {
+	return ObjectExists_Repeats_Unmarshal(n, b, out, ObjectExists_Compact_Unmarshal)
+}
+func ObjectExists_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ObjectExists) error {
+	return ObjectExists_Repeats_Unmarshal(n, b, out, ObjectExists_Detailed_Unmarshal)
+}
+func ObjectExists_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ObjectExists, unmarshEl func(jsonexp.Context, []byte, *ObjectExists) error) (err error) {
+	var vals []ObjectExists
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(ObjectExists_Type, "-", e)
+		} else {
+			vals = make([]ObjectExists, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(ObjectExists_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func ObjectExists_Compact_Optional_Marshal(n jsonexp.Context, val **ObjectExists) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ObjectExists_Compact_Marshal(n, *val)
+	}
+	return
+}
+func ObjectExists_Compact_Marshal(n jsonexp.Context, val *ObjectExists) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(ObjectExists_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("valid")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func ObjectExists_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ObjectExists) (err error) {
+	if len(b) > 0 {
+		var val ObjectExists
+		if e := ObjectExists_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func ObjectExists_Compact_Unmarshal(n jsonexp.Context, b []byte, out *ObjectExists) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(ObjectExists_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[ObjectExists_Field_Object], &out.Object); e != nil {
+		err = errutil.New(ObjectExists_Type+"."+ObjectExists_Field_Object, "-", e)
+	}
+	return
+}
+
+func ObjectExists_Detailed_Optional_Marshal(n jsonexp.Context, val **ObjectExists) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ObjectExists_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func ObjectExists_Detailed_Marshal(n jsonexp.Context, val *ObjectExists) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ObjectExists_Object] = b
+	} else {
+		fields[ObjectExists_Field_Object] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_ObjectExists,
+			Type:   ObjectExists_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func ObjectExists_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ObjectExists) (err error) {
+	if len(b) > 0 {
+		var val ObjectExists
+		if e := ObjectExists_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func ObjectExists_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ObjectExists) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ObjectExists, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ObjectExists_Object], &out.Object); e != nil {
-		err = errutil.New(Type_ObjectExists+"."+ObjectExists_Object, "-", e)
+		err = errutil.New(ObjectExists_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[ObjectExists_Field_Object], &out.Object); e != nil {
+		err = errutil.New(ObjectExists_Type+"."+ObjectExists_Field_Object, "-", e)
 	}
 	return
 }
@@ -4047,15 +13834,22 @@ type Pluralize struct {
 
 func (*Pluralize) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Pluralize,
+		Name: Pluralize_Type,
 		Uses: composer.Type_Flow,
 		Lede: "plural",
 	}
 }
 
-const Type_Pluralize = "pluralize"
-const Pluralize_Text = "$TEXT"
+const Pluralize_Type = "pluralize"
+const Pluralize_Lede = "plural"
+const Pluralize_Field_Text = "$TEXT"
 
+func (op *Pluralize) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Pluralize_Compact_Marshal(n, op)
+}
+func (op *Pluralize) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Pluralize_Compact_Unmarshal(n, b, op)
+}
 func (op *Pluralize) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Pluralize_Detailed_Marshal(n, op)
 }
@@ -4063,28 +13857,145 @@ func (op *Pluralize) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Pluralize_Detailed_Unmarshal(n, b, op)
 }
 
+func Pluralize_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Pluralize) ([]byte, error) {
+	return Pluralize_Repeats_Marshal(n, vals, Pluralize_Compact_Marshal)
+}
+func Pluralize_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Pluralize) ([]byte, error) {
+	return Pluralize_Repeats_Marshal(n, vals, Pluralize_Detailed_Marshal)
+}
+func Pluralize_Repeats_Marshal(n jsonexp.Context, vals *[]Pluralize, marshEl func(jsonexp.Context, *Pluralize) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Pluralize_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Pluralize_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Pluralize) error {
+	return Pluralize_Repeats_Unmarshal(n, b, out, Pluralize_Compact_Unmarshal)
+}
+func Pluralize_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Pluralize) error {
+	return Pluralize_Repeats_Unmarshal(n, b, out, Pluralize_Detailed_Unmarshal)
+}
+func Pluralize_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Pluralize, unmarshEl func(jsonexp.Context, []byte, *Pluralize) error) (err error) {
+	var vals []Pluralize
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Pluralize_Type, "-", e)
+		} else {
+			vals = make([]Pluralize, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Pluralize_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Pluralize_Compact_Optional_Marshal(n jsonexp.Context, val **Pluralize) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Pluralize_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Pluralize_Compact_Marshal(n jsonexp.Context, val *Pluralize) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Pluralize_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("of")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Pluralize_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Pluralize) (err error) {
+	if len(b) > 0 {
+		var val Pluralize
+		if e := Pluralize_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Pluralize_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Pluralize) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Pluralize_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[Pluralize_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Pluralize_Type+"."+Pluralize_Field_Text, "-", e)
+	}
+	return
+}
+
+func Pluralize_Detailed_Optional_Marshal(n jsonexp.Context, val **Pluralize) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Pluralize_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Pluralize_Detailed_Marshal(n jsonexp.Context, val *Pluralize) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Pluralize_Text] = b
+	} else {
+		fields[Pluralize_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Pluralize,
+			Type:   Pluralize_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Pluralize_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Pluralize) (err error) {
+	if len(b) > 0 {
+		var val Pluralize
+		if e := Pluralize_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Pluralize_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Pluralize) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Pluralize, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Pluralize_Text], &out.Text); e != nil {
-		err = errutil.New(Type_Pluralize+"."+Pluralize_Text, "-", e)
+		err = errutil.New(Pluralize_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Pluralize_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Pluralize_Type+"."+Pluralize_Field_Text, "-", e)
 	}
 	return
 }
@@ -4096,15 +14007,22 @@ type PrintNum struct {
 
 func (*PrintNum) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_PrintNum,
+		Name: PrintNum_Type,
 		Uses: composer.Type_Flow,
 		Lede: "numeral",
 	}
 }
 
-const Type_PrintNum = "print_num"
-const PrintNum_Num = "$NUM"
+const PrintNum_Type = "print_num"
+const PrintNum_Lede = "numeral"
+const PrintNum_Field_Num = "$NUM"
 
+func (op *PrintNum) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return PrintNum_Compact_Marshal(n, op)
+}
+func (op *PrintNum) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return PrintNum_Compact_Unmarshal(n, b, op)
+}
 func (op *PrintNum) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return PrintNum_Detailed_Marshal(n, op)
 }
@@ -4112,28 +14030,145 @@ func (op *PrintNum) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return PrintNum_Detailed_Unmarshal(n, b, op)
 }
 
+func PrintNum_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]PrintNum) ([]byte, error) {
+	return PrintNum_Repeats_Marshal(n, vals, PrintNum_Compact_Marshal)
+}
+func PrintNum_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]PrintNum) ([]byte, error) {
+	return PrintNum_Repeats_Marshal(n, vals, PrintNum_Detailed_Marshal)
+}
+func PrintNum_Repeats_Marshal(n jsonexp.Context, vals *[]PrintNum, marshEl func(jsonexp.Context, *PrintNum) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(PrintNum_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func PrintNum_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]PrintNum) error {
+	return PrintNum_Repeats_Unmarshal(n, b, out, PrintNum_Compact_Unmarshal)
+}
+func PrintNum_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]PrintNum) error {
+	return PrintNum_Repeats_Unmarshal(n, b, out, PrintNum_Detailed_Unmarshal)
+}
+func PrintNum_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]PrintNum, unmarshEl func(jsonexp.Context, []byte, *PrintNum) error) (err error) {
+	var vals []PrintNum
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(PrintNum_Type, "-", e)
+		} else {
+			vals = make([]PrintNum, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(PrintNum_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func PrintNum_Compact_Optional_Marshal(n jsonexp.Context, val **PrintNum) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = PrintNum_Compact_Marshal(n, *val)
+	}
+	return
+}
+func PrintNum_Compact_Marshal(n jsonexp.Context, val *PrintNum) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(PrintNum_Lede)
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Num); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func PrintNum_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PrintNum) (err error) {
+	if len(b) > 0 {
+		var val PrintNum
+		if e := PrintNum_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func PrintNum_Compact_Unmarshal(n jsonexp.Context, b []byte, out *PrintNum) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(PrintNum_Type, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[PrintNum_Field_Num], &out.Num); e != nil {
+		err = errutil.New(PrintNum_Type+"."+PrintNum_Field_Num, "-", e)
+	}
+	return
+}
+
+func PrintNum_Detailed_Optional_Marshal(n jsonexp.Context, val **PrintNum) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = PrintNum_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func PrintNum_Detailed_Marshal(n jsonexp.Context, val *PrintNum) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.Num); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[PrintNum_Num] = b
+	} else {
+		fields[PrintNum_Field_Num] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_PrintNum,
+			Type:   PrintNum_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func PrintNum_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PrintNum) (err error) {
+	if len(b) > 0 {
+		var val PrintNum
+		if e := PrintNum_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func PrintNum_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PrintNum) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_PrintNum, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[PrintNum_Num], &out.Num); e != nil {
-		err = errutil.New(Type_PrintNum+"."+PrintNum_Num, "-", e)
+		err = errutil.New(PrintNum_Type, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[PrintNum_Field_Num], &out.Num); e != nil {
+		err = errutil.New(PrintNum_Type+"."+PrintNum_Field_Num, "-", e)
 	}
 	return
 }
@@ -4145,15 +14180,22 @@ type PrintNumWord struct {
 
 func (*PrintNumWord) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_PrintNumWord,
+		Name: PrintNumWord_Type,
 		Uses: composer.Type_Flow,
 		Lede: "numeral",
 	}
 }
 
-const Type_PrintNumWord = "print_num_word"
-const PrintNumWord_Num = "$NUM"
+const PrintNumWord_Type = "print_num_word"
+const PrintNumWord_Lede = "numeral"
+const PrintNumWord_Field_Num = "$NUM"
 
+func (op *PrintNumWord) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return PrintNumWord_Compact_Marshal(n, op)
+}
+func (op *PrintNumWord) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return PrintNumWord_Compact_Unmarshal(n, b, op)
+}
 func (op *PrintNumWord) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return PrintNumWord_Detailed_Marshal(n, op)
 }
@@ -4161,28 +14203,145 @@ func (op *PrintNumWord) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return PrintNumWord_Detailed_Unmarshal(n, b, op)
 }
 
+func PrintNumWord_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]PrintNumWord) ([]byte, error) {
+	return PrintNumWord_Repeats_Marshal(n, vals, PrintNumWord_Compact_Marshal)
+}
+func PrintNumWord_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]PrintNumWord) ([]byte, error) {
+	return PrintNumWord_Repeats_Marshal(n, vals, PrintNumWord_Detailed_Marshal)
+}
+func PrintNumWord_Repeats_Marshal(n jsonexp.Context, vals *[]PrintNumWord, marshEl func(jsonexp.Context, *PrintNumWord) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(PrintNumWord_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func PrintNumWord_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]PrintNumWord) error {
+	return PrintNumWord_Repeats_Unmarshal(n, b, out, PrintNumWord_Compact_Unmarshal)
+}
+func PrintNumWord_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]PrintNumWord) error {
+	return PrintNumWord_Repeats_Unmarshal(n, b, out, PrintNumWord_Detailed_Unmarshal)
+}
+func PrintNumWord_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]PrintNumWord, unmarshEl func(jsonexp.Context, []byte, *PrintNumWord) error) (err error) {
+	var vals []PrintNumWord
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(PrintNumWord_Type, "-", e)
+		} else {
+			vals = make([]PrintNumWord, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(PrintNumWord_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func PrintNumWord_Compact_Optional_Marshal(n jsonexp.Context, val **PrintNumWord) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = PrintNumWord_Compact_Marshal(n, *val)
+	}
+	return
+}
+func PrintNumWord_Compact_Marshal(n jsonexp.Context, val *PrintNumWord) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(PrintNumWord_Lede)
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.Num); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("words")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func PrintNumWord_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PrintNumWord) (err error) {
+	if len(b) > 0 {
+		var val PrintNumWord
+		if e := PrintNumWord_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func PrintNumWord_Compact_Unmarshal(n jsonexp.Context, b []byte, out *PrintNumWord) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(PrintNumWord_Type, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[PrintNumWord_Field_Num], &out.Num); e != nil {
+		err = errutil.New(PrintNumWord_Type+"."+PrintNumWord_Field_Num, "-", e)
+	}
+	return
+}
+
+func PrintNumWord_Detailed_Optional_Marshal(n jsonexp.Context, val **PrintNumWord) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = PrintNumWord_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func PrintNumWord_Detailed_Marshal(n jsonexp.Context, val *PrintNumWord) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.Num); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[PrintNumWord_Num] = b
+	} else {
+		fields[PrintNumWord_Field_Num] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_PrintNumWord,
+			Type:   PrintNumWord_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func PrintNumWord_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PrintNumWord) (err error) {
+	if len(b) > 0 {
+		var val PrintNumWord
+		if e := PrintNumWord_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func PrintNumWord_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PrintNumWord) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_PrintNumWord, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[PrintNumWord_Num], &out.Num); e != nil {
-		err = errutil.New(Type_PrintNumWord+"."+PrintNumWord_Num, "-", e)
+		err = errutil.New(PrintNumWord_Type, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[PrintNumWord_Field_Num], &out.Num); e != nil {
+		err = errutil.New(PrintNumWord_Type+"."+PrintNumWord_Field_Num, "-", e)
 	}
 	return
 }
@@ -4195,16 +14354,23 @@ type ProductOf struct {
 
 func (*ProductOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_ProductOf,
+		Name: ProductOf_Type,
 		Uses: composer.Type_Flow,
 		Lede: "mul",
 	}
 }
 
-const Type_ProductOf = "product_of"
-const ProductOf_A = "$A"
-const ProductOf_B = "$B"
+const ProductOf_Type = "product_of"
+const ProductOf_Lede = "mul"
+const ProductOf_Field_A = "$A"
+const ProductOf_Field_B = "$B"
 
+func (op *ProductOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return ProductOf_Compact_Marshal(n, op)
+}
+func (op *ProductOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return ProductOf_Compact_Unmarshal(n, b, op)
+}
 func (op *ProductOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return ProductOf_Detailed_Marshal(n, op)
 }
@@ -4212,35 +14378,162 @@ func (op *ProductOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return ProductOf_Detailed_Unmarshal(n, b, op)
 }
 
+func ProductOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]ProductOf) ([]byte, error) {
+	return ProductOf_Repeats_Marshal(n, vals, ProductOf_Compact_Marshal)
+}
+func ProductOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]ProductOf) ([]byte, error) {
+	return ProductOf_Repeats_Marshal(n, vals, ProductOf_Detailed_Marshal)
+}
+func ProductOf_Repeats_Marshal(n jsonexp.Context, vals *[]ProductOf, marshEl func(jsonexp.Context, *ProductOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(ProductOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func ProductOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ProductOf) error {
+	return ProductOf_Repeats_Unmarshal(n, b, out, ProductOf_Compact_Unmarshal)
+}
+func ProductOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ProductOf) error {
+	return ProductOf_Repeats_Unmarshal(n, b, out, ProductOf_Detailed_Unmarshal)
+}
+func ProductOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]ProductOf, unmarshEl func(jsonexp.Context, []byte, *ProductOf) error) (err error) {
+	var vals []ProductOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(ProductOf_Type, "-", e)
+		} else {
+			vals = make([]ProductOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(ProductOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func ProductOf_Compact_Optional_Marshal(n jsonexp.Context, val **ProductOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ProductOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func ProductOf_Compact_Marshal(n jsonexp.Context, val *ProductOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(ProductOf_Lede)
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.A); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.B); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("by")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func ProductOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ProductOf) (err error) {
+	if len(b) > 0 {
+		var val ProductOf
+		if e := ProductOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func ProductOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *ProductOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(ProductOf_Type, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[ProductOf_Field_A], &out.A); e != nil {
+		err = errutil.New(ProductOf_Type+"."+ProductOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[ProductOf_Field_B], &out.B); e != nil {
+		err = errutil.New(ProductOf_Type+"."+ProductOf_Field_B, "-", e)
+	}
+	return
+}
+
+func ProductOf_Detailed_Optional_Marshal(n jsonexp.Context, val **ProductOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = ProductOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func ProductOf_Detailed_Marshal(n jsonexp.Context, val *ProductOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.A); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ProductOf_A] = b
+	} else {
+		fields[ProductOf_Field_A] = b
 	}
+
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.B); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[ProductOf_B] = b
+	} else {
+		fields[ProductOf_Field_B] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_ProductOf,
+			Type:   ProductOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func ProductOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ProductOf) (err error) {
+	if len(b) > 0 {
+		var val ProductOf
+		if e := ProductOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func ProductOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *ProductOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_ProductOf, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ProductOf_A], &out.A); e != nil {
-		err = errutil.New(Type_ProductOf+"."+ProductOf_A, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ProductOf_B], &out.B); e != nil {
-		err = errutil.New(Type_ProductOf+"."+ProductOf_B, "-", e)
+		err = errutil.New(ProductOf_Type, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ProductOf_Field_A], &out.A); e != nil {
+		err = errutil.New(ProductOf_Type+"."+ProductOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[ProductOf_Field_B], &out.B); e != nil {
+		err = errutil.New(ProductOf_Type+"."+ProductOf_Field_B, "-", e)
 	}
 	return
 }
@@ -4254,17 +14547,24 @@ type PutAtField struct {
 
 func (*PutAtField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_PutAtField,
+		Name: PutAtField_Type,
 		Uses: composer.Type_Flow,
 		Lede: "put",
 	}
 }
 
-const Type_PutAtField = "put_at_field"
-const PutAtField_Into = "$INTO"
-const PutAtField_From = "$FROM"
-const PutAtField_AtField = "$AT_FIELD"
+const PutAtField_Type = "put_at_field"
+const PutAtField_Lede = "put"
+const PutAtField_Field_Into = "$INTO"
+const PutAtField_Field_From = "$FROM"
+const PutAtField_Field_AtField = "$AT_FIELD"
 
+func (op *PutAtField) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return PutAtField_Compact_Marshal(n, op)
+}
+func (op *PutAtField) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return PutAtField_Compact_Unmarshal(n, b, op)
+}
 func (op *PutAtField) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return PutAtField_Detailed_Marshal(n, op)
 }
@@ -4272,42 +14572,179 @@ func (op *PutAtField) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return PutAtField_Detailed_Unmarshal(n, b, op)
 }
 
+func PutAtField_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]PutAtField) ([]byte, error) {
+	return PutAtField_Repeats_Marshal(n, vals, PutAtField_Compact_Marshal)
+}
+func PutAtField_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]PutAtField) ([]byte, error) {
+	return PutAtField_Repeats_Marshal(n, vals, PutAtField_Detailed_Marshal)
+}
+func PutAtField_Repeats_Marshal(n jsonexp.Context, vals *[]PutAtField, marshEl func(jsonexp.Context, *PutAtField) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(PutAtField_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func PutAtField_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]PutAtField) error {
+	return PutAtField_Repeats_Unmarshal(n, b, out, PutAtField_Compact_Unmarshal)
+}
+func PutAtField_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]PutAtField) error {
+	return PutAtField_Repeats_Unmarshal(n, b, out, PutAtField_Detailed_Unmarshal)
+}
+func PutAtField_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]PutAtField, unmarshEl func(jsonexp.Context, []byte, *PutAtField) error) (err error) {
+	var vals []PutAtField
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(PutAtField_Type, "-", e)
+		} else {
+			vals = make([]PutAtField, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(PutAtField_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func PutAtField_Compact_Optional_Marshal(n jsonexp.Context, val **PutAtField) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = PutAtField_Compact_Marshal(n, *val)
+	}
+	return
+}
+func PutAtField_Compact_Marshal(n jsonexp.Context, val *PutAtField) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(PutAtField_Lede)
+	if b, e := IntoTargetFields_Compact_Marshal(n, &val.Into); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.Assignment_Compact_Marshal(n, &val.From); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("from")
+		fields = append(fields, b)
+	}
+
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.AtField); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("at")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func PutAtField_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PutAtField) (err error) {
+	if len(b) > 0 {
+		var val PutAtField
+		if e := PutAtField_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func PutAtField_Compact_Unmarshal(n jsonexp.Context, b []byte, out *PutAtField) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(PutAtField_Type, "-", e)
+	} else if e := IntoTargetFields_Compact_Unmarshal(n, msg.Fields[PutAtField_Field_Into], &out.Into); e != nil {
+		err = errutil.New(PutAtField_Type+"."+PutAtField_Field_Into, "-", e)
+	} else if e := rt.Assignment_Compact_Unmarshal(n, msg.Fields[PutAtField_Field_From], &out.From); e != nil {
+		err = errutil.New(PutAtField_Type+"."+PutAtField_Field_From, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[PutAtField_Field_AtField], &out.AtField); e != nil {
+		err = errutil.New(PutAtField_Type+"."+PutAtField_Field_AtField, "-", e)
+	}
+	return
+}
+
+func PutAtField_Detailed_Optional_Marshal(n jsonexp.Context, val **PutAtField) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = PutAtField_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func PutAtField_Detailed_Marshal(n jsonexp.Context, val *PutAtField) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := IntoTargetFields_Detailed_Marshal(n, &val.Into); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[PutAtField_Into] = b
+	} else {
+		fields[PutAtField_Field_Into] = b
 	}
+
 	if b, e := rt.Assignment_Detailed_Marshal(n, &val.From); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[PutAtField_From] = b
+	} else {
+		fields[PutAtField_Field_From] = b
 	}
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.AtField); e != nil {
+
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.AtField); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[PutAtField_AtField] = b
+	} else {
+		fields[PutAtField_Field_AtField] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_PutAtField,
+			Type:   PutAtField_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func PutAtField_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PutAtField) (err error) {
+	if len(b) > 0 {
+		var val PutAtField
+		if e := PutAtField_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func PutAtField_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *PutAtField) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_PutAtField, "-", e)
-	} else if e := IntoTargetFields_Detailed_Unmarshal(n, msg.Fields[PutAtField_Into], &out.Into); e != nil {
-		err = errutil.New(Type_PutAtField+"."+PutAtField_Into, "-", e)
-	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[PutAtField_From], &out.From); e != nil {
-		err = errutil.New(Type_PutAtField+"."+PutAtField_From, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[PutAtField_AtField], &out.AtField); e != nil {
-		err = errutil.New(Type_PutAtField+"."+PutAtField_AtField, "-", e)
+		err = errutil.New(PutAtField_Type, "-", e)
+	} else if e := IntoTargetFields_Detailed_Unmarshal(n, msg.Fields[PutAtField_Field_Into], &out.Into); e != nil {
+		err = errutil.New(PutAtField_Type+"."+PutAtField_Field_Into, "-", e)
+	} else if e := rt.Assignment_Detailed_Unmarshal(n, msg.Fields[PutAtField_Field_From], &out.From); e != nil {
+		err = errutil.New(PutAtField_Type+"."+PutAtField_Field_From, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[PutAtField_Field_AtField], &out.AtField); e != nil {
+		err = errutil.New(PutAtField_Type+"."+PutAtField_Field_AtField, "-", e)
 	}
 	return
 }
@@ -4320,16 +14757,23 @@ type QuotientOf struct {
 
 func (*QuotientOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_QuotientOf,
+		Name: QuotientOf_Type,
 		Uses: composer.Type_Flow,
 		Lede: "div",
 	}
 }
 
-const Type_QuotientOf = "quotient_of"
-const QuotientOf_A = "$A"
-const QuotientOf_B = "$B"
+const QuotientOf_Type = "quotient_of"
+const QuotientOf_Lede = "div"
+const QuotientOf_Field_A = "$A"
+const QuotientOf_Field_B = "$B"
 
+func (op *QuotientOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return QuotientOf_Compact_Marshal(n, op)
+}
+func (op *QuotientOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return QuotientOf_Compact_Unmarshal(n, b, op)
+}
 func (op *QuotientOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return QuotientOf_Detailed_Marshal(n, op)
 }
@@ -4337,35 +14781,162 @@ func (op *QuotientOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return QuotientOf_Detailed_Unmarshal(n, b, op)
 }
 
+func QuotientOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]QuotientOf) ([]byte, error) {
+	return QuotientOf_Repeats_Marshal(n, vals, QuotientOf_Compact_Marshal)
+}
+func QuotientOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]QuotientOf) ([]byte, error) {
+	return QuotientOf_Repeats_Marshal(n, vals, QuotientOf_Detailed_Marshal)
+}
+func QuotientOf_Repeats_Marshal(n jsonexp.Context, vals *[]QuotientOf, marshEl func(jsonexp.Context, *QuotientOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(QuotientOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func QuotientOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]QuotientOf) error {
+	return QuotientOf_Repeats_Unmarshal(n, b, out, QuotientOf_Compact_Unmarshal)
+}
+func QuotientOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]QuotientOf) error {
+	return QuotientOf_Repeats_Unmarshal(n, b, out, QuotientOf_Detailed_Unmarshal)
+}
+func QuotientOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]QuotientOf, unmarshEl func(jsonexp.Context, []byte, *QuotientOf) error) (err error) {
+	var vals []QuotientOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(QuotientOf_Type, "-", e)
+		} else {
+			vals = make([]QuotientOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(QuotientOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func QuotientOf_Compact_Optional_Marshal(n jsonexp.Context, val **QuotientOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = QuotientOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func QuotientOf_Compact_Marshal(n jsonexp.Context, val *QuotientOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(QuotientOf_Lede)
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.A); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.B); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("by")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func QuotientOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **QuotientOf) (err error) {
+	if len(b) > 0 {
+		var val QuotientOf
+		if e := QuotientOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func QuotientOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *QuotientOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(QuotientOf_Type, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[QuotientOf_Field_A], &out.A); e != nil {
+		err = errutil.New(QuotientOf_Type+"."+QuotientOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[QuotientOf_Field_B], &out.B); e != nil {
+		err = errutil.New(QuotientOf_Type+"."+QuotientOf_Field_B, "-", e)
+	}
+	return
+}
+
+func QuotientOf_Detailed_Optional_Marshal(n jsonexp.Context, val **QuotientOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = QuotientOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func QuotientOf_Detailed_Marshal(n jsonexp.Context, val *QuotientOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.A); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[QuotientOf_A] = b
+	} else {
+		fields[QuotientOf_Field_A] = b
 	}
+
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.B); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[QuotientOf_B] = b
+	} else {
+		fields[QuotientOf_Field_B] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_QuotientOf,
+			Type:   QuotientOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func QuotientOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **QuotientOf) (err error) {
+	if len(b) > 0 {
+		var val QuotientOf
+		if e := QuotientOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func QuotientOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *QuotientOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_QuotientOf, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[QuotientOf_A], &out.A); e != nil {
-		err = errutil.New(Type_QuotientOf+"."+QuotientOf_A, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[QuotientOf_B], &out.B); e != nil {
-		err = errutil.New(Type_QuotientOf+"."+QuotientOf_B, "-", e)
+		err = errutil.New(QuotientOf_Type, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[QuotientOf_Field_A], &out.A); e != nil {
+		err = errutil.New(QuotientOf_Type+"."+QuotientOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[QuotientOf_Field_B], &out.B); e != nil {
+		err = errutil.New(QuotientOf_Type+"."+QuotientOf_Field_B, "-", e)
 	}
 	return
 }
@@ -4378,16 +14949,23 @@ type RemainderOf struct {
 
 func (*RemainderOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_RemainderOf,
+		Name: RemainderOf_Type,
 		Uses: composer.Type_Flow,
 		Lede: "mod",
 	}
 }
 
-const Type_RemainderOf = "remainder_of"
-const RemainderOf_A = "$A"
-const RemainderOf_B = "$B"
+const RemainderOf_Type = "remainder_of"
+const RemainderOf_Lede = "mod"
+const RemainderOf_Field_A = "$A"
+const RemainderOf_Field_B = "$B"
 
+func (op *RemainderOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return RemainderOf_Compact_Marshal(n, op)
+}
+func (op *RemainderOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return RemainderOf_Compact_Unmarshal(n, b, op)
+}
 func (op *RemainderOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return RemainderOf_Detailed_Marshal(n, op)
 }
@@ -4395,35 +14973,162 @@ func (op *RemainderOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return RemainderOf_Detailed_Unmarshal(n, b, op)
 }
 
+func RemainderOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]RemainderOf) ([]byte, error) {
+	return RemainderOf_Repeats_Marshal(n, vals, RemainderOf_Compact_Marshal)
+}
+func RemainderOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]RemainderOf) ([]byte, error) {
+	return RemainderOf_Repeats_Marshal(n, vals, RemainderOf_Detailed_Marshal)
+}
+func RemainderOf_Repeats_Marshal(n jsonexp.Context, vals *[]RemainderOf, marshEl func(jsonexp.Context, *RemainderOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(RemainderOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func RemainderOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]RemainderOf) error {
+	return RemainderOf_Repeats_Unmarshal(n, b, out, RemainderOf_Compact_Unmarshal)
+}
+func RemainderOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]RemainderOf) error {
+	return RemainderOf_Repeats_Unmarshal(n, b, out, RemainderOf_Detailed_Unmarshal)
+}
+func RemainderOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]RemainderOf, unmarshEl func(jsonexp.Context, []byte, *RemainderOf) error) (err error) {
+	var vals []RemainderOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(RemainderOf_Type, "-", e)
+		} else {
+			vals = make([]RemainderOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(RemainderOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func RemainderOf_Compact_Optional_Marshal(n jsonexp.Context, val **RemainderOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = RemainderOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func RemainderOf_Compact_Marshal(n jsonexp.Context, val *RemainderOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(RemainderOf_Lede)
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.A); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.B); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("by")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func RemainderOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RemainderOf) (err error) {
+	if len(b) > 0 {
+		var val RemainderOf
+		if e := RemainderOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func RemainderOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *RemainderOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(RemainderOf_Type, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[RemainderOf_Field_A], &out.A); e != nil {
+		err = errutil.New(RemainderOf_Type+"."+RemainderOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[RemainderOf_Field_B], &out.B); e != nil {
+		err = errutil.New(RemainderOf_Type+"."+RemainderOf_Field_B, "-", e)
+	}
+	return
+}
+
+func RemainderOf_Detailed_Optional_Marshal(n jsonexp.Context, val **RemainderOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = RemainderOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func RemainderOf_Detailed_Marshal(n jsonexp.Context, val *RemainderOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.A); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[RemainderOf_A] = b
+	} else {
+		fields[RemainderOf_Field_A] = b
 	}
+
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.B); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[RemainderOf_B] = b
+	} else {
+		fields[RemainderOf_Field_B] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_RemainderOf,
+			Type:   RemainderOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func RemainderOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RemainderOf) (err error) {
+	if len(b) > 0 {
+		var val RemainderOf
+		if e := RemainderOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func RemainderOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RemainderOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_RemainderOf, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[RemainderOf_A], &out.A); e != nil {
-		err = errutil.New(Type_RemainderOf+"."+RemainderOf_A, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[RemainderOf_B], &out.B); e != nil {
-		err = errutil.New(Type_RemainderOf+"."+RemainderOf_B, "-", e)
+		err = errutil.New(RemainderOf_Type, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[RemainderOf_Field_A], &out.A); e != nil {
+		err = errutil.New(RemainderOf_Type+"."+RemainderOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[RemainderOf_Field_B], &out.B); e != nil {
+		err = errutil.New(RemainderOf_Type+"."+RemainderOf_Field_B, "-", e)
 	}
 	return
 }
@@ -4436,15 +15141,22 @@ type Response struct {
 
 func (*Response) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Response,
+		Name: Response_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_Response = "response"
-const Response_Name = "$NAME"
-const Response_Text = "$TEXT"
+const Response_Type = "response"
+const Response_Lede = Response_Type
+const Response_Field_Name = "$NAME"
+const Response_Field_Text = "$TEXT"
 
+func (op *Response) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Response_Compact_Marshal(n, op)
+}
+func (op *Response) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Response_Compact_Unmarshal(n, b, op)
+}
 func (op *Response) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Response_Detailed_Marshal(n, op)
 }
@@ -4452,35 +15164,162 @@ func (op *Response) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Response_Detailed_Unmarshal(n, b, op)
 }
 
-func Response_Detailed_Marshal(n jsonexp.Context, val *Response) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Name); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Response_Name] = b
-	}
-	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Response_Text] = b
+func Response_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Response) ([]byte, error) {
+	return Response_Repeats_Marshal(n, vals, Response_Compact_Marshal)
+}
+func Response_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Response) ([]byte, error) {
+	return Response_Repeats_Marshal(n, vals, Response_Detailed_Marshal)
+}
+func Response_Repeats_Marshal(n jsonexp.Context, vals *[]Response, marshEl func(jsonexp.Context, *Response) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Response_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Response_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Response) error {
+	return Response_Repeats_Unmarshal(n, b, out, Response_Compact_Unmarshal)
+}
+func Response_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Response) error {
+	return Response_Repeats_Unmarshal(n, b, out, Response_Detailed_Unmarshal)
+}
+func Response_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Response, unmarshEl func(jsonexp.Context, []byte, *Response) error) (err error) {
+	var vals []Response
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Response_Type, "-", e)
+		} else {
+			vals = make([]Response, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Response_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Response_Compact_Optional_Marshal(n jsonexp.Context, val **Response) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Response_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Response_Compact_Marshal(n jsonexp.Context, val *Response) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Response_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.TextEval_Compact_Optional_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		sig.WriteLabel("text")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Response_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Response) (err error) {
+	if len(b) > 0 {
+		var val Response
+		if e := Response_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Response_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Response) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Response_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[Response_Field_Name], &out.Name); e != nil {
+		err = errutil.New(Response_Type+"."+Response_Field_Name, "-", e)
+	} else if e := rt.TextEval_Compact_Optional_Unmarshal(n, msg.Fields[Response_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Response_Type+"."+Response_Field_Text, "-", e)
+	}
+	return
+}
+
+func Response_Detailed_Optional_Marshal(n jsonexp.Context, val **Response) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Response_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func Response_Detailed_Marshal(n jsonexp.Context, val *Response) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Name); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[Response_Field_Name] = b
+	}
+
+	if b, e := rt.TextEval_Detailed_Optional_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		fields[Response_Field_Text] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Response,
+			Type:   Response_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Response_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Response) (err error) {
+	if len(b) > 0 {
+		var val Response
+		if e := Response_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Response_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Response) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Response, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[Response_Name], &out.Name); e != nil {
-		err = errutil.New(Type_Response+"."+Response_Name, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Response_Text], &out.Text); e != nil {
-		err = errutil.New(Type_Response+"."+Response_Text, "-", e)
+		err = errutil.New(Response_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[Response_Field_Name], &out.Name); e != nil {
+		err = errutil.New(Response_Type+"."+Response_Field_Name, "-", e)
+	} else if e := rt.TextEval_Detailed_Optional_Unmarshal(n, msg.Fields[Response_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Response_Type+"."+Response_Field_Text, "-", e)
 	}
 	return
 }
@@ -4492,14 +15331,21 @@ type Row struct {
 
 func (*Row) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Row,
+		Name: Row_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_Row = "row"
-const Row_Do = "$DO"
+const Row_Type = "row"
+const Row_Lede = Row_Type
+const Row_Field_Do = "$DO"
 
+func (op *Row) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Row_Compact_Marshal(n, op)
+}
+func (op *Row) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Row_Compact_Unmarshal(n, b, op)
+}
 func (op *Row) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Row_Detailed_Marshal(n, op)
 }
@@ -4507,28 +15353,145 @@ func (op *Row) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Row_Detailed_Unmarshal(n, b, op)
 }
 
+func Row_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Row) ([]byte, error) {
+	return Row_Repeats_Marshal(n, vals, Row_Compact_Marshal)
+}
+func Row_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Row) ([]byte, error) {
+	return Row_Repeats_Marshal(n, vals, Row_Detailed_Marshal)
+}
+func Row_Repeats_Marshal(n jsonexp.Context, vals *[]Row, marshEl func(jsonexp.Context, *Row) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Row_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Row_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Row) error {
+	return Row_Repeats_Unmarshal(n, b, out, Row_Compact_Unmarshal)
+}
+func Row_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Row) error {
+	return Row_Repeats_Unmarshal(n, b, out, Row_Detailed_Unmarshal)
+}
+func Row_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Row, unmarshEl func(jsonexp.Context, []byte, *Row) error) (err error) {
+	var vals []Row
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Row_Type, "-", e)
+		} else {
+			vals = make([]Row, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Row_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Row_Compact_Optional_Marshal(n jsonexp.Context, val **Row) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Row_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Row_Compact_Marshal(n jsonexp.Context, val *Row) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Row_Lede)
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Row_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Row) (err error) {
+	if len(b) > 0 {
+		var val Row
+		if e := Row_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Row_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Row) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Row_Type, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[Row_Field_Do], &out.Do); e != nil {
+		err = errutil.New(Row_Type+"."+Row_Field_Do, "-", e)
+	}
+	return
+}
+
+func Row_Detailed_Optional_Marshal(n jsonexp.Context, val **Row) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Row_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Row_Detailed_Marshal(n jsonexp.Context, val *Row) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Row_Do] = b
+	} else {
+		fields[Row_Field_Do] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Row,
+			Type:   Row_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Row_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Row) (err error) {
+	if len(b) > 0 {
+		var val Row
+		if e := Row_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Row_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Row) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Row, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[Row_Do], &out.Do); e != nil {
-		err = errutil.New(Type_Row+"."+Row_Do, "-", e)
+		err = errutil.New(Row_Type, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[Row_Field_Do], &out.Do); e != nil {
+		err = errutil.New(Row_Type+"."+Row_Field_Do, "-", e)
 	}
 	return
 }
@@ -4540,14 +15503,21 @@ type Rows struct {
 
 func (*Rows) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Rows,
+		Name: Rows_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const Type_Rows = "rows"
-const Rows_Do = "$DO"
+const Rows_Type = "rows"
+const Rows_Lede = Rows_Type
+const Rows_Field_Do = "$DO"
 
+func (op *Rows) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Rows_Compact_Marshal(n, op)
+}
+func (op *Rows) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Rows_Compact_Unmarshal(n, b, op)
+}
 func (op *Rows) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Rows_Detailed_Marshal(n, op)
 }
@@ -4555,28 +15525,145 @@ func (op *Rows) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Rows_Detailed_Unmarshal(n, b, op)
 }
 
+func Rows_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Rows) ([]byte, error) {
+	return Rows_Repeats_Marshal(n, vals, Rows_Compact_Marshal)
+}
+func Rows_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Rows) ([]byte, error) {
+	return Rows_Repeats_Marshal(n, vals, Rows_Detailed_Marshal)
+}
+func Rows_Repeats_Marshal(n jsonexp.Context, vals *[]Rows, marshEl func(jsonexp.Context, *Rows) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Rows_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Rows_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Rows) error {
+	return Rows_Repeats_Unmarshal(n, b, out, Rows_Compact_Unmarshal)
+}
+func Rows_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Rows) error {
+	return Rows_Repeats_Unmarshal(n, b, out, Rows_Detailed_Unmarshal)
+}
+func Rows_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Rows, unmarshEl func(jsonexp.Context, []byte, *Rows) error) (err error) {
+	var vals []Rows
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Rows_Type, "-", e)
+		} else {
+			vals = make([]Rows, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Rows_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Rows_Compact_Optional_Marshal(n jsonexp.Context, val **Rows) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Rows_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Rows_Compact_Marshal(n jsonexp.Context, val *Rows) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Rows_Lede)
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Rows_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Rows) (err error) {
+	if len(b) > 0 {
+		var val Rows
+		if e := Rows_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Rows_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Rows) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Rows_Type, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[Rows_Field_Do], &out.Do); e != nil {
+		err = errutil.New(Rows_Type+"."+Rows_Field_Do, "-", e)
+	}
+	return
+}
+
+func Rows_Detailed_Optional_Marshal(n jsonexp.Context, val **Rows) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Rows_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Rows_Detailed_Marshal(n jsonexp.Context, val *Rows) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Rows_Do] = b
+	} else {
+		fields[Rows_Field_Do] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Rows,
+			Type:   Rows_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Rows_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Rows) (err error) {
+	if len(b) > 0 {
+		var val Rows
+		if e := Rows_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Rows_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Rows) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Rows, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[Rows_Do], &out.Do); e != nil {
-		err = errutil.New(Type_Rows+"."+Rows_Do, "-", e)
+		err = errutil.New(Rows_Type, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[Rows_Field_Do], &out.Do); e != nil {
+		err = errutil.New(Rows_Type+"."+Rows_Field_Do, "-", e)
 	}
 	return
 }
@@ -4588,15 +15675,22 @@ type SayText struct {
 
 func (*SayText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_SayText,
+		Name: SayText_Type,
 		Uses: composer.Type_Flow,
 		Lede: "say",
 	}
 }
 
-const Type_SayText = "say_text"
-const SayText_Text = "$TEXT"
+const SayText_Type = "say_text"
+const SayText_Lede = "say"
+const SayText_Field_Text = "$TEXT"
 
+func (op *SayText) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return SayText_Compact_Marshal(n, op)
+}
+func (op *SayText) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return SayText_Compact_Unmarshal(n, b, op)
+}
 func (op *SayText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return SayText_Detailed_Marshal(n, op)
 }
@@ -4604,28 +15698,145 @@ func (op *SayText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return SayText_Detailed_Unmarshal(n, b, op)
 }
 
+func SayText_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]SayText) ([]byte, error) {
+	return SayText_Repeats_Marshal(n, vals, SayText_Compact_Marshal)
+}
+func SayText_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]SayText) ([]byte, error) {
+	return SayText_Repeats_Marshal(n, vals, SayText_Detailed_Marshal)
+}
+func SayText_Repeats_Marshal(n jsonexp.Context, vals *[]SayText, marshEl func(jsonexp.Context, *SayText) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(SayText_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func SayText_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SayText) error {
+	return SayText_Repeats_Unmarshal(n, b, out, SayText_Compact_Unmarshal)
+}
+func SayText_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SayText) error {
+	return SayText_Repeats_Unmarshal(n, b, out, SayText_Detailed_Unmarshal)
+}
+func SayText_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SayText, unmarshEl func(jsonexp.Context, []byte, *SayText) error) (err error) {
+	var vals []SayText
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(SayText_Type, "-", e)
+		} else {
+			vals = make([]SayText, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(SayText_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func SayText_Compact_Optional_Marshal(n jsonexp.Context, val **SayText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SayText_Compact_Marshal(n, *val)
+	}
+	return
+}
+func SayText_Compact_Marshal(n jsonexp.Context, val *SayText) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(SayText_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func SayText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SayText) (err error) {
+	if len(b) > 0 {
+		var val SayText
+		if e := SayText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func SayText_Compact_Unmarshal(n jsonexp.Context, b []byte, out *SayText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(SayText_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[SayText_Field_Text], &out.Text); e != nil {
+		err = errutil.New(SayText_Type+"."+SayText_Field_Text, "-", e)
+	}
+	return
+}
+
+func SayText_Detailed_Optional_Marshal(n jsonexp.Context, val **SayText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SayText_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func SayText_Detailed_Marshal(n jsonexp.Context, val *SayText) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[SayText_Text] = b
+	} else {
+		fields[SayText_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_SayText,
+			Type:   SayText_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func SayText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SayText) (err error) {
+	if len(b) > 0 {
+		var val SayText
+		if e := SayText_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func SayText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *SayText) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_SayText, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[SayText_Text], &out.Text); e != nil {
-		err = errutil.New(Type_SayText+"."+SayText_Text, "-", e)
+		err = errutil.New(SayText_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[SayText_Field_Text], &out.Text); e != nil {
+		err = errutil.New(SayText_Type+"."+SayText_Field_Text, "-", e)
 	}
 	return
 }
@@ -4638,16 +15849,23 @@ type SetTrait struct {
 
 func (*SetTrait) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_SetTrait,
+		Name: SetTrait_Type,
 		Uses: composer.Type_Flow,
 		Lede: "put",
 	}
 }
 
-const Type_SetTrait = "set_trait"
-const SetTrait_Object = "$OBJECT"
-const SetTrait_Trait = "$TRAIT"
+const SetTrait_Type = "set_trait"
+const SetTrait_Lede = "put"
+const SetTrait_Field_Object = "$OBJECT"
+const SetTrait_Field_Trait = "$TRAIT"
 
+func (op *SetTrait) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return SetTrait_Compact_Marshal(n, op)
+}
+func (op *SetTrait) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return SetTrait_Compact_Unmarshal(n, b, op)
+}
 func (op *SetTrait) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return SetTrait_Detailed_Marshal(n, op)
 }
@@ -4655,35 +15873,162 @@ func (op *SetTrait) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return SetTrait_Detailed_Unmarshal(n, b, op)
 }
 
+func SetTrait_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]SetTrait) ([]byte, error) {
+	return SetTrait_Repeats_Marshal(n, vals, SetTrait_Compact_Marshal)
+}
+func SetTrait_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]SetTrait) ([]byte, error) {
+	return SetTrait_Repeats_Marshal(n, vals, SetTrait_Detailed_Marshal)
+}
+func SetTrait_Repeats_Marshal(n jsonexp.Context, vals *[]SetTrait, marshEl func(jsonexp.Context, *SetTrait) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(SetTrait_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func SetTrait_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SetTrait) error {
+	return SetTrait_Repeats_Unmarshal(n, b, out, SetTrait_Compact_Unmarshal)
+}
+func SetTrait_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SetTrait) error {
+	return SetTrait_Repeats_Unmarshal(n, b, out, SetTrait_Detailed_Unmarshal)
+}
+func SetTrait_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SetTrait, unmarshEl func(jsonexp.Context, []byte, *SetTrait) error) (err error) {
+	var vals []SetTrait
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(SetTrait_Type, "-", e)
+		} else {
+			vals = make([]SetTrait, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(SetTrait_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func SetTrait_Compact_Optional_Marshal(n jsonexp.Context, val **SetTrait) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SetTrait_Compact_Marshal(n, *val)
+	}
+	return
+}
+func SetTrait_Compact_Marshal(n jsonexp.Context, val *SetTrait) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(SetTrait_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Object); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("obj")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Trait); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("trait")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func SetTrait_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SetTrait) (err error) {
+	if len(b) > 0 {
+		var val SetTrait
+		if e := SetTrait_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func SetTrait_Compact_Unmarshal(n jsonexp.Context, b []byte, out *SetTrait) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(SetTrait_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[SetTrait_Field_Object], &out.Object); e != nil {
+		err = errutil.New(SetTrait_Type+"."+SetTrait_Field_Object, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[SetTrait_Field_Trait], &out.Trait); e != nil {
+		err = errutil.New(SetTrait_Type+"."+SetTrait_Field_Trait, "-", e)
+	}
+	return
+}
+
+func SetTrait_Detailed_Optional_Marshal(n jsonexp.Context, val **SetTrait) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SetTrait_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func SetTrait_Detailed_Marshal(n jsonexp.Context, val *SetTrait) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Object); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[SetTrait_Object] = b
+	} else {
+		fields[SetTrait_Field_Object] = b
 	}
+
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Trait); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[SetTrait_Trait] = b
+	} else {
+		fields[SetTrait_Field_Trait] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_SetTrait,
+			Type:   SetTrait_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func SetTrait_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SetTrait) (err error) {
+	if len(b) > 0 {
+		var val SetTrait
+		if e := SetTrait_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func SetTrait_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *SetTrait) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_SetTrait, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[SetTrait_Object], &out.Object); e != nil {
-		err = errutil.New(Type_SetTrait+"."+SetTrait_Object, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[SetTrait_Trait], &out.Trait); e != nil {
-		err = errutil.New(Type_SetTrait+"."+SetTrait_Trait, "-", e)
+		err = errutil.New(SetTrait_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[SetTrait_Field_Object], &out.Object); e != nil {
+		err = errutil.New(SetTrait_Type+"."+SetTrait_Field_Object, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[SetTrait_Field_Trait], &out.Trait); e != nil {
+		err = errutil.New(SetTrait_Type+"."+SetTrait_Field_Trait, "-", e)
 	}
 	return
 }
@@ -4695,15 +16040,22 @@ type Singularize struct {
 
 func (*Singularize) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Singularize,
+		Name: Singularize_Type,
 		Uses: composer.Type_Flow,
 		Lede: "singular",
 	}
 }
 
-const Type_Singularize = "singularize"
-const Singularize_Text = "$TEXT"
+const Singularize_Type = "singularize"
+const Singularize_Lede = "singular"
+const Singularize_Field_Text = "$TEXT"
 
+func (op *Singularize) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Singularize_Compact_Marshal(n, op)
+}
+func (op *Singularize) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Singularize_Compact_Unmarshal(n, b, op)
+}
 func (op *Singularize) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Singularize_Detailed_Marshal(n, op)
 }
@@ -4711,28 +16063,145 @@ func (op *Singularize) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Singularize_Detailed_Unmarshal(n, b, op)
 }
 
+func Singularize_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Singularize) ([]byte, error) {
+	return Singularize_Repeats_Marshal(n, vals, Singularize_Compact_Marshal)
+}
+func Singularize_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Singularize) ([]byte, error) {
+	return Singularize_Repeats_Marshal(n, vals, Singularize_Detailed_Marshal)
+}
+func Singularize_Repeats_Marshal(n jsonexp.Context, vals *[]Singularize, marshEl func(jsonexp.Context, *Singularize) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Singularize_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Singularize_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Singularize) error {
+	return Singularize_Repeats_Unmarshal(n, b, out, Singularize_Compact_Unmarshal)
+}
+func Singularize_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Singularize) error {
+	return Singularize_Repeats_Unmarshal(n, b, out, Singularize_Detailed_Unmarshal)
+}
+func Singularize_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Singularize, unmarshEl func(jsonexp.Context, []byte, *Singularize) error) (err error) {
+	var vals []Singularize
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Singularize_Type, "-", e)
+		} else {
+			vals = make([]Singularize, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Singularize_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Singularize_Compact_Optional_Marshal(n jsonexp.Context, val **Singularize) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Singularize_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Singularize_Compact_Marshal(n jsonexp.Context, val *Singularize) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Singularize_Lede)
+	if b, e := rt.TextEval_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("of")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Singularize_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Singularize) (err error) {
+	if len(b) > 0 {
+		var val Singularize
+		if e := Singularize_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Singularize_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Singularize) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Singularize_Type, "-", e)
+	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[Singularize_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Singularize_Type+"."+Singularize_Field_Text, "-", e)
+	}
+	return
+}
+
+func Singularize_Detailed_Optional_Marshal(n jsonexp.Context, val **Singularize) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Singularize_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Singularize_Detailed_Marshal(n jsonexp.Context, val *Singularize) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.TextEval_Detailed_Marshal(n, &val.Text); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Singularize_Text] = b
+	} else {
+		fields[Singularize_Field_Text] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Singularize,
+			Type:   Singularize_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Singularize_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Singularize) (err error) {
+	if len(b) > 0 {
+		var val Singularize
+		if e := Singularize_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Singularize_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Singularize) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Singularize, "-", e)
-	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Singularize_Text], &out.Text); e != nil {
-		err = errutil.New(Type_Singularize+"."+Singularize_Text, "-", e)
+		err = errutil.New(Singularize_Type, "-", e)
+	} else if e := rt.TextEval_Detailed_Unmarshal(n, msg.Fields[Singularize_Field_Text], &out.Text); e != nil {
+		err = errutil.New(Singularize_Type+"."+Singularize_Field_Text, "-", e)
 	}
 	return
 }
@@ -4744,15 +16213,22 @@ type SlashText struct {
 
 func (*SlashText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_SlashText,
+		Name: SlashText_Type,
 		Uses: composer.Type_Flow,
 		Lede: "slashes",
 	}
 }
 
-const Type_SlashText = "slash_text"
-const SlashText_Do = "$DO"
+const SlashText_Type = "slash_text"
+const SlashText_Lede = "slashes"
+const SlashText_Field_Do = "$DO"
 
+func (op *SlashText) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return SlashText_Compact_Marshal(n, op)
+}
+func (op *SlashText) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return SlashText_Compact_Unmarshal(n, b, op)
+}
 func (op *SlashText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return SlashText_Detailed_Marshal(n, op)
 }
@@ -4760,28 +16236,145 @@ func (op *SlashText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return SlashText_Detailed_Unmarshal(n, b, op)
 }
 
+func SlashText_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]SlashText) ([]byte, error) {
+	return SlashText_Repeats_Marshal(n, vals, SlashText_Compact_Marshal)
+}
+func SlashText_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]SlashText) ([]byte, error) {
+	return SlashText_Repeats_Marshal(n, vals, SlashText_Detailed_Marshal)
+}
+func SlashText_Repeats_Marshal(n jsonexp.Context, vals *[]SlashText, marshEl func(jsonexp.Context, *SlashText) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(SlashText_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func SlashText_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SlashText) error {
+	return SlashText_Repeats_Unmarshal(n, b, out, SlashText_Compact_Unmarshal)
+}
+func SlashText_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SlashText) error {
+	return SlashText_Repeats_Unmarshal(n, b, out, SlashText_Detailed_Unmarshal)
+}
+func SlashText_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SlashText, unmarshEl func(jsonexp.Context, []byte, *SlashText) error) (err error) {
+	var vals []SlashText
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(SlashText_Type, "-", e)
+		} else {
+			vals = make([]SlashText, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(SlashText_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func SlashText_Compact_Optional_Marshal(n jsonexp.Context, val **SlashText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SlashText_Compact_Marshal(n, *val)
+	}
+	return
+}
+func SlashText_Compact_Marshal(n jsonexp.Context, val *SlashText) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(SlashText_Lede)
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func SlashText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SlashText) (err error) {
+	if len(b) > 0 {
+		var val SlashText
+		if e := SlashText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func SlashText_Compact_Unmarshal(n jsonexp.Context, b []byte, out *SlashText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(SlashText_Type, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[SlashText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(SlashText_Type+"."+SlashText_Field_Do, "-", e)
+	}
+	return
+}
+
+func SlashText_Detailed_Optional_Marshal(n jsonexp.Context, val **SlashText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SlashText_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func SlashText_Detailed_Marshal(n jsonexp.Context, val *SlashText) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[SlashText_Do] = b
+	} else {
+		fields[SlashText_Field_Do] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_SlashText,
+			Type:   SlashText_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func SlashText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SlashText) (err error) {
+	if len(b) > 0 {
+		var val SlashText
+		if e := SlashText_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func SlashText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *SlashText) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_SlashText, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[SlashText_Do], &out.Do); e != nil {
-		err = errutil.New(Type_SlashText+"."+SlashText_Do, "-", e)
+		err = errutil.New(SlashText_Type, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[SlashText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(SlashText_Type+"."+SlashText_Field_Do, "-", e)
 	}
 	return
 }
@@ -4792,14 +16385,21 @@ type Softline struct {
 
 func (*Softline) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Softline,
+		Name: Softline_Type,
 		Uses: composer.Type_Flow,
 		Lede: "wbr",
 	}
 }
 
-const Type_Softline = "softline"
+const Softline_Type = "softline"
+const Softline_Lede = "wbr"
 
+func (op *Softline) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Softline_Compact_Marshal(n, op)
+}
+func (op *Softline) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Softline_Compact_Unmarshal(n, b, op)
+}
 func (op *Softline) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Softline_Detailed_Marshal(n, op)
 }
@@ -4807,21 +16407,128 @@ func (op *Softline) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Softline_Detailed_Unmarshal(n, b, op)
 }
 
+func Softline_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Softline) ([]byte, error) {
+	return Softline_Repeats_Marshal(n, vals, Softline_Compact_Marshal)
+}
+func Softline_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Softline) ([]byte, error) {
+	return Softline_Repeats_Marshal(n, vals, Softline_Detailed_Marshal)
+}
+func Softline_Repeats_Marshal(n jsonexp.Context, vals *[]Softline, marshEl func(jsonexp.Context, *Softline) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Softline_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Softline_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Softline) error {
+	return Softline_Repeats_Unmarshal(n, b, out, Softline_Compact_Unmarshal)
+}
+func Softline_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Softline) error {
+	return Softline_Repeats_Unmarshal(n, b, out, Softline_Detailed_Unmarshal)
+}
+func Softline_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Softline, unmarshEl func(jsonexp.Context, []byte, *Softline) error) (err error) {
+	var vals []Softline
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Softline_Type, "-", e)
+		} else {
+			vals = make([]Softline, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Softline_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Softline_Compact_Optional_Marshal(n jsonexp.Context, val **Softline) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Softline_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Softline_Compact_Marshal(n jsonexp.Context, val *Softline) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Softline_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Softline_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Softline) (err error) {
+	if len(b) > 0 {
+		var val Softline
+		if e := Softline_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Softline_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Softline) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Softline_Type, "-", e)
+	}
+	return
+}
+
+func Softline_Detailed_Optional_Marshal(n jsonexp.Context, val **Softline) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Softline_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Softline_Detailed_Marshal(n jsonexp.Context, val *Softline) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Softline,
+			Type:   Softline_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Softline_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Softline) (err error) {
+	if len(b) > 0 {
+		var val Softline
+		if e := Softline_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Softline_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Softline) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Softline, "-", e)
+		err = errutil.New(Softline_Type, "-", e)
 	}
 	return
 }
@@ -4833,15 +16540,22 @@ type SpanText struct {
 
 func (*SpanText) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_SpanText,
+		Name: SpanText_Type,
 		Uses: composer.Type_Flow,
 		Lede: "spaces",
 	}
 }
 
-const Type_SpanText = "span_text"
-const SpanText_Do = "$DO"
+const SpanText_Type = "span_text"
+const SpanText_Lede = "spaces"
+const SpanText_Field_Do = "$DO"
 
+func (op *SpanText) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return SpanText_Compact_Marshal(n, op)
+}
+func (op *SpanText) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return SpanText_Compact_Unmarshal(n, b, op)
+}
 func (op *SpanText) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return SpanText_Detailed_Marshal(n, op)
 }
@@ -4849,28 +16563,145 @@ func (op *SpanText) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return SpanText_Detailed_Unmarshal(n, b, op)
 }
 
+func SpanText_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]SpanText) ([]byte, error) {
+	return SpanText_Repeats_Marshal(n, vals, SpanText_Compact_Marshal)
+}
+func SpanText_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]SpanText) ([]byte, error) {
+	return SpanText_Repeats_Marshal(n, vals, SpanText_Detailed_Marshal)
+}
+func SpanText_Repeats_Marshal(n jsonexp.Context, vals *[]SpanText, marshEl func(jsonexp.Context, *SpanText) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(SpanText_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func SpanText_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SpanText) error {
+	return SpanText_Repeats_Unmarshal(n, b, out, SpanText_Compact_Unmarshal)
+}
+func SpanText_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SpanText) error {
+	return SpanText_Repeats_Unmarshal(n, b, out, SpanText_Detailed_Unmarshal)
+}
+func SpanText_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SpanText, unmarshEl func(jsonexp.Context, []byte, *SpanText) error) (err error) {
+	var vals []SpanText
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(SpanText_Type, "-", e)
+		} else {
+			vals = make([]SpanText, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(SpanText_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func SpanText_Compact_Optional_Marshal(n jsonexp.Context, val **SpanText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SpanText_Compact_Marshal(n, *val)
+	}
+	return
+}
+func SpanText_Compact_Marshal(n jsonexp.Context, val *SpanText) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(SpanText_Lede)
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func SpanText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SpanText) (err error) {
+	if len(b) > 0 {
+		var val SpanText
+		if e := SpanText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func SpanText_Compact_Unmarshal(n jsonexp.Context, b []byte, out *SpanText) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(SpanText_Type, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[SpanText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(SpanText_Type+"."+SpanText_Field_Do, "-", e)
+	}
+	return
+}
+
+func SpanText_Detailed_Optional_Marshal(n jsonexp.Context, val **SpanText) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SpanText_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func SpanText_Detailed_Marshal(n jsonexp.Context, val *SpanText) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[SpanText_Do] = b
+	} else {
+		fields[SpanText_Field_Do] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_SpanText,
+			Type:   SpanText_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func SpanText_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SpanText) (err error) {
+	if len(b) > 0 {
+		var val SpanText
+		if e := SpanText_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func SpanText_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *SpanText) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_SpanText, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[SpanText_Do], &out.Do); e != nil {
-		err = errutil.New(Type_SpanText+"."+SpanText_Do, "-", e)
+		err = errutil.New(SpanText_Type, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[SpanText_Field_Do], &out.Do); e != nil {
+		err = errutil.New(SpanText_Type+"."+SpanText_Field_Do, "-", e)
 	}
 	return
 }
@@ -4883,16 +16714,23 @@ type SumOf struct {
 
 func (*SumOf) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_SumOf,
+		Name: SumOf_Type,
 		Uses: composer.Type_Flow,
 		Lede: "inc",
 	}
 }
 
-const Type_SumOf = "sum_of"
-const SumOf_A = "$A"
-const SumOf_B = "$B"
+const SumOf_Type = "sum_of"
+const SumOf_Lede = "inc"
+const SumOf_Field_A = "$A"
+const SumOf_Field_B = "$B"
 
+func (op *SumOf) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return SumOf_Compact_Marshal(n, op)
+}
+func (op *SumOf) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return SumOf_Compact_Unmarshal(n, b, op)
+}
 func (op *SumOf) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return SumOf_Detailed_Marshal(n, op)
 }
@@ -4900,35 +16738,162 @@ func (op *SumOf) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return SumOf_Detailed_Unmarshal(n, b, op)
 }
 
+func SumOf_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]SumOf) ([]byte, error) {
+	return SumOf_Repeats_Marshal(n, vals, SumOf_Compact_Marshal)
+}
+func SumOf_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]SumOf) ([]byte, error) {
+	return SumOf_Repeats_Marshal(n, vals, SumOf_Detailed_Marshal)
+}
+func SumOf_Repeats_Marshal(n jsonexp.Context, vals *[]SumOf, marshEl func(jsonexp.Context, *SumOf) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(SumOf_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func SumOf_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SumOf) error {
+	return SumOf_Repeats_Unmarshal(n, b, out, SumOf_Compact_Unmarshal)
+}
+func SumOf_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SumOf) error {
+	return SumOf_Repeats_Unmarshal(n, b, out, SumOf_Detailed_Unmarshal)
+}
+func SumOf_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]SumOf, unmarshEl func(jsonexp.Context, []byte, *SumOf) error) (err error) {
+	var vals []SumOf
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(SumOf_Type, "-", e)
+		} else {
+			vals = make([]SumOf, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(SumOf_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func SumOf_Compact_Optional_Marshal(n jsonexp.Context, val **SumOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SumOf_Compact_Marshal(n, *val)
+	}
+	return
+}
+func SumOf_Compact_Marshal(n jsonexp.Context, val *SumOf) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(SumOf_Lede)
+	if b, e := rt.NumberEval_Compact_Marshal(n, &val.A); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := rt.NumberEval_Compact_Optional_Marshal(n, &val.B); e != nil {
+		err = errutil.Append(err, e)
+	} else if len(b) > 0 {
+		sig.WriteLabel("by")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func SumOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SumOf) (err error) {
+	if len(b) > 0 {
+		var val SumOf
+		if e := SumOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func SumOf_Compact_Unmarshal(n jsonexp.Context, b []byte, out *SumOf) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(SumOf_Type, "-", e)
+	} else if e := rt.NumberEval_Compact_Unmarshal(n, msg.Fields[SumOf_Field_A], &out.A); e != nil {
+		err = errutil.New(SumOf_Type+"."+SumOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Compact_Optional_Unmarshal(n, msg.Fields[SumOf_Field_B], &out.B); e != nil {
+		err = errutil.New(SumOf_Type+"."+SumOf_Field_B, "-", e)
+	}
+	return
+}
+
+func SumOf_Detailed_Optional_Marshal(n jsonexp.Context, val **SumOf) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = SumOf_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func SumOf_Detailed_Marshal(n jsonexp.Context, val *SumOf) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.A); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[SumOf_A] = b
+	} else {
+		fields[SumOf_Field_A] = b
 	}
-	if b, e := rt.NumberEval_Detailed_Marshal(n, &val.B); e != nil {
+
+	if b, e := rt.NumberEval_Detailed_Optional_Marshal(n, &val.B); e != nil {
 		err = errutil.Append(err, e)
 	} else if len(b) > 0 {
-		fields[SumOf_B] = b
+		fields[SumOf_Field_B] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_SumOf,
+			Type:   SumOf_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func SumOf_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **SumOf) (err error) {
+	if len(b) > 0 {
+		var val SumOf
+		if e := SumOf_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func SumOf_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *SumOf) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_SumOf, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[SumOf_A], &out.A); e != nil {
-		err = errutil.New(Type_SumOf+"."+SumOf_A, "-", e)
-	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[SumOf_B], &out.B); e != nil {
-		err = errutil.New(Type_SumOf+"."+SumOf_B, "-", e)
+		err = errutil.New(SumOf_Type, "-", e)
+	} else if e := rt.NumberEval_Detailed_Unmarshal(n, msg.Fields[SumOf_Field_A], &out.A); e != nil {
+		err = errutil.New(SumOf_Type+"."+SumOf_Field_A, "-", e)
+	} else if e := rt.NumberEval_Detailed_Optional_Unmarshal(n, msg.Fields[SumOf_Field_B], &out.B); e != nil {
+		err = errutil.New(SumOf_Type+"."+SumOf_Field_B, "-", e)
 	}
 	return
 }
@@ -4940,15 +16905,22 @@ type TextValue struct {
 
 func (*TextValue) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_TextValue,
+		Name: TextValue_Type,
 		Uses: composer.Type_Flow,
 		Lede: "txt",
 	}
 }
 
-const Type_TextValue = "text_value"
-const TextValue_Text = "$TEXT"
+const TextValue_Type = "text_value"
+const TextValue_Lede = "txt"
+const TextValue_Field_Text = "$TEXT"
 
+func (op *TextValue) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return TextValue_Compact_Marshal(n, op)
+}
+func (op *TextValue) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return TextValue_Compact_Unmarshal(n, b, op)
+}
 func (op *TextValue) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return TextValue_Detailed_Marshal(n, op)
 }
@@ -4956,28 +16928,145 @@ func (op *TextValue) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return TextValue_Detailed_Unmarshal(n, b, op)
 }
 
-func TextValue_Detailed_Marshal(n jsonexp.Context, val *TextValue) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Marshal(n, &val.Text); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[TextValue_Text] = b
+func TextValue_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]TextValue) ([]byte, error) {
+	return TextValue_Repeats_Marshal(n, vals, TextValue_Compact_Marshal)
+}
+func TextValue_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TextValue) ([]byte, error) {
+	return TextValue_Repeats_Marshal(n, vals, TextValue_Detailed_Marshal)
+}
+func TextValue_Repeats_Marshal(n jsonexp.Context, vals *[]TextValue, marshEl func(jsonexp.Context, *TextValue) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(TextValue_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func TextValue_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextValue) error {
+	return TextValue_Repeats_Unmarshal(n, b, out, TextValue_Compact_Unmarshal)
+}
+func TextValue_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextValue) error {
+	return TextValue_Repeats_Unmarshal(n, b, out, TextValue_Detailed_Unmarshal)
+}
+func TextValue_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TextValue, unmarshEl func(jsonexp.Context, []byte, *TextValue) error) (err error) {
+	var vals []TextValue
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(TextValue_Type, "-", e)
+		} else {
+			vals = make([]TextValue, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(TextValue_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func TextValue_Compact_Optional_Marshal(n jsonexp.Context, val **TextValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = TextValue_Compact_Marshal(n, *val)
+	}
+	return
+}
+func TextValue_Compact_Marshal(n jsonexp.Context, val *TextValue) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(TextValue_Lede)
+	if b, e := value.Text_Override_Compact_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func TextValue_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TextValue) (err error) {
+	if len(b) > 0 {
+		var val TextValue
+		if e := TextValue_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func TextValue_Compact_Unmarshal(n jsonexp.Context, b []byte, out *TextValue) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(TextValue_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[TextValue_Field_Text], &out.Text); e != nil {
+		err = errutil.New(TextValue_Type+"."+TextValue_Field_Text, "-", e)
+	}
+	return
+}
+
+func TextValue_Detailed_Optional_Marshal(n jsonexp.Context, val **TextValue) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = TextValue_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func TextValue_Detailed_Marshal(n jsonexp.Context, val *TextValue) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Marshal(n, &val.Text); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[TextValue_Field_Text] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_TextValue,
+			Type:   TextValue_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func TextValue_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TextValue) (err error) {
+	if len(b) > 0 {
+		var val TextValue
+		if e := TextValue_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func TextValue_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TextValue) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_TextValue, "-", e)
-	} else if e := value.Text_Detailed_Override_Unmarshal(n, msg.Fields[TextValue_Text], &out.Text); e != nil {
-		err = errutil.New(Type_TextValue+"."+TextValue_Text, "-", e)
+		err = errutil.New(TextValue_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Unmarshal(n, msg.Fields[TextValue_Field_Text], &out.Text); e != nil {
+		err = errutil.New(TextValue_Type+"."+TextValue_Field_Text, "-", e)
 	}
 	return
 }
@@ -4989,15 +17078,22 @@ type Texts struct {
 
 func (*Texts) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Texts,
+		Name: Texts_Type,
 		Uses: composer.Type_Flow,
 		Lede: "txts",
 	}
 }
 
-const Type_Texts = "texts"
-const Texts_Values = "$VALUES"
+const Texts_Type = "texts"
+const Texts_Lede = "txts"
+const Texts_Field_Values = "$VALUES"
 
+func (op *Texts) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Texts_Compact_Marshal(n, op)
+}
+func (op *Texts) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Texts_Compact_Unmarshal(n, b, op)
+}
 func (op *Texts) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Texts_Detailed_Marshal(n, op)
 }
@@ -5005,44 +17101,178 @@ func (op *Texts) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Texts_Detailed_Unmarshal(n, b, op)
 }
 
-func Texts_Detailed_Marshal(n jsonexp.Context, val *Texts) (ret []byte, err error) {
-	fields := make(jsonexp.Fields)
-	if b, e := value.Text_Detailed_Override_Repeats_Marshal(n, &val.Values); e != nil {
-		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[Texts_Values] = b
+func Texts_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Texts) ([]byte, error) {
+	return Texts_Repeats_Marshal(n, vals, Texts_Compact_Marshal)
+}
+func Texts_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Texts) ([]byte, error) {
+	return Texts_Repeats_Marshal(n, vals, Texts_Detailed_Marshal)
+}
+func Texts_Repeats_Marshal(n jsonexp.Context, vals *[]Texts, marshEl func(jsonexp.Context, *Texts) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Texts_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
 	}
 	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Texts_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Texts) error {
+	return Texts_Repeats_Unmarshal(n, b, out, Texts_Compact_Unmarshal)
+}
+func Texts_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Texts) error {
+	return Texts_Repeats_Unmarshal(n, b, out, Texts_Detailed_Unmarshal)
+}
+func Texts_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Texts, unmarshEl func(jsonexp.Context, []byte, *Texts) error) (err error) {
+	var vals []Texts
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Texts_Type, "-", e)
+		} else {
+			vals = make([]Texts, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Texts_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Texts_Compact_Optional_Marshal(n jsonexp.Context, val **Texts) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Texts_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Texts_Compact_Marshal(n jsonexp.Context, val *Texts) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Texts_Lede)
+	if b, e := value.Text_Override_Compact_Repeats_Marshal(n, &val.Values); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Texts_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Texts) (err error) {
+	if len(b) > 0 {
+		var val Texts
+		if e := Texts_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Texts_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Texts) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Texts_Type, "-", e)
+	} else if e := value.Text_Override_Compact_Repeats_Unmarshal(n, msg.Fields[Texts_Field_Values], &out.Values); e != nil {
+		err = errutil.New(Texts_Type+"."+Texts_Field_Values, "-", e)
+	}
+	return
+}
+
+func Texts_Detailed_Optional_Marshal(n jsonexp.Context, val **Texts) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Texts_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func Texts_Detailed_Marshal(n jsonexp.Context, val *Texts) (ret []byte, err error) {
+	fields := make(jsonexp.Fields)
+	if b, e := value.Text_Override_Detailed_Repeats_Marshal(n, &val.Values); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		fields[Texts_Field_Values] = b
+	}
+
+	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Texts,
+			Type:   Texts_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Texts_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Texts) (err error) {
+	if len(b) > 0 {
+		var val Texts
+		if e := Texts_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Texts_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Texts) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Texts, "-", e)
-	} else if e := value.Text_Detailed_Override_Repeats_Unmarshal(n, msg.Fields[Texts_Values], &out.Values); e != nil {
-		err = errutil.New(Type_Texts+"."+Texts_Values, "-", e)
+		err = errutil.New(Texts_Type, "-", e)
+	} else if e := value.Text_Override_Detailed_Repeats_Unmarshal(n, msg.Fields[Texts_Field_Values], &out.Values); e != nil {
+		err = errutil.New(Texts_Type+"."+Texts_Field_Values, "-", e)
 	}
 	return
 }
 
-const Type_Trigger = "trigger"
+const Trigger_Type = "trigger"
+
+var Trigger_Compact_Optional_Marshal = Trigger_Compact_Marshal
+var Trigger_Compact_Optional_Unmarshal = Trigger_Compact_Unmarshal
+
+func Trigger_Compact_Marshal(n jsonexp.Context, ptr *Trigger) (ret []byte, err error) {
+	if slat := *ptr; slat != nil {
+		ret, err = slat.(jsonexp.CompactMarshaler).MarshalCompact(n)
+	}
+	return
+}
+
+func Trigger_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Trigger) (err error) {
+	if ptr, e := jsonexp.UnmarshalCompactSlot(n, b); e != nil {
+		err = e
+	} else if store, ok := ptr.(Trigger); !ok && ptr != nil {
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Trigger_Type)
+	} else {
+		(*out) = store
+	}
+	return
+}
+
+var Trigger_Detailed_Optional_Marshal = Trigger_Detailed_Marshal
+var Trigger_Detailed_Optional_Unmarshal = Trigger_Detailed_Unmarshal
 
 func Trigger_Detailed_Marshal(n jsonexp.Context, ptr *Trigger) (ret []byte, err error) {
-	var b []byte
 	if slat := *ptr; slat != nil {
-		b, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
-	}
-	if err == nil {
-		ret, err = json.Marshal(jsonexp.Node{
-			Type:  Type_Trigger,
-			Value: b,
-		})
+		ret, err = slat.(jsonexp.DetailedMarshaler).MarshalDetailed(n)
 	}
 	return
 }
@@ -5051,9 +17281,62 @@ func Trigger_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Trigger) (err 
 	if ptr, e := jsonexp.UnmarshalDetailedSlot(n, b); e != nil {
 		err = e
 	} else if store, ok := ptr.(Trigger); !ok && ptr != nil {
-		err = errutil.Fmt("couldnt store %T into %s", ptr, Type_Trigger)
+		err = errutil.Fmt("couldnt store %T into %s", ptr, Trigger_Type)
 	} else {
 		(*out) = store
+	}
+	return
+}
+
+func Trigger_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Trigger) ([]byte, error) {
+	return Trigger_Repeats_Marshal(n, vals, Trigger_Compact_Marshal)
+}
+func Trigger_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Trigger) ([]byte, error) {
+	return Trigger_Repeats_Marshal(n, vals, Trigger_Detailed_Marshal)
+}
+func Trigger_Repeats_Marshal(n jsonexp.Context, vals *[]Trigger, marshEl func(jsonexp.Context, *Trigger) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Trigger_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Trigger_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Trigger) error {
+	return Trigger_Repeats_Unmarshal(n, b, out, Trigger_Compact_Unmarshal)
+}
+func Trigger_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Trigger) error {
+	return Trigger_Repeats_Unmarshal(n, b, out, Trigger_Detailed_Unmarshal)
+}
+func Trigger_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Trigger, unmarshEl func(jsonexp.Context, []byte, *Trigger) error) (err error) {
+	var vals []Trigger
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Trigger_Type, "-", e)
+		} else {
+			vals = make([]Trigger, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Trigger_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
 	}
 	return
 }
@@ -5064,14 +17347,21 @@ type TriggerCycle struct {
 
 func (*TriggerCycle) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_TriggerCycle,
+		Name: TriggerCycle_Type,
 		Uses: composer.Type_Flow,
 		Lede: "every",
 	}
 }
 
-const Type_TriggerCycle = "trigger_cycle"
+const TriggerCycle_Type = "trigger_cycle"
+const TriggerCycle_Lede = "every"
 
+func (op *TriggerCycle) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return TriggerCycle_Compact_Marshal(n, op)
+}
+func (op *TriggerCycle) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return TriggerCycle_Compact_Unmarshal(n, b, op)
+}
 func (op *TriggerCycle) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return TriggerCycle_Detailed_Marshal(n, op)
 }
@@ -5079,21 +17369,128 @@ func (op *TriggerCycle) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return TriggerCycle_Detailed_Unmarshal(n, b, op)
 }
 
+func TriggerCycle_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]TriggerCycle) ([]byte, error) {
+	return TriggerCycle_Repeats_Marshal(n, vals, TriggerCycle_Compact_Marshal)
+}
+func TriggerCycle_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TriggerCycle) ([]byte, error) {
+	return TriggerCycle_Repeats_Marshal(n, vals, TriggerCycle_Detailed_Marshal)
+}
+func TriggerCycle_Repeats_Marshal(n jsonexp.Context, vals *[]TriggerCycle, marshEl func(jsonexp.Context, *TriggerCycle) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(TriggerCycle_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func TriggerCycle_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TriggerCycle) error {
+	return TriggerCycle_Repeats_Unmarshal(n, b, out, TriggerCycle_Compact_Unmarshal)
+}
+func TriggerCycle_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TriggerCycle) error {
+	return TriggerCycle_Repeats_Unmarshal(n, b, out, TriggerCycle_Detailed_Unmarshal)
+}
+func TriggerCycle_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TriggerCycle, unmarshEl func(jsonexp.Context, []byte, *TriggerCycle) error) (err error) {
+	var vals []TriggerCycle
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(TriggerCycle_Type, "-", e)
+		} else {
+			vals = make([]TriggerCycle, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(TriggerCycle_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func TriggerCycle_Compact_Optional_Marshal(n jsonexp.Context, val **TriggerCycle) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = TriggerCycle_Compact_Marshal(n, *val)
+	}
+	return
+}
+func TriggerCycle_Compact_Marshal(n jsonexp.Context, val *TriggerCycle) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(TriggerCycle_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func TriggerCycle_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TriggerCycle) (err error) {
+	if len(b) > 0 {
+		var val TriggerCycle
+		if e := TriggerCycle_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func TriggerCycle_Compact_Unmarshal(n jsonexp.Context, b []byte, out *TriggerCycle) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(TriggerCycle_Type, "-", e)
+	}
+	return
+}
+
+func TriggerCycle_Detailed_Optional_Marshal(n jsonexp.Context, val **TriggerCycle) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = TriggerCycle_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func TriggerCycle_Detailed_Marshal(n jsonexp.Context, val *TriggerCycle) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_TriggerCycle,
+			Type:   TriggerCycle_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func TriggerCycle_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TriggerCycle) (err error) {
+	if len(b) > 0 {
+		var val TriggerCycle
+		if e := TriggerCycle_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func TriggerCycle_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TriggerCycle) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_TriggerCycle, "-", e)
+		err = errutil.New(TriggerCycle_Type, "-", e)
 	}
 	return
 }
@@ -5104,14 +17501,21 @@ type TriggerOnce struct {
 
 func (*TriggerOnce) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_TriggerOnce,
+		Name: TriggerOnce_Type,
 		Uses: composer.Type_Flow,
 		Lede: "at",
 	}
 }
 
-const Type_TriggerOnce = "trigger_once"
+const TriggerOnce_Type = "trigger_once"
+const TriggerOnce_Lede = "at"
 
+func (op *TriggerOnce) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return TriggerOnce_Compact_Marshal(n, op)
+}
+func (op *TriggerOnce) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return TriggerOnce_Compact_Unmarshal(n, b, op)
+}
 func (op *TriggerOnce) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return TriggerOnce_Detailed_Marshal(n, op)
 }
@@ -5119,21 +17523,128 @@ func (op *TriggerOnce) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return TriggerOnce_Detailed_Unmarshal(n, b, op)
 }
 
+func TriggerOnce_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]TriggerOnce) ([]byte, error) {
+	return TriggerOnce_Repeats_Marshal(n, vals, TriggerOnce_Compact_Marshal)
+}
+func TriggerOnce_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TriggerOnce) ([]byte, error) {
+	return TriggerOnce_Repeats_Marshal(n, vals, TriggerOnce_Detailed_Marshal)
+}
+func TriggerOnce_Repeats_Marshal(n jsonexp.Context, vals *[]TriggerOnce, marshEl func(jsonexp.Context, *TriggerOnce) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(TriggerOnce_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func TriggerOnce_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TriggerOnce) error {
+	return TriggerOnce_Repeats_Unmarshal(n, b, out, TriggerOnce_Compact_Unmarshal)
+}
+func TriggerOnce_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TriggerOnce) error {
+	return TriggerOnce_Repeats_Unmarshal(n, b, out, TriggerOnce_Detailed_Unmarshal)
+}
+func TriggerOnce_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TriggerOnce, unmarshEl func(jsonexp.Context, []byte, *TriggerOnce) error) (err error) {
+	var vals []TriggerOnce
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(TriggerOnce_Type, "-", e)
+		} else {
+			vals = make([]TriggerOnce, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(TriggerOnce_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func TriggerOnce_Compact_Optional_Marshal(n jsonexp.Context, val **TriggerOnce) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = TriggerOnce_Compact_Marshal(n, *val)
+	}
+	return
+}
+func TriggerOnce_Compact_Marshal(n jsonexp.Context, val *TriggerOnce) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(TriggerOnce_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func TriggerOnce_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TriggerOnce) (err error) {
+	if len(b) > 0 {
+		var val TriggerOnce
+		if e := TriggerOnce_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func TriggerOnce_Compact_Unmarshal(n jsonexp.Context, b []byte, out *TriggerOnce) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(TriggerOnce_Type, "-", e)
+	}
+	return
+}
+
+func TriggerOnce_Detailed_Optional_Marshal(n jsonexp.Context, val **TriggerOnce) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = TriggerOnce_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func TriggerOnce_Detailed_Marshal(n jsonexp.Context, val *TriggerOnce) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_TriggerOnce,
+			Type:   TriggerOnce_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func TriggerOnce_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TriggerOnce) (err error) {
+	if len(b) > 0 {
+		var val TriggerOnce
+		if e := TriggerOnce_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func TriggerOnce_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TriggerOnce) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_TriggerOnce, "-", e)
+		err = errutil.New(TriggerOnce_Type, "-", e)
 	}
 	return
 }
@@ -5144,14 +17655,21 @@ type TriggerSwitch struct {
 
 func (*TriggerSwitch) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_TriggerSwitch,
+		Name: TriggerSwitch_Type,
 		Uses: composer.Type_Flow,
 		Lede: "after",
 	}
 }
 
-const Type_TriggerSwitch = "trigger_switch"
+const TriggerSwitch_Type = "trigger_switch"
+const TriggerSwitch_Lede = "after"
 
+func (op *TriggerSwitch) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return TriggerSwitch_Compact_Marshal(n, op)
+}
+func (op *TriggerSwitch) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return TriggerSwitch_Compact_Unmarshal(n, b, op)
+}
 func (op *TriggerSwitch) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return TriggerSwitch_Detailed_Marshal(n, op)
 }
@@ -5159,21 +17677,128 @@ func (op *TriggerSwitch) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return TriggerSwitch_Detailed_Unmarshal(n, b, op)
 }
 
+func TriggerSwitch_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]TriggerSwitch) ([]byte, error) {
+	return TriggerSwitch_Repeats_Marshal(n, vals, TriggerSwitch_Compact_Marshal)
+}
+func TriggerSwitch_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]TriggerSwitch) ([]byte, error) {
+	return TriggerSwitch_Repeats_Marshal(n, vals, TriggerSwitch_Detailed_Marshal)
+}
+func TriggerSwitch_Repeats_Marshal(n jsonexp.Context, vals *[]TriggerSwitch, marshEl func(jsonexp.Context, *TriggerSwitch) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(TriggerSwitch_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func TriggerSwitch_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TriggerSwitch) error {
+	return TriggerSwitch_Repeats_Unmarshal(n, b, out, TriggerSwitch_Compact_Unmarshal)
+}
+func TriggerSwitch_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TriggerSwitch) error {
+	return TriggerSwitch_Repeats_Unmarshal(n, b, out, TriggerSwitch_Detailed_Unmarshal)
+}
+func TriggerSwitch_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]TriggerSwitch, unmarshEl func(jsonexp.Context, []byte, *TriggerSwitch) error) (err error) {
+	var vals []TriggerSwitch
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(TriggerSwitch_Type, "-", e)
+		} else {
+			vals = make([]TriggerSwitch, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(TriggerSwitch_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func TriggerSwitch_Compact_Optional_Marshal(n jsonexp.Context, val **TriggerSwitch) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = TriggerSwitch_Compact_Marshal(n, *val)
+	}
+	return
+}
+func TriggerSwitch_Compact_Marshal(n jsonexp.Context, val *TriggerSwitch) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(TriggerSwitch_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func TriggerSwitch_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TriggerSwitch) (err error) {
+	if len(b) > 0 {
+		var val TriggerSwitch
+		if e := TriggerSwitch_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func TriggerSwitch_Compact_Unmarshal(n jsonexp.Context, b []byte, out *TriggerSwitch) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(TriggerSwitch_Type, "-", e)
+	}
+	return
+}
+
+func TriggerSwitch_Detailed_Optional_Marshal(n jsonexp.Context, val **TriggerSwitch) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = TriggerSwitch_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func TriggerSwitch_Detailed_Marshal(n jsonexp.Context, val *TriggerSwitch) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_TriggerSwitch,
+			Type:   TriggerSwitch_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func TriggerSwitch_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TriggerSwitch) (err error) {
+	if len(b) > 0 {
+		var val TriggerSwitch
+		if e := TriggerSwitch_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func TriggerSwitch_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *TriggerSwitch) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_TriggerSwitch, "-", e)
+		err = errutil.New(TriggerSwitch_Type, "-", e)
 	}
 	return
 }
@@ -5184,14 +17809,21 @@ type Unequal struct {
 
 func (*Unequal) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_Unequal,
+		Name: Unequal_Type,
 		Uses: composer.Type_Flow,
 		Lede: "other_than",
 	}
 }
 
-const Type_Unequal = "unequal"
+const Unequal_Type = "unequal"
+const Unequal_Lede = "other_than"
 
+func (op *Unequal) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return Unequal_Compact_Marshal(n, op)
+}
+func (op *Unequal) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return Unequal_Compact_Unmarshal(n, b, op)
+}
 func (op *Unequal) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return Unequal_Detailed_Marshal(n, op)
 }
@@ -5199,21 +17831,128 @@ func (op *Unequal) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return Unequal_Detailed_Unmarshal(n, b, op)
 }
 
+func Unequal_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]Unequal) ([]byte, error) {
+	return Unequal_Repeats_Marshal(n, vals, Unequal_Compact_Marshal)
+}
+func Unequal_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]Unequal) ([]byte, error) {
+	return Unequal_Repeats_Marshal(n, vals, Unequal_Detailed_Marshal)
+}
+func Unequal_Repeats_Marshal(n jsonexp.Context, vals *[]Unequal, marshEl func(jsonexp.Context, *Unequal) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(Unequal_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func Unequal_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Unequal) error {
+	return Unequal_Repeats_Unmarshal(n, b, out, Unequal_Compact_Unmarshal)
+}
+func Unequal_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Unequal) error {
+	return Unequal_Repeats_Unmarshal(n, b, out, Unequal_Detailed_Unmarshal)
+}
+func Unequal_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]Unequal, unmarshEl func(jsonexp.Context, []byte, *Unequal) error) (err error) {
+	var vals []Unequal
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(Unequal_Type, "-", e)
+		} else {
+			vals = make([]Unequal, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(Unequal_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func Unequal_Compact_Optional_Marshal(n jsonexp.Context, val **Unequal) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Unequal_Compact_Marshal(n, *val)
+	}
+	return
+}
+func Unequal_Compact_Marshal(n jsonexp.Context, val *Unequal) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(Unequal_Lede)
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func Unequal_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Unequal) (err error) {
+	if len(b) > 0 {
+		var val Unequal
+		if e := Unequal_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func Unequal_Compact_Unmarshal(n jsonexp.Context, b []byte, out *Unequal) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(Unequal_Type, "-", e)
+	}
+	return
+}
+
+func Unequal_Detailed_Optional_Marshal(n jsonexp.Context, val **Unequal) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = Unequal_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func Unequal_Detailed_Marshal(n jsonexp.Context, val *Unequal) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_Unequal,
+			Type:   Unequal_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func Unequal_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Unequal) (err error) {
+	if len(b) > 0 {
+		var val Unequal
+		if e := Unequal_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func Unequal_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *Unequal) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_Unequal, "-", e)
+		err = errutil.New(Unequal_Type, "-", e)
 	}
 	return
 }
@@ -5226,16 +17965,23 @@ type While struct {
 
 func (*While) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Type_While,
+		Name: While_Type,
 		Uses: composer.Type_Flow,
 		Lede: "repeating",
 	}
 }
 
-const Type_While = "while"
-const While_True = "$TRUE"
-const While_Do = "$DO"
+const While_Type = "while"
+const While_Lede = "repeating"
+const While_Field_True = "$TRUE"
+const While_Field_Do = "$DO"
 
+func (op *While) MarshalCompact(n jsonexp.Context) (ret []byte, err error) {
+	return While_Compact_Marshal(n, op)
+}
+func (op *While) UnmarshalCompact(n jsonexp.Context, b []byte) error {
+	return While_Compact_Unmarshal(n, b, op)
+}
 func (op *While) MarshalDetailed(n jsonexp.Context) (ret []byte, err error) {
 	return While_Detailed_Marshal(n, op)
 }
@@ -5243,35 +17989,162 @@ func (op *While) UnmarshalDetailed(n jsonexp.Context, b []byte) error {
 	return While_Detailed_Unmarshal(n, b, op)
 }
 
+func While_Compact_Repeats_Marshal(n jsonexp.Context, vals *[]While) ([]byte, error) {
+	return While_Repeats_Marshal(n, vals, While_Compact_Marshal)
+}
+func While_Detailed_Repeats_Marshal(n jsonexp.Context, vals *[]While) ([]byte, error) {
+	return While_Repeats_Marshal(n, vals, While_Detailed_Marshal)
+}
+func While_Repeats_Marshal(n jsonexp.Context, vals *[]While, marshEl func(jsonexp.Context, *While) ([]byte, error)) (ret []byte, err error) {
+	var msgs []json.RawMessage
+	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
+		msgs = make([]json.RawMessage, cnt)
+		for i, el := range *vals {
+			if b, e := marshEl(n, &el); e != nil {
+				err = errutil.New(While_Type, "at", i, "-", e)
+				break
+			} else {
+				msgs[i] = b
+			}
+		}
+	}
+	if err == nil {
+		ret, err = json.Marshal(msgs)
+	}
+	return
+}
+
+func While_Compact_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]While) error {
+	return While_Repeats_Unmarshal(n, b, out, While_Compact_Unmarshal)
+}
+func While_Detailed_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]While) error {
+	return While_Repeats_Unmarshal(n, b, out, While_Detailed_Unmarshal)
+}
+func While_Repeats_Unmarshal(n jsonexp.Context, b []byte, out *[]While, unmarshEl func(jsonexp.Context, []byte, *While) error) (err error) {
+	var vals []While
+	if len(b) > 0 { // generated code collapses optional and empty.
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(b, &msgs); e != nil {
+			err = errutil.New(While_Type, "-", e)
+		} else {
+			vals = make([]While, len(msgs))
+			for i, msg := range msgs {
+				if e := unmarshEl(n, msg, &vals[i]); e != nil {
+					err = errutil.New(While_Type, "at", i, "-", e)
+					break
+				}
+			}
+		}
+	}
+	if err == nil {
+		*out = vals
+	}
+	return
+}
+
+func While_Compact_Optional_Marshal(n jsonexp.Context, val **While) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = While_Compact_Marshal(n, *val)
+	}
+	return
+}
+func While_Compact_Marshal(n jsonexp.Context, val *While) (ret []byte, err error) {
+	var sig jsonexp.Sig
+	var fields []json.RawMessage
+	sig.WriteLede(While_Lede)
+	if b, e := rt.BoolEval_Compact_Marshal(n, &val.True); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("")
+		fields = append(fields, b)
+	}
+
+	if b, e := Activity_Compact_Marshal(n, &val.Do); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		sig.WriteLabel("do")
+		fields = append(fields, b)
+	}
+
+	if err == nil {
+		ret, err = json.Marshal(map[string]interface{}{
+			sig.String(): fields,
+		})
+	}
+	return
+}
+
+func While_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **While) (err error) {
+	if len(b) > 0 {
+		var val While
+		if e := While_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+func While_Compact_Unmarshal(n jsonexp.Context, b []byte, out *While) (err error) {
+	var msg jsonexp.Flow
+	if e := json.Unmarshal(b, &msg); e != nil {
+		err = errutil.New(While_Type, "-", e)
+	} else if e := rt.BoolEval_Compact_Unmarshal(n, msg.Fields[While_Field_True], &out.True); e != nil {
+		err = errutil.New(While_Type+"."+While_Field_True, "-", e)
+	} else if e := Activity_Compact_Unmarshal(n, msg.Fields[While_Field_Do], &out.Do); e != nil {
+		err = errutil.New(While_Type+"."+While_Field_Do, "-", e)
+	}
+	return
+}
+
+func While_Detailed_Optional_Marshal(n jsonexp.Context, val **While) (ret []byte, err error) {
+	if *val != nil {
+		ret, err = While_Detailed_Marshal(n, *val)
+	}
+	return
+}
 func While_Detailed_Marshal(n jsonexp.Context, val *While) (ret []byte, err error) {
 	fields := make(jsonexp.Fields)
 	if b, e := rt.BoolEval_Detailed_Marshal(n, &val.True); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[While_True] = b
+	} else {
+		fields[While_Field_True] = b
 	}
+
 	if b, e := Activity_Detailed_Marshal(n, &val.Do); e != nil {
 		err = errutil.Append(err, e)
-	} else if len(b) > 0 {
-		fields[While_Do] = b
+	} else {
+		fields[While_Field_Do] = b
 	}
+
 	if err == nil {
 		ret, err = json.Marshal(jsonexp.Flow{
-			Type:   Type_While,
+			Type:   While_Type,
 			Fields: fields,
 		})
 	}
 	return
 }
 
+func While_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **While) (err error) {
+	if len(b) > 0 {
+		var val While
+		if e := While_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
 func While_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *While) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(Type_While, "-", e)
-	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[While_True], &out.True); e != nil {
-		err = errutil.New(Type_While+"."+While_True, "-", e)
-	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[While_Do], &out.Do); e != nil {
-		err = errutil.New(Type_While+"."+While_Do, "-", e)
+		err = errutil.New(While_Type, "-", e)
+	} else if e := rt.BoolEval_Detailed_Unmarshal(n, msg.Fields[While_Field_True], &out.True); e != nil {
+		err = errutil.New(While_Type+"."+While_Field_True, "-", e)
+	} else if e := Activity_Detailed_Unmarshal(n, msg.Fields[While_Field_Do], &out.Do); e != nil {
+		err = errutil.New(While_Type+"."+While_Field_Do, "-", e)
 	}
 	return
 }

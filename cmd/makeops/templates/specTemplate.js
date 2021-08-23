@@ -2,7 +2,7 @@
 'use strict';
 module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
   return composer.Spec{
-    Name: Type_{{Pascal name}},
+    Name: {{Pascal name}}_Type,
     Uses: composer.Type_{{Pascal uses}},
 {{#if (LedeName this)}}
     Lede: "{{LedeName this}}",
@@ -22,7 +22,7 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
 {{/if}}
 {{#if (Uses name "swap")}}
     Choices: []string {
-      {{#each (Choices @this)~}}{{Pascal ../name}}_{{Pascal this.token}},{{#unless @last}} {{/unless}}{{/each}}
+      {{#each (Choices @this)~}}{{Pascal ../name}}_{{Pascal this.token}}_Opt,{{#unless @last}} {{/unless}}{{/each}}
      },
     Swaps: []interface{} {
 {{#each with.params}}
@@ -33,4 +33,10 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
   }
 }
 
-const Type_{{Pascal name}} = "{{name}}";`;
+const {{Pascal name}}_Type = "{{name}}"
+const {{Pascal name}}_Lede = {{#if (LedeName this)~}}
+  "{{LedeName this}}"
+{{~else~}}
+  {{Pascal name}}_Type
+{{~/if~}}
+`;

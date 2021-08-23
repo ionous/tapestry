@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"regexp"
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
@@ -52,7 +53,18 @@ func CompactFile(inpaths string) (err error) {
 				if err != nil {
 					fmt.Println(err)
 				}
-				fmt.Print(string(b))
+				s := string(b)
+				re := regexp.MustCompile(`([,{\[])\s+([{\[])`)
+				re2 := regexp.MustCompile(`([\]}])\s+([\]}])`)
+				n := re.ReplaceAllString(s, "$1$2")
+				for {
+					was := n
+					n = re2.ReplaceAllString(n, "$1$2")
+					if was == n {
+						break
+					}
+				}
+				fmt.Print(n + "\n")
 			}
 		}
 	}

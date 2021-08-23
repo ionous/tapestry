@@ -11,4 +11,5 @@ require (
 	github.com/kr/pretty v0.2.1
 	github.com/mattn/go-sqlite3 v1.14.6
 	github.com/reiver/go-porterstemmer v1.0.1
+	github.com/tidwall/pretty v1.2.0 // indirect
 )

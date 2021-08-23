@@ -183,10 +183,10 @@ func (dec *Compacter) readField(refType r.Type, el interface{}) (ret interface{}
 func (dec *Compacter) readString(spec composer.Spec, m reader.Map) (ret interface{}, err error) {
 	if el, ok := m[reader.ItemValue]; !ok {
 		err = errutil.New("missing value while reading string")
-	} else if v, ok := el.(string); !ok {
+	} else if v, ok := el.(string); !ok && el != nil {
 		err = errutil.New("expected a string")
 	} else {
-		if v[0] != '$' {
+		if len(v) == 0 || v[0] != '$' {
 			if spec.OpenStrings {
 				ret = v
 			} else {
@@ -211,7 +211,7 @@ func (dec *Compacter) readFloat(cmd composer.Spec, m reader.Map) (ret float64, e
 	if el, ok := m[reader.ItemValue]; !ok {
 		err = errutil.New("missing value while reading string")
 	} else if v, ok := el.(float64); !ok {
-		err = errutil.New("expected a string")
+		err = errutil.New("expected a float")
 	} else {
 		ret = v
 	}

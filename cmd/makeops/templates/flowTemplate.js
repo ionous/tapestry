@@ -14,13 +14,15 @@ type {{Pascal name}} struct {
 
 {{>spec~}}
 {{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
-const {{Pascal ../name}}_{{Pascal @key}}= "{{@key}}";
+const {{Pascal ../name}}_Field_{{Pascal @key}} = "{{@key}}";
 {{~/unless}}{{~/each}}
-{{/with}}
-{{#if marshal}}
-{{>sig type}}
-{{>flowDetails type}}
+{{#if ../marshal}}
+{{>sig}}
+{{#unless (NoHelpers name)}}
+{{>repeat name=(Pascal name) el=(Pascal name)}}
+{{/unless}}
+{{>flowCompact}}
+{{>flowDetails}}
 {{/if}}
-{{#if repeats}}{{>repeat type}}{{/if}}
-{{#if  optional}}{{>option type}}{{/if}}
+{{/with}}
 `;

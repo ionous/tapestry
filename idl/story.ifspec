@@ -417,7 +417,7 @@
             {
                 "uses": "flow",
                 "slot": "story_statement",
-                "spec": "{relation:relation_name} relates {relation_cardinality}",
+                "spec": "{relation:relation_name} relates {cardinality:relation_cardinality}",
                 "group": "modeling"
             },
             "relation_cardinality":

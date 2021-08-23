@@ -71,6 +71,9 @@ Handlebars.registerHelper('IsPositioned', isPositioned);
 Handlebars.registerHelper('IsToken', function(str) {
   return (str && str[0] === '$');
 });
+Handlebars.registerHelper('NoHelpers', function(name) {
+  return name === "position";
+});
 
 Handlebars.registerHelper('LedeName', function(t) {
   const m = t.group.includes("modeling");
@@ -101,28 +104,33 @@ const scopedName = function(name, ignoreOverride) {
 };
 
 Handlebars.registerHelper('ScopeOf', scopeOf);
-Handlebars.registerHelper('ModOf', function(param) {
- return param.repeats? "_Repeats":
-   (param.optional && (allTypes[param.type].uses === "flow"))?
-     "_Optional": "";
-});
 
 Handlebars.registerHelper('LowerNameOf', function(key, param) {
   const el = pascal(key) || pascal(param.type);
   return el.charAt(0).toLowerCase() + el.slice(1);
 });
 
-Handlebars.registerHelper('LabelOf', function(key, param, index) {
+const labelOf= function(key, param, index) {
   const m = currentType.group.includes("modeling");
   return m ? (index ? lower(key) : '_') : param.label.replaceAll(" ", "_");
+}
+Handlebars.registerHelper('LabelOf', labelOf);
+Handlebars.registerHelper('SelectorOf', function(key, param, index) {
+  const x= labelOf(key, param, index);
+  return x !== "_"? x: "";
 });
-
 Handlebars.registerHelper('OverrideOf', function(name) {
   return overrides[name];
+});
+Handlebars.registerHelper('PrimitiveOf', function(name) {
+  return overrides[name] || name;
 });
 Handlebars.registerHelper('IsBool', function(name) {
   return overrides[name] === 'bool';
 });
+const isPrim= function(type) {
+  return ["num", "str"].includes(type.uses);
+}
 Handlebars.registerHelper('TypeOf', function(param) {
   const name = param.type;
   const type = allTypes[name]; // the referenced type
@@ -213,7 +221,13 @@ Handlebars.registerHelper('GroupOf', function(desc) {
 })
 
 // load each js file as a handlebars template
-const partials = ['spec', 'repeat', 'option', 'sig', 'flowDetails'];
+const partials = [
+  'repeat', 'sig', 'spec', 'override',
+  'flowCompact', 'flowDetails',
+  'primCompact', 'primDetails',
+  'slotCompact', 'slotDetails',
+  'swapCompact', 'swapDetails'
+];
 const sources = ['header', 'slot', 'prim', 'swap', 'flow', 'footer', 'regList'];
 partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Template.js`)));
 const templates = Object.fromEntries(sources.map(k => [k,
@@ -265,6 +279,7 @@ console.log("num groups", Object.keys(groups).length);
 
 // determine includes:
 for (currentGroup in groups) {
+  console.log(currentGroup);
   const marshal = currentGroup !== "reader";
   const g = groups[currentGroup];
   // look up all the dependencies
@@ -296,10 +311,6 @@ for (currentGroup in groups) {
     }
   }
 
-  // for looking at the full spec(s)
-  // console.log(JSON.stringify(allTypes,0,2));
-  // return;
-
   // 1. open a file
   const dir = path.join(process.env.GOPATH, "src", locationOf(currentGroup));
   const filepath = path.join(dir, `${currentGroup}_lang.go`);
@@ -327,12 +338,11 @@ for (currentGroup in groups) {
     if (template) {
       currentType = type;
       // console.log(type.uses);
-      fs.writeSync(fd, template({
+      const d= {
         marshal,
-        optional: optionals.has(typeName),
-        repeats: repeats.has(typeName),
         type: type,
-      }));
+      };
+      fs.writeSync(fd, template(d));
     }
   }
   // 3. write registration lists

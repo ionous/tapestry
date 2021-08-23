@@ -36,14 +36,16 @@ func (spec *Spec) UsesStr() bool {
 }
 
 func (spec *Spec) FindChoice(choice string) (ret string, okay bool) {
-	if choice[0] != '$' {
-		if spec.OpenStrings {
-			ret = choice
+	if len(choice) > 0 {
+		if choice[0] != '$' {
+			if spec.OpenStrings {
+				ret = choice
+				okay = true
+			}
+		} else if s, i := spec.IndexOfChoice(choice); i >= 0 {
+			ret = s
 			okay = true
 		}
-	} else if s, i := spec.IndexOfChoice(choice); i >= 0 {
-		ret = s
-		okay = true
 	}
 	return
 }
