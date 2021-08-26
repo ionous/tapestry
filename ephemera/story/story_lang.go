@@ -261,6 +261,18 @@ func ActionContext_Compact_Optional_Marshal(n jsonexp.Context, val **ActionConte
 	}
 	return
 }
+func ActionContext_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ActionContext) (err error) {
+	if len(b) > 0 {
+		var val ActionContext
+		if e := ActionContext_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func ActionContext_Compact_Marshal(n jsonexp.Context, val *ActionContext) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(ActionContext_Lede)
@@ -277,18 +289,6 @@ func ActionContext_Compact_Marshal(n jsonexp.Context, val *ActionContext) (ret [
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func ActionContext_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ActionContext) (err error) {
-	if len(b) > 0 {
-		var val ActionContext
-		if e := ActionContext_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -444,6 +444,18 @@ func ActionDecl_Compact_Optional_Marshal(n jsonexp.Context, val **ActionDecl) (r
 	}
 	return
 }
+func ActionDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ActionDecl) (err error) {
+	if len(b) > 0 {
+		var val ActionDecl
+		if e := ActionDecl_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func ActionDecl_Compact_Marshal(n jsonexp.Context, val *ActionDecl) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(ActionDecl_Lede)
@@ -470,18 +482,6 @@ func ActionDecl_Compact_Marshal(n jsonexp.Context, val *ActionDecl) (ret []byte,
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func ActionDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ActionDecl) (err error) {
-	if len(b) > 0 {
-		var val ActionDecl
-		if e := ActionDecl_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -1663,6 +1663,18 @@ func Argument_Compact_Optional_Marshal(n jsonexp.Context, val **Argument) (ret [
 	}
 	return
 }
+func Argument_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Argument) (err error) {
+	if len(b) > 0 {
+		var val Argument
+		if e := Argument_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Argument_Compact_Marshal(n jsonexp.Context, val *Argument) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Argument_Lede)
@@ -1684,18 +1696,6 @@ func Argument_Compact_Marshal(n jsonexp.Context, val *Argument) (ret []byte, err
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func Argument_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Argument) (err error) {
-	if len(b) > 0 {
-		var val Argument
-		if e := Argument_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -1858,6 +1858,18 @@ func Arguments_Compact_Optional_Marshal(n jsonexp.Context, val **Arguments) (ret
 	}
 	return
 }
+func Arguments_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Arguments) (err error) {
+	if len(b) > 0 {
+		var val Arguments
+		if e := Arguments_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Arguments_Compact_Marshal(n jsonexp.Context, val *Arguments) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Arguments_Lede)
@@ -1874,18 +1886,6 @@ func Arguments_Compact_Marshal(n jsonexp.Context, val *Arguments) (ret []byte, e
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func Arguments_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Arguments) (err error) {
-	if len(b) > 0 {
-		var val Arguments
-		if e := Arguments_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -2194,6 +2194,18 @@ func AspectTraits_Compact_Optional_Marshal(n jsonexp.Context, val **AspectTraits
 	}
 	return
 }
+func AspectTraits_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AspectTraits) (err error) {
+	if len(b) > 0 {
+		var val AspectTraits
+		if e := AspectTraits_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func AspectTraits_Compact_Marshal(n jsonexp.Context, val *AspectTraits) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(AspectTraits_Lede)
@@ -2209,18 +2221,6 @@ func AspectTraits_Compact_Marshal(n jsonexp.Context, val *AspectTraits) (ret []b
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func AspectTraits_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **AspectTraits) (err error) {
-	if len(b) > 0 {
-		var val AspectTraits
-		if e := AspectTraits_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -2376,6 +2376,18 @@ func BoxedNumber_Compact_Optional_Marshal(n jsonexp.Context, val **BoxedNumber) 
 	}
 	return
 }
+func BoxedNumber_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BoxedNumber) (err error) {
+	if len(b) > 0 {
+		var val BoxedNumber
+		if e := BoxedNumber_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func BoxedNumber_Compact_Marshal(n jsonexp.Context, val *BoxedNumber) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(BoxedNumber_Lede)
@@ -2386,18 +2398,6 @@ func BoxedNumber_Compact_Marshal(n jsonexp.Context, val *BoxedNumber) (ret []byt
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func BoxedNumber_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BoxedNumber) (err error) {
-	if len(b) > 0 {
-		var val BoxedNumber
-		if e := BoxedNumber_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -2543,6 +2543,18 @@ func BoxedText_Compact_Optional_Marshal(n jsonexp.Context, val **BoxedText) (ret
 	}
 	return
 }
+func BoxedText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BoxedText) (err error) {
+	if len(b) > 0 {
+		var val BoxedText
+		if e := BoxedText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func BoxedText_Compact_Marshal(n jsonexp.Context, val *BoxedText) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(BoxedText_Lede)
@@ -2553,18 +2565,6 @@ func BoxedText_Compact_Marshal(n jsonexp.Context, val *BoxedText) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func BoxedText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **BoxedText) (err error) {
-	if len(b) > 0 {
-		var val BoxedText
-		if e := BoxedText_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -2716,6 +2716,18 @@ func Certainties_Compact_Optional_Marshal(n jsonexp.Context, val **Certainties) 
 	}
 	return
 }
+func Certainties_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Certainties) (err error) {
+	if len(b) > 0 {
+		var val Certainties
+		if e := Certainties_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Certainties_Compact_Marshal(n jsonexp.Context, val *Certainties) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Certainties_Lede)
@@ -2741,18 +2753,6 @@ func Certainties_Compact_Marshal(n jsonexp.Context, val *Certainties) (ret []byt
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Certainties_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Certainties) (err error) {
-	if len(b) > 0 {
-		var val Certainties
-		if e := Certainties_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -3094,6 +3094,18 @@ func Comment_Compact_Optional_Marshal(n jsonexp.Context, val **Comment) (ret []b
 	}
 	return
 }
+func Comment_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Comment) (err error) {
+	if len(b) > 0 {
+		var val Comment
+		if e := Comment_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Comment_Compact_Marshal(n jsonexp.Context, val *Comment) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Comment_Lede)
@@ -3104,18 +3116,6 @@ func Comment_Compact_Marshal(n jsonexp.Context, val *Comment) (ret []byte, err e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Comment_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Comment) (err error) {
-	if len(b) > 0 {
-		var val Comment
-		if e := Comment_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -3264,6 +3264,18 @@ func CommonAction_Compact_Optional_Marshal(n jsonexp.Context, val **CommonAction
 	}
 	return
 }
+func CommonAction_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CommonAction) (err error) {
+	if len(b) > 0 {
+		var val CommonAction
+		if e := CommonAction_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func CommonAction_Compact_Marshal(n jsonexp.Context, val *CommonAction) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(CommonAction_Lede)
@@ -3285,18 +3297,6 @@ func CommonAction_Compact_Marshal(n jsonexp.Context, val *CommonAction) (ret []b
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func CommonAction_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CommonAction) (err error) {
-	if len(b) > 0 {
-		var val CommonAction
-		if e := CommonAction_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -3460,6 +3460,18 @@ func CountOf_Compact_Optional_Marshal(n jsonexp.Context, val **CountOf) (ret []b
 	}
 	return
 }
+func CountOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CountOf) (err error) {
+	if len(b) > 0 {
+		var val CountOf
+		if e := CountOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func CountOf_Compact_Marshal(n jsonexp.Context, val *CountOf) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(CountOf_Lede)
@@ -3481,18 +3493,6 @@ func CountOf_Compact_Marshal(n jsonexp.Context, val *CountOf) (ret []byte, err e
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func CountOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CountOf) (err error) {
-	if len(b) > 0 {
-		var val CountOf
-		if e := CountOf_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -3654,6 +3654,18 @@ func CycleText_Compact_Optional_Marshal(n jsonexp.Context, val **CycleText) (ret
 	}
 	return
 }
+func CycleText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CycleText) (err error) {
+	if len(b) > 0 {
+		var val CycleText
+		if e := CycleText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func CycleText_Compact_Marshal(n jsonexp.Context, val *CycleText) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(CycleText_Lede)
@@ -3670,18 +3682,6 @@ func CycleText_Compact_Marshal(n jsonexp.Context, val *CycleText) (ret []byte, e
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func CycleText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **CycleText) (err error) {
-	if len(b) > 0 {
-		var val CycleText
-		if e := CycleText_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -3834,6 +3834,18 @@ func Determine_Compact_Optional_Marshal(n jsonexp.Context, val **Determine) (ret
 	}
 	return
 }
+func Determine_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Determine) (err error) {
+	if len(b) > 0 {
+		var val Determine
+		if e := Determine_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Determine_Compact_Marshal(n jsonexp.Context, val *Determine) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Determine_Lede)
@@ -3849,18 +3861,6 @@ func Determine_Compact_Marshal(n jsonexp.Context, val *Determine) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Determine_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Determine) (err error) {
-	if len(b) > 0 {
-		var val Determine
-		if e := Determine_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -4182,6 +4182,18 @@ func EventBlock_Compact_Optional_Marshal(n jsonexp.Context, val **EventBlock) (r
 	}
 	return
 }
+func EventBlock_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **EventBlock) (err error) {
+	if len(b) > 0 {
+		var val EventBlock
+		if e := EventBlock_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func EventBlock_Compact_Marshal(n jsonexp.Context, val *EventBlock) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(EventBlock_Lede)
@@ -4203,18 +4215,6 @@ func EventBlock_Compact_Marshal(n jsonexp.Context, val *EventBlock) (ret []byte,
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func EventBlock_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **EventBlock) (err error) {
-	if len(b) > 0 {
-		var val EventBlock
-		if e := EventBlock_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -4381,6 +4381,18 @@ func EventHandler_Compact_Optional_Marshal(n jsonexp.Context, val **EventHandler
 	}
 	return
 }
+func EventHandler_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **EventHandler) (err error) {
+	if len(b) > 0 {
+		var val EventHandler
+		if e := EventHandler_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func EventHandler_Compact_Marshal(n jsonexp.Context, val *EventHandler) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(EventHandler_Lede)
@@ -4406,18 +4418,6 @@ func EventHandler_Compact_Marshal(n jsonexp.Context, val *EventHandler) (ret []b
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func EventHandler_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **EventHandler) (err error) {
-	if len(b) > 0 {
-		var val EventHandler
-		if e := EventHandler_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -5327,6 +5327,18 @@ func GrammarDecl_Compact_Optional_Marshal(n jsonexp.Context, val **GrammarDecl) 
 	}
 	return
 }
+func GrammarDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **GrammarDecl) (err error) {
+	if len(b) > 0 {
+		var val GrammarDecl
+		if e := GrammarDecl_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func GrammarDecl_Compact_Marshal(n jsonexp.Context, val *GrammarDecl) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(GrammarDecl_Lede)
@@ -5337,18 +5349,6 @@ func GrammarDecl_Compact_Marshal(n jsonexp.Context, val *GrammarDecl) (ret []byt
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func GrammarDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **GrammarDecl) (err error) {
-	if len(b) > 0 {
-		var val GrammarDecl
-		if e := GrammarDecl_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -5500,6 +5500,18 @@ func KindOfNoun_Compact_Optional_Marshal(n jsonexp.Context, val **KindOfNoun) (r
 	}
 	return
 }
+func KindOfNoun_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindOfNoun) (err error) {
+	if len(b) > 0 {
+		var val KindOfNoun
+		if e := KindOfNoun_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func KindOfNoun_Compact_Marshal(n jsonexp.Context, val *KindOfNoun) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(KindOfNoun_Lede)
@@ -5525,18 +5537,6 @@ func KindOfNoun_Compact_Marshal(n jsonexp.Context, val *KindOfNoun) (ret []byte,
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func KindOfNoun_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindOfNoun) (err error) {
-	if len(b) > 0 {
-		var val KindOfNoun
-		if e := KindOfNoun_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -5714,6 +5714,18 @@ func KindOfRelation_Compact_Optional_Marshal(n jsonexp.Context, val **KindOfRela
 	}
 	return
 }
+func KindOfRelation_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindOfRelation) (err error) {
+	if len(b) > 0 {
+		var val KindOfRelation
+		if e := KindOfRelation_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func KindOfRelation_Compact_Marshal(n jsonexp.Context, val *KindOfRelation) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(KindOfRelation_Lede)
@@ -5729,18 +5741,6 @@ func KindOfRelation_Compact_Marshal(n jsonexp.Context, val *KindOfRelation) (ret
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func KindOfRelation_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindOfRelation) (err error) {
-	if len(b) > 0 {
-		var val KindOfRelation
-		if e := KindOfRelation_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -5896,6 +5896,18 @@ func KindsOfAspect_Compact_Optional_Marshal(n jsonexp.Context, val **KindsOfAspe
 	}
 	return
 }
+func KindsOfAspect_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOfAspect) (err error) {
+	if len(b) > 0 {
+		var val KindsOfAspect
+		if e := KindsOfAspect_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func KindsOfAspect_Compact_Marshal(n jsonexp.Context, val *KindsOfAspect) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(KindsOfAspect_Lede)
@@ -5906,18 +5918,6 @@ func KindsOfAspect_Compact_Marshal(n jsonexp.Context, val *KindsOfAspect) (ret [
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func KindsOfAspect_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOfAspect) (err error) {
-	if len(b) > 0 {
-		var val KindsOfAspect
-		if e := KindsOfAspect_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -6065,6 +6065,18 @@ func KindsOfKind_Compact_Optional_Marshal(n jsonexp.Context, val **KindsOfKind) 
 	}
 	return
 }
+func KindsOfKind_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOfKind) (err error) {
+	if len(b) > 0 {
+		var val KindsOfKind
+		if e := KindsOfKind_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func KindsOfKind_Compact_Marshal(n jsonexp.Context, val *KindsOfKind) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(KindsOfKind_Lede)
@@ -6080,18 +6092,6 @@ func KindsOfKind_Compact_Marshal(n jsonexp.Context, val *KindsOfKind) (ret []byt
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func KindsOfKind_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOfKind) (err error) {
-	if len(b) > 0 {
-		var val KindsOfKind
-		if e := KindsOfKind_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -6247,6 +6247,18 @@ func KindsOfRecord_Compact_Optional_Marshal(n jsonexp.Context, val **KindsOfReco
 	}
 	return
 }
+func KindsOfRecord_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOfRecord) (err error) {
+	if len(b) > 0 {
+		var val KindsOfRecord
+		if e := KindsOfRecord_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func KindsOfRecord_Compact_Marshal(n jsonexp.Context, val *KindsOfRecord) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(KindsOfRecord_Lede)
@@ -6257,18 +6269,6 @@ func KindsOfRecord_Compact_Marshal(n jsonexp.Context, val *KindsOfRecord) (ret [
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func KindsOfRecord_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsOfRecord) (err error) {
-	if len(b) > 0 {
-		var val KindsOfRecord
-		if e := KindsOfRecord_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -6416,6 +6416,18 @@ func KindsPossessProperties_Compact_Optional_Marshal(n jsonexp.Context, val **Ki
 	}
 	return
 }
+func KindsPossessProperties_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsPossessProperties) (err error) {
+	if len(b) > 0 {
+		var val KindsPossessProperties
+		if e := KindsPossessProperties_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func KindsPossessProperties_Compact_Marshal(n jsonexp.Context, val *KindsPossessProperties) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(KindsPossessProperties_Lede)
@@ -6431,18 +6443,6 @@ func KindsPossessProperties_Compact_Marshal(n jsonexp.Context, val *KindsPossess
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func KindsPossessProperties_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **KindsPossessProperties) (err error) {
-	if len(b) > 0 {
-		var val KindsPossessProperties
-		if e := KindsPossessProperties_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -6600,6 +6600,18 @@ func Lede_Compact_Optional_Marshal(n jsonexp.Context, val **Lede) (ret []byte, e
 	}
 	return
 }
+func Lede_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Lede) (err error) {
+	if len(b) > 0 {
+		var val Lede
+		if e := Lede_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Lede_Compact_Marshal(n jsonexp.Context, val *Lede) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Lede_Lede)
@@ -6615,18 +6627,6 @@ func Lede_Compact_Marshal(n jsonexp.Context, val *Lede) (ret []byte, err error) 
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Lede_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Lede) (err error) {
-	if len(b) > 0 {
-		var val Lede
-		if e := Lede_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -6784,6 +6784,18 @@ func LocalDecl_Compact_Optional_Marshal(n jsonexp.Context, val **LocalDecl) (ret
 	}
 	return
 }
+func LocalDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **LocalDecl) (err error) {
+	if len(b) > 0 {
+		var val LocalDecl
+		if e := LocalDecl_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func LocalDecl_Compact_Marshal(n jsonexp.Context, val *LocalDecl) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(LocalDecl_Lede)
@@ -6799,18 +6811,6 @@ func LocalDecl_Compact_Marshal(n jsonexp.Context, val *LocalDecl) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func LocalDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **LocalDecl) (err error) {
-	if len(b) > 0 {
-		var val LocalDecl
-		if e := LocalDecl_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -6966,6 +6966,18 @@ func LocalInit_Compact_Optional_Marshal(n jsonexp.Context, val **LocalInit) (ret
 	}
 	return
 }
+func LocalInit_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **LocalInit) (err error) {
+	if len(b) > 0 {
+		var val LocalInit
+		if e := LocalInit_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func LocalInit_Compact_Marshal(n jsonexp.Context, val *LocalInit) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(LocalInit_Lede)
@@ -6976,18 +6988,6 @@ func LocalInit_Compact_Marshal(n jsonexp.Context, val *LocalInit) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func LocalInit_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **LocalInit) (err error) {
-	if len(b) > 0 {
-		var val LocalInit
-		if e := LocalInit_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -7135,6 +7135,18 @@ func Make_Compact_Optional_Marshal(n jsonexp.Context, val **Make) (ret []byte, e
 	}
 	return
 }
+func Make_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Make) (err error) {
+	if len(b) > 0 {
+		var val Make
+		if e := Make_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Make_Compact_Marshal(n jsonexp.Context, val *Make) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Make_Lede)
@@ -7150,18 +7162,6 @@ func Make_Compact_Marshal(n jsonexp.Context, val *Make) (ret []byte, err error) 
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Make_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Make) (err error) {
-	if len(b) > 0 {
-		var val Make
-		if e := Make_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -7319,6 +7319,18 @@ func ManyToMany_Compact_Optional_Marshal(n jsonexp.Context, val **ManyToMany) (r
 	}
 	return
 }
+func ManyToMany_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ManyToMany) (err error) {
+	if len(b) > 0 {
+		var val ManyToMany
+		if e := ManyToMany_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func ManyToMany_Compact_Marshal(n jsonexp.Context, val *ManyToMany) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(ManyToMany_Lede)
@@ -7334,18 +7346,6 @@ func ManyToMany_Compact_Marshal(n jsonexp.Context, val *ManyToMany) (ret []byte,
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func ManyToMany_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ManyToMany) (err error) {
-	if len(b) > 0 {
-		var val ManyToMany
-		if e := ManyToMany_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -7503,6 +7503,18 @@ func ManyToOne_Compact_Optional_Marshal(n jsonexp.Context, val **ManyToOne) (ret
 	}
 	return
 }
+func ManyToOne_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ManyToOne) (err error) {
+	if len(b) > 0 {
+		var val ManyToOne
+		if e := ManyToOne_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func ManyToOne_Compact_Marshal(n jsonexp.Context, val *ManyToOne) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(ManyToOne_Lede)
@@ -7518,18 +7530,6 @@ func ManyToOne_Compact_Marshal(n jsonexp.Context, val *ManyToOne) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func ManyToOne_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ManyToOne) (err error) {
-	if len(b) > 0 {
-		var val ManyToOne
-		if e := ManyToOne_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -7687,6 +7687,18 @@ func NamedNoun_Compact_Optional_Marshal(n jsonexp.Context, val **NamedNoun) (ret
 	}
 	return
 }
+func NamedNoun_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NamedNoun) (err error) {
+	if len(b) > 0 {
+		var val NamedNoun
+		if e := NamedNoun_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func NamedNoun_Compact_Marshal(n jsonexp.Context, val *NamedNoun) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(NamedNoun_Lede)
@@ -7702,18 +7714,6 @@ func NamedNoun_Compact_Marshal(n jsonexp.Context, val *NamedNoun) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func NamedNoun_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NamedNoun) (err error) {
-	if len(b) > 0 {
-		var val NamedNoun
-		if e := NamedNoun_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -7873,6 +7873,18 @@ func NounAssignment_Compact_Optional_Marshal(n jsonexp.Context, val **NounAssign
 	}
 	return
 }
+func NounAssignment_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounAssignment) (err error) {
+	if len(b) > 0 {
+		var val NounAssignment
+		if e := NounAssignment_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func NounAssignment_Compact_Marshal(n jsonexp.Context, val *NounAssignment) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(NounAssignment_Lede)
@@ -7893,18 +7905,6 @@ func NounAssignment_Compact_Marshal(n jsonexp.Context, val *NounAssignment) (ret
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func NounAssignment_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounAssignment) (err error) {
-	if len(b) > 0 {
-		var val NounAssignment
-		if e := NounAssignment_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -8440,6 +8440,18 @@ func NounRelation_Compact_Optional_Marshal(n jsonexp.Context, val **NounRelation
 	}
 	return
 }
+func NounRelation_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounRelation) (err error) {
+	if len(b) > 0 {
+		var val NounRelation
+		if e := NounRelation_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func NounRelation_Compact_Marshal(n jsonexp.Context, val *NounRelation) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(NounRelation_Lede)
@@ -8460,18 +8472,6 @@ func NounRelation_Compact_Marshal(n jsonexp.Context, val *NounRelation) (ret []b
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func NounRelation_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounRelation) (err error) {
-	if len(b) > 0 {
-		var val NounRelation
-		if e := NounRelation_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -8641,6 +8641,18 @@ func NounStatement_Compact_Optional_Marshal(n jsonexp.Context, val **NounStateme
 	}
 	return
 }
+func NounStatement_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounStatement) (err error) {
+	if len(b) > 0 {
+		var val NounStatement
+		if e := NounStatement_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func NounStatement_Compact_Marshal(n jsonexp.Context, val *NounStatement) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(NounStatement_Lede)
@@ -8661,18 +8673,6 @@ func NounStatement_Compact_Marshal(n jsonexp.Context, val *NounStatement) (ret [
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func NounStatement_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounStatement) (err error) {
-	if len(b) > 0 {
-		var val NounStatement
-		if e := NounStatement_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -8840,6 +8840,18 @@ func NounTraits_Compact_Optional_Marshal(n jsonexp.Context, val **NounTraits) (r
 	}
 	return
 }
+func NounTraits_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounTraits) (err error) {
+	if len(b) > 0 {
+		var val NounTraits
+		if e := NounTraits_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func NounTraits_Compact_Marshal(n jsonexp.Context, val *NounTraits) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(NounTraits_Lede)
@@ -8855,18 +8867,6 @@ func NounTraits_Compact_Marshal(n jsonexp.Context, val *NounTraits) (ret []byte,
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func NounTraits_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **NounTraits) (err error) {
-	if len(b) > 0 {
-		var val NounTraits
-		if e := NounTraits_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -9183,6 +9183,18 @@ func ObjectType_Compact_Optional_Marshal(n jsonexp.Context, val **ObjectType) (r
 	}
 	return
 }
+func ObjectType_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ObjectType) (err error) {
+	if len(b) > 0 {
+		var val ObjectType
+		if e := ObjectType_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func ObjectType_Compact_Marshal(n jsonexp.Context, val *ObjectType) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(ObjectType_Lede)
@@ -9198,18 +9210,6 @@ func ObjectType_Compact_Marshal(n jsonexp.Context, val *ObjectType) (ret []byte,
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func ObjectType_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ObjectType) (err error) {
-	if len(b) > 0 {
-		var val ObjectType
-		if e := ObjectType_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -9367,6 +9367,18 @@ func OneToMany_Compact_Optional_Marshal(n jsonexp.Context, val **OneToMany) (ret
 	}
 	return
 }
+func OneToMany_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **OneToMany) (err error) {
+	if len(b) > 0 {
+		var val OneToMany
+		if e := OneToMany_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func OneToMany_Compact_Marshal(n jsonexp.Context, val *OneToMany) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(OneToMany_Lede)
@@ -9382,18 +9394,6 @@ func OneToMany_Compact_Marshal(n jsonexp.Context, val *OneToMany) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func OneToMany_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **OneToMany) (err error) {
-	if len(b) > 0 {
-		var val OneToMany
-		if e := OneToMany_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -9551,6 +9551,18 @@ func OneToOne_Compact_Optional_Marshal(n jsonexp.Context, val **OneToOne) (ret [
 	}
 	return
 }
+func OneToOne_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **OneToOne) (err error) {
+	if len(b) > 0 {
+		var val OneToOne
+		if e := OneToOne_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func OneToOne_Compact_Marshal(n jsonexp.Context, val *OneToOne) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(OneToOne_Lede)
@@ -9566,18 +9578,6 @@ func OneToOne_Compact_Marshal(n jsonexp.Context, val *OneToOne) (ret []byte, err
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func OneToOne_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **OneToOne) (err error) {
-	if len(b) > 0 {
-		var val OneToOne
-		if e := OneToOne_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -9734,6 +9734,18 @@ func PairedAction_Compact_Optional_Marshal(n jsonexp.Context, val **PairedAction
 	}
 	return
 }
+func PairedAction_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PairedAction) (err error) {
+	if len(b) > 0 {
+		var val PairedAction
+		if e := PairedAction_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PairedAction_Compact_Marshal(n jsonexp.Context, val *PairedAction) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PairedAction_Lede)
@@ -9750,18 +9762,6 @@ func PairedAction_Compact_Marshal(n jsonexp.Context, val *PairedAction) (ret []b
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func PairedAction_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PairedAction) (err error) {
-	if len(b) > 0 {
-		var val PairedAction
-		if e := PairedAction_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -9912,6 +9912,18 @@ func Paragraph_Compact_Optional_Marshal(n jsonexp.Context, val **Paragraph) (ret
 	}
 	return
 }
+func Paragraph_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Paragraph) (err error) {
+	if len(b) > 0 {
+		var val Paragraph
+		if e := Paragraph_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Paragraph_Compact_Marshal(n jsonexp.Context, val *Paragraph) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Paragraph_Lede)
@@ -9922,18 +9934,6 @@ func Paragraph_Compact_Marshal(n jsonexp.Context, val *Paragraph) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Paragraph_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Paragraph) (err error) {
-	if len(b) > 0 {
-		var val Paragraph
-		if e := Paragraph_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -10085,6 +10085,18 @@ func PatternActions_Compact_Optional_Marshal(n jsonexp.Context, val **PatternAct
 	}
 	return
 }
+func PatternActions_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternActions) (err error) {
+	if len(b) > 0 {
+		var val PatternActions
+		if e := PatternActions_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PatternActions_Compact_Marshal(n jsonexp.Context, val *PatternActions) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PatternActions_Lede)
@@ -10110,18 +10122,6 @@ func PatternActions_Compact_Marshal(n jsonexp.Context, val *PatternActions) (ret
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func PatternActions_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternActions) (err error) {
-	if len(b) > 0 {
-		var val PatternActions
-		if e := PatternActions_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -10305,6 +10305,18 @@ func PatternDecl_Compact_Optional_Marshal(n jsonexp.Context, val **PatternDecl) 
 	}
 	return
 }
+func PatternDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternDecl) (err error) {
+	if len(b) > 0 {
+		var val PatternDecl
+		if e := PatternDecl_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PatternDecl_Compact_Marshal(n jsonexp.Context, val *PatternDecl) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PatternDecl_Lede)
@@ -10335,18 +10347,6 @@ func PatternDecl_Compact_Marshal(n jsonexp.Context, val *PatternDecl) (ret []byt
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func PatternDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternDecl) (err error) {
-	if len(b) > 0 {
-		var val PatternDecl
-		if e := PatternDecl_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -10693,6 +10693,18 @@ func PatternLocals_Compact_Optional_Marshal(n jsonexp.Context, val **PatternLoca
 	}
 	return
 }
+func PatternLocals_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternLocals) (err error) {
+	if len(b) > 0 {
+		var val PatternLocals
+		if e := PatternLocals_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PatternLocals_Compact_Marshal(n jsonexp.Context, val *PatternLocals) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PatternLocals_Lede)
@@ -10703,18 +10715,6 @@ func PatternLocals_Compact_Marshal(n jsonexp.Context, val *PatternLocals) (ret [
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func PatternLocals_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternLocals) (err error) {
-	if len(b) > 0 {
-		var val PatternLocals
-		if e := PatternLocals_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -10860,6 +10860,18 @@ func PatternReturn_Compact_Optional_Marshal(n jsonexp.Context, val **PatternRetu
 	}
 	return
 }
+func PatternReturn_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternReturn) (err error) {
+	if len(b) > 0 {
+		var val PatternReturn
+		if e := PatternReturn_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PatternReturn_Compact_Marshal(n jsonexp.Context, val *PatternReturn) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PatternReturn_Lede)
@@ -10870,18 +10882,6 @@ func PatternReturn_Compact_Marshal(n jsonexp.Context, val *PatternReturn) (ret [
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func PatternReturn_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternReturn) (err error) {
-	if len(b) > 0 {
-		var val PatternReturn
-		if e := PatternReturn_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -11031,6 +11031,18 @@ func PatternRule_Compact_Optional_Marshal(n jsonexp.Context, val **PatternRule) 
 	}
 	return
 }
+func PatternRule_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternRule) (err error) {
+	if len(b) > 0 {
+		var val PatternRule
+		if e := PatternRule_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PatternRule_Compact_Marshal(n jsonexp.Context, val *PatternRule) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PatternRule_Lede)
@@ -11051,18 +11063,6 @@ func PatternRule_Compact_Marshal(n jsonexp.Context, val *PatternRule) (ret []byt
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func PatternRule_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternRule) (err error) {
-	if len(b) > 0 {
-		var val PatternRule
-		if e := PatternRule_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -11228,6 +11228,18 @@ func PatternRules_Compact_Optional_Marshal(n jsonexp.Context, val **PatternRules
 	}
 	return
 }
+func PatternRules_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternRules) (err error) {
+	if len(b) > 0 {
+		var val PatternRules
+		if e := PatternRules_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PatternRules_Compact_Marshal(n jsonexp.Context, val *PatternRules) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PatternRules_Lede)
@@ -11238,18 +11250,6 @@ func PatternRules_Compact_Marshal(n jsonexp.Context, val *PatternRules) (ret []b
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func PatternRules_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternRules) (err error) {
-	if len(b) > 0 {
-		var val PatternRules
-		if e := PatternRules_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -11563,6 +11563,18 @@ func PatternVariablesDecl_Compact_Optional_Marshal(n jsonexp.Context, val **Patt
 	}
 	return
 }
+func PatternVariablesDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternVariablesDecl) (err error) {
+	if len(b) > 0 {
+		var val PatternVariablesDecl
+		if e := PatternVariablesDecl_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PatternVariablesDecl_Compact_Marshal(n jsonexp.Context, val *PatternVariablesDecl) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PatternVariablesDecl_Lede)
@@ -11578,18 +11590,6 @@ func PatternVariablesDecl_Compact_Marshal(n jsonexp.Context, val *PatternVariabl
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func PatternVariablesDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternVariablesDecl) (err error) {
-	if len(b) > 0 {
-		var val PatternVariablesDecl
-		if e := PatternVariablesDecl_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -11745,6 +11745,18 @@ func PatternVariablesTail_Compact_Optional_Marshal(n jsonexp.Context, val **Patt
 	}
 	return
 }
+func PatternVariablesTail_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternVariablesTail) (err error) {
+	if len(b) > 0 {
+		var val PatternVariablesTail
+		if e := PatternVariablesTail_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PatternVariablesTail_Compact_Marshal(n jsonexp.Context, val *PatternVariablesTail) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PatternVariablesTail_Lede)
@@ -11755,18 +11767,6 @@ func PatternVariablesTail_Compact_Marshal(n jsonexp.Context, val *PatternVariabl
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func PatternVariablesTail_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PatternVariablesTail) (err error) {
-	if len(b) > 0 {
-		var val PatternVariablesTail
-		if e := PatternVariablesTail_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -13112,6 +13112,18 @@ func PropertyDecl_Compact_Optional_Marshal(n jsonexp.Context, val **PropertyDecl
 	}
 	return
 }
+func PropertyDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PropertyDecl) (err error) {
+	if len(b) > 0 {
+		var val PropertyDecl
+		if e := PropertyDecl_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func PropertyDecl_Compact_Marshal(n jsonexp.Context, val *PropertyDecl) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(PropertyDecl_Lede)
@@ -13137,18 +13149,6 @@ func PropertyDecl_Compact_Marshal(n jsonexp.Context, val *PropertyDecl) (ret []b
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func PropertyDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **PropertyDecl) (err error) {
-	if len(b) > 0 {
-		var val PropertyDecl
-		if e := PropertyDecl_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -13534,6 +13534,18 @@ func RecordList_Compact_Optional_Marshal(n jsonexp.Context, val **RecordList) (r
 	}
 	return
 }
+func RecordList_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RecordList) (err error) {
+	if len(b) > 0 {
+		var val RecordList
+		if e := RecordList_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func RecordList_Compact_Marshal(n jsonexp.Context, val *RecordList) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RecordList_Lede)
@@ -13544,18 +13556,6 @@ func RecordList_Compact_Marshal(n jsonexp.Context, val *RecordList) (ret []byte,
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func RecordList_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RecordList) (err error) {
-	if len(b) > 0 {
-		var val RecordList
-		if e := RecordList_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -14013,6 +14013,18 @@ func RecordType_Compact_Optional_Marshal(n jsonexp.Context, val **RecordType) (r
 	}
 	return
 }
+func RecordType_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RecordType) (err error) {
+	if len(b) > 0 {
+		var val RecordType
+		if e := RecordType_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func RecordType_Compact_Marshal(n jsonexp.Context, val *RecordType) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RecordType_Lede)
@@ -14023,18 +14035,6 @@ func RecordType_Compact_Marshal(n jsonexp.Context, val *RecordType) (ret []byte,
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func RecordType_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RecordType) (err error) {
-	if len(b) > 0 {
-		var val RecordType
-		if e := RecordType_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -14182,6 +14182,18 @@ func RecordsPossessProperties_Compact_Optional_Marshal(n jsonexp.Context, val **
 	}
 	return
 }
+func RecordsPossessProperties_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RecordsPossessProperties) (err error) {
+	if len(b) > 0 {
+		var val RecordsPossessProperties
+		if e := RecordsPossessProperties_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func RecordsPossessProperties_Compact_Marshal(n jsonexp.Context, val *RecordsPossessProperties) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RecordsPossessProperties_Lede)
@@ -14197,18 +14209,6 @@ func RecordsPossessProperties_Compact_Marshal(n jsonexp.Context, val *RecordsPos
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func RecordsPossessProperties_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RecordsPossessProperties) (err error) {
-	if len(b) > 0 {
-		var val RecordsPossessProperties
-		if e := RecordsPossessProperties_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -14588,6 +14588,18 @@ func RelativeToNoun_Compact_Optional_Marshal(n jsonexp.Context, val **RelativeTo
 	}
 	return
 }
+func RelativeToNoun_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativeToNoun) (err error) {
+	if len(b) > 0 {
+		var val RelativeToNoun
+		if e := RelativeToNoun_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func RelativeToNoun_Compact_Marshal(n jsonexp.Context, val *RelativeToNoun) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RelativeToNoun_Lede)
@@ -14613,18 +14625,6 @@ func RelativeToNoun_Compact_Marshal(n jsonexp.Context, val *RelativeToNoun) (ret
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func RelativeToNoun_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativeToNoun) (err error) {
-	if len(b) > 0 {
-		var val RelativeToNoun
-		if e := RelativeToNoun_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -14800,6 +14800,18 @@ func RenderTemplate_Compact_Optional_Marshal(n jsonexp.Context, val **RenderTemp
 	}
 	return
 }
+func RenderTemplate_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderTemplate) (err error) {
+	if len(b) > 0 {
+		var val RenderTemplate
+		if e := RenderTemplate_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func RenderTemplate_Compact_Marshal(n jsonexp.Context, val *RenderTemplate) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderTemplate_Lede)
@@ -14810,18 +14822,6 @@ func RenderTemplate_Compact_Marshal(n jsonexp.Context, val *RenderTemplate) (ret
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func RenderTemplate_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderTemplate) (err error) {
-	if len(b) > 0 {
-		var val RenderTemplate
-		if e := RenderTemplate_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -14971,6 +14971,18 @@ func Send_Compact_Optional_Marshal(n jsonexp.Context, val **Send) (ret []byte, e
 	}
 	return
 }
+func Send_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Send) (err error) {
+	if len(b) > 0 {
+		var val Send
+		if e := Send_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Send_Compact_Marshal(n jsonexp.Context, val *Send) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Send_Lede)
@@ -14991,18 +15003,6 @@ func Send_Compact_Marshal(n jsonexp.Context, val *Send) (ret []byte, err error) 
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Send_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Send) (err error) {
-	if len(b) > 0 {
-		var val Send
-		if e := Send_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -15169,6 +15169,18 @@ func ShuffleText_Compact_Optional_Marshal(n jsonexp.Context, val **ShuffleText) 
 	}
 	return
 }
+func ShuffleText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ShuffleText) (err error) {
+	if len(b) > 0 {
+		var val ShuffleText
+		if e := ShuffleText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func ShuffleText_Compact_Marshal(n jsonexp.Context, val *ShuffleText) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(ShuffleText_Lede)
@@ -15185,18 +15197,6 @@ func ShuffleText_Compact_Marshal(n jsonexp.Context, val *ShuffleText) (ret []byt
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func ShuffleText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ShuffleText) (err error) {
-	if len(b) > 0 {
-		var val ShuffleText
-		if e := ShuffleText_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -15504,6 +15504,18 @@ func StoppingText_Compact_Optional_Marshal(n jsonexp.Context, val **StoppingText
 	}
 	return
 }
+func StoppingText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **StoppingText) (err error) {
+	if len(b) > 0 {
+		var val StoppingText
+		if e := StoppingText_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func StoppingText_Compact_Marshal(n jsonexp.Context, val *StoppingText) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(StoppingText_Lede)
@@ -15520,18 +15532,6 @@ func StoppingText_Compact_Marshal(n jsonexp.Context, val *StoppingText) (ret []b
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func StoppingText_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **StoppingText) (err error) {
-	if len(b) > 0 {
-		var val StoppingText
-		if e := StoppingText_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -15682,6 +15682,18 @@ func Story_Compact_Optional_Marshal(n jsonexp.Context, val **Story) (ret []byte,
 	}
 	return
 }
+func Story_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Story) (err error) {
+	if len(b) > 0 {
+		var val Story
+		if e := Story_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Story_Compact_Marshal(n jsonexp.Context, val *Story) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Story_Lede)
@@ -15692,18 +15704,6 @@ func Story_Compact_Marshal(n jsonexp.Context, val *Story) (ret []byte, err error
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Story_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Story) (err error) {
-	if len(b) > 0 {
-		var val Story
-		if e := Story_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -15947,6 +15947,18 @@ func Summary_Compact_Optional_Marshal(n jsonexp.Context, val **Summary) (ret []b
 	}
 	return
 }
+func Summary_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Summary) (err error) {
+	if len(b) > 0 {
+		var val Summary
+		if e := Summary_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Summary_Compact_Marshal(n jsonexp.Context, val *Summary) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Summary_Lede)
@@ -15963,18 +15975,6 @@ func Summary_Compact_Marshal(n jsonexp.Context, val *Summary) (ret []byte, err e
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func Summary_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Summary) (err error) {
-	if len(b) > 0 {
-		var val Summary
-		if e := Summary_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -16127,6 +16127,18 @@ func Tail_Compact_Optional_Marshal(n jsonexp.Context, val **Tail) (ret []byte, e
 	}
 	return
 }
+func Tail_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Tail) (err error) {
+	if len(b) > 0 {
+		var val Tail
+		if e := Tail_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Tail_Compact_Marshal(n jsonexp.Context, val *Tail) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Tail_Lede)
@@ -16142,18 +16154,6 @@ func Tail_Compact_Marshal(n jsonexp.Context, val *Tail) (ret []byte, err error) 
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Tail_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Tail) (err error) {
-	if len(b) > 0 {
-		var val Tail
-		if e := Tail_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -16473,6 +16473,18 @@ func TestOutput_Compact_Optional_Marshal(n jsonexp.Context, val **TestOutput) (r
 	}
 	return
 }
+func TestOutput_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestOutput) (err error) {
+	if len(b) > 0 {
+		var val TestOutput
+		if e := TestOutput_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func TestOutput_Compact_Marshal(n jsonexp.Context, val *TestOutput) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(TestOutput_Lede)
@@ -16483,18 +16495,6 @@ func TestOutput_Compact_Marshal(n jsonexp.Context, val *TestOutput) (ret []byte,
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func TestOutput_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestOutput) (err error) {
-	if len(b) > 0 {
-		var val TestOutput
-		if e := TestOutput_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -16642,6 +16642,18 @@ func TestRule_Compact_Optional_Marshal(n jsonexp.Context, val **TestRule) (ret [
 	}
 	return
 }
+func TestRule_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestRule) (err error) {
+	if len(b) > 0 {
+		var val TestRule
+		if e := TestRule_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func TestRule_Compact_Marshal(n jsonexp.Context, val *TestRule) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(TestRule_Lede)
@@ -16657,18 +16669,6 @@ func TestRule_Compact_Marshal(n jsonexp.Context, val *TestRule) (ret []byte, err
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func TestRule_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestRule) (err error) {
-	if len(b) > 0 {
-		var val TestRule
-		if e := TestRule_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -16826,6 +16826,18 @@ func TestScene_Compact_Optional_Marshal(n jsonexp.Context, val **TestScene) (ret
 	}
 	return
 }
+func TestScene_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestScene) (err error) {
+	if len(b) > 0 {
+		var val TestScene
+		if e := TestScene_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func TestScene_Compact_Marshal(n jsonexp.Context, val *TestScene) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(TestScene_Lede)
@@ -16841,18 +16853,6 @@ func TestScene_Compact_Marshal(n jsonexp.Context, val *TestScene) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func TestScene_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestScene) (err error) {
-	if len(b) > 0 {
-		var val TestScene
-		if e := TestScene_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -17011,6 +17011,18 @@ func TestStatement_Compact_Optional_Marshal(n jsonexp.Context, val **TestStateme
 	}
 	return
 }
+func TestStatement_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestStatement) (err error) {
+	if len(b) > 0 {
+		var val TestStatement
+		if e := TestStatement_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func TestStatement_Compact_Marshal(n jsonexp.Context, val *TestStatement) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(TestStatement_Lede)
@@ -17032,18 +17044,6 @@ func TestStatement_Compact_Marshal(n jsonexp.Context, val *TestStatement) (ret [
 			})
 		} else {
 			ret, err = sig.MarshalJSON()
-		}
-	}
-	return
-}
-
-func TestStatement_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TestStatement) (err error) {
-	if len(b) > 0 {
-		var val TestStatement
-		if e := TestStatement_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
 		}
 	}
 	return
@@ -17618,6 +17618,18 @@ func TraitPhrase_Compact_Optional_Marshal(n jsonexp.Context, val **TraitPhrase) 
 	}
 	return
 }
+func TraitPhrase_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TraitPhrase) (err error) {
+	if len(b) > 0 {
+		var val TraitPhrase
+		if e := TraitPhrase_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func TraitPhrase_Compact_Marshal(n jsonexp.Context, val *TraitPhrase) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(TraitPhrase_Lede)
@@ -17633,18 +17645,6 @@ func TraitPhrase_Compact_Marshal(n jsonexp.Context, val *TraitPhrase) (ret []byt
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func TraitPhrase_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **TraitPhrase) (err error) {
-	if len(b) > 0 {
-		var val TraitPhrase
-		if e := TraitPhrase_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -17806,6 +17806,18 @@ func VariableDecl_Compact_Optional_Marshal(n jsonexp.Context, val **VariableDecl
 	}
 	return
 }
+func VariableDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **VariableDecl) (err error) {
+	if len(b) > 0 {
+		var val VariableDecl
+		if e := VariableDecl_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func VariableDecl_Compact_Marshal(n jsonexp.Context, val *VariableDecl) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(VariableDecl_Lede)
@@ -17831,18 +17843,6 @@ func VariableDecl_Compact_Marshal(n jsonexp.Context, val *VariableDecl) (ret []b
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func VariableDecl_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **VariableDecl) (err error) {
-	if len(b) > 0 {
-		var val VariableDecl
-		if e := VariableDecl_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }

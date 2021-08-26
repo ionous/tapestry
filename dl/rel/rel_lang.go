@@ -101,6 +101,18 @@ func ReciprocalOf_Compact_Optional_Marshal(n jsonexp.Context, val **ReciprocalOf
 	}
 	return
 }
+func ReciprocalOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ReciprocalOf) (err error) {
+	if len(b) > 0 {
+		var val ReciprocalOf
+		if e := ReciprocalOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func ReciprocalOf_Compact_Marshal(n jsonexp.Context, val *ReciprocalOf) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(ReciprocalOf_Lede)
@@ -116,18 +128,6 @@ func ReciprocalOf_Compact_Marshal(n jsonexp.Context, val *ReciprocalOf) (ret []b
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func ReciprocalOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ReciprocalOf) (err error) {
-	if len(b) > 0 {
-		var val ReciprocalOf
-		if e := ReciprocalOf_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -286,6 +286,18 @@ func ReciprocalsOf_Compact_Optional_Marshal(n jsonexp.Context, val **Reciprocals
 	}
 	return
 }
+func ReciprocalsOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ReciprocalsOf) (err error) {
+	if len(b) > 0 {
+		var val ReciprocalsOf
+		if e := ReciprocalsOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func ReciprocalsOf_Compact_Marshal(n jsonexp.Context, val *ReciprocalsOf) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(ReciprocalsOf_Lede)
@@ -301,18 +313,6 @@ func ReciprocalsOf_Compact_Marshal(n jsonexp.Context, val *ReciprocalsOf) (ret [
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func ReciprocalsOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **ReciprocalsOf) (err error) {
-	if len(b) > 0 {
-		var val ReciprocalsOf
-		if e := ReciprocalsOf_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -472,6 +472,18 @@ func Relate_Compact_Optional_Marshal(n jsonexp.Context, val **Relate) (ret []byt
 	}
 	return
 }
+func Relate_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Relate) (err error) {
+	if len(b) > 0 {
+		var val Relate
+		if e := Relate_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func Relate_Compact_Marshal(n jsonexp.Context, val *Relate) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(Relate_Lede)
@@ -492,18 +504,6 @@ func Relate_Compact_Marshal(n jsonexp.Context, val *Relate) (ret []byte, err err
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func Relate_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Relate) (err error) {
-	if len(b) > 0 {
-		var val Relate
-		if e := Relate_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -672,6 +672,18 @@ func RelativeOf_Compact_Optional_Marshal(n jsonexp.Context, val **RelativeOf) (r
 	}
 	return
 }
+func RelativeOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativeOf) (err error) {
+	if len(b) > 0 {
+		var val RelativeOf
+		if e := RelativeOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func RelativeOf_Compact_Marshal(n jsonexp.Context, val *RelativeOf) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RelativeOf_Lede)
@@ -687,18 +699,6 @@ func RelativeOf_Compact_Marshal(n jsonexp.Context, val *RelativeOf) (ret []byte,
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func RelativeOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativeOf) (err error) {
-	if len(b) > 0 {
-		var val RelativeOf
-		if e := RelativeOf_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -857,6 +857,18 @@ func RelativesOf_Compact_Optional_Marshal(n jsonexp.Context, val **RelativesOf) 
 	}
 	return
 }
+func RelativesOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativesOf) (err error) {
+	if len(b) > 0 {
+		var val RelativesOf
+		if e := RelativesOf_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func RelativesOf_Compact_Marshal(n jsonexp.Context, val *RelativesOf) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RelativesOf_Lede)
@@ -872,18 +884,6 @@ func RelativesOf_Compact_Marshal(n jsonexp.Context, val *RelativesOf) (ret []byt
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func RelativesOf_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RelativesOf) (err error) {
-	if len(b) > 0 {
-		var val RelativesOf
-		if e := RelativesOf_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }

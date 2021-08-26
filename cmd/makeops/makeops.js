@@ -159,6 +159,10 @@ Handlebars.registerHelper('Uses', function(name, test) {
   return uses === test;
 });
 
+Handlebars.registerHelper('IsLiteral', function(group) {
+  return group.indexOf('literals') >= 0;
+});
+
 Handlebars.registerHelper('IsInternal', function(label) {
   return label === '-';
 });
@@ -277,6 +281,8 @@ for (const typeName in allTypes) {
 }
 console.log("num groups", Object.keys(groups).length);
 
+
+
 // determine includes:
 for (currentGroup in groups) {
   console.log(currentGroup);
@@ -345,6 +351,7 @@ for (currentGroup in groups) {
       fs.writeSync(fd, template(d));
     }
   }
+
   // 3. write registration lists
   fs.writeSync(fd, templates.regList({
     which: "Slots",
@@ -360,3 +367,5 @@ for (currentGroup in groups) {
   // re-format the file using go format.
   child_process.execSync(`gofmt -e -s -w ${filepath}`);
 }
+
+

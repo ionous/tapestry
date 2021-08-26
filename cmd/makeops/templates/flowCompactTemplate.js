@@ -11,7 +11,24 @@ func {{Pascal name}}_Compact_Optional_Marshal(n jsonexp.Context, val **{{Pascal 
   }
   return
 }
+func {{Pascal name}}_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **{{Pascal name}}) (err error) {
+  if len(b) > 0 {
+    var val {{Pascal name}}
+    if e:= {{Pascal name}}_Compact_Unmarshal(n, b, &val); e!= nil {
+      err = e
+    } else {
+      *out = &val
+    }
+  }
+  return
+}
+
 func {{Pascal name}}_Compact_Marshal(n jsonexp.Context, val *{{Pascal name}}) (ret []byte, err error) {
+{{#if (IsLiteral group)}}
+{{~#each (ParamsOf this)}}
+  ret, err = {{ScopeOf type}}{{Pascal type}}{{#if (OverrideOf type)}}_Override{{/if}}_Compact{{#if repeats}}_Repeats{{else if optional}}_Optional{{/if}}_Marshal(n, &val.{{Pascal @key}})
+{{/each}}
+{{else}}
   var sig jsonexp.CompactFlow
   sig.WriteLede({{Pascal name}}_Lede)
 {{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
@@ -35,18 +52,7 @@ func {{Pascal name}}_Compact_Marshal(n jsonexp.Context, val *{{Pascal name}}) (r
     }
 {{~/unless}}
   }
-  return
-}
-
-func {{Pascal name}}_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **{{Pascal name}}) (err error) {
-  if len(b) > 0 {
-    var val {{Pascal name}}
-    if e:= {{Pascal name}}_Compact_Unmarshal(n, b, &val); e!= nil {
-      err = e
-    } else {
-      *out = &val
-    }
-  }
+{{/if}}
   return
 }
 func {{Pascal name}}_Compact_Unmarshal(n jsonexp.Context, b []byte, out *{{Pascal name}}) (err error) {

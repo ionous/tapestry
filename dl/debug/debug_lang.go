@@ -101,6 +101,18 @@ func DebugLog_Compact_Optional_Marshal(n jsonexp.Context, val **DebugLog) (ret [
 	}
 	return
 }
+func DebugLog_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DebugLog) (err error) {
+	if len(b) > 0 {
+		var val DebugLog
+		if e := DebugLog_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func DebugLog_Compact_Marshal(n jsonexp.Context, val *DebugLog) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(DebugLog_Lede)
@@ -116,18 +128,6 @@ func DebugLog_Compact_Marshal(n jsonexp.Context, val *DebugLog) (ret []byte, err
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func DebugLog_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DebugLog) (err error) {
-	if len(b) > 0 {
-		var val DebugLog
-		if e := DebugLog_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
@@ -283,6 +283,18 @@ func DoNothing_Compact_Optional_Marshal(n jsonexp.Context, val **DoNothing) (ret
 	}
 	return
 }
+func DoNothing_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DoNothing) (err error) {
+	if len(b) > 0 {
+		var val DoNothing
+		if e := DoNothing_Compact_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
+	}
+	return
+}
+
 func DoNothing_Compact_Marshal(n jsonexp.Context, val *DoNothing) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(DoNothing_Lede)
@@ -293,18 +305,6 @@ func DoNothing_Compact_Marshal(n jsonexp.Context, val *DoNothing) (ret []byte, e
 	}
 	if err == nil {
 		ret, err = sig.MarshalJSON()
-	}
-	return
-}
-
-func DoNothing_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **DoNothing) (err error) {
-	if len(b) > 0 {
-		var val DoNothing
-		if e := DoNothing_Compact_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
 	}
 	return
 }
