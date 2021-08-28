@@ -110,7 +110,6 @@ func RenderExp_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Ren
 	}
 	return
 }
-
 func RenderExp_Compact_Marshal(n jsonexp.Context, val *RenderExp) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderExp_Lede)
@@ -125,18 +124,23 @@ func RenderExp_Compact_Marshal(n jsonexp.Context, val *RenderExp) (ret []byte, e
 	return
 }
 func RenderExp_Compact_Unmarshal(n jsonexp.Context, b []byte, out *RenderExp) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(RenderExp_Type, "-", e)
-	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[RenderExp_Field_Expression], &out.Expression); e != nil {
-		err = errutil.New(RenderExp_Type+"."+RenderExp_Field_Expression, "-", e)
-	}
 	return
 }
 
 func RenderExp_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderExp) (ret []byte, err error) {
 	if *val != nil {
 		ret, err = RenderExp_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func RenderExp_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderExp) (err error) {
+	if len(b) > 0 {
+		var val RenderExp
+		if e := RenderExp_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
 	}
 	return
 }
@@ -157,17 +161,6 @@ func RenderExp_Detailed_Marshal(n jsonexp.Context, val *RenderExp) (ret []byte, 
 	return
 }
 
-func RenderExp_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderExp) (err error) {
-	if len(b) > 0 {
-		var val RenderExp
-		if e := RenderExp_Detailed_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
-	}
-	return
-}
 func RenderExp_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderExp) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
@@ -277,7 +270,6 @@ func RenderField_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **R
 	}
 	return
 }
-
 func RenderField_Compact_Marshal(n jsonexp.Context, val *RenderField) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderField_Lede)
@@ -292,18 +284,23 @@ func RenderField_Compact_Marshal(n jsonexp.Context, val *RenderField) (ret []byt
 	return
 }
 func RenderField_Compact_Unmarshal(n jsonexp.Context, b []byte, out *RenderField) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(RenderField_Type, "-", e)
-	} else if e := rt.TextEval_Compact_Unmarshal(n, msg.Fields[RenderField_Field_Name], &out.Name); e != nil {
-		err = errutil.New(RenderField_Type+"."+RenderField_Field_Name, "-", e)
-	}
 	return
 }
 
 func RenderField_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderField) (ret []byte, err error) {
 	if *val != nil {
 		ret, err = RenderField_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func RenderField_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderField) (err error) {
+	if len(b) > 0 {
+		var val RenderField
+		if e := RenderField_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
 	}
 	return
 }
@@ -324,17 +321,6 @@ func RenderField_Detailed_Marshal(n jsonexp.Context, val *RenderField) (ret []by
 	return
 }
 
-func RenderField_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderField) (err error) {
-	if len(b) > 0 {
-		var val RenderField
-		if e := RenderField_Detailed_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
-	}
-	return
-}
 func RenderField_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderField) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
@@ -605,7 +591,6 @@ func RenderName_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Re
 	}
 	return
 }
-
 func RenderName_Compact_Marshal(n jsonexp.Context, val *RenderName) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderName_Lede)
@@ -620,18 +605,23 @@ func RenderName_Compact_Marshal(n jsonexp.Context, val *RenderName) (ret []byte,
 	return
 }
 func RenderName_Compact_Unmarshal(n jsonexp.Context, b []byte, out *RenderName) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(RenderName_Type, "-", e)
-	} else if e := value.Text_Override_Compact_Unmarshal(n, msg.Fields[RenderName_Field_Name], &out.Name); e != nil {
-		err = errutil.New(RenderName_Type+"."+RenderName_Field_Name, "-", e)
-	}
 	return
 }
 
 func RenderName_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderName) (ret []byte, err error) {
 	if *val != nil {
 		ret, err = RenderName_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func RenderName_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderName) (err error) {
+	if len(b) > 0 {
+		var val RenderName
+		if e := RenderName_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
 	}
 	return
 }
@@ -652,17 +642,6 @@ func RenderName_Detailed_Marshal(n jsonexp.Context, val *RenderName) (ret []byte
 	return
 }
 
-func RenderName_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderName) (err error) {
-	if len(b) > 0 {
-		var val RenderName
-		if e := RenderName_Detailed_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
-	}
-	return
-}
 func RenderName_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderName) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
@@ -775,7 +754,6 @@ func RenderPattern_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out *
 	}
 	return
 }
-
 func RenderPattern_Compact_Marshal(n jsonexp.Context, val *RenderPattern) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderPattern_Lede)
@@ -795,20 +773,23 @@ func RenderPattern_Compact_Marshal(n jsonexp.Context, val *RenderPattern) (ret [
 	return
 }
 func RenderPattern_Compact_Unmarshal(n jsonexp.Context, b []byte, out *RenderPattern) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(RenderPattern_Type, "-", e)
-	} else if e := value.PatternName_Compact_Unmarshal(n, msg.Fields[RenderPattern_Field_Pattern], &out.Pattern); e != nil {
-		err = errutil.New(RenderPattern_Type+"."+RenderPattern_Field_Pattern, "-", e)
-	} else if e := core.CallArgs_Compact_Unmarshal(n, msg.Fields[RenderPattern_Field_Arguments], &out.Arguments); e != nil {
-		err = errutil.New(RenderPattern_Type+"."+RenderPattern_Field_Arguments, "-", e)
-	}
 	return
 }
 
 func RenderPattern_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderPattern) (ret []byte, err error) {
 	if *val != nil {
 		ret, err = RenderPattern_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func RenderPattern_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderPattern) (err error) {
+	if len(b) > 0 {
+		var val RenderPattern
+		if e := RenderPattern_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
 	}
 	return
 }
@@ -835,17 +816,6 @@ func RenderPattern_Detailed_Marshal(n jsonexp.Context, val *RenderPattern) (ret 
 	return
 }
 
-func RenderPattern_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderPattern) (err error) {
-	if len(b) > 0 {
-		var val RenderPattern
-		if e := RenderPattern_Detailed_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
-	}
-	return
-}
 func RenderPattern_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderPattern) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {
@@ -959,7 +929,6 @@ func RenderRef_Compact_Optional_Unmarshal(n jsonexp.Context, b []byte, out **Ren
 	}
 	return
 }
-
 func RenderRef_Compact_Marshal(n jsonexp.Context, val *RenderRef) (ret []byte, err error) {
 	var sig jsonexp.CompactFlow
 	sig.WriteLede(RenderRef_Lede)
@@ -979,20 +948,23 @@ func RenderRef_Compact_Marshal(n jsonexp.Context, val *RenderRef) (ret []byte, e
 	return
 }
 func RenderRef_Compact_Unmarshal(n jsonexp.Context, b []byte, out *RenderRef) (err error) {
-	var msg jsonexp.Flow
-	if e := json.Unmarshal(b, &msg); e != nil {
-		err = errutil.New(RenderRef_Type, "-", e)
-	} else if e := value.VariableName_Compact_Unmarshal(n, msg.Fields[RenderRef_Field_Name], &out.Name); e != nil {
-		err = errutil.New(RenderRef_Type+"."+RenderRef_Field_Name, "-", e)
-	} else if e := RenderFlags_Compact_Unmarshal(n, msg.Fields[RenderRef_Field_Flags], &out.Flags); e != nil {
-		err = errutil.New(RenderRef_Type+"."+RenderRef_Field_Flags, "-", e)
-	}
 	return
 }
 
 func RenderRef_Detailed_Optional_Marshal(n jsonexp.Context, val **RenderRef) (ret []byte, err error) {
 	if *val != nil {
 		ret, err = RenderRef_Detailed_Marshal(n, *val)
+	}
+	return
+}
+func RenderRef_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderRef) (err error) {
+	if len(b) > 0 {
+		var val RenderRef
+		if e := RenderRef_Detailed_Unmarshal(n, b, &val); e != nil {
+			err = e
+		} else {
+			*out = &val
+		}
 	}
 	return
 }
@@ -1019,17 +991,6 @@ func RenderRef_Detailed_Marshal(n jsonexp.Context, val *RenderRef) (ret []byte, 
 	return
 }
 
-func RenderRef_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **RenderRef) (err error) {
-	if len(b) > 0 {
-		var val RenderRef
-		if e := RenderRef_Detailed_Unmarshal(n, b, &val); e != nil {
-			err = e
-		} else {
-			*out = &val
-		}
-	}
-	return
-}
 func RenderRef_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *RenderRef) (err error) {
 	var msg jsonexp.Flow
 	if e := json.Unmarshal(b, &msg); e != nil {

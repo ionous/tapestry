@@ -1,12 +1,6 @@
-// flowDetails.js
+// flowDetailsTemplate.js
 'use strict';
 module.exports = `
-func {{Pascal name}}_Detailed_Optional_Marshal(n jsonexp.Context, val **{{Pascal name}}) (ret []byte,err error) {
-  if *val != nil {
-    ret, err= {{Pascal name}}_Detailed_Marshal(n, *val)
-  }
-  return
-}
 func {{Pascal name}}_Detailed_Marshal(n jsonexp.Context, val *{{Pascal name}}) (ret []byte,err error) {
 {{#unless (ParamsOf this)}}
   var fields jsonexp.Fields
@@ -31,17 +25,6 @@ func {{Pascal name}}_Detailed_Marshal(n jsonexp.Context, val *{{Pascal name}}) (
   return
 }
 
-func {{Pascal name}}_Detailed_Optional_Unmarshal(n jsonexp.Context, b []byte, out **{{Pascal name}}) (err error) {
-  if len(b) > 0 {
-    var val {{Pascal name}}
-    if e:= {{Pascal name}}_Detailed_Unmarshal(n, b, &val); e!= nil {
-      err = e
-    } else {
-      *out = &val
-    }
-  }
-  return
-}
 func {{Pascal name}}_Detailed_Unmarshal(n jsonexp.Context, b []byte, out *{{Pascal name}}) (err error) {
   var msg jsonexp.Flow
   if e := json.Unmarshal(b, &msg); e != nil {

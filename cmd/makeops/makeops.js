@@ -223,10 +223,14 @@ Handlebars.registerHelper('LocationOf', locationOf);
 Handlebars.registerHelper('GroupOf', function(desc) {
   return desc.group.join(', ');
 })
+Handlebars.registerHelper('compactFlow', function(type, options) {
+  return type.name === "text_value" ? 'compactText' : type.name === "get_var"? "compactVar": "flowCompact";
+})
 
 // load each js file as a handlebars template
 const partials = [
   'repeat', 'sig', 'spec', 'override',
+  'compactText', 'compactVar', 'optional',
   'flowCompact', 'flowDetails',
   'primCompact', 'primDetails',
   'slotCompact', 'slotDetails',
@@ -255,18 +259,7 @@ for (const typeName in allTypes) {
     if (type.uses === "slot") {
       g.slots.push(typeName);
     } else if (type.uses !== "group") {
-      // do a bunch of work to figure out whether to "override" the type
-      // go is pretty strict about its typedefs, and sometimes its nicer
-      // just to have a string instead of a wrapper type requiring string access.
-      // if (type.uses === "str") {
-        // const { with: { tokens = [] } = {} } = type; // safely extract tokens
-        // const token = tokenize(typeName);
-        // const closedChoices = tokens.indexOf(token) < 0;
-
-        // if (closedChoices && Object.keys(type.with.params).length === 2) {
-        //   overrides[typeName] = "bool";
-        // }
-      // } else
+      //
       if (type.uses === "num") {
         const { with: { tokens = [] } = {} } = type; // safely extract tokens
         if (tokens.length <= 1) {
