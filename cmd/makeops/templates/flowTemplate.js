@@ -21,9 +21,7 @@ const {{Pascal ../name}}_Field_{{Pascal @key}} = "{{@key}}";
 {{#unless (NoHelpers name)}}
 {{>repeat name=(Pascal name) el=(Pascal name)}}
 {{/unless}}
-{{>optional mod="Compact"}}
-{{> (compactFlow this)}}
-{{>optional mod="Detailed"}}
+{{>optional}}
 {{>flowDetails}}
 {{/if}}
 {{/with}}

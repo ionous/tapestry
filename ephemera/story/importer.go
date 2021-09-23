@@ -58,17 +58,17 @@ func (i *Importer) RegisterTypes(cmds []composer.Composer) {
 }
 
 func (k *Importer) ImportStory(src string, b []byte) (ret *Story, err error) {
-	k.source = src
-	k.Recorder.SetSource(src)
-	//
-	story := new(Story)
-	if e := story.UnmarshalDetailed(k, b); e != nil {
-		err = e
-	} else if e := story.ImportStory(k); e != nil {
-		err = e
-	} else {
-		ret = story
-	}
+	// k.source = src
+	// k.Recorder.SetSource(src)
+	// //
+	// story := new(Story)
+	// if e := story.UnmarshalDetailed(k, b); e != nil {
+	// 	err = e
+	// } else if e := story.ImportStory(k); e != nil {
+	// 	err = e
+	// } else {
+	// 	ret = story
+	// }
 	return
 }
 

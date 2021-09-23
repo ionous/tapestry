@@ -29,7 +29,6 @@ func (op* {{Pascal name}}) GetChoice() (ret string, okay bool) {
 
 {{~#if ../marshal}}
 {{>sig}}
-{{>swapCompact}}
 {{>swapDetails}}
 {{/if}}
 {{/with}}

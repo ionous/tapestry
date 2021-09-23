@@ -4,7 +4,6 @@ module.exports = `
 {{~#with type~}}
 const {{Pascal name}}_Type = "{{name}}";
 {{#if ../marshal}}
-{{>slotCompact}}
 {{>slotDetails}}
 {{/if}}
 {{/with}}

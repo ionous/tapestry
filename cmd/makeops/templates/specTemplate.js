@@ -34,9 +34,4 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
 }
 
 const {{Pascal name}}_Type = "{{name}}"
-const {{Pascal name}}_Lede = {{#if (LedeName this)~}}
-  "{{LedeName this}}"
-{{~else~}}
-  {{Pascal name}}_Type
-{{~/if~}}
 `;

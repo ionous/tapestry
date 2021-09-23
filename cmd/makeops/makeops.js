@@ -1,4 +1,4 @@
-// node makeops.js | gofmt -e -s > ../../ephemera/story/iffy_model.go
+// node makeops.js
 // reads from spec.js to generate golang models
 'use strict';
 
@@ -223,18 +223,13 @@ Handlebars.registerHelper('LocationOf', locationOf);
 Handlebars.registerHelper('GroupOf', function(desc) {
   return desc.group.join(', ');
 })
-Handlebars.registerHelper('compactFlow', function(type, options) {
-  return type.name === "text_value" ? 'compactText' : type.name === "get_var"? "compactVar": "flowCompact";
-})
-
 // load each js file as a handlebars template
 const partials = [
-  'repeat', 'sig', 'spec', 'override',
-  'compactText', 'compactVar', 'optional',
-  'flowCompact', 'flowDetails',
-  'primCompact', 'primDetails',
-  'slotCompact', 'slotDetails',
-  'swapCompact', 'swapDetails'
+  'repeat', 'sig', 'spec', 'override', 'optional',
+  'flowDetails',
+  'primDetails',
+  'slotDetails',
+  'swapDetails'
 ];
 const sources = ['header', 'slot', 'prim', 'swap', 'flow', 'footer', 'regList'];
 partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Template.js`)));
@@ -320,9 +315,7 @@ for (currentGroup in groups) {
     inc.add("composer");
   }
   if (marshal) {
-    inc.add("encoding/json");
-    inc.add("git.sr.ht/~ionous/iffy/export/jsonexp");
-    inc.add("github.com/ionous/errutil")
+    inc.add("git.sr.ht/~ionous/iffy/export/jsn");
   }
 
   // 2. write the header ( with package name and inc )

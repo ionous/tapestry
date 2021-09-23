@@ -1,0 +1,37 @@
+approximate state machine
+
+
+Details:
+- beginFlow: push state(Flow)
+- openKey: panic
+- setCursor: record pos
+- writeValue: panic
+- beginSwap: push state(Swap)
+- beginRepeat: push state(Slice)
+
+	Flow:
+	- enter: /new writer incl. pending type, pending lede, and an empty map
+	- exit:  /pop close map
+	
+	- openKey(key): >> Key(key)
+	- endBlock: write {id,type,value:map}; pop machine.
+
+		Unkeyed:
+		- writeValue: panic
+
+		Key(key):
+		- writeValue: add {key,value} to map >> Unkeyed
+
+	Slice:
+	- endBlock: write slice; pop machine.
+	- writeValue: add value to slice
+
+	Swap:
+	- init( kind, choice ): store vars
+	- endBlock: write {id,type,value: {choice: written value}};
+				pop machine.
+
+		SwapEmpty:
+			- writeValue: store value >> SwapWritten
+		SwapWritten:
+			- writeValue: panic
