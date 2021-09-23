@@ -13,3 +13,4 @@ cmd/play/play
 cmd/spec/spec
 cmd/stem/stem
 *.zip
+jsn.old.txt
