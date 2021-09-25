@@ -1,6 +1,11 @@
-package jsn
+package detailed
 
-import "strconv"
+import (
+	"strconv"
+
+	"git.sr.ht/~ionous/iffy/export/jsn"
+	"github.com/ionous/errutil"
+)
 
 type detBaseState struct {
 	m    *DetailedMarshaler
@@ -46,10 +51,22 @@ func (d *detBaseState) readData() interface{} {
 
 func (d *detBaseState) writeData(v interface{}) {
 	if d.out != nil {
-		panic("base state already data")
+		d.m.Warning(errutil.New("base state already data"))
 	} else {
 		d.out = v
 	}
+}
+
+// record an error but don't terminate
+func (d *detBaseState) Warning(e error) {
+	d.m.err = errutil.Append(d.m.err, e)
+}
+
+// record an error and terminate
+func (d *detBaseState) Error(e error) {
+	d.m.err = errutil.Append(d.m.err, e)
+	d.m.stack = nil
+	d.m.changeState(detNull{})
 }
 
 // starts a series of key-values pairs
@@ -69,7 +86,11 @@ func (d *detBaseState) MapValues(lede, kind string) {
 }
 
 func (d *detBaseState) MapKey(sig, field string) {
-	panic("key only valid in a map")
+	d.m.Error(errutil.New("key only valid in a map"))
+}
+
+func (d *detBaseState) MapLiteral(string) {
+	d.m.Error(errutil.New("literal only valid in a map"))
 }
 
 func (d *detBaseState) SetCursor(id string) {
@@ -81,7 +102,15 @@ func (d *detBaseState) WriteValue(kind string, value interface{}) {
 	// note: while the owner of this detBaseState memory is technically top state ...
 	// in go, that owner type is inaccessible in the aggregated element
 	// so... we need to the state machine for the outermost version of ourselves.
-	d.m.writeData(d.m.makeValue(kind, value))
+	d.m.writeData(detValue{
+		Id:    d.m.flushCursor(),
+		Type:  kind,
+		Value: value,
+	})
+}
+
+func (d *detBaseState) WriteChoice(kind string, val jsn.Enumeration) {
+	d.m.WriteValue(kind, val.String())
 }
 
 func (d *detBaseState) PickValues(kind, choice string) {
@@ -122,12 +151,16 @@ func (d *detFlowState) MapKey(sig, field string) {
 	})
 }
 
+func (d *detFlowState) MapLiteral(field string) {
+	d.m.MapKey("", field)
+}
+
 func (d *detFlowState) readData() interface{} {
 	return &d.data
 }
 
 func (d *detFlowState) writeData(v interface{}) {
-	panic("missing key when writing to a flow")
+	d.m.Error(errutil.New("missing key when writing to a flow"))
 }
 
 func (d *detKeyState) named() string {
@@ -163,5 +196,5 @@ type detSwapWritten struct {
 }
 
 func (d *detSwapWritten) writeData(v interface{}) {
-	panic("swap already written")
+	d.m.Warning(errutil.New("swap already written"))
 }

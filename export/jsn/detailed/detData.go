@@ -1,4 +1,4 @@
-package jsn
+package detailed
 
 type detMap struct {
 	Id     string                 `json:"id,omitempty"`
@@ -6,7 +6,7 @@ type detMap struct {
 	Fields map[string]interface{} `json:"value"`
 }
 
-type detValueData struct {
+type detValue struct {
 	Id    string      `json:"id,omitempty"`
 	Type  string      `json:"type"`
 	Value interface{} `json:"value"`

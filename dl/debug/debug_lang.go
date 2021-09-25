@@ -98,7 +98,7 @@ func DoNothing_Optional_Marshal(n jsn.Marshaler, val **DoNothing) {
 func DoNothing_Marshal(n jsn.Marshaler, val *DoNothing) {
 	n.MapValues(DoNothing_Type, DoNothing_Type)
 	n.MapKey("why", DoNothing_Field_Reason)
-	/* */ value.Text_Override_Optional_Marshal(n, &val.Reason)
+	/* */ value.Text_Unboxed_Optional_Marshal(n, &val.Reason)
 	n.EndValues()
 	return
 }
@@ -132,6 +132,10 @@ func (*LoggingLevel) Compose() composer.Spec {
 	}
 }
 
+func (op *LoggingLevel) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const LoggingLevel_Type = "logging_level"
 
 func (op *LoggingLevel) Marshal(n jsn.Marshaler) {
@@ -146,7 +150,7 @@ func LoggingLevel_Optional_Marshal(n jsn.Marshaler, val *LoggingLevel) {
 }
 
 func LoggingLevel_Marshal(n jsn.Marshaler, val *LoggingLevel) {
-	n.WriteValue(LoggingLevel_Type, val.Str)
+	n.WriteChoice(LoggingLevel_Type, val)
 }
 
 func LoggingLevel_Repeats_Marshal(n jsn.Marshaler, vals *[]LoggingLevel) {

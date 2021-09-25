@@ -1,14 +1,17 @@
-package jsn
+package detailed
+
+import "git.sr.ht/~ionous/iffy/export/jsn"
 
 type DetailedMarshaler struct {
 	detailedState
-	top    string
-	stack  jsnDetails
+	top    string // for debugging
+	stack  detStack
 	cursor string
+	err    error
 }
 
 type detailedState interface {
-	Marshaler
+	jsn.Marshaler
 	named() string
 	writeData(value interface{})
 	readData() interface{}
@@ -23,11 +26,14 @@ func NewDetailedMarshaler() *DetailedMarshaler {
 	return m
 }
 
-func (m *DetailedMarshaler) Data() (ret interface{}) {
+// Data returns the accumulated script tree ready for serialization
+// FIX, FUTURE: could write a custom json serialization to skip this in memory step.
+func (m *DetailedMarshaler) Data() (interface{}, error) {
+	var out interface{}
 	if det, ok := m.detailedState.(*detBaseState); ok {
-		ret = det.readData()
+		out = det.readData()
 	}
-	return
+	return out, m.err
 }
 
 func (m *DetailedMarshaler) flushCursor() (ret string) {
@@ -52,13 +58,4 @@ func (m *DetailedMarshaler) popState() (ret detailedState) {
 func (m *DetailedMarshaler) changeState(d detailedState) {
 	m.detailedState = d // new current state
 	m.top = m.detailedState.named()
-}
-
-// doesnt change state
-func (m *DetailedMarshaler) makeValue(kind string, value interface{}) detValueData {
-	return detValueData{
-		Id:    m.flushCursor(),
-		Type:  kind,
-		Value: value,
-	}
 }

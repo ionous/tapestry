@@ -125,6 +125,10 @@ func (*RenderFlags) Compose() composer.Spec {
 	}
 }
 
+func (op *RenderFlags) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const RenderFlags_Type = "render_flags"
 
 func (op *RenderFlags) Marshal(n jsn.Marshaler) {
@@ -139,7 +143,7 @@ func RenderFlags_Optional_Marshal(n jsn.Marshaler, val *RenderFlags) {
 }
 
 func RenderFlags_Marshal(n jsn.Marshaler, val *RenderFlags) {
-	n.WriteValue(RenderFlags_Type, val.Str)
+	n.WriteChoice(RenderFlags_Type, val)
 }
 
 func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {
@@ -193,7 +197,7 @@ func RenderName_Optional_Marshal(n jsn.Marshaler, val **RenderName) {
 func RenderName_Marshal(n jsn.Marshaler, val *RenderName) {
 	n.MapValues(RenderName_Type, RenderName_Type)
 	n.MapKey("", RenderName_Field_Name)
-	/* */ value.Text_Override_Marshal(n, &val.Name)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
 	n.EndValues()
 	return
 }

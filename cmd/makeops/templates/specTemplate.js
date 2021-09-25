@@ -33,5 +33,10 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
   }
 }
 
+{{#if (Uses name "str")}}
+func (op *{{Pascal name}}) FindChoice() (string, bool) {
+  return op.Compose().FindChoice(op.Str)
+}
+{{/if}}
 const {{Pascal name}}_Type = "{{name}}"
 `;

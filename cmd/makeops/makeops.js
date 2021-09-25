@@ -8,10 +8,13 @@ const fs = require('fs'); // filesystem for loading iffy language file
 const child_process = require('child_process');
 const path = require('path');
 
-// when we see the key'd type name, replace it with the associated primitive value.
-const overrides = { "text": "string", "bool": "bool" };
-const optionals = new Set();
-const repeats = new Set();
+// unbox: when generating some kinds of simple types...
+// replace the specified typename with specified primitive.
+// types that map to numbers, etc. are added as unbox automatically.
+const unbox = { "text": "string", "bool": "bool" };
+// custom serialization of a type
+// blocks the generation of the inner most serialization function
+const custom = new Set(["get_var", "text"]);
 
 // change to tokenized like name
 const tokenize = function(name) {
@@ -76,6 +79,9 @@ Handlebars.registerHelper('NoHelpers', function(name) {
 });
 
 Handlebars.registerHelper('LedeName', function(t) {
+  // we exclude modeling ( as a opposed to runtime functions )
+  // because currently most of those are in sentence form not expression form.
+  // if this get fixed, then the WriteValue WriteChoice should e fixed to pass a lede
   const m = t.group.includes("modeling");
   if (!m && t.uses === "flow") {
     const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
@@ -92,11 +98,11 @@ const scopeOf = function(name) {
   return n;
 };
 
-const scopedName = function(name, ignoreOverride) {
+const scopedName = function(name, ignoreUnboxing) {
   let n = pascal(name);
-  const override = !ignoreOverride && overrides[name];
-  if (override) {
-    n = override; // stuffed in during makeops startup.
+  const unboxType = !ignoreUnboxing && unbox[name];
+  if (unboxType) {
+    n = unboxType; // stuffed in during makeops startup.
   } else {
     n = scopeOf(name) + n;
   }
@@ -119,14 +125,14 @@ Handlebars.registerHelper('SelectorOf', function(key, param, index) {
   const x= labelOf(key, param, index);
   return x !== "_"? x: "";
 });
-Handlebars.registerHelper('OverrideOf', function(name) {
-  return overrides[name];
-});
-Handlebars.registerHelper('PrimitiveOf', function(name) {
-  return overrides[name] || name;
+Handlebars.registerHelper('Custom',function(name) {
+  return custom.has(name) ? "_Customized": "";
 });
 Handlebars.registerHelper('IsBool', function(name) {
-  return overrides[name] === 'bool';
+  return unbox[name] === 'bool';
+});
+Handlebars.registerHelper('Unboxed', function(name) {
+  return unbox[name];
 });
 const isPrim= function(type) {
   return ["num", "str"].includes(type.uses);
@@ -170,6 +176,15 @@ Handlebars.registerHelper('IsInternal', function(label) {
 // for uses='str'
 Handlebars.registerHelper('IsClosed', function(strType) {
   return isClosed(strType);
+});
+
+Handlebars.registerHelper('IsEnumerated', function(type) {
+  let okay= false;
+  if (type.uses === 'str') {
+    const token = tokenize(type.name);
+    okay= strChoices(token, type).length > 0;
+  }
+  return okay;
 });
 
 // for uses='str' or 'swap'
@@ -225,11 +240,7 @@ Handlebars.registerHelper('GroupOf', function(desc) {
 })
 // load each js file as a handlebars template
 const partials = [
-  'repeat', 'sig', 'spec', 'override', 'optional',
-  'flowDetails',
-  'primDetails',
-  'slotDetails',
-  'swapDetails'
+  'repeat', 'sig', 'spec'
 ];
 const sources = ['header', 'slot', 'prim', 'swap', 'flow', 'footer', 'regList'];
 partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Template.js`)));
@@ -258,7 +269,7 @@ for (const typeName in allTypes) {
       if (type.uses === "num") {
         const { with: { tokens = [] } = {} } = type; // safely extract tokens
         if (tokens.length <= 1) {
-          overrides[typeName] = "float64";
+          unbox[typeName] = "float64";
         }
       }
       g.slats.push(typeName);
@@ -269,8 +280,6 @@ for (const typeName in allTypes) {
 }
 console.log("num groups", Object.keys(groups).length);
 
-
-
 // determine includes:
 for (currentGroup in groups) {
   console.log(currentGroup);
@@ -278,7 +287,7 @@ for (currentGroup in groups) {
   const g = groups[currentGroup];
   // look up all the dependencies
   const inc = new Set();
-  for (const typeName of g.slats.filter(n=> !overrides[n])) {
+  for (const typeName of g.slats.filter(n=> !unbox[n])) {
     const type = allTypes[typeName];
     if (isPositioned(type)) {
       const o = "reader"; // for forced str and swap position field
@@ -289,14 +298,9 @@ for (currentGroup in groups) {
     const params = paramsOf(type);
     for (const p in params) {
       const param = params[p];
-      if (param.repeats) {
-        repeats.add(param.type);
-      } else if (param.optional) {
-        optionals.add(param.type);
-      }
       // when we are marshaling we need to include all types
-      // otherwise we only need to include the types we dont override out of existence
-      if (param && (marshal || !overrides[param.type])) {
+      // otherwise we only need to include the types we dont unbox out of existence
+      if (param && (marshal || !unbox[param.type])) {
         const o = nameToGroup[param.type];
         if (o && o !== currentGroup) {
           inc.add(o);
@@ -329,10 +333,10 @@ for (currentGroup in groups) {
     const template = templates[type.uses];
     if (template) {
       currentType = type;
-      // console.log(type.uses);
+      // console.log(typeName, marshal);
       const d= {
         marshal,
-        type: type,
+        type,
       };
       fs.writeSync(fd, template(d));
     }

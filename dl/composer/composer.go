@@ -35,7 +35,8 @@ func (spec *Spec) UsesStr() bool {
 	return spec.OpenStrings || len(spec.Strings) > 0
 }
 
-func (spec *Spec) FindChoice(choice string) (ret string, okay bool) {
+// fix: could use some cleanup based on how its actually getting used.
+func (spec Spec) FindChoice(choice string) (ret string, okay bool) {
 	if len(choice) > 0 {
 		if choice[0] != '$' {
 			if spec.OpenStrings {

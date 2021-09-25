@@ -399,7 +399,7 @@ func BoolValue_Optional_Marshal(n jsn.Marshaler, val **BoolValue) {
 func BoolValue_Marshal(n jsn.Marshaler, val *BoolValue) {
 	n.MapValues("bool", BoolValue_Type)
 	n.MapKey("", BoolValue_Field_Bool)
-	/* */ value.Bool_Override_Marshal(n, &val.Bool)
+	/* */ value.Bool_Unboxed_Marshal(n, &val.Bool)
 	n.EndValues()
 	return
 }
@@ -601,7 +601,7 @@ func CallArg_Optional_Marshal(n jsn.Marshaler, val **CallArg) {
 func CallArg_Marshal(n jsn.Marshaler, val *CallArg) {
 	n.MapValues("inarg", CallArg_Type)
 	n.MapKey("", CallArg_Field_Name)
-	/* */ value.Text_Override_Marshal(n, &val.Name)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
 	n.MapKey("from", CallArg_Field_From)
 	/* */ rt.Assignment_Marshal(n, &val.From)
 	n.EndValues()
@@ -744,7 +744,7 @@ func CallMake_Optional_Marshal(n jsn.Marshaler, val **CallMake) {
 func CallMake_Marshal(n jsn.Marshaler, val *CallMake) {
 	n.MapValues(CallMake_Type, CallMake_Type)
 	n.MapKey("", CallMake_Field_Kind)
-	/* */ value.Text_Override_Marshal(n, &val.Kind)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Kind)
 	n.MapKey("args", CallMake_Field_Arguments)
 	/* */ CallArgs_Marshal(n, &val.Arguments)
 	n.EndValues()
@@ -844,7 +844,7 @@ func CallSend_Optional_Marshal(n jsn.Marshaler, val **CallSend) {
 func CallSend_Marshal(n jsn.Marshaler, val *CallSend) {
 	n.MapValues(CallSend_Type, CallSend_Type)
 	n.MapKey("", CallSend_Field_Event)
-	/* */ value.Text_Override_Marshal(n, &val.Event)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Event)
 	n.MapKey("to", CallSend_Field_Path)
 	/* */ rt.TextListEval_Marshal(n, &val.Path)
 	n.MapKey("args", CallSend_Field_Arguments)
@@ -1204,7 +1204,7 @@ func ChooseMoreValue_Optional_Marshal(n jsn.Marshaler, val **ChooseMoreValue) {
 func ChooseMoreValue_Marshal(n jsn.Marshaler, val *ChooseMoreValue) {
 	n.MapValues("else_if", ChooseMoreValue_Type)
 	n.MapKey("", ChooseMoreValue_Field_Assign)
-	/* */ value.Text_Override_Marshal(n, &val.Assign)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Assign)
 	n.MapKey("from", ChooseMoreValue_Field_From)
 	/* */ rt.Assignment_Marshal(n, &val.From)
 	n.MapKey("and", ChooseMoreValue_Field_Filter)
@@ -1420,7 +1420,7 @@ func ChooseValue_Optional_Marshal(n jsn.Marshaler, val **ChooseValue) {
 func ChooseValue_Marshal(n jsn.Marshaler, val *ChooseValue) {
 	n.MapValues("if", ChooseValue_Type)
 	n.MapKey("", ChooseValue_Field_Assign)
-	/* */ value.Text_Override_Marshal(n, &val.Assign)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Assign)
 	n.MapKey("from", ChooseValue_Field_From)
 	/* */ rt.Assignment_Marshal(n, &val.From)
 	n.MapKey("and", ChooseValue_Field_Filter)
@@ -2265,7 +2265,7 @@ func GetAtField_Optional_Marshal(n jsn.Marshaler, val **GetAtField) {
 func GetAtField_Marshal(n jsn.Marshaler, val *GetAtField) {
 	n.MapValues("get", GetAtField_Type)
 	n.MapKey("", GetAtField_Field_Field)
-	/* */ value.Text_Override_Marshal(n, &val.Field)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Field)
 	n.MapKey("from", GetAtField_Field_From)
 	/* */ FromSourceFields_Marshal(n, &val.From)
 	n.EndValues()
@@ -2310,7 +2310,7 @@ func GetVar_Optional_Marshal(n jsn.Marshaler, val **GetVar) {
 	}
 }
 
-func GetVar_Marshal(n jsn.Marshaler, val *GetVar) {
+func GetVar_Marshal_Customized(n jsn.Marshaler, val *GetVar) {
 	n.MapValues("var", GetVar_Type)
 	n.MapKey("", GetVar_Field_Name)
 	/* */ value.VariableName_Marshal(n, &val.Name)
@@ -2398,7 +2398,7 @@ func HasDominion_Optional_Marshal(n jsn.Marshaler, val **HasDominion) {
 func HasDominion_Marshal(n jsn.Marshaler, val *HasDominion) {
 	n.MapValues(HasDominion_Type, HasDominion_Type)
 	n.MapKey("", HasDominion_Field_Name)
-	/* */ value.Text_Override_Marshal(n, &val.Name)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
 	n.EndValues()
 	return
 }
@@ -2753,7 +2753,7 @@ func IsExactKindOf_Marshal(n jsn.Marshaler, val *IsExactKindOf) {
 	n.MapKey("", IsExactKindOf_Field_Object)
 	/* */ rt.TextEval_Marshal(n, &val.Object)
 	n.MapKey("is_exactly", IsExactKindOf_Field_Kind)
-	/* */ value.Text_Override_Marshal(n, &val.Kind)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Kind)
 	n.EndValues()
 	return
 }
@@ -2803,7 +2803,7 @@ func IsKindOf_Marshal(n jsn.Marshaler, val *IsKindOf) {
 	n.MapKey("", IsKindOf_Field_Object)
 	/* */ rt.TextEval_Marshal(n, &val.Object)
 	n.MapKey("is", IsKindOf_Field_Kind)
-	/* */ value.Text_Override_Marshal(n, &val.Kind)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Kind)
 	n.EndValues()
 	return
 }
@@ -2942,7 +2942,7 @@ func KindsOf_Optional_Marshal(n jsn.Marshaler, val **KindsOf) {
 func KindsOf_Marshal(n jsn.Marshaler, val *KindsOf) {
 	n.MapValues(KindsOf_Type, KindsOf_Type)
 	n.MapKey("", KindsOf_Field_Kind)
-	/* */ value.Text_Override_Marshal(n, &val.Kind)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Kind)
 	n.EndValues()
 	return
 }
@@ -3262,7 +3262,7 @@ func Matches_Marshal(n jsn.Marshaler, val *Matches) {
 	n.MapKey("", Matches_Field_Text)
 	/* */ rt.TextEval_Marshal(n, &val.Text)
 	n.MapKey("to", Matches_Field_Pattern)
-	/* */ value.Text_Override_Marshal(n, &val.Pattern)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Pattern)
 	n.EndValues()
 	return
 }
@@ -3519,8 +3519,8 @@ func NumValue_Optional_Marshal(n jsn.Marshaler, val **NumValue) {
 
 func NumValue_Marshal(n jsn.Marshaler, val *NumValue) {
 	n.MapValues("num", NumValue_Type)
-	n.MapKey("", NumValue_Field_Num)
-	/* */ value.Number_Override_Marshal(n, &val.Num)
+	n.MapLiteral(NumValue_Field_Num)
+	/* */ value.Number_Unboxed_Marshal(n, &val.Num)
 	n.EndValues()
 	return
 }
@@ -3566,7 +3566,7 @@ func Numbers_Optional_Marshal(n jsn.Marshaler, val **Numbers) {
 func Numbers_Marshal(n jsn.Marshaler, val *Numbers) {
 	n.MapValues("nums", Numbers_Type)
 	n.MapKey("", Numbers_Field_Values)
-	/* */ value.Number_Override_Repeats_Marshal(n, &val.Values)
+	/* */ value.Number_Unboxed_Repeats_Marshal(n, &val.Values)
 	n.EndValues()
 	return
 }
@@ -3854,7 +3854,7 @@ func PutAtField_Marshal(n jsn.Marshaler, val *PutAtField) {
 	n.MapKey("from", PutAtField_Field_From)
 	/* */ rt.Assignment_Marshal(n, &val.From)
 	n.MapKey("at", PutAtField_Field_AtField)
-	/* */ value.Text_Override_Marshal(n, &val.AtField)
+	/* */ value.Text_Unboxed_Marshal(n, &val.AtField)
 	n.EndValues()
 	return
 }
@@ -4001,7 +4001,7 @@ func Response_Optional_Marshal(n jsn.Marshaler, val **Response) {
 func Response_Marshal(n jsn.Marshaler, val *Response) {
 	n.MapValues(Response_Type, Response_Type)
 	n.MapKey("", Response_Field_Name)
-	/* */ value.Text_Override_Marshal(n, &val.Name)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
 	n.MapKey("text", Response_Field_Text)
 	/* */ rt.TextEval_Optional_Marshal(n, &val.Text)
 	n.EndValues()
@@ -4464,7 +4464,7 @@ func TextValue_Optional_Marshal(n jsn.Marshaler, val **TextValue) {
 func TextValue_Marshal(n jsn.Marshaler, val *TextValue) {
 	n.MapValues("txt", TextValue_Type)
 	n.MapKey("", TextValue_Field_Text)
-	/* */ value.Text_Override_Marshal(n, &val.Text)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Text)
 	n.EndValues()
 	return
 }
@@ -4510,7 +4510,7 @@ func Texts_Optional_Marshal(n jsn.Marshaler, val **Texts) {
 func Texts_Marshal(n jsn.Marshaler, val *Texts) {
 	n.MapValues("txts", Texts_Type)
 	n.MapKey("", Texts_Field_Values)
-	/* */ value.Text_Override_Repeats_Marshal(n, &val.Values)
+	/* */ value.Text_Unboxed_Repeats_Marshal(n, &val.Values)
 	n.EndValues()
 	return
 }

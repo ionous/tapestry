@@ -29,7 +29,18 @@ func (op* {{Pascal name}}) GetChoice() (ret string, okay bool) {
 
 {{~#if ../marshal}}
 {{>sig}}
-{{>swapDetails}}
+func {{Pascal name}}_Marshal{{Custom name}}(n jsn.Marshaler, val *{{Pascal name}}){
+  if pick, ok := val.GetChoice(); ok {
+    if slat := val.Opt; len(pick) > 0 {
+{{~#if (IsPositioned this)}}
+      n.SetCursor(val.At.Offset)
+{{/if}}
+      n.PickValues({{Pascal name}}_Type, pick)
+      /* */ slat.(jsn.Marshalee).Marshal(n)
+      n.EndValues()
+    }
+  }
+}
 {{/if}}
 {{/with}}
 {{>repeat name=(Pascal type.name) el=(Pascal type.name)}}

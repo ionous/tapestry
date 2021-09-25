@@ -32,38 +32,36 @@ func (*Bool) Compose() composer.Spec {
 	}
 }
 
+func (op *Bool) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const Bool_Type = "bool"
 
 func (op *Bool) Marshal(n jsn.Marshaler) {
 	Bool_Marshal(n, op)
 }
 
-func Bool_Override_Optional_Marshal(n jsn.Marshaler, val *bool) {
-	var zero bool
-	if *val != zero {
-		Bool_Override_Marshal(n, val)
-	}
-}
-
-func Bool_Override_Marshal(n jsn.Marshaler, val *bool) {
-	var out string
-	if *val {
-		out = Bool_True
-	} else {
-		out = Bool_False
-	}
-	Bool_Marshal(n, &Bool{out})
-}
-
-func Bool_Override_Repeats_Marshal(n jsn.Marshaler, vals *[]bool) {
+func Bool_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]bool) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
 		n.RepeatValues(cnt)
 		for _, el := range *vals {
-			Bool_Override_Marshal(n, &el)
+			Bool_Unboxed_Marshal(n, &el)
 		}
 		n.EndValues()
 	}
 	return
+}
+
+func Bool_Unboxed_Optional_Marshal(n jsn.Marshaler, val *bool) {
+	var zero bool
+	if *val != zero {
+		Bool_Unboxed_Marshal(n, val)
+	}
+}
+
+func Bool_Unboxed_Marshal(n jsn.Marshaler, val *bool) {
+	Bool_Marshal(n, &Bool{jsn.BoxBool(val)})
 }
 
 func Bool_Optional_Marshal(n jsn.Marshaler, val *Bool) {
@@ -74,7 +72,7 @@ func Bool_Optional_Marshal(n jsn.Marshaler, val *Bool) {
 }
 
 func Bool_Marshal(n jsn.Marshaler, val *Bool) {
-	n.WriteValue(Bool_Type, val.Str)
+	n.WriteChoice(Bool_Type, val)
 }
 
 func Bool_Repeats_Marshal(n jsn.Marshaler, vals *[]Bool) {
@@ -103,6 +101,10 @@ func (*Lines) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
+}
+
+func (op *Lines) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
 }
 
 const Lines_Type = "lines"
@@ -151,26 +153,26 @@ func (op *Number) Marshal(n jsn.Marshaler) {
 	Number_Marshal(n, op)
 }
 
-func Number_Override_Optional_Marshal(n jsn.Marshaler, val *float64) {
-	var zero float64
-	if *val != zero {
-		Number_Override_Marshal(n, val)
-	}
-}
-
-func Number_Override_Marshal(n jsn.Marshaler, val *float64) {
-	Number_Marshal(n, &Number{*val})
-}
-
-func Number_Override_Repeats_Marshal(n jsn.Marshaler, vals *[]float64) {
+func Number_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]float64) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
 		n.RepeatValues(cnt)
 		for _, el := range *vals {
-			Number_Override_Marshal(n, &el)
+			Number_Unboxed_Marshal(n, &el)
 		}
 		n.EndValues()
 	}
 	return
+}
+
+func Number_Unboxed_Optional_Marshal(n jsn.Marshaler, val *float64) {
+	var zero float64
+	if *val != zero {
+		Number_Unboxed_Marshal(n, val)
+	}
+}
+
+func Number_Unboxed_Marshal(n jsn.Marshaler, val *float64) {
+	Number_Marshal(n, &Number{jsn.BoxFloat64(val)})
 }
 
 func Number_Optional_Marshal(n jsn.Marshaler, val *Number) {
@@ -211,6 +213,10 @@ func (*PatternName) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
+}
+
+func (op *PatternName) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
 }
 
 const PatternName_Type = "pattern_name"
@@ -260,6 +266,10 @@ func (*RelationName) Compose() composer.Spec {
 	}
 }
 
+func (op *RelationName) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const RelationName_Type = "relation_name"
 
 func (op *RelationName) Marshal(n jsn.Marshaler) {
@@ -306,32 +316,36 @@ func (*Text) Compose() composer.Spec {
 	}
 }
 
+func (op *Text) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const Text_Type = "text"
 
 func (op *Text) Marshal(n jsn.Marshaler) {
 	Text_Marshal(n, op)
 }
 
-func Text_Override_Optional_Marshal(n jsn.Marshaler, val *string) {
-	var zero string
-	if *val != zero {
-		Text_Override_Marshal(n, val)
-	}
-}
-
-func Text_Override_Marshal(n jsn.Marshaler, val *string) {
-	Text_Marshal(n, &Text{*val})
-}
-
-func Text_Override_Repeats_Marshal(n jsn.Marshaler, vals *[]string) {
+func Text_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]string) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
 		n.RepeatValues(cnt)
 		for _, el := range *vals {
-			Text_Override_Marshal(n, &el)
+			Text_Unboxed_Marshal(n, &el)
 		}
 		n.EndValues()
 	}
 	return
+}
+
+func Text_Unboxed_Optional_Marshal(n jsn.Marshaler, val *string) {
+	var zero string
+	if *val != zero {
+		Text_Unboxed_Marshal(n, val)
+	}
+}
+
+func Text_Unboxed_Marshal(n jsn.Marshaler, val *string) {
+	Text_Marshal(n, &Text{jsn.BoxString(val)})
 }
 
 func Text_Optional_Marshal(n jsn.Marshaler, val *Text) {
@@ -341,7 +355,7 @@ func Text_Optional_Marshal(n jsn.Marshaler, val *Text) {
 	}
 }
 
-func Text_Marshal(n jsn.Marshaler, val *Text) {
+func Text_Marshal_Customized(n jsn.Marshaler, val *Text) {
 	n.WriteValue(Text_Type, val.Str)
 }
 
@@ -372,6 +386,10 @@ func (*VariableName) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
+}
+
+func (op *VariableName) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
 }
 
 const VariableName_Type = "variable_name"

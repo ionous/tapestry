@@ -35,6 +35,10 @@ func (*AbstractAction) Compose() composer.Spec {
 	}
 }
 
+func (op *AbstractAction) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const AbstractAction_Type = "abstract_action"
 
 func (op *AbstractAction) Marshal(n jsn.Marshaler) {
@@ -49,7 +53,7 @@ func AbstractAction_Optional_Marshal(n jsn.Marshaler, val *AbstractAction) {
 }
 
 func AbstractAction_Marshal(n jsn.Marshaler, val *AbstractAction) {
-	n.WriteValue(AbstractAction_Type, val.Str)
+	n.WriteChoice(AbstractAction_Type, val)
 }
 
 func AbstractAction_Repeats_Marshal(n jsn.Marshaler, vals *[]AbstractAction) {
@@ -183,6 +187,10 @@ func (*ActionName) Compose() composer.Spec {
 	}
 }
 
+func (op *ActionName) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const ActionName_Type = "action_name"
 
 func (op *ActionName) Marshal(n jsn.Marshaler) {
@@ -251,16 +259,14 @@ func (op *ActionParams) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
-
 func (op *ActionParams) Marshal(n jsn.Marshaler) {
 	ActionParams_Marshal(n, op)
 }
-
 func ActionParams_Marshal(n jsn.Marshaler, val *ActionParams) {
 	if pick, ok := val.GetChoice(); ok {
 		if slat := val.Opt; len(pick) > 0 {
 			n.PickValues(ActionParams_Type, pick)
-			slat.(jsn.Marshalee).Marshal(n)
+			/* */ slat.(jsn.Marshalee).Marshal(n)
 			n.EndValues()
 		}
 	}
@@ -302,6 +308,10 @@ func (*Ana) Compose() composer.Spec {
 	}
 }
 
+func (op *Ana) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const Ana_Type = "ana"
 
 func (op *Ana) Marshal(n jsn.Marshaler) {
@@ -316,7 +326,7 @@ func Ana_Optional_Marshal(n jsn.Marshaler, val *Ana) {
 }
 
 func Ana_Marshal(n jsn.Marshaler, val *Ana) {
-	n.WriteValue(Ana_Type, val.Str)
+	n.WriteChoice(Ana_Type, val)
 }
 
 func Ana_Repeats_Marshal(n jsn.Marshaler, vals *[]Ana) {
@@ -359,6 +369,10 @@ func (*AreAn) Compose() composer.Spec {
 	}
 }
 
+func (op *AreAn) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const AreAn_Type = "are_an"
 
 func (op *AreAn) Marshal(n jsn.Marshaler) {
@@ -373,7 +387,7 @@ func AreAn_Optional_Marshal(n jsn.Marshaler, val *AreAn) {
 }
 
 func AreAn_Marshal(n jsn.Marshaler, val *AreAn) {
-	n.WriteValue(AreAn_Type, val.Str)
+	n.WriteChoice(AreAn_Type, val)
 }
 
 func AreAn_Repeats_Marshal(n jsn.Marshaler, vals *[]AreAn) {
@@ -412,6 +426,10 @@ func (*AreBeing) Compose() composer.Spec {
 	}
 }
 
+func (op *AreBeing) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const AreBeing_Type = "are_being"
 
 func (op *AreBeing) Marshal(n jsn.Marshaler) {
@@ -426,7 +444,7 @@ func AreBeing_Optional_Marshal(n jsn.Marshaler, val *AreBeing) {
 }
 
 func AreBeing_Marshal(n jsn.Marshaler, val *AreBeing) {
-	n.WriteValue(AreBeing_Type, val.Str)
+	n.WriteChoice(AreBeing_Type, val)
 }
 
 func AreBeing_Repeats_Marshal(n jsn.Marshaler, vals *[]AreBeing) {
@@ -465,6 +483,10 @@ func (*AreEither) Compose() composer.Spec {
 	}
 }
 
+func (op *AreEither) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const AreEither_Type = "are_either"
 
 func (op *AreEither) Marshal(n jsn.Marshaler) {
@@ -479,7 +501,7 @@ func AreEither_Optional_Marshal(n jsn.Marshaler, val *AreEither) {
 }
 
 func AreEither_Marshal(n jsn.Marshaler, val *AreEither) {
-	n.WriteValue(AreEither_Type, val.Str)
+	n.WriteChoice(AreEither_Type, val)
 }
 
 func AreEither_Repeats_Marshal(n jsn.Marshaler, vals *[]AreEither) {
@@ -538,7 +560,7 @@ func Argument_Marshal(n jsn.Marshaler, val *Argument) {
 	n.SetCursor(val.At.Offset)
 	n.MapValues("arg", Argument_Type)
 	n.MapKey("", Argument_Field_Name)
-	/* */ value.Text_Override_Marshal(n, &val.Name)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
 	n.MapKey("from", Argument_Field_From)
 	/* */ rt.Assignment_Marshal(n, &val.From)
 	n.EndValues()
@@ -609,6 +631,10 @@ func (*Aspect) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
+}
+
+func (op *Aspect) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
 }
 
 const Aspect_Type = "aspect"
@@ -729,7 +755,7 @@ func BoxedNumber_Optional_Marshal(n jsn.Marshaler, val **BoxedNumber) {
 func BoxedNumber_Marshal(n jsn.Marshaler, val *BoxedNumber) {
 	n.MapValues(BoxedNumber_Type, BoxedNumber_Type)
 	n.MapKey("", BoxedNumber_Field_Number)
-	/* */ value.Number_Override_Marshal(n, &val.Number)
+	/* */ value.Number_Unboxed_Marshal(n, &val.Number)
 	n.EndValues()
 	return
 }
@@ -774,7 +800,7 @@ func BoxedText_Optional_Marshal(n jsn.Marshaler, val **BoxedText) {
 func BoxedText_Marshal(n jsn.Marshaler, val *BoxedText) {
 	n.MapValues(BoxedText_Type, BoxedText_Type)
 	n.MapKey("", BoxedText_Field_Text)
-	/* */ value.Text_Override_Marshal(n, &val.Text)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Text)
 	n.EndValues()
 	return
 }
@@ -864,6 +890,10 @@ func (*Certainty) Compose() composer.Spec {
 	}
 }
 
+func (op *Certainty) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const Certainty_Type = "certainty"
 
 func (op *Certainty) Marshal(n jsn.Marshaler) {
@@ -879,7 +909,7 @@ func Certainty_Optional_Marshal(n jsn.Marshaler, val *Certainty) {
 
 func Certainty_Marshal(n jsn.Marshaler, val *Certainty) {
 	n.SetCursor(val.At.Offset)
-	n.WriteValue(Certainty_Type, val.Str)
+	n.WriteChoice(Certainty_Type, val)
 }
 
 func Certainty_Repeats_Marshal(n jsn.Marshaler, vals *[]Certainty) {
@@ -1164,6 +1194,10 @@ func (*Determiner) Compose() composer.Spec {
 	}
 }
 
+func (op *Determiner) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const Determiner_Type = "determiner"
 
 func (op *Determiner) Marshal(n jsn.Marshaler) {
@@ -1178,7 +1212,7 @@ func Determiner_Optional_Marshal(n jsn.Marshaler, val *Determiner) {
 }
 
 func Determiner_Marshal(n jsn.Marshaler, val *Determiner) {
-	n.WriteValue(Determiner_Type, val.Str)
+	n.WriteChoice(Determiner_Type, val)
 }
 
 func Determiner_Repeats_Marshal(n jsn.Marshaler, vals *[]Determiner) {
@@ -1318,6 +1352,10 @@ func (*EventName) Compose() composer.Spec {
 	}
 }
 
+func (op *EventName) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const EventName_Type = "event_name"
 
 func (op *EventName) Marshal(n jsn.Marshaler) {
@@ -1373,6 +1411,10 @@ func (*EventPhase) Compose() composer.Spec {
 	}
 }
 
+func (op *EventPhase) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const EventPhase_Type = "event_phase"
 
 func (op *EventPhase) Marshal(n jsn.Marshaler) {
@@ -1387,7 +1429,7 @@ func EventPhase_Optional_Marshal(n jsn.Marshaler, val *EventPhase) {
 }
 
 func EventPhase_Marshal(n jsn.Marshaler, val *EventPhase) {
-	n.WriteValue(EventPhase_Type, val.Str)
+	n.WriteChoice(EventPhase_Type, val)
 }
 
 func EventPhase_Repeats_Marshal(n jsn.Marshaler, vals *[]EventPhase) {
@@ -1436,16 +1478,14 @@ func (op *EventTarget) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
-
 func (op *EventTarget) Marshal(n jsn.Marshaler) {
 	EventTarget_Marshal(n, op)
 }
-
 func EventTarget_Marshal(n jsn.Marshaler, val *EventTarget) {
 	if pick, ok := val.GetChoice(); ok {
 		if slat := val.Opt; len(pick) > 0 {
 			n.PickValues(EventTarget_Type, pick)
-			slat.(jsn.Marshalee).Marshal(n)
+			/* */ slat.(jsn.Marshalee).Marshal(n)
 			n.EndValues()
 		}
 	}
@@ -1506,17 +1546,15 @@ func (op *ExtType) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
-
 func (op *ExtType) Marshal(n jsn.Marshaler) {
 	ExtType_Marshal(n, op)
 }
-
 func ExtType_Marshal(n jsn.Marshaler, val *ExtType) {
 	if pick, ok := val.GetChoice(); ok {
 		if slat := val.Opt; len(pick) > 0 {
 			n.SetCursor(val.At.Offset)
 			n.PickValues(ExtType_Type, pick)
-			slat.(jsn.Marshalee).Marshal(n)
+			/* */ slat.(jsn.Marshalee).Marshal(n)
 			n.EndValues()
 		}
 	}
@@ -2057,7 +2095,7 @@ func Make_Optional_Marshal(n jsn.Marshaler, val **Make) {
 func Make_Marshal(n jsn.Marshaler, val *Make) {
 	n.MapValues(Make_Type, Make_Type)
 	n.MapKey("", Make_Field_Name)
-	/* */ value.Text_Override_Marshal(n, &val.Name)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
 	n.MapKey("arguments", Make_Field_Arguments)
 	/* */ Arguments_Optional_Marshal(n, &val.Arguments)
 	n.EndValues()
@@ -2282,6 +2320,10 @@ func (*NounName) Compose() composer.Spec {
 	}
 }
 
+func (op *NounName) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const NounName_Type = "noun_name"
 
 func (op *NounName) Marshal(n jsn.Marshaler) {
@@ -2351,17 +2393,15 @@ func (op *NounPhrase) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
-
 func (op *NounPhrase) Marshal(n jsn.Marshaler) {
 	NounPhrase_Marshal(n, op)
 }
-
 func NounPhrase_Marshal(n jsn.Marshaler, val *NounPhrase) {
 	if pick, ok := val.GetChoice(); ok {
 		if slat := val.Opt; len(pick) > 0 {
 			n.SetCursor(val.At.Offset)
 			n.PickValues(NounPhrase_Type, pick)
-			slat.(jsn.Marshalee).Marshal(n)
+			/* */ slat.(jsn.Marshalee).Marshal(n)
 			n.EndValues()
 		}
 	}
@@ -2557,6 +2597,10 @@ func (*NumberList) Compose() composer.Spec {
 	}
 }
 
+func (op *NumberList) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const NumberList_Type = "number_list"
 
 func (op *NumberList) Marshal(n jsn.Marshaler) {
@@ -2571,7 +2615,7 @@ func NumberList_Optional_Marshal(n jsn.Marshaler, val *NumberList) {
 }
 
 func NumberList_Marshal(n jsn.Marshaler, val *NumberList) {
-	n.WriteValue(NumberList_Type, val.Str)
+	n.WriteChoice(NumberList_Type, val)
 }
 
 func NumberList_Repeats_Marshal(n jsn.Marshaler, vals *[]NumberList) {
@@ -2968,6 +3012,10 @@ func (*PatternFlags) Compose() composer.Spec {
 	}
 }
 
+func (op *PatternFlags) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const PatternFlags_Type = "pattern_flags"
 
 func (op *PatternFlags) Marshal(n jsn.Marshaler) {
@@ -2982,7 +3030,7 @@ func PatternFlags_Optional_Marshal(n jsn.Marshaler, val *PatternFlags) {
 }
 
 func PatternFlags_Marshal(n jsn.Marshaler, val *PatternFlags) {
-	n.WriteValue(PatternFlags_Type, val.Str)
+	n.WriteChoice(PatternFlags_Type, val)
 }
 
 func PatternFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternFlags) {
@@ -3212,6 +3260,10 @@ func (*PatternType) Compose() composer.Spec {
 	}
 }
 
+func (op *PatternType) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const PatternType_Type = "pattern_type"
 
 func (op *PatternType) Marshal(n jsn.Marshaler) {
@@ -3227,7 +3279,7 @@ func PatternType_Optional_Marshal(n jsn.Marshaler, val *PatternType) {
 
 func PatternType_Marshal(n jsn.Marshaler, val *PatternType) {
 	n.SetCursor(val.At.Offset)
-	n.WriteValue(PatternType_Type, val.Str)
+	n.WriteChoice(PatternType_Type, val)
 }
 
 func PatternType_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternType) {
@@ -3353,6 +3405,10 @@ func (*PluralKinds) Compose() composer.Spec {
 	}
 }
 
+func (op *PluralKinds) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const PluralKinds_Type = "plural_kinds"
 
 func (op *PluralKinds) Marshal(n jsn.Marshaler) {
@@ -3409,6 +3465,10 @@ func (*PrimitiveType) Compose() composer.Spec {
 	}
 }
 
+func (op *PrimitiveType) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const PrimitiveType_Type = "primitive_type"
 
 func (op *PrimitiveType) Marshal(n jsn.Marshaler) {
@@ -3424,7 +3484,7 @@ func PrimitiveType_Optional_Marshal(n jsn.Marshaler, val *PrimitiveType) {
 
 func PrimitiveType_Marshal(n jsn.Marshaler, val *PrimitiveType) {
 	n.SetCursor(val.At.Offset)
-	n.WriteValue(PrimitiveType_Type, val.Str)
+	n.WriteChoice(PrimitiveType_Type, val)
 }
 
 func PrimitiveType_Repeats_Marshal(n jsn.Marshaler, vals *[]PrimitiveType) {
@@ -3473,16 +3533,14 @@ func (op *PrimitiveValue) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
-
 func (op *PrimitiveValue) Marshal(n jsn.Marshaler) {
 	PrimitiveValue_Marshal(n, op)
 }
-
 func PrimitiveValue_Marshal(n jsn.Marshaler, val *PrimitiveValue) {
 	if pick, ok := val.GetChoice(); ok {
 		if slat := val.Opt; len(pick) > 0 {
 			n.PickValues(PrimitiveValue_Type, pick)
-			slat.(jsn.Marshalee).Marshal(n)
+			/* */ slat.(jsn.Marshalee).Marshal(n)
 			n.EndValues()
 		}
 	}
@@ -3531,17 +3589,15 @@ func (op *ProgramHook) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
-
 func (op *ProgramHook) Marshal(n jsn.Marshaler) {
 	ProgramHook_Marshal(n, op)
 }
-
 func ProgramHook_Marshal(n jsn.Marshaler, val *ProgramHook) {
 	if pick, ok := val.GetChoice(); ok {
 		if slat := val.Opt; len(pick) > 0 {
 			n.SetCursor(val.At.Offset)
 			n.PickValues(ProgramHook_Type, pick)
-			slat.(jsn.Marshalee).Marshal(n)
+			/* */ slat.(jsn.Marshalee).Marshal(n)
 			n.EndValues()
 		}
 	}
@@ -3584,6 +3640,10 @@ func (*Pronoun) Compose() composer.Spec {
 	}
 }
 
+func (op *Pronoun) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const Pronoun_Type = "pronoun"
 
 func (op *Pronoun) Marshal(n jsn.Marshaler) {
@@ -3598,7 +3658,7 @@ func Pronoun_Optional_Marshal(n jsn.Marshaler, val *Pronoun) {
 }
 
 func Pronoun_Marshal(n jsn.Marshaler, val *Pronoun) {
-	n.WriteValue(Pronoun_Type, val.Str)
+	n.WriteChoice(Pronoun_Type, val)
 }
 
 func Pronoun_Repeats_Marshal(n jsn.Marshaler, vals *[]Pronoun) {
@@ -3628,6 +3688,10 @@ func (*Property) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
+}
+
+func (op *Property) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
 }
 
 const Property_Type = "property"
@@ -3684,6 +3748,10 @@ func (*PropertyAspect) Compose() composer.Spec {
 	}
 }
 
+func (op *PropertyAspect) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const PropertyAspect_Type = "property_aspect"
 
 func (op *PropertyAspect) Marshal(n jsn.Marshaler) {
@@ -3699,7 +3767,7 @@ func PropertyAspect_Optional_Marshal(n jsn.Marshaler, val *PropertyAspect) {
 
 func PropertyAspect_Marshal(n jsn.Marshaler, val *PropertyAspect) {
 	n.SetCursor(val.At.Offset)
-	n.WriteValue(PropertyAspect_Type, val.Str)
+	n.WriteChoice(PropertyAspect_Type, val)
 }
 
 func PropertyAspect_Repeats_Marshal(n jsn.Marshaler, vals *[]PropertyAspect) {
@@ -3810,17 +3878,15 @@ func (op *PropertyType) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
-
 func (op *PropertyType) Marshal(n jsn.Marshaler) {
 	PropertyType_Marshal(n, op)
 }
-
 func PropertyType_Marshal(n jsn.Marshaler, val *PropertyType) {
 	if pick, ok := val.GetChoice(); ok {
 		if slat := val.Opt; len(pick) > 0 {
 			n.SetCursor(val.At.Offset)
 			n.PickValues(PropertyType_Type, pick)
-			slat.(jsn.Marshalee).Marshal(n)
+			/* */ slat.(jsn.Marshalee).Marshal(n)
 			n.EndValues()
 		}
 	}
@@ -3900,6 +3966,10 @@ func (*RecordPlural) Compose() composer.Spec {
 	}
 }
 
+func (op *RecordPlural) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const RecordPlural_Type = "record_plural"
 
 func (op *RecordPlural) Marshal(n jsn.Marshaler) {
@@ -3945,6 +4015,10 @@ func (*RecordSingular) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
+}
+
+func (op *RecordSingular) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
 }
 
 const RecordSingular_Type = "record_singular"
@@ -4114,17 +4188,15 @@ func (op *RelationCardinality) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
-
 func (op *RelationCardinality) Marshal(n jsn.Marshaler) {
 	RelationCardinality_Marshal(n, op)
 }
-
 func RelationCardinality_Marshal(n jsn.Marshaler, val *RelationCardinality) {
 	if pick, ok := val.GetChoice(); ok {
 		if slat := val.Opt; len(pick) > 0 {
 			n.SetCursor(val.At.Offset)
 			n.PickValues(RelationCardinality_Type, pick)
-			slat.(jsn.Marshalee).Marshal(n)
+			/* */ slat.(jsn.Marshalee).Marshal(n)
 			n.EndValues()
 		}
 	}
@@ -4287,7 +4359,7 @@ func Send_Optional_Marshal(n jsn.Marshaler, val **Send) {
 func Send_Marshal(n jsn.Marshaler, val *Send) {
 	n.MapValues(Send_Type, Send_Type)
 	n.MapKey("", Send_Field_Event)
-	/* */ value.Text_Override_Marshal(n, &val.Event)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Event)
 	n.MapKey("path", Send_Field_Path)
 	/* */ rt.TextListEval_Marshal(n, &val.Path)
 	n.MapKey("arguments", Send_Field_Arguments)
@@ -4359,6 +4431,10 @@ func (*SingularKind) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
+}
+
+func (op *SingularKind) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
 }
 
 const SingularKind_Type = "singular_kind"
@@ -4626,6 +4702,10 @@ func (*TestName) Compose() composer.Spec {
 	}
 }
 
+func (op *TestName) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const TestName_Type = "test_name"
 
 func (op *TestName) Marshal(n jsn.Marshaler) {
@@ -4641,7 +4721,7 @@ func TestName_Optional_Marshal(n jsn.Marshaler, val *TestName) {
 
 func TestName_Marshal(n jsn.Marshaler, val *TestName) {
 	n.SetCursor(val.At.Offset)
-	n.WriteValue(TestName_Type, val.Str)
+	n.WriteChoice(TestName_Type, val)
 }
 
 func TestName_Repeats_Marshal(n jsn.Marshaler, vals *[]TestName) {
@@ -4895,6 +4975,10 @@ func (*TextList) Compose() composer.Spec {
 	}
 }
 
+func (op *TextList) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
+}
+
 const TextList_Type = "text_list"
 
 func (op *TextList) Marshal(n jsn.Marshaler) {
@@ -4909,7 +4993,7 @@ func TextList_Optional_Marshal(n jsn.Marshaler, val *TextList) {
 }
 
 func TextList_Marshal(n jsn.Marshaler, val *TextList) {
-	n.WriteValue(TextList_Type, val.Str)
+	n.WriteChoice(TextList_Type, val)
 }
 
 func TextList_Repeats_Marshal(n jsn.Marshaler, vals *[]TextList) {
@@ -4939,6 +5023,10 @@ func (*Trait) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
+}
+
+func (op *Trait) FindChoice() (string, bool) {
+	return op.Compose().FindChoice(op.Str)
 }
 
 const Trait_Type = "trait"
@@ -5116,17 +5204,15 @@ func (op *VariableType) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
-
 func (op *VariableType) Marshal(n jsn.Marshaler) {
 	VariableType_Marshal(n, op)
 }
-
 func VariableType_Marshal(n jsn.Marshaler, val *VariableType) {
 	if pick, ok := val.GetChoice(); ok {
 		if slat := val.Opt; len(pick) > 0 {
 			n.SetCursor(val.At.Offset)
 			n.PickValues(VariableType_Type, pick)
-			slat.(jsn.Marshalee).Marshal(n)
+			/* */ slat.(jsn.Marshalee).Marshal(n)
 			n.EndValues()
 		}
 	}

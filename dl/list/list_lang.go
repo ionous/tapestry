@@ -305,7 +305,7 @@ func Erasing_Marshal(n jsn.Marshaler, val *Erasing) {
 	n.MapKey("at_index", Erasing_Field_AtIndex)
 	/* */ rt.NumberEval_Marshal(n, &val.AtIndex)
 	n.MapKey("as", Erasing_Field_As)
-	/* */ value.Text_Override_Marshal(n, &val.As)
+	/* */ value.Text_Unboxed_Marshal(n, &val.As)
 	n.MapKey("do", Erasing_Field_Do)
 	/* */ core.Activity_Marshal(n, &val.Do)
 	n.EndValues()
@@ -365,7 +365,7 @@ func ErasingEdge_Marshal(n jsn.Marshaler, val *ErasingEdge) {
 	n.MapKey("at_front", ErasingEdge_Field_AtEdge)
 	/* */ rt.BoolEval_Optional_Marshal(n, &val.AtEdge)
 	n.MapKey("as", ErasingEdge_Field_As)
-	/* */ value.Text_Override_Marshal(n, &val.As)
+	/* */ value.Text_Unboxed_Marshal(n, &val.As)
 	n.MapKey("do", ErasingEdge_Field_Do)
 	/* */ core.Activity_Marshal(n, &val.Do)
 	n.MapKey("else", ErasingEdge_Field_Else)
@@ -857,7 +857,7 @@ func ListGather_Marshal(n jsn.Marshaler, val *ListGather) {
 	n.MapKey("from", ListGather_Field_From)
 	/* */ ListSource_Marshal(n, &val.From)
 	n.MapKey("", ListGather_Field_Using)
-	/* */ value.Text_Override_Marshal(n, &val.Using)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Using)
 	n.EndValues()
 	return
 }
@@ -975,11 +975,11 @@ func ListMap_Optional_Marshal(n jsn.Marshaler, val **ListMap) {
 func ListMap_Marshal(n jsn.Marshaler, val *ListMap) {
 	n.MapValues("map", ListMap_Type)
 	n.MapKey("", ListMap_Field_ToList)
-	/* */ value.Text_Override_Marshal(n, &val.ToList)
+	/* */ value.Text_Unboxed_Marshal(n, &val.ToList)
 	n.MapKey("from_list", ListMap_Field_FromList)
 	/* */ rt.Assignment_Marshal(n, &val.FromList)
 	n.MapKey("using", ListMap_Field_UsingPattern)
-	/* */ value.Text_Override_Marshal(n, &val.UsingPattern)
+	/* */ value.Text_Unboxed_Marshal(n, &val.UsingPattern)
 	n.EndValues()
 	return
 }
@@ -1029,11 +1029,11 @@ func ListReduce_Optional_Marshal(n jsn.Marshaler, val **ListReduce) {
 func ListReduce_Marshal(n jsn.Marshaler, val *ListReduce) {
 	n.MapValues("reduce", ListReduce_Type)
 	n.MapKey("into", ListReduce_Field_IntoValue)
-	/* */ value.Text_Override_Marshal(n, &val.IntoValue)
+	/* */ value.Text_Unboxed_Marshal(n, &val.IntoValue)
 	n.MapKey("from_list", ListReduce_Field_FromList)
 	/* */ rt.Assignment_Marshal(n, &val.FromList)
 	n.MapKey("using", ListReduce_Field_UsingPattern)
-	/* */ value.Text_Override_Marshal(n, &val.UsingPattern)
+	/* */ value.Text_Unboxed_Marshal(n, &val.UsingPattern)
 	n.EndValues()
 	return
 }
@@ -1129,7 +1129,7 @@ func ListSet_Optional_Marshal(n jsn.Marshaler, val **ListSet) {
 func ListSet_Marshal(n jsn.Marshaler, val *ListSet) {
 	n.MapValues("set", ListSet_Type)
 	n.MapKey("", ListSet_Field_List)
-	/* */ value.Text_Override_Marshal(n, &val.List)
+	/* */ value.Text_Unboxed_Marshal(n, &val.List)
 	n.MapKey("index", ListSet_Field_Index)
 	/* */ rt.NumberEval_Marshal(n, &val.Index)
 	n.MapKey("from", ListSet_Field_From)
@@ -1239,7 +1239,7 @@ func ListSortNumbers_Marshal(n jsn.Marshaler, val *ListSortNumbers) {
 	n.MapKey("", ListSortNumbers_Field_Var)
 	/* */ value.VariableName_Marshal(n, &val.Var)
 	n.MapKey("by_field", ListSortNumbers_Field_ByField)
-	/* */ value.Text_Override_Marshal(n, &val.ByField)
+	/* */ value.Text_Unboxed_Marshal(n, &val.ByField)
 	n.MapKey("descending", ListSortNumbers_Field_Descending)
 	/* */ rt.BoolEval_Optional_Marshal(n, &val.Descending)
 	n.EndValues()
@@ -1295,7 +1295,7 @@ func ListSortText_Marshal(n jsn.Marshaler, val *ListSortText) {
 	n.MapKey("", ListSortText_Field_Var)
 	/* */ value.VariableName_Marshal(n, &val.Var)
 	n.MapKey("by_field", ListSortText_Field_ByField)
-	/* */ value.Text_Override_Marshal(n, &val.ByField)
+	/* */ value.Text_Unboxed_Marshal(n, &val.ByField)
 	n.MapKey("descending", ListSortText_Field_Descending)
 	/* */ rt.BoolEval_Optional_Marshal(n, &val.Descending)
 	n.MapKey("using_case", ListSortText_Field_UsingCase)
@@ -1349,7 +1349,7 @@ func ListSortUsing_Marshal(n jsn.Marshaler, val *ListSortUsing) {
 	n.MapKey("", ListSortUsing_Field_Var)
 	/* */ value.VariableName_Marshal(n, &val.Var)
 	n.MapKey("using", ListSortUsing_Field_Using)
-	/* */ value.Text_Override_Marshal(n, &val.Using)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Using)
 	n.EndValues()
 	return
 }
@@ -1423,7 +1423,7 @@ func ListSplice_Optional_Marshal(n jsn.Marshaler, val **ListSplice) {
 func ListSplice_Marshal(n jsn.Marshaler, val *ListSplice) {
 	n.MapValues("splice", ListSplice_Type)
 	n.MapKey("", ListSplice_Field_List)
-	/* */ value.Text_Override_Marshal(n, &val.List)
+	/* */ value.Text_Unboxed_Marshal(n, &val.List)
 	n.MapKey("start", ListSplice_Field_Start)
 	/* */ rt.NumberEval_Marshal(n, &val.Start)
 	n.MapKey("remove", ListSplice_Field_Remove)

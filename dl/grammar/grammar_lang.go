@@ -48,7 +48,7 @@ func Action_Optional_Marshal(n jsn.Marshaler, val **Action) {
 func Action_Marshal(n jsn.Marshaler, val *Action) {
 	n.MapValues("as", Action_Type)
 	n.MapKey("", Action_Field_Action)
-	/* */ value.Text_Override_Marshal(n, &val.Action)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Action)
 	n.EndValues()
 	return
 }
@@ -95,9 +95,9 @@ func Alias_Optional_Marshal(n jsn.Marshaler, val **Alias) {
 func Alias_Marshal(n jsn.Marshaler, val *Alias) {
 	n.MapValues(Alias_Type, Alias_Type)
 	n.MapKey("", Alias_Field_Names)
-	/* */ value.Text_Override_Repeats_Marshal(n, &val.Names)
+	/* */ value.Text_Unboxed_Repeats_Marshal(n, &val.Names)
 	n.MapKey("as_noun", Alias_Field_AsNoun)
-	/* */ value.Text_Override_Marshal(n, &val.AsNoun)
+	/* */ value.Text_Unboxed_Marshal(n, &val.AsNoun)
 	n.EndValues()
 	return
 }
@@ -234,7 +234,7 @@ func Directive_Optional_Marshal(n jsn.Marshaler, val **Directive) {
 func Directive_Marshal(n jsn.Marshaler, val *Directive) {
 	n.MapValues(Directive_Type, Directive_Type)
 	n.MapKey("", Directive_Field_Lede)
-	/* */ value.Text_Override_Repeats_Marshal(n, &val.Lede)
+	/* */ value.Text_Unboxed_Repeats_Marshal(n, &val.Lede)
 	n.MapKey("scans", Directive_Field_Scans)
 	/* */ ScannerMaker_Repeats_Marshal(n, &val.Scans)
 	n.EndValues()
@@ -348,7 +348,7 @@ func Noun_Optional_Marshal(n jsn.Marshaler, val **Noun) {
 func Noun_Marshal(n jsn.Marshaler, val *Noun) {
 	n.MapValues(Noun_Type, Noun_Type)
 	n.MapKey("", Noun_Field_Kind)
-	/* */ value.Text_Override_Marshal(n, &val.Kind)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Kind)
 	n.EndValues()
 	return
 }
@@ -505,7 +505,7 @@ func Self_Optional_Marshal(n jsn.Marshaler, val **Self) {
 func Self_Marshal(n jsn.Marshaler, val *Self) {
 	n.MapValues(Self_Type, Self_Type)
 	n.MapKey("", Self_Field_Player)
-	/* */ value.Text_Override_Marshal(n, &val.Player)
+	/* */ value.Text_Unboxed_Marshal(n, &val.Player)
 	n.EndValues()
 	return
 }
@@ -550,7 +550,7 @@ func Words_Optional_Marshal(n jsn.Marshaler, val **Words) {
 func Words_Marshal(n jsn.Marshaler, val *Words) {
 	n.MapValues(Words_Type, Words_Type)
 	n.MapKey("", Words_Field_Words)
-	/* */ value.Text_Override_Repeats_Marshal(n, &val.Words)
+	/* */ value.Text_Unboxed_Repeats_Marshal(n, &val.Words)
 	n.EndValues()
 	return
 }
