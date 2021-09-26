@@ -14,6 +14,6 @@ func Text_Marshal(n jsn.Marshaler, val *Text) {
 		if len(str) > 0 && str[0] == '@' {
 			str = "@" + str
 		}
-		n.WriteValue(Text_Type, str)
+		n.SpecifyValue(Text_Type, str)
 	}
 }

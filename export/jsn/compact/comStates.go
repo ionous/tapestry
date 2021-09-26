@@ -1,8 +1,6 @@
 package compact
 
 import (
-	"strconv"
-
 	"github.com/ionous/errutil"
 )
 
@@ -15,7 +13,6 @@ type comFlow struct {
 type comKey struct {
 	*comFlow // parent state
 	key      string
-	name     string
 }
 
 type comLiteral struct {
@@ -31,12 +28,6 @@ type comSwap struct {
 	comBlock // every swap pushes a brand new machine
 }
 
-var namer int
-
-func newName(base string) string {
-	return base + "-" + strconv.Itoa(namer)
-}
-
 func (d *comFlow) MapKey(sig, _ string) {
 	d.m.changeState(&comKey{
 		comFlow: d,
@@ -48,7 +39,7 @@ func (d *comFlow) MapLiteral(field string) {
 	if len(d.values) > 0 {
 		d.m.Error(errutil.New("unexpected literal after map key:value"))
 	} else {
-		d.m.changeState(&comLiteral{comValue: comValue{m: d.m, name: newName("literal")}})
+		d.m.changeState(&comLiteral{comValue: comValue{m: d.m}})
 	}
 }
 
@@ -57,10 +48,11 @@ func (cf *comFlow) addMsg(label string, value interface{}) {
 	cf.values = append(cf.values, value)
 }
 
-func (d *comFlow) readData() (ret interface{}) {
+// EndValues ends the current state and commits its data to the parent state.
+func (d *comFlow) EndValues() {
 	sig := d.sig.String()
 	if cnt := len(d.values); cnt == 0 {
-		ret = sig
+		d.m.finishState(sig)
 	} else {
 		var v interface{}
 		if cnt == 1 {
@@ -68,23 +60,19 @@ func (d *comFlow) readData() (ret interface{}) {
 		} else {
 			v = d.values
 		}
-		ret = map[string]interface{}{
+		d.m.finishState(map[string]interface{}{
 			sig: v,
-		}
+		})
 	}
-	return
 }
 
-func (d *comFlow) writeData(v interface{}) {
+// someone is trying to write a value to the flow, but we need keys to do that.
+func (d *comFlow) commit(v interface{}) {
 	d.m.Error(errutil.New("missing key when writing to a flow"))
 }
 
-// override the flow's name to prefix that we are a substate of it.
-func (d *comKey) named() string {
-	return "key-" + d.comFlow.named()
-}
-
-func (d *comKey) writeData(v interface{}) {
+// write the value into the key and change back to the flow state
+func (d *comKey) commit(v interface{}) {
 	d.comFlow.addMsg(d.key, v)
 	d.m.changeState(d.comFlow)
 }
@@ -93,28 +81,34 @@ func (d *comKey) writeData(v interface{}) {
 // or ending the block result in an error.
 // see also comBlock EndValues
 func (d *comLiteral) EndValues() {
-	was := d.m.popState()         // gets rid of us
-	d.m.writeData(was.readData()) // write our accumulated data to the new parent
+	d.m.finishState(d.out)
 }
 
-func (d *comSlice) readData() interface{} {
-	return d.values
-}
-
-func (d *comSlice) writeData(v interface{}) {
+// a new value is being added to our slice
+func (d *comSlice) commit(v interface{}) {
 	d.values = append(d.values, v)
+}
+
+// the slice is done, write it to our parent whomever that is.
+func (d *comSlice) EndValues() {
+	d.m.finishState(d.values)
 }
 
 // compact raw values would normally just write the value
 // but: we don't want to lose the *kind* of the choice
 // so we do this specially
-func (d *comSwap) WriteValue(kind string, value interface{}) {
-	d.m.writeData(map[string]interface{}{
+func (d *comSwap) SpecifyValue(kind string, value interface{}) {
+	d.out = map[string]interface{}{
 		kind + ":": value,
-	})
+	}
 }
 
-func (d *comSwap) writeData(v interface{}) {
+func (d *comSwap) EndValues() {
+	d.m.finishState(d.out)
+}
+
+// record the swap choice and move to an error detection state
+func (d *comSwap) commit(v interface{}) {
 	d.out = v
 	d.m.changeState(&comWritten{d})
 }
@@ -123,6 +117,6 @@ type comWritten struct {
 	*comSwap
 }
 
-func (d *comWritten) writeData(v interface{}) {
-	d.m.Warning(errutil.New(d.name, "already written"))
+func (d *comWritten) commit(v interface{}) {
+	d.m.Warning(errutil.New("value already committed"))
 }

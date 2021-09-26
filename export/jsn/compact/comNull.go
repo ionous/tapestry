@@ -7,6 +7,4 @@ type comNull struct {
 	jsn.NullMarshaler
 }
 
-func (d *comNull) named() string         { return "null" }
-func (d *comNull) writeData(interface{}) {}
-func (d *comNull) readData() interface{} { return nil }
+func (d *comNull) commit(interface{}) {}

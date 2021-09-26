@@ -1,8 +1,12 @@
 package jsn
 
-// Marshaler outputs script data.
-// there are two categories of data: blocks and primitive values.
-// blocks are written using begin/end pairs; primitives using WriteValue.
+// Marshalee for types which fit into slots
+type Marshalee interface {
+	Marshal(Marshaler)
+}
+
+// Marshaler outputs two categories of script data: blocks and primitive values.
+// blocks are written using begin/end pairs; primitives using SpecifyValue.
 type Marshaler interface {
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
@@ -16,10 +20,6 @@ type Marshaler interface {
 	// ex. `{"type":"num_value","value":{"$NUM": {"type":"number","value":3}}}`
 	// can be written as just `3`.
 	MapLiteral(field string)
-	// writes a primitive value.
-	WriteValue(kind string, value interface{})
-	// writes a (potentially) enumerated value.
-	WriteChoice(kind string, enum Enumeration)
 	// selects one of a small set of possible choices
 	// the swap is closed ( written ) with a call to EndValues()
 	PickValues(kind, choice string)
@@ -28,6 +28,10 @@ type Marshaler interface {
 	RepeatValues(hint int)
 	// ends a flow, swap, or repeat.
 	EndValues()
+	// writes a primitive value.
+	SpecifyValue(kind string, value interface{})
+	// writes an enumerated value.
+	SpecifyEnum(kind string, value Enumeration)
 	// sets a unique id for the next block or primitive value.
 	SetCursor(id string)
 	// record an error but don't terminate
@@ -39,9 +43,4 @@ type Marshaler interface {
 type Enumeration interface {
 	String() string
 	FindChoice() (ret string, found bool)
-}
-
-type Marshalee interface {
-	// UnmarshalDetailed(Context, []byte)
-	Marshal(Marshaler)
 }

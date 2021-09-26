@@ -13,6 +13,6 @@ func GetVar_Marshal(n jsn.Marshaler, val *GetVar) {
 		// this would conflict with @@ text serialization.
 		n.Warning(errutil.New("serialization doesn't support variables names starting with @"))
 	} else {
-		n.WriteValue(GetVar_Type, "@"+str)
+		n.SpecifyValue(GetVar_Type, "@"+str)
 	}
 }

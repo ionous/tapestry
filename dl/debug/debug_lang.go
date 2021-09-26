@@ -150,7 +150,7 @@ func LoggingLevel_Optional_Marshal(n jsn.Marshaler, val *LoggingLevel) {
 }
 
 func LoggingLevel_Marshal(n jsn.Marshaler, val *LoggingLevel) {
-	n.WriteChoice(LoggingLevel_Type, val)
+	n.SpecifyEnum(LoggingLevel_Type, val)
 }
 
 func LoggingLevel_Repeats_Marshal(n jsn.Marshaler, vals *[]LoggingLevel) {

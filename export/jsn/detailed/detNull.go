@@ -7,6 +7,4 @@ type detNull struct {
 	jsn.NullMarshaler
 }
 
-func (detNull) named() string               { return "null" }
-func (detNull) writeData(value interface{}) {}
-func (detNull) readData() interface{}       { return nil }
+func (detNull) commit(value interface{}) {}
