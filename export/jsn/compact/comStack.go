@@ -1,15 +1,11 @@
 package compact
 
-type comStack []compactState
+type comStack []compactMarshaler
 
-func (j comStack) top() compactState {
-	return j[len(j)-1]
-}
-
-func (j *comStack) push(m compactState) {
+func (j *comStack) push(m compactMarshaler) {
 	(*j) = append(*j, m)
 }
-func (j *comStack) pop() (ret compactState) {
+func (j *comStack) pop() (ret compactMarshaler) {
 	end := len(*j) - 1
 	ret, (*j) = (*j)[end], (*j)[:end]
 	return

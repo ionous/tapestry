@@ -1,44 +1,34 @@
 package compact
 
-import "git.sr.ht/~ionous/iffy/export/jsn"
+import "github.com/ionous/errutil"
 
 type CompactMarshaler struct {
-	compactState
+	compactMarshaler
+	out    interface{}
 	stack  comStack
 	cursor string
 	err    error
 }
 
-type compactState interface {
-	jsn.Marshaler
-	// someone writes a fully completed value into us.
-	commit(value interface{})
-}
-
-type comRoot struct {
-	comBlock
-	out interface{}
-}
-
-func (cr *comRoot) commit(v interface{}) {
-	cr.out = v
-}
-
-// NewCompactMarshaler create an empty serializer that can produce compact data.
+// NewCompactMarshaler create an empty serializer to produce compact script data.
 func NewCompactMarshaler() *CompactMarshaler {
 	m := new(CompactMarshaler)
-	m.changeState(&comRoot{comBlock: comBlock{comValue{m: m}}})
+	next := newBlock(m)
+	next.onCommit = func(v interface{}) {
+		if m.out != nil {
+			m.Warning(errutil.New("can only write data once"))
+		} else {
+			m.out = v
+		}
+	}
+	m.changeState(next)
+	// m.changeState(&comRoot{comBlock: comBlock{comValue{m: m}}})
 	return m
 }
 
 // Data returns the accumulated script tree ready for serialization
-// FIX, FUTURE: could write a custom json serialization to skip this in memory step.
 func (m *CompactMarshaler) Data() (interface{}, error) {
-	var out interface{}
-	if cr, ok := m.compactState.(*comRoot); ok {
-		out = cr.out
-	}
-	return out, m.err
+	return m.out, m.err
 }
 
 func (m *CompactMarshaler) flushCursor() (ret string) {
@@ -46,18 +36,18 @@ func (m *CompactMarshaler) flushCursor() (ret string) {
 	return
 }
 
-func (m *CompactMarshaler) pushState(d compactState) {
-	m.stack.push(m.compactState) // remember the current state
-	m.compactState = d           // new current state
+func (m *CompactMarshaler) pushState(d compactMarshaler) {
+	m.stack.push(m.compactMarshaler) // remember the current state
+	m.compactMarshaler = d           // new current state
 }
 
 // set the current state to the last saved state
 func (m *CompactMarshaler) finishState(data interface{}) {
-	m.compactState = m.stack.pop()
-	m.compactState.commit(data)
+	m.compactMarshaler = m.stack.pop()
+	m.compactMarshaler.commit(data)
 }
 
 // replace the top of the stack ( equals a pop and push )
-func (m *CompactMarshaler) changeState(d compactState) {
-	m.compactState = d // new current state
+func (m *CompactMarshaler) changeState(d compactMarshaler) {
+	m.compactMarshaler = d // new current state
 }

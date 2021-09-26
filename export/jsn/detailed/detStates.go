@@ -7,7 +7,7 @@ import (
 
 type detailedMarshaler interface {
 	jsn.Marshaler
-	// a sub-state is finished as is writing data into us.
+	// substates write a fully completed value into us.
 	commit(interface{})
 }
 
@@ -48,8 +48,7 @@ func newBase(m *DetailedMarshaler, next *detState) *detState {
 }
 
 // blocks handle beginning new flows, swaps, or repeats
-// what happens when they end ( and how they collect data )
-// gets left to the caller
+// end ( and how they collect data ) gets left to the caller
 func newBlock(m *DetailedMarshaler) *detState {
 	next := newBase(m, new(detState))
 	next.OnMap = func(lede, kind string) {
@@ -71,7 +70,7 @@ func newBlock(m *DetailedMarshaler) *detState {
 	return next
 }
 
-// generically commits primitive value(s) to the passed state.
+// generically commits primitive value(s)
 func newValue(m *DetailedMarshaler, next *detState) *detState {
 	next.OnValue = func(kind string, value interface{}) {
 		m.commit(detValue{
@@ -134,7 +133,7 @@ func newSwap(m *DetailedMarshaler, choice string, vals detMap) *detState {
 		vals.Fields = map[string]interface{}{
 			choice: v,
 		}
-		m.changeState(newFinalValue(m, vals))
+		m.changeState(newBlockResult(m, vals))
 	}
 	// fix? what should an uncommitted choice write?
 	next.OnEnd = func() {
@@ -144,7 +143,7 @@ func newSwap(m *DetailedMarshaler, choice string, vals detMap) *detState {
 }
 
 // wait until the block is closed then finish
-func newFinalValue(m *DetailedMarshaler, v interface{}) *detState {
+func newBlockResult(m *DetailedMarshaler, v interface{}) *detState {
 	return &detState{MarshalMix: jsn.MarshalMix{
 		OnEnd: func() {
 			m.finishState(v)

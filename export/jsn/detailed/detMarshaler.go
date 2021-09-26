@@ -12,6 +12,7 @@ type DetailedMarshaler struct {
 	err    error
 }
 
+// NewCompactMarshaler create an empty serializer to produce detailed script data.
 func NewDetailedMarshaler() *DetailedMarshaler {
 	m := new(DetailedMarshaler)
 	next := newBlock(m)
@@ -27,7 +28,6 @@ func NewDetailedMarshaler() *DetailedMarshaler {
 }
 
 // Data returns the accumulated script tree ready for serialization
-// FIX, FUTURE: could write a custom json serialization to skip this in memory step.
 func (m *DetailedMarshaler) Data() (interface{}, error) {
 	return m.out, m.err
 }

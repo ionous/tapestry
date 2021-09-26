@@ -5,7 +5,8 @@ import (
 	"unicode"
 )
 
-// "Else if:from:and:do:else:"
+// Sig helps build the "lede" used the compact format
+// ex. "Else if:from:and:do:else:"
 type Sig struct {
 	out    strings.Builder
 	labels int

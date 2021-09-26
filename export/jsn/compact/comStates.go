@@ -1,122 +1,155 @@
 package compact
 
 import (
+	"git.sr.ht/~ionous/iffy/export/jsn"
 	"github.com/ionous/errutil"
 )
 
-type comFlow struct {
-	comBlock // every flow pushes a brand new machine
-	sig      Sig
-	values   []interface{}
+type compactMarshaler interface {
+	jsn.Marshaler
+	// substates write a fully completed value into us.
+	commit(value interface{})
 }
 
-type comKey struct {
-	*comFlow // parent state
-	key      string
+type comState struct {
+	jsn.MarshalMix
+	onCommit func(interface{})
 }
 
-type comLiteral struct {
-	comValue
-}
-
-type comSlice struct {
-	comBlock // every slice pushes a brand new machine
-	values   []interface{}
-}
-
-type comSwap struct {
-	comBlock // every swap pushes a brand new machine
-}
-
-func (d *comFlow) MapKey(sig, _ string) {
-	d.m.changeState(&comKey{
-		comFlow: d,
-		key:     sig,
-	})
-}
-
-func (d *comFlow) MapLiteral(field string) {
-	if len(d.values) > 0 {
-		d.m.Error(errutil.New("unexpected literal after map key:value"))
+func (d *comState) commit(v interface{}) {
+	if call := d.onCommit; call != nil {
+		call(v)
 	} else {
-		d.m.changeState(&comLiteral{comValue: comValue{m: d.m}})
+		d.Error(errutil.New("cant commit", v))
 	}
 }
 
-func (cf *comFlow) addMsg(label string, value interface{}) {
-	cf.sig.WriteLabel(label)
-	cf.values = append(cf.values, value)
+// base state handles simple reporting.
+func newBase(m *CompactMarshaler, next *comState) *comState {
+	// for now, overwrite without error checking.
+	next.OnCursor = func(id string) {
+		m.cursor = id
+	}
+	// record an error but don't terminate
+	next.OnWarn = func(e error) {
+		m.err = errutil.Append(m.err, e)
+	}
+	// record an error and terminate all existing stats
+	next.OnError = func(e error) {
+		m.err = errutil.Append(m.err, e)
+		m.stack = nil
+		m.changeState(&comState{MarshalMix: jsn.MarshalMix{
+			// absorb all other errors
+			// ( all other fns are empty,so they'll error and also be eaten )
+			OnError: func(error) {},
+		}})
+	}
+	return next
 }
 
-// EndValues ends the current state and commits its data to the parent state.
-func (d *comFlow) EndValues() {
-	sig := d.sig.String()
-	if cnt := len(d.values); cnt == 0 {
-		d.m.finishState(sig)
-	} else {
-		var v interface{}
-		if cnt == 1 {
-			v = d.values[0]
+func newValue(m *CompactMarshaler, next *comState) *comState {
+	next.OnValue = func(kind string, value interface{}) {
+		m.commit(value)
+	}
+	return next
+}
+
+func newBlock(m *CompactMarshaler) *comState {
+	next := newBase(m, new(comState))
+	// starts a series of key-values pairs
+	// the flow is closed ( written ) with a call to EndValues()
+	next.OnMap = func(lede, _ string) {
+		m.pushState(newFlow(m, newFlowData(lede)))
+	}
+	// ex."noun_phrase" "$KIND_OF_NOUN"
+	next.OnPick = func(kind, choice string) {
+		m.pushState(newSwap(m))
+	}
+	next.OnRepeat = func(hint int) {
+		m.pushState(newSlice(m, make([]interface{}, 0, hint)))
+	}
+	// in case nothing is written.
+	next.OnEnd = func() {
+		m.finishState(nil)
+	}
+	return next
+}
+
+func newFlow(m *CompactMarshaler, d *flowData) *comState {
+	next := newBlock(m)
+	next.OnKey = func(key, _ string) {
+		m.changeState(newKey(m, *next, d, key))
+	}
+	next.OnLiteral = func(field string) {
+		if len(d.values) > 0 {
+			m.Error(errutil.New("unexpected literal after map key:value"))
 		} else {
-			v = d.values
+			m.changeState(newLit(m))
 		}
-		d.m.finishState(map[string]interface{}{
-			sig: v,
-		})
 	}
-}
-
-// someone is trying to write a value to the flow, but we need keys to do that.
-func (d *comFlow) commit(v interface{}) {
-	d.m.Error(errutil.New("missing key when writing to a flow"))
-}
-
-// write the value into the key and change back to the flow state
-func (d *comKey) commit(v interface{}) {
-	d.comFlow.addMsg(d.key, v)
-	d.m.changeState(d.comFlow)
-}
-
-// a literal exists within a flow, all flow functions except writing the literal value
-// or ending the block result in an error.
-// see also comBlock EndValues
-func (d *comLiteral) EndValues() {
-	d.m.finishState(d.out)
-}
-
-// a new value is being added to our slice
-func (d *comSlice) commit(v interface{}) {
-	d.values = append(d.values, v)
-}
-
-// the slice is done, write it to our parent whomever that is.
-func (d *comSlice) EndValues() {
-	d.m.finishState(d.values)
-}
-
-// compact raw values would normally just write the value
-// but: we don't want to lose the *kind* of the choice
-// so we do this specially
-func (d *comSwap) SpecifyValue(kind string, value interface{}) {
-	d.out = map[string]interface{}{
-		kind + ":": value,
+	// EndValues ends the current state and commits its data to the parent state.
+	next.OnEnd = func() {
+		m.finishState(d.finalize())
 	}
+	return next
 }
 
-func (d *comSwap) EndValues() {
-	d.m.finishState(d.out)
+// writes the value into the key and change back to the flow state
+func newKey(m *CompactMarshaler, prev comState, d *flowData, key string) *comState {
+	next := newValue(m, &prev)
+	next.onCommit = func(v interface{}) {
+		d.addMsg(key, v)
+		m.changeState(&prev)
+	}
+	return next
 }
 
-// record the swap choice and move to an error detection state
-func (d *comSwap) commit(v interface{}) {
-	d.out = v
-	d.m.changeState(&comWritten{d})
+// a literal is a block like value that results in a single value
+// only writing the value or ending the block succeed.
+func newLit(m *CompactMarshaler) *comState {
+	next := newValue(m, newBlock(m))
+	next.onCommit = func(v interface{}) {
+		m.changeState(newBlockResult(m, v))
+	}
+	return next
 }
 
-type comWritten struct {
-	*comSwap
+// every slice pushes a brand new machine
+func newSlice(m *CompactMarshaler, vals []interface{}) *comState {
+	next := newValue(m, newBlock(m))
+	// a new value is being added to our slice
+	next.onCommit = func(v interface{}) {
+		vals = append(vals, v)
+	}
+	// the slice is done, write it to our parent whomever that is.
+	next.OnEnd = func() {
+		m.finishState(vals)
+	}
+	return next
 }
 
-func (d *comWritten) commit(v interface{}) {
-	d.m.Warning(errutil.New("value already committed"))
+func newSwap(m *CompactMarshaler) *comState {
+	next := newBlock(m)
+	// we don't want to lose the *kind* of the choice
+	// so we do this specially
+	next.OnValue = func(kind string, value interface{}) {
+		m.changeState(newBlockResult(m,
+			map[string]interface{}{
+				kind + ":": value,
+			}))
+	}
+	// record the swap choice and move to an error detection state
+	next.onCommit = func(v interface{}) {
+		m.changeState(newBlockResult(m, v))
+	}
+	return next
+}
+
+// wait until the block is closed then finish
+func newBlockResult(m *CompactMarshaler, v interface{}) *comState {
+	return &comState{MarshalMix: jsn.MarshalMix{
+		OnEnd: func() {
+			m.finishState(v)
+		},
+	}}
 }
