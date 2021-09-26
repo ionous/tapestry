@@ -5,158 +5,149 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type detBaseState struct {
-	m *DetailedMarshaler
+type detailedMarshaler interface {
+	jsn.Marshaler
+	// a sub-state is finished as is writing data into us.
+	commit(interface{})
 }
 
-type detFlowState struct {
-	detBaseState // every flow pushes a brand new machine
-	data         detMap
+type detState struct {
+	jsn.MarshalMix
+	onCommit func(interface{})
 }
 
-type detKeyState struct {
-	*detFlowState // parent state
-	key           string
+func (d *detState) commit(v interface{}) {
+	if call := d.onCommit; call != nil {
+		call(v)
+	} else {
+		d.Error(errutil.New("cant commit", v))
+	}
 }
 
-type detSliceState struct {
-	detBaseState // every slice pushes a brand new machine
-	values       []interface{}
+// base state handles simple reporting.
+func newBase(m *DetailedMarshaler, next *detState) *detState {
+	// for now, overwrite without error checking.
+	next.OnCursor = func(id string) {
+		m.cursor = id
+	}
+	// record an error but don't terminate
+	next.OnWarn = func(e error) {
+		m.err = errutil.Append(m.err, e)
+	}
+	// record an error and terminate all existing stats
+	next.OnError = func(e error) {
+		m.err = errutil.Append(m.err, e)
+		m.stack = nil
+		m.changeState(&detState{MarshalMix: jsn.MarshalMix{
+			// absorb all other errors
+			// ( all other fns are empty,so they'll error and also be eaten )
+			OnError: func(error) {},
+		}})
+	}
+	return next
 }
 
-type detSwapState struct {
-	detBaseState // every swap pushes a brand new machine
-	data         detMap
-	choice       string
-}
-
-func (d *detBaseState) EndValues() {
-	panic("end values not implemented")
-}
-
-// record an error but don't terminate
-func (d *detBaseState) Warning(e error) {
-	d.m.err = errutil.Append(d.m.err, e)
-}
-
-// record an error and terminate
-func (d *detBaseState) Error(e error) {
-	d.m.err = errutil.Append(d.m.err, e)
-	d.m.stack = nil
-	d.m.changeState(detNull{})
-}
-
-// starts a series of key-values pairs
-// the flow is closed ( written ) with a call to EndValues()
-func (d *detBaseState) MapValues(lede, kind string) {
-	d.m.pushState(&detFlowState{
-		detBaseState: detBaseState{m: d.m},
-		data: detMap{
-			Id:     d.m.flushCursor(),
+// blocks handle beginning new flows, swaps, or repeats
+// what happens when they end ( and how they collect data )
+// gets left to the caller
+func newBlock(m *DetailedMarshaler) *detState {
+	next := newBase(m, new(detState))
+	next.OnMap = func(lede, kind string) {
+		m.pushState(newFlow(m, detMap{
+			Id:     m.flushCursor(),
 			Type:   kind,
 			Fields: make(map[string]interface{}),
-		},
-	})
-}
-
-func (d *detBaseState) MapKey(sig, field string) {
-	d.m.Error(errutil.New("key only valid in a map"))
-}
-
-func (d *detBaseState) MapLiteral(string) {
-	d.m.Error(errutil.New("literal only valid in a map"))
-}
-
-func (d *detBaseState) SetCursor(id string) {
-	d.m.cursor = id //  for now, overwrite without error checking.
-}
-
-// SpecifyValue generically posts a primitive to the current state.
-func (d *detBaseState) SpecifyValue(kind string, value interface{}) {
-	// note: while the owner of this detBaseState memory is technically top state ...
-	// in go, that owner type is inaccessible in the aggregated element
-	// so... we need to the state machine for the outermost version of ourselves.
-	d.m.commit(detValue{
-		Id:    d.m.flushCursor(),
-		Type:  kind,
-		Value: value,
-	})
-}
-
-func (d *detBaseState) SpecifyEnum(kind string, val jsn.Enumeration) {
-	d.m.SpecifyValue(kind, val.String())
-}
-
-func (d *detBaseState) PickValues(kind, choice string) {
-	d.m.pushState(&detSwapState{
-		detBaseState: detBaseState{m: d.m},
-		choice:       choice,
-		data: detMap{
-			Id:   d.m.flushCursor(),
-			Type: kind,
-		},
-	})
-}
-
-func (d *detBaseState) RepeatValues(hint int) {
-	d.m.pushState(&detSliceState{
-		detBaseState: detBaseState{m: d.m},
-		values:       make([]interface{}, 0, hint),
-	})
-}
-
-func (d *detFlowState) MapKey(sig, field string) {
-	d.m.changeState(&detKeyState{
-		detFlowState: d,
-		key:          field,
-	})
-}
-
-func (d *detFlowState) MapLiteral(field string) {
-	d.m.MapKey("", field)
-}
-
-// EndValues ends the current state and commits its data to the parent state.
-func (d *detFlowState) EndValues() {
-	d.m.finishState(d.data)
-}
-
-func (d *detFlowState) commit(v interface{}) {
-	d.m.Error(errutil.New("missing key when writing to a flow"))
-}
-
-func (d *detKeyState) commit(v interface{}) {
-	d.data.Fields[d.key] = v // write our key, value pair
-	d.m.changeState(d.detFlowState)
-}
-
-// write a new value into the slice
-func (d *detSliceState) commit(v interface{}) {
-	d.values = append(d.values, v)
-}
-
-// EndValues ends the current state and commits its data to the parent state.
-func (d *detSliceState) EndValues() {
-	d.m.finishState(d.values)
-}
-
-// write our choice and change into an error checking state
-func (d *detSwapState) commit(v interface{}) {
-	d.data.Fields = map[string]interface{}{
-		d.choice: v,
+		}))
 	}
-	d.m.changeState(&detSwapWritten{d})
+	next.OnPick = func(kind, choice string) {
+		m.pushState(newSwap(m, choice, detMap{
+			Id:   m.flushCursor(),
+			Type: kind,
+		}))
+	}
+	next.OnRepeat = func(hint int) {
+		m.pushState(newSlice(m, make([]interface{}, 0, hint)))
+	}
+	return next
 }
 
-// EndValues ends the current state and commits its data to the parent state.
-func (d *detSwapState) EndValues() {
-	d.m.finishState(d.data)
+// generically commits primitive value(s) to the passed state.
+func newValue(m *DetailedMarshaler, next *detState) *detState {
+	next.OnValue = func(kind string, value interface{}) {
+		m.commit(detValue{
+			Id:    m.flushCursor(),
+			Type:  kind,
+			Value: value,
+		})
+	}
+	return next
 }
 
-type detSwapWritten struct {
-	*detSwapState
+// flows create a set of key-values pairs
+// the flow is closed ( written ) with a call to EndValues()
+// every flow pushes a brand new machine
+func newFlow(m *DetailedMarshaler, vals detMap) *detState {
+	next := newBlock(m)
+	next.OnKey = func(_, key string) {
+		m.changeState(newKey(m, *next, key, vals))
+	}
+	next.OnLiteral = func(field string) {
+		m.MapKey("", field) // loops back to OnKey
+	}
+	next.OnEnd = func() {
+		// doesnt worry if there's a pending key/value
+		// writing a value to a key is always considered optional
+		m.finishState(vals)
+	}
+	return next
 }
 
-func (d *detSwapWritten) commit(v interface{}) {
-	d.m.Warning(errutil.New("swap already committed"))
+// all keys are considered optional, so we do everything prev does with some extrs.
+// keys wait until they have a value, then write their data into their parent's data;
+// returning to the parent state.
+func newKey(m *DetailedMarshaler, prev detState, key string, vals detMap) *detState {
+	next := newValue(m, &prev)
+	next.onCommit = func(v interface{}) {
+		vals.Fields[key] = v // write our key, value pair
+		m.changeState(&prev)
+	}
+	return next
+}
+
+// every slice pushes a brand new machine
+func newSlice(m *DetailedMarshaler, vals []interface{}) *detState {
+	next := newValue(m, newBlock(m))
+	next.onCommit = func(v interface{}) {
+		vals = append(vals, v) // write a new value into the slice
+	}
+	next.OnEnd = func() {
+		m.finishState(vals)
+	}
+	return next
+}
+
+// every slice pushes a brand new machine
+func newSwap(m *DetailedMarshaler, choice string, vals detMap) *detState {
+	next := newValue(m, newBlock(m))
+	next.onCommit = func(v interface{}) {
+		// write our choice and change into an error checking state
+		vals.Fields = map[string]interface{}{
+			choice: v,
+		}
+		m.changeState(newFinalValue(m, vals))
+	}
+	// fix? what should an uncommitted choice write?
+	next.OnEnd = func() {
+		m.finishState(vals)
+	}
+	return next
+}
+
+// wait until the block is closed then finish
+func newFinalValue(m *DetailedMarshaler, v interface{}) *detState {
+	return &detState{MarshalMix: jsn.MarshalMix{
+		OnEnd: func() {
+			m.finishState(v)
+		},
+	}}
 }
