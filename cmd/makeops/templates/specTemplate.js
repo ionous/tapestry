@@ -33,10 +33,13 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
   }
 }
 
-{{#if (Uses name "str")}}
-func (op *{{Pascal name}}) FindChoice() (string, bool) {
-  return op.Compose().FindChoice(op.Str)
+{{#if (Uses name "str")}}{{#if (Choices this)}}
+func (op *{{Pascal name}}) SetEnum(kv string) {
+  composer.SetEnum(op, kv, &op.Str)
 }
-{{/if}}
+func (op *{{Pascal name}}) GetEnum() (retKey string, retVal string) {
+  return composer.GetEnum(op, op.Str)
+}
+{{/if}}{{/if}}
 const {{Pascal name}}_Type = "{{name}}"
 `;

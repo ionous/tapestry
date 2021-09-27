@@ -139,8 +139,11 @@ func (*LoggingLevel) Compose() composer.Spec {
 	}
 }
 
-func (op *LoggingLevel) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *LoggingLevel) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *LoggingLevel) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const LoggingLevel_Type = "logging_level"

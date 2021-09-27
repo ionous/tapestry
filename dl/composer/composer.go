@@ -51,13 +51,44 @@ func (spec Spec) FindChoice(choice string) (ret string, okay bool) {
 	return
 }
 
-func (spec *Spec) IndexOfChoice(choice string) (retStr string, retInd int) {
+func (spec *Spec) IndexOfChoice(key string) (retVal string, retInd int) {
 	retInd = -1 // provisionally
-	for i, c := range spec.Choices {
-		if c == choice {
-			retStr, retInd = spec.Strings[i], i
+	for i, k := range spec.Choices {
+		if k == key {
+			retVal, retInd = spec.Strings[i], i
 			break
 		}
+	}
+	return
+}
+
+func (spec *Spec) IndexOfValue(val string) (retKey string, retInd int) {
+	retInd = -1 // provisionally
+	for i, str := range spec.Strings {
+		if str == val {
+			retKey, retInd = spec.Choices[i], i
+			break
+		}
+	}
+	return
+}
+
+func GetEnum(op Composer, str string) (retKey string, retVal string) {
+	spec := op.Compose()
+	if v, i := spec.IndexOfChoice(str); i >= 0 {
+		retKey, retVal = str, v
+	} else {
+		retVal = str
+	}
+	return
+}
+
+func SetEnum(op Composer, kv string, dst *string) {
+	spec := op.Compose()
+	if k, i := spec.IndexOfValue(kv); i >= 0 {
+		*dst = k
+	} else {
+		*dst = kv
 	}
 	return
 }

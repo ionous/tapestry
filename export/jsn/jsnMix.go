@@ -65,19 +65,19 @@ func (ms *MarshalMix) EndValues() {
 		ms.Error(errutil.New("unexpected end"))
 	}
 }
-func (ms *MarshalMix) SpecifyValue(kind string, value interface{}) {
+func (ms *MarshalMix) SpecifyValue(kind string, val interface{}) {
 	if call := ms.OnValue; call != nil {
-		call(kind, value)
+		call(kind, val)
 	} else {
-		ms.Error(errutil.New("unexpected value", kind, value))
+		ms.Error(errutil.New("unexpected value", kind, val))
 	}
 }
 func (ms *MarshalMix) SpecifyEnum(kind string, val Enumeration) {
 	var out string
-	if str, ok := val.FindChoice(); !ok {
-		out = val.String()
+	if k, v := val.GetEnum(); len(k) > 0 {
+		out = k
 	} else {
-		out = str
+		out = v
 	}
 	ms.SpecifyValue(kind, out)
 }

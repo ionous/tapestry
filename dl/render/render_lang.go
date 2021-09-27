@@ -131,8 +131,11 @@ func (*RenderFlags) Compose() composer.Spec {
 	}
 }
 
-func (op *RenderFlags) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *RenderFlags) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *RenderFlags) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const RenderFlags_Type = "render_flags"

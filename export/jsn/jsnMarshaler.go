@@ -44,5 +44,6 @@ type Marshaler interface {
 
 type Enumeration interface {
 	String() string
-	FindChoice() (ret string, found bool)
+	GetEnum() (key string, value string)
+	SetEnum(keyOrValue string)
 }

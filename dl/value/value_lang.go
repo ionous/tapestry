@@ -32,8 +32,11 @@ func (*Bool) Compose() composer.Spec {
 	}
 }
 
-func (op *Bool) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *Bool) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *Bool) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const Bool_Type = "bool"
@@ -103,10 +106,6 @@ func (*Lines) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
-}
-
-func (op *Lines) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
 }
 
 const Lines_Type = "lines"
@@ -220,10 +219,6 @@ func (*PatternName) Compose() composer.Spec {
 	}
 }
 
-func (op *PatternName) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
-}
-
 const PatternName_Type = "pattern_name"
 
 func (op *PatternName) Marshal(n jsn.Marshaler) {
@@ -272,10 +267,6 @@ func (*RelationName) Compose() composer.Spec {
 	}
 }
 
-func (op *RelationName) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
-}
-
 const RelationName_Type = "relation_name"
 
 func (op *RelationName) Marshal(n jsn.Marshaler) {
@@ -321,10 +312,6 @@ func (*Text) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
-}
-
-func (op *Text) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
 }
 
 const Text_Type = "text"
@@ -395,10 +382,6 @@ func (*VariableName) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
-}
-
-func (op *VariableName) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
 }
 
 const VariableName_Type = "variable_name"

@@ -35,8 +35,11 @@ func (*AbstractAction) Compose() composer.Spec {
 	}
 }
 
-func (op *AbstractAction) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *AbstractAction) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *AbstractAction) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const AbstractAction_Type = "abstract_action"
@@ -196,10 +199,6 @@ func (*ActionName) Compose() composer.Spec {
 	}
 }
 
-func (op *ActionName) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
-}
-
 const ActionName_Type = "action_name"
 
 func (op *ActionName) Marshal(n jsn.Marshaler) {
@@ -320,8 +319,11 @@ func (*Ana) Compose() composer.Spec {
 	}
 }
 
-func (op *Ana) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *Ana) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *Ana) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const Ana_Type = "ana"
@@ -382,8 +384,11 @@ func (*AreAn) Compose() composer.Spec {
 	}
 }
 
-func (op *AreAn) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *AreAn) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *AreAn) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const AreAn_Type = "are_an"
@@ -440,8 +445,11 @@ func (*AreBeing) Compose() composer.Spec {
 	}
 }
 
-func (op *AreBeing) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *AreBeing) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *AreBeing) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const AreBeing_Type = "are_being"
@@ -498,8 +506,11 @@ func (*AreEither) Compose() composer.Spec {
 	}
 }
 
-func (op *AreEither) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *AreEither) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *AreEither) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const AreEither_Type = "are_either"
@@ -654,10 +665,6 @@ func (*Aspect) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
-}
-
-func (op *Aspect) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
 }
 
 const Aspect_Type = "aspect"
@@ -930,8 +937,11 @@ func (*Certainty) Compose() composer.Spec {
 	}
 }
 
-func (op *Certainty) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *Certainty) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *Certainty) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const Certainty_Type = "certainty"
@@ -1253,8 +1263,11 @@ func (*Determiner) Compose() composer.Spec {
 	}
 }
 
-func (op *Determiner) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *Determiner) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *Determiner) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const Determiner_Type = "determiner"
@@ -1422,10 +1435,6 @@ func (*EventName) Compose() composer.Spec {
 	}
 }
 
-func (op *EventName) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
-}
-
 const EventName_Type = "event_name"
 
 func (op *EventName) Marshal(n jsn.Marshaler) {
@@ -1482,8 +1491,11 @@ func (*EventPhase) Compose() composer.Spec {
 	}
 }
 
-func (op *EventPhase) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *EventPhase) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *EventPhase) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const EventPhase_Type = "event_phase"
@@ -2455,10 +2467,6 @@ func (*NounName) Compose() composer.Spec {
 	}
 }
 
-func (op *NounName) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
-}
-
 const NounName_Type = "noun_name"
 
 func (op *NounName) Marshal(n jsn.Marshaler) {
@@ -2749,8 +2757,11 @@ func (*NumberList) Compose() composer.Spec {
 	}
 }
 
-func (op *NumberList) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *NumberList) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *NumberList) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const NumberList_Type = "number_list"
@@ -3196,8 +3207,11 @@ func (*PatternFlags) Compose() composer.Spec {
 	}
 }
 
-func (op *PatternFlags) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *PatternFlags) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *PatternFlags) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const PatternFlags_Type = "pattern_flags"
@@ -3459,8 +3473,11 @@ func (*PatternType) Compose() composer.Spec {
 	}
 }
 
-func (op *PatternType) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *PatternType) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *PatternType) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const PatternType_Type = "pattern_type"
@@ -3612,10 +3629,6 @@ func (*PluralKinds) Compose() composer.Spec {
 	}
 }
 
-func (op *PluralKinds) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
-}
-
 const PluralKinds_Type = "plural_kinds"
 
 func (op *PluralKinds) Marshal(n jsn.Marshaler) {
@@ -3673,8 +3686,11 @@ func (*PrimitiveType) Compose() composer.Spec {
 	}
 }
 
-func (op *PrimitiveType) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *PrimitiveType) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *PrimitiveType) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const PrimitiveType_Type = "primitive_type"
@@ -3853,8 +3869,11 @@ func (*Pronoun) Compose() composer.Spec {
 	}
 }
 
-func (op *Pronoun) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *Pronoun) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *Pronoun) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const Pronoun_Type = "pronoun"
@@ -3902,10 +3921,6 @@ func (*Property) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
-}
-
-func (op *Property) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
 }
 
 const Property_Type = "property"
@@ -3963,8 +3978,11 @@ func (*PropertyAspect) Compose() composer.Spec {
 	}
 }
 
-func (op *PropertyAspect) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *PropertyAspect) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *PropertyAspect) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const PropertyAspect_Type = "property_aspect"
@@ -4193,10 +4211,6 @@ func (*RecordPlural) Compose() composer.Spec {
 	}
 }
 
-func (op *RecordPlural) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
-}
-
 const RecordPlural_Type = "record_plural"
 
 func (op *RecordPlural) Marshal(n jsn.Marshaler) {
@@ -4243,10 +4257,6 @@ func (*RecordSingular) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
-}
-
-func (op *RecordSingular) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
 }
 
 const RecordSingular_Type = "record_singular"
@@ -4688,10 +4698,6 @@ func (*SingularKind) Compose() composer.Spec {
 	}
 }
 
-func (op *SingularKind) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
-}
-
 const SingularKind_Type = "singular_kind"
 
 func (op *SingularKind) Marshal(n jsn.Marshaler) {
@@ -4972,8 +4978,11 @@ func (*TestName) Compose() composer.Spec {
 	}
 }
 
-func (op *TestName) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *TestName) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *TestName) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const TestName_Type = "test_name"
@@ -5262,8 +5271,11 @@ func (*TextList) Compose() composer.Spec {
 	}
 }
 
-func (op *TextList) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
+func (op *TextList) SetEnum(kv string) {
+	composer.SetEnum(op, kv, &op.Str)
+}
+func (op *TextList) GetEnum() (retKey string, retVal string) {
+	return composer.GetEnum(op, op.Str)
 }
 
 const TextList_Type = "text_list"
@@ -5311,10 +5323,6 @@ func (*Trait) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 	}
-}
-
-func (op *Trait) FindChoice() (string, bool) {
-	return op.Compose().FindChoice(op.Str)
 }
 
 const Trait_Type = "trait"
