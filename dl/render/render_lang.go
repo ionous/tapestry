@@ -31,11 +31,12 @@ func (op *RenderExp) Marshal(n jsn.Marshaler) {
 
 func RenderExp_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderExp) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RenderExp_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RenderExp_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -47,10 +48,12 @@ func RenderExp_Optional_Marshal(n jsn.Marshaler, val **RenderExp) {
 }
 
 func RenderExp_Marshal(n jsn.Marshaler, val *RenderExp) {
-	n.MapValues(RenderExp_Type, RenderExp_Type)
-	n.MapKey("", RenderExp_Field_Expression)
-	/* */ rt.TextEval_Marshal(n, &val.Expression)
-	n.EndValues()
+	if n.MapValues(RenderExp_Type, RenderExp_Type) {
+		if n.MapKey("", RenderExp_Field_Expression) {
+			rt.TextEval_Marshal(n, &val.Expression)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -76,11 +79,12 @@ func (op *RenderField) Marshal(n jsn.Marshaler) {
 
 func RenderField_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderField) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RenderField_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RenderField_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -92,10 +96,12 @@ func RenderField_Optional_Marshal(n jsn.Marshaler, val **RenderField) {
 }
 
 func RenderField_Marshal(n jsn.Marshaler, val *RenderField) {
-	n.MapValues(RenderField_Type, RenderField_Type)
-	n.MapKey("", RenderField_Field_Name)
-	/* */ rt.TextEval_Marshal(n, &val.Name)
-	n.EndValues()
+	if n.MapValues(RenderField_Type, RenderField_Type) {
+		if n.MapKey("", RenderField_Field_Name) {
+			rt.TextEval_Marshal(n, &val.Name)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -148,11 +154,12 @@ func RenderFlags_Marshal(n jsn.Marshaler, val *RenderFlags) {
 
 func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RenderFlags_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RenderFlags_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -179,11 +186,12 @@ func (op *RenderName) Marshal(n jsn.Marshaler) {
 
 func RenderName_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderName) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RenderName_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RenderName_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -195,10 +203,12 @@ func RenderName_Optional_Marshal(n jsn.Marshaler, val **RenderName) {
 }
 
 func RenderName_Marshal(n jsn.Marshaler, val *RenderName) {
-	n.MapValues(RenderName_Type, RenderName_Type)
-	n.MapKey("", RenderName_Field_Name)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
-	n.EndValues()
+	if n.MapValues(RenderName_Type, RenderName_Type) {
+		if n.MapKey("", RenderName_Field_Name) {
+			value.Text_Unboxed_Marshal(n, &val.Name)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -227,11 +237,12 @@ func (op *RenderPattern) Marshal(n jsn.Marshaler) {
 
 func RenderPattern_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderPattern) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RenderPattern_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RenderPattern_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -243,12 +254,15 @@ func RenderPattern_Optional_Marshal(n jsn.Marshaler, val **RenderPattern) {
 }
 
 func RenderPattern_Marshal(n jsn.Marshaler, val *RenderPattern) {
-	n.MapValues("render", RenderPattern_Type)
-	n.MapKey("", RenderPattern_Field_Pattern)
-	/* */ value.PatternName_Marshal(n, &val.Pattern)
-	n.MapKey("args", RenderPattern_Field_Arguments)
-	/* */ core.CallArgs_Marshal(n, &val.Arguments)
-	n.EndValues()
+	if n.MapValues("render", RenderPattern_Type) {
+		if n.MapKey("", RenderPattern_Field_Pattern) {
+			value.PatternName_Marshal(n, &val.Pattern)
+		}
+		if n.MapKey("args", RenderPattern_Field_Arguments) {
+			core.CallArgs_Marshal(n, &val.Arguments)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -276,11 +290,12 @@ func (op *RenderRef) Marshal(n jsn.Marshaler) {
 
 func RenderRef_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderRef) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RenderRef_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RenderRef_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -292,12 +307,15 @@ func RenderRef_Optional_Marshal(n jsn.Marshaler, val **RenderRef) {
 }
 
 func RenderRef_Marshal(n jsn.Marshaler, val *RenderRef) {
-	n.MapValues(RenderRef_Type, RenderRef_Type)
-	n.MapKey("", RenderRef_Field_Name)
-	/* */ value.VariableName_Marshal(n, &val.Name)
-	n.MapKey("flags", RenderRef_Field_Flags)
-	/* */ RenderFlags_Marshal(n, &val.Flags)
-	n.EndValues()
+	if n.MapValues(RenderRef_Type, RenderRef_Type) {
+		if n.MapKey("", RenderRef_Field_Name) {
+			value.VariableName_Marshal(n, &val.Name)
+		}
+		if n.MapKey("flags", RenderRef_Field_Flags) {
+			RenderFlags_Marshal(n, &val.Flags)
+		}
+		n.EndValues()
+	}
 	return
 }
 

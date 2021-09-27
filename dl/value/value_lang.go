@@ -44,11 +44,12 @@ func (op *Bool) Marshal(n jsn.Marshaler) {
 
 func Bool_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]bool) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Bool_Unboxed_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Bool_Unboxed_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -77,11 +78,12 @@ func Bool_Marshal(n jsn.Marshaler, val *Bool) {
 
 func Bool_Repeats_Marshal(n jsn.Marshaler, vals *[]Bool) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Bool_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Bool_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -126,11 +128,12 @@ func Lines_Marshal(n jsn.Marshaler, val *Lines) {
 
 func Lines_Repeats_Marshal(n jsn.Marshaler, vals *[]Lines) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Lines_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Lines_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -155,11 +158,12 @@ func (op *Number) Marshal(n jsn.Marshaler) {
 
 func Number_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]float64) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Number_Unboxed_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Number_Unboxed_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -188,11 +192,12 @@ func Number_Marshal(n jsn.Marshaler, val *Number) {
 
 func Number_Repeats_Marshal(n jsn.Marshaler, vals *[]Number) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Number_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Number_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -239,11 +244,12 @@ func PatternName_Marshal(n jsn.Marshaler, val *PatternName) {
 
 func PatternName_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternName) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			PatternName_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				PatternName_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -290,11 +296,12 @@ func RelationName_Marshal(n jsn.Marshaler, val *RelationName) {
 
 func RelationName_Repeats_Marshal(n jsn.Marshaler, vals *[]RelationName) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RelationName_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RelationName_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -328,11 +335,12 @@ func (op *Text) Marshal(n jsn.Marshaler) {
 
 func Text_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]string) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Text_Unboxed_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Text_Unboxed_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -361,11 +369,12 @@ func Text_Marshal_Customized(n jsn.Marshaler, val *Text) {
 
 func Text_Repeats_Marshal(n jsn.Marshaler, vals *[]Text) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Text_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Text_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -412,11 +421,12 @@ func VariableName_Marshal(n jsn.Marshaler, val *VariableName) {
 
 func VariableName_Repeats_Marshal(n jsn.Marshaler, vals *[]VariableName) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			VariableName_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				VariableName_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }

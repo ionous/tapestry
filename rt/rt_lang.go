@@ -18,11 +18,12 @@ func Assignment_Marshal(n jsn.Marshaler, ptr *Assignment) {
 
 func Assignment_Repeats_Marshal(n jsn.Marshaler, vals *[]Assignment) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Assignment_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Assignment_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -40,11 +41,12 @@ func BoolEval_Marshal(n jsn.Marshaler, ptr *BoolEval) {
 
 func BoolEval_Repeats_Marshal(n jsn.Marshaler, vals *[]BoolEval) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			BoolEval_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				BoolEval_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -62,11 +64,12 @@ func Execute_Marshal(n jsn.Marshaler, ptr *Execute) {
 
 func Execute_Repeats_Marshal(n jsn.Marshaler, vals *[]Execute) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Execute_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Execute_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -84,11 +87,12 @@ func NumListEval_Marshal(n jsn.Marshaler, ptr *NumListEval) {
 
 func NumListEval_Repeats_Marshal(n jsn.Marshaler, vals *[]NumListEval) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			NumListEval_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				NumListEval_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -106,11 +110,12 @@ func NumberEval_Marshal(n jsn.Marshaler, ptr *NumberEval) {
 
 func NumberEval_Repeats_Marshal(n jsn.Marshaler, vals *[]NumberEval) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			NumberEval_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				NumberEval_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -128,11 +133,12 @@ func RecordEval_Marshal(n jsn.Marshaler, ptr *RecordEval) {
 
 func RecordEval_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordEval) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RecordEval_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RecordEval_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -150,11 +156,12 @@ func RecordListEval_Marshal(n jsn.Marshaler, ptr *RecordListEval) {
 
 func RecordListEval_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordListEval) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RecordListEval_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RecordListEval_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -172,11 +179,12 @@ func TextEval_Marshal(n jsn.Marshaler, ptr *TextEval) {
 
 func TextEval_Repeats_Marshal(n jsn.Marshaler, vals *[]TextEval) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			TextEval_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				TextEval_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -194,11 +202,12 @@ func TextListEval_Marshal(n jsn.Marshaler, ptr *TextListEval) {
 
 func TextListEval_Repeats_Marshal(n jsn.Marshaler, vals *[]TextListEval) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			TextListEval_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				TextListEval_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }

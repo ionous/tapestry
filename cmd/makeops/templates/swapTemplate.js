@@ -35,9 +35,10 @@ func {{Pascal name}}_Marshal{{Custom name}}(n jsn.Marshaler, val *{{Pascal name}
 {{~#if (IsPositioned this)}}
       n.SetCursor(val.At.Offset)
 {{/if}}
-      n.PickValues({{Pascal name}}_Type, pick)
-      /* */ slat.(jsn.Marshalee).Marshal(n)
-      n.EndValues()
+      if n.PickValues({{Pascal name}}_Type, pick) {
+        slat.(jsn.Marshalee).Marshal(n)
+        n.EndValues()
+      }
     }
   }
 }

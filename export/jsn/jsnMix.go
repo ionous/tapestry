@@ -6,11 +6,11 @@ import "github.com/ionous/errutil"
 // providing functions which can be overridden one at a time to customize functionality
 // ( ie. for statemachines )
 type MarshalMix struct {
-	OnMap     func(lede, kind string)
-	OnKey     func(sig, field string)
-	OnLiteral func(field string)
-	OnPick    func(kind, choice string)
-	OnRepeat  func(hint int)
+	OnMap     func(lede, kind string) bool
+	OnKey     func(sig, field string) bool
+	OnLiteral func(field string) bool
+	OnPick    func(kind, choice string) bool
+	OnRepeat  func(hint int) bool
 	OnEnd     func()
 	OnValue   func(kind string, value interface{})
 	OnCursor  func(id string)
@@ -18,40 +18,45 @@ type MarshalMix struct {
 	OnError   func(error)
 }
 
-func (ms *MarshalMix) MapValues(lede, kind string) {
+func (ms *MarshalMix) MapValues(lede, kind string) (ret bool) {
 	if call := ms.OnMap; call != nil {
-		call(lede, kind)
+		ret = call(lede, kind)
 	} else {
 		ms.Error(errutil.New("unexpected map", lede, kind))
 	}
+	return
 }
-func (ms *MarshalMix) MapKey(key, field string) {
+func (ms *MarshalMix) MapKey(key, field string) (ret bool) {
 	if call := ms.OnKey; call != nil {
-		call(key, field)
+		ret = call(key, field)
 	} else {
 		ms.Error(errutil.New("unexpected key", key, field))
 	}
+	return
 }
-func (ms *MarshalMix) MapLiteral(field string) {
+func (ms *MarshalMix) MapLiteral(field string) (ret bool) {
 	if call := ms.OnLiteral; call != nil {
-		call(field)
+		ret = call(field)
 	} else {
 		ms.Error(errutil.New("unexpected literal", field))
 	}
+	return
 }
-func (ms *MarshalMix) PickValues(kind, choice string) {
+func (ms *MarshalMix) PickValues(kind, choice string) (ret bool) {
 	if call := ms.OnPick; call != nil {
-		call(kind, choice)
+		ret = call(kind, choice)
 	} else {
 		ms.Error(errutil.New("unexpected pick", kind, choice))
 	}
+	return
 }
-func (ms *MarshalMix) RepeatValues(hint int) {
+func (ms *MarshalMix) RepeatValues(hint int) (ret bool) {
 	if call := ms.OnRepeat; call != nil {
-		call(hint)
+		ret = call(hint)
 	} else {
 		ms.Error(errutil.New("unexpected repeat", hint))
 	}
+	return
 }
 func (ms *MarshalMix) EndValues() {
 	if call := ms.OnEnd; call != nil {

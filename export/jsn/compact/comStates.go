@@ -26,15 +26,18 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 	next := chart.NewReportingState(m)
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
-	next.OnMap = func(lede, _ string) {
+	next.OnMap = func(lede, _ string) bool {
 		m.PushState(newFlow(m, newFlowData(lede)))
+		return true
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
-	next.OnPick = func(kind, choice string) {
+	next.OnPick = func(kind, choice string) bool {
 		m.PushState(newSwap(m))
+		return true
 	}
-	next.OnRepeat = func(hint int) {
+	next.OnRepeat = func(hint int) bool {
 		m.PushState(newSlice(m, make([]interface{}, 0, hint)))
+		return true
 	}
 	// in case nothing is written.
 	next.OnEnd = func() {
@@ -45,15 +48,17 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 
 func newFlow(m *chart.Machine, d *flowData) *chart.StateMix {
 	next := newBlock(m)
-	next.OnKey = func(key, _ string) {
+	next.OnKey = func(key, _ string) bool {
 		m.ChangeState(newKey(m, *next, d, key))
+		return true
 	}
-	next.OnLiteral = func(field string) {
+	next.OnLiteral = func(field string) bool {
 		if len(d.values) > 0 {
 			m.Error(errutil.New("unexpected literal after map key:value"))
 		} else {
 			m.ChangeState(newLit(m))
 		}
+		return true
 	}
 	// EndValues ends the current state and commits its data to the parent state.
 	next.OnEnd = func() {

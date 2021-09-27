@@ -29,21 +29,24 @@ func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 // end ( and how they collect data ) gets left to the caller
 func newBlock(m *chart.Machine) *chart.StateMix {
 	next := chart.NewReportingState(m)
-	next.OnMap = func(lede, kind string) {
+	next.OnMap = func(lede, kind string) bool {
 		m.PushState(newFlow(m, detMap{
 			Id:     m.FlushCursor(),
 			Type:   kind,
 			Fields: make(map[string]interface{}),
 		}))
+		return true
 	}
-	next.OnPick = func(kind, choice string) {
+	next.OnPick = func(kind, choice string) bool {
 		m.PushState(newSwap(m, choice, detMap{
 			Id:   m.FlushCursor(),
 			Type: kind,
 		}))
+		return true
 	}
-	next.OnRepeat = func(hint int) {
+	next.OnRepeat = func(hint int) bool {
 		m.PushState(newSlice(m, make([]interface{}, 0, hint)))
+		return true
 	}
 	return next
 }
@@ -53,11 +56,13 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 // every flow pushes a brand new machine
 func newFlow(m *chart.Machine, vals detMap) *chart.StateMix {
 	next := newBlock(m)
-	next.OnKey = func(_, key string) {
+	next.OnKey = func(_, key string) bool {
 		m.ChangeState(newKey(m, *next, key, vals))
+		return true
 	}
-	next.OnLiteral = func(field string) {
+	next.OnLiteral = func(field string) bool {
 		m.MapKey("", field) // loops back to OnKey
+		return true
 	}
 	next.OnEnd = func() {
 		// doesnt worry if there's a pending key/value

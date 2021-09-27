@@ -33,11 +33,12 @@ func (op *ReciprocalOf) Marshal(n jsn.Marshaler) {
 
 func ReciprocalOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ReciprocalOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ReciprocalOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -49,12 +50,15 @@ func ReciprocalOf_Optional_Marshal(n jsn.Marshaler, val **ReciprocalOf) {
 }
 
 func ReciprocalOf_Marshal(n jsn.Marshaler, val *ReciprocalOf) {
-	n.MapValues("reciprocal", ReciprocalOf_Type)
-	n.MapKey("", ReciprocalOf_Field_Via)
-	/* */ value.RelationName_Marshal(n, &val.Via)
-	n.MapKey("object", ReciprocalOf_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues("reciprocal", ReciprocalOf_Type) {
+		if n.MapKey("", ReciprocalOf_Field_Via) {
+			value.RelationName_Marshal(n, &val.Via)
+		}
+		if n.MapKey("object", ReciprocalOf_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -83,11 +87,12 @@ func (op *ReciprocalsOf) Marshal(n jsn.Marshaler) {
 
 func ReciprocalsOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalsOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ReciprocalsOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ReciprocalsOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -99,12 +104,15 @@ func ReciprocalsOf_Optional_Marshal(n jsn.Marshaler, val **ReciprocalsOf) {
 }
 
 func ReciprocalsOf_Marshal(n jsn.Marshaler, val *ReciprocalsOf) {
-	n.MapValues("reciprocals", ReciprocalsOf_Type)
-	n.MapKey("", ReciprocalsOf_Field_Via)
-	/* */ value.RelationName_Marshal(n, &val.Via)
-	n.MapKey("object", ReciprocalsOf_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues("reciprocals", ReciprocalsOf_Type) {
+		if n.MapKey("", ReciprocalsOf_Field_Via) {
+			value.RelationName_Marshal(n, &val.Via)
+		}
+		if n.MapKey("object", ReciprocalsOf_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -134,11 +142,12 @@ func (op *Relate) Marshal(n jsn.Marshaler) {
 
 func Relate_Repeats_Marshal(n jsn.Marshaler, vals *[]Relate) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Relate_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Relate_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -150,14 +159,18 @@ func Relate_Optional_Marshal(n jsn.Marshaler, val **Relate) {
 }
 
 func Relate_Marshal(n jsn.Marshaler, val *Relate) {
-	n.MapValues(Relate_Type, Relate_Type)
-	n.MapKey("", Relate_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.MapKey("to", Relate_Field_ToObject)
-	/* */ rt.TextEval_Marshal(n, &val.ToObject)
-	n.MapKey("via", Relate_Field_Via)
-	/* */ value.RelationName_Marshal(n, &val.Via)
-	n.EndValues()
+	if n.MapValues(Relate_Type, Relate_Type) {
+		if n.MapKey("", Relate_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		if n.MapKey("to", Relate_Field_ToObject) {
+			rt.TextEval_Marshal(n, &val.ToObject)
+		}
+		if n.MapKey("via", Relate_Field_Via) {
+			value.RelationName_Marshal(n, &val.Via)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -186,11 +199,12 @@ func (op *RelativeOf) Marshal(n jsn.Marshaler) {
 
 func RelativeOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativeOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RelativeOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RelativeOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -202,12 +216,15 @@ func RelativeOf_Optional_Marshal(n jsn.Marshaler, val **RelativeOf) {
 }
 
 func RelativeOf_Marshal(n jsn.Marshaler, val *RelativeOf) {
-	n.MapValues("relative", RelativeOf_Type)
-	n.MapKey("", RelativeOf_Field_Via)
-	/* */ value.RelationName_Marshal(n, &val.Via)
-	n.MapKey("object", RelativeOf_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues("relative", RelativeOf_Type) {
+		if n.MapKey("", RelativeOf_Field_Via) {
+			value.RelationName_Marshal(n, &val.Via)
+		}
+		if n.MapKey("object", RelativeOf_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -236,11 +253,12 @@ func (op *RelativesOf) Marshal(n jsn.Marshaler) {
 
 func RelativesOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativesOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RelativesOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RelativesOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -252,12 +270,15 @@ func RelativesOf_Optional_Marshal(n jsn.Marshaler, val **RelativesOf) {
 }
 
 func RelativesOf_Marshal(n jsn.Marshaler, val *RelativesOf) {
-	n.MapValues("relatives", RelativesOf_Type)
-	n.MapKey("", RelativesOf_Field_Via)
-	/* */ value.RelationName_Marshal(n, &val.Via)
-	n.MapKey("object", RelativesOf_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues("relatives", RelativesOf_Type) {
+		if n.MapKey("", RelativesOf_Field_Via) {
+			value.RelationName_Marshal(n, &val.Via)
+		}
+		if n.MapKey("object", RelativesOf_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 

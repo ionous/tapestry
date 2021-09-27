@@ -32,11 +32,12 @@ func (op *Activity) Marshal(n jsn.Marshaler) {
 
 func Activity_Repeats_Marshal(n jsn.Marshaler, vals *[]Activity) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Activity_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Activity_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -48,10 +49,12 @@ func Activity_Optional_Marshal(n jsn.Marshaler, val **Activity) {
 }
 
 func Activity_Marshal(n jsn.Marshaler, val *Activity) {
-	n.MapValues("act", Activity_Type)
-	n.MapKey("", Activity_Field_Exe)
-	/* */ rt.Execute_Repeats_Marshal(n, &val.Exe)
-	n.EndValues()
+	if n.MapValues("act", Activity_Type) {
+		if n.MapKey("", Activity_Field_Exe) {
+			rt.Execute_Repeats_Marshal(n, &val.Exe)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -78,11 +81,12 @@ func (op *AllTrue) Marshal(n jsn.Marshaler) {
 
 func AllTrue_Repeats_Marshal(n jsn.Marshaler, vals *[]AllTrue) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			AllTrue_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				AllTrue_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -94,10 +98,12 @@ func AllTrue_Optional_Marshal(n jsn.Marshaler, val **AllTrue) {
 }
 
 func AllTrue_Marshal(n jsn.Marshaler, val *AllTrue) {
-	n.MapValues("all_of", AllTrue_Type)
-	n.MapKey("", AllTrue_Field_Test)
-	/* */ rt.BoolEval_Repeats_Marshal(n, &val.Test)
-	n.EndValues()
+	if n.MapValues("all_of", AllTrue_Type) {
+		if n.MapKey("", AllTrue_Field_Test) {
+			rt.BoolEval_Repeats_Marshal(n, &val.Test)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -120,11 +126,12 @@ func (op *Always) Marshal(n jsn.Marshaler) {
 
 func Always_Repeats_Marshal(n jsn.Marshaler, vals *[]Always) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Always_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Always_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -136,8 +143,9 @@ func Always_Optional_Marshal(n jsn.Marshaler, val **Always) {
 }
 
 func Always_Marshal(n jsn.Marshaler, val *Always) {
-	n.MapValues(Always_Type, Always_Type)
-	n.EndValues()
+	if n.MapValues(Always_Type, Always_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -164,11 +172,12 @@ func (op *AnyTrue) Marshal(n jsn.Marshaler) {
 
 func AnyTrue_Repeats_Marshal(n jsn.Marshaler, vals *[]AnyTrue) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			AnyTrue_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				AnyTrue_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -180,10 +189,12 @@ func AnyTrue_Optional_Marshal(n jsn.Marshaler, val **AnyTrue) {
 }
 
 func AnyTrue_Marshal(n jsn.Marshaler, val *AnyTrue) {
-	n.MapValues("any_of", AnyTrue_Type)
-	n.MapKey("", AnyTrue_Field_Test)
-	/* */ rt.BoolEval_Repeats_Marshal(n, &val.Test)
-	n.EndValues()
+	if n.MapValues("any_of", AnyTrue_Type) {
+		if n.MapKey("", AnyTrue_Field_Test) {
+			rt.BoolEval_Repeats_Marshal(n, &val.Test)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -212,11 +223,12 @@ func (op *Assign) Marshal(n jsn.Marshaler) {
 
 func Assign_Repeats_Marshal(n jsn.Marshaler, vals *[]Assign) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Assign_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Assign_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -228,12 +240,15 @@ func Assign_Optional_Marshal(n jsn.Marshaler, val **Assign) {
 }
 
 func Assign_Marshal(n jsn.Marshaler, val *Assign) {
-	n.MapValues("let", Assign_Type)
-	n.MapKey("", Assign_Field_Var)
-	/* */ value.VariableName_Marshal(n, &val.Var)
-	n.MapKey("be", Assign_Field_From)
-	/* */ rt.Assignment_Marshal(n, &val.From)
-	n.EndValues()
+	if n.MapValues("let", Assign_Type) {
+		if n.MapKey("", Assign_Field_Var) {
+			value.VariableName_Marshal(n, &val.Var)
+		}
+		if n.MapKey("be", Assign_Field_From) {
+			rt.Assignment_Marshal(n, &val.From)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -256,11 +271,12 @@ func (op *AtLeast) Marshal(n jsn.Marshaler) {
 
 func AtLeast_Repeats_Marshal(n jsn.Marshaler, vals *[]AtLeast) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			AtLeast_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				AtLeast_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -272,8 +288,9 @@ func AtLeast_Optional_Marshal(n jsn.Marshaler, val **AtLeast) {
 }
 
 func AtLeast_Marshal(n jsn.Marshaler, val *AtLeast) {
-	n.MapValues(AtLeast_Type, AtLeast_Type)
-	n.EndValues()
+	if n.MapValues(AtLeast_Type, AtLeast_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -296,11 +313,12 @@ func (op *AtMost) Marshal(n jsn.Marshaler) {
 
 func AtMost_Repeats_Marshal(n jsn.Marshaler, vals *[]AtMost) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			AtMost_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				AtMost_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -312,8 +330,9 @@ func AtMost_Optional_Marshal(n jsn.Marshaler, val **AtMost) {
 }
 
 func AtMost_Marshal(n jsn.Marshaler, val *AtMost) {
-	n.MapValues(AtMost_Type, AtMost_Type)
-	n.EndValues()
+	if n.MapValues(AtMost_Type, AtMost_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -337,11 +356,12 @@ func (op *Blankline) Marshal(n jsn.Marshaler) {
 
 func Blankline_Repeats_Marshal(n jsn.Marshaler, vals *[]Blankline) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Blankline_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Blankline_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -353,8 +373,9 @@ func Blankline_Optional_Marshal(n jsn.Marshaler, val **Blankline) {
 }
 
 func Blankline_Marshal(n jsn.Marshaler, val *Blankline) {
-	n.MapValues("p", Blankline_Type)
-	n.EndValues()
+	if n.MapValues("p", Blankline_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -381,11 +402,12 @@ func (op *BoolValue) Marshal(n jsn.Marshaler) {
 
 func BoolValue_Repeats_Marshal(n jsn.Marshaler, vals *[]BoolValue) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			BoolValue_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				BoolValue_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -397,10 +419,12 @@ func BoolValue_Optional_Marshal(n jsn.Marshaler, val **BoolValue) {
 }
 
 func BoolValue_Marshal(n jsn.Marshaler, val *BoolValue) {
-	n.MapValues("bool", BoolValue_Type)
-	n.MapKey("", BoolValue_Field_Bool)
-	/* */ value.Bool_Unboxed_Marshal(n, &val.Bool)
-	n.EndValues()
+	if n.MapValues("bool", BoolValue_Type) {
+		if n.MapKey("", BoolValue_Field_Bool) {
+			value.Bool_Unboxed_Marshal(n, &val.Bool)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -427,11 +451,12 @@ func (op *BracketText) Marshal(n jsn.Marshaler) {
 
 func BracketText_Repeats_Marshal(n jsn.Marshaler, vals *[]BracketText) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			BracketText_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				BracketText_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -443,10 +468,12 @@ func BracketText_Optional_Marshal(n jsn.Marshaler, val **BracketText) {
 }
 
 func BracketText_Marshal(n jsn.Marshaler, val *BracketText) {
-	n.MapValues("brackets", BracketText_Type)
-	n.MapKey("", BracketText_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.EndValues()
+	if n.MapValues("brackets", BracketText_Type) {
+		if n.MapKey("", BracketText_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -463,11 +490,12 @@ func Brancher_Marshal(n jsn.Marshaler, ptr *Brancher) {
 
 func Brancher_Repeats_Marshal(n jsn.Marshaler, vals *[]Brancher) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Brancher_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Brancher_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -491,11 +519,12 @@ func (op *Break) Marshal(n jsn.Marshaler) {
 
 func Break_Repeats_Marshal(n jsn.Marshaler, vals *[]Break) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Break_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Break_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -507,8 +536,9 @@ func Break_Optional_Marshal(n jsn.Marshaler, val **Break) {
 }
 
 func Break_Marshal(n jsn.Marshaler, val *Break) {
-	n.MapValues(Break_Type, Break_Type)
-	n.EndValues()
+	if n.MapValues(Break_Type, Break_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -535,11 +565,12 @@ func (op *BufferText) Marshal(n jsn.Marshaler) {
 
 func BufferText_Repeats_Marshal(n jsn.Marshaler, vals *[]BufferText) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			BufferText_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				BufferText_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -551,10 +582,12 @@ func BufferText_Optional_Marshal(n jsn.Marshaler, val **BufferText) {
 }
 
 func BufferText_Marshal(n jsn.Marshaler, val *BufferText) {
-	n.MapValues("buffers", BufferText_Type)
-	n.MapKey("", BufferText_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.EndValues()
+	if n.MapValues("buffers", BufferText_Type) {
+		if n.MapKey("", BufferText_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -583,11 +616,12 @@ func (op *CallArg) Marshal(n jsn.Marshaler) {
 
 func CallArg_Repeats_Marshal(n jsn.Marshaler, vals *[]CallArg) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CallArg_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CallArg_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -599,12 +633,15 @@ func CallArg_Optional_Marshal(n jsn.Marshaler, val **CallArg) {
 }
 
 func CallArg_Marshal(n jsn.Marshaler, val *CallArg) {
-	n.MapValues("inarg", CallArg_Type)
-	n.MapKey("", CallArg_Field_Name)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
-	n.MapKey("from", CallArg_Field_From)
-	/* */ rt.Assignment_Marshal(n, &val.From)
-	n.EndValues()
+	if n.MapValues("inarg", CallArg_Type) {
+		if n.MapKey("", CallArg_Field_Name) {
+			value.Text_Unboxed_Marshal(n, &val.Name)
+		}
+		if n.MapKey("from", CallArg_Field_From) {
+			rt.Assignment_Marshal(n, &val.From)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -631,11 +668,12 @@ func (op *CallArgs) Marshal(n jsn.Marshaler) {
 
 func CallArgs_Repeats_Marshal(n jsn.Marshaler, vals *[]CallArgs) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CallArgs_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CallArgs_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -647,10 +685,12 @@ func CallArgs_Optional_Marshal(n jsn.Marshaler, val **CallArgs) {
 }
 
 func CallArgs_Marshal(n jsn.Marshaler, val *CallArgs) {
-	n.MapValues("inargs", CallArgs_Type)
-	n.MapKey("", CallArgs_Field_Args)
-	/* */ CallArg_Repeats_Marshal(n, &val.Args)
-	n.EndValues()
+	if n.MapValues("inargs", CallArgs_Type) {
+		if n.MapKey("", CallArgs_Field_Args) {
+			CallArg_Repeats_Marshal(n, &val.Args)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -678,11 +718,12 @@ func (op *CallCycle) Marshal(n jsn.Marshaler) {
 
 func CallCycle_Repeats_Marshal(n jsn.Marshaler, vals *[]CallCycle) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CallCycle_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CallCycle_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -695,10 +736,12 @@ func CallCycle_Optional_Marshal(n jsn.Marshaler, val **CallCycle) {
 
 func CallCycle_Marshal(n jsn.Marshaler, val *CallCycle) {
 	n.SetCursor(val.At.Offset)
-	n.MapValues("cycle", CallCycle_Type)
-	n.MapKey("", CallCycle_Field_Parts)
-	/* */ rt.TextEval_Repeats_Marshal(n, &val.Parts)
-	n.EndValues()
+	if n.MapValues("cycle", CallCycle_Type) {
+		if n.MapKey("", CallCycle_Field_Parts) {
+			rt.TextEval_Repeats_Marshal(n, &val.Parts)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -726,11 +769,12 @@ func (op *CallMake) Marshal(n jsn.Marshaler) {
 
 func CallMake_Repeats_Marshal(n jsn.Marshaler, vals *[]CallMake) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CallMake_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CallMake_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -742,12 +786,15 @@ func CallMake_Optional_Marshal(n jsn.Marshaler, val **CallMake) {
 }
 
 func CallMake_Marshal(n jsn.Marshaler, val *CallMake) {
-	n.MapValues(CallMake_Type, CallMake_Type)
-	n.MapKey("", CallMake_Field_Kind)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Kind)
-	n.MapKey("args", CallMake_Field_Arguments)
-	/* */ CallArgs_Marshal(n, &val.Arguments)
-	n.EndValues()
+	if n.MapValues(CallMake_Type, CallMake_Type) {
+		if n.MapKey("", CallMake_Field_Kind) {
+			value.Text_Unboxed_Marshal(n, &val.Kind)
+		}
+		if n.MapKey("args", CallMake_Field_Arguments) {
+			CallArgs_Marshal(n, &val.Arguments)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -775,11 +822,12 @@ func (op *CallPattern) Marshal(n jsn.Marshaler) {
 
 func CallPattern_Repeats_Marshal(n jsn.Marshaler, vals *[]CallPattern) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CallPattern_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CallPattern_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -791,12 +839,15 @@ func CallPattern_Optional_Marshal(n jsn.Marshaler, val **CallPattern) {
 }
 
 func CallPattern_Marshal(n jsn.Marshaler, val *CallPattern) {
-	n.MapValues(CallPattern_Type, CallPattern_Type)
-	n.MapKey("", CallPattern_Field_Pattern)
-	/* */ value.PatternName_Marshal(n, &val.Pattern)
-	n.MapKey("args", CallPattern_Field_Arguments)
-	/* */ CallArgs_Marshal(n, &val.Arguments)
-	n.EndValues()
+	if n.MapValues(CallPattern_Type, CallPattern_Type) {
+		if n.MapKey("", CallPattern_Field_Pattern) {
+			value.PatternName_Marshal(n, &val.Pattern)
+		}
+		if n.MapKey("args", CallPattern_Field_Arguments) {
+			CallArgs_Marshal(n, &val.Arguments)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -826,11 +877,12 @@ func (op *CallSend) Marshal(n jsn.Marshaler) {
 
 func CallSend_Repeats_Marshal(n jsn.Marshaler, vals *[]CallSend) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CallSend_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CallSend_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -842,14 +894,18 @@ func CallSend_Optional_Marshal(n jsn.Marshaler, val **CallSend) {
 }
 
 func CallSend_Marshal(n jsn.Marshaler, val *CallSend) {
-	n.MapValues(CallSend_Type, CallSend_Type)
-	n.MapKey("", CallSend_Field_Event)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Event)
-	n.MapKey("to", CallSend_Field_Path)
-	/* */ rt.TextListEval_Marshal(n, &val.Path)
-	n.MapKey("args", CallSend_Field_Arguments)
-	/* */ CallArgs_Marshal(n, &val.Arguments)
-	n.EndValues()
+	if n.MapValues(CallSend_Type, CallSend_Type) {
+		if n.MapKey("", CallSend_Field_Event) {
+			value.Text_Unboxed_Marshal(n, &val.Event)
+		}
+		if n.MapKey("to", CallSend_Field_Path) {
+			rt.TextListEval_Marshal(n, &val.Path)
+		}
+		if n.MapKey("args", CallSend_Field_Arguments) {
+			CallArgs_Marshal(n, &val.Arguments)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -878,11 +934,12 @@ func (op *CallShuffle) Marshal(n jsn.Marshaler) {
 
 func CallShuffle_Repeats_Marshal(n jsn.Marshaler, vals *[]CallShuffle) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CallShuffle_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CallShuffle_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -895,10 +952,12 @@ func CallShuffle_Optional_Marshal(n jsn.Marshaler, val **CallShuffle) {
 
 func CallShuffle_Marshal(n jsn.Marshaler, val *CallShuffle) {
 	n.SetCursor(val.At.Offset)
-	n.MapValues("shuffle", CallShuffle_Type)
-	n.MapKey("", CallShuffle_Field_Parts)
-	/* */ rt.TextEval_Repeats_Marshal(n, &val.Parts)
-	n.EndValues()
+	if n.MapValues("shuffle", CallShuffle_Type) {
+		if n.MapKey("", CallShuffle_Field_Parts) {
+			rt.TextEval_Repeats_Marshal(n, &val.Parts)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -926,11 +985,12 @@ func (op *CallTerminal) Marshal(n jsn.Marshaler) {
 
 func CallTerminal_Repeats_Marshal(n jsn.Marshaler, vals *[]CallTerminal) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CallTerminal_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CallTerminal_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -943,10 +1003,12 @@ func CallTerminal_Optional_Marshal(n jsn.Marshaler, val **CallTerminal) {
 
 func CallTerminal_Marshal(n jsn.Marshaler, val *CallTerminal) {
 	n.SetCursor(val.At.Offset)
-	n.MapValues("stopping", CallTerminal_Type)
-	n.MapKey("", CallTerminal_Field_Parts)
-	/* */ rt.TextEval_Repeats_Marshal(n, &val.Parts)
-	n.EndValues()
+	if n.MapValues("stopping", CallTerminal_Type) {
+		if n.MapKey("", CallTerminal_Field_Parts) {
+			rt.TextEval_Repeats_Marshal(n, &val.Parts)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -976,11 +1038,12 @@ func (op *CallTrigger) Marshal(n jsn.Marshaler) {
 
 func CallTrigger_Repeats_Marshal(n jsn.Marshaler, vals *[]CallTrigger) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CallTrigger_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CallTrigger_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -993,12 +1056,15 @@ func CallTrigger_Optional_Marshal(n jsn.Marshaler, val **CallTrigger) {
 
 func CallTrigger_Marshal(n jsn.Marshaler, val *CallTrigger) {
 	n.SetCursor(val.At.Offset)
-	n.MapValues("trigger", CallTrigger_Type)
-	n.MapKey("", CallTrigger_Field_Trigger)
-	/* */ Trigger_Marshal(n, &val.Trigger)
-	n.MapKey("num", CallTrigger_Field_Num)
-	/* */ rt.NumberEval_Marshal(n, &val.Num)
-	n.EndValues()
+	if n.MapValues("trigger", CallTrigger_Type) {
+		if n.MapKey("", CallTrigger_Field_Trigger) {
+			Trigger_Marshal(n, &val.Trigger)
+		}
+		if n.MapKey("num", CallTrigger_Field_Num) {
+			rt.NumberEval_Marshal(n, &val.Num)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1024,11 +1090,12 @@ func (op *Capitalize) Marshal(n jsn.Marshaler) {
 
 func Capitalize_Repeats_Marshal(n jsn.Marshaler, vals *[]Capitalize) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Capitalize_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Capitalize_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1040,10 +1107,12 @@ func Capitalize_Optional_Marshal(n jsn.Marshaler, val **Capitalize) {
 }
 
 func Capitalize_Marshal(n jsn.Marshaler, val *Capitalize) {
-	n.MapValues(Capitalize_Type, Capitalize_Type)
-	n.MapKey("", Capitalize_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues(Capitalize_Type, Capitalize_Type) {
+		if n.MapKey("", Capitalize_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1074,11 +1143,12 @@ func (op *ChooseAction) Marshal(n jsn.Marshaler) {
 
 func ChooseAction_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseAction) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ChooseAction_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ChooseAction_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1090,14 +1160,18 @@ func ChooseAction_Optional_Marshal(n jsn.Marshaler, val **ChooseAction) {
 }
 
 func ChooseAction_Marshal(n jsn.Marshaler, val *ChooseAction) {
-	n.MapValues("if", ChooseAction_Type)
-	n.MapKey("", ChooseAction_Field_If)
-	/* */ rt.BoolEval_Marshal(n, &val.If)
-	n.MapKey("do", ChooseAction_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.MapKey("else", ChooseAction_Field_Else)
-	/* */ Brancher_Optional_Marshal(n, &val.Else)
-	n.EndValues()
+	if n.MapValues("if", ChooseAction_Type) {
+		if n.MapKey("", ChooseAction_Field_If) {
+			rt.BoolEval_Marshal(n, &val.If)
+		}
+		if n.MapKey("do", ChooseAction_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		if n.MapKey("else", ChooseAction_Field_Else) {
+			Brancher_Optional_Marshal(n, &val.Else)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1128,11 +1202,12 @@ func (op *ChooseMore) Marshal(n jsn.Marshaler) {
 
 func ChooseMore_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseMore) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ChooseMore_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ChooseMore_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1144,14 +1219,18 @@ func ChooseMore_Optional_Marshal(n jsn.Marshaler, val **ChooseMore) {
 }
 
 func ChooseMore_Marshal(n jsn.Marshaler, val *ChooseMore) {
-	n.MapValues("else_if", ChooseMore_Type)
-	n.MapKey("", ChooseMore_Field_If)
-	/* */ rt.BoolEval_Marshal(n, &val.If)
-	n.MapKey("do", ChooseMore_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.MapKey("else", ChooseMore_Field_Else)
-	/* */ Brancher_Optional_Marshal(n, &val.Else)
-	n.EndValues()
+	if n.MapValues("else_if", ChooseMore_Type) {
+		if n.MapKey("", ChooseMore_Field_If) {
+			rt.BoolEval_Marshal(n, &val.If)
+		}
+		if n.MapKey("do", ChooseMore_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		if n.MapKey("else", ChooseMore_Field_Else) {
+			Brancher_Optional_Marshal(n, &val.Else)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1186,11 +1265,12 @@ func (op *ChooseMoreValue) Marshal(n jsn.Marshaler) {
 
 func ChooseMoreValue_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseMoreValue) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ChooseMoreValue_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ChooseMoreValue_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1202,18 +1282,24 @@ func ChooseMoreValue_Optional_Marshal(n jsn.Marshaler, val **ChooseMoreValue) {
 }
 
 func ChooseMoreValue_Marshal(n jsn.Marshaler, val *ChooseMoreValue) {
-	n.MapValues("else_if", ChooseMoreValue_Type)
-	n.MapKey("", ChooseMoreValue_Field_Assign)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Assign)
-	n.MapKey("from", ChooseMoreValue_Field_From)
-	/* */ rt.Assignment_Marshal(n, &val.From)
-	n.MapKey("and", ChooseMoreValue_Field_Filter)
-	/* */ rt.BoolEval_Marshal(n, &val.Filter)
-	n.MapKey("do", ChooseMoreValue_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.MapKey("else", ChooseMoreValue_Field_Else)
-	/* */ Brancher_Optional_Marshal(n, &val.Else)
-	n.EndValues()
+	if n.MapValues("else_if", ChooseMoreValue_Type) {
+		if n.MapKey("", ChooseMoreValue_Field_Assign) {
+			value.Text_Unboxed_Marshal(n, &val.Assign)
+		}
+		if n.MapKey("from", ChooseMoreValue_Field_From) {
+			rt.Assignment_Marshal(n, &val.From)
+		}
+		if n.MapKey("and", ChooseMoreValue_Field_Filter) {
+			rt.BoolEval_Marshal(n, &val.Filter)
+		}
+		if n.MapKey("do", ChooseMoreValue_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		if n.MapKey("else", ChooseMoreValue_Field_Else) {
+			Brancher_Optional_Marshal(n, &val.Else)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1240,11 +1326,12 @@ func (op *ChooseNothingElse) Marshal(n jsn.Marshaler) {
 
 func ChooseNothingElse_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseNothingElse) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ChooseNothingElse_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ChooseNothingElse_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1256,10 +1343,12 @@ func ChooseNothingElse_Optional_Marshal(n jsn.Marshaler, val **ChooseNothingElse
 }
 
 func ChooseNothingElse_Marshal(n jsn.Marshaler, val *ChooseNothingElse) {
-	n.MapValues("else_do", ChooseNothingElse_Type)
-	n.MapKey("", ChooseNothingElse_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.EndValues()
+	if n.MapValues("else_do", ChooseNothingElse_Type) {
+		if n.MapKey("", ChooseNothingElse_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1290,11 +1379,12 @@ func (op *ChooseNum) Marshal(n jsn.Marshaler) {
 
 func ChooseNum_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseNum) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ChooseNum_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ChooseNum_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1306,14 +1396,18 @@ func ChooseNum_Optional_Marshal(n jsn.Marshaler, val **ChooseNum) {
 }
 
 func ChooseNum_Marshal(n jsn.Marshaler, val *ChooseNum) {
-	n.MapValues("num", ChooseNum_Type)
-	n.MapKey("if", ChooseNum_Field_If)
-	/* */ rt.BoolEval_Marshal(n, &val.If)
-	n.MapKey("then", ChooseNum_Field_True)
-	/* */ rt.NumberEval_Marshal(n, &val.True)
-	n.MapKey("else", ChooseNum_Field_False)
-	/* */ rt.NumberEval_Marshal(n, &val.False)
-	n.EndValues()
+	if n.MapValues("num", ChooseNum_Type) {
+		if n.MapKey("if", ChooseNum_Field_If) {
+			rt.BoolEval_Marshal(n, &val.If)
+		}
+		if n.MapKey("then", ChooseNum_Field_True) {
+			rt.NumberEval_Marshal(n, &val.True)
+		}
+		if n.MapKey("else", ChooseNum_Field_False) {
+			rt.NumberEval_Marshal(n, &val.False)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1344,11 +1438,12 @@ func (op *ChooseText) Marshal(n jsn.Marshaler) {
 
 func ChooseText_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseText) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ChooseText_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ChooseText_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1360,14 +1455,18 @@ func ChooseText_Optional_Marshal(n jsn.Marshaler, val **ChooseText) {
 }
 
 func ChooseText_Marshal(n jsn.Marshaler, val *ChooseText) {
-	n.MapValues("txt", ChooseText_Type)
-	n.MapKey("if", ChooseText_Field_If)
-	/* */ rt.BoolEval_Marshal(n, &val.If)
-	n.MapKey("then", ChooseText_Field_True)
-	/* */ rt.TextEval_Marshal(n, &val.True)
-	n.MapKey("else", ChooseText_Field_False)
-	/* */ rt.TextEval_Marshal(n, &val.False)
-	n.EndValues()
+	if n.MapValues("txt", ChooseText_Type) {
+		if n.MapKey("if", ChooseText_Field_If) {
+			rt.BoolEval_Marshal(n, &val.If)
+		}
+		if n.MapKey("then", ChooseText_Field_True) {
+			rt.TextEval_Marshal(n, &val.True)
+		}
+		if n.MapKey("else", ChooseText_Field_False) {
+			rt.TextEval_Marshal(n, &val.False)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1402,11 +1501,12 @@ func (op *ChooseValue) Marshal(n jsn.Marshaler) {
 
 func ChooseValue_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseValue) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ChooseValue_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ChooseValue_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1418,18 +1518,24 @@ func ChooseValue_Optional_Marshal(n jsn.Marshaler, val **ChooseValue) {
 }
 
 func ChooseValue_Marshal(n jsn.Marshaler, val *ChooseValue) {
-	n.MapValues("if", ChooseValue_Type)
-	n.MapKey("", ChooseValue_Field_Assign)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Assign)
-	n.MapKey("from", ChooseValue_Field_From)
-	/* */ rt.Assignment_Marshal(n, &val.From)
-	n.MapKey("and", ChooseValue_Field_Filter)
-	/* */ rt.BoolEval_Marshal(n, &val.Filter)
-	n.MapKey("do", ChooseValue_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.MapKey("else", ChooseValue_Field_Else)
-	/* */ Brancher_Optional_Marshal(n, &val.Else)
-	n.EndValues()
+	if n.MapValues("if", ChooseValue_Type) {
+		if n.MapKey("", ChooseValue_Field_Assign) {
+			value.Text_Unboxed_Marshal(n, &val.Assign)
+		}
+		if n.MapKey("from", ChooseValue_Field_From) {
+			rt.Assignment_Marshal(n, &val.From)
+		}
+		if n.MapKey("and", ChooseValue_Field_Filter) {
+			rt.BoolEval_Marshal(n, &val.Filter)
+		}
+		if n.MapKey("do", ChooseValue_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		if n.MapKey("else", ChooseValue_Field_Else) {
+			Brancher_Optional_Marshal(n, &val.Else)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1456,11 +1562,12 @@ func (op *CommaText) Marshal(n jsn.Marshaler) {
 
 func CommaText_Repeats_Marshal(n jsn.Marshaler, vals *[]CommaText) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CommaText_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CommaText_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1472,10 +1579,12 @@ func CommaText_Optional_Marshal(n jsn.Marshaler, val **CommaText) {
 }
 
 func CommaText_Marshal(n jsn.Marshaler, val *CommaText) {
-	n.MapValues("commas", CommaText_Type)
-	n.MapKey("", CommaText_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.EndValues()
+	if n.MapValues("commas", CommaText_Type) {
+		if n.MapKey("", CommaText_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1492,11 +1601,12 @@ func Comparator_Marshal(n jsn.Marshaler, ptr *Comparator) {
 
 func Comparator_Repeats_Marshal(n jsn.Marshaler, vals *[]Comparator) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Comparator_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Comparator_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1528,11 +1638,12 @@ func (op *CompareNum) Marshal(n jsn.Marshaler) {
 
 func CompareNum_Repeats_Marshal(n jsn.Marshaler, vals *[]CompareNum) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CompareNum_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CompareNum_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1544,14 +1655,18 @@ func CompareNum_Optional_Marshal(n jsn.Marshaler, val **CompareNum) {
 }
 
 func CompareNum_Marshal(n jsn.Marshaler, val *CompareNum) {
-	n.MapValues("cmp", CompareNum_Type)
-	n.MapKey("", CompareNum_Field_A)
-	/* */ rt.NumberEval_Marshal(n, &val.A)
-	n.MapKey("is", CompareNum_Field_Is)
-	/* */ Comparator_Marshal(n, &val.Is)
-	n.MapKey("num", CompareNum_Field_B)
-	/* */ rt.NumberEval_Marshal(n, &val.B)
-	n.EndValues()
+	if n.MapValues("cmp", CompareNum_Type) {
+		if n.MapKey("", CompareNum_Field_A) {
+			rt.NumberEval_Marshal(n, &val.A)
+		}
+		if n.MapKey("is", CompareNum_Field_Is) {
+			Comparator_Marshal(n, &val.Is)
+		}
+		if n.MapKey("num", CompareNum_Field_B) {
+			rt.NumberEval_Marshal(n, &val.B)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1582,11 +1697,12 @@ func (op *CompareText) Marshal(n jsn.Marshaler) {
 
 func CompareText_Repeats_Marshal(n jsn.Marshaler, vals *[]CompareText) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			CompareText_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				CompareText_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1598,14 +1714,18 @@ func CompareText_Optional_Marshal(n jsn.Marshaler, val **CompareText) {
 }
 
 func CompareText_Marshal(n jsn.Marshaler, val *CompareText) {
-	n.MapValues("cmp", CompareText_Type)
-	n.MapKey("", CompareText_Field_A)
-	/* */ rt.TextEval_Marshal(n, &val.A)
-	n.MapKey("is", CompareText_Field_Is)
-	/* */ Comparator_Marshal(n, &val.Is)
-	n.MapKey("txt", CompareText_Field_B)
-	/* */ rt.TextEval_Marshal(n, &val.B)
-	n.EndValues()
+	if n.MapValues("cmp", CompareText_Type) {
+		if n.MapKey("", CompareText_Field_A) {
+			rt.TextEval_Marshal(n, &val.A)
+		}
+		if n.MapKey("is", CompareText_Field_Is) {
+			Comparator_Marshal(n, &val.Is)
+		}
+		if n.MapKey("txt", CompareText_Field_B) {
+			rt.TextEval_Marshal(n, &val.B)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1634,11 +1754,12 @@ func (op *DiffOf) Marshal(n jsn.Marshaler) {
 
 func DiffOf_Repeats_Marshal(n jsn.Marshaler, vals *[]DiffOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			DiffOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				DiffOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1650,12 +1771,15 @@ func DiffOf_Optional_Marshal(n jsn.Marshaler, val **DiffOf) {
 }
 
 func DiffOf_Marshal(n jsn.Marshaler, val *DiffOf) {
-	n.MapValues("dec", DiffOf_Type)
-	n.MapKey("", DiffOf_Field_A)
-	/* */ rt.NumberEval_Marshal(n, &val.A)
-	n.MapKey("by", DiffOf_Field_B)
-	/* */ rt.NumberEval_Optional_Marshal(n, &val.B)
-	n.EndValues()
+	if n.MapValues("dec", DiffOf_Type) {
+		if n.MapKey("", DiffOf_Field_A) {
+			rt.NumberEval_Marshal(n, &val.A)
+		}
+		if n.MapKey("by", DiffOf_Field_B) {
+			rt.NumberEval_Optional_Marshal(n, &val.B)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1681,11 +1805,12 @@ func (op *During) Marshal(n jsn.Marshaler) {
 
 func During_Repeats_Marshal(n jsn.Marshaler, vals *[]During) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			During_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				During_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1697,10 +1822,12 @@ func During_Optional_Marshal(n jsn.Marshaler, val **During) {
 }
 
 func During_Marshal(n jsn.Marshaler, val *During) {
-	n.MapValues(During_Type, During_Type)
-	n.MapKey("", During_Field_Pattern)
-	/* */ value.PatternName_Marshal(n, &val.Pattern)
-	n.EndValues()
+	if n.MapValues(During_Type, During_Type) {
+		if n.MapKey("", During_Field_Pattern) {
+			value.PatternName_Marshal(n, &val.Pattern)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1724,11 +1851,12 @@ func (op *Equal) Marshal(n jsn.Marshaler) {
 
 func Equal_Repeats_Marshal(n jsn.Marshaler, vals *[]Equal) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Equal_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Equal_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1740,8 +1868,9 @@ func Equal_Optional_Marshal(n jsn.Marshaler, val **Equal) {
 }
 
 func Equal_Marshal(n jsn.Marshaler, val *Equal) {
-	n.MapValues("equals", Equal_Type)
-	n.EndValues()
+	if n.MapValues("equals", Equal_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -1767,11 +1896,12 @@ func (op *FromBool) Marshal(n jsn.Marshaler) {
 
 func FromBool_Repeats_Marshal(n jsn.Marshaler, vals *[]FromBool) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromBool_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromBool_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1783,10 +1913,12 @@ func FromBool_Optional_Marshal(n jsn.Marshaler, val **FromBool) {
 }
 
 func FromBool_Marshal(n jsn.Marshaler, val *FromBool) {
-	n.MapValues(FromBool_Type, FromBool_Type)
-	n.MapKey("", FromBool_Field_Val)
-	/* */ rt.BoolEval_Marshal(n, &val.Val)
-	n.EndValues()
+	if n.MapValues(FromBool_Type, FromBool_Type) {
+		if n.MapKey("", FromBool_Field_Val) {
+			rt.BoolEval_Marshal(n, &val.Val)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1812,11 +1944,12 @@ func (op *FromNum) Marshal(n jsn.Marshaler) {
 
 func FromNum_Repeats_Marshal(n jsn.Marshaler, vals *[]FromNum) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromNum_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromNum_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1828,10 +1961,12 @@ func FromNum_Optional_Marshal(n jsn.Marshaler, val **FromNum) {
 }
 
 func FromNum_Marshal(n jsn.Marshaler, val *FromNum) {
-	n.MapValues(FromNum_Type, FromNum_Type)
-	n.MapKey("", FromNum_Field_Val)
-	/* */ rt.NumberEval_Marshal(n, &val.Val)
-	n.EndValues()
+	if n.MapValues(FromNum_Type, FromNum_Type) {
+		if n.MapKey("", FromNum_Field_Val) {
+			rt.NumberEval_Marshal(n, &val.Val)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1858,11 +1993,12 @@ func (op *FromNumbers) Marshal(n jsn.Marshaler) {
 
 func FromNumbers_Repeats_Marshal(n jsn.Marshaler, vals *[]FromNumbers) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromNumbers_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromNumbers_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1874,10 +2010,12 @@ func FromNumbers_Optional_Marshal(n jsn.Marshaler, val **FromNumbers) {
 }
 
 func FromNumbers_Marshal(n jsn.Marshaler, val *FromNumbers) {
-	n.MapValues("from_nums", FromNumbers_Type)
-	n.MapKey("", FromNumbers_Field_Vals)
-	/* */ rt.NumListEval_Marshal(n, &val.Vals)
-	n.EndValues()
+	if n.MapValues("from_nums", FromNumbers_Type) {
+		if n.MapKey("", FromNumbers_Field_Vals) {
+			rt.NumListEval_Marshal(n, &val.Vals)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1903,11 +2041,12 @@ func (op *FromObj) Marshal(n jsn.Marshaler) {
 
 func FromObj_Repeats_Marshal(n jsn.Marshaler, vals *[]FromObj) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromObj_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromObj_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1919,10 +2058,12 @@ func FromObj_Optional_Marshal(n jsn.Marshaler, val **FromObj) {
 }
 
 func FromObj_Marshal(n jsn.Marshaler, val *FromObj) {
-	n.MapValues(FromObj_Type, FromObj_Type)
-	n.MapKey("", FromObj_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues(FromObj_Type, FromObj_Type) {
+		if n.MapKey("", FromObj_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1948,11 +2089,12 @@ func (op *FromRec) Marshal(n jsn.Marshaler) {
 
 func FromRec_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRec) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromRec_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromRec_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -1964,10 +2106,12 @@ func FromRec_Optional_Marshal(n jsn.Marshaler, val **FromRec) {
 }
 
 func FromRec_Marshal(n jsn.Marshaler, val *FromRec) {
-	n.MapValues(FromRec_Type, FromRec_Type)
-	n.MapKey("", FromRec_Field_Rec)
-	/* */ rt.RecordEval_Marshal(n, &val.Rec)
-	n.EndValues()
+	if n.MapValues(FromRec_Type, FromRec_Type) {
+		if n.MapKey("", FromRec_Field_Rec) {
+			rt.RecordEval_Marshal(n, &val.Rec)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -1994,11 +2138,12 @@ func (op *FromRecord) Marshal(n jsn.Marshaler) {
 
 func FromRecord_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRecord) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromRecord_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromRecord_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2010,10 +2155,12 @@ func FromRecord_Optional_Marshal(n jsn.Marshaler, val **FromRecord) {
 }
 
 func FromRecord_Marshal(n jsn.Marshaler, val *FromRecord) {
-	n.MapValues("from_rec", FromRecord_Type)
-	n.MapKey("", FromRecord_Field_Val)
-	/* */ rt.RecordEval_Marshal(n, &val.Val)
-	n.EndValues()
+	if n.MapValues("from_rec", FromRecord_Type) {
+		if n.MapKey("", FromRecord_Field_Val) {
+			rt.RecordEval_Marshal(n, &val.Val)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2040,11 +2187,12 @@ func (op *FromRecords) Marshal(n jsn.Marshaler) {
 
 func FromRecords_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRecords) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromRecords_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromRecords_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2056,10 +2204,12 @@ func FromRecords_Optional_Marshal(n jsn.Marshaler, val **FromRecords) {
 }
 
 func FromRecords_Marshal(n jsn.Marshaler, val *FromRecords) {
-	n.MapValues("from_recs", FromRecords_Type)
-	n.MapKey("", FromRecords_Field_Vals)
-	/* */ rt.RecordListEval_Marshal(n, &val.Vals)
-	n.EndValues()
+	if n.MapValues("from_recs", FromRecords_Type) {
+		if n.MapKey("", FromRecords_Field_Vals) {
+			rt.RecordListEval_Marshal(n, &val.Vals)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2076,11 +2226,12 @@ func FromSourceFields_Marshal(n jsn.Marshaler, ptr *FromSourceFields) {
 
 func FromSourceFields_Repeats_Marshal(n jsn.Marshaler, vals *[]FromSourceFields) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromSourceFields_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromSourceFields_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2108,11 +2259,12 @@ func (op *FromText) Marshal(n jsn.Marshaler) {
 
 func FromText_Repeats_Marshal(n jsn.Marshaler, vals *[]FromText) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromText_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromText_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2124,10 +2276,12 @@ func FromText_Optional_Marshal(n jsn.Marshaler, val **FromText) {
 }
 
 func FromText_Marshal(n jsn.Marshaler, val *FromText) {
-	n.MapValues("from_txt", FromText_Type)
-	n.MapKey("", FromText_Field_Val)
-	/* */ rt.TextEval_Marshal(n, &val.Val)
-	n.EndValues()
+	if n.MapValues("from_txt", FromText_Type) {
+		if n.MapKey("", FromText_Field_Val) {
+			rt.TextEval_Marshal(n, &val.Val)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2154,11 +2308,12 @@ func (op *FromTexts) Marshal(n jsn.Marshaler) {
 
 func FromTexts_Repeats_Marshal(n jsn.Marshaler, vals *[]FromTexts) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromTexts_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromTexts_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2170,10 +2325,12 @@ func FromTexts_Optional_Marshal(n jsn.Marshaler, val **FromTexts) {
 }
 
 func FromTexts_Marshal(n jsn.Marshaler, val *FromTexts) {
-	n.MapValues("from_txts", FromTexts_Type)
-	n.MapKey("", FromTexts_Field_Vals)
-	/* */ rt.TextListEval_Marshal(n, &val.Vals)
-	n.EndValues()
+	if n.MapValues("from_txts", FromTexts_Type) {
+		if n.MapKey("", FromTexts_Field_Vals) {
+			rt.TextListEval_Marshal(n, &val.Vals)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2199,11 +2356,12 @@ func (op *FromVar) Marshal(n jsn.Marshaler) {
 
 func FromVar_Repeats_Marshal(n jsn.Marshaler, vals *[]FromVar) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			FromVar_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				FromVar_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2215,10 +2373,12 @@ func FromVar_Optional_Marshal(n jsn.Marshaler, val **FromVar) {
 }
 
 func FromVar_Marshal(n jsn.Marshaler, val *FromVar) {
-	n.MapValues(FromVar_Type, FromVar_Type)
-	n.MapKey("", FromVar_Field_Var)
-	/* */ value.VariableName_Marshal(n, &val.Var)
-	n.EndValues()
+	if n.MapValues(FromVar_Type, FromVar_Type) {
+		if n.MapKey("", FromVar_Field_Var) {
+			value.VariableName_Marshal(n, &val.Var)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2247,11 +2407,12 @@ func (op *GetAtField) Marshal(n jsn.Marshaler) {
 
 func GetAtField_Repeats_Marshal(n jsn.Marshaler, vals *[]GetAtField) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			GetAtField_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				GetAtField_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2263,12 +2424,15 @@ func GetAtField_Optional_Marshal(n jsn.Marshaler, val **GetAtField) {
 }
 
 func GetAtField_Marshal(n jsn.Marshaler, val *GetAtField) {
-	n.MapValues("get", GetAtField_Type)
-	n.MapKey("", GetAtField_Field_Field)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Field)
-	n.MapKey("from", GetAtField_Field_From)
-	/* */ FromSourceFields_Marshal(n, &val.From)
-	n.EndValues()
+	if n.MapValues("get", GetAtField_Type) {
+		if n.MapKey("", GetAtField_Field_Field) {
+			value.Text_Unboxed_Marshal(n, &val.Field)
+		}
+		if n.MapKey("from", GetAtField_Field_From) {
+			FromSourceFields_Marshal(n, &val.From)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2295,11 +2459,12 @@ func (op *GetVar) Marshal(n jsn.Marshaler) {
 
 func GetVar_Repeats_Marshal(n jsn.Marshaler, vals *[]GetVar) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			GetVar_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				GetVar_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2311,10 +2476,12 @@ func GetVar_Optional_Marshal(n jsn.Marshaler, val **GetVar) {
 }
 
 func GetVar_Marshal_Customized(n jsn.Marshaler, val *GetVar) {
-	n.MapValues("var", GetVar_Type)
-	n.MapKey("", GetVar_Field_Name)
-	/* */ value.VariableName_Marshal(n, &val.Name)
-	n.EndValues()
+	if n.MapValues("var", GetVar_Type) {
+		if n.MapKey("", GetVar_Field_Name) {
+			value.VariableName_Marshal(n, &val.Name)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2337,11 +2504,12 @@ func (op *GreaterThan) Marshal(n jsn.Marshaler) {
 
 func GreaterThan_Repeats_Marshal(n jsn.Marshaler, vals *[]GreaterThan) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			GreaterThan_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				GreaterThan_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2353,8 +2521,9 @@ func GreaterThan_Optional_Marshal(n jsn.Marshaler, val **GreaterThan) {
 }
 
 func GreaterThan_Marshal(n jsn.Marshaler, val *GreaterThan) {
-	n.MapValues(GreaterThan_Type, GreaterThan_Type)
-	n.EndValues()
+	if n.MapValues(GreaterThan_Type, GreaterThan_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -2380,11 +2549,12 @@ func (op *HasDominion) Marshal(n jsn.Marshaler) {
 
 func HasDominion_Repeats_Marshal(n jsn.Marshaler, vals *[]HasDominion) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			HasDominion_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				HasDominion_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2396,10 +2566,12 @@ func HasDominion_Optional_Marshal(n jsn.Marshaler, val **HasDominion) {
 }
 
 func HasDominion_Marshal(n jsn.Marshaler, val *HasDominion) {
-	n.MapValues(HasDominion_Type, HasDominion_Type)
-	n.MapKey("", HasDominion_Field_Name)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
-	n.EndValues()
+	if n.MapValues(HasDominion_Type, HasDominion_Type) {
+		if n.MapKey("", HasDominion_Field_Name) {
+			value.Text_Unboxed_Marshal(n, &val.Name)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2428,11 +2600,12 @@ func (op *HasTrait) Marshal(n jsn.Marshaler) {
 
 func HasTrait_Repeats_Marshal(n jsn.Marshaler, vals *[]HasTrait) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			HasTrait_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				HasTrait_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2444,12 +2617,15 @@ func HasTrait_Optional_Marshal(n jsn.Marshaler, val **HasTrait) {
 }
 
 func HasTrait_Marshal(n jsn.Marshaler, val *HasTrait) {
-	n.MapValues("get", HasTrait_Type)
-	n.MapKey("obj", HasTrait_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.MapKey("trait", HasTrait_Field_Trait)
-	/* */ rt.TextEval_Marshal(n, &val.Trait)
-	n.EndValues()
+	if n.MapValues("get", HasTrait_Type) {
+		if n.MapKey("obj", HasTrait_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		if n.MapKey("trait", HasTrait_Field_Trait) {
+			rt.TextEval_Marshal(n, &val.Trait)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2475,11 +2651,12 @@ func (op *IdOf) Marshal(n jsn.Marshaler) {
 
 func IdOf_Repeats_Marshal(n jsn.Marshaler, vals *[]IdOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			IdOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				IdOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2491,10 +2668,12 @@ func IdOf_Optional_Marshal(n jsn.Marshaler, val **IdOf) {
 }
 
 func IdOf_Marshal(n jsn.Marshaler, val *IdOf) {
-	n.MapValues(IdOf_Type, IdOf_Type)
-	n.MapKey("", IdOf_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues(IdOf_Type, IdOf_Type) {
+		if n.MapKey("", IdOf_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2523,11 +2702,12 @@ func (op *Includes) Marshal(n jsn.Marshaler) {
 
 func Includes_Repeats_Marshal(n jsn.Marshaler, vals *[]Includes) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Includes_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Includes_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2539,12 +2719,15 @@ func Includes_Optional_Marshal(n jsn.Marshaler, val **Includes) {
 }
 
 func Includes_Marshal(n jsn.Marshaler, val *Includes) {
-	n.MapValues("contains", Includes_Type)
-	n.MapKey("", Includes_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.MapKey("part", Includes_Field_Part)
-	/* */ rt.TextEval_Marshal(n, &val.Part)
-	n.EndValues()
+	if n.MapValues("contains", Includes_Type) {
+		if n.MapKey("", Includes_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		if n.MapKey("part", Includes_Field_Part) {
+			rt.TextEval_Marshal(n, &val.Part)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2571,11 +2754,12 @@ func (op *IntoObj) Marshal(n jsn.Marshaler) {
 
 func IntoObj_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoObj) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			IntoObj_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				IntoObj_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2587,10 +2771,12 @@ func IntoObj_Optional_Marshal(n jsn.Marshaler, val **IntoObj) {
 }
 
 func IntoObj_Marshal(n jsn.Marshaler, val *IntoObj) {
-	n.MapValues("obj", IntoObj_Type)
-	n.MapKey("", IntoObj_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues("obj", IntoObj_Type) {
+		if n.MapKey("", IntoObj_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2607,11 +2793,12 @@ func IntoTargetFields_Marshal(n jsn.Marshaler, ptr *IntoTargetFields) {
 
 func IntoTargetFields_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoTargetFields) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			IntoTargetFields_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				IntoTargetFields_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2639,11 +2826,12 @@ func (op *IntoVar) Marshal(n jsn.Marshaler) {
 
 func IntoVar_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoVar) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			IntoVar_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				IntoVar_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2655,10 +2843,12 @@ func IntoVar_Optional_Marshal(n jsn.Marshaler, val **IntoVar) {
 }
 
 func IntoVar_Marshal(n jsn.Marshaler, val *IntoVar) {
-	n.MapValues("var", IntoVar_Type)
-	n.MapKey("", IntoVar_Field_Var)
-	/* */ value.VariableName_Marshal(n, &val.Var)
-	n.EndValues()
+	if n.MapValues("var", IntoVar_Type) {
+		if n.MapKey("", IntoVar_Field_Var) {
+			value.VariableName_Marshal(n, &val.Var)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2685,11 +2875,12 @@ func (op *IsEmpty) Marshal(n jsn.Marshaler) {
 
 func IsEmpty_Repeats_Marshal(n jsn.Marshaler, vals *[]IsEmpty) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			IsEmpty_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				IsEmpty_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2701,10 +2892,12 @@ func IsEmpty_Optional_Marshal(n jsn.Marshaler, val **IsEmpty) {
 }
 
 func IsEmpty_Marshal(n jsn.Marshaler, val *IsEmpty) {
-	n.MapValues("is", IsEmpty_Type)
-	n.MapKey("empty", IsEmpty_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("is", IsEmpty_Type) {
+		if n.MapKey("empty", IsEmpty_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2733,11 +2926,12 @@ func (op *IsExactKindOf) Marshal(n jsn.Marshaler) {
 
 func IsExactKindOf_Repeats_Marshal(n jsn.Marshaler, vals *[]IsExactKindOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			IsExactKindOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				IsExactKindOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2749,12 +2943,15 @@ func IsExactKindOf_Optional_Marshal(n jsn.Marshaler, val **IsExactKindOf) {
 }
 
 func IsExactKindOf_Marshal(n jsn.Marshaler, val *IsExactKindOf) {
-	n.MapValues("kind_of", IsExactKindOf_Type)
-	n.MapKey("", IsExactKindOf_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.MapKey("is_exactly", IsExactKindOf_Field_Kind)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Kind)
-	n.EndValues()
+	if n.MapValues("kind_of", IsExactKindOf_Type) {
+		if n.MapKey("", IsExactKindOf_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		if n.MapKey("is_exactly", IsExactKindOf_Field_Kind) {
+			value.Text_Unboxed_Marshal(n, &val.Kind)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2783,11 +2980,12 @@ func (op *IsKindOf) Marshal(n jsn.Marshaler) {
 
 func IsKindOf_Repeats_Marshal(n jsn.Marshaler, vals *[]IsKindOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			IsKindOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				IsKindOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2799,12 +2997,15 @@ func IsKindOf_Optional_Marshal(n jsn.Marshaler, val **IsKindOf) {
 }
 
 func IsKindOf_Marshal(n jsn.Marshaler, val *IsKindOf) {
-	n.MapValues("kind_of", IsKindOf_Type)
-	n.MapKey("", IsKindOf_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.MapKey("is", IsKindOf_Field_Kind)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Kind)
-	n.EndValues()
+	if n.MapValues("kind_of", IsKindOf_Type) {
+		if n.MapKey("", IsKindOf_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		if n.MapKey("is", IsKindOf_Field_Kind) {
+			value.Text_Unboxed_Marshal(n, &val.Kind)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2832,11 +3033,12 @@ func (op *Join) Marshal(n jsn.Marshaler) {
 
 func Join_Repeats_Marshal(n jsn.Marshaler, vals *[]Join) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Join_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Join_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2848,12 +3050,15 @@ func Join_Optional_Marshal(n jsn.Marshaler, val **Join) {
 }
 
 func Join_Marshal(n jsn.Marshaler, val *Join) {
-	n.MapValues(Join_Type, Join_Type)
-	n.MapKey("", Join_Field_Sep)
-	/* */ rt.TextEval_Marshal(n, &val.Sep)
-	n.MapKey("parts", Join_Field_Parts)
-	/* */ rt.TextEval_Repeats_Marshal(n, &val.Parts)
-	n.EndValues()
+	if n.MapValues(Join_Type, Join_Type) {
+		if n.MapKey("", Join_Field_Sep) {
+			rt.TextEval_Marshal(n, &val.Sep)
+		}
+		if n.MapKey("parts", Join_Field_Parts) {
+			rt.TextEval_Repeats_Marshal(n, &val.Parts)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2879,11 +3084,12 @@ func (op *KindOf) Marshal(n jsn.Marshaler) {
 
 func KindOf_Repeats_Marshal(n jsn.Marshaler, vals *[]KindOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			KindOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				KindOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2895,10 +3101,12 @@ func KindOf_Optional_Marshal(n jsn.Marshaler, val **KindOf) {
 }
 
 func KindOf_Marshal(n jsn.Marshaler, val *KindOf) {
-	n.MapValues(KindOf_Type, KindOf_Type)
-	n.MapKey("", KindOf_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues(KindOf_Type, KindOf_Type) {
+		if n.MapKey("", KindOf_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2924,11 +3132,12 @@ func (op *KindsOf) Marshal(n jsn.Marshaler) {
 
 func KindsOf_Repeats_Marshal(n jsn.Marshaler, vals *[]KindsOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			KindsOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				KindsOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2940,10 +3149,12 @@ func KindsOf_Optional_Marshal(n jsn.Marshaler, val **KindsOf) {
 }
 
 func KindsOf_Marshal(n jsn.Marshaler, val *KindsOf) {
-	n.MapValues(KindsOf_Type, KindsOf_Type)
-	n.MapKey("", KindsOf_Field_Kind)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Kind)
-	n.EndValues()
+	if n.MapValues(KindsOf_Type, KindsOf_Type) {
+		if n.MapKey("", KindsOf_Field_Kind) {
+			value.Text_Unboxed_Marshal(n, &val.Kind)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -2966,11 +3177,12 @@ func (op *LessThan) Marshal(n jsn.Marshaler) {
 
 func LessThan_Repeats_Marshal(n jsn.Marshaler, vals *[]LessThan) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			LessThan_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				LessThan_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -2982,8 +3194,9 @@ func LessThan_Optional_Marshal(n jsn.Marshaler, val **LessThan) {
 }
 
 func LessThan_Marshal(n jsn.Marshaler, val *LessThan) {
-	n.MapValues(LessThan_Type, LessThan_Type)
-	n.EndValues()
+	if n.MapValues(LessThan_Type, LessThan_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -3010,11 +3223,12 @@ func (op *MakeLowercase) Marshal(n jsn.Marshaler) {
 
 func MakeLowercase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeLowercase) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			MakeLowercase_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				MakeLowercase_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3026,10 +3240,12 @@ func MakeLowercase_Optional_Marshal(n jsn.Marshaler, val **MakeLowercase) {
 }
 
 func MakeLowercase_Marshal(n jsn.Marshaler, val *MakeLowercase) {
-	n.MapValues("lower", MakeLowercase_Type)
-	n.MapKey("", MakeLowercase_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("lower", MakeLowercase_Type) {
+		if n.MapKey("", MakeLowercase_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3056,11 +3272,12 @@ func (op *MakeReversed) Marshal(n jsn.Marshaler) {
 
 func MakeReversed_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeReversed) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			MakeReversed_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				MakeReversed_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3072,10 +3289,12 @@ func MakeReversed_Optional_Marshal(n jsn.Marshaler, val **MakeReversed) {
 }
 
 func MakeReversed_Marshal(n jsn.Marshaler, val *MakeReversed) {
-	n.MapValues("reverse", MakeReversed_Type)
-	n.MapKey("", MakeReversed_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("reverse", MakeReversed_Type) {
+		if n.MapKey("", MakeReversed_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3102,11 +3321,12 @@ func (op *MakeSentenceCase) Marshal(n jsn.Marshaler) {
 
 func MakeSentenceCase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeSentenceCase) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			MakeSentenceCase_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				MakeSentenceCase_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3118,10 +3338,12 @@ func MakeSentenceCase_Optional_Marshal(n jsn.Marshaler, val **MakeSentenceCase) 
 }
 
 func MakeSentenceCase_Marshal(n jsn.Marshaler, val *MakeSentenceCase) {
-	n.MapValues("sentence", MakeSentenceCase_Type)
-	n.MapKey("", MakeSentenceCase_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("sentence", MakeSentenceCase_Type) {
+		if n.MapKey("", MakeSentenceCase_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3148,11 +3370,12 @@ func (op *MakeTitleCase) Marshal(n jsn.Marshaler) {
 
 func MakeTitleCase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeTitleCase) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			MakeTitleCase_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				MakeTitleCase_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3164,10 +3387,12 @@ func MakeTitleCase_Optional_Marshal(n jsn.Marshaler, val **MakeTitleCase) {
 }
 
 func MakeTitleCase_Marshal(n jsn.Marshaler, val *MakeTitleCase) {
-	n.MapValues("title", MakeTitleCase_Type)
-	n.MapKey("", MakeTitleCase_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("title", MakeTitleCase_Type) {
+		if n.MapKey("", MakeTitleCase_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3194,11 +3419,12 @@ func (op *MakeUppercase) Marshal(n jsn.Marshaler) {
 
 func MakeUppercase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeUppercase) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			MakeUppercase_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				MakeUppercase_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3210,10 +3436,12 @@ func MakeUppercase_Optional_Marshal(n jsn.Marshaler, val **MakeUppercase) {
 }
 
 func MakeUppercase_Marshal(n jsn.Marshaler, val *MakeUppercase) {
-	n.MapValues("upper", MakeUppercase_Type)
-	n.MapKey("", MakeUppercase_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("upper", MakeUppercase_Type) {
+		if n.MapKey("", MakeUppercase_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3242,11 +3470,12 @@ func (op *Matches) Marshal(n jsn.Marshaler) {
 
 func Matches_Repeats_Marshal(n jsn.Marshaler, vals *[]Matches) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Matches_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Matches_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3258,12 +3487,15 @@ func Matches_Optional_Marshal(n jsn.Marshaler, val **Matches) {
 }
 
 func Matches_Marshal(n jsn.Marshaler, val *Matches) {
-	n.MapValues(Matches_Type, Matches_Type)
-	n.MapKey("", Matches_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.MapKey("to", Matches_Field_Pattern)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Pattern)
-	n.EndValues()
+	if n.MapValues(Matches_Type, Matches_Type) {
+		if n.MapKey("", Matches_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		if n.MapKey("to", Matches_Field_Pattern) {
+			value.Text_Unboxed_Marshal(n, &val.Pattern)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3289,11 +3521,12 @@ func (op *NameOf) Marshal(n jsn.Marshaler) {
 
 func NameOf_Repeats_Marshal(n jsn.Marshaler, vals *[]NameOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			NameOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				NameOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3305,10 +3538,12 @@ func NameOf_Optional_Marshal(n jsn.Marshaler, val **NameOf) {
 }
 
 func NameOf_Marshal(n jsn.Marshaler, val *NameOf) {
-	n.MapValues(NameOf_Type, NameOf_Type)
-	n.MapKey("", NameOf_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues(NameOf_Type, NameOf_Type) {
+		if n.MapKey("", NameOf_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3332,11 +3567,12 @@ func (op *Never) Marshal(n jsn.Marshaler) {
 
 func Never_Repeats_Marshal(n jsn.Marshaler, vals *[]Never) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Never_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Never_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3348,8 +3584,9 @@ func Never_Optional_Marshal(n jsn.Marshaler, val **Never) {
 }
 
 func Never_Marshal(n jsn.Marshaler, val *Never) {
-	n.MapValues("always", Never_Type)
-	n.EndValues()
+	if n.MapValues("always", Never_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -3373,11 +3610,12 @@ func (op *Newline) Marshal(n jsn.Marshaler) {
 
 func Newline_Repeats_Marshal(n jsn.Marshaler, vals *[]Newline) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Newline_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Newline_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3389,8 +3627,9 @@ func Newline_Optional_Marshal(n jsn.Marshaler, val **Newline) {
 }
 
 func Newline_Marshal(n jsn.Marshaler, val *Newline) {
-	n.MapValues("br", Newline_Type)
-	n.EndValues()
+	if n.MapValues("br", Newline_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -3413,11 +3652,12 @@ func (op *Next) Marshal(n jsn.Marshaler) {
 
 func Next_Repeats_Marshal(n jsn.Marshaler, vals *[]Next) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Next_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Next_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3429,8 +3669,9 @@ func Next_Optional_Marshal(n jsn.Marshaler, val **Next) {
 }
 
 func Next_Marshal(n jsn.Marshaler, val *Next) {
-	n.MapValues(Next_Type, Next_Type)
-	n.EndValues()
+	if n.MapValues(Next_Type, Next_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -3456,11 +3697,12 @@ func (op *Not) Marshal(n jsn.Marshaler) {
 
 func Not_Repeats_Marshal(n jsn.Marshaler, vals *[]Not) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Not_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Not_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3472,10 +3714,12 @@ func Not_Optional_Marshal(n jsn.Marshaler, val **Not) {
 }
 
 func Not_Marshal(n jsn.Marshaler, val *Not) {
-	n.MapValues(Not_Type, Not_Type)
-	n.MapKey("", Not_Field_Test)
-	/* */ rt.BoolEval_Marshal(n, &val.Test)
-	n.EndValues()
+	if n.MapValues(Not_Type, Not_Type) {
+		if n.MapKey("", Not_Field_Test) {
+			rt.BoolEval_Marshal(n, &val.Test)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3502,11 +3746,12 @@ func (op *NumValue) Marshal(n jsn.Marshaler) {
 
 func NumValue_Repeats_Marshal(n jsn.Marshaler, vals *[]NumValue) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			NumValue_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				NumValue_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3518,10 +3763,12 @@ func NumValue_Optional_Marshal(n jsn.Marshaler, val **NumValue) {
 }
 
 func NumValue_Marshal(n jsn.Marshaler, val *NumValue) {
-	n.MapValues("num", NumValue_Type)
-	n.MapLiteral(NumValue_Field_Num)
-	/* */ value.Number_Unboxed_Marshal(n, &val.Num)
-	n.EndValues()
+	if n.MapValues("num", NumValue_Type) {
+		if n.MapKey("", NumValue_Field_Num) {
+			value.Number_Unboxed_Marshal(n, &val.Num)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3548,11 +3795,12 @@ func (op *Numbers) Marshal(n jsn.Marshaler) {
 
 func Numbers_Repeats_Marshal(n jsn.Marshaler, vals *[]Numbers) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Numbers_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Numbers_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3564,10 +3812,12 @@ func Numbers_Optional_Marshal(n jsn.Marshaler, val **Numbers) {
 }
 
 func Numbers_Marshal(n jsn.Marshaler, val *Numbers) {
-	n.MapValues("nums", Numbers_Type)
-	n.MapKey("", Numbers_Field_Values)
-	/* */ value.Number_Unboxed_Repeats_Marshal(n, &val.Values)
-	n.EndValues()
+	if n.MapValues("nums", Numbers_Type) {
+		if n.MapKey("", Numbers_Field_Values) {
+			value.Number_Unboxed_Repeats_Marshal(n, &val.Values)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3594,11 +3844,12 @@ func (op *ObjectExists) Marshal(n jsn.Marshaler) {
 
 func ObjectExists_Repeats_Marshal(n jsn.Marshaler, vals *[]ObjectExists) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ObjectExists_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ObjectExists_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3610,10 +3861,12 @@ func ObjectExists_Optional_Marshal(n jsn.Marshaler, val **ObjectExists) {
 }
 
 func ObjectExists_Marshal(n jsn.Marshaler, val *ObjectExists) {
-	n.MapValues("is", ObjectExists_Type)
-	n.MapKey("valid", ObjectExists_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.EndValues()
+	if n.MapValues("is", ObjectExists_Type) {
+		if n.MapKey("valid", ObjectExists_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3640,11 +3893,12 @@ func (op *Pluralize) Marshal(n jsn.Marshaler) {
 
 func Pluralize_Repeats_Marshal(n jsn.Marshaler, vals *[]Pluralize) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Pluralize_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Pluralize_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3656,10 +3910,12 @@ func Pluralize_Optional_Marshal(n jsn.Marshaler, val **Pluralize) {
 }
 
 func Pluralize_Marshal(n jsn.Marshaler, val *Pluralize) {
-	n.MapValues("plural", Pluralize_Type)
-	n.MapKey("of", Pluralize_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("plural", Pluralize_Type) {
+		if n.MapKey("of", Pluralize_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3686,11 +3942,12 @@ func (op *PrintNum) Marshal(n jsn.Marshaler) {
 
 func PrintNum_Repeats_Marshal(n jsn.Marshaler, vals *[]PrintNum) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			PrintNum_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				PrintNum_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3702,10 +3959,12 @@ func PrintNum_Optional_Marshal(n jsn.Marshaler, val **PrintNum) {
 }
 
 func PrintNum_Marshal(n jsn.Marshaler, val *PrintNum) {
-	n.MapValues("numeral", PrintNum_Type)
-	n.MapKey("", PrintNum_Field_Num)
-	/* */ rt.NumberEval_Marshal(n, &val.Num)
-	n.EndValues()
+	if n.MapValues("numeral", PrintNum_Type) {
+		if n.MapKey("", PrintNum_Field_Num) {
+			rt.NumberEval_Marshal(n, &val.Num)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3732,11 +3991,12 @@ func (op *PrintNumWord) Marshal(n jsn.Marshaler) {
 
 func PrintNumWord_Repeats_Marshal(n jsn.Marshaler, vals *[]PrintNumWord) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			PrintNumWord_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				PrintNumWord_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3748,10 +4008,12 @@ func PrintNumWord_Optional_Marshal(n jsn.Marshaler, val **PrintNumWord) {
 }
 
 func PrintNumWord_Marshal(n jsn.Marshaler, val *PrintNumWord) {
-	n.MapValues("numeral", PrintNumWord_Type)
-	n.MapKey("words", PrintNumWord_Field_Num)
-	/* */ rt.NumberEval_Marshal(n, &val.Num)
-	n.EndValues()
+	if n.MapValues("numeral", PrintNumWord_Type) {
+		if n.MapKey("words", PrintNumWord_Field_Num) {
+			rt.NumberEval_Marshal(n, &val.Num)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3780,11 +4042,12 @@ func (op *ProductOf) Marshal(n jsn.Marshaler) {
 
 func ProductOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ProductOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			ProductOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				ProductOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3796,12 +4059,15 @@ func ProductOf_Optional_Marshal(n jsn.Marshaler, val **ProductOf) {
 }
 
 func ProductOf_Marshal(n jsn.Marshaler, val *ProductOf) {
-	n.MapValues("mul", ProductOf_Type)
-	n.MapKey("", ProductOf_Field_A)
-	/* */ rt.NumberEval_Marshal(n, &val.A)
-	n.MapKey("by", ProductOf_Field_B)
-	/* */ rt.NumberEval_Marshal(n, &val.B)
-	n.EndValues()
+	if n.MapValues("mul", ProductOf_Type) {
+		if n.MapKey("", ProductOf_Field_A) {
+			rt.NumberEval_Marshal(n, &val.A)
+		}
+		if n.MapKey("by", ProductOf_Field_B) {
+			rt.NumberEval_Marshal(n, &val.B)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3832,11 +4098,12 @@ func (op *PutAtField) Marshal(n jsn.Marshaler) {
 
 func PutAtField_Repeats_Marshal(n jsn.Marshaler, vals *[]PutAtField) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			PutAtField_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				PutAtField_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3848,14 +4115,18 @@ func PutAtField_Optional_Marshal(n jsn.Marshaler, val **PutAtField) {
 }
 
 func PutAtField_Marshal(n jsn.Marshaler, val *PutAtField) {
-	n.MapValues("put", PutAtField_Type)
-	n.MapKey("", PutAtField_Field_Into)
-	/* */ IntoTargetFields_Marshal(n, &val.Into)
-	n.MapKey("from", PutAtField_Field_From)
-	/* */ rt.Assignment_Marshal(n, &val.From)
-	n.MapKey("at", PutAtField_Field_AtField)
-	/* */ value.Text_Unboxed_Marshal(n, &val.AtField)
-	n.EndValues()
+	if n.MapValues("put", PutAtField_Type) {
+		if n.MapKey("", PutAtField_Field_Into) {
+			IntoTargetFields_Marshal(n, &val.Into)
+		}
+		if n.MapKey("from", PutAtField_Field_From) {
+			rt.Assignment_Marshal(n, &val.From)
+		}
+		if n.MapKey("at", PutAtField_Field_AtField) {
+			value.Text_Unboxed_Marshal(n, &val.AtField)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3884,11 +4155,12 @@ func (op *QuotientOf) Marshal(n jsn.Marshaler) {
 
 func QuotientOf_Repeats_Marshal(n jsn.Marshaler, vals *[]QuotientOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			QuotientOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				QuotientOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3900,12 +4172,15 @@ func QuotientOf_Optional_Marshal(n jsn.Marshaler, val **QuotientOf) {
 }
 
 func QuotientOf_Marshal(n jsn.Marshaler, val *QuotientOf) {
-	n.MapValues("div", QuotientOf_Type)
-	n.MapKey("", QuotientOf_Field_A)
-	/* */ rt.NumberEval_Marshal(n, &val.A)
-	n.MapKey("by", QuotientOf_Field_B)
-	/* */ rt.NumberEval_Marshal(n, &val.B)
-	n.EndValues()
+	if n.MapValues("div", QuotientOf_Type) {
+		if n.MapKey("", QuotientOf_Field_A) {
+			rt.NumberEval_Marshal(n, &val.A)
+		}
+		if n.MapKey("by", QuotientOf_Field_B) {
+			rt.NumberEval_Marshal(n, &val.B)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3934,11 +4209,12 @@ func (op *RemainderOf) Marshal(n jsn.Marshaler) {
 
 func RemainderOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RemainderOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			RemainderOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				RemainderOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3950,12 +4226,15 @@ func RemainderOf_Optional_Marshal(n jsn.Marshaler, val **RemainderOf) {
 }
 
 func RemainderOf_Marshal(n jsn.Marshaler, val *RemainderOf) {
-	n.MapValues("mod", RemainderOf_Type)
-	n.MapKey("", RemainderOf_Field_A)
-	/* */ rt.NumberEval_Marshal(n, &val.A)
-	n.MapKey("by", RemainderOf_Field_B)
-	/* */ rt.NumberEval_Marshal(n, &val.B)
-	n.EndValues()
+	if n.MapValues("mod", RemainderOf_Type) {
+		if n.MapKey("", RemainderOf_Field_A) {
+			rt.NumberEval_Marshal(n, &val.A)
+		}
+		if n.MapKey("by", RemainderOf_Field_B) {
+			rt.NumberEval_Marshal(n, &val.B)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -3983,11 +4262,12 @@ func (op *Response) Marshal(n jsn.Marshaler) {
 
 func Response_Repeats_Marshal(n jsn.Marshaler, vals *[]Response) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Response_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Response_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -3999,12 +4279,15 @@ func Response_Optional_Marshal(n jsn.Marshaler, val **Response) {
 }
 
 func Response_Marshal(n jsn.Marshaler, val *Response) {
-	n.MapValues(Response_Type, Response_Type)
-	n.MapKey("", Response_Field_Name)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Name)
-	n.MapKey("text", Response_Field_Text)
-	/* */ rt.TextEval_Optional_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues(Response_Type, Response_Type) {
+		if n.MapKey("", Response_Field_Name) {
+			value.Text_Unboxed_Marshal(n, &val.Name)
+		}
+		if n.MapKey("text", Response_Field_Text) {
+			rt.TextEval_Optional_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4030,11 +4313,12 @@ func (op *Row) Marshal(n jsn.Marshaler) {
 
 func Row_Repeats_Marshal(n jsn.Marshaler, vals *[]Row) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Row_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Row_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4046,10 +4330,12 @@ func Row_Optional_Marshal(n jsn.Marshaler, val **Row) {
 }
 
 func Row_Marshal(n jsn.Marshaler, val *Row) {
-	n.MapValues(Row_Type, Row_Type)
-	n.MapKey("", Row_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.EndValues()
+	if n.MapValues(Row_Type, Row_Type) {
+		if n.MapKey("", Row_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4075,11 +4361,12 @@ func (op *Rows) Marshal(n jsn.Marshaler) {
 
 func Rows_Repeats_Marshal(n jsn.Marshaler, vals *[]Rows) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Rows_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Rows_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4091,10 +4378,12 @@ func Rows_Optional_Marshal(n jsn.Marshaler, val **Rows) {
 }
 
 func Rows_Marshal(n jsn.Marshaler, val *Rows) {
-	n.MapValues(Rows_Type, Rows_Type)
-	n.MapKey("", Rows_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.EndValues()
+	if n.MapValues(Rows_Type, Rows_Type) {
+		if n.MapKey("", Rows_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4121,11 +4410,12 @@ func (op *SayText) Marshal(n jsn.Marshaler) {
 
 func SayText_Repeats_Marshal(n jsn.Marshaler, vals *[]SayText) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			SayText_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				SayText_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4137,10 +4427,12 @@ func SayText_Optional_Marshal(n jsn.Marshaler, val **SayText) {
 }
 
 func SayText_Marshal(n jsn.Marshaler, val *SayText) {
-	n.MapValues("say", SayText_Type)
-	n.MapKey("", SayText_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("say", SayText_Type) {
+		if n.MapKey("", SayText_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4169,11 +4461,12 @@ func (op *SetTrait) Marshal(n jsn.Marshaler) {
 
 func SetTrait_Repeats_Marshal(n jsn.Marshaler, vals *[]SetTrait) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			SetTrait_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				SetTrait_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4185,12 +4478,15 @@ func SetTrait_Optional_Marshal(n jsn.Marshaler, val **SetTrait) {
 }
 
 func SetTrait_Marshal(n jsn.Marshaler, val *SetTrait) {
-	n.MapValues("put", SetTrait_Type)
-	n.MapKey("obj", SetTrait_Field_Object)
-	/* */ rt.TextEval_Marshal(n, &val.Object)
-	n.MapKey("trait", SetTrait_Field_Trait)
-	/* */ rt.TextEval_Marshal(n, &val.Trait)
-	n.EndValues()
+	if n.MapValues("put", SetTrait_Type) {
+		if n.MapKey("obj", SetTrait_Field_Object) {
+			rt.TextEval_Marshal(n, &val.Object)
+		}
+		if n.MapKey("trait", SetTrait_Field_Trait) {
+			rt.TextEval_Marshal(n, &val.Trait)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4217,11 +4513,12 @@ func (op *Singularize) Marshal(n jsn.Marshaler) {
 
 func Singularize_Repeats_Marshal(n jsn.Marshaler, vals *[]Singularize) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Singularize_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Singularize_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4233,10 +4530,12 @@ func Singularize_Optional_Marshal(n jsn.Marshaler, val **Singularize) {
 }
 
 func Singularize_Marshal(n jsn.Marshaler, val *Singularize) {
-	n.MapValues("singular", Singularize_Type)
-	n.MapKey("of", Singularize_Field_Text)
-	/* */ rt.TextEval_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("singular", Singularize_Type) {
+		if n.MapKey("of", Singularize_Field_Text) {
+			rt.TextEval_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4263,11 +4562,12 @@ func (op *SlashText) Marshal(n jsn.Marshaler) {
 
 func SlashText_Repeats_Marshal(n jsn.Marshaler, vals *[]SlashText) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			SlashText_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				SlashText_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4279,10 +4579,12 @@ func SlashText_Optional_Marshal(n jsn.Marshaler, val **SlashText) {
 }
 
 func SlashText_Marshal(n jsn.Marshaler, val *SlashText) {
-	n.MapValues("slashes", SlashText_Type)
-	n.MapKey("", SlashText_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.EndValues()
+	if n.MapValues("slashes", SlashText_Type) {
+		if n.MapKey("", SlashText_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4306,11 +4608,12 @@ func (op *Softline) Marshal(n jsn.Marshaler) {
 
 func Softline_Repeats_Marshal(n jsn.Marshaler, vals *[]Softline) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Softline_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Softline_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4322,8 +4625,9 @@ func Softline_Optional_Marshal(n jsn.Marshaler, val **Softline) {
 }
 
 func Softline_Marshal(n jsn.Marshaler, val *Softline) {
-	n.MapValues("wbr", Softline_Type)
-	n.EndValues()
+	if n.MapValues("wbr", Softline_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -4350,11 +4654,12 @@ func (op *SpanText) Marshal(n jsn.Marshaler) {
 
 func SpanText_Repeats_Marshal(n jsn.Marshaler, vals *[]SpanText) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			SpanText_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				SpanText_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4366,10 +4671,12 @@ func SpanText_Optional_Marshal(n jsn.Marshaler, val **SpanText) {
 }
 
 func SpanText_Marshal(n jsn.Marshaler, val *SpanText) {
-	n.MapValues("spaces", SpanText_Type)
-	n.MapKey("", SpanText_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.EndValues()
+	if n.MapValues("spaces", SpanText_Type) {
+		if n.MapKey("", SpanText_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4398,11 +4705,12 @@ func (op *SumOf) Marshal(n jsn.Marshaler) {
 
 func SumOf_Repeats_Marshal(n jsn.Marshaler, vals *[]SumOf) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			SumOf_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				SumOf_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4414,12 +4722,15 @@ func SumOf_Optional_Marshal(n jsn.Marshaler, val **SumOf) {
 }
 
 func SumOf_Marshal(n jsn.Marshaler, val *SumOf) {
-	n.MapValues("inc", SumOf_Type)
-	n.MapKey("", SumOf_Field_A)
-	/* */ rt.NumberEval_Marshal(n, &val.A)
-	n.MapKey("by", SumOf_Field_B)
-	/* */ rt.NumberEval_Optional_Marshal(n, &val.B)
-	n.EndValues()
+	if n.MapValues("inc", SumOf_Type) {
+		if n.MapKey("", SumOf_Field_A) {
+			rt.NumberEval_Marshal(n, &val.A)
+		}
+		if n.MapKey("by", SumOf_Field_B) {
+			rt.NumberEval_Optional_Marshal(n, &val.B)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4446,11 +4757,12 @@ func (op *TextValue) Marshal(n jsn.Marshaler) {
 
 func TextValue_Repeats_Marshal(n jsn.Marshaler, vals *[]TextValue) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			TextValue_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				TextValue_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4462,10 +4774,12 @@ func TextValue_Optional_Marshal(n jsn.Marshaler, val **TextValue) {
 }
 
 func TextValue_Marshal(n jsn.Marshaler, val *TextValue) {
-	n.MapValues("txt", TextValue_Type)
-	n.MapKey("", TextValue_Field_Text)
-	/* */ value.Text_Unboxed_Marshal(n, &val.Text)
-	n.EndValues()
+	if n.MapValues("txt", TextValue_Type) {
+		if n.MapKey("", TextValue_Field_Text) {
+			value.Text_Unboxed_Marshal(n, &val.Text)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4492,11 +4806,12 @@ func (op *Texts) Marshal(n jsn.Marshaler) {
 
 func Texts_Repeats_Marshal(n jsn.Marshaler, vals *[]Texts) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Texts_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Texts_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4508,10 +4823,12 @@ func Texts_Optional_Marshal(n jsn.Marshaler, val **Texts) {
 }
 
 func Texts_Marshal(n jsn.Marshaler, val *Texts) {
-	n.MapValues("txts", Texts_Type)
-	n.MapKey("", Texts_Field_Values)
-	/* */ value.Text_Unboxed_Repeats_Marshal(n, &val.Values)
-	n.EndValues()
+	if n.MapValues("txts", Texts_Type) {
+		if n.MapKey("", Texts_Field_Values) {
+			value.Text_Unboxed_Repeats_Marshal(n, &val.Values)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -4528,11 +4845,12 @@ func Trigger_Marshal(n jsn.Marshaler, ptr *Trigger) {
 
 func Trigger_Repeats_Marshal(n jsn.Marshaler, vals *[]Trigger) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Trigger_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Trigger_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4557,11 +4875,12 @@ func (op *TriggerCycle) Marshal(n jsn.Marshaler) {
 
 func TriggerCycle_Repeats_Marshal(n jsn.Marshaler, vals *[]TriggerCycle) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			TriggerCycle_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				TriggerCycle_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4573,8 +4892,9 @@ func TriggerCycle_Optional_Marshal(n jsn.Marshaler, val **TriggerCycle) {
 }
 
 func TriggerCycle_Marshal(n jsn.Marshaler, val *TriggerCycle) {
-	n.MapValues("every", TriggerCycle_Type)
-	n.EndValues()
+	if n.MapValues("every", TriggerCycle_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -4598,11 +4918,12 @@ func (op *TriggerOnce) Marshal(n jsn.Marshaler) {
 
 func TriggerOnce_Repeats_Marshal(n jsn.Marshaler, vals *[]TriggerOnce) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			TriggerOnce_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				TriggerOnce_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4614,8 +4935,9 @@ func TriggerOnce_Optional_Marshal(n jsn.Marshaler, val **TriggerOnce) {
 }
 
 func TriggerOnce_Marshal(n jsn.Marshaler, val *TriggerOnce) {
-	n.MapValues("at", TriggerOnce_Type)
-	n.EndValues()
+	if n.MapValues("at", TriggerOnce_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -4639,11 +4961,12 @@ func (op *TriggerSwitch) Marshal(n jsn.Marshaler) {
 
 func TriggerSwitch_Repeats_Marshal(n jsn.Marshaler, vals *[]TriggerSwitch) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			TriggerSwitch_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				TriggerSwitch_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4655,8 +4978,9 @@ func TriggerSwitch_Optional_Marshal(n jsn.Marshaler, val **TriggerSwitch) {
 }
 
 func TriggerSwitch_Marshal(n jsn.Marshaler, val *TriggerSwitch) {
-	n.MapValues("after", TriggerSwitch_Type)
-	n.EndValues()
+	if n.MapValues("after", TriggerSwitch_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -4680,11 +5004,12 @@ func (op *Unequal) Marshal(n jsn.Marshaler) {
 
 func Unequal_Repeats_Marshal(n jsn.Marshaler, vals *[]Unequal) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			Unequal_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				Unequal_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4696,8 +5021,9 @@ func Unequal_Optional_Marshal(n jsn.Marshaler, val **Unequal) {
 }
 
 func Unequal_Marshal(n jsn.Marshaler, val *Unequal) {
-	n.MapValues("other_than", Unequal_Type)
-	n.EndValues()
+	if n.MapValues("other_than", Unequal_Type) {
+		n.EndValues()
+	}
 	return
 }
 
@@ -4726,11 +5052,12 @@ func (op *While) Marshal(n jsn.Marshaler) {
 
 func While_Repeats_Marshal(n jsn.Marshaler, vals *[]While) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			While_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				While_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -4742,12 +5069,15 @@ func While_Optional_Marshal(n jsn.Marshaler, val **While) {
 }
 
 func While_Marshal(n jsn.Marshaler, val *While) {
-	n.MapValues("repeating", While_Type)
-	n.MapKey("", While_Field_True)
-	/* */ rt.BoolEval_Marshal(n, &val.True)
-	n.MapKey("do", While_Field_Do)
-	/* */ Activity_Marshal(n, &val.Do)
-	n.EndValues()
+	if n.MapValues("repeating", While_Type) {
+		if n.MapKey("", While_Field_True) {
+			rt.BoolEval_Marshal(n, &val.True)
+		}
+		if n.MapKey("do", While_Field_Do) {
+			Activity_Marshal(n, &val.Do)
+		}
+		n.EndValues()
+	}
 	return
 }
 

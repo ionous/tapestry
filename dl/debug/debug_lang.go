@@ -33,11 +33,12 @@ func (op *DebugLog) Marshal(n jsn.Marshaler) {
 
 func DebugLog_Repeats_Marshal(n jsn.Marshaler, vals *[]DebugLog) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			DebugLog_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				DebugLog_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -49,12 +50,15 @@ func DebugLog_Optional_Marshal(n jsn.Marshaler, val **DebugLog) {
 }
 
 func DebugLog_Marshal(n jsn.Marshaler, val *DebugLog) {
-	n.MapValues("log", DebugLog_Type)
-	n.MapKey("", DebugLog_Field_Value)
-	/* */ rt.Assignment_Marshal(n, &val.Value)
-	n.MapKey("as", DebugLog_Field_LogLevel)
-	/* */ LoggingLevel_Optional_Marshal(n, &val.LogLevel)
-	n.EndValues()
+	if n.MapValues("log", DebugLog_Type) {
+		if n.MapKey("", DebugLog_Field_Value) {
+			rt.Assignment_Marshal(n, &val.Value)
+		}
+		if n.MapKey("as", DebugLog_Field_LogLevel) {
+			LoggingLevel_Optional_Marshal(n, &val.LogLevel)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -80,11 +84,12 @@ func (op *DoNothing) Marshal(n jsn.Marshaler) {
 
 func DoNothing_Repeats_Marshal(n jsn.Marshaler, vals *[]DoNothing) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			DoNothing_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				DoNothing_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
@@ -96,10 +101,12 @@ func DoNothing_Optional_Marshal(n jsn.Marshaler, val **DoNothing) {
 }
 
 func DoNothing_Marshal(n jsn.Marshaler, val *DoNothing) {
-	n.MapValues(DoNothing_Type, DoNothing_Type)
-	n.MapKey("why", DoNothing_Field_Reason)
-	/* */ value.Text_Unboxed_Optional_Marshal(n, &val.Reason)
-	n.EndValues()
+	if n.MapValues(DoNothing_Type, DoNothing_Type) {
+		if n.MapKey("why", DoNothing_Field_Reason) {
+			value.Text_Unboxed_Optional_Marshal(n, &val.Reason)
+		}
+		n.EndValues()
+	}
 	return
 }
 
@@ -155,11 +162,12 @@ func LoggingLevel_Marshal(n jsn.Marshaler, val *LoggingLevel) {
 
 func LoggingLevel_Repeats_Marshal(n jsn.Marshaler, vals *[]LoggingLevel) {
 	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		n.RepeatValues(cnt)
-		for _, el := range *vals {
-			LoggingLevel_Marshal(n, &el)
+		if n.RepeatValues(cnt) {
+			for _, el := range *vals {
+				LoggingLevel_Marshal(n, &el)
+			}
+			n.EndValues()
 		}
-		n.EndValues()
 	}
 	return
 }
