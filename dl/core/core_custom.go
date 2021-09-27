@@ -7,7 +7,7 @@ import (
 )
 
 func GetVar_Marshal(n jsn.Marshaler, val *GetVar) {
-	if _, ok := n.(*detailed.DetailedMarshaler); ok {
+	if _, ok := n.(*detailed.Chart); ok {
 		GetVar_Marshal_Customized(n, val)
 	} else if str := val.Name.Str; len(str) > 0 && str[0] == '@' {
 		// this would conflict with @@ text serialization.

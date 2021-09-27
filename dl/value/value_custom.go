@@ -6,7 +6,7 @@ import (
 )
 
 func Text_Marshal(n jsn.Marshaler, val *Text) {
-	if _, ok := n.(*detailed.DetailedMarshaler); ok {
+	if _, ok := n.(detailed.Chart); ok {
 		Text_Marshal_Customized(n, val)
 	} else {
 		// custom serialization to avoid conflicts with @variables
