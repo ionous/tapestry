@@ -157,7 +157,7 @@ func RenderFlags_Optional_Marshal(n jsn.Marshaler, val *RenderFlags) {
 }
 
 func RenderFlags_Marshal(n jsn.Marshaler, val *RenderFlags) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {

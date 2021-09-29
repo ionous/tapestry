@@ -49,9 +49,9 @@ func {{Pascal name}}_Marshal{{Custom name}}(n jsn.Marshaler, val *{{Pascal name}
   n.SetCursor(val.At.Offset)
 {{/if}}
 {{#if (IsEnumerated this)}}
-  n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+  n.EnumValue(jsn.MakeEnum(val, &val.Str))
 {{else}}
-  n.SpecifyValue({{Pascal name}}_Type, val.{{Pascal uses}})
+  n.{{Pascal uses}}Value(jsn.Make{{Pascal uses}}(val, &val.{{Pascal uses}}))
 {{/if}}
 }
 

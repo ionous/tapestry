@@ -14,17 +14,15 @@ func NewDetailedMarshaler() Chart {
 	return Chart{chart.NewMachine(newBlock)}
 }
 
-// generically commits primitive value(s)
 // detailed data represents even primitive values as a map of {id,type,value}.
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
-	next.OnValue = func(kind string, value interface{}) {
+	return chart.OnValue(next, func(k string, v interface{}) {
 		m.Commit(detValue{
 			Id:    m.FlushCursor(),
-			Type:  kind,
-			Value: value,
+			Type:  k,
+			Value: v,
 		})
-	}
-	return next
+	})
 }
 
 // blocks handle beginning new flows, swaps, or repeats

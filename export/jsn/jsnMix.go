@@ -12,7 +12,10 @@ type MarshalMix struct {
 	OnPick    func(Picker) bool
 	OnRepeat  func(hint int) bool
 	OnEnd     func()
-	OnValue   func(kind string, value interface{})
+	OnBool    func(BoolMarshaler)
+	OnEnum    func(EnumMarshaler)
+	OnNum     func(NumMarshaler)
+	OnStr     func(StrMarshaler)
 	OnCursor  func(id string)
 	OnWarn    func(error)
 	OnError   func(error)
@@ -65,21 +68,33 @@ func (ms *MarshalMix) EndValues() {
 		ms.Error(errutil.New("unexpected end"))
 	}
 }
-func (ms *MarshalMix) SpecifyValue(kind string, val interface{}) {
-	if call := ms.OnValue; call != nil {
-		call(kind, val)
+func (ms *MarshalMix) BoolValue(val BoolMarshaler) {
+	if call := ms.OnBool; call != nil {
+		call(val)
 	} else {
-		ms.Error(errutil.New("unexpected value", kind, val))
+		ms.Error(errutil.New("unexpected value", val))
 	}
 }
-func (ms *MarshalMix) SpecifyEnum(val Enumerator) {
-	var out string
-	if k, v := val.GetEnum(); len(k) > 0 {
-		out = k
+func (ms *MarshalMix) EnumValue(val EnumMarshaler) {
+	if call := ms.OnEnum; call != nil {
+		call(val)
 	} else {
-		out = v
+		ms.Error(errutil.New("unexpected value", val))
 	}
-	ms.SpecifyValue(val.GetType(), out)
+}
+func (ms *MarshalMix) NumValue(val NumMarshaler) {
+	if call := ms.OnNum; call != nil {
+		call(val)
+	} else {
+		ms.Error(errutil.New("unexpected value", val))
+	}
+}
+func (ms *MarshalMix) StrValue(val StrMarshaler) {
+	if call := ms.OnStr; call != nil {
+		call(val)
+	} else {
+		ms.Error(errutil.New("unexpected value", val))
+	}
 }
 func (ms *MarshalMix) SetCursor(id string) {
 	if call := ms.OnCursor; call != nil {

@@ -53,7 +53,7 @@ func AbstractAction_Optional_Marshal(n jsn.Marshaler, val *AbstractAction) {
 }
 
 func AbstractAction_Marshal(n jsn.Marshaler, val *AbstractAction) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func AbstractAction_Repeats_Marshal(n jsn.Marshaler, vals *[]AbstractAction) {
@@ -223,7 +223,7 @@ func ActionName_Optional_Marshal(n jsn.Marshaler, val *ActionName) {
 
 func ActionName_Marshal(n jsn.Marshaler, val *ActionName) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(ActionName_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func ActionName_Repeats_Marshal(n jsn.Marshaler, vals *[]ActionName) {
@@ -364,7 +364,7 @@ func Ana_Optional_Marshal(n jsn.Marshaler, val *Ana) {
 }
 
 func Ana_Marshal(n jsn.Marshaler, val *Ana) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func Ana_Repeats_Marshal(n jsn.Marshaler, vals *[]Ana) {
@@ -426,7 +426,7 @@ func AreAn_Optional_Marshal(n jsn.Marshaler, val *AreAn) {
 }
 
 func AreAn_Marshal(n jsn.Marshaler, val *AreAn) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func AreAn_Repeats_Marshal(n jsn.Marshaler, vals *[]AreAn) {
@@ -484,7 +484,7 @@ func AreBeing_Optional_Marshal(n jsn.Marshaler, val *AreBeing) {
 }
 
 func AreBeing_Marshal(n jsn.Marshaler, val *AreBeing) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func AreBeing_Repeats_Marshal(n jsn.Marshaler, vals *[]AreBeing) {
@@ -542,7 +542,7 @@ func AreEither_Optional_Marshal(n jsn.Marshaler, val *AreEither) {
 }
 
 func AreEither_Marshal(n jsn.Marshaler, val *AreEither) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func AreEither_Repeats_Marshal(n jsn.Marshaler, vals *[]AreEither) {
@@ -709,7 +709,7 @@ func Aspect_Optional_Marshal(n jsn.Marshaler, val *Aspect) {
 
 func Aspect_Marshal(n jsn.Marshaler, val *Aspect) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(Aspect_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func Aspect_Repeats_Marshal(n jsn.Marshaler, vals *[]Aspect) {
@@ -999,7 +999,7 @@ func Certainty_Optional_Marshal(n jsn.Marshaler, val *Certainty) {
 
 func Certainty_Marshal(n jsn.Marshaler, val *Certainty) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func Certainty_Repeats_Marshal(n jsn.Marshaler, vals *[]Certainty) {
@@ -1341,7 +1341,7 @@ func Determiner_Optional_Marshal(n jsn.Marshaler, val *Determiner) {
 }
 
 func Determiner_Marshal(n jsn.Marshaler, val *Determiner) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func Determiner_Repeats_Marshal(n jsn.Marshaler, vals *[]Determiner) {
@@ -1519,7 +1519,7 @@ func EventName_Optional_Marshal(n jsn.Marshaler, val *EventName) {
 
 func EventName_Marshal(n jsn.Marshaler, val *EventName) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(EventName_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func EventName_Repeats_Marshal(n jsn.Marshaler, vals *[]EventName) {
@@ -1578,7 +1578,7 @@ func EventPhase_Optional_Marshal(n jsn.Marshaler, val *EventPhase) {
 }
 
 func EventPhase_Marshal(n jsn.Marshaler, val *EventPhase) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func EventPhase_Repeats_Marshal(n jsn.Marshaler, vals *[]EventPhase) {
@@ -2648,7 +2648,7 @@ func NounName_Optional_Marshal(n jsn.Marshaler, val *NounName) {
 
 func NounName_Marshal(n jsn.Marshaler, val *NounName) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(NounName_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func NounName_Repeats_Marshal(n jsn.Marshaler, vals *[]NounName) {
@@ -2971,7 +2971,7 @@ func NumberList_Optional_Marshal(n jsn.Marshaler, val *NumberList) {
 }
 
 func NumberList_Marshal(n jsn.Marshaler, val *NumberList) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func NumberList_Repeats_Marshal(n jsn.Marshaler, vals *[]NumberList) {
@@ -3446,7 +3446,7 @@ func PatternFlags_Optional_Marshal(n jsn.Marshaler, val *PatternFlags) {
 }
 
 func PatternFlags_Marshal(n jsn.Marshaler, val *PatternFlags) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func PatternFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternFlags) {
@@ -3726,7 +3726,7 @@ func PatternType_Optional_Marshal(n jsn.Marshaler, val *PatternType) {
 
 func PatternType_Marshal(n jsn.Marshaler, val *PatternType) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func PatternType_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternType) {
@@ -3887,7 +3887,7 @@ func PluralKinds_Optional_Marshal(n jsn.Marshaler, val *PluralKinds) {
 
 func PluralKinds_Marshal(n jsn.Marshaler, val *PluralKinds) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(PluralKinds_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func PluralKinds_Repeats_Marshal(n jsn.Marshaler, vals *[]PluralKinds) {
@@ -3948,7 +3948,7 @@ func PrimitiveType_Optional_Marshal(n jsn.Marshaler, val *PrimitiveType) {
 
 func PrimitiveType_Marshal(n jsn.Marshaler, val *PrimitiveType) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func PrimitiveType_Repeats_Marshal(n jsn.Marshaler, vals *[]PrimitiveType) {
@@ -4154,7 +4154,7 @@ func Pronoun_Optional_Marshal(n jsn.Marshaler, val *Pronoun) {
 }
 
 func Pronoun_Marshal(n jsn.Marshaler, val *Pronoun) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func Pronoun_Repeats_Marshal(n jsn.Marshaler, vals *[]Pronoun) {
@@ -4206,7 +4206,7 @@ func Property_Optional_Marshal(n jsn.Marshaler, val *Property) {
 
 func Property_Marshal(n jsn.Marshaler, val *Property) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(Property_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func Property_Repeats_Marshal(n jsn.Marshaler, vals *[]Property) {
@@ -4265,7 +4265,7 @@ func PropertyAspect_Optional_Marshal(n jsn.Marshaler, val *PropertyAspect) {
 
 func PropertyAspect_Marshal(n jsn.Marshaler, val *PropertyAspect) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func PropertyAspect_Repeats_Marshal(n jsn.Marshaler, vals *[]PropertyAspect) {
@@ -4521,7 +4521,7 @@ func RecordPlural_Optional_Marshal(n jsn.Marshaler, val *RecordPlural) {
 
 func RecordPlural_Marshal(n jsn.Marshaler, val *RecordPlural) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(RecordPlural_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func RecordPlural_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordPlural) {
@@ -4573,7 +4573,7 @@ func RecordSingular_Optional_Marshal(n jsn.Marshaler, val *RecordSingular) {
 
 func RecordSingular_Marshal(n jsn.Marshaler, val *RecordSingular) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(RecordSingular_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func RecordSingular_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordSingular) {
@@ -5061,7 +5061,7 @@ func SingularKind_Optional_Marshal(n jsn.Marshaler, val *SingularKind) {
 
 func SingularKind_Marshal(n jsn.Marshaler, val *SingularKind) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(SingularKind_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func SingularKind_Repeats_Marshal(n jsn.Marshaler, vals *[]SingularKind) {
@@ -5361,7 +5361,7 @@ func TestName_Optional_Marshal(n jsn.Marshaler, val *TestName) {
 
 func TestName_Marshal(n jsn.Marshaler, val *TestName) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func TestName_Repeats_Marshal(n jsn.Marshaler, vals *[]TestName) {
@@ -5666,7 +5666,7 @@ func TextList_Optional_Marshal(n jsn.Marshaler, val *TextList) {
 }
 
 func TextList_Marshal(n jsn.Marshaler, val *TextList) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func TextList_Repeats_Marshal(n jsn.Marshaler, vals *[]TextList) {
@@ -5718,7 +5718,7 @@ func Trait_Optional_Marshal(n jsn.Marshaler, val *Trait) {
 
 func Trait_Marshal(n jsn.Marshaler, val *Trait) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(Trait_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func Trait_Repeats_Marshal(n jsn.Marshaler, vals *[]Trait) {

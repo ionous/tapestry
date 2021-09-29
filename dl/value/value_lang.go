@@ -73,7 +73,7 @@ func Bool_Optional_Marshal(n jsn.Marshaler, val *Bool) {
 }
 
 func Bool_Marshal(n jsn.Marshaler, val *Bool) {
-	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
+	n.EnumValue(jsn.MakeEnum(val, &val.Str))
 }
 
 func Bool_Repeats_Marshal(n jsn.Marshaler, vals *[]Bool) {
@@ -123,7 +123,7 @@ func Lines_Optional_Marshal(n jsn.Marshaler, val *Lines) {
 }
 
 func Lines_Marshal(n jsn.Marshaler, val *Lines) {
-	n.SpecifyValue(Lines_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func Lines_Repeats_Marshal(n jsn.Marshaler, vals *[]Lines) {
@@ -191,7 +191,7 @@ func Number_Optional_Marshal(n jsn.Marshaler, val *Number) {
 }
 
 func Number_Marshal(n jsn.Marshaler, val *Number) {
-	n.SpecifyValue(Number_Type, val.Num)
+	n.NumValue(jsn.MakeNum(val, &val.Num))
 }
 
 func Number_Repeats_Marshal(n jsn.Marshaler, vals *[]Number) {
@@ -243,7 +243,7 @@ func PatternName_Optional_Marshal(n jsn.Marshaler, val *PatternName) {
 
 func PatternName_Marshal(n jsn.Marshaler, val *PatternName) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(PatternName_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func PatternName_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternName) {
@@ -295,7 +295,7 @@ func RelationName_Optional_Marshal(n jsn.Marshaler, val *RelationName) {
 
 func RelationName_Marshal(n jsn.Marshaler, val *RelationName) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(RelationName_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func RelationName_Repeats_Marshal(n jsn.Marshaler, vals *[]RelationName) {
@@ -368,7 +368,7 @@ func Text_Optional_Marshal(n jsn.Marshaler, val *Text) {
 }
 
 func Text_Marshal_Customized(n jsn.Marshaler, val *Text) {
-	n.SpecifyValue(Text_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func Text_Repeats_Marshal(n jsn.Marshaler, vals *[]Text) {
@@ -420,7 +420,7 @@ func VariableName_Optional_Marshal(n jsn.Marshaler, val *VariableName) {
 
 func VariableName_Marshal(n jsn.Marshaler, val *VariableName) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyValue(VariableName_Type, val.Str)
+	n.StrValue(jsn.MakeStr(val, &val.Str))
 }
 
 func VariableName_Repeats_Marshal(n jsn.Marshaler, vals *[]VariableName) {

@@ -14,13 +14,11 @@ func NewCompactMarshaler() Chart {
 	return Chart{chart.NewMachine(newBlock)}
 }
 
-// generically commits primitive value(s)
 // compact data represents primitive values as their value.
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
-	next.OnValue = func(kind string, value interface{}) {
-		m.Commit(value)
-	}
-	return next
+	return chart.OnValue(next, func(k string, v interface{}) {
+		m.Commit(v)
+	})
 }
 
 func newBlock(m *chart.Machine) *chart.StateMix {
@@ -113,15 +111,13 @@ func newSlice(m *chart.Machine, vals []interface{}) *chart.StateMix {
 }
 
 func newSwap(m *chart.Machine) *chart.StateMix {
-	next := newBlock(m)
-	// we don't want to lose the *kind* of the choice
-	// so we do this specially
-	next.OnValue = func(kind string, value interface{}) {
+	// we don't want to lose the *kind* of the choice for simple values
+	next := chart.OnValue(newBlock(m), func(kind string, value interface{}) {
 		m.ChangeState(chart.NewBlockResult(m,
 			map[string]interface{}{
 				kind + ":": value,
 			}))
-	}
+	})
 	// record the swap choice and move to an error detection state
 	next.OnCommit = func(v interface{}) {
 		m.ChangeState(chart.NewBlockResult(m, v))

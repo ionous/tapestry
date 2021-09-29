@@ -30,10 +30,14 @@ type Marshaler interface {
 	RepeatValues(hint int) bool
 	// ends a flow, swap, or repeat.
 	EndValues()
-	// writes a primitive value.
-	SpecifyValue(kind string, value interface{})
-	// writes an enumerated value.
-	SpecifyEnum(Enumerator)
+	// specify a true/false value.
+	BoolValue(BoolMarshaler)
+	// specify an enumerated value.
+	EnumValue(EnumMarshaler)
+	// specify a number value.
+	NumValue(NumMarshaler)
+	// specify a string value.
+	StrValue(StrMarshaler)
 	// sets a unique id for the next block or primitive value.
 	SetCursor(id string)
 	// record an error but don't terminate
@@ -42,12 +46,26 @@ type Marshaler interface {
 	Error(err error)
 }
 
-type Enumerator interface {
+type BoolMarshaler interface {
+	GetType() string
+	GetBool() bool
+	SetBool(bool)
+}
+type EnumMarshaler interface {
 	GetType() string
 	GetEnum() (key string, value string)
 	SetEnum(keyOrValue string)
 }
-
+type NumMarshaler interface {
+	GetType() string
+	GetNum() float64
+	SetNum(float64)
+}
+type StrMarshaler interface {
+	GetType() string
+	GetStr() string
+	SetStr(string)
+}
 type Picker interface {
 	GetType() string
 	GetChoice() (string, bool)
