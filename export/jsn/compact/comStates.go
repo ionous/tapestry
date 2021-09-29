@@ -1,6 +1,7 @@
 package compact
 
 import (
+	"git.sr.ht/~ionous/iffy/export/jsn"
 	"git.sr.ht/~ionous/iffy/export/jsn/chart"
 	"github.com/ionous/errutil"
 )
@@ -31,13 +32,23 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 		return true
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
-	next.OnPick = func(kind, choice string) bool {
-		m.PushState(newSwap(m))
-		return true
+	// the compact encoding relies on the encoded inner block to unpack the choice.
+	// ( implies each option needs to be a unique type. )
+	next.OnPick = func(p jsn.Picker) (okay bool) {
+		if c, ok := p.GetChoice(); !ok {
+			m.Error(errutil.New("couldnt determine choice of", p))
+		} else if len(c) > 0 {
+			m.PushState(newSwap(m))
+			okay = true
+		}
+		return okay
 	}
-	next.OnRepeat = func(hint int) bool {
-		m.PushState(newSlice(m, make([]interface{}, 0, hint)))
-		return true
+	next.OnRepeat = func(hint int) (okay bool) {
+		if hint > 0 {
+			m.PushState(newSlice(m, make([]interface{}, 0, hint)))
+			okay = true
+		}
+		return okay
 	}
 	// in case nothing is written.
 	next.OnEnd = func() {

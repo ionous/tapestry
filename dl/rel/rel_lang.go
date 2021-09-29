@@ -14,6 +14,10 @@ type ReciprocalOf struct {
 	Object rt.TextEval        `if:"label=object"`
 }
 
+func (*ReciprocalOf) GetType() string {
+	return ReciprocalOf_Type
+}
+
 func (*ReciprocalOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ReciprocalOf_Type,
@@ -66,6 +70,10 @@ func ReciprocalOf_Marshal(n jsn.Marshaler, val *ReciprocalOf) {
 type ReciprocalsOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
+}
+
+func (*ReciprocalsOf) GetType() string {
+	return ReciprocalsOf_Type
 }
 
 func (*ReciprocalsOf) Compose() composer.Spec {
@@ -121,6 +129,10 @@ type Relate struct {
 	Object   rt.TextEval        `if:"label=_"`
 	ToObject rt.TextEval        `if:"label=to"`
 	Via      value.RelationName `if:"label=via"`
+}
+
+func (*Relate) GetType() string {
+	return Relate_Type
 }
 
 func (*Relate) Compose() composer.Spec {
@@ -180,6 +192,10 @@ type RelativeOf struct {
 	Object rt.TextEval        `if:"label=object"`
 }
 
+func (*RelativeOf) GetType() string {
+	return RelativeOf_Type
+}
+
 func (*RelativeOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RelativeOf_Type,
@@ -232,6 +248,10 @@ func RelativeOf_Marshal(n jsn.Marshaler, val *RelativeOf) {
 type RelativesOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
+}
+
+func (*RelativesOf) GetType() string {
+	return RelativesOf_Type
 }
 
 func (*RelativesOf) Compose() composer.Spec {

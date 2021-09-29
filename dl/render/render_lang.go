@@ -14,6 +14,10 @@ type RenderExp struct {
 	Expression rt.TextEval `if:"label=_"`
 }
 
+func (*RenderExp) GetType() string {
+	return RenderExp_Type
+}
+
 func (*RenderExp) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RenderExp_Type,
@@ -60,6 +64,10 @@ func RenderExp_Marshal(n jsn.Marshaler, val *RenderExp) {
 // RenderField in template phrases, picks between record variables, object variables, and named global objects.,ex. could be &quot;ringBearer&quot;, &quot;SamWise&quot;, or &quot;frodo&quot;
 type RenderField struct {
 	Name rt.TextEval `if:"label=_"`
+}
+
+func (*RenderField) GetType() string {
+	return RenderField_Type
 }
 
 func (*RenderField) Compose() composer.Spec {
@@ -118,6 +126,10 @@ const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
 const RenderFlags_RenderAsObj = "$RENDER_AS_OBJ"
 const RenderFlags_RenderAsAny = "$RENDER_AS_ANY"
 
+func (*RenderFlags) GetType() string {
+	return RenderFlags_Type
+}
+
 func (*RenderFlags) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RenderFlags_Type,
@@ -129,13 +141,6 @@ func (*RenderFlags) Compose() composer.Spec {
 			"render_as_var", "render_as_obj", "render_as_any",
 		},
 	}
-}
-
-func (op *RenderFlags) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *RenderFlags) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const RenderFlags_Type = "render_flags"
@@ -152,7 +157,7 @@ func RenderFlags_Optional_Marshal(n jsn.Marshaler, val *RenderFlags) {
 }
 
 func RenderFlags_Marshal(n jsn.Marshaler, val *RenderFlags) {
-	n.SpecifyEnum(RenderFlags_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {
@@ -170,6 +175,10 @@ func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {
 // RenderName handles changing a template like {.boombip} into text.,if the name is a variable containing an object name: return the printed object name ( via &quot;print name&quot; ),if the name is a variable with some other text: return that text.,if the name isn&#x27;t a variable but refers to some object: return that object&#x27;s printed object name.,otherwise, its an error.
 type RenderName struct {
 	Name string `if:"label=_,type=text"`
+}
+
+func (*RenderName) GetType() string {
+	return RenderName_Type
 }
 
 func (*RenderName) Compose() composer.Spec {
@@ -219,6 +228,10 @@ func RenderName_Marshal(n jsn.Marshaler, val *RenderName) {
 type RenderPattern struct {
 	Pattern   value.PatternName `if:"label=_"`
 	Arguments core.CallArgs     `if:"label=args"`
+}
+
+func (*RenderPattern) GetType() string {
+	return RenderPattern_Type
 }
 
 func (*RenderPattern) Compose() composer.Spec {
@@ -273,6 +286,10 @@ func RenderPattern_Marshal(n jsn.Marshaler, val *RenderPattern) {
 type RenderRef struct {
 	Name  value.VariableName `if:"label=_"`
 	Flags RenderFlags        `if:"label=flags"`
+}
+
+func (*RenderRef) GetType() string {
+	return RenderRef_Type
 }
 
 func (*RenderRef) Compose() composer.Spec {

@@ -14,6 +14,10 @@ type DebugLog struct {
 	LogLevel LoggingLevel  `if:"label=as,optional"`
 }
 
+func (*DebugLog) GetType() string {
+	return DebugLog_Type
+}
+
 func (*DebugLog) Compose() composer.Spec {
 	return composer.Spec{
 		Name: DebugLog_Type,
@@ -65,6 +69,10 @@ func DebugLog_Marshal(n jsn.Marshaler, val *DebugLog) {
 // DoNothing Statement which does nothing.
 type DoNothing struct {
 	Reason string `if:"label=why,optional,type=text"`
+}
+
+func (*DoNothing) GetType() string {
+	return DoNothing_Type
 }
 
 func (*DoNothing) Compose() composer.Spec {
@@ -126,6 +134,10 @@ const LoggingLevel_Info = "$INFO"
 const LoggingLevel_Warning = "$WARNING"
 const LoggingLevel_Error = "$ERROR"
 
+func (*LoggingLevel) GetType() string {
+	return LoggingLevel_Type
+}
+
 func (*LoggingLevel) Compose() composer.Spec {
 	return composer.Spec{
 		Name: LoggingLevel_Type,
@@ -137,13 +149,6 @@ func (*LoggingLevel) Compose() composer.Spec {
 			"note", "to_do", "fix", "info", "warning", "error",
 		},
 	}
-}
-
-func (op *LoggingLevel) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *LoggingLevel) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const LoggingLevel_Type = "logging_level"
@@ -160,7 +165,7 @@ func LoggingLevel_Optional_Marshal(n jsn.Marshaler, val *LoggingLevel) {
 }
 
 func LoggingLevel_Marshal(n jsn.Marshaler, val *LoggingLevel) {
-	n.SpecifyEnum(LoggingLevel_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func LoggingLevel_Repeats_Marshal(n jsn.Marshaler, vals *[]LoggingLevel) {

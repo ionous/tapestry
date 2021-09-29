@@ -1,7 +1,9 @@
 package detailed
 
 import (
+	"git.sr.ht/~ionous/iffy/export/jsn"
 	"git.sr.ht/~ionous/iffy/export/jsn/chart"
+	"github.com/ionous/errutil"
 )
 
 // Chart - marker so callers can see where a machine pointer came from.
@@ -37,16 +39,26 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 		}))
 		return true
 	}
-	next.OnPick = func(kind, choice string) bool {
-		m.PushState(newSwap(m, choice, detMap{
-			Id:   m.FlushCursor(),
-			Type: kind,
-		}))
-		return true
+	// ex."noun_phrase" "$KIND_OF_NOUN"
+	next.OnPick = func(p jsn.Picker) (okay bool) {
+		if choice, ok := p.GetChoice(); !ok {
+			m.Error(errutil.New("couldnt determine choice of", p))
+		} else if len(choice) > 0 {
+			kind := p.GetType()
+			m.PushState(newSwap(m, choice, detMap{
+				Id:   m.FlushCursor(),
+				Type: kind,
+			}))
+			okay = true
+		}
+		return okay
 	}
-	next.OnRepeat = func(hint int) bool {
-		m.PushState(newSlice(m, make([]interface{}, 0, hint)))
-		return true
+	next.OnRepeat = func(hint int) (okay bool) {
+		if hint > 0 {
+			m.PushState(newSlice(m, make([]interface{}, 0, hint)))
+			okay = true
+		}
+		return okay
 	}
 	return next
 }

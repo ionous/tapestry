@@ -9,7 +9,7 @@ type MarshalMix struct {
 	OnMap     func(lede, kind string) bool
 	OnKey     func(sig, field string) bool
 	OnLiteral func(field string) bool
-	OnPick    func(kind, choice string) bool
+	OnPick    func(Picker) bool
 	OnRepeat  func(hint int) bool
 	OnEnd     func()
 	OnValue   func(kind string, value interface{})
@@ -42,11 +42,11 @@ func (ms *MarshalMix) MapLiteral(field string) (ret bool) {
 	}
 	return
 }
-func (ms *MarshalMix) PickValues(kind, choice string) (ret bool) {
+func (ms *MarshalMix) PickValues(val Picker) (ret bool) {
 	if call := ms.OnPick; call != nil {
-		ret = call(kind, choice)
+		ret = call(val)
 	} else {
-		ms.Error(errutil.New("unexpected pick", kind, choice))
+		ms.Error(errutil.New("unexpected pick", val))
 	}
 	return
 }
@@ -72,14 +72,14 @@ func (ms *MarshalMix) SpecifyValue(kind string, val interface{}) {
 		ms.Error(errutil.New("unexpected value", kind, val))
 	}
 }
-func (ms *MarshalMix) SpecifyEnum(kind string, val Enumeration) {
+func (ms *MarshalMix) SpecifyEnum(val Enumerator) {
 	var out string
 	if k, v := val.GetEnum(); len(k) > 0 {
 		out = k
 	} else {
 		out = v
 	}
-	ms.SpecifyValue(kind, out)
+	ms.SpecifyValue(val.GetType(), out)
 }
 func (ms *MarshalMix) SetCursor(id string) {
 	if call := ms.OnCursor; call != nil {

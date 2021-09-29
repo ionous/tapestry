@@ -12,6 +12,10 @@ type Action struct {
 	Action string `if:"label=_,type=text"`
 }
 
+func (*Action) GetType() string {
+	return Action_Type
+}
+
 func (*Action) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Action_Type,
@@ -60,6 +64,10 @@ func Action_Marshal(n jsn.Marshaler, val *Action) {
 type Alias struct {
 	Names  []string `if:"label=_,type=text"`
 	AsNoun string   `if:"label=as_noun,type=text"`
+}
+
+func (*Alias) GetType() string {
+	return Alias_Type
 }
 
 func (*Alias) Compose() composer.Spec {
@@ -114,6 +122,10 @@ type AllOf struct {
 	Series []ScannerMaker `if:"label=_"`
 }
 
+func (*AllOf) GetType() string {
+	return AllOf_Type
+}
+
 func (*AllOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AllOf_Type,
@@ -160,6 +172,10 @@ func AllOf_Marshal(n jsn.Marshaler, val *AllOf) {
 // AnyOf makes a parser scanner
 type AnyOf struct {
 	Options []ScannerMaker `if:"label=_"`
+}
+
+func (*AnyOf) GetType() string {
+	return AnyOf_Type
 }
 
 func (*AnyOf) Compose() composer.Spec {
@@ -209,6 +225,10 @@ func AnyOf_Marshal(n jsn.Marshaler, val *AnyOf) {
 type Directive struct {
 	Lede  []string       `if:"label=_,type=text"`
 	Scans []ScannerMaker `if:"label=scans"`
+}
+
+func (*Directive) GetType() string {
+	return Directive_Type
 }
 
 func (*Directive) Compose() composer.Spec {
@@ -261,6 +281,10 @@ func Directive_Marshal(n jsn.Marshaler, val *Directive) {
 // Grammar Read what the player types and turn it into actions.
 type Grammar struct {
 	Grammar GrammarMaker `if:"label=_"`
+}
+
+func (*Grammar) GetType() string {
+	return Grammar_Type
 }
 
 func (*Grammar) Compose() composer.Spec {
@@ -334,6 +358,10 @@ type Noun struct {
 	Kind string `if:"label=_,type=text"`
 }
 
+func (*Noun) GetType() string {
+	return Noun_Type
+}
+
 func (*Noun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Noun_Type,
@@ -382,6 +410,10 @@ type Retarget struct {
 	Span []ScannerMaker `if:"label=_"`
 }
 
+func (*Retarget) GetType() string {
+	return Retarget_Type
+}
+
 func (*Retarget) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Retarget_Type,
@@ -428,6 +460,10 @@ func Retarget_Marshal(n jsn.Marshaler, val *Retarget) {
 // Reverse makes a parser scanner
 type Reverse struct {
 	Reverses []ScannerMaker `if:"label=_"`
+}
+
+func (*Reverse) GetType() string {
+	return Reverse_Type
 }
 
 func (*Reverse) Compose() composer.Spec {
@@ -501,6 +537,10 @@ type Self struct {
 	Player string `if:"label=_,type=text"`
 }
 
+func (*Self) GetType() string {
+	return Self_Type
+}
+
 func (*Self) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Self_Type,
@@ -547,6 +587,10 @@ func Self_Marshal(n jsn.Marshaler, val *Self) {
 // Words makes a parser scanner
 type Words struct {
 	Words []string `if:"label=_,type=text"`
+}
+
+func (*Words) GetType() string {
+	return Words_Type
 }
 
 func (*Words) Compose() composer.Spec {

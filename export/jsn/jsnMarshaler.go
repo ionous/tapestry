@@ -24,7 +24,7 @@ type Marshaler interface {
 	MapLiteral(field string) bool
 	// selects one of a small set of possible choices
 	// the swap is closed ( written ) with a call to EndValues()
-	PickValues(kind, choice string) bool
+	PickValues(Picker) bool
 	// starts a series of values ( probably hint long )
 	// the repeat is closed ( written ) with a call to EndValues()
 	RepeatValues(hint int) bool
@@ -33,7 +33,7 @@ type Marshaler interface {
 	// writes a primitive value.
 	SpecifyValue(kind string, value interface{})
 	// writes an enumerated value.
-	SpecifyEnum(kind string, value Enumeration)
+	SpecifyEnum(Enumerator)
 	// sets a unique id for the next block or primitive value.
 	SetCursor(id string)
 	// record an error but don't terminate
@@ -42,8 +42,14 @@ type Marshaler interface {
 	Error(err error)
 }
 
-type Enumeration interface {
-	String() string
+type Enumerator interface {
+	GetType() string
 	GetEnum() (key string, value string)
 	SetEnum(keyOrValue string)
+}
+
+type Picker interface {
+	GetType() string
+	GetChoice() (string, bool)
+	SetChoice(string) (interface{}, bool)
 }

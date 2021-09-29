@@ -72,23 +72,3 @@ func (spec *Spec) IndexOfValue(val string) (retKey string, retInd int) {
 	}
 	return
 }
-
-func GetEnum(op Composer, str string) (retKey string, retVal string) {
-	spec := op.Compose()
-	if v, i := spec.IndexOfChoice(str); i >= 0 {
-		retKey, retVal = str, v
-	} else {
-		retVal = str
-	}
-	return
-}
-
-func SetEnum(op Composer, kv string, dst *string) {
-	spec := op.Compose()
-	if k, i := spec.IndexOfValue(kv); i >= 0 {
-		*dst = k
-	} else {
-		*dst = kv
-	}
-	return
-}

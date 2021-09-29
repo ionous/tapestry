@@ -22,6 +22,10 @@ func (op *AbstractAction) String() string {
 
 const AbstractAction_Nothing = "$NOTHING"
 
+func (*AbstractAction) GetType() string {
+	return AbstractAction_Type
+}
+
 func (*AbstractAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AbstractAction_Type,
@@ -33,13 +37,6 @@ func (*AbstractAction) Compose() composer.Spec {
 			"nothing",
 		},
 	}
-}
-
-func (op *AbstractAction) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *AbstractAction) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const AbstractAction_Type = "abstract_action"
@@ -56,7 +53,7 @@ func AbstractAction_Optional_Marshal(n jsn.Marshaler, val *AbstractAction) {
 }
 
 func AbstractAction_Marshal(n jsn.Marshaler, val *AbstractAction) {
-	n.SpecifyEnum(AbstractAction_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func AbstractAction_Repeats_Marshal(n jsn.Marshaler, vals *[]AbstractAction) {
@@ -75,6 +72,10 @@ func AbstractAction_Repeats_Marshal(n jsn.Marshaler, vals *[]AbstractAction) {
 type ActionContext struct {
 	At   reader.Position `if:"internal"`
 	Kind SingularKind    `if:"label=kind"`
+}
+
+func (*ActionContext) GetType() string {
+	return ActionContext_Type
 }
 
 func (*ActionContext) Compose() composer.Spec {
@@ -127,6 +128,10 @@ type ActionDecl struct {
 	Event        EventName       `if:"label=event"`
 	Action       ActionName      `if:"label=action"`
 	ActionParams ActionParams    `if:"label=action_params"`
+}
+
+func (*ActionDecl) GetType() string {
+	return ActionDecl_Type
 }
 
 func (*ActionDecl) Compose() composer.Spec {
@@ -191,6 +196,10 @@ func (op *ActionName) String() string {
 	return op.Str
 }
 
+func (*ActionName) GetType() string {
+	return ActionName_Type
+}
+
 func (*ActionName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        ActionName_Type,
@@ -238,6 +247,10 @@ const ActionParams_Common_Opt = "$COMMON"
 const ActionParams_Dual_Opt = "$DUAL"
 const ActionParams_None_Opt = "$NONE"
 
+func (*ActionParams) GetType() string {
+	return ActionParams_Type
+}
+
 func (*ActionParams) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ActionParams_Type,
@@ -268,17 +281,31 @@ func (op *ActionParams) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
+
+func (op *ActionParams) SetChoice(c string) (ret interface{}, okay bool) {
+	switch c {
+	case "":
+		op.Opt, okay = nil, true
+	case ActionParams_Common_Opt:
+		opt := new(CommonAction)
+		op.Opt, ret, okay = opt, opt, true
+	case ActionParams_Dual_Opt:
+		opt := new(PairedAction)
+		op.Opt, ret, okay = opt, opt, true
+	case ActionParams_None_Opt:
+		opt := new(AbstractAction)
+		op.Opt, ret, okay = opt, opt, true
+	}
+	return
+}
+
 func (op *ActionParams) Marshal(n jsn.Marshaler) {
 	ActionParams_Marshal(n, op)
 }
 func ActionParams_Marshal(n jsn.Marshaler, val *ActionParams) {
-	if pick, ok := val.GetChoice(); ok {
-		if slat := val.Opt; len(pick) > 0 {
-			if n.PickValues(ActionParams_Type, pick) {
-				slat.(jsn.Marshalee).Marshal(n)
-				n.EndValues()
-			}
-		}
+	if n.PickValues(val) {
+		val.Opt.(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 }
 
@@ -306,6 +333,10 @@ func (op *Ana) String() string {
 const Ana_A = "$A"
 const Ana_An = "$AN"
 
+func (*Ana) GetType() string {
+	return Ana_Type
+}
+
 func (*Ana) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Ana_Type,
@@ -317,13 +348,6 @@ func (*Ana) Compose() composer.Spec {
 			"a", "an",
 		},
 	}
-}
-
-func (op *Ana) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *Ana) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const Ana_Type = "ana"
@@ -340,7 +364,7 @@ func Ana_Optional_Marshal(n jsn.Marshaler, val *Ana) {
 }
 
 func Ana_Marshal(n jsn.Marshaler, val *Ana) {
-	n.SpecifyEnum(Ana_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func Ana_Repeats_Marshal(n jsn.Marshaler, vals *[]Ana) {
@@ -371,6 +395,10 @@ const AreAn_Is = "$IS"
 const AreAn_Isa = "$ISA"
 const AreAn_Isan = "$ISAN"
 
+func (*AreAn) GetType() string {
+	return AreAn_Type
+}
+
 func (*AreAn) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AreAn_Type,
@@ -382,13 +410,6 @@ func (*AreAn) Compose() composer.Spec {
 			"are", "area", "arean", "is", "isa", "isan",
 		},
 	}
-}
-
-func (op *AreAn) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *AreAn) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const AreAn_Type = "are_an"
@@ -405,7 +426,7 @@ func AreAn_Optional_Marshal(n jsn.Marshaler, val *AreAn) {
 }
 
 func AreAn_Marshal(n jsn.Marshaler, val *AreAn) {
-	n.SpecifyEnum(AreAn_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func AreAn_Repeats_Marshal(n jsn.Marshaler, vals *[]AreAn) {
@@ -432,6 +453,10 @@ func (op *AreBeing) String() string {
 const AreBeing_Are = "$ARE"
 const AreBeing_Is = "$IS"
 
+func (*AreBeing) GetType() string {
+	return AreBeing_Type
+}
+
 func (*AreBeing) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AreBeing_Type,
@@ -443,13 +468,6 @@ func (*AreBeing) Compose() composer.Spec {
 			"are", "is",
 		},
 	}
-}
-
-func (op *AreBeing) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *AreBeing) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const AreBeing_Type = "are_being"
@@ -466,7 +484,7 @@ func AreBeing_Optional_Marshal(n jsn.Marshaler, val *AreBeing) {
 }
 
 func AreBeing_Marshal(n jsn.Marshaler, val *AreBeing) {
-	n.SpecifyEnum(AreBeing_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func AreBeing_Repeats_Marshal(n jsn.Marshaler, vals *[]AreBeing) {
@@ -493,6 +511,10 @@ func (op *AreEither) String() string {
 const AreEither_Canbe = "$CANBE"
 const AreEither_Either = "$EITHER"
 
+func (*AreEither) GetType() string {
+	return AreEither_Type
+}
+
 func (*AreEither) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AreEither_Type,
@@ -504,13 +526,6 @@ func (*AreEither) Compose() composer.Spec {
 			"canbe", "either",
 		},
 	}
-}
-
-func (op *AreEither) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *AreEither) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const AreEither_Type = "are_either"
@@ -527,7 +542,7 @@ func AreEither_Optional_Marshal(n jsn.Marshaler, val *AreEither) {
 }
 
 func AreEither_Marshal(n jsn.Marshaler, val *AreEither) {
-	n.SpecifyEnum(AreEither_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func AreEither_Repeats_Marshal(n jsn.Marshaler, vals *[]AreEither) {
@@ -547,6 +562,10 @@ type Argument struct {
 	At   reader.Position `if:"internal"`
 	Name string          `if:"label=_,type=text"`
 	From rt.Assignment   `if:"label=from"`
+}
+
+func (*Argument) GetType() string {
+	return Argument_Type
 }
 
 func (*Argument) Compose() composer.Spec {
@@ -604,6 +623,10 @@ type Arguments struct {
 	Args []Argument      `if:"label=_"`
 }
 
+func (*Arguments) GetType() string {
+	return Arguments_Type
+}
+
 func (*Arguments) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Arguments_Type,
@@ -659,6 +682,10 @@ func (op *Aspect) String() string {
 	return op.Str
 }
 
+func (*Aspect) GetType() string {
+	return Aspect_Type
+}
+
 func (*Aspect) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        Aspect_Type,
@@ -701,6 +728,10 @@ func Aspect_Repeats_Marshal(n jsn.Marshaler, vals *[]Aspect) {
 type AspectTraits struct {
 	Aspect      Aspect      `if:"label=_"`
 	TraitPhrase TraitPhrase `if:"label=trait_phrase"`
+}
+
+func (*AspectTraits) GetType() string {
+	return AspectTraits_Type
 }
 
 func (*AspectTraits) Compose() composer.Spec {
@@ -755,6 +786,10 @@ type BoxedNumber struct {
 	Number float64 `if:"label=_,type=number"`
 }
 
+func (*BoxedNumber) GetType() string {
+	return BoxedNumber_Type
+}
+
 func (*BoxedNumber) Compose() composer.Spec {
 	return composer.Spec{
 		Name: BoxedNumber_Type,
@@ -801,6 +836,10 @@ func BoxedNumber_Marshal(n jsn.Marshaler, val *BoxedNumber) {
 // BoxedText
 type BoxedText struct {
 	Text string `if:"label=_,type=text"`
+}
+
+func (*BoxedText) GetType() string {
+	return BoxedText_Type
 }
 
 func (*BoxedText) Compose() composer.Spec {
@@ -852,6 +891,10 @@ type Certainties struct {
 	AreBeing    AreBeing    `if:"label=are_being"`
 	Certainty   Certainty   `if:"label=certainty"`
 	Trait       Trait       `if:"label=trait"`
+}
+
+func (*Certainties) GetType() string {
+	return Certainties_Type
 }
 
 func (*Certainties) Compose() composer.Spec {
@@ -924,6 +967,10 @@ const Certainty_Always = "$ALWAYS"
 const Certainty_Seldom = "$SELDOM"
 const Certainty_Never = "$NEVER"
 
+func (*Certainty) GetType() string {
+	return Certainty_Type
+}
+
 func (*Certainty) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Certainty_Type,
@@ -935,13 +982,6 @@ func (*Certainty) Compose() composer.Spec {
 			"usually", "always", "seldom", "never",
 		},
 	}
-}
-
-func (op *Certainty) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *Certainty) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const Certainty_Type = "certainty"
@@ -959,7 +999,7 @@ func Certainty_Optional_Marshal(n jsn.Marshaler, val *Certainty) {
 
 func Certainty_Marshal(n jsn.Marshaler, val *Certainty) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(Certainty_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func Certainty_Repeats_Marshal(n jsn.Marshaler, vals *[]Certainty) {
@@ -977,6 +1017,10 @@ func Certainty_Repeats_Marshal(n jsn.Marshaler, vals *[]Certainty) {
 // Comment Information about the story for you and other authors.
 type Comment struct {
 	Lines value.Lines `if:"label=_"`
+}
+
+func (*Comment) GetType() string {
+	return Comment_Type
 }
 
 func (*Comment) Compose() composer.Spec {
@@ -1027,6 +1071,10 @@ type CommonAction struct {
 	At            reader.Position `if:"internal"`
 	Kind          SingularKind    `if:"label=kind"`
 	ActionContext *ActionContext  `if:"label=action_context,optional"`
+}
+
+func (*CommonAction) GetType() string {
+	return CommonAction_Type
 }
 
 func (*CommonAction) Compose() composer.Spec {
@@ -1084,6 +1132,10 @@ type CountOf struct {
 	Num     rt.NumberEval   `if:"label=num"`
 }
 
+func (*CountOf) GetType() string {
+	return CountOf_Type
+}
+
 func (*CountOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CountOf_Type,
@@ -1138,6 +1190,10 @@ type CycleText struct {
 	Parts []rt.TextEval   `if:"label=parts"`
 }
 
+func (*CycleText) GetType() string {
+	return CycleText_Type
+}
+
 func (*CycleText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CycleText_Type,
@@ -1186,6 +1242,10 @@ func CycleText_Marshal(n jsn.Marshaler, val *CycleText) {
 type Determine struct {
 	Name      value.PatternName `if:"label=_"`
 	Arguments *Arguments        `if:"label=arguments,optional"`
+}
+
+func (*Determine) GetType() string {
+	return Determine_Type
 }
 
 func (*Determine) Compose() composer.Spec {
@@ -1249,6 +1309,10 @@ const Determiner_An = "$AN"
 const Determiner_The = "$THE"
 const Determiner_Our = "$OUR"
 
+func (*Determiner) GetType() string {
+	return Determiner_Type
+}
+
 func (*Determiner) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        Determiner_Type,
@@ -1261,13 +1325,6 @@ func (*Determiner) Compose() composer.Spec {
 			"a", "an", "the", "our",
 		},
 	}
-}
-
-func (op *Determiner) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *Determiner) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const Determiner_Type = "determiner"
@@ -1284,7 +1341,7 @@ func Determiner_Optional_Marshal(n jsn.Marshaler, val *Determiner) {
 }
 
 func Determiner_Marshal(n jsn.Marshaler, val *Determiner) {
-	n.SpecifyEnum(Determiner_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func Determiner_Repeats_Marshal(n jsn.Marshaler, vals *[]Determiner) {
@@ -1304,6 +1361,10 @@ type EventBlock struct {
 	At       reader.Position `if:"internal"`
 	Target   EventTarget     `if:"label=target"`
 	Handlers []EventHandler  `if:"label=handlers"`
+}
+
+func (*EventBlock) GetType() string {
+	return EventBlock_Type
 }
 
 func (*EventBlock) Compose() composer.Spec {
@@ -1360,6 +1421,10 @@ type EventHandler struct {
 	Event        EventName      `if:"label=event"`
 	Locals       *PatternLocals `if:"label=locals,optional"`
 	PatternRules PatternRules   `if:"label=pattern_rules"`
+}
+
+func (*EventHandler) GetType() string {
+	return EventHandler_Type
 }
 
 func (*EventHandler) Compose() composer.Spec {
@@ -1427,6 +1492,10 @@ func (op *EventName) String() string {
 	return op.Str
 }
 
+func (*EventName) GetType() string {
+	return EventName_Type
+}
+
 func (*EventName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        EventName_Type,
@@ -1478,6 +1547,10 @@ const EventPhase_Before = "$BEFORE"
 const EventPhase_While = "$WHILE"
 const EventPhase_After = "$AFTER"
 
+func (*EventPhase) GetType() string {
+	return EventPhase_Type
+}
+
 func (*EventPhase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: EventPhase_Type,
@@ -1489,13 +1562,6 @@ func (*EventPhase) Compose() composer.Spec {
 			"before", "while", "after",
 		},
 	}
-}
-
-func (op *EventPhase) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *EventPhase) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const EventPhase_Type = "event_phase"
@@ -1512,7 +1578,7 @@ func EventPhase_Optional_Marshal(n jsn.Marshaler, val *EventPhase) {
 }
 
 func EventPhase_Marshal(n jsn.Marshaler, val *EventPhase) {
-	n.SpecifyEnum(EventPhase_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func EventPhase_Repeats_Marshal(n jsn.Marshaler, vals *[]EventPhase) {
@@ -1534,6 +1600,10 @@ type EventTarget struct {
 
 const EventTarget_Kinds_Opt = "$KINDS"
 const EventTarget_NamedNoun_Opt = "$NAMED_NOUN"
+
+func (*EventTarget) GetType() string {
+	return EventTarget_Type
+}
 
 func (*EventTarget) Compose() composer.Spec {
 	return composer.Spec{
@@ -1562,17 +1632,28 @@ func (op *EventTarget) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
+
+func (op *EventTarget) SetChoice(c string) (ret interface{}, okay bool) {
+	switch c {
+	case "":
+		op.Opt, okay = nil, true
+	case EventTarget_Kinds_Opt:
+		opt := new(PluralKinds)
+		op.Opt, ret, okay = opt, opt, true
+	case EventTarget_NamedNoun_Opt:
+		opt := new(NamedNoun)
+		op.Opt, ret, okay = opt, opt, true
+	}
+	return
+}
+
 func (op *EventTarget) Marshal(n jsn.Marshaler) {
 	EventTarget_Marshal(n, op)
 }
 func EventTarget_Marshal(n jsn.Marshaler, val *EventTarget) {
-	if pick, ok := val.GetChoice(); ok {
-		if slat := val.Opt; len(pick) > 0 {
-			if n.PickValues(EventTarget_Type, pick) {
-				slat.(jsn.Marshalee).Marshal(n)
-				n.EndValues()
-			}
-		}
+	if n.PickValues(val) {
+		val.Opt.(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 }
 
@@ -1598,6 +1679,10 @@ const ExtType_Numbers_Opt = "$NUMBERS"
 const ExtType_TextList_Opt = "$TEXT_LIST"
 const ExtType_Record_Opt = "$RECORD"
 const ExtType_Records_Opt = "$RECORDS"
+
+func (*ExtType) GetType() string {
+	return ExtType_Type
+}
 
 func (*ExtType) Compose() composer.Spec {
 	return composer.Spec{
@@ -1632,18 +1717,35 @@ func (op *ExtType) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
+
+func (op *ExtType) SetChoice(c string) (ret interface{}, okay bool) {
+	switch c {
+	case "":
+		op.Opt, okay = nil, true
+	case ExtType_Numbers_Opt:
+		opt := new(NumberList)
+		op.Opt, ret, okay = opt, opt, true
+	case ExtType_TextList_Opt:
+		opt := new(TextList)
+		op.Opt, ret, okay = opt, opt, true
+	case ExtType_Record_Opt:
+		opt := new(RecordType)
+		op.Opt, ret, okay = opt, opt, true
+	case ExtType_Records_Opt:
+		opt := new(RecordList)
+		op.Opt, ret, okay = opt, opt, true
+	}
+	return
+}
+
 func (op *ExtType) Marshal(n jsn.Marshaler) {
 	ExtType_Marshal(n, op)
 }
 func ExtType_Marshal(n jsn.Marshaler, val *ExtType) {
-	if pick, ok := val.GetChoice(); ok {
-		if slat := val.Opt; len(pick) > 0 {
-			n.SetCursor(val.At.Offset)
-			if n.PickValues(ExtType_Type, pick) {
-				slat.(jsn.Marshalee).Marshal(n)
-				n.EndValues()
-			}
-		}
+	n.SetCursor(val.At.Offset)
+	if n.PickValues(val) {
+		val.Opt.(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 }
 
@@ -1662,6 +1764,10 @@ func ExtType_Repeats_Marshal(n jsn.Marshaler, vals *[]ExtType) {
 // GrammarDecl
 type GrammarDecl struct {
 	Grammar grammar.GrammarMaker `if:"label=_"`
+}
+
+func (*GrammarDecl) GetType() string {
+	return GrammarDecl_Type
 }
 
 func (*GrammarDecl) Compose() composer.Spec {
@@ -1713,6 +1819,10 @@ type KindOfNoun struct {
 	Trait        []Trait       `if:"label=trait,optional"`
 	Kind         SingularKind  `if:"label=kind"`
 	NounRelation *NounRelation `if:"label=noun_relation,optional"`
+}
+
+func (*KindOfNoun) GetType() string {
+	return KindOfNoun_Type
 }
 
 func (*KindOfNoun) Compose() composer.Spec {
@@ -1776,6 +1886,10 @@ type KindOfRelation struct {
 	Cardinality RelationCardinality `if:"label=cardinality"`
 }
 
+func (*KindOfRelation) GetType() string {
+	return KindOfRelation_Type
+}
+
 func (*KindOfRelation) Compose() composer.Spec {
 	return composer.Spec{
 		Name: KindOfRelation_Type,
@@ -1828,6 +1942,10 @@ type KindsOfAspect struct {
 	Aspect Aspect `if:"label=_"`
 }
 
+func (*KindsOfAspect) GetType() string {
+	return KindsOfAspect_Type
+}
+
 func (*KindsOfAspect) Compose() composer.Spec {
 	return composer.Spec{
 		Name: KindsOfAspect_Type,
@@ -1875,6 +1993,10 @@ func KindsOfAspect_Marshal(n jsn.Marshaler, val *KindsOfAspect) {
 type KindsOfKind struct {
 	PluralKinds  PluralKinds  `if:"label=_"`
 	SingularKind SingularKind `if:"label=singular_kind"`
+}
+
+func (*KindsOfKind) GetType() string {
+	return KindsOfKind_Type
 }
 
 func (*KindsOfKind) Compose() composer.Spec {
@@ -1929,6 +2051,10 @@ type KindsOfRecord struct {
 	RecordPlural RecordPlural `if:"label=_"`
 }
 
+func (*KindsOfRecord) GetType() string {
+	return KindsOfRecord_Type
+}
+
 func (*KindsOfRecord) Compose() composer.Spec {
 	return composer.Spec{
 		Name: KindsOfRecord_Type,
@@ -1976,6 +2102,10 @@ func KindsOfRecord_Marshal(n jsn.Marshaler, val *KindsOfRecord) {
 type KindsPossessProperties struct {
 	PluralKinds  PluralKinds    `if:"label=_"`
 	PropertyDecl []PropertyDecl `if:"label=property_decl"`
+}
+
+func (*KindsPossessProperties) GetType() string {
+	return KindsPossessProperties_Type
 }
 
 func (*KindsPossessProperties) Compose() composer.Spec {
@@ -2031,6 +2161,10 @@ type Lede struct {
 	NounPhrase NounPhrase  `if:"label=noun_phrase"`
 }
 
+func (*Lede) GetType() string {
+	return Lede_Type
+}
+
 func (*Lede) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Lede_Type,
@@ -2082,6 +2216,10 @@ func Lede_Marshal(n jsn.Marshaler, val *Lede) {
 type LocalDecl struct {
 	VariableDecl VariableDecl `if:"label=_"`
 	Value        *LocalInit   `if:"label=value,optional"`
+}
+
+func (*LocalDecl) GetType() string {
+	return LocalDecl_Type
 }
 
 func (*LocalDecl) Compose() composer.Spec {
@@ -2136,6 +2274,10 @@ type LocalInit struct {
 	Value rt.Assignment `if:"label=_"`
 }
 
+func (*LocalInit) GetType() string {
+	return LocalInit_Type
+}
+
 func (*LocalInit) Compose() composer.Spec {
 	return composer.Spec{
 		Name: LocalInit_Type,
@@ -2183,6 +2325,10 @@ func LocalInit_Marshal(n jsn.Marshaler, val *LocalInit) {
 type Make struct {
 	Name      string     `if:"label=_,type=text"`
 	Arguments *Arguments `if:"label=arguments,optional"`
+}
+
+func (*Make) GetType() string {
+	return Make_Type
 }
 
 func (*Make) Compose() composer.Spec {
@@ -2238,6 +2384,10 @@ type ManyToMany struct {
 	OtherKinds PluralKinds `if:"label=other_kinds"`
 }
 
+func (*ManyToMany) GetType() string {
+	return ManyToMany_Type
+}
+
 func (*ManyToMany) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ManyToMany_Type,
@@ -2289,6 +2439,10 @@ func ManyToMany_Marshal(n jsn.Marshaler, val *ManyToMany) {
 type ManyToOne struct {
 	Kinds PluralKinds  `if:"label=_"`
 	Kind  SingularKind `if:"label=kind"`
+}
+
+func (*ManyToOne) GetType() string {
+	return ManyToOne_Type
 }
 
 func (*ManyToOne) Compose() composer.Spec {
@@ -2344,6 +2498,10 @@ type NamedNoun struct {
 	Name       NounName   `if:"label=name"`
 }
 
+func (*NamedNoun) GetType() string {
+	return NamedNoun_Type
+}
+
 func (*NamedNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NamedNoun_Type,
@@ -2396,6 +2554,10 @@ type NounAssignment struct {
 	Property Property    `if:"label=_"`
 	Nouns    []NamedNoun `if:"label=nouns"`
 	Lines    value.Lines `if:"label=lines"`
+}
+
+func (*NounAssignment) GetType() string {
+	return NounAssignment_Type
 }
 
 func (*NounAssignment) Compose() composer.Spec {
@@ -2459,6 +2621,10 @@ func (op *NounName) String() string {
 	return op.Str
 }
 
+func (*NounName) GetType() string {
+	return NounName_Type
+}
+
 func (*NounName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        NounName_Type,
@@ -2507,6 +2673,10 @@ const NounPhrase_KindOfNoun_Opt = "$KIND_OF_NOUN"
 const NounPhrase_NounTraits_Opt = "$NOUN_TRAITS"
 const NounPhrase_NounRelation_Opt = "$NOUN_RELATION"
 
+func (*NounPhrase) GetType() string {
+	return NounPhrase_Type
+}
+
 func (*NounPhrase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NounPhrase_Type,
@@ -2537,18 +2707,32 @@ func (op *NounPhrase) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
+
+func (op *NounPhrase) SetChoice(c string) (ret interface{}, okay bool) {
+	switch c {
+	case "":
+		op.Opt, okay = nil, true
+	case NounPhrase_KindOfNoun_Opt:
+		opt := new(KindOfNoun)
+		op.Opt, ret, okay = opt, opt, true
+	case NounPhrase_NounTraits_Opt:
+		opt := new(NounTraits)
+		op.Opt, ret, okay = opt, opt, true
+	case NounPhrase_NounRelation_Opt:
+		opt := new(NounRelation)
+		op.Opt, ret, okay = opt, opt, true
+	}
+	return
+}
+
 func (op *NounPhrase) Marshal(n jsn.Marshaler) {
 	NounPhrase_Marshal(n, op)
 }
 func NounPhrase_Marshal(n jsn.Marshaler, val *NounPhrase) {
-	if pick, ok := val.GetChoice(); ok {
-		if slat := val.Opt; len(pick) > 0 {
-			n.SetCursor(val.At.Offset)
-			if n.PickValues(NounPhrase_Type, pick) {
-				slat.(jsn.Marshalee).Marshal(n)
-				n.EndValues()
-			}
-		}
+	n.SetCursor(val.At.Offset)
+	if n.PickValues(val) {
+		val.Opt.(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 }
 
@@ -2569,6 +2753,10 @@ type NounRelation struct {
 	AreBeing AreBeing           `if:"label=_,optional"`
 	Relation value.RelationName `if:"label=relation"`
 	Nouns    []NamedNoun        `if:"label=nouns"`
+}
+
+func (*NounRelation) GetType() string {
+	return NounRelation_Type
 }
 
 func (*NounRelation) Compose() composer.Spec {
@@ -2629,6 +2817,10 @@ type NounStatement struct {
 	Summary *Summary `if:"label=summary,optional"`
 }
 
+func (*NounStatement) GetType() string {
+	return NounStatement_Type
+}
+
 func (*NounStatement) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NounStatement_Type,
@@ -2684,6 +2876,10 @@ func NounStatement_Marshal(n jsn.Marshaler, val *NounStatement) {
 type NounTraits struct {
 	AreBeing AreBeing `if:"label=_"`
 	Trait    []Trait  `if:"label=trait"`
+}
+
+func (*NounTraits) GetType() string {
+	return NounTraits_Type
 }
 
 func (*NounTraits) Compose() composer.Spec {
@@ -2744,6 +2940,10 @@ func (op *NumberList) String() string {
 
 const NumberList_List = "$LIST"
 
+func (*NumberList) GetType() string {
+	return NumberList_Type
+}
+
 func (*NumberList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NumberList_Type,
@@ -2755,13 +2955,6 @@ func (*NumberList) Compose() composer.Spec {
 			"list",
 		},
 	}
-}
-
-func (op *NumberList) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *NumberList) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const NumberList_Type = "number_list"
@@ -2778,7 +2971,7 @@ func NumberList_Optional_Marshal(n jsn.Marshaler, val *NumberList) {
 }
 
 func NumberList_Marshal(n jsn.Marshaler, val *NumberList) {
-	n.SpecifyEnum(NumberList_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func NumberList_Repeats_Marshal(n jsn.Marshaler, vals *[]NumberList) {
@@ -2797,6 +2990,10 @@ func NumberList_Repeats_Marshal(n jsn.Marshaler, vals *[]NumberList) {
 type ObjectType struct {
 	An   Ana          `if:"label=_"`
 	Kind SingularKind `if:"label=kind"`
+}
+
+func (*ObjectType) GetType() string {
+	return ObjectType_Type
 }
 
 func (*ObjectType) Compose() composer.Spec {
@@ -2852,6 +3049,10 @@ type OneToMany struct {
 	Kinds PluralKinds  `if:"label=kinds"`
 }
 
+func (*OneToMany) GetType() string {
+	return OneToMany_Type
+}
+
 func (*OneToMany) Compose() composer.Spec {
 	return composer.Spec{
 		Name: OneToMany_Type,
@@ -2903,6 +3104,10 @@ func OneToMany_Marshal(n jsn.Marshaler, val *OneToMany) {
 type OneToOne struct {
 	Kind      SingularKind `if:"label=_"`
 	OtherKind SingularKind `if:"label=other_kind"`
+}
+
+func (*OneToOne) GetType() string {
+	return OneToOne_Type
 }
 
 func (*OneToOne) Compose() composer.Spec {
@@ -2958,6 +3163,10 @@ type PairedAction struct {
 	Kinds PluralKinds     `if:"label=kinds"`
 }
 
+func (*PairedAction) GetType() string {
+	return PairedAction_Type
+}
+
 func (*PairedAction) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PairedAction_Type,
@@ -3005,6 +3214,10 @@ func PairedAction_Marshal(n jsn.Marshaler, val *PairedAction) {
 // Paragraph
 type Paragraph struct {
 	StoryStatement []StoryStatement `if:"label=_,optional"`
+}
+
+func (*Paragraph) GetType() string {
+	return Paragraph_Type
 }
 
 func (*Paragraph) Compose() composer.Spec {
@@ -3056,6 +3269,10 @@ type PatternActions struct {
 	PatternLocals *PatternLocals    `if:"label=pattern_locals,optional"`
 	PatternReturn *PatternReturn    `if:"label=pattern_return,optional"`
 	PatternRules  PatternRules      `if:"label=pattern_rules"`
+}
+
+func (*PatternActions) GetType() string {
+	return PatternActions_Type
 }
 
 func (*PatternActions) Compose() composer.Spec {
@@ -3120,6 +3337,10 @@ type PatternDecl struct {
 	Optvars       *PatternVariablesTail `if:"label=optvars,optional"`
 	PatternReturn *PatternReturn        `if:"label=pattern_return,optional"`
 	About         *Comment              `if:"label=about,optional"`
+}
+
+func (*PatternDecl) GetType() string {
+	return PatternDecl_Type
 }
 
 func (*PatternDecl) Compose() composer.Spec {
@@ -3194,6 +3415,10 @@ const PatternFlags_Before = "$BEFORE"
 const PatternFlags_After = "$AFTER"
 const PatternFlags_Terminate = "$TERMINATE"
 
+func (*PatternFlags) GetType() string {
+	return PatternFlags_Type
+}
+
 func (*PatternFlags) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PatternFlags_Type,
@@ -3205,13 +3430,6 @@ func (*PatternFlags) Compose() composer.Spec {
 			"before", "after", "terminate",
 		},
 	}
-}
-
-func (op *PatternFlags) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *PatternFlags) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const PatternFlags_Type = "pattern_flags"
@@ -3228,7 +3446,7 @@ func PatternFlags_Optional_Marshal(n jsn.Marshaler, val *PatternFlags) {
 }
 
 func PatternFlags_Marshal(n jsn.Marshaler, val *PatternFlags) {
-	n.SpecifyEnum(PatternFlags_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func PatternFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternFlags) {
@@ -3246,6 +3464,10 @@ func PatternFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternFlags) {
 // PatternLocals
 type PatternLocals struct {
 	LocalDecl []LocalDecl `if:"label=_"`
+}
+
+func (*PatternLocals) GetType() string {
+	return PatternLocals_Type
 }
 
 func (*PatternLocals) Compose() composer.Spec {
@@ -3296,6 +3518,10 @@ type PatternReturn struct {
 	Result VariableDecl `if:"label=_"`
 }
 
+func (*PatternReturn) GetType() string {
+	return PatternReturn_Type
+}
+
 func (*PatternReturn) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PatternReturn_Type,
@@ -3344,6 +3570,10 @@ type PatternRule struct {
 	Guard rt.BoolEval  `if:"label=_"`
 	Flags PatternFlags `if:"label=flags,optional"`
 	Hook  ProgramHook  `if:"label=hook"`
+}
+
+func (*PatternRule) GetType() string {
+	return PatternRule_Type
 }
 
 func (*PatternRule) Compose() composer.Spec {
@@ -3400,6 +3630,10 @@ func PatternRule_Marshal(n jsn.Marshaler, val *PatternRule) {
 // PatternRules
 type PatternRules struct {
 	PatternRule []PatternRule `if:"label=_,optional"`
+}
+
+func (*PatternRules) GetType() string {
+	return PatternRules_Type
 }
 
 func (*PatternRules) Compose() composer.Spec {
@@ -3459,6 +3693,10 @@ const PatternType_Patterns = "$PATTERNS"
 const PatternType_Actions = "$ACTIONS"
 const PatternType_Events = "$EVENTS"
 
+func (*PatternType) GetType() string {
+	return PatternType_Type
+}
+
 func (*PatternType) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        PatternType_Type,
@@ -3471,13 +3709,6 @@ func (*PatternType) Compose() composer.Spec {
 			"patterns", "actions", "events",
 		},
 	}
-}
-
-func (op *PatternType) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *PatternType) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const PatternType_Type = "pattern_type"
@@ -3495,7 +3726,7 @@ func PatternType_Optional_Marshal(n jsn.Marshaler, val *PatternType) {
 
 func PatternType_Marshal(n jsn.Marshaler, val *PatternType) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(PatternType_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func PatternType_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternType) {
@@ -3514,6 +3745,10 @@ func PatternType_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternType) {
 type PatternVariablesDecl struct {
 	PatternName  value.PatternName `if:"label=_"`
 	VariableDecl []VariableDecl    `if:"label=variable_decl"`
+}
+
+func (*PatternVariablesDecl) GetType() string {
+	return PatternVariablesDecl_Type
 }
 
 func (*PatternVariablesDecl) Compose() composer.Spec {
@@ -3566,6 +3801,10 @@ func PatternVariablesDecl_Marshal(n jsn.Marshaler, val *PatternVariablesDecl) {
 // PatternVariablesTail Storage for values used during the execution of a pattern.
 type PatternVariablesTail struct {
 	VariableDecl []VariableDecl `if:"label=_"`
+}
+
+func (*PatternVariablesTail) GetType() string {
+	return PatternVariablesTail_Type
 }
 
 func (*PatternVariablesTail) Compose() composer.Spec {
@@ -3621,6 +3860,10 @@ func (op *PluralKinds) String() string {
 	return op.Str
 }
 
+func (*PluralKinds) GetType() string {
+	return PluralKinds_Type
+}
+
 func (*PluralKinds) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        PluralKinds_Type,
@@ -3673,6 +3916,10 @@ const PrimitiveType_Number = "$NUMBER"
 const PrimitiveType_Text = "$TEXT"
 const PrimitiveType_Bool = "$BOOL"
 
+func (*PrimitiveType) GetType() string {
+	return PrimitiveType_Type
+}
+
 func (*PrimitiveType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PrimitiveType_Type,
@@ -3684,13 +3931,6 @@ func (*PrimitiveType) Compose() composer.Spec {
 			"number", "text", "bool",
 		},
 	}
-}
-
-func (op *PrimitiveType) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *PrimitiveType) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const PrimitiveType_Type = "primitive_type"
@@ -3708,7 +3948,7 @@ func PrimitiveType_Optional_Marshal(n jsn.Marshaler, val *PrimitiveType) {
 
 func PrimitiveType_Marshal(n jsn.Marshaler, val *PrimitiveType) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(PrimitiveType_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func PrimitiveType_Repeats_Marshal(n jsn.Marshaler, vals *[]PrimitiveType) {
@@ -3730,6 +3970,10 @@ type PrimitiveValue struct {
 
 const PrimitiveValue_BoxedText_Opt = "$BOXED_TEXT"
 const PrimitiveValue_BoxedNumber_Opt = "$BOXED_NUMBER"
+
+func (*PrimitiveValue) GetType() string {
+	return PrimitiveValue_Type
+}
 
 func (*PrimitiveValue) Compose() composer.Spec {
 	return composer.Spec{
@@ -3758,17 +4002,28 @@ func (op *PrimitiveValue) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
+
+func (op *PrimitiveValue) SetChoice(c string) (ret interface{}, okay bool) {
+	switch c {
+	case "":
+		op.Opt, okay = nil, true
+	case PrimitiveValue_BoxedText_Opt:
+		opt := new(BoxedText)
+		op.Opt, ret, okay = opt, opt, true
+	case PrimitiveValue_BoxedNumber_Opt:
+		opt := new(BoxedNumber)
+		op.Opt, ret, okay = opt, opt, true
+	}
+	return
+}
+
 func (op *PrimitiveValue) Marshal(n jsn.Marshaler) {
 	PrimitiveValue_Marshal(n, op)
 }
 func PrimitiveValue_Marshal(n jsn.Marshaler, val *PrimitiveValue) {
-	if pick, ok := val.GetChoice(); ok {
-		if slat := val.Opt; len(pick) > 0 {
-			if n.PickValues(PrimitiveValue_Type, pick) {
-				slat.(jsn.Marshalee).Marshal(n)
-				n.EndValues()
-			}
-		}
+	if n.PickValues(val) {
+		val.Opt.(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 }
 
@@ -3791,6 +4046,10 @@ type ProgramHook struct {
 }
 
 const ProgramHook_Activity_Opt = "$ACTIVITY"
+
+func (*ProgramHook) GetType() string {
+	return ProgramHook_Type
+}
 
 func (*ProgramHook) Compose() composer.Spec {
 	return composer.Spec{
@@ -3816,18 +4075,26 @@ func (op *ProgramHook) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
+
+func (op *ProgramHook) SetChoice(c string) (ret interface{}, okay bool) {
+	switch c {
+	case "":
+		op.Opt, okay = nil, true
+	case ProgramHook_Activity_Opt:
+		opt := new(core.Activity)
+		op.Opt, ret, okay = opt, opt, true
+	}
+	return
+}
+
 func (op *ProgramHook) Marshal(n jsn.Marshaler) {
 	ProgramHook_Marshal(n, op)
 }
 func ProgramHook_Marshal(n jsn.Marshaler, val *ProgramHook) {
-	if pick, ok := val.GetChoice(); ok {
-		if slat := val.Opt; len(pick) > 0 {
-			n.SetCursor(val.At.Offset)
-			if n.PickValues(ProgramHook_Type, pick) {
-				slat.(jsn.Marshalee).Marshal(n)
-				n.EndValues()
-			}
-		}
+	n.SetCursor(val.At.Offset)
+	if n.PickValues(val) {
+		val.Opt.(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 }
 
@@ -3855,6 +4122,10 @@ func (op *Pronoun) String() string {
 const Pronoun_It = "$IT"
 const Pronoun_They = "$THEY"
 
+func (*Pronoun) GetType() string {
+	return Pronoun_Type
+}
+
 func (*Pronoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        Pronoun_Type,
@@ -3867,13 +4138,6 @@ func (*Pronoun) Compose() composer.Spec {
 			"it", "they",
 		},
 	}
-}
-
-func (op *Pronoun) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *Pronoun) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const Pronoun_Type = "pronoun"
@@ -3890,7 +4154,7 @@ func Pronoun_Optional_Marshal(n jsn.Marshaler, val *Pronoun) {
 }
 
 func Pronoun_Marshal(n jsn.Marshaler, val *Pronoun) {
-	n.SpecifyEnum(Pronoun_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func Pronoun_Repeats_Marshal(n jsn.Marshaler, vals *[]Pronoun) {
@@ -3913,6 +4177,10 @@ type Property struct {
 
 func (op *Property) String() string {
 	return op.Str
+}
+
+func (*Property) GetType() string {
+	return Property_Type
 }
 
 func (*Property) Compose() composer.Spec {
@@ -3965,6 +4233,10 @@ func (op *PropertyAspect) String() string {
 
 const PropertyAspect_Aspect = "$ASPECT"
 
+func (*PropertyAspect) GetType() string {
+	return PropertyAspect_Type
+}
+
 func (*PropertyAspect) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PropertyAspect_Type,
@@ -3976,13 +4248,6 @@ func (*PropertyAspect) Compose() composer.Spec {
 			"aspect",
 		},
 	}
-}
-
-func (op *PropertyAspect) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *PropertyAspect) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const PropertyAspect_Type = "property_aspect"
@@ -4000,7 +4265,7 @@ func PropertyAspect_Optional_Marshal(n jsn.Marshaler, val *PropertyAspect) {
 
 func PropertyAspect_Marshal(n jsn.Marshaler, val *PropertyAspect) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(PropertyAspect_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func PropertyAspect_Repeats_Marshal(n jsn.Marshaler, vals *[]PropertyAspect) {
@@ -4021,6 +4286,10 @@ type PropertyDecl struct {
 	Property     Property     `if:"label=property"`
 	PropertyType PropertyType `if:"label=property_type"`
 	Comment      value.Lines  `if:"label=comment,optional"`
+}
+
+func (*PropertyDecl) GetType() string {
+	return PropertyDecl_Type
 }
 
 func (*PropertyDecl) Compose() composer.Spec {
@@ -4088,6 +4357,10 @@ const PropertyType_PropertyAspect_Opt = "$PROPERTY_ASPECT"
 const PropertyType_Primitive_Opt = "$PRIMITIVE"
 const PropertyType_Ext_Opt = "$EXT"
 
+func (*PropertyType) GetType() string {
+	return PropertyType_Type
+}
+
 func (*PropertyType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PropertyType_Type,
@@ -4118,18 +4391,32 @@ func (op *PropertyType) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
+
+func (op *PropertyType) SetChoice(c string) (ret interface{}, okay bool) {
+	switch c {
+	case "":
+		op.Opt, okay = nil, true
+	case PropertyType_PropertyAspect_Opt:
+		opt := new(PropertyAspect)
+		op.Opt, ret, okay = opt, opt, true
+	case PropertyType_Primitive_Opt:
+		opt := new(PrimitiveType)
+		op.Opt, ret, okay = opt, opt, true
+	case PropertyType_Ext_Opt:
+		opt := new(ExtType)
+		op.Opt, ret, okay = opt, opt, true
+	}
+	return
+}
+
 func (op *PropertyType) Marshal(n jsn.Marshaler) {
 	PropertyType_Marshal(n, op)
 }
 func PropertyType_Marshal(n jsn.Marshaler, val *PropertyType) {
-	if pick, ok := val.GetChoice(); ok {
-		if slat := val.Opt; len(pick) > 0 {
-			n.SetCursor(val.At.Offset)
-			if n.PickValues(PropertyType_Type, pick) {
-				slat.(jsn.Marshalee).Marshal(n)
-				n.EndValues()
-			}
-		}
+	n.SetCursor(val.At.Offset)
+	if n.PickValues(val) {
+		val.Opt.(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 }
 
@@ -4148,6 +4435,10 @@ func PropertyType_Repeats_Marshal(n jsn.Marshaler, vals *[]PropertyType) {
 // RecordList
 type RecordList struct {
 	Kind RecordSingular `if:"label=_"`
+}
+
+func (*RecordList) GetType() string {
+	return RecordList_Type
 }
 
 func (*RecordList) Compose() composer.Spec {
@@ -4203,6 +4494,10 @@ func (op *RecordPlural) String() string {
 	return op.Str
 }
 
+func (*RecordPlural) GetType() string {
+	return RecordPlural_Type
+}
+
 func (*RecordPlural) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        RecordPlural_Type,
@@ -4251,6 +4546,10 @@ func (op *RecordSingular) String() string {
 	return op.Str
 }
 
+func (*RecordSingular) GetType() string {
+	return RecordSingular_Type
+}
+
 func (*RecordSingular) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        RecordSingular_Type,
@@ -4292,6 +4591,10 @@ func RecordSingular_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordSingular) {
 // RecordType
 type RecordType struct {
 	Kind RecordSingular `if:"label=_"`
+}
+
+func (*RecordType) GetType() string {
+	return RecordType_Type
 }
 
 func (*RecordType) Compose() composer.Spec {
@@ -4341,6 +4644,10 @@ func RecordType_Marshal(n jsn.Marshaler, val *RecordType) {
 type RecordsPossessProperties struct {
 	RecordPlural RecordPlural   `if:"label=_"`
 	PropertyDecl []PropertyDecl `if:"label=property_decl"`
+}
+
+func (*RecordsPossessProperties) GetType() string {
+	return RecordsPossessProperties_Type
 }
 
 func (*RecordsPossessProperties) Compose() composer.Spec {
@@ -4401,6 +4708,10 @@ const RelationCardinality_OneToMany_Opt = "$ONE_TO_MANY"
 const RelationCardinality_ManyToOne_Opt = "$MANY_TO_ONE"
 const RelationCardinality_ManyToMany_Opt = "$MANY_TO_MANY"
 
+func (*RelationCardinality) GetType() string {
+	return RelationCardinality_Type
+}
+
 func (*RelationCardinality) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RelationCardinality_Type,
@@ -4434,18 +4745,35 @@ func (op *RelationCardinality) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
+
+func (op *RelationCardinality) SetChoice(c string) (ret interface{}, okay bool) {
+	switch c {
+	case "":
+		op.Opt, okay = nil, true
+	case RelationCardinality_OneToOne_Opt:
+		opt := new(OneToOne)
+		op.Opt, ret, okay = opt, opt, true
+	case RelationCardinality_OneToMany_Opt:
+		opt := new(OneToMany)
+		op.Opt, ret, okay = opt, opt, true
+	case RelationCardinality_ManyToOne_Opt:
+		opt := new(ManyToOne)
+		op.Opt, ret, okay = opt, opt, true
+	case RelationCardinality_ManyToMany_Opt:
+		opt := new(ManyToMany)
+		op.Opt, ret, okay = opt, opt, true
+	}
+	return
+}
+
 func (op *RelationCardinality) Marshal(n jsn.Marshaler) {
 	RelationCardinality_Marshal(n, op)
 }
 func RelationCardinality_Marshal(n jsn.Marshaler, val *RelationCardinality) {
-	if pick, ok := val.GetChoice(); ok {
-		if slat := val.Opt; len(pick) > 0 {
-			n.SetCursor(val.At.Offset)
-			if n.PickValues(RelationCardinality_Type, pick) {
-				slat.(jsn.Marshalee).Marshal(n)
-				n.EndValues()
-			}
-		}
+	n.SetCursor(val.At.Offset)
+	if n.PickValues(val) {
+		val.Opt.(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 }
 
@@ -4467,6 +4795,10 @@ type RelativeToNoun struct {
 	Nouns    []NamedNoun        `if:"label=nouns"`
 	AreBeing AreBeing           `if:"label=are_being"`
 	Nouns1   []NamedNoun        `if:"label=nouns1"`
+}
+
+func (*RelativeToNoun) GetType() string {
+	return RelativeToNoun_Type
 }
 
 func (*RelativeToNoun) Compose() composer.Spec {
@@ -4529,6 +4861,10 @@ type RenderTemplate struct {
 	Template value.Lines `if:"label=_"`
 }
 
+func (*RenderTemplate) GetType() string {
+	return RenderTemplate_Type
+}
+
 func (*RenderTemplate) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RenderTemplate_Type,
@@ -4577,6 +4913,10 @@ type Send struct {
 	Event     string          `if:"label=_,type=text"`
 	Path      rt.TextListEval `if:"label=path"`
 	Arguments *Arguments      `if:"label=arguments,optional"`
+}
+
+func (*Send) GetType() string {
+	return Send_Type
 }
 
 func (*Send) Compose() composer.Spec {
@@ -4636,6 +4976,10 @@ type ShuffleText struct {
 	Parts []rt.TextEval   `if:"label=parts"`
 }
 
+func (*ShuffleText) GetType() string {
+	return ShuffleText_Type
+}
+
 func (*ShuffleText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ShuffleText_Type,
@@ -4690,6 +5034,10 @@ func (op *SingularKind) String() string {
 	return op.Str
 }
 
+func (*SingularKind) GetType() string {
+	return SingularKind_Type
+}
+
 func (*SingularKind) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        SingularKind_Type,
@@ -4732,6 +5080,10 @@ func SingularKind_Repeats_Marshal(n jsn.Marshaler, vals *[]SingularKind) {
 type StoppingText struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=parts"`
+}
+
+func (*StoppingText) GetType() string {
+	return StoppingText_Type
 }
 
 func (*StoppingText) Compose() composer.Spec {
@@ -4781,6 +5133,10 @@ func StoppingText_Marshal(n jsn.Marshaler, val *StoppingText) {
 // Story
 type Story struct {
 	Paragraph []Paragraph `if:"label=_,optional"`
+}
+
+func (*Story) GetType() string {
+	return Story_Type
 }
 
 func (*Story) Compose() composer.Spec {
@@ -4855,6 +5211,10 @@ type Summary struct {
 	Lines value.Lines     `if:"label=lines"`
 }
 
+func (*Summary) GetType() string {
+	return Summary_Type
+}
+
 func (*Summary) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Summary_Type,
@@ -4903,6 +5263,10 @@ func Summary_Marshal(n jsn.Marshaler, val *Summary) {
 type Tail struct {
 	Pronoun    Pronoun    `if:"label=_"`
 	NounPhrase NounPhrase `if:"label=noun_phrase"`
+}
+
+func (*Tail) GetType() string {
+	return Tail_Type
 }
 
 func (*Tail) Compose() composer.Spec {
@@ -4964,6 +5328,10 @@ func (op *TestName) String() string {
 
 const TestName_CurrentTest = "$CURRENT_TEST"
 
+func (*TestName) GetType() string {
+	return TestName_Type
+}
+
 func (*TestName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        TestName_Type,
@@ -4976,13 +5344,6 @@ func (*TestName) Compose() composer.Spec {
 			"current_test",
 		},
 	}
-}
-
-func (op *TestName) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *TestName) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const TestName_Type = "test_name"
@@ -5000,7 +5361,7 @@ func TestName_Optional_Marshal(n jsn.Marshaler, val *TestName) {
 
 func TestName_Marshal(n jsn.Marshaler, val *TestName) {
 	n.SetCursor(val.At.Offset)
-	n.SpecifyEnum(TestName_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func TestName_Repeats_Marshal(n jsn.Marshaler, vals *[]TestName) {
@@ -5018,6 +5379,10 @@ func TestName_Repeats_Marshal(n jsn.Marshaler, vals *[]TestName) {
 // TestOutput Expect that a test uses &#x27;Say&#x27; to print some specific text.
 type TestOutput struct {
 	Lines value.Lines `if:"label=_"`
+}
+
+func (*TestOutput) GetType() string {
+	return TestOutput_Type
 }
 
 func (*TestOutput) Compose() composer.Spec {
@@ -5067,6 +5432,10 @@ func TestOutput_Marshal(n jsn.Marshaler, val *TestOutput) {
 type TestRule struct {
 	TestName TestName    `if:"label=_"`
 	Hook     ProgramHook `if:"label=hook"`
+}
+
+func (*TestRule) GetType() string {
+	return TestRule_Type
 }
 
 func (*TestRule) Compose() composer.Spec {
@@ -5122,6 +5491,10 @@ type TestScene struct {
 	Story    Story    `if:"label=story"`
 }
 
+func (*TestScene) GetType() string {
+	return TestScene_Type
+}
+
 func (*TestScene) Compose() composer.Spec {
 	return composer.Spec{
 		Name: TestScene_Type,
@@ -5174,6 +5547,10 @@ type TestStatement struct {
 	At       reader.Position `if:"internal"`
 	TestName TestName        `if:"label=test_name"`
 	Test     Testing         `if:"label=test"`
+}
+
+func (*TestStatement) GetType() string {
+	return TestStatement_Type
 }
 
 func (*TestStatement) Compose() composer.Spec {
@@ -5258,6 +5635,10 @@ func (op *TextList) String() string {
 
 const TextList_List = "$LIST"
 
+func (*TextList) GetType() string {
+	return TextList_Type
+}
+
 func (*TextList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: TextList_Type,
@@ -5269,13 +5650,6 @@ func (*TextList) Compose() composer.Spec {
 			"list",
 		},
 	}
-}
-
-func (op *TextList) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *TextList) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const TextList_Type = "text_list"
@@ -5292,7 +5666,7 @@ func TextList_Optional_Marshal(n jsn.Marshaler, val *TextList) {
 }
 
 func TextList_Marshal(n jsn.Marshaler, val *TextList) {
-	n.SpecifyEnum(TextList_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func TextList_Repeats_Marshal(n jsn.Marshaler, vals *[]TextList) {
@@ -5315,6 +5689,10 @@ type Trait struct {
 
 func (op *Trait) String() string {
 	return op.Str
+}
+
+func (*Trait) GetType() string {
+	return Trait_Type
 }
 
 func (*Trait) Compose() composer.Spec {
@@ -5359,6 +5737,10 @@ func Trait_Repeats_Marshal(n jsn.Marshaler, vals *[]Trait) {
 type TraitPhrase struct {
 	AreEither AreEither `if:"label=_"`
 	Trait     []Trait   `if:"label=trait"`
+}
+
+func (*TraitPhrase) GetType() string {
+	return TraitPhrase_Type
 }
 
 func (*TraitPhrase) Compose() composer.Spec {
@@ -5414,6 +5796,10 @@ type VariableDecl struct {
 	Name    value.VariableName `if:"label=name"`
 	Type    VariableType       `if:"label=type"`
 	Comment value.Lines        `if:"label=comment,optional"`
+}
+
+func (*VariableDecl) GetType() string {
+	return VariableDecl_Type
 }
 
 func (*VariableDecl) Compose() composer.Spec {
@@ -5481,6 +5867,10 @@ const VariableType_Primitive_Opt = "$PRIMITIVE"
 const VariableType_Object_Opt = "$OBJECT"
 const VariableType_Ext_Opt = "$EXT"
 
+func (*VariableType) GetType() string {
+	return VariableType_Type
+}
+
 func (*VariableType) Compose() composer.Spec {
 	return composer.Spec{
 		Name: VariableType_Type,
@@ -5511,18 +5901,32 @@ func (op *VariableType) GetChoice() (ret string, okay bool) {
 	}
 	return
 }
+
+func (op *VariableType) SetChoice(c string) (ret interface{}, okay bool) {
+	switch c {
+	case "":
+		op.Opt, okay = nil, true
+	case VariableType_Primitive_Opt:
+		opt := new(PrimitiveType)
+		op.Opt, ret, okay = opt, opt, true
+	case VariableType_Object_Opt:
+		opt := new(ObjectType)
+		op.Opt, ret, okay = opt, opt, true
+	case VariableType_Ext_Opt:
+		opt := new(ExtType)
+		op.Opt, ret, okay = opt, opt, true
+	}
+	return
+}
+
 func (op *VariableType) Marshal(n jsn.Marshaler) {
 	VariableType_Marshal(n, op)
 }
 func VariableType_Marshal(n jsn.Marshaler, val *VariableType) {
-	if pick, ok := val.GetChoice(); ok {
-		if slat := val.Opt; len(pick) > 0 {
-			n.SetCursor(val.At.Offset)
-			if n.PickValues(VariableType_Type, pick) {
-				slat.(jsn.Marshalee).Marshal(n)
-				n.EndValues()
-			}
-		}
+	n.SetCursor(val.At.Offset)
+	if n.PickValues(val) {
+		val.Opt.(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 }
 

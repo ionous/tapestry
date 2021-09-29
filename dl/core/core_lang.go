@@ -14,6 +14,10 @@ type Activity struct {
 	Exe []rt.Execute `if:"label=_"`
 }
 
+func (*Activity) GetType() string {
+	return Activity_Type
+}
+
 func (*Activity) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Activity_Type,
@@ -61,6 +65,10 @@ func Activity_Marshal(n jsn.Marshaler, val *Activity) {
 // AllTrue Returns true if all of the evaluations are true.
 type AllTrue struct {
 	Test []rt.BoolEval `if:"label=_"`
+}
+
+func (*AllTrue) GetType() string {
+	return AllTrue_Type
 }
 
 func (*AllTrue) Compose() composer.Spec {
@@ -111,6 +119,10 @@ func AllTrue_Marshal(n jsn.Marshaler, val *AllTrue) {
 type Always struct {
 }
 
+func (*Always) GetType() string {
+	return Always_Type
+}
+
 func (*Always) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Always_Type,
@@ -152,6 +164,10 @@ func Always_Marshal(n jsn.Marshaler, val *Always) {
 // AnyTrue Returns true if any of the evaluations are true.
 type AnyTrue struct {
 	Test []rt.BoolEval `if:"label=_"`
+}
+
+func (*AnyTrue) GetType() string {
+	return AnyTrue_Type
 }
 
 func (*AnyTrue) Compose() composer.Spec {
@@ -202,6 +218,10 @@ func AnyTrue_Marshal(n jsn.Marshaler, val *AnyTrue) {
 type Assign struct {
 	Var  value.VariableName `if:"label=_"`
 	From rt.Assignment      `if:"label=be"`
+}
+
+func (*Assign) GetType() string {
+	return Assign_Type
 }
 
 func (*Assign) Compose() composer.Spec {
@@ -256,6 +276,10 @@ func Assign_Marshal(n jsn.Marshaler, val *Assign) {
 type AtLeast struct {
 }
 
+func (*AtLeast) GetType() string {
+	return AtLeast_Type
+}
+
 func (*AtLeast) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AtLeast_Type,
@@ -296,6 +320,10 @@ func AtLeast_Marshal(n jsn.Marshaler, val *AtLeast) {
 
 // AtMost The first value is less than or equal to the second value.
 type AtMost struct {
+}
+
+func (*AtMost) GetType() string {
+	return AtMost_Type
 }
 
 func (*AtMost) Compose() composer.Spec {
@@ -340,6 +368,10 @@ func AtMost_Marshal(n jsn.Marshaler, val *AtMost) {
 type Blankline struct {
 }
 
+func (*Blankline) GetType() string {
+	return Blankline_Type
+}
+
 func (*Blankline) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Blankline_Type,
@@ -382,6 +414,10 @@ func Blankline_Marshal(n jsn.Marshaler, val *Blankline) {
 // BoolValue Specify an explicit true or false value.
 type BoolValue struct {
 	Bool bool `if:"label=_,type=bool"`
+}
+
+func (*BoolValue) GetType() string {
+	return BoolValue_Type
 }
 
 func (*BoolValue) Compose() composer.Spec {
@@ -431,6 +467,10 @@ func BoolValue_Marshal(n jsn.Marshaler, val *BoolValue) {
 // BracketText Sandwiches text printed during a block and puts them inside parenthesis &#x27;()&#x27;.
 type BracketText struct {
 	Do Activity `if:"label=_"`
+}
+
+func (*BracketText) GetType() string {
+	return BracketText_Type
 }
 
 func (*BracketText) Compose() composer.Spec {
@@ -504,6 +544,10 @@ func Brancher_Repeats_Marshal(n jsn.Marshaler, vals *[]Brancher) {
 type Break struct {
 }
 
+func (*Break) GetType() string {
+	return Break_Type
+}
+
 func (*Break) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Break_Type,
@@ -545,6 +589,10 @@ func Break_Marshal(n jsn.Marshaler, val *Break) {
 // BufferText
 type BufferText struct {
 	Do Activity `if:"label=_"`
+}
+
+func (*BufferText) GetType() string {
+	return BufferText_Type
 }
 
 func (*BufferText) Compose() composer.Spec {
@@ -595,6 +643,10 @@ func BufferText_Marshal(n jsn.Marshaler, val *BufferText) {
 type CallArg struct {
 	Name string        `if:"label=_,type=text"`
 	From rt.Assignment `if:"label=from"`
+}
+
+func (*CallArg) GetType() string {
+	return CallArg_Type
 }
 
 func (*CallArg) Compose() composer.Spec {
@@ -650,6 +702,10 @@ type CallArgs struct {
 	Args []CallArg `if:"label=_"`
 }
 
+func (*CallArgs) GetType() string {
+	return CallArgs_Type
+}
+
 func (*CallArgs) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CallArgs_Type,
@@ -698,6 +754,10 @@ func CallArgs_Marshal(n jsn.Marshaler, val *CallArgs) {
 type CallCycle struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
+}
+
+func (*CallCycle) GetType() string {
+	return CallCycle_Type
 }
 
 func (*CallCycle) Compose() composer.Spec {
@@ -749,6 +809,10 @@ func CallCycle_Marshal(n jsn.Marshaler, val *CallCycle) {
 type CallMake struct {
 	Kind      string   `if:"label=_,type=text"`
 	Arguments CallArgs `if:"label=args"`
+}
+
+func (*CallMake) GetType() string {
+	return CallMake_Type
 }
 
 func (*CallMake) Compose() composer.Spec {
@@ -804,6 +868,10 @@ type CallPattern struct {
 	Arguments CallArgs          `if:"label=args"`
 }
 
+func (*CallPattern) GetType() string {
+	return CallPattern_Type
+}
+
 func (*CallPattern) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CallPattern_Type,
@@ -856,6 +924,10 @@ type CallSend struct {
 	Event     string          `if:"label=_,type=text"`
 	Path      rt.TextListEval `if:"label=to"`
 	Arguments CallArgs        `if:"label=args"`
+}
+
+func (*CallSend) GetType() string {
+	return CallSend_Type
 }
 
 func (*CallSend) Compose() composer.Spec {
@@ -916,6 +988,10 @@ type CallShuffle struct {
 	Indices Shuffler        `if:"internal"`
 }
 
+func (*CallShuffle) GetType() string {
+	return CallShuffle_Type
+}
+
 func (*CallShuffle) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CallShuffle_Type,
@@ -965,6 +1041,10 @@ func CallShuffle_Marshal(n jsn.Marshaler, val *CallShuffle) {
 type CallTerminal struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
+}
+
+func (*CallTerminal) GetType() string {
+	return CallTerminal_Type
 }
 
 func (*CallTerminal) Compose() composer.Spec {
@@ -1017,6 +1097,10 @@ type CallTrigger struct {
 	At      reader.Position `if:"internal"`
 	Trigger Trigger         `if:"label=_"`
 	Num     rt.NumberEval   `if:"label=num"`
+}
+
+func (*CallTrigger) GetType() string {
+	return CallTrigger_Type
 }
 
 func (*CallTrigger) Compose() composer.Spec {
@@ -1073,6 +1157,10 @@ type Capitalize struct {
 	Text rt.TextEval `if:"label=_"`
 }
 
+func (*Capitalize) GetType() string {
+	return Capitalize_Type
+}
+
 func (*Capitalize) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Capitalize_Type,
@@ -1121,6 +1209,10 @@ type ChooseAction struct {
 	If   rt.BoolEval `if:"label=_"`
 	Do   Activity    `if:"label=do"`
 	Else Brancher    `if:"label=else,optional"`
+}
+
+func (*ChooseAction) GetType() string {
+	return ChooseAction_Type
 }
 
 func (*ChooseAction) Compose() composer.Spec {
@@ -1182,6 +1274,10 @@ type ChooseMore struct {
 	Else Brancher    `if:"label=else,optional"`
 }
 
+func (*ChooseMore) GetType() string {
+	return ChooseMore_Type
+}
+
 func (*ChooseMore) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ChooseMore_Type,
@@ -1241,6 +1337,10 @@ type ChooseMoreValue struct {
 	Filter rt.BoolEval   `if:"label=and"`
 	Do     Activity      `if:"label=do"`
 	Else   Brancher      `if:"label=else,optional"`
+}
+
+func (*ChooseMoreValue) GetType() string {
+	return ChooseMoreValue_Type
 }
 
 func (*ChooseMoreValue) Compose() composer.Spec {
@@ -1308,6 +1408,10 @@ type ChooseNothingElse struct {
 	Do Activity `if:"label=_"`
 }
 
+func (*ChooseNothingElse) GetType() string {
+	return ChooseNothingElse_Type
+}
+
 func (*ChooseNothingElse) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ChooseNothingElse_Type,
@@ -1357,6 +1461,10 @@ type ChooseNum struct {
 	If    rt.BoolEval   `if:"label=if"`
 	True  rt.NumberEval `if:"label=then"`
 	False rt.NumberEval `if:"label=else"`
+}
+
+func (*ChooseNum) GetType() string {
+	return ChooseNum_Type
 }
 
 func (*ChooseNum) Compose() composer.Spec {
@@ -1418,6 +1526,10 @@ type ChooseText struct {
 	False rt.TextEval `if:"label=else"`
 }
 
+func (*ChooseText) GetType() string {
+	return ChooseText_Type
+}
+
 func (*ChooseText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ChooseText_Type,
@@ -1477,6 +1589,10 @@ type ChooseValue struct {
 	Filter rt.BoolEval   `if:"label=and"`
 	Do     Activity      `if:"label=do"`
 	Else   Brancher      `if:"label=else,optional"`
+}
+
+func (*ChooseValue) GetType() string {
+	return ChooseValue_Type
 }
 
 func (*ChooseValue) Compose() composer.Spec {
@@ -1542,6 +1658,10 @@ func ChooseValue_Marshal(n jsn.Marshaler, val *ChooseValue) {
 // CommaText Separates words with commas, and &#x27;and&#x27;.
 type CommaText struct {
 	Do Activity `if:"label=_"`
+}
+
+func (*CommaText) GetType() string {
+	return CommaText_Type
 }
 
 func (*CommaText) Compose() composer.Spec {
@@ -1618,6 +1738,10 @@ type CompareNum struct {
 	B  rt.NumberEval `if:"label=num"`
 }
 
+func (*CompareNum) GetType() string {
+	return CompareNum_Type
+}
+
 func (*CompareNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CompareNum_Type,
@@ -1675,6 +1799,10 @@ type CompareText struct {
 	A  rt.TextEval `if:"label=_"`
 	Is Comparator  `if:"label=is"`
 	B  rt.TextEval `if:"label=txt"`
+}
+
+func (*CompareText) GetType() string {
+	return CompareText_Type
 }
 
 func (*CompareText) Compose() composer.Spec {
@@ -1735,6 +1863,10 @@ type DiffOf struct {
 	B rt.NumberEval `if:"label=by,optional"`
 }
 
+func (*DiffOf) GetType() string {
+	return DiffOf_Type
+}
+
 func (*DiffOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: DiffOf_Type,
@@ -1788,6 +1920,10 @@ type During struct {
 	Pattern value.PatternName `if:"label=_"`
 }
 
+func (*During) GetType() string {
+	return During_Type
+}
+
 func (*During) Compose() composer.Spec {
 	return composer.Spec{
 		Name: During_Type,
@@ -1835,6 +1971,10 @@ func During_Marshal(n jsn.Marshaler, val *During) {
 type Equal struct {
 }
 
+func (*Equal) GetType() string {
+	return Equal_Type
+}
+
 func (*Equal) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Equal_Type,
@@ -1877,6 +2017,10 @@ func Equal_Marshal(n jsn.Marshaler, val *Equal) {
 // FromBool Assigns the calculated boolean value.
 type FromBool struct {
 	Val rt.BoolEval `if:"label=_"`
+}
+
+func (*FromBool) GetType() string {
+	return FromBool_Type
 }
 
 func (*FromBool) Compose() composer.Spec {
@@ -1927,6 +2071,10 @@ type FromNum struct {
 	Val rt.NumberEval `if:"label=_"`
 }
 
+func (*FromNum) GetType() string {
+	return FromNum_Type
+}
+
 func (*FromNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromNum_Type,
@@ -1973,6 +2121,10 @@ func FromNum_Marshal(n jsn.Marshaler, val *FromNum) {
 // FromNumbers Assigns the calculated numbers.
 type FromNumbers struct {
 	Vals rt.NumListEval `if:"label=_"`
+}
+
+func (*FromNumbers) GetType() string {
+	return FromNumbers_Type
 }
 
 func (*FromNumbers) Compose() composer.Spec {
@@ -2024,6 +2176,10 @@ type FromObj struct {
 	Object rt.TextEval `if:"label=_"`
 }
 
+func (*FromObj) GetType() string {
+	return FromObj_Type
+}
+
 func (*FromObj) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromObj_Type,
@@ -2070,6 +2226,10 @@ func FromObj_Marshal(n jsn.Marshaler, val *FromObj) {
 // FromRec Targets a record stored in a record.
 type FromRec struct {
 	Rec rt.RecordEval `if:"label=_"`
+}
+
+func (*FromRec) GetType() string {
+	return FromRec_Type
 }
 
 func (*FromRec) Compose() composer.Spec {
@@ -2120,6 +2280,10 @@ type FromRecord struct {
 	Val rt.RecordEval `if:"label=_"`
 }
 
+func (*FromRecord) GetType() string {
+	return FromRecord_Type
+}
+
 func (*FromRecord) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromRecord_Type,
@@ -2167,6 +2331,10 @@ func FromRecord_Marshal(n jsn.Marshaler, val *FromRecord) {
 // FromRecords Assigns the calculated records.
 type FromRecords struct {
 	Vals rt.RecordListEval `if:"label=_"`
+}
+
+func (*FromRecords) GetType() string {
+	return FromRecords_Type
 }
 
 func (*FromRecords) Compose() composer.Spec {
@@ -2241,6 +2409,10 @@ type FromText struct {
 	Val rt.TextEval `if:"label=_"`
 }
 
+func (*FromText) GetType() string {
+	return FromText_Type
+}
+
 func (*FromText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromText_Type,
@@ -2288,6 +2460,10 @@ func FromText_Marshal(n jsn.Marshaler, val *FromText) {
 // FromTexts Assigns the calculated texts.
 type FromTexts struct {
 	Vals rt.TextListEval `if:"label=_"`
+}
+
+func (*FromTexts) GetType() string {
+	return FromTexts_Type
 }
 
 func (*FromTexts) Compose() composer.Spec {
@@ -2339,6 +2515,10 @@ type FromVar struct {
 	Var value.VariableName `if:"label=_"`
 }
 
+func (*FromVar) GetType() string {
+	return FromVar_Type
+}
+
 func (*FromVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromVar_Type,
@@ -2386,6 +2566,10 @@ func FromVar_Marshal(n jsn.Marshaler, val *FromVar) {
 type GetAtField struct {
 	Field string           `if:"label=_,type=text"`
 	From  FromSourceFields `if:"label=from"`
+}
+
+func (*GetAtField) GetType() string {
+	return GetAtField_Type
 }
 
 func (*GetAtField) Compose() composer.Spec {
@@ -2441,6 +2625,10 @@ type GetVar struct {
 	Name value.VariableName `if:"label=_"`
 }
 
+func (*GetVar) GetType() string {
+	return GetVar_Type
+}
+
 func (*GetVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: GetVar_Type,
@@ -2489,6 +2677,10 @@ func GetVar_Marshal_Customized(n jsn.Marshaler, val *GetVar) {
 type GreaterThan struct {
 }
 
+func (*GreaterThan) GetType() string {
+	return GreaterThan_Type
+}
+
 func (*GreaterThan) Compose() composer.Spec {
 	return composer.Spec{
 		Name: GreaterThan_Type,
@@ -2530,6 +2722,10 @@ func GreaterThan_Marshal(n jsn.Marshaler, val *GreaterThan) {
 // HasDominion
 type HasDominion struct {
 	Name string `if:"label=_,type=text"`
+}
+
+func (*HasDominion) GetType() string {
+	return HasDominion_Type
 }
 
 func (*HasDominion) Compose() composer.Spec {
@@ -2579,6 +2775,10 @@ func HasDominion_Marshal(n jsn.Marshaler, val *HasDominion) {
 type HasTrait struct {
 	Object rt.TextEval `if:"label=obj"`
 	Trait  rt.TextEval `if:"label=trait"`
+}
+
+func (*HasTrait) GetType() string {
+	return HasTrait_Type
 }
 
 func (*HasTrait) Compose() composer.Spec {
@@ -2634,6 +2834,10 @@ type IdOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
 
+func (*IdOf) GetType() string {
+	return IdOf_Type
+}
+
 func (*IdOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: IdOf_Type,
@@ -2681,6 +2885,10 @@ func IdOf_Marshal(n jsn.Marshaler, val *IdOf) {
 type Includes struct {
 	Text rt.TextEval `if:"label=_"`
 	Part rt.TextEval `if:"label=part"`
+}
+
+func (*Includes) GetType() string {
+	return Includes_Type
 }
 
 func (*Includes) Compose() composer.Spec {
@@ -2734,6 +2942,10 @@ func Includes_Marshal(n jsn.Marshaler, val *Includes) {
 // IntoObj Targets an object with a computed name.
 type IntoObj struct {
 	Object rt.TextEval `if:"label=_"`
+}
+
+func (*IntoObj) GetType() string {
+	return IntoObj_Type
 }
 
 func (*IntoObj) Compose() composer.Spec {
@@ -2808,6 +3020,10 @@ type IntoVar struct {
 	Var value.VariableName `if:"label=_"`
 }
 
+func (*IntoVar) GetType() string {
+	return IntoVar_Type
+}
+
 func (*IntoVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: IntoVar_Type,
@@ -2855,6 +3071,10 @@ func IntoVar_Marshal(n jsn.Marshaler, val *IntoVar) {
 // IsEmpty True if the text is empty.
 type IsEmpty struct {
 	Text rt.TextEval `if:"label=empty"`
+}
+
+func (*IsEmpty) GetType() string {
+	return IsEmpty_Type
 }
 
 func (*IsEmpty) Compose() composer.Spec {
@@ -2905,6 +3125,10 @@ func IsEmpty_Marshal(n jsn.Marshaler, val *IsEmpty) {
 type IsExactKindOf struct {
 	Object rt.TextEval `if:"label=_"`
 	Kind   string      `if:"label=is_exactly,type=text"`
+}
+
+func (*IsExactKindOf) GetType() string {
+	return IsExactKindOf_Type
 }
 
 func (*IsExactKindOf) Compose() composer.Spec {
@@ -2961,6 +3185,10 @@ type IsKindOf struct {
 	Kind   string      `if:"label=is,type=text"`
 }
 
+func (*IsKindOf) GetType() string {
+	return IsKindOf_Type
+}
+
 func (*IsKindOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: IsKindOf_Type,
@@ -3015,6 +3243,10 @@ type Join struct {
 	Parts []rt.TextEval `if:"label=parts"`
 }
 
+func (*Join) GetType() string {
+	return Join_Type
+}
+
 func (*Join) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Join_Type,
@@ -3067,6 +3299,10 @@ type KindOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
 
+func (*KindOf) GetType() string {
+	return KindOf_Type
+}
+
 func (*KindOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: KindOf_Type,
@@ -3113,6 +3349,10 @@ func KindOf_Marshal(n jsn.Marshaler, val *KindOf) {
 // KindsOf A list of compatible kinds.
 type KindsOf struct {
 	Kind string `if:"label=_,type=text"`
+}
+
+func (*KindsOf) GetType() string {
+	return KindsOf_Type
 }
 
 func (*KindsOf) Compose() composer.Spec {
@@ -3162,6 +3402,10 @@ func KindsOf_Marshal(n jsn.Marshaler, val *KindsOf) {
 type LessThan struct {
 }
 
+func (*LessThan) GetType() string {
+	return LessThan_Type
+}
+
 func (*LessThan) Compose() composer.Spec {
 	return composer.Spec{
 		Name: LessThan_Type,
@@ -3203,6 +3447,10 @@ func LessThan_Marshal(n jsn.Marshaler, val *LessThan) {
 // MakeLowercase Returns new text, with every letter turned into lowercase. For example, &#x27;shout&#x27; from &#x27;SHOUT&#x27;.
 type MakeLowercase struct {
 	Text rt.TextEval `if:"label=_"`
+}
+
+func (*MakeLowercase) GetType() string {
+	return MakeLowercase_Type
 }
 
 func (*MakeLowercase) Compose() composer.Spec {
@@ -3254,6 +3502,10 @@ type MakeReversed struct {
 	Text rt.TextEval `if:"label=_"`
 }
 
+func (*MakeReversed) GetType() string {
+	return MakeReversed_Type
+}
+
 func (*MakeReversed) Compose() composer.Spec {
 	return composer.Spec{
 		Name: MakeReversed_Type,
@@ -3301,6 +3553,10 @@ func MakeReversed_Marshal(n jsn.Marshaler, val *MakeReversed) {
 // MakeSentenceCase Returns new text, start each sentence with a capital letter. For example, &#x27;Empire Apple.&#x27; from &#x27;Empire apple.&#x27;.
 type MakeSentenceCase struct {
 	Text rt.TextEval `if:"label=_"`
+}
+
+func (*MakeSentenceCase) GetType() string {
+	return MakeSentenceCase_Type
 }
 
 func (*MakeSentenceCase) Compose() composer.Spec {
@@ -3352,6 +3608,10 @@ type MakeTitleCase struct {
 	Text rt.TextEval `if:"label=_"`
 }
 
+func (*MakeTitleCase) GetType() string {
+	return MakeTitleCase_Type
+}
+
 func (*MakeTitleCase) Compose() composer.Spec {
 	return composer.Spec{
 		Name: MakeTitleCase_Type,
@@ -3399,6 +3659,10 @@ func MakeTitleCase_Marshal(n jsn.Marshaler, val *MakeTitleCase) {
 // MakeUppercase Returns new text, with every letter turned into uppercase. For example, &#x27;APPLE&#x27; from &#x27;apple&#x27;.
 type MakeUppercase struct {
 	Text rt.TextEval `if:"label=_"`
+}
+
+func (*MakeUppercase) GetType() string {
+	return MakeUppercase_Type
 }
 
 func (*MakeUppercase) Compose() composer.Spec {
@@ -3450,6 +3714,10 @@ type Matches struct {
 	Text    rt.TextEval `if:"label=_"`
 	Pattern string      `if:"label=to,type=text"`
 	Cache   MatchCache  `if:"internal"`
+}
+
+func (*Matches) GetType() string {
+	return Matches_Type
 }
 
 func (*Matches) Compose() composer.Spec {
@@ -3504,6 +3772,10 @@ type NameOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
 
+func (*NameOf) GetType() string {
+	return NameOf_Type
+}
+
 func (*NameOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NameOf_Type,
@@ -3551,6 +3823,10 @@ func NameOf_Marshal(n jsn.Marshaler, val *NameOf) {
 type Never struct {
 }
 
+func (*Never) GetType() string {
+	return Never_Type
+}
+
 func (*Never) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Never_Type,
@@ -3592,6 +3868,10 @@ func Never_Marshal(n jsn.Marshaler, val *Never) {
 
 // Newline Start a new line.
 type Newline struct {
+}
+
+func (*Newline) GetType() string {
+	return Newline_Type
 }
 
 func (*Newline) Compose() composer.Spec {
@@ -3637,6 +3917,10 @@ func Newline_Marshal(n jsn.Marshaler, val *Newline) {
 type Next struct {
 }
 
+func (*Next) GetType() string {
+	return Next_Type
+}
+
 func (*Next) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Next_Type,
@@ -3678,6 +3962,10 @@ func Next_Marshal(n jsn.Marshaler, val *Next) {
 // Not Returns the opposite value.
 type Not struct {
 	Test rt.BoolEval `if:"label=_"`
+}
+
+func (*Not) GetType() string {
+	return Not_Type
 }
 
 func (*Not) Compose() composer.Spec {
@@ -3726,6 +4014,10 @@ func Not_Marshal(n jsn.Marshaler, val *Not) {
 // NumValue Specify a particular number.
 type NumValue struct {
 	Num float64 `if:"label=_,type=number"`
+}
+
+func (*NumValue) GetType() string {
+	return NumValue_Type
 }
 
 func (*NumValue) Compose() composer.Spec {
@@ -3777,6 +4069,10 @@ type Numbers struct {
 	Values []float64 `if:"label=_,type=number"`
 }
 
+func (*Numbers) GetType() string {
+	return Numbers_Type
+}
+
 func (*Numbers) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Numbers_Type,
@@ -3824,6 +4120,10 @@ func Numbers_Marshal(n jsn.Marshaler, val *Numbers) {
 // ObjectExists Returns whether there is a object of the specified name.
 type ObjectExists struct {
 	Object rt.TextEval `if:"label=valid"`
+}
+
+func (*ObjectExists) GetType() string {
+	return ObjectExists_Type
 }
 
 func (*ObjectExists) Compose() composer.Spec {
@@ -3875,6 +4175,10 @@ type Pluralize struct {
 	Text rt.TextEval `if:"label=of"`
 }
 
+func (*Pluralize) GetType() string {
+	return Pluralize_Type
+}
+
 func (*Pluralize) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Pluralize_Type,
@@ -3922,6 +4226,10 @@ func Pluralize_Marshal(n jsn.Marshaler, val *Pluralize) {
 // PrintNum Writes a number using numerals, eg. &#x27;1&#x27;.
 type PrintNum struct {
 	Num rt.NumberEval `if:"label=_"`
+}
+
+func (*PrintNum) GetType() string {
+	return PrintNum_Type
 }
 
 func (*PrintNum) Compose() composer.Spec {
@@ -3973,6 +4281,10 @@ type PrintNumWord struct {
 	Num rt.NumberEval `if:"label=words"`
 }
 
+func (*PrintNumWord) GetType() string {
+	return PrintNumWord_Type
+}
+
 func (*PrintNumWord) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PrintNumWord_Type,
@@ -4021,6 +4333,10 @@ func PrintNumWord_Marshal(n jsn.Marshaler, val *PrintNumWord) {
 type ProductOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
+}
+
+func (*ProductOf) GetType() string {
+	return ProductOf_Type
 }
 
 func (*ProductOf) Compose() composer.Spec {
@@ -4076,6 +4392,10 @@ type PutAtField struct {
 	Into    IntoTargetFields `if:"label=_"`
 	From    rt.Assignment    `if:"label=from"`
 	AtField string           `if:"label=at,type=text"`
+}
+
+func (*PutAtField) GetType() string {
+	return PutAtField_Type
 }
 
 func (*PutAtField) Compose() composer.Spec {
@@ -4136,6 +4456,10 @@ type QuotientOf struct {
 	B rt.NumberEval `if:"label=by"`
 }
 
+func (*QuotientOf) GetType() string {
+	return QuotientOf_Type
+}
+
 func (*QuotientOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: QuotientOf_Type,
@@ -4188,6 +4512,10 @@ func QuotientOf_Marshal(n jsn.Marshaler, val *QuotientOf) {
 type RemainderOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
+}
+
+func (*RemainderOf) GetType() string {
+	return RemainderOf_Type
 }
 
 func (*RemainderOf) Compose() composer.Spec {
@@ -4244,6 +4572,10 @@ type Response struct {
 	Text rt.TextEval `if:"label=text,optional"`
 }
 
+func (*Response) GetType() string {
+	return Response_Type
+}
+
 func (*Response) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Response_Type,
@@ -4296,6 +4628,10 @@ type Row struct {
 	Do Activity `if:"label=_"`
 }
 
+func (*Row) GetType() string {
+	return Row_Type
+}
+
 func (*Row) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Row_Type,
@@ -4342,6 +4678,10 @@ func Row_Marshal(n jsn.Marshaler, val *Row) {
 // Rows Group text into successive lines.
 type Rows struct {
 	Do Activity `if:"label=_"`
+}
+
+func (*Rows) GetType() string {
+	return Rows_Type
 }
 
 func (*Rows) Compose() composer.Spec {
@@ -4392,6 +4732,10 @@ type SayText struct {
 	Text rt.TextEval `if:"label=_"`
 }
 
+func (*SayText) GetType() string {
+	return SayText_Type
+}
+
 func (*SayText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: SayText_Type,
@@ -4440,6 +4784,10 @@ func SayText_Marshal(n jsn.Marshaler, val *SayText) {
 type SetTrait struct {
 	Object rt.TextEval `if:"label=obj"`
 	Trait  rt.TextEval `if:"label=trait"`
+}
+
+func (*SetTrait) GetType() string {
+	return SetTrait_Type
 }
 
 func (*SetTrait) Compose() composer.Spec {
@@ -4495,6 +4843,10 @@ type Singularize struct {
 	Text rt.TextEval `if:"label=of"`
 }
 
+func (*Singularize) GetType() string {
+	return Singularize_Type
+}
+
 func (*Singularize) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Singularize_Type,
@@ -4542,6 +4894,10 @@ func Singularize_Marshal(n jsn.Marshaler, val *Singularize) {
 // SlashText Separates words with left-leaning slashes &#x27;/&#x27;.
 type SlashText struct {
 	Do Activity `if:"label=_"`
+}
+
+func (*SlashText) GetType() string {
+	return SlashText_Type
 }
 
 func (*SlashText) Compose() composer.Spec {
@@ -4592,6 +4948,10 @@ func SlashText_Marshal(n jsn.Marshaler, val *SlashText) {
 type Softline struct {
 }
 
+func (*Softline) GetType() string {
+	return Softline_Type
+}
+
 func (*Softline) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Softline_Type,
@@ -4634,6 +4994,10 @@ func Softline_Marshal(n jsn.Marshaler, val *Softline) {
 // SpanText Writes text with spaces between words.
 type SpanText struct {
 	Do Activity `if:"label=_"`
+}
+
+func (*SpanText) GetType() string {
+	return SpanText_Type
 }
 
 func (*SpanText) Compose() composer.Spec {
@@ -4684,6 +5048,10 @@ func SpanText_Marshal(n jsn.Marshaler, val *SpanText) {
 type SumOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by,optional"`
+}
+
+func (*SumOf) GetType() string {
+	return SumOf_Type
 }
 
 func (*SumOf) Compose() composer.Spec {
@@ -4739,6 +5107,10 @@ type TextValue struct {
 	Text string `if:"label=_,type=text"`
 }
 
+func (*TextValue) GetType() string {
+	return TextValue_Type
+}
+
 func (*TextValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: TextValue_Type,
@@ -4786,6 +5158,10 @@ func TextValue_Marshal(n jsn.Marshaler, val *TextValue) {
 // Texts Text List: Specifies a set of string values.
 type Texts struct {
 	Values []string `if:"label=_,type=text"`
+}
+
+func (*Texts) GetType() string {
+	return Texts_Type
 }
 
 func (*Texts) Compose() composer.Spec {
@@ -4859,6 +5235,10 @@ func Trigger_Repeats_Marshal(n jsn.Marshaler, vals *[]Trigger) {
 type TriggerCycle struct {
 }
 
+func (*TriggerCycle) GetType() string {
+	return TriggerCycle_Type
+}
+
 func (*TriggerCycle) Compose() composer.Spec {
 	return composer.Spec{
 		Name: TriggerCycle_Type,
@@ -4900,6 +5280,10 @@ func TriggerCycle_Marshal(n jsn.Marshaler, val *TriggerCycle) {
 
 // TriggerOnce
 type TriggerOnce struct {
+}
+
+func (*TriggerOnce) GetType() string {
+	return TriggerOnce_Type
 }
 
 func (*TriggerOnce) Compose() composer.Spec {
@@ -4945,6 +5329,10 @@ func TriggerOnce_Marshal(n jsn.Marshaler, val *TriggerOnce) {
 type TriggerSwitch struct {
 }
 
+func (*TriggerSwitch) GetType() string {
+	return TriggerSwitch_Type
+}
+
 func (*TriggerSwitch) Compose() composer.Spec {
 	return composer.Spec{
 		Name: TriggerSwitch_Type,
@@ -4986,6 +5374,10 @@ func TriggerSwitch_Marshal(n jsn.Marshaler, val *TriggerSwitch) {
 
 // Unequal The first value doesn&#x27;t equal the second value.
 type Unequal struct {
+}
+
+func (*Unequal) GetType() string {
+	return Unequal_Type
 }
 
 func (*Unequal) Compose() composer.Spec {
@@ -5031,6 +5423,10 @@ func Unequal_Marshal(n jsn.Marshaler, val *Unequal) {
 type While struct {
 	True rt.BoolEval `if:"label=_"`
 	Do   Activity    `if:"label=do"`
+}
+
+func (*While) GetType() string {
+	return While_Type
 }
 
 func (*While) Compose() composer.Spec {

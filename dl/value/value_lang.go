@@ -19,6 +19,10 @@ func (op *Bool) String() string {
 const Bool_True = "$TRUE"
 const Bool_False = "$FALSE"
 
+func (*Bool) GetType() string {
+	return Bool_Type
+}
+
 func (*Bool) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Bool_Type,
@@ -30,13 +34,6 @@ func (*Bool) Compose() composer.Spec {
 			"true", "false",
 		},
 	}
-}
-
-func (op *Bool) SetEnum(kv string) {
-	composer.SetEnum(op, kv, &op.Str)
-}
-func (op *Bool) GetEnum() (retKey string, retVal string) {
-	return composer.GetEnum(op, op.Str)
 }
 
 const Bool_Type = "bool"
@@ -76,7 +73,7 @@ func Bool_Optional_Marshal(n jsn.Marshaler, val *Bool) {
 }
 
 func Bool_Marshal(n jsn.Marshaler, val *Bool) {
-	n.SpecifyEnum(Bool_Type, val)
+	n.SpecifyEnum(jsn.MakeEnum(val, &val.Str))
 }
 
 func Bool_Repeats_Marshal(n jsn.Marshaler, vals *[]Bool) {
@@ -98,6 +95,10 @@ type Lines struct {
 
 func (op *Lines) String() string {
 	return op.Str
+}
+
+func (*Lines) GetType() string {
+	return Lines_Type
 }
 
 func (*Lines) Compose() composer.Spec {
@@ -140,6 +141,10 @@ func Lines_Repeats_Marshal(n jsn.Marshaler, vals *[]Lines) {
 // Number requires a user-specified string.
 type Number struct {
 	Num float64
+}
+
+func (*Number) GetType() string {
+	return Number_Type
 }
 
 func (*Number) Compose() composer.Spec {
@@ -211,6 +216,10 @@ func (op *PatternName) String() string {
 	return op.Str
 }
 
+func (*PatternName) GetType() string {
+	return PatternName_Type
+}
+
 func (*PatternName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        PatternName_Type,
@@ -259,6 +268,10 @@ func (op *RelationName) String() string {
 	return op.Str
 }
 
+func (*RelationName) GetType() string {
+	return RelationName_Type
+}
+
 func (*RelationName) Compose() composer.Spec {
 	return composer.Spec{
 		Name:        RelationName_Type,
@@ -304,6 +317,10 @@ type Text struct {
 
 func (op *Text) String() string {
 	return op.Str
+}
+
+func (*Text) GetType() string {
+	return Text_Type
 }
 
 func (*Text) Compose() composer.Spec {
@@ -374,6 +391,10 @@ type VariableName struct {
 
 func (op *VariableName) String() string {
 	return op.Str
+}
+
+func (*VariableName) GetType() string {
+	return VariableName_Type
 }
 
 func (*VariableName) Compose() composer.Spec {

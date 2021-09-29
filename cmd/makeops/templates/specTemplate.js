@@ -1,6 +1,11 @@
 // specPartial.js
 'use strict';
-module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
+module.exports =`
+func (*{{Pascal name}}) GetType() string {
+  return {{Pascal name}}_Type
+}
+
+func (*{{Pascal name}}) Compose() composer.Spec {
   return composer.Spec{
     Name: {{Pascal name}}_Type,
     Uses: composer.Type_{{Pascal uses}},
@@ -33,13 +38,5 @@ module.exports =`func (*{{Pascal name}}) Compose() composer.Spec {
   }
 }
 
-{{#if (Uses name "str")}}{{#if (Choices this)}}
-func (op *{{Pascal name}}) SetEnum(kv string) {
-  composer.SetEnum(op, kv, &op.Str)
-}
-func (op *{{Pascal name}}) GetEnum() (retKey string, retVal string) {
-  return composer.GetEnum(op, op.Str)
-}
-{{/if}}{{/if}}
 const {{Pascal name}}_Type = "{{name}}"
 `;
