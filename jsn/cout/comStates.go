@@ -1,4 +1,4 @@
-package compact
+package cout
 
 import (
 	"git.sr.ht/~ionous/iffy/jsn"

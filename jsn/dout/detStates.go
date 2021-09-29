@@ -1,4 +1,4 @@
-package detailed
+package dout
 
 import (
 	"git.sr.ht/~ionous/iffy/jsn"

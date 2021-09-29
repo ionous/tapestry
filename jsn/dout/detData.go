@@ -1,4 +1,4 @@
-package detailed
+package dout
 
 type detMap struct {
 	Id     string                 `json:"id,omitempty"`

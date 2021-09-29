@@ -1,4 +1,4 @@
-package compact
+package cout
 
 type flowData struct {
 	sig    Sig

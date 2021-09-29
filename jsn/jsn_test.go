@@ -5,13 +5,13 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
-	"git.sr.ht/~ionous/iffy/jsn/compact"
-	"git.sr.ht/~ionous/iffy/jsn/detailed"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
+	"git.sr.ht/~ionous/iffy/jsn/dout"
 )
 
 func TestDetails(t *testing.T) {
 	src := debug.FactorialStory
-	m := detailed.NewDetailedMarshaler()
+	m := dout.NewDetailedMarshaler()
 	src.Marshal(m)
 	if d, e := m.Data(); e != nil {
 		t.Fatal(e)
@@ -24,7 +24,7 @@ func TestDetails(t *testing.T) {
 
 func TestCompact(t *testing.T) {
 	src := debug.FactorialStory
-	m := compact.NewCompactMarshaler()
+	m := cout.NewCompactMarshaler()
 	src.Marshal(m)
 	if d, e := m.Data(); e != nil {
 		t.Fatal(e)

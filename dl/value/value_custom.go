@@ -2,11 +2,11 @@ package value
 
 import (
 	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/detailed"
+	"git.sr.ht/~ionous/iffy/jsn/dout"
 )
 
 func Text_Marshal(n jsn.Marshaler, val *Text) {
-	if _, ok := n.(detailed.Chart); ok {
+	if _, ok := n.(dout.Chart); ok {
 		Text_Marshal_Customized(n, val)
 	} else {
 		n.StrValue(val)

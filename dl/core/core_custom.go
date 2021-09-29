@@ -2,12 +2,12 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/detailed"
+	"git.sr.ht/~ionous/iffy/jsn/dout"
 	"github.com/ionous/errutil"
 )
 
 func GetVar_Marshal(n jsn.Marshaler, val *GetVar) {
-	if _, ok := n.(*detailed.Chart); ok {
+	if _, ok := n.(*dout.Chart); ok {
 		GetVar_Marshal_Customized(n, val)
 	} else if str := val.Name.Str; len(str) > 0 && str[0] == '@' {
 		// this would conflict with @@ text serialization.
