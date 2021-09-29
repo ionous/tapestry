@@ -4,7 +4,7 @@ package value
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/reader"
-	"git.sr.ht/~ionous/iffy/export/jsn"
+	"git.sr.ht/~ionous/iffy/jsn"
 )
 
 // Bool requires a user-specified string.

@@ -4,7 +4,7 @@ package grammar
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/value"
-	"git.sr.ht/~ionous/iffy/export/jsn"
+	"git.sr.ht/~ionous/iffy/jsn"
 )
 
 // Action makes a parser scanner producing a script defined action.

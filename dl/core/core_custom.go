@@ -1,8 +1,8 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/export/jsn"
-	"git.sr.ht/~ionous/iffy/export/jsn/detailed"
+	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/iffy/jsn/detailed"
 	"github.com/ionous/errutil"
 )
 

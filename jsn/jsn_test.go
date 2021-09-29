@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
-	"git.sr.ht/~ionous/iffy/export/jsn/compact"
-	"git.sr.ht/~ionous/iffy/export/jsn/detailed"
+	"git.sr.ht/~ionous/iffy/jsn/compact"
+	"git.sr.ht/~ionous/iffy/jsn/detailed"
 )
 
 func TestDetails(t *testing.T) {

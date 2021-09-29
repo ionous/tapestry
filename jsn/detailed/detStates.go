@@ -1,8 +1,8 @@
 package detailed
 
 import (
-	"git.sr.ht/~ionous/iffy/export/jsn"
-	"git.sr.ht/~ionous/iffy/export/jsn/chart"
+	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/iffy/jsn/chart"
 	"github.com/ionous/errutil"
 )
 
