@@ -14,9 +14,18 @@ func NewDetailedMarshaler() Chart {
 	return Chart{chart.NewMachine(newBlock)}
 }
 
+func makeEnum(val jsn.EnumMarshaler) (ret string) {
+	if k, v := val.GetEnum(); len(k) > 0 {
+		ret = k
+	} else {
+		ret = v
+	}
+	return
+}
+
 // detailed data represents even primitive values as a map of {id,type,value}.
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
-	return chart.OnValue(next, func(k string, v interface{}) {
+	return chart.NewValue(next, makeEnum, func(k string, v interface{}) {
 		m.Commit(detValue{
 			Id:    m.FlushCursor(),
 			Type:  k,

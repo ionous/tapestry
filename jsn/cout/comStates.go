@@ -14,9 +14,18 @@ func NewCompactMarshaler() Chart {
 	return Chart{chart.NewMachine(newBlock)}
 }
 
+func makeEnum(val jsn.EnumMarshaler) (ret string) {
+	if k, v := val.GetEnum(); len(k) > 0 {
+		ret = v
+	} else {
+		ret = v
+	}
+	return
+}
+
 // compact data represents primitive values as their value.
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
-	return chart.OnValue(next, func(k string, v interface{}) {
+	return chart.NewValue(next, makeEnum, func(k string, v interface{}) {
 		m.Commit(v)
 	})
 }
@@ -112,7 +121,8 @@ func newSlice(m *chart.Machine, vals []interface{}) *chart.StateMix {
 
 func newSwap(m *chart.Machine) *chart.StateMix {
 	// we don't want to lose the *kind* of the choice for simple values
-	next := chart.OnValue(newBlock(m), func(kind string, value interface{}) {
+	// ( otherwise we cant differentiate b/t -- for example -- two string types )
+	next := chart.NewValue(newBlock(m), makeEnum, func(kind string, value interface{}) {
 		m.ChangeState(chart.NewBlockResult(m,
 			map[string]interface{}{
 				kind + ":": value,
