@@ -19,8 +19,8 @@ func TestDetails(t *testing.T) {
 	} else if b, e := json.MarshalIndent(d, "", "  "); e != nil {
 		t.Fatal(e)
 	} else if val := hash(b); val != 0x53398df7 {
-		t.Log(val, string(b))
-		t.Fatal("mismatched output")
+		t.Log(string(b))
+		t.Fatalf("mismatched output 0x%0x", val)
 	}
 }
 
@@ -32,8 +32,9 @@ func TestCompact(t *testing.T) {
 		t.Fatal(e)
 	} else if b, e := json.MarshalIndent(d, "", "  "); e != nil {
 		t.Fatal(e)
-	} else {
+	} else if val := hash(b); val != 0xd86f0fd9 {
 		t.Log(string(b))
+		t.Fatalf("mismatched output 0x%0x", val)
 	}
 }
 
