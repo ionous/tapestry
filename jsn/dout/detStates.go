@@ -11,10 +11,10 @@ type Chart struct{ *chart.Machine }
 
 // NewDetailedMarshaler create an empty serializer to produce detailed script data.
 func NewDetailedMarshaler() Chart {
-	return Chart{chart.NewMachine(newBlock)}
+	return Chart{chart.NewEncoder(newBlock)}
 }
 
-func makeEnum(val jsn.EnumMarshaler) (ret string) {
+func makeEnum(val chart.EnumMarshaler) (ret string) {
 	if k, v := val.GetEnum(); len(k) > 0 {
 		ret = k
 	} else {
@@ -25,43 +25,46 @@ func makeEnum(val jsn.EnumMarshaler) (ret string) {
 
 // detailed data represents even primitive values as a map of {id,type,value}.
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
-	return chart.NewValue(next, makeEnum, func(k string, v interface{}) {
+	next.OnValue = func(typeName string, pv interface{}) {
+		if enum, ok := pv.(chart.EnumMarshaler); ok {
+			pv = makeEnum(enum)
+		}
 		m.Commit(detValue{
 			Id:    m.FlushCursor(),
-			Type:  k,
-			Value: v,
+			Type:  typeName,
+			Value: pv,
 		})
-	})
+	}
+	return next
 }
 
 // blocks handle beginning new flows, swaps, or repeats
 // end ( and how they collect data ) gets left to the caller
 func newBlock(m *chart.Machine) *chart.StateMix {
 	next := chart.NewReportingState(m)
-	next.OnMap = func(lede, kind string) bool {
+	next.OnMap = func(lede, typeName string) bool {
 		m.PushState(newFlow(m, detMap{
 			Id:     m.FlushCursor(),
-			Type:   kind,
+			Type:   typeName,
 			Fields: make(map[string]interface{}),
 		}))
 		return true
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
-	next.OnPick = func(p jsn.Picker) (okay bool) {
+	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
 		if choice, ok := p.GetChoice(); !ok {
 			m.Error(errutil.New("couldnt determine choice of", p))
 		} else if len(choice) > 0 {
-			kind := p.GetType()
 			m.PushState(newSwap(m, choice, detMap{
 				Id:   m.FlushCursor(),
-				Type: kind,
+				Type: typeName,
 			}))
 			okay = true
 		}
 		return okay
 	}
-	next.OnRepeat = func(hint int) (okay bool) {
-		if hint > 0 {
+	next.OnRepeat = func(t string, vs jsn.Slicer) (okay bool) {
+		if hint := vs.GetSize(); hint > 0 {
 			m.PushState(newSlice(m, make([]interface{}, 0, hint)))
 			okay = true
 		}

@@ -16,14 +16,17 @@ func Assignment_Marshal(n jsn.Marshaler, ptr *Assignment) {
 	return
 }
 
+type Assignment_Slice []Assignment
+
+func (op *Assignment_Slice) GetSize() int    { return len(*op) }
+func (op *Assignment_Slice) SetSize(cnt int) { (*op) = make(Assignment_Slice, cnt) }
+
 func Assignment_Repeats_Marshal(n jsn.Marshaler, vals *[]Assignment) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				Assignment_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(Assignment_Type, (*Assignment_Slice)(vals)) {
+		for _, el := range *vals {
+			Assignment_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
@@ -39,14 +42,17 @@ func BoolEval_Marshal(n jsn.Marshaler, ptr *BoolEval) {
 	return
 }
 
+type BoolEval_Slice []BoolEval
+
+func (op *BoolEval_Slice) GetSize() int    { return len(*op) }
+func (op *BoolEval_Slice) SetSize(cnt int) { (*op) = make(BoolEval_Slice, cnt) }
+
 func BoolEval_Repeats_Marshal(n jsn.Marshaler, vals *[]BoolEval) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				BoolEval_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(BoolEval_Type, (*BoolEval_Slice)(vals)) {
+		for _, el := range *vals {
+			BoolEval_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
@@ -62,14 +68,17 @@ func Execute_Marshal(n jsn.Marshaler, ptr *Execute) {
 	return
 }
 
+type Execute_Slice []Execute
+
+func (op *Execute_Slice) GetSize() int    { return len(*op) }
+func (op *Execute_Slice) SetSize(cnt int) { (*op) = make(Execute_Slice, cnt) }
+
 func Execute_Repeats_Marshal(n jsn.Marshaler, vals *[]Execute) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				Execute_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(Execute_Type, (*Execute_Slice)(vals)) {
+		for _, el := range *vals {
+			Execute_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
@@ -85,14 +94,17 @@ func NumListEval_Marshal(n jsn.Marshaler, ptr *NumListEval) {
 	return
 }
 
+type NumListEval_Slice []NumListEval
+
+func (op *NumListEval_Slice) GetSize() int    { return len(*op) }
+func (op *NumListEval_Slice) SetSize(cnt int) { (*op) = make(NumListEval_Slice, cnt) }
+
 func NumListEval_Repeats_Marshal(n jsn.Marshaler, vals *[]NumListEval) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				NumListEval_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(NumListEval_Type, (*NumListEval_Slice)(vals)) {
+		for _, el := range *vals {
+			NumListEval_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
@@ -108,14 +120,17 @@ func NumberEval_Marshal(n jsn.Marshaler, ptr *NumberEval) {
 	return
 }
 
+type NumberEval_Slice []NumberEval
+
+func (op *NumberEval_Slice) GetSize() int    { return len(*op) }
+func (op *NumberEval_Slice) SetSize(cnt int) { (*op) = make(NumberEval_Slice, cnt) }
+
 func NumberEval_Repeats_Marshal(n jsn.Marshaler, vals *[]NumberEval) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				NumberEval_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(NumberEval_Type, (*NumberEval_Slice)(vals)) {
+		for _, el := range *vals {
+			NumberEval_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
@@ -131,14 +146,17 @@ func RecordEval_Marshal(n jsn.Marshaler, ptr *RecordEval) {
 	return
 }
 
+type RecordEval_Slice []RecordEval
+
+func (op *RecordEval_Slice) GetSize() int    { return len(*op) }
+func (op *RecordEval_Slice) SetSize(cnt int) { (*op) = make(RecordEval_Slice, cnt) }
+
 func RecordEval_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordEval) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				RecordEval_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(RecordEval_Type, (*RecordEval_Slice)(vals)) {
+		for _, el := range *vals {
+			RecordEval_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
@@ -154,14 +172,17 @@ func RecordListEval_Marshal(n jsn.Marshaler, ptr *RecordListEval) {
 	return
 }
 
+type RecordListEval_Slice []RecordListEval
+
+func (op *RecordListEval_Slice) GetSize() int    { return len(*op) }
+func (op *RecordListEval_Slice) SetSize(cnt int) { (*op) = make(RecordListEval_Slice, cnt) }
+
 func RecordListEval_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordListEval) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				RecordListEval_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(RecordListEval_Type, (*RecordListEval_Slice)(vals)) {
+		for _, el := range *vals {
+			RecordListEval_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
@@ -177,14 +198,17 @@ func TextEval_Marshal(n jsn.Marshaler, ptr *TextEval) {
 	return
 }
 
+type TextEval_Slice []TextEval
+
+func (op *TextEval_Slice) GetSize() int    { return len(*op) }
+func (op *TextEval_Slice) SetSize(cnt int) { (*op) = make(TextEval_Slice, cnt) }
+
 func TextEval_Repeats_Marshal(n jsn.Marshaler, vals *[]TextEval) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				TextEval_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(TextEval_Type, (*TextEval_Slice)(vals)) {
+		for _, el := range *vals {
+			TextEval_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
@@ -200,14 +224,17 @@ func TextListEval_Marshal(n jsn.Marshaler, ptr *TextListEval) {
 	return
 }
 
+type TextListEval_Slice []TextListEval
+
+func (op *TextListEval_Slice) GetSize() int    { return len(*op) }
+func (op *TextListEval_Slice) SetSize(cnt int) { (*op) = make(TextListEval_Slice, cnt) }
+
 func TextListEval_Repeats_Marshal(n jsn.Marshaler, vals *[]TextListEval) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				TextListEval_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(TextListEval_Type, (*TextListEval_Slice)(vals)) {
+		for _, el := range *vals {
+			TextListEval_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }

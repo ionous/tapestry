@@ -6,7 +6,7 @@ import (
 )
 
 func Text_Marshal(n jsn.Marshaler, val *Text) {
-	if ex, ok := n.(cout.TextMarshaler); !ok || !ex.TextValue(&val.Str) {
+	if ex, ok := n.(cout.TextMarshaler); !ok || !ex.TextValue(Text_Type, &val.Str) {
 		Text_Marshal_Customized(n, val)
 	}
 }

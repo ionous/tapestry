@@ -11,10 +11,6 @@ type Position struct {
 	Source string `if:"label=in,type=text"`
 }
 
-func (*Position) GetType() string {
-	return Position_Type
-}
-
 func (*Position) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Position_Type,

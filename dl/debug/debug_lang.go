@@ -14,10 +14,6 @@ type DebugLog struct {
 	LogLevel LoggingLevel  `if:"label=as,optional"`
 }
 
-func (*DebugLog) GetType() string {
-	return DebugLog_Type
-}
-
 func (*DebugLog) Compose() composer.Spec {
 	return composer.Spec{
 		Name: DebugLog_Type,
@@ -35,26 +31,34 @@ func (op *DebugLog) Marshal(n jsn.Marshaler) {
 	DebugLog_Marshal(n, op)
 }
 
+type DebugLog_Slice []DebugLog
+
+func (op *DebugLog_Slice) GetSize() int    { return len(*op) }
+func (op *DebugLog_Slice) SetSize(cnt int) { (*op) = make(DebugLog_Slice, cnt) }
+
 func DebugLog_Repeats_Marshal(n jsn.Marshaler, vals *[]DebugLog) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				DebugLog_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(DebugLog_Type, (*DebugLog_Slice)(vals)) {
+		for _, el := range *vals {
+			DebugLog_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
 
-func DebugLog_Optional_Marshal(n jsn.Marshaler, val **DebugLog) {
-	if *val != nil {
-		DebugLog_Marshal(n, *val)
+func DebugLog_Optional_Marshal(n jsn.Marshaler, pv **DebugLog) {
+	if enc := n.IsEncoding(); enc && *pv != nil {
+		DebugLog_Marshal(n, *pv)
+	} else if !enc {
+		var v DebugLog
+		if DebugLog_Marshal(n, &v) {
+			*pv = &v
+		}
 	}
 }
 
-func DebugLog_Marshal(n jsn.Marshaler, val *DebugLog) {
-	if n.MapValues("log", DebugLog_Type) {
+func DebugLog_Marshal(n jsn.Marshaler, val *DebugLog) (okay bool) {
+	if okay = n.MapValues("log", DebugLog_Type); okay {
 		if n.MapKey("", DebugLog_Field_Value) {
 			rt.Assignment_Marshal(n, &val.Value)
 		}
@@ -69,10 +73,6 @@ func DebugLog_Marshal(n jsn.Marshaler, val *DebugLog) {
 // DoNothing Statement which does nothing.
 type DoNothing struct {
 	Reason string `if:"label=why,optional,type=text"`
-}
-
-func (*DoNothing) GetType() string {
-	return DoNothing_Type
 }
 
 func (*DoNothing) Compose() composer.Spec {
@@ -90,26 +90,34 @@ func (op *DoNothing) Marshal(n jsn.Marshaler) {
 	DoNothing_Marshal(n, op)
 }
 
+type DoNothing_Slice []DoNothing
+
+func (op *DoNothing_Slice) GetSize() int    { return len(*op) }
+func (op *DoNothing_Slice) SetSize(cnt int) { (*op) = make(DoNothing_Slice, cnt) }
+
 func DoNothing_Repeats_Marshal(n jsn.Marshaler, vals *[]DoNothing) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				DoNothing_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(DoNothing_Type, (*DoNothing_Slice)(vals)) {
+		for _, el := range *vals {
+			DoNothing_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
 
-func DoNothing_Optional_Marshal(n jsn.Marshaler, val **DoNothing) {
-	if *val != nil {
-		DoNothing_Marshal(n, *val)
+func DoNothing_Optional_Marshal(n jsn.Marshaler, pv **DoNothing) {
+	if enc := n.IsEncoding(); enc && *pv != nil {
+		DoNothing_Marshal(n, *pv)
+	} else if !enc {
+		var v DoNothing
+		if DoNothing_Marshal(n, &v) {
+			*pv = &v
+		}
 	}
 }
 
-func DoNothing_Marshal(n jsn.Marshaler, val *DoNothing) {
-	if n.MapValues(DoNothing_Type, DoNothing_Type) {
+func DoNothing_Marshal(n jsn.Marshaler, val *DoNothing) (okay bool) {
+	if okay = n.MapValues(DoNothing_Type, DoNothing_Type); okay {
 		if n.MapKey("why", DoNothing_Field_Reason) {
 			value.Text_Unboxed_Optional_Marshal(n, &val.Reason)
 		}
@@ -134,10 +142,6 @@ const LoggingLevel_Info = "$INFO"
 const LoggingLevel_Warning = "$WARNING"
 const LoggingLevel_Error = "$ERROR"
 
-func (*LoggingLevel) GetType() string {
-	return LoggingLevel_Type
-}
-
 func (*LoggingLevel) Compose() composer.Spec {
 	return composer.Spec{
 		Name: LoggingLevel_Type,
@@ -159,23 +163,26 @@ func (op *LoggingLevel) Marshal(n jsn.Marshaler) {
 
 func LoggingLevel_Optional_Marshal(n jsn.Marshaler, val *LoggingLevel) {
 	var zero LoggingLevel
-	if val.Str != zero.Str {
+	if enc := n.IsEncoding(); !enc || val.Str != zero.Str {
 		LoggingLevel_Marshal(n, val)
 	}
 }
 
 func LoggingLevel_Marshal(n jsn.Marshaler, val *LoggingLevel) {
-	n.EnumValue(jsn.MakeEnum(val, &val.Str))
+	n.GenericValue(LoggingLevel_Type, jsn.MakeEnum(val, &val.Str))
 }
 
+type LoggingLevel_Slice []LoggingLevel
+
+func (op *LoggingLevel_Slice) GetSize() int    { return len(*op) }
+func (op *LoggingLevel_Slice) SetSize(cnt int) { (*op) = make(LoggingLevel_Slice, cnt) }
+
 func LoggingLevel_Repeats_Marshal(n jsn.Marshaler, vals *[]LoggingLevel) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				LoggingLevel_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(LoggingLevel_Type, (*LoggingLevel_Slice)(vals)) {
+		for _, el := range *vals {
+			LoggingLevel_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }

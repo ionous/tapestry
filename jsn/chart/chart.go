@@ -4,17 +4,30 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// rename to nwew builder or something?
+// b/c reading happens in place it doesnt need commit or data... hmmm
 type Machine struct {
 	State
-	out    interface{}
-	stack  chartStack
-	cursor string
-	err    error
+	encoding bool
+	out      interface{}
+	stack    chartStack
+	cursor   string
+	err      error
 }
 
-// NewMachine create an empty serializer to produce compact script data.
-func NewMachine(init func(*Machine) *StateMix) *Machine {
-	m := new(Machine)
+// NewEncoder -
+func NewEncoder(init func(*Machine) *StateMix) *Machine {
+	return newMachine(true, init)
+}
+
+// NewDecoder -
+func NewDecoder(init func(*Machine) *StateMix) *Machine {
+	return newMachine(false, init)
+}
+
+// newMachine create an empty serializer to produce compact script data.
+func newMachine(encoding bool, init func(*Machine) *StateMix) *Machine {
+	m := &Machine{encoding: encoding}
 	next := init(m)
 	next.OnCommit = func(v interface{}) {
 		if m.out != nil {
@@ -25,6 +38,11 @@ func NewMachine(init func(*Machine) *StateMix) *Machine {
 	}
 	m.ChangeState(next)
 	return m
+}
+
+//
+func (m *Machine) IsEncoding() bool {
+	return m.encoding
 }
 
 // Data returns the accumulated script tree ready for serialization

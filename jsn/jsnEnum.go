@@ -2,29 +2,25 @@ package jsn
 
 import "git.sr.ht/~ionous/iffy/dl/composer"
 
-type ComposerType interface {
-	composer.Composer
-	GetType() string
-}
-
 // Enum wraps str-like values used by the ifspec code generator.
 // it alleviates some redundant code generation.
 type Enum struct {
-	ComposerType
+	composer.Composer
 	str *string
 }
 
-func MakeEnum(op ComposerType, str *string) Enum {
+func MakeEnum(op composer.Composer, str *string) Enum {
 	return Enum{op, str}
 }
 
-func (n Enum) SetEnum(kv string) {
+func (n Enum) SetEnum(kv string) bool {
 	spec := n.Compose()
 	if k, i := spec.IndexOfValue(kv); i >= 0 {
 		*(n.str) = k
 	} else {
 		*(n.str) = kv
 	}
+	return true // fix: eventually some error handling
 }
 
 func (n Enum) GetEnum() (retKey string, retVal string) {

@@ -319,7 +319,7 @@ for (currentGroup in groups) {
     inc.add("composer");
   }
   if (marshal) {
-    inc.add("git.sr.ht/~ionous/iffy/export/jsn");
+    inc.add("git.sr.ht/~ionous/iffy/jsn");
   }
 
   // 2. write the header ( with package name and inc )

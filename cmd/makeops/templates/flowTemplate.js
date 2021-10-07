@@ -22,17 +22,23 @@ const {{Pascal ../name}}_Field_{{Pascal @key}} = "{{@key}}";
 {{>repeat name=(Pascal name) el=(Pascal name)}}
 {{/unless}}
 
-func {{Pascal name}}_Optional_Marshal(n jsn.Marshaler, val **{{Pascal name}}) {
-  if *val != nil {
-    {{Pascal name}}_Marshal(n, *val)
+func {{Pascal name}}_Optional_Marshal(n jsn.Marshaler, pv **{{Pascal name}}) {
+  if enc := n.IsEncoding(); enc && *pv != nil {
+    {{Pascal name}}_Marshal(n, *pv)
+  } else if !enc {
+    var v {{Pascal name}}
+    if {{Pascal name}}_Marshal(n, &v) {
+      *pv = &v
+    }
   }
 }
 
-func {{Pascal name}}_Marshal{{Custom name}}(n jsn.Marshaler, val *{{Pascal name}}) {
+func {{Pascal name}}_Marshal{{Custom name}}(n jsn.Marshaler, val *{{Pascal name}}) (okay bool) {
 {{#if (IsPositioned this)}}
   n.SetCursor(val.At.Offset)
+{{/if}}{{#if IsLiteral}}
 {{/if}}
-  if n.MapValues({{#if (LedeName this)~}}"{{LedeName this}}"{{~else~}}{{Pascal name}}_Type{{~/if~}}, {{Pascal name}}_Type) {
+  if okay = n.MapValues({{#if (LedeName this)~}}"{{LedeName this}}"{{~else~}}{{Pascal name}}_Type{{~/if~}}, {{Pascal name}}_Type); okay {
 {{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
     if n.MapKey("{{SelectorOf @key this @index}}", {{Pascal ../name}}_Field_{{Pascal @key}}) {
       {{ScopeOf type}}{{Pascal type}}

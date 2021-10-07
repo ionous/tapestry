@@ -14,10 +14,6 @@ type ReciprocalOf struct {
 	Object rt.TextEval        `if:"label=object"`
 }
 
-func (*ReciprocalOf) GetType() string {
-	return ReciprocalOf_Type
-}
-
 func (*ReciprocalOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ReciprocalOf_Type,
@@ -35,26 +31,34 @@ func (op *ReciprocalOf) Marshal(n jsn.Marshaler) {
 	ReciprocalOf_Marshal(n, op)
 }
 
+type ReciprocalOf_Slice []ReciprocalOf
+
+func (op *ReciprocalOf_Slice) GetSize() int    { return len(*op) }
+func (op *ReciprocalOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalOf_Slice, cnt) }
+
 func ReciprocalOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalOf) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				ReciprocalOf_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(ReciprocalOf_Type, (*ReciprocalOf_Slice)(vals)) {
+		for _, el := range *vals {
+			ReciprocalOf_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
 
-func ReciprocalOf_Optional_Marshal(n jsn.Marshaler, val **ReciprocalOf) {
-	if *val != nil {
-		ReciprocalOf_Marshal(n, *val)
+func ReciprocalOf_Optional_Marshal(n jsn.Marshaler, pv **ReciprocalOf) {
+	if enc := n.IsEncoding(); enc && *pv != nil {
+		ReciprocalOf_Marshal(n, *pv)
+	} else if !enc {
+		var v ReciprocalOf
+		if ReciprocalOf_Marshal(n, &v) {
+			*pv = &v
+		}
 	}
 }
 
-func ReciprocalOf_Marshal(n jsn.Marshaler, val *ReciprocalOf) {
-	if n.MapValues("reciprocal", ReciprocalOf_Type) {
+func ReciprocalOf_Marshal(n jsn.Marshaler, val *ReciprocalOf) (okay bool) {
+	if okay = n.MapValues("reciprocal", ReciprocalOf_Type); okay {
 		if n.MapKey("", ReciprocalOf_Field_Via) {
 			value.RelationName_Marshal(n, &val.Via)
 		}
@@ -70,10 +74,6 @@ func ReciprocalOf_Marshal(n jsn.Marshaler, val *ReciprocalOf) {
 type ReciprocalsOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
-}
-
-func (*ReciprocalsOf) GetType() string {
-	return ReciprocalsOf_Type
 }
 
 func (*ReciprocalsOf) Compose() composer.Spec {
@@ -93,26 +93,34 @@ func (op *ReciprocalsOf) Marshal(n jsn.Marshaler) {
 	ReciprocalsOf_Marshal(n, op)
 }
 
+type ReciprocalsOf_Slice []ReciprocalsOf
+
+func (op *ReciprocalsOf_Slice) GetSize() int    { return len(*op) }
+func (op *ReciprocalsOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalsOf_Slice, cnt) }
+
 func ReciprocalsOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalsOf) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				ReciprocalsOf_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(ReciprocalsOf_Type, (*ReciprocalsOf_Slice)(vals)) {
+		for _, el := range *vals {
+			ReciprocalsOf_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
 
-func ReciprocalsOf_Optional_Marshal(n jsn.Marshaler, val **ReciprocalsOf) {
-	if *val != nil {
-		ReciprocalsOf_Marshal(n, *val)
+func ReciprocalsOf_Optional_Marshal(n jsn.Marshaler, pv **ReciprocalsOf) {
+	if enc := n.IsEncoding(); enc && *pv != nil {
+		ReciprocalsOf_Marshal(n, *pv)
+	} else if !enc {
+		var v ReciprocalsOf
+		if ReciprocalsOf_Marshal(n, &v) {
+			*pv = &v
+		}
 	}
 }
 
-func ReciprocalsOf_Marshal(n jsn.Marshaler, val *ReciprocalsOf) {
-	if n.MapValues("reciprocals", ReciprocalsOf_Type) {
+func ReciprocalsOf_Marshal(n jsn.Marshaler, val *ReciprocalsOf) (okay bool) {
+	if okay = n.MapValues("reciprocals", ReciprocalsOf_Type); okay {
 		if n.MapKey("", ReciprocalsOf_Field_Via) {
 			value.RelationName_Marshal(n, &val.Via)
 		}
@@ -129,10 +137,6 @@ type Relate struct {
 	Object   rt.TextEval        `if:"label=_"`
 	ToObject rt.TextEval        `if:"label=to"`
 	Via      value.RelationName `if:"label=via"`
-}
-
-func (*Relate) GetType() string {
-	return Relate_Type
 }
 
 func (*Relate) Compose() composer.Spec {
@@ -152,26 +156,34 @@ func (op *Relate) Marshal(n jsn.Marshaler) {
 	Relate_Marshal(n, op)
 }
 
+type Relate_Slice []Relate
+
+func (op *Relate_Slice) GetSize() int    { return len(*op) }
+func (op *Relate_Slice) SetSize(cnt int) { (*op) = make(Relate_Slice, cnt) }
+
 func Relate_Repeats_Marshal(n jsn.Marshaler, vals *[]Relate) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				Relate_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(Relate_Type, (*Relate_Slice)(vals)) {
+		for _, el := range *vals {
+			Relate_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
 
-func Relate_Optional_Marshal(n jsn.Marshaler, val **Relate) {
-	if *val != nil {
-		Relate_Marshal(n, *val)
+func Relate_Optional_Marshal(n jsn.Marshaler, pv **Relate) {
+	if enc := n.IsEncoding(); enc && *pv != nil {
+		Relate_Marshal(n, *pv)
+	} else if !enc {
+		var v Relate
+		if Relate_Marshal(n, &v) {
+			*pv = &v
+		}
 	}
 }
 
-func Relate_Marshal(n jsn.Marshaler, val *Relate) {
-	if n.MapValues(Relate_Type, Relate_Type) {
+func Relate_Marshal(n jsn.Marshaler, val *Relate) (okay bool) {
+	if okay = n.MapValues(Relate_Type, Relate_Type); okay {
 		if n.MapKey("", Relate_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
@@ -192,10 +204,6 @@ type RelativeOf struct {
 	Object rt.TextEval        `if:"label=object"`
 }
 
-func (*RelativeOf) GetType() string {
-	return RelativeOf_Type
-}
-
 func (*RelativeOf) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RelativeOf_Type,
@@ -213,26 +221,34 @@ func (op *RelativeOf) Marshal(n jsn.Marshaler) {
 	RelativeOf_Marshal(n, op)
 }
 
+type RelativeOf_Slice []RelativeOf
+
+func (op *RelativeOf_Slice) GetSize() int    { return len(*op) }
+func (op *RelativeOf_Slice) SetSize(cnt int) { (*op) = make(RelativeOf_Slice, cnt) }
+
 func RelativeOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativeOf) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				RelativeOf_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(RelativeOf_Type, (*RelativeOf_Slice)(vals)) {
+		for _, el := range *vals {
+			RelativeOf_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
 
-func RelativeOf_Optional_Marshal(n jsn.Marshaler, val **RelativeOf) {
-	if *val != nil {
-		RelativeOf_Marshal(n, *val)
+func RelativeOf_Optional_Marshal(n jsn.Marshaler, pv **RelativeOf) {
+	if enc := n.IsEncoding(); enc && *pv != nil {
+		RelativeOf_Marshal(n, *pv)
+	} else if !enc {
+		var v RelativeOf
+		if RelativeOf_Marshal(n, &v) {
+			*pv = &v
+		}
 	}
 }
 
-func RelativeOf_Marshal(n jsn.Marshaler, val *RelativeOf) {
-	if n.MapValues("relative", RelativeOf_Type) {
+func RelativeOf_Marshal(n jsn.Marshaler, val *RelativeOf) (okay bool) {
+	if okay = n.MapValues("relative", RelativeOf_Type); okay {
 		if n.MapKey("", RelativeOf_Field_Via) {
 			value.RelationName_Marshal(n, &val.Via)
 		}
@@ -248,10 +264,6 @@ func RelativeOf_Marshal(n jsn.Marshaler, val *RelativeOf) {
 type RelativesOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
-}
-
-func (*RelativesOf) GetType() string {
-	return RelativesOf_Type
 }
 
 func (*RelativesOf) Compose() composer.Spec {
@@ -271,26 +283,34 @@ func (op *RelativesOf) Marshal(n jsn.Marshaler) {
 	RelativesOf_Marshal(n, op)
 }
 
+type RelativesOf_Slice []RelativesOf
+
+func (op *RelativesOf_Slice) GetSize() int    { return len(*op) }
+func (op *RelativesOf_Slice) SetSize(cnt int) { (*op) = make(RelativesOf_Slice, cnt) }
+
 func RelativesOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativesOf) {
-	if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-		if n.RepeatValues(cnt) {
-			for _, el := range *vals {
-				RelativesOf_Marshal(n, &el)
-			}
-			n.EndValues()
+	if n.RepeatValues(RelativesOf_Type, (*RelativesOf_Slice)(vals)) {
+		for _, el := range *vals {
+			RelativesOf_Marshal(n, &el)
 		}
+		n.EndValues()
 	}
 	return
 }
 
-func RelativesOf_Optional_Marshal(n jsn.Marshaler, val **RelativesOf) {
-	if *val != nil {
-		RelativesOf_Marshal(n, *val)
+func RelativesOf_Optional_Marshal(n jsn.Marshaler, pv **RelativesOf) {
+	if enc := n.IsEncoding(); enc && *pv != nil {
+		RelativesOf_Marshal(n, *pv)
+	} else if !enc {
+		var v RelativesOf
+		if RelativesOf_Marshal(n, &v) {
+			*pv = &v
+		}
 	}
 }
 
-func RelativesOf_Marshal(n jsn.Marshaler, val *RelativesOf) {
-	if n.MapValues("relatives", RelativesOf_Type) {
+func RelativesOf_Marshal(n jsn.Marshaler, val *RelativesOf) (okay bool) {
+	if okay = n.MapValues("relatives", RelativesOf_Type); okay {
 		if n.MapKey("", RelativesOf_Field_Via) {
 			value.RelationName_Marshal(n, &val.Via)
 		}

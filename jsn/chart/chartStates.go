@@ -56,23 +56,3 @@ func NewBlockResult(m *Machine, v interface{}) *StateMix {
 		},
 	}}
 }
-
-// NewValue generically handles primitive value(s)
-func NewValue(next *StateMix,
-	makeEnum func(jsn.EnumMarshaler) string,
-	makeValue func(string, interface{}),
-) *StateMix {
-	next.OnBool = func(val jsn.BoolMarshaler) {
-		makeValue(val.GetType(), val.GetBool())
-	}
-	next.OnNum = func(val jsn.NumMarshaler) {
-		makeValue(val.GetType(), val.GetNum())
-	}
-	next.OnStr = func(val jsn.StrMarshaler) {
-		makeValue(val.GetType(), val.GetStr())
-	}
-	next.OnEnum = func(val jsn.EnumMarshaler) {
-		makeValue(val.GetType(), makeEnum(val))
-	}
-	return next
-}

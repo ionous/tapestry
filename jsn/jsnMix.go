@@ -6,26 +6,26 @@ import "github.com/ionous/errutil"
 // providing functions which can be overridden one at a time to customize functionality
 // ( ie. for statemachines )
 type MarshalMix struct {
-	OnMap     func(lede, kind string) bool
+	OnMap     func(lede, typeName string) bool
 	OnKey     func(sig, field string) bool
-	OnLiteral func(field string) bool
-	OnPick    func(Picker) bool
-	OnRepeat  func(hint int) bool
+	OnLiteral func(string) bool
+	OnPick    func(string, Picker) bool
+	OnRepeat  func(string, Slicer) bool
 	OnEnd     func()
-	OnBool    func(BoolMarshaler)
-	OnEnum    func(EnumMarshaler)
-	OnNum     func(NumMarshaler)
-	OnStr     func(StrMarshaler)
-	OnCursor  func(id string)
+	OnValue   func(string, interface{})
+	OnCursor  func(string)
 	OnWarn    func(error)
 	OnError   func(error)
 }
 
-func (ms *MarshalMix) MapValues(lede, kind string) (ret bool) {
+func (ms *MarshalMix) IsEncoding() bool {
+	panic("not implemented")
+}
+func (ms *MarshalMix) MapValues(lede, typeName string) (ret bool) {
 	if call := ms.OnMap; call != nil {
-		ret = call(lede, kind)
+		ret = call(lede, typeName)
 	} else {
-		ms.Error(errutil.New("unexpected map", lede, kind))
+		ms.Error(errutil.New("unexpected map", lede, typeName))
 	}
 	return
 }
@@ -45,19 +45,19 @@ func (ms *MarshalMix) MapLiteral(field string) (ret bool) {
 	}
 	return
 }
-func (ms *MarshalMix) PickValues(val Picker) (ret bool) {
+func (ms *MarshalMix) PickValues(typeName string, val Picker) (ret bool) {
 	if call := ms.OnPick; call != nil {
-		ret = call(val)
+		ret = call(typeName, val)
 	} else {
-		ms.Error(errutil.New("unexpected pick", val))
+		ms.Error(errutil.New("unexpected pick", typeName, val))
 	}
 	return
 }
-func (ms *MarshalMix) RepeatValues(hint int) (ret bool) {
+func (ms *MarshalMix) RepeatValues(typeName string, val Slicer) (ret bool) {
 	if call := ms.OnRepeat; call != nil {
-		ret = call(hint)
+		ret = call(typeName, val)
 	} else {
-		ms.Error(errutil.New("unexpected repeat", hint))
+		ms.Error(errutil.New("unexpected repeat", typeName, val))
 	}
 	return
 }
@@ -68,32 +68,11 @@ func (ms *MarshalMix) EndValues() {
 		ms.Error(errutil.New("unexpected end"))
 	}
 }
-func (ms *MarshalMix) BoolValue(val BoolMarshaler) {
-	if call := ms.OnBool; call != nil {
-		call(val)
+func (ms *MarshalMix) GenericValue(typeName string, pv interface{}) {
+	if call := ms.OnValue; call != nil {
+		call(typeName, pv)
 	} else {
-		ms.Error(errutil.New("unexpected value", val))
-	}
-}
-func (ms *MarshalMix) EnumValue(val EnumMarshaler) {
-	if call := ms.OnEnum; call != nil {
-		call(val)
-	} else {
-		ms.Error(errutil.New("unexpected value", val))
-	}
-}
-func (ms *MarshalMix) NumValue(val NumMarshaler) {
-	if call := ms.OnNum; call != nil {
-		call(val)
-	} else {
-		ms.Error(errutil.New("unexpected value", val))
-	}
-}
-func (ms *MarshalMix) StrValue(val StrMarshaler) {
-	if call := ms.OnStr; call != nil {
-		call(val)
-	} else {
-		ms.Error(errutil.New("unexpected value", val))
+		ms.Error(errutil.New("unexpected value", typeName, pv))
 	}
 }
 func (ms *MarshalMix) SetCursor(id string) {

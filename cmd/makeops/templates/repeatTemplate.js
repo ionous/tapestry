@@ -3,14 +3,17 @@
 // ex. in flow, or prim, etc.
 'use strict';
 module.exports =`
+type {{name}}{{mod}}_Slice []{{el}}
+
+func (op* {{name}}{{mod}}_Slice) GetSize() int    { return len(*op) }
+func (op* {{name}}{{mod}}_Slice) SetSize(cnt int) { (*op) = make({{name}}{{mod}}_Slice, cnt) }
+
 func {{name}}{{mod}}_Repeats_Marshal(n jsn.Marshaler, vals *[]{{el}}) {
-  if cnt := len(*vals); cnt > 0 { // generated code collapses optional and empty.
-    if n.RepeatValues(cnt) {
-      for _, el := range *vals {
-        {{name}}{{mod}}_Marshal(n, &el)
-      }
-      n.EndValues()
+  if n.RepeatValues({{name}}_Type, (*{{name}}{{mod}}_Slice)(vals)) {
+    for _, el := range *vals {
+      {{name}}{{mod}}_Marshal(n, &el)
     }
+    n.EndValues()
   }
   return
 }

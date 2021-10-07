@@ -1,10 +1,6 @@
 // specPartial.js
 'use strict';
 module.exports =`
-func (*{{Pascal name}}) GetType() string {
-  return {{Pascal name}}_Type
-}
-
 func (*{{Pascal name}}) Compose() composer.Spec {
   return composer.Spec{
     Name: {{Pascal name}}_Type,

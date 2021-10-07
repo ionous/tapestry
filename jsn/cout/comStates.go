@@ -11,10 +11,10 @@ type Chart struct{ *chart.Machine }
 
 // NewCompactMarshaler create an empty serializer to produce compact script data.
 func NewCompactMarshaler() Chart {
-	return Chart{chart.NewMachine(newBlock)}
+	return Chart{chart.NewEncoder(newBlock)}
 }
 
-func makeEnum(val jsn.EnumMarshaler) (ret string) {
+func makeEnum(val chart.EnumMarshaler) (ret string) {
 	if k, v := val.GetEnum(); len(k) > 0 {
 		ret = v
 	} else {
@@ -25,9 +25,13 @@ func makeEnum(val jsn.EnumMarshaler) (ret string) {
 
 // compact data represents primitive values as their value.
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
-	return chart.NewValue(next, makeEnum, func(k string, v interface{}) {
-		m.Commit(v)
-	})
+	next.OnValue = func(typeName string, pv interface{}) {
+		if enum, ok := pv.(chart.EnumMarshaler); ok {
+			pv = makeEnum(enum)
+		}
+		m.Commit(pv)
+	}
+	return next
 }
 
 func newBlock(m *chart.Machine) *chart.StateMix {
@@ -41,7 +45,7 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 	// ex."noun_phrase" "$KIND_OF_NOUN"
 	// the compact encoding relies on the encoded inner block to unpack the choice.
 	// ( implies each option needs to be a unique type. )
-	next.OnPick = func(p jsn.Picker) (okay bool) {
+	next.OnPick = func(t string, p jsn.Picker) (okay bool) {
 		if c, ok := p.GetChoice(); !ok {
 			m.Error(errutil.New("couldnt determine choice of", p))
 		} else if len(c) > 0 {
@@ -50,8 +54,8 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 		}
 		return okay
 	}
-	next.OnRepeat = func(hint int) (okay bool) {
-		if hint > 0 {
+	next.OnRepeat = func(t string, vs jsn.Slicer) (okay bool) {
+		if hint := vs.GetSize(); hint > 0 {
 			m.PushState(newSlice(m, make([]interface{}, 0, hint)))
 			okay = true
 		}
@@ -122,12 +126,16 @@ func newSlice(m *chart.Machine, vals []interface{}) *chart.StateMix {
 func newSwap(m *chart.Machine) *chart.StateMix {
 	// we don't want to lose the *kind* of the choice for simple values
 	// ( otherwise we cant differentiate b/t -- for example -- two string types )
-	next := chart.NewValue(newBlock(m), makeEnum, func(kind string, value interface{}) {
+	next := newBlock(m)
+	next.OnValue = func(typeName string, pv interface{}) {
+		if enum, ok := pv.(chart.EnumMarshaler); ok {
+			pv = makeEnum(enum)
+		}
 		m.ChangeState(chart.NewBlockResult(m,
 			map[string]interface{}{
-				kind + ":": value,
+				typeName + ":": pv,
 			}))
-	})
+	}
 	// record the swap choice and move to an error detection state
 	next.OnCommit = func(v interface{}) {
 		m.ChangeState(chart.NewBlockResult(m, v))
