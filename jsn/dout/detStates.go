@@ -9,8 +9,8 @@ import (
 // Chart - marker so callers can see where a machine pointer came from.
 type Chart struct{ *chart.Machine }
 
-// NewDetailedMarshaler create an empty serializer to produce detailed script data.
-func NewDetailedMarshaler() Chart {
+// NewEncoder create an empty serializer to produce detailed script data.
+func NewEncoder() Chart {
 	return Chart{chart.NewEncoder(newBlock)}
 }
 
@@ -41,7 +41,10 @@ func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 // blocks handle beginning new flows, swaps, or repeats
 // end ( and how they collect data ) gets left to the caller
 func newBlock(m *chart.Machine) *chart.StateMix {
-	next := chart.NewReportingState(m)
+	return addBlock(m, chart.NewReportingState(m))
+}
+
+func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	next.OnMap = func(lede, typeName string) bool {
 		m.PushState(newFlow(m, detMap{
 			Id:     m.FlushCursor(),
@@ -70,6 +73,7 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 		}
 		return okay
 	}
+	// next.OnEnd... gets determined by the specific block
 	return next
 }
 
@@ -77,13 +81,9 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 // the flow is closed ( written ) with a call to EndValues()
 // every flow pushes a brand new machine
 func newFlow(m *chart.Machine, vals detMap) *chart.StateMix {
-	next := newBlock(m)
+	next := chart.NewReportingState(m)
 	next.OnKey = func(_, key string) bool {
 		m.ChangeState(newKey(m, *next, key, vals))
-		return true
-	}
-	next.OnLiteral = func(field string) bool {
-		m.MapKey("", field) // loops back to OnKey
 		return true
 	}
 	next.OnEnd = func() {
@@ -98,7 +98,7 @@ func newFlow(m *chart.Machine, vals detMap) *chart.StateMix {
 // keys wait until they have a value, then write their data into their parent's data;
 // returning to the parent state.
 func newKey(m *chart.Machine, prev chart.StateMix, key string, vals detMap) *chart.StateMix {
-	next := newValue(m, &prev)
+	next := newValue(m, addBlock(m, &prev))
 	next.OnCommit = func(v interface{}) {
 		vals.Fields[key] = v // write our key, value pair
 		m.ChangeState(&prev)

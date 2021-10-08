@@ -4,8 +4,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// rename to nwew builder or something?
-// b/c reading happens in place it doesnt need commit or data... hmmm
 type Machine struct {
 	State
 	encoding bool
@@ -15,12 +13,12 @@ type Machine struct {
 	err      error
 }
 
-// NewEncoder -
+// NewEncoder writes json data
 func NewEncoder(init func(*Machine) *StateMix) *Machine {
 	return newMachine(true, init)
 }
 
-// NewDecoder -
+// NewDecoder reads json data
 func NewDecoder(init func(*Machine) *StateMix) *Machine {
 	return newMachine(false, init)
 }
@@ -40,7 +38,7 @@ func newMachine(encoding bool, init func(*Machine) *StateMix) *Machine {
 	return m
 }
 
-//
+// IsEncoding indicates whether the machine is writing json ( or reading json. )
 func (m *Machine) IsEncoding() bool {
 	return m.encoding
 }

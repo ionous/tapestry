@@ -34,16 +34,12 @@ func {{Pascal name}}_Optional_Marshal(n jsn.Marshaler, pv **{{Pascal name}}) {
 }
 
 func {{Pascal name}}_Marshal{{Custom name}}(n jsn.Marshaler, val *{{Pascal name}}) (okay bool) {
-{{~#if (IsPositioned this)}}
+{{#if (IsPositioned this)}}
   n.SetCursor(val.At.Offset)
-{{~/if}}{{#if (IsLiteral group)}}{{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
-  {{ScopeOf type}}{{Pascal type}}
-  {{~#if (Unboxed type)}}_Unboxed{{/if}}
-  {{~#if repeats}}_Repeats
-  {{~else if optional}}_Optional
-  {{~/if}}_Marshal(n, &val.{{Pascal @key}})
-{{~/unless}}{{/each}}{{else}}
-  if okay = n.MapValues({{#if (LedeName this)~}}"{{LedeName this}}"{{~else~}}{{Pascal name}}_Type{{~/if~}}, {{Pascal name}}_Type); okay {
+{{/if}}
+  if okay = n.Map
+    {{~#if (IsLiteral group)}}Literal{{else}}Values{{/if~}}
+    ({{#if (LedeName this)~}}"{{LedeName this}}"{{~else~}}{{Pascal name}}_Type{{~/if~}}, {{Pascal name}}_Type); okay {
 {{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
     if n.MapKey("{{SelectorOf @key this @index}}", {{Pascal ../name}}_Field_{{Pascal @key}}) {
       {{ScopeOf type}}{{Pascal type}}
@@ -54,7 +50,7 @@ func {{Pascal name}}_Marshal{{Custom name}}(n jsn.Marshaler, val *{{Pascal name}
     }
 {{~/unless}}{{/each}}
     n.EndValues()
-  }{{/if}}
+  }
   return
 }
 {{/if}}

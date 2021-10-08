@@ -12,29 +12,37 @@ import (
 
 func TestDetails(t *testing.T) {
 	src := debug.FactorialStory
-	m := dout.NewDetailedMarshaler()
-	src.Marshal(m)
-	if d, e := m.Data(); e != nil {
+	out := dout.NewEncoder()
+	src.Marshal(out)
+	if d, e := out.Data(); e != nil {
 		t.Fatal(e)
 	} else if b, e := json.MarshalIndent(d, "", "  "); e != nil {
 		t.Fatal(e)
 	} else if val := hash(b); val != 0x53398df7 {
 		t.Log(string(b))
 		t.Fatalf("mismatched output 0x%0x", val)
+	} else {
+		// var dst story.Story
+		// dst.Marshal(din.NewDecoder(b))
+		// if diff := pretty.Diff(src, &dst); len(diff) != 0 {
+		// 	t.Fatal(diff)
+		// }
 	}
 }
 
 func TestCompact(t *testing.T) {
 	src := debug.FactorialStory
-	m := cout.NewCompactMarshaler()
-	src.Marshal(m)
-	if d, e := m.Data(); e != nil {
+	out := cout.NewEncoder()
+	src.Marshal(out)
+	if d, e := out.Data(); e != nil {
 		t.Fatal(e)
 	} else if b, e := json.MarshalIndent(d, "", "  "); e != nil {
 		t.Fatal(e)
 	} else if val := hash(b); val != 0xd86f0fd9 {
 		t.Log(string(b))
 		t.Fatalf("mismatched output 0x%0x", val)
+	} else {
+
 	}
 }
 

@@ -15,15 +15,14 @@ type Marshaler interface {
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
 	MapValues(lede, typeName string) bool
-	// the start of a possible key:value pair inside a flow.
-	// values are begin/end blocks or primitive values.
-	// a new MapKey or an EndValues will cancel writing this pair.
-	MapKey(sig, field string) bool
-	// mark the one and only key:value pair for the flow
 	// literal values can be written without the surrounding map in the compact format.
 	// ex. `{"type":"num_value","value":{"$NUM": {"type":"number","value":3}}}`
 	// can be written as just `3`.
-	MapLiteral(field string) bool
+	MapLiteral(lede, typeName string) bool
+	// the start of a possible key:value pair inside a flow or literal.
+	// values are begin/end blocks or primitive values.
+	// a new MapKey or an EndValues will cancel writing this pair.
+	MapKey(sig, field string) bool
 	// selects one of a small set of possible choices
 	// the swap is closed ( written ) with a call to EndValues()
 	PickValues(typeName string, vp Picker) bool

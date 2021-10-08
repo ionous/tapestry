@@ -6,9 +6,9 @@ import "github.com/ionous/errutil"
 // providing functions which can be overridden one at a time to customize functionality
 // ( ie. for statemachines )
 type MarshalMix struct {
-	OnMap     func(lede, typeName string) bool
-	OnKey     func(sig, field string) bool
-	OnLiteral func(string) bool
+	OnMap     func(string, string) bool
+	OnKey     func(string, string) bool
+	OnLiteral func(string, string) bool
 	OnPick    func(string, Picker) bool
 	OnRepeat  func(string, Slicer) bool
 	OnEnd     func()
@@ -29,19 +29,20 @@ func (ms *MarshalMix) MapValues(lede, typeName string) (ret bool) {
 	}
 	return
 }
+func (ms *MarshalMix) MapLiteral(lede, typeName string) (ret bool) {
+	if call := ms.OnLiteral; call != nil {
+		ret = call(lede, typeName)
+	} else {
+		// fall back to a regular map
+		ret = ms.MapValues(lede, typeName)
+	}
+	return
+}
 func (ms *MarshalMix) MapKey(key, field string) (ret bool) {
 	if call := ms.OnKey; call != nil {
 		ret = call(key, field)
 	} else {
 		ms.Error(errutil.New("unexpected key", key, field))
-	}
-	return
-}
-func (ms *MarshalMix) MapLiteral(field string) (ret bool) {
-	if call := ms.OnLiteral; call != nil {
-		ret = call(field)
-	} else {
-		ms.Error(errutil.New("unexpected literal", field))
 	}
 	return
 }
