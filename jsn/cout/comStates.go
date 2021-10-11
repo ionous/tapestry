@@ -29,8 +29,8 @@ func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 		if enum, ok := pv.(chart.EnumMarshaler); ok {
 			pv = makeEnum(enum)
 		}
-		m.Commit(pv)
-	}
+			m.Commit(pv)
+		}
 	return next
 }
 
@@ -54,10 +54,17 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 		m.PushState(newFlow(m, data))
 		return true
 	}
+	next.OnSlot = func(typeName string, slot jsn.Spotter) (okay bool) {
+		if slot.HasSlot() {
+			m.PushState(newSlot(m))
+			okay = true
+		}
+		return
+	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
 	// the compact encoding relies on the encoded inner block to unpack the choice.
 	// ( implies each option needs to be a unique type. )
-	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
+	next.OnPick = func(_ string, p jsn.Picker) (okay bool) {
 		if choice, ok := p.GetChoice(); !ok {
 			m.Error(errutil.New("couldnt determine choice of", p))
 		} else if len(choice) > 0 {
@@ -116,10 +123,24 @@ func newSlice(m *chart.Machine, vals []interface{}) *chart.StateMix {
 	return next
 }
 
+// every slot pushes a brand new machine
+func newSlot(m *chart.Machine) *chart.StateMix {
+	next := newValue(m, newBlock(m))
+	next.OnCommit = func(v interface{}) {
+		// write our choice and change into an error checking state
+		m.ChangeState(chart.NewBlockResult(m, v))
+	}
+	// fix? what should an uncommitted choice write?
+	next.OnEnd = func() {
+		m.FinishState(nil)
+	}
+	return next
+}
+
 func newSwap(m *chart.Machine) *chart.StateMix {
 	// we don't want to lose the *kind* of the choice for simple values
 	// ( otherwise we cant differentiate b/t -- for example -- two string types )
-	next := newBlock(m)
+	next := newValue(m, newBlock(m))
 	next.OnValue = func(typeName string, pv interface{}) {
 		if enum, ok := pv.(chart.EnumMarshaler); ok {
 			pv = makeEnum(enum)

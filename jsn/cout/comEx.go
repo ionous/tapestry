@@ -15,7 +15,7 @@ type VariableMarshaler interface {
 func (cv Chart) TextValue(typeName string, pstr *string) (okay bool) {
 	str := *pstr
 	if len(str) > 0 && str[0] == '@' {
-		cv.GenericValue(typeName, "@"+str)
+		cv.MarshalValue(typeName, "@"+str)
 		okay = true
 	}
 	return
@@ -25,7 +25,7 @@ func (cv Chart) VariableValue(typeName string, pstr *string) (okay bool) {
 	str := *pstr
 	// a leading ampersand would with @@ escaped text serialization.
 	if leadingAmp := len(str) > 0 && str[0] == '@'; !leadingAmp {
-		cv.GenericValue(typeName, "@"+str)
+		cv.MarshalValue(typeName, "@"+str)
 		okay = true
 	}
 	return
