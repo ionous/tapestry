@@ -2,7 +2,6 @@ package story
 
 import (
 	"database/sql"
-	r "reflect"
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/composer"
@@ -10,7 +9,6 @@ import (
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ident"
 	"git.sr.ht/~ionous/iffy/tables"
-	"github.com/ionous/errutil"
 )
 
 // Importer helps read story specific json.
@@ -23,7 +21,7 @@ type Importer struct {
 	StoryEnv
 	// jsonExp.importerExporter
 	source string
-	cmds   map[string]r.Type
+	cmds   composer.Registry
 	path   programPath
 }
 
@@ -43,17 +41,8 @@ func NewImporter(db *sql.DB) *Importer {
 }
 
 func (i *Importer) RegisterTypes(cmds []composer.Composer) {
-	if i.cmds == nil {
-		i.cmds = make(map[string]r.Type)
-	}
-	for _, cmd := range cmds {
-		if spec := cmd.Compose(); len(spec.Name) == 0 {
-			panic(errutil.Sprintf("Missing type name %T", cmd))
-		} else if was, exists := i.cmds[spec.Name]; exists {
-			panic(errutil.Sprintf("Duplicate type name %q now: %T, was: %s", spec.Name, cmd, was.String()))
-		} else {
-			i.cmds[spec.Name] = r.TypeOf(cmd).Elem()
-		}
+	if e := i.cmds.RegisterTypes(cmds); e != nil {
+		panic(e)
 	}
 }
 

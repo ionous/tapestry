@@ -1,20 +1,14 @@
 package story
 
-import (
-	r "reflect"
-
-	"github.com/ionous/errutil"
-)
-
 func (k *Importer) Source() string {
 	return k.source
 }
 
 func (k *Importer) NewType(s, t string) (ret interface{}, err error) {
-	if rtype, ok := k.cmds[t]; !ok {
-		err = errutil.New("unknown type", t)
+	if p, e := k.cmds.NewType(t); e != nil {
+		err = e
 	} else {
-		ret = r.New(rtype).Interface()
+		ret = p
 		k.path.push(s) // slot ( aka interface ) of most recently new'd type
 	}
 	return
