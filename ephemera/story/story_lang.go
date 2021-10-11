@@ -49,7 +49,7 @@ func AbstractAction_Optional_Marshal(n jsn.Marshaler, val *AbstractAction) {
 }
 
 func AbstractAction_Marshal(n jsn.Marshaler, val *AbstractAction) {
-	n.GenericValue(AbstractAction_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(AbstractAction_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type AbstractAction_Slice []AbstractAction
@@ -226,7 +226,7 @@ func ActionName_Optional_Marshal(n jsn.Marshaler, val *ActionName) {
 
 func ActionName_Marshal(n jsn.Marshaler, val *ActionName) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(ActionName_Type, &val.Str)
+	n.MarshalValue(ActionName_Type, &val.Str)
 }
 
 type ActionName_Slice []ActionName
@@ -365,7 +365,7 @@ func Ana_Optional_Marshal(n jsn.Marshaler, val *Ana) {
 }
 
 func Ana_Marshal(n jsn.Marshaler, val *Ana) {
-	n.GenericValue(Ana_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(Ana_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type Ana_Slice []Ana
@@ -426,7 +426,7 @@ func AreAn_Optional_Marshal(n jsn.Marshaler, val *AreAn) {
 }
 
 func AreAn_Marshal(n jsn.Marshaler, val *AreAn) {
-	n.GenericValue(AreAn_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(AreAn_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type AreAn_Slice []AreAn
@@ -483,7 +483,7 @@ func AreBeing_Optional_Marshal(n jsn.Marshaler, val *AreBeing) {
 }
 
 func AreBeing_Marshal(n jsn.Marshaler, val *AreBeing) {
-	n.GenericValue(AreBeing_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(AreBeing_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type AreBeing_Slice []AreBeing
@@ -540,7 +540,7 @@ func AreEither_Optional_Marshal(n jsn.Marshaler, val *AreEither) {
 }
 
 func AreEither_Marshal(n jsn.Marshaler, val *AreEither) {
-	n.GenericValue(AreEither_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(AreEither_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type AreEither_Slice []AreEither
@@ -714,7 +714,7 @@ func Aspect_Optional_Marshal(n jsn.Marshaler, val *Aspect) {
 
 func Aspect_Marshal(n jsn.Marshaler, val *Aspect) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(Aspect_Type, &val.Str)
+	n.MarshalValue(Aspect_Type, &val.Str)
 }
 
 type Aspect_Slice []Aspect
@@ -1019,7 +1019,7 @@ func Certainty_Optional_Marshal(n jsn.Marshaler, val *Certainty) {
 
 func Certainty_Marshal(n jsn.Marshaler, val *Certainty) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(Certainty_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(Certainty_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type Certainty_Slice []Certainty
@@ -1380,7 +1380,7 @@ func Determiner_Optional_Marshal(n jsn.Marshaler, val *Determiner) {
 }
 
 func Determiner_Marshal(n jsn.Marshaler, val *Determiner) {
-	n.GenericValue(Determiner_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(Determiner_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type Determiner_Slice []Determiner
@@ -1565,7 +1565,7 @@ func EventName_Optional_Marshal(n jsn.Marshaler, val *EventName) {
 
 func EventName_Marshal(n jsn.Marshaler, val *EventName) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(EventName_Type, &val.Str)
+	n.MarshalValue(EventName_Type, &val.Str)
 }
 
 type EventName_Slice []EventName
@@ -1623,7 +1623,7 @@ func EventPhase_Optional_Marshal(n jsn.Marshaler, val *EventPhase) {
 }
 
 func EventPhase_Marshal(n jsn.Marshaler, val *EventPhase) {
-	n.GenericValue(EventPhase_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(EventPhase_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type EventPhase_Slice []EventPhase
@@ -2752,7 +2752,7 @@ func NounName_Optional_Marshal(n jsn.Marshaler, val *NounName) {
 
 func NounName_Marshal(n jsn.Marshaler, val *NounName) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(NounName_Type, &val.Str)
+	n.MarshalValue(NounName_Type, &val.Str)
 }
 
 type NounName_Slice []NounName
@@ -3085,7 +3085,7 @@ func NumberList_Optional_Marshal(n jsn.Marshaler, val *NumberList) {
 }
 
 func NumberList_Marshal(n jsn.Marshaler, val *NumberList) {
-	n.GenericValue(NumberList_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(NumberList_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type NumberList_Slice []NumberList
@@ -3587,7 +3587,7 @@ func PatternFlags_Optional_Marshal(n jsn.Marshaler, val *PatternFlags) {
 }
 
 func PatternFlags_Marshal(n jsn.Marshaler, val *PatternFlags) {
-	n.GenericValue(PatternFlags_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(PatternFlags_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type PatternFlags_Slice []PatternFlags
@@ -3882,7 +3882,7 @@ func PatternType_Optional_Marshal(n jsn.Marshaler, val *PatternType) {
 
 func PatternType_Marshal(n jsn.Marshaler, val *PatternType) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(PatternType_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(PatternType_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type PatternType_Slice []PatternType
@@ -4050,7 +4050,7 @@ func PluralKinds_Optional_Marshal(n jsn.Marshaler, val *PluralKinds) {
 
 func PluralKinds_Marshal(n jsn.Marshaler, val *PluralKinds) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(PluralKinds_Type, &val.Str)
+	n.MarshalValue(PluralKinds_Type, &val.Str)
 }
 
 type PluralKinds_Slice []PluralKinds
@@ -4110,7 +4110,7 @@ func PrimitiveType_Optional_Marshal(n jsn.Marshaler, val *PrimitiveType) {
 
 func PrimitiveType_Marshal(n jsn.Marshaler, val *PrimitiveType) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(PrimitiveType_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(PrimitiveType_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type PrimitiveType_Slice []PrimitiveType
@@ -4313,7 +4313,7 @@ func Pronoun_Optional_Marshal(n jsn.Marshaler, val *Pronoun) {
 }
 
 func Pronoun_Marshal(n jsn.Marshaler, val *Pronoun) {
-	n.GenericValue(Pronoun_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(Pronoun_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type Pronoun_Slice []Pronoun
@@ -4364,7 +4364,7 @@ func Property_Optional_Marshal(n jsn.Marshaler, val *Property) {
 
 func Property_Marshal(n jsn.Marshaler, val *Property) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(Property_Type, &val.Str)
+	n.MarshalValue(Property_Type, &val.Str)
 }
 
 type Property_Slice []Property
@@ -4422,7 +4422,7 @@ func PropertyAspect_Optional_Marshal(n jsn.Marshaler, val *PropertyAspect) {
 
 func PropertyAspect_Marshal(n jsn.Marshaler, val *PropertyAspect) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(PropertyAspect_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(PropertyAspect_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type PropertyAspect_Slice []PropertyAspect
@@ -4684,7 +4684,7 @@ func RecordPlural_Optional_Marshal(n jsn.Marshaler, val *RecordPlural) {
 
 func RecordPlural_Marshal(n jsn.Marshaler, val *RecordPlural) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(RecordPlural_Type, &val.Str)
+	n.MarshalValue(RecordPlural_Type, &val.Str)
 }
 
 type RecordPlural_Slice []RecordPlural
@@ -4735,7 +4735,7 @@ func RecordSingular_Optional_Marshal(n jsn.Marshaler, val *RecordSingular) {
 
 func RecordSingular_Marshal(n jsn.Marshaler, val *RecordSingular) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(RecordSingular_Type, &val.Str)
+	n.MarshalValue(RecordSingular_Type, &val.Str)
 }
 
 type RecordSingular_Slice []RecordSingular
@@ -5247,7 +5247,7 @@ func SingularKind_Optional_Marshal(n jsn.Marshaler, val *SingularKind) {
 
 func SingularKind_Marshal(n jsn.Marshaler, val *SingularKind) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(SingularKind_Type, &val.Str)
+	n.MarshalValue(SingularKind_Type, &val.Str)
 }
 
 type SingularKind_Slice []SingularKind
@@ -5383,9 +5383,18 @@ const StoryStatement_Type = "story_statement"
 
 var StoryStatement_Optional_Marshal = StoryStatement_Marshal
 
+type StoryStatement_Slot struct{ ptr *StoryStatement }
+
+func (at StoryStatement_Slot) HasSlot() bool { return at.ptr != nil }
+func (at StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.ptr), okay = v.(StoryStatement)
+	return
+}
+
 func StoryStatement_Marshal(n jsn.Marshaler, ptr *StoryStatement) {
-	if slat := *ptr; slat != nil {
-		slat.(jsn.Marshalee).Marshal(n)
+	if ok := n.SlotValues(StoryStatement_Type, StoryStatement_Slot{ptr}); ok {
+		(*ptr).(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 	return
 }
@@ -5565,7 +5574,7 @@ func TestName_Optional_Marshal(n jsn.Marshaler, val *TestName) {
 
 func TestName_Marshal(n jsn.Marshaler, val *TestName) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(TestName_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(TestName_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type TestName_Slice []TestName
@@ -5828,9 +5837,18 @@ const Testing_Type = "testing"
 
 var Testing_Optional_Marshal = Testing_Marshal
 
+type Testing_Slot struct{ ptr *Testing }
+
+func (at Testing_Slot) HasSlot() bool { return at.ptr != nil }
+func (at Testing_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.ptr), okay = v.(Testing)
+	return
+}
+
 func Testing_Marshal(n jsn.Marshaler, ptr *Testing) {
-	if slat := *ptr; slat != nil {
-		slat.(jsn.Marshalee).Marshal(n)
+	if ok := n.SlotValues(Testing_Type, Testing_Slot{ptr}); ok {
+		(*ptr).(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 	return
 }
@@ -5888,7 +5906,7 @@ func TextList_Optional_Marshal(n jsn.Marshaler, val *TextList) {
 }
 
 func TextList_Marshal(n jsn.Marshaler, val *TextList) {
-	n.GenericValue(TextList_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(TextList_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type TextList_Slice []TextList
@@ -5939,7 +5957,7 @@ func Trait_Optional_Marshal(n jsn.Marshaler, val *Trait) {
 
 func Trait_Marshal(n jsn.Marshaler, val *Trait) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(Trait_Type, &val.Str)
+	n.MarshalValue(Trait_Type, &val.Str)
 }
 
 type Trait_Slice []Trait

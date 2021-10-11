@@ -23,16 +23,19 @@ type Marshaler interface {
 	// values are begin/end blocks or primitive values.
 	// a new MapKey or an EndValues will cancel writing this pair.
 	MapKey(sig, field string) bool
-	// selects one of a small set of possible choices
+	// selects one of an unbounded set of possible values
+	// returns the value if it exists for future serialization
+	SlotValues(typeName string, slot Spotter) bool
+	// selects one of a closed set of possible values
 	// the swap is closed ( written ) with a call to EndValues()
-	PickValues(typeName string, vp Picker) bool
+	PickValues(typeName string, pick Picker) bool
 	// starts a series of values
 	// the repeat is closed ( written ) with a call to EndValues()
-	RepeatValues(typeName string, vs Slicer) bool
+	RepeatValues(typeName string, slice Slicer) bool
 	// ends a flow, swap, or repeat.
 	EndValues()
-	// specify a single value
-	GenericValue(typeName string, pv interface{})
+	// specify a primitive value or enum
+	MarshalValue(typeName string, pv interface{})
 	// sets a unique id for the next block or primitive value.
 	SetCursor(id string)
 	// record an error but don't terminate
@@ -49,4 +52,9 @@ type Slicer interface {
 type Picker interface {
 	GetChoice() (string, bool)
 	SetChoice(string) (interface{}, bool)
+}
+
+type Spotter interface {
+	HasSlot() bool
+	SetSlot(interface{}) bool
 }

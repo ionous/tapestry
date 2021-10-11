@@ -9,6 +9,7 @@ type MarshalMix struct {
 	OnMap     func(string, string) bool
 	OnKey     func(string, string) bool
 	OnLiteral func(string, string) bool
+	OnSlot    func(string, Spotter) bool
 	OnPick    func(string, Picker) bool
 	OnRepeat  func(string, Slicer) bool
 	OnEnd     func()
@@ -46,9 +47,17 @@ func (ms *MarshalMix) MapKey(key, field string) (ret bool) {
 	}
 	return
 }
-func (ms *MarshalMix) PickValues(typeName string, val Picker) (ret bool) {
+func (ms *MarshalMix) SlotValues(typeName string, val Spotter) (okay bool) {
+	if call := ms.OnSlot; call != nil {
+		okay = call(typeName, val)
+	} else {
+		ms.Error(errutil.New("unexpected pick", typeName, val))
+	}
+	return
+}
+func (ms *MarshalMix) PickValues(typeName string, val Picker) (okay bool) {
 	if call := ms.OnPick; call != nil {
-		ret = call(typeName, val)
+		okay = call(typeName, val)
 	} else {
 		ms.Error(errutil.New("unexpected pick", typeName, val))
 	}
@@ -69,12 +78,13 @@ func (ms *MarshalMix) EndValues() {
 		ms.Error(errutil.New("unexpected end"))
 	}
 }
-func (ms *MarshalMix) GenericValue(typeName string, pv interface{}) {
+func (ms *MarshalMix) MarshalValue(typeName string, pv interface{}) {
 	if call := ms.OnValue; call != nil {
 		call(typeName, pv)
 	} else {
 		ms.Error(errutil.New("unexpected value", typeName, pv))
 	}
+	return
 }
 func (ms *MarshalMix) SetCursor(id string) {
 	if call := ms.OnCursor; call != nil {

@@ -561,9 +561,18 @@ const Brancher_Type = "brancher"
 
 var Brancher_Optional_Marshal = Brancher_Marshal
 
+type Brancher_Slot struct{ ptr *Brancher }
+
+func (at Brancher_Slot) HasSlot() bool { return at.ptr != nil }
+func (at Brancher_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.ptr), okay = v.(Brancher)
+	return
+}
+
 func Brancher_Marshal(n jsn.Marshaler, ptr *Brancher) {
-	if slat := *ptr; slat != nil {
-		slat.(jsn.Marshalee).Marshal(n)
+	if ok := n.SlotValues(Brancher_Type, Brancher_Slot{ptr}); ok {
+		(*ptr).(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 	return
 }
@@ -1835,9 +1844,18 @@ const Comparator_Type = "comparator"
 
 var Comparator_Optional_Marshal = Comparator_Marshal
 
+type Comparator_Slot struct{ ptr *Comparator }
+
+func (at Comparator_Slot) HasSlot() bool { return at.ptr != nil }
+func (at Comparator_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.ptr), okay = v.(Comparator)
+	return
+}
+
 func Comparator_Marshal(n jsn.Marshaler, ptr *Comparator) {
-	if slat := *ptr; slat != nil {
-		slat.(jsn.Marshalee).Marshal(n)
+	if ok := n.SlotValues(Comparator_Type, Comparator_Slot{ptr}); ok {
+		(*ptr).(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 	return
 }
@@ -2559,9 +2577,18 @@ const FromSourceFields_Type = "from_source_fields"
 
 var FromSourceFields_Optional_Marshal = FromSourceFields_Marshal
 
+type FromSourceFields_Slot struct{ ptr *FromSourceFields }
+
+func (at FromSourceFields_Slot) HasSlot() bool { return at.ptr != nil }
+func (at FromSourceFields_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.ptr), okay = v.(FromSourceFields)
+	return
+}
+
 func FromSourceFields_Marshal(n jsn.Marshaler, ptr *FromSourceFields) {
-	if slat := *ptr; slat != nil {
-		slat.(jsn.Marshalee).Marshal(n)
+	if ok := n.SlotValues(FromSourceFields_Type, FromSourceFields_Slot{ptr}); ok {
+		(*ptr).(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 	return
 }
@@ -3217,9 +3244,18 @@ const IntoTargetFields_Type = "into_target_fields"
 
 var IntoTargetFields_Optional_Marshal = IntoTargetFields_Marshal
 
+type IntoTargetFields_Slot struct{ ptr *IntoTargetFields }
+
+func (at IntoTargetFields_Slot) HasSlot() bool { return at.ptr != nil }
+func (at IntoTargetFields_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.ptr), okay = v.(IntoTargetFields)
+	return
+}
+
 func IntoTargetFields_Marshal(n jsn.Marshaler, ptr *IntoTargetFields) {
-	if slat := *ptr; slat != nil {
-		slat.(jsn.Marshalee).Marshal(n)
+	if ok := n.SlotValues(IntoTargetFields_Type, IntoTargetFields_Slot{ptr}); ok {
+		(*ptr).(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 	return
 }
@@ -5600,9 +5636,18 @@ const Trigger_Type = "trigger"
 
 var Trigger_Optional_Marshal = Trigger_Marshal
 
+type Trigger_Slot struct{ ptr *Trigger }
+
+func (at Trigger_Slot) HasSlot() bool { return at.ptr != nil }
+func (at Trigger_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.ptr), okay = v.(Trigger)
+	return
+}
+
 func Trigger_Marshal(n jsn.Marshaler, ptr *Trigger) {
-	if slat := *ptr; slat != nil {
-		slat.(jsn.Marshalee).Marshal(n)
+	if ok := n.SlotValues(Trigger_Type, Trigger_Slot{ptr}); ok {
+		(*ptr).(jsn.Marshalee).Marshal(n)
+		n.EndValues()
 	}
 	return
 }

@@ -72,7 +72,7 @@ func Bool_Optional_Marshal(n jsn.Marshaler, val *Bool) {
 }
 
 func Bool_Marshal(n jsn.Marshaler, val *Bool) {
-	n.GenericValue(Bool_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(Bool_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type Bool_Slice []Bool
@@ -121,7 +121,7 @@ func Lines_Optional_Marshal(n jsn.Marshaler, val *Lines) {
 }
 
 func Lines_Marshal(n jsn.Marshaler, val *Lines) {
-	n.GenericValue(Lines_Type, &val.Str)
+	n.MarshalValue(Lines_Type, &val.Str)
 }
 
 type Lines_Slice []Lines
@@ -191,7 +191,7 @@ func Number_Optional_Marshal(n jsn.Marshaler, val *Number) {
 }
 
 func Number_Marshal(n jsn.Marshaler, val *Number) {
-	n.GenericValue(Number_Type, &val.Num)
+	n.MarshalValue(Number_Type, &val.Num)
 }
 
 type Number_Slice []Number
@@ -242,7 +242,7 @@ func PatternName_Optional_Marshal(n jsn.Marshaler, val *PatternName) {
 
 func PatternName_Marshal(n jsn.Marshaler, val *PatternName) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(PatternName_Type, &val.Str)
+	n.MarshalValue(PatternName_Type, &val.Str)
 }
 
 type PatternName_Slice []PatternName
@@ -293,7 +293,7 @@ func RelationName_Optional_Marshal(n jsn.Marshaler, val *RelationName) {
 
 func RelationName_Marshal(n jsn.Marshaler, val *RelationName) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(RelationName_Type, &val.Str)
+	n.MarshalValue(RelationName_Type, &val.Str)
 }
 
 type RelationName_Slice []RelationName
@@ -368,7 +368,7 @@ func Text_Optional_Marshal(n jsn.Marshaler, val *Text) {
 }
 
 func Text_Marshal_Customized(n jsn.Marshaler, val *Text) {
-	n.GenericValue(Text_Type, &val.Str)
+	n.MarshalValue(Text_Type, &val.Str)
 }
 
 type Text_Slice []Text
@@ -419,7 +419,7 @@ func VariableName_Optional_Marshal(n jsn.Marshaler, val *VariableName) {
 
 func VariableName_Marshal(n jsn.Marshaler, val *VariableName) {
 	n.SetCursor(val.At.Offset)
-	n.GenericValue(VariableName_Type, &val.Str)
+	n.MarshalValue(VariableName_Type, &val.Str)
 }
 
 type VariableName_Slice []VariableName

@@ -161,7 +161,7 @@ func RenderFlags_Optional_Marshal(n jsn.Marshaler, val *RenderFlags) {
 }
 
 func RenderFlags_Marshal(n jsn.Marshaler, val *RenderFlags) {
-	n.GenericValue(RenderFlags_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(RenderFlags_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type RenderFlags_Slice []RenderFlags

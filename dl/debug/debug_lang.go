@@ -169,7 +169,7 @@ func LoggingLevel_Optional_Marshal(n jsn.Marshaler, val *LoggingLevel) {
 }
 
 func LoggingLevel_Marshal(n jsn.Marshaler, val *LoggingLevel) {
-	n.GenericValue(LoggingLevel_Type, jsn.MakeEnum(val, &val.Str))
+	n.MarshalValue(LoggingLevel_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type LoggingLevel_Slice []LoggingLevel

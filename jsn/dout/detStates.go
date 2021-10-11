@@ -23,18 +23,19 @@ func makeEnum(val chart.EnumMarshaler) (ret string) {
 	return
 }
 
-// detailed data represents even primitive values as a map of {id,type,value}.
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	next.OnValue = func(typeName string, pv interface{}) {
 		if enum, ok := pv.(chart.EnumMarshaler); ok {
 			pv = makeEnum(enum)
 		}
+		// detailed data represents even primitive values as a map of {id,type,value}.
 		m.Commit(detValue{
 			Id:    m.FlushCursor(),
 			Type:  typeName,
 			Value: pv,
 		})
 	}
+	// next.OnCommit -- handled by each caller
 	return next
 }
 
@@ -45,13 +46,23 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 }
 
 func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
-	next.OnMap = func(lede, typeName string) bool {
+	next.OnMap = func(_, typeName string) bool {
 		m.PushState(newFlow(m, detMap{
 			Id:     m.FlushCursor(),
 			Type:   typeName,
 			Fields: make(map[string]interface{}),
 		}))
 		return true
+	}
+	next.OnSlot = func(typeName string, slot jsn.Spotter) (okay bool) {
+		if slot.HasSlot() {
+			m.PushState(newSlot(m, detValue{
+				Id:   m.FlushCursor(),
+				Type: typeName,
+			}))
+			okay = true
+		}
+		return
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
 	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
@@ -98,6 +109,7 @@ func newFlow(m *chart.Machine, vals detMap) *chart.StateMix {
 // keys wait until they have a value, then write their data into their parent's data;
 // returning to the parent state.
 func newKey(m *chart.Machine, prev chart.StateMix, key string, vals detMap) *chart.StateMix {
+	// a key's value can be a simple value, or a block.
 	next := newValue(m, addBlock(m, &prev))
 	next.OnCommit = func(v interface{}) {
 		vals.Fields[key] = v // write our key, value pair
@@ -107,30 +119,45 @@ func newKey(m *chart.Machine, prev chart.StateMix, key string, vals detMap) *cha
 }
 
 // every slice pushes a brand new machine
-func newSlice(m *chart.Machine, vals []interface{}) *chart.StateMix {
+func newSlice(m *chart.Machine, slice []interface{}) *chart.StateMix {
 	next := newValue(m, newBlock(m))
 	next.OnCommit = func(v interface{}) {
-		vals = append(vals, v) // write a new value into the slice
+		slice = append(slice, v) // write a new value into the slice
 	}
 	next.OnEnd = func() {
-		m.FinishState(vals)
+		m.FinishState(slice)
 	}
 	return next
 }
 
-// every slice pushes a brand new machine
-func newSwap(m *chart.Machine, choice string, vals detMap) *chart.StateMix {
+// every swap pushes a brand new machine
+func newSlot(m *chart.Machine, slot detValue) *chart.StateMix {
 	next := newValue(m, newBlock(m))
 	next.OnCommit = func(v interface{}) {
 		// write our choice and change into an error checking state
-		vals.Fields = map[string]interface{}{
-			choice: v,
-		}
-		m.ChangeState(chart.NewBlockResult(m, vals))
+		slot.Value = v
+		m.ChangeState(chart.NewBlockResult(m, slot))
 	}
 	// fix? what should an uncommitted choice write?
 	next.OnEnd = func() {
-		m.FinishState(vals)
+		m.FinishState(slot)
+	}
+	return next
+}
+
+// every swap pushes a brand new machine
+func newSwap(m *chart.Machine, choice string, swap detMap) *chart.StateMix {
+	next := newValue(m, newBlock(m))
+	next.OnCommit = func(v interface{}) {
+		// write our choice and change into an error checking state
+		swap.Fields = map[string]interface{}{
+			choice: v,
+		}
+		m.ChangeState(chart.NewBlockResult(m, swap))
+	}
+	// fix? what should an uncommitted choice write?
+	next.OnEnd = func() {
+		m.FinishState(swap)
 	}
 	return next
 }
