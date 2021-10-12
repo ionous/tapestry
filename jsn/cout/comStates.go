@@ -14,11 +14,14 @@ func NewEncoder() Chart {
 	return Chart{chart.NewEncoder(newBlock)}
 }
 
-func makeEnum(val chart.EnumMarshaler) (ret string) {
-	if k, v := val.GetEnum(); len(k) > 0 {
-		ret = v
-	} else {
-		ret = v
+func unpack(pv interface{}) (ret interface{}) {
+	switch pv := pv.(type) {
+	case interface{ GetCompactValue() interface{} }:
+		ret = pv.GetCompactValue()
+	case interface{ GetValue() interface{} }:
+		ret = pv.GetValue()
+	default:
+		ret = pv
 	}
 	return
 }
@@ -26,11 +29,8 @@ func makeEnum(val chart.EnumMarshaler) (ret string) {
 // compact data represents primitive values as their value.
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	next.OnValue = func(typeName string, pv interface{}) {
-		if enum, ok := pv.(chart.EnumMarshaler); ok {
-			pv = makeEnum(enum)
-		}
-			m.Commit(pv)
-		}
+		m.Commit(unpack(pv))
+	}
 	return next
 }
 
@@ -142,12 +142,9 @@ func newSwap(m *chart.Machine) *chart.StateMix {
 	// ( otherwise we cant differentiate b/t -- for example -- two string types )
 	next := newValue(m, newBlock(m))
 	next.OnValue = func(typeName string, pv interface{}) {
-		if enum, ok := pv.(chart.EnumMarshaler); ok {
-			pv = makeEnum(enum)
-		}
 		m.ChangeState(chart.NewBlockResult(m,
 			map[string]interface{}{
-				typeName + ":": pv,
+				typeName + ":": unpack(pv),
 			}))
 	}
 	// record the swap choice and move to an error detection state

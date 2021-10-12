@@ -37,8 +37,8 @@ func (op *AsNum_Slice) SetSize(cnt int) { (*op) = make(AsNum_Slice, cnt) }
 
 func AsNum_Repeats_Marshal(n jsn.Marshaler, vals *[]AsNum) {
 	if n.RepeatValues(AsNum_Type, (*AsNum_Slice)(vals)) {
-		for _, el := range *vals {
-			AsNum_Marshal(n, &el)
+		for i := range *vals {
+			AsNum_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -94,8 +94,8 @@ func (op *AsRec_Slice) SetSize(cnt int) { (*op) = make(AsRec_Slice, cnt) }
 
 func AsRec_Repeats_Marshal(n jsn.Marshaler, vals *[]AsRec) {
 	if n.RepeatValues(AsRec_Type, (*AsRec_Slice)(vals)) {
-		for _, el := range *vals {
-			AsRec_Marshal(n, &el)
+		for i := range *vals {
+			AsRec_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -151,8 +151,8 @@ func (op *AsTxt_Slice) SetSize(cnt int) { (*op) = make(AsTxt_Slice, cnt) }
 
 func AsTxt_Repeats_Marshal(n jsn.Marshaler, vals *[]AsTxt) {
 	if n.RepeatValues(AsTxt_Type, (*AsTxt_Slice)(vals)) {
-		for _, el := range *vals {
-			AsTxt_Marshal(n, &el)
+		for i := range *vals {
+			AsTxt_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -210,8 +210,8 @@ func (op *EraseEdge_Slice) SetSize(cnt int) { (*op) = make(EraseEdge_Slice, cnt)
 
 func EraseEdge_Repeats_Marshal(n jsn.Marshaler, vals *[]EraseEdge) {
 	if n.RepeatValues(EraseEdge_Type, (*EraseEdge_Slice)(vals)) {
-		for _, el := range *vals {
-			EraseEdge_Marshal(n, &el)
+		for i := range *vals {
+			EraseEdge_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -274,8 +274,8 @@ func (op *EraseIndex_Slice) SetSize(cnt int) { (*op) = make(EraseIndex_Slice, cn
 
 func EraseIndex_Repeats_Marshal(n jsn.Marshaler, vals *[]EraseIndex) {
 	if n.RepeatValues(EraseIndex_Type, (*EraseIndex_Slice)(vals)) {
-		for _, el := range *vals {
-			EraseIndex_Marshal(n, &el)
+		for i := range *vals {
+			EraseIndex_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -344,8 +344,8 @@ func (op *Erasing_Slice) SetSize(cnt int) { (*op) = make(Erasing_Slice, cnt) }
 
 func Erasing_Repeats_Marshal(n jsn.Marshaler, vals *[]Erasing) {
 	if n.RepeatValues(Erasing_Type, (*Erasing_Slice)(vals)) {
-		for _, el := range *vals {
-			Erasing_Marshal(n, &el)
+		for i := range *vals {
+			Erasing_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -421,8 +421,8 @@ func (op *ErasingEdge_Slice) SetSize(cnt int) { (*op) = make(ErasingEdge_Slice, 
 
 func ErasingEdge_Repeats_Marshal(n jsn.Marshaler, vals *[]ErasingEdge) {
 	if n.RepeatValues(ErasingEdge_Type, (*ErasingEdge_Slice)(vals)) {
-		for _, el := range *vals {
-			ErasingEdge_Marshal(n, &el)
+		for i := range *vals {
+			ErasingEdge_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -490,8 +490,8 @@ func (op *FromNumList_Slice) SetSize(cnt int) { (*op) = make(FromNumList_Slice, 
 
 func FromNumList_Repeats_Marshal(n jsn.Marshaler, vals *[]FromNumList) {
 	if n.RepeatValues(FromNumList_Type, (*FromNumList_Slice)(vals)) {
-		for _, el := range *vals {
-			FromNumList_Marshal(n, &el)
+		for i := range *vals {
+			FromNumList_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -547,8 +547,8 @@ func (op *FromRecList_Slice) SetSize(cnt int) { (*op) = make(FromRecList_Slice, 
 
 func FromRecList_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRecList) {
 	if n.RepeatValues(FromRecList_Type, (*FromRecList_Slice)(vals)) {
-		for _, el := range *vals {
-			FromRecList_Marshal(n, &el)
+		for i := range *vals {
+			FromRecList_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -604,8 +604,8 @@ func (op *FromTxtList_Slice) SetSize(cnt int) { (*op) = make(FromTxtList_Slice, 
 
 func FromTxtList_Repeats_Marshal(n jsn.Marshaler, vals *[]FromTxtList) {
 	if n.RepeatValues(FromTxtList_Type, (*FromTxtList_Slice)(vals)) {
-		for _, el := range *vals {
-			FromTxtList_Marshal(n, &el)
+		for i := range *vals {
+			FromTxtList_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -661,8 +661,8 @@ func (op *IntoNumList_Slice) SetSize(cnt int) { (*op) = make(IntoNumList_Slice, 
 
 func IntoNumList_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoNumList) {
 	if n.RepeatValues(IntoNumList_Type, (*IntoNumList_Slice)(vals)) {
-		for _, el := range *vals {
-			IntoNumList_Marshal(n, &el)
+		for i := range *vals {
+			IntoNumList_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -718,8 +718,8 @@ func (op *IntoRecList_Slice) SetSize(cnt int) { (*op) = make(IntoRecList_Slice, 
 
 func IntoRecList_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoRecList) {
 	if n.RepeatValues(IntoRecList_Type, (*IntoRecList_Slice)(vals)) {
-		for _, el := range *vals {
-			IntoRecList_Marshal(n, &el)
+		for i := range *vals {
+			IntoRecList_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -775,8 +775,8 @@ func (op *IntoTxtList_Slice) SetSize(cnt int) { (*op) = make(IntoTxtList_Slice, 
 
 func IntoTxtList_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoTxtList) {
 	if n.RepeatValues(IntoTxtList_Type, (*IntoTxtList_Slice)(vals)) {
-		for _, el := range *vals {
-			IntoTxtList_Marshal(n, &el)
+		for i := range *vals {
+			IntoTxtList_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -834,8 +834,8 @@ func (op *ListAt_Slice) SetSize(cnt int) { (*op) = make(ListAt_Slice, cnt) }
 
 func ListAt_Repeats_Marshal(n jsn.Marshaler, vals *[]ListAt) {
 	if n.RepeatValues(ListAt_Type, (*ListAt_Slice)(vals)) {
-		for _, el := range *vals {
-			ListAt_Marshal(n, &el)
+		for i := range *vals {
+			ListAt_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -900,8 +900,8 @@ func (op *ListEach_Slice) SetSize(cnt int) { (*op) = make(ListEach_Slice, cnt) }
 
 func ListEach_Repeats_Marshal(n jsn.Marshaler, vals *[]ListEach) {
 	if n.RepeatValues(ListEach_Type, (*ListEach_Slice)(vals)) {
-		for _, el := range *vals {
-			ListEach_Marshal(n, &el)
+		for i := range *vals {
+			ListEach_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -968,8 +968,8 @@ func (op *ListFind_Slice) SetSize(cnt int) { (*op) = make(ListFind_Slice, cnt) }
 
 func ListFind_Repeats_Marshal(n jsn.Marshaler, vals *[]ListFind) {
 	if n.RepeatValues(ListFind_Type, (*ListFind_Slice)(vals)) {
-		for _, el := range *vals {
-			ListFind_Marshal(n, &el)
+		for i := range *vals {
+			ListFind_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1032,8 +1032,8 @@ func (op *ListGather_Slice) SetSize(cnt int) { (*op) = make(ListGather_Slice, cn
 
 func ListGather_Repeats_Marshal(n jsn.Marshaler, vals *[]ListGather) {
 	if n.RepeatValues(ListGather_Type, (*ListGather_Slice)(vals)) {
-		for _, el := range *vals {
-			ListGather_Marshal(n, &el)
+		for i := range *vals {
+			ListGather_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1094,8 +1094,8 @@ func (op *ListIterator_Slice) SetSize(cnt int) { (*op) = make(ListIterator_Slice
 
 func ListIterator_Repeats_Marshal(n jsn.Marshaler, vals *[]ListIterator) {
 	if n.RepeatValues(ListIterator_Type, (*ListIterator_Slice)(vals)) {
-		for _, el := range *vals {
-			ListIterator_Marshal(n, &el)
+		for i := range *vals {
+			ListIterator_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1130,8 +1130,8 @@ func (op *ListLen_Slice) SetSize(cnt int) { (*op) = make(ListLen_Slice, cnt) }
 
 func ListLen_Repeats_Marshal(n jsn.Marshaler, vals *[]ListLen) {
 	if n.RepeatValues(ListLen_Type, (*ListLen_Slice)(vals)) {
-		for _, el := range *vals {
-			ListLen_Marshal(n, &el)
+		for i := range *vals {
+			ListLen_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1191,8 +1191,8 @@ func (op *ListMap_Slice) SetSize(cnt int) { (*op) = make(ListMap_Slice, cnt) }
 
 func ListMap_Repeats_Marshal(n jsn.Marshaler, vals *[]ListMap) {
 	if n.RepeatValues(ListMap_Type, (*ListMap_Slice)(vals)) {
-		for _, el := range *vals {
-			ListMap_Marshal(n, &el)
+		for i := range *vals {
+			ListMap_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1258,8 +1258,8 @@ func (op *ListReduce_Slice) SetSize(cnt int) { (*op) = make(ListReduce_Slice, cn
 
 func ListReduce_Repeats_Marshal(n jsn.Marshaler, vals *[]ListReduce) {
 	if n.RepeatValues(ListReduce_Type, (*ListReduce_Slice)(vals)) {
-		for _, el := range *vals {
-			ListReduce_Marshal(n, &el)
+		for i := range *vals {
+			ListReduce_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1321,8 +1321,8 @@ func (op *ListReverse_Slice) SetSize(cnt int) { (*op) = make(ListReverse_Slice, 
 
 func ListReverse_Repeats_Marshal(n jsn.Marshaler, vals *[]ListReverse) {
 	if n.RepeatValues(ListReverse_Type, (*ListReverse_Slice)(vals)) {
-		for _, el := range *vals {
-			ListReverse_Marshal(n, &el)
+		for i := range *vals {
+			ListReverse_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1382,8 +1382,8 @@ func (op *ListSet_Slice) SetSize(cnt int) { (*op) = make(ListSet_Slice, cnt) }
 
 func ListSet_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSet) {
 	if n.RepeatValues(ListSet_Type, (*ListSet_Slice)(vals)) {
-		for _, el := range *vals {
-			ListSet_Marshal(n, &el)
+		for i := range *vals {
+			ListSet_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1449,8 +1449,8 @@ func (op *ListSlice_Slice) SetSize(cnt int) { (*op) = make(ListSlice_Slice, cnt)
 
 func ListSlice_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSlice) {
 	if n.RepeatValues(ListSlice_Type, (*ListSlice_Slice)(vals)) {
-		for _, el := range *vals {
-			ListSlice_Marshal(n, &el)
+		for i := range *vals {
+			ListSlice_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1516,8 +1516,8 @@ func (op *ListSortNumbers_Slice) SetSize(cnt int) { (*op) = make(ListSortNumbers
 
 func ListSortNumbers_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSortNumbers) {
 	if n.RepeatValues(ListSortNumbers_Type, (*ListSortNumbers_Slice)(vals)) {
-		for _, el := range *vals {
-			ListSortNumbers_Marshal(n, &el)
+		for i := range *vals {
+			ListSortNumbers_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1585,8 +1585,8 @@ func (op *ListSortText_Slice) SetSize(cnt int) { (*op) = make(ListSortText_Slice
 
 func ListSortText_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSortText) {
 	if n.RepeatValues(ListSortText_Type, (*ListSortText_Slice)(vals)) {
-		for _, el := range *vals {
-			ListSortText_Marshal(n, &el)
+		for i := range *vals {
+			ListSortText_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1653,8 +1653,8 @@ func (op *ListSortUsing_Slice) SetSize(cnt int) { (*op) = make(ListSortUsing_Sli
 
 func ListSortUsing_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSortUsing) {
 	if n.RepeatValues(ListSortUsing_Type, (*ListSortUsing_Slice)(vals)) {
-		for _, el := range *vals {
-			ListSortUsing_Marshal(n, &el)
+		for i := range *vals {
+			ListSortUsing_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1712,8 +1712,8 @@ func (op *ListSource_Slice) SetSize(cnt int) { (*op) = make(ListSource_Slice, cn
 
 func ListSource_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSource) {
 	if n.RepeatValues(ListSource_Type, (*ListSource_Slice)(vals)) {
-		for _, el := range *vals {
-			ListSource_Marshal(n, &el)
+		for i := range *vals {
+			ListSource_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1754,8 +1754,8 @@ func (op *ListSplice_Slice) SetSize(cnt int) { (*op) = make(ListSplice_Slice, cn
 
 func ListSplice_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSplice) {
 	if n.RepeatValues(ListSplice_Type, (*ListSplice_Slice)(vals)) {
-		for _, el := range *vals {
-			ListSplice_Marshal(n, &el)
+		for i := range *vals {
+			ListSplice_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1819,8 +1819,8 @@ func (op *ListTarget_Slice) SetSize(cnt int) { (*op) = make(ListTarget_Slice, cn
 
 func ListTarget_Repeats_Marshal(n jsn.Marshaler, vals *[]ListTarget) {
 	if n.RepeatValues(ListTarget_Type, (*ListTarget_Slice)(vals)) {
-		for _, el := range *vals {
-			ListTarget_Marshal(n, &el)
+		for i := range *vals {
+			ListTarget_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1859,8 +1859,8 @@ func (op *PutEdge_Slice) SetSize(cnt int) { (*op) = make(PutEdge_Slice, cnt) }
 
 func PutEdge_Repeats_Marshal(n jsn.Marshaler, vals *[]PutEdge) {
 	if n.RepeatValues(PutEdge_Type, (*PutEdge_Slice)(vals)) {
-		for _, el := range *vals {
-			PutEdge_Marshal(n, &el)
+		for i := range *vals {
+			PutEdge_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1926,8 +1926,8 @@ func (op *PutIndex_Slice) SetSize(cnt int) { (*op) = make(PutIndex_Slice, cnt) }
 
 func PutIndex_Repeats_Marshal(n jsn.Marshaler, vals *[]PutIndex) {
 	if n.RepeatValues(PutIndex_Type, (*PutIndex_Slice)(vals)) {
-		for _, el := range *vals {
-			PutIndex_Marshal(n, &el)
+		for i := range *vals {
+			PutIndex_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -1992,8 +1992,8 @@ func (op *Range_Slice) SetSize(cnt int) { (*op) = make(Range_Slice, cnt) }
 
 func Range_Repeats_Marshal(n jsn.Marshaler, vals *[]Range) {
 	if n.RepeatValues(Range_Type, (*Range_Slice)(vals)) {
-		for _, el := range *vals {
-			Range_Marshal(n, &el)
+		for i := range *vals {
+			Range_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}

@@ -36,8 +36,8 @@ func (op *RenderExp_Slice) SetSize(cnt int) { (*op) = make(RenderExp_Slice, cnt)
 
 func RenderExp_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderExp) {
 	if n.RepeatValues(RenderExp_Type, (*RenderExp_Slice)(vals)) {
-		for _, el := range *vals {
-			RenderExp_Marshal(n, &el)
+		for i := range *vals {
+			RenderExp_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -92,8 +92,8 @@ func (op *RenderField_Slice) SetSize(cnt int) { (*op) = make(RenderField_Slice, 
 
 func RenderField_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderField) {
 	if n.RepeatValues(RenderField_Type, (*RenderField_Slice)(vals)) {
-		for _, el := range *vals {
-			RenderField_Marshal(n, &el)
+		for i := range *vals {
+			RenderField_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -171,8 +171,8 @@ func (op *RenderFlags_Slice) SetSize(cnt int) { (*op) = make(RenderFlags_Slice, 
 
 func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {
 	if n.RepeatValues(RenderFlags_Type, (*RenderFlags_Slice)(vals)) {
-		for _, el := range *vals {
-			RenderFlags_Marshal(n, &el)
+		for i := range *vals {
+			RenderFlags_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -206,8 +206,8 @@ func (op *RenderName_Slice) SetSize(cnt int) { (*op) = make(RenderName_Slice, cn
 
 func RenderName_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderName) {
 	if n.RepeatValues(RenderName_Type, (*RenderName_Slice)(vals)) {
-		for _, el := range *vals {
-			RenderName_Marshal(n, &el)
+		for i := range *vals {
+			RenderName_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -265,8 +265,8 @@ func (op *RenderPattern_Slice) SetSize(cnt int) { (*op) = make(RenderPattern_Sli
 
 func RenderPattern_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderPattern) {
 	if n.RepeatValues(RenderPattern_Type, (*RenderPattern_Slice)(vals)) {
-		for _, el := range *vals {
-			RenderPattern_Marshal(n, &el)
+		for i := range *vals {
+			RenderPattern_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -326,8 +326,8 @@ func (op *RenderRef_Slice) SetSize(cnt int) { (*op) = make(RenderRef_Slice, cnt)
 
 func RenderRef_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderRef) {
 	if n.RepeatValues(RenderRef_Type, (*RenderRef_Slice)(vals)) {
-		for _, el := range *vals {
-			RenderRef_Marshal(n, &el)
+		for i := range *vals {
+			RenderRef_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}

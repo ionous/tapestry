@@ -14,19 +14,10 @@ func NewEncoder() Chart {
 	return Chart{chart.NewEncoder(newBlock)}
 }
 
-func makeEnum(val chart.EnumMarshaler) (ret string) {
-	if k, v := val.GetEnum(); len(k) > 0 {
-		ret = k
-	} else {
-		ret = v
-	}
-	return
-}
-
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	next.OnValue = func(typeName string, pv interface{}) {
-		if enum, ok := pv.(chart.EnumMarshaler); ok {
-			pv = makeEnum(enum)
+		if el, ok := pv.(interface{ GetValue() interface{} }); ok {
+			pv = el.GetValue()
 		}
 		// detailed data represents even primitive values as a map of {id,type,value}.
 		m.Commit(detValue{

@@ -10,8 +10,8 @@ func (op* {{name}}{{mod}}_Slice) SetSize(cnt int) { (*op) = make({{name}}{{mod}}
 
 func {{name}}{{mod}}_Repeats_Marshal(n jsn.Marshaler, vals *[]{{el}}) {
   if n.RepeatValues({{name}}_Type, (*{{name}}{{mod}}_Slice)(vals)) {
-    for _, el := range *vals {
-      {{name}}{{mod}}_Marshal(n, &el)
+    for i := range *vals {
+      {{name}}{{mod}}_Marshal(n, &(*vals)[i])
     }
     n.EndValues()
   }

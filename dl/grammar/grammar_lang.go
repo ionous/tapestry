@@ -35,8 +35,8 @@ func (op *Action_Slice) SetSize(cnt int) { (*op) = make(Action_Slice, cnt) }
 
 func Action_Repeats_Marshal(n jsn.Marshaler, vals *[]Action) {
 	if n.RepeatValues(Action_Type, (*Action_Slice)(vals)) {
-		for _, el := range *vals {
-			Action_Marshal(n, &el)
+		for i := range *vals {
+			Action_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -93,8 +93,8 @@ func (op *Alias_Slice) SetSize(cnt int) { (*op) = make(Alias_Slice, cnt) }
 
 func Alias_Repeats_Marshal(n jsn.Marshaler, vals *[]Alias) {
 	if n.RepeatValues(Alias_Type, (*Alias_Slice)(vals)) {
-		for _, el := range *vals {
-			Alias_Marshal(n, &el)
+		for i := range *vals {
+			Alias_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -152,8 +152,8 @@ func (op *AllOf_Slice) SetSize(cnt int) { (*op) = make(AllOf_Slice, cnt) }
 
 func AllOf_Repeats_Marshal(n jsn.Marshaler, vals *[]AllOf) {
 	if n.RepeatValues(AllOf_Type, (*AllOf_Slice)(vals)) {
-		for _, el := range *vals {
-			AllOf_Marshal(n, &el)
+		for i := range *vals {
+			AllOf_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -208,8 +208,8 @@ func (op *AnyOf_Slice) SetSize(cnt int) { (*op) = make(AnyOf_Slice, cnt) }
 
 func AnyOf_Repeats_Marshal(n jsn.Marshaler, vals *[]AnyOf) {
 	if n.RepeatValues(AnyOf_Type, (*AnyOf_Slice)(vals)) {
-		for _, el := range *vals {
-			AnyOf_Marshal(n, &el)
+		for i := range *vals {
+			AnyOf_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -266,8 +266,8 @@ func (op *Directive_Slice) SetSize(cnt int) { (*op) = make(Directive_Slice, cnt)
 
 func Directive_Repeats_Marshal(n jsn.Marshaler, vals *[]Directive) {
 	if n.RepeatValues(Directive_Type, (*Directive_Slice)(vals)) {
-		for _, el := range *vals {
-			Directive_Marshal(n, &el)
+		for i := range *vals {
+			Directive_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -325,8 +325,8 @@ func (op *Grammar_Slice) SetSize(cnt int) { (*op) = make(Grammar_Slice, cnt) }
 
 func Grammar_Repeats_Marshal(n jsn.Marshaler, vals *[]Grammar) {
 	if n.RepeatValues(Grammar_Type, (*Grammar_Slice)(vals)) {
-		for _, el := range *vals {
-			Grammar_Marshal(n, &el)
+		for i := range *vals {
+			Grammar_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -381,8 +381,8 @@ func (op *GrammarMaker_Slice) SetSize(cnt int) { (*op) = make(GrammarMaker_Slice
 
 func GrammarMaker_Repeats_Marshal(n jsn.Marshaler, vals *[]GrammarMaker) {
 	if n.RepeatValues(GrammarMaker_Type, (*GrammarMaker_Slice)(vals)) {
-		for _, el := range *vals {
-			GrammarMaker_Marshal(n, &el)
+		for i := range *vals {
+			GrammarMaker_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -416,8 +416,8 @@ func (op *Noun_Slice) SetSize(cnt int) { (*op) = make(Noun_Slice, cnt) }
 
 func Noun_Repeats_Marshal(n jsn.Marshaler, vals *[]Noun) {
 	if n.RepeatValues(Noun_Type, (*Noun_Slice)(vals)) {
-		for _, el := range *vals {
-			Noun_Marshal(n, &el)
+		for i := range *vals {
+			Noun_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -472,8 +472,8 @@ func (op *Retarget_Slice) SetSize(cnt int) { (*op) = make(Retarget_Slice, cnt) }
 
 func Retarget_Repeats_Marshal(n jsn.Marshaler, vals *[]Retarget) {
 	if n.RepeatValues(Retarget_Type, (*Retarget_Slice)(vals)) {
-		for _, el := range *vals {
-			Retarget_Marshal(n, &el)
+		for i := range *vals {
+			Retarget_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -528,8 +528,8 @@ func (op *Reverse_Slice) SetSize(cnt int) { (*op) = make(Reverse_Slice, cnt) }
 
 func Reverse_Repeats_Marshal(n jsn.Marshaler, vals *[]Reverse) {
 	if n.RepeatValues(Reverse_Type, (*Reverse_Slice)(vals)) {
-		for _, el := range *vals {
-			Reverse_Marshal(n, &el)
+		for i := range *vals {
+			Reverse_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -584,8 +584,8 @@ func (op *ScannerMaker_Slice) SetSize(cnt int) { (*op) = make(ScannerMaker_Slice
 
 func ScannerMaker_Repeats_Marshal(n jsn.Marshaler, vals *[]ScannerMaker) {
 	if n.RepeatValues(ScannerMaker_Type, (*ScannerMaker_Slice)(vals)) {
-		for _, el := range *vals {
-			ScannerMaker_Marshal(n, &el)
+		for i := range *vals {
+			ScannerMaker_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -619,8 +619,8 @@ func (op *Self_Slice) SetSize(cnt int) { (*op) = make(Self_Slice, cnt) }
 
 func Self_Repeats_Marshal(n jsn.Marshaler, vals *[]Self) {
 	if n.RepeatValues(Self_Type, (*Self_Slice)(vals)) {
-		for _, el := range *vals {
-			Self_Marshal(n, &el)
+		for i := range *vals {
+			Self_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -675,8 +675,8 @@ func (op *Words_Slice) SetSize(cnt int) { (*op) = make(Words_Slice, cnt) }
 
 func Words_Repeats_Marshal(n jsn.Marshaler, vals *[]Words) {
 	if n.RepeatValues(Words_Type, (*Words_Slice)(vals)) {
-		for _, el := range *vals {
-			Words_Marshal(n, &el)
+		for i := range *vals {
+			Words_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}

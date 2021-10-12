@@ -33,7 +33,7 @@ func {{Pascal name}}_Unboxed_Optional_Marshal(n jsn.Marshaler, val *{{Unboxed na
 }
 
 func {{Pascal name}}_Unboxed_Marshal(n jsn.Marshaler, val *{{Unboxed name}}) {
-  {{Pascal name}}_Marshal(n, &{{Pascal name}}{jsn.Box{{Pascal (Unboxed name)}}(val)})
+  n.MarshalValue({{Pascal name}}_Type, jsn.Box{{Pascal (Unboxed name)}}(val))
 }
 {{/if}}
 

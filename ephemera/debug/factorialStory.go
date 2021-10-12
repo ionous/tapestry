@@ -25,7 +25,7 @@ var FactorialStory = &story.Story{
 				Hook: story.ProgramHook{
 					Opt: &core.Activity{
 						Exe: []rt.Execute{
-							&core.Say{
+							&core.SayText{
 								Text: &core.PrintNum{
 									Num: &core.CallPattern{
 										Pattern: factorialName,
@@ -93,7 +93,7 @@ var numVar = value.VariableName{Str: "num"}
 
 var numberDecl = story.VariableDecl{
 	An: story.Determiner{
-		Str: "a",
+		Str: story.Determiner_A,
 	},
 	Name: numVar,
 	Type: story.VariableType{

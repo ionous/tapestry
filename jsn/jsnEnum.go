@@ -13,22 +13,29 @@ func MakeEnum(op composer.Composer, str *string) Enum {
 	return Enum{op, str}
 }
 
-func (n Enum) SetEnum(kv string) bool {
-	spec := n.Compose()
-	if k, i := spec.IndexOfValue(kv); i >= 0 {
-		*(n.str) = k
-	} else {
-		*(n.str) = kv
-	}
-	return true // fix: eventually some error handling
+func (n Enum) GetValue() interface{} {
+	return *n.str
 }
 
-func (n Enum) GetEnum() (retKey string, retVal string) {
+func (n Enum) GetCompactValue() (ret interface{}) {
 	spec, str := n.Compose(), *n.str
 	if v, i := spec.IndexOfChoice(str); i >= 0 {
-		retKey, retVal = str, v
+		ret = v
 	} else {
-		retVal = str
+		ret = str
+	}
+	return
+}
+
+func (n Enum) SetValue(kv interface{}) (okay bool) {
+	if str, ok := kv.(string); ok {
+		spec := n.Compose()
+		if k, i := spec.IndexOfValue(str); i >= 0 {
+			*(n.str) = k
+		} else {
+			*(n.str) = str
+		}
+		okay = true
 	}
 	return
 }

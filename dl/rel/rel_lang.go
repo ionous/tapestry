@@ -38,8 +38,8 @@ func (op *ReciprocalOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalOf_Slice
 
 func ReciprocalOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalOf) {
 	if n.RepeatValues(ReciprocalOf_Type, (*ReciprocalOf_Slice)(vals)) {
-		for _, el := range *vals {
-			ReciprocalOf_Marshal(n, &el)
+		for i := range *vals {
+			ReciprocalOf_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -100,8 +100,8 @@ func (op *ReciprocalsOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalsOf_Sli
 
 func ReciprocalsOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalsOf) {
 	if n.RepeatValues(ReciprocalsOf_Type, (*ReciprocalsOf_Slice)(vals)) {
-		for _, el := range *vals {
-			ReciprocalsOf_Marshal(n, &el)
+		for i := range *vals {
+			ReciprocalsOf_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -163,8 +163,8 @@ func (op *Relate_Slice) SetSize(cnt int) { (*op) = make(Relate_Slice, cnt) }
 
 func Relate_Repeats_Marshal(n jsn.Marshaler, vals *[]Relate) {
 	if n.RepeatValues(Relate_Type, (*Relate_Slice)(vals)) {
-		for _, el := range *vals {
-			Relate_Marshal(n, &el)
+		for i := range *vals {
+			Relate_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -228,8 +228,8 @@ func (op *RelativeOf_Slice) SetSize(cnt int) { (*op) = make(RelativeOf_Slice, cn
 
 func RelativeOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativeOf) {
 	if n.RepeatValues(RelativeOf_Type, (*RelativeOf_Slice)(vals)) {
-		for _, el := range *vals {
-			RelativeOf_Marshal(n, &el)
+		for i := range *vals {
+			RelativeOf_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -290,8 +290,8 @@ func (op *RelativesOf_Slice) SetSize(cnt int) { (*op) = make(RelativesOf_Slice, 
 
 func RelativesOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativesOf) {
 	if n.RepeatValues(RelativesOf_Type, (*RelativesOf_Slice)(vals)) {
-		for _, el := range *vals {
-			RelativesOf_Marshal(n, &el)
+		for i := range *vals {
+			RelativesOf_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}

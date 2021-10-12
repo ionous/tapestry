@@ -38,8 +38,8 @@ func (op *DebugLog_Slice) SetSize(cnt int) { (*op) = make(DebugLog_Slice, cnt) }
 
 func DebugLog_Repeats_Marshal(n jsn.Marshaler, vals *[]DebugLog) {
 	if n.RepeatValues(DebugLog_Type, (*DebugLog_Slice)(vals)) {
-		for _, el := range *vals {
-			DebugLog_Marshal(n, &el)
+		for i := range *vals {
+			DebugLog_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -97,8 +97,8 @@ func (op *DoNothing_Slice) SetSize(cnt int) { (*op) = make(DoNothing_Slice, cnt)
 
 func DoNothing_Repeats_Marshal(n jsn.Marshaler, vals *[]DoNothing) {
 	if n.RepeatValues(DoNothing_Type, (*DoNothing_Slice)(vals)) {
-		for _, el := range *vals {
-			DoNothing_Marshal(n, &el)
+		for i := range *vals {
+			DoNothing_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
@@ -179,8 +179,8 @@ func (op *LoggingLevel_Slice) SetSize(cnt int) { (*op) = make(LoggingLevel_Slice
 
 func LoggingLevel_Repeats_Marshal(n jsn.Marshaler, vals *[]LoggingLevel) {
 	if n.RepeatValues(LoggingLevel_Type, (*LoggingLevel_Slice)(vals)) {
-		for _, el := range *vals {
-			LoggingLevel_Marshal(n, &el)
+		for i := range *vals {
+			LoggingLevel_Marshal(n, &(*vals)[i])
 		}
 		n.EndValues()
 	}
