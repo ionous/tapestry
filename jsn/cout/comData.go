@@ -1,15 +1,15 @@
 package cout
 
 type flowData struct {
-	sig       Sig
-	values    []interface{}
-	totalKeys int
-	literal   bool
+	sig     Sig
+	values  []interface{}
+	literal bool
 }
 
-func newFlowData(lede string) *flowData {
+func newFlowData(lede string, literal bool) *flowData {
 	var cf flowData
 	cf.sig.WriteLede(lede)
+	cf.literal = literal
 	return &cf
 }
 

@@ -44,14 +44,11 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
 	next.OnMap = func(lede, _ string) bool {
-		data := newFlowData(lede)
-		m.PushState(newFlow(m, data))
+		m.PushState(newFlow(m, newFlowData(lede, false)))
 		return true
 	}
 	next.OnLiteral = func(lede, _ string) bool {
-		data := newFlowData(lede)
-		data.literal = true
-		m.PushState(newFlow(m, data))
+		m.PushState(newFlow(m, newFlowData(lede, true)))
 		return true
 	}
 	next.OnSlot = func(typeName string, slot jsn.Spotter) (okay bool) {
@@ -87,7 +84,6 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 func newFlow(m *chart.Machine, d *flowData) *chart.StateMix {
 	next := chart.NewReportingState(m)
 	next.OnKey = func(key, _ string) bool {
-		d.totalKeys++
 		m.ChangeState(newKey(m, *next, d, key))
 		return true
 	}
