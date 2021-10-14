@@ -7,6 +7,7 @@ const allTypes = require('./model.js'); // iffy language file
 const fs = require('fs'); // filesystem for loading iffy language file
 const child_process = require('child_process');
 const path = require('path');
+const fnv1a = require('./fnv1a.js');
 
 // unbox: when generating some kinds of simple types...
 // replace the specified typename with specified primitive.
@@ -77,8 +78,7 @@ Handlebars.registerHelper('IsToken', function(str) {
 Handlebars.registerHelper('NoHelpers', function(name) {
   return name === "position";
 });
-
-Handlebars.registerHelper('LedeName', function(t) {
+const ledeName = function(t) {
   // we exclude modeling ( as a opposed to runtime functions )
   // because currently most of those are in sentence form not expression form.
   // if this get fixed, then the WriteValue WriteChoice should e fixed to pass a lede
@@ -87,7 +87,8 @@ Handlebars.registerHelper('LedeName', function(t) {
     const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
     return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
   }
-});
+}
+Handlebars.registerHelper('LedeName', ledeName);
 
 const scopeOf = function(name) {
   let n = "";
@@ -121,10 +122,11 @@ const labelOf= function(key, param, index) {
   return m ? (index ? lower(key) : '_') : param.label.replaceAll(" ", "_");
 }
 Handlebars.registerHelper('LabelOf', labelOf);
-Handlebars.registerHelper('SelectorOf', function(key, param, index) {
+const selectorOf = function(key, param, index) {
   const x= labelOf(key, param, index);
   return x !== "_"? x: "";
-});
+}
+Handlebars.registerHelper('SelectorOf', selectorOf);
 Handlebars.registerHelper('Custom',function(name) {
   return custom.has(name) ? "_Customized": "";
 });
@@ -210,7 +212,61 @@ Handlebars.registerHelper('DescOf', function(x) {
     }
   }
   return ret;
-})
+});
+
+const reg = function(t, out, all) {
+  const lede= ledeName(t);
+  const sig= [ pascal(lede || t.name)];
+  const ps= paramsOf(t);
+  let i=0;
+  for (const k in ps) {
+    const p= ps[k];
+    if (p.label !== '-') {
+      const n= i++;
+      let sel= selectorOf(k, p, n);
+      if (sel.length > 1) {
+        sel= pascal(sel);
+        sel= sel.charAt(0).toLowerCase() + sel.slice(1);
+      }
+      let pad = "";
+      if (!n) {
+        if (!sel) {
+          sig[0] += ":";
+        } else {
+          pad = " ";
+        }
+      }
+      if (n || sel) {
+        sel = pad + sel + ":";
+        if (!p.optional) {
+          // addSelector
+          for (let j=0, cnt=sig.length; j< cnt; j++) {
+            sig[j] += sel;
+          }
+        } else {
+          // dupSelectors
+          for (let j=0, cnt=sig.length; j< cnt; j++) {
+            sig.push(sig[j]+sel);
+          }
+        }
+      }
+    }
+  }
+  for (const n of sig) {
+    const hash= fnv1a(n, {size:64});
+    const was= all[hash];
+    if (was) {
+      // Error: hash conflict 14222179384726139225 'FromRec:' from_rec vs. 'FromRec:' from_record
+      throw new Error(`hash conflict '${was.sig}' ${was.group}.${was.type} vs. '${n}' ${t.group}.${t.name}`)
+    }
+    const d= {
+      sig:n,
+      type:t.name,
+      group:t.group,
+    };
+    out[hash]= all[hash]= d;
+  }
+};
 
 const locationOf = function(x) {
   let where;
@@ -242,7 +298,7 @@ Handlebars.registerHelper('GroupOf', function(desc) {
 const partials = [
   'repeat', 'sig', 'spec'
 ];
-const sources = ['header', 'slot', 'prim', 'swap', 'flow', 'footer', 'regList'];
+const sources = ['header', 'slot', 'prim', 'swap', 'flow', 'footer', 'regList', 'sigMap'];
 partials.forEach(k => Handlebars.registerPartial(k, require(`./templates/${k}Template.js`)));
 const templates = Object.fromEntries(sources.map(k => [k,
   Handlebars.compile(require(`./templates/${k}Template.js`))])
@@ -279,6 +335,7 @@ for (const typeName in allTypes) {
   }
 }
 console.log("num groups", Object.keys(groups).length);
+let regall= {};
 
 // determine includes:
 for (currentGroup in groups) {
@@ -353,6 +410,16 @@ for (currentGroup in groups) {
     list: g.slats.map(n => allTypes[n]),
     RegType: "composer.Composer",
   }));
+  let signatures= {};
+  for (const t of g.slats.map(n => allTypes[n])) {
+    if (t.uses === 'flow') {
+      reg(t, signatures, regall);
+    }
+  }
+  fs.writeSync(fd, templates.sigMap({
+    list: signatures,
+  }));
+
   fs.closeSync(fd);
   // re-format the file using go format.
   child_process.execSync(`gofmt -e -s -w ${filepath}`);

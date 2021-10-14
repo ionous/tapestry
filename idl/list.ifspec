@@ -17,21 +17,21 @@
     "as_num":
     {
         "uses": "flow",
-        "spec": "num {_%var:variable_name}",
+        "spec": "as_num {_%var:variable_name}",
         "slot": "list_iterator",
         "desc": "Define the name of a number variable."
     },
     "as_rec":
     {
         "uses": "flow",
-        "spec": "rec {_%var:variable_name}",
+        "spec": "as_rec {_%var:variable_name}",
         "slot": "list_iterator",
         "desc": "Define the name of a record variable."
     },
     "as_txt":
     {
         "uses": "flow",
-        "spec": "txt {_%var:variable_name}",
+        "spec": "as_txt {_%var:variable_name}",
         "slot": "list_iterator",
         "desc": "Define the name of a text variable."
     },
@@ -96,21 +96,21 @@
     "from_num_list":
     {
         "uses": "flow",
-        "spec": "nums {_%var:variable_name}",
+        "spec": "var_of_nums {_%var:variable_name}",
         "slot": "list_source",
         "desc": "Uses a list of numbers"
     },
     "from_rec_list":
     {
         "uses": "flow",
-        "spec": "recs {_%var:variable_name}",
+        "spec": "var_of_recs {_%var:variable_name}",
         "slot": "list_source",
         "desc": "Uses a list of records"
     },
     "from_txt_list":
     {
         "uses": "flow",
-        "spec": "txts {_%var:variable_name}",
+        "spec": "var_of_txts {_%var:variable_name}",
         "slot": "list_source",
         "desc": "Uses a list of text"
     },
@@ -123,21 +123,21 @@
     "into_num_list":
     {
         "uses": "flow",
-        "spec": "nums {_%var:variable_name}",
+        "spec": "into_nums {_%var:variable_name}",
         "slot": "list_target",
         "desc": "Targets a list of numbers"
     },
     "into_rec_list":
     {
         "uses": "flow",
-        "spec": "recs {_%var:variable_name}",
+        "spec": "into_recs {_%var:variable_name}",
         "slot": "list_target",
         "desc": "Targets a list of records"
     },
     "into_txt_list":
     {
         "uses": "flow",
-        "spec": "txts {_%var:variable_name}",
+        "spec": "into_txts {_%var:variable_name}",
         "slot": "list_target",
         "desc": "Targets a list of text"
     },
@@ -194,7 +194,7 @@
     "list_reverse":
     {
         "uses": "flow",
-        "spec": "reverse {_%list:list_source}",
+        "spec": "reverse {list:list_source}",
         "slot": "execute",
         "desc": "Reverse a list."
     },
@@ -229,7 +229,7 @@
     "list_sort_numbers":
     {
         "uses": "flow",
-        "spec": "sort {_%var:variable_name} {by_field:text} {descending?bool_eval}",
+        "spec": "sort_numbers {_%var:variable_name} {by_field:text} {descending?bool_eval}",
         "slot": "execute"
     },
     "list_sort_using":
@@ -242,7 +242,7 @@
     "list_sort_text":
     {
         "uses": "flow",
-        "spec": "sort {_%var:variable_name} {by_field:text} {descending?bool_eval} {using_case?bool_eval}",
+        "spec": "sort_texts {_%var:variable_name} {by_field:text} {descending?bool_eval} {using_case?bool_eval}",
         "slot": "execute",
         "desc": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
     },

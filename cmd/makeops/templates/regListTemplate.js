@@ -1,4 +1,4 @@
-// slotTemplate.js
+// regListTemlpate.js
 'use strict';
 module.exports =`
 {{#if list.length}}

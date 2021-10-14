@@ -446,3 +446,5 @@ var Slats = []composer.Composer{
 	(*Text)(nil),
 	(*VariableName)(nil),
 }
+
+var Signatures = map[uint]interface{}{}

@@ -366,3 +366,11 @@ var Slats = []composer.Composer{
 	(*RenderPattern)(nil),
 	(*RenderRef)(nil),
 }
+
+var Signatures = map[uint]interface{}{
+	16799527360025986462: (*RenderExp)(nil),     /* RenderExp: */
+	8103562808853847007:  (*RenderField)(nil),   /* RenderField: */
+	2017102261165852124:  (*RenderName)(nil),    /* RenderName: */
+	9758431868100851810:  (*RenderPattern)(nil), /* Render:args: */
+	615784906923963755:   (*RenderRef)(nil),     /* RenderRef:flags: */
+}

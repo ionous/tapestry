@@ -75,7 +75,6 @@ func (*AllTrue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AllTrue_Type,
 		Uses: composer.Type_Flow,
-		Lede: "all_of",
 	}
 }
 
@@ -114,7 +113,7 @@ func AllTrue_Optional_Marshal(n jsn.Marshaler, pv **AllTrue) {
 }
 
 func AllTrue_Marshal(n jsn.Marshaler, val *AllTrue) (okay bool) {
-	if okay = n.MapValues("all_of", AllTrue_Type); okay {
+	if okay = n.MapValues(AllTrue_Type, AllTrue_Type); okay {
 		if n.MapKey("", AllTrue_Field_Test) {
 			rt.BoolEval_Repeats_Marshal(n, &val.Test)
 		}
@@ -182,7 +181,6 @@ func (*AnyTrue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AnyTrue_Type,
 		Uses: composer.Type_Flow,
-		Lede: "any_of",
 	}
 }
 
@@ -221,7 +219,7 @@ func AnyTrue_Optional_Marshal(n jsn.Marshaler, pv **AnyTrue) {
 }
 
 func AnyTrue_Marshal(n jsn.Marshaler, val *AnyTrue) (okay bool) {
-	if okay = n.MapValues("any_of", AnyTrue_Type); okay {
+	if okay = n.MapValues(AnyTrue_Type, AnyTrue_Type); okay {
 		if n.MapKey("", AnyTrue_Field_Test) {
 			rt.BoolEval_Repeats_Marshal(n, &val.Test)
 		}
@@ -2356,6 +2354,7 @@ func (*FromObj) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromObj_Type,
 		Uses: composer.Type_Flow,
+		Lede: "obj_fields",
 	}
 }
 
@@ -2394,7 +2393,7 @@ func FromObj_Optional_Marshal(n jsn.Marshaler, pv **FromObj) {
 }
 
 func FromObj_Marshal(n jsn.Marshaler, val *FromObj) (okay bool) {
-	if okay = n.MapValues(FromObj_Type, FromObj_Type); okay {
+	if okay = n.MapValues("obj_fields", FromObj_Type); okay {
 		if n.MapKey("", FromObj_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
@@ -2412,6 +2411,7 @@ func (*FromRec) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromRec_Type,
 		Uses: composer.Type_Flow,
+		Lede: "rec_fields",
 	}
 }
 
@@ -2450,7 +2450,7 @@ func FromRec_Optional_Marshal(n jsn.Marshaler, pv **FromRec) {
 }
 
 func FromRec_Marshal(n jsn.Marshaler, val *FromRec) (okay bool) {
-	if okay = n.MapValues(FromRec_Type, FromRec_Type); okay {
+	if okay = n.MapValues("rec_fields", FromRec_Type); okay {
 		if n.MapKey("", FromRec_Field_Rec) {
 			rt.RecordEval_Marshal(n, &val.Rec)
 		}
@@ -2731,6 +2731,7 @@ func (*FromVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromVar_Type,
 		Uses: composer.Type_Flow,
+		Lede: "var_fields",
 	}
 }
 
@@ -2769,7 +2770,7 @@ func FromVar_Optional_Marshal(n jsn.Marshaler, pv **FromVar) {
 }
 
 func FromVar_Marshal(n jsn.Marshaler, val *FromVar) (okay bool) {
-	if okay = n.MapValues(FromVar_Type, FromVar_Type); okay {
+	if okay = n.MapValues("var_fields", FromVar_Type); okay {
 		if n.MapKey("", FromVar_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -3192,7 +3193,7 @@ func (*IntoObj) Compose() composer.Spec {
 	return composer.Spec{
 		Name: IntoObj_Type,
 		Uses: composer.Type_Flow,
-		Lede: "obj",
+		Lede: "obj_field",
 	}
 }
 
@@ -3231,7 +3232,7 @@ func IntoObj_Optional_Marshal(n jsn.Marshaler, pv **IntoObj) {
 }
 
 func IntoObj_Marshal(n jsn.Marshaler, val *IntoObj) (okay bool) {
-	if okay = n.MapValues("obj", IntoObj_Type); okay {
+	if okay = n.MapValues("obj_field", IntoObj_Type); okay {
 		if n.MapKey("", IntoObj_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
@@ -3284,7 +3285,7 @@ func (*IntoVar) Compose() composer.Spec {
 	return composer.Spec{
 		Name: IntoVar_Type,
 		Uses: composer.Type_Flow,
-		Lede: "var",
+		Lede: "var_field",
 	}
 }
 
@@ -3323,7 +3324,7 @@ func IntoVar_Optional_Marshal(n jsn.Marshaler, pv **IntoVar) {
 }
 
 func IntoVar_Marshal(n jsn.Marshaler, val *IntoVar) (okay bool) {
-	if okay = n.MapValues("var", IntoVar_Type); okay {
+	if okay = n.MapValues("var_field", IntoVar_Type); okay {
 		if n.MapKey("", IntoVar_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -3795,7 +3796,7 @@ func MakeLowercase_Marshal(n jsn.Marshaler, val *MakeLowercase) (okay bool) {
 
 // MakeReversed Returns new text flipped back to front. For example, &#x27;elppA&#x27; from &#x27;Apple&#x27;, or &#x27;noon&#x27; from &#x27;noon&#x27;.
 type MakeReversed struct {
-	Text rt.TextEval `if:"label=_"`
+	Text rt.TextEval `if:"label=text"`
 }
 
 func (*MakeReversed) Compose() composer.Spec {
@@ -3842,7 +3843,7 @@ func MakeReversed_Optional_Marshal(n jsn.Marshaler, pv **MakeReversed) {
 
 func MakeReversed_Marshal(n jsn.Marshaler, val *MakeReversed) (okay bool) {
 	if okay = n.MapValues("reverse", MakeReversed_Type); okay {
-		if n.MapKey("", MakeReversed_Field_Text) {
+		if n.MapKey("text", MakeReversed_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
 		n.EndValues()
@@ -4147,7 +4148,6 @@ func (*Never) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Never_Type,
 		Uses: composer.Type_Flow,
-		Lede: "always",
 	}
 }
 
@@ -4184,7 +4184,7 @@ func Never_Optional_Marshal(n jsn.Marshaler, pv **Never) {
 }
 
 func Never_Marshal(n jsn.Marshaler, val *Never) (okay bool) {
-	if okay = n.MapValues("always", Never_Type); okay {
+	if okay = n.MapValues(Never_Type, Never_Type); okay {
 		n.EndValues()
 	}
 	return
@@ -6041,4 +6041,113 @@ var Slats = []composer.Composer{
 	(*TriggerSwitch)(nil),
 	(*Unequal)(nil),
 	(*While)(nil),
+}
+
+var Signatures = map[uint]interface{}{
+	9563969450495003011:  (*Activity)(nil),          /* Act: */
+	5766132082989451290:  (*AllTrue)(nil),           /* AllTrue: */
+	3551738626604328996:  (*Always)(nil),            /* Always */
+	5530004915832666773:  (*AnyTrue)(nil),           /* AnyTrue: */
+	964848420644943929:   (*Assign)(nil),            /* Let:be: */
+	8393987310376781689:  (*AtLeast)(nil),           /* AtLeast */
+	6318029524925488119:  (*AtMost)(nil),            /* AtMost */
+	12638241076625424335: (*Blankline)(nil),         /* P */
+	1736897526516691909:  (*BoolValue)(nil),         /* Bool: */
+	296659450533921070:   (*BracketText)(nil),       /* Brackets: */
+	5769182059867686040:  (*Break)(nil),             /* Break */
+	1468716792759951334:  (*BufferText)(nil),        /* Buffers: */
+	12587790669191301162: (*CallArg)(nil),           /* Inarg:from: */
+	5369402786275276311:  (*CallArgs)(nil),          /* Inargs: */
+	13830472648721021489: (*CallCycle)(nil),         /* Cycle: */
+	15946925553828934364: (*CallMake)(nil),          /* CallMake:args: */
+	15968985848252216970: (*CallPattern)(nil),       /* CallPattern:args: */
+	9001627797986963633:  (*CallSend)(nil),          /* CallSend:to:args: */
+	4094744094015329372:  (*CallShuffle)(nil),       /* Shuffle: */
+	397325548209379145:   (*CallTerminal)(nil),      /* Stopping: */
+	6201894317097750905:  (*CallTrigger)(nil),       /* Trigger:num: */
+	11297042870903436571: (*Capitalize)(nil),        /* Capitalize: */
+	801098075024283221:   (*ChooseAction)(nil),      /* If:do: */
+	16837911797943566414: (*ChooseAction)(nil),      /* If:do:else: */
+	6647835788319785576:  (*ChooseMore)(nil),        /* ElseIf:do: */
+	8891784798413013545:  (*ChooseMore)(nil),        /* ElseIf:do:else: */
+	8118318284549648335:  (*ChooseMoreValue)(nil),   /* ElseIf:from:and:do: */
+	15789793076434728188: (*ChooseMoreValue)(nil),   /* ElseIf:from:and:do:else: */
+	10400553141435587369: (*ChooseNothingElse)(nil), /* ElseDo: */
+	6975806637395575556:  (*ChooseNum)(nil),         /* Num if:then:else: */
+	3873612904538163080:  (*ChooseText)(nil),        /* Txt if:then:else: */
+	1980715091726959140:  (*ChooseValue)(nil),       /* If:from:and:do: */
+	7009621164357801941:  (*ChooseValue)(nil),       /* If:from:and:do:else: */
+	10071311581658796529: (*CommaText)(nil),         /* Commas: */
+	16120682472252114465: (*CompareNum)(nil),        /* Cmp:is:num: */
+	7447576730273512137:  (*CompareText)(nil),       /* Cmp:is:txt: */
+	15006778405246945707: (*DiffOf)(nil),            /* Dec: */
+	15857313894902256996: (*DiffOf)(nil),            /* Dec:by: */
+	8764800739954063190:  (*During)(nil),            /* During: */
+	1753806270445300148:  (*Equal)(nil),             /* Equals */
+	12958508767616079733: (*FromBool)(nil),          /* FromBool: */
+	1549912768528741755:  (*FromNum)(nil),           /* FromNum: */
+	10142847724583857470: (*FromNumbers)(nil),       /* FromNums: */
+	10710451369001919943: (*FromObj)(nil),           /* ObjFields: */
+	2612904280306907934:  (*FromRec)(nil),           /* RecFields: */
+	14222179384726139225: (*FromRecord)(nil),        /* FromRec: */
+	15883210900960895884: (*FromRecords)(nil),       /* FromRecs: */
+	10911058166184667263: (*FromText)(nil),          /* FromTxt: */
+	6711291326309402106:  (*FromTexts)(nil),         /* FromTxts: */
+	12398042414257414931: (*FromVar)(nil),           /* VarFields: */
+	1388232177254779715:  (*GetAtField)(nil),        /* Get:from: */
+	14151708642469140140: (*GetVar)(nil),            /* Var: */
+	60595651907097662:    (*GreaterThan)(nil),       /* GreaterThan */
+	7228360982355755098:  (*HasDominion)(nil),       /* HasDominion: */
+	17664170115517891482: (*HasTrait)(nil),          /* Get obj:trait: */
+	10727511238220812609: (*IdOf)(nil),              /* IdOf: */
+	1080512400466662143:  (*Includes)(nil),          /* Contains:part: */
+	9915543600215807772:  (*IntoObj)(nil),           /* ObjField: */
+	16034994987020741904: (*IntoVar)(nil),           /* VarField: */
+	3262909017575450402:  (*IsEmpty)(nil),           /* Is empty: */
+	9266285462670386846:  (*IsExactKindOf)(nil),     /* KindOf:isExactly: */
+	8240640059307590354:  (*IsKindOf)(nil),          /* KindOf:is: */
+	8856805864711625497:  (*Join)(nil),              /* Join:parts: */
+	11296148874053869044: (*KindOf)(nil),            /* KindOf: */
+	17605671480000835281: (*KindsOf)(nil),           /* KindsOf: */
+	13322186486440282691: (*LessThan)(nil),          /* LessThan */
+	13496033380132251392: (*MakeLowercase)(nil),     /* Lower: */
+	1041569095092303606:  (*MakeReversed)(nil),      /* Reverse text: */
+	1183160597042696586:  (*MakeSentenceCase)(nil),  /* Sentence: */
+	14218506878958151209: (*MakeTitleCase)(nil),     /* Title: */
+	6358042897234725735:  (*MakeUppercase)(nil),     /* Upper: */
+	2713245075151573181:  (*Matches)(nil),           /* Matches:to: */
+	3843862012941569591:  (*NameOf)(nil),            /* NameOf: */
+	10058766148349444137: (*Never)(nil),             /* Never */
+	653943369825436213:   (*Newline)(nil),           /* Br */
+	1134746331002594312:  (*Next)(nil),              /* Next */
+	7387800900385408432:  (*Not)(nil),               /* Not: */
+	9668407916590545547:  (*NumValue)(nil),          /* Num: */
+	17428560025310008846: (*Numbers)(nil),           /* Nums: */
+	5910595103012063731:  (*ObjectExists)(nil),      /* Is valid: */
+	737548260315376446:   (*Pluralize)(nil),         /* Plural of: */
+	14901128508397332453: (*PrintNum)(nil),          /* Numeral: */
+	16124696221349267254: (*PrintNumWord)(nil),      /* Numeral words: */
+	6997154239603411150:  (*ProductOf)(nil),         /* Mul:by: */
+	4203536933166593903:  (*PutAtField)(nil),        /* Put:from:at: */
+	9642860352247282847:  (*QuotientOf)(nil),        /* Div:by: */
+	17855808514151565940: (*RemainderOf)(nil),       /* Mod:by: */
+	7052086945096604332:  (*Response)(nil),          /* Response: */
+	4774612926507711811:  (*Response)(nil),          /* Response:text: */
+	14613688398311225843: (*Row)(nil),               /* Row: */
+	3616198808268747974:  (*Rows)(nil),              /* Rows: */
+	3730533159734531406:  (*SayText)(nil),           /* Say: */
+	4615224243559596965:  (*SetTrait)(nil),          /* Put obj:trait: */
+	17621435589152331937: (*Singularize)(nil),       /* Singular of: */
+	2005944222973282288:  (*SlashText)(nil),         /* Slashes: */
+	8407401479373948554:  (*Softline)(nil),          /* Wbr */
+	13947012081139838056: (*SpanText)(nil),          /* Spaces: */
+	2338774282197734279:  (*SumOf)(nil),             /* Inc: */
+	13375523970040178104: (*SumOf)(nil),             /* Inc:by: */
+	15892234395983060559: (*TextValue)(nil),         /* Txt: */
+	10570907516103306122: (*Texts)(nil),             /* Txts: */
+	15065524158993996740: (*TriggerCycle)(nil),      /* Every */
+	650855941173987400:   (*TriggerOnce)(nil),       /* At */
+	15543013144495859017: (*TriggerSwitch)(nil),     /* After */
+	320693597002023882:   (*Unequal)(nil),           /* OtherThan */
+	11869639038566752997: (*While)(nil),             /* Repeating:do: */
 }

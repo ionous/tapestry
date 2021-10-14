@@ -34,7 +34,7 @@
     "all_true":
     {
         "uses": "flow",
-        "spec": "all_of {_%test+bool_eval}",
+        "spec": "all_true {_%test+bool_eval}",
         "slot": "bool_eval",
         "desc": "Returns true if all of the evaluations are true.",
         "group": "logic"
@@ -50,7 +50,7 @@
     "never":
     {
         "uses": "flow",
-        "spec": "always",
+        "spec": "never",
         "slot": "bool_eval",
         "desc": "Returns false.",
         "group": "logic"
@@ -58,7 +58,7 @@
     "any_true":
     {
         "uses": "flow",
-        "spec": "any_of {_%test+bool_eval}",
+        "spec": "any_true {_%test+bool_eval}",
         "slot": "bool_eval",
         "desc": "Returns true if any of the evaluations are true.",
         "group": "logic"
@@ -314,7 +314,7 @@
     "from_obj":
     {
         "uses": "flow",
-        "spec": "from_obj {_%object:text_eval}",
+        "spec": "obj_fields {_%object:text_eval}",
         "slot": "from_source_fields",
         "desc": "Targets an object with a computed name.",
         "group": "misc"
@@ -322,7 +322,7 @@
     "from_rec":
     {
         "uses": "flow",
-        "spec": "from_rec {_%rec:record_eval}",
+        "spec": "rec_fields {_%rec:record_eval}",
         "slot": "from_source_fields",
         "desc": "Targets a record stored in a record.",
         "group": "misc"
@@ -362,7 +362,7 @@
     "from_var":
     {
         "uses": "flow",
-        "spec": "from_var {_%var:variable_name}",
+        "spec": "var_fields {_%var:variable_name}",
         "slot": "from_source_fields",
         "desc": "Targets a record stored in a variable.",
         "group": "misc"
@@ -435,7 +435,7 @@
     "into_obj":
     {
         "uses": "flow",
-        "spec": "obj {_%object:text_eval}",
+        "spec": "obj_field {_%object:text_eval}",
         "slot": "into_target_fields",
         "desc": "Targets an object with a computed name.",
         "group": "misc"
@@ -443,7 +443,7 @@
     "into_var":
     {
         "uses": "flow",
-        "spec": "var {_%var:variable_name}",
+        "spec": "var_field {_%var:variable_name}",
         "slot": "into_target_fields",
         "desc": "Targets an object or record stored in a variable",
         "group": "misc"
@@ -547,7 +547,7 @@
     "make_reversed":
     {
         "uses": "flow",
-        "spec": "reverse {_%text:text_eval}",
+        "spec": "reverse {text:text_eval}",
         "slot": "text_eval",
         "desc": "Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.",
         "group": "format"

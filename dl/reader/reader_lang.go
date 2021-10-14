@@ -27,3 +27,7 @@ const Position_Field_Source = "$SOURCE"
 var Slats = []composer.Composer{
 	(*Position)(nil),
 }
+
+var Signatures = map[uint]interface{}{
+	1994392263685226704: (*Position)(nil), /* Src:in: */
+}

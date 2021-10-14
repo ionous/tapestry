@@ -18,7 +18,6 @@ func (*AsNum) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AsNum_Type,
 		Uses: composer.Type_Flow,
-		Lede: "num",
 	}
 }
 
@@ -57,7 +56,7 @@ func AsNum_Optional_Marshal(n jsn.Marshaler, pv **AsNum) {
 }
 
 func AsNum_Marshal(n jsn.Marshaler, val *AsNum) (okay bool) {
-	if okay = n.MapValues("num", AsNum_Type); okay {
+	if okay = n.MapValues(AsNum_Type, AsNum_Type); okay {
 		if n.MapKey("", AsNum_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -75,7 +74,6 @@ func (*AsRec) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AsRec_Type,
 		Uses: composer.Type_Flow,
-		Lede: "rec",
 	}
 }
 
@@ -114,7 +112,7 @@ func AsRec_Optional_Marshal(n jsn.Marshaler, pv **AsRec) {
 }
 
 func AsRec_Marshal(n jsn.Marshaler, val *AsRec) (okay bool) {
-	if okay = n.MapValues("rec", AsRec_Type); okay {
+	if okay = n.MapValues(AsRec_Type, AsRec_Type); okay {
 		if n.MapKey("", AsRec_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -132,7 +130,6 @@ func (*AsTxt) Compose() composer.Spec {
 	return composer.Spec{
 		Name: AsTxt_Type,
 		Uses: composer.Type_Flow,
-		Lede: "txt",
 	}
 }
 
@@ -171,7 +168,7 @@ func AsTxt_Optional_Marshal(n jsn.Marshaler, pv **AsTxt) {
 }
 
 func AsTxt_Marshal(n jsn.Marshaler, val *AsTxt) (okay bool) {
-	if okay = n.MapValues("txt", AsTxt_Type); okay {
+	if okay = n.MapValues(AsTxt_Type, AsTxt_Type); okay {
 		if n.MapKey("", AsTxt_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -471,7 +468,7 @@ func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromNumList_Type,
 		Uses: composer.Type_Flow,
-		Lede: "nums",
+		Lede: "var_of_nums",
 	}
 }
 
@@ -510,7 +507,7 @@ func FromNumList_Optional_Marshal(n jsn.Marshaler, pv **FromNumList) {
 }
 
 func FromNumList_Marshal(n jsn.Marshaler, val *FromNumList) (okay bool) {
-	if okay = n.MapValues("nums", FromNumList_Type); okay {
+	if okay = n.MapValues("var_of_nums", FromNumList_Type); okay {
 		if n.MapKey("", FromNumList_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -528,7 +525,7 @@ func (*FromRecList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromRecList_Type,
 		Uses: composer.Type_Flow,
-		Lede: "recs",
+		Lede: "var_of_recs",
 	}
 }
 
@@ -567,7 +564,7 @@ func FromRecList_Optional_Marshal(n jsn.Marshaler, pv **FromRecList) {
 }
 
 func FromRecList_Marshal(n jsn.Marshaler, val *FromRecList) (okay bool) {
-	if okay = n.MapValues("recs", FromRecList_Type); okay {
+	if okay = n.MapValues("var_of_recs", FromRecList_Type); okay {
 		if n.MapKey("", FromRecList_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -585,7 +582,7 @@ func (*FromTxtList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromTxtList_Type,
 		Uses: composer.Type_Flow,
-		Lede: "txts",
+		Lede: "var_of_txts",
 	}
 }
 
@@ -624,7 +621,7 @@ func FromTxtList_Optional_Marshal(n jsn.Marshaler, pv **FromTxtList) {
 }
 
 func FromTxtList_Marshal(n jsn.Marshaler, val *FromTxtList) (okay bool) {
-	if okay = n.MapValues("txts", FromTxtList_Type); okay {
+	if okay = n.MapValues("var_of_txts", FromTxtList_Type); okay {
 		if n.MapKey("", FromTxtList_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -642,7 +639,7 @@ func (*IntoNumList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: IntoNumList_Type,
 		Uses: composer.Type_Flow,
-		Lede: "nums",
+		Lede: "into_nums",
 	}
 }
 
@@ -681,7 +678,7 @@ func IntoNumList_Optional_Marshal(n jsn.Marshaler, pv **IntoNumList) {
 }
 
 func IntoNumList_Marshal(n jsn.Marshaler, val *IntoNumList) (okay bool) {
-	if okay = n.MapValues("nums", IntoNumList_Type); okay {
+	if okay = n.MapValues("into_nums", IntoNumList_Type); okay {
 		if n.MapKey("", IntoNumList_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -699,7 +696,7 @@ func (*IntoRecList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: IntoRecList_Type,
 		Uses: composer.Type_Flow,
-		Lede: "recs",
+		Lede: "into_recs",
 	}
 }
 
@@ -738,7 +735,7 @@ func IntoRecList_Optional_Marshal(n jsn.Marshaler, pv **IntoRecList) {
 }
 
 func IntoRecList_Marshal(n jsn.Marshaler, val *IntoRecList) (okay bool) {
-	if okay = n.MapValues("recs", IntoRecList_Type); okay {
+	if okay = n.MapValues("into_recs", IntoRecList_Type); okay {
 		if n.MapKey("", IntoRecList_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -756,7 +753,7 @@ func (*IntoTxtList) Compose() composer.Spec {
 	return composer.Spec{
 		Name: IntoTxtList_Type,
 		Uses: composer.Type_Flow,
-		Lede: "txts",
+		Lede: "into_txts",
 	}
 }
 
@@ -795,7 +792,7 @@ func IntoTxtList_Optional_Marshal(n jsn.Marshaler, pv **IntoTxtList) {
 }
 
 func IntoTxtList_Marshal(n jsn.Marshaler, val *IntoTxtList) (okay bool) {
-	if okay = n.MapValues("txts", IntoTxtList_Type); okay {
+	if okay = n.MapValues("into_txts", IntoTxtList_Type); okay {
 		if n.MapKey("", IntoTxtList_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -1295,7 +1292,7 @@ func ListReduce_Marshal(n jsn.Marshaler, val *ListReduce) (okay bool) {
 
 // ListReverse Reverse a list.
 type ListReverse struct {
-	List ListSource `if:"label=_"`
+	List ListSource `if:"label=list"`
 }
 
 func (*ListReverse) Compose() composer.Spec {
@@ -1342,7 +1339,7 @@ func ListReverse_Optional_Marshal(n jsn.Marshaler, pv **ListReverse) {
 
 func ListReverse_Marshal(n jsn.Marshaler, val *ListReverse) (okay bool) {
 	if okay = n.MapValues("reverse", ListReverse_Type); okay {
-		if n.MapKey("", ListReverse_Field_List) {
+		if n.MapKey("list", ListReverse_Field_List) {
 			ListSource_Marshal(n, &val.List)
 		}
 		n.EndValues()
@@ -1495,7 +1492,7 @@ func (*ListSortNumbers) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ListSortNumbers_Type,
 		Uses: composer.Type_Flow,
-		Lede: "sort",
+		Lede: "sort_numbers",
 	}
 }
 
@@ -1536,7 +1533,7 @@ func ListSortNumbers_Optional_Marshal(n jsn.Marshaler, pv **ListSortNumbers) {
 }
 
 func ListSortNumbers_Marshal(n jsn.Marshaler, val *ListSortNumbers) (okay bool) {
-	if okay = n.MapValues("sort", ListSortNumbers_Type); okay {
+	if okay = n.MapValues("sort_numbers", ListSortNumbers_Type); okay {
 		if n.MapKey("", ListSortNumbers_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -1563,7 +1560,7 @@ func (*ListSortText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ListSortText_Type,
 		Uses: composer.Type_Flow,
-		Lede: "sort",
+		Lede: "sort_texts",
 	}
 }
 
@@ -1605,7 +1602,7 @@ func ListSortText_Optional_Marshal(n jsn.Marshaler, pv **ListSortText) {
 }
 
 func ListSortText_Marshal(n jsn.Marshaler, val *ListSortText) (okay bool) {
-	if okay = n.MapValues("sort", ListSortText_Type); okay {
+	if okay = n.MapValues("sort_texts", ListSortText_Type); okay {
 		if n.MapKey("", ListSortText_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
@@ -2064,4 +2061,53 @@ var Slats = []composer.Composer{
 	(*PutEdge)(nil),
 	(*PutIndex)(nil),
 	(*Range)(nil),
+}
+
+var Signatures = map[uint]interface{}{
+	12988276311577525315: (*AsNum)(nil),           /* AsNum: */
+	5538742983703937313:  (*AsRec)(nil),           /* AsRec: */
+	4514588378517715255:  (*AsTxt)(nil),           /* AsTxt: */
+	602674204343183133:   (*EraseEdge)(nil),       /* Erase: */
+	2379140516691405863:  (*EraseEdge)(nil),       /* Erase:atFront: */
+	18068640065349035914: (*EraseIndex)(nil),      /* Erase:from:atIndex: */
+	15022408731321198722: (*Erasing)(nil),         /* Erasing:from:atIndex:as:do: */
+	10199179765059749783: (*ErasingEdge)(nil),     /* Erasing:as:do: */
+	4059879572017637653:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do: */
+	2253244220008480180:  (*ErasingEdge)(nil),     /* Erasing:as:do:else: */
+	4832054959845425038:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do:else: */
+	11643102106272323440: (*FromNumList)(nil),     /* VarOfNums: */
+	11748429228606086474: (*FromRecList)(nil),     /* VarOfRecs: */
+	9860873969452403008:  (*FromTxtList)(nil),     /* VarOfTxts: */
+	15891010564373014004: (*IntoNumList)(nil),     /* IntoNums: */
+	12459647556401208318: (*IntoRecList)(nil),     /* IntoRecs: */
+	8659259889251239468:  (*IntoTxtList)(nil),     /* IntoTxts: */
+	486700160484864869:   (*ListAt)(nil),          /* Get:index: */
+	5893619730181277740:  (*ListEach)(nil),        /* Repeating across:as:do: */
+	4018832586238090637:  (*ListEach)(nil),        /* Repeating across:as:do:else: */
+	10285751875873889942: (*ListFind)(nil),        /* Find:list: */
+	523806146137244572:   (*ListGather)(nil),      /* Gather:from:: */
+	11936860857815714018: (*ListLen)(nil),         /* Len: */
+	5185210125302469743:  (*ListMap)(nil),         /* Map:fromList:using: */
+	14826188473242626433: (*ListReduce)(nil),      /* Reduce into:fromList:using: */
+	13627278328240309351: (*ListReverse)(nil),     /* Reverse list: */
+	15586923045386932713: (*ListSet)(nil),         /* Set:index:from: */
+	16656583749567367441: (*ListSlice)(nil),       /* Slice: */
+	8205818265699527963:  (*ListSlice)(nil),       /* Slice:start: */
+	11293812622311872004: (*ListSlice)(nil),       /* Slice:end: */
+	1592674698280817110:  (*ListSlice)(nil),       /* Slice:start:end: */
+	5767454846835881814:  (*ListSortNumbers)(nil), /* SortNumbers:byField: */
+	11765588999597320458: (*ListSortNumbers)(nil), /* SortNumbers:byField:descending: */
+	16820765327929145512: (*ListSortText)(nil),    /* SortTexts:byField: */
+	7928660393625494104:  (*ListSortText)(nil),    /* SortTexts:byField:descending: */
+	14523039554491862046: (*ListSortText)(nil),    /* SortTexts:byField:usingCase: */
+	13718565834155724622: (*ListSortText)(nil),    /* SortTexts:byField:descending:usingCase: */
+	17242083762994141003: (*ListSortUsing)(nil),   /* Sort:using: */
+	10934695318884901016: (*ListSplice)(nil),      /* Splice:start:remove:insert: */
+	17042054112571797420: (*PutEdge)(nil),         /* Put:into: */
+	14857107863114820154: (*PutEdge)(nil),         /* Put:into:atFront: */
+	8899481094314089999:  (*PutIndex)(nil),        /* Put:into:atIndex: */
+	9793113837890674936:  (*Range)(nil),           /* Range: */
+	12654734042076112886: (*Range)(nil),           /* Range:from: */
+	4890710300640402911:  (*Range)(nil),           /* Range:byStep: */
+	17061865887297909749: (*Range)(nil),           /* Range:from:byStep: */
 }

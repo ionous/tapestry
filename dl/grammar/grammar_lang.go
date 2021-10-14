@@ -722,3 +722,17 @@ var Slats = []composer.Composer{
 	(*Self)(nil),
 	(*Words)(nil),
 }
+
+var Signatures = map[uint]interface{}{
+	18013434347847705365: (*Action)(nil),    /* As: */
+	12970384957739247299: (*Alias)(nil),     /* Alias:asNoun: */
+	12299258133038749149: (*AllOf)(nil),     /* AllOf: */
+	5638555781748976558:  (*AnyOf)(nil),     /* AnyOf: */
+	13009220793665599564: (*Directive)(nil), /* Directive:scans: */
+	15013060695242199180: (*Grammar)(nil),   /* Grammar: */
+	571163134278291657:   (*Noun)(nil),      /* Noun: */
+	9105733481983959033:  (*Retarget)(nil),  /* Retarget: */
+	11708077258721206605: (*Reverse)(nil),   /* Reverse: */
+	7416511141403176695:  (*Self)(nil),      /* Self: */
+	1154838578286238320:  (*Words)(nil),     /* Words: */
+}
