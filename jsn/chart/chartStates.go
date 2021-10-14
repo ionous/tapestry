@@ -35,16 +35,6 @@ func NewReportingState(m *Machine) *StateMix {
 	next.OnWarn = func(e error) {
 		m.err = errutil.Append(m.err, e)
 	}
-	// record an error and terminate all existing stats
-	next.OnError = func(e error) {
-		m.err = errutil.Append(m.err, e)
-		m.stack = nil
-		m.ChangeState(&StateMix{MarshalMix: jsn.MarshalMix{
-			// absorb all other errors
-			// ( all other fns are empty,so they'll error and also be eaten )
-			OnError: func(error) {},
-		}})
-	}
 	return next
 }
 

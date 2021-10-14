@@ -16,7 +16,6 @@ type MarshalMix struct {
 	OnValue   func(string, interface{})
 	OnCursor  func(string)
 	OnWarn    func(error)
-	OnError   func(error)
 }
 
 func (ms *MarshalMix) IsEncoding() bool {
@@ -93,15 +92,8 @@ func (ms *MarshalMix) SetCursor(id string) {
 		ms.Error(errutil.New("unexpected cursor", id))
 	}
 }
-func (ms *MarshalMix) Warning(err error) {
-	if call := ms.OnWarn; call != nil {
-		call(err)
-	} else {
-		ms.Error(err)
-	}
-}
 func (ms *MarshalMix) Error(err error) {
-	if call := ms.OnError; call != nil {
+	if call := ms.OnWarn; call != nil {
 		call(err)
 	} else {
 		panic(err)

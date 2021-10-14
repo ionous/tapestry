@@ -28,21 +28,21 @@ func (dec *Decoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.S
 	next.OnValue = func(typeName string, pv interface{}) {
 		var d dinValue
 		if e := json.Unmarshal(*pm, &d); e != nil {
-			dec.Warning(e)
+			dec.Error(e)
 		} else {
 			if el, ok := pv.(interface{ SetValue(interface{}) bool }); ok {
 				var i interface{}
 				if e := json.Unmarshal(d.Msg, &i); e != nil {
-					dec.Warning(e)
+					dec.Error(e)
 				} else if !el.SetValue(i) {
-					dec.Warning(errutil.New("couldnt set value", i))
+					dec.Error(errutil.New("couldnt set value", i))
 				} else {
 					dec.Commit(nil)
 				}
 			} else {
 				// unmarshal directly into the target value
 				if e := json.Unmarshal(d.Msg, pv); e != nil {
-					dec.Warning(e)
+					dec.Error(e)
 				} else {
 					dec.Commit(nil)
 				}
@@ -62,9 +62,9 @@ func (dec *Decoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.S
 	next.OnMap = func(_, typeName string) (okay bool) {
 		var d dinMap
 		if e := json.Unmarshal(*pm, &d); e != nil {
-			dec.Warning(e)
+			dec.Error(e)
 		} else if d.Type != typeName {
-			dec.Warning(errutil.New("expected", typeName, "found", d.Type))
+			dec.Error(errutil.New("expected", typeName, "found", d.Type))
 		} else {
 			dec.PushState(dec.newFlow(d.Fields))
 			okay = true
@@ -74,15 +74,15 @@ func (dec *Decoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.S
 	next.OnSlot = func(typeName string, slot jsn.Spotter) (okay bool) {
 		var d, inner dinValue
 		if e := json.Unmarshal(*pm, &d); e != nil {
-			dec.Warning(e)
+			dec.Error(e)
 		} else if d.Type != typeName {
-			dec.Warning(errutil.New("expected", typeName, "found", d.Type))
+			dec.Error(errutil.New("expected", typeName, "found", d.Type))
 		} else if e := json.Unmarshal(d.Msg, &inner); e != nil {
-			dec.Warning(e)
+			dec.Error(e)
 		} else if v, e := dec.reg.NewType(inner.Type); e != nil {
-			dec.Warning(e)
+			dec.Error(e)
 		} else if !slot.SetSlot(v) {
-			dec.Warning(errutil.Fmt("couldn't put %T into slot %T", v, slot))
+			dec.Error(errutil.Fmt("couldn't put %T into slot %T", v, slot))
 		} else {
 			dec.PushState(dec.newSlot(d.Msg))
 			okay = true
@@ -93,16 +93,16 @@ func (dec *Decoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.S
 	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
 		var d dinMap
 		if e := json.Unmarshal(*pm, &d); e != nil {
-			dec.Warning(e)
+			dec.Error(e)
 		} else if d.Type != typeName {
-			dec.Warning(errutil.New("expected", typeName, "found", d.Type))
+			dec.Error(errutil.New("expected", typeName, "found", d.Type))
 		} else {
 			for k, v := range d.Fields {
 				if okay {
-					dec.Warning(errutil.New("swap has too many choices"))
+					dec.Error(errutil.New("swap has too many choices"))
 					break
 				} else if _, ok := p.SetChoice(k); !ok {
-					dec.Warning(errutil.New("swap has unexpected choice", k))
+					dec.Error(errutil.New("swap has unexpected choice", k))
 					break
 				} else {
 					dec.PushState(dec.newSwap(v))
@@ -115,7 +115,7 @@ func (dec *Decoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.S
 	next.OnRepeat = func(_ string, slice jsn.Slicer) (okay bool) {
 		var vs []json.RawMessage
 		if e := json.Unmarshal(*pm, &vs); e != nil {
-			dec.Warning(e)
+			dec.Error(e)
 		} else if cnt := len(vs); cnt > 0 {
 			slice.SetSize(cnt)
 			dec.PushState(dec.newSlice(vs))
@@ -163,7 +163,7 @@ func (dec *Decoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 		}
 	}
 	next.OnEnd = func() {
-		dec.Warning(errutil.New("slice underflow", len(msgs)))
+		dec.Error(errutil.New("slice underflow", len(msgs)))
 		dec.FinishState(nil)
 	}
 	return next

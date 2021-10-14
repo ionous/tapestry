@@ -39,8 +39,6 @@ type Marshaler interface {
 	// sets a unique id for the next block or primitive value.
 	SetCursor(id string)
 	// record an error but don't terminate
-	Warning(err error)
-	// record an error and terminate
 	Error(err error)
 }
 

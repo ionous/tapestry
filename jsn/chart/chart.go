@@ -29,7 +29,7 @@ func newMachine(encoding bool, init func(*Machine) *StateMix) *Machine {
 	next := init(m)
 	next.OnCommit = func(v interface{}) {
 		if m.out != nil {
-			m.Warning(errutil.New("can only write data once"))
+			m.Error(errutil.New("can only write data once"))
 		} else {
 			m.out = v
 		}
