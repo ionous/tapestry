@@ -36,18 +36,14 @@ func (dec *Decoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.S
 					dec.Error(e)
 				} else if !el.SetValue(i) {
 					dec.Error(errutil.New("couldnt set value", i))
-				} else {
-					dec.Commit(nil)
 				}
 			} else {
-				// unmarshal directly into the target value
 				if e := json.Unmarshal(d.Msg, pv); e != nil {
-					dec.Error(e)
-				} else {
-					dec.Commit(nil)
+					dec.Error(e) // couldnt unmarshal directly into the target value
 				}
 			}
 		}
+		dec.Commit(nil)
 		return
 	}
 	// next.OnCommit -- handled by each caller
