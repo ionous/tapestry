@@ -6,12 +6,12 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Chart - marker so callers can see where a machine pointer came from.
-type Chart struct{ *chart.Machine }
+// Encoder - marker so callers can see where a machine pointer came from.
+type Encoder struct{ *chart.Machine }
 
 // NewEncoder create an empty serializer to produce compact script data.
-func NewEncoder() Chart {
-	return Chart{chart.NewEncoder(newBlock)}
+func NewEncoder() *Encoder {
+	return &Encoder{chart.NewEncoder(newBlock)}
 }
 
 func unpack(pv interface{}) (ret interface{}) {
@@ -44,11 +44,11 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
 	next.OnMap = func(lede, _ string) bool {
-		m.PushState(newFlow(m, newFlowData(lede, false)))
+		m.PushState(newFlow(m, newComFlow(lede, false)))
 		return true
 	}
 	next.OnLiteral = func(lede, _ string) bool {
-		m.PushState(newFlow(m, newFlowData(lede, true)))
+		m.PushState(newFlow(m, newComFlow(lede, true)))
 		return true
 	}
 	next.OnSlot = func(typeName string, slot jsn.Spotter) (okay bool) {
@@ -59,13 +59,11 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 		return
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
-	// the compact encoding relies on the encoded inner block to unpack the choice.
-	// ( implies each option needs to be a unique type. )
-	next.OnPick = func(_ string, p jsn.Picker) (okay bool) {
+	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
 		if choice, ok := p.GetChoice(); !ok {
 			m.Error(errutil.New("couldnt determine choice of", p))
 		} else if len(choice) > 0 {
-			m.PushState(newSwap(m))
+			m.PushState(newSwap(m, &comSwap{typeName: typeName, choice: choice}))
 			okay = true
 		}
 		return okay
@@ -81,7 +79,7 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	return next
 }
 
-func newFlow(m *chart.Machine, d *flowData) *chart.StateMix {
+func newFlow(m *chart.Machine, d *comFlow) *chart.StateMix {
 	next := chart.NewReportingState(m)
 	next.OnKey = func(key, _ string) bool {
 		m.ChangeState(newKey(m, *next, d, key))
@@ -96,11 +94,15 @@ func newFlow(m *chart.Machine, d *flowData) *chart.StateMix {
 }
 
 // writes the value into the key and change back to the flow state
-func newKey(m *chart.Machine, prev chart.StateMix, d *flowData, key string) *chart.StateMix {
+func newKey(m *chart.Machine, prev chart.StateMix, d *comFlow, key string) *chart.StateMix {
 	next := newValue(m, addBlock(m, &prev))
 	next.OnCommit = func(v interface{}) {
-		d.addMsg(key, v)
-		m.ChangeState(&prev)
+		if c, ok := v.(*comSwap); ok {
+			d.addMsgPair(key, c.choice, c.value)
+		} else {
+			d.addMsg(key, v)
+			m.ChangeState(&prev)
+		}
 	}
 	return next
 }
@@ -133,19 +135,10 @@ func newSlot(m *chart.Machine) *chart.StateMix {
 	return next
 }
 
-func newSwap(m *chart.Machine) *chart.StateMix {
-	// we don't want to lose the *kind* of the choice for simple values
-	// ( otherwise we cant differentiate b/t -- for example -- two string types )
+func newSwap(m *chart.Machine, swap *comSwap) *chart.StateMix {
 	next := newValue(m, newBlock(m))
-	next.OnValue = func(typeName string, pv interface{}) {
-		m.ChangeState(chart.NewBlockResult(m,
-			map[string]interface{}{
-				typeName + ":": unpack(pv),
-			}))
-	}
-	// record the swap choice and move to an error detection state
 	next.OnCommit = func(v interface{}) {
-		m.ChangeState(chart.NewBlockResult(m, v))
+		m.ChangeState(chart.NewBlockResult(m, swap.SetValue(v)))
 	}
 	return next
 }

@@ -56,6 +56,9 @@ func (m *Machine) FlushCursor() (ret string) {
 
 // PushState - enter the passed state saving the current state into history
 func (m *Machine) PushState(d State) {
+	if d == nil {
+		panic("trying to push a nil state")
+	}
 	m.stack.push(m.State) // remember the current state
 	m.State = d           // new current state
 }

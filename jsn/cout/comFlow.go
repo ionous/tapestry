@@ -1,24 +1,29 @@
 package cout
 
-type flowData struct {
+type comFlow struct {
 	sig     Sig
 	values  []interface{}
 	literal bool
 }
 
-func newFlowData(lede string, literal bool) *flowData {
-	var cf flowData
+func newComFlow(lede string, literal bool) *comFlow {
+	var cf comFlow
 	cf.sig.WriteLede(lede)
 	cf.literal = literal
 	return &cf
 }
 
-func (cf *flowData) addMsg(label string, value interface{}) {
+func (cf *comFlow) addMsg(label string, value interface{}) {
 	cf.sig.WriteLabel(label)
 	cf.values = append(cf.values, value)
 }
 
-func (cf *flowData) finalize() (ret interface{}) {
+func (cf *comFlow) addMsgPair(label, choice string, value interface{}) {
+	cf.sig.WriteLabelPair(label, choice)
+	cf.values = append(cf.values, value)
+}
+
+func (cf *comFlow) finalize() (ret interface{}) {
 	sig := cf.sig.String()
 	if cnt := len(cf.values); cnt == 0 {
 		ret = sig
