@@ -193,7 +193,7 @@ var Slats = []composer.Composer{
 	(*LoggingLevel)(nil),
 }
 
-var Signatures = map[uint]interface{}{
+var Signatures = map[uint64]interface{}{
 	5700043876155103121:  (*DebugLog)(nil),  /* Log: */
 	17593113710683116377: (*DebugLog)(nil),  /* Log:as: */
 	5234640093503358177:  (*DoNothing)(nil), /* DoNothing */

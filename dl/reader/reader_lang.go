@@ -28,6 +28,6 @@ var Slats = []composer.Composer{
 	(*Position)(nil),
 }
 
-var Signatures = map[uint]interface{}{
+var Signatures = map[uint64]interface{}{
 	1994392263685226704: (*Position)(nil), /* Src:in: */
 }

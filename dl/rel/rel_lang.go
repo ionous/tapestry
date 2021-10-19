@@ -330,7 +330,7 @@ var Slats = []composer.Composer{
 	(*RelativesOf)(nil),
 }
 
-var Signatures = map[uint]interface{}{
+var Signatures = map[uint64]interface{}{
 	9593459146430787736:  (*ReciprocalOf)(nil),  /* Reciprocal:object: */
 	8613133962478128719:  (*ReciprocalsOf)(nil), /* Reciprocals:object: */
 	13617100648357099813: (*Relate)(nil),        /* Relate:to:via: */

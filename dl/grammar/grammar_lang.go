@@ -723,7 +723,7 @@ var Slats = []composer.Composer{
 	(*Words)(nil),
 }
 
-var Signatures = map[uint]interface{}{
+var Signatures = map[uint64]interface{}{
 	18013434347847705365: (*Action)(nil),    /* As: */
 	12970384957739247299: (*Alias)(nil),     /* Alias:asNoun: */
 	12299258133038749149: (*AllOf)(nil),     /* AllOf: */

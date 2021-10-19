@@ -6043,7 +6043,7 @@ var Slats = []composer.Composer{
 	(*While)(nil),
 }
 
-var Signatures = map[uint]interface{}{
+var Signatures = map[uint64]interface{}{
 	9563969450495003011:  (*Activity)(nil),          /* Act: */
 	5766132082989451290:  (*AllTrue)(nil),           /* AllTrue: */
 	3551738626604328996:  (*Always)(nil),            /* Always */

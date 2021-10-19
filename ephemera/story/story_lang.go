@@ -70,7 +70,7 @@ func AbstractAction_Repeats_Marshal(n jsn.Marshaler, vals *[]AbstractAction) {
 // ActionContext
 type ActionContext struct {
 	At   reader.Position `if:"internal"`
-	Kind SingularKind    `if:"label=kind"`
+	Kind SingularKind    `if:"label=_"`
 }
 
 func (*ActionContext) Compose() composer.Spec {
@@ -117,7 +117,7 @@ func ActionContext_Optional_Marshal(n jsn.Marshaler, pv **ActionContext) {
 func ActionContext_Marshal(n jsn.Marshaler, val *ActionContext) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(ActionContext_Type, ActionContext_Type); okay {
-		if n.MapKey("kind", ActionContext_Field_Kind) {
+		if n.MapKey("", ActionContext_Field_Kind) {
 			SingularKind_Marshal(n, &val.Kind)
 		}
 		n.EndValues()
@@ -128,7 +128,7 @@ func ActionContext_Marshal(n jsn.Marshaler, val *ActionContext) (okay bool) {
 // ActionDecl
 type ActionDecl struct {
 	At           reader.Position `if:"internal"`
-	Event        EventName       `if:"label=event"`
+	Event        EventName       `if:"label=_"`
 	Action       ActionName      `if:"label=action"`
 	ActionParams ActionParams    `if:"label=action_params"`
 }
@@ -179,7 +179,7 @@ func ActionDecl_Optional_Marshal(n jsn.Marshaler, pv **ActionDecl) {
 func ActionDecl_Marshal(n jsn.Marshaler, val *ActionDecl) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(ActionDecl_Type, ActionDecl_Type); okay {
-		if n.MapKey("event", ActionDecl_Field_Event) {
+		if n.MapKey("", ActionDecl_Field_Event) {
 			EventName_Marshal(n, &val.Event)
 		}
 		if n.MapKey("action", ActionDecl_Field_Action) {
@@ -1096,7 +1096,7 @@ func Comment_Marshal(n jsn.Marshaler, val *Comment) (okay bool) {
 // CommonAction
 type CommonAction struct {
 	At            reader.Position `if:"internal"`
-	Kind          SingularKind    `if:"label=kind"`
+	Kind          SingularKind    `if:"label=_"`
 	ActionContext *ActionContext  `if:"label=action_context,optional"`
 }
 
@@ -1145,7 +1145,7 @@ func CommonAction_Optional_Marshal(n jsn.Marshaler, pv **CommonAction) {
 func CommonAction_Marshal(n jsn.Marshaler, val *CommonAction) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(CommonAction_Type, CommonAction_Type); okay {
-		if n.MapKey("kind", CommonAction_Field_Kind) {
+		if n.MapKey("", CommonAction_Field_Kind) {
 			SingularKind_Marshal(n, &val.Kind)
 		}
 		if n.MapKey("action_context", CommonAction_Field_ActionContext) {
@@ -1159,7 +1159,7 @@ func CommonAction_Marshal(n jsn.Marshaler, val *CommonAction) (okay bool) {
 // CountOf A guard which returns true based on a counter.
 type CountOf struct {
 	At      reader.Position `if:"internal"`
-	Trigger core.Trigger    `if:"label=trigger"`
+	Trigger core.Trigger    `if:"label=_"`
 	Num     rt.NumberEval   `if:"label=num"`
 }
 
@@ -1208,7 +1208,7 @@ func CountOf_Optional_Marshal(n jsn.Marshaler, pv **CountOf) {
 func CountOf_Marshal(n jsn.Marshaler, val *CountOf) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(CountOf_Type, CountOf_Type); okay {
-		if n.MapKey("trigger", CountOf_Field_Trigger) {
+		if n.MapKey("", CountOf_Field_Trigger) {
 			core.Trigger_Marshal(n, &val.Trigger)
 		}
 		if n.MapKey("num", CountOf_Field_Num) {
@@ -1222,7 +1222,7 @@ func CountOf_Marshal(n jsn.Marshaler, val *CountOf) (okay bool) {
 // CycleText
 type CycleText struct {
 	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=parts"`
+	Parts []rt.TextEval   `if:"label=_"`
 }
 
 func (*CycleText) Compose() composer.Spec {
@@ -1269,7 +1269,7 @@ func CycleText_Optional_Marshal(n jsn.Marshaler, pv **CycleText) {
 func CycleText_Marshal(n jsn.Marshaler, val *CycleText) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(CycleText_Type, CycleText_Type); okay {
-		if n.MapKey("parts", CycleText_Field_Parts) {
+		if n.MapKey("", CycleText_Field_Parts) {
 			rt.TextEval_Repeats_Marshal(n, &val.Parts)
 		}
 		n.EndValues()
@@ -1401,7 +1401,7 @@ func Determiner_Repeats_Marshal(n jsn.Marshaler, vals *[]Determiner) {
 // EventBlock Listeners let objects in the game world react to changes before, during, or after they happen.
 type EventBlock struct {
 	At       reader.Position `if:"internal"`
-	Target   EventTarget     `if:"label=target"`
+	Target   EventTarget     `if:"label=_"`
 	Handlers []EventHandler  `if:"label=handlers"`
 }
 
@@ -1450,7 +1450,7 @@ func EventBlock_Optional_Marshal(n jsn.Marshaler, pv **EventBlock) {
 func EventBlock_Marshal(n jsn.Marshaler, val *EventBlock) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(EventBlock_Type, EventBlock_Type); okay {
-		if n.MapKey("target", EventBlock_Field_Target) {
+		if n.MapKey("", EventBlock_Field_Target) {
 			EventTarget_Marshal(n, &val.Target)
 		}
 		if n.MapKey("handlers", EventBlock_Field_Handlers) {
@@ -3289,7 +3289,7 @@ func OneToOne_Marshal(n jsn.Marshaler, val *OneToOne) (okay bool) {
 // PairedAction
 type PairedAction struct {
 	At    reader.Position `if:"internal"`
-	Kinds PluralKinds     `if:"label=kinds"`
+	Kinds PluralKinds     `if:"label=_"`
 }
 
 func (*PairedAction) Compose() composer.Spec {
@@ -3336,7 +3336,7 @@ func PairedAction_Optional_Marshal(n jsn.Marshaler, pv **PairedAction) {
 func PairedAction_Marshal(n jsn.Marshaler, val *PairedAction) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(PairedAction_Type, PairedAction_Type); okay {
-		if n.MapKey("kinds", PairedAction_Field_Kinds) {
+		if n.MapKey("", PairedAction_Field_Kinds) {
 			PluralKinds_Marshal(n, &val.Kinds)
 		}
 		n.EndValues()
@@ -5159,7 +5159,7 @@ func Send_Marshal(n jsn.Marshaler, val *Send) (okay bool) {
 // ShuffleText
 type ShuffleText struct {
 	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=parts"`
+	Parts []rt.TextEval   `if:"label=_"`
 }
 
 func (*ShuffleText) Compose() composer.Spec {
@@ -5206,7 +5206,7 @@ func ShuffleText_Optional_Marshal(n jsn.Marshaler, pv **ShuffleText) {
 func ShuffleText_Marshal(n jsn.Marshaler, val *ShuffleText) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(ShuffleText_Type, ShuffleText_Type); okay {
-		if n.MapKey("parts", ShuffleText_Field_Parts) {
+		if n.MapKey("", ShuffleText_Field_Parts) {
 			rt.TextEval_Repeats_Marshal(n, &val.Parts)
 		}
 		n.EndValues()
@@ -5268,7 +5268,7 @@ func SingularKind_Repeats_Marshal(n jsn.Marshaler, vals *[]SingularKind) {
 // StoppingText
 type StoppingText struct {
 	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=parts"`
+	Parts []rt.TextEval   `if:"label=_"`
 }
 
 func (*StoppingText) Compose() composer.Spec {
@@ -5315,7 +5315,7 @@ func StoppingText_Optional_Marshal(n jsn.Marshaler, pv **StoppingText) {
 func StoppingText_Marshal(n jsn.Marshaler, val *StoppingText) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(StoppingText_Type, StoppingText_Type); okay {
-		if n.MapKey("parts", StoppingText_Field_Parts) {
+		if n.MapKey("", StoppingText_Field_Parts) {
 			rt.TextEval_Repeats_Marshal(n, &val.Parts)
 		}
 		n.EndValues()
@@ -5417,7 +5417,7 @@ func StoryStatement_Repeats_Marshal(n jsn.Marshaler, vals *[]StoryStatement) {
 // Summary
 type Summary struct {
 	At    reader.Position `if:"internal"`
-	Lines value.Lines     `if:"label=lines"`
+	Lines value.Lines     `if:"label=_"`
 }
 
 func (*Summary) Compose() composer.Spec {
@@ -5464,7 +5464,7 @@ func Summary_Optional_Marshal(n jsn.Marshaler, pv **Summary) {
 func Summary_Marshal(n jsn.Marshaler, val *Summary) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(Summary_Type, Summary_Type); okay {
-		if n.MapKey("lines", Summary_Field_Lines) {
+		if n.MapKey("", Summary_Field_Lines) {
 			value.Lines_Marshal(n, &val.Lines)
 		}
 		n.EndValues()
@@ -5773,7 +5773,7 @@ func TestScene_Marshal(n jsn.Marshaler, val *TestScene) (okay bool) {
 // TestStatement
 type TestStatement struct {
 	At       reader.Position `if:"internal"`
-	TestName TestName        `if:"label=test_name"`
+	TestName TestName        `if:"label=_"`
 	Test     Testing         `if:"label=test"`
 }
 
@@ -5822,7 +5822,7 @@ func TestStatement_Optional_Marshal(n jsn.Marshaler, pv **TestStatement) {
 func TestStatement_Marshal(n jsn.Marshaler, val *TestStatement) (okay bool) {
 	n.SetCursor(val.At.Offset)
 	if okay = n.MapValues(TestStatement_Type, TestStatement_Type); okay {
-		if n.MapKey("test_name", TestStatement_Field_TestName) {
+		if n.MapKey("", TestStatement_Field_TestName) {
 			TestName_Marshal(n, &val.TestName)
 		}
 		if n.MapKey("test", TestStatement_Field_Test) {
@@ -6298,7 +6298,7 @@ var Slats = []composer.Composer{
 	(*VariableType)(nil),
 }
 
-var Signatures = map[uint]interface{}{
+var Signatures = map[uint64]interface{}{
 	7872120455849093108:  (*ActionContext)(nil),            /* ActionContext: */
 	12205697827844452273: (*ActionDecl)(nil),               /* ActionDecl:action:actionParams: */
 	6291103735245333139:  (*Argument)(nil),                 /* Arg:from: */

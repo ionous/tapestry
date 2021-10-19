@@ -123,6 +123,10 @@ module.exports = class Make {
 
   // pick or enter a small bit of text.
   makeStr( name, uses, msg, desc) {
+    // strTypes dont have normal params:
+    // we aren't fitting types into parameters
+    // the parameters are instead enumerated choices.
+    // that should probably be made clearer somehow
     const settings={ asValues: true, nullValue: name };
     let tags= TagParser.parse(msg, settings);
     // msg had no tags: it's either a desc, or it was set/left as null.

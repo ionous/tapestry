@@ -4,17 +4,17 @@ module.exports = `
 {{~#with type~}}
 // {{Pascal name}} {{desc.short}}
 type {{Pascal name}} struct {
-{{#each (ParamsOf this)}}
-  {{Pascal @key}} {{TypeOf this}} \`if:"
-  {{~#if (IsInternal label)}}internal{{else}}label={{LabelOf @key this @index}}{{/if}}
+{{#each params}}
+  {{Pascal key}} {{TypeOf this}} \`if:"
+  {{~#if internal}}internal{{else}}label={{tag}}{{/if}}
   {{~#if optional}},optional{{/if}}\
   {{~#if (Unboxed type)}},type={{type}}{{/if}}"\`
 {{/each}}
 }
 
 {{>spec~}}
-{{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
-const {{Pascal ../name}}_Field_{{Pascal @key}} = "{{@key}}";
+{{~#each params}}{{#unless internal}}
+const {{Pascal ../name}}_Field_{{Pascal key}} = "{{key}}";
 {{~/unless}}{{~/each}}
 {{#if ../marshal}}
 {{>sig}}
@@ -40,13 +40,13 @@ func {{Pascal name}}_Marshal{{Custom name}}(n jsn.Marshaler, val *{{Pascal name}
   if okay = n.Map
     {{~#if (IsLiteral group)}}Literal{{else}}Values{{/if~}}
     ({{#if (LedeName this)~}}"{{LedeName this}}"{{~else~}}{{Pascal name}}_Type{{~/if~}}, {{Pascal name}}_Type); okay {
-{{~#each (ParamsOf this)}}{{#unless (IsInternal label)}}
-    if n.MapKey("{{SelectorOf @key this @index}}", {{Pascal ../name}}_Field_{{Pascal @key}}) {
+{{~#each params}}{{#unless (IsInternal label)}}
+    if n.MapKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}}) {
       {{ScopeOf type}}{{Pascal type}}
       {{~#if (Unboxed type)}}_Unboxed{{/if}}
       {{~#if repeats}}_Repeats
       {{~else if optional}}_Optional
-      {{~/if}}_Marshal(n, &val.{{Pascal @key}})
+      {{~/if}}_Marshal(n, &val.{{Pascal key}})
     }
 {{~/unless}}{{/each}}
     n.EndValues()

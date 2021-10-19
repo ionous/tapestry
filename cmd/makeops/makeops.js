@@ -69,7 +69,6 @@ let currentGroup;
 let currentType;
 
 Handlebars.registerHelper('Pascal', pascal);
-Handlebars.registerHelper('ParamsOf', paramsOf);
 Handlebars.registerHelper('IsPositioned', isPositioned);
 // does the passed string start with a $
 Handlebars.registerHelper('IsToken', function(str) {
@@ -81,7 +80,7 @@ Handlebars.registerHelper('NoHelpers', function(name) {
 const ledeName = function(t) {
   // we exclude modeling ( as a opposed to runtime functions )
   // because currently most of those are in sentence form not expression form.
-  // if this get fixed, then the WriteValue WriteChoice should e fixed to pass a lede
+  // if this get fixed, then the WriteValue WriteChoice should be fixed to pass a lede
   const m = t.group.includes("modeling");
   if (!m && t.uses === "flow") {
     const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
@@ -116,17 +115,6 @@ Handlebars.registerHelper('LowerNameOf', function(key, param) {
   const el = pascal(key) || pascal(param.type);
   return el.charAt(0).toLowerCase() + el.slice(1);
 });
-
-const labelOf= function(key, param, index) {
-  const m = currentType.group.includes("modeling");
-  return m ? (index ? lower(key) : '_') : param.label.replaceAll(" ", "_");
-}
-Handlebars.registerHelper('LabelOf', labelOf);
-const selectorOf = function(key, param, index) {
-  const x= labelOf(key, param, index);
-  return x !== "_"? x: "";
-}
-Handlebars.registerHelper('SelectorOf', selectorOf);
 Handlebars.registerHelper('Custom',function(name) {
   return custom.has(name) ? "_Customized": "";
 });
@@ -142,7 +130,7 @@ const isPrim= function(type) {
 Handlebars.registerHelper('TypeOf', function(param) {
   const name = param.type;
   const type = allTypes[name]; // the referenced type
-  if (!type && param.label !== '-') {
+  if (!type && !param.internal) {
     throw new Error(`unknown type ${name}`);
   }
   //
@@ -214,16 +202,16 @@ Handlebars.registerHelper('DescOf', function(x) {
   return ret;
 });
 
-const reg = function(t, out, all) {
+// generate a signature hash for the passed type.
+const signType = function(t, out, all) {
+  currentType= t; // hack for selectors and other functions.
   const lede= ledeName(t);
   const sig= [ pascal(lede || t.name)];
-  const ps= paramsOf(t);
   let i=0;
-  for (const k in ps) {
-    const p= ps[k];
-    if (p.label !== '-') {
+  for (const p of t.params) {
+    if (!p.internal) {
       const n= i++;
-      let sel= selectorOf(k, p, n);
+      let sel= p.sel;
       if (sel.length > 1) {
         sel= pascal(sel);
         sel= sel.charAt(0).toLowerCase() + sel.slice(1);
@@ -312,6 +300,32 @@ for (const typeName in allTypes) {
   if (Array.isArray(type.desc)) {
     type.desc = type.desc.join("  ");
   }
+  // write overtop of existing parameter data
+  let pi=0;
+  let ps=[];
+  const params= paramsOf(type);
+  for (const key in params) {
+    let param= params[key];
+    // str types can have params which are just a string
+    // whenever the label and the value are the same value
+    // to keep the template generator simple: normalize those params.
+    if (typeof param === 'string') {
+      params[key]= param= { label: param, value: param };
+    }
+
+    const m = type.group.includes("modeling");
+    const tag= m ? (pi ? lower(key) : '_') : param.label.replaceAll(" ", "_");
+    param.internal= param.label === '-';
+    param.key= key;
+    param.tag= tag;
+    param.sel= tag !== "_"? tag: "";
+    ps.push(param);
+    if (!param.internal) {
+      pi++;
+    }
+  }
+  type.params= ps;
+
   //
   if (type.uses !== "group") {
     // ex. ["story statements"]=> "story"
@@ -352,9 +366,8 @@ for (currentGroup in groups) {
         inc.add(o);
       }
     }
-    const params = paramsOf(type);
-    for (const p in params) {
-      const param = params[p];
+
+    for (const param of type.params) {
       // when we are marshaling we need to include all types
       // otherwise we only need to include the types we dont unbox out of existence
       if (param && (marshal || !unbox[param.type])) {
@@ -413,7 +426,7 @@ for (currentGroup in groups) {
   let signatures= {};
   for (const t of g.slats.map(n => allTypes[n])) {
     if (t.uses === 'flow') {
-      reg(t, signatures, regall);
+      signType(t, signatures, regall);
     }
   }
   fs.writeSync(fd, templates.sigMap({

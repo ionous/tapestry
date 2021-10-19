@@ -332,4 +332,4 @@ var Slots = []interface{}{
 	(*TextListEval)(nil),
 }
 
-var Signatures = map[uint]interface{}{}
+var Signatures = map[uint64]interface{}{}
