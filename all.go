@@ -19,7 +19,7 @@ var AllSlots = [][]interface{}{
 	core.Slots,
 	grammar.Slots,
 	list.Slots,
-	// story.Slots,
+	// story.Slots, // re:story importer, etc.
 	rt.Slots,
 }
 var AllSlats = [][]composer.Composer{
@@ -32,6 +32,16 @@ var AllSlats = [][]composer.Composer{
 	render.Slats,
 	value.Slats,
 	// story.Slats,
+}
+var AllSignatures = []map[uint64]interface{}{
+	core.Signatures,
+	debug.Signatures,
+	grammar.Signatures,
+	list.Signatures,
+	reader.Signatures,
+	rel.Signatures,
+	render.Signatures,
+	value.Signatures,
 }
 
 func RegisterGobs() {
