@@ -1,6 +1,7 @@
 package chart
 
 import (
+	"git.sr.ht/~ionous/iffy/jsn"
 	"github.com/ionous/errutil"
 )
 
@@ -11,21 +12,25 @@ type Machine struct {
 	stack    chartStack
 	cursor   string
 	err      error
+	custom   Customization
 }
 
+// Customization
+type Customization map[string]jsn.CustomizedMarshal
+
 // NewEncoder writes json data
-func NewEncoder(init func(*Machine) *StateMix) *Machine {
-	return newMachine(true, init)
+func NewEncoder(custom Customization, init func(*Machine) *StateMix) *Machine {
+	return newMachine(custom, true, init)
 }
 
 // NewDecoder reads json data
-func NewDecoder(init func(*Machine) *StateMix) *Machine {
-	return newMachine(false, init)
+func NewDecoder(custom Customization, init func(*Machine) *StateMix) *Machine {
+	return newMachine(custom, false, init)
 }
 
 // newMachine create an empty serializer to produce compact script data.
-func newMachine(encoding bool, init func(*Machine) *StateMix) *Machine {
-	m := &Machine{encoding: encoding}
+func newMachine(custom Customization, encoding bool, init func(*Machine) *StateMix) *Machine {
+	m := &Machine{encoding: encoding, custom: custom}
 	next := init(m)
 	next.OnCommit = func(v interface{}) {
 		if m.out != nil {
@@ -41,6 +46,15 @@ func newMachine(encoding bool, init func(*Machine) *StateMix) *Machine {
 // IsEncoding indicates whether the machine is writing json ( or reading json. )
 func (m *Machine) IsEncoding() bool {
 	return m.encoding
+}
+
+func (m *Machine) CustomizedMarshal(typeName string) (ret jsn.CustomizedMarshal, okay bool) {
+	ret, okay = m.custom[typeName]
+	return
+}
+
+func (m *Machine) SetCursor(id string) {
+	m.cursor = id
 }
 
 // Data returns the accumulated script tree ready for serialization

@@ -15,7 +15,15 @@ const fnv1a = require('./fnv1a.js');
 const unbox = { "text": "string", "bool": "bool" };
 // custom serialization of a type
 // blocks the generation of the inner most serialization function
-const custom = new Set(["get_var", "text"]);
+const custom = new Set([
+  "bool_eval",
+  "num_list_eval",
+  "number_eval",
+  "text_eval",
+  "text_list_eval",
+  "get_var",
+  "text"
+]);
 
 // change to tokenized like name
 const tokenize = function(name) {
@@ -66,7 +74,6 @@ const paramsOf = function(t) {
 const groups = {};
 const nameToGroup = {};
 let currentGroup;
-let currentType;
 
 Handlebars.registerHelper('Pascal', pascal);
 Handlebars.registerHelper('IsPositioned', isPositioned);
@@ -115,7 +122,7 @@ Handlebars.registerHelper('LowerNameOf', function(key, param) {
   const el = pascal(key) || pascal(param.type);
   return el.charAt(0).toLowerCase() + el.slice(1);
 });
-Handlebars.registerHelper('Custom',function(name) {
+Handlebars.registerHelper('IsCustom',function(name) {
   return custom.has(name) ? "_Customized": "";
 });
 Handlebars.registerHelper('IsBool', function(name) {
@@ -176,14 +183,11 @@ Handlebars.registerHelper('IsEnumerated', function(type) {
   }
   return okay;
 });
-
 // for uses='str' or 'swap'
 Handlebars.registerHelper('Choices', function(strType) {
   const token = tokenize(strType.name);
   return strChoices(token, strType);
 });
-
-
 // flatten desc
 Handlebars.registerHelper('DescOf', function(x) {
   let ret = '';
@@ -202,39 +206,65 @@ Handlebars.registerHelper('DescOf', function(x) {
   return ret;
 });
 
+const camelize= function(sel) {
+  if (sel.length > 1) {
+    sel= pascal(sel);
+    sel= sel.charAt(0).toLowerCase() + sel.slice(1);
+  }
+  return sel;
+}
+
+const appendSelector= function(sig, sel, optional) {
+
+}
+
 // generate a signature hash for the passed type.
 const signType = function(t, out, all) {
-  currentType= t; // hack for selectors and other functions.
   const lede= ledeName(t);
-  const sig= [ pascal(lede || t.name)];
-  let i=0;
-  for (const p of t.params) {
-    if (!p.internal) {
-      const n= i++;
-      let sel= p.sel;
-      if (sel.length > 1) {
-        sel= pascal(sel);
-        sel= sel.charAt(0).toLowerCase() + sel.slice(1);
+  const init= pascal(lede || t.name);
+  let sig= [];
+  if (t.uses === 'swap') {
+    for (const p of t.params) {
+      if (!p.internal) {
+        const sel= camelize(p.sel);
+        sig.push( init + ":" + sel + ":" );
       }
-      let pad = "";
-      if (!n) {
-        if (!sel) {
-          sig[0] += ":";
-        } else {
-          pad = " ";
-        }
-      }
-      if (n || sel) {
-        sel = pad + sel + ":";
-        if (!p.optional) {
-          // addSelector
-          for (let j=0, cnt=sig.length; j< cnt; j++) {
-            sig[j] += sel;
+    }
+  } else {
+    let i=0;
+    sig.push( init );
+    for (const p of t.params) {
+      if (!p.internal) {
+        const n= i++;
+        let sel= camelize(p.sel);
+        let pad = "";
+        if (!n) { // first non-internal parameter?
+          if (!sel) {
+            sig[0] += ":";
+          } else {
+            pad = " ";
           }
-        } else {
-          // dupSelectors
-          for (let j=0, cnt=sig.length; j< cnt; j++) {
-            sig.push(sig[j]+sel);
+        }
+        if (n || sel) {
+          sel = pad + sel;
+          const pt= allTypes[p.type];
+          if (pt.uses !== 'swap') {
+            const els= p.optional? sig: [];
+            for (let j=0, cnt=sig.length; j< cnt; j++) {
+              els.push(`${sig[j]}${sel}:`);
+            }
+            sig= els;
+          } else {
+            // every choice is added as a possible selector
+            const els= p.optional? sig: [];
+            for (let j=0, cnt=sig.length; j< cnt; j++) {
+              for (const c of pt.params) {
+                if (!c.internal) {
+                  els.push(`${sig[j]}${sel} ${c.sel}:`);
+                }
+              }
+            }
+            sig= els;
           }
         }
       }
@@ -300,7 +330,7 @@ for (const typeName in allTypes) {
   if (Array.isArray(type.desc)) {
     type.desc = type.desc.join("  ");
   }
-  // write overtop of existing parameter data
+  // write over existing parameter data
   let pi=0;
   let ps=[];
   const params= paramsOf(type);
@@ -313,12 +343,18 @@ for (const typeName in allTypes) {
       params[key]= param= { label: param, value: param };
     }
 
+    // commands tagged modeling automatically get anonymous first parameters
     const m = type.group.includes("modeling");
-    const tag= m ? (pi ? lower(key) : '_') : param.label.replaceAll(" ", "_");
+    let tag;
+    if (type.uses !== 'swap') {
+      tag= m ? (pi ? lower(key) : '_') : param.label.replaceAll(" ", "_");
+    } else {
+      tag= lower(key);
+    }
     param.internal= param.label === '-';
     param.key= key;
     param.tag= tag;
-    param.sel= tag !== "_"? tag: "";
+    param.sel= tag !== "_" ? tag: "";
     ps.push(param);
     if (!param.internal) {
       pi++;
@@ -402,7 +438,6 @@ for (currentGroup in groups) {
     const type = allTypes[typeName];
     const template = templates[type.uses];
     if (template) {
-      currentType = type;
       // console.log(typeName, marshal);
       const d= {
         marshal,
@@ -424,8 +459,9 @@ for (currentGroup in groups) {
     RegType: "composer.Composer",
   }));
   let signatures= {};
+  // console.log(JSON.stringify(allTypes,0,2));
   for (const t of g.slats.map(n => allTypes[n])) {
-    if (t.uses === 'flow') {
+    if ((t.uses === 'flow') || (t.uses === 'swap')) {
       signType(t, signatures, regall);
     }
   }

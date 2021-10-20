@@ -2888,7 +2888,15 @@ func GetVar_Optional_Marshal(n jsn.Marshaler, pv **GetVar) {
 	}
 }
 
-func GetVar_Marshal_Customized(n jsn.Marshaler, val *GetVar) (okay bool) {
+func GetVar_Marshal(n jsn.Marshaler, val *GetVar) (okay bool) {
+	if fn, ok := n.CustomizedMarshal(GetVar_Type); ok {
+		okay = fn(n, val)
+	} else {
+		okay = GetVar_DefaultMarshal(n, val)
+	}
+	return
+}
+func GetVar_DefaultMarshal(n jsn.Marshaler, val *GetVar) (okay bool) {
 	if okay = n.MapValues("var", GetVar_Type); okay {
 		if n.MapKey("", GetVar_Field_Name) {
 			value.VariableName_Marshal(n, &val.Name)

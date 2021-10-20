@@ -10,8 +10,8 @@ import (
 type Encoder struct{ *chart.Machine }
 
 // NewEncoder create an empty serializer to produce compact script data.
-func NewEncoder() *Encoder {
-	return &Encoder{chart.NewEncoder(newBlock)}
+func NewEncoder(cs chart.Customization) *Encoder {
+	return &Encoder{chart.NewEncoder(cs, newBlock)}
 }
 
 func unpack(pv interface{}) (ret interface{}) {

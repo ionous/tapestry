@@ -12,6 +12,15 @@ type Marshalee interface {
 type Marshaler interface {
 	// is the implementation writing json or reading it.
 	IsEncoding() bool
+	// some types may need special handling in a particular scenarios
+	CustomizedMarshal(typeName string) (CustomizedMarshal, bool)
+	// sets a unique id for the next block or primitive value.
+	SetCursor(id string)
+	// current state: embedded into this one
+	State
+}
+
+type State interface {
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
 	MapValues(lede, typeName string) bool
@@ -36,11 +45,11 @@ type Marshaler interface {
 	EndValues()
 	// specify a primitive value or enum
 	MarshalValue(typeName string, pv interface{})
-	// sets a unique id for the next block or primitive value.
-	SetCursor(id string)
-	// record an error but don't terminate
+	// record an error
 	Error(err error)
 }
+
+type CustomizedMarshal func(Marshaler, interface{}) bool
 
 type Slicer interface {
 	GetSize() int

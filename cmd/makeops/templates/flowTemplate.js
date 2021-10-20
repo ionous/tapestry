@@ -33,7 +33,17 @@ func {{Pascal name}}_Optional_Marshal(n jsn.Marshaler, pv **{{Pascal name}}) {
   }
 }
 
-func {{Pascal name}}_Marshal{{Custom name}}(n jsn.Marshaler, val *{{Pascal name}}) (okay bool) {
+func {{Pascal name}}_Marshal(n jsn.Marshaler, val *{{Pascal name}}) (okay bool) {
+{{#if (IsCustom name)}}
+  if fn, ok := n.CustomizedMarshal({{Pascal name}}_Type); ok {
+    okay = fn(n, val)
+  } else {
+    okay = {{Pascal name}}_DefaultMarshal(n, val)
+  }
+  return
+}
+func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, val *{{Pascal name}}) (okay bool) {
+{{/if}}
 {{#if (IsPositioned this)}}
   n.SetCursor(val.At.Offset)
 {{/if}}

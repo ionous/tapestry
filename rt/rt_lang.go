@@ -53,6 +53,14 @@ func (at BoolEval_Slot) SetSlot(v interface{}) (okay bool) {
 }
 
 func BoolEval_Marshal(n jsn.Marshaler, ptr *BoolEval) {
+	if fn, ok := n.CustomizedMarshal(BoolEval_Type); ok {
+		fn(n, ptr)
+	} else {
+		BoolEval_DefaultMarshal(n, ptr)
+	}
+	return
+}
+func BoolEval_DefaultMarshal(n jsn.Marshaler, ptr *BoolEval) {
 	if ok := n.SlotValues(BoolEval_Type, BoolEval_Slot{ptr}); ok {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
@@ -123,6 +131,14 @@ func (at NumListEval_Slot) SetSlot(v interface{}) (okay bool) {
 }
 
 func NumListEval_Marshal(n jsn.Marshaler, ptr *NumListEval) {
+	if fn, ok := n.CustomizedMarshal(NumListEval_Type); ok {
+		fn(n, ptr)
+	} else {
+		NumListEval_DefaultMarshal(n, ptr)
+	}
+	return
+}
+func NumListEval_DefaultMarshal(n jsn.Marshaler, ptr *NumListEval) {
 	if ok := n.SlotValues(NumListEval_Type, NumListEval_Slot{ptr}); ok {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
@@ -158,6 +174,14 @@ func (at NumberEval_Slot) SetSlot(v interface{}) (okay bool) {
 }
 
 func NumberEval_Marshal(n jsn.Marshaler, ptr *NumberEval) {
+	if fn, ok := n.CustomizedMarshal(NumberEval_Type); ok {
+		fn(n, ptr)
+	} else {
+		NumberEval_DefaultMarshal(n, ptr)
+	}
+	return
+}
+func NumberEval_DefaultMarshal(n jsn.Marshaler, ptr *NumberEval) {
 	if ok := n.SlotValues(NumberEval_Type, NumberEval_Slot{ptr}); ok {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
@@ -263,6 +287,14 @@ func (at TextEval_Slot) SetSlot(v interface{}) (okay bool) {
 }
 
 func TextEval_Marshal(n jsn.Marshaler, ptr *TextEval) {
+	if fn, ok := n.CustomizedMarshal(TextEval_Type); ok {
+		fn(n, ptr)
+	} else {
+		TextEval_DefaultMarshal(n, ptr)
+	}
+	return
+}
+func TextEval_DefaultMarshal(n jsn.Marshaler, ptr *TextEval) {
 	if ok := n.SlotValues(TextEval_Type, TextEval_Slot{ptr}); ok {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
@@ -298,6 +330,14 @@ func (at TextListEval_Slot) SetSlot(v interface{}) (okay bool) {
 }
 
 func TextListEval_Marshal(n jsn.Marshaler, ptr *TextListEval) {
+	if fn, ok := n.CustomizedMarshal(TextListEval_Type); ok {
+		fn(n, ptr)
+	} else {
+		TextListEval_DefaultMarshal(n, ptr)
+	}
+	return
+}
+func TextListEval_DefaultMarshal(n jsn.Marshaler, ptr *TextListEval) {
 	if ok := n.SlotValues(TextListEval_Type, TextListEval_Slot{ptr}); ok {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()

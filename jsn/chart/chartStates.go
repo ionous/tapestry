@@ -6,7 +6,7 @@ import (
 )
 
 type State interface {
-	jsn.Marshaler
+	jsn.State
 	// substates write a fully completed value into us.
 	Commit(interface{})
 }
@@ -20,17 +20,13 @@ func (d *StateMix) Commit(v interface{}) {
 	if call := d.OnCommit; call != nil {
 		call(v)
 	} else {
-		d.Error(errutil.New("cant commit", v))
+		d.Error(errutil.Fmt("unexpected commit (%v)", v))
 	}
 }
 
 // base state handles simple reporting.
 func NewReportingState(m *Machine) *StateMix {
 	next := new(StateMix)
-	// for now, overwrite without error checking.
-	next.OnCursor = func(id string) {
-		m.cursor = id
-	}
 	// record an error but don't terminate
 	next.OnWarn = func(e error) {
 		m.err = errutil.Append(m.err, e)

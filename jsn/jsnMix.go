@@ -14,13 +14,9 @@ type MarshalMix struct {
 	OnRepeat  func(string, Slicer) bool
 	OnEnd     func()
 	OnValue   func(string, interface{})
-	OnCursor  func(string)
 	OnWarn    func(error)
 }
 
-func (ms *MarshalMix) IsEncoding() bool {
-	panic("not implemented")
-}
 func (ms *MarshalMix) MapValues(lede, typeName string) (ret bool) {
 	if call := ms.OnMap; call != nil {
 		ret = call(lede, typeName)
@@ -84,13 +80,6 @@ func (ms *MarshalMix) MarshalValue(typeName string, pv interface{}) {
 		ms.Error(errutil.New("unexpected value", typeName, pv))
 	}
 	return
-}
-func (ms *MarshalMix) SetCursor(id string) {
-	if call := ms.OnCursor; call != nil {
-		call(id)
-	} else {
-		ms.Error(errutil.New("unexpected cursor", id))
-	}
 }
 func (ms *MarshalMix) Error(err error) {
 	if call := ms.OnWarn; call != nil {

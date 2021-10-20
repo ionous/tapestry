@@ -10,8 +10,8 @@ import (
 type Chart struct{ *chart.Machine }
 
 // NewEncoder create an empty serializer to produce detailed script data.
-func NewEncoder() Chart {
-	return Chart{chart.NewEncoder(newBlock)}
+func NewEncoder(cs chart.Customization) Chart {
+	return Chart{chart.NewEncoder(cs, newBlock)}
 }
 
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
