@@ -20,18 +20,13 @@ func (d *StateMix) Commit(v interface{}) {
 	if call := d.OnCommit; call != nil {
 		call(v)
 	} else {
-		d.Error(errutil.Fmt("unexpected commit (%v)", v))
+		d.Warn(errutil.Fmt("unexpected commit (%v)", v))
 	}
 }
 
 // base state handles simple reporting.
 func NewReportingState(m *Machine) *StateMix {
-	next := new(StateMix)
-	// record an error but don't terminate
-	next.OnWarn = func(e error) {
-		m.err = errutil.Append(m.err, e)
-	}
-	return next
+	return &StateMix{MarshalMix: jsn.MarshalMix{OnWarn: m.Error}}
 }
 
 // wait until the block is closed then finish

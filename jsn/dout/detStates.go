@@ -7,11 +7,22 @@ import (
 )
 
 // Chart - marker so callers can see where a machine pointer came from.
-type Chart struct{ *chart.Machine }
+type xEncoder struct{ chart.Machine }
 
 // NewEncoder create an empty serializer to produce detailed script data.
-func NewEncoder(cs chart.Customization) Chart {
-	return Chart{chart.NewEncoder(cs, newBlock)}
+func Encode(in jsn.Marshalee) (ret interface{}, err error) {
+	m := xEncoder{chart.MakeEncoder(nil)}
+	next := newBlock(&m.Machine)
+	next.OnCommit = func(v interface{}) {
+		if ret != nil {
+			m.Error(errutil.New("can only write data once"))
+		} else {
+			ret = v
+		}
+	}
+	m.ChangeState(next)
+	in.Marshal(&m)
+	return ret, m.Errors()
 }
 
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {

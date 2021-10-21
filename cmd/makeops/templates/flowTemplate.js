@@ -50,9 +50,7 @@ func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, val *{{Pascal name}}) (okay
 {{#if (IsPositioned this)}}
   n.SetCursor(val.At.Offset)
 {{/if}}
-  if okay = n.Map
-    {{~#if (IsLiteral group)}}Literal{{else}}Values{{/if~}}
-    ({{#if (LedeName this)~}}"{{LedeName this}}"{{~else~}}{{Pascal name}}_Type{{~/if~}}, {{Pascal name}}_Type); okay {
+  if okay = n.MapValues({{#if (LedeName this)}}"{{LedeName this}}"{{else}}{{Pascal name}}_Type{{/if}}, {{Pascal name}}_Type); okay {
 {{~#each params}}{{#unless (IsInternal label)}}
     if n.MapKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}}) {
       {{ScopeOf type}}{{Pascal type}}

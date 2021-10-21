@@ -9,23 +9,22 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type Decoder struct {
-	*chart.Machine
+type xDecoder struct {
+	chart.Machine
 	reg            []map[uint64]interface{}
 	CurrentMessage json.RawMessage
 }
 
-func NewDecoder(msg json.RawMessage, reg []map[uint64]interface{}) *Decoder {
-	out := &Decoder{reg: reg, Machine: chart.NewDecoder(custom, nil)}
-	next := out.newBlock(msg)
-	next.OnCommit = func(interface{}) {
-		// println("done")
-	}
-	out.ChangeState(next)
-	return out
+func Decode(dst jsn.Marshalee, msg json.RawMessage, reg []map[uint64]interface{}) error {
+	dec := xDecoder{reg: reg, Machine: chart.MakeDecoder(custom)}
+	next := dec.newBlock(msg)
+	next.OnCommit = func(interface{}) {}
+	dec.ChangeState(next)
+	dst.Marshal(&dec)
+	return dec.Errors()
 }
 
-func (dec *Decoder) newValue(msg json.RawMessage, next *chart.StateMix) *chart.StateMix {
+func (dec *xDecoder) newValue(msg json.RawMessage, next *chart.StateMix) *chart.StateMix {
 	dec.CurrentMessage = msg
 	next.OnValue = func(_ string, pv interface{}) {
 		if el, ok := pv.(interface{ SetValue(interface{}) bool }); ok {
@@ -46,11 +45,11 @@ func (dec *Decoder) newValue(msg json.RawMessage, next *chart.StateMix) *chart.S
 	return next
 }
 
-func (dec *Decoder) newBlock(msg json.RawMessage) *chart.StateMix {
-	return dec.addBlock(msg, chart.NewReportingState(dec.Machine))
+func (dec *xDecoder) newBlock(msg json.RawMessage) *chart.StateMix {
+	return dec.addBlock(msg, chart.NewReportingState(&dec.Machine))
 }
 
-func (dec *Decoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.StateMix {
+func (dec *xDecoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.StateMix {
 	next.OnMap = func(lede, _ string) (okay bool) {
 		if _, k, args, e := dec.readCmd(msg); e != nil {
 			dec.Error(e)
@@ -112,8 +111,8 @@ func (dec *Decoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.S
 }
 
 // the message data is special, and the next state is expected to be a swap
-func (dec *Decoder) newEmbeddedSwap(prev chart.StateMix, msg json.RawMessage, pick string) *chart.StateMix {
-	next := chart.NewReportingState(dec.Machine)
+func (dec *xDecoder) newEmbeddedSwap(prev chart.StateMix, msg json.RawMessage, pick string) *chart.StateMix {
+	next := chart.NewReportingState(&dec.Machine)
 	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
 		pick := newStringKey(pick)
 		if _, ok := p.SetChoice(pick); !ok {
@@ -139,8 +138,8 @@ func newStringKey(s string) string {
 	return string(rs)
 }
 
-func (dec *Decoder) newFlow(flow *cinFlow) *chart.StateMix {
-	next := chart.NewReportingState(dec.Machine)
+func (dec *xDecoder) newFlow(flow *cinFlow) *chart.StateMix {
+	next := chart.NewReportingState(&dec.Machine)
 	// the generated code is going to be calling this zero or more times
 	// we need to walk the parameter names in order looking for matches
 	next.OnKey = func(lede, _ string) (okay bool) {
@@ -161,7 +160,7 @@ func (dec *Decoder) newFlow(flow *cinFlow) *chart.StateMix {
 }
 
 // we have a valid flow key, we are now waiting on its value.
-func (dec *Decoder) newKey(prev chart.StateMix, msg json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newKey(prev chart.StateMix, msg json.RawMessage) *chart.StateMix {
 	next := dec.newValue(msg, dec.addBlock(msg, &prev))
 	next.OnCommit = func(interface{}) {
 		dec.ChangeState(&prev)
@@ -170,14 +169,14 @@ func (dec *Decoder) newKey(prev chart.StateMix, msg json.RawMessage) *chart.Stat
 }
 
 // we expect at least one msg, and no more and no fewer values than msgs
-func (dec *Decoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 	next := dec.newValue(msgs[0], dec.newBlock(msgs[0]))
 	next.OnCommit = func(interface{}) {
 		var after *chart.StateMix
 		if rest := msgs[1:]; len(rest) > 0 {
 			after = dec.newSlice(rest)
 		} else {
-			after = chart.NewBlockResult(dec.Machine, "slice end")
+			after = chart.NewBlockResult(&dec.Machine, "slice end")
 		}
 		dec.ChangeState(after)
 	}
@@ -189,8 +188,8 @@ func (dec *Decoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 }
 
 // in compact format, the msg holds the slat which fills the slot
-func (dec *Decoder) newSlot(k string, args json.RawMessage) *chart.StateMix {
-	next := chart.NewReportingState(dec.Machine)
+func (dec *xDecoder) newSlot(k string, args json.RawMessage) *chart.StateMix {
+	next := chart.NewReportingState(&dec.Machine)
 	next.OnMap = func(_, _ string) (okay bool) {
 		if flow, e := newFlowData(k, args); e != nil {
 			dec.Error(e)
@@ -201,7 +200,7 @@ func (dec *Decoder) newSlot(k string, args json.RawMessage) *chart.StateMix {
 		return
 	}
 	next.OnCommit = func(interface{}) {
-		dec.ChangeState(chart.NewBlockResult(dec.Machine, "slot end"))
+		dec.ChangeState(chart.NewBlockResult(&dec.Machine, "slot end"))
 	}
 	next.OnEnd = func() {
 		dec.FinishState("empty slot")
@@ -210,10 +209,10 @@ func (dec *Decoder) newSlot(k string, args json.RawMessage) *chart.StateMix {
 }
 
 // pretty much any simple value or block data can fulfill a swap
-func (dec *Decoder) newSwap(msg json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newSwap(msg json.RawMessage) *chart.StateMix {
 	next := dec.newValue(msg, dec.newBlock(msg))
 	next.OnCommit = func(interface{}) {
-		dec.ChangeState(chart.NewBlockResult(dec.Machine, "swap end"))
+		dec.ChangeState(chart.NewBlockResult(&dec.Machine, "swap end"))
 	}
 	next.OnEnd = func() {
 		dec.FinishState("empty swap")
@@ -224,7 +223,7 @@ func (dec *Decoder) newSwap(msg json.RawMessage) *chart.StateMix {
 // retType: type registry nil pointer
 // retKey: raw signature in the json. ex. "Story:", "Always", or "Command some thing:else:"
 // retVal: json msg data to the right of the key
-func (dec *Decoder) readCmd(msg json.RawMessage) (retType interface{}, retKey string, retVal json.RawMessage, err error) {
+func (dec *xDecoder) readCmd(msg json.RawMessage) (retType interface{}, retKey string, retVal json.RawMessage, err error) {
 	// ex. {"Story:":  [...]}
 	// except note that literals are stored as their value,
 	// functions with one parameter dont use the array, and

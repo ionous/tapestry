@@ -13,7 +13,7 @@ import (
 var custom = chart.Customization{
 	// package rt:
 	rt.Assignment_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
-		dec, ptr := n.(*Decoder), i.(*rt.Assignment)
+		dec, ptr := n.(*xDecoder), i.(*rt.Assignment)
 		if v, ok := readVar(dec); ok {
 			*ptr, okay = v, true
 		} else {
@@ -22,7 +22,7 @@ var custom = chart.Customization{
 		return
 	},
 	rt.BoolEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
-		dec, ptr := n.(*Decoder), i.(*rt.BoolEval)
+		dec, ptr := n.(*xDecoder), i.(*rt.BoolEval)
 		if v, ok := readBool(dec); ok {
 			*ptr, okay = v, true
 		} else if v, ok := readVar(dec); ok {
@@ -34,7 +34,7 @@ var custom = chart.Customization{
 		return
 	},
 	rt.NumberEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
-		dec, ptr := n.(*Decoder), i.(*rt.NumberEval)
+		dec, ptr := n.(*xDecoder), i.(*rt.NumberEval)
 		if v, ok := readNum(dec); ok {
 			*ptr, okay = v, true
 		} else if v, ok := readVar(dec); ok {
@@ -45,7 +45,7 @@ var custom = chart.Customization{
 		return
 	},
 	rt.NumListEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
-		dec, ptr := n.(*Decoder), i.(*rt.NumListEval)
+		dec, ptr := n.(*xDecoder), i.(*rt.NumListEval)
 		if v, ok := readNumList(dec); ok {
 			*ptr, okay = v, true
 		} else if v, ok := readVar(dec); ok {
@@ -56,7 +56,7 @@ var custom = chart.Customization{
 		return
 	},
 	rt.RecordEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
-		dec, ptr := n.(*Decoder), i.(*rt.RecordEval)
+		dec, ptr := n.(*xDecoder), i.(*rt.RecordEval)
 		if v, ok := readVar(dec); ok {
 			*ptr, okay = v, true
 		} else {
@@ -65,7 +65,7 @@ var custom = chart.Customization{
 		return
 	},
 	rt.RecordListEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
-		dec, ptr := n.(*Decoder), i.(*rt.RecordListEval)
+		dec, ptr := n.(*xDecoder), i.(*rt.RecordListEval)
 		if v, ok := readVar(dec); ok {
 			*ptr, okay = v, true
 		} else {
@@ -74,7 +74,7 @@ var custom = chart.Customization{
 		return
 	},
 	rt.TextEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
-		dec, ptr := n.(*Decoder), i.(*rt.TextEval)
+		dec, ptr := n.(*xDecoder), i.(*rt.TextEval)
 		// NOTE: a string where a text eval is expected could be a variable providing text or some literal text.
 		// variables start with @, and text that starts with an @ winds up prefixed with two @@s
 		if v, ok := readVarOrText(dec); ok {
@@ -85,7 +85,7 @@ var custom = chart.Customization{
 		return
 	},
 	rt.TextListEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
-		dec, ptr := n.(*Decoder), i.(*rt.TextListEval)
+		dec, ptr := n.(*xDecoder), i.(*rt.TextListEval)
 		if v, ok := readTextList(dec); ok {
 			*ptr, okay = v, true
 		} else if v, ok := readVar(dec); ok {
@@ -102,7 +102,7 @@ var custom = chart.Customization{
 	// ( we dont expect those to be escaped )
 }
 
-func readBool(dec *Decoder) (ret *core.BoolValue, okay bool) {
+func readBool(dec *xDecoder) (ret *core.BoolValue, okay bool) {
 	var val bool
 	if e := json.Unmarshal(dec.CurrentMessage, &val); e == nil {
 		ret, okay = &core.BoolValue{val}, true
@@ -110,7 +110,7 @@ func readBool(dec *Decoder) (ret *core.BoolValue, okay bool) {
 	}
 	return
 }
-func readNum(dec *Decoder) (ret *core.NumValue, okay bool) {
+func readNum(dec *xDecoder) (ret *core.NumValue, okay bool) {
 	var val float64
 	if e := json.Unmarshal(dec.CurrentMessage, &val); e == nil {
 		ret, okay = &core.NumValue{val}, true
@@ -118,7 +118,7 @@ func readNum(dec *Decoder) (ret *core.NumValue, okay bool) {
 	}
 	return
 }
-func readNumList(dec *Decoder) (ret *core.Numbers, okay bool) {
+func readNumList(dec *xDecoder) (ret *core.Numbers, okay bool) {
 	var val []float64
 	if e := json.Unmarshal(dec.CurrentMessage, &val); e == nil {
 		ret, okay = &core.Numbers{val}, true
@@ -126,7 +126,7 @@ func readNumList(dec *Decoder) (ret *core.Numbers, okay bool) {
 	}
 	return
 }
-func readTextList(dec *Decoder) (ret *core.Texts, okay bool) {
+func readTextList(dec *xDecoder) (ret *core.Texts, okay bool) {
 	var val []string
 	if e := json.Unmarshal(dec.CurrentMessage, &val); e == nil {
 		ret, okay = &core.Texts{val}, true
@@ -137,7 +137,7 @@ func readTextList(dec *Decoder) (ret *core.Texts, okay bool) {
 
 // when there's just a single string that fits a text eval...
 // it could be literal text or a variable providing text.
-func readVarOrText(dec *Decoder) (ret rt.TextEval, okay bool) {
+func readVarOrText(dec *xDecoder) (ret rt.TextEval, okay bool) {
 	var str string
 	if e := json.Unmarshal(dec.CurrentMessage, &str); e == nil {
 		if cnt := len(str); cnt == 0 || str[0] != '@' {
@@ -159,7 +159,7 @@ func readVarOrText(dec *Decoder) (ret rt.TextEval, okay bool) {
 	return
 }
 
-func readVar(dec *Decoder) (ret *core.GetVar, okay bool) {
+func readVar(dec *xDecoder) (ret *core.GetVar, okay bool) {
 	var str string
 	if e := json.Unmarshal(dec.CurrentMessage, &str); e == nil {
 		if len(str) > 0 && str[0] == '@' {

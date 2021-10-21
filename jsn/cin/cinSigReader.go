@@ -18,6 +18,14 @@ type sigParam struct {
 	choice string // optional
 }
 
+func (p *sigParam) String() string {
+	out := p.label
+	if len(p.choice) > 0 {
+		out = out + " " + p.choice
+	}
+	return out
+}
+
 type runeBuffer []rune
 
 const eof = rune(-1)

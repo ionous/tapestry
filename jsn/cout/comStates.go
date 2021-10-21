@@ -6,13 +6,29 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Encoder - marker so callers can see where a machine pointer came from.
-type Encoder struct{ *chart.Machine }
+// xEncoder - marker so callers can see where a machine pointer came from.
+type xEncoder struct {
+	chart.Machine
+}
 
 // NewEncoder create an empty serializer to produce compact script data.
-func NewEncoder() *Encoder {
-	return &Encoder{chart.NewEncoder(custom, newBlock)}
+func Encode(in jsn.Marshalee) (ret interface{}, err error) {
+	m := xEncoder{Machine: chart.MakeEncoder(custom)}
+	next := m.newBlock()
+	next.OnCommit = func(v interface{}) {
+		if ret != nil {
+			m.Error(errutil.New("can only write data once"))
+		} else {
+			ret = v
+		}
+	}
+	m.ChangeState(next)
+	in.Marshal(&m)
+	return ret, m.Errors()
 }
+
+// debug.FactorialStory.Marshal(out)
+// if d, e := out.Data(); e != nil {
 
 func unpack(pv interface{}) (ret interface{}) {
 	switch pv := pv.(type) {
@@ -27,7 +43,7 @@ func unpack(pv interface{}) (ret interface{}) {
 }
 
 // compact data represents primitive values as their value.
-func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
+func (m *xEncoder) newValue(next *chart.StateMix) *chart.StateMix {
 	next.OnValue = func(typeName string, pv interface{}) {
 		m.Commit(unpack(pv))
 	}
@@ -36,24 +52,20 @@ func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 
 // blocks handle beginning new flows, swaps, or repeats
 // end ( and how they collect data ) gets left to the caller
-func newBlock(m *chart.Machine) *chart.StateMix {
-	return addBlock(m, chart.NewReportingState(m))
+func (m *xEncoder) newBlock() *chart.StateMix {
+	return m.addBlock(chart.NewReportingState(&m.Machine))
 }
 
-func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
+func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
 	next.OnMap = func(lede, _ string) bool {
-		m.PushState(newFlow(m, newComFlow(lede, false)))
-		return true
-	}
-	next.OnLiteral = func(lede, _ string) bool {
-		m.PushState(newFlow(m, newComFlow(lede, true)))
+		m.PushState(m.newFlow(newComFlow(lede)))
 		return true
 	}
 	next.OnSlot = func(typeName string, slot jsn.Spotter) (okay bool) {
 		if slot.HasSlot() {
-			m.PushState(newSlot(m))
+			m.PushState(m.newSlot())
 			okay = true
 		}
 		return
@@ -63,14 +75,14 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 		if choice, ok := p.GetChoice(); !ok {
 			m.Error(errutil.New("couldnt determine choice of", p))
 		} else if len(choice) > 0 {
-			m.PushState(newSwap(m, &comSwap{typeName: typeName, choice: choice}))
+			m.PushState(m.newSwap(&comSwap{typeName: typeName, choice: choice}))
 			okay = true
 		}
 		return okay
 	}
 	next.OnRepeat = func(t string, vs jsn.Slicer) (okay bool) {
 		if hint := vs.GetSize(); hint > 0 {
-			m.PushState(newSlice(m, make([]interface{}, 0, hint)))
+			m.PushState(m.newSlice(make([]interface{}, 0, hint)))
 			okay = true
 		}
 		return okay
@@ -79,10 +91,10 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	return next
 }
 
-func newFlow(m *chart.Machine, d *comFlow) *chart.StateMix {
-	next := chart.NewReportingState(m)
+func (m *xEncoder) newFlow(d *comFlow) *chart.StateMix {
+	next := chart.NewReportingState(&m.Machine)
 	next.OnKey = func(key, _ string) bool {
-		m.ChangeState(newKey(m, *next, d, key))
+		m.ChangeState(m.newKey(*next, d, key))
 		return true
 	}
 	next.OnEnd = func() {
@@ -94,8 +106,8 @@ func newFlow(m *chart.Machine, d *comFlow) *chart.StateMix {
 }
 
 // writes the value into the key and change back to the flow state
-func newKey(m *chart.Machine, prev chart.StateMix, d *comFlow, key string) *chart.StateMix {
-	next := newValue(m, addBlock(m, &prev))
+func (m *xEncoder) newKey(prev chart.StateMix, d *comFlow, key string) *chart.StateMix {
+	next := m.newValue(m.addBlock(&prev))
 	next.OnCommit = func(v interface{}) {
 		if c, ok := v.(*comSwap); ok {
 			d.addMsgPair(key, c.choice, c.value)
@@ -108,8 +120,8 @@ func newKey(m *chart.Machine, prev chart.StateMix, d *comFlow, key string) *char
 }
 
 // every slice pushes a brand new machine
-func newSlice(m *chart.Machine, vals []interface{}) *chart.StateMix {
-	next := newValue(m, newBlock(m))
+func (m *xEncoder) newSlice(vals []interface{}) *chart.StateMix {
+	next := m.newValue(m.newBlock())
 	// a new value is being added to our slice
 	next.OnCommit = func(v interface{}) {
 		vals = append(vals, v)
@@ -122,11 +134,11 @@ func newSlice(m *chart.Machine, vals []interface{}) *chart.StateMix {
 }
 
 // every slot pushes a brand new machine
-func newSlot(m *chart.Machine) *chart.StateMix {
-	next := newValue(m, newBlock(m))
+func (m *xEncoder) newSlot() *chart.StateMix {
+	next := m.newValue(m.newBlock())
 	next.OnCommit = func(v interface{}) {
 		// write our choice and change into an error checking state
-		m.ChangeState(chart.NewBlockResult(m, v))
+		m.ChangeState(chart.NewBlockResult(&m.Machine, v))
 	}
 	// fix? what should an uncommitted choice write?
 	next.OnEnd = func() {
@@ -135,10 +147,10 @@ func newSlot(m *chart.Machine) *chart.StateMix {
 	return next
 }
 
-func newSwap(m *chart.Machine, swap *comSwap) *chart.StateMix {
-	next := newValue(m, newBlock(m))
+func (m *xEncoder) newSwap(swap *comSwap) *chart.StateMix {
+	next := m.newValue(m.newBlock())
 	next.OnCommit = func(v interface{}) {
-		m.ChangeState(chart.NewBlockResult(m, swap.SetValue(v)))
+		m.ChangeState(chart.NewBlockResult(&m.Machine, swap.SetValue(v)))
 	}
 	return next
 }

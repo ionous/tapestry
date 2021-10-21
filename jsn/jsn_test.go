@@ -17,9 +17,7 @@ import (
 )
 
 func TestDetailsEncode(t *testing.T) {
-	out := dout.NewEncoder(nil)
-	debug.FactorialStory.Marshal(out)
-	if d, e := out.Data(); e != nil {
+	if d, e := dout.Encode(debug.FactorialStory); e != nil {
 		t.Fatal(e)
 	} else if b, e := json.Marshal(d); e != nil {
 		t.Fatal(e)
@@ -30,22 +28,16 @@ func TestDetailsEncode(t *testing.T) {
 
 func TestDetailsDecode(t *testing.T) {
 	var dst story.Story
-	dec := din.NewDecoder(makeRegistry(), []byte(det))
-	dst.Marshal(dec)
-	if _, e := dec.Data(); e != nil {
+	if e := din.Decode(&dst, makeRegistry(), []byte(det)); e != nil {
 		t.Fatal(e)
-	}
-	if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
+	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
 		pretty.Print(dst)
 		t.Fatal(diff)
 	}
 }
 
 func TestCompactEncoder(t *testing.T) {
-	// should these just be part of the cout package directly?
-	out := cout.NewEncoder()
-	debug.FactorialStory.Marshal(out)
-	if d, e := out.Data(); e != nil {
+	if d, e := cout.Encode(debug.FactorialStory); e != nil {
 		t.Fatal(e)
 	} else if b, e := json.Marshal(d); e != nil {
 		t.Fatal(e)
@@ -56,16 +48,12 @@ func TestCompactEncoder(t *testing.T) {
 
 func TestCompactDecode(t *testing.T) {
 	var dst story.Story
-	dec := cin.NewDecoder(
-		[]byte(com),
+	if e := cin.Decode(&dst, []byte(com),
 		append(iffy.AllSignatures, story.Signatures),
-	)
-	dst.Marshal(dec)
-	if _, e := dec.Data(); e != nil {
+	); e != nil {
 		pretty.Println(dst)
 		t.Fatal(e)
-	}
-	if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
+	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
 		pretty.Print(dst)
 		t.Fatal(diff)
 	}

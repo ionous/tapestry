@@ -9,22 +9,21 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type Decoder struct {
+type xDecoder struct {
 	chart.Machine
 	reg composer.Registry
 }
 
-func NewDecoder(reg composer.Registry, msg json.RawMessage) *Decoder {
-	out := &Decoder{reg: reg}
-	next := out.newBlock(&msg)
-	next.OnCommit = func(interface{}) {
-		// println("done")
-	}
-	out.ChangeState(next)
-	return out
+func Decode(dst jsn.Marshalee, reg composer.Registry, msg json.RawMessage) error {
+	dec := xDecoder{reg: reg}
+	next := dec.newBlock(&msg)
+	next.OnCommit = func(interface{}) {}
+	dec.ChangeState(next)
+	dst.Marshal(&dec)
+	return dec.Errors()
 }
 
-func (dec *Decoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.StateMix {
+func (dec *xDecoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.StateMix {
 	next.OnValue = func(typeName string, pv interface{}) {
 		var d dinValue
 		if e := json.Unmarshal(*pm, &d); e != nil {
@@ -50,11 +49,11 @@ func (dec *Decoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.S
 	return next
 }
 
-func (dec *Decoder) newBlock(pm *json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newBlock(pm *json.RawMessage) *chart.StateMix {
 	return dec.addBlock(pm, chart.NewReportingState(&dec.Machine))
 }
 
-func (dec *Decoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.StateMix {
+func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.StateMix {
 	next.OnMap = func(_, typeName string) (okay bool) {
 		var d dinMap
 		if e := json.Unmarshal(*pm, &d); e != nil {
@@ -122,7 +121,7 @@ func (dec *Decoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.S
 	return next
 }
 
-func (dec *Decoder) newFlow(fields dinFields) *chart.StateMix {
+func (dec *xDecoder) newFlow(fields dinFields) *chart.StateMix {
 	next := chart.NewReportingState(&dec.Machine)
 	next.OnKey = func(_, key string) (okay bool) {
 		if msg, ok := fields[key]; ok {
@@ -137,7 +136,7 @@ func (dec *Decoder) newFlow(fields dinFields) *chart.StateMix {
 	return next
 }
 
-func (dec *Decoder) newKey(prev chart.StateMix, msg json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newKey(prev chart.StateMix, msg json.RawMessage) *chart.StateMix {
 	// a key's value can be a simple value, or a block.
 	next := dec.newValue(&msg, dec.addBlock(&msg, &prev))
 	next.OnCommit = func(interface{}) {
@@ -147,7 +146,7 @@ func (dec *Decoder) newKey(prev chart.StateMix, msg json.RawMessage) *chart.Stat
 }
 
 // we expect to get no more and no fewer values than msgs
-func (dec *Decoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 	msg := msgs[0]
 	next := dec.newValue(&msg, dec.newBlock(&msg))
 	next.OnCommit = func(interface{}) {
@@ -165,7 +164,7 @@ func (dec *Decoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 	return next
 }
 
-func (dec *Decoder) newSlot(msg json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newSlot(msg json.RawMessage) *chart.StateMix {
 	next := dec.newValue(&msg, dec.newBlock(&msg))
 	next.OnCommit = func(interface{}) {
 		dec.ChangeState(chart.NewBlockResult(&dec.Machine, nil))
@@ -176,7 +175,7 @@ func (dec *Decoder) newSlot(msg json.RawMessage) *chart.StateMix {
 	return next
 }
 
-func (dec *Decoder) newSwap(msg json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newSwap(msg json.RawMessage) *chart.StateMix {
 	next := dec.newValue(&msg, dec.newBlock(&msg))
 	next.OnCommit = func(interface{}) {
 		dec.ChangeState(chart.NewBlockResult(&dec.Machine, nil))

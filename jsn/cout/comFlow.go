@@ -1,15 +1,13 @@
 package cout
 
 type comFlow struct {
-	sig     Sig
-	values  []interface{}
-	literal bool
+	sig    Sig
+	values []interface{}
 }
 
-func newComFlow(lede string, literal bool) *comFlow {
+func newComFlow(lede string) *comFlow {
 	var cf comFlow
 	cf.sig.WriteLede(lede)
-	cf.literal = literal
 	return &cf
 }
 
@@ -27,8 +25,6 @@ func (cf *comFlow) finalize() (ret interface{}) {
 	sig := cf.sig.String()
 	if cnt := len(cf.values); cnt == 0 {
 		ret = sig
-	} else if cf.literal {
-		ret = cf.values[0]
 	} else {
 		var v interface{}
 		if cnt == 1 {

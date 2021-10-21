@@ -8,7 +8,6 @@ import (
 type Machine struct {
 	State
 	encoding bool
-	out      interface{}
 	stack    chartStack
 	cursor   string
 	err      error
@@ -18,31 +17,19 @@ type Machine struct {
 // Customization
 type Customization map[string]jsn.CustomizedMarshal
 
-// NewEncoder writes json data
-func NewEncoder(custom Customization, init func(*Machine) *StateMix) *Machine {
-	return newMachine(custom, true, init)
+// MakeEncoder writes json data
+func MakeEncoder(custom Customization) Machine {
+	return makeMachine(custom, true)
 }
 
-// NewDecoder reads json data
-func NewDecoder(custom Customization, init func(*Machine) *StateMix) *Machine {
-	return newMachine(custom, false, init)
+// MakeDecoder reads json data
+func MakeDecoder(custom Customization) Machine {
+	return makeMachine(custom, false)
 }
 
 // newMachine create an empty serializer to produce compact script data.
-func newMachine(custom Customization, encoding bool, init func(*Machine) *StateMix) *Machine {
-	m := &Machine{encoding: encoding, custom: custom}
-	if init != nil {
-		next := init(m)
-		next.OnCommit = func(v interface{}) {
-			if m.out != nil {
-				m.Error(errutil.New("can only write data once"))
-			} else {
-				m.out = v
-			}
-		}
-		m.ChangeState(next)
-	}
-	return m
+func makeMachine(custom Customization, encoding bool) Machine {
+	return Machine{encoding: encoding, custom: custom}
 }
 
 // IsEncoding indicates whether the machine is writing json ( or reading json. )
@@ -60,13 +47,18 @@ func (m *Machine) SetCursor(id string) {
 }
 
 // Data returns the accumulated script tree ready for serialization
-func (m *Machine) Data() (interface{}, error) {
-	return m.out, m.err
+func (m *Machine) Errors() error {
+	return m.err
 }
 
 // FlushCursor - return and reset the most recently recorded cursor position
 func (m *Machine) FlushCursor() (ret string) {
 	ret, m.cursor = m.cursor, ""
+	return
+}
+
+func (m *Machine) Error(e error) {
+	m.err = errutil.Append(m.err, e)
 	return
 }
 

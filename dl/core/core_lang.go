@@ -498,7 +498,15 @@ func BoolValue_Optional_Marshal(n jsn.Marshaler, pv **BoolValue) {
 }
 
 func BoolValue_Marshal(n jsn.Marshaler, val *BoolValue) (okay bool) {
-	if okay = n.MapLiteral("bool", BoolValue_Type); okay {
+	if fn, ok := n.CustomizedMarshal(BoolValue_Type); ok {
+		okay = fn(n, val)
+	} else {
+		okay = BoolValue_DefaultMarshal(n, val)
+	}
+	return
+}
+func BoolValue_DefaultMarshal(n jsn.Marshaler, val *BoolValue) (okay bool) {
+	if okay = n.MapValues("bool", BoolValue_Type); okay {
 		if n.MapKey("", BoolValue_Field_Bool) {
 			value.Bool_Unboxed_Marshal(n, &val.Bool)
 		}
@@ -4474,7 +4482,15 @@ func NumValue_Optional_Marshal(n jsn.Marshaler, pv **NumValue) {
 }
 
 func NumValue_Marshal(n jsn.Marshaler, val *NumValue) (okay bool) {
-	if okay = n.MapLiteral("num", NumValue_Type); okay {
+	if fn, ok := n.CustomizedMarshal(NumValue_Type); ok {
+		okay = fn(n, val)
+	} else {
+		okay = NumValue_DefaultMarshal(n, val)
+	}
+	return
+}
+func NumValue_DefaultMarshal(n jsn.Marshaler, val *NumValue) (okay bool) {
+	if okay = n.MapValues("num", NumValue_Type); okay {
 		if n.MapKey("", NumValue_Field_Num) {
 			value.Number_Unboxed_Marshal(n, &val.Num)
 		}
@@ -4532,7 +4548,15 @@ func Numbers_Optional_Marshal(n jsn.Marshaler, pv **Numbers) {
 }
 
 func Numbers_Marshal(n jsn.Marshaler, val *Numbers) (okay bool) {
-	if okay = n.MapLiteral("nums", Numbers_Type); okay {
+	if fn, ok := n.CustomizedMarshal(Numbers_Type); ok {
+		okay = fn(n, val)
+	} else {
+		okay = Numbers_DefaultMarshal(n, val)
+	}
+	return
+}
+func Numbers_DefaultMarshal(n jsn.Marshaler, val *Numbers) (okay bool) {
+	if okay = n.MapValues("nums", Numbers_Type); okay {
 		if n.MapKey("", Numbers_Field_Values) {
 			value.Number_Unboxed_Repeats_Marshal(n, &val.Values)
 		}
@@ -5673,7 +5697,7 @@ func TextValue_Marshal(n jsn.Marshaler, val *TextValue) (okay bool) {
 	return
 }
 func TextValue_DefaultMarshal(n jsn.Marshaler, val *TextValue) (okay bool) {
-	if okay = n.MapLiteral("txt", TextValue_Type); okay {
+	if okay = n.MapValues("txt", TextValue_Type); okay {
 		if n.MapKey("", TextValue_Field_Text) {
 			value.Text_Unboxed_Marshal(n, &val.Text)
 		}
@@ -5731,7 +5755,15 @@ func Texts_Optional_Marshal(n jsn.Marshaler, pv **Texts) {
 }
 
 func Texts_Marshal(n jsn.Marshaler, val *Texts) (okay bool) {
-	if okay = n.MapLiteral("txts", Texts_Type); okay {
+	if fn, ok := n.CustomizedMarshal(Texts_Type); ok {
+		okay = fn(n, val)
+	} else {
+		okay = Texts_DefaultMarshal(n, val)
+	}
+	return
+}
+func Texts_DefaultMarshal(n jsn.Marshaler, val *Texts) (okay bool) {
+	if okay = n.MapValues("txts", Texts_Type); okay {
 		if n.MapKey("", Texts_Field_Values) {
 			value.Text_Unboxed_Repeats_Marshal(n, &val.Values)
 		}

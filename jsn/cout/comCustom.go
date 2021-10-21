@@ -7,6 +7,19 @@ import (
 )
 
 var custom = chart.Customization{
+	core.BoolValue_Type: func(n jsn.Marshaler, i interface{}) bool {
+		var out bool = i.(*core.BoolValue).Bool
+		return n.MarshalValue(core.BoolValue_Type, out)
+	},
+	core.NumValue_Type: func(n jsn.Marshaler, i interface{}) bool {
+		var out float64 = i.(*core.NumValue).Num
+		return n.MarshalValue(core.NumValue_Type, out)
+	},
+	core.Numbers_Type: func(n jsn.Marshaler, i interface{}) bool {
+		var out []float64 = i.(*core.Numbers).Values
+		return n.MarshalValue(core.Numbers_Type, out)
+	},
+
 	// write text as a raw string
 	core.TextValue_Type: func(n jsn.Marshaler, i interface{}) bool {
 		str := i.(*core.TextValue).Text
@@ -16,6 +29,12 @@ var custom = chart.Customization{
 		}
 		return n.MarshalValue(core.TextValue_Type, str)
 	},
+	//
+	core.Texts_Type: func(n jsn.Marshaler, i interface{}) bool {
+		var out []string = i.(*core.Texts).Values
+		return n.MarshalValue(core.Texts_Type, out)
+	},
+
 	// write variables as a string prepended by @
 	core.GetVar_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
 		ptr := i.(*core.GetVar)

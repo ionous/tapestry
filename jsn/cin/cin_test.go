@@ -23,5 +23,9 @@ func TestSigReader(t *testing.T) {
 func readSig(s string) []string {
 	var x sigReader
 	x.readSig(s)
-	return append([]string{x.cmd}, x.params...)
+	out := []string{x.cmd}
+	for _, p := range x.params {
+		out = append(out, p.String())
+	}
+	return out
 }

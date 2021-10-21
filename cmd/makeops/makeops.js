@@ -26,7 +26,11 @@ const custom = new Set([
   "text_list_eval",
   // core
   "get_var", // we collapse this into a literal string starting with @
-  "text_value" // we escape text values to avoid confusion with get_var
+  "bool_value",
+  "num_value",
+  "numbers",
+  "text_value", // we escape text values to avoid confusion with get_var
+  "texts"
 ]);
 
 // change to tokenized like name
@@ -164,10 +168,6 @@ Handlebars.registerHelper('IsSlat', function(name) {
 Handlebars.registerHelper('Uses', function(name, test) {
   const { uses } = allTypes[name];
   return uses === test;
-});
-
-Handlebars.registerHelper('IsLiteral', function(group) {
-  return group.indexOf('literals') >= 0;
 });
 
 Handlebars.registerHelper('IsInternal', function(label) {
