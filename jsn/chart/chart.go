@@ -31,15 +31,17 @@ func NewDecoder(custom Customization, init func(*Machine) *StateMix) *Machine {
 // newMachine create an empty serializer to produce compact script data.
 func newMachine(custom Customization, encoding bool, init func(*Machine) *StateMix) *Machine {
 	m := &Machine{encoding: encoding, custom: custom}
-	next := init(m)
-	next.OnCommit = func(v interface{}) {
-		if m.out != nil {
-			m.Error(errutil.New("can only write data once"))
-		} else {
-			m.out = v
+	if init != nil {
+		next := init(m)
+		next.OnCommit = func(v interface{}) {
+			if m.out != nil {
+				m.Error(errutil.New("can only write data once"))
+			} else {
+				m.out = v
+			}
 		}
+		m.ChangeState(next)
 	}
-	m.ChangeState(next)
 	return m
 }
 

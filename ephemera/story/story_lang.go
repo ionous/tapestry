@@ -5391,8 +5391,8 @@ func (at StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func StoryStatement_Marshal(n jsn.Marshaler, ptr *StoryStatement) {
-	if ok := n.SlotValues(StoryStatement_Type, StoryStatement_Slot{ptr}); ok {
+func StoryStatement_Marshal(n jsn.Marshaler, ptr *StoryStatement) (okay bool) {
+	if okay = n.SlotValues(StoryStatement_Type, StoryStatement_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -5845,8 +5845,8 @@ func (at Testing_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func Testing_Marshal(n jsn.Marshaler, ptr *Testing) {
-	if ok := n.SlotValues(Testing_Type, Testing_Slot{ptr}); ok {
+func Testing_Marshal(n jsn.Marshaler, ptr *Testing) (okay bool) {
+	if okay = n.SlotValues(Testing_Type, Testing_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}

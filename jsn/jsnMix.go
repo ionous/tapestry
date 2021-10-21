@@ -17,26 +17,26 @@ type MarshalMix struct {
 	OnWarn    func(error)
 }
 
-func (ms *MarshalMix) MapValues(lede, typeName string) (ret bool) {
+func (ms *MarshalMix) MapValues(lede, typeName string) (okay bool) {
 	if call := ms.OnMap; call != nil {
-		ret = call(lede, typeName)
+		okay = call(lede, typeName)
 	} else {
 		ms.Error(errutil.New("unexpected map", lede, typeName))
 	}
 	return
 }
-func (ms *MarshalMix) MapLiteral(lede, typeName string) (ret bool) {
+func (ms *MarshalMix) MapLiteral(lede, typeName string) (okay bool) {
 	if call := ms.OnLiteral; call != nil {
-		ret = call(lede, typeName)
+		okay = call(lede, typeName)
 	} else {
 		// fall back to a regular map
-		ret = ms.MapValues(lede, typeName)
+		okay = ms.MapValues(lede, typeName)
 	}
 	return
 }
-func (ms *MarshalMix) MapKey(key, field string) (ret bool) {
+func (ms *MarshalMix) MapKey(key, field string) (okay bool) {
 	if call := ms.OnKey; call != nil {
-		ret = call(key, field)
+		okay = call(key, field)
 	} else {
 		ms.Error(errutil.New("unexpected key", key, field))
 	}
@@ -58,9 +58,9 @@ func (ms *MarshalMix) PickValues(typeName string, val Picker) (okay bool) {
 	}
 	return
 }
-func (ms *MarshalMix) RepeatValues(typeName string, val Slicer) (ret bool) {
+func (ms *MarshalMix) RepeatValues(typeName string, val Slicer) (okay bool) {
 	if call := ms.OnRepeat; call != nil {
-		ret = call(typeName, val)
+		okay = call(typeName, val)
 	} else {
 		ms.Error(errutil.New("unexpected repeat", typeName, val))
 	}
@@ -73,9 +73,10 @@ func (ms *MarshalMix) EndValues() {
 		ms.Error(errutil.New("unexpected end"))
 	}
 }
-func (ms *MarshalMix) MarshalValue(typeName string, pv interface{}) {
+func (ms *MarshalMix) MarshalValue(typeName string, pv interface{}) (okay bool) {
 	if call := ms.OnValue; call != nil {
 		call(typeName, pv)
+		okay = true
 	} else {
 		ms.Error(errutil.New("unexpected value", typeName, pv))
 	}

@@ -14,21 +14,21 @@ func (at {{Pascal name}}_Slot) SetSlot(v interface{}) (okay bool) {
   return
 }
 
-func {{Pascal name}}_Marshal(n jsn.Marshaler, ptr *{{Pascal name}}) {
+func {{Pascal name}}_Marshal(n jsn.Marshaler, ptr *{{Pascal name}}) (okay bool) {
 {{#if (IsCustom name)}}
-  if fn, ok := n.CustomizedMarshal({{Pascal name}}_Type); ok {
-    fn(n, ptr)
+  if fn, exists := n.CustomizedMarshal({{Pascal name}}_Type); exists {
+    okay = fn(n, ptr)
   } else {
-    {{Pascal name}}_DefaultMarshal(n, ptr)
+    okay = {{Pascal name}}_DefaultMarshal(n, ptr)
   }
   return
 }
-func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, ptr *{{Pascal name}}) {
+func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, ptr *{{Pascal name}}) (okay bool) {
 {{/if}}
 {{~#if (IsPositioned this)}}
   n.SetCursor(ptr.At.Offset)
 {{/if}}
-  if ok := n.SlotValues({{Pascal name}}_Type, {{Pascal name}}_Slot{ptr}); ok {
+  if okay = n.SlotValues({{Pascal name}}_Type, {{Pascal name}}_Slot{ptr}); okay {
     (*ptr).(jsn.Marshalee).Marshal(n)
     n.EndValues()
   }

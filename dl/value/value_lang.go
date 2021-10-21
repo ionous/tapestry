@@ -368,13 +368,6 @@ func Text_Optional_Marshal(n jsn.Marshaler, val *Text) {
 }
 
 func Text_Marshal(n jsn.Marshaler, val *Text) {
-	if fn, ok := n.CustomizedMarshal(Text_Type); ok {
-		fn(n, val)
-	} else {
-		Text_DefaultMarshal(n, val)
-	}
-}
-func Text_DefaultMarshal(n jsn.Marshaler, val *Text) {
 	n.MarshalValue(Text_Type, &val.Str)
 }
 

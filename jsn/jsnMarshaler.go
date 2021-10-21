@@ -43,8 +43,8 @@ type State interface {
 	RepeatValues(typeName string, slice Slicer) bool
 	// ends a flow, swap, or repeat.
 	EndValues()
-	// specify a primitive value or enum
-	MarshalValue(typeName string, pv interface{})
+	// specify a primitive value or enum.
+	MarshalValue(typeName string, pv interface{}) bool
 	// record an error
 	Error(err error)
 }

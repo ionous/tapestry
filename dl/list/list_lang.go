@@ -1076,8 +1076,8 @@ func (at ListIterator_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func ListIterator_Marshal(n jsn.Marshaler, ptr *ListIterator) {
-	if ok := n.SlotValues(ListIterator_Type, ListIterator_Slot{ptr}); ok {
+func ListIterator_Marshal(n jsn.Marshaler, ptr *ListIterator) (okay bool) {
+	if okay = n.SlotValues(ListIterator_Type, ListIterator_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -1694,8 +1694,8 @@ func (at ListSource_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func ListSource_Marshal(n jsn.Marshaler, ptr *ListSource) {
-	if ok := n.SlotValues(ListSource_Type, ListSource_Slot{ptr}); ok {
+func ListSource_Marshal(n jsn.Marshaler, ptr *ListSource) (okay bool) {
+	if okay = n.SlotValues(ListSource_Type, ListSource_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -1801,8 +1801,8 @@ func (at ListTarget_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func ListTarget_Marshal(n jsn.Marshaler, ptr *ListTarget) {
-	if ok := n.SlotValues(ListTarget_Type, ListTarget_Slot{ptr}); ok {
+func ListTarget_Marshal(n jsn.Marshaler, ptr *ListTarget) (okay bool) {
+	if okay = n.SlotValues(ListTarget_Type, ListTarget_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}

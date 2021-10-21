@@ -366,8 +366,8 @@ func (at GrammarMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func GrammarMaker_Marshal(n jsn.Marshaler, ptr *GrammarMaker) {
-	if ok := n.SlotValues(GrammarMaker_Type, GrammarMaker_Slot{ptr}); ok {
+func GrammarMaker_Marshal(n jsn.Marshaler, ptr *GrammarMaker) (okay bool) {
+	if okay = n.SlotValues(GrammarMaker_Type, GrammarMaker_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -569,8 +569,8 @@ func (at ScannerMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func ScannerMaker_Marshal(n jsn.Marshaler, ptr *ScannerMaker) {
-	if ok := n.SlotValues(ScannerMaker_Type, ScannerMaker_Slot{ptr}); ok {
+func ScannerMaker_Marshal(n jsn.Marshaler, ptr *ScannerMaker) (okay bool) {
+	if okay = n.SlotValues(ScannerMaker_Type, ScannerMaker_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}

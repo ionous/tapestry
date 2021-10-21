@@ -16,13 +16,17 @@ const unbox = { "text": "string", "bool": "bool" };
 // custom serialization of a type
 // blocks the generation of the inner most serialization function
 const custom = new Set([
+  "assignment",
   "bool_eval",
-  "num_list_eval",
   "number_eval",
+  "num_list_eval",
+  "record_eval",
+  "record_list_eval",
   "text_eval",
   "text_list_eval",
-  "get_var",
-  "text"
+  // core
+  "get_var", // we collapse this into a literal string starting with @
+  "text_value" // we escape text values to avoid confusion with get_var
 ]);
 
 // change to tokenized like name
@@ -384,7 +388,8 @@ for (const typeName in allTypes) {
     groups[group] = g;
   }
 }
-console.log("num groups", Object.keys(groups).length);
+// console.log("num groups", Object.keys(groups).length);
+// console.log("all types", JSON.stringify(allTypes,0,2));
 let regall= {};
 
 // determine includes:

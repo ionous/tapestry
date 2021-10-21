@@ -6,12 +6,9 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/chart"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/jsn/din"
 
@@ -46,28 +43,7 @@ func TestDetailsDecode(t *testing.T) {
 
 func TestCompactEncoder(t *testing.T) {
 	// should these just be part of the cout package directly?
-	out := cout.NewEncoder(chart.Customization{
-		// write text as a raw string
-		value.Text_Type: func(n jsn.Marshaler, i interface{}) bool {
-			str := i.(*value.Text).Str
-			// if the text starts with an @, add another @
-			if len(str) > 0 && str[0] == '@' {
-				str = "@" + str
-			}
-			n.MarshalValue(value.Text_Type, str)
-			return true // never use structured serialization for text
-		},
-		// write variables as a string prepended by @
-		core.GetVar_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
-			str := i.(*core.GetVar).Name.Str
-			// a leading ampersand would conflict with @@ escaped text serialization.
-			if leadingAmp := len(str) > 0 && str[0] == '@'; !leadingAmp {
-				n.MarshalValue(core.GetVar_Type, "@"+str)
-				okay = true // otherwise fallback to structured serialization
-			}
-			return
-		},
-	})
+	out := cout.NewEncoder()
 	debug.FactorialStory.Marshal(out)
 	if d, e := out.Data(); e != nil {
 		t.Fatal(e)
@@ -78,19 +54,22 @@ func TestCompactEncoder(t *testing.T) {
 	}
 }
 
-// func TestCompactDecode(t *testing.T) {
-// 	var dst story.Story
-// 	dec := cin.NewDecoder(append(iffy.AllSignatures, story.Signatures), []byte(com))
-// 	dst.Marshal(dec)
-// 	if _, e := dec.Data(); e != nil {
-// 		pretty.Println(dst)
-// 		t.Fatal(e)
-// 	}
-// 	if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
-// 		pretty.Print(dst)
-// 		t.Fatal(diff)
-// 	}
-// }
+func TestCompactDecode(t *testing.T) {
+	var dst story.Story
+	dec := cin.NewDecoder(
+		[]byte(com),
+		append(iffy.AllSignatures, story.Signatures),
+	)
+	dst.Marshal(dec)
+	if _, e := dec.Data(); e != nil {
+		pretty.Println(dst)
+		t.Fatal(e)
+	}
+	if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
+		pretty.Print(dst)
+		t.Fatal(diff)
+	}
+}
 
 func makeRegistry() composer.Registry {
 	var k composer.Registry

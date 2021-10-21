@@ -43,7 +43,7 @@ func (dec *Decoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.S
 				}
 			}
 		}
-		dec.Commit(nil)
+		dec.Commit("new value")
 		return
 	}
 	// next.OnCommit -- handled by each caller

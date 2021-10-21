@@ -567,8 +567,8 @@ func (at Brancher_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func Brancher_Marshal(n jsn.Marshaler, ptr *Brancher) {
-	if ok := n.SlotValues(Brancher_Type, Brancher_Slot{ptr}); ok {
+func Brancher_Marshal(n jsn.Marshaler, ptr *Brancher) (okay bool) {
+	if okay = n.SlotValues(Brancher_Type, Brancher_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -1850,8 +1850,8 @@ func (at Comparator_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func Comparator_Marshal(n jsn.Marshaler, ptr *Comparator) {
-	if ok := n.SlotValues(Comparator_Type, Comparator_Slot{ptr}); ok {
+func Comparator_Marshal(n jsn.Marshaler, ptr *Comparator) (okay bool) {
+	if okay = n.SlotValues(Comparator_Type, Comparator_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -2585,8 +2585,8 @@ func (at FromSourceFields_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func FromSourceFields_Marshal(n jsn.Marshaler, ptr *FromSourceFields) {
-	if ok := n.SlotValues(FromSourceFields_Type, FromSourceFields_Slot{ptr}); ok {
+func FromSourceFields_Marshal(n jsn.Marshaler, ptr *FromSourceFields) (okay bool) {
+	if okay = n.SlotValues(FromSourceFields_Type, FromSourceFields_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -3261,8 +3261,8 @@ func (at IntoTargetFields_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func IntoTargetFields_Marshal(n jsn.Marshaler, ptr *IntoTargetFields) {
-	if ok := n.SlotValues(IntoTargetFields_Type, IntoTargetFields_Slot{ptr}); ok {
+func IntoTargetFields_Marshal(n jsn.Marshaler, ptr *IntoTargetFields) (okay bool) {
+	if okay = n.SlotValues(IntoTargetFields_Type, IntoTargetFields_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -5574,6 +5574,14 @@ func TextValue_Optional_Marshal(n jsn.Marshaler, pv **TextValue) {
 }
 
 func TextValue_Marshal(n jsn.Marshaler, val *TextValue) (okay bool) {
+	if fn, ok := n.CustomizedMarshal(TextValue_Type); ok {
+		okay = fn(n, val)
+	} else {
+		okay = TextValue_DefaultMarshal(n, val)
+	}
+	return
+}
+func TextValue_DefaultMarshal(n jsn.Marshaler, val *TextValue) (okay bool) {
 	if okay = n.MapLiteral("txt", TextValue_Type); okay {
 		if n.MapKey("", TextValue_Field_Text) {
 			value.Text_Unboxed_Marshal(n, &val.Text)
@@ -5652,8 +5660,8 @@ func (at Trigger_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func Trigger_Marshal(n jsn.Marshaler, ptr *Trigger) {
-	if ok := n.SlotValues(Trigger_Type, Trigger_Slot{ptr}); ok {
+func Trigger_Marshal(n jsn.Marshaler, ptr *Trigger) (okay bool) {
+	if okay = n.SlotValues(Trigger_Type, Trigger_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}

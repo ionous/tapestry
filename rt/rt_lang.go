@@ -17,8 +17,16 @@ func (at Assignment_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func Assignment_Marshal(n jsn.Marshaler, ptr *Assignment) {
-	if ok := n.SlotValues(Assignment_Type, Assignment_Slot{ptr}); ok {
+func Assignment_Marshal(n jsn.Marshaler, ptr *Assignment) (okay bool) {
+	if fn, exists := n.CustomizedMarshal(Assignment_Type); exists {
+		okay = fn(n, ptr)
+	} else {
+		okay = Assignment_DefaultMarshal(n, ptr)
+	}
+	return
+}
+func Assignment_DefaultMarshal(n jsn.Marshaler, ptr *Assignment) (okay bool) {
+	if okay = n.SlotValues(Assignment_Type, Assignment_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -52,16 +60,16 @@ func (at BoolEval_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func BoolEval_Marshal(n jsn.Marshaler, ptr *BoolEval) {
-	if fn, ok := n.CustomizedMarshal(BoolEval_Type); ok {
-		fn(n, ptr)
+func BoolEval_Marshal(n jsn.Marshaler, ptr *BoolEval) (okay bool) {
+	if fn, exists := n.CustomizedMarshal(BoolEval_Type); exists {
+		okay = fn(n, ptr)
 	} else {
-		BoolEval_DefaultMarshal(n, ptr)
+		okay = BoolEval_DefaultMarshal(n, ptr)
 	}
 	return
 }
-func BoolEval_DefaultMarshal(n jsn.Marshaler, ptr *BoolEval) {
-	if ok := n.SlotValues(BoolEval_Type, BoolEval_Slot{ptr}); ok {
+func BoolEval_DefaultMarshal(n jsn.Marshaler, ptr *BoolEval) (okay bool) {
+	if okay = n.SlotValues(BoolEval_Type, BoolEval_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -95,8 +103,8 @@ func (at Execute_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func Execute_Marshal(n jsn.Marshaler, ptr *Execute) {
-	if ok := n.SlotValues(Execute_Type, Execute_Slot{ptr}); ok {
+func Execute_Marshal(n jsn.Marshaler, ptr *Execute) (okay bool) {
+	if okay = n.SlotValues(Execute_Type, Execute_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -130,16 +138,16 @@ func (at NumListEval_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func NumListEval_Marshal(n jsn.Marshaler, ptr *NumListEval) {
-	if fn, ok := n.CustomizedMarshal(NumListEval_Type); ok {
-		fn(n, ptr)
+func NumListEval_Marshal(n jsn.Marshaler, ptr *NumListEval) (okay bool) {
+	if fn, exists := n.CustomizedMarshal(NumListEval_Type); exists {
+		okay = fn(n, ptr)
 	} else {
-		NumListEval_DefaultMarshal(n, ptr)
+		okay = NumListEval_DefaultMarshal(n, ptr)
 	}
 	return
 }
-func NumListEval_DefaultMarshal(n jsn.Marshaler, ptr *NumListEval) {
-	if ok := n.SlotValues(NumListEval_Type, NumListEval_Slot{ptr}); ok {
+func NumListEval_DefaultMarshal(n jsn.Marshaler, ptr *NumListEval) (okay bool) {
+	if okay = n.SlotValues(NumListEval_Type, NumListEval_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -173,16 +181,16 @@ func (at NumberEval_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func NumberEval_Marshal(n jsn.Marshaler, ptr *NumberEval) {
-	if fn, ok := n.CustomizedMarshal(NumberEval_Type); ok {
-		fn(n, ptr)
+func NumberEval_Marshal(n jsn.Marshaler, ptr *NumberEval) (okay bool) {
+	if fn, exists := n.CustomizedMarshal(NumberEval_Type); exists {
+		okay = fn(n, ptr)
 	} else {
-		NumberEval_DefaultMarshal(n, ptr)
+		okay = NumberEval_DefaultMarshal(n, ptr)
 	}
 	return
 }
-func NumberEval_DefaultMarshal(n jsn.Marshaler, ptr *NumberEval) {
-	if ok := n.SlotValues(NumberEval_Type, NumberEval_Slot{ptr}); ok {
+func NumberEval_DefaultMarshal(n jsn.Marshaler, ptr *NumberEval) (okay bool) {
+	if okay = n.SlotValues(NumberEval_Type, NumberEval_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -216,8 +224,16 @@ func (at RecordEval_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func RecordEval_Marshal(n jsn.Marshaler, ptr *RecordEval) {
-	if ok := n.SlotValues(RecordEval_Type, RecordEval_Slot{ptr}); ok {
+func RecordEval_Marshal(n jsn.Marshaler, ptr *RecordEval) (okay bool) {
+	if fn, exists := n.CustomizedMarshal(RecordEval_Type); exists {
+		okay = fn(n, ptr)
+	} else {
+		okay = RecordEval_DefaultMarshal(n, ptr)
+	}
+	return
+}
+func RecordEval_DefaultMarshal(n jsn.Marshaler, ptr *RecordEval) (okay bool) {
+	if okay = n.SlotValues(RecordEval_Type, RecordEval_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -251,8 +267,16 @@ func (at RecordListEval_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func RecordListEval_Marshal(n jsn.Marshaler, ptr *RecordListEval) {
-	if ok := n.SlotValues(RecordListEval_Type, RecordListEval_Slot{ptr}); ok {
+func RecordListEval_Marshal(n jsn.Marshaler, ptr *RecordListEval) (okay bool) {
+	if fn, exists := n.CustomizedMarshal(RecordListEval_Type); exists {
+		okay = fn(n, ptr)
+	} else {
+		okay = RecordListEval_DefaultMarshal(n, ptr)
+	}
+	return
+}
+func RecordListEval_DefaultMarshal(n jsn.Marshaler, ptr *RecordListEval) (okay bool) {
+	if okay = n.SlotValues(RecordListEval_Type, RecordListEval_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -286,16 +310,16 @@ func (at TextEval_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func TextEval_Marshal(n jsn.Marshaler, ptr *TextEval) {
-	if fn, ok := n.CustomizedMarshal(TextEval_Type); ok {
-		fn(n, ptr)
+func TextEval_Marshal(n jsn.Marshaler, ptr *TextEval) (okay bool) {
+	if fn, exists := n.CustomizedMarshal(TextEval_Type); exists {
+		okay = fn(n, ptr)
 	} else {
-		TextEval_DefaultMarshal(n, ptr)
+		okay = TextEval_DefaultMarshal(n, ptr)
 	}
 	return
 }
-func TextEval_DefaultMarshal(n jsn.Marshaler, ptr *TextEval) {
-	if ok := n.SlotValues(TextEval_Type, TextEval_Slot{ptr}); ok {
+func TextEval_DefaultMarshal(n jsn.Marshaler, ptr *TextEval) (okay bool) {
+	if okay = n.SlotValues(TextEval_Type, TextEval_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
@@ -329,16 +353,16 @@ func (at TextListEval_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func TextListEval_Marshal(n jsn.Marshaler, ptr *TextListEval) {
-	if fn, ok := n.CustomizedMarshal(TextListEval_Type); ok {
-		fn(n, ptr)
+func TextListEval_Marshal(n jsn.Marshaler, ptr *TextListEval) (okay bool) {
+	if fn, exists := n.CustomizedMarshal(TextListEval_Type); exists {
+		okay = fn(n, ptr)
 	} else {
-		TextListEval_DefaultMarshal(n, ptr)
+		okay = TextListEval_DefaultMarshal(n, ptr)
 	}
 	return
 }
-func TextListEval_DefaultMarshal(n jsn.Marshaler, ptr *TextListEval) {
-	if ok := n.SlotValues(TextListEval_Type, TextListEval_Slot{ptr}); ok {
+func TextListEval_DefaultMarshal(n jsn.Marshaler, ptr *TextListEval) (okay bool) {
+	if okay = n.SlotValues(TextListEval_Type, TextListEval_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
 		n.EndValues()
 	}
