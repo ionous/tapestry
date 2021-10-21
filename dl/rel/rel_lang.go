@@ -9,6 +9,7 @@ import (
 )
 
 // ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.)
+// User implements: TextEval.
 type ReciprocalOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
@@ -71,6 +72,7 @@ func ReciprocalOf_Marshal(n jsn.Marshaler, val *ReciprocalOf) (okay bool) {
 }
 
 // ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)
+// User implements: TextListEval.
 type ReciprocalsOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
@@ -133,6 +135,7 @@ func ReciprocalsOf_Marshal(n jsn.Marshaler, val *ReciprocalsOf) (okay bool) {
 }
 
 // Relate Relate two nouns.
+// User implements: Execute.
 type Relate struct {
 	Object   rt.TextEval        `if:"label=_"`
 	ToObject rt.TextEval        `if:"label=to"`
@@ -199,6 +202,7 @@ func Relate_Marshal(n jsn.Marshaler, val *Relate) (okay bool) {
 }
 
 // RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.)
+// User implements: TextEval.
 type RelativeOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`
@@ -261,6 +265,7 @@ func RelativeOf_Marshal(n jsn.Marshaler, val *RelativeOf) (okay bool) {
 }
 
 // RelativesOf Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
+// User implements: TextListEval.
 type RelativesOf struct {
 	Via    value.RelationName `if:"label=_"`
 	Object rt.TextEval        `if:"label=object"`

@@ -8,6 +8,7 @@ import (
 )
 
 // Action makes a parser scanner producing a script defined action.
+// User implements: ScannerMaker.
 type Action struct {
 	Action string `if:"label=_,type=text"`
 }
@@ -65,6 +66,7 @@ func Action_Marshal(n jsn.Marshaler, val *Action) (okay bool) {
 }
 
 // Alias allows the user to refer to a noun by one or more other terms.
+// User implements: GrammarMaker.
 type Alias struct {
 	Names  []string `if:"label=_,type=text"`
 	AsNoun string   `if:"label=as_noun,type=text"`
@@ -126,6 +128,7 @@ func Alias_Marshal(n jsn.Marshaler, val *Alias) (okay bool) {
 }
 
 // AllOf makes a parser scanner
+// User implements: ScannerMaker.
 type AllOf struct {
 	Series []ScannerMaker `if:"label=_"`
 }
@@ -182,6 +185,7 @@ func AllOf_Marshal(n jsn.Marshaler, val *AllOf) (okay bool) {
 }
 
 // AnyOf makes a parser scanner
+// User implements: ScannerMaker.
 type AnyOf struct {
 	Options []ScannerMaker `if:"label=_"`
 }
@@ -238,6 +242,7 @@ func AnyOf_Marshal(n jsn.Marshaler, val *AnyOf) (okay bool) {
 }
 
 // Directive starts a parser scanner
+// User implements: GrammarMaker.
 type Directive struct {
 	Lede  []string       `if:"label=_,type=text"`
 	Scans []ScannerMaker `if:"label=scans"`
@@ -390,6 +395,7 @@ func GrammarMaker_Repeats_Marshal(n jsn.Marshaler, vals *[]GrammarMaker) {
 }
 
 // Noun makes a parser scanner
+// User implements: ScannerMaker.
 type Noun struct {
 	Kind string `if:"label=_,type=text"`
 }
@@ -446,6 +452,7 @@ func Noun_Marshal(n jsn.Marshaler, val *Noun) (okay bool) {
 }
 
 // Retarget makes a parser scanner
+// User implements: ScannerMaker.
 type Retarget struct {
 	Span []ScannerMaker `if:"label=_"`
 }
@@ -502,6 +509,7 @@ func Retarget_Marshal(n jsn.Marshaler, val *Retarget) (okay bool) {
 }
 
 // Reverse makes a parser scanner
+// User implements: ScannerMaker.
 type Reverse struct {
 	Reverses []ScannerMaker `if:"label=_"`
 }
@@ -593,6 +601,7 @@ func ScannerMaker_Repeats_Marshal(n jsn.Marshaler, vals *[]ScannerMaker) {
 }
 
 // Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
+// User implements: ScannerMaker.
 type Self struct {
 	Player string `if:"label=_,type=text"`
 }
@@ -649,6 +658,7 @@ func Self_Marshal(n jsn.Marshaler, val *Self) (okay bool) {
 }
 
 // Words makes a parser scanner
+// User implements: ScannerMaker.
 type Words struct {
 	Words []string `if:"label=_,type=text"`
 }

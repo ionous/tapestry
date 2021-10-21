@@ -9,6 +9,7 @@ import (
 )
 
 // DebugLog Debug log
+// User implements: Execute.
 type DebugLog struct {
 	Value    rt.Assignment `if:"label=_"`
 	LogLevel LoggingLevel  `if:"label=as,optional"`
@@ -71,6 +72,7 @@ func DebugLog_Marshal(n jsn.Marshaler, val *DebugLog) (okay bool) {
 }
 
 // DoNothing Statement which does nothing.
+// User implements: Execute.
 type DoNothing struct {
 	Reason string `if:"label=why,optional,type=text"`
 }

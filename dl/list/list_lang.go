@@ -10,6 +10,7 @@ import (
 )
 
 // AsNum Define the name of a number variable.
+// User implements: ListIterator.
 type AsNum struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -66,6 +67,7 @@ func AsNum_Marshal(n jsn.Marshaler, val *AsNum) (okay bool) {
 }
 
 // AsRec Define the name of a record variable.
+// User implements: ListIterator.
 type AsRec struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -122,6 +124,7 @@ func AsRec_Marshal(n jsn.Marshaler, val *AsRec) (okay bool) {
 }
 
 // AsTxt Define the name of a text variable.
+// User implements: ListIterator.
 type AsTxt struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -178,6 +181,7 @@ func AsTxt_Marshal(n jsn.Marshaler, val *AsTxt) (okay bool) {
 }
 
 // EraseEdge Erase at edge: Remove one or more values from a list
+// User implements: Execute.
 type EraseEdge struct {
 	From   ListSource  `if:"label=_"`
 	AtEdge rt.BoolEval `if:"label=at_front,optional"`
@@ -240,6 +244,7 @@ func EraseEdge_Marshal(n jsn.Marshaler, val *EraseEdge) (okay bool) {
 }
 
 // EraseIndex Erase at index: Remove one or more values from a list
+// User implements: Execute.
 type EraseIndex struct {
 	Count   rt.NumberEval `if:"label=_"`
 	From    ListSource    `if:"label=from"`
@@ -307,6 +312,7 @@ func EraseIndex_Marshal(n jsn.Marshaler, val *EraseIndex) (okay bool) {
 }
 
 // Erasing Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
+// User implements: Execute.
 type Erasing struct {
 	Count   rt.NumberEval `if:"label=_"`
 	From    ListSource    `if:"label=from"`
@@ -383,6 +389,7 @@ func Erasing_Marshal(n jsn.Marshaler, val *Erasing) (okay bool) {
 }
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
+// User implements: Execute.
 type ErasingEdge struct {
 	From   ListSource    `if:"label=_"`
 	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
@@ -460,6 +467,7 @@ func ErasingEdge_Marshal(n jsn.Marshaler, val *ErasingEdge) (okay bool) {
 }
 
 // FromNumList Uses a list of numbers
+// User implements: ListSource.
 type FromNumList struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -517,6 +525,7 @@ func FromNumList_Marshal(n jsn.Marshaler, val *FromNumList) (okay bool) {
 }
 
 // FromRecList Uses a list of records
+// User implements: ListSource.
 type FromRecList struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -574,6 +583,7 @@ func FromRecList_Marshal(n jsn.Marshaler, val *FromRecList) (okay bool) {
 }
 
 // FromTxtList Uses a list of text
+// User implements: ListSource.
 type FromTxtList struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -631,6 +641,7 @@ func FromTxtList_Marshal(n jsn.Marshaler, val *FromTxtList) (okay bool) {
 }
 
 // IntoNumList Targets a list of numbers
+// User implements: ListTarget.
 type IntoNumList struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -688,6 +699,7 @@ func IntoNumList_Marshal(n jsn.Marshaler, val *IntoNumList) (okay bool) {
 }
 
 // IntoRecList Targets a list of records
+// User implements: ListTarget.
 type IntoRecList struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -745,6 +757,7 @@ func IntoRecList_Marshal(n jsn.Marshaler, val *IntoRecList) (okay bool) {
 }
 
 // IntoTxtList Targets a list of text
+// User implements: ListTarget.
 type IntoTxtList struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -802,6 +815,7 @@ func IntoTxtList_Marshal(n jsn.Marshaler, val *IntoTxtList) (okay bool) {
 }
 
 // ListAt Get a value from a list. The first element is is index 1.
+// User implements: NumberEval, TextEval, RecordEval.
 type ListAt struct {
 	List  rt.Assignment `if:"label=_"`
 	Index rt.NumberEval `if:"label=index"`
@@ -864,6 +878,7 @@ func ListAt_Marshal(n jsn.Marshaler, val *ListAt) (okay bool) {
 }
 
 // ListEach Loops over the elements in the passed list, or runs the &#x27;else&#x27; activity if empty.
+// User implements: Execute.
 type ListEach struct {
 	List rt.Assignment `if:"label=across"`
 	As   ListIterator  `if:"label=as"`
@@ -936,6 +951,7 @@ func ListEach_Marshal(n jsn.Marshaler, val *ListEach) (okay bool) {
 }
 
 // ListFind Search a list for a specific value.
+// User implements: BoolEval, NumberEval.
 type ListFind struct {
 	Value rt.Assignment `if:"label=_"`
 	List  rt.Assignment `if:"label=list"`
@@ -1100,6 +1116,7 @@ func ListIterator_Repeats_Marshal(n jsn.Marshaler, vals *[]ListIterator) {
 }
 
 // ListLen Determines the number of values in a list.
+// User implements: NumberEval.
 type ListLen struct {
 	List rt.Assignment `if:"label=_"`
 }
@@ -1157,6 +1174,7 @@ func ListLen_Marshal(n jsn.Marshaler, val *ListLen) (okay bool) {
 }
 
 // ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the &#x27;from list&#x27;, one value at a time.
+// User implements: Execute.
 type ListMap struct {
 	ToList       string        `if:"label=_,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
@@ -1224,6 +1242,7 @@ func ListMap_Marshal(n jsn.Marshaler, val *ListMap) (okay bool) {
 }
 
 // ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: &#x27;in&#x27; ( each element of the list ) and &#x27;out&#x27; ( ex. a record ).
+// User implements: Execute.
 type ListReduce struct {
 	IntoValue    string        `if:"label=into,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
@@ -1291,6 +1310,7 @@ func ListReduce_Marshal(n jsn.Marshaler, val *ListReduce) (okay bool) {
 }
 
 // ListReverse Reverse a list.
+// User implements: Execute.
 type ListReverse struct {
 	List ListSource `if:"label=list"`
 }
@@ -1348,6 +1368,7 @@ func ListReverse_Marshal(n jsn.Marshaler, val *ListReverse) (okay bool) {
 }
 
 // ListSet Overwrite an existing value in a list.
+// User implements: Execute.
 type ListSet struct {
 	List  string        `if:"label=_,type=text"`
 	Index rt.NumberEval `if:"label=index"`
@@ -1415,6 +1436,7 @@ func ListSet_Marshal(n jsn.Marshaler, val *ListSet) (okay bool) {
 }
 
 // ListSlice Create a new list from a section of another list.,Start is optional, if omitted slice starts at the first element.,If start is greater the length, an empty array is returned.,Slice doesnt include the ending index.,Negatives indices indicates an offset from the end.,When end is omitted, copy up to and including the last element;,and do the same if the end is greater than the length
+// User implements: NumListEval, TextListEval, RecordListEval.
 type ListSlice struct {
 	List  rt.Assignment `if:"label=_"`
 	Start rt.NumberEval `if:"label=start,optional"`
@@ -1482,6 +1504,7 @@ func ListSlice_Marshal(n jsn.Marshaler, val *ListSlice) (okay bool) {
 }
 
 // ListSortNumbers
+// User implements: Execute.
 type ListSortNumbers struct {
 	Var        value.VariableName `if:"label=_"`
 	ByField    string             `if:"label=by_field,type=text"`
@@ -1549,6 +1572,7 @@ func ListSortNumbers_Marshal(n jsn.Marshaler, val *ListSortNumbers) (okay bool) 
 }
 
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
+// User implements: Execute.
 type ListSortText struct {
 	Var        value.VariableName `if:"label=_"`
 	ByField    string             `if:"label=by_field,type=text"`
@@ -1621,6 +1645,7 @@ func ListSortText_Marshal(n jsn.Marshaler, val *ListSortText) (okay bool) {
 }
 
 // ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
+// User implements: Execute.
 type ListSortUsing struct {
 	Var   value.VariableName `if:"label=_"`
 	Using string             `if:"label=using,type=text"`
@@ -1718,6 +1743,7 @@ func ListSource_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSource) {
 }
 
 // ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
+// User implements: Execute, NumListEval, TextListEval, RecordListEval.
 type ListSplice struct {
 	List   string        `if:"label=_,type=text"`
 	Start  rt.NumberEval `if:"label=start"`
@@ -1825,6 +1851,7 @@ func ListTarget_Repeats_Marshal(n jsn.Marshaler, vals *[]ListTarget) {
 }
 
 // PutEdge Add a value to a list
+// User implements: Execute.
 type PutEdge struct {
 	From   rt.Assignment `if:"label=_"`
 	Into   ListTarget    `if:"label=into"`
@@ -1892,6 +1919,7 @@ func PutEdge_Marshal(n jsn.Marshaler, val *PutEdge) (okay bool) {
 }
 
 // PutIndex Replace one value in a list with another
+// User implements: Execute.
 type PutIndex struct {
 	From    rt.Assignment `if:"label=_"`
 	Into    ListTarget    `if:"label=into"`
@@ -1959,6 +1987,7 @@ func PutIndex_Marshal(n jsn.Marshaler, val *PutIndex) (okay bool) {
 }
 
 // Range Generates a series of numbers r[i] &#x3D; (start + step*i) where i&gt;&#x3D;0.,Start and step default to 1, stop defaults to start;,the inputs are truncated to produce whole numbers;,a zero step returns an error.,A positive step ends the series when the returned value would exceed stop,while a negative step ends before generating a value less than stop.
+// User implements: NumListEval.
 type Range struct {
 	To     rt.NumberEval `if:"label=_"`
 	From   rt.NumberEval `if:"label=from,optional"`

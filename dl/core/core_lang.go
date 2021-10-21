@@ -10,6 +10,7 @@ import (
 )
 
 // Activity
+// User implements: Execute.
 type Activity struct {
 	Exe []rt.Execute `if:"label=_"`
 }
@@ -67,6 +68,7 @@ func Activity_Marshal(n jsn.Marshaler, val *Activity) (okay bool) {
 }
 
 // AllTrue Returns true if all of the evaluations are true.
+// User implements: BoolEval.
 type AllTrue struct {
 	Test []rt.BoolEval `if:"label=_"`
 }
@@ -123,6 +125,7 @@ func AllTrue_Marshal(n jsn.Marshaler, val *AllTrue) (okay bool) {
 }
 
 // Always Returns true.
+// User implements: BoolEval.
 type Always struct {
 }
 
@@ -173,6 +176,7 @@ func Always_Marshal(n jsn.Marshaler, val *Always) (okay bool) {
 }
 
 // AnyTrue Returns true if any of the evaluations are true.
+// User implements: BoolEval.
 type AnyTrue struct {
 	Test []rt.BoolEval `if:"label=_"`
 }
@@ -229,6 +233,7 @@ func AnyTrue_Marshal(n jsn.Marshaler, val *AnyTrue) (okay bool) {
 }
 
 // Assign Assigns a variable to a value.
+// User implements: Execute.
 type Assign struct {
 	Var  value.VariableName `if:"label=_"`
 	From rt.Assignment      `if:"label=be"`
@@ -291,6 +296,7 @@ func Assign_Marshal(n jsn.Marshaler, val *Assign) (okay bool) {
 }
 
 // AtLeast The first value is greater than or equal to the second value.
+// User implements: Comparator.
 type AtLeast struct {
 }
 
@@ -341,6 +347,7 @@ func AtLeast_Marshal(n jsn.Marshaler, val *AtLeast) (okay bool) {
 }
 
 // AtMost The first value is less than or equal to the second value.
+// User implements: Comparator.
 type AtMost struct {
 }
 
@@ -391,6 +398,7 @@ func AtMost_Marshal(n jsn.Marshaler, val *AtMost) (okay bool) {
 }
 
 // Blankline Add a single blank line following some text.
+// User implements: Execute.
 type Blankline struct {
 }
 
@@ -442,6 +450,7 @@ func Blankline_Marshal(n jsn.Marshaler, val *Blankline) (okay bool) {
 }
 
 // BoolValue Specify an explicit true or false value.
+// User implements: BoolEval.
 type BoolValue struct {
 	Bool bool `if:"label=_,type=bool"`
 }
@@ -499,6 +508,7 @@ func BoolValue_Marshal(n jsn.Marshaler, val *BoolValue) (okay bool) {
 }
 
 // BracketText Sandwiches text printed during a block and puts them inside parenthesis &#x27;()&#x27;.
+// User implements: TextEval.
 type BracketText struct {
 	Do Activity `if:"label=_"`
 }
@@ -591,6 +601,7 @@ func Brancher_Repeats_Marshal(n jsn.Marshaler, vals *[]Brancher) {
 }
 
 // Break In a repeating loop, exit the loop.
+// User implements: Execute.
 type Break struct {
 }
 
@@ -641,6 +652,7 @@ func Break_Marshal(n jsn.Marshaler, val *Break) (okay bool) {
 }
 
 // BufferText
+// User implements: TextEval.
 type BufferText struct {
 	Do Activity `if:"label=_"`
 }
@@ -817,6 +829,7 @@ func CallArgs_Marshal(n jsn.Marshaler, val *CallArgs) (okay bool) {
 }
 
 // CallCycle Runtime version of cycle_text
+// User implements: TextEval.
 type CallCycle struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
@@ -876,6 +889,7 @@ func CallCycle_Marshal(n jsn.Marshaler, val *CallCycle) (okay bool) {
 }
 
 // CallMake Runtime version of make
+// User implements: RecordEval.
 type CallMake struct {
 	Kind      string   `if:"label=_,type=text"`
 	Arguments CallArgs `if:"label=args"`
@@ -937,6 +951,7 @@ func CallMake_Marshal(n jsn.Marshaler, val *CallMake) (okay bool) {
 }
 
 // CallPattern Runtime version of determine
+// User implements: Execute, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type CallPattern struct {
 	Pattern   value.PatternName `if:"label=_"`
 	Arguments CallArgs          `if:"label=args"`
@@ -998,6 +1013,7 @@ func CallPattern_Marshal(n jsn.Marshaler, val *CallPattern) (okay bool) {
 }
 
 // CallSend Runtime version of send
+// User implements: Execute, BoolEval.
 type CallSend struct {
 	Event     string          `if:"label=_,type=text"`
 	Path      rt.TextListEval `if:"label=to"`
@@ -1064,6 +1080,7 @@ func CallSend_Marshal(n jsn.Marshaler, val *CallSend) (okay bool) {
 }
 
 // CallShuffle Runtime version of shuffle_text
+// User implements: TextEval.
 type CallShuffle struct {
 	At      reader.Position `if:"internal"`
 	Parts   []rt.TextEval   `if:"label=_"`
@@ -1124,6 +1141,7 @@ func CallShuffle_Marshal(n jsn.Marshaler, val *CallShuffle) (okay bool) {
 }
 
 // CallTerminal Runtime version of stopping_text
+// User implements: TextEval.
 type CallTerminal struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
@@ -1183,6 +1201,7 @@ func CallTerminal_Marshal(n jsn.Marshaler, val *CallTerminal) (okay bool) {
 }
 
 // CallTrigger Runtime version of count_of
+// User implements: BoolEval.
 type CallTrigger struct {
 	At      reader.Position `if:"internal"`
 	Trigger Trigger         `if:"label=_"`
@@ -1247,6 +1266,7 @@ func CallTrigger_Marshal(n jsn.Marshaler, val *CallTrigger) (okay bool) {
 }
 
 // Capitalize Returns new text, with the first letter turned into uppercase.
+// User implements: TextEval.
 type Capitalize struct {
 	Text rt.TextEval `if:"label=_"`
 }
@@ -1303,6 +1323,7 @@ func Capitalize_Marshal(n jsn.Marshaler, val *Capitalize) (okay bool) {
 }
 
 // ChooseAction An if statement.
+// User implements: Execute, Brancher.
 type ChooseAction struct {
 	If   rt.BoolEval `if:"label=_"`
 	Do   Activity    `if:"label=do"`
@@ -1370,6 +1391,7 @@ func ChooseAction_Marshal(n jsn.Marshaler, val *ChooseAction) (okay bool) {
 }
 
 // ChooseMore
+// User implements: Brancher.
 type ChooseMore struct {
 	If   rt.BoolEval `if:"label=_"`
 	Do   Activity    `if:"label=do"`
@@ -1437,6 +1459,7 @@ func ChooseMore_Marshal(n jsn.Marshaler, val *ChooseMore) (okay bool) {
 }
 
 // ChooseMoreValue
+// User implements: Brancher.
 type ChooseMoreValue struct {
 	Assign string        `if:"label=_,type=text"`
 	From   rt.Assignment `if:"label=from"`
@@ -1514,6 +1537,7 @@ func ChooseMoreValue_Marshal(n jsn.Marshaler, val *ChooseMoreValue) (okay bool) 
 }
 
 // ChooseNothingElse
+// User implements: Brancher.
 type ChooseNothingElse struct {
 	Do Activity `if:"label=_"`
 }
@@ -1571,6 +1595,7 @@ func ChooseNothingElse_Marshal(n jsn.Marshaler, val *ChooseNothingElse) (okay bo
 }
 
 // ChooseNum Pick one of two numbers based on a boolean test.
+// User implements: NumberEval.
 type ChooseNum struct {
 	If    rt.BoolEval   `if:"label=if"`
 	True  rt.NumberEval `if:"label=then"`
@@ -1638,6 +1663,7 @@ func ChooseNum_Marshal(n jsn.Marshaler, val *ChooseNum) (okay bool) {
 }
 
 // ChooseText Pick one of two strings based on a boolean test.
+// User implements: TextEval.
 type ChooseText struct {
 	If    rt.BoolEval `if:"label=if"`
 	True  rt.TextEval `if:"label=then"`
@@ -1705,6 +1731,7 @@ func ChooseText_Marshal(n jsn.Marshaler, val *ChooseText) (okay bool) {
 }
 
 // ChooseValue An if statement with local assignment.
+// User implements: Execute, Brancher.
 type ChooseValue struct {
 	Assign string        `if:"label=_,type=text"`
 	From   rt.Assignment `if:"label=from"`
@@ -1782,6 +1809,7 @@ func ChooseValue_Marshal(n jsn.Marshaler, val *ChooseValue) (okay bool) {
 }
 
 // CommaText Separates words with commas, and &#x27;and&#x27;.
+// User implements: TextEval.
 type CommaText struct {
 	Do Activity `if:"label=_"`
 }
@@ -1874,6 +1902,7 @@ func Comparator_Repeats_Marshal(n jsn.Marshaler, vals *[]Comparator) {
 }
 
 // CompareNum True if eq,ne,gt,lt,ge,le two numbers.
+// User implements: BoolEval.
 type CompareNum struct {
 	A  rt.NumberEval `if:"label=_"`
 	Is Comparator    `if:"label=is"`
@@ -1941,6 +1970,7 @@ func CompareNum_Marshal(n jsn.Marshaler, val *CompareNum) (okay bool) {
 }
 
 // CompareText True if eq,ne,gt,lt,ge,le two strings ( lexical. )
+// User implements: BoolEval.
 type CompareText struct {
 	A  rt.TextEval `if:"label=_"`
 	Is Comparator  `if:"label=is"`
@@ -2008,6 +2038,7 @@ func CompareText_Marshal(n jsn.Marshaler, val *CompareText) (okay bool) {
 }
 
 // DiffOf Subtract two numbers.
+// User implements: NumberEval.
 type DiffOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by,optional"`
@@ -2070,6 +2101,7 @@ func DiffOf_Marshal(n jsn.Marshaler, val *DiffOf) (okay bool) {
 }
 
 // During Decide whether a pattern is running.
+// User implements: BoolEval, NumberEval.
 type During struct {
 	Pattern value.PatternName `if:"label=_"`
 }
@@ -2126,6 +2158,7 @@ func During_Marshal(n jsn.Marshaler, val *During) (okay bool) {
 }
 
 // Equal Two values exactly match.
+// User implements: Comparator.
 type Equal struct {
 }
 
@@ -2177,6 +2210,7 @@ func Equal_Marshal(n jsn.Marshaler, val *Equal) (okay bool) {
 }
 
 // FromBool Assigns the calculated boolean value.
+// User implements: Assignment.
 type FromBool struct {
 	Val rt.BoolEval `if:"label=_"`
 }
@@ -2233,6 +2267,7 @@ func FromBool_Marshal(n jsn.Marshaler, val *FromBool) (okay bool) {
 }
 
 // FromNum Assigns the calculated number.
+// User implements: Assignment.
 type FromNum struct {
 	Val rt.NumberEval `if:"label=_"`
 }
@@ -2289,6 +2324,7 @@ func FromNum_Marshal(n jsn.Marshaler, val *FromNum) (okay bool) {
 }
 
 // FromNumbers Assigns the calculated numbers.
+// User implements: Assignment.
 type FromNumbers struct {
 	Vals rt.NumListEval `if:"label=_"`
 }
@@ -2346,6 +2382,7 @@ func FromNumbers_Marshal(n jsn.Marshaler, val *FromNumbers) (okay bool) {
 }
 
 // FromObj Targets an object with a computed name.
+// User implements: FromSourceFields.
 type FromObj struct {
 	Object rt.TextEval `if:"label=_"`
 }
@@ -2403,6 +2440,7 @@ func FromObj_Marshal(n jsn.Marshaler, val *FromObj) (okay bool) {
 }
 
 // FromRec Targets a record stored in a record.
+// User implements: FromSourceFields.
 type FromRec struct {
 	Rec rt.RecordEval `if:"label=_"`
 }
@@ -2460,6 +2498,7 @@ func FromRec_Marshal(n jsn.Marshaler, val *FromRec) (okay bool) {
 }
 
 // FromRecord Assigns the calculated record.
+// User implements: Assignment.
 type FromRecord struct {
 	Val rt.RecordEval `if:"label=_"`
 }
@@ -2517,6 +2556,7 @@ func FromRecord_Marshal(n jsn.Marshaler, val *FromRecord) (okay bool) {
 }
 
 // FromRecords Assigns the calculated records.
+// User implements: Assignment.
 type FromRecords struct {
 	Vals rt.RecordListEval `if:"label=_"`
 }
@@ -2609,6 +2649,7 @@ func FromSourceFields_Repeats_Marshal(n jsn.Marshaler, vals *[]FromSourceFields)
 }
 
 // FromText Assigns the calculated piece of text.
+// User implements: Assignment.
 type FromText struct {
 	Val rt.TextEval `if:"label=_"`
 }
@@ -2666,6 +2707,7 @@ func FromText_Marshal(n jsn.Marshaler, val *FromText) (okay bool) {
 }
 
 // FromTexts Assigns the calculated texts.
+// User implements: Assignment.
 type FromTexts struct {
 	Vals rt.TextListEval `if:"label=_"`
 }
@@ -2723,6 +2765,7 @@ func FromTexts_Marshal(n jsn.Marshaler, val *FromTexts) (okay bool) {
 }
 
 // FromVar Targets a record stored in a variable.
+// User implements: FromSourceFields.
 type FromVar struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -2780,6 +2823,7 @@ func FromVar_Marshal(n jsn.Marshaler, val *FromVar) (okay bool) {
 }
 
 // GetAtField Get a value from a record.
+// User implements: Assignment, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type GetAtField struct {
 	Field string           `if:"label=_,type=text"`
 	From  FromSourceFields `if:"label=from"`
@@ -2842,6 +2886,7 @@ func GetAtField_Marshal(n jsn.Marshaler, val *GetAtField) (okay bool) {
 }
 
 // GetVar Get Variable: Return the value of the named variable.
+// User implements: Assignment, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type GetVar struct {
 	Name value.VariableName `if:"label=_"`
 }
@@ -2907,6 +2952,7 @@ func GetVar_DefaultMarshal(n jsn.Marshaler, val *GetVar) (okay bool) {
 }
 
 // GreaterThan The first value is larger than the second value.
+// User implements: Comparator.
 type GreaterThan struct {
 }
 
@@ -2957,6 +3003,7 @@ func GreaterThan_Marshal(n jsn.Marshaler, val *GreaterThan) (okay bool) {
 }
 
 // HasDominion
+// User implements: BoolEval.
 type HasDominion struct {
 	Name string `if:"label=_,type=text"`
 }
@@ -3013,6 +3060,7 @@ func HasDominion_Marshal(n jsn.Marshaler, val *HasDominion) (okay bool) {
 }
 
 // HasTrait Return true if the object is currently in the requested state.
+// User implements: BoolEval.
 type HasTrait struct {
 	Object rt.TextEval `if:"label=obj"`
 	Trait  rt.TextEval `if:"label=trait"`
@@ -3075,6 +3123,7 @@ func HasTrait_Marshal(n jsn.Marshaler, val *HasTrait) (okay bool) {
 }
 
 // IdOf A unique object identifier.
+// User implements: TextEval.
 type IdOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
@@ -3131,6 +3180,7 @@ func IdOf_Marshal(n jsn.Marshaler, val *IdOf) (okay bool) {
 }
 
 // Includes True if text contains text.
+// User implements: BoolEval.
 type Includes struct {
 	Text rt.TextEval `if:"label=_"`
 	Part rt.TextEval `if:"label=part"`
@@ -3193,6 +3243,7 @@ func Includes_Marshal(n jsn.Marshaler, val *Includes) (okay bool) {
 }
 
 // IntoObj Targets an object with a computed name.
+// User implements: IntoTargetFields.
 type IntoObj struct {
 	Object rt.TextEval `if:"label=_"`
 }
@@ -3285,6 +3336,7 @@ func IntoTargetFields_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoTargetFields)
 }
 
 // IntoVar Targets an object or record stored in a variable
+// User implements: IntoTargetFields.
 type IntoVar struct {
 	Var value.VariableName `if:"label=_"`
 }
@@ -3342,6 +3394,7 @@ func IntoVar_Marshal(n jsn.Marshaler, val *IntoVar) (okay bool) {
 }
 
 // IsEmpty True if the text is empty.
+// User implements: BoolEval.
 type IsEmpty struct {
 	Text rt.TextEval `if:"label=empty"`
 }
@@ -3399,6 +3452,7 @@ func IsEmpty_Marshal(n jsn.Marshaler, val *IsEmpty) (okay bool) {
 }
 
 // IsExactKindOf True if the object is exactly the named kind.
+// User implements: BoolEval.
 type IsExactKindOf struct {
 	Object rt.TextEval `if:"label=_"`
 	Kind   string      `if:"label=is_exactly,type=text"`
@@ -3461,6 +3515,7 @@ func IsExactKindOf_Marshal(n jsn.Marshaler, val *IsExactKindOf) (okay bool) {
 }
 
 // IsKindOf True if the object is compatible with the named kind.
+// User implements: BoolEval.
 type IsKindOf struct {
 	Object rt.TextEval `if:"label=_"`
 	Kind   string      `if:"label=is,type=text"`
@@ -3523,6 +3578,7 @@ func IsKindOf_Marshal(n jsn.Marshaler, val *IsKindOf) (okay bool) {
 }
 
 // Join Returns multiple pieces of text as a single new piece of text.
+// User implements: TextEval.
 type Join struct {
 	Sep   rt.TextEval   `if:"label=_"`
 	Parts []rt.TextEval `if:"label=parts"`
@@ -3584,6 +3640,7 @@ func Join_Marshal(n jsn.Marshaler, val *Join) (okay bool) {
 }
 
 // KindOf Friendly name of the object&#x27;s kind.
+// User implements: TextEval.
 type KindOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
@@ -3640,6 +3697,7 @@ func KindOf_Marshal(n jsn.Marshaler, val *KindOf) (okay bool) {
 }
 
 // KindsOf A list of compatible kinds.
+// User implements: TextListEval.
 type KindsOf struct {
 	Kind string `if:"label=_,type=text"`
 }
@@ -3696,6 +3754,7 @@ func KindsOf_Marshal(n jsn.Marshaler, val *KindsOf) (okay bool) {
 }
 
 // LessThan The first value is less than the second value.
+// User implements: Comparator.
 type LessThan struct {
 }
 
@@ -3746,6 +3805,7 @@ func LessThan_Marshal(n jsn.Marshaler, val *LessThan) (okay bool) {
 }
 
 // MakeLowercase Returns new text, with every letter turned into lowercase. For example, &#x27;shout&#x27; from &#x27;SHOUT&#x27;.
+// User implements: TextEval.
 type MakeLowercase struct {
 	Text rt.TextEval `if:"label=_"`
 }
@@ -3803,6 +3863,7 @@ func MakeLowercase_Marshal(n jsn.Marshaler, val *MakeLowercase) (okay bool) {
 }
 
 // MakeReversed Returns new text flipped back to front. For example, &#x27;elppA&#x27; from &#x27;Apple&#x27;, or &#x27;noon&#x27; from &#x27;noon&#x27;.
+// User implements: TextEval.
 type MakeReversed struct {
 	Text rt.TextEval `if:"label=text"`
 }
@@ -3860,6 +3921,7 @@ func MakeReversed_Marshal(n jsn.Marshaler, val *MakeReversed) (okay bool) {
 }
 
 // MakeSentenceCase Returns new text, start each sentence with a capital letter. For example, &#x27;Empire Apple.&#x27; from &#x27;Empire apple.&#x27;.
+// User implements: TextEval.
 type MakeSentenceCase struct {
 	Text rt.TextEval `if:"label=_"`
 }
@@ -3917,6 +3979,7 @@ func MakeSentenceCase_Marshal(n jsn.Marshaler, val *MakeSentenceCase) (okay bool
 }
 
 // MakeTitleCase Returns new text, starting each word with a capital letter. For example, &#x27;Empire Apple&#x27; from &#x27;empire apple&#x27;.
+// User implements: TextEval.
 type MakeTitleCase struct {
 	Text rt.TextEval `if:"label=_"`
 }
@@ -3974,6 +4037,7 @@ func MakeTitleCase_Marshal(n jsn.Marshaler, val *MakeTitleCase) (okay bool) {
 }
 
 // MakeUppercase Returns new text, with every letter turned into uppercase. For example, &#x27;APPLE&#x27; from &#x27;apple&#x27;.
+// User implements: TextEval.
 type MakeUppercase struct {
 	Text rt.TextEval `if:"label=_"`
 }
@@ -4031,6 +4095,7 @@ func MakeUppercase_Marshal(n jsn.Marshaler, val *MakeUppercase) (okay bool) {
 }
 
 // Matches Determine whether the specified text is similar to the specified regular expression.
+// User implements: BoolEval.
 type Matches struct {
 	Text    rt.TextEval `if:"label=_"`
 	Pattern string      `if:"label=to,type=text"`
@@ -4093,6 +4158,7 @@ func Matches_Marshal(n jsn.Marshaler, val *Matches) (okay bool) {
 }
 
 // NameOf Full name of the object.
+// User implements: TextEval.
 type NameOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
@@ -4149,6 +4215,7 @@ func NameOf_Marshal(n jsn.Marshaler, val *NameOf) (okay bool) {
 }
 
 // Never Returns false.
+// User implements: BoolEval.
 type Never struct {
 }
 
@@ -4199,6 +4266,7 @@ func Never_Marshal(n jsn.Marshaler, val *Never) (okay bool) {
 }
 
 // Newline Start a new line.
+// User implements: Execute.
 type Newline struct {
 }
 
@@ -4250,6 +4318,7 @@ func Newline_Marshal(n jsn.Marshaler, val *Newline) (okay bool) {
 }
 
 // Next In a repeating loop, try the next iteration of the loop.
+// User implements: Execute.
 type Next struct {
 }
 
@@ -4300,6 +4369,7 @@ func Next_Marshal(n jsn.Marshaler, val *Next) (okay bool) {
 }
 
 // Not Returns the opposite value.
+// User implements: BoolEval.
 type Not struct {
 	Test rt.BoolEval `if:"label=_"`
 }
@@ -4356,6 +4426,7 @@ func Not_Marshal(n jsn.Marshaler, val *Not) (okay bool) {
 }
 
 // NumValue Specify a particular number.
+// User implements: NumberEval.
 type NumValue struct {
 	Num float64 `if:"label=_,type=number"`
 }
@@ -4413,6 +4484,7 @@ func NumValue_Marshal(n jsn.Marshaler, val *NumValue) (okay bool) {
 }
 
 // Numbers Number List: Specify a list of numbers.
+// User implements: NumListEval.
 type Numbers struct {
 	Values []float64 `if:"label=_,type=number"`
 }
@@ -4470,6 +4542,7 @@ func Numbers_Marshal(n jsn.Marshaler, val *Numbers) (okay bool) {
 }
 
 // ObjectExists Returns whether there is a object of the specified name.
+// User implements: BoolEval.
 type ObjectExists struct {
 	Object rt.TextEval `if:"label=valid"`
 }
@@ -4527,6 +4600,7 @@ func ObjectExists_Marshal(n jsn.Marshaler, val *ObjectExists) (okay bool) {
 }
 
 // Pluralize Returns the plural form of a singular word. (ex. apples for apple. )
+// User implements: TextEval.
 type Pluralize struct {
 	Text rt.TextEval `if:"label=of"`
 }
@@ -4584,6 +4658,7 @@ func Pluralize_Marshal(n jsn.Marshaler, val *Pluralize) (okay bool) {
 }
 
 // PrintNum Writes a number using numerals, eg. &#x27;1&#x27;.
+// User implements: TextEval.
 type PrintNum struct {
 	Num rt.NumberEval `if:"label=_"`
 }
@@ -4641,6 +4716,7 @@ func PrintNum_Marshal(n jsn.Marshaler, val *PrintNum) (okay bool) {
 }
 
 // PrintNumWord Writes a number in plain english: eg. &#x27;one&#x27;
+// User implements: TextEval.
 type PrintNumWord struct {
 	Num rt.NumberEval `if:"label=words"`
 }
@@ -4698,6 +4774,7 @@ func PrintNumWord_Marshal(n jsn.Marshaler, val *PrintNumWord) (okay bool) {
 }
 
 // ProductOf Multiply two numbers.
+// User implements: NumberEval.
 type ProductOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
@@ -4760,6 +4837,7 @@ func ProductOf_Marshal(n jsn.Marshaler, val *ProductOf) (okay bool) {
 }
 
 // PutAtField Put a value into the field of an record or object
+// User implements: Execute.
 type PutAtField struct {
 	Into    IntoTargetFields `if:"label=_"`
 	From    rt.Assignment    `if:"label=from"`
@@ -4827,6 +4905,7 @@ func PutAtField_Marshal(n jsn.Marshaler, val *PutAtField) (okay bool) {
 }
 
 // QuotientOf Divide one number by another.
+// User implements: NumberEval.
 type QuotientOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
@@ -4889,6 +4968,7 @@ func QuotientOf_Marshal(n jsn.Marshaler, val *QuotientOf) (okay bool) {
 }
 
 // RemainderOf Divide one number by another, and return the remainder.
+// User implements: NumberEval.
 type RemainderOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
@@ -4951,6 +5031,7 @@ func RemainderOf_Marshal(n jsn.Marshaler, val *RemainderOf) (okay bool) {
 }
 
 // Response Generate text in a replaceable manner.
+// User implements: TextEval.
 type Response struct {
 	Name string      `if:"label=_,type=text"`
 	Text rt.TextEval `if:"label=text,optional"`
@@ -5012,6 +5093,7 @@ func Response_Marshal(n jsn.Marshaler, val *Response) (okay bool) {
 }
 
 // Row A single line as part of a group of lines.
+// User implements: TextEval.
 type Row struct {
 	Do Activity `if:"label=_"`
 }
@@ -5068,6 +5150,7 @@ func Row_Marshal(n jsn.Marshaler, val *Row) (okay bool) {
 }
 
 // Rows Group text into successive lines.
+// User implements: TextEval.
 type Rows struct {
 	Do Activity `if:"label=_"`
 }
@@ -5124,6 +5207,7 @@ func Rows_Marshal(n jsn.Marshaler, val *Rows) (okay bool) {
 }
 
 // SayText Print some bit of text to the player.
+// User implements: Execute.
 type SayText struct {
 	Text rt.TextEval `if:"label=_"`
 }
@@ -5181,6 +5265,7 @@ func SayText_Marshal(n jsn.Marshaler, val *SayText) (okay bool) {
 }
 
 // SetTrait Put an object into a particular state.
+// User implements: Execute.
 type SetTrait struct {
 	Object rt.TextEval `if:"label=obj"`
 	Trait  rt.TextEval `if:"label=trait"`
@@ -5243,6 +5328,7 @@ func SetTrait_Marshal(n jsn.Marshaler, val *SetTrait) (okay bool) {
 }
 
 // Singularize Returns the singular form of a plural word. (ex. apple for apples )
+// User implements: TextEval.
 type Singularize struct {
 	Text rt.TextEval `if:"label=of"`
 }
@@ -5300,6 +5386,7 @@ func Singularize_Marshal(n jsn.Marshaler, val *Singularize) (okay bool) {
 }
 
 // SlashText Separates words with left-leaning slashes &#x27;/&#x27;.
+// User implements: TextEval.
 type SlashText struct {
 	Do Activity `if:"label=_"`
 }
@@ -5357,6 +5444,7 @@ func SlashText_Marshal(n jsn.Marshaler, val *SlashText) (okay bool) {
 }
 
 // Softline Start a new line ( if not already at a new line. )
+// User implements: Execute.
 type Softline struct {
 }
 
@@ -5408,6 +5496,7 @@ func Softline_Marshal(n jsn.Marshaler, val *Softline) (okay bool) {
 }
 
 // SpanText Writes text with spaces between words.
+// User implements: TextEval.
 type SpanText struct {
 	Do Activity `if:"label=_"`
 }
@@ -5465,6 +5554,7 @@ func SpanText_Marshal(n jsn.Marshaler, val *SpanText) (okay bool) {
 }
 
 // SumOf Add two numbers.
+// User implements: NumberEval.
 type SumOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by,optional"`
@@ -5527,6 +5617,7 @@ func SumOf_Marshal(n jsn.Marshaler, val *SumOf) (okay bool) {
 }
 
 // TextValue Specify a small bit of text.
+// User implements: TextEval.
 type TextValue struct {
 	Text string `if:"label=_,type=text"`
 }
@@ -5592,6 +5683,7 @@ func TextValue_DefaultMarshal(n jsn.Marshaler, val *TextValue) (okay bool) {
 }
 
 // Texts Text List: Specifies a set of string values.
+// User implements: TextListEval.
 type Texts struct {
 	Values []string `if:"label=_,type=text"`
 }
@@ -5684,6 +5776,7 @@ func Trigger_Repeats_Marshal(n jsn.Marshaler, vals *[]Trigger) {
 }
 
 // TriggerCycle
+// User implements: Trigger.
 type TriggerCycle struct {
 }
 
@@ -5735,6 +5828,7 @@ func TriggerCycle_Marshal(n jsn.Marshaler, val *TriggerCycle) (okay bool) {
 }
 
 // TriggerOnce
+// User implements: Trigger.
 type TriggerOnce struct {
 }
 
@@ -5786,6 +5880,7 @@ func TriggerOnce_Marshal(n jsn.Marshaler, val *TriggerOnce) (okay bool) {
 }
 
 // TriggerSwitch
+// User implements: Trigger.
 type TriggerSwitch struct {
 }
 
@@ -5837,6 +5932,7 @@ func TriggerSwitch_Marshal(n jsn.Marshaler, val *TriggerSwitch) (okay bool) {
 }
 
 // Unequal The first value doesn&#x27;t equal the second value.
+// User implements: Comparator.
 type Unequal struct {
 }
 
@@ -5888,6 +5984,7 @@ func Unequal_Marshal(n jsn.Marshaler, val *Unequal) (okay bool) {
 }
 
 // While Keep running a series of actions while a condition is true.
+// User implements: Execute.
 type While struct {
 	True rt.BoolEval `if:"label=_"`
 	Do   Activity    `if:"label=do"`

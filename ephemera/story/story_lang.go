@@ -126,6 +126,7 @@ func ActionContext_Marshal(n jsn.Marshaler, val *ActionContext) (okay bool) {
 }
 
 // ActionDecl
+// User implements: StoryStatement.
 type ActionDecl struct {
 	At           reader.Position `if:"internal"`
 	Event        EventName       `if:"label=_"`
@@ -733,6 +734,7 @@ func Aspect_Repeats_Marshal(n jsn.Marshaler, vals *[]Aspect) {
 }
 
 // AspectTraits
+// User implements: StoryStatement.
 type AspectTraits struct {
 	Aspect      Aspect      `if:"label=_"`
 	TraitPhrase TraitPhrase `if:"label=trait_phrase"`
@@ -906,6 +908,7 @@ func BoxedText_Marshal(n jsn.Marshaler, val *BoxedText) (okay bool) {
 }
 
 // Certainties
+// User implements: StoryStatement.
 type Certainties struct {
 	PluralKinds PluralKinds `if:"label=_"`
 	AreBeing    AreBeing    `if:"label=are_being"`
@@ -1038,6 +1041,7 @@ func Certainty_Repeats_Marshal(n jsn.Marshaler, vals *[]Certainty) {
 }
 
 // Comment Information about the story for you and other authors.
+// User implements: StoryStatement, Execute.
 type Comment struct {
 	Lines value.Lines `if:"label=_"`
 }
@@ -1157,6 +1161,7 @@ func CommonAction_Marshal(n jsn.Marshaler, val *CommonAction) (okay bool) {
 }
 
 // CountOf A guard which returns true based on a counter.
+// User implements: BoolEval.
 type CountOf struct {
 	At      reader.Position `if:"internal"`
 	Trigger core.Trigger    `if:"label=_"`
@@ -1220,6 +1225,7 @@ func CountOf_Marshal(n jsn.Marshaler, val *CountOf) (okay bool) {
 }
 
 // CycleText
+// User implements: TextEval.
 type CycleText struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
@@ -1278,6 +1284,7 @@ func CycleText_Marshal(n jsn.Marshaler, val *CycleText) (okay bool) {
 }
 
 // Determine
+// User implements: Execute, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type Determine struct {
 	Name      value.PatternName `if:"label=_"`
 	Arguments *Arguments        `if:"label=arguments,optional"`
@@ -1399,6 +1406,7 @@ func Determiner_Repeats_Marshal(n jsn.Marshaler, vals *[]Determiner) {
 }
 
 // EventBlock Listeners let objects in the game world react to changes before, during, or after they happen.
+// User implements: StoryStatement.
 type EventBlock struct {
 	At       reader.Position `if:"internal"`
 	Target   EventTarget     `if:"label=_"`
@@ -1935,6 +1943,7 @@ func KindOfNoun_Marshal(n jsn.Marshaler, val *KindOfNoun) (okay bool) {
 }
 
 // KindOfRelation
+// User implements: StoryStatement.
 type KindOfRelation struct {
 	Relation    value.RelationName  `if:"label=_"`
 	Cardinality RelationCardinality `if:"label=cardinality"`
@@ -1996,6 +2005,7 @@ func KindOfRelation_Marshal(n jsn.Marshaler, val *KindOfRelation) (okay bool) {
 }
 
 // KindsOfAspect
+// User implements: StoryStatement.
 type KindsOfAspect struct {
 	Aspect Aspect `if:"label=_"`
 }
@@ -2052,6 +2062,7 @@ func KindsOfAspect_Marshal(n jsn.Marshaler, val *KindsOfAspect) (okay bool) {
 }
 
 // KindsOfKind
+// User implements: StoryStatement.
 type KindsOfKind struct {
 	PluralKinds  PluralKinds  `if:"label=_"`
 	SingularKind SingularKind `if:"label=singular_kind"`
@@ -2113,6 +2124,7 @@ func KindsOfKind_Marshal(n jsn.Marshaler, val *KindsOfKind) (okay bool) {
 }
 
 // KindsOfRecord
+// User implements: StoryStatement.
 type KindsOfRecord struct {
 	RecordPlural RecordPlural `if:"label=_"`
 }
@@ -2169,6 +2181,7 @@ func KindsOfRecord_Marshal(n jsn.Marshaler, val *KindsOfRecord) (okay bool) {
 }
 
 // KindsPossessProperties
+// User implements: StoryStatement.
 type KindsPossessProperties struct {
 	PluralKinds  PluralKinds    `if:"label=_"`
 	PropertyDecl []PropertyDecl `if:"label=property_decl"`
@@ -2410,6 +2423,7 @@ func LocalInit_Marshal(n jsn.Marshaler, val *LocalInit) (okay bool) {
 }
 
 // Make
+// User implements: RecordEval.
 type Make struct {
 	Name      string     `if:"label=_,type=text"`
 	Arguments *Arguments `if:"label=arguments,optional"`
@@ -2654,6 +2668,7 @@ func NamedNoun_Marshal(n jsn.Marshaler, val *NamedNoun) (okay bool) {
 }
 
 // NounAssignment Assign text.
+// User implements: StoryStatement.
 type NounAssignment struct {
 	Property Property    `if:"label=_"`
 	Nouns    []NamedNoun `if:"label=nouns"`
@@ -2921,6 +2936,7 @@ func NounRelation_Marshal(n jsn.Marshaler, val *NounRelation) (okay bool) {
 }
 
 // NounStatement Describes people, places, or things.
+// User implements: StoryStatement.
 type NounStatement struct {
 	Lede    Lede     `if:"label=_"`
 	Tail    []Tail   `if:"label=tail,optional"`
@@ -3401,6 +3417,7 @@ func Paragraph_Marshal(n jsn.Marshaler, val *Paragraph) (okay bool) {
 }
 
 // PatternActions Actions to take when using a pattern.
+// User implements: StoryStatement.
 type PatternActions struct {
 	Name          value.PatternName `if:"label=_"`
 	PatternLocals *PatternLocals    `if:"label=pattern_locals,optional"`
@@ -3472,6 +3489,7 @@ func PatternActions_Marshal(n jsn.Marshaler, val *PatternActions) (okay bool) {
 }
 
 // PatternDecl
+// User implements: StoryStatement.
 type PatternDecl struct {
 	Type          PatternType           `if:"label=_"`
 	Name          value.PatternName     `if:"label=name"`
@@ -3901,6 +3919,7 @@ func PatternType_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternType) {
 }
 
 // PatternVariablesDecl Values provided when calling a pattern.
+// User implements: StoryStatement.
 type PatternVariablesDecl struct {
 	PatternName  value.PatternName `if:"label=_"`
 	VariableDecl []VariableDecl    `if:"label=variable_decl"`
@@ -4810,6 +4829,7 @@ func RecordType_Marshal(n jsn.Marshaler, val *RecordType) (okay bool) {
 }
 
 // RecordsPossessProperties
+// User implements: StoryStatement.
 type RecordsPossessProperties struct {
 	RecordPlural RecordPlural   `if:"label=_"`
 	PropertyDecl []PropertyDecl `if:"label=property_decl"`
@@ -4964,6 +4984,7 @@ func RelationCardinality_Repeats_Marshal(n jsn.Marshaler, vals *[]RelationCardin
 }
 
 // RelativeToNoun
+// User implements: StoryStatement.
 type RelativeToNoun struct {
 	Relation value.RelationName `if:"label=_"`
 	Nouns    []NamedNoun        `if:"label=nouns"`
@@ -5035,6 +5056,7 @@ func RelativeToNoun_Marshal(n jsn.Marshaler, val *RelativeToNoun) (okay bool) {
 }
 
 // RenderTemplate Parse text using iffy templates.
+// User implements: TextEval.
 type RenderTemplate struct {
 	Template value.Lines `if:"label=_"`
 }
@@ -5091,6 +5113,7 @@ func RenderTemplate_Marshal(n jsn.Marshaler, val *RenderTemplate) (okay bool) {
 }
 
 // Send
+// User implements: Execute, BoolEval.
 type Send struct {
 	Event     string          `if:"label=_,type=text"`
 	Path      rt.TextListEval `if:"label=path"`
@@ -5157,6 +5180,7 @@ func Send_Marshal(n jsn.Marshaler, val *Send) (okay bool) {
 }
 
 // ShuffleText
+// User implements: TextEval.
 type ShuffleText struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
@@ -5266,6 +5290,7 @@ func SingularKind_Repeats_Marshal(n jsn.Marshaler, vals *[]SingularKind) {
 }
 
 // StoppingText
+// User implements: TextEval.
 type StoppingText struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
@@ -5593,6 +5618,7 @@ func TestName_Repeats_Marshal(n jsn.Marshaler, vals *[]TestName) {
 }
 
 // TestOutput Expect that a test uses &#x27;Say&#x27; to print some specific text.
+// User implements: Testing.
 type TestOutput struct {
 	Lines value.Lines `if:"label=_"`
 }
@@ -5649,6 +5675,7 @@ func TestOutput_Marshal(n jsn.Marshaler, val *TestOutput) (okay bool) {
 }
 
 // TestRule
+// User implements: StoryStatement.
 type TestRule struct {
 	TestName TestName    `if:"label=_"`
 	Hook     ProgramHook `if:"label=hook"`
@@ -5710,6 +5737,7 @@ func TestRule_Marshal(n jsn.Marshaler, val *TestRule) (okay bool) {
 }
 
 // TestScene
+// User implements: StoryStatement.
 type TestScene struct {
 	TestName TestName `if:"label=_"`
 	Story    Story    `if:"label=story"`
@@ -5771,6 +5799,7 @@ func TestScene_Marshal(n jsn.Marshaler, val *TestScene) (okay bool) {
 }
 
 // TestStatement
+// User implements: StoryStatement.
 type TestStatement struct {
 	At       reader.Position `if:"internal"`
 	TestName TestName        `if:"label=_"`

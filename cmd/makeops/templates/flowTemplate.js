@@ -3,6 +3,9 @@
 module.exports = `
 {{~#with type~}}
 // {{Pascal name}} {{desc.short}}
+{{#if with.slots}}
+// User implements:{{#each with.slots}} {{Pascal this}}{{#unless @last}},{{/unless}}{{/each}}.
+{{/if}}
 type {{Pascal name}} struct {
 {{#each params}}
   {{Pascal key}} {{TypeOf this}} \`if:"

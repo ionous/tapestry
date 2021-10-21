@@ -10,6 +10,7 @@ import (
 )
 
 // RenderExp
+// User implements: TextEval.
 type RenderExp struct {
 	Expression rt.TextEval `if:"label=_"`
 }
@@ -66,6 +67,7 @@ func RenderExp_Marshal(n jsn.Marshaler, val *RenderExp) (okay bool) {
 }
 
 // RenderField in template phrases, picks between record variables, object variables, and named global objects.,ex. could be &quot;ringBearer&quot;, &quot;SamWise&quot;, or &quot;frodo&quot;
+// User implements: FromSourceFields.
 type RenderField struct {
 	Name rt.TextEval `if:"label=_"`
 }
@@ -180,6 +182,7 @@ func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {
 }
 
 // RenderName handles changing a template like {.boombip} into text.,if the name is a variable containing an object name: return the printed object name ( via &quot;print name&quot; ),if the name is a variable with some other text: return that text.,if the name isn&#x27;t a variable but refers to some object: return that object&#x27;s printed object name.,otherwise, its an error.
+// User implements: TextEval.
 type RenderName struct {
 	Name string `if:"label=_,type=text"`
 }
@@ -236,6 +239,7 @@ func RenderName_Marshal(n jsn.Marshaler, val *RenderName) (okay bool) {
 }
 
 // RenderPattern printing is generally an activity b/c say is an activity,and we want the ability to say several things in series.
+// User implements: Assignment, TextEval.
 type RenderPattern struct {
 	Pattern   value.PatternName `if:"label=_"`
 	Arguments core.CallArgs     `if:"label=args"`
@@ -298,6 +302,7 @@ func RenderPattern_Marshal(n jsn.Marshaler, val *RenderPattern) (okay bool) {
 }
 
 // RenderRef returns the value of a variable or the id of an object.
+// User implements: Assignment, NumberEval, TextEval.
 type RenderRef struct {
 	Name  value.VariableName `if:"label=_"`
 	Flags RenderFlags        `if:"label=flags"`
