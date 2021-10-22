@@ -14,8 +14,8 @@ type xDecoder struct {
 	reg composer.Registry
 }
 
-func Decode(dst jsn.Marshalee, reg composer.Registry, msg json.RawMessage) error {
-	dec := xDecoder{reg: reg}
+func Decode(dst jsn.Marshalee, msg json.RawMessage) error {
+	dec := xDecoder{reg: makeRegistry()}
 	next := dec.newBlock(&msg)
 	next.OnCommit = func(interface{}) {}
 	dec.ChangeState(next)

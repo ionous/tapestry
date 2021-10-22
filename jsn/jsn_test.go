@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/jsn/cin"
@@ -28,7 +27,7 @@ func TestDetailsEncode(t *testing.T) {
 
 func TestDetailsDecode(t *testing.T) {
 	var dst story.Story
-	if e := din.Decode(&dst, makeRegistry(), []byte(det)); e != nil {
+	if e := din.Decode(&dst, []byte(det)); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
 		pretty.Print(dst)
@@ -57,15 +56,6 @@ func TestCompactDecode(t *testing.T) {
 		pretty.Print(dst)
 		t.Fatal(diff)
 	}
-}
-
-func makeRegistry() composer.Registry {
-	var k composer.Registry
-	for _, slats := range iffy.AllSlats {
-		k.RegisterTypes(slats)
-	}
-	k.RegisterTypes(story.Slats)
-	return k
 }
 
 var det = `{"type":"story","value":{"$PARAGRAPH":[{"type":"paragraph","value":{"$STORY_STATEMENT":[{"type":"story_statement","value":{"type":"test_statement","value":{"$TEST":{"type":"testing","value":{"type":"test_output","value":{"$LINES":{"type":"lines","value":"6"}}}},"$TEST_NAME":{"type":"test_name","value":"factorial"}}}},{"type":"story_statement","value":{"type":"test_rule","value":{"$HOOK":{"type":"program_hook","value":{"$ACTIVITY":{"type":"activity","value":{"$EXE":[{"type":"execute","value":{"type":"say_text","value":{"$TEXT":{"type":"text_eval","value":{"type":"print_num","value":{"$NUM":{"type":"number_eval","value":{"type":"call_pattern","value":{"$ARGUMENTS":{"type":"call_args","value":{"$ARGS":[{"type":"call_arg","value":{"$FROM":{"type":"assignment","value":{"type":"from_num","value":{"$VAL":{"type":"number_eval","value":{"type":"num_value","value":{"$NUM":{"type":"number","value":3}}}}}}},"$NAME":{"type":"text","value":"num"}}}]}},"$PATTERN":{"type":"pattern_name","value":"factorial"}}}}}}}}}}]}}}},"$TEST_NAME":{"type":"test_name","value":"factorial"}}}},{"type":"story_statement","value":{"type":"pattern_decl","value":{"$NAME":{"type":"pattern_name","value":"factorial"},"$OPTVARS":{"type":"pattern_variables_tail","value":{"$VARIABLE_DECL":[{"type":"variable_decl","value":{"$AN":{"type":"determiner","value":"$A"},"$NAME":{"type":"variable_name","value":"num"},"$TYPE":{"type":"variable_type","value":{"$PRIMITIVE":{"type":"primitive_type","value":"$NUMBER"}}}}}]}},"$TYPE":{"type":"pattern_type","value":"$PATTERNS"}}}},{"type":"story_statement","value":{"type":"pattern_actions","value":{"$NAME":{"type":"pattern_name","value":"factorial"},"$PATTERN_RETURN":{"type":"pattern_return","value":{"$RESULT":{"type":"variable_decl","value":{"$AN":{"type":"determiner","value":"$A"},"$NAME":{"type":"variable_name","value":"num"},"$TYPE":{"type":"variable_type","value":{"$PRIMITIVE":{"type":"primitive_type","value":"$NUMBER"}}}}}}},"$PATTERN_RULES":{"type":"pattern_rules","value":{"$PATTERN_RULE":[{"type":"pattern_rule","value":{"$GUARD":{"type":"bool_eval","value":{"type":"always","value":{}}},"$HOOK":{"type":"program_hook","value":{"$ACTIVITY":{"type":"activity","value":{"$EXE":[{"type":"execute","value":{"type":"assign","value":{"$FROM":{"type":"assignment","value":{"type":"from_num","value":{"$VAL":{"type":"number_eval","value":{"type":"product_of","value":{"$A":{"type":"number_eval","value":{"type":"get_var","value":{"$NAME":{"type":"variable_name","value":"num"}}}},"$B":{"type":"number_eval","value":{"type":"diff_of","value":{"$A":{"type":"number_eval","value":{"type":"get_var","value":{"$NAME":{"type":"variable_name","value":"num"}}}},"$B":{"type":"number_eval","value":{"type":"num_value","value":{"$NUM":{"type":"number","value":1}}}}}}}}}}}}},"$VAR":{"type":"variable_name","value":"num"}}}}]}}}}}}]}}}}},{"type":"story_statement","value":{"type":"pattern_actions","value":{"$NAME":{"type":"pattern_name","value":"factorial"},"$PATTERN_RETURN":{"type":"pattern_return","value":{"$RESULT":{"type":"variable_decl","value":{"$AN":{"type":"determiner","value":"$A"},"$NAME":{"type":"variable_name","value":"num"},"$TYPE":{"type":"variable_type","value":{"$PRIMITIVE":{"type":"primitive_type","value":"$NUMBER"}}}}}}},"$PATTERN_RULES":{"type":"pattern_rules","value":{"$PATTERN_RULE":[{"type":"pattern_rule","value":{"$GUARD":{"type":"bool_eval","value":{"type":"compare_num","value":{"$A":{"type":"number_eval","value":{"type":"get_var","value":{"$NAME":{"type":"variable_name","value":"num"}}}},"$B":{"type":"number_eval","value":{"type":"num_value","value":{"$NUM":{"type":"number","value":0}}}},"$IS":{"type":"comparator","value":{"type":"equal","value":{}}}}}},"$HOOK":{"type":"program_hook","value":{"$ACTIVITY":{"type":"activity","value":{"$EXE":[{"type":"execute","value":{"type":"assign","value":{"$FROM":{"type":"assignment","value":{"type":"from_num","value":{"$VAL":{"type":"number_eval","value":{"type":"num_value","value":{"$NUM":{"type":"number","value":1}}}}}}},"$VAR":{"type":"variable_name","value":"num"}}}}]}}}}}}]}}}}}]}}]}}`

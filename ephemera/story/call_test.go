@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/kr/pretty"
@@ -30,7 +31,7 @@ func TestDetermineNum(t *testing.T) {
 	var rule story.Determine
 	if b, e := json.Marshal(factorialDetermine); e != nil {
 		t.Fatal(e)
-	} else if e := rule.UnmarshalDetailed(k, b); e != nil {
+	} else if e := din.Decode(&rule, b); e != nil {
 		t.Fatal(e)
 	} else if ptr, e := rule.ImportStub(k); e != nil {
 		t.Fatal(e)

@@ -7,6 +7,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/rt/print"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"git.sr.ht/~ionous/iffy/rt/writer"
@@ -17,12 +18,10 @@ import (
 )
 
 func TestPatternActivity(t *testing.T) {
-	k, db := newImporter(t, testdb.Memory)
-	defer db.Close()
 	var prog core.Activity
 	if b, e := json.Marshal(_pattern_activity); e != nil {
 		t.Fatal(e)
-	} else if e := prog.UnmarshalDetailed(k, b); e != nil {
+	} else if e := din.Decode(&prog, b); e != nil {
 		t.Fatal(e)
 	} else {
 		var run testRuntime
@@ -43,7 +42,7 @@ func TestPatternActions(t *testing.T) {
 	var prog story.PatternActions
 	if b, e := json.Marshal(_pattern_actions); e != nil {
 		t.Fatal(e)
-	} else if e := prog.UnmarshalDetailed(k, b); e != nil {
+	} else if e := din.Decode(&prog, b); e != nil {
 		t.Fatal(e)
 	} else if e := prog.ImportPhrase(k); e != nil {
 		t.Fatal(e)
