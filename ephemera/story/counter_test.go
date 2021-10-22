@@ -1,7 +1,6 @@
 package story
 
 import (
-	r "reflect"
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
@@ -10,16 +9,21 @@ import (
 
 func TestSearchForCounters(t *testing.T) {
 	c := &core.CallTrigger{}
-	if !searchForCounters(r.ValueOf(c)) {
+	if !searchForCounters(c) {
 		t.Fatal("core")
 	} else {
 		allTrue := &core.AllTrue{[]rt.BoolEval{c}}
-		if !searchForCounters(r.ValueOf(allTrue)) {
+		if !searchForCounters(allTrue) {
 			t.Fatal("all true")
 		} else {
 			not := &core.Not{allTrue}
-			if !searchForCounters(r.ValueOf(not)) {
+			if !searchForCounters(not) {
 				t.Fatal("not")
+			} else {
+				empty := &core.Not{&core.AllTrue{}}
+				if searchForCounters(empty) {
+					t.Fatal("should have no counters")
+				}
 			}
 		}
 	}

@@ -8,6 +8,7 @@ var {{Pascal name}}_Optional_Marshal = {{Pascal name}}_Marshal
 
 type {{Pascal name}}_Slot struct { ptr *{{Pascal name}} }
 
+func (At {{Pascal name}}_Slot) GetType() string { return {{Pascal name}}_Type }
 func (at {{Pascal name}}_Slot) HasSlot() bool { return at.ptr != nil }
 func (at {{Pascal name}}_Slot) SetSlot(v interface{}) (okay bool) {
   (*at.ptr), okay = v.({{Pascal name}})
@@ -28,9 +29,9 @@ func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, ptr *{{Pascal name}}) (okay
 {{~#if (IsPositioned this)}}
   n.SetCursor(ptr.At.Offset)
 {{/if}}
-  if okay = n.SlotValues({{Pascal name}}_Type, {{Pascal name}}_Slot{ptr}); okay {
+  if okay = n.MarshalBlock({{Pascal name}}_Slot{ptr}); okay {
     (*ptr).(jsn.Marshalee).Marshal(n)
-    n.EndValues()
+    n.EndBlock()
   }
   return
 }

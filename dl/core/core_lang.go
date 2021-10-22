@@ -33,15 +33,16 @@ func (op *Activity) Marshal(n jsn.Marshaler) {
 
 type Activity_Slice []Activity
 
+func (op *Activity_Slice) GetType() string { return Activity_Type }
 func (op *Activity_Slice) GetSize() int    { return len(*op) }
 func (op *Activity_Slice) SetSize(cnt int) { (*op) = make(Activity_Slice, cnt) }
 
 func Activity_Repeats_Marshal(n jsn.Marshaler, vals *[]Activity) {
-	if n.RepeatValues(Activity_Type, (*Activity_Slice)(vals)) {
+	if n.MarshalBlock((*Activity_Slice)(vals)) {
 		for i := range *vals {
 			Activity_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -57,11 +58,12 @@ func Activity_Optional_Marshal(n jsn.Marshaler, pv **Activity) {
 }
 
 func Activity_Marshal(n jsn.Marshaler, val *Activity) (okay bool) {
-	if okay = n.MapValues("act", Activity_Type); okay {
-		if n.MapKey("", Activity_Field_Exe) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("act",
+		Activity_Type)); okay {
+		if n.MarshalKey("", Activity_Field_Exe) {
 			rt.Execute_Repeats_Marshal(n, &val.Exe)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -89,15 +91,16 @@ func (op *AllTrue) Marshal(n jsn.Marshaler) {
 
 type AllTrue_Slice []AllTrue
 
+func (op *AllTrue_Slice) GetType() string { return AllTrue_Type }
 func (op *AllTrue_Slice) GetSize() int    { return len(*op) }
 func (op *AllTrue_Slice) SetSize(cnt int) { (*op) = make(AllTrue_Slice, cnt) }
 
 func AllTrue_Repeats_Marshal(n jsn.Marshaler, vals *[]AllTrue) {
-	if n.RepeatValues(AllTrue_Type, (*AllTrue_Slice)(vals)) {
+	if n.MarshalBlock((*AllTrue_Slice)(vals)) {
 		for i := range *vals {
 			AllTrue_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -113,11 +116,12 @@ func AllTrue_Optional_Marshal(n jsn.Marshaler, pv **AllTrue) {
 }
 
 func AllTrue_Marshal(n jsn.Marshaler, val *AllTrue) (okay bool) {
-	if okay = n.MapValues(AllTrue_Type, AllTrue_Type); okay {
-		if n.MapKey("", AllTrue_Field_Test) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(AllTrue_Type,
+		AllTrue_Type)); okay {
+		if n.MarshalKey("", AllTrue_Field_Test) {
 			rt.BoolEval_Repeats_Marshal(n, &val.Test)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -142,15 +146,16 @@ func (op *Always) Marshal(n jsn.Marshaler) {
 
 type Always_Slice []Always
 
+func (op *Always_Slice) GetType() string { return Always_Type }
 func (op *Always_Slice) GetSize() int    { return len(*op) }
 func (op *Always_Slice) SetSize(cnt int) { (*op) = make(Always_Slice, cnt) }
 
 func Always_Repeats_Marshal(n jsn.Marshaler, vals *[]Always) {
-	if n.RepeatValues(Always_Type, (*Always_Slice)(vals)) {
+	if n.MarshalBlock((*Always_Slice)(vals)) {
 		for i := range *vals {
 			Always_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -166,8 +171,9 @@ func Always_Optional_Marshal(n jsn.Marshaler, pv **Always) {
 }
 
 func Always_Marshal(n jsn.Marshaler, val *Always) (okay bool) {
-	if okay = n.MapValues(Always_Type, Always_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow(Always_Type,
+		Always_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -195,15 +201,16 @@ func (op *AnyTrue) Marshal(n jsn.Marshaler) {
 
 type AnyTrue_Slice []AnyTrue
 
+func (op *AnyTrue_Slice) GetType() string { return AnyTrue_Type }
 func (op *AnyTrue_Slice) GetSize() int    { return len(*op) }
 func (op *AnyTrue_Slice) SetSize(cnt int) { (*op) = make(AnyTrue_Slice, cnt) }
 
 func AnyTrue_Repeats_Marshal(n jsn.Marshaler, vals *[]AnyTrue) {
-	if n.RepeatValues(AnyTrue_Type, (*AnyTrue_Slice)(vals)) {
+	if n.MarshalBlock((*AnyTrue_Slice)(vals)) {
 		for i := range *vals {
 			AnyTrue_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -219,11 +226,12 @@ func AnyTrue_Optional_Marshal(n jsn.Marshaler, pv **AnyTrue) {
 }
 
 func AnyTrue_Marshal(n jsn.Marshaler, val *AnyTrue) (okay bool) {
-	if okay = n.MapValues(AnyTrue_Type, AnyTrue_Type); okay {
-		if n.MapKey("", AnyTrue_Field_Test) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(AnyTrue_Type,
+		AnyTrue_Type)); okay {
+		if n.MarshalKey("", AnyTrue_Field_Test) {
 			rt.BoolEval_Repeats_Marshal(n, &val.Test)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -254,15 +262,16 @@ func (op *Assign) Marshal(n jsn.Marshaler) {
 
 type Assign_Slice []Assign
 
+func (op *Assign_Slice) GetType() string { return Assign_Type }
 func (op *Assign_Slice) GetSize() int    { return len(*op) }
 func (op *Assign_Slice) SetSize(cnt int) { (*op) = make(Assign_Slice, cnt) }
 
 func Assign_Repeats_Marshal(n jsn.Marshaler, vals *[]Assign) {
-	if n.RepeatValues(Assign_Type, (*Assign_Slice)(vals)) {
+	if n.MarshalBlock((*Assign_Slice)(vals)) {
 		for i := range *vals {
 			Assign_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -278,14 +287,15 @@ func Assign_Optional_Marshal(n jsn.Marshaler, pv **Assign) {
 }
 
 func Assign_Marshal(n jsn.Marshaler, val *Assign) (okay bool) {
-	if okay = n.MapValues("let", Assign_Type); okay {
-		if n.MapKey("", Assign_Field_Var) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("let",
+		Assign_Type)); okay {
+		if n.MarshalKey("", Assign_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
-		if n.MapKey("be", Assign_Field_From) {
+		if n.MarshalKey("be", Assign_Field_From) {
 			rt.Assignment_Marshal(n, &val.From)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -310,15 +320,16 @@ func (op *AtLeast) Marshal(n jsn.Marshaler) {
 
 type AtLeast_Slice []AtLeast
 
+func (op *AtLeast_Slice) GetType() string { return AtLeast_Type }
 func (op *AtLeast_Slice) GetSize() int    { return len(*op) }
 func (op *AtLeast_Slice) SetSize(cnt int) { (*op) = make(AtLeast_Slice, cnt) }
 
 func AtLeast_Repeats_Marshal(n jsn.Marshaler, vals *[]AtLeast) {
-	if n.RepeatValues(AtLeast_Type, (*AtLeast_Slice)(vals)) {
+	if n.MarshalBlock((*AtLeast_Slice)(vals)) {
 		for i := range *vals {
 			AtLeast_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -334,8 +345,9 @@ func AtLeast_Optional_Marshal(n jsn.Marshaler, pv **AtLeast) {
 }
 
 func AtLeast_Marshal(n jsn.Marshaler, val *AtLeast) (okay bool) {
-	if okay = n.MapValues(AtLeast_Type, AtLeast_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow(AtLeast_Type,
+		AtLeast_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -360,15 +372,16 @@ func (op *AtMost) Marshal(n jsn.Marshaler) {
 
 type AtMost_Slice []AtMost
 
+func (op *AtMost_Slice) GetType() string { return AtMost_Type }
 func (op *AtMost_Slice) GetSize() int    { return len(*op) }
 func (op *AtMost_Slice) SetSize(cnt int) { (*op) = make(AtMost_Slice, cnt) }
 
 func AtMost_Repeats_Marshal(n jsn.Marshaler, vals *[]AtMost) {
-	if n.RepeatValues(AtMost_Type, (*AtMost_Slice)(vals)) {
+	if n.MarshalBlock((*AtMost_Slice)(vals)) {
 		for i := range *vals {
 			AtMost_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -384,8 +397,9 @@ func AtMost_Optional_Marshal(n jsn.Marshaler, pv **AtMost) {
 }
 
 func AtMost_Marshal(n jsn.Marshaler, val *AtMost) (okay bool) {
-	if okay = n.MapValues(AtMost_Type, AtMost_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow(AtMost_Type,
+		AtMost_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -411,15 +425,16 @@ func (op *Blankline) Marshal(n jsn.Marshaler) {
 
 type Blankline_Slice []Blankline
 
+func (op *Blankline_Slice) GetType() string { return Blankline_Type }
 func (op *Blankline_Slice) GetSize() int    { return len(*op) }
 func (op *Blankline_Slice) SetSize(cnt int) { (*op) = make(Blankline_Slice, cnt) }
 
 func Blankline_Repeats_Marshal(n jsn.Marshaler, vals *[]Blankline) {
-	if n.RepeatValues(Blankline_Type, (*Blankline_Slice)(vals)) {
+	if n.MarshalBlock((*Blankline_Slice)(vals)) {
 		for i := range *vals {
 			Blankline_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -435,8 +450,9 @@ func Blankline_Optional_Marshal(n jsn.Marshaler, pv **Blankline) {
 }
 
 func Blankline_Marshal(n jsn.Marshaler, val *Blankline) (okay bool) {
-	if okay = n.MapValues("p", Blankline_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow("p",
+		Blankline_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -465,15 +481,16 @@ func (op *BoolValue) Marshal(n jsn.Marshaler) {
 
 type BoolValue_Slice []BoolValue
 
+func (op *BoolValue_Slice) GetType() string { return BoolValue_Type }
 func (op *BoolValue_Slice) GetSize() int    { return len(*op) }
 func (op *BoolValue_Slice) SetSize(cnt int) { (*op) = make(BoolValue_Slice, cnt) }
 
 func BoolValue_Repeats_Marshal(n jsn.Marshaler, vals *[]BoolValue) {
-	if n.RepeatValues(BoolValue_Type, (*BoolValue_Slice)(vals)) {
+	if n.MarshalBlock((*BoolValue_Slice)(vals)) {
 		for i := range *vals {
 			BoolValue_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -497,11 +514,12 @@ func BoolValue_Marshal(n jsn.Marshaler, val *BoolValue) (okay bool) {
 	return
 }
 func BoolValue_DefaultMarshal(n jsn.Marshaler, val *BoolValue) (okay bool) {
-	if okay = n.MapValues("bool", BoolValue_Type); okay {
-		if n.MapKey("", BoolValue_Field_Bool) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("bool",
+		BoolValue_Type)); okay {
+		if n.MarshalKey("", BoolValue_Field_Bool) {
 			value.Bool_Unboxed_Marshal(n, &val.Bool)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -530,15 +548,16 @@ func (op *BracketText) Marshal(n jsn.Marshaler) {
 
 type BracketText_Slice []BracketText
 
+func (op *BracketText_Slice) GetType() string { return BracketText_Type }
 func (op *BracketText_Slice) GetSize() int    { return len(*op) }
 func (op *BracketText_Slice) SetSize(cnt int) { (*op) = make(BracketText_Slice, cnt) }
 
 func BracketText_Repeats_Marshal(n jsn.Marshaler, vals *[]BracketText) {
-	if n.RepeatValues(BracketText_Type, (*BracketText_Slice)(vals)) {
+	if n.MarshalBlock((*BracketText_Slice)(vals)) {
 		for i := range *vals {
 			BracketText_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -554,11 +573,12 @@ func BracketText_Optional_Marshal(n jsn.Marshaler, pv **BracketText) {
 }
 
 func BracketText_Marshal(n jsn.Marshaler, val *BracketText) (okay bool) {
-	if okay = n.MapValues("brackets", BracketText_Type); okay {
-		if n.MapKey("", BracketText_Field_Do) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("brackets",
+		BracketText_Type)); okay {
+		if n.MarshalKey("", BracketText_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -569,31 +589,33 @@ var Brancher_Optional_Marshal = Brancher_Marshal
 
 type Brancher_Slot struct{ ptr *Brancher }
 
-func (at Brancher_Slot) HasSlot() bool { return at.ptr != nil }
+func (At Brancher_Slot) GetType() string { return Brancher_Type }
+func (at Brancher_Slot) HasSlot() bool   { return at.ptr != nil }
 func (at Brancher_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(Brancher)
 	return
 }
 
 func Brancher_Marshal(n jsn.Marshaler, ptr *Brancher) (okay bool) {
-	if okay = n.SlotValues(Brancher_Type, Brancher_Slot{ptr}); okay {
+	if okay = n.MarshalBlock(Brancher_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
 
 type Brancher_Slice []Brancher
 
+func (op *Brancher_Slice) GetType() string { return Brancher_Type }
 func (op *Brancher_Slice) GetSize() int    { return len(*op) }
 func (op *Brancher_Slice) SetSize(cnt int) { (*op) = make(Brancher_Slice, cnt) }
 
 func Brancher_Repeats_Marshal(n jsn.Marshaler, vals *[]Brancher) {
-	if n.RepeatValues(Brancher_Type, (*Brancher_Slice)(vals)) {
+	if n.MarshalBlock((*Brancher_Slice)(vals)) {
 		for i := range *vals {
 			Brancher_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -617,15 +639,16 @@ func (op *Break) Marshal(n jsn.Marshaler) {
 
 type Break_Slice []Break
 
+func (op *Break_Slice) GetType() string { return Break_Type }
 func (op *Break_Slice) GetSize() int    { return len(*op) }
 func (op *Break_Slice) SetSize(cnt int) { (*op) = make(Break_Slice, cnt) }
 
 func Break_Repeats_Marshal(n jsn.Marshaler, vals *[]Break) {
-	if n.RepeatValues(Break_Type, (*Break_Slice)(vals)) {
+	if n.MarshalBlock((*Break_Slice)(vals)) {
 		for i := range *vals {
 			Break_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -641,8 +664,9 @@ func Break_Optional_Marshal(n jsn.Marshaler, pv **Break) {
 }
 
 func Break_Marshal(n jsn.Marshaler, val *Break) (okay bool) {
-	if okay = n.MapValues(Break_Type, Break_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow(Break_Type,
+		Break_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -671,15 +695,16 @@ func (op *BufferText) Marshal(n jsn.Marshaler) {
 
 type BufferText_Slice []BufferText
 
+func (op *BufferText_Slice) GetType() string { return BufferText_Type }
 func (op *BufferText_Slice) GetSize() int    { return len(*op) }
 func (op *BufferText_Slice) SetSize(cnt int) { (*op) = make(BufferText_Slice, cnt) }
 
 func BufferText_Repeats_Marshal(n jsn.Marshaler, vals *[]BufferText) {
-	if n.RepeatValues(BufferText_Type, (*BufferText_Slice)(vals)) {
+	if n.MarshalBlock((*BufferText_Slice)(vals)) {
 		for i := range *vals {
 			BufferText_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -695,11 +720,12 @@ func BufferText_Optional_Marshal(n jsn.Marshaler, pv **BufferText) {
 }
 
 func BufferText_Marshal(n jsn.Marshaler, val *BufferText) (okay bool) {
-	if okay = n.MapValues("buffers", BufferText_Type); okay {
-		if n.MapKey("", BufferText_Field_Do) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("buffers",
+		BufferText_Type)); okay {
+		if n.MarshalKey("", BufferText_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -729,15 +755,16 @@ func (op *CallArg) Marshal(n jsn.Marshaler) {
 
 type CallArg_Slice []CallArg
 
+func (op *CallArg_Slice) GetType() string { return CallArg_Type }
 func (op *CallArg_Slice) GetSize() int    { return len(*op) }
 func (op *CallArg_Slice) SetSize(cnt int) { (*op) = make(CallArg_Slice, cnt) }
 
 func CallArg_Repeats_Marshal(n jsn.Marshaler, vals *[]CallArg) {
-	if n.RepeatValues(CallArg_Type, (*CallArg_Slice)(vals)) {
+	if n.MarshalBlock((*CallArg_Slice)(vals)) {
 		for i := range *vals {
 			CallArg_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -753,14 +780,15 @@ func CallArg_Optional_Marshal(n jsn.Marshaler, pv **CallArg) {
 }
 
 func CallArg_Marshal(n jsn.Marshaler, val *CallArg) (okay bool) {
-	if okay = n.MapValues("inarg", CallArg_Type); okay {
-		if n.MapKey("", CallArg_Field_Name) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("inarg",
+		CallArg_Type)); okay {
+		if n.MarshalKey("", CallArg_Field_Name) {
 			value.Text_Unboxed_Marshal(n, &val.Name)
 		}
-		if n.MapKey("from", CallArg_Field_From) {
+		if n.MarshalKey("from", CallArg_Field_From) {
 			rt.Assignment_Marshal(n, &val.From)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -788,15 +816,16 @@ func (op *CallArgs) Marshal(n jsn.Marshaler) {
 
 type CallArgs_Slice []CallArgs
 
+func (op *CallArgs_Slice) GetType() string { return CallArgs_Type }
 func (op *CallArgs_Slice) GetSize() int    { return len(*op) }
 func (op *CallArgs_Slice) SetSize(cnt int) { (*op) = make(CallArgs_Slice, cnt) }
 
 func CallArgs_Repeats_Marshal(n jsn.Marshaler, vals *[]CallArgs) {
-	if n.RepeatValues(CallArgs_Type, (*CallArgs_Slice)(vals)) {
+	if n.MarshalBlock((*CallArgs_Slice)(vals)) {
 		for i := range *vals {
 			CallArgs_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -812,11 +841,12 @@ func CallArgs_Optional_Marshal(n jsn.Marshaler, pv **CallArgs) {
 }
 
 func CallArgs_Marshal(n jsn.Marshaler, val *CallArgs) (okay bool) {
-	if okay = n.MapValues("inargs", CallArgs_Type); okay {
-		if n.MapKey("", CallArgs_Field_Args) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("inargs",
+		CallArgs_Type)); okay {
+		if n.MarshalKey("", CallArgs_Field_Args) {
 			CallArg_Repeats_Marshal(n, &val.Args)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -846,15 +876,16 @@ func (op *CallCycle) Marshal(n jsn.Marshaler) {
 
 type CallCycle_Slice []CallCycle
 
+func (op *CallCycle_Slice) GetType() string { return CallCycle_Type }
 func (op *CallCycle_Slice) GetSize() int    { return len(*op) }
 func (op *CallCycle_Slice) SetSize(cnt int) { (*op) = make(CallCycle_Slice, cnt) }
 
 func CallCycle_Repeats_Marshal(n jsn.Marshaler, vals *[]CallCycle) {
-	if n.RepeatValues(CallCycle_Type, (*CallCycle_Slice)(vals)) {
+	if n.MarshalBlock((*CallCycle_Slice)(vals)) {
 		for i := range *vals {
 			CallCycle_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -871,11 +902,12 @@ func CallCycle_Optional_Marshal(n jsn.Marshaler, pv **CallCycle) {
 
 func CallCycle_Marshal(n jsn.Marshaler, val *CallCycle) (okay bool) {
 	n.SetCursor(val.At.Offset)
-	if okay = n.MapValues("cycle", CallCycle_Type); okay {
-		if n.MapKey("", CallCycle_Field_Parts) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("cycle",
+		CallCycle_Type)); okay {
+		if n.MarshalKey("", CallCycle_Field_Parts) {
 			rt.TextEval_Repeats_Marshal(n, &val.Parts)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -905,15 +937,16 @@ func (op *CallMake) Marshal(n jsn.Marshaler) {
 
 type CallMake_Slice []CallMake
 
+func (op *CallMake_Slice) GetType() string { return CallMake_Type }
 func (op *CallMake_Slice) GetSize() int    { return len(*op) }
 func (op *CallMake_Slice) SetSize(cnt int) { (*op) = make(CallMake_Slice, cnt) }
 
 func CallMake_Repeats_Marshal(n jsn.Marshaler, vals *[]CallMake) {
-	if n.RepeatValues(CallMake_Type, (*CallMake_Slice)(vals)) {
+	if n.MarshalBlock((*CallMake_Slice)(vals)) {
 		for i := range *vals {
 			CallMake_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -929,14 +962,15 @@ func CallMake_Optional_Marshal(n jsn.Marshaler, pv **CallMake) {
 }
 
 func CallMake_Marshal(n jsn.Marshaler, val *CallMake) (okay bool) {
-	if okay = n.MapValues(CallMake_Type, CallMake_Type); okay {
-		if n.MapKey("", CallMake_Field_Kind) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(CallMake_Type,
+		CallMake_Type)); okay {
+		if n.MarshalKey("", CallMake_Field_Kind) {
 			value.Text_Unboxed_Marshal(n, &val.Kind)
 		}
-		if n.MapKey("args", CallMake_Field_Arguments) {
+		if n.MarshalKey("args", CallMake_Field_Arguments) {
 			CallArgs_Marshal(n, &val.Arguments)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -966,15 +1000,16 @@ func (op *CallPattern) Marshal(n jsn.Marshaler) {
 
 type CallPattern_Slice []CallPattern
 
+func (op *CallPattern_Slice) GetType() string { return CallPattern_Type }
 func (op *CallPattern_Slice) GetSize() int    { return len(*op) }
 func (op *CallPattern_Slice) SetSize(cnt int) { (*op) = make(CallPattern_Slice, cnt) }
 
 func CallPattern_Repeats_Marshal(n jsn.Marshaler, vals *[]CallPattern) {
-	if n.RepeatValues(CallPattern_Type, (*CallPattern_Slice)(vals)) {
+	if n.MarshalBlock((*CallPattern_Slice)(vals)) {
 		for i := range *vals {
 			CallPattern_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -990,14 +1025,15 @@ func CallPattern_Optional_Marshal(n jsn.Marshaler, pv **CallPattern) {
 }
 
 func CallPattern_Marshal(n jsn.Marshaler, val *CallPattern) (okay bool) {
-	if okay = n.MapValues(CallPattern_Type, CallPattern_Type); okay {
-		if n.MapKey("", CallPattern_Field_Pattern) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(CallPattern_Type,
+		CallPattern_Type)); okay {
+		if n.MarshalKey("", CallPattern_Field_Pattern) {
 			value.PatternName_Marshal(n, &val.Pattern)
 		}
-		if n.MapKey("args", CallPattern_Field_Arguments) {
+		if n.MarshalKey("args", CallPattern_Field_Arguments) {
 			CallArgs_Marshal(n, &val.Arguments)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1029,15 +1065,16 @@ func (op *CallSend) Marshal(n jsn.Marshaler) {
 
 type CallSend_Slice []CallSend
 
+func (op *CallSend_Slice) GetType() string { return CallSend_Type }
 func (op *CallSend_Slice) GetSize() int    { return len(*op) }
 func (op *CallSend_Slice) SetSize(cnt int) { (*op) = make(CallSend_Slice, cnt) }
 
 func CallSend_Repeats_Marshal(n jsn.Marshaler, vals *[]CallSend) {
-	if n.RepeatValues(CallSend_Type, (*CallSend_Slice)(vals)) {
+	if n.MarshalBlock((*CallSend_Slice)(vals)) {
 		for i := range *vals {
 			CallSend_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1053,17 +1090,18 @@ func CallSend_Optional_Marshal(n jsn.Marshaler, pv **CallSend) {
 }
 
 func CallSend_Marshal(n jsn.Marshaler, val *CallSend) (okay bool) {
-	if okay = n.MapValues(CallSend_Type, CallSend_Type); okay {
-		if n.MapKey("", CallSend_Field_Event) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(CallSend_Type,
+		CallSend_Type)); okay {
+		if n.MarshalKey("", CallSend_Field_Event) {
 			value.Text_Unboxed_Marshal(n, &val.Event)
 		}
-		if n.MapKey("to", CallSend_Field_Path) {
+		if n.MarshalKey("to", CallSend_Field_Path) {
 			rt.TextListEval_Marshal(n, &val.Path)
 		}
-		if n.MapKey("args", CallSend_Field_Arguments) {
+		if n.MarshalKey("args", CallSend_Field_Arguments) {
 			CallArgs_Marshal(n, &val.Arguments)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1094,15 +1132,16 @@ func (op *CallShuffle) Marshal(n jsn.Marshaler) {
 
 type CallShuffle_Slice []CallShuffle
 
+func (op *CallShuffle_Slice) GetType() string { return CallShuffle_Type }
 func (op *CallShuffle_Slice) GetSize() int    { return len(*op) }
 func (op *CallShuffle_Slice) SetSize(cnt int) { (*op) = make(CallShuffle_Slice, cnt) }
 
 func CallShuffle_Repeats_Marshal(n jsn.Marshaler, vals *[]CallShuffle) {
-	if n.RepeatValues(CallShuffle_Type, (*CallShuffle_Slice)(vals)) {
+	if n.MarshalBlock((*CallShuffle_Slice)(vals)) {
 		for i := range *vals {
 			CallShuffle_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1119,11 +1158,12 @@ func CallShuffle_Optional_Marshal(n jsn.Marshaler, pv **CallShuffle) {
 
 func CallShuffle_Marshal(n jsn.Marshaler, val *CallShuffle) (okay bool) {
 	n.SetCursor(val.At.Offset)
-	if okay = n.MapValues("shuffle", CallShuffle_Type); okay {
-		if n.MapKey("", CallShuffle_Field_Parts) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("shuffle",
+		CallShuffle_Type)); okay {
+		if n.MarshalKey("", CallShuffle_Field_Parts) {
 			rt.TextEval_Repeats_Marshal(n, &val.Parts)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1153,15 +1193,16 @@ func (op *CallTerminal) Marshal(n jsn.Marshaler) {
 
 type CallTerminal_Slice []CallTerminal
 
+func (op *CallTerminal_Slice) GetType() string { return CallTerminal_Type }
 func (op *CallTerminal_Slice) GetSize() int    { return len(*op) }
 func (op *CallTerminal_Slice) SetSize(cnt int) { (*op) = make(CallTerminal_Slice, cnt) }
 
 func CallTerminal_Repeats_Marshal(n jsn.Marshaler, vals *[]CallTerminal) {
-	if n.RepeatValues(CallTerminal_Type, (*CallTerminal_Slice)(vals)) {
+	if n.MarshalBlock((*CallTerminal_Slice)(vals)) {
 		for i := range *vals {
 			CallTerminal_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1178,11 +1219,12 @@ func CallTerminal_Optional_Marshal(n jsn.Marshaler, pv **CallTerminal) {
 
 func CallTerminal_Marshal(n jsn.Marshaler, val *CallTerminal) (okay bool) {
 	n.SetCursor(val.At.Offset)
-	if okay = n.MapValues("stopping", CallTerminal_Type); okay {
-		if n.MapKey("", CallTerminal_Field_Parts) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("stopping",
+		CallTerminal_Type)); okay {
+		if n.MarshalKey("", CallTerminal_Field_Parts) {
 			rt.TextEval_Repeats_Marshal(n, &val.Parts)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1214,15 +1256,16 @@ func (op *CallTrigger) Marshal(n jsn.Marshaler) {
 
 type CallTrigger_Slice []CallTrigger
 
+func (op *CallTrigger_Slice) GetType() string { return CallTrigger_Type }
 func (op *CallTrigger_Slice) GetSize() int    { return len(*op) }
 func (op *CallTrigger_Slice) SetSize(cnt int) { (*op) = make(CallTrigger_Slice, cnt) }
 
 func CallTrigger_Repeats_Marshal(n jsn.Marshaler, vals *[]CallTrigger) {
-	if n.RepeatValues(CallTrigger_Type, (*CallTrigger_Slice)(vals)) {
+	if n.MarshalBlock((*CallTrigger_Slice)(vals)) {
 		for i := range *vals {
 			CallTrigger_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1239,14 +1282,15 @@ func CallTrigger_Optional_Marshal(n jsn.Marshaler, pv **CallTrigger) {
 
 func CallTrigger_Marshal(n jsn.Marshaler, val *CallTrigger) (okay bool) {
 	n.SetCursor(val.At.Offset)
-	if okay = n.MapValues("trigger", CallTrigger_Type); okay {
-		if n.MapKey("", CallTrigger_Field_Trigger) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("trigger",
+		CallTrigger_Type)); okay {
+		if n.MarshalKey("", CallTrigger_Field_Trigger) {
 			Trigger_Marshal(n, &val.Trigger)
 		}
-		if n.MapKey("num", CallTrigger_Field_Num) {
+		if n.MarshalKey("num", CallTrigger_Field_Num) {
 			rt.NumberEval_Marshal(n, &val.Num)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1274,15 +1318,16 @@ func (op *Capitalize) Marshal(n jsn.Marshaler) {
 
 type Capitalize_Slice []Capitalize
 
+func (op *Capitalize_Slice) GetType() string { return Capitalize_Type }
 func (op *Capitalize_Slice) GetSize() int    { return len(*op) }
 func (op *Capitalize_Slice) SetSize(cnt int) { (*op) = make(Capitalize_Slice, cnt) }
 
 func Capitalize_Repeats_Marshal(n jsn.Marshaler, vals *[]Capitalize) {
-	if n.RepeatValues(Capitalize_Type, (*Capitalize_Slice)(vals)) {
+	if n.MarshalBlock((*Capitalize_Slice)(vals)) {
 		for i := range *vals {
 			Capitalize_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1298,11 +1343,12 @@ func Capitalize_Optional_Marshal(n jsn.Marshaler, pv **Capitalize) {
 }
 
 func Capitalize_Marshal(n jsn.Marshaler, val *Capitalize) (okay bool) {
-	if okay = n.MapValues(Capitalize_Type, Capitalize_Type); okay {
-		if n.MapKey("", Capitalize_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Capitalize_Type,
+		Capitalize_Type)); okay {
+		if n.MarshalKey("", Capitalize_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1335,15 +1381,16 @@ func (op *ChooseAction) Marshal(n jsn.Marshaler) {
 
 type ChooseAction_Slice []ChooseAction
 
+func (op *ChooseAction_Slice) GetType() string { return ChooseAction_Type }
 func (op *ChooseAction_Slice) GetSize() int    { return len(*op) }
 func (op *ChooseAction_Slice) SetSize(cnt int) { (*op) = make(ChooseAction_Slice, cnt) }
 
 func ChooseAction_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseAction) {
-	if n.RepeatValues(ChooseAction_Type, (*ChooseAction_Slice)(vals)) {
+	if n.MarshalBlock((*ChooseAction_Slice)(vals)) {
 		for i := range *vals {
 			ChooseAction_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1359,17 +1406,18 @@ func ChooseAction_Optional_Marshal(n jsn.Marshaler, pv **ChooseAction) {
 }
 
 func ChooseAction_Marshal(n jsn.Marshaler, val *ChooseAction) (okay bool) {
-	if okay = n.MapValues("if", ChooseAction_Type); okay {
-		if n.MapKey("", ChooseAction_Field_If) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("if",
+		ChooseAction_Type)); okay {
+		if n.MarshalKey("", ChooseAction_Field_If) {
 			rt.BoolEval_Marshal(n, &val.If)
 		}
-		if n.MapKey("do", ChooseAction_Field_Do) {
+		if n.MarshalKey("do", ChooseAction_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		if n.MapKey("else", ChooseAction_Field_Else) {
+		if n.MarshalKey("else", ChooseAction_Field_Else) {
 			Brancher_Optional_Marshal(n, &val.Else)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1402,15 +1450,16 @@ func (op *ChooseMore) Marshal(n jsn.Marshaler) {
 
 type ChooseMore_Slice []ChooseMore
 
+func (op *ChooseMore_Slice) GetType() string { return ChooseMore_Type }
 func (op *ChooseMore_Slice) GetSize() int    { return len(*op) }
 func (op *ChooseMore_Slice) SetSize(cnt int) { (*op) = make(ChooseMore_Slice, cnt) }
 
 func ChooseMore_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseMore) {
-	if n.RepeatValues(ChooseMore_Type, (*ChooseMore_Slice)(vals)) {
+	if n.MarshalBlock((*ChooseMore_Slice)(vals)) {
 		for i := range *vals {
 			ChooseMore_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1426,17 +1475,18 @@ func ChooseMore_Optional_Marshal(n jsn.Marshaler, pv **ChooseMore) {
 }
 
 func ChooseMore_Marshal(n jsn.Marshaler, val *ChooseMore) (okay bool) {
-	if okay = n.MapValues("else_if", ChooseMore_Type); okay {
-		if n.MapKey("", ChooseMore_Field_If) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("else_if",
+		ChooseMore_Type)); okay {
+		if n.MarshalKey("", ChooseMore_Field_If) {
 			rt.BoolEval_Marshal(n, &val.If)
 		}
-		if n.MapKey("do", ChooseMore_Field_Do) {
+		if n.MarshalKey("do", ChooseMore_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		if n.MapKey("else", ChooseMore_Field_Else) {
+		if n.MarshalKey("else", ChooseMore_Field_Else) {
 			Brancher_Optional_Marshal(n, &val.Else)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1473,15 +1523,16 @@ func (op *ChooseMoreValue) Marshal(n jsn.Marshaler) {
 
 type ChooseMoreValue_Slice []ChooseMoreValue
 
+func (op *ChooseMoreValue_Slice) GetType() string { return ChooseMoreValue_Type }
 func (op *ChooseMoreValue_Slice) GetSize() int    { return len(*op) }
 func (op *ChooseMoreValue_Slice) SetSize(cnt int) { (*op) = make(ChooseMoreValue_Slice, cnt) }
 
 func ChooseMoreValue_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseMoreValue) {
-	if n.RepeatValues(ChooseMoreValue_Type, (*ChooseMoreValue_Slice)(vals)) {
+	if n.MarshalBlock((*ChooseMoreValue_Slice)(vals)) {
 		for i := range *vals {
 			ChooseMoreValue_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1497,23 +1548,24 @@ func ChooseMoreValue_Optional_Marshal(n jsn.Marshaler, pv **ChooseMoreValue) {
 }
 
 func ChooseMoreValue_Marshal(n jsn.Marshaler, val *ChooseMoreValue) (okay bool) {
-	if okay = n.MapValues("else_if", ChooseMoreValue_Type); okay {
-		if n.MapKey("", ChooseMoreValue_Field_Assign) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("else_if",
+		ChooseMoreValue_Type)); okay {
+		if n.MarshalKey("", ChooseMoreValue_Field_Assign) {
 			value.Text_Unboxed_Marshal(n, &val.Assign)
 		}
-		if n.MapKey("from", ChooseMoreValue_Field_From) {
+		if n.MarshalKey("from", ChooseMoreValue_Field_From) {
 			rt.Assignment_Marshal(n, &val.From)
 		}
-		if n.MapKey("and", ChooseMoreValue_Field_Filter) {
+		if n.MarshalKey("and", ChooseMoreValue_Field_Filter) {
 			rt.BoolEval_Marshal(n, &val.Filter)
 		}
-		if n.MapKey("do", ChooseMoreValue_Field_Do) {
+		if n.MarshalKey("do", ChooseMoreValue_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		if n.MapKey("else", ChooseMoreValue_Field_Else) {
+		if n.MarshalKey("else", ChooseMoreValue_Field_Else) {
 			Brancher_Optional_Marshal(n, &val.Else)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1542,15 +1594,16 @@ func (op *ChooseNothingElse) Marshal(n jsn.Marshaler) {
 
 type ChooseNothingElse_Slice []ChooseNothingElse
 
+func (op *ChooseNothingElse_Slice) GetType() string { return ChooseNothingElse_Type }
 func (op *ChooseNothingElse_Slice) GetSize() int    { return len(*op) }
 func (op *ChooseNothingElse_Slice) SetSize(cnt int) { (*op) = make(ChooseNothingElse_Slice, cnt) }
 
 func ChooseNothingElse_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseNothingElse) {
-	if n.RepeatValues(ChooseNothingElse_Type, (*ChooseNothingElse_Slice)(vals)) {
+	if n.MarshalBlock((*ChooseNothingElse_Slice)(vals)) {
 		for i := range *vals {
 			ChooseNothingElse_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1566,11 +1619,12 @@ func ChooseNothingElse_Optional_Marshal(n jsn.Marshaler, pv **ChooseNothingElse)
 }
 
 func ChooseNothingElse_Marshal(n jsn.Marshaler, val *ChooseNothingElse) (okay bool) {
-	if okay = n.MapValues("else_do", ChooseNothingElse_Type); okay {
-		if n.MapKey("", ChooseNothingElse_Field_Do) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("else_do",
+		ChooseNothingElse_Type)); okay {
+		if n.MarshalKey("", ChooseNothingElse_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1603,15 +1657,16 @@ func (op *ChooseNum) Marshal(n jsn.Marshaler) {
 
 type ChooseNum_Slice []ChooseNum
 
+func (op *ChooseNum_Slice) GetType() string { return ChooseNum_Type }
 func (op *ChooseNum_Slice) GetSize() int    { return len(*op) }
 func (op *ChooseNum_Slice) SetSize(cnt int) { (*op) = make(ChooseNum_Slice, cnt) }
 
 func ChooseNum_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseNum) {
-	if n.RepeatValues(ChooseNum_Type, (*ChooseNum_Slice)(vals)) {
+	if n.MarshalBlock((*ChooseNum_Slice)(vals)) {
 		for i := range *vals {
 			ChooseNum_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1627,17 +1682,18 @@ func ChooseNum_Optional_Marshal(n jsn.Marshaler, pv **ChooseNum) {
 }
 
 func ChooseNum_Marshal(n jsn.Marshaler, val *ChooseNum) (okay bool) {
-	if okay = n.MapValues("num", ChooseNum_Type); okay {
-		if n.MapKey("if", ChooseNum_Field_If) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("num",
+		ChooseNum_Type)); okay {
+		if n.MarshalKey("if", ChooseNum_Field_If) {
 			rt.BoolEval_Marshal(n, &val.If)
 		}
-		if n.MapKey("then", ChooseNum_Field_True) {
+		if n.MarshalKey("then", ChooseNum_Field_True) {
 			rt.NumberEval_Marshal(n, &val.True)
 		}
-		if n.MapKey("else", ChooseNum_Field_False) {
+		if n.MarshalKey("else", ChooseNum_Field_False) {
 			rt.NumberEval_Marshal(n, &val.False)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1670,15 +1726,16 @@ func (op *ChooseText) Marshal(n jsn.Marshaler) {
 
 type ChooseText_Slice []ChooseText
 
+func (op *ChooseText_Slice) GetType() string { return ChooseText_Type }
 func (op *ChooseText_Slice) GetSize() int    { return len(*op) }
 func (op *ChooseText_Slice) SetSize(cnt int) { (*op) = make(ChooseText_Slice, cnt) }
 
 func ChooseText_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseText) {
-	if n.RepeatValues(ChooseText_Type, (*ChooseText_Slice)(vals)) {
+	if n.MarshalBlock((*ChooseText_Slice)(vals)) {
 		for i := range *vals {
 			ChooseText_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1694,17 +1751,18 @@ func ChooseText_Optional_Marshal(n jsn.Marshaler, pv **ChooseText) {
 }
 
 func ChooseText_Marshal(n jsn.Marshaler, val *ChooseText) (okay bool) {
-	if okay = n.MapValues("txt", ChooseText_Type); okay {
-		if n.MapKey("if", ChooseText_Field_If) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("txt",
+		ChooseText_Type)); okay {
+		if n.MarshalKey("if", ChooseText_Field_If) {
 			rt.BoolEval_Marshal(n, &val.If)
 		}
-		if n.MapKey("then", ChooseText_Field_True) {
+		if n.MarshalKey("then", ChooseText_Field_True) {
 			rt.TextEval_Marshal(n, &val.True)
 		}
-		if n.MapKey("else", ChooseText_Field_False) {
+		if n.MarshalKey("else", ChooseText_Field_False) {
 			rt.TextEval_Marshal(n, &val.False)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1741,15 +1799,16 @@ func (op *ChooseValue) Marshal(n jsn.Marshaler) {
 
 type ChooseValue_Slice []ChooseValue
 
+func (op *ChooseValue_Slice) GetType() string { return ChooseValue_Type }
 func (op *ChooseValue_Slice) GetSize() int    { return len(*op) }
 func (op *ChooseValue_Slice) SetSize(cnt int) { (*op) = make(ChooseValue_Slice, cnt) }
 
 func ChooseValue_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseValue) {
-	if n.RepeatValues(ChooseValue_Type, (*ChooseValue_Slice)(vals)) {
+	if n.MarshalBlock((*ChooseValue_Slice)(vals)) {
 		for i := range *vals {
 			ChooseValue_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1765,23 +1824,24 @@ func ChooseValue_Optional_Marshal(n jsn.Marshaler, pv **ChooseValue) {
 }
 
 func ChooseValue_Marshal(n jsn.Marshaler, val *ChooseValue) (okay bool) {
-	if okay = n.MapValues("if", ChooseValue_Type); okay {
-		if n.MapKey("", ChooseValue_Field_Assign) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("if",
+		ChooseValue_Type)); okay {
+		if n.MarshalKey("", ChooseValue_Field_Assign) {
 			value.Text_Unboxed_Marshal(n, &val.Assign)
 		}
-		if n.MapKey("from", ChooseValue_Field_From) {
+		if n.MarshalKey("from", ChooseValue_Field_From) {
 			rt.Assignment_Marshal(n, &val.From)
 		}
-		if n.MapKey("and", ChooseValue_Field_Filter) {
+		if n.MarshalKey("and", ChooseValue_Field_Filter) {
 			rt.BoolEval_Marshal(n, &val.Filter)
 		}
-		if n.MapKey("do", ChooseValue_Field_Do) {
+		if n.MarshalKey("do", ChooseValue_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		if n.MapKey("else", ChooseValue_Field_Else) {
+		if n.MarshalKey("else", ChooseValue_Field_Else) {
 			Brancher_Optional_Marshal(n, &val.Else)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1810,15 +1870,16 @@ func (op *CommaText) Marshal(n jsn.Marshaler) {
 
 type CommaText_Slice []CommaText
 
+func (op *CommaText_Slice) GetType() string { return CommaText_Type }
 func (op *CommaText_Slice) GetSize() int    { return len(*op) }
 func (op *CommaText_Slice) SetSize(cnt int) { (*op) = make(CommaText_Slice, cnt) }
 
 func CommaText_Repeats_Marshal(n jsn.Marshaler, vals *[]CommaText) {
-	if n.RepeatValues(CommaText_Type, (*CommaText_Slice)(vals)) {
+	if n.MarshalBlock((*CommaText_Slice)(vals)) {
 		for i := range *vals {
 			CommaText_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1834,11 +1895,12 @@ func CommaText_Optional_Marshal(n jsn.Marshaler, pv **CommaText) {
 }
 
 func CommaText_Marshal(n jsn.Marshaler, val *CommaText) (okay bool) {
-	if okay = n.MapValues("commas", CommaText_Type); okay {
-		if n.MapKey("", CommaText_Field_Do) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("commas",
+		CommaText_Type)); okay {
+		if n.MarshalKey("", CommaText_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1849,31 +1911,33 @@ var Comparator_Optional_Marshal = Comparator_Marshal
 
 type Comparator_Slot struct{ ptr *Comparator }
 
-func (at Comparator_Slot) HasSlot() bool { return at.ptr != nil }
+func (At Comparator_Slot) GetType() string { return Comparator_Type }
+func (at Comparator_Slot) HasSlot() bool   { return at.ptr != nil }
 func (at Comparator_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(Comparator)
 	return
 }
 
 func Comparator_Marshal(n jsn.Marshaler, ptr *Comparator) (okay bool) {
-	if okay = n.SlotValues(Comparator_Type, Comparator_Slot{ptr}); okay {
+	if okay = n.MarshalBlock(Comparator_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
 
 type Comparator_Slice []Comparator
 
+func (op *Comparator_Slice) GetType() string { return Comparator_Type }
 func (op *Comparator_Slice) GetSize() int    { return len(*op) }
 func (op *Comparator_Slice) SetSize(cnt int) { (*op) = make(Comparator_Slice, cnt) }
 
 func Comparator_Repeats_Marshal(n jsn.Marshaler, vals *[]Comparator) {
-	if n.RepeatValues(Comparator_Type, (*Comparator_Slice)(vals)) {
+	if n.MarshalBlock((*Comparator_Slice)(vals)) {
 		for i := range *vals {
 			Comparator_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1905,15 +1969,16 @@ func (op *CompareNum) Marshal(n jsn.Marshaler) {
 
 type CompareNum_Slice []CompareNum
 
+func (op *CompareNum_Slice) GetType() string { return CompareNum_Type }
 func (op *CompareNum_Slice) GetSize() int    { return len(*op) }
 func (op *CompareNum_Slice) SetSize(cnt int) { (*op) = make(CompareNum_Slice, cnt) }
 
 func CompareNum_Repeats_Marshal(n jsn.Marshaler, vals *[]CompareNum) {
-	if n.RepeatValues(CompareNum_Type, (*CompareNum_Slice)(vals)) {
+	if n.MarshalBlock((*CompareNum_Slice)(vals)) {
 		for i := range *vals {
 			CompareNum_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1929,17 +1994,18 @@ func CompareNum_Optional_Marshal(n jsn.Marshaler, pv **CompareNum) {
 }
 
 func CompareNum_Marshal(n jsn.Marshaler, val *CompareNum) (okay bool) {
-	if okay = n.MapValues("cmp", CompareNum_Type); okay {
-		if n.MapKey("", CompareNum_Field_A) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("cmp",
+		CompareNum_Type)); okay {
+		if n.MarshalKey("", CompareNum_Field_A) {
 			rt.NumberEval_Marshal(n, &val.A)
 		}
-		if n.MapKey("is", CompareNum_Field_Is) {
+		if n.MarshalKey("is", CompareNum_Field_Is) {
 			Comparator_Marshal(n, &val.Is)
 		}
-		if n.MapKey("num", CompareNum_Field_B) {
+		if n.MarshalKey("num", CompareNum_Field_B) {
 			rt.NumberEval_Marshal(n, &val.B)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -1972,15 +2038,16 @@ func (op *CompareText) Marshal(n jsn.Marshaler) {
 
 type CompareText_Slice []CompareText
 
+func (op *CompareText_Slice) GetType() string { return CompareText_Type }
 func (op *CompareText_Slice) GetSize() int    { return len(*op) }
 func (op *CompareText_Slice) SetSize(cnt int) { (*op) = make(CompareText_Slice, cnt) }
 
 func CompareText_Repeats_Marshal(n jsn.Marshaler, vals *[]CompareText) {
-	if n.RepeatValues(CompareText_Type, (*CompareText_Slice)(vals)) {
+	if n.MarshalBlock((*CompareText_Slice)(vals)) {
 		for i := range *vals {
 			CompareText_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -1996,17 +2063,18 @@ func CompareText_Optional_Marshal(n jsn.Marshaler, pv **CompareText) {
 }
 
 func CompareText_Marshal(n jsn.Marshaler, val *CompareText) (okay bool) {
-	if okay = n.MapValues("cmp", CompareText_Type); okay {
-		if n.MapKey("", CompareText_Field_A) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("cmp",
+		CompareText_Type)); okay {
+		if n.MarshalKey("", CompareText_Field_A) {
 			rt.TextEval_Marshal(n, &val.A)
 		}
-		if n.MapKey("is", CompareText_Field_Is) {
+		if n.MarshalKey("is", CompareText_Field_Is) {
 			Comparator_Marshal(n, &val.Is)
 		}
-		if n.MapKey("txt", CompareText_Field_B) {
+		if n.MarshalKey("txt", CompareText_Field_B) {
 			rt.TextEval_Marshal(n, &val.B)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2037,15 +2105,16 @@ func (op *DiffOf) Marshal(n jsn.Marshaler) {
 
 type DiffOf_Slice []DiffOf
 
+func (op *DiffOf_Slice) GetType() string { return DiffOf_Type }
 func (op *DiffOf_Slice) GetSize() int    { return len(*op) }
 func (op *DiffOf_Slice) SetSize(cnt int) { (*op) = make(DiffOf_Slice, cnt) }
 
 func DiffOf_Repeats_Marshal(n jsn.Marshaler, vals *[]DiffOf) {
-	if n.RepeatValues(DiffOf_Type, (*DiffOf_Slice)(vals)) {
+	if n.MarshalBlock((*DiffOf_Slice)(vals)) {
 		for i := range *vals {
 			DiffOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2061,14 +2130,15 @@ func DiffOf_Optional_Marshal(n jsn.Marshaler, pv **DiffOf) {
 }
 
 func DiffOf_Marshal(n jsn.Marshaler, val *DiffOf) (okay bool) {
-	if okay = n.MapValues("dec", DiffOf_Type); okay {
-		if n.MapKey("", DiffOf_Field_A) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("dec",
+		DiffOf_Type)); okay {
+		if n.MarshalKey("", DiffOf_Field_A) {
 			rt.NumberEval_Marshal(n, &val.A)
 		}
-		if n.MapKey("by", DiffOf_Field_B) {
+		if n.MarshalKey("by", DiffOf_Field_B) {
 			rt.NumberEval_Optional_Marshal(n, &val.B)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2096,15 +2166,16 @@ func (op *During) Marshal(n jsn.Marshaler) {
 
 type During_Slice []During
 
+func (op *During_Slice) GetType() string { return During_Type }
 func (op *During_Slice) GetSize() int    { return len(*op) }
 func (op *During_Slice) SetSize(cnt int) { (*op) = make(During_Slice, cnt) }
 
 func During_Repeats_Marshal(n jsn.Marshaler, vals *[]During) {
-	if n.RepeatValues(During_Type, (*During_Slice)(vals)) {
+	if n.MarshalBlock((*During_Slice)(vals)) {
 		for i := range *vals {
 			During_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2120,11 +2191,12 @@ func During_Optional_Marshal(n jsn.Marshaler, pv **During) {
 }
 
 func During_Marshal(n jsn.Marshaler, val *During) (okay bool) {
-	if okay = n.MapValues(During_Type, During_Type); okay {
-		if n.MapKey("", During_Field_Pattern) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(During_Type,
+		During_Type)); okay {
+		if n.MarshalKey("", During_Field_Pattern) {
 			value.PatternName_Marshal(n, &val.Pattern)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2150,15 +2222,16 @@ func (op *Equal) Marshal(n jsn.Marshaler) {
 
 type Equal_Slice []Equal
 
+func (op *Equal_Slice) GetType() string { return Equal_Type }
 func (op *Equal_Slice) GetSize() int    { return len(*op) }
 func (op *Equal_Slice) SetSize(cnt int) { (*op) = make(Equal_Slice, cnt) }
 
 func Equal_Repeats_Marshal(n jsn.Marshaler, vals *[]Equal) {
-	if n.RepeatValues(Equal_Type, (*Equal_Slice)(vals)) {
+	if n.MarshalBlock((*Equal_Slice)(vals)) {
 		for i := range *vals {
 			Equal_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2174,8 +2247,9 @@ func Equal_Optional_Marshal(n jsn.Marshaler, pv **Equal) {
 }
 
 func Equal_Marshal(n jsn.Marshaler, val *Equal) (okay bool) {
-	if okay = n.MapValues("equals", Equal_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow("equals",
+		Equal_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -2203,15 +2277,16 @@ func (op *FromBool) Marshal(n jsn.Marshaler) {
 
 type FromBool_Slice []FromBool
 
+func (op *FromBool_Slice) GetType() string { return FromBool_Type }
 func (op *FromBool_Slice) GetSize() int    { return len(*op) }
 func (op *FromBool_Slice) SetSize(cnt int) { (*op) = make(FromBool_Slice, cnt) }
 
 func FromBool_Repeats_Marshal(n jsn.Marshaler, vals *[]FromBool) {
-	if n.RepeatValues(FromBool_Type, (*FromBool_Slice)(vals)) {
+	if n.MarshalBlock((*FromBool_Slice)(vals)) {
 		for i := range *vals {
 			FromBool_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2227,11 +2302,12 @@ func FromBool_Optional_Marshal(n jsn.Marshaler, pv **FromBool) {
 }
 
 func FromBool_Marshal(n jsn.Marshaler, val *FromBool) (okay bool) {
-	if okay = n.MapValues(FromBool_Type, FromBool_Type); okay {
-		if n.MapKey("", FromBool_Field_Val) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(FromBool_Type,
+		FromBool_Type)); okay {
+		if n.MarshalKey("", FromBool_Field_Val) {
 			rt.BoolEval_Marshal(n, &val.Val)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2259,15 +2335,16 @@ func (op *FromNum) Marshal(n jsn.Marshaler) {
 
 type FromNum_Slice []FromNum
 
+func (op *FromNum_Slice) GetType() string { return FromNum_Type }
 func (op *FromNum_Slice) GetSize() int    { return len(*op) }
 func (op *FromNum_Slice) SetSize(cnt int) { (*op) = make(FromNum_Slice, cnt) }
 
 func FromNum_Repeats_Marshal(n jsn.Marshaler, vals *[]FromNum) {
-	if n.RepeatValues(FromNum_Type, (*FromNum_Slice)(vals)) {
+	if n.MarshalBlock((*FromNum_Slice)(vals)) {
 		for i := range *vals {
 			FromNum_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2283,11 +2360,12 @@ func FromNum_Optional_Marshal(n jsn.Marshaler, pv **FromNum) {
 }
 
 func FromNum_Marshal(n jsn.Marshaler, val *FromNum) (okay bool) {
-	if okay = n.MapValues(FromNum_Type, FromNum_Type); okay {
-		if n.MapKey("", FromNum_Field_Val) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(FromNum_Type,
+		FromNum_Type)); okay {
+		if n.MarshalKey("", FromNum_Field_Val) {
 			rt.NumberEval_Marshal(n, &val.Val)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2316,15 +2394,16 @@ func (op *FromNumbers) Marshal(n jsn.Marshaler) {
 
 type FromNumbers_Slice []FromNumbers
 
+func (op *FromNumbers_Slice) GetType() string { return FromNumbers_Type }
 func (op *FromNumbers_Slice) GetSize() int    { return len(*op) }
 func (op *FromNumbers_Slice) SetSize(cnt int) { (*op) = make(FromNumbers_Slice, cnt) }
 
 func FromNumbers_Repeats_Marshal(n jsn.Marshaler, vals *[]FromNumbers) {
-	if n.RepeatValues(FromNumbers_Type, (*FromNumbers_Slice)(vals)) {
+	if n.MarshalBlock((*FromNumbers_Slice)(vals)) {
 		for i := range *vals {
 			FromNumbers_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2340,11 +2419,12 @@ func FromNumbers_Optional_Marshal(n jsn.Marshaler, pv **FromNumbers) {
 }
 
 func FromNumbers_Marshal(n jsn.Marshaler, val *FromNumbers) (okay bool) {
-	if okay = n.MapValues("from_nums", FromNumbers_Type); okay {
-		if n.MapKey("", FromNumbers_Field_Vals) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("from_nums",
+		FromNumbers_Type)); okay {
+		if n.MarshalKey("", FromNumbers_Field_Vals) {
 			rt.NumListEval_Marshal(n, &val.Vals)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2373,15 +2453,16 @@ func (op *FromObj) Marshal(n jsn.Marshaler) {
 
 type FromObj_Slice []FromObj
 
+func (op *FromObj_Slice) GetType() string { return FromObj_Type }
 func (op *FromObj_Slice) GetSize() int    { return len(*op) }
 func (op *FromObj_Slice) SetSize(cnt int) { (*op) = make(FromObj_Slice, cnt) }
 
 func FromObj_Repeats_Marshal(n jsn.Marshaler, vals *[]FromObj) {
-	if n.RepeatValues(FromObj_Type, (*FromObj_Slice)(vals)) {
+	if n.MarshalBlock((*FromObj_Slice)(vals)) {
 		for i := range *vals {
 			FromObj_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2397,11 +2478,12 @@ func FromObj_Optional_Marshal(n jsn.Marshaler, pv **FromObj) {
 }
 
 func FromObj_Marshal(n jsn.Marshaler, val *FromObj) (okay bool) {
-	if okay = n.MapValues("obj_fields", FromObj_Type); okay {
-		if n.MapKey("", FromObj_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("obj_fields",
+		FromObj_Type)); okay {
+		if n.MarshalKey("", FromObj_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2430,15 +2512,16 @@ func (op *FromRec) Marshal(n jsn.Marshaler) {
 
 type FromRec_Slice []FromRec
 
+func (op *FromRec_Slice) GetType() string { return FromRec_Type }
 func (op *FromRec_Slice) GetSize() int    { return len(*op) }
 func (op *FromRec_Slice) SetSize(cnt int) { (*op) = make(FromRec_Slice, cnt) }
 
 func FromRec_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRec) {
-	if n.RepeatValues(FromRec_Type, (*FromRec_Slice)(vals)) {
+	if n.MarshalBlock((*FromRec_Slice)(vals)) {
 		for i := range *vals {
 			FromRec_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2454,11 +2537,12 @@ func FromRec_Optional_Marshal(n jsn.Marshaler, pv **FromRec) {
 }
 
 func FromRec_Marshal(n jsn.Marshaler, val *FromRec) (okay bool) {
-	if okay = n.MapValues("rec_fields", FromRec_Type); okay {
-		if n.MapKey("", FromRec_Field_Rec) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("rec_fields",
+		FromRec_Type)); okay {
+		if n.MarshalKey("", FromRec_Field_Rec) {
 			rt.RecordEval_Marshal(n, &val.Rec)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2487,15 +2571,16 @@ func (op *FromRecord) Marshal(n jsn.Marshaler) {
 
 type FromRecord_Slice []FromRecord
 
+func (op *FromRecord_Slice) GetType() string { return FromRecord_Type }
 func (op *FromRecord_Slice) GetSize() int    { return len(*op) }
 func (op *FromRecord_Slice) SetSize(cnt int) { (*op) = make(FromRecord_Slice, cnt) }
 
 func FromRecord_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRecord) {
-	if n.RepeatValues(FromRecord_Type, (*FromRecord_Slice)(vals)) {
+	if n.MarshalBlock((*FromRecord_Slice)(vals)) {
 		for i := range *vals {
 			FromRecord_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2511,11 +2596,12 @@ func FromRecord_Optional_Marshal(n jsn.Marshaler, pv **FromRecord) {
 }
 
 func FromRecord_Marshal(n jsn.Marshaler, val *FromRecord) (okay bool) {
-	if okay = n.MapValues("from_rec", FromRecord_Type); okay {
-		if n.MapKey("", FromRecord_Field_Val) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("from_rec",
+		FromRecord_Type)); okay {
+		if n.MarshalKey("", FromRecord_Field_Val) {
 			rt.RecordEval_Marshal(n, &val.Val)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2544,15 +2630,16 @@ func (op *FromRecords) Marshal(n jsn.Marshaler) {
 
 type FromRecords_Slice []FromRecords
 
+func (op *FromRecords_Slice) GetType() string { return FromRecords_Type }
 func (op *FromRecords_Slice) GetSize() int    { return len(*op) }
 func (op *FromRecords_Slice) SetSize(cnt int) { (*op) = make(FromRecords_Slice, cnt) }
 
 func FromRecords_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRecords) {
-	if n.RepeatValues(FromRecords_Type, (*FromRecords_Slice)(vals)) {
+	if n.MarshalBlock((*FromRecords_Slice)(vals)) {
 		for i := range *vals {
 			FromRecords_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2568,11 +2655,12 @@ func FromRecords_Optional_Marshal(n jsn.Marshaler, pv **FromRecords) {
 }
 
 func FromRecords_Marshal(n jsn.Marshaler, val *FromRecords) (okay bool) {
-	if okay = n.MapValues("from_recs", FromRecords_Type); okay {
-		if n.MapKey("", FromRecords_Field_Vals) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("from_recs",
+		FromRecords_Type)); okay {
+		if n.MarshalKey("", FromRecords_Field_Vals) {
 			rt.RecordListEval_Marshal(n, &val.Vals)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2583,31 +2671,33 @@ var FromSourceFields_Optional_Marshal = FromSourceFields_Marshal
 
 type FromSourceFields_Slot struct{ ptr *FromSourceFields }
 
-func (at FromSourceFields_Slot) HasSlot() bool { return at.ptr != nil }
+func (At FromSourceFields_Slot) GetType() string { return FromSourceFields_Type }
+func (at FromSourceFields_Slot) HasSlot() bool   { return at.ptr != nil }
 func (at FromSourceFields_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(FromSourceFields)
 	return
 }
 
 func FromSourceFields_Marshal(n jsn.Marshaler, ptr *FromSourceFields) (okay bool) {
-	if okay = n.SlotValues(FromSourceFields_Type, FromSourceFields_Slot{ptr}); okay {
+	if okay = n.MarshalBlock(FromSourceFields_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
 
 type FromSourceFields_Slice []FromSourceFields
 
+func (op *FromSourceFields_Slice) GetType() string { return FromSourceFields_Type }
 func (op *FromSourceFields_Slice) GetSize() int    { return len(*op) }
 func (op *FromSourceFields_Slice) SetSize(cnt int) { (*op) = make(FromSourceFields_Slice, cnt) }
 
 func FromSourceFields_Repeats_Marshal(n jsn.Marshaler, vals *[]FromSourceFields) {
-	if n.RepeatValues(FromSourceFields_Type, (*FromSourceFields_Slice)(vals)) {
+	if n.MarshalBlock((*FromSourceFields_Slice)(vals)) {
 		for i := range *vals {
 			FromSourceFields_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2635,15 +2725,16 @@ func (op *FromText) Marshal(n jsn.Marshaler) {
 
 type FromText_Slice []FromText
 
+func (op *FromText_Slice) GetType() string { return FromText_Type }
 func (op *FromText_Slice) GetSize() int    { return len(*op) }
 func (op *FromText_Slice) SetSize(cnt int) { (*op) = make(FromText_Slice, cnt) }
 
 func FromText_Repeats_Marshal(n jsn.Marshaler, vals *[]FromText) {
-	if n.RepeatValues(FromText_Type, (*FromText_Slice)(vals)) {
+	if n.MarshalBlock((*FromText_Slice)(vals)) {
 		for i := range *vals {
 			FromText_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2659,11 +2750,12 @@ func FromText_Optional_Marshal(n jsn.Marshaler, pv **FromText) {
 }
 
 func FromText_Marshal(n jsn.Marshaler, val *FromText) (okay bool) {
-	if okay = n.MapValues("from_txt", FromText_Type); okay {
-		if n.MapKey("", FromText_Field_Val) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("from_txt",
+		FromText_Type)); okay {
+		if n.MarshalKey("", FromText_Field_Val) {
 			rt.TextEval_Marshal(n, &val.Val)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2692,15 +2784,16 @@ func (op *FromTexts) Marshal(n jsn.Marshaler) {
 
 type FromTexts_Slice []FromTexts
 
+func (op *FromTexts_Slice) GetType() string { return FromTexts_Type }
 func (op *FromTexts_Slice) GetSize() int    { return len(*op) }
 func (op *FromTexts_Slice) SetSize(cnt int) { (*op) = make(FromTexts_Slice, cnt) }
 
 func FromTexts_Repeats_Marshal(n jsn.Marshaler, vals *[]FromTexts) {
-	if n.RepeatValues(FromTexts_Type, (*FromTexts_Slice)(vals)) {
+	if n.MarshalBlock((*FromTexts_Slice)(vals)) {
 		for i := range *vals {
 			FromTexts_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2716,11 +2809,12 @@ func FromTexts_Optional_Marshal(n jsn.Marshaler, pv **FromTexts) {
 }
 
 func FromTexts_Marshal(n jsn.Marshaler, val *FromTexts) (okay bool) {
-	if okay = n.MapValues("from_txts", FromTexts_Type); okay {
-		if n.MapKey("", FromTexts_Field_Vals) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("from_txts",
+		FromTexts_Type)); okay {
+		if n.MarshalKey("", FromTexts_Field_Vals) {
 			rt.TextListEval_Marshal(n, &val.Vals)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2749,15 +2843,16 @@ func (op *FromVar) Marshal(n jsn.Marshaler) {
 
 type FromVar_Slice []FromVar
 
+func (op *FromVar_Slice) GetType() string { return FromVar_Type }
 func (op *FromVar_Slice) GetSize() int    { return len(*op) }
 func (op *FromVar_Slice) SetSize(cnt int) { (*op) = make(FromVar_Slice, cnt) }
 
 func FromVar_Repeats_Marshal(n jsn.Marshaler, vals *[]FromVar) {
-	if n.RepeatValues(FromVar_Type, (*FromVar_Slice)(vals)) {
+	if n.MarshalBlock((*FromVar_Slice)(vals)) {
 		for i := range *vals {
 			FromVar_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2773,11 +2868,12 @@ func FromVar_Optional_Marshal(n jsn.Marshaler, pv **FromVar) {
 }
 
 func FromVar_Marshal(n jsn.Marshaler, val *FromVar) (okay bool) {
-	if okay = n.MapValues("var_fields", FromVar_Type); okay {
-		if n.MapKey("", FromVar_Field_Var) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("var_fields",
+		FromVar_Type)); okay {
+		if n.MarshalKey("", FromVar_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2808,15 +2904,16 @@ func (op *GetAtField) Marshal(n jsn.Marshaler) {
 
 type GetAtField_Slice []GetAtField
 
+func (op *GetAtField_Slice) GetType() string { return GetAtField_Type }
 func (op *GetAtField_Slice) GetSize() int    { return len(*op) }
 func (op *GetAtField_Slice) SetSize(cnt int) { (*op) = make(GetAtField_Slice, cnt) }
 
 func GetAtField_Repeats_Marshal(n jsn.Marshaler, vals *[]GetAtField) {
-	if n.RepeatValues(GetAtField_Type, (*GetAtField_Slice)(vals)) {
+	if n.MarshalBlock((*GetAtField_Slice)(vals)) {
 		for i := range *vals {
 			GetAtField_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2832,14 +2929,15 @@ func GetAtField_Optional_Marshal(n jsn.Marshaler, pv **GetAtField) {
 }
 
 func GetAtField_Marshal(n jsn.Marshaler, val *GetAtField) (okay bool) {
-	if okay = n.MapValues("get", GetAtField_Type); okay {
-		if n.MapKey("", GetAtField_Field_Field) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("get",
+		GetAtField_Type)); okay {
+		if n.MarshalKey("", GetAtField_Field_Field) {
 			value.Text_Unboxed_Marshal(n, &val.Field)
 		}
-		if n.MapKey("from", GetAtField_Field_From) {
+		if n.MarshalKey("from", GetAtField_Field_From) {
 			FromSourceFields_Marshal(n, &val.From)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2868,15 +2966,16 @@ func (op *GetVar) Marshal(n jsn.Marshaler) {
 
 type GetVar_Slice []GetVar
 
+func (op *GetVar_Slice) GetType() string { return GetVar_Type }
 func (op *GetVar_Slice) GetSize() int    { return len(*op) }
 func (op *GetVar_Slice) SetSize(cnt int) { (*op) = make(GetVar_Slice, cnt) }
 
 func GetVar_Repeats_Marshal(n jsn.Marshaler, vals *[]GetVar) {
-	if n.RepeatValues(GetVar_Type, (*GetVar_Slice)(vals)) {
+	if n.MarshalBlock((*GetVar_Slice)(vals)) {
 		for i := range *vals {
 			GetVar_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2900,11 +2999,12 @@ func GetVar_Marshal(n jsn.Marshaler, val *GetVar) (okay bool) {
 	return
 }
 func GetVar_DefaultMarshal(n jsn.Marshaler, val *GetVar) (okay bool) {
-	if okay = n.MapValues("var", GetVar_Type); okay {
-		if n.MapKey("", GetVar_Field_Name) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("var",
+		GetVar_Type)); okay {
+		if n.MarshalKey("", GetVar_Field_Name) {
 			value.VariableName_Marshal(n, &val.Name)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -2929,15 +3029,16 @@ func (op *GreaterThan) Marshal(n jsn.Marshaler) {
 
 type GreaterThan_Slice []GreaterThan
 
+func (op *GreaterThan_Slice) GetType() string { return GreaterThan_Type }
 func (op *GreaterThan_Slice) GetSize() int    { return len(*op) }
 func (op *GreaterThan_Slice) SetSize(cnt int) { (*op) = make(GreaterThan_Slice, cnt) }
 
 func GreaterThan_Repeats_Marshal(n jsn.Marshaler, vals *[]GreaterThan) {
-	if n.RepeatValues(GreaterThan_Type, (*GreaterThan_Slice)(vals)) {
+	if n.MarshalBlock((*GreaterThan_Slice)(vals)) {
 		for i := range *vals {
 			GreaterThan_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -2953,8 +3054,9 @@ func GreaterThan_Optional_Marshal(n jsn.Marshaler, pv **GreaterThan) {
 }
 
 func GreaterThan_Marshal(n jsn.Marshaler, val *GreaterThan) (okay bool) {
-	if okay = n.MapValues(GreaterThan_Type, GreaterThan_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow(GreaterThan_Type,
+		GreaterThan_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -2982,15 +3084,16 @@ func (op *HasDominion) Marshal(n jsn.Marshaler) {
 
 type HasDominion_Slice []HasDominion
 
+func (op *HasDominion_Slice) GetType() string { return HasDominion_Type }
 func (op *HasDominion_Slice) GetSize() int    { return len(*op) }
 func (op *HasDominion_Slice) SetSize(cnt int) { (*op) = make(HasDominion_Slice, cnt) }
 
 func HasDominion_Repeats_Marshal(n jsn.Marshaler, vals *[]HasDominion) {
-	if n.RepeatValues(HasDominion_Type, (*HasDominion_Slice)(vals)) {
+	if n.MarshalBlock((*HasDominion_Slice)(vals)) {
 		for i := range *vals {
 			HasDominion_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3006,11 +3109,12 @@ func HasDominion_Optional_Marshal(n jsn.Marshaler, pv **HasDominion) {
 }
 
 func HasDominion_Marshal(n jsn.Marshaler, val *HasDominion) (okay bool) {
-	if okay = n.MapValues(HasDominion_Type, HasDominion_Type); okay {
-		if n.MapKey("", HasDominion_Field_Name) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(HasDominion_Type,
+		HasDominion_Type)); okay {
+		if n.MarshalKey("", HasDominion_Field_Name) {
 			value.Text_Unboxed_Marshal(n, &val.Name)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3041,15 +3145,16 @@ func (op *HasTrait) Marshal(n jsn.Marshaler) {
 
 type HasTrait_Slice []HasTrait
 
+func (op *HasTrait_Slice) GetType() string { return HasTrait_Type }
 func (op *HasTrait_Slice) GetSize() int    { return len(*op) }
 func (op *HasTrait_Slice) SetSize(cnt int) { (*op) = make(HasTrait_Slice, cnt) }
 
 func HasTrait_Repeats_Marshal(n jsn.Marshaler, vals *[]HasTrait) {
-	if n.RepeatValues(HasTrait_Type, (*HasTrait_Slice)(vals)) {
+	if n.MarshalBlock((*HasTrait_Slice)(vals)) {
 		for i := range *vals {
 			HasTrait_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3065,14 +3170,15 @@ func HasTrait_Optional_Marshal(n jsn.Marshaler, pv **HasTrait) {
 }
 
 func HasTrait_Marshal(n jsn.Marshaler, val *HasTrait) (okay bool) {
-	if okay = n.MapValues("get", HasTrait_Type); okay {
-		if n.MapKey("obj", HasTrait_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("get",
+		HasTrait_Type)); okay {
+		if n.MarshalKey("obj", HasTrait_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		if n.MapKey("trait", HasTrait_Field_Trait) {
+		if n.MarshalKey("trait", HasTrait_Field_Trait) {
 			rt.TextEval_Marshal(n, &val.Trait)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3100,15 +3206,16 @@ func (op *IdOf) Marshal(n jsn.Marshaler) {
 
 type IdOf_Slice []IdOf
 
+func (op *IdOf_Slice) GetType() string { return IdOf_Type }
 func (op *IdOf_Slice) GetSize() int    { return len(*op) }
 func (op *IdOf_Slice) SetSize(cnt int) { (*op) = make(IdOf_Slice, cnt) }
 
 func IdOf_Repeats_Marshal(n jsn.Marshaler, vals *[]IdOf) {
-	if n.RepeatValues(IdOf_Type, (*IdOf_Slice)(vals)) {
+	if n.MarshalBlock((*IdOf_Slice)(vals)) {
 		for i := range *vals {
 			IdOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3124,11 +3231,12 @@ func IdOf_Optional_Marshal(n jsn.Marshaler, pv **IdOf) {
 }
 
 func IdOf_Marshal(n jsn.Marshaler, val *IdOf) (okay bool) {
-	if okay = n.MapValues(IdOf_Type, IdOf_Type); okay {
-		if n.MapKey("", IdOf_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(IdOf_Type,
+		IdOf_Type)); okay {
+		if n.MarshalKey("", IdOf_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3159,15 +3267,16 @@ func (op *Includes) Marshal(n jsn.Marshaler) {
 
 type Includes_Slice []Includes
 
+func (op *Includes_Slice) GetType() string { return Includes_Type }
 func (op *Includes_Slice) GetSize() int    { return len(*op) }
 func (op *Includes_Slice) SetSize(cnt int) { (*op) = make(Includes_Slice, cnt) }
 
 func Includes_Repeats_Marshal(n jsn.Marshaler, vals *[]Includes) {
-	if n.RepeatValues(Includes_Type, (*Includes_Slice)(vals)) {
+	if n.MarshalBlock((*Includes_Slice)(vals)) {
 		for i := range *vals {
 			Includes_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3183,14 +3292,15 @@ func Includes_Optional_Marshal(n jsn.Marshaler, pv **Includes) {
 }
 
 func Includes_Marshal(n jsn.Marshaler, val *Includes) (okay bool) {
-	if okay = n.MapValues("contains", Includes_Type); okay {
-		if n.MapKey("", Includes_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("contains",
+		Includes_Type)); okay {
+		if n.MarshalKey("", Includes_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		if n.MapKey("part", Includes_Field_Part) {
+		if n.MarshalKey("part", Includes_Field_Part) {
 			rt.TextEval_Marshal(n, &val.Part)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3219,15 +3329,16 @@ func (op *IntoObj) Marshal(n jsn.Marshaler) {
 
 type IntoObj_Slice []IntoObj
 
+func (op *IntoObj_Slice) GetType() string { return IntoObj_Type }
 func (op *IntoObj_Slice) GetSize() int    { return len(*op) }
 func (op *IntoObj_Slice) SetSize(cnt int) { (*op) = make(IntoObj_Slice, cnt) }
 
 func IntoObj_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoObj) {
-	if n.RepeatValues(IntoObj_Type, (*IntoObj_Slice)(vals)) {
+	if n.MarshalBlock((*IntoObj_Slice)(vals)) {
 		for i := range *vals {
 			IntoObj_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3243,11 +3354,12 @@ func IntoObj_Optional_Marshal(n jsn.Marshaler, pv **IntoObj) {
 }
 
 func IntoObj_Marshal(n jsn.Marshaler, val *IntoObj) (okay bool) {
-	if okay = n.MapValues("obj_field", IntoObj_Type); okay {
-		if n.MapKey("", IntoObj_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("obj_field",
+		IntoObj_Type)); okay {
+		if n.MarshalKey("", IntoObj_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3258,31 +3370,33 @@ var IntoTargetFields_Optional_Marshal = IntoTargetFields_Marshal
 
 type IntoTargetFields_Slot struct{ ptr *IntoTargetFields }
 
-func (at IntoTargetFields_Slot) HasSlot() bool { return at.ptr != nil }
+func (At IntoTargetFields_Slot) GetType() string { return IntoTargetFields_Type }
+func (at IntoTargetFields_Slot) HasSlot() bool   { return at.ptr != nil }
 func (at IntoTargetFields_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(IntoTargetFields)
 	return
 }
 
 func IntoTargetFields_Marshal(n jsn.Marshaler, ptr *IntoTargetFields) (okay bool) {
-	if okay = n.SlotValues(IntoTargetFields_Type, IntoTargetFields_Slot{ptr}); okay {
+	if okay = n.MarshalBlock(IntoTargetFields_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
 
 type IntoTargetFields_Slice []IntoTargetFields
 
+func (op *IntoTargetFields_Slice) GetType() string { return IntoTargetFields_Type }
 func (op *IntoTargetFields_Slice) GetSize() int    { return len(*op) }
 func (op *IntoTargetFields_Slice) SetSize(cnt int) { (*op) = make(IntoTargetFields_Slice, cnt) }
 
 func IntoTargetFields_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoTargetFields) {
-	if n.RepeatValues(IntoTargetFields_Type, (*IntoTargetFields_Slice)(vals)) {
+	if n.MarshalBlock((*IntoTargetFields_Slice)(vals)) {
 		for i := range *vals {
 			IntoTargetFields_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3310,15 +3424,16 @@ func (op *IntoVar) Marshal(n jsn.Marshaler) {
 
 type IntoVar_Slice []IntoVar
 
+func (op *IntoVar_Slice) GetType() string { return IntoVar_Type }
 func (op *IntoVar_Slice) GetSize() int    { return len(*op) }
 func (op *IntoVar_Slice) SetSize(cnt int) { (*op) = make(IntoVar_Slice, cnt) }
 
 func IntoVar_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoVar) {
-	if n.RepeatValues(IntoVar_Type, (*IntoVar_Slice)(vals)) {
+	if n.MarshalBlock((*IntoVar_Slice)(vals)) {
 		for i := range *vals {
 			IntoVar_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3334,11 +3449,12 @@ func IntoVar_Optional_Marshal(n jsn.Marshaler, pv **IntoVar) {
 }
 
 func IntoVar_Marshal(n jsn.Marshaler, val *IntoVar) (okay bool) {
-	if okay = n.MapValues("var_field", IntoVar_Type); okay {
-		if n.MapKey("", IntoVar_Field_Var) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("var_field",
+		IntoVar_Type)); okay {
+		if n.MarshalKey("", IntoVar_Field_Var) {
 			value.VariableName_Marshal(n, &val.Var)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3367,15 +3483,16 @@ func (op *IsEmpty) Marshal(n jsn.Marshaler) {
 
 type IsEmpty_Slice []IsEmpty
 
+func (op *IsEmpty_Slice) GetType() string { return IsEmpty_Type }
 func (op *IsEmpty_Slice) GetSize() int    { return len(*op) }
 func (op *IsEmpty_Slice) SetSize(cnt int) { (*op) = make(IsEmpty_Slice, cnt) }
 
 func IsEmpty_Repeats_Marshal(n jsn.Marshaler, vals *[]IsEmpty) {
-	if n.RepeatValues(IsEmpty_Type, (*IsEmpty_Slice)(vals)) {
+	if n.MarshalBlock((*IsEmpty_Slice)(vals)) {
 		for i := range *vals {
 			IsEmpty_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3391,11 +3508,12 @@ func IsEmpty_Optional_Marshal(n jsn.Marshaler, pv **IsEmpty) {
 }
 
 func IsEmpty_Marshal(n jsn.Marshaler, val *IsEmpty) (okay bool) {
-	if okay = n.MapValues("is", IsEmpty_Type); okay {
-		if n.MapKey("empty", IsEmpty_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("is",
+		IsEmpty_Type)); okay {
+		if n.MarshalKey("empty", IsEmpty_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3426,15 +3544,16 @@ func (op *IsExactKindOf) Marshal(n jsn.Marshaler) {
 
 type IsExactKindOf_Slice []IsExactKindOf
 
+func (op *IsExactKindOf_Slice) GetType() string { return IsExactKindOf_Type }
 func (op *IsExactKindOf_Slice) GetSize() int    { return len(*op) }
 func (op *IsExactKindOf_Slice) SetSize(cnt int) { (*op) = make(IsExactKindOf_Slice, cnt) }
 
 func IsExactKindOf_Repeats_Marshal(n jsn.Marshaler, vals *[]IsExactKindOf) {
-	if n.RepeatValues(IsExactKindOf_Type, (*IsExactKindOf_Slice)(vals)) {
+	if n.MarshalBlock((*IsExactKindOf_Slice)(vals)) {
 		for i := range *vals {
 			IsExactKindOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3450,14 +3569,15 @@ func IsExactKindOf_Optional_Marshal(n jsn.Marshaler, pv **IsExactKindOf) {
 }
 
 func IsExactKindOf_Marshal(n jsn.Marshaler, val *IsExactKindOf) (okay bool) {
-	if okay = n.MapValues("kind_of", IsExactKindOf_Type); okay {
-		if n.MapKey("", IsExactKindOf_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("kind_of",
+		IsExactKindOf_Type)); okay {
+		if n.MarshalKey("", IsExactKindOf_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		if n.MapKey("is_exactly", IsExactKindOf_Field_Kind) {
+		if n.MarshalKey("is_exactly", IsExactKindOf_Field_Kind) {
 			value.Text_Unboxed_Marshal(n, &val.Kind)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3488,15 +3608,16 @@ func (op *IsKindOf) Marshal(n jsn.Marshaler) {
 
 type IsKindOf_Slice []IsKindOf
 
+func (op *IsKindOf_Slice) GetType() string { return IsKindOf_Type }
 func (op *IsKindOf_Slice) GetSize() int    { return len(*op) }
 func (op *IsKindOf_Slice) SetSize(cnt int) { (*op) = make(IsKindOf_Slice, cnt) }
 
 func IsKindOf_Repeats_Marshal(n jsn.Marshaler, vals *[]IsKindOf) {
-	if n.RepeatValues(IsKindOf_Type, (*IsKindOf_Slice)(vals)) {
+	if n.MarshalBlock((*IsKindOf_Slice)(vals)) {
 		for i := range *vals {
 			IsKindOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3512,14 +3633,15 @@ func IsKindOf_Optional_Marshal(n jsn.Marshaler, pv **IsKindOf) {
 }
 
 func IsKindOf_Marshal(n jsn.Marshaler, val *IsKindOf) (okay bool) {
-	if okay = n.MapValues("kind_of", IsKindOf_Type); okay {
-		if n.MapKey("", IsKindOf_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("kind_of",
+		IsKindOf_Type)); okay {
+		if n.MarshalKey("", IsKindOf_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		if n.MapKey("is", IsKindOf_Field_Kind) {
+		if n.MarshalKey("is", IsKindOf_Field_Kind) {
 			value.Text_Unboxed_Marshal(n, &val.Kind)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3549,15 +3671,16 @@ func (op *Join) Marshal(n jsn.Marshaler) {
 
 type Join_Slice []Join
 
+func (op *Join_Slice) GetType() string { return Join_Type }
 func (op *Join_Slice) GetSize() int    { return len(*op) }
 func (op *Join_Slice) SetSize(cnt int) { (*op) = make(Join_Slice, cnt) }
 
 func Join_Repeats_Marshal(n jsn.Marshaler, vals *[]Join) {
-	if n.RepeatValues(Join_Type, (*Join_Slice)(vals)) {
+	if n.MarshalBlock((*Join_Slice)(vals)) {
 		for i := range *vals {
 			Join_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3573,14 +3696,15 @@ func Join_Optional_Marshal(n jsn.Marshaler, pv **Join) {
 }
 
 func Join_Marshal(n jsn.Marshaler, val *Join) (okay bool) {
-	if okay = n.MapValues(Join_Type, Join_Type); okay {
-		if n.MapKey("", Join_Field_Sep) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Join_Type,
+		Join_Type)); okay {
+		if n.MarshalKey("", Join_Field_Sep) {
 			rt.TextEval_Marshal(n, &val.Sep)
 		}
-		if n.MapKey("parts", Join_Field_Parts) {
+		if n.MarshalKey("parts", Join_Field_Parts) {
 			rt.TextEval_Repeats_Marshal(n, &val.Parts)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3608,15 +3732,16 @@ func (op *KindOf) Marshal(n jsn.Marshaler) {
 
 type KindOf_Slice []KindOf
 
+func (op *KindOf_Slice) GetType() string { return KindOf_Type }
 func (op *KindOf_Slice) GetSize() int    { return len(*op) }
 func (op *KindOf_Slice) SetSize(cnt int) { (*op) = make(KindOf_Slice, cnt) }
 
 func KindOf_Repeats_Marshal(n jsn.Marshaler, vals *[]KindOf) {
-	if n.RepeatValues(KindOf_Type, (*KindOf_Slice)(vals)) {
+	if n.MarshalBlock((*KindOf_Slice)(vals)) {
 		for i := range *vals {
 			KindOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3632,11 +3757,12 @@ func KindOf_Optional_Marshal(n jsn.Marshaler, pv **KindOf) {
 }
 
 func KindOf_Marshal(n jsn.Marshaler, val *KindOf) (okay bool) {
-	if okay = n.MapValues(KindOf_Type, KindOf_Type); okay {
-		if n.MapKey("", KindOf_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(KindOf_Type,
+		KindOf_Type)); okay {
+		if n.MarshalKey("", KindOf_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3664,15 +3790,16 @@ func (op *KindsOf) Marshal(n jsn.Marshaler) {
 
 type KindsOf_Slice []KindsOf
 
+func (op *KindsOf_Slice) GetType() string { return KindsOf_Type }
 func (op *KindsOf_Slice) GetSize() int    { return len(*op) }
 func (op *KindsOf_Slice) SetSize(cnt int) { (*op) = make(KindsOf_Slice, cnt) }
 
 func KindsOf_Repeats_Marshal(n jsn.Marshaler, vals *[]KindsOf) {
-	if n.RepeatValues(KindsOf_Type, (*KindsOf_Slice)(vals)) {
+	if n.MarshalBlock((*KindsOf_Slice)(vals)) {
 		for i := range *vals {
 			KindsOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3688,11 +3815,12 @@ func KindsOf_Optional_Marshal(n jsn.Marshaler, pv **KindsOf) {
 }
 
 func KindsOf_Marshal(n jsn.Marshaler, val *KindsOf) (okay bool) {
-	if okay = n.MapValues(KindsOf_Type, KindsOf_Type); okay {
-		if n.MapKey("", KindsOf_Field_Kind) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(KindsOf_Type,
+		KindsOf_Type)); okay {
+		if n.MarshalKey("", KindsOf_Field_Kind) {
 			value.Text_Unboxed_Marshal(n, &val.Kind)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3717,15 +3845,16 @@ func (op *LessThan) Marshal(n jsn.Marshaler) {
 
 type LessThan_Slice []LessThan
 
+func (op *LessThan_Slice) GetType() string { return LessThan_Type }
 func (op *LessThan_Slice) GetSize() int    { return len(*op) }
 func (op *LessThan_Slice) SetSize(cnt int) { (*op) = make(LessThan_Slice, cnt) }
 
 func LessThan_Repeats_Marshal(n jsn.Marshaler, vals *[]LessThan) {
-	if n.RepeatValues(LessThan_Type, (*LessThan_Slice)(vals)) {
+	if n.MarshalBlock((*LessThan_Slice)(vals)) {
 		for i := range *vals {
 			LessThan_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3741,8 +3870,9 @@ func LessThan_Optional_Marshal(n jsn.Marshaler, pv **LessThan) {
 }
 
 func LessThan_Marshal(n jsn.Marshaler, val *LessThan) (okay bool) {
-	if okay = n.MapValues(LessThan_Type, LessThan_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow(LessThan_Type,
+		LessThan_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -3771,15 +3901,16 @@ func (op *MakeLowercase) Marshal(n jsn.Marshaler) {
 
 type MakeLowercase_Slice []MakeLowercase
 
+func (op *MakeLowercase_Slice) GetType() string { return MakeLowercase_Type }
 func (op *MakeLowercase_Slice) GetSize() int    { return len(*op) }
 func (op *MakeLowercase_Slice) SetSize(cnt int) { (*op) = make(MakeLowercase_Slice, cnt) }
 
 func MakeLowercase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeLowercase) {
-	if n.RepeatValues(MakeLowercase_Type, (*MakeLowercase_Slice)(vals)) {
+	if n.MarshalBlock((*MakeLowercase_Slice)(vals)) {
 		for i := range *vals {
 			MakeLowercase_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3795,11 +3926,12 @@ func MakeLowercase_Optional_Marshal(n jsn.Marshaler, pv **MakeLowercase) {
 }
 
 func MakeLowercase_Marshal(n jsn.Marshaler, val *MakeLowercase) (okay bool) {
-	if okay = n.MapValues("lower", MakeLowercase_Type); okay {
-		if n.MapKey("", MakeLowercase_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("lower",
+		MakeLowercase_Type)); okay {
+		if n.MarshalKey("", MakeLowercase_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3828,15 +3960,16 @@ func (op *MakeReversed) Marshal(n jsn.Marshaler) {
 
 type MakeReversed_Slice []MakeReversed
 
+func (op *MakeReversed_Slice) GetType() string { return MakeReversed_Type }
 func (op *MakeReversed_Slice) GetSize() int    { return len(*op) }
 func (op *MakeReversed_Slice) SetSize(cnt int) { (*op) = make(MakeReversed_Slice, cnt) }
 
 func MakeReversed_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeReversed) {
-	if n.RepeatValues(MakeReversed_Type, (*MakeReversed_Slice)(vals)) {
+	if n.MarshalBlock((*MakeReversed_Slice)(vals)) {
 		for i := range *vals {
 			MakeReversed_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3852,11 +3985,12 @@ func MakeReversed_Optional_Marshal(n jsn.Marshaler, pv **MakeReversed) {
 }
 
 func MakeReversed_Marshal(n jsn.Marshaler, val *MakeReversed) (okay bool) {
-	if okay = n.MapValues("reverse", MakeReversed_Type); okay {
-		if n.MapKey("text", MakeReversed_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("reverse",
+		MakeReversed_Type)); okay {
+		if n.MarshalKey("text", MakeReversed_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3885,15 +4019,16 @@ func (op *MakeSentenceCase) Marshal(n jsn.Marshaler) {
 
 type MakeSentenceCase_Slice []MakeSentenceCase
 
+func (op *MakeSentenceCase_Slice) GetType() string { return MakeSentenceCase_Type }
 func (op *MakeSentenceCase_Slice) GetSize() int    { return len(*op) }
 func (op *MakeSentenceCase_Slice) SetSize(cnt int) { (*op) = make(MakeSentenceCase_Slice, cnt) }
 
 func MakeSentenceCase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeSentenceCase) {
-	if n.RepeatValues(MakeSentenceCase_Type, (*MakeSentenceCase_Slice)(vals)) {
+	if n.MarshalBlock((*MakeSentenceCase_Slice)(vals)) {
 		for i := range *vals {
 			MakeSentenceCase_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3909,11 +4044,12 @@ func MakeSentenceCase_Optional_Marshal(n jsn.Marshaler, pv **MakeSentenceCase) {
 }
 
 func MakeSentenceCase_Marshal(n jsn.Marshaler, val *MakeSentenceCase) (okay bool) {
-	if okay = n.MapValues("sentence", MakeSentenceCase_Type); okay {
-		if n.MapKey("", MakeSentenceCase_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("sentence",
+		MakeSentenceCase_Type)); okay {
+		if n.MarshalKey("", MakeSentenceCase_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3942,15 +4078,16 @@ func (op *MakeTitleCase) Marshal(n jsn.Marshaler) {
 
 type MakeTitleCase_Slice []MakeTitleCase
 
+func (op *MakeTitleCase_Slice) GetType() string { return MakeTitleCase_Type }
 func (op *MakeTitleCase_Slice) GetSize() int    { return len(*op) }
 func (op *MakeTitleCase_Slice) SetSize(cnt int) { (*op) = make(MakeTitleCase_Slice, cnt) }
 
 func MakeTitleCase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeTitleCase) {
-	if n.RepeatValues(MakeTitleCase_Type, (*MakeTitleCase_Slice)(vals)) {
+	if n.MarshalBlock((*MakeTitleCase_Slice)(vals)) {
 		for i := range *vals {
 			MakeTitleCase_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -3966,11 +4103,12 @@ func MakeTitleCase_Optional_Marshal(n jsn.Marshaler, pv **MakeTitleCase) {
 }
 
 func MakeTitleCase_Marshal(n jsn.Marshaler, val *MakeTitleCase) (okay bool) {
-	if okay = n.MapValues("title", MakeTitleCase_Type); okay {
-		if n.MapKey("", MakeTitleCase_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("title",
+		MakeTitleCase_Type)); okay {
+		if n.MarshalKey("", MakeTitleCase_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -3999,15 +4137,16 @@ func (op *MakeUppercase) Marshal(n jsn.Marshaler) {
 
 type MakeUppercase_Slice []MakeUppercase
 
+func (op *MakeUppercase_Slice) GetType() string { return MakeUppercase_Type }
 func (op *MakeUppercase_Slice) GetSize() int    { return len(*op) }
 func (op *MakeUppercase_Slice) SetSize(cnt int) { (*op) = make(MakeUppercase_Slice, cnt) }
 
 func MakeUppercase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeUppercase) {
-	if n.RepeatValues(MakeUppercase_Type, (*MakeUppercase_Slice)(vals)) {
+	if n.MarshalBlock((*MakeUppercase_Slice)(vals)) {
 		for i := range *vals {
 			MakeUppercase_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4023,11 +4162,12 @@ func MakeUppercase_Optional_Marshal(n jsn.Marshaler, pv **MakeUppercase) {
 }
 
 func MakeUppercase_Marshal(n jsn.Marshaler, val *MakeUppercase) (okay bool) {
-	if okay = n.MapValues("upper", MakeUppercase_Type); okay {
-		if n.MapKey("", MakeUppercase_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("upper",
+		MakeUppercase_Type)); okay {
+		if n.MarshalKey("", MakeUppercase_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4058,15 +4198,16 @@ func (op *Matches) Marshal(n jsn.Marshaler) {
 
 type Matches_Slice []Matches
 
+func (op *Matches_Slice) GetType() string { return Matches_Type }
 func (op *Matches_Slice) GetSize() int    { return len(*op) }
 func (op *Matches_Slice) SetSize(cnt int) { (*op) = make(Matches_Slice, cnt) }
 
 func Matches_Repeats_Marshal(n jsn.Marshaler, vals *[]Matches) {
-	if n.RepeatValues(Matches_Type, (*Matches_Slice)(vals)) {
+	if n.MarshalBlock((*Matches_Slice)(vals)) {
 		for i := range *vals {
 			Matches_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4082,14 +4223,15 @@ func Matches_Optional_Marshal(n jsn.Marshaler, pv **Matches) {
 }
 
 func Matches_Marshal(n jsn.Marshaler, val *Matches) (okay bool) {
-	if okay = n.MapValues(Matches_Type, Matches_Type); okay {
-		if n.MapKey("", Matches_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Matches_Type,
+		Matches_Type)); okay {
+		if n.MarshalKey("", Matches_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		if n.MapKey("to", Matches_Field_Pattern) {
+		if n.MarshalKey("to", Matches_Field_Pattern) {
 			value.Text_Unboxed_Marshal(n, &val.Pattern)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4117,15 +4259,16 @@ func (op *NameOf) Marshal(n jsn.Marshaler) {
 
 type NameOf_Slice []NameOf
 
+func (op *NameOf_Slice) GetType() string { return NameOf_Type }
 func (op *NameOf_Slice) GetSize() int    { return len(*op) }
 func (op *NameOf_Slice) SetSize(cnt int) { (*op) = make(NameOf_Slice, cnt) }
 
 func NameOf_Repeats_Marshal(n jsn.Marshaler, vals *[]NameOf) {
-	if n.RepeatValues(NameOf_Type, (*NameOf_Slice)(vals)) {
+	if n.MarshalBlock((*NameOf_Slice)(vals)) {
 		for i := range *vals {
 			NameOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4141,11 +4284,12 @@ func NameOf_Optional_Marshal(n jsn.Marshaler, pv **NameOf) {
 }
 
 func NameOf_Marshal(n jsn.Marshaler, val *NameOf) (okay bool) {
-	if okay = n.MapValues(NameOf_Type, NameOf_Type); okay {
-		if n.MapKey("", NameOf_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(NameOf_Type,
+		NameOf_Type)); okay {
+		if n.MarshalKey("", NameOf_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4170,15 +4314,16 @@ func (op *Never) Marshal(n jsn.Marshaler) {
 
 type Never_Slice []Never
 
+func (op *Never_Slice) GetType() string { return Never_Type }
 func (op *Never_Slice) GetSize() int    { return len(*op) }
 func (op *Never_Slice) SetSize(cnt int) { (*op) = make(Never_Slice, cnt) }
 
 func Never_Repeats_Marshal(n jsn.Marshaler, vals *[]Never) {
-	if n.RepeatValues(Never_Type, (*Never_Slice)(vals)) {
+	if n.MarshalBlock((*Never_Slice)(vals)) {
 		for i := range *vals {
 			Never_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4194,8 +4339,9 @@ func Never_Optional_Marshal(n jsn.Marshaler, pv **Never) {
 }
 
 func Never_Marshal(n jsn.Marshaler, val *Never) (okay bool) {
-	if okay = n.MapValues(Never_Type, Never_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow(Never_Type,
+		Never_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -4221,15 +4367,16 @@ func (op *Newline) Marshal(n jsn.Marshaler) {
 
 type Newline_Slice []Newline
 
+func (op *Newline_Slice) GetType() string { return Newline_Type }
 func (op *Newline_Slice) GetSize() int    { return len(*op) }
 func (op *Newline_Slice) SetSize(cnt int) { (*op) = make(Newline_Slice, cnt) }
 
 func Newline_Repeats_Marshal(n jsn.Marshaler, vals *[]Newline) {
-	if n.RepeatValues(Newline_Type, (*Newline_Slice)(vals)) {
+	if n.MarshalBlock((*Newline_Slice)(vals)) {
 		for i := range *vals {
 			Newline_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4245,8 +4392,9 @@ func Newline_Optional_Marshal(n jsn.Marshaler, pv **Newline) {
 }
 
 func Newline_Marshal(n jsn.Marshaler, val *Newline) (okay bool) {
-	if okay = n.MapValues("br", Newline_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow("br",
+		Newline_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -4271,15 +4419,16 @@ func (op *Next) Marshal(n jsn.Marshaler) {
 
 type Next_Slice []Next
 
+func (op *Next_Slice) GetType() string { return Next_Type }
 func (op *Next_Slice) GetSize() int    { return len(*op) }
 func (op *Next_Slice) SetSize(cnt int) { (*op) = make(Next_Slice, cnt) }
 
 func Next_Repeats_Marshal(n jsn.Marshaler, vals *[]Next) {
-	if n.RepeatValues(Next_Type, (*Next_Slice)(vals)) {
+	if n.MarshalBlock((*Next_Slice)(vals)) {
 		for i := range *vals {
 			Next_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4295,8 +4444,9 @@ func Next_Optional_Marshal(n jsn.Marshaler, pv **Next) {
 }
 
 func Next_Marshal(n jsn.Marshaler, val *Next) (okay bool) {
-	if okay = n.MapValues(Next_Type, Next_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow(Next_Type,
+		Next_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -4324,15 +4474,16 @@ func (op *Not) Marshal(n jsn.Marshaler) {
 
 type Not_Slice []Not
 
+func (op *Not_Slice) GetType() string { return Not_Type }
 func (op *Not_Slice) GetSize() int    { return len(*op) }
 func (op *Not_Slice) SetSize(cnt int) { (*op) = make(Not_Slice, cnt) }
 
 func Not_Repeats_Marshal(n jsn.Marshaler, vals *[]Not) {
-	if n.RepeatValues(Not_Type, (*Not_Slice)(vals)) {
+	if n.MarshalBlock((*Not_Slice)(vals)) {
 		for i := range *vals {
 			Not_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4348,11 +4499,12 @@ func Not_Optional_Marshal(n jsn.Marshaler, pv **Not) {
 }
 
 func Not_Marshal(n jsn.Marshaler, val *Not) (okay bool) {
-	if okay = n.MapValues(Not_Type, Not_Type); okay {
-		if n.MapKey("", Not_Field_Test) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Not_Type,
+		Not_Type)); okay {
+		if n.MarshalKey("", Not_Field_Test) {
 			rt.BoolEval_Marshal(n, &val.Test)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4381,15 +4533,16 @@ func (op *NumValue) Marshal(n jsn.Marshaler) {
 
 type NumValue_Slice []NumValue
 
+func (op *NumValue_Slice) GetType() string { return NumValue_Type }
 func (op *NumValue_Slice) GetSize() int    { return len(*op) }
 func (op *NumValue_Slice) SetSize(cnt int) { (*op) = make(NumValue_Slice, cnt) }
 
 func NumValue_Repeats_Marshal(n jsn.Marshaler, vals *[]NumValue) {
-	if n.RepeatValues(NumValue_Type, (*NumValue_Slice)(vals)) {
+	if n.MarshalBlock((*NumValue_Slice)(vals)) {
 		for i := range *vals {
 			NumValue_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4413,11 +4566,12 @@ func NumValue_Marshal(n jsn.Marshaler, val *NumValue) (okay bool) {
 	return
 }
 func NumValue_DefaultMarshal(n jsn.Marshaler, val *NumValue) (okay bool) {
-	if okay = n.MapValues("num", NumValue_Type); okay {
-		if n.MapKey("", NumValue_Field_Num) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("num",
+		NumValue_Type)); okay {
+		if n.MarshalKey("", NumValue_Field_Num) {
 			value.Number_Unboxed_Marshal(n, &val.Num)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4446,15 +4600,16 @@ func (op *Numbers) Marshal(n jsn.Marshaler) {
 
 type Numbers_Slice []Numbers
 
+func (op *Numbers_Slice) GetType() string { return Numbers_Type }
 func (op *Numbers_Slice) GetSize() int    { return len(*op) }
 func (op *Numbers_Slice) SetSize(cnt int) { (*op) = make(Numbers_Slice, cnt) }
 
 func Numbers_Repeats_Marshal(n jsn.Marshaler, vals *[]Numbers) {
-	if n.RepeatValues(Numbers_Type, (*Numbers_Slice)(vals)) {
+	if n.MarshalBlock((*Numbers_Slice)(vals)) {
 		for i := range *vals {
 			Numbers_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4478,11 +4633,12 @@ func Numbers_Marshal(n jsn.Marshaler, val *Numbers) (okay bool) {
 	return
 }
 func Numbers_DefaultMarshal(n jsn.Marshaler, val *Numbers) (okay bool) {
-	if okay = n.MapValues("nums", Numbers_Type); okay {
-		if n.MapKey("", Numbers_Field_Values) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("nums",
+		Numbers_Type)); okay {
+		if n.MarshalKey("", Numbers_Field_Values) {
 			value.Number_Unboxed_Repeats_Marshal(n, &val.Values)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4511,15 +4667,16 @@ func (op *ObjectExists) Marshal(n jsn.Marshaler) {
 
 type ObjectExists_Slice []ObjectExists
 
+func (op *ObjectExists_Slice) GetType() string { return ObjectExists_Type }
 func (op *ObjectExists_Slice) GetSize() int    { return len(*op) }
 func (op *ObjectExists_Slice) SetSize(cnt int) { (*op) = make(ObjectExists_Slice, cnt) }
 
 func ObjectExists_Repeats_Marshal(n jsn.Marshaler, vals *[]ObjectExists) {
-	if n.RepeatValues(ObjectExists_Type, (*ObjectExists_Slice)(vals)) {
+	if n.MarshalBlock((*ObjectExists_Slice)(vals)) {
 		for i := range *vals {
 			ObjectExists_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4535,11 +4692,12 @@ func ObjectExists_Optional_Marshal(n jsn.Marshaler, pv **ObjectExists) {
 }
 
 func ObjectExists_Marshal(n jsn.Marshaler, val *ObjectExists) (okay bool) {
-	if okay = n.MapValues("is", ObjectExists_Type); okay {
-		if n.MapKey("valid", ObjectExists_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("is",
+		ObjectExists_Type)); okay {
+		if n.MarshalKey("valid", ObjectExists_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4568,15 +4726,16 @@ func (op *Pluralize) Marshal(n jsn.Marshaler) {
 
 type Pluralize_Slice []Pluralize
 
+func (op *Pluralize_Slice) GetType() string { return Pluralize_Type }
 func (op *Pluralize_Slice) GetSize() int    { return len(*op) }
 func (op *Pluralize_Slice) SetSize(cnt int) { (*op) = make(Pluralize_Slice, cnt) }
 
 func Pluralize_Repeats_Marshal(n jsn.Marshaler, vals *[]Pluralize) {
-	if n.RepeatValues(Pluralize_Type, (*Pluralize_Slice)(vals)) {
+	if n.MarshalBlock((*Pluralize_Slice)(vals)) {
 		for i := range *vals {
 			Pluralize_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4592,11 +4751,12 @@ func Pluralize_Optional_Marshal(n jsn.Marshaler, pv **Pluralize) {
 }
 
 func Pluralize_Marshal(n jsn.Marshaler, val *Pluralize) (okay bool) {
-	if okay = n.MapValues("plural", Pluralize_Type); okay {
-		if n.MapKey("of", Pluralize_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("plural",
+		Pluralize_Type)); okay {
+		if n.MarshalKey("of", Pluralize_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4625,15 +4785,16 @@ func (op *PrintNum) Marshal(n jsn.Marshaler) {
 
 type PrintNum_Slice []PrintNum
 
+func (op *PrintNum_Slice) GetType() string { return PrintNum_Type }
 func (op *PrintNum_Slice) GetSize() int    { return len(*op) }
 func (op *PrintNum_Slice) SetSize(cnt int) { (*op) = make(PrintNum_Slice, cnt) }
 
 func PrintNum_Repeats_Marshal(n jsn.Marshaler, vals *[]PrintNum) {
-	if n.RepeatValues(PrintNum_Type, (*PrintNum_Slice)(vals)) {
+	if n.MarshalBlock((*PrintNum_Slice)(vals)) {
 		for i := range *vals {
 			PrintNum_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4649,11 +4810,12 @@ func PrintNum_Optional_Marshal(n jsn.Marshaler, pv **PrintNum) {
 }
 
 func PrintNum_Marshal(n jsn.Marshaler, val *PrintNum) (okay bool) {
-	if okay = n.MapValues("numeral", PrintNum_Type); okay {
-		if n.MapKey("", PrintNum_Field_Num) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("numeral",
+		PrintNum_Type)); okay {
+		if n.MarshalKey("", PrintNum_Field_Num) {
 			rt.NumberEval_Marshal(n, &val.Num)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4682,15 +4844,16 @@ func (op *PrintNumWord) Marshal(n jsn.Marshaler) {
 
 type PrintNumWord_Slice []PrintNumWord
 
+func (op *PrintNumWord_Slice) GetType() string { return PrintNumWord_Type }
 func (op *PrintNumWord_Slice) GetSize() int    { return len(*op) }
 func (op *PrintNumWord_Slice) SetSize(cnt int) { (*op) = make(PrintNumWord_Slice, cnt) }
 
 func PrintNumWord_Repeats_Marshal(n jsn.Marshaler, vals *[]PrintNumWord) {
-	if n.RepeatValues(PrintNumWord_Type, (*PrintNumWord_Slice)(vals)) {
+	if n.MarshalBlock((*PrintNumWord_Slice)(vals)) {
 		for i := range *vals {
 			PrintNumWord_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4706,11 +4869,12 @@ func PrintNumWord_Optional_Marshal(n jsn.Marshaler, pv **PrintNumWord) {
 }
 
 func PrintNumWord_Marshal(n jsn.Marshaler, val *PrintNumWord) (okay bool) {
-	if okay = n.MapValues("numeral", PrintNumWord_Type); okay {
-		if n.MapKey("words", PrintNumWord_Field_Num) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("numeral",
+		PrintNumWord_Type)); okay {
+		if n.MarshalKey("words", PrintNumWord_Field_Num) {
 			rt.NumberEval_Marshal(n, &val.Num)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4741,15 +4905,16 @@ func (op *ProductOf) Marshal(n jsn.Marshaler) {
 
 type ProductOf_Slice []ProductOf
 
+func (op *ProductOf_Slice) GetType() string { return ProductOf_Type }
 func (op *ProductOf_Slice) GetSize() int    { return len(*op) }
 func (op *ProductOf_Slice) SetSize(cnt int) { (*op) = make(ProductOf_Slice, cnt) }
 
 func ProductOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ProductOf) {
-	if n.RepeatValues(ProductOf_Type, (*ProductOf_Slice)(vals)) {
+	if n.MarshalBlock((*ProductOf_Slice)(vals)) {
 		for i := range *vals {
 			ProductOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4765,14 +4930,15 @@ func ProductOf_Optional_Marshal(n jsn.Marshaler, pv **ProductOf) {
 }
 
 func ProductOf_Marshal(n jsn.Marshaler, val *ProductOf) (okay bool) {
-	if okay = n.MapValues("mul", ProductOf_Type); okay {
-		if n.MapKey("", ProductOf_Field_A) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("mul",
+		ProductOf_Type)); okay {
+		if n.MarshalKey("", ProductOf_Field_A) {
 			rt.NumberEval_Marshal(n, &val.A)
 		}
-		if n.MapKey("by", ProductOf_Field_B) {
+		if n.MarshalKey("by", ProductOf_Field_B) {
 			rt.NumberEval_Marshal(n, &val.B)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4805,15 +4971,16 @@ func (op *PutAtField) Marshal(n jsn.Marshaler) {
 
 type PutAtField_Slice []PutAtField
 
+func (op *PutAtField_Slice) GetType() string { return PutAtField_Type }
 func (op *PutAtField_Slice) GetSize() int    { return len(*op) }
 func (op *PutAtField_Slice) SetSize(cnt int) { (*op) = make(PutAtField_Slice, cnt) }
 
 func PutAtField_Repeats_Marshal(n jsn.Marshaler, vals *[]PutAtField) {
-	if n.RepeatValues(PutAtField_Type, (*PutAtField_Slice)(vals)) {
+	if n.MarshalBlock((*PutAtField_Slice)(vals)) {
 		for i := range *vals {
 			PutAtField_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4829,17 +4996,18 @@ func PutAtField_Optional_Marshal(n jsn.Marshaler, pv **PutAtField) {
 }
 
 func PutAtField_Marshal(n jsn.Marshaler, val *PutAtField) (okay bool) {
-	if okay = n.MapValues("put", PutAtField_Type); okay {
-		if n.MapKey("", PutAtField_Field_Into) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("put",
+		PutAtField_Type)); okay {
+		if n.MarshalKey("", PutAtField_Field_Into) {
 			IntoTargetFields_Marshal(n, &val.Into)
 		}
-		if n.MapKey("from", PutAtField_Field_From) {
+		if n.MarshalKey("from", PutAtField_Field_From) {
 			rt.Assignment_Marshal(n, &val.From)
 		}
-		if n.MapKey("at", PutAtField_Field_AtField) {
+		if n.MarshalKey("at", PutAtField_Field_AtField) {
 			value.Text_Unboxed_Marshal(n, &val.AtField)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4870,15 +5038,16 @@ func (op *QuotientOf) Marshal(n jsn.Marshaler) {
 
 type QuotientOf_Slice []QuotientOf
 
+func (op *QuotientOf_Slice) GetType() string { return QuotientOf_Type }
 func (op *QuotientOf_Slice) GetSize() int    { return len(*op) }
 func (op *QuotientOf_Slice) SetSize(cnt int) { (*op) = make(QuotientOf_Slice, cnt) }
 
 func QuotientOf_Repeats_Marshal(n jsn.Marshaler, vals *[]QuotientOf) {
-	if n.RepeatValues(QuotientOf_Type, (*QuotientOf_Slice)(vals)) {
+	if n.MarshalBlock((*QuotientOf_Slice)(vals)) {
 		for i := range *vals {
 			QuotientOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4894,14 +5063,15 @@ func QuotientOf_Optional_Marshal(n jsn.Marshaler, pv **QuotientOf) {
 }
 
 func QuotientOf_Marshal(n jsn.Marshaler, val *QuotientOf) (okay bool) {
-	if okay = n.MapValues("div", QuotientOf_Type); okay {
-		if n.MapKey("", QuotientOf_Field_A) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("div",
+		QuotientOf_Type)); okay {
+		if n.MarshalKey("", QuotientOf_Field_A) {
 			rt.NumberEval_Marshal(n, &val.A)
 		}
-		if n.MapKey("by", QuotientOf_Field_B) {
+		if n.MarshalKey("by", QuotientOf_Field_B) {
 			rt.NumberEval_Marshal(n, &val.B)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4932,15 +5102,16 @@ func (op *RemainderOf) Marshal(n jsn.Marshaler) {
 
 type RemainderOf_Slice []RemainderOf
 
+func (op *RemainderOf_Slice) GetType() string { return RemainderOf_Type }
 func (op *RemainderOf_Slice) GetSize() int    { return len(*op) }
 func (op *RemainderOf_Slice) SetSize(cnt int) { (*op) = make(RemainderOf_Slice, cnt) }
 
 func RemainderOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RemainderOf) {
-	if n.RepeatValues(RemainderOf_Type, (*RemainderOf_Slice)(vals)) {
+	if n.MarshalBlock((*RemainderOf_Slice)(vals)) {
 		for i := range *vals {
 			RemainderOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -4956,14 +5127,15 @@ func RemainderOf_Optional_Marshal(n jsn.Marshaler, pv **RemainderOf) {
 }
 
 func RemainderOf_Marshal(n jsn.Marshaler, val *RemainderOf) (okay bool) {
-	if okay = n.MapValues("mod", RemainderOf_Type); okay {
-		if n.MapKey("", RemainderOf_Field_A) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("mod",
+		RemainderOf_Type)); okay {
+		if n.MarshalKey("", RemainderOf_Field_A) {
 			rt.NumberEval_Marshal(n, &val.A)
 		}
-		if n.MapKey("by", RemainderOf_Field_B) {
+		if n.MarshalKey("by", RemainderOf_Field_B) {
 			rt.NumberEval_Marshal(n, &val.B)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -4993,15 +5165,16 @@ func (op *Response) Marshal(n jsn.Marshaler) {
 
 type Response_Slice []Response
 
+func (op *Response_Slice) GetType() string { return Response_Type }
 func (op *Response_Slice) GetSize() int    { return len(*op) }
 func (op *Response_Slice) SetSize(cnt int) { (*op) = make(Response_Slice, cnt) }
 
 func Response_Repeats_Marshal(n jsn.Marshaler, vals *[]Response) {
-	if n.RepeatValues(Response_Type, (*Response_Slice)(vals)) {
+	if n.MarshalBlock((*Response_Slice)(vals)) {
 		for i := range *vals {
 			Response_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5017,14 +5190,15 @@ func Response_Optional_Marshal(n jsn.Marshaler, pv **Response) {
 }
 
 func Response_Marshal(n jsn.Marshaler, val *Response) (okay bool) {
-	if okay = n.MapValues(Response_Type, Response_Type); okay {
-		if n.MapKey("", Response_Field_Name) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Response_Type,
+		Response_Type)); okay {
+		if n.MarshalKey("", Response_Field_Name) {
 			value.Text_Unboxed_Marshal(n, &val.Name)
 		}
-		if n.MapKey("text", Response_Field_Text) {
+		if n.MarshalKey("text", Response_Field_Text) {
 			rt.TextEval_Optional_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5052,15 +5226,16 @@ func (op *Row) Marshal(n jsn.Marshaler) {
 
 type Row_Slice []Row
 
+func (op *Row_Slice) GetType() string { return Row_Type }
 func (op *Row_Slice) GetSize() int    { return len(*op) }
 func (op *Row_Slice) SetSize(cnt int) { (*op) = make(Row_Slice, cnt) }
 
 func Row_Repeats_Marshal(n jsn.Marshaler, vals *[]Row) {
-	if n.RepeatValues(Row_Type, (*Row_Slice)(vals)) {
+	if n.MarshalBlock((*Row_Slice)(vals)) {
 		for i := range *vals {
 			Row_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5076,11 +5251,12 @@ func Row_Optional_Marshal(n jsn.Marshaler, pv **Row) {
 }
 
 func Row_Marshal(n jsn.Marshaler, val *Row) (okay bool) {
-	if okay = n.MapValues(Row_Type, Row_Type); okay {
-		if n.MapKey("", Row_Field_Do) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Row_Type,
+		Row_Type)); okay {
+		if n.MarshalKey("", Row_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5108,15 +5284,16 @@ func (op *Rows) Marshal(n jsn.Marshaler) {
 
 type Rows_Slice []Rows
 
+func (op *Rows_Slice) GetType() string { return Rows_Type }
 func (op *Rows_Slice) GetSize() int    { return len(*op) }
 func (op *Rows_Slice) SetSize(cnt int) { (*op) = make(Rows_Slice, cnt) }
 
 func Rows_Repeats_Marshal(n jsn.Marshaler, vals *[]Rows) {
-	if n.RepeatValues(Rows_Type, (*Rows_Slice)(vals)) {
+	if n.MarshalBlock((*Rows_Slice)(vals)) {
 		for i := range *vals {
 			Rows_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5132,11 +5309,12 @@ func Rows_Optional_Marshal(n jsn.Marshaler, pv **Rows) {
 }
 
 func Rows_Marshal(n jsn.Marshaler, val *Rows) (okay bool) {
-	if okay = n.MapValues(Rows_Type, Rows_Type); okay {
-		if n.MapKey("", Rows_Field_Do) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Rows_Type,
+		Rows_Type)); okay {
+		if n.MarshalKey("", Rows_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5165,15 +5343,16 @@ func (op *SayText) Marshal(n jsn.Marshaler) {
 
 type SayText_Slice []SayText
 
+func (op *SayText_Slice) GetType() string { return SayText_Type }
 func (op *SayText_Slice) GetSize() int    { return len(*op) }
 func (op *SayText_Slice) SetSize(cnt int) { (*op) = make(SayText_Slice, cnt) }
 
 func SayText_Repeats_Marshal(n jsn.Marshaler, vals *[]SayText) {
-	if n.RepeatValues(SayText_Type, (*SayText_Slice)(vals)) {
+	if n.MarshalBlock((*SayText_Slice)(vals)) {
 		for i := range *vals {
 			SayText_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5189,11 +5368,12 @@ func SayText_Optional_Marshal(n jsn.Marshaler, pv **SayText) {
 }
 
 func SayText_Marshal(n jsn.Marshaler, val *SayText) (okay bool) {
-	if okay = n.MapValues("say", SayText_Type); okay {
-		if n.MapKey("", SayText_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("say",
+		SayText_Type)); okay {
+		if n.MarshalKey("", SayText_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5224,15 +5404,16 @@ func (op *SetTrait) Marshal(n jsn.Marshaler) {
 
 type SetTrait_Slice []SetTrait
 
+func (op *SetTrait_Slice) GetType() string { return SetTrait_Type }
 func (op *SetTrait_Slice) GetSize() int    { return len(*op) }
 func (op *SetTrait_Slice) SetSize(cnt int) { (*op) = make(SetTrait_Slice, cnt) }
 
 func SetTrait_Repeats_Marshal(n jsn.Marshaler, vals *[]SetTrait) {
-	if n.RepeatValues(SetTrait_Type, (*SetTrait_Slice)(vals)) {
+	if n.MarshalBlock((*SetTrait_Slice)(vals)) {
 		for i := range *vals {
 			SetTrait_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5248,14 +5429,15 @@ func SetTrait_Optional_Marshal(n jsn.Marshaler, pv **SetTrait) {
 }
 
 func SetTrait_Marshal(n jsn.Marshaler, val *SetTrait) (okay bool) {
-	if okay = n.MapValues("put", SetTrait_Type); okay {
-		if n.MapKey("obj", SetTrait_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("put",
+		SetTrait_Type)); okay {
+		if n.MarshalKey("obj", SetTrait_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		if n.MapKey("trait", SetTrait_Field_Trait) {
+		if n.MarshalKey("trait", SetTrait_Field_Trait) {
 			rt.TextEval_Marshal(n, &val.Trait)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5284,15 +5466,16 @@ func (op *Singularize) Marshal(n jsn.Marshaler) {
 
 type Singularize_Slice []Singularize
 
+func (op *Singularize_Slice) GetType() string { return Singularize_Type }
 func (op *Singularize_Slice) GetSize() int    { return len(*op) }
 func (op *Singularize_Slice) SetSize(cnt int) { (*op) = make(Singularize_Slice, cnt) }
 
 func Singularize_Repeats_Marshal(n jsn.Marshaler, vals *[]Singularize) {
-	if n.RepeatValues(Singularize_Type, (*Singularize_Slice)(vals)) {
+	if n.MarshalBlock((*Singularize_Slice)(vals)) {
 		for i := range *vals {
 			Singularize_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5308,11 +5491,12 @@ func Singularize_Optional_Marshal(n jsn.Marshaler, pv **Singularize) {
 }
 
 func Singularize_Marshal(n jsn.Marshaler, val *Singularize) (okay bool) {
-	if okay = n.MapValues("singular", Singularize_Type); okay {
-		if n.MapKey("of", Singularize_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("singular",
+		Singularize_Type)); okay {
+		if n.MarshalKey("of", Singularize_Field_Text) {
 			rt.TextEval_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5341,15 +5525,16 @@ func (op *SlashText) Marshal(n jsn.Marshaler) {
 
 type SlashText_Slice []SlashText
 
+func (op *SlashText_Slice) GetType() string { return SlashText_Type }
 func (op *SlashText_Slice) GetSize() int    { return len(*op) }
 func (op *SlashText_Slice) SetSize(cnt int) { (*op) = make(SlashText_Slice, cnt) }
 
 func SlashText_Repeats_Marshal(n jsn.Marshaler, vals *[]SlashText) {
-	if n.RepeatValues(SlashText_Type, (*SlashText_Slice)(vals)) {
+	if n.MarshalBlock((*SlashText_Slice)(vals)) {
 		for i := range *vals {
 			SlashText_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5365,11 +5550,12 @@ func SlashText_Optional_Marshal(n jsn.Marshaler, pv **SlashText) {
 }
 
 func SlashText_Marshal(n jsn.Marshaler, val *SlashText) (okay bool) {
-	if okay = n.MapValues("slashes", SlashText_Type); okay {
-		if n.MapKey("", SlashText_Field_Do) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("slashes",
+		SlashText_Type)); okay {
+		if n.MarshalKey("", SlashText_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5395,15 +5581,16 @@ func (op *Softline) Marshal(n jsn.Marshaler) {
 
 type Softline_Slice []Softline
 
+func (op *Softline_Slice) GetType() string { return Softline_Type }
 func (op *Softline_Slice) GetSize() int    { return len(*op) }
 func (op *Softline_Slice) SetSize(cnt int) { (*op) = make(Softline_Slice, cnt) }
 
 func Softline_Repeats_Marshal(n jsn.Marshaler, vals *[]Softline) {
-	if n.RepeatValues(Softline_Type, (*Softline_Slice)(vals)) {
+	if n.MarshalBlock((*Softline_Slice)(vals)) {
 		for i := range *vals {
 			Softline_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5419,8 +5606,9 @@ func Softline_Optional_Marshal(n jsn.Marshaler, pv **Softline) {
 }
 
 func Softline_Marshal(n jsn.Marshaler, val *Softline) (okay bool) {
-	if okay = n.MapValues("wbr", Softline_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow("wbr",
+		Softline_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -5449,15 +5637,16 @@ func (op *SpanText) Marshal(n jsn.Marshaler) {
 
 type SpanText_Slice []SpanText
 
+func (op *SpanText_Slice) GetType() string { return SpanText_Type }
 func (op *SpanText_Slice) GetSize() int    { return len(*op) }
 func (op *SpanText_Slice) SetSize(cnt int) { (*op) = make(SpanText_Slice, cnt) }
 
 func SpanText_Repeats_Marshal(n jsn.Marshaler, vals *[]SpanText) {
-	if n.RepeatValues(SpanText_Type, (*SpanText_Slice)(vals)) {
+	if n.MarshalBlock((*SpanText_Slice)(vals)) {
 		for i := range *vals {
 			SpanText_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5473,11 +5662,12 @@ func SpanText_Optional_Marshal(n jsn.Marshaler, pv **SpanText) {
 }
 
 func SpanText_Marshal(n jsn.Marshaler, val *SpanText) (okay bool) {
-	if okay = n.MapValues("spaces", SpanText_Type); okay {
-		if n.MapKey("", SpanText_Field_Do) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("spaces",
+		SpanText_Type)); okay {
+		if n.MarshalKey("", SpanText_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5508,15 +5698,16 @@ func (op *SumOf) Marshal(n jsn.Marshaler) {
 
 type SumOf_Slice []SumOf
 
+func (op *SumOf_Slice) GetType() string { return SumOf_Type }
 func (op *SumOf_Slice) GetSize() int    { return len(*op) }
 func (op *SumOf_Slice) SetSize(cnt int) { (*op) = make(SumOf_Slice, cnt) }
 
 func SumOf_Repeats_Marshal(n jsn.Marshaler, vals *[]SumOf) {
-	if n.RepeatValues(SumOf_Type, (*SumOf_Slice)(vals)) {
+	if n.MarshalBlock((*SumOf_Slice)(vals)) {
 		for i := range *vals {
 			SumOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5532,14 +5723,15 @@ func SumOf_Optional_Marshal(n jsn.Marshaler, pv **SumOf) {
 }
 
 func SumOf_Marshal(n jsn.Marshaler, val *SumOf) (okay bool) {
-	if okay = n.MapValues("inc", SumOf_Type); okay {
-		if n.MapKey("", SumOf_Field_A) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("inc",
+		SumOf_Type)); okay {
+		if n.MarshalKey("", SumOf_Field_A) {
 			rt.NumberEval_Marshal(n, &val.A)
 		}
-		if n.MapKey("by", SumOf_Field_B) {
+		if n.MarshalKey("by", SumOf_Field_B) {
 			rt.NumberEval_Optional_Marshal(n, &val.B)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5568,15 +5760,16 @@ func (op *TextValue) Marshal(n jsn.Marshaler) {
 
 type TextValue_Slice []TextValue
 
+func (op *TextValue_Slice) GetType() string { return TextValue_Type }
 func (op *TextValue_Slice) GetSize() int    { return len(*op) }
 func (op *TextValue_Slice) SetSize(cnt int) { (*op) = make(TextValue_Slice, cnt) }
 
 func TextValue_Repeats_Marshal(n jsn.Marshaler, vals *[]TextValue) {
-	if n.RepeatValues(TextValue_Type, (*TextValue_Slice)(vals)) {
+	if n.MarshalBlock((*TextValue_Slice)(vals)) {
 		for i := range *vals {
 			TextValue_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5600,11 +5793,12 @@ func TextValue_Marshal(n jsn.Marshaler, val *TextValue) (okay bool) {
 	return
 }
 func TextValue_DefaultMarshal(n jsn.Marshaler, val *TextValue) (okay bool) {
-	if okay = n.MapValues("txt", TextValue_Type); okay {
-		if n.MapKey("", TextValue_Field_Text) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("txt",
+		TextValue_Type)); okay {
+		if n.MarshalKey("", TextValue_Field_Text) {
 			value.Text_Unboxed_Marshal(n, &val.Text)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5633,15 +5827,16 @@ func (op *Texts) Marshal(n jsn.Marshaler) {
 
 type Texts_Slice []Texts
 
+func (op *Texts_Slice) GetType() string { return Texts_Type }
 func (op *Texts_Slice) GetSize() int    { return len(*op) }
 func (op *Texts_Slice) SetSize(cnt int) { (*op) = make(Texts_Slice, cnt) }
 
 func Texts_Repeats_Marshal(n jsn.Marshaler, vals *[]Texts) {
-	if n.RepeatValues(Texts_Type, (*Texts_Slice)(vals)) {
+	if n.MarshalBlock((*Texts_Slice)(vals)) {
 		for i := range *vals {
 			Texts_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5665,11 +5860,12 @@ func Texts_Marshal(n jsn.Marshaler, val *Texts) (okay bool) {
 	return
 }
 func Texts_DefaultMarshal(n jsn.Marshaler, val *Texts) (okay bool) {
-	if okay = n.MapValues("txts", Texts_Type); okay {
-		if n.MapKey("", Texts_Field_Values) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("txts",
+		Texts_Type)); okay {
+		if n.MarshalKey("", Texts_Field_Values) {
 			value.Text_Unboxed_Repeats_Marshal(n, &val.Values)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -5680,31 +5876,33 @@ var Trigger_Optional_Marshal = Trigger_Marshal
 
 type Trigger_Slot struct{ ptr *Trigger }
 
-func (at Trigger_Slot) HasSlot() bool { return at.ptr != nil }
+func (At Trigger_Slot) GetType() string { return Trigger_Type }
+func (at Trigger_Slot) HasSlot() bool   { return at.ptr != nil }
 func (at Trigger_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(Trigger)
 	return
 }
 
 func Trigger_Marshal(n jsn.Marshaler, ptr *Trigger) (okay bool) {
-	if okay = n.SlotValues(Trigger_Type, Trigger_Slot{ptr}); okay {
+	if okay = n.MarshalBlock(Trigger_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
 
 type Trigger_Slice []Trigger
 
+func (op *Trigger_Slice) GetType() string { return Trigger_Type }
 func (op *Trigger_Slice) GetSize() int    { return len(*op) }
 func (op *Trigger_Slice) SetSize(cnt int) { (*op) = make(Trigger_Slice, cnt) }
 
 func Trigger_Repeats_Marshal(n jsn.Marshaler, vals *[]Trigger) {
-	if n.RepeatValues(Trigger_Type, (*Trigger_Slice)(vals)) {
+	if n.MarshalBlock((*Trigger_Slice)(vals)) {
 		for i := range *vals {
 			Trigger_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5729,15 +5927,16 @@ func (op *TriggerCycle) Marshal(n jsn.Marshaler) {
 
 type TriggerCycle_Slice []TriggerCycle
 
+func (op *TriggerCycle_Slice) GetType() string { return TriggerCycle_Type }
 func (op *TriggerCycle_Slice) GetSize() int    { return len(*op) }
 func (op *TriggerCycle_Slice) SetSize(cnt int) { (*op) = make(TriggerCycle_Slice, cnt) }
 
 func TriggerCycle_Repeats_Marshal(n jsn.Marshaler, vals *[]TriggerCycle) {
-	if n.RepeatValues(TriggerCycle_Type, (*TriggerCycle_Slice)(vals)) {
+	if n.MarshalBlock((*TriggerCycle_Slice)(vals)) {
 		for i := range *vals {
 			TriggerCycle_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5753,8 +5952,9 @@ func TriggerCycle_Optional_Marshal(n jsn.Marshaler, pv **TriggerCycle) {
 }
 
 func TriggerCycle_Marshal(n jsn.Marshaler, val *TriggerCycle) (okay bool) {
-	if okay = n.MapValues("every", TriggerCycle_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow("every",
+		TriggerCycle_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -5780,15 +5980,16 @@ func (op *TriggerOnce) Marshal(n jsn.Marshaler) {
 
 type TriggerOnce_Slice []TriggerOnce
 
+func (op *TriggerOnce_Slice) GetType() string { return TriggerOnce_Type }
 func (op *TriggerOnce_Slice) GetSize() int    { return len(*op) }
 func (op *TriggerOnce_Slice) SetSize(cnt int) { (*op) = make(TriggerOnce_Slice, cnt) }
 
 func TriggerOnce_Repeats_Marshal(n jsn.Marshaler, vals *[]TriggerOnce) {
-	if n.RepeatValues(TriggerOnce_Type, (*TriggerOnce_Slice)(vals)) {
+	if n.MarshalBlock((*TriggerOnce_Slice)(vals)) {
 		for i := range *vals {
 			TriggerOnce_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5804,8 +6005,9 @@ func TriggerOnce_Optional_Marshal(n jsn.Marshaler, pv **TriggerOnce) {
 }
 
 func TriggerOnce_Marshal(n jsn.Marshaler, val *TriggerOnce) (okay bool) {
-	if okay = n.MapValues("at", TriggerOnce_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow("at",
+		TriggerOnce_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -5831,15 +6033,16 @@ func (op *TriggerSwitch) Marshal(n jsn.Marshaler) {
 
 type TriggerSwitch_Slice []TriggerSwitch
 
+func (op *TriggerSwitch_Slice) GetType() string { return TriggerSwitch_Type }
 func (op *TriggerSwitch_Slice) GetSize() int    { return len(*op) }
 func (op *TriggerSwitch_Slice) SetSize(cnt int) { (*op) = make(TriggerSwitch_Slice, cnt) }
 
 func TriggerSwitch_Repeats_Marshal(n jsn.Marshaler, vals *[]TriggerSwitch) {
-	if n.RepeatValues(TriggerSwitch_Type, (*TriggerSwitch_Slice)(vals)) {
+	if n.MarshalBlock((*TriggerSwitch_Slice)(vals)) {
 		for i := range *vals {
 			TriggerSwitch_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5855,8 +6058,9 @@ func TriggerSwitch_Optional_Marshal(n jsn.Marshaler, pv **TriggerSwitch) {
 }
 
 func TriggerSwitch_Marshal(n jsn.Marshaler, val *TriggerSwitch) (okay bool) {
-	if okay = n.MapValues("after", TriggerSwitch_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow("after",
+		TriggerSwitch_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -5882,15 +6086,16 @@ func (op *Unequal) Marshal(n jsn.Marshaler) {
 
 type Unequal_Slice []Unequal
 
+func (op *Unequal_Slice) GetType() string { return Unequal_Type }
 func (op *Unequal_Slice) GetSize() int    { return len(*op) }
 func (op *Unequal_Slice) SetSize(cnt int) { (*op) = make(Unequal_Slice, cnt) }
 
 func Unequal_Repeats_Marshal(n jsn.Marshaler, vals *[]Unequal) {
-	if n.RepeatValues(Unequal_Type, (*Unequal_Slice)(vals)) {
+	if n.MarshalBlock((*Unequal_Slice)(vals)) {
 		for i := range *vals {
 			Unequal_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5906,8 +6111,9 @@ func Unequal_Optional_Marshal(n jsn.Marshaler, pv **Unequal) {
 }
 
 func Unequal_Marshal(n jsn.Marshaler, val *Unequal) (okay bool) {
-	if okay = n.MapValues("other_than", Unequal_Type); okay {
-		n.EndValues()
+	if okay = n.MarshalBlock(jsn.MarkFlow("other_than",
+		Unequal_Type)); okay {
+		n.EndBlock()
 	}
 	return
 }
@@ -5938,15 +6144,16 @@ func (op *While) Marshal(n jsn.Marshaler) {
 
 type While_Slice []While
 
+func (op *While_Slice) GetType() string { return While_Type }
 func (op *While_Slice) GetSize() int    { return len(*op) }
 func (op *While_Slice) SetSize(cnt int) { (*op) = make(While_Slice, cnt) }
 
 func While_Repeats_Marshal(n jsn.Marshaler, vals *[]While) {
-	if n.RepeatValues(While_Type, (*While_Slice)(vals)) {
+	if n.MarshalBlock((*While_Slice)(vals)) {
 		for i := range *vals {
 			While_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -5962,14 +6169,15 @@ func While_Optional_Marshal(n jsn.Marshaler, pv **While) {
 }
 
 func While_Marshal(n jsn.Marshaler, val *While) (okay bool) {
-	if okay = n.MapValues("repeating", While_Type); okay {
-		if n.MapKey("", While_Field_True) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("repeating",
+		While_Type)); okay {
+		if n.MarshalKey("", While_Field_True) {
 			rt.BoolEval_Marshal(n, &val.True)
 		}
-		if n.MapKey("do", While_Field_Do) {
+		if n.MarshalKey("do", While_Field_Do) {
 			Activity_Marshal(n, &val.Do)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }

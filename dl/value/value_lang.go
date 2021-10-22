@@ -40,15 +40,16 @@ func (op *Bool) Marshal(n jsn.Marshaler) {
 
 type Bool_Unboxed_Slice []bool
 
+func (op *Bool_Unboxed_Slice) GetType() string { return Bool_Type }
 func (op *Bool_Unboxed_Slice) GetSize() int    { return len(*op) }
 func (op *Bool_Unboxed_Slice) SetSize(cnt int) { (*op) = make(Bool_Unboxed_Slice, cnt) }
 
 func Bool_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]bool) {
-	if n.RepeatValues(Bool_Type, (*Bool_Unboxed_Slice)(vals)) {
+	if n.MarshalBlock((*Bool_Unboxed_Slice)(vals)) {
 		for i := range *vals {
 			Bool_Unboxed_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -76,15 +77,16 @@ func Bool_Marshal(n jsn.Marshaler, val *Bool) {
 
 type Bool_Slice []Bool
 
+func (op *Bool_Slice) GetType() string { return Bool_Type }
 func (op *Bool_Slice) GetSize() int    { return len(*op) }
 func (op *Bool_Slice) SetSize(cnt int) { (*op) = make(Bool_Slice, cnt) }
 
 func Bool_Repeats_Marshal(n jsn.Marshaler, vals *[]Bool) {
-	if n.RepeatValues(Bool_Type, (*Bool_Slice)(vals)) {
+	if n.MarshalBlock((*Bool_Slice)(vals)) {
 		for i := range *vals {
 			Bool_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -124,15 +126,16 @@ func Lines_Marshal(n jsn.Marshaler, val *Lines) {
 
 type Lines_Slice []Lines
 
+func (op *Lines_Slice) GetType() string { return Lines_Type }
 func (op *Lines_Slice) GetSize() int    { return len(*op) }
 func (op *Lines_Slice) SetSize(cnt int) { (*op) = make(Lines_Slice, cnt) }
 
 func Lines_Repeats_Marshal(n jsn.Marshaler, vals *[]Lines) {
-	if n.RepeatValues(Lines_Type, (*Lines_Slice)(vals)) {
+	if n.MarshalBlock((*Lines_Slice)(vals)) {
 		for i := range *vals {
 			Lines_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -156,15 +159,16 @@ func (op *Number) Marshal(n jsn.Marshaler) {
 
 type Number_Unboxed_Slice []float64
 
+func (op *Number_Unboxed_Slice) GetType() string { return Number_Type }
 func (op *Number_Unboxed_Slice) GetSize() int    { return len(*op) }
 func (op *Number_Unboxed_Slice) SetSize(cnt int) { (*op) = make(Number_Unboxed_Slice, cnt) }
 
 func Number_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]float64) {
-	if n.RepeatValues(Number_Type, (*Number_Unboxed_Slice)(vals)) {
+	if n.MarshalBlock((*Number_Unboxed_Slice)(vals)) {
 		for i := range *vals {
 			Number_Unboxed_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -192,15 +196,16 @@ func Number_Marshal(n jsn.Marshaler, val *Number) {
 
 type Number_Slice []Number
 
+func (op *Number_Slice) GetType() string { return Number_Type }
 func (op *Number_Slice) GetSize() int    { return len(*op) }
 func (op *Number_Slice) SetSize(cnt int) { (*op) = make(Number_Slice, cnt) }
 
 func Number_Repeats_Marshal(n jsn.Marshaler, vals *[]Number) {
-	if n.RepeatValues(Number_Type, (*Number_Slice)(vals)) {
+	if n.MarshalBlock((*Number_Slice)(vals)) {
 		for i := range *vals {
 			Number_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -242,15 +247,16 @@ func PatternName_Marshal(n jsn.Marshaler, val *PatternName) {
 
 type PatternName_Slice []PatternName
 
+func (op *PatternName_Slice) GetType() string { return PatternName_Type }
 func (op *PatternName_Slice) GetSize() int    { return len(*op) }
 func (op *PatternName_Slice) SetSize(cnt int) { (*op) = make(PatternName_Slice, cnt) }
 
 func PatternName_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternName) {
-	if n.RepeatValues(PatternName_Type, (*PatternName_Slice)(vals)) {
+	if n.MarshalBlock((*PatternName_Slice)(vals)) {
 		for i := range *vals {
 			PatternName_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -292,15 +298,16 @@ func RelationName_Marshal(n jsn.Marshaler, val *RelationName) {
 
 type RelationName_Slice []RelationName
 
+func (op *RelationName_Slice) GetType() string { return RelationName_Type }
 func (op *RelationName_Slice) GetSize() int    { return len(*op) }
 func (op *RelationName_Slice) SetSize(cnt int) { (*op) = make(RelationName_Slice, cnt) }
 
 func RelationName_Repeats_Marshal(n jsn.Marshaler, vals *[]RelationName) {
-	if n.RepeatValues(RelationName_Type, (*RelationName_Slice)(vals)) {
+	if n.MarshalBlock((*RelationName_Slice)(vals)) {
 		for i := range *vals {
 			RelationName_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -329,15 +336,16 @@ func (op *Text) Marshal(n jsn.Marshaler) {
 
 type Text_Unboxed_Slice []string
 
+func (op *Text_Unboxed_Slice) GetType() string { return Text_Type }
 func (op *Text_Unboxed_Slice) GetSize() int    { return len(*op) }
 func (op *Text_Unboxed_Slice) SetSize(cnt int) { (*op) = make(Text_Unboxed_Slice, cnt) }
 
 func Text_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]string) {
-	if n.RepeatValues(Text_Type, (*Text_Unboxed_Slice)(vals)) {
+	if n.MarshalBlock((*Text_Unboxed_Slice)(vals)) {
 		for i := range *vals {
 			Text_Unboxed_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -365,15 +373,16 @@ func Text_Marshal(n jsn.Marshaler, val *Text) {
 
 type Text_Slice []Text
 
+func (op *Text_Slice) GetType() string { return Text_Type }
 func (op *Text_Slice) GetSize() int    { return len(*op) }
 func (op *Text_Slice) SetSize(cnt int) { (*op) = make(Text_Slice, cnt) }
 
 func Text_Repeats_Marshal(n jsn.Marshaler, vals *[]Text) {
-	if n.RepeatValues(Text_Type, (*Text_Slice)(vals)) {
+	if n.MarshalBlock((*Text_Slice)(vals)) {
 		for i := range *vals {
 			Text_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -415,15 +424,16 @@ func VariableName_Marshal(n jsn.Marshaler, val *VariableName) {
 
 type VariableName_Slice []VariableName
 
+func (op *VariableName_Slice) GetType() string { return VariableName_Type }
 func (op *VariableName_Slice) GetSize() int    { return len(*op) }
 func (op *VariableName_Slice) SetSize(cnt int) { (*op) = make(VariableName_Slice, cnt) }
 
 func VariableName_Repeats_Marshal(n jsn.Marshaler, vals *[]VariableName) {
-	if n.RepeatValues(VariableName_Type, (*VariableName_Slice)(vals)) {
+	if n.MarshalBlock((*VariableName_Slice)(vals)) {
 		for i := range *vals {
 			VariableName_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 

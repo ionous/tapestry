@@ -34,15 +34,16 @@ func (op *DebugLog) Marshal(n jsn.Marshaler) {
 
 type DebugLog_Slice []DebugLog
 
+func (op *DebugLog_Slice) GetType() string { return DebugLog_Type }
 func (op *DebugLog_Slice) GetSize() int    { return len(*op) }
 func (op *DebugLog_Slice) SetSize(cnt int) { (*op) = make(DebugLog_Slice, cnt) }
 
 func DebugLog_Repeats_Marshal(n jsn.Marshaler, vals *[]DebugLog) {
-	if n.RepeatValues(DebugLog_Type, (*DebugLog_Slice)(vals)) {
+	if n.MarshalBlock((*DebugLog_Slice)(vals)) {
 		for i := range *vals {
 			DebugLog_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -58,14 +59,15 @@ func DebugLog_Optional_Marshal(n jsn.Marshaler, pv **DebugLog) {
 }
 
 func DebugLog_Marshal(n jsn.Marshaler, val *DebugLog) (okay bool) {
-	if okay = n.MapValues("log", DebugLog_Type); okay {
-		if n.MapKey("", DebugLog_Field_Value) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("log",
+		DebugLog_Type)); okay {
+		if n.MarshalKey("", DebugLog_Field_Value) {
 			rt.Assignment_Marshal(n, &val.Value)
 		}
-		if n.MapKey("as", DebugLog_Field_LogLevel) {
+		if n.MarshalKey("as", DebugLog_Field_LogLevel) {
 			LoggingLevel_Optional_Marshal(n, &val.LogLevel)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -93,15 +95,16 @@ func (op *DoNothing) Marshal(n jsn.Marshaler) {
 
 type DoNothing_Slice []DoNothing
 
+func (op *DoNothing_Slice) GetType() string { return DoNothing_Type }
 func (op *DoNothing_Slice) GetSize() int    { return len(*op) }
 func (op *DoNothing_Slice) SetSize(cnt int) { (*op) = make(DoNothing_Slice, cnt) }
 
 func DoNothing_Repeats_Marshal(n jsn.Marshaler, vals *[]DoNothing) {
-	if n.RepeatValues(DoNothing_Type, (*DoNothing_Slice)(vals)) {
+	if n.MarshalBlock((*DoNothing_Slice)(vals)) {
 		for i := range *vals {
 			DoNothing_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -117,11 +120,12 @@ func DoNothing_Optional_Marshal(n jsn.Marshaler, pv **DoNothing) {
 }
 
 func DoNothing_Marshal(n jsn.Marshaler, val *DoNothing) (okay bool) {
-	if okay = n.MapValues(DoNothing_Type, DoNothing_Type); okay {
-		if n.MapKey("why", DoNothing_Field_Reason) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(DoNothing_Type,
+		DoNothing_Type)); okay {
+		if n.MarshalKey("why", DoNothing_Field_Reason) {
 			value.Text_Unboxed_Optional_Marshal(n, &val.Reason)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -174,15 +178,16 @@ func LoggingLevel_Marshal(n jsn.Marshaler, val *LoggingLevel) {
 
 type LoggingLevel_Slice []LoggingLevel
 
+func (op *LoggingLevel_Slice) GetType() string { return LoggingLevel_Type }
 func (op *LoggingLevel_Slice) GetSize() int    { return len(*op) }
 func (op *LoggingLevel_Slice) SetSize(cnt int) { (*op) = make(LoggingLevel_Slice, cnt) }
 
 func LoggingLevel_Repeats_Marshal(n jsn.Marshaler, vals *[]LoggingLevel) {
-	if n.RepeatValues(LoggingLevel_Type, (*LoggingLevel_Slice)(vals)) {
+	if n.MarshalBlock((*LoggingLevel_Slice)(vals)) {
 		for i := range *vals {
 			LoggingLevel_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 

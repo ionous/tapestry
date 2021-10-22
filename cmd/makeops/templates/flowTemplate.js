@@ -50,9 +50,11 @@ func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, val *{{Pascal name}}) (okay
 {{#if (IsPositioned this)}}
   n.SetCursor(val.At.Offset)
 {{/if}}
-  if okay = n.MapValues({{#if (LedeName this)}}"{{LedeName this}}"{{else}}{{Pascal name}}_Type{{/if}}, {{Pascal name}}_Type); okay {
+  if okay = n.MarshalBlock(jsn.MarkFlow(
+{{~#if (LedeName this)}}"{{LedeName this}}"{{else}}{{Pascal name}}_Type{{/if}},
+{{Pascal name}}_Type)); okay {
 {{~#each params}}{{#unless (IsInternal label)}}
-    if n.MapKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}}) {
+    if n.MarshalKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}}) {
       {{ScopeOf type}}{{Pascal type}}
       {{~#if (Unboxed type)}}_Unboxed{{/if}}
       {{~#if repeats}}_Repeats
@@ -60,7 +62,7 @@ func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, val *{{Pascal name}}) (okay
       {{~/if}}_Marshal(n, &val.{{Pascal key}})
     }
 {{~/unless}}{{/each}}
-    n.EndValues()
+    n.EndBlock()
   }
   return
 }

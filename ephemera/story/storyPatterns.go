@@ -1,12 +1,10 @@
 package story
 
 import (
-	r "reflect"
-
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera"
-	"git.sr.ht/~ionous/iffy/export"
+	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -110,7 +108,7 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 		if guard := op.Guard; guard == nil {
 			err = errutil.New("missing guard in", pattern.String(), "at", op.Hook.At.String())
 		} else {
-			if searchForCounters(r.ValueOf(guard)) {
+			if searchForCounters(guard.(jsn.Marshalee)) {
 				flags |= rt.Filter
 			}
 			// check if this rule is declared inside a specific domain
@@ -177,60 +175,6 @@ func (op *PatternType) ImportType(k *Importer) (ret ephemera.Named, err error) {
 		err = errutil.Fmt("choice %s not found in %T", op.Str, op)
 	} else {
 		ret = k.NewName(t, tables.NAMED_TYPE, op.At.String())
-	}
-	return
-}
-
-func searchForCounters(rval r.Value) bool {
-	return searchForType(rval.Elem(), r.TypeOf((*core.CallTrigger)(nil)).Elem())
-}
-
-func searchForType(rval r.Value, match r.Type) (ret bool) {
-	if rtype := rval.Type(); rtype == match {
-		ret = true
-	} else {
-		ret = export.WalkProperties(rtype, func(f *r.StructField, path []int) (ret bool) {
-			switch ftype := f.Type; ftype.Kind() {
-			case r.Slice:
-				k := ftype.Elem().Kind()
-				if k == r.Interface {
-					f := rval.FieldByIndex(path)
-					for i, cnt := 0, f.Len(); i < cnt; i++ {
-						if el := f.Index(i); checkInterfaceType(el, match) {
-							ret = true
-							break
-						}
-					}
-				}
-
-			case r.Ptr:
-				f := rval.FieldByIndex(path)
-				ret = checkPtrType(f, match)
-			case r.Interface:
-				f := rval.FieldByIndex(path)
-				ret = checkInterfaceType(f, match)
-			}
-			return
-		})
-	}
-	return
-}
-
-func checkPtrType(f r.Value, match r.Type) (ret bool) {
-	if !f.IsNil() {
-		if el := f.Elem(); el.Kind() == r.Struct {
-			ret = searchForType(el, match)
-		}
-	}
-	return
-}
-
-func checkInterfaceType(f r.Value, match r.Type) (ret bool) {
-	if !f.IsNil() {
-		el := f.Elem()
-		if k := el.Kind(); k == r.Ptr {
-			ret = checkPtrType(el, match)
-		}
 	}
 	return
 }

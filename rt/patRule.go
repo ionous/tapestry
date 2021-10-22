@@ -35,8 +35,8 @@ const (
 	Prefix  Flags = (1 << iota) // all prefix rules get sorted towards the front of the list
 	Infix                       // keeps the rule at the same relative location
 	Postfix                     // all postfix rules get sorted towards the end of the list
-	After
-	Filter
+	After                       //
+	Filter                      // internal flag to find (and always update) counters in rules
 )
 
 func (l Rule) Flags() (ret Flags) {

@@ -32,15 +32,16 @@ func (op *RenderExp) Marshal(n jsn.Marshaler) {
 
 type RenderExp_Slice []RenderExp
 
+func (op *RenderExp_Slice) GetType() string { return RenderExp_Type }
 func (op *RenderExp_Slice) GetSize() int    { return len(*op) }
 func (op *RenderExp_Slice) SetSize(cnt int) { (*op) = make(RenderExp_Slice, cnt) }
 
 func RenderExp_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderExp) {
-	if n.RepeatValues(RenderExp_Type, (*RenderExp_Slice)(vals)) {
+	if n.MarshalBlock((*RenderExp_Slice)(vals)) {
 		for i := range *vals {
 			RenderExp_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -56,11 +57,12 @@ func RenderExp_Optional_Marshal(n jsn.Marshaler, pv **RenderExp) {
 }
 
 func RenderExp_Marshal(n jsn.Marshaler, val *RenderExp) (okay bool) {
-	if okay = n.MapValues(RenderExp_Type, RenderExp_Type); okay {
-		if n.MapKey("", RenderExp_Field_Expression) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(RenderExp_Type,
+		RenderExp_Type)); okay {
+		if n.MarshalKey("", RenderExp_Field_Expression) {
 			rt.TextEval_Marshal(n, &val.Expression)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -88,15 +90,16 @@ func (op *RenderField) Marshal(n jsn.Marshaler) {
 
 type RenderField_Slice []RenderField
 
+func (op *RenderField_Slice) GetType() string { return RenderField_Type }
 func (op *RenderField_Slice) GetSize() int    { return len(*op) }
 func (op *RenderField_Slice) SetSize(cnt int) { (*op) = make(RenderField_Slice, cnt) }
 
 func RenderField_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderField) {
-	if n.RepeatValues(RenderField_Type, (*RenderField_Slice)(vals)) {
+	if n.MarshalBlock((*RenderField_Slice)(vals)) {
 		for i := range *vals {
 			RenderField_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -112,11 +115,12 @@ func RenderField_Optional_Marshal(n jsn.Marshaler, pv **RenderField) {
 }
 
 func RenderField_Marshal(n jsn.Marshaler, val *RenderField) (okay bool) {
-	if okay = n.MapValues(RenderField_Type, RenderField_Type); okay {
-		if n.MapKey("", RenderField_Field_Name) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(RenderField_Type,
+		RenderField_Type)); okay {
+		if n.MarshalKey("", RenderField_Field_Name) {
 			rt.TextEval_Marshal(n, &val.Name)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -166,15 +170,16 @@ func RenderFlags_Marshal(n jsn.Marshaler, val *RenderFlags) {
 
 type RenderFlags_Slice []RenderFlags
 
+func (op *RenderFlags_Slice) GetType() string { return RenderFlags_Type }
 func (op *RenderFlags_Slice) GetSize() int    { return len(*op) }
 func (op *RenderFlags_Slice) SetSize(cnt int) { (*op) = make(RenderFlags_Slice, cnt) }
 
 func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {
-	if n.RepeatValues(RenderFlags_Type, (*RenderFlags_Slice)(vals)) {
+	if n.MarshalBlock((*RenderFlags_Slice)(vals)) {
 		for i := range *vals {
 			RenderFlags_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -201,15 +206,16 @@ func (op *RenderName) Marshal(n jsn.Marshaler) {
 
 type RenderName_Slice []RenderName
 
+func (op *RenderName_Slice) GetType() string { return RenderName_Type }
 func (op *RenderName_Slice) GetSize() int    { return len(*op) }
 func (op *RenderName_Slice) SetSize(cnt int) { (*op) = make(RenderName_Slice, cnt) }
 
 func RenderName_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderName) {
-	if n.RepeatValues(RenderName_Type, (*RenderName_Slice)(vals)) {
+	if n.MarshalBlock((*RenderName_Slice)(vals)) {
 		for i := range *vals {
 			RenderName_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -225,11 +231,12 @@ func RenderName_Optional_Marshal(n jsn.Marshaler, pv **RenderName) {
 }
 
 func RenderName_Marshal(n jsn.Marshaler, val *RenderName) (okay bool) {
-	if okay = n.MapValues(RenderName_Type, RenderName_Type); okay {
-		if n.MapKey("", RenderName_Field_Name) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(RenderName_Type,
+		RenderName_Type)); okay {
+		if n.MarshalKey("", RenderName_Field_Name) {
 			value.Text_Unboxed_Marshal(n, &val.Name)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -260,15 +267,16 @@ func (op *RenderPattern) Marshal(n jsn.Marshaler) {
 
 type RenderPattern_Slice []RenderPattern
 
+func (op *RenderPattern_Slice) GetType() string { return RenderPattern_Type }
 func (op *RenderPattern_Slice) GetSize() int    { return len(*op) }
 func (op *RenderPattern_Slice) SetSize(cnt int) { (*op) = make(RenderPattern_Slice, cnt) }
 
 func RenderPattern_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderPattern) {
-	if n.RepeatValues(RenderPattern_Type, (*RenderPattern_Slice)(vals)) {
+	if n.MarshalBlock((*RenderPattern_Slice)(vals)) {
 		for i := range *vals {
 			RenderPattern_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -284,14 +292,15 @@ func RenderPattern_Optional_Marshal(n jsn.Marshaler, pv **RenderPattern) {
 }
 
 func RenderPattern_Marshal(n jsn.Marshaler, val *RenderPattern) (okay bool) {
-	if okay = n.MapValues("render", RenderPattern_Type); okay {
-		if n.MapKey("", RenderPattern_Field_Pattern) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("render",
+		RenderPattern_Type)); okay {
+		if n.MarshalKey("", RenderPattern_Field_Pattern) {
 			value.PatternName_Marshal(n, &val.Pattern)
 		}
-		if n.MapKey("args", RenderPattern_Field_Arguments) {
+		if n.MarshalKey("args", RenderPattern_Field_Arguments) {
 			core.CallArgs_Marshal(n, &val.Arguments)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -321,15 +330,16 @@ func (op *RenderRef) Marshal(n jsn.Marshaler) {
 
 type RenderRef_Slice []RenderRef
 
+func (op *RenderRef_Slice) GetType() string { return RenderRef_Type }
 func (op *RenderRef_Slice) GetSize() int    { return len(*op) }
 func (op *RenderRef_Slice) SetSize(cnt int) { (*op) = make(RenderRef_Slice, cnt) }
 
 func RenderRef_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderRef) {
-	if n.RepeatValues(RenderRef_Type, (*RenderRef_Slice)(vals)) {
+	if n.MarshalBlock((*RenderRef_Slice)(vals)) {
 		for i := range *vals {
 			RenderRef_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -345,14 +355,15 @@ func RenderRef_Optional_Marshal(n jsn.Marshaler, pv **RenderRef) {
 }
 
 func RenderRef_Marshal(n jsn.Marshaler, val *RenderRef) (okay bool) {
-	if okay = n.MapValues(RenderRef_Type, RenderRef_Type); okay {
-		if n.MapKey("", RenderRef_Field_Name) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(RenderRef_Type,
+		RenderRef_Type)); okay {
+		if n.MarshalKey("", RenderRef_Field_Name) {
 			value.VariableName_Marshal(n, &val.Name)
 		}
-		if n.MapKey("flags", RenderRef_Field_Flags) {
+		if n.MarshalKey("flags", RenderRef_Field_Flags) {
 			RenderFlags_Marshal(n, &val.Flags)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }

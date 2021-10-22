@@ -31,15 +31,16 @@ func (op *Action) Marshal(n jsn.Marshaler) {
 
 type Action_Slice []Action
 
+func (op *Action_Slice) GetType() string { return Action_Type }
 func (op *Action_Slice) GetSize() int    { return len(*op) }
 func (op *Action_Slice) SetSize(cnt int) { (*op) = make(Action_Slice, cnt) }
 
 func Action_Repeats_Marshal(n jsn.Marshaler, vals *[]Action) {
-	if n.RepeatValues(Action_Type, (*Action_Slice)(vals)) {
+	if n.MarshalBlock((*Action_Slice)(vals)) {
 		for i := range *vals {
 			Action_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -55,11 +56,12 @@ func Action_Optional_Marshal(n jsn.Marshaler, pv **Action) {
 }
 
 func Action_Marshal(n jsn.Marshaler, val *Action) (okay bool) {
-	if okay = n.MapValues("as", Action_Type); okay {
-		if n.MapKey("", Action_Field_Action) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("as",
+		Action_Type)); okay {
+		if n.MarshalKey("", Action_Field_Action) {
 			value.Text_Unboxed_Marshal(n, &val.Action)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -89,15 +91,16 @@ func (op *Alias) Marshal(n jsn.Marshaler) {
 
 type Alias_Slice []Alias
 
+func (op *Alias_Slice) GetType() string { return Alias_Type }
 func (op *Alias_Slice) GetSize() int    { return len(*op) }
 func (op *Alias_Slice) SetSize(cnt int) { (*op) = make(Alias_Slice, cnt) }
 
 func Alias_Repeats_Marshal(n jsn.Marshaler, vals *[]Alias) {
-	if n.RepeatValues(Alias_Type, (*Alias_Slice)(vals)) {
+	if n.MarshalBlock((*Alias_Slice)(vals)) {
 		for i := range *vals {
 			Alias_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -113,14 +116,15 @@ func Alias_Optional_Marshal(n jsn.Marshaler, pv **Alias) {
 }
 
 func Alias_Marshal(n jsn.Marshaler, val *Alias) (okay bool) {
-	if okay = n.MapValues(Alias_Type, Alias_Type); okay {
-		if n.MapKey("", Alias_Field_Names) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Alias_Type,
+		Alias_Type)); okay {
+		if n.MarshalKey("", Alias_Field_Names) {
 			value.Text_Unboxed_Repeats_Marshal(n, &val.Names)
 		}
-		if n.MapKey("as_noun", Alias_Field_AsNoun) {
+		if n.MarshalKey("as_noun", Alias_Field_AsNoun) {
 			value.Text_Unboxed_Marshal(n, &val.AsNoun)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -148,15 +152,16 @@ func (op *AllOf) Marshal(n jsn.Marshaler) {
 
 type AllOf_Slice []AllOf
 
+func (op *AllOf_Slice) GetType() string { return AllOf_Type }
 func (op *AllOf_Slice) GetSize() int    { return len(*op) }
 func (op *AllOf_Slice) SetSize(cnt int) { (*op) = make(AllOf_Slice, cnt) }
 
 func AllOf_Repeats_Marshal(n jsn.Marshaler, vals *[]AllOf) {
-	if n.RepeatValues(AllOf_Type, (*AllOf_Slice)(vals)) {
+	if n.MarshalBlock((*AllOf_Slice)(vals)) {
 		for i := range *vals {
 			AllOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -172,11 +177,12 @@ func AllOf_Optional_Marshal(n jsn.Marshaler, pv **AllOf) {
 }
 
 func AllOf_Marshal(n jsn.Marshaler, val *AllOf) (okay bool) {
-	if okay = n.MapValues(AllOf_Type, AllOf_Type); okay {
-		if n.MapKey("", AllOf_Field_Series) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(AllOf_Type,
+		AllOf_Type)); okay {
+		if n.MarshalKey("", AllOf_Field_Series) {
 			ScannerMaker_Repeats_Marshal(n, &val.Series)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -204,15 +210,16 @@ func (op *AnyOf) Marshal(n jsn.Marshaler) {
 
 type AnyOf_Slice []AnyOf
 
+func (op *AnyOf_Slice) GetType() string { return AnyOf_Type }
 func (op *AnyOf_Slice) GetSize() int    { return len(*op) }
 func (op *AnyOf_Slice) SetSize(cnt int) { (*op) = make(AnyOf_Slice, cnt) }
 
 func AnyOf_Repeats_Marshal(n jsn.Marshaler, vals *[]AnyOf) {
-	if n.RepeatValues(AnyOf_Type, (*AnyOf_Slice)(vals)) {
+	if n.MarshalBlock((*AnyOf_Slice)(vals)) {
 		for i := range *vals {
 			AnyOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -228,11 +235,12 @@ func AnyOf_Optional_Marshal(n jsn.Marshaler, pv **AnyOf) {
 }
 
 func AnyOf_Marshal(n jsn.Marshaler, val *AnyOf) (okay bool) {
-	if okay = n.MapValues(AnyOf_Type, AnyOf_Type); okay {
-		if n.MapKey("", AnyOf_Field_Options) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(AnyOf_Type,
+		AnyOf_Type)); okay {
+		if n.MarshalKey("", AnyOf_Field_Options) {
 			ScannerMaker_Repeats_Marshal(n, &val.Options)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -262,15 +270,16 @@ func (op *Directive) Marshal(n jsn.Marshaler) {
 
 type Directive_Slice []Directive
 
+func (op *Directive_Slice) GetType() string { return Directive_Type }
 func (op *Directive_Slice) GetSize() int    { return len(*op) }
 func (op *Directive_Slice) SetSize(cnt int) { (*op) = make(Directive_Slice, cnt) }
 
 func Directive_Repeats_Marshal(n jsn.Marshaler, vals *[]Directive) {
-	if n.RepeatValues(Directive_Type, (*Directive_Slice)(vals)) {
+	if n.MarshalBlock((*Directive_Slice)(vals)) {
 		for i := range *vals {
 			Directive_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -286,14 +295,15 @@ func Directive_Optional_Marshal(n jsn.Marshaler, pv **Directive) {
 }
 
 func Directive_Marshal(n jsn.Marshaler, val *Directive) (okay bool) {
-	if okay = n.MapValues(Directive_Type, Directive_Type); okay {
-		if n.MapKey("", Directive_Field_Lede) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Directive_Type,
+		Directive_Type)); okay {
+		if n.MarshalKey("", Directive_Field_Lede) {
 			value.Text_Unboxed_Repeats_Marshal(n, &val.Lede)
 		}
-		if n.MapKey("scans", Directive_Field_Scans) {
+		if n.MarshalKey("scans", Directive_Field_Scans) {
 			ScannerMaker_Repeats_Marshal(n, &val.Scans)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -320,15 +330,16 @@ func (op *Grammar) Marshal(n jsn.Marshaler) {
 
 type Grammar_Slice []Grammar
 
+func (op *Grammar_Slice) GetType() string { return Grammar_Type }
 func (op *Grammar_Slice) GetSize() int    { return len(*op) }
 func (op *Grammar_Slice) SetSize(cnt int) { (*op) = make(Grammar_Slice, cnt) }
 
 func Grammar_Repeats_Marshal(n jsn.Marshaler, vals *[]Grammar) {
-	if n.RepeatValues(Grammar_Type, (*Grammar_Slice)(vals)) {
+	if n.MarshalBlock((*Grammar_Slice)(vals)) {
 		for i := range *vals {
 			Grammar_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -344,11 +355,12 @@ func Grammar_Optional_Marshal(n jsn.Marshaler, pv **Grammar) {
 }
 
 func Grammar_Marshal(n jsn.Marshaler, val *Grammar) (okay bool) {
-	if okay = n.MapValues(Grammar_Type, Grammar_Type); okay {
-		if n.MapKey("", Grammar_Field_Grammar) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Grammar_Type,
+		Grammar_Type)); okay {
+		if n.MarshalKey("", Grammar_Field_Grammar) {
 			GrammarMaker_Marshal(n, &val.Grammar)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -359,31 +371,33 @@ var GrammarMaker_Optional_Marshal = GrammarMaker_Marshal
 
 type GrammarMaker_Slot struct{ ptr *GrammarMaker }
 
-func (at GrammarMaker_Slot) HasSlot() bool { return at.ptr != nil }
+func (At GrammarMaker_Slot) GetType() string { return GrammarMaker_Type }
+func (at GrammarMaker_Slot) HasSlot() bool   { return at.ptr != nil }
 func (at GrammarMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(GrammarMaker)
 	return
 }
 
 func GrammarMaker_Marshal(n jsn.Marshaler, ptr *GrammarMaker) (okay bool) {
-	if okay = n.SlotValues(GrammarMaker_Type, GrammarMaker_Slot{ptr}); okay {
+	if okay = n.MarshalBlock(GrammarMaker_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
 
 type GrammarMaker_Slice []GrammarMaker
 
+func (op *GrammarMaker_Slice) GetType() string { return GrammarMaker_Type }
 func (op *GrammarMaker_Slice) GetSize() int    { return len(*op) }
 func (op *GrammarMaker_Slice) SetSize(cnt int) { (*op) = make(GrammarMaker_Slice, cnt) }
 
 func GrammarMaker_Repeats_Marshal(n jsn.Marshaler, vals *[]GrammarMaker) {
-	if n.RepeatValues(GrammarMaker_Type, (*GrammarMaker_Slice)(vals)) {
+	if n.MarshalBlock((*GrammarMaker_Slice)(vals)) {
 		for i := range *vals {
 			GrammarMaker_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -410,15 +424,16 @@ func (op *Noun) Marshal(n jsn.Marshaler) {
 
 type Noun_Slice []Noun
 
+func (op *Noun_Slice) GetType() string { return Noun_Type }
 func (op *Noun_Slice) GetSize() int    { return len(*op) }
 func (op *Noun_Slice) SetSize(cnt int) { (*op) = make(Noun_Slice, cnt) }
 
 func Noun_Repeats_Marshal(n jsn.Marshaler, vals *[]Noun) {
-	if n.RepeatValues(Noun_Type, (*Noun_Slice)(vals)) {
+	if n.MarshalBlock((*Noun_Slice)(vals)) {
 		for i := range *vals {
 			Noun_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -434,11 +449,12 @@ func Noun_Optional_Marshal(n jsn.Marshaler, pv **Noun) {
 }
 
 func Noun_Marshal(n jsn.Marshaler, val *Noun) (okay bool) {
-	if okay = n.MapValues(Noun_Type, Noun_Type); okay {
-		if n.MapKey("", Noun_Field_Kind) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Noun_Type,
+		Noun_Type)); okay {
+		if n.MarshalKey("", Noun_Field_Kind) {
 			value.Text_Unboxed_Marshal(n, &val.Kind)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -466,15 +482,16 @@ func (op *Retarget) Marshal(n jsn.Marshaler) {
 
 type Retarget_Slice []Retarget
 
+func (op *Retarget_Slice) GetType() string { return Retarget_Type }
 func (op *Retarget_Slice) GetSize() int    { return len(*op) }
 func (op *Retarget_Slice) SetSize(cnt int) { (*op) = make(Retarget_Slice, cnt) }
 
 func Retarget_Repeats_Marshal(n jsn.Marshaler, vals *[]Retarget) {
-	if n.RepeatValues(Retarget_Type, (*Retarget_Slice)(vals)) {
+	if n.MarshalBlock((*Retarget_Slice)(vals)) {
 		for i := range *vals {
 			Retarget_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -490,11 +507,12 @@ func Retarget_Optional_Marshal(n jsn.Marshaler, pv **Retarget) {
 }
 
 func Retarget_Marshal(n jsn.Marshaler, val *Retarget) (okay bool) {
-	if okay = n.MapValues(Retarget_Type, Retarget_Type); okay {
-		if n.MapKey("", Retarget_Field_Span) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Retarget_Type,
+		Retarget_Type)); okay {
+		if n.MarshalKey("", Retarget_Field_Span) {
 			ScannerMaker_Repeats_Marshal(n, &val.Span)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -522,15 +540,16 @@ func (op *Reverse) Marshal(n jsn.Marshaler) {
 
 type Reverse_Slice []Reverse
 
+func (op *Reverse_Slice) GetType() string { return Reverse_Type }
 func (op *Reverse_Slice) GetSize() int    { return len(*op) }
 func (op *Reverse_Slice) SetSize(cnt int) { (*op) = make(Reverse_Slice, cnt) }
 
 func Reverse_Repeats_Marshal(n jsn.Marshaler, vals *[]Reverse) {
-	if n.RepeatValues(Reverse_Type, (*Reverse_Slice)(vals)) {
+	if n.MarshalBlock((*Reverse_Slice)(vals)) {
 		for i := range *vals {
 			Reverse_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -546,11 +565,12 @@ func Reverse_Optional_Marshal(n jsn.Marshaler, pv **Reverse) {
 }
 
 func Reverse_Marshal(n jsn.Marshaler, val *Reverse) (okay bool) {
-	if okay = n.MapValues(Reverse_Type, Reverse_Type); okay {
-		if n.MapKey("", Reverse_Field_Reverses) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Reverse_Type,
+		Reverse_Type)); okay {
+		if n.MarshalKey("", Reverse_Field_Reverses) {
 			ScannerMaker_Repeats_Marshal(n, &val.Reverses)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -561,31 +581,33 @@ var ScannerMaker_Optional_Marshal = ScannerMaker_Marshal
 
 type ScannerMaker_Slot struct{ ptr *ScannerMaker }
 
-func (at ScannerMaker_Slot) HasSlot() bool { return at.ptr != nil }
+func (At ScannerMaker_Slot) GetType() string { return ScannerMaker_Type }
+func (at ScannerMaker_Slot) HasSlot() bool   { return at.ptr != nil }
 func (at ScannerMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(ScannerMaker)
 	return
 }
 
 func ScannerMaker_Marshal(n jsn.Marshaler, ptr *ScannerMaker) (okay bool) {
-	if okay = n.SlotValues(ScannerMaker_Type, ScannerMaker_Slot{ptr}); okay {
+	if okay = n.MarshalBlock(ScannerMaker_Slot{ptr}); okay {
 		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
 
 type ScannerMaker_Slice []ScannerMaker
 
+func (op *ScannerMaker_Slice) GetType() string { return ScannerMaker_Type }
 func (op *ScannerMaker_Slice) GetSize() int    { return len(*op) }
 func (op *ScannerMaker_Slice) SetSize(cnt int) { (*op) = make(ScannerMaker_Slice, cnt) }
 
 func ScannerMaker_Repeats_Marshal(n jsn.Marshaler, vals *[]ScannerMaker) {
-	if n.RepeatValues(ScannerMaker_Type, (*ScannerMaker_Slice)(vals)) {
+	if n.MarshalBlock((*ScannerMaker_Slice)(vals)) {
 		for i := range *vals {
 			ScannerMaker_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -612,15 +634,16 @@ func (op *Self) Marshal(n jsn.Marshaler) {
 
 type Self_Slice []Self
 
+func (op *Self_Slice) GetType() string { return Self_Type }
 func (op *Self_Slice) GetSize() int    { return len(*op) }
 func (op *Self_Slice) SetSize(cnt int) { (*op) = make(Self_Slice, cnt) }
 
 func Self_Repeats_Marshal(n jsn.Marshaler, vals *[]Self) {
-	if n.RepeatValues(Self_Type, (*Self_Slice)(vals)) {
+	if n.MarshalBlock((*Self_Slice)(vals)) {
 		for i := range *vals {
 			Self_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -636,11 +659,12 @@ func Self_Optional_Marshal(n jsn.Marshaler, pv **Self) {
 }
 
 func Self_Marshal(n jsn.Marshaler, val *Self) (okay bool) {
-	if okay = n.MapValues(Self_Type, Self_Type); okay {
-		if n.MapKey("", Self_Field_Player) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Self_Type,
+		Self_Type)); okay {
+		if n.MarshalKey("", Self_Field_Player) {
 			value.Text_Unboxed_Marshal(n, &val.Player)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -668,15 +692,16 @@ func (op *Words) Marshal(n jsn.Marshaler) {
 
 type Words_Slice []Words
 
+func (op *Words_Slice) GetType() string { return Words_Type }
 func (op *Words_Slice) GetSize() int    { return len(*op) }
 func (op *Words_Slice) SetSize(cnt int) { (*op) = make(Words_Slice, cnt) }
 
 func Words_Repeats_Marshal(n jsn.Marshaler, vals *[]Words) {
-	if n.RepeatValues(Words_Type, (*Words_Slice)(vals)) {
+	if n.MarshalBlock((*Words_Slice)(vals)) {
 		for i := range *vals {
 			Words_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -692,11 +717,12 @@ func Words_Optional_Marshal(n jsn.Marshaler, pv **Words) {
 }
 
 func Words_Marshal(n jsn.Marshaler, val *Words) (okay bool) {
-	if okay = n.MapValues(Words_Type, Words_Type); okay {
-		if n.MapKey("", Words_Field_Words) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Words_Type,
+		Words_Type)); okay {
+		if n.MarshalKey("", Words_Field_Words) {
 			value.Text_Unboxed_Repeats_Marshal(n, &val.Words)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }

@@ -5,10 +5,10 @@ type Marshalee interface {
 	Marshal(Marshaler)
 }
 
-// Marshaler reads and writes two categories of script data: blocks and primitive values.
-// Blocks are written using begin/end pairs; primitives using SpecifyValue.
-// If a block returns true, a matching EndValues() must be called ( after visiting values or sub-blocks. )
-// If a block returns false, end must *not* be called ( no values or sub-blocks are allowed. )
+// Marshaler reads and writes two categories of script data: simple values, and block values.
+// Block values are composed of simple values, or in some cases other block values.
+// The expected implementation is a hierarchical statemachine of some sort, where
+// "State" mutates during calls to other State functions.
 type Marshaler interface {
 	// is the implementation writing json or reading it.
 	IsEncoding() bool
@@ -23,41 +23,59 @@ type Marshaler interface {
 }
 
 type State interface {
-	// starts a series of key-values pairs
-	// the flow is closed ( written ) with a call to EndValues()
-	MapValues(lede, typeName string) bool
-	// the start of a possible key:value pair inside a flow or literal.
-	// values are begin/end blocks or primitive values.
-	// a new MapKey or an EndValues will cancel writing this pair.
-	MapKey(sig, field string) bool
-	// selects one of an unbounded set of possible values
-	// returns the value if it exists for future serialization
-	SlotValues(typeName string, slot Spotter) bool
-	// selects one of a closed set of possible values
-	// the swap is closed ( written ) with a call to EndValues()
-	PickValues(typeName string, pick Picker) bool
-	// starts a series of values
-	// the repeat is closed ( written ) with a call to EndValues()
-	RepeatValues(typeName string, slice Slicer) bool
-	// ends a flow, swap, or repeat.
-	EndValues()
-	// specify a primitive value or enum.
-	MarshalValue(typeName string, pv interface{}) bool
+	// starts one of various block types.
+	// If this returns true, a matching EndBlock() must be called ( after visiting any sub values. )
+	// If this returns false, EndBlock() must *not* be called ( and no sub values are allowed. )
+	MarshalBlock(BlockType) bool
+	// the start of a possible key:value pair inside a FlowBlock.
+	// a new MarshalKey or an EndBlock will cancel writing this pair.
+	// if this returns true, the corresponding value must be marshaled.
+	MarshalKey(sig, field string) bool
+	// specify a simple value ( or enum. )
+	// returns true/false only to improve compatibility with MarshalBlock;
+	// callers generally should generally not act on the return value.
+	MarshalValue(typeName string, _ interface{}) bool
+	// designates the end of the current block
+	EndBlock()
 }
 
 type CustomizedMarshal func(Marshaler, interface{}) bool
 
-type Slicer interface {
-	GetSize() int
-	SetSize(int)
+// designation for a type which has multiple sub-values.
+type BlockType interface {
+	GetType() string
 }
 
-type Picker interface {
+// starts a series of key-values pairs
+// the flow is closed ( written ) with a call to EndBlock()
+type FlowBlock interface {
+	BlockType
+	GetLede() string
+}
+
+// selects one of a closed set of possible values
+// the swap is closed ( written ) with a call to EndBlock()
+type SwapBlock interface {
+	BlockType
 	GetChoice() (string, bool)
 	SetChoice(string) (interface{}, bool)
 }
+type Picker = SwapBlock
 
-type Spotter interface {
+// starts a series of values
+// the repeat is closed ( written ) with a call to EndBlock()
+type SliceBlock interface {
+	BlockType
+	GetSize() int
+	SetSize(int)
+}
+type Slicer = SliceBlock
+
+// selects one of an unbounded set of possible values
+// returns the value if it exists for future serialization
+type SlotBlock interface {
+	BlockType
 	HasSlot() bool
 	SetSlot(interface{}) bool
 }
+type Spotter = SlotBlock

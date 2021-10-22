@@ -15,6 +15,8 @@ const {{Pascal ../name}}_{{Pascal @key}}_Opt= "{{@key}}";
 
 {{>spec}}
 
+func (op* {{Pascal name}}) GetType() string { return {{Pascal name}}_Type }
+
 func (op* {{Pascal name}}) GetChoice() (ret string, okay bool) {
   switch op.Opt.(type) {
   case nil:
@@ -56,9 +58,9 @@ func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, val *{{Pascal name}}) {
 {{~#if (IsPositioned this)}}
   n.SetCursor(val.At.Offset)
 {{/if}}
-  if n.PickValues({{Pascal name}}_Type, val) {
+  if n.MarshalBlock(val) {
     val.Opt.(jsn.Marshalee).Marshal(n)
-    n.EndValues()
+    n.EndBlock()
   }
 }
 {{/if}}

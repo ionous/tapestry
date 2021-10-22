@@ -34,15 +34,16 @@ func (op *ReciprocalOf) Marshal(n jsn.Marshaler) {
 
 type ReciprocalOf_Slice []ReciprocalOf
 
+func (op *ReciprocalOf_Slice) GetType() string { return ReciprocalOf_Type }
 func (op *ReciprocalOf_Slice) GetSize() int    { return len(*op) }
 func (op *ReciprocalOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalOf_Slice, cnt) }
 
 func ReciprocalOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalOf) {
-	if n.RepeatValues(ReciprocalOf_Type, (*ReciprocalOf_Slice)(vals)) {
+	if n.MarshalBlock((*ReciprocalOf_Slice)(vals)) {
 		for i := range *vals {
 			ReciprocalOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -58,14 +59,15 @@ func ReciprocalOf_Optional_Marshal(n jsn.Marshaler, pv **ReciprocalOf) {
 }
 
 func ReciprocalOf_Marshal(n jsn.Marshaler, val *ReciprocalOf) (okay bool) {
-	if okay = n.MapValues("reciprocal", ReciprocalOf_Type); okay {
-		if n.MapKey("", ReciprocalOf_Field_Via) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("reciprocal",
+		ReciprocalOf_Type)); okay {
+		if n.MarshalKey("", ReciprocalOf_Field_Via) {
 			value.RelationName_Marshal(n, &val.Via)
 		}
-		if n.MapKey("object", ReciprocalOf_Field_Object) {
+		if n.MarshalKey("object", ReciprocalOf_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -96,15 +98,16 @@ func (op *ReciprocalsOf) Marshal(n jsn.Marshaler) {
 
 type ReciprocalsOf_Slice []ReciprocalsOf
 
+func (op *ReciprocalsOf_Slice) GetType() string { return ReciprocalsOf_Type }
 func (op *ReciprocalsOf_Slice) GetSize() int    { return len(*op) }
 func (op *ReciprocalsOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalsOf_Slice, cnt) }
 
 func ReciprocalsOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalsOf) {
-	if n.RepeatValues(ReciprocalsOf_Type, (*ReciprocalsOf_Slice)(vals)) {
+	if n.MarshalBlock((*ReciprocalsOf_Slice)(vals)) {
 		for i := range *vals {
 			ReciprocalsOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -120,14 +123,15 @@ func ReciprocalsOf_Optional_Marshal(n jsn.Marshaler, pv **ReciprocalsOf) {
 }
 
 func ReciprocalsOf_Marshal(n jsn.Marshaler, val *ReciprocalsOf) (okay bool) {
-	if okay = n.MapValues("reciprocals", ReciprocalsOf_Type); okay {
-		if n.MapKey("", ReciprocalsOf_Field_Via) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("reciprocals",
+		ReciprocalsOf_Type)); okay {
+		if n.MarshalKey("", ReciprocalsOf_Field_Via) {
 			value.RelationName_Marshal(n, &val.Via)
 		}
-		if n.MapKey("object", ReciprocalsOf_Field_Object) {
+		if n.MarshalKey("object", ReciprocalsOf_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -159,15 +163,16 @@ func (op *Relate) Marshal(n jsn.Marshaler) {
 
 type Relate_Slice []Relate
 
+func (op *Relate_Slice) GetType() string { return Relate_Type }
 func (op *Relate_Slice) GetSize() int    { return len(*op) }
 func (op *Relate_Slice) SetSize(cnt int) { (*op) = make(Relate_Slice, cnt) }
 
 func Relate_Repeats_Marshal(n jsn.Marshaler, vals *[]Relate) {
-	if n.RepeatValues(Relate_Type, (*Relate_Slice)(vals)) {
+	if n.MarshalBlock((*Relate_Slice)(vals)) {
 		for i := range *vals {
 			Relate_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -183,17 +188,18 @@ func Relate_Optional_Marshal(n jsn.Marshaler, pv **Relate) {
 }
 
 func Relate_Marshal(n jsn.Marshaler, val *Relate) (okay bool) {
-	if okay = n.MapValues(Relate_Type, Relate_Type); okay {
-		if n.MapKey("", Relate_Field_Object) {
+	if okay = n.MarshalBlock(jsn.MarkFlow(Relate_Type,
+		Relate_Type)); okay {
+		if n.MarshalKey("", Relate_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		if n.MapKey("to", Relate_Field_ToObject) {
+		if n.MarshalKey("to", Relate_Field_ToObject) {
 			rt.TextEval_Marshal(n, &val.ToObject)
 		}
-		if n.MapKey("via", Relate_Field_Via) {
+		if n.MarshalKey("via", Relate_Field_Via) {
 			value.RelationName_Marshal(n, &val.Via)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -224,15 +230,16 @@ func (op *RelativeOf) Marshal(n jsn.Marshaler) {
 
 type RelativeOf_Slice []RelativeOf
 
+func (op *RelativeOf_Slice) GetType() string { return RelativeOf_Type }
 func (op *RelativeOf_Slice) GetSize() int    { return len(*op) }
 func (op *RelativeOf_Slice) SetSize(cnt int) { (*op) = make(RelativeOf_Slice, cnt) }
 
 func RelativeOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativeOf) {
-	if n.RepeatValues(RelativeOf_Type, (*RelativeOf_Slice)(vals)) {
+	if n.MarshalBlock((*RelativeOf_Slice)(vals)) {
 		for i := range *vals {
 			RelativeOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -248,14 +255,15 @@ func RelativeOf_Optional_Marshal(n jsn.Marshaler, pv **RelativeOf) {
 }
 
 func RelativeOf_Marshal(n jsn.Marshaler, val *RelativeOf) (okay bool) {
-	if okay = n.MapValues("relative", RelativeOf_Type); okay {
-		if n.MapKey("", RelativeOf_Field_Via) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("relative",
+		RelativeOf_Type)); okay {
+		if n.MarshalKey("", RelativeOf_Field_Via) {
 			value.RelationName_Marshal(n, &val.Via)
 		}
-		if n.MapKey("object", RelativeOf_Field_Object) {
+		if n.MarshalKey("object", RelativeOf_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }
@@ -286,15 +294,16 @@ func (op *RelativesOf) Marshal(n jsn.Marshaler) {
 
 type RelativesOf_Slice []RelativesOf
 
+func (op *RelativesOf_Slice) GetType() string { return RelativesOf_Type }
 func (op *RelativesOf_Slice) GetSize() int    { return len(*op) }
 func (op *RelativesOf_Slice) SetSize(cnt int) { (*op) = make(RelativesOf_Slice, cnt) }
 
 func RelativesOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativesOf) {
-	if n.RepeatValues(RelativesOf_Type, (*RelativesOf_Slice)(vals)) {
+	if n.MarshalBlock((*RelativesOf_Slice)(vals)) {
 		for i := range *vals {
 			RelativesOf_Marshal(n, &(*vals)[i])
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 }
 
@@ -310,14 +319,15 @@ func RelativesOf_Optional_Marshal(n jsn.Marshaler, pv **RelativesOf) {
 }
 
 func RelativesOf_Marshal(n jsn.Marshaler, val *RelativesOf) (okay bool) {
-	if okay = n.MapValues("relatives", RelativesOf_Type); okay {
-		if n.MapKey("", RelativesOf_Field_Via) {
+	if okay = n.MarshalBlock(jsn.MarkFlow("relatives",
+		RelativesOf_Type)); okay {
+		if n.MarshalKey("", RelativesOf_Field_Via) {
 			value.RelationName_Marshal(n, &val.Via)
 		}
-		if n.MapKey("object", RelativesOf_Field_Object) {
+		if n.MarshalKey("object", RelativesOf_Field_Object) {
 			rt.TextEval_Marshal(n, &val.Object)
 		}
-		n.EndValues()
+		n.EndBlock()
 	}
 	return
 }

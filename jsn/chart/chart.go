@@ -32,6 +32,12 @@ func makeMachine(custom Customization, encoding bool) Machine {
 	return Machine{encoding: encoding, custom: custom}
 }
 
+func (m *Machine) Marshal(tgt jsn.Marshalee, init State) error {
+	m.ChangeState(init)
+	tgt.Marshal(m)
+	return m.err
+}
+
 // IsEncoding indicates whether the machine is writing json ( or reading json. )
 func (m *Machine) IsEncoding() bool {
 	return m.encoding
