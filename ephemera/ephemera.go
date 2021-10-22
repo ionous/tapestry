@@ -2,10 +2,8 @@ package ephemera
 
 import (
 	"database/sql"
-	r "reflect"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
@@ -151,10 +149,6 @@ func (k *Recorder) NewTrait(trait, aspect Named, rank int) {
 // NewValue assigns the property of a noun a value;
 // traits can be assigned by naming the individual trait and setting a true ( or false ) value.
 func (k *Recorder) NewValue(noun, prop Named, value interface{}) {
-	// temp; for testing...
-	if v := r.ValueOf(value); v.Kind() == r.Interface {
-		value = value.(rt.Assignment)
-	}
 	k.cache.Must(eph_value, noun, prop, value)
 }
 

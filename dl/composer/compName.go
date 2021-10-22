@@ -1,27 +1,14 @@
 package composer
 
-import (
-	r "reflect"
-
-	"git.sr.ht/~ionous/iffy/lang"
-)
-
-// fix? imposes some otherwise unneeded imports....
 func SpecName(c Composer) (ret string) {
 	if c == nil {
 		ret = "<nil>"
 	} else if spec := c.Compose(); len(spec.Name) > 0 {
 		ret = spec.Name
 	} else {
-		el := r.TypeOf(c).Elem()
-		ret = lang.Underscore(el.Name())
+		ret = "???" // all generated types have names now.
 	}
 	return
-}
-
-func SlotName(c interface{}) string {
-	el := r.TypeOf(c).Elem()
-	return lang.Underscore(el.Name())
 }
 
 // translate a choice, typically a $TOKEN, to a value.

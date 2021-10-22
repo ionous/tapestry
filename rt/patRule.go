@@ -16,7 +16,7 @@ type Rule struct {
 	Execute
 }
 
-// Handler executes a statement its filter passes
+// Handler executes a statement if its filter passes
 type Handler struct {
 	Filter BoolEval
 	Exe    Execute

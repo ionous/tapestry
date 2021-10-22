@@ -8,12 +8,9 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// GobScanner - reads from the database directly into the targeted (composer) value
 type GobScanner struct {
 	Target r.Value
-}
-
-func NewGobScanner(ptr interface{}) *GobScanner {
-	return &GobScanner{r.ValueOf(ptr).Elem()}
 }
 
 func (gs *GobScanner) Scan(val interface{}) (err error) {
