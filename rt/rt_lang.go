@@ -45,7 +45,6 @@ func Assignment_Repeats_Marshal(n jsn.Marshaler, vals *[]Assignment) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 const BoolEval_Type = "bool_eval"
@@ -88,7 +87,6 @@ func BoolEval_Repeats_Marshal(n jsn.Marshaler, vals *[]BoolEval) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 const Execute_Type = "execute"
@@ -123,7 +121,6 @@ func Execute_Repeats_Marshal(n jsn.Marshaler, vals *[]Execute) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 const NumListEval_Type = "num_list_eval"
@@ -166,7 +163,6 @@ func NumListEval_Repeats_Marshal(n jsn.Marshaler, vals *[]NumListEval) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 const NumberEval_Type = "number_eval"
@@ -209,7 +205,6 @@ func NumberEval_Repeats_Marshal(n jsn.Marshaler, vals *[]NumberEval) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 const RecordEval_Type = "record_eval"
@@ -252,7 +247,6 @@ func RecordEval_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordEval) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 const RecordListEval_Type = "record_list_eval"
@@ -295,7 +289,6 @@ func RecordListEval_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordListEval) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 const TextEval_Type = "text_eval"
@@ -338,7 +331,6 @@ func TextEval_Repeats_Marshal(n jsn.Marshaler, vals *[]TextEval) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 const TextListEval_Type = "text_list_eval"
@@ -381,7 +373,6 @@ func TextListEval_Repeats_Marshal(n jsn.Marshaler, vals *[]TextListEval) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 var Slots = []interface{}{

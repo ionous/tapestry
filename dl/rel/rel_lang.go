@@ -44,7 +44,6 @@ func ReciprocalOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ReciprocalOf_Optional_Marshal(n jsn.Marshaler, pv **ReciprocalOf) {
@@ -107,7 +106,6 @@ func ReciprocalsOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalsOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ReciprocalsOf_Optional_Marshal(n jsn.Marshaler, pv **ReciprocalsOf) {
@@ -171,7 +169,6 @@ func Relate_Repeats_Marshal(n jsn.Marshaler, vals *[]Relate) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Relate_Optional_Marshal(n jsn.Marshaler, pv **Relate) {
@@ -237,7 +234,6 @@ func RelativeOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativeOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RelativeOf_Optional_Marshal(n jsn.Marshaler, pv **RelativeOf) {
@@ -300,7 +296,6 @@ func RelativesOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativesOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RelativesOf_Optional_Marshal(n jsn.Marshaler, pv **RelativesOf) {

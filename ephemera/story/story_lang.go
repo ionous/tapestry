@@ -64,7 +64,6 @@ func AbstractAction_Repeats_Marshal(n jsn.Marshaler, vals *[]AbstractAction) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // ActionContext
@@ -100,7 +99,6 @@ func ActionContext_Repeats_Marshal(n jsn.Marshaler, vals *[]ActionContext) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ActionContext_Optional_Marshal(n jsn.Marshaler, pv **ActionContext) {
@@ -163,7 +161,6 @@ func ActionDecl_Repeats_Marshal(n jsn.Marshaler, vals *[]ActionDecl) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ActionDecl_Optional_Marshal(n jsn.Marshaler, pv **ActionDecl) {
@@ -242,7 +239,6 @@ func ActionName_Repeats_Marshal(n jsn.Marshaler, vals *[]ActionName) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // ActionParams swaps between various options
@@ -324,7 +320,6 @@ func ActionParams_Repeats_Marshal(n jsn.Marshaler, vals *[]ActionParams) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Ana requires a user-specified string.
@@ -381,7 +376,6 @@ func Ana_Repeats_Marshal(n jsn.Marshaler, vals *[]Ana) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // AreAn requires a user-specified string.
@@ -442,7 +436,6 @@ func AreAn_Repeats_Marshal(n jsn.Marshaler, vals *[]AreAn) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // AreBeing requires a user-specified string.
@@ -499,7 +492,6 @@ func AreBeing_Repeats_Marshal(n jsn.Marshaler, vals *[]AreBeing) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // AreEither requires a user-specified string.
@@ -556,7 +548,6 @@ func AreEither_Repeats_Marshal(n jsn.Marshaler, vals *[]AreEither) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Argument
@@ -595,7 +586,6 @@ func Argument_Repeats_Marshal(n jsn.Marshaler, vals *[]Argument) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Argument_Optional_Marshal(n jsn.Marshaler, pv **Argument) {
@@ -657,7 +647,6 @@ func Arguments_Repeats_Marshal(n jsn.Marshaler, vals *[]Arguments) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Arguments_Optional_Marshal(n jsn.Marshaler, pv **Arguments) {
@@ -730,7 +719,6 @@ func Aspect_Repeats_Marshal(n jsn.Marshaler, vals *[]Aspect) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // AspectTraits
@@ -768,7 +756,6 @@ func AspectTraits_Repeats_Marshal(n jsn.Marshaler, vals *[]AspectTraits) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AspectTraits_Optional_Marshal(n jsn.Marshaler, pv **AspectTraits) {
@@ -827,7 +814,6 @@ func BoxedNumber_Repeats_Marshal(n jsn.Marshaler, vals *[]BoxedNumber) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func BoxedNumber_Optional_Marshal(n jsn.Marshaler, pv **BoxedNumber) {
@@ -883,7 +869,6 @@ func BoxedText_Repeats_Marshal(n jsn.Marshaler, vals *[]BoxedText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func BoxedText_Optional_Marshal(n jsn.Marshaler, pv **BoxedText) {
@@ -946,7 +931,6 @@ func Certainties_Repeats_Marshal(n jsn.Marshaler, vals *[]Certainties) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Certainties_Optional_Marshal(n jsn.Marshaler, pv **Certainties) {
@@ -1037,7 +1021,6 @@ func Certainty_Repeats_Marshal(n jsn.Marshaler, vals *[]Certainty) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Comment Information about the story for you and other authors.
@@ -1073,7 +1056,6 @@ func Comment_Repeats_Marshal(n jsn.Marshaler, vals *[]Comment) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Comment_Optional_Marshal(n jsn.Marshaler, pv **Comment) {
@@ -1132,7 +1114,6 @@ func CommonAction_Repeats_Marshal(n jsn.Marshaler, vals *[]CommonAction) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CommonAction_Optional_Marshal(n jsn.Marshaler, pv **CommonAction) {
@@ -1196,7 +1177,6 @@ func CountOf_Repeats_Marshal(n jsn.Marshaler, vals *[]CountOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CountOf_Optional_Marshal(n jsn.Marshaler, pv **CountOf) {
@@ -1258,7 +1238,6 @@ func CycleText_Repeats_Marshal(n jsn.Marshaler, vals *[]CycleText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CycleText_Optional_Marshal(n jsn.Marshaler, pv **CycleText) {
@@ -1318,7 +1297,6 @@ func Determine_Repeats_Marshal(n jsn.Marshaler, vals *[]Determine) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Determine_Optional_Marshal(n jsn.Marshaler, pv **Determine) {
@@ -1402,7 +1380,6 @@ func Determiner_Repeats_Marshal(n jsn.Marshaler, vals *[]Determiner) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // EventBlock Listeners let objects in the game world react to changes before, during, or after they happen.
@@ -1441,7 +1418,6 @@ func EventBlock_Repeats_Marshal(n jsn.Marshaler, vals *[]EventBlock) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func EventBlock_Optional_Marshal(n jsn.Marshaler, pv **EventBlock) {
@@ -1507,7 +1483,6 @@ func EventHandler_Repeats_Marshal(n jsn.Marshaler, vals *[]EventHandler) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func EventHandler_Optional_Marshal(n jsn.Marshaler, pv **EventHandler) {
@@ -1588,7 +1563,6 @@ func EventName_Repeats_Marshal(n jsn.Marshaler, vals *[]EventName) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // EventPhase requires a user-specified string.
@@ -1646,7 +1620,6 @@ func EventPhase_Repeats_Marshal(n jsn.Marshaler, vals *[]EventPhase) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // EventTarget swaps between various options
@@ -1721,7 +1694,6 @@ func EventTarget_Repeats_Marshal(n jsn.Marshaler, vals *[]EventTarget) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // ExtType swaps between various options
@@ -1812,7 +1784,6 @@ func ExtType_Repeats_Marshal(n jsn.Marshaler, vals *[]ExtType) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // GrammarDecl
@@ -1847,7 +1818,6 @@ func GrammarDecl_Repeats_Marshal(n jsn.Marshaler, vals *[]GrammarDecl) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func GrammarDecl_Optional_Marshal(n jsn.Marshaler, pv **GrammarDecl) {
@@ -1909,7 +1879,6 @@ func KindOfNoun_Repeats_Marshal(n jsn.Marshaler, vals *[]KindOfNoun) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func KindOfNoun_Optional_Marshal(n jsn.Marshaler, pv **KindOfNoun) {
@@ -1977,7 +1946,6 @@ func KindOfRelation_Repeats_Marshal(n jsn.Marshaler, vals *[]KindOfRelation) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func KindOfRelation_Optional_Marshal(n jsn.Marshaler, pv **KindOfRelation) {
@@ -2037,7 +2005,6 @@ func KindsOfAspect_Repeats_Marshal(n jsn.Marshaler, vals *[]KindsOfAspect) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func KindsOfAspect_Optional_Marshal(n jsn.Marshaler, pv **KindsOfAspect) {
@@ -2096,7 +2063,6 @@ func KindsOfKind_Repeats_Marshal(n jsn.Marshaler, vals *[]KindsOfKind) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func KindsOfKind_Optional_Marshal(n jsn.Marshaler, pv **KindsOfKind) {
@@ -2156,7 +2122,6 @@ func KindsOfRecord_Repeats_Marshal(n jsn.Marshaler, vals *[]KindsOfRecord) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func KindsOfRecord_Optional_Marshal(n jsn.Marshaler, pv **KindsOfRecord) {
@@ -2217,7 +2182,6 @@ func KindsPossessProperties_Repeats_Marshal(n jsn.Marshaler, vals *[]KindsPosses
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func KindsPossessProperties_Optional_Marshal(n jsn.Marshaler, pv **KindsPossessProperties) {
@@ -2278,7 +2242,6 @@ func Lede_Repeats_Marshal(n jsn.Marshaler, vals *[]Lede) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Lede_Optional_Marshal(n jsn.Marshaler, pv **Lede) {
@@ -2339,7 +2302,6 @@ func LocalDecl_Repeats_Marshal(n jsn.Marshaler, vals *[]LocalDecl) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func LocalDecl_Optional_Marshal(n jsn.Marshaler, pv **LocalDecl) {
@@ -2398,7 +2360,6 @@ func LocalInit_Repeats_Marshal(n jsn.Marshaler, vals *[]LocalInit) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func LocalInit_Optional_Marshal(n jsn.Marshaler, pv **LocalInit) {
@@ -2457,7 +2418,6 @@ func Make_Repeats_Marshal(n jsn.Marshaler, vals *[]Make) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Make_Optional_Marshal(n jsn.Marshaler, pv **Make) {
@@ -2518,7 +2478,6 @@ func ManyToMany_Repeats_Marshal(n jsn.Marshaler, vals *[]ManyToMany) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ManyToMany_Optional_Marshal(n jsn.Marshaler, pv **ManyToMany) {
@@ -2579,7 +2538,6 @@ func ManyToOne_Repeats_Marshal(n jsn.Marshaler, vals *[]ManyToOne) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ManyToOne_Optional_Marshal(n jsn.Marshaler, pv **ManyToOne) {
@@ -2640,7 +2598,6 @@ func NamedNoun_Repeats_Marshal(n jsn.Marshaler, vals *[]NamedNoun) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func NamedNoun_Optional_Marshal(n jsn.Marshaler, pv **NamedNoun) {
@@ -2704,7 +2661,6 @@ func NounAssignment_Repeats_Marshal(n jsn.Marshaler, vals *[]NounAssignment) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func NounAssignment_Optional_Marshal(n jsn.Marshaler, pv **NounAssignment) {
@@ -2782,7 +2738,6 @@ func NounName_Repeats_Marshal(n jsn.Marshaler, vals *[]NounName) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // NounPhrase swaps between various options
@@ -2866,7 +2821,6 @@ func NounPhrase_Repeats_Marshal(n jsn.Marshaler, vals *[]NounPhrase) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // NounRelation
@@ -2905,7 +2859,6 @@ func NounRelation_Repeats_Marshal(n jsn.Marshaler, vals *[]NounRelation) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func NounRelation_Optional_Marshal(n jsn.Marshaler, pv **NounRelation) {
@@ -2972,7 +2925,6 @@ func NounStatement_Repeats_Marshal(n jsn.Marshaler, vals *[]NounStatement) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func NounStatement_Optional_Marshal(n jsn.Marshaler, pv **NounStatement) {
@@ -3036,7 +2988,6 @@ func NounTraits_Repeats_Marshal(n jsn.Marshaler, vals *[]NounTraits) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func NounTraits_Optional_Marshal(n jsn.Marshaler, pv **NounTraits) {
@@ -3116,7 +3067,6 @@ func NumberList_Repeats_Marshal(n jsn.Marshaler, vals *[]NumberList) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // ObjectType
@@ -3153,7 +3103,6 @@ func ObjectType_Repeats_Marshal(n jsn.Marshaler, vals *[]ObjectType) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ObjectType_Optional_Marshal(n jsn.Marshaler, pv **ObjectType) {
@@ -3214,7 +3163,6 @@ func OneToMany_Repeats_Marshal(n jsn.Marshaler, vals *[]OneToMany) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func OneToMany_Optional_Marshal(n jsn.Marshaler, pv **OneToMany) {
@@ -3275,7 +3223,6 @@ func OneToOne_Repeats_Marshal(n jsn.Marshaler, vals *[]OneToOne) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func OneToOne_Optional_Marshal(n jsn.Marshaler, pv **OneToOne) {
@@ -3335,7 +3282,6 @@ func PairedAction_Repeats_Marshal(n jsn.Marshaler, vals *[]PairedAction) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PairedAction_Optional_Marshal(n jsn.Marshaler, pv **PairedAction) {
@@ -3392,7 +3338,6 @@ func Paragraph_Repeats_Marshal(n jsn.Marshaler, vals *[]Paragraph) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Paragraph_Optional_Marshal(n jsn.Marshaler, pv **Paragraph) {
@@ -3455,7 +3400,6 @@ func PatternActions_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternActions) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PatternActions_Optional_Marshal(n jsn.Marshaler, pv **PatternActions) {
@@ -3529,7 +3473,6 @@ func PatternDecl_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternDecl) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PatternDecl_Optional_Marshal(n jsn.Marshaler, pv **PatternDecl) {
@@ -3620,7 +3563,6 @@ func PatternFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternFlags) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // PatternLocals
@@ -3655,7 +3597,6 @@ func PatternLocals_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternLocals) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PatternLocals_Optional_Marshal(n jsn.Marshaler, pv **PatternLocals) {
@@ -3711,7 +3652,6 @@ func PatternReturn_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternReturn) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PatternReturn_Optional_Marshal(n jsn.Marshaler, pv **PatternReturn) {
@@ -3771,7 +3711,6 @@ func PatternRule_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternRule) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PatternRule_Optional_Marshal(n jsn.Marshaler, pv **PatternRule) {
@@ -3833,7 +3772,6 @@ func PatternRules_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternRules) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PatternRules_Optional_Marshal(n jsn.Marshaler, pv **PatternRules) {
@@ -3915,7 +3853,6 @@ func PatternType_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternType) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // PatternVariablesDecl Values provided when calling a pattern.
@@ -3953,7 +3890,6 @@ func PatternVariablesDecl_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternVariab
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PatternVariablesDecl_Optional_Marshal(n jsn.Marshaler, pv **PatternVariablesDecl) {
@@ -4012,7 +3948,6 @@ func PatternVariablesTail_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternVariab
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PatternVariablesTail_Optional_Marshal(n jsn.Marshaler, pv **PatternVariablesTail) {
@@ -4084,7 +4019,6 @@ func PluralKinds_Repeats_Marshal(n jsn.Marshaler, vals *[]PluralKinds) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // PrimitiveType requires a user-specified string.
@@ -4144,7 +4078,6 @@ func PrimitiveType_Repeats_Marshal(n jsn.Marshaler, vals *[]PrimitiveType) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // PrimitiveValue swaps between various options
@@ -4219,7 +4152,6 @@ func PrimitiveValue_Repeats_Marshal(n jsn.Marshaler, vals *[]PrimitiveValue) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // ProgramHook swaps between various options
@@ -4289,7 +4221,6 @@ func ProgramHook_Repeats_Marshal(n jsn.Marshaler, vals *[]ProgramHook) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Pronoun requires a user-specified string.
@@ -4347,7 +4278,6 @@ func Pronoun_Repeats_Marshal(n jsn.Marshaler, vals *[]Pronoun) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Property requires a user-specified string.
@@ -4398,7 +4328,6 @@ func Property_Repeats_Marshal(n jsn.Marshaler, vals *[]Property) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // PropertyAspect requires a user-specified string.
@@ -4456,7 +4385,6 @@ func PropertyAspect_Repeats_Marshal(n jsn.Marshaler, vals *[]PropertyAspect) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // PropertyDecl
@@ -4497,7 +4425,6 @@ func PropertyDecl_Repeats_Marshal(n jsn.Marshaler, vals *[]PropertyDecl) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PropertyDecl_Optional_Marshal(n jsn.Marshaler, pv **PropertyDecl) {
@@ -4611,7 +4538,6 @@ func PropertyType_Repeats_Marshal(n jsn.Marshaler, vals *[]PropertyType) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // RecordList
@@ -4646,7 +4572,6 @@ func RecordList_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordList) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RecordList_Optional_Marshal(n jsn.Marshaler, pv **RecordList) {
@@ -4718,7 +4643,6 @@ func RecordPlural_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordPlural) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // RecordSingular requires a user-specified string.
@@ -4769,7 +4693,6 @@ func RecordSingular_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordSingular) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // RecordType
@@ -4804,7 +4727,6 @@ func RecordType_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordType) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RecordType_Optional_Marshal(n jsn.Marshaler, pv **RecordType) {
@@ -4865,7 +4787,6 @@ func RecordsPossessProperties_Repeats_Marshal(n jsn.Marshaler, vals *[]RecordsPo
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RecordsPossessProperties_Optional_Marshal(n jsn.Marshaler, pv **RecordsPossessProperties) {
@@ -4980,7 +4901,6 @@ func RelationCardinality_Repeats_Marshal(n jsn.Marshaler, vals *[]RelationCardin
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // RelativeToNoun
@@ -5022,7 +4942,6 @@ func RelativeToNoun_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativeToNoun) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RelativeToNoun_Optional_Marshal(n jsn.Marshaler, pv **RelativeToNoun) {
@@ -5088,7 +5007,6 @@ func RenderTemplate_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderTemplate) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RenderTemplate_Optional_Marshal(n jsn.Marshaler, pv **RenderTemplate) {
@@ -5149,7 +5067,6 @@ func Send_Repeats_Marshal(n jsn.Marshaler, vals *[]Send) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Send_Optional_Marshal(n jsn.Marshaler, pv **Send) {
@@ -5213,7 +5130,6 @@ func ShuffleText_Repeats_Marshal(n jsn.Marshaler, vals *[]ShuffleText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ShuffleText_Optional_Marshal(n jsn.Marshaler, pv **ShuffleText) {
@@ -5286,7 +5202,6 @@ func SingularKind_Repeats_Marshal(n jsn.Marshaler, vals *[]SingularKind) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // StoppingText
@@ -5323,7 +5238,6 @@ func StoppingText_Repeats_Marshal(n jsn.Marshaler, vals *[]StoppingText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func StoppingText_Optional_Marshal(n jsn.Marshaler, pv **StoppingText) {
@@ -5380,7 +5294,6 @@ func Story_Repeats_Marshal(n jsn.Marshaler, vals *[]Story) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Story_Optional_Marshal(n jsn.Marshaler, pv **Story) {
@@ -5436,7 +5349,6 @@ func StoryStatement_Repeats_Marshal(n jsn.Marshaler, vals *[]StoryStatement) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Summary
@@ -5472,7 +5384,6 @@ func Summary_Repeats_Marshal(n jsn.Marshaler, vals *[]Summary) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Summary_Optional_Marshal(n jsn.Marshaler, pv **Summary) {
@@ -5531,7 +5442,6 @@ func Tail_Repeats_Marshal(n jsn.Marshaler, vals *[]Tail) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Tail_Optional_Marshal(n jsn.Marshaler, pv **Tail) {
@@ -5614,7 +5524,6 @@ func TestName_Repeats_Marshal(n jsn.Marshaler, vals *[]TestName) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // TestOutput Expect that a test uses &#x27;Say&#x27; to print some specific text.
@@ -5650,7 +5559,6 @@ func TestOutput_Repeats_Marshal(n jsn.Marshaler, vals *[]TestOutput) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func TestOutput_Optional_Marshal(n jsn.Marshaler, pv **TestOutput) {
@@ -5709,7 +5617,6 @@ func TestRule_Repeats_Marshal(n jsn.Marshaler, vals *[]TestRule) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func TestRule_Optional_Marshal(n jsn.Marshaler, pv **TestRule) {
@@ -5771,7 +5678,6 @@ func TestScene_Repeats_Marshal(n jsn.Marshaler, vals *[]TestScene) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func TestScene_Optional_Marshal(n jsn.Marshaler, pv **TestScene) {
@@ -5834,7 +5740,6 @@ func TestStatement_Repeats_Marshal(n jsn.Marshaler, vals *[]TestStatement) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func TestStatement_Optional_Marshal(n jsn.Marshaler, pv **TestStatement) {
@@ -5894,7 +5799,6 @@ func Testing_Repeats_Marshal(n jsn.Marshaler, vals *[]Testing) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // TextList requires a user-specified string.
@@ -5950,7 +5854,6 @@ func TextList_Repeats_Marshal(n jsn.Marshaler, vals *[]TextList) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Trait requires a user-specified string.
@@ -6001,7 +5904,6 @@ func Trait_Repeats_Marshal(n jsn.Marshaler, vals *[]Trait) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // TraitPhrase
@@ -6038,7 +5940,6 @@ func TraitPhrase_Repeats_Marshal(n jsn.Marshaler, vals *[]TraitPhrase) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func TraitPhrase_Optional_Marshal(n jsn.Marshaler, pv **TraitPhrase) {
@@ -6103,7 +6004,6 @@ func VariableDecl_Repeats_Marshal(n jsn.Marshaler, vals *[]VariableDecl) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func VariableDecl_Optional_Marshal(n jsn.Marshaler, pv **VariableDecl) {
@@ -6217,7 +6117,6 @@ func VariableType_Repeats_Marshal(n jsn.Marshaler, vals *[]VariableType) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 var Slots = []interface{}{

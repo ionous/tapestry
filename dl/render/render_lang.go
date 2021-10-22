@@ -42,7 +42,6 @@ func RenderExp_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderExp) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RenderExp_Optional_Marshal(n jsn.Marshaler, pv **RenderExp) {
@@ -99,7 +98,6 @@ func RenderField_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderField) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RenderField_Optional_Marshal(n jsn.Marshaler, pv **RenderField) {
@@ -178,7 +176,6 @@ func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // RenderName handles changing a template like {.boombip} into text.,if the name is a variable containing an object name: return the printed object name ( via &quot;print name&quot; ),if the name is a variable with some other text: return that text.,if the name isn&#x27;t a variable but refers to some object: return that object&#x27;s printed object name.,otherwise, its an error.
@@ -214,7 +211,6 @@ func RenderName_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderName) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RenderName_Optional_Marshal(n jsn.Marshaler, pv **RenderName) {
@@ -274,7 +270,6 @@ func RenderPattern_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderPattern) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RenderPattern_Optional_Marshal(n jsn.Marshaler, pv **RenderPattern) {
@@ -336,7 +331,6 @@ func RenderRef_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderRef) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RenderRef_Optional_Marshal(n jsn.Marshaler, pv **RenderRef) {

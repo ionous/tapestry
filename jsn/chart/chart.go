@@ -59,7 +59,6 @@ func (m *Machine) FlushCursor() (ret string) {
 
 func (m *Machine) Error(e error) {
 	m.err = errutil.Append(m.err, e)
-	return
 }
 
 // PushState - enter the passed state saving the current state into history

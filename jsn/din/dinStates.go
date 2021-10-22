@@ -43,7 +43,6 @@ func (dec *xDecoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.
 			}
 		}
 		dec.Commit("new value")
-		return
 	}
 	// next.OnCommit -- handled by each caller
 	return next
@@ -150,7 +149,7 @@ func (dec *xDecoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 	msg := msgs[0]
 	next := dec.newValue(&msg, dec.newBlock(&msg))
 	next.OnCommit = func(interface{}) {
-		if msgs = msgs[1:len(msgs)]; len(msgs) > 0 {
+		if msgs = msgs[1:]; len(msgs) > 0 {
 			msg = msgs[0]
 		} else {
 			// expect nothing else now...

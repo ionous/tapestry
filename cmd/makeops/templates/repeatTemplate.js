@@ -15,6 +15,5 @@ func {{name}}{{mod}}_Repeats_Marshal(n jsn.Marshaler, vals *[]{{el}}) {
     }
     n.EndValues()
   }
-  return
 }
 `;

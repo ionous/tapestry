@@ -44,7 +44,6 @@ func DebugLog_Repeats_Marshal(n jsn.Marshaler, vals *[]DebugLog) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func DebugLog_Optional_Marshal(n jsn.Marshaler, pv **DebugLog) {
@@ -104,7 +103,6 @@ func DoNothing_Repeats_Marshal(n jsn.Marshaler, vals *[]DoNothing) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func DoNothing_Optional_Marshal(n jsn.Marshaler, pv **DoNothing) {
@@ -186,7 +184,6 @@ func LoggingLevel_Repeats_Marshal(n jsn.Marshaler, vals *[]LoggingLevel) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 var Slats = []composer.Composer{

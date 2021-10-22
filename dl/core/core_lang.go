@@ -43,7 +43,6 @@ func Activity_Repeats_Marshal(n jsn.Marshaler, vals *[]Activity) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Activity_Optional_Marshal(n jsn.Marshaler, pv **Activity) {
@@ -100,7 +99,6 @@ func AllTrue_Repeats_Marshal(n jsn.Marshaler, vals *[]AllTrue) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AllTrue_Optional_Marshal(n jsn.Marshaler, pv **AllTrue) {
@@ -154,7 +152,6 @@ func Always_Repeats_Marshal(n jsn.Marshaler, vals *[]Always) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Always_Optional_Marshal(n jsn.Marshaler, pv **Always) {
@@ -208,7 +205,6 @@ func AnyTrue_Repeats_Marshal(n jsn.Marshaler, vals *[]AnyTrue) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AnyTrue_Optional_Marshal(n jsn.Marshaler, pv **AnyTrue) {
@@ -268,7 +264,6 @@ func Assign_Repeats_Marshal(n jsn.Marshaler, vals *[]Assign) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Assign_Optional_Marshal(n jsn.Marshaler, pv **Assign) {
@@ -325,7 +320,6 @@ func AtLeast_Repeats_Marshal(n jsn.Marshaler, vals *[]AtLeast) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AtLeast_Optional_Marshal(n jsn.Marshaler, pv **AtLeast) {
@@ -376,7 +370,6 @@ func AtMost_Repeats_Marshal(n jsn.Marshaler, vals *[]AtMost) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AtMost_Optional_Marshal(n jsn.Marshaler, pv **AtMost) {
@@ -428,7 +421,6 @@ func Blankline_Repeats_Marshal(n jsn.Marshaler, vals *[]Blankline) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Blankline_Optional_Marshal(n jsn.Marshaler, pv **Blankline) {
@@ -483,7 +475,6 @@ func BoolValue_Repeats_Marshal(n jsn.Marshaler, vals *[]BoolValue) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func BoolValue_Optional_Marshal(n jsn.Marshaler, pv **BoolValue) {
@@ -549,7 +540,6 @@ func BracketText_Repeats_Marshal(n jsn.Marshaler, vals *[]BracketText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func BracketText_Optional_Marshal(n jsn.Marshaler, pv **BracketText) {
@@ -605,7 +595,6 @@ func Brancher_Repeats_Marshal(n jsn.Marshaler, vals *[]Brancher) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Break In a repeating loop, exit the loop.
@@ -638,7 +627,6 @@ func Break_Repeats_Marshal(n jsn.Marshaler, vals *[]Break) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Break_Optional_Marshal(n jsn.Marshaler, pv **Break) {
@@ -693,7 +681,6 @@ func BufferText_Repeats_Marshal(n jsn.Marshaler, vals *[]BufferText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func BufferText_Optional_Marshal(n jsn.Marshaler, pv **BufferText) {
@@ -752,7 +739,6 @@ func CallArg_Repeats_Marshal(n jsn.Marshaler, vals *[]CallArg) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CallArg_Optional_Marshal(n jsn.Marshaler, pv **CallArg) {
@@ -812,7 +798,6 @@ func CallArgs_Repeats_Marshal(n jsn.Marshaler, vals *[]CallArgs) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CallArgs_Optional_Marshal(n jsn.Marshaler, pv **CallArgs) {
@@ -871,7 +856,6 @@ func CallCycle_Repeats_Marshal(n jsn.Marshaler, vals *[]CallCycle) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CallCycle_Optional_Marshal(n jsn.Marshaler, pv **CallCycle) {
@@ -931,7 +915,6 @@ func CallMake_Repeats_Marshal(n jsn.Marshaler, vals *[]CallMake) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CallMake_Optional_Marshal(n jsn.Marshaler, pv **CallMake) {
@@ -993,7 +976,6 @@ func CallPattern_Repeats_Marshal(n jsn.Marshaler, vals *[]CallPattern) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CallPattern_Optional_Marshal(n jsn.Marshaler, pv **CallPattern) {
@@ -1057,7 +1039,6 @@ func CallSend_Repeats_Marshal(n jsn.Marshaler, vals *[]CallSend) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CallSend_Optional_Marshal(n jsn.Marshaler, pv **CallSend) {
@@ -1123,7 +1104,6 @@ func CallShuffle_Repeats_Marshal(n jsn.Marshaler, vals *[]CallShuffle) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CallShuffle_Optional_Marshal(n jsn.Marshaler, pv **CallShuffle) {
@@ -1183,7 +1163,6 @@ func CallTerminal_Repeats_Marshal(n jsn.Marshaler, vals *[]CallTerminal) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CallTerminal_Optional_Marshal(n jsn.Marshaler, pv **CallTerminal) {
@@ -1245,7 +1224,6 @@ func CallTrigger_Repeats_Marshal(n jsn.Marshaler, vals *[]CallTrigger) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CallTrigger_Optional_Marshal(n jsn.Marshaler, pv **CallTrigger) {
@@ -1306,7 +1284,6 @@ func Capitalize_Repeats_Marshal(n jsn.Marshaler, vals *[]Capitalize) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Capitalize_Optional_Marshal(n jsn.Marshaler, pv **Capitalize) {
@@ -1368,7 +1345,6 @@ func ChooseAction_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseAction) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ChooseAction_Optional_Marshal(n jsn.Marshaler, pv **ChooseAction) {
@@ -1436,7 +1412,6 @@ func ChooseMore_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseMore) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ChooseMore_Optional_Marshal(n jsn.Marshaler, pv **ChooseMore) {
@@ -1508,7 +1483,6 @@ func ChooseMoreValue_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseMoreValue) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ChooseMoreValue_Optional_Marshal(n jsn.Marshaler, pv **ChooseMoreValue) {
@@ -1578,7 +1552,6 @@ func ChooseNothingElse_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseNothingEls
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ChooseNothingElse_Optional_Marshal(n jsn.Marshaler, pv **ChooseNothingElse) {
@@ -1640,7 +1613,6 @@ func ChooseNum_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseNum) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ChooseNum_Optional_Marshal(n jsn.Marshaler, pv **ChooseNum) {
@@ -1708,7 +1680,6 @@ func ChooseText_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ChooseText_Optional_Marshal(n jsn.Marshaler, pv **ChooseText) {
@@ -1780,7 +1751,6 @@ func ChooseValue_Repeats_Marshal(n jsn.Marshaler, vals *[]ChooseValue) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ChooseValue_Optional_Marshal(n jsn.Marshaler, pv **ChooseValue) {
@@ -1850,7 +1820,6 @@ func CommaText_Repeats_Marshal(n jsn.Marshaler, vals *[]CommaText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CommaText_Optional_Marshal(n jsn.Marshaler, pv **CommaText) {
@@ -1906,7 +1875,6 @@ func Comparator_Repeats_Marshal(n jsn.Marshaler, vals *[]Comparator) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // CompareNum True if eq,ne,gt,lt,ge,le two numbers.
@@ -1947,7 +1915,6 @@ func CompareNum_Repeats_Marshal(n jsn.Marshaler, vals *[]CompareNum) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CompareNum_Optional_Marshal(n jsn.Marshaler, pv **CompareNum) {
@@ -2015,7 +1982,6 @@ func CompareText_Repeats_Marshal(n jsn.Marshaler, vals *[]CompareText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func CompareText_Optional_Marshal(n jsn.Marshaler, pv **CompareText) {
@@ -2081,7 +2047,6 @@ func DiffOf_Repeats_Marshal(n jsn.Marshaler, vals *[]DiffOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func DiffOf_Optional_Marshal(n jsn.Marshaler, pv **DiffOf) {
@@ -2141,7 +2106,6 @@ func During_Repeats_Marshal(n jsn.Marshaler, vals *[]During) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func During_Optional_Marshal(n jsn.Marshaler, pv **During) {
@@ -2196,7 +2160,6 @@ func Equal_Repeats_Marshal(n jsn.Marshaler, vals *[]Equal) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Equal_Optional_Marshal(n jsn.Marshaler, pv **Equal) {
@@ -2250,7 +2213,6 @@ func FromBool_Repeats_Marshal(n jsn.Marshaler, vals *[]FromBool) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromBool_Optional_Marshal(n jsn.Marshaler, pv **FromBool) {
@@ -2307,7 +2269,6 @@ func FromNum_Repeats_Marshal(n jsn.Marshaler, vals *[]FromNum) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromNum_Optional_Marshal(n jsn.Marshaler, pv **FromNum) {
@@ -2365,7 +2326,6 @@ func FromNumbers_Repeats_Marshal(n jsn.Marshaler, vals *[]FromNumbers) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromNumbers_Optional_Marshal(n jsn.Marshaler, pv **FromNumbers) {
@@ -2423,7 +2383,6 @@ func FromObj_Repeats_Marshal(n jsn.Marshaler, vals *[]FromObj) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromObj_Optional_Marshal(n jsn.Marshaler, pv **FromObj) {
@@ -2481,7 +2440,6 @@ func FromRec_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRec) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromRec_Optional_Marshal(n jsn.Marshaler, pv **FromRec) {
@@ -2539,7 +2497,6 @@ func FromRecord_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRecord) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromRecord_Optional_Marshal(n jsn.Marshaler, pv **FromRecord) {
@@ -2597,7 +2554,6 @@ func FromRecords_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRecords) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromRecords_Optional_Marshal(n jsn.Marshaler, pv **FromRecords) {
@@ -2653,7 +2609,6 @@ func FromSourceFields_Repeats_Marshal(n jsn.Marshaler, vals *[]FromSourceFields)
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // FromText Assigns the calculated piece of text.
@@ -2690,7 +2645,6 @@ func FromText_Repeats_Marshal(n jsn.Marshaler, vals *[]FromText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromText_Optional_Marshal(n jsn.Marshaler, pv **FromText) {
@@ -2748,7 +2702,6 @@ func FromTexts_Repeats_Marshal(n jsn.Marshaler, vals *[]FromTexts) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromTexts_Optional_Marshal(n jsn.Marshaler, pv **FromTexts) {
@@ -2806,7 +2759,6 @@ func FromVar_Repeats_Marshal(n jsn.Marshaler, vals *[]FromVar) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromVar_Optional_Marshal(n jsn.Marshaler, pv **FromVar) {
@@ -2866,7 +2818,6 @@ func GetAtField_Repeats_Marshal(n jsn.Marshaler, vals *[]GetAtField) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func GetAtField_Optional_Marshal(n jsn.Marshaler, pv **GetAtField) {
@@ -2927,7 +2878,6 @@ func GetVar_Repeats_Marshal(n jsn.Marshaler, vals *[]GetVar) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func GetVar_Optional_Marshal(n jsn.Marshaler, pv **GetVar) {
@@ -2989,7 +2939,6 @@ func GreaterThan_Repeats_Marshal(n jsn.Marshaler, vals *[]GreaterThan) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func GreaterThan_Optional_Marshal(n jsn.Marshaler, pv **GreaterThan) {
@@ -3043,7 +2992,6 @@ func HasDominion_Repeats_Marshal(n jsn.Marshaler, vals *[]HasDominion) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func HasDominion_Optional_Marshal(n jsn.Marshaler, pv **HasDominion) {
@@ -3103,7 +3051,6 @@ func HasTrait_Repeats_Marshal(n jsn.Marshaler, vals *[]HasTrait) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func HasTrait_Optional_Marshal(n jsn.Marshaler, pv **HasTrait) {
@@ -3163,7 +3110,6 @@ func IdOf_Repeats_Marshal(n jsn.Marshaler, vals *[]IdOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func IdOf_Optional_Marshal(n jsn.Marshaler, pv **IdOf) {
@@ -3223,7 +3169,6 @@ func Includes_Repeats_Marshal(n jsn.Marshaler, vals *[]Includes) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Includes_Optional_Marshal(n jsn.Marshaler, pv **Includes) {
@@ -3284,7 +3229,6 @@ func IntoObj_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoObj) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func IntoObj_Optional_Marshal(n jsn.Marshaler, pv **IntoObj) {
@@ -3340,7 +3284,6 @@ func IntoTargetFields_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoTargetFields)
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // IntoVar Targets an object or record stored in a variable
@@ -3377,7 +3320,6 @@ func IntoVar_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoVar) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func IntoVar_Optional_Marshal(n jsn.Marshaler, pv **IntoVar) {
@@ -3435,7 +3377,6 @@ func IsEmpty_Repeats_Marshal(n jsn.Marshaler, vals *[]IsEmpty) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func IsEmpty_Optional_Marshal(n jsn.Marshaler, pv **IsEmpty) {
@@ -3495,7 +3436,6 @@ func IsExactKindOf_Repeats_Marshal(n jsn.Marshaler, vals *[]IsExactKindOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func IsExactKindOf_Optional_Marshal(n jsn.Marshaler, pv **IsExactKindOf) {
@@ -3558,7 +3498,6 @@ func IsKindOf_Repeats_Marshal(n jsn.Marshaler, vals *[]IsKindOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func IsKindOf_Optional_Marshal(n jsn.Marshaler, pv **IsKindOf) {
@@ -3620,7 +3559,6 @@ func Join_Repeats_Marshal(n jsn.Marshaler, vals *[]Join) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Join_Optional_Marshal(n jsn.Marshaler, pv **Join) {
@@ -3680,7 +3618,6 @@ func KindOf_Repeats_Marshal(n jsn.Marshaler, vals *[]KindOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func KindOf_Optional_Marshal(n jsn.Marshaler, pv **KindOf) {
@@ -3737,7 +3674,6 @@ func KindsOf_Repeats_Marshal(n jsn.Marshaler, vals *[]KindsOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func KindsOf_Optional_Marshal(n jsn.Marshaler, pv **KindsOf) {
@@ -3791,7 +3727,6 @@ func LessThan_Repeats_Marshal(n jsn.Marshaler, vals *[]LessThan) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func LessThan_Optional_Marshal(n jsn.Marshaler, pv **LessThan) {
@@ -3846,7 +3781,6 @@ func MakeLowercase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeLowercase) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func MakeLowercase_Optional_Marshal(n jsn.Marshaler, pv **MakeLowercase) {
@@ -3904,7 +3838,6 @@ func MakeReversed_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeReversed) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func MakeReversed_Optional_Marshal(n jsn.Marshaler, pv **MakeReversed) {
@@ -3962,7 +3895,6 @@ func MakeSentenceCase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeSentenceCase)
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func MakeSentenceCase_Optional_Marshal(n jsn.Marshaler, pv **MakeSentenceCase) {
@@ -4020,7 +3952,6 @@ func MakeTitleCase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeTitleCase) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func MakeTitleCase_Optional_Marshal(n jsn.Marshaler, pv **MakeTitleCase) {
@@ -4078,7 +4009,6 @@ func MakeUppercase_Repeats_Marshal(n jsn.Marshaler, vals *[]MakeUppercase) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func MakeUppercase_Optional_Marshal(n jsn.Marshaler, pv **MakeUppercase) {
@@ -4138,7 +4068,6 @@ func Matches_Repeats_Marshal(n jsn.Marshaler, vals *[]Matches) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Matches_Optional_Marshal(n jsn.Marshaler, pv **Matches) {
@@ -4198,7 +4127,6 @@ func NameOf_Repeats_Marshal(n jsn.Marshaler, vals *[]NameOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func NameOf_Optional_Marshal(n jsn.Marshaler, pv **NameOf) {
@@ -4252,7 +4180,6 @@ func Never_Repeats_Marshal(n jsn.Marshaler, vals *[]Never) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Never_Optional_Marshal(n jsn.Marshaler, pv **Never) {
@@ -4304,7 +4231,6 @@ func Newline_Repeats_Marshal(n jsn.Marshaler, vals *[]Newline) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Newline_Optional_Marshal(n jsn.Marshaler, pv **Newline) {
@@ -4355,7 +4281,6 @@ func Next_Repeats_Marshal(n jsn.Marshaler, vals *[]Next) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Next_Optional_Marshal(n jsn.Marshaler, pv **Next) {
@@ -4409,7 +4334,6 @@ func Not_Repeats_Marshal(n jsn.Marshaler, vals *[]Not) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Not_Optional_Marshal(n jsn.Marshaler, pv **Not) {
@@ -4467,7 +4391,6 @@ func NumValue_Repeats_Marshal(n jsn.Marshaler, vals *[]NumValue) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func NumValue_Optional_Marshal(n jsn.Marshaler, pv **NumValue) {
@@ -4533,7 +4456,6 @@ func Numbers_Repeats_Marshal(n jsn.Marshaler, vals *[]Numbers) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Numbers_Optional_Marshal(n jsn.Marshaler, pv **Numbers) {
@@ -4599,7 +4521,6 @@ func ObjectExists_Repeats_Marshal(n jsn.Marshaler, vals *[]ObjectExists) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ObjectExists_Optional_Marshal(n jsn.Marshaler, pv **ObjectExists) {
@@ -4657,7 +4578,6 @@ func Pluralize_Repeats_Marshal(n jsn.Marshaler, vals *[]Pluralize) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Pluralize_Optional_Marshal(n jsn.Marshaler, pv **Pluralize) {
@@ -4715,7 +4635,6 @@ func PrintNum_Repeats_Marshal(n jsn.Marshaler, vals *[]PrintNum) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PrintNum_Optional_Marshal(n jsn.Marshaler, pv **PrintNum) {
@@ -4773,7 +4692,6 @@ func PrintNumWord_Repeats_Marshal(n jsn.Marshaler, vals *[]PrintNumWord) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PrintNumWord_Optional_Marshal(n jsn.Marshaler, pv **PrintNumWord) {
@@ -4833,7 +4751,6 @@ func ProductOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ProductOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ProductOf_Optional_Marshal(n jsn.Marshaler, pv **ProductOf) {
@@ -4898,7 +4815,6 @@ func PutAtField_Repeats_Marshal(n jsn.Marshaler, vals *[]PutAtField) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PutAtField_Optional_Marshal(n jsn.Marshaler, pv **PutAtField) {
@@ -4964,7 +4880,6 @@ func QuotientOf_Repeats_Marshal(n jsn.Marshaler, vals *[]QuotientOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func QuotientOf_Optional_Marshal(n jsn.Marshaler, pv **QuotientOf) {
@@ -5027,7 +4942,6 @@ func RemainderOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RemainderOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func RemainderOf_Optional_Marshal(n jsn.Marshaler, pv **RemainderOf) {
@@ -5089,7 +5003,6 @@ func Response_Repeats_Marshal(n jsn.Marshaler, vals *[]Response) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Response_Optional_Marshal(n jsn.Marshaler, pv **Response) {
@@ -5149,7 +5062,6 @@ func Row_Repeats_Marshal(n jsn.Marshaler, vals *[]Row) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Row_Optional_Marshal(n jsn.Marshaler, pv **Row) {
@@ -5206,7 +5118,6 @@ func Rows_Repeats_Marshal(n jsn.Marshaler, vals *[]Rows) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Rows_Optional_Marshal(n jsn.Marshaler, pv **Rows) {
@@ -5264,7 +5175,6 @@ func SayText_Repeats_Marshal(n jsn.Marshaler, vals *[]SayText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func SayText_Optional_Marshal(n jsn.Marshaler, pv **SayText) {
@@ -5324,7 +5234,6 @@ func SetTrait_Repeats_Marshal(n jsn.Marshaler, vals *[]SetTrait) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func SetTrait_Optional_Marshal(n jsn.Marshaler, pv **SetTrait) {
@@ -5385,7 +5294,6 @@ func Singularize_Repeats_Marshal(n jsn.Marshaler, vals *[]Singularize) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Singularize_Optional_Marshal(n jsn.Marshaler, pv **Singularize) {
@@ -5443,7 +5351,6 @@ func SlashText_Repeats_Marshal(n jsn.Marshaler, vals *[]SlashText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func SlashText_Optional_Marshal(n jsn.Marshaler, pv **SlashText) {
@@ -5498,7 +5405,6 @@ func Softline_Repeats_Marshal(n jsn.Marshaler, vals *[]Softline) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Softline_Optional_Marshal(n jsn.Marshaler, pv **Softline) {
@@ -5553,7 +5459,6 @@ func SpanText_Repeats_Marshal(n jsn.Marshaler, vals *[]SpanText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func SpanText_Optional_Marshal(n jsn.Marshaler, pv **SpanText) {
@@ -5613,7 +5518,6 @@ func SumOf_Repeats_Marshal(n jsn.Marshaler, vals *[]SumOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func SumOf_Optional_Marshal(n jsn.Marshaler, pv **SumOf) {
@@ -5674,7 +5578,6 @@ func TextValue_Repeats_Marshal(n jsn.Marshaler, vals *[]TextValue) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func TextValue_Optional_Marshal(n jsn.Marshaler, pv **TextValue) {
@@ -5740,7 +5643,6 @@ func Texts_Repeats_Marshal(n jsn.Marshaler, vals *[]Texts) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Texts_Optional_Marshal(n jsn.Marshaler, pv **Texts) {
@@ -5804,7 +5706,6 @@ func Trigger_Repeats_Marshal(n jsn.Marshaler, vals *[]Trigger) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // TriggerCycle
@@ -5838,7 +5739,6 @@ func TriggerCycle_Repeats_Marshal(n jsn.Marshaler, vals *[]TriggerCycle) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func TriggerCycle_Optional_Marshal(n jsn.Marshaler, pv **TriggerCycle) {
@@ -5890,7 +5790,6 @@ func TriggerOnce_Repeats_Marshal(n jsn.Marshaler, vals *[]TriggerOnce) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func TriggerOnce_Optional_Marshal(n jsn.Marshaler, pv **TriggerOnce) {
@@ -5942,7 +5841,6 @@ func TriggerSwitch_Repeats_Marshal(n jsn.Marshaler, vals *[]TriggerSwitch) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func TriggerSwitch_Optional_Marshal(n jsn.Marshaler, pv **TriggerSwitch) {
@@ -5994,7 +5892,6 @@ func Unequal_Repeats_Marshal(n jsn.Marshaler, vals *[]Unequal) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Unequal_Optional_Marshal(n jsn.Marshaler, pv **Unequal) {
@@ -6051,7 +5948,6 @@ func While_Repeats_Marshal(n jsn.Marshaler, vals *[]While) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func While_Optional_Marshal(n jsn.Marshaler, pv **While) {

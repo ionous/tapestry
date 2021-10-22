@@ -42,7 +42,6 @@ func AsNum_Repeats_Marshal(n jsn.Marshaler, vals *[]AsNum) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AsNum_Optional_Marshal(n jsn.Marshaler, pv **AsNum) {
@@ -99,7 +98,6 @@ func AsRec_Repeats_Marshal(n jsn.Marshaler, vals *[]AsRec) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AsRec_Optional_Marshal(n jsn.Marshaler, pv **AsRec) {
@@ -156,7 +154,6 @@ func AsTxt_Repeats_Marshal(n jsn.Marshaler, vals *[]AsTxt) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AsTxt_Optional_Marshal(n jsn.Marshaler, pv **AsTxt) {
@@ -216,7 +213,6 @@ func EraseEdge_Repeats_Marshal(n jsn.Marshaler, vals *[]EraseEdge) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func EraseEdge_Optional_Marshal(n jsn.Marshaler, pv **EraseEdge) {
@@ -281,7 +277,6 @@ func EraseIndex_Repeats_Marshal(n jsn.Marshaler, vals *[]EraseIndex) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func EraseIndex_Optional_Marshal(n jsn.Marshaler, pv **EraseIndex) {
@@ -352,7 +347,6 @@ func Erasing_Repeats_Marshal(n jsn.Marshaler, vals *[]Erasing) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Erasing_Optional_Marshal(n jsn.Marshaler, pv **Erasing) {
@@ -430,7 +424,6 @@ func ErasingEdge_Repeats_Marshal(n jsn.Marshaler, vals *[]ErasingEdge) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ErasingEdge_Optional_Marshal(n jsn.Marshaler, pv **ErasingEdge) {
@@ -500,7 +493,6 @@ func FromNumList_Repeats_Marshal(n jsn.Marshaler, vals *[]FromNumList) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromNumList_Optional_Marshal(n jsn.Marshaler, pv **FromNumList) {
@@ -558,7 +550,6 @@ func FromRecList_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRecList) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromRecList_Optional_Marshal(n jsn.Marshaler, pv **FromRecList) {
@@ -616,7 +607,6 @@ func FromTxtList_Repeats_Marshal(n jsn.Marshaler, vals *[]FromTxtList) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func FromTxtList_Optional_Marshal(n jsn.Marshaler, pv **FromTxtList) {
@@ -674,7 +664,6 @@ func IntoNumList_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoNumList) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func IntoNumList_Optional_Marshal(n jsn.Marshaler, pv **IntoNumList) {
@@ -732,7 +721,6 @@ func IntoRecList_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoRecList) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func IntoRecList_Optional_Marshal(n jsn.Marshaler, pv **IntoRecList) {
@@ -790,7 +778,6 @@ func IntoTxtList_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoTxtList) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func IntoTxtList_Optional_Marshal(n jsn.Marshaler, pv **IntoTxtList) {
@@ -850,7 +837,6 @@ func ListAt_Repeats_Marshal(n jsn.Marshaler, vals *[]ListAt) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListAt_Optional_Marshal(n jsn.Marshaler, pv **ListAt) {
@@ -917,7 +903,6 @@ func ListEach_Repeats_Marshal(n jsn.Marshaler, vals *[]ListEach) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListEach_Optional_Marshal(n jsn.Marshaler, pv **ListEach) {
@@ -986,7 +971,6 @@ func ListFind_Repeats_Marshal(n jsn.Marshaler, vals *[]ListFind) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListFind_Optional_Marshal(n jsn.Marshaler, pv **ListFind) {
@@ -1050,7 +1034,6 @@ func ListGather_Repeats_Marshal(n jsn.Marshaler, vals *[]ListGather) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListGather_Optional_Marshal(n jsn.Marshaler, pv **ListGather) {
@@ -1112,7 +1095,6 @@ func ListIterator_Repeats_Marshal(n jsn.Marshaler, vals *[]ListIterator) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // ListLen Determines the number of values in a list.
@@ -1149,7 +1131,6 @@ func ListLen_Repeats_Marshal(n jsn.Marshaler, vals *[]ListLen) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListLen_Optional_Marshal(n jsn.Marshaler, pv **ListLen) {
@@ -1211,7 +1192,6 @@ func ListMap_Repeats_Marshal(n jsn.Marshaler, vals *[]ListMap) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListMap_Optional_Marshal(n jsn.Marshaler, pv **ListMap) {
@@ -1279,7 +1259,6 @@ func ListReduce_Repeats_Marshal(n jsn.Marshaler, vals *[]ListReduce) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListReduce_Optional_Marshal(n jsn.Marshaler, pv **ListReduce) {
@@ -1343,7 +1322,6 @@ func ListReverse_Repeats_Marshal(n jsn.Marshaler, vals *[]ListReverse) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListReverse_Optional_Marshal(n jsn.Marshaler, pv **ListReverse) {
@@ -1405,7 +1383,6 @@ func ListSet_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSet) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListSet_Optional_Marshal(n jsn.Marshaler, pv **ListSet) {
@@ -1473,7 +1450,6 @@ func ListSlice_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSlice) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListSlice_Optional_Marshal(n jsn.Marshaler, pv **ListSlice) {
@@ -1541,7 +1517,6 @@ func ListSortNumbers_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSortNumbers) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListSortNumbers_Optional_Marshal(n jsn.Marshaler, pv **ListSortNumbers) {
@@ -1611,7 +1586,6 @@ func ListSortText_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSortText) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListSortText_Optional_Marshal(n jsn.Marshaler, pv **ListSortText) {
@@ -1680,7 +1654,6 @@ func ListSortUsing_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSortUsing) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListSortUsing_Optional_Marshal(n jsn.Marshaler, pv **ListSortUsing) {
@@ -1739,7 +1712,6 @@ func ListSource_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSource) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
@@ -1782,7 +1754,6 @@ func ListSplice_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSplice) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func ListSplice_Optional_Marshal(n jsn.Marshaler, pv **ListSplice) {
@@ -1847,7 +1818,6 @@ func ListTarget_Repeats_Marshal(n jsn.Marshaler, vals *[]ListTarget) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // PutEdge Add a value to a list
@@ -1888,7 +1858,6 @@ func PutEdge_Repeats_Marshal(n jsn.Marshaler, vals *[]PutEdge) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PutEdge_Optional_Marshal(n jsn.Marshaler, pv **PutEdge) {
@@ -1956,7 +1925,6 @@ func PutIndex_Repeats_Marshal(n jsn.Marshaler, vals *[]PutIndex) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func PutIndex_Optional_Marshal(n jsn.Marshaler, pv **PutIndex) {
@@ -2023,7 +1991,6 @@ func Range_Repeats_Marshal(n jsn.Marshaler, vals *[]Range) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Range_Optional_Marshal(n jsn.Marshaler, pv **Range) {

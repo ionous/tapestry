@@ -41,7 +41,6 @@ func Action_Repeats_Marshal(n jsn.Marshaler, vals *[]Action) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Action_Optional_Marshal(n jsn.Marshaler, pv **Action) {
@@ -100,7 +99,6 @@ func Alias_Repeats_Marshal(n jsn.Marshaler, vals *[]Alias) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Alias_Optional_Marshal(n jsn.Marshaler, pv **Alias) {
@@ -160,7 +158,6 @@ func AllOf_Repeats_Marshal(n jsn.Marshaler, vals *[]AllOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AllOf_Optional_Marshal(n jsn.Marshaler, pv **AllOf) {
@@ -217,7 +214,6 @@ func AnyOf_Repeats_Marshal(n jsn.Marshaler, vals *[]AnyOf) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func AnyOf_Optional_Marshal(n jsn.Marshaler, pv **AnyOf) {
@@ -276,7 +272,6 @@ func Directive_Repeats_Marshal(n jsn.Marshaler, vals *[]Directive) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Directive_Optional_Marshal(n jsn.Marshaler, pv **Directive) {
@@ -335,7 +330,6 @@ func Grammar_Repeats_Marshal(n jsn.Marshaler, vals *[]Grammar) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Grammar_Optional_Marshal(n jsn.Marshaler, pv **Grammar) {
@@ -391,7 +385,6 @@ func GrammarMaker_Repeats_Marshal(n jsn.Marshaler, vals *[]GrammarMaker) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Noun makes a parser scanner
@@ -427,7 +420,6 @@ func Noun_Repeats_Marshal(n jsn.Marshaler, vals *[]Noun) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Noun_Optional_Marshal(n jsn.Marshaler, pv **Noun) {
@@ -484,7 +476,6 @@ func Retarget_Repeats_Marshal(n jsn.Marshaler, vals *[]Retarget) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Retarget_Optional_Marshal(n jsn.Marshaler, pv **Retarget) {
@@ -541,7 +532,6 @@ func Reverse_Repeats_Marshal(n jsn.Marshaler, vals *[]Reverse) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Reverse_Optional_Marshal(n jsn.Marshaler, pv **Reverse) {
@@ -597,7 +587,6 @@ func ScannerMaker_Repeats_Marshal(n jsn.Marshaler, vals *[]ScannerMaker) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
@@ -633,7 +622,6 @@ func Self_Repeats_Marshal(n jsn.Marshaler, vals *[]Self) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Self_Optional_Marshal(n jsn.Marshaler, pv **Self) {
@@ -690,7 +678,6 @@ func Words_Repeats_Marshal(n jsn.Marshaler, vals *[]Words) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Words_Optional_Marshal(n jsn.Marshaler, pv **Words) {

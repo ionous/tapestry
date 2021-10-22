@@ -50,7 +50,6 @@ func Bool_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]bool) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Bool_Unboxed_Optional_Marshal(n jsn.Marshaler, val *bool) {
@@ -87,7 +86,6 @@ func Bool_Repeats_Marshal(n jsn.Marshaler, vals *[]Bool) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Lines requires a user-specified string.
@@ -136,7 +134,6 @@ func Lines_Repeats_Marshal(n jsn.Marshaler, vals *[]Lines) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Number requires a user-specified string.
@@ -169,7 +166,6 @@ func Number_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]float64) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Number_Unboxed_Optional_Marshal(n jsn.Marshaler, val *float64) {
@@ -206,7 +202,6 @@ func Number_Repeats_Marshal(n jsn.Marshaler, vals *[]Number) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // PatternName requires a user-specified string.
@@ -257,7 +252,6 @@ func PatternName_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternName) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // RelationName requires a user-specified string.
@@ -308,7 +302,6 @@ func RelationName_Repeats_Marshal(n jsn.Marshaler, vals *[]RelationName) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // Text requires a user-specified string.
@@ -346,7 +339,6 @@ func Text_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]string) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 func Text_Unboxed_Optional_Marshal(n jsn.Marshaler, val *string) {
@@ -383,7 +375,6 @@ func Text_Repeats_Marshal(n jsn.Marshaler, vals *[]Text) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 // VariableName requires a user-specified string.
@@ -434,7 +425,6 @@ func VariableName_Repeats_Marshal(n jsn.Marshaler, vals *[]VariableName) {
 		}
 		n.EndValues()
 	}
-	return
 }
 
 var Slats = []composer.Composer{

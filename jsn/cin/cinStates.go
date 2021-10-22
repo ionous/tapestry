@@ -40,7 +40,6 @@ func (dec *xDecoder) newValue(msg json.RawMessage, next *chart.StateMix) *chart.
 			}
 		}
 		dec.Commit("new value")
-		return
 	}
 	return next
 }
