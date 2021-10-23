@@ -26,20 +26,21 @@ func Decode(dst jsn.Marshalee, msg json.RawMessage, reg []map[uint64]interface{}
 
 func (dec *xDecoder) newValue(msg json.RawMessage, next *chart.StateMix) *chart.StateMix {
 	dec.CurrentMessage = msg
-	next.OnValue = func(_ string, pv interface{}) {
+	next.OnValue = func(_ string, pv interface{}) (err error) {
 		if el, ok := pv.(interface{ SetValue(interface{}) bool }); ok {
 			var i interface{}
 			if e := json.Unmarshal(msg, &i); e != nil {
-				dec.Error(e)
+				err = e
 			} else if !el.SetValue(i) {
-				dec.Error(errutil.New("couldnt set value", i))
+				err = errutil.New("couldnt set value", i)
 			}
 		} else {
 			if e := json.Unmarshal(msg, pv); e != nil {
-				dec.Error(e) // coudn't unmarshal directly into the target value?
+				err = e // coudn't unmarshal directly into the target value?
 			}
 		}
 		dec.Commit("new value")
+		return
 	}
 	return next
 }
@@ -142,16 +143,16 @@ func (dec *xDecoder) newFlow(flow *cinFlow) *chart.StateMix {
 	var next chart.StateMix
 	// the generated code is going to be calling this zero or more times
 	// we need to walk the parameter names in order looking for matches
-	next.OnKey = func(lede, _ string) (okay bool) {
+	next.OnKey = func(lede, _ string) (err error) {
 		pick, msg := flow.findArg(lede)
 		if len(pick) > 0 {
 			dec.ChangeState(dec.newEmbeddedSwap(next, msg, pick))
-			okay = true
 		} else if len(msg) > 0 {
 			dec.ChangeState(dec.newKey(next, msg))
-			okay = true
+		} else {
+			err = jsn.Missing
 		}
-		return okay
+		return
 	}
 	next.OnEnd = func() {
 		dec.FinishState("flow")

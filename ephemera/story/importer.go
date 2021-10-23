@@ -5,6 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/jsn/din"
 
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ident"
@@ -21,7 +22,7 @@ type Importer struct {
 	StoryEnv
 	// jsonExp.importerExporter
 	source string
-	cmds   composer.Registry
+	cmds   din.Registry
 	path   programPath
 }
 
@@ -47,17 +48,18 @@ func (i *Importer) RegisterTypes(cmds []composer.Composer) {
 }
 
 func (k *Importer) ImportStory(src string, b []byte) (ret *Story, err error) {
-	// k.source = src
-	// k.Recorder.SetSource(src)
-	// //
-	// story := new(Story)
-	// if e := story.UnmarshalDetailed(k, b); e != nil {
-	// 	err = e
-	// } else if e := story.ImportStory(k); e != nil {
-	// 	err = e
-	// } else {
-	// 	ret = story
-	// }
+	var story Story
+	if e := DecodeDetailedStory(&story, b); e != nil {
+		err = e
+	} else {
+		k.source = src
+		k.Recorder.SetSource(src)
+		if e := story.ImportStory(k); e != nil {
+			err = e
+		} else {
+			ret = &story
+		}
+	}
 	return
 }
 

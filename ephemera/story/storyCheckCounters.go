@@ -22,14 +22,12 @@ func searchForType(src jsn.Marshalee, typeName string) (okay bool, err error) {
 	err = ts.Marshal(src, &chart.StateMix{
 		OnBlock: func(b jsn.BlockType) error {
 			if b.GetType() == typeName {
-				okay = true
-				earlyOut = jsn.Missing
+				okay, earlyOut = true, jsn.Missing
 			}
 			return earlyOut
 		},
-		OnKey:   func(_, _ string) bool { return !okay },
-		OnValue: func(_ string, _ interface{}) {},
-		OnEnd:   func() {},
+		OnKey:   func(_, _ string) error { return earlyOut },
+		OnValue: func(_ string, _ interface{}) error { return earlyOut },
 	})
 	return
 }

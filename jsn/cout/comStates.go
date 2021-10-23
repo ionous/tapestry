@@ -44,8 +44,9 @@ func unpack(pv interface{}) (ret interface{}) {
 
 // compact data represents primitive values as their value.
 func (m *xEncoder) newValue(next *chart.StateMix) *chart.StateMix {
-	next.OnValue = func(typeName string, pv interface{}) {
+	next.OnValue = func(typeName string, pv interface{}) error {
 		m.Commit(unpack(pv))
+		return nil
 	}
 	return next
 }
@@ -94,9 +95,9 @@ func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 
 func (m *xEncoder) newFlow(d *comFlow) *chart.StateMix {
 	var next chart.StateMix
-	next.OnKey = func(key, _ string) bool {
+	next.OnKey = func(key, _ string) error {
 		m.ChangeState(m.newKey(next, d, key))
-		return true
+		return nil
 	}
 	next.OnEnd = func() {
 		// doesnt worry if there's a pending key/value

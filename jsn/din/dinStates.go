@@ -23,25 +23,26 @@ func Decode(dst jsn.Marshalee, reg Registry, msg json.RawMessage) error {
 }
 
 func (dec *xDecoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.StateMix {
-	next.OnValue = func(typeName string, pv interface{}) {
+	next.OnValue = func(typeName string, pv interface{}) (err error) {
 		var d dinValue
 		if e := json.Unmarshal(*pm, &d); e != nil {
-			dec.Error(e)
+			err = e
 		} else {
 			if el, ok := pv.(interface{ SetValue(interface{}) bool }); ok {
 				var i interface{}
 				if e := json.Unmarshal(d.Msg, &i); e != nil {
-					dec.Error(e)
+					err = e
 				} else if !el.SetValue(i) {
-					dec.Error(errutil.New("couldnt set value", i))
+					err = errutil.New("couldnt set value", i)
 				}
 			} else {
 				if e := json.Unmarshal(d.Msg, pv); e != nil {
-					dec.Error(e) // couldnt unmarshal directly into the target value
+					err = e // couldnt unmarshal directly into the target value
 				}
 			}
 		}
 		dec.Commit("new value")
+		return
 	}
 	// next.OnCommit -- handled by each caller
 	return next
@@ -122,12 +123,13 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 
 func (dec *xDecoder) newFlow(fields dinFields) *chart.StateMix {
 	var next chart.StateMix
-	next.OnKey = func(_, key string) (okay bool) {
-		if msg, ok := fields[key]; ok {
+	next.OnKey = func(_, key string) (err error) {
+		if msg, ok := fields[key]; !ok {
+			err = jsn.Missing
+		} else {
 			dec.ChangeState(dec.newKey(next, msg))
-			okay = true
 		}
-		return okay
+		return
 	}
 	next.OnEnd = func() {
 		dec.FinishState(nil)

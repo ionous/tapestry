@@ -26,7 +26,7 @@ func Encode(in jsn.Marshalee) (ret interface{}, err error) {
 }
 
 func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
-	next.OnValue = func(typeName string, pv interface{}) {
+	next.OnValue = func(typeName string, pv interface{}) error {
 		if el, ok := pv.(interface{ GetValue() interface{} }); ok {
 			pv = el.GetValue()
 		}
@@ -36,6 +36,7 @@ func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 			Type:  typeName,
 			Value: pv,
 		})
+		return nil
 	}
 	// next.OnCommit -- handled by each caller
 	return next
@@ -96,9 +97,9 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 // every flow pushes a brand new machine
 func newFlow(m *chart.Machine, vals detMap) *chart.StateMix {
 	var next chart.StateMix
-	next.OnKey = func(_, key string) bool {
+	next.OnKey = func(_, key string) error {
 		m.ChangeState(newKey(m, next, key, vals))
-		return true
+		return nil
 	}
 	next.OnEnd = func() {
 		// doesnt worry if there's a pending key/value
