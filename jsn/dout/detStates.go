@@ -44,7 +44,8 @@ func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 // blocks handle beginning new flows, swaps, or repeats
 // end ( and how they collect data ) gets left to the caller
 func newBlock(m *chart.Machine) *chart.StateMix {
-	return addBlock(m, chart.NewReportingState(m))
+	var next chart.StateMix
+	return addBlock(m, &next)
 }
 
 func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
@@ -94,9 +95,9 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 // the flow is closed ( written ) with a call to EndValues()
 // every flow pushes a brand new machine
 func newFlow(m *chart.Machine, vals detMap) *chart.StateMix {
-	next := chart.NewReportingState(m)
+	var next chart.StateMix
 	next.OnKey = func(_, key string) bool {
-		m.ChangeState(newKey(m, *next, key, vals))
+		m.ChangeState(newKey(m, next, key, vals))
 		return true
 	}
 	next.OnEnd = func() {
@@ -104,7 +105,7 @@ func newFlow(m *chart.Machine, vals detMap) *chart.StateMix {
 		// writing a value to a key is always considered optional
 		m.FinishState(vals)
 	}
-	return next
+	return &next
 }
 
 // all keys are considered optional, so we do everything prev does with some extrs.

@@ -45,7 +45,8 @@ func (dec *xDecoder) newValue(msg json.RawMessage, next *chart.StateMix) *chart.
 }
 
 func (dec *xDecoder) newBlock(msg json.RawMessage) *chart.StateMix {
-	return dec.addBlock(msg, chart.NewReportingState(&dec.Machine))
+	var next chart.StateMix
+	return dec.addBlock(msg, &next)
 }
 
 func (dec *xDecoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.StateMix {
@@ -111,7 +112,7 @@ func (dec *xDecoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.
 
 // the message data is special, and the next state is expected to be a swap
 func (dec *xDecoder) newEmbeddedSwap(prev chart.StateMix, msg json.RawMessage, pick string) *chart.StateMix {
-	next := chart.NewReportingState(&dec.Machine)
+	var next chart.StateMix
 	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
 		pick := newStringKey(pick)
 		if _, ok := p.SetChoice(pick); !ok {
@@ -125,7 +126,7 @@ func (dec *xDecoder) newEmbeddedSwap(prev chart.StateMix, msg json.RawMessage, p
 	next.OnCommit = func(interface{}) {
 		dec.ChangeState(&prev)
 	}
-	return next
+	return &next
 }
 
 func newStringKey(s string) string {
@@ -138,16 +139,16 @@ func newStringKey(s string) string {
 }
 
 func (dec *xDecoder) newFlow(flow *cinFlow) *chart.StateMix {
-	next := chart.NewReportingState(&dec.Machine)
+	var next chart.StateMix
 	// the generated code is going to be calling this zero or more times
 	// we need to walk the parameter names in order looking for matches
 	next.OnKey = func(lede, _ string) (okay bool) {
 		pick, msg := flow.findArg(lede)
 		if len(pick) > 0 {
-			dec.ChangeState(dec.newEmbeddedSwap(*next, msg, pick))
+			dec.ChangeState(dec.newEmbeddedSwap(next, msg, pick))
 			okay = true
 		} else if len(msg) > 0 {
-			dec.ChangeState(dec.newKey(*next, msg))
+			dec.ChangeState(dec.newKey(next, msg))
 			okay = true
 		}
 		return okay
@@ -155,7 +156,7 @@ func (dec *xDecoder) newFlow(flow *cinFlow) *chart.StateMix {
 	next.OnEnd = func() {
 		dec.FinishState("flow")
 	}
-	return next
+	return &next
 }
 
 // we have a valid flow key, we are now waiting on its value.
@@ -188,7 +189,7 @@ func (dec *xDecoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 
 // in compact format, the msg holds the slat which fills the slot
 func (dec *xDecoder) newSlot(k string, args json.RawMessage) *chart.StateMix {
-	next := chart.NewReportingState(&dec.Machine)
+	var next chart.StateMix
 	next.OnMap = func(_, _ string) (okay bool) {
 		if flow, e := newFlowData(k, args); e != nil {
 			dec.Error(e)
@@ -204,7 +205,7 @@ func (dec *xDecoder) newSlot(k string, args json.RawMessage) *chart.StateMix {
 	next.OnEnd = func() {
 		dec.FinishState("empty slot")
 	}
-	return next
+	return &next
 }
 
 // pretty much any simple value or block data can fulfill a swap

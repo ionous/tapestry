@@ -48,7 +48,8 @@ func (dec *xDecoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.
 }
 
 func (dec *xDecoder) newBlock(pm *json.RawMessage) *chart.StateMix {
-	return dec.addBlock(pm, chart.NewReportingState(&dec.Machine))
+	var next chart.StateMix
+	return dec.addBlock(pm, &next)
 }
 
 func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.StateMix {
@@ -120,10 +121,10 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 }
 
 func (dec *xDecoder) newFlow(fields dinFields) *chart.StateMix {
-	next := chart.NewReportingState(&dec.Machine)
+	var next chart.StateMix
 	next.OnKey = func(_, key string) (okay bool) {
 		if msg, ok := fields[key]; ok {
-			dec.ChangeState(dec.newKey(*next, msg))
+			dec.ChangeState(dec.newKey(next, msg))
 			okay = true
 		}
 		return okay
@@ -131,7 +132,7 @@ func (dec *xDecoder) newFlow(fields dinFields) *chart.StateMix {
 	next.OnEnd = func() {
 		dec.FinishState(nil)
 	}
-	return next
+	return &next
 }
 
 func (dec *xDecoder) newKey(prev chart.StateMix, msg json.RawMessage) *chart.StateMix {

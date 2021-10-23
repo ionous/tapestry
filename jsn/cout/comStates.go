@@ -53,7 +53,8 @@ func (m *xEncoder) newValue(next *chart.StateMix) *chart.StateMix {
 // blocks handle beginning new flows, swaps, or repeats
 // end ( and how they collect data ) gets left to the caller
 func (m *xEncoder) newBlock() *chart.StateMix {
-	return m.addBlock(chart.NewReportingState(&m.Machine))
+	var next chart.StateMix
+	return m.addBlock(&next)
 }
 
 func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
@@ -92,9 +93,9 @@ func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 }
 
 func (m *xEncoder) newFlow(d *comFlow) *chart.StateMix {
-	next := chart.NewReportingState(&m.Machine)
+	var next chart.StateMix
 	next.OnKey = func(key, _ string) bool {
-		m.ChangeState(m.newKey(*next, d, key))
+		m.ChangeState(m.newKey(next, d, key))
 		return true
 	}
 	next.OnEnd = func() {
@@ -102,7 +103,7 @@ func (m *xEncoder) newFlow(d *comFlow) *chart.StateMix {
 		// writing a value to a key is always considered optional
 		m.FinishState(d.finalize())
 	}
-	return next
+	return &next
 }
 
 // writes the value into the key and change back to the flow state

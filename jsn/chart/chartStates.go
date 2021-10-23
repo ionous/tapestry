@@ -25,11 +25,6 @@ type StateMix struct {
 	OnCommit func(interface{})
 }
 
-// base state handles simple reporting.
-func NewReportingState(m *Machine) *StateMix {
-	return &StateMix{}
-}
-
 // wait until the block is closed then finish
 func NewBlockResult(m *Machine, v interface{}) *StateMix {
 	return &StateMix{
