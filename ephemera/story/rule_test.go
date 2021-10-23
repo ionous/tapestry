@@ -21,7 +21,7 @@ func TestPatternActivity(t *testing.T) {
 	var prog core.Activity
 	if b, e := json.Marshal(_pattern_activity); e != nil {
 		t.Fatal(e)
-	} else if e := din.Decode(&prog, b); e != nil {
+	} else if e := din.Decode(&prog, story.StoryRegistry(), b); e != nil {
 		t.Fatal(e)
 	} else {
 		var run testRuntime
@@ -42,7 +42,7 @@ func TestPatternActions(t *testing.T) {
 	var prog story.PatternActions
 	if b, e := json.Marshal(_pattern_actions); e != nil {
 		t.Fatal(e)
-	} else if e := din.Decode(&prog, b); e != nil {
+	} else if e := din.Decode(&prog, story.StoryRegistry(), b); e != nil {
 		t.Fatal(e)
 	} else if e := prog.ImportPhrase(k); e != nil {
 		t.Fatal(e)

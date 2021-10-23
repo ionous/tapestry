@@ -31,7 +31,7 @@ func TestDetermineNum(t *testing.T) {
 	var rule story.Determine
 	if b, e := json.Marshal(factorialDetermine); e != nil {
 		t.Fatal(e)
-	} else if e := din.Decode(&rule, b); e != nil {
+	} else if e := din.Decode(&rule, story.StoryRegistry(), b); e != nil {
 		t.Fatal(e)
 	} else if ptr, e := rule.ImportStub(k); e != nil {
 		t.Fatal(e)

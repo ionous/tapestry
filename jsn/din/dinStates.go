@@ -3,7 +3,6 @@ package din
 import (
 	"encoding/json"
 
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/jsn/chart"
 	"github.com/ionous/errutil"
@@ -11,11 +10,11 @@ import (
 
 type xDecoder struct {
 	chart.Machine
-	reg composer.Registry
+	reg Registry
 }
 
-func Decode(dst jsn.Marshalee, msg json.RawMessage) error {
-	dec := xDecoder{reg: makeRegistry()}
+func Decode(dst jsn.Marshalee, reg Registry, msg json.RawMessage) error {
+	dec := xDecoder{reg: reg}
 	next := dec.newBlock(&msg)
 	next.OnCommit = func(interface{}) {}
 	dec.ChangeState(next)

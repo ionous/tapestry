@@ -25,39 +25,41 @@ const {{Pascal ../name}}_{{Pascal this.token}}= "{{this.token}}";
 {{#if (Unboxed name)}}
 {{>repeat name=(Pascal name) mod="_Unboxed" el=(Unboxed name)}}
 
-func {{Pascal name}}_Unboxed_Optional_Marshal(n jsn.Marshaler, val *{{Unboxed name}}) {
+func {{Pascal name}}_Unboxed_Optional_Marshal(m jsn.Marshaler, val *{{Unboxed name}}) (err error) {
   var zero {{Unboxed name}}
-  if enc := n.IsEncoding(); !enc || *val != zero {
-    {{Pascal name}}_Unboxed_Marshal(n, val)
+  if enc := m.IsEncoding(); !enc || *val != zero {
+    err = {{Pascal name}}_Unboxed_Marshal(m, val)
   }
+  return
 }
 
-func {{Pascal name}}_Unboxed_Marshal(n jsn.Marshaler, val *{{Unboxed name}}) {
-  n.MarshalValue({{Pascal name}}_Type, jsn.Box{{Pascal (Unboxed name)}}(val))
+func {{Pascal name}}_Unboxed_Marshal(m jsn.Marshaler, val *{{Unboxed name}}) error {
+  return m.MarshalValue({{Pascal name}}_Type, jsn.Box{{Pascal (Unboxed name)}}(val))
 }
 {{/if}}
 
-func {{Pascal name}}_Optional_Marshal(n jsn.Marshaler, val *{{Pascal name}}) {
+func {{Pascal name}}_Optional_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
   var zero {{Pascal name}}
-  if enc := n.IsEncoding(); !enc || val.{{Pascal uses}} != zero.{{Pascal uses}} {
-     {{Pascal name}}_Marshal(n, val)
+  if enc := m.IsEncoding(); !enc || val.{{Pascal uses}} != zero.{{Pascal uses}} {
+     err = {{Pascal name}}_Marshal(m, val)
   }
+  return
 }
 
-func {{Pascal name}}_Marshal(n jsn.Marshaler, val *{{Pascal name}}) {
+func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
 {{#if (IsCustom name)}}
-  if fn, ok := n.CustomizedMarshal({{Pascal name}}_Type); ok {
-    fn(n, val)
+  if fn, ok := m.CustomizedMarshal({{Pascal name}}_Type); ok {
+    err = fn(m, val)
   } else {
-    {{Pascal name}}_DefaultMarshal(n, val)
+    err = {{Pascal name}}_DefaultMarshal(m, val)
   }
 }
-func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, val *{{Pascal name}}) {
+func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, val *{{Pascal name}}) error {
 {{/if}}
 {{#if (IsPositioned this)}}
-  n.SetCursor(val.At.Offset)
+  m.SetCursor(val.At.Offset)
 {{/if}}
-  n.MarshalValue({{Pascal name}}_Type, {{#if (IsEnumerated this)~}}
+  return m.MarshalValue({{Pascal name}}_Type, {{#if (IsEnumerated this)~}}
     jsn.MakeEnum(val, &val.Str){{else~}}
     &val.{{Pascal uses}}{{/if~}}
   )

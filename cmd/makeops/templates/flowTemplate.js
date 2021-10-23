@@ -25,44 +25,49 @@ const {{Pascal ../name}}_Field_{{Pascal key}} = "{{key}}";
 {{>repeat name=(Pascal name) el=(Pascal name)}}
 {{/unless}}
 
-func {{Pascal name}}_Optional_Marshal(n jsn.Marshaler, pv **{{Pascal name}}) {
-  if enc := n.IsEncoding(); enc && *pv != nil {
-    {{Pascal name}}_Marshal(n, *pv)
+func {{Pascal name}}_Optional_Marshal(m jsn.Marshaler, pv **{{Pascal name}}) (err error) {
+  if enc := m.IsEncoding(); enc && *pv != nil {
+    err = {{Pascal name}}_Marshal(m, *pv)
   } else if !enc {
     var v {{Pascal name}}
-    if {{Pascal name}}_Marshal(n, &v) {
+    if err = {{Pascal name}}_Marshal(m, &v); err == nil {
       *pv = &v
     }
   }
+  return
 }
 
-func {{Pascal name}}_Marshal(n jsn.Marshaler, val *{{Pascal name}}) (okay bool) {
+func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
 {{#if (IsCustom name)}}
-  if fn, ok := n.CustomizedMarshal({{Pascal name}}_Type); ok {
-    okay = fn(n, val)
+  if fn, ok := m.CustomizedMarshal({{Pascal name}}_Type); ok {
+    err = fn(m, val)
   } else {
-    okay = {{Pascal name}}_DefaultMarshal(n, val)
+    err = {{Pascal name}}_DefaultMarshal(m, val)
   }
   return
 }
-func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, val *{{Pascal name}}) (okay bool) {
+func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
 {{/if}}
 {{#if (IsPositioned this)}}
-  n.SetCursor(val.At.Offset)
+  m.SetCursor(val.At.Offset)
 {{/if}}
-  if okay = n.MarshalBlock(jsn.MarkFlow(
-{{~#if (LedeName this)}}"{{LedeName this}}"{{else}}{{Pascal name}}_Type{{/if}},
-{{Pascal name}}_Type)); okay {
+  if err = m.MarshalBlock(jsn.MarkFlow(
+{{~#if (LedeName this)}}"{{LedeName this}}"{{else}}{{Pascal name}}_Type{{/if
+}}, {{Pascal name}}_Type)); err == nil {
 {{~#each params}}{{#unless (IsInternal label)}}
-    if n.MarshalKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}}) {
-      {{ScopeOf type}}{{Pascal type}}
+    e{{@index}} := m.MarshalKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}})
+    if e{{@index}} == nil {
+      e{{@index}} = {{ScopeOf type}}{{Pascal type}}
       {{~#if (Unboxed type)}}_Unboxed{{/if}}
       {{~#if repeats}}_Repeats
       {{~else if optional}}_Optional
-      {{~/if}}_Marshal(n, &val.{{Pascal key}})
+      {{~/if}}_Marshal(m, &val.{{Pascal key}})
+    }
+    if e{{@index}} != nil && e{{@index}} != jsn.Missing {
+      m.Error(errutil.New(e{{@index}}, "in flow at", {{Pascal ../name}}_Field_{{Pascal key}}))
     }
 {{~/unless}}{{/each}}
-    n.EndBlock()
+    m.EndBlock()
   }
   return
 }

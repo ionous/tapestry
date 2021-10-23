@@ -12,86 +12,86 @@ import (
 
 var custom = chart.Customization{
 	// package rt:
-	rt.Assignment_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
+	rt.Assignment_Type: func(n jsn.Marshaler, i interface{}) (err error) {
 		dec, ptr := n.(*xDecoder), i.(*rt.Assignment)
 		if v, ok := readVar(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else {
-			okay = rt.Assignment_DefaultMarshal(dec, ptr)
+			err = rt.Assignment_DefaultMarshal(dec, ptr)
 		}
 		return
 	},
-	rt.BoolEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
+	rt.BoolEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
 		dec, ptr := n.(*xDecoder), i.(*rt.BoolEval)
 		if v, ok := readBool(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else if v, ok := readVar(dec); ok {
 			dec.Commit("bool var")
-			*ptr, okay = v, true
+			*ptr = v
 		} else {
-			okay = rt.BoolEval_DefaultMarshal(dec, ptr)
+			err = rt.BoolEval_DefaultMarshal(dec, ptr)
 		}
 		return
 	},
-	rt.NumberEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
+	rt.NumberEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
 		dec, ptr := n.(*xDecoder), i.(*rt.NumberEval)
 		if v, ok := readNum(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else if v, ok := readVar(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else {
-			okay = rt.NumberEval_DefaultMarshal(dec, ptr)
+			err = rt.NumberEval_DefaultMarshal(dec, ptr)
 		}
 		return
 	},
-	rt.NumListEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
+	rt.NumListEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
 		dec, ptr := n.(*xDecoder), i.(*rt.NumListEval)
 		if v, ok := readNumList(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else if v, ok := readVar(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else {
-			okay = rt.NumListEval_DefaultMarshal(dec, ptr)
+			err = rt.NumListEval_DefaultMarshal(dec, ptr)
 		}
 		return
 	},
-	rt.RecordEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
+	rt.RecordEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
 		dec, ptr := n.(*xDecoder), i.(*rt.RecordEval)
 		if v, ok := readVar(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else {
-			okay = rt.RecordEval_DefaultMarshal(dec, ptr)
+			err = rt.RecordEval_DefaultMarshal(dec, ptr)
 		}
 		return
 	},
-	rt.RecordListEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
+	rt.RecordListEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
 		dec, ptr := n.(*xDecoder), i.(*rt.RecordListEval)
 		if v, ok := readVar(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else {
-			okay = rt.RecordListEval_DefaultMarshal(dec, ptr)
+			err = rt.RecordListEval_DefaultMarshal(dec, ptr)
 		}
 		return
 	},
-	rt.TextEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
+	rt.TextEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
 		dec, ptr := n.(*xDecoder), i.(*rt.TextEval)
 		// NOTE: a string where a text eval is expected could be a variable providing text or some literal text.
 		// variables start with @, and text that starts with an @ winds up prefixed with two @@s
 		if v, ok := readVarOrText(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else {
-			okay = rt.TextEval_DefaultMarshal(dec, ptr)
+			err = rt.TextEval_DefaultMarshal(dec, ptr)
 		}
 		return
 	},
-	rt.TextListEval_Type: func(n jsn.Marshaler, i interface{}) (okay bool) {
+	rt.TextListEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
 		dec, ptr := n.(*xDecoder), i.(*rt.TextListEval)
 		if v, ok := readTextList(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else if v, ok := readVar(dec); ok {
-			*ptr, okay = v, true
+			*ptr = v
 		} else {
-			okay = rt.TextListEval_DefaultMarshal(dec, ptr)
+			err = rt.TextListEval_DefaultMarshal(dec, ptr)
 		}
 		return
 	},
@@ -135,7 +135,7 @@ func readTextList(dec *xDecoder) (ret *core.Texts, okay bool) {
 	return
 }
 
-// when there's just a single string that fits a text eval...
+// when there's just a single string that fits a text eval..
 // it could be literal text or a variable providing text.
 func readVarOrText(dec *xDecoder) (ret rt.TextEval, okay bool) {
 	var str string
@@ -146,11 +146,11 @@ func readVarOrText(dec *xDecoder) (ret rt.TextEval, okay bool) {
 		} else {
 			if cnt > 2 && str[1] == '@' {
 				// any text primitive with an @ gets another @ prefixed to it
-				// so... strip that off here.
+				// so.. strip that off here.
 				ret, okay = &core.TextValue{str[1:]}, true
 				dec.Commit("escaped text literal")
 			} else {
-				// only has one @... that means its a var
+				// only has one @.. that means its a var
 				ret, okay = newVar(str), true
 				dec.Commit("text var")
 			}

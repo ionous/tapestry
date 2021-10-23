@@ -44,24 +44,27 @@ func (op* {{Pascal name}}) SetChoice(c string) (ret interface{}, okay bool) {
 
 {{#if ../marshal}}
 {{>sig}}
-func {{Pascal name}}_Marshal(n jsn.Marshaler, val *{{Pascal name}}){
+func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
 {{#if (IsCustom name)}}
-  if fn, ok := n.CustomizedMarshal({{Pascal name}}_Type); ok {
-    fn(n, val)
+  if fn, ok := m.CustomizedMarshal({{Pascal name}}_Type); ok {
+    err = fn(m, val)
   } else {
-    {{Pascal name}}_DefaultMarshal(n, val)
+    err = {{Pascal name}}_DefaultMarshal(m, val)
   }
   return
 }
-func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, val *{{Pascal name}}) {
+func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
 {{/if}}
 {{~#if (IsPositioned this)}}
-  n.SetCursor(val.At.Offset)
+  m.SetCursor(val.At.Offset)
 {{/if}}
-  if n.MarshalBlock(val) {
-    val.Opt.(jsn.Marshalee).Marshal(n)
-    n.EndBlock()
+  if err = m.MarshalBlock(val); err == nil {
+    if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+      m.Error(e)
+    }
+    m.EndBlock()
   }
+  return
 }
 {{/if}}
 {{/with}}

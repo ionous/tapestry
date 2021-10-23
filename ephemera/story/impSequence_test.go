@@ -19,7 +19,7 @@ func TestImportSequence(t *testing.T) {
 	var cmd story.CycleText
 	if b, e := json.Marshal(_cycle_text); e != nil {
 		t.Fatal(e)
-	} else if e := din.Decode(&cmd, b); e != nil {
+	} else if e := din.Decode(&cmd, story.StoryRegistry(), b); e != nil {
 		t.Fatal(e)
 	} else if ptr, e := cmd.ImportStub(k); e != nil {
 		t.Fatal(e)

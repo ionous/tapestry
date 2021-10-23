@@ -1,8 +1,10 @@
 package jsn
 
+import "github.com/ionous/errutil"
+
 // Marshalee for types which fit into slots
 type Marshalee interface {
-	Marshal(Marshaler)
+	Marshal(Marshaler) error
 }
 
 // Marshaler reads and writes two categories of script data: simple values, and block values.
@@ -16,30 +18,37 @@ type Marshaler interface {
 	CustomizedMarshal(typeName string) (CustomizedMarshal, bool)
 	// sets a unique id for the next block or primitive value.
 	SetCursor(id string)
-	// record an error
-	Error(err error)
+	// report an error
+	// errors for values inside of blocks are generally reported here
+	// otherwise they are returned on the stack.
+	Error(error)
 	// current state: embedded into this one
 	State
 }
 
+// Missing provides a standard return for when a value doesnt exist to marshal.
+// Most often passed on the stack ( and not reported to the Marshaler ) to know not to descend into a block
+const Missing = errutil.Error("Missing")
+
 type State interface {
 	// starts one of various block types.
-	// If this returns true, a matching EndBlock() must be called ( after visiting any sub values. )
-	// If this returns false, EndBlock() must *not* be called ( and no sub values are allowed. )
-	MarshalBlock(BlockType) bool
+	// if this succeeds (returns nil), a matching EndBlock() must be called ( after visiting any sub values. )
+	// If this returns an error, EndBlock() must *not* be called ( and no sub values are allowed. )
+	MarshalBlock(BlockType) error
 	// the start of a possible key:value pair inside a FlowBlock.
 	// a new MarshalKey or an EndBlock will cancel writing this pair.
-	// if this returns true, the corresponding value must be marshaled.
-	MarshalKey(sig, field string) bool
+	// if this succeeds (returns nil), it must be followed by a MarshalValue call.
+	// if this returns an error, its value must *not* be marshaled.
+	MarshalKey(sig, field string) error
 	// specify a simple value ( or enum. )
-	// returns true/false only to improve compatibility with MarshalBlock;
-	// callers generally should generally not act on the return value.
-	MarshalValue(typeName string, _ interface{}) bool
+	// callers should generally report the error or pass it on, but not both.
+	MarshalValue(typeName string, _ interface{}) error
 	// designates the end of the current block
 	EndBlock()
 }
 
-type CustomizedMarshal func(Marshaler, interface{}) bool
+// fix: these could probably be moved internal to the particular machine.
+type CustomizedMarshal func(Marshaler, interface{}) error
 
 // designation for a type which has multiple sub-values.
 type BlockType interface {

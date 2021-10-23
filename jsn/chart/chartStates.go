@@ -14,7 +14,7 @@ type State interface {
 // StateMix implements the jsn.State interface
 // providing functions which can be overridden one at a time to customize functionality
 type StateMix struct {
-	OnBlock  func(jsn.BlockType) bool
+	OnBlock  func(jsn.BlockType) error
 	OnMap    func(string, string) bool
 	OnKey    func(string, string) bool
 	OnSlot   func(string, jsn.SlotBlock) bool
@@ -22,13 +22,12 @@ type StateMix struct {
 	OnRepeat func(string, jsn.SliceBlock) bool
 	OnEnd    func()
 	OnValue  func(string, interface{})
-	OnWarn   func(error)
 	OnCommit func(interface{})
 }
 
 // base state handles simple reporting.
 func NewReportingState(m *Machine) *StateMix {
-	return &StateMix{OnWarn: m.Error}
+	return &StateMix{}
 }
 
 // wait until the block is closed then finish
@@ -43,88 +42,87 @@ func NewBlockResult(m *Machine, v interface{}) *StateMix {
 	}
 }
 
-func (d *StateMix) MarshalBlock(b jsn.BlockType) (okay bool) {
+func (d *StateMix) MarshalBlock(b jsn.BlockType) (err error) {
 	if call := d.OnBlock; call != nil {
-		okay = call(b)
+		err = call(b)
 	} else {
 		// backwards compatibility from when there were separate functions for each block type
 		switch block := b.(type) {
 		case jsn.FlowBlock:
-			okay = d.MapValues(block.GetLede(), block.GetType())
+			err = d.MapValues(block.GetLede(), block.GetType())
 		case jsn.SwapBlock:
-			okay = d.PickValues(block.GetType(), block)
+			err = d.PickValues(block.GetType(), block)
 		case jsn.SliceBlock:
-			okay = d.RepeatValues(block.GetType(), block)
+			err = d.RepeatValues(block.GetType(), block)
 		case jsn.SlotBlock:
-			okay = d.SlotValues(block.GetType(), block)
+			err = d.SlotValues(block.GetType(), block)
 		default:
-			d.Warn(errutil.New("unexpected map type %T", b))
+			err = errutil.New("unexpected map type %T", b)
 		}
 	}
 	return
 }
-func (d *StateMix) MapValues(lede, typeName string) (okay bool) {
+func okayMissing(ok bool) (err error) {
+	if !ok {
+		err = jsn.Missing
+	}
+	return
+}
+func (d *StateMix) MapValues(lede, typeName string) (err error) {
 	if call := d.OnMap; call != nil {
-		okay = call(lede, typeName)
+		err = okayMissing(call(lede, typeName))
 	} else {
-		d.Warn(errutil.New("unexpected map", lede, typeName))
+		err = errutil.New("unexpected map", lede, typeName)
 	}
 	return
 }
-func (d *StateMix) MarshalKey(key, field string) (okay bool) {
+func (d *StateMix) MarshalKey(key, field string) (err error) {
 	if call := d.OnKey; call != nil {
-		okay = call(key, field)
+		err = okayMissing(call(key, field))
 	} else {
-		d.Warn(errutil.New("unexpected key", key, field))
+		err = errutil.New("unexpected key", key, field)
 	}
 	return
 }
-func (d *StateMix) SlotValues(typeName string, val jsn.SlotBlock) (okay bool) {
+func (d *StateMix) SlotValues(typeName string, val jsn.SlotBlock) (err error) {
 	if call := d.OnSlot; call != nil {
-		okay = call(typeName, val)
+		err = okayMissing(call(typeName, val))
 	} else {
-		d.Warn(errutil.New("unexpected pick", typeName, val))
+		err = errutil.New("unexpected pick", typeName, val)
 	}
 	return
 }
-func (d *StateMix) PickValues(typeName string, val jsn.SwapBlock) (okay bool) {
+func (d *StateMix) PickValues(typeName string, val jsn.SwapBlock) (err error) {
 	if call := d.OnPick; call != nil {
-		okay = call(typeName, val)
+		err = okayMissing(call(typeName, val))
 	} else {
-		d.Warn(errutil.New("unexpected pick", typeName, val))
+		err = errutil.New("unexpected pick", typeName, val)
 	}
 	return
 }
-func (d *StateMix) RepeatValues(typeName string, val jsn.SliceBlock) (okay bool) {
+func (d *StateMix) RepeatValues(typeName string, val jsn.SliceBlock) (err error) {
 	if call := d.OnRepeat; call != nil {
-		okay = call(typeName, val)
+		err = okayMissing(call(typeName, val))
 	} else {
-		d.Warn(errutil.New("unexpected repeat", typeName, val))
+		err = errutil.New("unexpected repeat", typeName, val)
 	}
 	return
 }
 func (d *StateMix) EndBlock() {
 	if call := d.OnEnd; call != nil {
 		call()
-	} else {
-		d.Warn(errutil.New("unexpected end"))
-	}
+	} /* else {
+		// no way to report on this any more :/
+		err = errutil.New("unexpected end"))
+	}*/
 }
-func (d *StateMix) MarshalValue(typeName string, pv interface{}) (okay bool) {
+func (d *StateMix) MarshalValue(typeName string, pv interface{}) (err error) {
 	if call := d.OnValue; call != nil {
 		call(typeName, pv)
-		okay = true
 	} else {
-		d.Warn(errutil.New("unexpected value", typeName, pv))
+		err = errutil.New("unexpected value", typeName, pv)
 	}
 	return
-}
-func (d *StateMix) Warn(err error) {
-	if call := d.OnWarn; call != nil {
-		call(err)
-	} else {
-		panic(err)
-	}
 }
 
 // NOTE: doesn't warn if not implemented.

@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 // DebugLog Debug log
@@ -28,8 +29,8 @@ const DebugLog_Type = "debug_log"
 const DebugLog_Field_Value = "$VALUE"
 const DebugLog_Field_LogLevel = "$LOG_LEVEL"
 
-func (op *DebugLog) Marshal(n jsn.Marshaler) {
-	DebugLog_Marshal(n, op)
+func (op *DebugLog) Marshal(m jsn.Marshaler) error {
+	return DebugLog_Marshal(m, op)
 }
 
 type DebugLog_Slice []DebugLog
@@ -38,36 +39,47 @@ func (op *DebugLog_Slice) GetType() string { return DebugLog_Type }
 func (op *DebugLog_Slice) GetSize() int    { return len(*op) }
 func (op *DebugLog_Slice) SetSize(cnt int) { (*op) = make(DebugLog_Slice, cnt) }
 
-func DebugLog_Repeats_Marshal(n jsn.Marshaler, vals *[]DebugLog) {
-	if n.MarshalBlock((*DebugLog_Slice)(vals)) {
+func DebugLog_Repeats_Marshal(m jsn.Marshaler, vals *[]DebugLog) (err error) {
+	if err = m.MarshalBlock((*DebugLog_Slice)(vals)); err == nil {
 		for i := range *vals {
-			DebugLog_Marshal(n, &(*vals)[i])
+			if e := DebugLog_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func DebugLog_Optional_Marshal(n jsn.Marshaler, pv **DebugLog) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		DebugLog_Marshal(n, *pv)
+func DebugLog_Optional_Marshal(m jsn.Marshaler, pv **DebugLog) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DebugLog_Marshal(m, *pv)
 	} else if !enc {
 		var v DebugLog
-		if DebugLog_Marshal(n, &v) {
+		if err = DebugLog_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func DebugLog_Marshal(n jsn.Marshaler, val *DebugLog) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("log",
-		DebugLog_Type)); okay {
-		if n.MarshalKey("", DebugLog_Field_Value) {
-			rt.Assignment_Marshal(n, &val.Value)
+func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("log", DebugLog_Type)); err == nil {
+		e0 := m.MarshalKey("", DebugLog_Field_Value)
+		if e0 == nil {
+			e0 = rt.Assignment_Marshal(m, &val.Value)
 		}
-		if n.MarshalKey("as", DebugLog_Field_LogLevel) {
-			LoggingLevel_Optional_Marshal(n, &val.LogLevel)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DebugLog_Field_Value))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("as", DebugLog_Field_LogLevel)
+		if e1 == nil {
+			e1 = LoggingLevel_Optional_Marshal(m, &val.LogLevel)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DebugLog_Field_LogLevel))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -89,8 +101,8 @@ const DoNothing_Type = "do_nothing"
 
 const DoNothing_Field_Reason = "$REASON"
 
-func (op *DoNothing) Marshal(n jsn.Marshaler) {
-	DoNothing_Marshal(n, op)
+func (op *DoNothing) Marshal(m jsn.Marshaler) error {
+	return DoNothing_Marshal(m, op)
 }
 
 type DoNothing_Slice []DoNothing
@@ -99,33 +111,40 @@ func (op *DoNothing_Slice) GetType() string { return DoNothing_Type }
 func (op *DoNothing_Slice) GetSize() int    { return len(*op) }
 func (op *DoNothing_Slice) SetSize(cnt int) { (*op) = make(DoNothing_Slice, cnt) }
 
-func DoNothing_Repeats_Marshal(n jsn.Marshaler, vals *[]DoNothing) {
-	if n.MarshalBlock((*DoNothing_Slice)(vals)) {
+func DoNothing_Repeats_Marshal(m jsn.Marshaler, vals *[]DoNothing) (err error) {
+	if err = m.MarshalBlock((*DoNothing_Slice)(vals)); err == nil {
 		for i := range *vals {
-			DoNothing_Marshal(n, &(*vals)[i])
+			if e := DoNothing_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func DoNothing_Optional_Marshal(n jsn.Marshaler, pv **DoNothing) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		DoNothing_Marshal(n, *pv)
+func DoNothing_Optional_Marshal(m jsn.Marshaler, pv **DoNothing) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DoNothing_Marshal(m, *pv)
 	} else if !enc {
 		var v DoNothing
-		if DoNothing_Marshal(n, &v) {
+		if err = DoNothing_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func DoNothing_Marshal(n jsn.Marshaler, val *DoNothing) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(DoNothing_Type,
-		DoNothing_Type)); okay {
-		if n.MarshalKey("why", DoNothing_Field_Reason) {
-			value.Text_Unboxed_Optional_Marshal(n, &val.Reason)
+func DoNothing_Marshal(m jsn.Marshaler, val *DoNothing) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(DoNothing_Type, DoNothing_Type)); err == nil {
+		e0 := m.MarshalKey("why", DoNothing_Field_Reason)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Optional_Marshal(m, &val.Reason)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DoNothing_Field_Reason))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -161,19 +180,20 @@ func (*LoggingLevel) Compose() composer.Spec {
 
 const LoggingLevel_Type = "logging_level"
 
-func (op *LoggingLevel) Marshal(n jsn.Marshaler) {
-	LoggingLevel_Marshal(n, op)
+func (op *LoggingLevel) Marshal(m jsn.Marshaler) error {
+	return LoggingLevel_Marshal(m, op)
 }
 
-func LoggingLevel_Optional_Marshal(n jsn.Marshaler, val *LoggingLevel) {
+func LoggingLevel_Optional_Marshal(m jsn.Marshaler, val *LoggingLevel) (err error) {
 	var zero LoggingLevel
-	if enc := n.IsEncoding(); !enc || val.Str != zero.Str {
-		LoggingLevel_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = LoggingLevel_Marshal(m, val)
 	}
+	return
 }
 
-func LoggingLevel_Marshal(n jsn.Marshaler, val *LoggingLevel) {
-	n.MarshalValue(LoggingLevel_Type, jsn.MakeEnum(val, &val.Str))
+func LoggingLevel_Marshal(m jsn.Marshaler, val *LoggingLevel) (err error) {
+	return m.MarshalValue(LoggingLevel_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type LoggingLevel_Slice []LoggingLevel
@@ -182,13 +202,16 @@ func (op *LoggingLevel_Slice) GetType() string { return LoggingLevel_Type }
 func (op *LoggingLevel_Slice) GetSize() int    { return len(*op) }
 func (op *LoggingLevel_Slice) SetSize(cnt int) { (*op) = make(LoggingLevel_Slice, cnt) }
 
-func LoggingLevel_Repeats_Marshal(n jsn.Marshaler, vals *[]LoggingLevel) {
-	if n.MarshalBlock((*LoggingLevel_Slice)(vals)) {
+func LoggingLevel_Repeats_Marshal(m jsn.Marshaler, vals *[]LoggingLevel) (err error) {
+	if err = m.MarshalBlock((*LoggingLevel_Slice)(vals)); err == nil {
 		for i := range *vals {
-			LoggingLevel_Marshal(n, &(*vals)[i])
+			if e := LoggingLevel_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 var Slats = []composer.Composer{

@@ -431,6 +431,7 @@ for (currentGroup in groups) {
   }
   if (marshal) {
     inc.add("git.sr.ht/~ionous/iffy/jsn");
+    inc.add("github.com/ionous/errutil");
   }
 
   // 2. write the header ( with package name and inc )

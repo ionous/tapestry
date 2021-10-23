@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/jsn"
+	"github.com/ionous/errutil"
 )
 
 // Bool requires a user-specified string.
@@ -34,8 +35,8 @@ func (*Bool) Compose() composer.Spec {
 
 const Bool_Type = "bool"
 
-func (op *Bool) Marshal(n jsn.Marshaler) {
-	Bool_Marshal(n, op)
+func (op *Bool) Marshal(m jsn.Marshaler) error {
+	return Bool_Marshal(m, op)
 }
 
 type Bool_Unboxed_Slice []bool
@@ -44,35 +45,40 @@ func (op *Bool_Unboxed_Slice) GetType() string { return Bool_Type }
 func (op *Bool_Unboxed_Slice) GetSize() int    { return len(*op) }
 func (op *Bool_Unboxed_Slice) SetSize(cnt int) { (*op) = make(Bool_Unboxed_Slice, cnt) }
 
-func Bool_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]bool) {
-	if n.MarshalBlock((*Bool_Unboxed_Slice)(vals)) {
+func Bool_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]bool) (err error) {
+	if err = m.MarshalBlock((*Bool_Unboxed_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Bool_Unboxed_Marshal(n, &(*vals)[i])
+			if e := Bool_Unboxed_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func Bool_Unboxed_Optional_Marshal(n jsn.Marshaler, val *bool) {
+func Bool_Unboxed_Optional_Marshal(m jsn.Marshaler, val *bool) (err error) {
 	var zero bool
-	if enc := n.IsEncoding(); !enc || *val != zero {
-		Bool_Unboxed_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || *val != zero {
+		err = Bool_Unboxed_Marshal(m, val)
 	}
+	return
 }
 
-func Bool_Unboxed_Marshal(n jsn.Marshaler, val *bool) {
-	n.MarshalValue(Bool_Type, jsn.BoxBool(val))
+func Bool_Unboxed_Marshal(m jsn.Marshaler, val *bool) error {
+	return m.MarshalValue(Bool_Type, jsn.BoxBool(val))
 }
 
-func Bool_Optional_Marshal(n jsn.Marshaler, val *Bool) {
+func Bool_Optional_Marshal(m jsn.Marshaler, val *Bool) (err error) {
 	var zero Bool
-	if enc := n.IsEncoding(); !enc || val.Str != zero.Str {
-		Bool_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = Bool_Marshal(m, val)
 	}
+	return
 }
 
-func Bool_Marshal(n jsn.Marshaler, val *Bool) {
-	n.MarshalValue(Bool_Type, jsn.MakeEnum(val, &val.Str))
+func Bool_Marshal(m jsn.Marshaler, val *Bool) (err error) {
+	return m.MarshalValue(Bool_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type Bool_Slice []Bool
@@ -81,13 +87,16 @@ func (op *Bool_Slice) GetType() string { return Bool_Type }
 func (op *Bool_Slice) GetSize() int    { return len(*op) }
 func (op *Bool_Slice) SetSize(cnt int) { (*op) = make(Bool_Slice, cnt) }
 
-func Bool_Repeats_Marshal(n jsn.Marshaler, vals *[]Bool) {
-	if n.MarshalBlock((*Bool_Slice)(vals)) {
+func Bool_Repeats_Marshal(m jsn.Marshaler, vals *[]Bool) (err error) {
+	if err = m.MarshalBlock((*Bool_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Bool_Marshal(n, &(*vals)[i])
+			if e := Bool_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // Lines requires a user-specified string.
@@ -109,19 +118,20 @@ func (*Lines) Compose() composer.Spec {
 
 const Lines_Type = "lines"
 
-func (op *Lines) Marshal(n jsn.Marshaler) {
-	Lines_Marshal(n, op)
+func (op *Lines) Marshal(m jsn.Marshaler) error {
+	return Lines_Marshal(m, op)
 }
 
-func Lines_Optional_Marshal(n jsn.Marshaler, val *Lines) {
+func Lines_Optional_Marshal(m jsn.Marshaler, val *Lines) (err error) {
 	var zero Lines
-	if enc := n.IsEncoding(); !enc || val.Str != zero.Str {
-		Lines_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = Lines_Marshal(m, val)
 	}
+	return
 }
 
-func Lines_Marshal(n jsn.Marshaler, val *Lines) {
-	n.MarshalValue(Lines_Type, &val.Str)
+func Lines_Marshal(m jsn.Marshaler, val *Lines) (err error) {
+	return m.MarshalValue(Lines_Type, &val.Str)
 }
 
 type Lines_Slice []Lines
@@ -130,13 +140,16 @@ func (op *Lines_Slice) GetType() string { return Lines_Type }
 func (op *Lines_Slice) GetSize() int    { return len(*op) }
 func (op *Lines_Slice) SetSize(cnt int) { (*op) = make(Lines_Slice, cnt) }
 
-func Lines_Repeats_Marshal(n jsn.Marshaler, vals *[]Lines) {
-	if n.MarshalBlock((*Lines_Slice)(vals)) {
+func Lines_Repeats_Marshal(m jsn.Marshaler, vals *[]Lines) (err error) {
+	if err = m.MarshalBlock((*Lines_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Lines_Marshal(n, &(*vals)[i])
+			if e := Lines_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // Number requires a user-specified string.
@@ -153,8 +166,8 @@ func (*Number) Compose() composer.Spec {
 
 const Number_Type = "number"
 
-func (op *Number) Marshal(n jsn.Marshaler) {
-	Number_Marshal(n, op)
+func (op *Number) Marshal(m jsn.Marshaler) error {
+	return Number_Marshal(m, op)
 }
 
 type Number_Unboxed_Slice []float64
@@ -163,35 +176,40 @@ func (op *Number_Unboxed_Slice) GetType() string { return Number_Type }
 func (op *Number_Unboxed_Slice) GetSize() int    { return len(*op) }
 func (op *Number_Unboxed_Slice) SetSize(cnt int) { (*op) = make(Number_Unboxed_Slice, cnt) }
 
-func Number_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]float64) {
-	if n.MarshalBlock((*Number_Unboxed_Slice)(vals)) {
+func Number_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]float64) (err error) {
+	if err = m.MarshalBlock((*Number_Unboxed_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Number_Unboxed_Marshal(n, &(*vals)[i])
+			if e := Number_Unboxed_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func Number_Unboxed_Optional_Marshal(n jsn.Marshaler, val *float64) {
+func Number_Unboxed_Optional_Marshal(m jsn.Marshaler, val *float64) (err error) {
 	var zero float64
-	if enc := n.IsEncoding(); !enc || *val != zero {
-		Number_Unboxed_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || *val != zero {
+		err = Number_Unboxed_Marshal(m, val)
 	}
+	return
 }
 
-func Number_Unboxed_Marshal(n jsn.Marshaler, val *float64) {
-	n.MarshalValue(Number_Type, jsn.BoxFloat64(val))
+func Number_Unboxed_Marshal(m jsn.Marshaler, val *float64) error {
+	return m.MarshalValue(Number_Type, jsn.BoxFloat64(val))
 }
 
-func Number_Optional_Marshal(n jsn.Marshaler, val *Number) {
+func Number_Optional_Marshal(m jsn.Marshaler, val *Number) (err error) {
 	var zero Number
-	if enc := n.IsEncoding(); !enc || val.Num != zero.Num {
-		Number_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || val.Num != zero.Num {
+		err = Number_Marshal(m, val)
 	}
+	return
 }
 
-func Number_Marshal(n jsn.Marshaler, val *Number) {
-	n.MarshalValue(Number_Type, &val.Num)
+func Number_Marshal(m jsn.Marshaler, val *Number) (err error) {
+	return m.MarshalValue(Number_Type, &val.Num)
 }
 
 type Number_Slice []Number
@@ -200,13 +218,16 @@ func (op *Number_Slice) GetType() string { return Number_Type }
 func (op *Number_Slice) GetSize() int    { return len(*op) }
 func (op *Number_Slice) SetSize(cnt int) { (*op) = make(Number_Slice, cnt) }
 
-func Number_Repeats_Marshal(n jsn.Marshaler, vals *[]Number) {
-	if n.MarshalBlock((*Number_Slice)(vals)) {
+func Number_Repeats_Marshal(m jsn.Marshaler, vals *[]Number) (err error) {
+	if err = m.MarshalBlock((*Number_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Number_Marshal(n, &(*vals)[i])
+			if e := Number_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // PatternName requires a user-specified string.
@@ -229,20 +250,21 @@ func (*PatternName) Compose() composer.Spec {
 
 const PatternName_Type = "pattern_name"
 
-func (op *PatternName) Marshal(n jsn.Marshaler) {
-	PatternName_Marshal(n, op)
+func (op *PatternName) Marshal(m jsn.Marshaler) error {
+	return PatternName_Marshal(m, op)
 }
 
-func PatternName_Optional_Marshal(n jsn.Marshaler, val *PatternName) {
+func PatternName_Optional_Marshal(m jsn.Marshaler, val *PatternName) (err error) {
 	var zero PatternName
-	if enc := n.IsEncoding(); !enc || val.Str != zero.Str {
-		PatternName_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = PatternName_Marshal(m, val)
 	}
+	return
 }
 
-func PatternName_Marshal(n jsn.Marshaler, val *PatternName) {
-	n.SetCursor(val.At.Offset)
-	n.MarshalValue(PatternName_Type, &val.Str)
+func PatternName_Marshal(m jsn.Marshaler, val *PatternName) (err error) {
+	m.SetCursor(val.At.Offset)
+	return m.MarshalValue(PatternName_Type, &val.Str)
 }
 
 type PatternName_Slice []PatternName
@@ -251,13 +273,16 @@ func (op *PatternName_Slice) GetType() string { return PatternName_Type }
 func (op *PatternName_Slice) GetSize() int    { return len(*op) }
 func (op *PatternName_Slice) SetSize(cnt int) { (*op) = make(PatternName_Slice, cnt) }
 
-func PatternName_Repeats_Marshal(n jsn.Marshaler, vals *[]PatternName) {
-	if n.MarshalBlock((*PatternName_Slice)(vals)) {
+func PatternName_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternName) (err error) {
+	if err = m.MarshalBlock((*PatternName_Slice)(vals)); err == nil {
 		for i := range *vals {
-			PatternName_Marshal(n, &(*vals)[i])
+			if e := PatternName_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // RelationName requires a user-specified string.
@@ -280,20 +305,21 @@ func (*RelationName) Compose() composer.Spec {
 
 const RelationName_Type = "relation_name"
 
-func (op *RelationName) Marshal(n jsn.Marshaler) {
-	RelationName_Marshal(n, op)
+func (op *RelationName) Marshal(m jsn.Marshaler) error {
+	return RelationName_Marshal(m, op)
 }
 
-func RelationName_Optional_Marshal(n jsn.Marshaler, val *RelationName) {
+func RelationName_Optional_Marshal(m jsn.Marshaler, val *RelationName) (err error) {
 	var zero RelationName
-	if enc := n.IsEncoding(); !enc || val.Str != zero.Str {
-		RelationName_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = RelationName_Marshal(m, val)
 	}
+	return
 }
 
-func RelationName_Marshal(n jsn.Marshaler, val *RelationName) {
-	n.SetCursor(val.At.Offset)
-	n.MarshalValue(RelationName_Type, &val.Str)
+func RelationName_Marshal(m jsn.Marshaler, val *RelationName) (err error) {
+	m.SetCursor(val.At.Offset)
+	return m.MarshalValue(RelationName_Type, &val.Str)
 }
 
 type RelationName_Slice []RelationName
@@ -302,13 +328,16 @@ func (op *RelationName_Slice) GetType() string { return RelationName_Type }
 func (op *RelationName_Slice) GetSize() int    { return len(*op) }
 func (op *RelationName_Slice) SetSize(cnt int) { (*op) = make(RelationName_Slice, cnt) }
 
-func RelationName_Repeats_Marshal(n jsn.Marshaler, vals *[]RelationName) {
-	if n.MarshalBlock((*RelationName_Slice)(vals)) {
+func RelationName_Repeats_Marshal(m jsn.Marshaler, vals *[]RelationName) (err error) {
+	if err = m.MarshalBlock((*RelationName_Slice)(vals)); err == nil {
 		for i := range *vals {
-			RelationName_Marshal(n, &(*vals)[i])
+			if e := RelationName_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // Text requires a user-specified string.
@@ -330,8 +359,8 @@ func (*Text) Compose() composer.Spec {
 
 const Text_Type = "text"
 
-func (op *Text) Marshal(n jsn.Marshaler) {
-	Text_Marshal(n, op)
+func (op *Text) Marshal(m jsn.Marshaler) error {
+	return Text_Marshal(m, op)
 }
 
 type Text_Unboxed_Slice []string
@@ -340,35 +369,40 @@ func (op *Text_Unboxed_Slice) GetType() string { return Text_Type }
 func (op *Text_Unboxed_Slice) GetSize() int    { return len(*op) }
 func (op *Text_Unboxed_Slice) SetSize(cnt int) { (*op) = make(Text_Unboxed_Slice, cnt) }
 
-func Text_Unboxed_Repeats_Marshal(n jsn.Marshaler, vals *[]string) {
-	if n.MarshalBlock((*Text_Unboxed_Slice)(vals)) {
+func Text_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]string) (err error) {
+	if err = m.MarshalBlock((*Text_Unboxed_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Text_Unboxed_Marshal(n, &(*vals)[i])
+			if e := Text_Unboxed_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func Text_Unboxed_Optional_Marshal(n jsn.Marshaler, val *string) {
+func Text_Unboxed_Optional_Marshal(m jsn.Marshaler, val *string) (err error) {
 	var zero string
-	if enc := n.IsEncoding(); !enc || *val != zero {
-		Text_Unboxed_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || *val != zero {
+		err = Text_Unboxed_Marshal(m, val)
 	}
+	return
 }
 
-func Text_Unboxed_Marshal(n jsn.Marshaler, val *string) {
-	n.MarshalValue(Text_Type, jsn.BoxString(val))
+func Text_Unboxed_Marshal(m jsn.Marshaler, val *string) error {
+	return m.MarshalValue(Text_Type, jsn.BoxString(val))
 }
 
-func Text_Optional_Marshal(n jsn.Marshaler, val *Text) {
+func Text_Optional_Marshal(m jsn.Marshaler, val *Text) (err error) {
 	var zero Text
-	if enc := n.IsEncoding(); !enc || val.Str != zero.Str {
-		Text_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = Text_Marshal(m, val)
 	}
+	return
 }
 
-func Text_Marshal(n jsn.Marshaler, val *Text) {
-	n.MarshalValue(Text_Type, &val.Str)
+func Text_Marshal(m jsn.Marshaler, val *Text) (err error) {
+	return m.MarshalValue(Text_Type, &val.Str)
 }
 
 type Text_Slice []Text
@@ -377,13 +411,16 @@ func (op *Text_Slice) GetType() string { return Text_Type }
 func (op *Text_Slice) GetSize() int    { return len(*op) }
 func (op *Text_Slice) SetSize(cnt int) { (*op) = make(Text_Slice, cnt) }
 
-func Text_Repeats_Marshal(n jsn.Marshaler, vals *[]Text) {
-	if n.MarshalBlock((*Text_Slice)(vals)) {
+func Text_Repeats_Marshal(m jsn.Marshaler, vals *[]Text) (err error) {
+	if err = m.MarshalBlock((*Text_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Text_Marshal(n, &(*vals)[i])
+			if e := Text_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // VariableName requires a user-specified string.
@@ -406,20 +443,21 @@ func (*VariableName) Compose() composer.Spec {
 
 const VariableName_Type = "variable_name"
 
-func (op *VariableName) Marshal(n jsn.Marshaler) {
-	VariableName_Marshal(n, op)
+func (op *VariableName) Marshal(m jsn.Marshaler) error {
+	return VariableName_Marshal(m, op)
 }
 
-func VariableName_Optional_Marshal(n jsn.Marshaler, val *VariableName) {
+func VariableName_Optional_Marshal(m jsn.Marshaler, val *VariableName) (err error) {
 	var zero VariableName
-	if enc := n.IsEncoding(); !enc || val.Str != zero.Str {
-		VariableName_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = VariableName_Marshal(m, val)
 	}
+	return
 }
 
-func VariableName_Marshal(n jsn.Marshaler, val *VariableName) {
-	n.SetCursor(val.At.Offset)
-	n.MarshalValue(VariableName_Type, &val.Str)
+func VariableName_Marshal(m jsn.Marshaler, val *VariableName) (err error) {
+	m.SetCursor(val.At.Offset)
+	return m.MarshalValue(VariableName_Type, &val.Str)
 }
 
 type VariableName_Slice []VariableName
@@ -428,13 +466,16 @@ func (op *VariableName_Slice) GetType() string { return VariableName_Type }
 func (op *VariableName_Slice) GetSize() int    { return len(*op) }
 func (op *VariableName_Slice) SetSize(cnt int) { (*op) = make(VariableName_Slice, cnt) }
 
-func VariableName_Repeats_Marshal(n jsn.Marshaler, vals *[]VariableName) {
-	if n.MarshalBlock((*VariableName_Slice)(vals)) {
+func VariableName_Repeats_Marshal(m jsn.Marshaler, vals *[]VariableName) (err error) {
+	if err = m.MarshalBlock((*VariableName_Slice)(vals)); err == nil {
 		for i := range *vals {
-			VariableName_Marshal(n, &(*vals)[i])
+			if e := VariableName_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 var Slats = []composer.Composer{

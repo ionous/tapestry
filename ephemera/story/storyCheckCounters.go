@@ -18,17 +18,16 @@ func searchForCounters(i jsn.Marshalee) (okay bool) {
 func searchForType(src jsn.Marshalee, typeName string) (okay bool, err error) {
 	ts := chart.MakeEncoder(nil)
 	// fix use panic / recover to early exit?
+	var earlyOut error
 	err = ts.Marshal(src, &chart.StateMix{
-		OnWarn: ts.Error,
-		OnBlock: func(b jsn.BlockType) bool {
+		OnBlock: func(b jsn.BlockType) error {
 			if b.GetType() == typeName {
 				okay = true
+				earlyOut = jsn.Missing
 			}
-			return !okay
+			return earlyOut
 		},
-		OnKey: func(_, _ string) bool {
-			return !okay
-		},
+		OnKey:   func(_, _ string) bool { return !okay },
 		OnValue: func(_ string, _ interface{}) {},
 		OnEnd:   func() {},
 	})

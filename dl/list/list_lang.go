@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 // AsNum Define the name of a number variable.
@@ -26,8 +27,8 @@ const AsNum_Type = "as_num"
 
 const AsNum_Field_Var = "$VAR"
 
-func (op *AsNum) Marshal(n jsn.Marshaler) {
-	AsNum_Marshal(n, op)
+func (op *AsNum) Marshal(m jsn.Marshaler) error {
+	return AsNum_Marshal(m, op)
 }
 
 type AsNum_Slice []AsNum
@@ -36,33 +37,40 @@ func (op *AsNum_Slice) GetType() string { return AsNum_Type }
 func (op *AsNum_Slice) GetSize() int    { return len(*op) }
 func (op *AsNum_Slice) SetSize(cnt int) { (*op) = make(AsNum_Slice, cnt) }
 
-func AsNum_Repeats_Marshal(n jsn.Marshaler, vals *[]AsNum) {
-	if n.MarshalBlock((*AsNum_Slice)(vals)) {
+func AsNum_Repeats_Marshal(m jsn.Marshaler, vals *[]AsNum) (err error) {
+	if err = m.MarshalBlock((*AsNum_Slice)(vals)); err == nil {
 		for i := range *vals {
-			AsNum_Marshal(n, &(*vals)[i])
+			if e := AsNum_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func AsNum_Optional_Marshal(n jsn.Marshaler, pv **AsNum) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		AsNum_Marshal(n, *pv)
+func AsNum_Optional_Marshal(m jsn.Marshaler, pv **AsNum) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = AsNum_Marshal(m, *pv)
 	} else if !enc {
 		var v AsNum
-		if AsNum_Marshal(n, &v) {
+		if err = AsNum_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func AsNum_Marshal(n jsn.Marshaler, val *AsNum) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(AsNum_Type,
-		AsNum_Type)); okay {
-		if n.MarshalKey("", AsNum_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(AsNum_Type, AsNum_Type)); err == nil {
+		e0 := m.MarshalKey("", AsNum_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", AsNum_Field_Var))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -84,8 +92,8 @@ const AsRec_Type = "as_rec"
 
 const AsRec_Field_Var = "$VAR"
 
-func (op *AsRec) Marshal(n jsn.Marshaler) {
-	AsRec_Marshal(n, op)
+func (op *AsRec) Marshal(m jsn.Marshaler) error {
+	return AsRec_Marshal(m, op)
 }
 
 type AsRec_Slice []AsRec
@@ -94,33 +102,40 @@ func (op *AsRec_Slice) GetType() string { return AsRec_Type }
 func (op *AsRec_Slice) GetSize() int    { return len(*op) }
 func (op *AsRec_Slice) SetSize(cnt int) { (*op) = make(AsRec_Slice, cnt) }
 
-func AsRec_Repeats_Marshal(n jsn.Marshaler, vals *[]AsRec) {
-	if n.MarshalBlock((*AsRec_Slice)(vals)) {
+func AsRec_Repeats_Marshal(m jsn.Marshaler, vals *[]AsRec) (err error) {
+	if err = m.MarshalBlock((*AsRec_Slice)(vals)); err == nil {
 		for i := range *vals {
-			AsRec_Marshal(n, &(*vals)[i])
+			if e := AsRec_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func AsRec_Optional_Marshal(n jsn.Marshaler, pv **AsRec) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		AsRec_Marshal(n, *pv)
+func AsRec_Optional_Marshal(m jsn.Marshaler, pv **AsRec) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = AsRec_Marshal(m, *pv)
 	} else if !enc {
 		var v AsRec
-		if AsRec_Marshal(n, &v) {
+		if err = AsRec_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func AsRec_Marshal(n jsn.Marshaler, val *AsRec) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(AsRec_Type,
-		AsRec_Type)); okay {
-		if n.MarshalKey("", AsRec_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(AsRec_Type, AsRec_Type)); err == nil {
+		e0 := m.MarshalKey("", AsRec_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", AsRec_Field_Var))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -142,8 +157,8 @@ const AsTxt_Type = "as_txt"
 
 const AsTxt_Field_Var = "$VAR"
 
-func (op *AsTxt) Marshal(n jsn.Marshaler) {
-	AsTxt_Marshal(n, op)
+func (op *AsTxt) Marshal(m jsn.Marshaler) error {
+	return AsTxt_Marshal(m, op)
 }
 
 type AsTxt_Slice []AsTxt
@@ -152,33 +167,40 @@ func (op *AsTxt_Slice) GetType() string { return AsTxt_Type }
 func (op *AsTxt_Slice) GetSize() int    { return len(*op) }
 func (op *AsTxt_Slice) SetSize(cnt int) { (*op) = make(AsTxt_Slice, cnt) }
 
-func AsTxt_Repeats_Marshal(n jsn.Marshaler, vals *[]AsTxt) {
-	if n.MarshalBlock((*AsTxt_Slice)(vals)) {
+func AsTxt_Repeats_Marshal(m jsn.Marshaler, vals *[]AsTxt) (err error) {
+	if err = m.MarshalBlock((*AsTxt_Slice)(vals)); err == nil {
 		for i := range *vals {
-			AsTxt_Marshal(n, &(*vals)[i])
+			if e := AsTxt_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func AsTxt_Optional_Marshal(n jsn.Marshaler, pv **AsTxt) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		AsTxt_Marshal(n, *pv)
+func AsTxt_Optional_Marshal(m jsn.Marshaler, pv **AsTxt) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = AsTxt_Marshal(m, *pv)
 	} else if !enc {
 		var v AsTxt
-		if AsTxt_Marshal(n, &v) {
+		if err = AsTxt_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func AsTxt_Marshal(n jsn.Marshaler, val *AsTxt) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(AsTxt_Type,
-		AsTxt_Type)); okay {
-		if n.MarshalKey("", AsTxt_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(AsTxt_Type, AsTxt_Type)); err == nil {
+		e0 := m.MarshalKey("", AsTxt_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", AsTxt_Field_Var))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -203,8 +225,8 @@ const EraseEdge_Type = "erase_edge"
 const EraseEdge_Field_From = "$FROM"
 const EraseEdge_Field_AtEdge = "$AT_EDGE"
 
-func (op *EraseEdge) Marshal(n jsn.Marshaler) {
-	EraseEdge_Marshal(n, op)
+func (op *EraseEdge) Marshal(m jsn.Marshaler) error {
+	return EraseEdge_Marshal(m, op)
 }
 
 type EraseEdge_Slice []EraseEdge
@@ -213,36 +235,47 @@ func (op *EraseEdge_Slice) GetType() string { return EraseEdge_Type }
 func (op *EraseEdge_Slice) GetSize() int    { return len(*op) }
 func (op *EraseEdge_Slice) SetSize(cnt int) { (*op) = make(EraseEdge_Slice, cnt) }
 
-func EraseEdge_Repeats_Marshal(n jsn.Marshaler, vals *[]EraseEdge) {
-	if n.MarshalBlock((*EraseEdge_Slice)(vals)) {
+func EraseEdge_Repeats_Marshal(m jsn.Marshaler, vals *[]EraseEdge) (err error) {
+	if err = m.MarshalBlock((*EraseEdge_Slice)(vals)); err == nil {
 		for i := range *vals {
-			EraseEdge_Marshal(n, &(*vals)[i])
+			if e := EraseEdge_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func EraseEdge_Optional_Marshal(n jsn.Marshaler, pv **EraseEdge) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		EraseEdge_Marshal(n, *pv)
+func EraseEdge_Optional_Marshal(m jsn.Marshaler, pv **EraseEdge) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EraseEdge_Marshal(m, *pv)
 	} else if !enc {
 		var v EraseEdge
-		if EraseEdge_Marshal(n, &v) {
+		if err = EraseEdge_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func EraseEdge_Marshal(n jsn.Marshaler, val *EraseEdge) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("erase",
-		EraseEdge_Type)); okay {
-		if n.MarshalKey("", EraseEdge_Field_From) {
-			ListSource_Marshal(n, &val.From)
+func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("erase", EraseEdge_Type)); err == nil {
+		e0 := m.MarshalKey("", EraseEdge_Field_From)
+		if e0 == nil {
+			e0 = ListSource_Marshal(m, &val.From)
 		}
-		if n.MarshalKey("at_front", EraseEdge_Field_AtEdge) {
-			rt.BoolEval_Optional_Marshal(n, &val.AtEdge)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EraseEdge_Field_From))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("at_front", EraseEdge_Field_AtEdge)
+		if e1 == nil {
+			e1 = rt.BoolEval_Optional_Marshal(m, &val.AtEdge)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EraseEdge_Field_AtEdge))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -269,8 +302,8 @@ const EraseIndex_Field_Count = "$COUNT"
 const EraseIndex_Field_From = "$FROM"
 const EraseIndex_Field_AtIndex = "$AT_INDEX"
 
-func (op *EraseIndex) Marshal(n jsn.Marshaler) {
-	EraseIndex_Marshal(n, op)
+func (op *EraseIndex) Marshal(m jsn.Marshaler) error {
+	return EraseIndex_Marshal(m, op)
 }
 
 type EraseIndex_Slice []EraseIndex
@@ -279,39 +312,54 @@ func (op *EraseIndex_Slice) GetType() string { return EraseIndex_Type }
 func (op *EraseIndex_Slice) GetSize() int    { return len(*op) }
 func (op *EraseIndex_Slice) SetSize(cnt int) { (*op) = make(EraseIndex_Slice, cnt) }
 
-func EraseIndex_Repeats_Marshal(n jsn.Marshaler, vals *[]EraseIndex) {
-	if n.MarshalBlock((*EraseIndex_Slice)(vals)) {
+func EraseIndex_Repeats_Marshal(m jsn.Marshaler, vals *[]EraseIndex) (err error) {
+	if err = m.MarshalBlock((*EraseIndex_Slice)(vals)); err == nil {
 		for i := range *vals {
-			EraseIndex_Marshal(n, &(*vals)[i])
+			if e := EraseIndex_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func EraseIndex_Optional_Marshal(n jsn.Marshaler, pv **EraseIndex) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		EraseIndex_Marshal(n, *pv)
+func EraseIndex_Optional_Marshal(m jsn.Marshaler, pv **EraseIndex) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EraseIndex_Marshal(m, *pv)
 	} else if !enc {
 		var v EraseIndex
-		if EraseIndex_Marshal(n, &v) {
+		if err = EraseIndex_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func EraseIndex_Marshal(n jsn.Marshaler, val *EraseIndex) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("erase",
-		EraseIndex_Type)); okay {
-		if n.MarshalKey("", EraseIndex_Field_Count) {
-			rt.NumberEval_Marshal(n, &val.Count)
+func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("erase", EraseIndex_Type)); err == nil {
+		e0 := m.MarshalKey("", EraseIndex_Field_Count)
+		if e0 == nil {
+			e0 = rt.NumberEval_Marshal(m, &val.Count)
 		}
-		if n.MarshalKey("from", EraseIndex_Field_From) {
-			ListSource_Marshal(n, &val.From)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EraseIndex_Field_Count))
 		}
-		if n.MarshalKey("at_index", EraseIndex_Field_AtIndex) {
-			rt.NumberEval_Marshal(n, &val.AtIndex)
+		e1 := m.MarshalKey("from", EraseIndex_Field_From)
+		if e1 == nil {
+			e1 = ListSource_Marshal(m, &val.From)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EraseIndex_Field_From))
+		}
+		e2 := m.MarshalKey("at_index", EraseIndex_Field_AtIndex)
+		if e2 == nil {
+			e2 = rt.NumberEval_Marshal(m, &val.AtIndex)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EraseIndex_Field_AtIndex))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -341,8 +389,8 @@ const Erasing_Field_AtIndex = "$AT_INDEX"
 const Erasing_Field_As = "$AS"
 const Erasing_Field_Do = "$DO"
 
-func (op *Erasing) Marshal(n jsn.Marshaler) {
-	Erasing_Marshal(n, op)
+func (op *Erasing) Marshal(m jsn.Marshaler) error {
+	return Erasing_Marshal(m, op)
 }
 
 type Erasing_Slice []Erasing
@@ -351,45 +399,68 @@ func (op *Erasing_Slice) GetType() string { return Erasing_Type }
 func (op *Erasing_Slice) GetSize() int    { return len(*op) }
 func (op *Erasing_Slice) SetSize(cnt int) { (*op) = make(Erasing_Slice, cnt) }
 
-func Erasing_Repeats_Marshal(n jsn.Marshaler, vals *[]Erasing) {
-	if n.MarshalBlock((*Erasing_Slice)(vals)) {
+func Erasing_Repeats_Marshal(m jsn.Marshaler, vals *[]Erasing) (err error) {
+	if err = m.MarshalBlock((*Erasing_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Erasing_Marshal(n, &(*vals)[i])
+			if e := Erasing_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func Erasing_Optional_Marshal(n jsn.Marshaler, pv **Erasing) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		Erasing_Marshal(n, *pv)
+func Erasing_Optional_Marshal(m jsn.Marshaler, pv **Erasing) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Erasing_Marshal(m, *pv)
 	} else if !enc {
 		var v Erasing
-		if Erasing_Marshal(n, &v) {
+		if err = Erasing_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func Erasing_Marshal(n jsn.Marshaler, val *Erasing) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(Erasing_Type,
-		Erasing_Type)); okay {
-		if n.MarshalKey("", Erasing_Field_Count) {
-			rt.NumberEval_Marshal(n, &val.Count)
+func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(Erasing_Type, Erasing_Type)); err == nil {
+		e0 := m.MarshalKey("", Erasing_Field_Count)
+		if e0 == nil {
+			e0 = rt.NumberEval_Marshal(m, &val.Count)
 		}
-		if n.MarshalKey("from", Erasing_Field_From) {
-			ListSource_Marshal(n, &val.From)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Erasing_Field_Count))
 		}
-		if n.MarshalKey("at_index", Erasing_Field_AtIndex) {
-			rt.NumberEval_Marshal(n, &val.AtIndex)
+		e1 := m.MarshalKey("from", Erasing_Field_From)
+		if e1 == nil {
+			e1 = ListSource_Marshal(m, &val.From)
 		}
-		if n.MarshalKey("as", Erasing_Field_As) {
-			value.Text_Unboxed_Marshal(n, &val.As)
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Erasing_Field_From))
 		}
-		if n.MarshalKey("do", Erasing_Field_Do) {
-			core.Activity_Marshal(n, &val.Do)
+		e2 := m.MarshalKey("at_index", Erasing_Field_AtIndex)
+		if e2 == nil {
+			e2 = rt.NumberEval_Marshal(m, &val.AtIndex)
 		}
-		n.EndBlock()
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", Erasing_Field_AtIndex))
+		}
+		e3 := m.MarshalKey("as", Erasing_Field_As)
+		if e3 == nil {
+			e3 = value.Text_Unboxed_Marshal(m, &val.As)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", Erasing_Field_As))
+		}
+		e4 := m.MarshalKey("do", Erasing_Field_Do)
+		if e4 == nil {
+			e4 = core.Activity_Marshal(m, &val.Do)
+		}
+		if e4 != nil && e4 != jsn.Missing {
+			m.Error(errutil.New(e4, "in flow at", Erasing_Field_Do))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -420,8 +491,8 @@ const ErasingEdge_Field_As = "$AS"
 const ErasingEdge_Field_Do = "$DO"
 const ErasingEdge_Field_Else = "$ELSE"
 
-func (op *ErasingEdge) Marshal(n jsn.Marshaler) {
-	ErasingEdge_Marshal(n, op)
+func (op *ErasingEdge) Marshal(m jsn.Marshaler) error {
+	return ErasingEdge_Marshal(m, op)
 }
 
 type ErasingEdge_Slice []ErasingEdge
@@ -430,45 +501,68 @@ func (op *ErasingEdge_Slice) GetType() string { return ErasingEdge_Type }
 func (op *ErasingEdge_Slice) GetSize() int    { return len(*op) }
 func (op *ErasingEdge_Slice) SetSize(cnt int) { (*op) = make(ErasingEdge_Slice, cnt) }
 
-func ErasingEdge_Repeats_Marshal(n jsn.Marshaler, vals *[]ErasingEdge) {
-	if n.MarshalBlock((*ErasingEdge_Slice)(vals)) {
+func ErasingEdge_Repeats_Marshal(m jsn.Marshaler, vals *[]ErasingEdge) (err error) {
+	if err = m.MarshalBlock((*ErasingEdge_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ErasingEdge_Marshal(n, &(*vals)[i])
+			if e := ErasingEdge_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ErasingEdge_Optional_Marshal(n jsn.Marshaler, pv **ErasingEdge) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ErasingEdge_Marshal(n, *pv)
+func ErasingEdge_Optional_Marshal(m jsn.Marshaler, pv **ErasingEdge) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ErasingEdge_Marshal(m, *pv)
 	} else if !enc {
 		var v ErasingEdge
-		if ErasingEdge_Marshal(n, &v) {
+		if err = ErasingEdge_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ErasingEdge_Marshal(n jsn.Marshaler, val *ErasingEdge) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("erasing",
-		ErasingEdge_Type)); okay {
-		if n.MarshalKey("", ErasingEdge_Field_From) {
-			ListSource_Marshal(n, &val.From)
+func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("erasing", ErasingEdge_Type)); err == nil {
+		e0 := m.MarshalKey("", ErasingEdge_Field_From)
+		if e0 == nil {
+			e0 = ListSource_Marshal(m, &val.From)
 		}
-		if n.MarshalKey("at_front", ErasingEdge_Field_AtEdge) {
-			rt.BoolEval_Optional_Marshal(n, &val.AtEdge)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ErasingEdge_Field_From))
 		}
-		if n.MarshalKey("as", ErasingEdge_Field_As) {
-			value.Text_Unboxed_Marshal(n, &val.As)
+		e1 := m.MarshalKey("at_front", ErasingEdge_Field_AtEdge)
+		if e1 == nil {
+			e1 = rt.BoolEval_Optional_Marshal(m, &val.AtEdge)
 		}
-		if n.MarshalKey("do", ErasingEdge_Field_Do) {
-			core.Activity_Marshal(n, &val.Do)
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ErasingEdge_Field_AtEdge))
 		}
-		if n.MarshalKey("else", ErasingEdge_Field_Else) {
-			core.Brancher_Optional_Marshal(n, &val.Else)
+		e2 := m.MarshalKey("as", ErasingEdge_Field_As)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Marshal(m, &val.As)
 		}
-		n.EndBlock()
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ErasingEdge_Field_As))
+		}
+		e3 := m.MarshalKey("do", ErasingEdge_Field_Do)
+		if e3 == nil {
+			e3 = core.Activity_Marshal(m, &val.Do)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", ErasingEdge_Field_Do))
+		}
+		e4 := m.MarshalKey("else", ErasingEdge_Field_Else)
+		if e4 == nil {
+			e4 = core.Brancher_Optional_Marshal(m, &val.Else)
+		}
+		if e4 != nil && e4 != jsn.Missing {
+			m.Error(errutil.New(e4, "in flow at", ErasingEdge_Field_Else))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -491,8 +585,8 @@ const FromNumList_Type = "from_num_list"
 
 const FromNumList_Field_Var = "$VAR"
 
-func (op *FromNumList) Marshal(n jsn.Marshaler) {
-	FromNumList_Marshal(n, op)
+func (op *FromNumList) Marshal(m jsn.Marshaler) error {
+	return FromNumList_Marshal(m, op)
 }
 
 type FromNumList_Slice []FromNumList
@@ -501,33 +595,40 @@ func (op *FromNumList_Slice) GetType() string { return FromNumList_Type }
 func (op *FromNumList_Slice) GetSize() int    { return len(*op) }
 func (op *FromNumList_Slice) SetSize(cnt int) { (*op) = make(FromNumList_Slice, cnt) }
 
-func FromNumList_Repeats_Marshal(n jsn.Marshaler, vals *[]FromNumList) {
-	if n.MarshalBlock((*FromNumList_Slice)(vals)) {
+func FromNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromNumList) (err error) {
+	if err = m.MarshalBlock((*FromNumList_Slice)(vals)); err == nil {
 		for i := range *vals {
-			FromNumList_Marshal(n, &(*vals)[i])
+			if e := FromNumList_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func FromNumList_Optional_Marshal(n jsn.Marshaler, pv **FromNumList) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		FromNumList_Marshal(n, *pv)
+func FromNumList_Optional_Marshal(m jsn.Marshaler, pv **FromNumList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = FromNumList_Marshal(m, *pv)
 	} else if !enc {
 		var v FromNumList
-		if FromNumList_Marshal(n, &v) {
+		if err = FromNumList_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func FromNumList_Marshal(n jsn.Marshaler, val *FromNumList) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("var_of_nums",
-		FromNumList_Type)); okay {
-		if n.MarshalKey("", FromNumList_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("var_of_nums", FromNumList_Type)); err == nil {
+		e0 := m.MarshalKey("", FromNumList_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", FromNumList_Field_Var))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -550,8 +651,8 @@ const FromRecList_Type = "from_rec_list"
 
 const FromRecList_Field_Var = "$VAR"
 
-func (op *FromRecList) Marshal(n jsn.Marshaler) {
-	FromRecList_Marshal(n, op)
+func (op *FromRecList) Marshal(m jsn.Marshaler) error {
+	return FromRecList_Marshal(m, op)
 }
 
 type FromRecList_Slice []FromRecList
@@ -560,33 +661,40 @@ func (op *FromRecList_Slice) GetType() string { return FromRecList_Type }
 func (op *FromRecList_Slice) GetSize() int    { return len(*op) }
 func (op *FromRecList_Slice) SetSize(cnt int) { (*op) = make(FromRecList_Slice, cnt) }
 
-func FromRecList_Repeats_Marshal(n jsn.Marshaler, vals *[]FromRecList) {
-	if n.MarshalBlock((*FromRecList_Slice)(vals)) {
+func FromRecList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromRecList) (err error) {
+	if err = m.MarshalBlock((*FromRecList_Slice)(vals)); err == nil {
 		for i := range *vals {
-			FromRecList_Marshal(n, &(*vals)[i])
+			if e := FromRecList_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func FromRecList_Optional_Marshal(n jsn.Marshaler, pv **FromRecList) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		FromRecList_Marshal(n, *pv)
+func FromRecList_Optional_Marshal(m jsn.Marshaler, pv **FromRecList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = FromRecList_Marshal(m, *pv)
 	} else if !enc {
 		var v FromRecList
-		if FromRecList_Marshal(n, &v) {
+		if err = FromRecList_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func FromRecList_Marshal(n jsn.Marshaler, val *FromRecList) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("var_of_recs",
-		FromRecList_Type)); okay {
-		if n.MarshalKey("", FromRecList_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("var_of_recs", FromRecList_Type)); err == nil {
+		e0 := m.MarshalKey("", FromRecList_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", FromRecList_Field_Var))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -609,8 +717,8 @@ const FromTxtList_Type = "from_txt_list"
 
 const FromTxtList_Field_Var = "$VAR"
 
-func (op *FromTxtList) Marshal(n jsn.Marshaler) {
-	FromTxtList_Marshal(n, op)
+func (op *FromTxtList) Marshal(m jsn.Marshaler) error {
+	return FromTxtList_Marshal(m, op)
 }
 
 type FromTxtList_Slice []FromTxtList
@@ -619,33 +727,40 @@ func (op *FromTxtList_Slice) GetType() string { return FromTxtList_Type }
 func (op *FromTxtList_Slice) GetSize() int    { return len(*op) }
 func (op *FromTxtList_Slice) SetSize(cnt int) { (*op) = make(FromTxtList_Slice, cnt) }
 
-func FromTxtList_Repeats_Marshal(n jsn.Marshaler, vals *[]FromTxtList) {
-	if n.MarshalBlock((*FromTxtList_Slice)(vals)) {
+func FromTxtList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromTxtList) (err error) {
+	if err = m.MarshalBlock((*FromTxtList_Slice)(vals)); err == nil {
 		for i := range *vals {
-			FromTxtList_Marshal(n, &(*vals)[i])
+			if e := FromTxtList_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func FromTxtList_Optional_Marshal(n jsn.Marshaler, pv **FromTxtList) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		FromTxtList_Marshal(n, *pv)
+func FromTxtList_Optional_Marshal(m jsn.Marshaler, pv **FromTxtList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = FromTxtList_Marshal(m, *pv)
 	} else if !enc {
 		var v FromTxtList
-		if FromTxtList_Marshal(n, &v) {
+		if err = FromTxtList_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func FromTxtList_Marshal(n jsn.Marshaler, val *FromTxtList) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("var_of_txts",
-		FromTxtList_Type)); okay {
-		if n.MarshalKey("", FromTxtList_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("var_of_txts", FromTxtList_Type)); err == nil {
+		e0 := m.MarshalKey("", FromTxtList_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", FromTxtList_Field_Var))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -668,8 +783,8 @@ const IntoNumList_Type = "into_num_list"
 
 const IntoNumList_Field_Var = "$VAR"
 
-func (op *IntoNumList) Marshal(n jsn.Marshaler) {
-	IntoNumList_Marshal(n, op)
+func (op *IntoNumList) Marshal(m jsn.Marshaler) error {
+	return IntoNumList_Marshal(m, op)
 }
 
 type IntoNumList_Slice []IntoNumList
@@ -678,33 +793,40 @@ func (op *IntoNumList_Slice) GetType() string { return IntoNumList_Type }
 func (op *IntoNumList_Slice) GetSize() int    { return len(*op) }
 func (op *IntoNumList_Slice) SetSize(cnt int) { (*op) = make(IntoNumList_Slice, cnt) }
 
-func IntoNumList_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoNumList) {
-	if n.MarshalBlock((*IntoNumList_Slice)(vals)) {
+func IntoNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoNumList) (err error) {
+	if err = m.MarshalBlock((*IntoNumList_Slice)(vals)); err == nil {
 		for i := range *vals {
-			IntoNumList_Marshal(n, &(*vals)[i])
+			if e := IntoNumList_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func IntoNumList_Optional_Marshal(n jsn.Marshaler, pv **IntoNumList) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		IntoNumList_Marshal(n, *pv)
+func IntoNumList_Optional_Marshal(m jsn.Marshaler, pv **IntoNumList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = IntoNumList_Marshal(m, *pv)
 	} else if !enc {
 		var v IntoNumList
-		if IntoNumList_Marshal(n, &v) {
+		if err = IntoNumList_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func IntoNumList_Marshal(n jsn.Marshaler, val *IntoNumList) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("into_nums",
-		IntoNumList_Type)); okay {
-		if n.MarshalKey("", IntoNumList_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("into_nums", IntoNumList_Type)); err == nil {
+		e0 := m.MarshalKey("", IntoNumList_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", IntoNumList_Field_Var))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -727,8 +849,8 @@ const IntoRecList_Type = "into_rec_list"
 
 const IntoRecList_Field_Var = "$VAR"
 
-func (op *IntoRecList) Marshal(n jsn.Marshaler) {
-	IntoRecList_Marshal(n, op)
+func (op *IntoRecList) Marshal(m jsn.Marshaler) error {
+	return IntoRecList_Marshal(m, op)
 }
 
 type IntoRecList_Slice []IntoRecList
@@ -737,33 +859,40 @@ func (op *IntoRecList_Slice) GetType() string { return IntoRecList_Type }
 func (op *IntoRecList_Slice) GetSize() int    { return len(*op) }
 func (op *IntoRecList_Slice) SetSize(cnt int) { (*op) = make(IntoRecList_Slice, cnt) }
 
-func IntoRecList_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoRecList) {
-	if n.MarshalBlock((*IntoRecList_Slice)(vals)) {
+func IntoRecList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoRecList) (err error) {
+	if err = m.MarshalBlock((*IntoRecList_Slice)(vals)); err == nil {
 		for i := range *vals {
-			IntoRecList_Marshal(n, &(*vals)[i])
+			if e := IntoRecList_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func IntoRecList_Optional_Marshal(n jsn.Marshaler, pv **IntoRecList) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		IntoRecList_Marshal(n, *pv)
+func IntoRecList_Optional_Marshal(m jsn.Marshaler, pv **IntoRecList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = IntoRecList_Marshal(m, *pv)
 	} else if !enc {
 		var v IntoRecList
-		if IntoRecList_Marshal(n, &v) {
+		if err = IntoRecList_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func IntoRecList_Marshal(n jsn.Marshaler, val *IntoRecList) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("into_recs",
-		IntoRecList_Type)); okay {
-		if n.MarshalKey("", IntoRecList_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("into_recs", IntoRecList_Type)); err == nil {
+		e0 := m.MarshalKey("", IntoRecList_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", IntoRecList_Field_Var))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -786,8 +915,8 @@ const IntoTxtList_Type = "into_txt_list"
 
 const IntoTxtList_Field_Var = "$VAR"
 
-func (op *IntoTxtList) Marshal(n jsn.Marshaler) {
-	IntoTxtList_Marshal(n, op)
+func (op *IntoTxtList) Marshal(m jsn.Marshaler) error {
+	return IntoTxtList_Marshal(m, op)
 }
 
 type IntoTxtList_Slice []IntoTxtList
@@ -796,33 +925,40 @@ func (op *IntoTxtList_Slice) GetType() string { return IntoTxtList_Type }
 func (op *IntoTxtList_Slice) GetSize() int    { return len(*op) }
 func (op *IntoTxtList_Slice) SetSize(cnt int) { (*op) = make(IntoTxtList_Slice, cnt) }
 
-func IntoTxtList_Repeats_Marshal(n jsn.Marshaler, vals *[]IntoTxtList) {
-	if n.MarshalBlock((*IntoTxtList_Slice)(vals)) {
+func IntoTxtList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoTxtList) (err error) {
+	if err = m.MarshalBlock((*IntoTxtList_Slice)(vals)); err == nil {
 		for i := range *vals {
-			IntoTxtList_Marshal(n, &(*vals)[i])
+			if e := IntoTxtList_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func IntoTxtList_Optional_Marshal(n jsn.Marshaler, pv **IntoTxtList) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		IntoTxtList_Marshal(n, *pv)
+func IntoTxtList_Optional_Marshal(m jsn.Marshaler, pv **IntoTxtList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = IntoTxtList_Marshal(m, *pv)
 	} else if !enc {
 		var v IntoTxtList
-		if IntoTxtList_Marshal(n, &v) {
+		if err = IntoTxtList_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func IntoTxtList_Marshal(n jsn.Marshaler, val *IntoTxtList) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("into_txts",
-		IntoTxtList_Type)); okay {
-		if n.MarshalKey("", IntoTxtList_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("into_txts", IntoTxtList_Type)); err == nil {
+		e0 := m.MarshalKey("", IntoTxtList_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", IntoTxtList_Field_Var))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -847,8 +983,8 @@ const ListAt_Type = "list_at"
 const ListAt_Field_List = "$LIST"
 const ListAt_Field_Index = "$INDEX"
 
-func (op *ListAt) Marshal(n jsn.Marshaler) {
-	ListAt_Marshal(n, op)
+func (op *ListAt) Marshal(m jsn.Marshaler) error {
+	return ListAt_Marshal(m, op)
 }
 
 type ListAt_Slice []ListAt
@@ -857,36 +993,47 @@ func (op *ListAt_Slice) GetType() string { return ListAt_Type }
 func (op *ListAt_Slice) GetSize() int    { return len(*op) }
 func (op *ListAt_Slice) SetSize(cnt int) { (*op) = make(ListAt_Slice, cnt) }
 
-func ListAt_Repeats_Marshal(n jsn.Marshaler, vals *[]ListAt) {
-	if n.MarshalBlock((*ListAt_Slice)(vals)) {
+func ListAt_Repeats_Marshal(m jsn.Marshaler, vals *[]ListAt) (err error) {
+	if err = m.MarshalBlock((*ListAt_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListAt_Marshal(n, &(*vals)[i])
+			if e := ListAt_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListAt_Optional_Marshal(n jsn.Marshaler, pv **ListAt) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListAt_Marshal(n, *pv)
+func ListAt_Optional_Marshal(m jsn.Marshaler, pv **ListAt) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListAt_Marshal(m, *pv)
 	} else if !enc {
 		var v ListAt
-		if ListAt_Marshal(n, &v) {
+		if err = ListAt_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListAt_Marshal(n jsn.Marshaler, val *ListAt) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("get",
-		ListAt_Type)); okay {
-		if n.MarshalKey("", ListAt_Field_List) {
-			rt.Assignment_Marshal(n, &val.List)
+func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("get", ListAt_Type)); err == nil {
+		e0 := m.MarshalKey("", ListAt_Field_List)
+		if e0 == nil {
+			e0 = rt.Assignment_Marshal(m, &val.List)
 		}
-		if n.MarshalKey("index", ListAt_Field_Index) {
-			rt.NumberEval_Marshal(n, &val.Index)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListAt_Field_List))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("index", ListAt_Field_Index)
+		if e1 == nil {
+			e1 = rt.NumberEval_Marshal(m, &val.Index)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListAt_Field_Index))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -915,8 +1062,8 @@ const ListEach_Field_As = "$AS"
 const ListEach_Field_Do = "$DO"
 const ListEach_Field_Else = "$ELSE"
 
-func (op *ListEach) Marshal(n jsn.Marshaler) {
-	ListEach_Marshal(n, op)
+func (op *ListEach) Marshal(m jsn.Marshaler) error {
+	return ListEach_Marshal(m, op)
 }
 
 type ListEach_Slice []ListEach
@@ -925,42 +1072,61 @@ func (op *ListEach_Slice) GetType() string { return ListEach_Type }
 func (op *ListEach_Slice) GetSize() int    { return len(*op) }
 func (op *ListEach_Slice) SetSize(cnt int) { (*op) = make(ListEach_Slice, cnt) }
 
-func ListEach_Repeats_Marshal(n jsn.Marshaler, vals *[]ListEach) {
-	if n.MarshalBlock((*ListEach_Slice)(vals)) {
+func ListEach_Repeats_Marshal(m jsn.Marshaler, vals *[]ListEach) (err error) {
+	if err = m.MarshalBlock((*ListEach_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListEach_Marshal(n, &(*vals)[i])
+			if e := ListEach_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListEach_Optional_Marshal(n jsn.Marshaler, pv **ListEach) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListEach_Marshal(n, *pv)
+func ListEach_Optional_Marshal(m jsn.Marshaler, pv **ListEach) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListEach_Marshal(m, *pv)
 	} else if !enc {
 		var v ListEach
-		if ListEach_Marshal(n, &v) {
+		if err = ListEach_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListEach_Marshal(n jsn.Marshaler, val *ListEach) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("repeating",
-		ListEach_Type)); okay {
-		if n.MarshalKey("across", ListEach_Field_List) {
-			rt.Assignment_Marshal(n, &val.List)
+func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("repeating", ListEach_Type)); err == nil {
+		e0 := m.MarshalKey("across", ListEach_Field_List)
+		if e0 == nil {
+			e0 = rt.Assignment_Marshal(m, &val.List)
 		}
-		if n.MarshalKey("as", ListEach_Field_As) {
-			ListIterator_Marshal(n, &val.As)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListEach_Field_List))
 		}
-		if n.MarshalKey("do", ListEach_Field_Do) {
-			core.Activity_Marshal(n, &val.Do)
+		e1 := m.MarshalKey("as", ListEach_Field_As)
+		if e1 == nil {
+			e1 = ListIterator_Marshal(m, &val.As)
 		}
-		if n.MarshalKey("else", ListEach_Field_Else) {
-			core.Brancher_Optional_Marshal(n, &val.Else)
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListEach_Field_As))
 		}
-		n.EndBlock()
+		e2 := m.MarshalKey("do", ListEach_Field_Do)
+		if e2 == nil {
+			e2 = core.Activity_Marshal(m, &val.Do)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListEach_Field_Do))
+		}
+		e3 := m.MarshalKey("else", ListEach_Field_Else)
+		if e3 == nil {
+			e3 = core.Brancher_Optional_Marshal(m, &val.Else)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", ListEach_Field_Else))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -985,8 +1151,8 @@ const ListFind_Type = "list_find"
 const ListFind_Field_Value = "$VALUE"
 const ListFind_Field_List = "$LIST"
 
-func (op *ListFind) Marshal(n jsn.Marshaler) {
-	ListFind_Marshal(n, op)
+func (op *ListFind) Marshal(m jsn.Marshaler) error {
+	return ListFind_Marshal(m, op)
 }
 
 type ListFind_Slice []ListFind
@@ -995,36 +1161,47 @@ func (op *ListFind_Slice) GetType() string { return ListFind_Type }
 func (op *ListFind_Slice) GetSize() int    { return len(*op) }
 func (op *ListFind_Slice) SetSize(cnt int) { (*op) = make(ListFind_Slice, cnt) }
 
-func ListFind_Repeats_Marshal(n jsn.Marshaler, vals *[]ListFind) {
-	if n.MarshalBlock((*ListFind_Slice)(vals)) {
+func ListFind_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFind) (err error) {
+	if err = m.MarshalBlock((*ListFind_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListFind_Marshal(n, &(*vals)[i])
+			if e := ListFind_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListFind_Optional_Marshal(n jsn.Marshaler, pv **ListFind) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListFind_Marshal(n, *pv)
+func ListFind_Optional_Marshal(m jsn.Marshaler, pv **ListFind) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListFind_Marshal(m, *pv)
 	} else if !enc {
 		var v ListFind
-		if ListFind_Marshal(n, &v) {
+		if err = ListFind_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListFind_Marshal(n jsn.Marshaler, val *ListFind) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("find",
-		ListFind_Type)); okay {
-		if n.MarshalKey("", ListFind_Field_Value) {
-			rt.Assignment_Marshal(n, &val.Value)
+func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("find", ListFind_Type)); err == nil {
+		e0 := m.MarshalKey("", ListFind_Field_Value)
+		if e0 == nil {
+			e0 = rt.Assignment_Marshal(m, &val.Value)
 		}
-		if n.MarshalKey("list", ListFind_Field_List) {
-			rt.Assignment_Marshal(n, &val.List)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListFind_Field_Value))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("list", ListFind_Field_List)
+		if e1 == nil {
+			e1 = rt.Assignment_Marshal(m, &val.List)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListFind_Field_List))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1050,8 +1227,8 @@ const ListGather_Field_Var = "$VAR"
 const ListGather_Field_From = "$FROM"
 const ListGather_Field_Using = "$USING"
 
-func (op *ListGather) Marshal(n jsn.Marshaler) {
-	ListGather_Marshal(n, op)
+func (op *ListGather) Marshal(m jsn.Marshaler) error {
+	return ListGather_Marshal(m, op)
 }
 
 type ListGather_Slice []ListGather
@@ -1060,39 +1237,54 @@ func (op *ListGather_Slice) GetType() string { return ListGather_Type }
 func (op *ListGather_Slice) GetSize() int    { return len(*op) }
 func (op *ListGather_Slice) SetSize(cnt int) { (*op) = make(ListGather_Slice, cnt) }
 
-func ListGather_Repeats_Marshal(n jsn.Marshaler, vals *[]ListGather) {
-	if n.MarshalBlock((*ListGather_Slice)(vals)) {
+func ListGather_Repeats_Marshal(m jsn.Marshaler, vals *[]ListGather) (err error) {
+	if err = m.MarshalBlock((*ListGather_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListGather_Marshal(n, &(*vals)[i])
+			if e := ListGather_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListGather_Optional_Marshal(n jsn.Marshaler, pv **ListGather) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListGather_Marshal(n, *pv)
+func ListGather_Optional_Marshal(m jsn.Marshaler, pv **ListGather) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListGather_Marshal(m, *pv)
 	} else if !enc {
 		var v ListGather
-		if ListGather_Marshal(n, &v) {
+		if err = ListGather_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListGather_Marshal(n jsn.Marshaler, val *ListGather) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("gather",
-		ListGather_Type)); okay {
-		if n.MarshalKey("", ListGather_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("gather", ListGather_Type)); err == nil {
+		e0 := m.MarshalKey("", ListGather_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		if n.MarshalKey("from", ListGather_Field_From) {
-			ListSource_Marshal(n, &val.From)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListGather_Field_Var))
 		}
-		if n.MarshalKey("", ListGather_Field_Using) {
-			value.Text_Unboxed_Marshal(n, &val.Using)
+		e1 := m.MarshalKey("from", ListGather_Field_From)
+		if e1 == nil {
+			e1 = ListSource_Marshal(m, &val.From)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListGather_Field_From))
+		}
+		e2 := m.MarshalKey("", ListGather_Field_Using)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Marshal(m, &val.Using)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListGather_Field_Using))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1110,10 +1302,12 @@ func (at ListIterator_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func ListIterator_Marshal(n jsn.Marshaler, ptr *ListIterator) (okay bool) {
-	if okay = n.MarshalBlock(ListIterator_Slot{ptr}); okay {
-		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndBlock()
+func ListIterator_Marshal(m jsn.Marshaler, ptr *ListIterator) (err error) {
+	if err = m.MarshalBlock(ListIterator_Slot{ptr}); err == nil {
+		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+			m.Error(e)
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1124,13 +1318,16 @@ func (op *ListIterator_Slice) GetType() string { return ListIterator_Type }
 func (op *ListIterator_Slice) GetSize() int    { return len(*op) }
 func (op *ListIterator_Slice) SetSize(cnt int) { (*op) = make(ListIterator_Slice, cnt) }
 
-func ListIterator_Repeats_Marshal(n jsn.Marshaler, vals *[]ListIterator) {
-	if n.MarshalBlock((*ListIterator_Slice)(vals)) {
+func ListIterator_Repeats_Marshal(m jsn.Marshaler, vals *[]ListIterator) (err error) {
+	if err = m.MarshalBlock((*ListIterator_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListIterator_Marshal(n, &(*vals)[i])
+			if e := ListIterator_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // ListLen Determines the number of values in a list.
@@ -1151,8 +1348,8 @@ const ListLen_Type = "list_len"
 
 const ListLen_Field_List = "$LIST"
 
-func (op *ListLen) Marshal(n jsn.Marshaler) {
-	ListLen_Marshal(n, op)
+func (op *ListLen) Marshal(m jsn.Marshaler) error {
+	return ListLen_Marshal(m, op)
 }
 
 type ListLen_Slice []ListLen
@@ -1161,33 +1358,40 @@ func (op *ListLen_Slice) GetType() string { return ListLen_Type }
 func (op *ListLen_Slice) GetSize() int    { return len(*op) }
 func (op *ListLen_Slice) SetSize(cnt int) { (*op) = make(ListLen_Slice, cnt) }
 
-func ListLen_Repeats_Marshal(n jsn.Marshaler, vals *[]ListLen) {
-	if n.MarshalBlock((*ListLen_Slice)(vals)) {
+func ListLen_Repeats_Marshal(m jsn.Marshaler, vals *[]ListLen) (err error) {
+	if err = m.MarshalBlock((*ListLen_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListLen_Marshal(n, &(*vals)[i])
+			if e := ListLen_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListLen_Optional_Marshal(n jsn.Marshaler, pv **ListLen) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListLen_Marshal(n, *pv)
+func ListLen_Optional_Marshal(m jsn.Marshaler, pv **ListLen) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListLen_Marshal(m, *pv)
 	} else if !enc {
 		var v ListLen
-		if ListLen_Marshal(n, &v) {
+		if err = ListLen_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListLen_Marshal(n jsn.Marshaler, val *ListLen) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("len",
-		ListLen_Type)); okay {
-		if n.MarshalKey("", ListLen_Field_List) {
-			rt.Assignment_Marshal(n, &val.List)
+func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("len", ListLen_Type)); err == nil {
+		e0 := m.MarshalKey("", ListLen_Field_List)
+		if e0 == nil {
+			e0 = rt.Assignment_Marshal(m, &val.List)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListLen_Field_List))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1214,8 +1418,8 @@ const ListMap_Field_ToList = "$TO_LIST"
 const ListMap_Field_FromList = "$FROM_LIST"
 const ListMap_Field_UsingPattern = "$USING_PATTERN"
 
-func (op *ListMap) Marshal(n jsn.Marshaler) {
-	ListMap_Marshal(n, op)
+func (op *ListMap) Marshal(m jsn.Marshaler) error {
+	return ListMap_Marshal(m, op)
 }
 
 type ListMap_Slice []ListMap
@@ -1224,39 +1428,54 @@ func (op *ListMap_Slice) GetType() string { return ListMap_Type }
 func (op *ListMap_Slice) GetSize() int    { return len(*op) }
 func (op *ListMap_Slice) SetSize(cnt int) { (*op) = make(ListMap_Slice, cnt) }
 
-func ListMap_Repeats_Marshal(n jsn.Marshaler, vals *[]ListMap) {
-	if n.MarshalBlock((*ListMap_Slice)(vals)) {
+func ListMap_Repeats_Marshal(m jsn.Marshaler, vals *[]ListMap) (err error) {
+	if err = m.MarshalBlock((*ListMap_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListMap_Marshal(n, &(*vals)[i])
+			if e := ListMap_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListMap_Optional_Marshal(n jsn.Marshaler, pv **ListMap) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListMap_Marshal(n, *pv)
+func ListMap_Optional_Marshal(m jsn.Marshaler, pv **ListMap) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListMap_Marshal(m, *pv)
 	} else if !enc {
 		var v ListMap
-		if ListMap_Marshal(n, &v) {
+		if err = ListMap_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListMap_Marshal(n jsn.Marshaler, val *ListMap) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("map",
-		ListMap_Type)); okay {
-		if n.MarshalKey("", ListMap_Field_ToList) {
-			value.Text_Unboxed_Marshal(n, &val.ToList)
+func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("map", ListMap_Type)); err == nil {
+		e0 := m.MarshalKey("", ListMap_Field_ToList)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.ToList)
 		}
-		if n.MarshalKey("from_list", ListMap_Field_FromList) {
-			rt.Assignment_Marshal(n, &val.FromList)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListMap_Field_ToList))
 		}
-		if n.MarshalKey("using", ListMap_Field_UsingPattern) {
-			value.Text_Unboxed_Marshal(n, &val.UsingPattern)
+		e1 := m.MarshalKey("from_list", ListMap_Field_FromList)
+		if e1 == nil {
+			e1 = rt.Assignment_Marshal(m, &val.FromList)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListMap_Field_FromList))
+		}
+		e2 := m.MarshalKey("using", ListMap_Field_UsingPattern)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Marshal(m, &val.UsingPattern)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListMap_Field_UsingPattern))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1283,8 +1502,8 @@ const ListReduce_Field_IntoValue = "$INTO_VALUE"
 const ListReduce_Field_FromList = "$FROM_LIST"
 const ListReduce_Field_UsingPattern = "$USING_PATTERN"
 
-func (op *ListReduce) Marshal(n jsn.Marshaler) {
-	ListReduce_Marshal(n, op)
+func (op *ListReduce) Marshal(m jsn.Marshaler) error {
+	return ListReduce_Marshal(m, op)
 }
 
 type ListReduce_Slice []ListReduce
@@ -1293,39 +1512,54 @@ func (op *ListReduce_Slice) GetType() string { return ListReduce_Type }
 func (op *ListReduce_Slice) GetSize() int    { return len(*op) }
 func (op *ListReduce_Slice) SetSize(cnt int) { (*op) = make(ListReduce_Slice, cnt) }
 
-func ListReduce_Repeats_Marshal(n jsn.Marshaler, vals *[]ListReduce) {
-	if n.MarshalBlock((*ListReduce_Slice)(vals)) {
+func ListReduce_Repeats_Marshal(m jsn.Marshaler, vals *[]ListReduce) (err error) {
+	if err = m.MarshalBlock((*ListReduce_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListReduce_Marshal(n, &(*vals)[i])
+			if e := ListReduce_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListReduce_Optional_Marshal(n jsn.Marshaler, pv **ListReduce) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListReduce_Marshal(n, *pv)
+func ListReduce_Optional_Marshal(m jsn.Marshaler, pv **ListReduce) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListReduce_Marshal(m, *pv)
 	} else if !enc {
 		var v ListReduce
-		if ListReduce_Marshal(n, &v) {
+		if err = ListReduce_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListReduce_Marshal(n jsn.Marshaler, val *ListReduce) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("reduce",
-		ListReduce_Type)); okay {
-		if n.MarshalKey("into", ListReduce_Field_IntoValue) {
-			value.Text_Unboxed_Marshal(n, &val.IntoValue)
+func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("reduce", ListReduce_Type)); err == nil {
+		e0 := m.MarshalKey("into", ListReduce_Field_IntoValue)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.IntoValue)
 		}
-		if n.MarshalKey("from_list", ListReduce_Field_FromList) {
-			rt.Assignment_Marshal(n, &val.FromList)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListReduce_Field_IntoValue))
 		}
-		if n.MarshalKey("using", ListReduce_Field_UsingPattern) {
-			value.Text_Unboxed_Marshal(n, &val.UsingPattern)
+		e1 := m.MarshalKey("from_list", ListReduce_Field_FromList)
+		if e1 == nil {
+			e1 = rt.Assignment_Marshal(m, &val.FromList)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListReduce_Field_FromList))
+		}
+		e2 := m.MarshalKey("using", ListReduce_Field_UsingPattern)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Marshal(m, &val.UsingPattern)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListReduce_Field_UsingPattern))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1348,8 +1582,8 @@ const ListReverse_Type = "list_reverse"
 
 const ListReverse_Field_List = "$LIST"
 
-func (op *ListReverse) Marshal(n jsn.Marshaler) {
-	ListReverse_Marshal(n, op)
+func (op *ListReverse) Marshal(m jsn.Marshaler) error {
+	return ListReverse_Marshal(m, op)
 }
 
 type ListReverse_Slice []ListReverse
@@ -1358,33 +1592,40 @@ func (op *ListReverse_Slice) GetType() string { return ListReverse_Type }
 func (op *ListReverse_Slice) GetSize() int    { return len(*op) }
 func (op *ListReverse_Slice) SetSize(cnt int) { (*op) = make(ListReverse_Slice, cnt) }
 
-func ListReverse_Repeats_Marshal(n jsn.Marshaler, vals *[]ListReverse) {
-	if n.MarshalBlock((*ListReverse_Slice)(vals)) {
+func ListReverse_Repeats_Marshal(m jsn.Marshaler, vals *[]ListReverse) (err error) {
+	if err = m.MarshalBlock((*ListReverse_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListReverse_Marshal(n, &(*vals)[i])
+			if e := ListReverse_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListReverse_Optional_Marshal(n jsn.Marshaler, pv **ListReverse) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListReverse_Marshal(n, *pv)
+func ListReverse_Optional_Marshal(m jsn.Marshaler, pv **ListReverse) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListReverse_Marshal(m, *pv)
 	} else if !enc {
 		var v ListReverse
-		if ListReverse_Marshal(n, &v) {
+		if err = ListReverse_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListReverse_Marshal(n jsn.Marshaler, val *ListReverse) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("reverse",
-		ListReverse_Type)); okay {
-		if n.MarshalKey("list", ListReverse_Field_List) {
-			ListSource_Marshal(n, &val.List)
+func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("reverse", ListReverse_Type)); err == nil {
+		e0 := m.MarshalKey("list", ListReverse_Field_List)
+		if e0 == nil {
+			e0 = ListSource_Marshal(m, &val.List)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListReverse_Field_List))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1411,8 +1652,8 @@ const ListSet_Field_List = "$LIST"
 const ListSet_Field_Index = "$INDEX"
 const ListSet_Field_From = "$FROM"
 
-func (op *ListSet) Marshal(n jsn.Marshaler) {
-	ListSet_Marshal(n, op)
+func (op *ListSet) Marshal(m jsn.Marshaler) error {
+	return ListSet_Marshal(m, op)
 }
 
 type ListSet_Slice []ListSet
@@ -1421,39 +1662,54 @@ func (op *ListSet_Slice) GetType() string { return ListSet_Type }
 func (op *ListSet_Slice) GetSize() int    { return len(*op) }
 func (op *ListSet_Slice) SetSize(cnt int) { (*op) = make(ListSet_Slice, cnt) }
 
-func ListSet_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSet) {
-	if n.MarshalBlock((*ListSet_Slice)(vals)) {
+func ListSet_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSet) (err error) {
+	if err = m.MarshalBlock((*ListSet_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListSet_Marshal(n, &(*vals)[i])
+			if e := ListSet_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListSet_Optional_Marshal(n jsn.Marshaler, pv **ListSet) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListSet_Marshal(n, *pv)
+func ListSet_Optional_Marshal(m jsn.Marshaler, pv **ListSet) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListSet_Marshal(m, *pv)
 	} else if !enc {
 		var v ListSet
-		if ListSet_Marshal(n, &v) {
+		if err = ListSet_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListSet_Marshal(n jsn.Marshaler, val *ListSet) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("set",
-		ListSet_Type)); okay {
-		if n.MarshalKey("", ListSet_Field_List) {
-			value.Text_Unboxed_Marshal(n, &val.List)
+func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("set", ListSet_Type)); err == nil {
+		e0 := m.MarshalKey("", ListSet_Field_List)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.List)
 		}
-		if n.MarshalKey("index", ListSet_Field_Index) {
-			rt.NumberEval_Marshal(n, &val.Index)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListSet_Field_List))
 		}
-		if n.MarshalKey("from", ListSet_Field_From) {
-			rt.Assignment_Marshal(n, &val.From)
+		e1 := m.MarshalKey("index", ListSet_Field_Index)
+		if e1 == nil {
+			e1 = rt.NumberEval_Marshal(m, &val.Index)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListSet_Field_Index))
+		}
+		e2 := m.MarshalKey("from", ListSet_Field_From)
+		if e2 == nil {
+			e2 = rt.Assignment_Marshal(m, &val.From)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListSet_Field_From))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1480,8 +1736,8 @@ const ListSlice_Field_List = "$LIST"
 const ListSlice_Field_Start = "$START"
 const ListSlice_Field_End = "$END"
 
-func (op *ListSlice) Marshal(n jsn.Marshaler) {
-	ListSlice_Marshal(n, op)
+func (op *ListSlice) Marshal(m jsn.Marshaler) error {
+	return ListSlice_Marshal(m, op)
 }
 
 type ListSlice_Slice []ListSlice
@@ -1490,39 +1746,54 @@ func (op *ListSlice_Slice) GetType() string { return ListSlice_Type }
 func (op *ListSlice_Slice) GetSize() int    { return len(*op) }
 func (op *ListSlice_Slice) SetSize(cnt int) { (*op) = make(ListSlice_Slice, cnt) }
 
-func ListSlice_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSlice) {
-	if n.MarshalBlock((*ListSlice_Slice)(vals)) {
+func ListSlice_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSlice) (err error) {
+	if err = m.MarshalBlock((*ListSlice_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListSlice_Marshal(n, &(*vals)[i])
+			if e := ListSlice_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListSlice_Optional_Marshal(n jsn.Marshaler, pv **ListSlice) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListSlice_Marshal(n, *pv)
+func ListSlice_Optional_Marshal(m jsn.Marshaler, pv **ListSlice) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListSlice_Marshal(m, *pv)
 	} else if !enc {
 		var v ListSlice
-		if ListSlice_Marshal(n, &v) {
+		if err = ListSlice_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListSlice_Marshal(n jsn.Marshaler, val *ListSlice) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("slice",
-		ListSlice_Type)); okay {
-		if n.MarshalKey("", ListSlice_Field_List) {
-			rt.Assignment_Marshal(n, &val.List)
+func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("slice", ListSlice_Type)); err == nil {
+		e0 := m.MarshalKey("", ListSlice_Field_List)
+		if e0 == nil {
+			e0 = rt.Assignment_Marshal(m, &val.List)
 		}
-		if n.MarshalKey("start", ListSlice_Field_Start) {
-			rt.NumberEval_Optional_Marshal(n, &val.Start)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListSlice_Field_List))
 		}
-		if n.MarshalKey("end", ListSlice_Field_End) {
-			rt.NumberEval_Optional_Marshal(n, &val.End)
+		e1 := m.MarshalKey("start", ListSlice_Field_Start)
+		if e1 == nil {
+			e1 = rt.NumberEval_Optional_Marshal(m, &val.Start)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListSlice_Field_Start))
+		}
+		e2 := m.MarshalKey("end", ListSlice_Field_End)
+		if e2 == nil {
+			e2 = rt.NumberEval_Optional_Marshal(m, &val.End)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListSlice_Field_End))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1549,8 +1820,8 @@ const ListSortNumbers_Field_Var = "$VAR"
 const ListSortNumbers_Field_ByField = "$BY_FIELD"
 const ListSortNumbers_Field_Descending = "$DESCENDING"
 
-func (op *ListSortNumbers) Marshal(n jsn.Marshaler) {
-	ListSortNumbers_Marshal(n, op)
+func (op *ListSortNumbers) Marshal(m jsn.Marshaler) error {
+	return ListSortNumbers_Marshal(m, op)
 }
 
 type ListSortNumbers_Slice []ListSortNumbers
@@ -1559,39 +1830,54 @@ func (op *ListSortNumbers_Slice) GetType() string { return ListSortNumbers_Type 
 func (op *ListSortNumbers_Slice) GetSize() int    { return len(*op) }
 func (op *ListSortNumbers_Slice) SetSize(cnt int) { (*op) = make(ListSortNumbers_Slice, cnt) }
 
-func ListSortNumbers_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSortNumbers) {
-	if n.MarshalBlock((*ListSortNumbers_Slice)(vals)) {
+func ListSortNumbers_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSortNumbers) (err error) {
+	if err = m.MarshalBlock((*ListSortNumbers_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListSortNumbers_Marshal(n, &(*vals)[i])
+			if e := ListSortNumbers_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListSortNumbers_Optional_Marshal(n jsn.Marshaler, pv **ListSortNumbers) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListSortNumbers_Marshal(n, *pv)
+func ListSortNumbers_Optional_Marshal(m jsn.Marshaler, pv **ListSortNumbers) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListSortNumbers_Marshal(m, *pv)
 	} else if !enc {
 		var v ListSortNumbers
-		if ListSortNumbers_Marshal(n, &v) {
+		if err = ListSortNumbers_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListSortNumbers_Marshal(n jsn.Marshaler, val *ListSortNumbers) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("sort_numbers",
-		ListSortNumbers_Type)); okay {
-		if n.MarshalKey("", ListSortNumbers_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("sort_numbers", ListSortNumbers_Type)); err == nil {
+		e0 := m.MarshalKey("", ListSortNumbers_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		if n.MarshalKey("by_field", ListSortNumbers_Field_ByField) {
-			value.Text_Unboxed_Marshal(n, &val.ByField)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListSortNumbers_Field_Var))
 		}
-		if n.MarshalKey("descending", ListSortNumbers_Field_Descending) {
-			rt.BoolEval_Optional_Marshal(n, &val.Descending)
+		e1 := m.MarshalKey("by_field", ListSortNumbers_Field_ByField)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.ByField)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListSortNumbers_Field_ByField))
+		}
+		e2 := m.MarshalKey("descending", ListSortNumbers_Field_Descending)
+		if e2 == nil {
+			e2 = rt.BoolEval_Optional_Marshal(m, &val.Descending)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListSortNumbers_Field_Descending))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1620,8 +1906,8 @@ const ListSortText_Field_ByField = "$BY_FIELD"
 const ListSortText_Field_Descending = "$DESCENDING"
 const ListSortText_Field_UsingCase = "$USING_CASE"
 
-func (op *ListSortText) Marshal(n jsn.Marshaler) {
-	ListSortText_Marshal(n, op)
+func (op *ListSortText) Marshal(m jsn.Marshaler) error {
+	return ListSortText_Marshal(m, op)
 }
 
 type ListSortText_Slice []ListSortText
@@ -1630,42 +1916,61 @@ func (op *ListSortText_Slice) GetType() string { return ListSortText_Type }
 func (op *ListSortText_Slice) GetSize() int    { return len(*op) }
 func (op *ListSortText_Slice) SetSize(cnt int) { (*op) = make(ListSortText_Slice, cnt) }
 
-func ListSortText_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSortText) {
-	if n.MarshalBlock((*ListSortText_Slice)(vals)) {
+func ListSortText_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSortText) (err error) {
+	if err = m.MarshalBlock((*ListSortText_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListSortText_Marshal(n, &(*vals)[i])
+			if e := ListSortText_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListSortText_Optional_Marshal(n jsn.Marshaler, pv **ListSortText) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListSortText_Marshal(n, *pv)
+func ListSortText_Optional_Marshal(m jsn.Marshaler, pv **ListSortText) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListSortText_Marshal(m, *pv)
 	} else if !enc {
 		var v ListSortText
-		if ListSortText_Marshal(n, &v) {
+		if err = ListSortText_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListSortText_Marshal(n jsn.Marshaler, val *ListSortText) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("sort_texts",
-		ListSortText_Type)); okay {
-		if n.MarshalKey("", ListSortText_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("sort_texts", ListSortText_Type)); err == nil {
+		e0 := m.MarshalKey("", ListSortText_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		if n.MarshalKey("by_field", ListSortText_Field_ByField) {
-			value.Text_Unboxed_Marshal(n, &val.ByField)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListSortText_Field_Var))
 		}
-		if n.MarshalKey("descending", ListSortText_Field_Descending) {
-			rt.BoolEval_Optional_Marshal(n, &val.Descending)
+		e1 := m.MarshalKey("by_field", ListSortText_Field_ByField)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.ByField)
 		}
-		if n.MarshalKey("using_case", ListSortText_Field_UsingCase) {
-			rt.BoolEval_Optional_Marshal(n, &val.UsingCase)
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListSortText_Field_ByField))
 		}
-		n.EndBlock()
+		e2 := m.MarshalKey("descending", ListSortText_Field_Descending)
+		if e2 == nil {
+			e2 = rt.BoolEval_Optional_Marshal(m, &val.Descending)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListSortText_Field_Descending))
+		}
+		e3 := m.MarshalKey("using_case", ListSortText_Field_UsingCase)
+		if e3 == nil {
+			e3 = rt.BoolEval_Optional_Marshal(m, &val.UsingCase)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", ListSortText_Field_UsingCase))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1690,8 +1995,8 @@ const ListSortUsing_Type = "list_sort_using"
 const ListSortUsing_Field_Var = "$VAR"
 const ListSortUsing_Field_Using = "$USING"
 
-func (op *ListSortUsing) Marshal(n jsn.Marshaler) {
-	ListSortUsing_Marshal(n, op)
+func (op *ListSortUsing) Marshal(m jsn.Marshaler) error {
+	return ListSortUsing_Marshal(m, op)
 }
 
 type ListSortUsing_Slice []ListSortUsing
@@ -1700,36 +2005,47 @@ func (op *ListSortUsing_Slice) GetType() string { return ListSortUsing_Type }
 func (op *ListSortUsing_Slice) GetSize() int    { return len(*op) }
 func (op *ListSortUsing_Slice) SetSize(cnt int) { (*op) = make(ListSortUsing_Slice, cnt) }
 
-func ListSortUsing_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSortUsing) {
-	if n.MarshalBlock((*ListSortUsing_Slice)(vals)) {
+func ListSortUsing_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSortUsing) (err error) {
+	if err = m.MarshalBlock((*ListSortUsing_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListSortUsing_Marshal(n, &(*vals)[i])
+			if e := ListSortUsing_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListSortUsing_Optional_Marshal(n jsn.Marshaler, pv **ListSortUsing) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListSortUsing_Marshal(n, *pv)
+func ListSortUsing_Optional_Marshal(m jsn.Marshaler, pv **ListSortUsing) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListSortUsing_Marshal(m, *pv)
 	} else if !enc {
 		var v ListSortUsing
-		if ListSortUsing_Marshal(n, &v) {
+		if err = ListSortUsing_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListSortUsing_Marshal(n jsn.Marshaler, val *ListSortUsing) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("sort",
-		ListSortUsing_Type)); okay {
-		if n.MarshalKey("", ListSortUsing_Field_Var) {
-			value.VariableName_Marshal(n, &val.Var)
+func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("sort", ListSortUsing_Type)); err == nil {
+		e0 := m.MarshalKey("", ListSortUsing_Field_Var)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Var)
 		}
-		if n.MarshalKey("using", ListSortUsing_Field_Using) {
-			value.Text_Unboxed_Marshal(n, &val.Using)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListSortUsing_Field_Var))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("using", ListSortUsing_Field_Using)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Using)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListSortUsing_Field_Using))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1747,10 +2063,12 @@ func (at ListSource_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func ListSource_Marshal(n jsn.Marshaler, ptr *ListSource) (okay bool) {
-	if okay = n.MarshalBlock(ListSource_Slot{ptr}); okay {
-		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndBlock()
+func ListSource_Marshal(m jsn.Marshaler, ptr *ListSource) (err error) {
+	if err = m.MarshalBlock(ListSource_Slot{ptr}); err == nil {
+		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+			m.Error(e)
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1761,13 +2079,16 @@ func (op *ListSource_Slice) GetType() string { return ListSource_Type }
 func (op *ListSource_Slice) GetSize() int    { return len(*op) }
 func (op *ListSource_Slice) SetSize(cnt int) { (*op) = make(ListSource_Slice, cnt) }
 
-func ListSource_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSource) {
-	if n.MarshalBlock((*ListSource_Slice)(vals)) {
+func ListSource_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSource) (err error) {
+	if err = m.MarshalBlock((*ListSource_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListSource_Marshal(n, &(*vals)[i])
+			if e := ListSource_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
@@ -1794,8 +2115,8 @@ const ListSplice_Field_Start = "$START"
 const ListSplice_Field_Remove = "$REMOVE"
 const ListSplice_Field_Insert = "$INSERT"
 
-func (op *ListSplice) Marshal(n jsn.Marshaler) {
-	ListSplice_Marshal(n, op)
+func (op *ListSplice) Marshal(m jsn.Marshaler) error {
+	return ListSplice_Marshal(m, op)
 }
 
 type ListSplice_Slice []ListSplice
@@ -1804,42 +2125,61 @@ func (op *ListSplice_Slice) GetType() string { return ListSplice_Type }
 func (op *ListSplice_Slice) GetSize() int    { return len(*op) }
 func (op *ListSplice_Slice) SetSize(cnt int) { (*op) = make(ListSplice_Slice, cnt) }
 
-func ListSplice_Repeats_Marshal(n jsn.Marshaler, vals *[]ListSplice) {
-	if n.MarshalBlock((*ListSplice_Slice)(vals)) {
+func ListSplice_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSplice) (err error) {
+	if err = m.MarshalBlock((*ListSplice_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListSplice_Marshal(n, &(*vals)[i])
+			if e := ListSplice_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ListSplice_Optional_Marshal(n jsn.Marshaler, pv **ListSplice) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ListSplice_Marshal(n, *pv)
+func ListSplice_Optional_Marshal(m jsn.Marshaler, pv **ListSplice) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListSplice_Marshal(m, *pv)
 	} else if !enc {
 		var v ListSplice
-		if ListSplice_Marshal(n, &v) {
+		if err = ListSplice_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ListSplice_Marshal(n jsn.Marshaler, val *ListSplice) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("splice",
-		ListSplice_Type)); okay {
-		if n.MarshalKey("", ListSplice_Field_List) {
-			value.Text_Unboxed_Marshal(n, &val.List)
+func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("splice", ListSplice_Type)); err == nil {
+		e0 := m.MarshalKey("", ListSplice_Field_List)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.List)
 		}
-		if n.MarshalKey("start", ListSplice_Field_Start) {
-			rt.NumberEval_Marshal(n, &val.Start)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListSplice_Field_List))
 		}
-		if n.MarshalKey("remove", ListSplice_Field_Remove) {
-			rt.NumberEval_Marshal(n, &val.Remove)
+		e1 := m.MarshalKey("start", ListSplice_Field_Start)
+		if e1 == nil {
+			e1 = rt.NumberEval_Marshal(m, &val.Start)
 		}
-		if n.MarshalKey("insert", ListSplice_Field_Insert) {
-			rt.Assignment_Marshal(n, &val.Insert)
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListSplice_Field_Start))
 		}
-		n.EndBlock()
+		e2 := m.MarshalKey("remove", ListSplice_Field_Remove)
+		if e2 == nil {
+			e2 = rt.NumberEval_Marshal(m, &val.Remove)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListSplice_Field_Remove))
+		}
+		e3 := m.MarshalKey("insert", ListSplice_Field_Insert)
+		if e3 == nil {
+			e3 = rt.Assignment_Marshal(m, &val.Insert)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", ListSplice_Field_Insert))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1857,10 +2197,12 @@ func (at ListTarget_Slot) SetSlot(v interface{}) (okay bool) {
 	return
 }
 
-func ListTarget_Marshal(n jsn.Marshaler, ptr *ListTarget) (okay bool) {
-	if okay = n.MarshalBlock(ListTarget_Slot{ptr}); okay {
-		(*ptr).(jsn.Marshalee).Marshal(n)
-		n.EndBlock()
+func ListTarget_Marshal(m jsn.Marshaler, ptr *ListTarget) (err error) {
+	if err = m.MarshalBlock(ListTarget_Slot{ptr}); err == nil {
+		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+			m.Error(e)
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1871,13 +2213,16 @@ func (op *ListTarget_Slice) GetType() string { return ListTarget_Type }
 func (op *ListTarget_Slice) GetSize() int    { return len(*op) }
 func (op *ListTarget_Slice) SetSize(cnt int) { (*op) = make(ListTarget_Slice, cnt) }
 
-func ListTarget_Repeats_Marshal(n jsn.Marshaler, vals *[]ListTarget) {
-	if n.MarshalBlock((*ListTarget_Slice)(vals)) {
+func ListTarget_Repeats_Marshal(m jsn.Marshaler, vals *[]ListTarget) (err error) {
+	if err = m.MarshalBlock((*ListTarget_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ListTarget_Marshal(n, &(*vals)[i])
+			if e := ListTarget_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // PutEdge Add a value to a list
@@ -1902,8 +2247,8 @@ const PutEdge_Field_From = "$FROM"
 const PutEdge_Field_Into = "$INTO"
 const PutEdge_Field_AtEdge = "$AT_EDGE"
 
-func (op *PutEdge) Marshal(n jsn.Marshaler) {
-	PutEdge_Marshal(n, op)
+func (op *PutEdge) Marshal(m jsn.Marshaler) error {
+	return PutEdge_Marshal(m, op)
 }
 
 type PutEdge_Slice []PutEdge
@@ -1912,39 +2257,54 @@ func (op *PutEdge_Slice) GetType() string { return PutEdge_Type }
 func (op *PutEdge_Slice) GetSize() int    { return len(*op) }
 func (op *PutEdge_Slice) SetSize(cnt int) { (*op) = make(PutEdge_Slice, cnt) }
 
-func PutEdge_Repeats_Marshal(n jsn.Marshaler, vals *[]PutEdge) {
-	if n.MarshalBlock((*PutEdge_Slice)(vals)) {
+func PutEdge_Repeats_Marshal(m jsn.Marshaler, vals *[]PutEdge) (err error) {
+	if err = m.MarshalBlock((*PutEdge_Slice)(vals)); err == nil {
 		for i := range *vals {
-			PutEdge_Marshal(n, &(*vals)[i])
+			if e := PutEdge_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func PutEdge_Optional_Marshal(n jsn.Marshaler, pv **PutEdge) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		PutEdge_Marshal(n, *pv)
+func PutEdge_Optional_Marshal(m jsn.Marshaler, pv **PutEdge) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = PutEdge_Marshal(m, *pv)
 	} else if !enc {
 		var v PutEdge
-		if PutEdge_Marshal(n, &v) {
+		if err = PutEdge_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func PutEdge_Marshal(n jsn.Marshaler, val *PutEdge) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("put",
-		PutEdge_Type)); okay {
-		if n.MarshalKey("", PutEdge_Field_From) {
-			rt.Assignment_Marshal(n, &val.From)
+func PutEdge_Marshal(m jsn.Marshaler, val *PutEdge) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("put", PutEdge_Type)); err == nil {
+		e0 := m.MarshalKey("", PutEdge_Field_From)
+		if e0 == nil {
+			e0 = rt.Assignment_Marshal(m, &val.From)
 		}
-		if n.MarshalKey("into", PutEdge_Field_Into) {
-			ListTarget_Marshal(n, &val.Into)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", PutEdge_Field_From))
 		}
-		if n.MarshalKey("at_front", PutEdge_Field_AtEdge) {
-			rt.BoolEval_Optional_Marshal(n, &val.AtEdge)
+		e1 := m.MarshalKey("into", PutEdge_Field_Into)
+		if e1 == nil {
+			e1 = ListTarget_Marshal(m, &val.Into)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", PutEdge_Field_Into))
+		}
+		e2 := m.MarshalKey("at_front", PutEdge_Field_AtEdge)
+		if e2 == nil {
+			e2 = rt.BoolEval_Optional_Marshal(m, &val.AtEdge)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", PutEdge_Field_AtEdge))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -1971,8 +2331,8 @@ const PutIndex_Field_From = "$FROM"
 const PutIndex_Field_Into = "$INTO"
 const PutIndex_Field_AtIndex = "$AT_INDEX"
 
-func (op *PutIndex) Marshal(n jsn.Marshaler) {
-	PutIndex_Marshal(n, op)
+func (op *PutIndex) Marshal(m jsn.Marshaler) error {
+	return PutIndex_Marshal(m, op)
 }
 
 type PutIndex_Slice []PutIndex
@@ -1981,39 +2341,54 @@ func (op *PutIndex_Slice) GetType() string { return PutIndex_Type }
 func (op *PutIndex_Slice) GetSize() int    { return len(*op) }
 func (op *PutIndex_Slice) SetSize(cnt int) { (*op) = make(PutIndex_Slice, cnt) }
 
-func PutIndex_Repeats_Marshal(n jsn.Marshaler, vals *[]PutIndex) {
-	if n.MarshalBlock((*PutIndex_Slice)(vals)) {
+func PutIndex_Repeats_Marshal(m jsn.Marshaler, vals *[]PutIndex) (err error) {
+	if err = m.MarshalBlock((*PutIndex_Slice)(vals)); err == nil {
 		for i := range *vals {
-			PutIndex_Marshal(n, &(*vals)[i])
+			if e := PutIndex_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func PutIndex_Optional_Marshal(n jsn.Marshaler, pv **PutIndex) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		PutIndex_Marshal(n, *pv)
+func PutIndex_Optional_Marshal(m jsn.Marshaler, pv **PutIndex) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = PutIndex_Marshal(m, *pv)
 	} else if !enc {
 		var v PutIndex
-		if PutIndex_Marshal(n, &v) {
+		if err = PutIndex_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func PutIndex_Marshal(n jsn.Marshaler, val *PutIndex) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("put",
-		PutIndex_Type)); okay {
-		if n.MarshalKey("", PutIndex_Field_From) {
-			rt.Assignment_Marshal(n, &val.From)
+func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("put", PutIndex_Type)); err == nil {
+		e0 := m.MarshalKey("", PutIndex_Field_From)
+		if e0 == nil {
+			e0 = rt.Assignment_Marshal(m, &val.From)
 		}
-		if n.MarshalKey("into", PutIndex_Field_Into) {
-			ListTarget_Marshal(n, &val.Into)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", PutIndex_Field_From))
 		}
-		if n.MarshalKey("at_index", PutIndex_Field_AtIndex) {
-			rt.NumberEval_Marshal(n, &val.AtIndex)
+		e1 := m.MarshalKey("into", PutIndex_Field_Into)
+		if e1 == nil {
+			e1 = ListTarget_Marshal(m, &val.Into)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", PutIndex_Field_Into))
+		}
+		e2 := m.MarshalKey("at_index", PutIndex_Field_AtIndex)
+		if e2 == nil {
+			e2 = rt.NumberEval_Marshal(m, &val.AtIndex)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", PutIndex_Field_AtIndex))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -2039,8 +2414,8 @@ const Range_Field_To = "$TO"
 const Range_Field_From = "$FROM"
 const Range_Field_ByStep = "$BY_STEP"
 
-func (op *Range) Marshal(n jsn.Marshaler) {
-	Range_Marshal(n, op)
+func (op *Range) Marshal(m jsn.Marshaler) error {
+	return Range_Marshal(m, op)
 }
 
 type Range_Slice []Range
@@ -2049,39 +2424,54 @@ func (op *Range_Slice) GetType() string { return Range_Type }
 func (op *Range_Slice) GetSize() int    { return len(*op) }
 func (op *Range_Slice) SetSize(cnt int) { (*op) = make(Range_Slice, cnt) }
 
-func Range_Repeats_Marshal(n jsn.Marshaler, vals *[]Range) {
-	if n.MarshalBlock((*Range_Slice)(vals)) {
+func Range_Repeats_Marshal(m jsn.Marshaler, vals *[]Range) (err error) {
+	if err = m.MarshalBlock((*Range_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Range_Marshal(n, &(*vals)[i])
+			if e := Range_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func Range_Optional_Marshal(n jsn.Marshaler, pv **Range) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		Range_Marshal(n, *pv)
+func Range_Optional_Marshal(m jsn.Marshaler, pv **Range) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Range_Marshal(m, *pv)
 	} else if !enc {
 		var v Range
-		if Range_Marshal(n, &v) {
+		if err = Range_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func Range_Marshal(n jsn.Marshaler, val *Range) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(Range_Type,
-		Range_Type)); okay {
-		if n.MarshalKey("", Range_Field_To) {
-			rt.NumberEval_Marshal(n, &val.To)
+func Range_Marshal(m jsn.Marshaler, val *Range) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(Range_Type, Range_Type)); err == nil {
+		e0 := m.MarshalKey("", Range_Field_To)
+		if e0 == nil {
+			e0 = rt.NumberEval_Marshal(m, &val.To)
 		}
-		if n.MarshalKey("from", Range_Field_From) {
-			rt.NumberEval_Optional_Marshal(n, &val.From)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Range_Field_To))
 		}
-		if n.MarshalKey("by_step", Range_Field_ByStep) {
-			rt.NumberEval_Optional_Marshal(n, &val.ByStep)
+		e1 := m.MarshalKey("from", Range_Field_From)
+		if e1 == nil {
+			e1 = rt.NumberEval_Optional_Marshal(m, &val.From)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Range_Field_From))
+		}
+		e2 := m.MarshalKey("by_step", Range_Field_ByStep)
+		if e2 == nil {
+			e2 = rt.NumberEval_Optional_Marshal(m, &val.ByStep)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", Range_Field_ByStep))
+		}
+		m.EndBlock()
 	}
 	return
 }

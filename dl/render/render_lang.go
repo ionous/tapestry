@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 // RenderExp
@@ -26,8 +27,8 @@ const RenderExp_Type = "render_exp"
 
 const RenderExp_Field_Expression = "$EXPRESSION"
 
-func (op *RenderExp) Marshal(n jsn.Marshaler) {
-	RenderExp_Marshal(n, op)
+func (op *RenderExp) Marshal(m jsn.Marshaler) error {
+	return RenderExp_Marshal(m, op)
 }
 
 type RenderExp_Slice []RenderExp
@@ -36,33 +37,40 @@ func (op *RenderExp_Slice) GetType() string { return RenderExp_Type }
 func (op *RenderExp_Slice) GetSize() int    { return len(*op) }
 func (op *RenderExp_Slice) SetSize(cnt int) { (*op) = make(RenderExp_Slice, cnt) }
 
-func RenderExp_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderExp) {
-	if n.MarshalBlock((*RenderExp_Slice)(vals)) {
+func RenderExp_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderExp) (err error) {
+	if err = m.MarshalBlock((*RenderExp_Slice)(vals)); err == nil {
 		for i := range *vals {
-			RenderExp_Marshal(n, &(*vals)[i])
+			if e := RenderExp_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func RenderExp_Optional_Marshal(n jsn.Marshaler, pv **RenderExp) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		RenderExp_Marshal(n, *pv)
+func RenderExp_Optional_Marshal(m jsn.Marshaler, pv **RenderExp) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RenderExp_Marshal(m, *pv)
 	} else if !enc {
 		var v RenderExp
-		if RenderExp_Marshal(n, &v) {
+		if err = RenderExp_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func RenderExp_Marshal(n jsn.Marshaler, val *RenderExp) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(RenderExp_Type,
-		RenderExp_Type)); okay {
-		if n.MarshalKey("", RenderExp_Field_Expression) {
-			rt.TextEval_Marshal(n, &val.Expression)
+func RenderExp_Marshal(m jsn.Marshaler, val *RenderExp) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(RenderExp_Type, RenderExp_Type)); err == nil {
+		e0 := m.MarshalKey("", RenderExp_Field_Expression)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Expression)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RenderExp_Field_Expression))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -84,8 +92,8 @@ const RenderField_Type = "render_field"
 
 const RenderField_Field_Name = "$NAME"
 
-func (op *RenderField) Marshal(n jsn.Marshaler) {
-	RenderField_Marshal(n, op)
+func (op *RenderField) Marshal(m jsn.Marshaler) error {
+	return RenderField_Marshal(m, op)
 }
 
 type RenderField_Slice []RenderField
@@ -94,33 +102,40 @@ func (op *RenderField_Slice) GetType() string { return RenderField_Type }
 func (op *RenderField_Slice) GetSize() int    { return len(*op) }
 func (op *RenderField_Slice) SetSize(cnt int) { (*op) = make(RenderField_Slice, cnt) }
 
-func RenderField_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderField) {
-	if n.MarshalBlock((*RenderField_Slice)(vals)) {
+func RenderField_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderField) (err error) {
+	if err = m.MarshalBlock((*RenderField_Slice)(vals)); err == nil {
 		for i := range *vals {
-			RenderField_Marshal(n, &(*vals)[i])
+			if e := RenderField_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func RenderField_Optional_Marshal(n jsn.Marshaler, pv **RenderField) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		RenderField_Marshal(n, *pv)
+func RenderField_Optional_Marshal(m jsn.Marshaler, pv **RenderField) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RenderField_Marshal(m, *pv)
 	} else if !enc {
 		var v RenderField
-		if RenderField_Marshal(n, &v) {
+		if err = RenderField_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func RenderField_Marshal(n jsn.Marshaler, val *RenderField) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(RenderField_Type,
-		RenderField_Type)); okay {
-		if n.MarshalKey("", RenderField_Field_Name) {
-			rt.TextEval_Marshal(n, &val.Name)
+func RenderField_Marshal(m jsn.Marshaler, val *RenderField) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(RenderField_Type, RenderField_Type)); err == nil {
+		e0 := m.MarshalKey("", RenderField_Field_Name)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RenderField_Field_Name))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -153,19 +168,20 @@ func (*RenderFlags) Compose() composer.Spec {
 
 const RenderFlags_Type = "render_flags"
 
-func (op *RenderFlags) Marshal(n jsn.Marshaler) {
-	RenderFlags_Marshal(n, op)
+func (op *RenderFlags) Marshal(m jsn.Marshaler) error {
+	return RenderFlags_Marshal(m, op)
 }
 
-func RenderFlags_Optional_Marshal(n jsn.Marshaler, val *RenderFlags) {
+func RenderFlags_Optional_Marshal(m jsn.Marshaler, val *RenderFlags) (err error) {
 	var zero RenderFlags
-	if enc := n.IsEncoding(); !enc || val.Str != zero.Str {
-		RenderFlags_Marshal(n, val)
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = RenderFlags_Marshal(m, val)
 	}
+	return
 }
 
-func RenderFlags_Marshal(n jsn.Marshaler, val *RenderFlags) {
-	n.MarshalValue(RenderFlags_Type, jsn.MakeEnum(val, &val.Str))
+func RenderFlags_Marshal(m jsn.Marshaler, val *RenderFlags) (err error) {
+	return m.MarshalValue(RenderFlags_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type RenderFlags_Slice []RenderFlags
@@ -174,13 +190,16 @@ func (op *RenderFlags_Slice) GetType() string { return RenderFlags_Type }
 func (op *RenderFlags_Slice) GetSize() int    { return len(*op) }
 func (op *RenderFlags_Slice) SetSize(cnt int) { (*op) = make(RenderFlags_Slice, cnt) }
 
-func RenderFlags_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderFlags) {
-	if n.MarshalBlock((*RenderFlags_Slice)(vals)) {
+func RenderFlags_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderFlags) (err error) {
+	if err = m.MarshalBlock((*RenderFlags_Slice)(vals)); err == nil {
 		for i := range *vals {
-			RenderFlags_Marshal(n, &(*vals)[i])
+			if e := RenderFlags_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
 // RenderName handles changing a template like {.boombip} into text.,if the name is a variable containing an object name: return the printed object name ( via &quot;print name&quot; ),if the name is a variable with some other text: return that text.,if the name isn&#x27;t a variable but refers to some object: return that object&#x27;s printed object name.,otherwise, its an error.
@@ -200,8 +219,8 @@ const RenderName_Type = "render_name"
 
 const RenderName_Field_Name = "$NAME"
 
-func (op *RenderName) Marshal(n jsn.Marshaler) {
-	RenderName_Marshal(n, op)
+func (op *RenderName) Marshal(m jsn.Marshaler) error {
+	return RenderName_Marshal(m, op)
 }
 
 type RenderName_Slice []RenderName
@@ -210,33 +229,40 @@ func (op *RenderName_Slice) GetType() string { return RenderName_Type }
 func (op *RenderName_Slice) GetSize() int    { return len(*op) }
 func (op *RenderName_Slice) SetSize(cnt int) { (*op) = make(RenderName_Slice, cnt) }
 
-func RenderName_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderName) {
-	if n.MarshalBlock((*RenderName_Slice)(vals)) {
+func RenderName_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderName) (err error) {
+	if err = m.MarshalBlock((*RenderName_Slice)(vals)); err == nil {
 		for i := range *vals {
-			RenderName_Marshal(n, &(*vals)[i])
+			if e := RenderName_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func RenderName_Optional_Marshal(n jsn.Marshaler, pv **RenderName) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		RenderName_Marshal(n, *pv)
+func RenderName_Optional_Marshal(m jsn.Marshaler, pv **RenderName) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RenderName_Marshal(m, *pv)
 	} else if !enc {
 		var v RenderName
-		if RenderName_Marshal(n, &v) {
+		if err = RenderName_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func RenderName_Marshal(n jsn.Marshaler, val *RenderName) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(RenderName_Type,
-		RenderName_Type)); okay {
-		if n.MarshalKey("", RenderName_Field_Name) {
-			value.Text_Unboxed_Marshal(n, &val.Name)
+func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(RenderName_Type, RenderName_Type)); err == nil {
+		e0 := m.MarshalKey("", RenderName_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
 		}
-		n.EndBlock()
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RenderName_Field_Name))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -261,8 +287,8 @@ const RenderPattern_Type = "render_pattern"
 const RenderPattern_Field_Pattern = "$PATTERN"
 const RenderPattern_Field_Arguments = "$ARGUMENTS"
 
-func (op *RenderPattern) Marshal(n jsn.Marshaler) {
-	RenderPattern_Marshal(n, op)
+func (op *RenderPattern) Marshal(m jsn.Marshaler) error {
+	return RenderPattern_Marshal(m, op)
 }
 
 type RenderPattern_Slice []RenderPattern
@@ -271,36 +297,47 @@ func (op *RenderPattern_Slice) GetType() string { return RenderPattern_Type }
 func (op *RenderPattern_Slice) GetSize() int    { return len(*op) }
 func (op *RenderPattern_Slice) SetSize(cnt int) { (*op) = make(RenderPattern_Slice, cnt) }
 
-func RenderPattern_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderPattern) {
-	if n.MarshalBlock((*RenderPattern_Slice)(vals)) {
+func RenderPattern_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderPattern) (err error) {
+	if err = m.MarshalBlock((*RenderPattern_Slice)(vals)); err == nil {
 		for i := range *vals {
-			RenderPattern_Marshal(n, &(*vals)[i])
+			if e := RenderPattern_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func RenderPattern_Optional_Marshal(n jsn.Marshaler, pv **RenderPattern) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		RenderPattern_Marshal(n, *pv)
+func RenderPattern_Optional_Marshal(m jsn.Marshaler, pv **RenderPattern) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RenderPattern_Marshal(m, *pv)
 	} else if !enc {
 		var v RenderPattern
-		if RenderPattern_Marshal(n, &v) {
+		if err = RenderPattern_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func RenderPattern_Marshal(n jsn.Marshaler, val *RenderPattern) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("render",
-		RenderPattern_Type)); okay {
-		if n.MarshalKey("", RenderPattern_Field_Pattern) {
-			value.PatternName_Marshal(n, &val.Pattern)
+func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("render", RenderPattern_Type)); err == nil {
+		e0 := m.MarshalKey("", RenderPattern_Field_Pattern)
+		if e0 == nil {
+			e0 = value.PatternName_Marshal(m, &val.Pattern)
 		}
-		if n.MarshalKey("args", RenderPattern_Field_Arguments) {
-			core.CallArgs_Marshal(n, &val.Arguments)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RenderPattern_Field_Pattern))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("args", RenderPattern_Field_Arguments)
+		if e1 == nil {
+			e1 = core.CallArgs_Marshal(m, &val.Arguments)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RenderPattern_Field_Arguments))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -324,8 +361,8 @@ const RenderRef_Type = "render_ref"
 const RenderRef_Field_Name = "$NAME"
 const RenderRef_Field_Flags = "$FLAGS"
 
-func (op *RenderRef) Marshal(n jsn.Marshaler) {
-	RenderRef_Marshal(n, op)
+func (op *RenderRef) Marshal(m jsn.Marshaler) error {
+	return RenderRef_Marshal(m, op)
 }
 
 type RenderRef_Slice []RenderRef
@@ -334,36 +371,47 @@ func (op *RenderRef_Slice) GetType() string { return RenderRef_Type }
 func (op *RenderRef_Slice) GetSize() int    { return len(*op) }
 func (op *RenderRef_Slice) SetSize(cnt int) { (*op) = make(RenderRef_Slice, cnt) }
 
-func RenderRef_Repeats_Marshal(n jsn.Marshaler, vals *[]RenderRef) {
-	if n.MarshalBlock((*RenderRef_Slice)(vals)) {
+func RenderRef_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderRef) (err error) {
+	if err = m.MarshalBlock((*RenderRef_Slice)(vals)); err == nil {
 		for i := range *vals {
-			RenderRef_Marshal(n, &(*vals)[i])
+			if e := RenderRef_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func RenderRef_Optional_Marshal(n jsn.Marshaler, pv **RenderRef) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		RenderRef_Marshal(n, *pv)
+func RenderRef_Optional_Marshal(m jsn.Marshaler, pv **RenderRef) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RenderRef_Marshal(m, *pv)
 	} else if !enc {
 		var v RenderRef
-		if RenderRef_Marshal(n, &v) {
+		if err = RenderRef_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func RenderRef_Marshal(n jsn.Marshaler, val *RenderRef) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(RenderRef_Type,
-		RenderRef_Type)); okay {
-		if n.MarshalKey("", RenderRef_Field_Name) {
-			value.VariableName_Marshal(n, &val.Name)
+func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(RenderRef_Type, RenderRef_Type)); err == nil {
+		e0 := m.MarshalKey("", RenderRef_Field_Name)
+		if e0 == nil {
+			e0 = value.VariableName_Marshal(m, &val.Name)
 		}
-		if n.MarshalKey("flags", RenderRef_Field_Flags) {
-			RenderFlags_Marshal(n, &val.Flags)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RenderRef_Field_Name))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("flags", RenderRef_Field_Flags)
+		if e1 == nil {
+			e1 = RenderFlags_Marshal(m, &val.Flags)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RenderRef_Field_Flags))
+		}
+		m.EndBlock()
 	}
 	return
 }

@@ -19,7 +19,7 @@ var AllSlots = [][]interface{}{
 	core.Slots,
 	grammar.Slots,
 	list.Slots,
-	// story.Slots, // re:story importer, etc.
+	// story.Slots, // story importer uses AllSlots so we can't include the slats here
 	rt.Slots,
 }
 var AllSlats = [][]composer.Composer{
@@ -31,7 +31,7 @@ var AllSlats = [][]composer.Composer{
 	rel.Slats,
 	render.Slats,
 	value.Slats,
-	// story.Slats,
+	// story.Slats, // story importer uses AllSlats so we can't include the slats here
 }
 var AllSignatures = []map[uint64]interface{}{
 	core.Signatures,

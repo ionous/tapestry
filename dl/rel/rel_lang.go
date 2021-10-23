@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 // ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.)
@@ -28,8 +29,8 @@ const ReciprocalOf_Type = "reciprocal_of"
 const ReciprocalOf_Field_Via = "$VIA"
 const ReciprocalOf_Field_Object = "$OBJECT"
 
-func (op *ReciprocalOf) Marshal(n jsn.Marshaler) {
-	ReciprocalOf_Marshal(n, op)
+func (op *ReciprocalOf) Marshal(m jsn.Marshaler) error {
+	return ReciprocalOf_Marshal(m, op)
 }
 
 type ReciprocalOf_Slice []ReciprocalOf
@@ -38,36 +39,47 @@ func (op *ReciprocalOf_Slice) GetType() string { return ReciprocalOf_Type }
 func (op *ReciprocalOf_Slice) GetSize() int    { return len(*op) }
 func (op *ReciprocalOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalOf_Slice, cnt) }
 
-func ReciprocalOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalOf) {
-	if n.MarshalBlock((*ReciprocalOf_Slice)(vals)) {
+func ReciprocalOf_Repeats_Marshal(m jsn.Marshaler, vals *[]ReciprocalOf) (err error) {
+	if err = m.MarshalBlock((*ReciprocalOf_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ReciprocalOf_Marshal(n, &(*vals)[i])
+			if e := ReciprocalOf_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ReciprocalOf_Optional_Marshal(n jsn.Marshaler, pv **ReciprocalOf) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ReciprocalOf_Marshal(n, *pv)
+func ReciprocalOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalOf) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ReciprocalOf_Marshal(m, *pv)
 	} else if !enc {
 		var v ReciprocalOf
-		if ReciprocalOf_Marshal(n, &v) {
+		if err = ReciprocalOf_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ReciprocalOf_Marshal(n jsn.Marshaler, val *ReciprocalOf) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("reciprocal",
-		ReciprocalOf_Type)); okay {
-		if n.MarshalKey("", ReciprocalOf_Field_Via) {
-			value.RelationName_Marshal(n, &val.Via)
+func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("reciprocal", ReciprocalOf_Type)); err == nil {
+		e0 := m.MarshalKey("", ReciprocalOf_Field_Via)
+		if e0 == nil {
+			e0 = value.RelationName_Marshal(m, &val.Via)
 		}
-		if n.MarshalKey("object", ReciprocalOf_Field_Object) {
-			rt.TextEval_Marshal(n, &val.Object)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ReciprocalOf_Field_Via))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("object", ReciprocalOf_Field_Object)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Object)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ReciprocalOf_Field_Object))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -92,8 +104,8 @@ const ReciprocalsOf_Type = "reciprocals_of"
 const ReciprocalsOf_Field_Via = "$VIA"
 const ReciprocalsOf_Field_Object = "$OBJECT"
 
-func (op *ReciprocalsOf) Marshal(n jsn.Marshaler) {
-	ReciprocalsOf_Marshal(n, op)
+func (op *ReciprocalsOf) Marshal(m jsn.Marshaler) error {
+	return ReciprocalsOf_Marshal(m, op)
 }
 
 type ReciprocalsOf_Slice []ReciprocalsOf
@@ -102,36 +114,47 @@ func (op *ReciprocalsOf_Slice) GetType() string { return ReciprocalsOf_Type }
 func (op *ReciprocalsOf_Slice) GetSize() int    { return len(*op) }
 func (op *ReciprocalsOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalsOf_Slice, cnt) }
 
-func ReciprocalsOf_Repeats_Marshal(n jsn.Marshaler, vals *[]ReciprocalsOf) {
-	if n.MarshalBlock((*ReciprocalsOf_Slice)(vals)) {
+func ReciprocalsOf_Repeats_Marshal(m jsn.Marshaler, vals *[]ReciprocalsOf) (err error) {
+	if err = m.MarshalBlock((*ReciprocalsOf_Slice)(vals)); err == nil {
 		for i := range *vals {
-			ReciprocalsOf_Marshal(n, &(*vals)[i])
+			if e := ReciprocalsOf_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func ReciprocalsOf_Optional_Marshal(n jsn.Marshaler, pv **ReciprocalsOf) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		ReciprocalsOf_Marshal(n, *pv)
+func ReciprocalsOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalsOf) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ReciprocalsOf_Marshal(m, *pv)
 	} else if !enc {
 		var v ReciprocalsOf
-		if ReciprocalsOf_Marshal(n, &v) {
+		if err = ReciprocalsOf_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func ReciprocalsOf_Marshal(n jsn.Marshaler, val *ReciprocalsOf) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("reciprocals",
-		ReciprocalsOf_Type)); okay {
-		if n.MarshalKey("", ReciprocalsOf_Field_Via) {
-			value.RelationName_Marshal(n, &val.Via)
+func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("reciprocals", ReciprocalsOf_Type)); err == nil {
+		e0 := m.MarshalKey("", ReciprocalsOf_Field_Via)
+		if e0 == nil {
+			e0 = value.RelationName_Marshal(m, &val.Via)
 		}
-		if n.MarshalKey("object", ReciprocalsOf_Field_Object) {
-			rt.TextEval_Marshal(n, &val.Object)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ReciprocalsOf_Field_Via))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("object", ReciprocalsOf_Field_Object)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Object)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ReciprocalsOf_Field_Object))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -157,8 +180,8 @@ const Relate_Field_Object = "$OBJECT"
 const Relate_Field_ToObject = "$TO_OBJECT"
 const Relate_Field_Via = "$VIA"
 
-func (op *Relate) Marshal(n jsn.Marshaler) {
-	Relate_Marshal(n, op)
+func (op *Relate) Marshal(m jsn.Marshaler) error {
+	return Relate_Marshal(m, op)
 }
 
 type Relate_Slice []Relate
@@ -167,39 +190,54 @@ func (op *Relate_Slice) GetType() string { return Relate_Type }
 func (op *Relate_Slice) GetSize() int    { return len(*op) }
 func (op *Relate_Slice) SetSize(cnt int) { (*op) = make(Relate_Slice, cnt) }
 
-func Relate_Repeats_Marshal(n jsn.Marshaler, vals *[]Relate) {
-	if n.MarshalBlock((*Relate_Slice)(vals)) {
+func Relate_Repeats_Marshal(m jsn.Marshaler, vals *[]Relate) (err error) {
+	if err = m.MarshalBlock((*Relate_Slice)(vals)); err == nil {
 		for i := range *vals {
-			Relate_Marshal(n, &(*vals)[i])
+			if e := Relate_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func Relate_Optional_Marshal(n jsn.Marshaler, pv **Relate) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		Relate_Marshal(n, *pv)
+func Relate_Optional_Marshal(m jsn.Marshaler, pv **Relate) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Relate_Marshal(m, *pv)
 	} else if !enc {
 		var v Relate
-		if Relate_Marshal(n, &v) {
+		if err = Relate_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func Relate_Marshal(n jsn.Marshaler, val *Relate) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow(Relate_Type,
-		Relate_Type)); okay {
-		if n.MarshalKey("", Relate_Field_Object) {
-			rt.TextEval_Marshal(n, &val.Object)
+func Relate_Marshal(m jsn.Marshaler, val *Relate) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow(Relate_Type, Relate_Type)); err == nil {
+		e0 := m.MarshalKey("", Relate_Field_Object)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Object)
 		}
-		if n.MarshalKey("to", Relate_Field_ToObject) {
-			rt.TextEval_Marshal(n, &val.ToObject)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Relate_Field_Object))
 		}
-		if n.MarshalKey("via", Relate_Field_Via) {
-			value.RelationName_Marshal(n, &val.Via)
+		e1 := m.MarshalKey("to", Relate_Field_ToObject)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.ToObject)
 		}
-		n.EndBlock()
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Relate_Field_ToObject))
+		}
+		e2 := m.MarshalKey("via", Relate_Field_Via)
+		if e2 == nil {
+			e2 = value.RelationName_Marshal(m, &val.Via)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", Relate_Field_Via))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -224,8 +262,8 @@ const RelativeOf_Type = "relative_of"
 const RelativeOf_Field_Via = "$VIA"
 const RelativeOf_Field_Object = "$OBJECT"
 
-func (op *RelativeOf) Marshal(n jsn.Marshaler) {
-	RelativeOf_Marshal(n, op)
+func (op *RelativeOf) Marshal(m jsn.Marshaler) error {
+	return RelativeOf_Marshal(m, op)
 }
 
 type RelativeOf_Slice []RelativeOf
@@ -234,36 +272,47 @@ func (op *RelativeOf_Slice) GetType() string { return RelativeOf_Type }
 func (op *RelativeOf_Slice) GetSize() int    { return len(*op) }
 func (op *RelativeOf_Slice) SetSize(cnt int) { (*op) = make(RelativeOf_Slice, cnt) }
 
-func RelativeOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativeOf) {
-	if n.MarshalBlock((*RelativeOf_Slice)(vals)) {
+func RelativeOf_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativeOf) (err error) {
+	if err = m.MarshalBlock((*RelativeOf_Slice)(vals)); err == nil {
 		for i := range *vals {
-			RelativeOf_Marshal(n, &(*vals)[i])
+			if e := RelativeOf_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func RelativeOf_Optional_Marshal(n jsn.Marshaler, pv **RelativeOf) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		RelativeOf_Marshal(n, *pv)
+func RelativeOf_Optional_Marshal(m jsn.Marshaler, pv **RelativeOf) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RelativeOf_Marshal(m, *pv)
 	} else if !enc {
 		var v RelativeOf
-		if RelativeOf_Marshal(n, &v) {
+		if err = RelativeOf_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func RelativeOf_Marshal(n jsn.Marshaler, val *RelativeOf) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("relative",
-		RelativeOf_Type)); okay {
-		if n.MarshalKey("", RelativeOf_Field_Via) {
-			value.RelationName_Marshal(n, &val.Via)
+func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("relative", RelativeOf_Type)); err == nil {
+		e0 := m.MarshalKey("", RelativeOf_Field_Via)
+		if e0 == nil {
+			e0 = value.RelationName_Marshal(m, &val.Via)
 		}
-		if n.MarshalKey("object", RelativeOf_Field_Object) {
-			rt.TextEval_Marshal(n, &val.Object)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RelativeOf_Field_Via))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("object", RelativeOf_Field_Object)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Object)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RelativeOf_Field_Object))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -288,8 +337,8 @@ const RelativesOf_Type = "relatives_of"
 const RelativesOf_Field_Via = "$VIA"
 const RelativesOf_Field_Object = "$OBJECT"
 
-func (op *RelativesOf) Marshal(n jsn.Marshaler) {
-	RelativesOf_Marshal(n, op)
+func (op *RelativesOf) Marshal(m jsn.Marshaler) error {
+	return RelativesOf_Marshal(m, op)
 }
 
 type RelativesOf_Slice []RelativesOf
@@ -298,36 +347,47 @@ func (op *RelativesOf_Slice) GetType() string { return RelativesOf_Type }
 func (op *RelativesOf_Slice) GetSize() int    { return len(*op) }
 func (op *RelativesOf_Slice) SetSize(cnt int) { (*op) = make(RelativesOf_Slice, cnt) }
 
-func RelativesOf_Repeats_Marshal(n jsn.Marshaler, vals *[]RelativesOf) {
-	if n.MarshalBlock((*RelativesOf_Slice)(vals)) {
+func RelativesOf_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativesOf) (err error) {
+	if err = m.MarshalBlock((*RelativesOf_Slice)(vals)); err == nil {
 		for i := range *vals {
-			RelativesOf_Marshal(n, &(*vals)[i])
+			if e := RelativesOf_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
+				m.Error(errutil.New(e, "in slice at", i))
+			}
 		}
-		n.EndBlock()
+		m.EndBlock()
 	}
+	return
 }
 
-func RelativesOf_Optional_Marshal(n jsn.Marshaler, pv **RelativesOf) {
-	if enc := n.IsEncoding(); enc && *pv != nil {
-		RelativesOf_Marshal(n, *pv)
+func RelativesOf_Optional_Marshal(m jsn.Marshaler, pv **RelativesOf) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RelativesOf_Marshal(m, *pv)
 	} else if !enc {
 		var v RelativesOf
-		if RelativesOf_Marshal(n, &v) {
+		if err = RelativesOf_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
+	return
 }
 
-func RelativesOf_Marshal(n jsn.Marshaler, val *RelativesOf) (okay bool) {
-	if okay = n.MarshalBlock(jsn.MarkFlow("relatives",
-		RelativesOf_Type)); okay {
-		if n.MarshalKey("", RelativesOf_Field_Via) {
-			value.RelationName_Marshal(n, &val.Via)
+func RelativesOf_Marshal(m jsn.Marshaler, val *RelativesOf) (err error) {
+	if err = m.MarshalBlock(jsn.MarkFlow("relatives", RelativesOf_Type)); err == nil {
+		e0 := m.MarshalKey("", RelativesOf_Field_Via)
+		if e0 == nil {
+			e0 = value.RelationName_Marshal(m, &val.Via)
 		}
-		if n.MarshalKey("object", RelativesOf_Field_Object) {
-			rt.TextEval_Marshal(n, &val.Object)
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RelativesOf_Field_Via))
 		}
-		n.EndBlock()
+		e1 := m.MarshalKey("object", RelativesOf_Field_Object)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Object)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RelativesOf_Field_Object))
+		}
+		m.EndBlock()
 	}
 	return
 }

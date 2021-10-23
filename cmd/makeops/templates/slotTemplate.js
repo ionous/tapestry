@@ -15,23 +15,25 @@ func (at {{Pascal name}}_Slot) SetSlot(v interface{}) (okay bool) {
   return
 }
 
-func {{Pascal name}}_Marshal(n jsn.Marshaler, ptr *{{Pascal name}}) (okay bool) {
+func {{Pascal name}}_Marshal(m jsn.Marshaler, ptr *{{Pascal name}}) (err error) {
 {{#if (IsCustom name)}}
-  if fn, exists := n.CustomizedMarshal({{Pascal name}}_Type); exists {
-    okay = fn(n, ptr)
+  if fn, exists := m.CustomizedMarshal({{Pascal name}}_Type); exists {
+    err = fn(m, ptr)
   } else {
-    okay = {{Pascal name}}_DefaultMarshal(n, ptr)
+    err = {{Pascal name}}_DefaultMarshal(m, ptr)
   }
   return
 }
-func {{Pascal name}}_DefaultMarshal(n jsn.Marshaler, ptr *{{Pascal name}}) (okay bool) {
+func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, ptr *{{Pascal name}}) (err error) {
 {{/if}}
 {{~#if (IsPositioned this)}}
-  n.SetCursor(ptr.At.Offset)
+  m.SetCursor(ptr.At.Offset)
 {{/if}}
-  if okay = n.MarshalBlock({{Pascal name}}_Slot{ptr}); okay {
-    (*ptr).(jsn.Marshalee).Marshal(n)
-    n.EndBlock()
+  if err = m.MarshalBlock({{Pascal name}}_Slot{ptr}); err == nil {
+    if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+      m.Error(e)
+    }
+    m.EndBlock()
   }
   return
 }
