@@ -33,7 +33,8 @@ func makeMachine(custom Customization, encoding bool) Machine {
 }
 
 func (m *Machine) Marshal(tgt jsn.Marshalee, init State) error {
-	m.ChangeState(init)
+	m.ChangeState(&StateMix{}) // fix. right now, if you try to Finish the initial state (ex. during tests) pop panics
+	m.PushState(init)
 	tgt.Marshal(m)
 	return m.err
 }

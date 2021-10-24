@@ -34,7 +34,7 @@ type State interface {
 	// starts one of various block types.
 	// if this succeeds (returns nil), a matching EndBlock() must be called ( after visiting any sub values. )
 	// If this returns an error, EndBlock() must *not* be called ( and no sub values are allowed. )
-	MarshalBlock(BlockType) error
+	MarshalBlock(Block) error
 	// the start of a possible key:value pair inside a FlowBlock.
 	// a new MarshalKey or an EndBlock will cancel writing this pair.
 	// if this succeeds (returns nil), it must be followed by a MarshalValue call.
@@ -51,21 +51,21 @@ type State interface {
 type CustomizedMarshal func(Marshaler, interface{}) error
 
 // designation for a type which has multiple sub-values.
-type BlockType interface {
+type Block interface {
 	GetType() string
 }
 
 // starts a series of key-values pairs
 // the flow is closed ( written ) with a call to EndBlock()
 type FlowBlock interface {
-	BlockType
+	Block
 	GetLede() string
 }
 
 // selects one of a closed set of possible values
 // the swap is closed ( written ) with a call to EndBlock()
 type SwapBlock interface {
-	BlockType
+	Block
 	GetChoice() (string, bool)
 	SetChoice(string) (interface{}, bool)
 }
@@ -74,7 +74,7 @@ type Picker = SwapBlock
 // starts a series of values
 // the repeat is closed ( written ) with a call to EndBlock()
 type SliceBlock interface {
-	BlockType
+	Block
 	GetSize() int
 	SetSize(int)
 }
@@ -83,7 +83,7 @@ type Slicer = SliceBlock
 // selects one of an unbounded set of possible values
 // returns the value if it exists for future serialization
 type SlotBlock interface {
-	BlockType
+	Block
 	HasSlot() bool
 	SetSlot(interface{}) bool
 }

@@ -20,7 +20,7 @@ func searchForType(src jsn.Marshalee, typeName string) (okay bool, err error) {
 	// fix use panic / recover to early exit?
 	var earlyOut error
 	err = ts.Marshal(src, &chart.StateMix{
-		OnBlock: func(b jsn.BlockType) error {
+		OnBlock: func(b jsn.Block) error {
 			if b.GetType() == typeName {
 				okay, earlyOut = true, jsn.Missing
 			}

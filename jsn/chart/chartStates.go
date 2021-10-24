@@ -22,7 +22,7 @@ func (e Unhandled) Error() string {
 // StateMix implements the jsn.State interface
 // providing functions which can be overridden one at a time to customize functionality
 type StateMix struct {
-	OnBlock  func(jsn.BlockType) error
+	OnBlock  func(jsn.Block) error
 	OnMap    func(string, string) bool
 	OnKey    func(string, string) error
 	OnSlot   func(string, jsn.SlotBlock) bool
@@ -45,7 +45,7 @@ func NewBlockResult(m *Machine, v interface{}) *StateMix {
 	}
 }
 
-func (d *StateMix) MarshalBlock(b jsn.BlockType) (err error) {
+func (d *StateMix) MarshalBlock(b jsn.Block) (err error) {
 	if call := d.OnBlock; call != nil {
 		err = call(b)
 	} else {

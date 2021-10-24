@@ -23,9 +23,9 @@ func Key(want string, fn func(string) error) *chart.StateMix {
 }
 
 // expects that the very next value is a block
-func Block(want string, fn func(jsn.BlockType) error) *chart.StateMix {
+func Block(want string, fn func(jsn.Block) error) *chart.StateMix {
 	return &chart.StateMix{
-		OnBlock: func(b jsn.BlockType) (err error) {
+		OnBlock: func(b jsn.Block) (err error) {
 			if have := b.GetType(); have == want {
 				err = fn(b)
 			} else {
@@ -53,7 +53,7 @@ func Value(want string, fn func(interface{}) error) *chart.StateMix {
 func Eventually(want jsn.State) *chart.StateMix {
 	var unhandled chart.Unhandled
 	return &chart.StateMix{
-		OnBlock: func(b jsn.BlockType) (err error) {
+		OnBlock: func(b jsn.Block) (err error) {
 			if e := want.MarshalBlock(b); !errors.As(e, &unhandled) {
 				err = e
 			}
