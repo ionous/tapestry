@@ -20,7 +20,7 @@
                     "type": "relation_name",
                     "value": "whereabouts"
                   },
-                  "$RELATION_CARDINALITY": {
+                  "$CARDINALITY": {
                     "id": "id-176f34db27a-5",
                     "type": "relation_cardinality",
                     "value": {
