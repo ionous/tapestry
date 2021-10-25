@@ -76,7 +76,7 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 		}
 		return
 	}
-	next.OnSlot = func(typeName string, slot jsn.Spotter) (okay bool) {
+	next.OnSlot = func(typeName string, slot jsn.SlotBlock) (okay bool) {
 		var d, inner dinValue
 		if e := json.Unmarshal(*pm, &d); e != nil {
 			dec.Error(e)
@@ -95,7 +95,7 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 		return
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
-	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
+	next.OnSwap = func(typeName string, p jsn.SwapBlock) (okay bool) {
 		var d dinMap
 		if e := json.Unmarshal(*pm, &d); e != nil {
 			dec.Error(e)
@@ -117,7 +117,7 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 		}
 		return
 	}
-	next.OnRepeat = func(_ string, slice jsn.Slicer) (okay bool) {
+	next.OnRepeat = func(_ string, slice jsn.SliceBlock) (okay bool) {
 		var vs []json.RawMessage
 		if e := json.Unmarshal(*pm, &vs); e != nil {
 			dec.Error(e)

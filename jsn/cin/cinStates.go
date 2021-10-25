@@ -62,7 +62,7 @@ func (dec *xDecoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.
 		}
 		return
 	}
-	next.OnSlot = func(_ string, slot jsn.Spotter) (okay bool) {
+	next.OnSlot = func(_ string, slot jsn.SlotBlock) (okay bool) {
 		if t, k, args, e := dec.readCmd(msg); e != nil {
 			dec.Error(e)
 		} else if v := newFromType(t); !slot.SetSlot(v) {
@@ -74,7 +74,7 @@ func (dec *xDecoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.
 		return
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
-	next.OnPick = func(_ string, p jsn.Picker) (okay bool) {
+	next.OnSwap = func(_ string, p jsn.SwapBlock) (okay bool) {
 		// expanded swaps { "swapName choice:": <value> }
 		if _, k, args, e := dec.readCmd(msg); e != nil {
 			dec.Error(e)
@@ -97,7 +97,7 @@ func (dec *xDecoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.
 		}
 		return
 	}
-	next.OnRepeat = func(_ string, slice jsn.Slicer) (okay bool) {
+	next.OnRepeat = func(_ string, slice jsn.SliceBlock) (okay bool) {
 		var vs []json.RawMessage
 		if e := json.Unmarshal(msg, &vs); e != nil {
 			dec.Error(e)
@@ -114,7 +114,7 @@ func (dec *xDecoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.
 // the message data is special, and the next state is expected to be a swap
 func (dec *xDecoder) newEmbeddedSwap(prev chart.StateMix, msg json.RawMessage, pick string) *chart.StateMix {
 	var next chart.StateMix
-	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
+	next.OnSwap = func(typeName string, p jsn.SwapBlock) (okay bool) {
 		pick := newStringKey(pick)
 		if _, ok := p.SetChoice(pick); !ok {
 			dec.Error(errutil.Fmt("swap has unexpected %q", pick))

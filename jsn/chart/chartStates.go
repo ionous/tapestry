@@ -26,7 +26,7 @@ type StateMix struct {
 	OnMap    func(string, string) bool
 	OnKey    func(string, string) error
 	OnSlot   func(string, jsn.SlotBlock) bool
-	OnPick   func(string, jsn.SwapBlock) bool
+	OnSwap   func(string, jsn.SwapBlock) bool
 	OnRepeat func(string, jsn.SliceBlock) bool
 	OnEnd    func()
 	OnValue  func(string, interface{}) error
@@ -96,7 +96,7 @@ func (d *StateMix) SlotValues(typeName string, val jsn.SlotBlock) (err error) {
 	return
 }
 func (d *StateMix) PickValues(typeName string, val jsn.SwapBlock) (err error) {
-	if call := d.OnPick; call != nil {
+	if call := d.OnSwap; call != nil {
 		err = okayMissing(call(typeName, val))
 	} else {
 		err = Unhandled(errutil.Sprint("unexpected pick", typeName, val))

@@ -58,7 +58,7 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 		}))
 		return true
 	}
-	next.OnSlot = func(typeName string, slot jsn.Spotter) (okay bool) {
+	next.OnSlot = func(typeName string, slot jsn.SlotBlock) (okay bool) {
 		if _, ok := slot.GetSlot(); ok {
 			m.PushState(newSlot(m, detValue{
 				Id:   m.FlushCursor(),
@@ -69,7 +69,7 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 		return
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
-	next.OnPick = func(typeName string, p jsn.Picker) (okay bool) {
+	next.OnSwap = func(typeName string, p jsn.SwapBlock) (okay bool) {
 		if choice, ok := p.GetChoice(); !ok {
 			m.Error(errutil.New("couldnt determine choice of", p))
 		} else if len(choice) > 0 {
@@ -81,7 +81,7 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 		}
 		return okay
 	}
-	next.OnRepeat = func(t string, vs jsn.Slicer) (okay bool) {
+	next.OnRepeat = func(t string, vs jsn.SliceBlock) (okay bool) {
 		if hint := vs.GetSize(); hint > 0 {
 			m.PushState(newSlice(m, make([]interface{}, 0, hint)))
 			okay = true

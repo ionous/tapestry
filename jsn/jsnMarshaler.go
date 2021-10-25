@@ -70,7 +70,6 @@ type SwapBlock interface {
 	GetChoice() (string, bool)
 	SetChoice(string) (interface{}, bool)
 }
-type Picker = SwapBlock
 
 // starts a series of values
 // the repeat is closed ( written ) with a call to EndBlock()
@@ -79,7 +78,6 @@ type SliceBlock interface {
 	GetSize() int
 	SetSize(int)
 }
-type Slicer = SliceBlock
 
 // selects one of an unbounded set of possible values
 // returns the value if it exists for future serialization
@@ -88,4 +86,3 @@ type SlotBlock interface {
 	GetSlot() (interface{}, bool)
 	SetSlot(interface{}) bool
 }
-type Spotter = SlotBlock
