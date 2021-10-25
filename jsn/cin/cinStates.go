@@ -85,14 +85,11 @@ func (dec *xDecoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.
 				dec.Error(e)
 			} else if len(sig.params) != 1 || len(sig.params[0].choice) > 0 {
 				dec.Error(errutil.New("expected exactly one choice in", k))
+			} else if ok := p.SetSwap(sig.params[0].label); !ok {
+				dec.Error(errutil.New("swap has unexpected choice", k))
 			} else {
-				choice := sig.params[0].label
-				if _, ok := p.SetChoice(choice); !ok {
-					dec.Error(errutil.New("swap has unexpected choice", k))
-				} else {
-					dec.PushState(dec.newSwap(args))
-					okay = true
-				}
+				dec.PushState(dec.newSwap(args))
+				okay = true
 			}
 		}
 		return
@@ -116,7 +113,7 @@ func (dec *xDecoder) newEmbeddedSwap(prev chart.StateMix, msg json.RawMessage, p
 	var next chart.StateMix
 	next.OnSwap = func(typeName string, p jsn.SwapBlock) (okay bool) {
 		pick := newStringKey(pick)
-		if _, ok := p.SetChoice(pick); !ok {
+		if ok := p.SetSwap(pick); !ok {
 			dec.Error(errutil.Fmt("swap has unexpected %q", pick))
 		} else {
 			dec.PushState(dec.newSwap(msg))

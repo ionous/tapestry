@@ -422,17 +422,20 @@ var GrammarMaker_Optional_Marshal = GrammarMaker_Marshal
 
 type GrammarMaker_Slot struct{ ptr *GrammarMaker }
 
-func (At GrammarMaker_Slot) GetType() string              { return GrammarMaker_Type }
-func (at GrammarMaker_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at GrammarMaker_Slot) GetType() string              { return GrammarMaker_Type }
+func (at GrammarMaker_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at GrammarMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(GrammarMaker)
 	return
 }
 
 func GrammarMaker_Marshal(m jsn.Marshaler, ptr *GrammarMaker) (err error) {
-	if err = m.MarshalBlock(GrammarMaker_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := GrammarMaker_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -658,17 +661,20 @@ var ScannerMaker_Optional_Marshal = ScannerMaker_Marshal
 
 type ScannerMaker_Slot struct{ ptr *ScannerMaker }
 
-func (At ScannerMaker_Slot) GetType() string              { return ScannerMaker_Type }
-func (at ScannerMaker_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at ScannerMaker_Slot) GetType() string              { return ScannerMaker_Type }
+func (at ScannerMaker_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at ScannerMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(ScannerMaker)
 	return
 }
 
 func ScannerMaker_Marshal(m jsn.Marshaler, ptr *ScannerMaker) (err error) {
-	if err = m.MarshalBlock(ScannerMaker_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := ScannerMaker_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}

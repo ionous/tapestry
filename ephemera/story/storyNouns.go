@@ -22,8 +22,8 @@ func (*Pronoun) ImportNouns(*Importer) (err error) {
 }
 
 func (op *NounPhrase) ImportNouns(k *Importer) (err error) {
-	if imp, ok := op.Opt.(NounImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+	if imp, ok := op.Value.(NounImporter); !ok {
+		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
 		err = imp.ImportNouns(k)
 	}

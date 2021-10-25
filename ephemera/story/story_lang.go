@@ -280,7 +280,8 @@ func ActionName_Repeats_Marshal(m jsn.Marshaler, vals *[]ActionName) (err error)
 
 // ActionParams swaps between various options
 type ActionParams struct {
-	Opt interface{}
+	Value  interface{}
+	Choice string
 }
 
 const ActionParams_Common_Opt = "$COMMON"
@@ -306,33 +307,24 @@ const ActionParams_Type = "action_params"
 
 func (op *ActionParams) GetType() string { return ActionParams_Type }
 
-func (op *ActionParams) GetChoice() (ret string, okay bool) {
-	switch op.Opt.(type) {
-	case nil:
-		okay = true
-	case *CommonAction:
-		ret, okay = ActionParams_Common_Opt, true
-	case *PairedAction:
-		ret, okay = ActionParams_Dual_Opt, true
-	case *AbstractAction:
-		ret, okay = ActionParams_None_Opt, true
-	}
-	return
+func (op *ActionParams) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
 }
 
-func (op *ActionParams) SetChoice(c string) (ret interface{}, okay bool) {
+func (op *ActionParams) SetSwap(c string) (okay bool) {
 	switch c {
 	case "":
-		op.Opt, okay = nil, true
+		op.Choice, op.Value = c, nil
+		okay = true
 	case ActionParams_Common_Opt:
-		opt := new(CommonAction)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(CommonAction)
+		okay = true
 	case ActionParams_Dual_Opt:
-		opt := new(PairedAction)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(PairedAction)
+		okay = true
 	case ActionParams_None_Opt:
-		opt := new(AbstractAction)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(AbstractAction)
+		okay = true
 	}
 	return
 }
@@ -342,8 +334,10 @@ func (op *ActionParams) Marshal(m jsn.Marshaler) error {
 }
 func ActionParams_Marshal(m jsn.Marshaler, val *ActionParams) (err error) {
 	if err = m.MarshalBlock(val); err == nil {
-		if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -1880,7 +1874,8 @@ func EventPhase_Repeats_Marshal(m jsn.Marshaler, vals *[]EventPhase) (err error)
 
 // EventTarget swaps between various options
 type EventTarget struct {
-	Opt interface{}
+	Value  interface{}
+	Choice string
 }
 
 const EventTarget_Kinds_Opt = "$KINDS"
@@ -1904,28 +1899,21 @@ const EventTarget_Type = "event_target"
 
 func (op *EventTarget) GetType() string { return EventTarget_Type }
 
-func (op *EventTarget) GetChoice() (ret string, okay bool) {
-	switch op.Opt.(type) {
-	case nil:
-		okay = true
-	case *PluralKinds:
-		ret, okay = EventTarget_Kinds_Opt, true
-	case *NamedNoun:
-		ret, okay = EventTarget_NamedNoun_Opt, true
-	}
-	return
+func (op *EventTarget) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
 }
 
-func (op *EventTarget) SetChoice(c string) (ret interface{}, okay bool) {
+func (op *EventTarget) SetSwap(c string) (okay bool) {
 	switch c {
 	case "":
-		op.Opt, okay = nil, true
+		op.Choice, op.Value = c, nil
+		okay = true
 	case EventTarget_Kinds_Opt:
-		opt := new(PluralKinds)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(PluralKinds)
+		okay = true
 	case EventTarget_NamedNoun_Opt:
-		opt := new(NamedNoun)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(NamedNoun)
+		okay = true
 	}
 	return
 }
@@ -1935,8 +1923,10 @@ func (op *EventTarget) Marshal(m jsn.Marshaler) error {
 }
 func EventTarget_Marshal(m jsn.Marshaler, val *EventTarget) (err error) {
 	if err = m.MarshalBlock(val); err == nil {
-		if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -1963,8 +1953,9 @@ func EventTarget_Repeats_Marshal(m jsn.Marshaler, vals *[]EventTarget) (err erro
 
 // ExtType swaps between various options
 type ExtType struct {
-	At  reader.Position `if:"internal"`
-	Opt interface{}
+	At     reader.Position `if:"internal"`
+	Value  interface{}
+	Choice string
 }
 
 const ExtType_Numbers_Opt = "$NUMBERS"
@@ -1992,38 +1983,27 @@ const ExtType_Type = "ext_type"
 
 func (op *ExtType) GetType() string { return ExtType_Type }
 
-func (op *ExtType) GetChoice() (ret string, okay bool) {
-	switch op.Opt.(type) {
-	case nil:
-		okay = true
-	case *NumberList:
-		ret, okay = ExtType_Numbers_Opt, true
-	case *TextList:
-		ret, okay = ExtType_TextList_Opt, true
-	case *RecordType:
-		ret, okay = ExtType_Record_Opt, true
-	case *RecordList:
-		ret, okay = ExtType_Records_Opt, true
-	}
-	return
+func (op *ExtType) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
 }
 
-func (op *ExtType) SetChoice(c string) (ret interface{}, okay bool) {
+func (op *ExtType) SetSwap(c string) (okay bool) {
 	switch c {
 	case "":
-		op.Opt, okay = nil, true
+		op.Choice, op.Value = c, nil
+		okay = true
 	case ExtType_Numbers_Opt:
-		opt := new(NumberList)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(NumberList)
+		okay = true
 	case ExtType_TextList_Opt:
-		opt := new(TextList)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(TextList)
+		okay = true
 	case ExtType_Record_Opt:
-		opt := new(RecordType)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(RecordType)
+		okay = true
 	case ExtType_Records_Opt:
-		opt := new(RecordList)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(RecordList)
+		okay = true
 	}
 	return
 }
@@ -2034,8 +2014,10 @@ func (op *ExtType) Marshal(m jsn.Marshaler) error {
 func ExtType_Marshal(m jsn.Marshaler, val *ExtType) (err error) {
 	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(val); err == nil {
-		if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -3212,8 +3194,9 @@ func NounName_Repeats_Marshal(m jsn.Marshaler, vals *[]NounName) (err error) {
 
 // NounPhrase swaps between various options
 type NounPhrase struct {
-	At  reader.Position `if:"internal"`
-	Opt interface{}
+	At     reader.Position `if:"internal"`
+	Value  interface{}
+	Choice string
 }
 
 const NounPhrase_KindOfNoun_Opt = "$KIND_OF_NOUN"
@@ -3239,33 +3222,24 @@ const NounPhrase_Type = "noun_phrase"
 
 func (op *NounPhrase) GetType() string { return NounPhrase_Type }
 
-func (op *NounPhrase) GetChoice() (ret string, okay bool) {
-	switch op.Opt.(type) {
-	case nil:
-		okay = true
-	case *KindOfNoun:
-		ret, okay = NounPhrase_KindOfNoun_Opt, true
-	case *NounTraits:
-		ret, okay = NounPhrase_NounTraits_Opt, true
-	case *NounRelation:
-		ret, okay = NounPhrase_NounRelation_Opt, true
-	}
-	return
+func (op *NounPhrase) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
 }
 
-func (op *NounPhrase) SetChoice(c string) (ret interface{}, okay bool) {
+func (op *NounPhrase) SetSwap(c string) (okay bool) {
 	switch c {
 	case "":
-		op.Opt, okay = nil, true
+		op.Choice, op.Value = c, nil
+		okay = true
 	case NounPhrase_KindOfNoun_Opt:
-		opt := new(KindOfNoun)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(KindOfNoun)
+		okay = true
 	case NounPhrase_NounTraits_Opt:
-		opt := new(NounTraits)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(NounTraits)
+		okay = true
 	case NounPhrase_NounRelation_Opt:
-		opt := new(NounRelation)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(NounRelation)
+		okay = true
 	}
 	return
 }
@@ -3276,8 +3250,10 @@ func (op *NounPhrase) Marshal(m jsn.Marshaler) error {
 func NounPhrase_Marshal(m jsn.Marshaler, val *NounPhrase) (err error) {
 	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(val); err == nil {
-		if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -4802,7 +4778,8 @@ func PrimitiveType_Repeats_Marshal(m jsn.Marshaler, vals *[]PrimitiveType) (err 
 
 // PrimitiveValue swaps between various options
 type PrimitiveValue struct {
-	Opt interface{}
+	Value  interface{}
+	Choice string
 }
 
 const PrimitiveValue_BoxedText_Opt = "$BOXED_TEXT"
@@ -4826,28 +4803,21 @@ const PrimitiveValue_Type = "primitive_value"
 
 func (op *PrimitiveValue) GetType() string { return PrimitiveValue_Type }
 
-func (op *PrimitiveValue) GetChoice() (ret string, okay bool) {
-	switch op.Opt.(type) {
-	case nil:
-		okay = true
-	case *BoxedText:
-		ret, okay = PrimitiveValue_BoxedText_Opt, true
-	case *BoxedNumber:
-		ret, okay = PrimitiveValue_BoxedNumber_Opt, true
-	}
-	return
+func (op *PrimitiveValue) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
 }
 
-func (op *PrimitiveValue) SetChoice(c string) (ret interface{}, okay bool) {
+func (op *PrimitiveValue) SetSwap(c string) (okay bool) {
 	switch c {
 	case "":
-		op.Opt, okay = nil, true
+		op.Choice, op.Value = c, nil
+		okay = true
 	case PrimitiveValue_BoxedText_Opt:
-		opt := new(BoxedText)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(BoxedText)
+		okay = true
 	case PrimitiveValue_BoxedNumber_Opt:
-		opt := new(BoxedNumber)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(BoxedNumber)
+		okay = true
 	}
 	return
 }
@@ -4857,8 +4827,10 @@ func (op *PrimitiveValue) Marshal(m jsn.Marshaler) error {
 }
 func PrimitiveValue_Marshal(m jsn.Marshaler, val *PrimitiveValue) (err error) {
 	if err = m.MarshalBlock(val); err == nil {
-		if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -4885,8 +4857,9 @@ func PrimitiveValue_Repeats_Marshal(m jsn.Marshaler, vals *[]PrimitiveValue) (er
 
 // ProgramHook swaps between various options
 type ProgramHook struct {
-	At  reader.Position `if:"internal"`
-	Opt interface{}
+	At     reader.Position `if:"internal"`
+	Value  interface{}
+	Choice string
 }
 
 const ProgramHook_Activity_Opt = "$ACTIVITY"
@@ -4908,23 +4881,18 @@ const ProgramHook_Type = "program_hook"
 
 func (op *ProgramHook) GetType() string { return ProgramHook_Type }
 
-func (op *ProgramHook) GetChoice() (ret string, okay bool) {
-	switch op.Opt.(type) {
-	case nil:
-		okay = true
-	case *core.Activity:
-		ret, okay = ProgramHook_Activity_Opt, true
-	}
-	return
+func (op *ProgramHook) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
 }
 
-func (op *ProgramHook) SetChoice(c string) (ret interface{}, okay bool) {
+func (op *ProgramHook) SetSwap(c string) (okay bool) {
 	switch c {
 	case "":
-		op.Opt, okay = nil, true
+		op.Choice, op.Value = c, nil
+		okay = true
 	case ProgramHook_Activity_Opt:
-		opt := new(core.Activity)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(core.Activity)
+		okay = true
 	}
 	return
 }
@@ -4935,8 +4903,10 @@ func (op *ProgramHook) Marshal(m jsn.Marshaler) error {
 func ProgramHook_Marshal(m jsn.Marshaler, val *ProgramHook) (err error) {
 	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(val); err == nil {
-		if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -5233,8 +5203,9 @@ func PropertyDecl_Marshal(m jsn.Marshaler, val *PropertyDecl) (err error) {
 
 // PropertyType swaps between various options
 type PropertyType struct {
-	At  reader.Position `if:"internal"`
-	Opt interface{}
+	At     reader.Position `if:"internal"`
+	Value  interface{}
+	Choice string
 }
 
 const PropertyType_PropertyAspect_Opt = "$PROPERTY_ASPECT"
@@ -5260,33 +5231,24 @@ const PropertyType_Type = "property_type"
 
 func (op *PropertyType) GetType() string { return PropertyType_Type }
 
-func (op *PropertyType) GetChoice() (ret string, okay bool) {
-	switch op.Opt.(type) {
-	case nil:
-		okay = true
-	case *PropertyAspect:
-		ret, okay = PropertyType_PropertyAspect_Opt, true
-	case *PrimitiveType:
-		ret, okay = PropertyType_Primitive_Opt, true
-	case *ExtType:
-		ret, okay = PropertyType_Ext_Opt, true
-	}
-	return
+func (op *PropertyType) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
 }
 
-func (op *PropertyType) SetChoice(c string) (ret interface{}, okay bool) {
+func (op *PropertyType) SetSwap(c string) (okay bool) {
 	switch c {
 	case "":
-		op.Opt, okay = nil, true
+		op.Choice, op.Value = c, nil
+		okay = true
 	case PropertyType_PropertyAspect_Opt:
-		opt := new(PropertyAspect)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(PropertyAspect)
+		okay = true
 	case PropertyType_Primitive_Opt:
-		opt := new(PrimitiveType)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(PrimitiveType)
+		okay = true
 	case PropertyType_Ext_Opt:
-		opt := new(ExtType)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(ExtType)
+		okay = true
 	}
 	return
 }
@@ -5297,8 +5259,10 @@ func (op *PropertyType) Marshal(m jsn.Marshaler) error {
 func PropertyType_Marshal(m jsn.Marshaler, val *PropertyType) (err error) {
 	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(val); err == nil {
-		if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -5639,8 +5603,9 @@ func RecordsPossessProperties_Marshal(m jsn.Marshaler, val *RecordsPossessProper
 
 // RelationCardinality swaps between various options
 type RelationCardinality struct {
-	At  reader.Position `if:"internal"`
-	Opt interface{}
+	At     reader.Position `if:"internal"`
+	Value  interface{}
+	Choice string
 }
 
 const RelationCardinality_OneToOne_Opt = "$ONE_TO_ONE"
@@ -5668,38 +5633,27 @@ const RelationCardinality_Type = "relation_cardinality"
 
 func (op *RelationCardinality) GetType() string { return RelationCardinality_Type }
 
-func (op *RelationCardinality) GetChoice() (ret string, okay bool) {
-	switch op.Opt.(type) {
-	case nil:
-		okay = true
-	case *OneToOne:
-		ret, okay = RelationCardinality_OneToOne_Opt, true
-	case *OneToMany:
-		ret, okay = RelationCardinality_OneToMany_Opt, true
-	case *ManyToOne:
-		ret, okay = RelationCardinality_ManyToOne_Opt, true
-	case *ManyToMany:
-		ret, okay = RelationCardinality_ManyToMany_Opt, true
-	}
-	return
+func (op *RelationCardinality) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
 }
 
-func (op *RelationCardinality) SetChoice(c string) (ret interface{}, okay bool) {
+func (op *RelationCardinality) SetSwap(c string) (okay bool) {
 	switch c {
 	case "":
-		op.Opt, okay = nil, true
+		op.Choice, op.Value = c, nil
+		okay = true
 	case RelationCardinality_OneToOne_Opt:
-		opt := new(OneToOne)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(OneToOne)
+		okay = true
 	case RelationCardinality_OneToMany_Opt:
-		opt := new(OneToMany)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(OneToMany)
+		okay = true
 	case RelationCardinality_ManyToOne_Opt:
-		opt := new(ManyToOne)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(ManyToOne)
+		okay = true
 	case RelationCardinality_ManyToMany_Opt:
-		opt := new(ManyToMany)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(ManyToMany)
+		okay = true
 	}
 	return
 }
@@ -5710,8 +5664,10 @@ func (op *RelationCardinality) Marshal(m jsn.Marshaler) error {
 func RelationCardinality_Marshal(m jsn.Marshaler, val *RelationCardinality) (err error) {
 	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(val); err == nil {
-		if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -6235,17 +6191,20 @@ var StoryStatement_Optional_Marshal = StoryStatement_Marshal
 
 type StoryStatement_Slot struct{ ptr *StoryStatement }
 
-func (At StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
-func (at StoryStatement_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
+func (at StoryStatement_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(StoryStatement)
 	return
 }
 
 func StoryStatement_Marshal(m jsn.Marshaler, ptr *StoryStatement) (err error) {
-	if err = m.MarshalBlock(StoryStatement_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := StoryStatement_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -6767,17 +6726,20 @@ var Testing_Optional_Marshal = Testing_Marshal
 
 type Testing_Slot struct{ ptr *Testing }
 
-func (At Testing_Slot) GetType() string              { return Testing_Type }
-func (at Testing_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at Testing_Slot) GetType() string              { return Testing_Type }
+func (at Testing_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at Testing_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(Testing)
 	return
 }
 
 func Testing_Marshal(m jsn.Marshaler, ptr *Testing) (err error) {
-	if err = m.MarshalBlock(Testing_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := Testing_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -7083,8 +7045,9 @@ func VariableDecl_Marshal(m jsn.Marshaler, val *VariableDecl) (err error) {
 
 // VariableType swaps between various options
 type VariableType struct {
-	At  reader.Position `if:"internal"`
-	Opt interface{}
+	At     reader.Position `if:"internal"`
+	Value  interface{}
+	Choice string
 }
 
 const VariableType_Primitive_Opt = "$PRIMITIVE"
@@ -7110,33 +7073,24 @@ const VariableType_Type = "variable_type"
 
 func (op *VariableType) GetType() string { return VariableType_Type }
 
-func (op *VariableType) GetChoice() (ret string, okay bool) {
-	switch op.Opt.(type) {
-	case nil:
-		okay = true
-	case *PrimitiveType:
-		ret, okay = VariableType_Primitive_Opt, true
-	case *ObjectType:
-		ret, okay = VariableType_Object_Opt, true
-	case *ExtType:
-		ret, okay = VariableType_Ext_Opt, true
-	}
-	return
+func (op *VariableType) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
 }
 
-func (op *VariableType) SetChoice(c string) (ret interface{}, okay bool) {
+func (op *VariableType) SetSwap(c string) (okay bool) {
 	switch c {
 	case "":
-		op.Opt, okay = nil, true
+		op.Choice, op.Value = c, nil
+		okay = true
 	case VariableType_Primitive_Opt:
-		opt := new(PrimitiveType)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(PrimitiveType)
+		okay = true
 	case VariableType_Object_Opt:
-		opt := new(ObjectType)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(ObjectType)
+		okay = true
 	case VariableType_Ext_Opt:
-		opt := new(ExtType)
-		op.Opt, ret, okay = opt, opt, true
+		op.Choice, op.Value = c, new(ExtType)
+		okay = true
 	}
 	return
 }
@@ -7147,8 +7101,10 @@ func (op *VariableType) Marshal(m jsn.Marshaler) error {
 func VariableType_Marshal(m jsn.Marshaler, val *VariableType) (err error) {
 	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(val); err == nil {
-		if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}

@@ -5,8 +5,9 @@ module.exports = `
 // {{Pascal name}} swaps between various options
 type {{Pascal name}} struct {
 {{~#if (IsPositioned this)}}
-  At  reader.Position \`if:"internal"\`{{/if}}
-  Opt interface{}
+  At     reader.Position \`if:"internal"\`{{/if}}
+  Value  interface{}
+  Choice string
 }
 
 {{#each with.params}}
@@ -17,26 +18,19 @@ const {{Pascal ../name}}_{{Pascal @key}}_Opt= "{{@key}}";
 
 func (op* {{Pascal name}}) GetType() string { return {{Pascal name}}_Type }
 
-func (op* {{Pascal name}}) GetChoice() (ret string, okay bool) {
-  switch op.Opt.(type) {
-  case nil:
-    okay = true
-{{#each with.params}}
-  case *{{TypeOf this}}:
-    ret, okay = {{Pascal ../name}}_{{Pascal @key}}_Opt, true
-{{/each}}
-  }
-  return
+func (op* {{Pascal name}}) GetSwap() (string, interface{}) {
+  return op.Choice, op.Value
 }
 
-func (op* {{Pascal name}}) SetChoice(c string) (ret interface{}, okay bool) {
+func (op* {{Pascal name}}) SetSwap(c string) (okay bool) {
   switch c {
   case "":
-    op.Opt, okay = nil, true
+    op.Choice, op.Value = c, nil
+    okay = true
 {{#each with.params}}
   case {{Pascal ../name}}_{{Pascal @key}}_Opt:
-    opt := new({{TypeOf this}})
-    op.Opt, ret, okay = opt, opt, true
+    op.Choice, op.Value = c, new({{TypeOf this}})
+    okay = true
 {{/each}}
   }
   return
@@ -59,8 +53,10 @@ func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, val *{{Pascal name}}) (err 
   m.SetCursor(val.At.Offset)
 {{/if}}
   if err = m.MarshalBlock(val); err == nil {
-    if e := val.Opt.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-      m.Error(e)
+    if _, ptr := val.GetSwap(); ptr != nil {
+      if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+        m.Error(e)
+      }
     }
     m.EndBlock()
   }

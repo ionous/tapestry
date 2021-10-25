@@ -70,9 +70,7 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
 	next.OnSwap = func(typeName string, p jsn.SwapBlock) (okay bool) {
-		if choice, ok := p.GetChoice(); !ok {
-			m.Error(errutil.New("couldnt determine choice of", p))
-		} else if len(choice) > 0 {
+		if choice, _ := p.GetSwap(); len(choice) > 0 {
 			m.PushState(newSwap(m, choice, detMap{
 				Id:   m.FlushCursor(),
 				Type: typeName,

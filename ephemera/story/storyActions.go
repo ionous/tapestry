@@ -40,7 +40,7 @@ func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret ep
 	type actionImporter interface {
 		ImportAction(*Importer, eph.Named) error
 	}
-	return n, op.ActionParams.Opt.(actionImporter).ImportAction(k, n)
+	return n, op.ActionParams.Value.(actionImporter).ImportAction(k, n)
 }
 
 func (op *CommonAction) ImportAction(k *Importer, n eph.Named) (err error) {

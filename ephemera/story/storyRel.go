@@ -27,8 +27,8 @@ func (op *RelationCardinality) ImportCardinality(k *Importer) (ret importedCardi
 	type cardinalityImporter interface {
 		ImportCardinality(k *Importer) (importedCardinality, error)
 	}
-	if c, ok := op.Opt.(cardinalityImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+	if c, ok := op.Value.(cardinalityImporter); !ok {
+		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
 		ret, err = c.ImportCardinality(k)
 	}

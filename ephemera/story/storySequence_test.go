@@ -15,6 +15,7 @@ import (
 	"github.com/kr/pretty"
 )
 
+// test that importing cycling text transforms to the proper runtime command
 func TestImportSequence(t *testing.T) {
 	k, db := newImporter(t, testdb.Memory)
 	defer db.Close()
@@ -23,10 +24,13 @@ func TestImportSequence(t *testing.T) {
 		t.Fatal(e)
 	} else if e := din.Decode(&cmd, iffy.Registry(), b); e != nil {
 		t.Fatal(e)
-	} else if ptr, e := cmd.ImportStub(k); e != nil {
-		t.Fatal(e)
-	} else if diff := pretty.Diff(ptr, &_import_target); len(diff) > 0 {
-		t.Fatal(pretty.Print(_import_target, cmd))
+	} else {
+		p := core.FromText{&cmd} // wrap the cycle text in a slot since that's the level ImportStub operates on
+		if k.ImportStory(t.Name(), &p); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(p.Val, &_import_target); len(diff) > 0 {
+			t.Fatal(pretty.Print(_import_target, cmd))
+		}
 	}
 }
 

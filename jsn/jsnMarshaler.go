@@ -60,15 +60,15 @@ type Block interface {
 type FlowBlock interface {
 	Block
 	GetLede() string
-	GetValue() interface{}
+	GetFlow() interface{}
 }
 
 // selects one of a closed set of possible values
 // the swap is closed ( written ) with a call to EndBlock()
 type SwapBlock interface {
 	Block
-	GetChoice() (string, bool)
-	SetChoice(string) (interface{}, bool)
+	GetSwap() (string, interface{})
+	SetSwap(string) bool
 }
 
 // starts a series of values

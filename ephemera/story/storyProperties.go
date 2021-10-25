@@ -22,8 +22,8 @@ func (op *PropertyType) ImportPropertyType(k *Importer, kind, prop eph.Named) (e
 	type propertyTypeImporter interface {
 		ImportPropertyType(k *Importer, kind, prop eph.Named) error
 	}
-	if opt, ok := op.Opt.(propertyTypeImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+	if opt, ok := op.Value.(propertyTypeImporter); !ok {
+		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
 		err = opt.ImportPropertyType(k, kind, prop)
 		// Comment      *Lines
@@ -66,8 +66,8 @@ func (op *PrimitiveType) ImportPropertyType(k *Importer, kind, prop eph.Named) (
 
 // number_list, text_list, record_type, record_list
 func (op *ExtType) ImportVariableType(k *Importer) (retType eph.Named, retAff string, err error) {
-	if imp, ok := op.Opt.(primTypeImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+	if imp, ok := op.Value.(primTypeImporter); !ok {
+		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else if typeName, aff, e := imp.ImportPrimType(k); e != nil {
 		err = e
 	} else {
@@ -85,8 +85,8 @@ func (op *ExtType) ImportVariableType(k *Importer) (retType eph.Named, retAff st
 
 // number_list, text_list, record_type, record_list
 func (op *ExtType) ImportPropertyType(k *Importer, kind, prop eph.Named) (err error) {
-	if imp, ok := op.Opt.(primTypeImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+	if imp, ok := op.Value.(primTypeImporter); !ok {
+		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else if primType, primAff, e := imp.ImportPrimType(k); e != nil {
 		err = e
 	} else {

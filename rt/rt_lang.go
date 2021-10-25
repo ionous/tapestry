@@ -12,8 +12,8 @@ var Assignment_Optional_Marshal = Assignment_Marshal
 
 type Assignment_Slot struct{ ptr *Assignment }
 
-func (At Assignment_Slot) GetType() string              { return Assignment_Type }
-func (at Assignment_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at Assignment_Slot) GetType() string              { return Assignment_Type }
+func (at Assignment_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at Assignment_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(Assignment)
 	return
@@ -28,9 +28,12 @@ func Assignment_Marshal(m jsn.Marshaler, ptr *Assignment) (err error) {
 	return
 }
 func Assignment_DefaultMarshal(m jsn.Marshaler, ptr *Assignment) (err error) {
-	if err = m.MarshalBlock(Assignment_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := Assignment_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -61,8 +64,8 @@ var BoolEval_Optional_Marshal = BoolEval_Marshal
 
 type BoolEval_Slot struct{ ptr *BoolEval }
 
-func (At BoolEval_Slot) GetType() string              { return BoolEval_Type }
-func (at BoolEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at BoolEval_Slot) GetType() string              { return BoolEval_Type }
+func (at BoolEval_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at BoolEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(BoolEval)
 	return
@@ -77,9 +80,12 @@ func BoolEval_Marshal(m jsn.Marshaler, ptr *BoolEval) (err error) {
 	return
 }
 func BoolEval_DefaultMarshal(m jsn.Marshaler, ptr *BoolEval) (err error) {
-	if err = m.MarshalBlock(BoolEval_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := BoolEval_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -110,17 +116,20 @@ var Execute_Optional_Marshal = Execute_Marshal
 
 type Execute_Slot struct{ ptr *Execute }
 
-func (At Execute_Slot) GetType() string              { return Execute_Type }
-func (at Execute_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at Execute_Slot) GetType() string              { return Execute_Type }
+func (at Execute_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at Execute_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(Execute)
 	return
 }
 
 func Execute_Marshal(m jsn.Marshaler, ptr *Execute) (err error) {
-	if err = m.MarshalBlock(Execute_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := Execute_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -151,8 +160,8 @@ var NumListEval_Optional_Marshal = NumListEval_Marshal
 
 type NumListEval_Slot struct{ ptr *NumListEval }
 
-func (At NumListEval_Slot) GetType() string              { return NumListEval_Type }
-func (at NumListEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at NumListEval_Slot) GetType() string              { return NumListEval_Type }
+func (at NumListEval_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at NumListEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(NumListEval)
 	return
@@ -167,9 +176,12 @@ func NumListEval_Marshal(m jsn.Marshaler, ptr *NumListEval) (err error) {
 	return
 }
 func NumListEval_DefaultMarshal(m jsn.Marshaler, ptr *NumListEval) (err error) {
-	if err = m.MarshalBlock(NumListEval_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := NumListEval_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -200,8 +212,8 @@ var NumberEval_Optional_Marshal = NumberEval_Marshal
 
 type NumberEval_Slot struct{ ptr *NumberEval }
 
-func (At NumberEval_Slot) GetType() string              { return NumberEval_Type }
-func (at NumberEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at NumberEval_Slot) GetType() string              { return NumberEval_Type }
+func (at NumberEval_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at NumberEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(NumberEval)
 	return
@@ -216,9 +228,12 @@ func NumberEval_Marshal(m jsn.Marshaler, ptr *NumberEval) (err error) {
 	return
 }
 func NumberEval_DefaultMarshal(m jsn.Marshaler, ptr *NumberEval) (err error) {
-	if err = m.MarshalBlock(NumberEval_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := NumberEval_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -249,8 +264,8 @@ var RecordEval_Optional_Marshal = RecordEval_Marshal
 
 type RecordEval_Slot struct{ ptr *RecordEval }
 
-func (At RecordEval_Slot) GetType() string              { return RecordEval_Type }
-func (at RecordEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at RecordEval_Slot) GetType() string              { return RecordEval_Type }
+func (at RecordEval_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at RecordEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(RecordEval)
 	return
@@ -265,9 +280,12 @@ func RecordEval_Marshal(m jsn.Marshaler, ptr *RecordEval) (err error) {
 	return
 }
 func RecordEval_DefaultMarshal(m jsn.Marshaler, ptr *RecordEval) (err error) {
-	if err = m.MarshalBlock(RecordEval_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := RecordEval_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -298,8 +316,8 @@ var RecordListEval_Optional_Marshal = RecordListEval_Marshal
 
 type RecordListEval_Slot struct{ ptr *RecordListEval }
 
-func (At RecordListEval_Slot) GetType() string              { return RecordListEval_Type }
-func (at RecordListEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at RecordListEval_Slot) GetType() string              { return RecordListEval_Type }
+func (at RecordListEval_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at RecordListEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(RecordListEval)
 	return
@@ -314,9 +332,12 @@ func RecordListEval_Marshal(m jsn.Marshaler, ptr *RecordListEval) (err error) {
 	return
 }
 func RecordListEval_DefaultMarshal(m jsn.Marshaler, ptr *RecordListEval) (err error) {
-	if err = m.MarshalBlock(RecordListEval_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := RecordListEval_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -347,8 +368,8 @@ var TextEval_Optional_Marshal = TextEval_Marshal
 
 type TextEval_Slot struct{ ptr *TextEval }
 
-func (At TextEval_Slot) GetType() string              { return TextEval_Type }
-func (at TextEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at TextEval_Slot) GetType() string              { return TextEval_Type }
+func (at TextEval_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at TextEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(TextEval)
 	return
@@ -363,9 +384,12 @@ func TextEval_Marshal(m jsn.Marshaler, ptr *TextEval) (err error) {
 	return
 }
 func TextEval_DefaultMarshal(m jsn.Marshaler, ptr *TextEval) (err error) {
-	if err = m.MarshalBlock(TextEval_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := TextEval_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
@@ -396,8 +420,8 @@ var TextListEval_Optional_Marshal = TextListEval_Marshal
 
 type TextListEval_Slot struct{ ptr *TextListEval }
 
-func (At TextListEval_Slot) GetType() string              { return TextListEval_Type }
-func (at TextListEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
+func (at TextListEval_Slot) GetType() string              { return TextListEval_Type }
+func (at TextListEval_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
 func (at TextListEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(TextListEval)
 	return
@@ -412,9 +436,12 @@ func TextListEval_Marshal(m jsn.Marshaler, ptr *TextListEval) (err error) {
 	return
 }
 func TextListEval_DefaultMarshal(m jsn.Marshaler, ptr *TextListEval) (err error) {
-	if err = m.MarshalBlock(TextListEval_Slot{ptr}); err == nil {
-		if e := (*ptr).(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-			m.Error(e)
+	slot := TextListEval_Slot{ptr}
+	if err = m.MarshalBlock(slot); err == nil {
+		if a, ok := slot.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}

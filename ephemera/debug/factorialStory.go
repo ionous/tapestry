@@ -23,7 +23,8 @@ var FactorialStory = &story.Story{
 					Str: "factorial",
 				},
 				Hook: story.ProgramHook{
-					Opt: &core.Activity{
+					Choice: story.ProgramHook_Activity_Opt,
+					Value: &core.Activity{
 						Exe: []rt.Execute{
 							&core.SayText{
 								Text: &core.PrintNum{
@@ -54,7 +55,8 @@ var FactorialStory = &story.Story{
 					PatternRule: []story.PatternRule{{
 						Guard: &core.Always{},
 						Hook: story.ProgramHook{
-							Opt: &core.Activity{[]rt.Execute{
+							Choice: story.ProgramHook_Activity_Opt,
+							Value: &core.Activity{[]rt.Execute{
 								&core.Assign{
 									Var: numVar,
 									From: &core.FromNum{&core.ProductOf{
@@ -77,7 +79,8 @@ var FactorialStory = &story.Story{
 							Is: &core.Equal{},
 							B:  &core.NumValue{}},
 						Hook: story.ProgramHook{
-							Opt: &core.Activity{[]rt.Execute{
+							Choice: story.ProgramHook_Activity_Opt,
+							Value: &core.Activity{[]rt.Execute{
 								&core.Assign{
 									Var:  numVar,
 									From: &core.FromNum{&core.NumValue{Num: 1}},
@@ -97,7 +100,8 @@ var numberDecl = story.VariableDecl{
 	},
 	Name: numVar,
 	Type: story.VariableType{
-		Opt: &story.PrimitiveType{
+		Choice: story.VariableType_Primitive_Opt,
+		Value: &story.PrimitiveType{
 			Str: story.PrimitiveType_Number,
 		}},
 }

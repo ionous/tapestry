@@ -88,7 +88,7 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 			dec.Error(e)
 		} else if !slot.SetSlot(v) {
 			dec.Error(errutil.Fmt("couldn't put %T into slot %T", v, slot))
-		} else {
+		} else if v != nil {
 			dec.PushState(dec.newSlot(d.Msg))
 			okay = true
 		}
@@ -106,7 +106,7 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 				if okay {
 					dec.Error(errutil.New("swap has too many choices"))
 					break
-				} else if _, ok := p.SetChoice(k); !ok {
+				} else if ok := p.SetSwap(k); !ok {
 					dec.Error(errutil.New("swap has unexpected choice", k))
 					break
 				} else {

@@ -16,7 +16,7 @@ func (op *NamedNoun) NewName(k *Importer) (ret eph.Named, err error) {
 }
 
 func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
-	if opt, ok := op.Target.Opt.(interface {
+	if opt, ok := op.Target.Value.(interface {
 		NewName(*Importer) (eph.Named, error)
 	}); !ok {
 		err = errutil.Fmt("unknown event block target %T at %s", opt, op.At)

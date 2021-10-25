@@ -36,9 +36,9 @@ func NewImporter(db *sql.DB) *Importer {
 	return k
 }
 
-func (k *Importer) ImportStory(path string, src *Story) (err error) {
+func (k *Importer) ImportStory(path string, tgt jsn.Marshalee) (err error) {
 	k.SetSource(path)
-	return importStory(k, src)
+	return importStory(k, tgt)
 }
 
 func (k *Importer) NewName(name, category, ofs string) eph.Named {
@@ -104,7 +104,7 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 			BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
 					err = errutil.Fmt("trying to post import something other than a flow")
-				} else if name, ok := flow.GetValue().(*TestName); !ok {
+				} else if name, ok := flow.GetFlow().(*TestName); !ok {
 					err = errutil.Fmt("trying to post import something other than a flow")
 				} else {
 					// unpack the name, resolving "CurrentTest" to the name of the current test
@@ -126,7 +126,7 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 		},
 		OtherBlocks: KeyMap{
 			BlockStart: func(b jsn.Block, v interface{}) (err error) {
-				switch newBlock := v.(type) {
+				switch newBlock := b.(type) {
 				case jsn.SlotBlock:
 					if slat, ok := newBlock.GetSlot(); !ok {
 						err = jsn.Missing
@@ -146,7 +146,7 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 			BlockEnd: func(b jsn.Block, slot interface{}) (err error) {
 				switch oldBlock := b.(type) {
 				case jsn.FlowBlock:
-					switch tgt := oldBlock.GetValue().(type) {
+					switch tgt := oldBlock.GetFlow().(type) {
 					case StoryStatement:
 						err = tgt.ImportPhrase(k)
 					}

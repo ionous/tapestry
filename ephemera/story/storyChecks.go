@@ -18,6 +18,11 @@ func (op *TestRule) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
+func (op *TestScene) ImportPhrase(k *Importer) (err error) {
+	// handled separately so we can have separate begin/end frames
+	return
+}
+
 func (op *TestStatement) ImportPhrase(k *Importer) (err error) {
 	if t := op.Test; t == nil {
 		err = ImportError(op, op.At, errutil.Fmt("%w Test", MissingSlot))

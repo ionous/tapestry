@@ -15,7 +15,8 @@ func TestPatternVars(t *testing.T) {
 		PatternName: value.PatternName{Str: "corral"},
 		VariableDecl: []story.VariableDecl{{
 			Type: story.VariableType{
-				Opt: &story.ObjectType{
+				Choice: story.VariableType_Object_Opt,
+				Value: &story.ObjectType{
 					// An: story.Ana{
 					// 	Str: "$AN",
 					// },

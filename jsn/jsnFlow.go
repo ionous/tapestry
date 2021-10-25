@@ -18,6 +18,6 @@ func (n Flow) GetType() string {
 func (n Flow) GetLede() string {
 	return n.lede
 }
-func (n Flow) GetValue() interface{} {
+func (n Flow) GetFlow() interface{} {
 	return n.op
 }

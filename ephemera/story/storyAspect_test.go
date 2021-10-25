@@ -58,7 +58,7 @@ func TestEndBlock(t *testing.T) {
 		story.Map(&ts, story.BlockMap{
 			story.Certainties_Type: story.KeyMap{
 				story.BlockEnd: func(b jsn.Block, v interface{}) (err error) {
-					cs := b.(jsn.Flow).GetValue().(*story.Certainties) // ick
+					cs := b.(jsn.Flow).GetFlow().(*story.Certainties) // ick
 					found = cs.PluralKinds.Str == "test"
 					return
 				},

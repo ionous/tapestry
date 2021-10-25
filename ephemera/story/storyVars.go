@@ -29,8 +29,8 @@ func (op *VariableType) ImportVariableType(k *Importer) (retType eph.Named, retA
 	type variableTypeImporter interface {
 		ImportVariableType(*Importer) (eph.Named, string, error)
 	}
-	if opt, ok := op.Opt.(variableTypeImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+	if opt, ok := op.Value.(variableTypeImporter); !ok {
+		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
 		retType, retAff, err = opt.ImportVariableType(k)
 	}
