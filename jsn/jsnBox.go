@@ -41,11 +41,12 @@ func (box BoxedBool) GetCompactValue() (ret interface{}) {
 }
 
 func (box BoxedBool) SetValue(v interface{}) (okay bool) {
-	if v == nil {
+	switch n := v.(type) {
+	case nil:
 		box.setValue(false)
 		okay = true
-	} else {
-		switch v.(string) {
+	case string:
+		switch n {
 		case "$TRUE", "true":
 			box.setValue(true)
 			okay = true
@@ -65,7 +66,11 @@ func (box BoxedFloat) GetValue() interface{} {
 	return *box.v
 }
 func (box BoxedFloat) SetValue(v interface{}) (okay bool) {
-	if n, ok := v.(float64); ok {
+	switch n := v.(type) {
+	case nil:
+		*box.v = 0
+		okay = true
+	case float64:
 		*box.v = n
 		okay = true
 	}
@@ -76,7 +81,11 @@ func (box BoxedString) GetValue() interface{} {
 	return *box.v
 }
 func (box BoxedString) SetValue(v interface{}) (okay bool) {
-	if n, ok := v.(string); ok {
+	switch n := v.(type) {
+	case nil:
+		*box.v = ""
+		okay = true
+	case string:
 		*box.v = n
 		okay = true
 	}
