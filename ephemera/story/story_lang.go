@@ -125,7 +125,7 @@ func ActionContext_Optional_Marshal(m jsn.Marshaler, pv **ActionContext) (err er
 
 func ActionContext_Marshal(m jsn.Marshaler, val *ActionContext) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(ActionContext_Type, ActionContext_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(ActionContext_Type, ActionContext_Type, val)); err == nil {
 		e1 := m.MarshalKey("", ActionContext_Field_Kind)
 		if e1 == nil {
 			e1 = SingularKind_Marshal(m, &val.Kind)
@@ -196,7 +196,7 @@ func ActionDecl_Optional_Marshal(m jsn.Marshaler, pv **ActionDecl) (err error) {
 
 func ActionDecl_Marshal(m jsn.Marshaler, val *ActionDecl) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(ActionDecl_Type, ActionDecl_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(ActionDecl_Type, ActionDecl_Type, val)); err == nil {
 		e1 := m.MarshalKey("", ActionDecl_Field_Event)
 		if e1 == nil {
 			e1 = EventName_Marshal(m, &val.Event)
@@ -672,7 +672,7 @@ func Argument_Optional_Marshal(m jsn.Marshaler, pv **Argument) (err error) {
 
 func Argument_Marshal(m jsn.Marshaler, val *Argument) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow("arg", Argument_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("arg", Argument_Type, val)); err == nil {
 		e1 := m.MarshalKey("", Argument_Field_Name)
 		if e1 == nil {
 			e1 = value.Text_Unboxed_Marshal(m, &val.Name)
@@ -746,7 +746,7 @@ func Arguments_Optional_Marshal(m jsn.Marshaler, pv **Arguments) (err error) {
 
 func Arguments_Marshal(m jsn.Marshaler, val *Arguments) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow("args", Arguments_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("args", Arguments_Type, val)); err == nil {
 		e1 := m.MarshalKey("", Arguments_Field_Args)
 		if e1 == nil {
 			e1 = Argument_Repeats_Marshal(m, &val.Args)
@@ -868,7 +868,7 @@ func AspectTraits_Optional_Marshal(m jsn.Marshaler, pv **AspectTraits) (err erro
 }
 
 func AspectTraits_Marshal(m jsn.Marshaler, val *AspectTraits) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(AspectTraits_Type, AspectTraits_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(AspectTraits_Type, AspectTraits_Type, val)); err == nil {
 		e0 := m.MarshalKey("", AspectTraits_Field_Aspect)
 		if e0 == nil {
 			e0 = Aspect_Marshal(m, &val.Aspect)
@@ -939,7 +939,7 @@ func BoxedNumber_Optional_Marshal(m jsn.Marshaler, pv **BoxedNumber) (err error)
 }
 
 func BoxedNumber_Marshal(m jsn.Marshaler, val *BoxedNumber) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(BoxedNumber_Type, BoxedNumber_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(BoxedNumber_Type, BoxedNumber_Type, val)); err == nil {
 		e0 := m.MarshalKey("", BoxedNumber_Field_Number)
 		if e0 == nil {
 			e0 = value.Number_Unboxed_Marshal(m, &val.Number)
@@ -1003,7 +1003,7 @@ func BoxedText_Optional_Marshal(m jsn.Marshaler, pv **BoxedText) (err error) {
 }
 
 func BoxedText_Marshal(m jsn.Marshaler, val *BoxedText) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(BoxedText_Type, BoxedText_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(BoxedText_Type, BoxedText_Type, val)); err == nil {
 		e0 := m.MarshalKey("", BoxedText_Field_Text)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Text)
@@ -1074,7 +1074,7 @@ func Certainties_Optional_Marshal(m jsn.Marshaler, pv **Certainties) (err error)
 }
 
 func Certainties_Marshal(m jsn.Marshaler, val *Certainties) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Certainties_Type, Certainties_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Certainties_Type, Certainties_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Certainties_Field_PluralKinds)
 		if e0 == nil {
 			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
@@ -1225,7 +1225,7 @@ func Comment_Optional_Marshal(m jsn.Marshaler, pv **Comment) (err error) {
 }
 
 func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Comment_Type, Comment_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Comment_Type, Comment_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Comment_Field_Lines)
 		if e0 == nil {
 			e0 = value.Lines_Marshal(m, &val.Lines)
@@ -1293,7 +1293,7 @@ func CommonAction_Optional_Marshal(m jsn.Marshaler, pv **CommonAction) (err erro
 
 func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(CommonAction_Type, CommonAction_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(CommonAction_Type, CommonAction_Type, val)); err == nil {
 		e1 := m.MarshalKey("", CommonAction_Field_Kind)
 		if e1 == nil {
 			e1 = SingularKind_Marshal(m, &val.Kind)
@@ -1369,7 +1369,7 @@ func CountOf_Optional_Marshal(m jsn.Marshaler, pv **CountOf) (err error) {
 
 func CountOf_Marshal(m jsn.Marshaler, val *CountOf) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(CountOf_Type, CountOf_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(CountOf_Type, CountOf_Type, val)); err == nil {
 		e1 := m.MarshalKey("", CountOf_Field_Trigger)
 		if e1 == nil {
 			e1 = core.Trigger_Marshal(m, &val.Trigger)
@@ -1443,7 +1443,7 @@ func CycleText_Optional_Marshal(m jsn.Marshaler, pv **CycleText) (err error) {
 
 func CycleText_Marshal(m jsn.Marshaler, val *CycleText) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(CycleText_Type, CycleText_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(CycleText_Type, CycleText_Type, val)); err == nil {
 		e1 := m.MarshalKey("", CycleText_Field_Parts)
 		if e1 == nil {
 			e1 = rt.TextEval_Repeats_Marshal(m, &val.Parts)
@@ -1510,7 +1510,7 @@ func Determine_Optional_Marshal(m jsn.Marshaler, pv **Determine) (err error) {
 }
 
 func Determine_Marshal(m jsn.Marshaler, val *Determine) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Determine_Type, Determine_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Determine_Type, Determine_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Determine_Field_Name)
 		if e0 == nil {
 			e0 = value.PatternName_Marshal(m, &val.Name)
@@ -1650,7 +1650,7 @@ func EventBlock_Optional_Marshal(m jsn.Marshaler, pv **EventBlock) (err error) {
 
 func EventBlock_Marshal(m jsn.Marshaler, val *EventBlock) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(EventBlock_Type, EventBlock_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(EventBlock_Type, EventBlock_Type, val)); err == nil {
 		e1 := m.MarshalKey("", EventBlock_Field_Target)
 		if e1 == nil {
 			e1 = EventTarget_Marshal(m, &val.Target)
@@ -1727,7 +1727,7 @@ func EventHandler_Optional_Marshal(m jsn.Marshaler, pv **EventHandler) (err erro
 }
 
 func EventHandler_Marshal(m jsn.Marshaler, val *EventHandler) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(EventHandler_Type, EventHandler_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(EventHandler_Type, EventHandler_Type, val)); err == nil {
 		e0 := m.MarshalKey("", EventHandler_Field_EventPhase)
 		if e0 == nil {
 			e0 = EventPhase_Marshal(m, &val.EventPhase)
@@ -2111,7 +2111,7 @@ func GrammarDecl_Optional_Marshal(m jsn.Marshaler, pv **GrammarDecl) (err error)
 }
 
 func GrammarDecl_Marshal(m jsn.Marshaler, val *GrammarDecl) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(GrammarDecl_Type, GrammarDecl_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(GrammarDecl_Type, GrammarDecl_Type, val)); err == nil {
 		e0 := m.MarshalKey("", GrammarDecl_Field_Grammar)
 		if e0 == nil {
 			e0 = grammar.GrammarMaker_Marshal(m, &val.Grammar)
@@ -2181,7 +2181,7 @@ func KindOfNoun_Optional_Marshal(m jsn.Marshaler, pv **KindOfNoun) (err error) {
 }
 
 func KindOfNoun_Marshal(m jsn.Marshaler, val *KindOfNoun) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(KindOfNoun_Type, KindOfNoun_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(KindOfNoun_Type, KindOfNoun_Type, val)); err == nil {
 		e0 := m.MarshalKey("", KindOfNoun_Field_AreAn)
 		if e0 == nil {
 			e0 = AreAn_Marshal(m, &val.AreAn)
@@ -2269,7 +2269,7 @@ func KindOfRelation_Optional_Marshal(m jsn.Marshaler, pv **KindOfRelation) (err 
 }
 
 func KindOfRelation_Marshal(m jsn.Marshaler, val *KindOfRelation) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(KindOfRelation_Type, KindOfRelation_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(KindOfRelation_Type, KindOfRelation_Type, val)); err == nil {
 		e0 := m.MarshalKey("", KindOfRelation_Field_Relation)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Relation)
@@ -2341,7 +2341,7 @@ func KindsOfAspect_Optional_Marshal(m jsn.Marshaler, pv **KindsOfAspect) (err er
 }
 
 func KindsOfAspect_Marshal(m jsn.Marshaler, val *KindsOfAspect) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(KindsOfAspect_Type, KindsOfAspect_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(KindsOfAspect_Type, KindsOfAspect_Type, val)); err == nil {
 		e0 := m.MarshalKey("", KindsOfAspect_Field_Aspect)
 		if e0 == nil {
 			e0 = Aspect_Marshal(m, &val.Aspect)
@@ -2408,7 +2408,7 @@ func KindsOfKind_Optional_Marshal(m jsn.Marshaler, pv **KindsOfKind) (err error)
 }
 
 func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(KindsOfKind_Type, KindsOfKind_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(KindsOfKind_Type, KindsOfKind_Type, val)); err == nil {
 		e0 := m.MarshalKey("", KindsOfKind_Field_PluralKinds)
 		if e0 == nil {
 			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
@@ -2480,7 +2480,7 @@ func KindsOfRecord_Optional_Marshal(m jsn.Marshaler, pv **KindsOfRecord) (err er
 }
 
 func KindsOfRecord_Marshal(m jsn.Marshaler, val *KindsOfRecord) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(KindsOfRecord_Type, KindsOfRecord_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(KindsOfRecord_Type, KindsOfRecord_Type, val)); err == nil {
 		e0 := m.MarshalKey("", KindsOfRecord_Field_RecordPlural)
 		if e0 == nil {
 			e0 = RecordPlural_Marshal(m, &val.RecordPlural)
@@ -2549,7 +2549,7 @@ func KindsPossessProperties_Optional_Marshal(m jsn.Marshaler, pv **KindsPossessP
 }
 
 func KindsPossessProperties_Marshal(m jsn.Marshaler, val *KindsPossessProperties) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(KindsPossessProperties_Type, KindsPossessProperties_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(KindsPossessProperties_Type, KindsPossessProperties_Type, val)); err == nil {
 		e0 := m.MarshalKey("", KindsPossessProperties_Field_PluralKinds)
 		if e0 == nil {
 			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
@@ -2622,7 +2622,7 @@ func Lede_Optional_Marshal(m jsn.Marshaler, pv **Lede) (err error) {
 }
 
 func Lede_Marshal(m jsn.Marshaler, val *Lede) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Lede_Type, Lede_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Lede_Type, Lede_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Lede_Field_Nouns)
 		if e0 == nil {
 			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
@@ -2695,7 +2695,7 @@ func LocalDecl_Optional_Marshal(m jsn.Marshaler, pv **LocalDecl) (err error) {
 }
 
 func LocalDecl_Marshal(m jsn.Marshaler, val *LocalDecl) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(LocalDecl_Type, LocalDecl_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(LocalDecl_Type, LocalDecl_Type, val)); err == nil {
 		e0 := m.MarshalKey("", LocalDecl_Field_VariableDecl)
 		if e0 == nil {
 			e0 = VariableDecl_Marshal(m, &val.VariableDecl)
@@ -2766,7 +2766,7 @@ func LocalInit_Optional_Marshal(m jsn.Marshaler, pv **LocalInit) (err error) {
 }
 
 func LocalInit_Marshal(m jsn.Marshaler, val *LocalInit) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(LocalInit_Type, LocalInit_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(LocalInit_Type, LocalInit_Type, val)); err == nil {
 		e0 := m.MarshalKey("", LocalInit_Field_Value)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.Value)
@@ -2833,7 +2833,7 @@ func Make_Optional_Marshal(m jsn.Marshaler, pv **Make) (err error) {
 }
 
 func Make_Marshal(m jsn.Marshaler, val *Make) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Make_Type, Make_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Make_Type, Make_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Make_Field_Name)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
@@ -2906,7 +2906,7 @@ func ManyToMany_Optional_Marshal(m jsn.Marshaler, pv **ManyToMany) (err error) {
 }
 
 func ManyToMany_Marshal(m jsn.Marshaler, val *ManyToMany) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(ManyToMany_Type, ManyToMany_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(ManyToMany_Type, ManyToMany_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ManyToMany_Field_Kinds)
 		if e0 == nil {
 			e0 = PluralKinds_Marshal(m, &val.Kinds)
@@ -2979,7 +2979,7 @@ func ManyToOne_Optional_Marshal(m jsn.Marshaler, pv **ManyToOne) (err error) {
 }
 
 func ManyToOne_Marshal(m jsn.Marshaler, val *ManyToOne) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(ManyToOne_Type, ManyToOne_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(ManyToOne_Type, ManyToOne_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ManyToOne_Field_Kinds)
 		if e0 == nil {
 			e0 = PluralKinds_Marshal(m, &val.Kinds)
@@ -3052,7 +3052,7 @@ func NamedNoun_Optional_Marshal(m jsn.Marshaler, pv **NamedNoun) (err error) {
 }
 
 func NamedNoun_Marshal(m jsn.Marshaler, val *NamedNoun) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(NamedNoun_Type, NamedNoun_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(NamedNoun_Type, NamedNoun_Type, val)); err == nil {
 		e0 := m.MarshalKey("", NamedNoun_Field_Determiner)
 		if e0 == nil {
 			e0 = Determiner_Marshal(m, &val.Determiner)
@@ -3128,7 +3128,7 @@ func NounAssignment_Optional_Marshal(m jsn.Marshaler, pv **NounAssignment) (err 
 }
 
 func NounAssignment_Marshal(m jsn.Marshaler, val *NounAssignment) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(NounAssignment_Type, NounAssignment_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(NounAssignment_Type, NounAssignment_Type, val)); err == nil {
 		e0 := m.MarshalKey("", NounAssignment_Field_Property)
 		if e0 == nil {
 			e0 = Property_Marshal(m, &val.Property)
@@ -3357,7 +3357,7 @@ func NounRelation_Optional_Marshal(m jsn.Marshaler, pv **NounRelation) (err erro
 }
 
 func NounRelation_Marshal(m jsn.Marshaler, val *NounRelation) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(NounRelation_Type, NounRelation_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(NounRelation_Type, NounRelation_Type, val)); err == nil {
 		e0 := m.MarshalKey("", NounRelation_Field_AreBeing)
 		if e0 == nil {
 			e0 = AreBeing_Optional_Marshal(m, &val.AreBeing)
@@ -3440,7 +3440,7 @@ func NounStatement_Optional_Marshal(m jsn.Marshaler, pv **NounStatement) (err er
 }
 
 func NounStatement_Marshal(m jsn.Marshaler, val *NounStatement) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(NounStatement_Type, NounStatement_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(NounStatement_Type, NounStatement_Type, val)); err == nil {
 		e0 := m.MarshalKey("", NounStatement_Field_Lede)
 		if e0 == nil {
 			e0 = Lede_Marshal(m, &val.Lede)
@@ -3520,7 +3520,7 @@ func NounTraits_Optional_Marshal(m jsn.Marshaler, pv **NounTraits) (err error) {
 }
 
 func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(NounTraits_Type, NounTraits_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(NounTraits_Type, NounTraits_Type, val)); err == nil {
 		e0 := m.MarshalKey("", NounTraits_Field_AreBeing)
 		if e0 == nil {
 			e0 = AreBeing_Marshal(m, &val.AreBeing)
@@ -3653,7 +3653,7 @@ func ObjectType_Optional_Marshal(m jsn.Marshaler, pv **ObjectType) (err error) {
 }
 
 func ObjectType_Marshal(m jsn.Marshaler, val *ObjectType) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(ObjectType_Type, ObjectType_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(ObjectType_Type, ObjectType_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ObjectType_Field_An)
 		if e0 == nil {
 			e0 = Ana_Marshal(m, &val.An)
@@ -3726,7 +3726,7 @@ func OneToMany_Optional_Marshal(m jsn.Marshaler, pv **OneToMany) (err error) {
 }
 
 func OneToMany_Marshal(m jsn.Marshaler, val *OneToMany) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(OneToMany_Type, OneToMany_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(OneToMany_Type, OneToMany_Type, val)); err == nil {
 		e0 := m.MarshalKey("", OneToMany_Field_Kind)
 		if e0 == nil {
 			e0 = SingularKind_Marshal(m, &val.Kind)
@@ -3799,7 +3799,7 @@ func OneToOne_Optional_Marshal(m jsn.Marshaler, pv **OneToOne) (err error) {
 }
 
 func OneToOne_Marshal(m jsn.Marshaler, val *OneToOne) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(OneToOne_Type, OneToOne_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(OneToOne_Type, OneToOne_Type, val)); err == nil {
 		e0 := m.MarshalKey("", OneToOne_Field_Kind)
 		if e0 == nil {
 			e0 = SingularKind_Marshal(m, &val.Kind)
@@ -3872,7 +3872,7 @@ func PairedAction_Optional_Marshal(m jsn.Marshaler, pv **PairedAction) (err erro
 
 func PairedAction_Marshal(m jsn.Marshaler, val *PairedAction) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(PairedAction_Type, PairedAction_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PairedAction_Type, PairedAction_Type, val)); err == nil {
 		e1 := m.MarshalKey("", PairedAction_Field_Kinds)
 		if e1 == nil {
 			e1 = PluralKinds_Marshal(m, &val.Kinds)
@@ -3936,7 +3936,7 @@ func Paragraph_Optional_Marshal(m jsn.Marshaler, pv **Paragraph) (err error) {
 }
 
 func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Paragraph_Type, Paragraph_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Paragraph_Type, Paragraph_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Paragraph_Field_StoryStatement)
 		if e0 == nil {
 			e0 = StoryStatement_Repeats_Marshal(m, &val.StoryStatement)
@@ -4007,7 +4007,7 @@ func PatternActions_Optional_Marshal(m jsn.Marshaler, pv **PatternActions) (err 
 }
 
 func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(PatternActions_Type, PatternActions_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PatternActions_Type, PatternActions_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PatternActions_Field_Name)
 		if e0 == nil {
 			e0 = value.PatternName_Marshal(m, &val.Name)
@@ -4101,7 +4101,7 @@ func PatternDecl_Optional_Marshal(m jsn.Marshaler, pv **PatternDecl) (err error)
 }
 
 func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(PatternDecl_Type, PatternDecl_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PatternDecl_Type, PatternDecl_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PatternDecl_Field_Type)
 		if e0 == nil {
 			e0 = PatternType_Marshal(m, &val.Type)
@@ -4255,7 +4255,7 @@ func PatternLocals_Optional_Marshal(m jsn.Marshaler, pv **PatternLocals) (err er
 }
 
 func PatternLocals_Marshal(m jsn.Marshaler, val *PatternLocals) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(PatternLocals_Type, PatternLocals_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PatternLocals_Type, PatternLocals_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PatternLocals_Field_LocalDecl)
 		if e0 == nil {
 			e0 = LocalDecl_Repeats_Marshal(m, &val.LocalDecl)
@@ -4319,7 +4319,7 @@ func PatternReturn_Optional_Marshal(m jsn.Marshaler, pv **PatternReturn) (err er
 }
 
 func PatternReturn_Marshal(m jsn.Marshaler, val *PatternReturn) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(PatternReturn_Type, PatternReturn_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PatternReturn_Type, PatternReturn_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PatternReturn_Field_Result)
 		if e0 == nil {
 			e0 = VariableDecl_Marshal(m, &val.Result)
@@ -4387,7 +4387,7 @@ func PatternRule_Optional_Marshal(m jsn.Marshaler, pv **PatternRule) (err error)
 }
 
 func PatternRule_Marshal(m jsn.Marshaler, val *PatternRule) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(PatternRule_Type, PatternRule_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PatternRule_Type, PatternRule_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PatternRule_Field_Guard)
 		if e0 == nil {
 			e0 = rt.BoolEval_Marshal(m, &val.Guard)
@@ -4465,7 +4465,7 @@ func PatternRules_Optional_Marshal(m jsn.Marshaler, pv **PatternRules) (err erro
 }
 
 func PatternRules_Marshal(m jsn.Marshaler, val *PatternRules) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(PatternRules_Type, PatternRules_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PatternRules_Type, PatternRules_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PatternRules_Field_PatternRule)
 		if e0 == nil {
 			e0 = PatternRule_Repeats_Marshal(m, &val.PatternRule)
@@ -4597,7 +4597,7 @@ func PatternVariablesDecl_Optional_Marshal(m jsn.Marshaler, pv **PatternVariable
 }
 
 func PatternVariablesDecl_Marshal(m jsn.Marshaler, val *PatternVariablesDecl) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(PatternVariablesDecl_Type, PatternVariablesDecl_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PatternVariablesDecl_Type, PatternVariablesDecl_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PatternVariablesDecl_Field_PatternName)
 		if e0 == nil {
 			e0 = value.PatternName_Marshal(m, &val.PatternName)
@@ -4668,7 +4668,7 @@ func PatternVariablesTail_Optional_Marshal(m jsn.Marshaler, pv **PatternVariable
 }
 
 func PatternVariablesTail_Marshal(m jsn.Marshaler, val *PatternVariablesTail) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(PatternVariablesTail_Type, PatternVariablesTail_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PatternVariablesTail_Type, PatternVariablesTail_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PatternVariablesTail_Field_VariableDecl)
 		if e0 == nil {
 			e0 = VariableDecl_Repeats_Marshal(m, &val.VariableDecl)
@@ -5197,7 +5197,7 @@ func PropertyDecl_Optional_Marshal(m jsn.Marshaler, pv **PropertyDecl) (err erro
 }
 
 func PropertyDecl_Marshal(m jsn.Marshaler, val *PropertyDecl) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(PropertyDecl_Type, PropertyDecl_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(PropertyDecl_Type, PropertyDecl_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PropertyDecl_Field_An)
 		if e0 == nil {
 			e0 = Determiner_Marshal(m, &val.An)
@@ -5374,7 +5374,7 @@ func RecordList_Optional_Marshal(m jsn.Marshaler, pv **RecordList) (err error) {
 }
 
 func RecordList_Marshal(m jsn.Marshaler, val *RecordList) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(RecordList_Type, RecordList_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(RecordList_Type, RecordList_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RecordList_Field_Kind)
 		if e0 == nil {
 			e0 = RecordSingular_Marshal(m, &val.Kind)
@@ -5548,7 +5548,7 @@ func RecordType_Optional_Marshal(m jsn.Marshaler, pv **RecordType) (err error) {
 }
 
 func RecordType_Marshal(m jsn.Marshaler, val *RecordType) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(RecordType_Type, RecordType_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(RecordType_Type, RecordType_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RecordType_Field_Kind)
 		if e0 == nil {
 			e0 = RecordSingular_Marshal(m, &val.Kind)
@@ -5617,7 +5617,7 @@ func RecordsPossessProperties_Optional_Marshal(m jsn.Marshaler, pv **RecordsPoss
 }
 
 func RecordsPossessProperties_Marshal(m jsn.Marshaler, val *RecordsPossessProperties) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(RecordsPossessProperties_Type, RecordsPossessProperties_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(RecordsPossessProperties_Type, RecordsPossessProperties_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RecordsPossessProperties_Field_RecordPlural)
 		if e0 == nil {
 			e0 = RecordPlural_Marshal(m, &val.RecordPlural)
@@ -5794,7 +5794,7 @@ func RelativeToNoun_Optional_Marshal(m jsn.Marshaler, pv **RelativeToNoun) (err 
 }
 
 func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(RelativeToNoun_Type, RelativeToNoun_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(RelativeToNoun_Type, RelativeToNoun_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RelativeToNoun_Field_Relation)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Relation)
@@ -5880,7 +5880,7 @@ func RenderTemplate_Optional_Marshal(m jsn.Marshaler, pv **RenderTemplate) (err 
 }
 
 func RenderTemplate_Marshal(m jsn.Marshaler, val *RenderTemplate) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(RenderTemplate_Type, RenderTemplate_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(RenderTemplate_Type, RenderTemplate_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RenderTemplate_Field_Template)
 		if e0 == nil {
 			e0 = value.Lines_Marshal(m, &val.Template)
@@ -5949,7 +5949,7 @@ func Send_Optional_Marshal(m jsn.Marshaler, pv **Send) (err error) {
 }
 
 func Send_Marshal(m jsn.Marshaler, val *Send) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Send_Type, Send_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Send_Type, Send_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Send_Field_Event)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Event)
@@ -6030,7 +6030,7 @@ func ShuffleText_Optional_Marshal(m jsn.Marshaler, pv **ShuffleText) (err error)
 
 func ShuffleText_Marshal(m jsn.Marshaler, val *ShuffleText) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(ShuffleText_Type, ShuffleText_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(ShuffleText_Type, ShuffleText_Type, val)); err == nil {
 		e1 := m.MarshalKey("", ShuffleText_Field_Parts)
 		if e1 == nil {
 			e1 = rt.TextEval_Repeats_Marshal(m, &val.Parts)
@@ -6152,7 +6152,7 @@ func StoppingText_Optional_Marshal(m jsn.Marshaler, pv **StoppingText) (err erro
 
 func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(StoppingText_Type, StoppingText_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(StoppingText_Type, StoppingText_Type, val)); err == nil {
 		e1 := m.MarshalKey("", StoppingText_Field_Parts)
 		if e1 == nil {
 			e1 = rt.TextEval_Repeats_Marshal(m, &val.Parts)
@@ -6216,7 +6216,7 @@ func Story_Optional_Marshal(m jsn.Marshaler, pv **Story) (err error) {
 }
 
 func Story_Marshal(m jsn.Marshaler, val *Story) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Story_Type, Story_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Story_Type, Story_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Story_Field_Paragraph)
 		if e0 == nil {
 			e0 = Paragraph_Repeats_Marshal(m, &val.Paragraph)
@@ -6235,8 +6235,8 @@ var StoryStatement_Optional_Marshal = StoryStatement_Marshal
 
 type StoryStatement_Slot struct{ ptr *StoryStatement }
 
-func (At StoryStatement_Slot) GetType() string { return StoryStatement_Type }
-func (at StoryStatement_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
+func (at StoryStatement_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(StoryStatement)
 	return
@@ -6323,7 +6323,7 @@ func Summary_Optional_Marshal(m jsn.Marshaler, pv **Summary) (err error) {
 
 func Summary_Marshal(m jsn.Marshaler, val *Summary) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(Summary_Type, Summary_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Summary_Type, Summary_Type, val)); err == nil {
 		e1 := m.MarshalKey("", Summary_Field_Lines)
 		if e1 == nil {
 			e1 = value.Lines_Marshal(m, &val.Lines)
@@ -6389,7 +6389,7 @@ func Tail_Optional_Marshal(m jsn.Marshaler, pv **Tail) (err error) {
 }
 
 func Tail_Marshal(m jsn.Marshaler, val *Tail) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Tail_Type, Tail_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Tail_Type, Tail_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Tail_Field_Pronoun)
 		if e0 == nil {
 			e0 = Pronoun_Marshal(m, &val.Pronoun)
@@ -6524,7 +6524,7 @@ func TestOutput_Optional_Marshal(m jsn.Marshaler, pv **TestOutput) (err error) {
 }
 
 func TestOutput_Marshal(m jsn.Marshaler, val *TestOutput) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(TestOutput_Type, TestOutput_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(TestOutput_Type, TestOutput_Type, val)); err == nil {
 		e0 := m.MarshalKey("", TestOutput_Field_Lines)
 		if e0 == nil {
 			e0 = value.Lines_Marshal(m, &val.Lines)
@@ -6591,7 +6591,7 @@ func TestRule_Optional_Marshal(m jsn.Marshaler, pv **TestRule) (err error) {
 }
 
 func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(TestRule_Type, TestRule_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(TestRule_Type, TestRule_Type, val)); err == nil {
 		e0 := m.MarshalKey("", TestRule_Field_TestName)
 		if e0 == nil {
 			e0 = TestName_Marshal(m, &val.TestName)
@@ -6665,7 +6665,7 @@ func TestScene_Optional_Marshal(m jsn.Marshaler, pv **TestScene) (err error) {
 }
 
 func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(TestScene_Type, TestScene_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(TestScene_Type, TestScene_Type, val)); err == nil {
 		e0 := m.MarshalKey("", TestScene_Field_TestName)
 		if e0 == nil {
 			e0 = TestName_Marshal(m, &val.TestName)
@@ -6741,7 +6741,7 @@ func TestStatement_Optional_Marshal(m jsn.Marshaler, pv **TestStatement) (err er
 
 func TestStatement_Marshal(m jsn.Marshaler, val *TestStatement) (err error) {
 	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(jsn.MarkFlow(TestStatement_Type, TestStatement_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(TestStatement_Type, TestStatement_Type, val)); err == nil {
 		e1 := m.MarshalKey("", TestStatement_Field_TestName)
 		if e1 == nil {
 			e1 = TestName_Marshal(m, &val.TestName)
@@ -6767,8 +6767,8 @@ var Testing_Optional_Marshal = Testing_Marshal
 
 type Testing_Slot struct{ ptr *Testing }
 
-func (At Testing_Slot) GetType() string { return Testing_Type }
-func (at Testing_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At Testing_Slot) GetType() string              { return Testing_Type }
+func (at Testing_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at Testing_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(Testing)
 	return
@@ -6970,7 +6970,7 @@ func TraitPhrase_Optional_Marshal(m jsn.Marshaler, pv **TraitPhrase) (err error)
 }
 
 func TraitPhrase_Marshal(m jsn.Marshaler, val *TraitPhrase) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(TraitPhrase_Type, TraitPhrase_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(TraitPhrase_Type, TraitPhrase_Type, val)); err == nil {
 		e0 := m.MarshalKey("", TraitPhrase_Field_AreEither)
 		if e0 == nil {
 			e0 = AreEither_Marshal(m, &val.AreEither)
@@ -7047,7 +7047,7 @@ func VariableDecl_Optional_Marshal(m jsn.Marshaler, pv **VariableDecl) (err erro
 }
 
 func VariableDecl_Marshal(m jsn.Marshaler, val *VariableDecl) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(VariableDecl_Type, VariableDecl_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(VariableDecl_Type, VariableDecl_Type, val)); err == nil {
 		e0 := m.MarshalKey("", VariableDecl_Field_An)
 		if e0 == nil {
 			e0 = Determiner_Marshal(m, &val.An)

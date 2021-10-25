@@ -64,7 +64,7 @@ func ReciprocalOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalOf) (err erro
 }
 
 func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("reciprocal", ReciprocalOf_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("reciprocal", ReciprocalOf_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ReciprocalOf_Field_Via)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Via)
@@ -139,7 +139,7 @@ func ReciprocalsOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalsOf) (err er
 }
 
 func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("reciprocals", ReciprocalsOf_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("reciprocals", ReciprocalsOf_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ReciprocalsOf_Field_Via)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Via)
@@ -215,7 +215,7 @@ func Relate_Optional_Marshal(m jsn.Marshaler, pv **Relate) (err error) {
 }
 
 func Relate_Marshal(m jsn.Marshaler, val *Relate) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Relate_Type, Relate_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Relate_Type, Relate_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Relate_Field_Object)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.Object)
@@ -297,7 +297,7 @@ func RelativeOf_Optional_Marshal(m jsn.Marshaler, pv **RelativeOf) (err error) {
 }
 
 func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("relative", RelativeOf_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("relative", RelativeOf_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RelativeOf_Field_Via)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Via)
@@ -372,7 +372,7 @@ func RelativesOf_Optional_Marshal(m jsn.Marshaler, pv **RelativesOf) (err error)
 }
 
 func RelativesOf_Marshal(m jsn.Marshaler, val *RelativesOf) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("relatives", RelativesOf_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("relatives", RelativesOf_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RelativesOf_Field_Via)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Via)

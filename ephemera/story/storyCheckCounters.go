@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/jsn/chart"
 )
 
-func searchForCounters(i jsn.Marshalee) (okay bool) {
+func SearchForCounters(i jsn.Marshalee) (okay bool) {
 	if ok, e := searchForType(i, core.CallTrigger_Type); e != nil {
 		panic(e)
 	} else {

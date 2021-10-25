@@ -3,10 +3,13 @@ package story_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn/din"
+
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
@@ -18,11 +21,16 @@ func TestImportStory(t *testing.T) {
 	if e := tables.CreateEphemera(db); e != nil {
 		t.Fatal("create tables", e)
 	} else {
-		k := story.NewImporter(db)
-		if _, e := k.ImportStory(t.Name(), []byte(debug.Blob)); e != nil {
-			t.Fatal("import", e)
+		var curr story.Story
+		if e := din.Decode(&curr, iffy.Registry(), []byte(debug.Blob)); e != nil {
+			t.Fatal(e)
 		} else {
-			t.Log("ok")
+			k := story.NewImporter(db)
+			if e := k.ImportStory(t.Name(), &curr); e != nil {
+				t.Fatal("import", e)
+			} else {
+				t.Log("ok")
+			}
 		}
 	}
 }

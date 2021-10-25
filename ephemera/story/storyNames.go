@@ -89,7 +89,7 @@ func NewTestName(k *Importer, n TestName) (ret ephemera.Named, err error) {
 	// things that would need work are:
 	// tests, autogen fields, and control over the domain ( ie. NewName vs. NewDowmainName )
 	if n.Str == TestName_CurrentTest {
-		ret = k.StoryEnv.Recent.Test
+		ret = k.Env().Recent.Test
 	} else {
 		name := lang.Breakcase(n.Str)
 		ret = k.NewName(name, tables.NAMED_TEST, n.At.String())

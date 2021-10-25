@@ -62,7 +62,7 @@ func AsNum_Optional_Marshal(m jsn.Marshaler, pv **AsNum) (err error) {
 }
 
 func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(AsNum_Type, AsNum_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(AsNum_Type, AsNum_Type, val)); err == nil {
 		e0 := m.MarshalKey("", AsNum_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -127,7 +127,7 @@ func AsRec_Optional_Marshal(m jsn.Marshaler, pv **AsRec) (err error) {
 }
 
 func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(AsRec_Type, AsRec_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(AsRec_Type, AsRec_Type, val)); err == nil {
 		e0 := m.MarshalKey("", AsRec_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -192,7 +192,7 @@ func AsTxt_Optional_Marshal(m jsn.Marshaler, pv **AsTxt) (err error) {
 }
 
 func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(AsTxt_Type, AsTxt_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(AsTxt_Type, AsTxt_Type, val)); err == nil {
 		e0 := m.MarshalKey("", AsTxt_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -260,7 +260,7 @@ func EraseEdge_Optional_Marshal(m jsn.Marshaler, pv **EraseEdge) (err error) {
 }
 
 func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("erase", EraseEdge_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("erase", EraseEdge_Type, val)); err == nil {
 		e0 := m.MarshalKey("", EraseEdge_Field_From)
 		if e0 == nil {
 			e0 = ListSource_Marshal(m, &val.From)
@@ -337,7 +337,7 @@ func EraseIndex_Optional_Marshal(m jsn.Marshaler, pv **EraseIndex) (err error) {
 }
 
 func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("erase", EraseIndex_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("erase", EraseIndex_Type, val)); err == nil {
 		e0 := m.MarshalKey("", EraseIndex_Field_Count)
 		if e0 == nil {
 			e0 = rt.NumberEval_Marshal(m, &val.Count)
@@ -424,7 +424,7 @@ func Erasing_Optional_Marshal(m jsn.Marshaler, pv **Erasing) (err error) {
 }
 
 func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Erasing_Type, Erasing_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Erasing_Type, Erasing_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Erasing_Field_Count)
 		if e0 == nil {
 			e0 = rt.NumberEval_Marshal(m, &val.Count)
@@ -526,7 +526,7 @@ func ErasingEdge_Optional_Marshal(m jsn.Marshaler, pv **ErasingEdge) (err error)
 }
 
 func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("erasing", ErasingEdge_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("erasing", ErasingEdge_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ErasingEdge_Field_From)
 		if e0 == nil {
 			e0 = ListSource_Marshal(m, &val.From)
@@ -620,7 +620,7 @@ func FromNumList_Optional_Marshal(m jsn.Marshaler, pv **FromNumList) (err error)
 }
 
 func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("var_of_nums", FromNumList_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("var_of_nums", FromNumList_Type, val)); err == nil {
 		e0 := m.MarshalKey("", FromNumList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -686,7 +686,7 @@ func FromRecList_Optional_Marshal(m jsn.Marshaler, pv **FromRecList) (err error)
 }
 
 func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("var_of_recs", FromRecList_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("var_of_recs", FromRecList_Type, val)); err == nil {
 		e0 := m.MarshalKey("", FromRecList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -752,7 +752,7 @@ func FromTxtList_Optional_Marshal(m jsn.Marshaler, pv **FromTxtList) (err error)
 }
 
 func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("var_of_txts", FromTxtList_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("var_of_txts", FromTxtList_Type, val)); err == nil {
 		e0 := m.MarshalKey("", FromTxtList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -818,7 +818,7 @@ func IntoNumList_Optional_Marshal(m jsn.Marshaler, pv **IntoNumList) (err error)
 }
 
 func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("into_nums", IntoNumList_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("into_nums", IntoNumList_Type, val)); err == nil {
 		e0 := m.MarshalKey("", IntoNumList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -884,7 +884,7 @@ func IntoRecList_Optional_Marshal(m jsn.Marshaler, pv **IntoRecList) (err error)
 }
 
 func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("into_recs", IntoRecList_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("into_recs", IntoRecList_Type, val)); err == nil {
 		e0 := m.MarshalKey("", IntoRecList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -950,7 +950,7 @@ func IntoTxtList_Optional_Marshal(m jsn.Marshaler, pv **IntoTxtList) (err error)
 }
 
 func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("into_txts", IntoTxtList_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("into_txts", IntoTxtList_Type, val)); err == nil {
 		e0 := m.MarshalKey("", IntoTxtList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -1018,7 +1018,7 @@ func ListAt_Optional_Marshal(m jsn.Marshaler, pv **ListAt) (err error) {
 }
 
 func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("get", ListAt_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("get", ListAt_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListAt_Field_List)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.List)
@@ -1097,7 +1097,7 @@ func ListEach_Optional_Marshal(m jsn.Marshaler, pv **ListEach) (err error) {
 }
 
 func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("repeating", ListEach_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("repeating", ListEach_Type, val)); err == nil {
 		e0 := m.MarshalKey("across", ListEach_Field_List)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.List)
@@ -1186,7 +1186,7 @@ func ListFind_Optional_Marshal(m jsn.Marshaler, pv **ListFind) (err error) {
 }
 
 func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("find", ListFind_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("find", ListFind_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListFind_Field_Value)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.Value)
@@ -1262,7 +1262,7 @@ func ListGather_Optional_Marshal(m jsn.Marshaler, pv **ListGather) (err error) {
 }
 
 func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("gather", ListGather_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("gather", ListGather_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListGather_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -1295,8 +1295,8 @@ var ListIterator_Optional_Marshal = ListIterator_Marshal
 
 type ListIterator_Slot struct{ ptr *ListIterator }
 
-func (At ListIterator_Slot) GetType() string { return ListIterator_Type }
-func (at ListIterator_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At ListIterator_Slot) GetType() string              { return ListIterator_Type }
+func (at ListIterator_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at ListIterator_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(ListIterator)
 	return
@@ -1383,7 +1383,7 @@ func ListLen_Optional_Marshal(m jsn.Marshaler, pv **ListLen) (err error) {
 }
 
 func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("len", ListLen_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("len", ListLen_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListLen_Field_List)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.List)
@@ -1453,7 +1453,7 @@ func ListMap_Optional_Marshal(m jsn.Marshaler, pv **ListMap) (err error) {
 }
 
 func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("map", ListMap_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("map", ListMap_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListMap_Field_ToList)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.ToList)
@@ -1537,7 +1537,7 @@ func ListReduce_Optional_Marshal(m jsn.Marshaler, pv **ListReduce) (err error) {
 }
 
 func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("reduce", ListReduce_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("reduce", ListReduce_Type, val)); err == nil {
 		e0 := m.MarshalKey("into", ListReduce_Field_IntoValue)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.IntoValue)
@@ -1617,7 +1617,7 @@ func ListReverse_Optional_Marshal(m jsn.Marshaler, pv **ListReverse) (err error)
 }
 
 func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("reverse", ListReverse_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("reverse", ListReverse_Type, val)); err == nil {
 		e0 := m.MarshalKey("list", ListReverse_Field_List)
 		if e0 == nil {
 			e0 = ListSource_Marshal(m, &val.List)
@@ -1687,7 +1687,7 @@ func ListSet_Optional_Marshal(m jsn.Marshaler, pv **ListSet) (err error) {
 }
 
 func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("set", ListSet_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("set", ListSet_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListSet_Field_List)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.List)
@@ -1771,7 +1771,7 @@ func ListSlice_Optional_Marshal(m jsn.Marshaler, pv **ListSlice) (err error) {
 }
 
 func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("slice", ListSlice_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("slice", ListSlice_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListSlice_Field_List)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.List)
@@ -1855,7 +1855,7 @@ func ListSortNumbers_Optional_Marshal(m jsn.Marshaler, pv **ListSortNumbers) (er
 }
 
 func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("sort_numbers", ListSortNumbers_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("sort_numbers", ListSortNumbers_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListSortNumbers_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -1941,7 +1941,7 @@ func ListSortText_Optional_Marshal(m jsn.Marshaler, pv **ListSortText) (err erro
 }
 
 func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("sort_texts", ListSortText_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("sort_texts", ListSortText_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListSortText_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -2030,7 +2030,7 @@ func ListSortUsing_Optional_Marshal(m jsn.Marshaler, pv **ListSortUsing) (err er
 }
 
 func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("sort", ListSortUsing_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("sort", ListSortUsing_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListSortUsing_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -2056,8 +2056,8 @@ var ListSource_Optional_Marshal = ListSource_Marshal
 
 type ListSource_Slot struct{ ptr *ListSource }
 
-func (At ListSource_Slot) GetType() string { return ListSource_Type }
-func (at ListSource_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At ListSource_Slot) GetType() string              { return ListSource_Type }
+func (at ListSource_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at ListSource_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(ListSource)
 	return
@@ -2150,7 +2150,7 @@ func ListSplice_Optional_Marshal(m jsn.Marshaler, pv **ListSplice) (err error) {
 }
 
 func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("splice", ListSplice_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("splice", ListSplice_Type, val)); err == nil {
 		e0 := m.MarshalKey("", ListSplice_Field_List)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.List)
@@ -2190,8 +2190,8 @@ var ListTarget_Optional_Marshal = ListTarget_Marshal
 
 type ListTarget_Slot struct{ ptr *ListTarget }
 
-func (At ListTarget_Slot) GetType() string { return ListTarget_Type }
-func (at ListTarget_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At ListTarget_Slot) GetType() string              { return ListTarget_Type }
+func (at ListTarget_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at ListTarget_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(ListTarget)
 	return
@@ -2282,7 +2282,7 @@ func PutEdge_Optional_Marshal(m jsn.Marshaler, pv **PutEdge) (err error) {
 }
 
 func PutEdge_Marshal(m jsn.Marshaler, val *PutEdge) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("put", PutEdge_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("put", PutEdge_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PutEdge_Field_From)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.From)
@@ -2366,7 +2366,7 @@ func PutIndex_Optional_Marshal(m jsn.Marshaler, pv **PutIndex) (err error) {
 }
 
 func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("put", PutIndex_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("put", PutIndex_Type, val)); err == nil {
 		e0 := m.MarshalKey("", PutIndex_Field_From)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.From)
@@ -2449,7 +2449,7 @@ func Range_Optional_Marshal(m jsn.Marshaler, pv **Range) (err error) {
 }
 
 func Range_Marshal(m jsn.Marshaler, val *Range) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Range_Type, Range_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Range_Type, Range_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Range_Field_To)
 		if e0 == nil {
 			e0 = rt.NumberEval_Marshal(m, &val.To)

@@ -51,9 +51,9 @@ func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, val *{{Pascal name}}) (err 
 {{#if (IsPositioned this)}}
   m.SetCursor(val.At.Offset)
 {{/if}}
-  if err = m.MarshalBlock(jsn.MarkFlow(
+  if err = m.MarshalBlock(jsn.MakeFlow(
 {{~#if (LedeName this)}}"{{LedeName this}}"{{else}}{{Pascal name}}_Type{{/if
-}}, {{Pascal name}}_Type)); err == nil {
+}}, {{Pascal name}}_Type, val)); err == nil {
 {{~#each params}}{{#unless (IsInternal label)}}
     e{{@index}} := m.MarshalKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}})
     if e{{@index}} == nil {

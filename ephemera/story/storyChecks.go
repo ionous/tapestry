@@ -5,7 +5,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// ImportPhrase implements StoryStatement
 func (op *TestRule) ImportPhrase(k *Importer) (err error) {
 	if n, e := NewTestName(k, op.TestName); e != nil {
 		err = e
@@ -15,18 +14,6 @@ func (op *TestRule) ImportPhrase(k *Importer) (err error) {
 		err = e
 	} else {
 		k.NewTestProgram(n, prog)
-	}
-	return
-}
-
-// ImportPhrase implements StoryStatement
-func (op *TestScene) ImportPhrase(k *Importer) (err error) {
-	if n, e := NewTestName(k, op.TestName); e != nil {
-		err = e
-	} else {
-		err = k.CollectTest(n, func() error {
-			return op.Story.ImportStory(k)
-		})
 	}
 	return
 }

@@ -24,9 +24,7 @@ func TestFullFactorial(t *testing.T) {
 		t.Fatal("couldn't create tables", e)
 	} else {
 		k := story.NewImporter(db)
-		k.SetSource(t.Name())
-		//
-		if e := debug.FactorialStory.ImportStory(k); e != nil {
+		if e := k.ImportStory(t.Name(), debug.FactorialStory); e != nil {
 			t.Fatal("couldn't import story", e)
 		} else if e := assembly.AssembleStory(db, "kinds", ds.Add); e != nil {
 			t.Fatal("couldnt assemble story", e, ds.Err())

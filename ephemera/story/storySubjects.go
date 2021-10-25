@@ -2,31 +2,6 @@ package story
 
 import "git.sr.ht/~ionous/iffy/ephemera"
 
-type StoryEnv struct {
-	Recent struct {
-		// Scene, Aspect, Test string
-		// Nouns[]? Relation, Trait
-		// string or ephemera.Named
-		Nouns Nouns
-		Test  ephemera.Named
-	}
-	Current struct {
-		// eventually, a stack.
-		Domain ephemera.Named
-	}
-}
-
-func (n *StoryEnv) CollectTest(test ephemera.Named, during func() error) (err error) {
-	lastScene := n.Current.Domain
-	n.Current.Domain = test
-	// the most recent test might become the last popped test value
-	// ( once domains and tests are stackable )
-	n.Recent.Test = test
-	err = during()
-	n.Current.Domain = lastScene
-	return
-}
-
 type Nouns struct {
 	Subjects, Objects []ephemera.Named
 	Objectifying      bool // phrases discuss noun subjects by default
@@ -62,11 +37,4 @@ func (n *Nouns) pList() (ret *[]ephemera.Named) {
 func (n *Nouns) Add(name ephemera.Named) {
 	pn := n.pList()
 	(*pn) = append((*pn), name)
-}
-
-func LastNameOf(n []ephemera.Named) (ret ephemera.Named) {
-	if cnt := len(n); cnt > 0 {
-		ret = (n)[cnt-1]
-	}
-	return
 }

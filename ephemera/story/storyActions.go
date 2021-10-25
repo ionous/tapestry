@@ -37,11 +37,10 @@ func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret ep
 	k.NewPatternDecl(n, paramName, paramType, affine.Object.String())
 
 	// then the other parameters...
+	type actionImporter interface {
+		ImportAction(*Importer, ephemera.Named) error
+	}
 	return n, op.ActionParams.Opt.(actionImporter).ImportAction(k, n)
-}
-
-type actionImporter interface {
-	ImportAction(*Importer, ephemera.Named) error
 }
 
 func (op *CommonAction) ImportAction(k *Importer, n ephemera.Named) (err error) {
@@ -50,6 +49,10 @@ func (op *CommonAction) ImportAction(k *Importer, n ephemera.Named) (err error) 
 	} else {
 		noun := k.NewName(actionNoun, tables.NAMED_PARAMETER, op.At.String())
 		k.NewPatternDecl(n, noun, kind, affine.Object.String())
+		// FIX! why wasnt this being imported?
+		// if op.ActionContext != nil {
+		// 	err = op.ActionContext.ImportContext(k, n)
+		// }
 	}
 	return
 }

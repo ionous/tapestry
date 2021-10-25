@@ -23,7 +23,7 @@ func TestImportNamedNouns(t *testing.T) {
 	}
 	for i := 0; i < len(nouns); i += 2 {
 		n := makeNoun(nouns[i], nouns[i+1])
-		if e := n.Import(k); e != nil {
+		if e := n.ImportNouns(k); e != nil {
 			t.Fatal(e, "at", i)
 		}
 	}

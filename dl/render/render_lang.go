@@ -62,7 +62,7 @@ func RenderExp_Optional_Marshal(m jsn.Marshaler, pv **RenderExp) (err error) {
 }
 
 func RenderExp_Marshal(m jsn.Marshaler, val *RenderExp) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(RenderExp_Type, RenderExp_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(RenderExp_Type, RenderExp_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RenderExp_Field_Expression)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.Expression)
@@ -127,7 +127,7 @@ func RenderField_Optional_Marshal(m jsn.Marshaler, pv **RenderField) (err error)
 }
 
 func RenderField_Marshal(m jsn.Marshaler, val *RenderField) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(RenderField_Type, RenderField_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(RenderField_Type, RenderField_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RenderField_Field_Name)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.Name)
@@ -254,7 +254,7 @@ func RenderName_Optional_Marshal(m jsn.Marshaler, pv **RenderName) (err error) {
 }
 
 func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(RenderName_Type, RenderName_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(RenderName_Type, RenderName_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RenderName_Field_Name)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
@@ -322,7 +322,7 @@ func RenderPattern_Optional_Marshal(m jsn.Marshaler, pv **RenderPattern) (err er
 }
 
 func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("render", RenderPattern_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("render", RenderPattern_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RenderPattern_Field_Pattern)
 		if e0 == nil {
 			e0 = value.PatternName_Marshal(m, &val.Pattern)
@@ -396,7 +396,7 @@ func RenderRef_Optional_Marshal(m jsn.Marshaler, pv **RenderRef) (err error) {
 }
 
 func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(RenderRef_Type, RenderRef_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(RenderRef_Type, RenderRef_Type, val)); err == nil {
 		e0 := m.MarshalKey("", RenderRef_Field_Name)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Name)

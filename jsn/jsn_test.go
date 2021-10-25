@@ -27,7 +27,7 @@ func TestDetailsEncode(t *testing.T) {
 
 func TestDetailsDecode(t *testing.T) {
 	var dst story.Story
-	if e := din.Decode(&dst, story.StoryRegistry(), []byte(det)); e != nil {
+	if e := din.Decode(&dst, iffy.Registry(), []byte(det)); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
 		pretty.Print(dst)

@@ -64,7 +64,7 @@ func DebugLog_Optional_Marshal(m jsn.Marshaler, pv **DebugLog) (err error) {
 }
 
 func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("log", DebugLog_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("log", DebugLog_Type, val)); err == nil {
 		e0 := m.MarshalKey("", DebugLog_Field_Value)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.Value)
@@ -136,7 +136,7 @@ func DoNothing_Optional_Marshal(m jsn.Marshaler, pv **DoNothing) (err error) {
 }
 
 func DoNothing_Marshal(m jsn.Marshaler, val *DoNothing) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(DoNothing_Type, DoNothing_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(DoNothing_Type, DoNothing_Type, val)); err == nil {
 		e0 := m.MarshalKey("why", DoNothing_Field_Reason)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Optional_Marshal(m, &val.Reason)

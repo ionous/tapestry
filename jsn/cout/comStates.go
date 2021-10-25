@@ -66,7 +66,7 @@ func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 		return true
 	}
 	next.OnSlot = func(typeName string, slot jsn.Spotter) (okay bool) {
-		if slot.HasSlot() {
+		if _, ok := slot.GetSlot(); ok {
 			m.PushState(m.newSlot())
 			okay = true
 		}

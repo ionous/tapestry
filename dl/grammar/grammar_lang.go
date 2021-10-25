@@ -61,7 +61,7 @@ func Action_Optional_Marshal(m jsn.Marshaler, pv **Action) (err error) {
 }
 
 func Action_Marshal(m jsn.Marshaler, val *Action) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow("as", Action_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow("as", Action_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Action_Field_Action)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Action)
@@ -128,7 +128,7 @@ func Alias_Optional_Marshal(m jsn.Marshaler, pv **Alias) (err error) {
 }
 
 func Alias_Marshal(m jsn.Marshaler, val *Alias) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Alias_Type, Alias_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Alias_Type, Alias_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Alias_Field_Names)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Repeats_Marshal(m, &val.Names)
@@ -200,7 +200,7 @@ func AllOf_Optional_Marshal(m jsn.Marshaler, pv **AllOf) (err error) {
 }
 
 func AllOf_Marshal(m jsn.Marshaler, val *AllOf) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(AllOf_Type, AllOf_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(AllOf_Type, AllOf_Type, val)); err == nil {
 		e0 := m.MarshalKey("", AllOf_Field_Series)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Series)
@@ -265,7 +265,7 @@ func AnyOf_Optional_Marshal(m jsn.Marshaler, pv **AnyOf) (err error) {
 }
 
 func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(AnyOf_Type, AnyOf_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(AnyOf_Type, AnyOf_Type, val)); err == nil {
 		e0 := m.MarshalKey("", AnyOf_Field_Options)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Options)
@@ -332,7 +332,7 @@ func Directive_Optional_Marshal(m jsn.Marshaler, pv **Directive) (err error) {
 }
 
 func Directive_Marshal(m jsn.Marshaler, val *Directive) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Directive_Type, Directive_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Directive_Type, Directive_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Directive_Field_Lede)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Repeats_Marshal(m, &val.Lede)
@@ -403,7 +403,7 @@ func Grammar_Optional_Marshal(m jsn.Marshaler, pv **Grammar) (err error) {
 }
 
 func Grammar_Marshal(m jsn.Marshaler, val *Grammar) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Grammar_Type, Grammar_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Grammar_Type, Grammar_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Grammar_Field_Grammar)
 		if e0 == nil {
 			e0 = GrammarMaker_Marshal(m, &val.Grammar)
@@ -422,8 +422,8 @@ var GrammarMaker_Optional_Marshal = GrammarMaker_Marshal
 
 type GrammarMaker_Slot struct{ ptr *GrammarMaker }
 
-func (At GrammarMaker_Slot) GetType() string { return GrammarMaker_Type }
-func (at GrammarMaker_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At GrammarMaker_Slot) GetType() string              { return GrammarMaker_Type }
+func (at GrammarMaker_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at GrammarMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(GrammarMaker)
 	return
@@ -509,7 +509,7 @@ func Noun_Optional_Marshal(m jsn.Marshaler, pv **Noun) (err error) {
 }
 
 func Noun_Marshal(m jsn.Marshaler, val *Noun) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Noun_Type, Noun_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Noun_Type, Noun_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Noun_Field_Kind)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Kind)
@@ -574,7 +574,7 @@ func Retarget_Optional_Marshal(m jsn.Marshaler, pv **Retarget) (err error) {
 }
 
 func Retarget_Marshal(m jsn.Marshaler, val *Retarget) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Retarget_Type, Retarget_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Retarget_Type, Retarget_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Retarget_Field_Span)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Span)
@@ -639,7 +639,7 @@ func Reverse_Optional_Marshal(m jsn.Marshaler, pv **Reverse) (err error) {
 }
 
 func Reverse_Marshal(m jsn.Marshaler, val *Reverse) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Reverse_Type, Reverse_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Reverse_Type, Reverse_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Reverse_Field_Reverses)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Reverses)
@@ -658,8 +658,8 @@ var ScannerMaker_Optional_Marshal = ScannerMaker_Marshal
 
 type ScannerMaker_Slot struct{ ptr *ScannerMaker }
 
-func (At ScannerMaker_Slot) GetType() string { return ScannerMaker_Type }
-func (at ScannerMaker_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At ScannerMaker_Slot) GetType() string              { return ScannerMaker_Type }
+func (at ScannerMaker_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at ScannerMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(ScannerMaker)
 	return
@@ -745,7 +745,7 @@ func Self_Optional_Marshal(m jsn.Marshaler, pv **Self) (err error) {
 }
 
 func Self_Marshal(m jsn.Marshaler, val *Self) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Self_Type, Self_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Self_Type, Self_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Self_Field_Player)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Player)
@@ -810,7 +810,7 @@ func Words_Optional_Marshal(m jsn.Marshaler, pv **Words) (err error) {
 }
 
 func Words_Marshal(m jsn.Marshaler, val *Words) (err error) {
-	if err = m.MarshalBlock(jsn.MarkFlow(Words_Type, Words_Type)); err == nil {
+	if err = m.MarshalBlock(jsn.MakeFlow(Words_Type, Words_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Words_Field_Words)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Repeats_Marshal(m, &val.Words)

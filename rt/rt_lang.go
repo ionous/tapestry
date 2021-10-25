@@ -12,8 +12,8 @@ var Assignment_Optional_Marshal = Assignment_Marshal
 
 type Assignment_Slot struct{ ptr *Assignment }
 
-func (At Assignment_Slot) GetType() string { return Assignment_Type }
-func (at Assignment_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At Assignment_Slot) GetType() string              { return Assignment_Type }
+func (at Assignment_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at Assignment_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(Assignment)
 	return
@@ -61,8 +61,8 @@ var BoolEval_Optional_Marshal = BoolEval_Marshal
 
 type BoolEval_Slot struct{ ptr *BoolEval }
 
-func (At BoolEval_Slot) GetType() string { return BoolEval_Type }
-func (at BoolEval_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At BoolEval_Slot) GetType() string              { return BoolEval_Type }
+func (at BoolEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at BoolEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(BoolEval)
 	return
@@ -110,8 +110,8 @@ var Execute_Optional_Marshal = Execute_Marshal
 
 type Execute_Slot struct{ ptr *Execute }
 
-func (At Execute_Slot) GetType() string { return Execute_Type }
-func (at Execute_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At Execute_Slot) GetType() string              { return Execute_Type }
+func (at Execute_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at Execute_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(Execute)
 	return
@@ -151,8 +151,8 @@ var NumListEval_Optional_Marshal = NumListEval_Marshal
 
 type NumListEval_Slot struct{ ptr *NumListEval }
 
-func (At NumListEval_Slot) GetType() string { return NumListEval_Type }
-func (at NumListEval_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At NumListEval_Slot) GetType() string              { return NumListEval_Type }
+func (at NumListEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at NumListEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(NumListEval)
 	return
@@ -200,8 +200,8 @@ var NumberEval_Optional_Marshal = NumberEval_Marshal
 
 type NumberEval_Slot struct{ ptr *NumberEval }
 
-func (At NumberEval_Slot) GetType() string { return NumberEval_Type }
-func (at NumberEval_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At NumberEval_Slot) GetType() string              { return NumberEval_Type }
+func (at NumberEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at NumberEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(NumberEval)
 	return
@@ -249,8 +249,8 @@ var RecordEval_Optional_Marshal = RecordEval_Marshal
 
 type RecordEval_Slot struct{ ptr *RecordEval }
 
-func (At RecordEval_Slot) GetType() string { return RecordEval_Type }
-func (at RecordEval_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At RecordEval_Slot) GetType() string              { return RecordEval_Type }
+func (at RecordEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at RecordEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(RecordEval)
 	return
@@ -298,8 +298,8 @@ var RecordListEval_Optional_Marshal = RecordListEval_Marshal
 
 type RecordListEval_Slot struct{ ptr *RecordListEval }
 
-func (At RecordListEval_Slot) GetType() string { return RecordListEval_Type }
-func (at RecordListEval_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At RecordListEval_Slot) GetType() string              { return RecordListEval_Type }
+func (at RecordListEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at RecordListEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(RecordListEval)
 	return
@@ -347,8 +347,8 @@ var TextEval_Optional_Marshal = TextEval_Marshal
 
 type TextEval_Slot struct{ ptr *TextEval }
 
-func (At TextEval_Slot) GetType() string { return TextEval_Type }
-func (at TextEval_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At TextEval_Slot) GetType() string              { return TextEval_Type }
+func (at TextEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at TextEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(TextEval)
 	return
@@ -396,8 +396,8 @@ var TextListEval_Optional_Marshal = TextListEval_Marshal
 
 type TextListEval_Slot struct{ ptr *TextListEval }
 
-func (At TextListEval_Slot) GetType() string { return TextListEval_Type }
-func (at TextListEval_Slot) HasSlot() bool   { return at.ptr != nil }
+func (At TextListEval_Slot) GetType() string              { return TextListEval_Type }
+func (at TextListEval_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at TextListEval_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.ptr), okay = v.(TextListEval)
 	return

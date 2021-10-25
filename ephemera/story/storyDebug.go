@@ -20,8 +20,3 @@ func (op *Comment) ImportStub(k *Importer) (ret interface{}, err error) {
 	}
 	return
 }
-
-// a hopefully temporary hack
-func (k *Importer) InProgram() (ret bool) {
-	return k.path.inProg()
-}

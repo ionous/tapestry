@@ -4,8 +4,11 @@ import (
 	"database/sql"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/tables"
 )
+
+type Named = eph.Named
 
 type Recorder struct {
 	srcId int64
@@ -25,25 +28,25 @@ func (k *Recorder) SetSource(srcURI string) *Recorder {
 // and returns a unique identifier for it.
 // Category is likely one of kind, noun, aspect, attribute, property, relation.
 // The format of the location ofs depends on the data source.
-func (k *Recorder) NewName(name, category, ofs string) (ret Named) {
-	return k.NewDomainName(Named{}, name, category, ofs)
+func (k *Recorder) NewName(name, category, ofs string) (ret eph.Named) {
+	return k.NewDomainName(eph.Named{}, name, category, ofs)
 }
 
-func (k *Recorder) NewDomainName(domain Named, name, category, ofs string) (ret Named) {
+func (k *Recorder) NewDomainName(domain eph.Named, name, category, ofs string) (ret eph.Named) {
 	// normalize names in an attempt to simplify lookup of some names
 	// many tests would have to be adjusted to be able to handle normalization wholesale
 	// so for now make this opt-in.
 	norm := strings.TrimSpace(name)
 	namedId := k.cache.MustGetId(eph_named, norm, name, category, domain, k.srcId, ofs)
-	return Named{namedId, norm}
+	return eph.MakeName(namedId, norm)
 }
 
-type Prog struct{ Named }
+type Prog struct{ eph.Named }
 
 // fix: this should probably take "ofs" just like NewName does.
 func (k *Recorder) NewProg(rootType string, blob []byte) (ret Prog) {
 	id := k.cache.MustGetId(eph_prog, k.srcId, rootType, blob)
-	ret = Prog{Named{id, rootType}}
+	ret = Prog{eph.MakeName(id, rootType)}
 	return
 }
 

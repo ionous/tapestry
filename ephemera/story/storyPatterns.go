@@ -108,13 +108,14 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 		if guard := op.Guard; guard == nil {
 			err = errutil.New("missing guard in", pattern.String(), "at", op.Hook.At.String())
 		} else {
-			if searchForCounters(guard.(jsn.Marshalee)) {
+			if SearchForCounters(guard.(jsn.Marshalee)) {
 				flags |= rt.Filter
 			}
+			domain := k.Env().Current.Domain
 			// check if this rule is declared inside a specific domain
-			if dom := k.Current.Domain.String(); len(dom) > 0 {
+			if domain != k.Env().Game.Domain {
 				guard = &core.AllTrue{[]rt.BoolEval{
-					&core.HasDominion{dom},
+					&core.HasDominion{domain.String()},
 					guard,
 				}}
 			}
@@ -124,7 +125,7 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 				err = errutil.New(e, "while importing pattern rule", pattern.String())
 			} else {
 				// currentDomain returns "entire_game" when k.Current.Domain is the empty string.
-				k.NewPatternRule(pattern, target, k.currentDomain(), patternProg)
+				k.NewPatternRule(pattern, target, domain, patternProg)
 			}
 		}
 	}

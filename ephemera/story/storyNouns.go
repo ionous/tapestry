@@ -6,35 +6,40 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
 
-func (*Pronoun) Import(*Importer) (err error) {
+type NounImporter interface {
+	ImportNouns(k *Importer) (err error)
+}
+
+func (*Pronoun) ImportNouns(*Importer) (err error) {
 	// FIX: pronoun(s) can indicate plurality
 	return
 }
 
-func (op *NounPhrase) Import(k *Importer) (err error) {
-	if imp, ok := op.Opt.(GenericImport); !ok {
+func (op *NounPhrase) ImportNouns(k *Importer) (err error) {
+	if imp, ok := op.Opt.(NounImporter); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
 	} else {
-		err = imp.Import(k)
+		err = imp.ImportNouns(k)
 	}
 	return
 }
 
 func ImportNamedNouns(k *Importer, els []NamedNoun) (err error) {
 	for _, el := range els {
-		if e := el.Import(k); e != nil {
+		if e := el.ImportNouns(k); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}
 	return
 }
 
-func (op *NamedNoun) Import(k *Importer) (err error) {
+func (op *NamedNoun) ImportNouns(k *Importer) (err error) {
 	// declare a noun class that has several default fields
 	if once := "noun"; k.Once(once) {
 		// common or proper nouns ( rabbit, vs. Roger )
@@ -57,7 +62,7 @@ func (op *NamedNoun) Import(k *Importer) (err error) {
 func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 	// declare the existence of the field "printed name"
 	if once := "printed_name"; k.Once(once) {
-		domain := k.gameDomain()
+		domain := k.Env().Game.Domain
 		things := k.NewDomainName(domain, "objects", tables.NAMED_KINDS, once)
 		field := k.NewDomainName(domain, "printed_name", tables.NAMED_FIELD, once)
 		k.NewField(things, field, tables.PRIM_TEXT, "")
@@ -81,13 +86,13 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 	printedNameProp := k.NewName("printed_name", tables.NAMED_FIELD, at)
 
 	for i := 0; i < cnt; i++ {
-		countedNoun := k.autoCounter.Next(baseName)
-		noun := k.NewName(countedNoun, "noun", at)
+		countedNoun := k.newCounter(baseName, reader.Position{})
+		noun := k.NewName(countedNoun.Offset, "noun", at)
 		k.NewNoun(noun, namedSingularKind)
 		k.NewValue(noun, countedTypeTrait, true)
 		k.NewValue(noun, printedNameProp, baseName)
 		// needed for relations, etc.
-		k.Recent.Nouns.Add(noun)
+		k.Env().Recent.Nouns.Add(noun)
 	}
 	return
 }
@@ -96,7 +101,7 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 	if noun, e := NewNounName(k, op.Name); e != nil {
 		err = e
 	} else {
-		k.Recent.Nouns.Add(noun)
+		k.Env().Recent.Nouns.Add(noun)
 		// pick common or proper based on noun capitalization.
 		// fix: implicitly generated facts should be considered preliminary
 		// so that authors can override them.
@@ -120,7 +125,7 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 
 			// create a "indefinite article" field for all objects
 			if once := "named_noun"; k.Once(once) {
-				domain := k.gameDomain()
+				domain := k.Env().Game.Domain
 				objects := k.NewDomainName(domain, "objects", tables.NAMED_KINDS, once)
 				indefinite := k.NewDomainName(domain, "indefinite_article", tables.NAMED_FIELD, once)
 				k.NewField(objects, indefinite, tables.PRIM_TEXT, "")
@@ -131,7 +136,7 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 }
 
 // ex. "[the box] (is a) (closed) (container) ((on) (the beach))"
-func (op *KindOfNoun) Import(k *Importer) (err error) {
+func (op *KindOfNoun) ImportNouns(k *Importer) (err error) {
 	if kind, e := NewSingularKind(k, op.Kind); e != nil {
 		err = e
 	} else {
@@ -148,7 +153,7 @@ func (op *KindOfNoun) Import(k *Importer) (err error) {
 		}
 		if err == nil {
 			// we collected the nouns and delayed processing them till now.
-			for _, noun := range k.Recent.Nouns.Subjects {
+			for _, noun := range k.Env().Recent.Nouns.Subjects {
 				k.NewNoun(noun, kind)
 				for _, trait := range traits {
 					k.NewValue(noun, trait, true) // the value of the trait for the noun is true
@@ -157,7 +162,7 @@ func (op *KindOfNoun) Import(k *Importer) (err error) {
 
 			//
 			if op.NounRelation != nil {
-				err = op.NounRelation.Import(k)
+				err = op.NounRelation.ImportNouns(k)
 			}
 		}
 	}
@@ -166,17 +171,17 @@ func (op *KindOfNoun) Import(k *Importer) (err error) {
 
 // ex. [the cat and the hat] (are) (in) (the book)
 // ex. [Hector and Maria] (are) (suspicious of) (Santa and Santana).
-func (op *NounRelation) Import(k *Importer) (err error) {
+func (op *NounRelation) ImportNouns(k *Importer) (err error) {
 	if rel, e := NewRelation(k, op.Relation); e != nil {
 		err = e
-	} else if e := k.Recent.Nouns.CollectObjects(func() (err error) {
+	} else if e := k.Env().Recent.Nouns.CollectObjects(func() (err error) {
 		return ImportNamedNouns(k, op.Nouns)
 	}); e != nil {
 		err = e
 	} else {
-		domain := k.currentDomain()
-		for _, subject := range k.Recent.Nouns.Subjects {
-			for _, object := range k.Recent.Nouns.Objects {
+		domain := k.Env().Current.Domain
+		for _, subject := range k.Env().Recent.Nouns.Subjects {
+			for _, object := range k.Env().Recent.Nouns.Objects {
 				k.NewRelative(object, rel, subject, domain)
 			}
 		}
@@ -185,13 +190,13 @@ func (op *NounRelation) Import(k *Importer) (err error) {
 }
 
 //
-func (op *NounTraits) Import(k *Importer) (err error) {
+func (op *NounTraits) ImportNouns(k *Importer) (err error) {
 	for _, t := range op.Trait {
 		if trait, e := NewTrait(k, t); e != nil {
 			err = e
 			break
 		} else {
-			for _, noun := range k.Recent.Nouns.Subjects {
+			for _, noun := range k.Env().Recent.Nouns.Subjects {
 				k.NewValue(noun, trait, true) // the value of the trait for the noun is true
 			}
 		}

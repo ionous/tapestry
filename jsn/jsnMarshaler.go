@@ -60,6 +60,7 @@ type Block interface {
 type FlowBlock interface {
 	Block
 	GetLede() string
+	GetValue() interface{}
 }
 
 // selects one of a closed set of possible values
@@ -84,7 +85,7 @@ type Slicer = SliceBlock
 // returns the value if it exists for future serialization
 type SlotBlock interface {
 	Block
-	HasSlot() bool
+	GetSlot() (interface{}, bool)
 	SetSlot(interface{}) bool
 }
 type Spotter = SlotBlock

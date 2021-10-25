@@ -12,7 +12,9 @@ import (
 	"runtime/pprof"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -79,15 +81,18 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 			} else {
 				fs := make(Files)
 				if e := fs.ReadPaths(inFile); e != nil {
-					err = errutil.New("couldn't import  file", inFile, e)
+					err = errutil.New("couldn't read file", inFile, e)
 				} else {
 					k := story.NewImporter(db)
 					for path, data := range fs {
 						log.Println("importing", path)
-						if v, e := k.ImportStory(path, data); e != nil {
+						var curr story.Story
+						if e := din.Decode(&curr, iffy.Registry(), data); e != nil {
+							err = errutil.Append(err, e)
+						} else if e := k.ImportStory(path, &curr); e != nil {
 							err = errutil.Append(err, e)
 						} else {
-							ret = append(ret, v)
+							ret = append(ret, &curr)
 						}
 					}
 				}

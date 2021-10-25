@@ -17,6 +17,10 @@ func (n Enum) GetValue() interface{} {
 	return *n.str
 }
 
+func (n Enum) String() string {
+	return *n.str
+}
+
 func (n Enum) GetCompactValue() (ret interface{}) {
 	spec, str := n.Compose(), *n.str
 	if v, i := spec.IndexOfChoice(str); i >= 0 {

@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 )
@@ -18,9 +19,7 @@ func TestFactorialStory(t *testing.T) {
 		t.Fatal("create tables", e)
 	} else {
 		k := story.NewImporter(db)
-		k.SetSource(t.Name())
-		//
-		if e := debug.FactorialStory.ImportStory(k); e != nil {
+		if e := k.ImportStory(t.Name(), debug.FactorialStory); e != nil {
 			t.Fatal(e)
 		} else {
 			var buf strings.Builder
@@ -32,7 +31,7 @@ func TestFactorialStory(t *testing.T) {
 			if have, want := buf.String(), lines(
 				"1", // eph_check -- 1 unit test
 				"2", // eph_rule -- 2 rules
-				"3", // e@h_prog -- 1 test program, 2 rules
+				"3", // eph_prog -- 1 test program, 2 rules
 				"4", // eph_pattern specifies types - (1 pattern, 1 parameter) * (1 decl, 1 call)
 				// eph_named
 				"factorial,pattern", // name of the pattern

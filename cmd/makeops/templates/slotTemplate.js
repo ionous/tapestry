@@ -9,7 +9,7 @@ var {{Pascal name}}_Optional_Marshal = {{Pascal name}}_Marshal
 type {{Pascal name}}_Slot struct { ptr *{{Pascal name}} }
 
 func (At {{Pascal name}}_Slot) GetType() string { return {{Pascal name}}_Type }
-func (at {{Pascal name}}_Slot) HasSlot() bool { return at.ptr != nil }
+func (at {{Pascal name}}_Slot) GetSlot() (interface{}, bool) { return at.ptr, at.ptr != nil }
 func (at {{Pascal name}}_Slot) SetSlot(v interface{}) (okay bool) {
   (*at.ptr), okay = v.({{Pascal name}})
   return

@@ -2,6 +2,7 @@ package din
 
 import (
 	"encoding/json"
+	r "reflect"
 
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/jsn/chart"
@@ -10,16 +11,25 @@ import (
 
 type xDecoder struct {
 	chart.Machine
-	reg Registry
+	reg map[string]r.Type
 }
 
-func Decode(dst jsn.Marshalee, reg Registry, msg json.RawMessage) error {
+func Decode(dst jsn.Marshalee, reg map[string]r.Type, msg json.RawMessage) error {
 	dec := xDecoder{reg: reg}
 	next := dec.newBlock(&msg)
 	next.OnCommit = func(interface{}) {}
 	dec.ChangeState(next)
 	dst.Marshal(&dec)
 	return dec.Errors()
+}
+
+func (dec *xDecoder) newType(typeName string) (ret interface{}, err error) {
+	if rtype, ok := dec.reg[typeName]; !ok {
+		err = errutil.New("unknown type", typeName)
+	} else {
+		ret = r.New(rtype).Interface()
+	}
+	return
 }
 
 func (dec *xDecoder) newValue(pm *json.RawMessage, next *chart.StateMix) *chart.StateMix {
@@ -74,7 +84,7 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 			dec.Error(errutil.New("expected", typeName, "found", d.Type))
 		} else if e := json.Unmarshal(d.Msg, &inner); e != nil {
 			dec.Error(e)
-		} else if v, e := dec.reg.NewType(inner.Type); e != nil {
+		} else if v, e := dec.newType(inner.Type); e != nil {
 			dec.Error(e)
 		} else if !slot.SetSlot(v) {
 			dec.Error(errutil.Fmt("couldn't put %T into slot %T", v, slot))
