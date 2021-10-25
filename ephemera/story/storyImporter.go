@@ -89,7 +89,7 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 	// presumably, this will have to be fixed eventually
 	// so that states can be composited not monolithic.
 	ts := chart.MakeEncoder(nil)
-	states := BlockMap{
+	return ts.Marshal(tgt, Map(&ts, BlockMap{
 		rt.Execute_Type: KeyMap{
 			BlockStart: func(b jsn.Block, _ interface{}) (err error) {
 				k.activityDepth++
@@ -115,7 +115,6 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 						// ( once domains and tests are stackable )
 						k.env.Recent.Test = newDomain
 						k.env.PushDomain(newDomain)
-
 					}
 				}
 				return
@@ -125,50 +124,39 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 				return
 			},
 		},
-	}
-
-	type ImportStub interface {
-		ImportStub(*Importer) (interface{}, error)
-	}
-
-	// CHECK THAT ONLY STORY STATEMENTS IMPLEMENT STORY STATEMENT!
-	replaceSlot := KeyMap{
-		BlockEnd: func(b jsn.Block, slot interface{}) (err error) {
-			if slot, ok := slot.(jsn.SlotBlock); !ok {
-				err = errutil.New("trying to replace something other than a slot")
-			} else if slat, ok := slot.GetSlot(); !ok {
-				err = jsn.Missing
-			} else if target, ok := slat.(ImportStub); !ok {
-				err = errutil.New("slat is not replaceable")
-			} else if rep, e := target.ImportStub(k); e != nil {
-				err = errutil.New(e, "failed to create replacement")
-			} else if !slot.SetSlot(rep) {
-				err = errutil.New("failed to set replacement")
-			}
-			return
+		OtherBlocks: KeyMap{
+			BlockStart: func(b jsn.Block, v interface{}) (err error) {
+				switch newBlock := v.(type) {
+				case jsn.SlotBlock:
+					if slat, ok := newBlock.GetSlot(); !ok {
+						err = jsn.Missing
+					} else {
+						switch tgt := slat.(type) {
+						case ImportStub:
+							if rep, e := tgt.ImportStub(k); e != nil {
+								err = errutil.New(e, "failed to create replacement")
+							} else if !newBlock.SetSlot(rep) {
+								err = errutil.New("failed to set replacement")
+							}
+						}
+					}
+				}
+				return
+			},
+			BlockEnd: func(b jsn.Block, slot interface{}) (err error) {
+				switch oldBlock := b.(type) {
+				case jsn.FlowBlock:
+					switch tgt := oldBlock.GetValue().(type) {
+					case StoryStatement:
+						err = tgt.ImportPhrase(k)
+					}
+				}
+				return
+			},
 		},
-	}
-	storyStatement := KeyMap{
-		BlockEnd: func(b jsn.Block, v interface{}) (err error) {
-			if flow, ok := b.(jsn.FlowBlock); !ok {
-				err = errutil.Fmt("trying to post import something other than a flow")
-			} else if imp, ok := flow.GetValue().(StoryStatement); !ok {
-				err = errutil.Fmt("flow lacks a post import method")
-			} else {
-				err = imp.ImportPhrase(k)
-			}
-			return
-		},
-	}
-	for _, cmd := range Slats {
-		// FIX: i'd like to visit story statements after replace....
-		if _, ok := cmd.(ImportStub); ok {
-			spec := cmd.Compose()
-			states[spec.Name] = replaceSlot
-		} else if _, ok := cmd.(StoryStatement); ok {
-			spec := cmd.Compose()
-			states[spec.Name] = storyStatement
-		}
-	}
-	return ts.Marshal(tgt, Map(&ts, states))
+	}))
+}
+
+type ImportStub interface {
+	ImportStub(*Importer) (interface{}, error)
 }
