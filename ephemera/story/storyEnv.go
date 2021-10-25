@@ -1,27 +1,27 @@
 package story
 
-import "git.sr.ht/~ionous/iffy/ephemera"
+import "git.sr.ht/~ionous/iffy/ephemera/eph"
 
 type StoryEnv struct {
 	Recent struct {
 		// Scene, Aspect, Test string
 		// Nouns[]? Relation, Trait
-		// string or ephemera.Named
+		// string or eph.Named
 		Nouns Nouns
-		Test  ephemera.Named
+		Test  eph.Named
 	}
 	Game struct {
-		Domain ephemera.Named
+		Domain eph.Named
 	}
 	Current struct {
 		// eventually, a stack.
-		Domain ephemera.Named
+		Domain eph.Named
 	}
-	Domains []ephemera.Named
+	Domains []eph.Named
 }
 
 // save current domain and set a new one
-func (n *StoryEnv) PushDomain(newDomain ephemera.Named) {
+func (n *StoryEnv) PushDomain(newDomain eph.Named) {
 	n.Current.Domain, n.Domains = newDomain, append(n.Domains, n.Current.Domain)
 }
 

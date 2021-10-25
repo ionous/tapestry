@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -40,7 +40,7 @@ func (op *Summary) ImportNouns(k *Importer) (err error) {
 	return
 }
 
-func LastNameOf(n []ephemera.Named) (ret ephemera.Named) {
+func LastNameOf(n []eph.Named) (ret eph.Named) {
 	if cnt := len(n); cnt > 0 {
 		ret = (n)[cnt-1]
 	}
@@ -56,7 +56,7 @@ func (op *Tail) ImportNouns(k *Importer) (err error) {
 	return
 }
 
-func (op *TraitPhrase) ImportTraits(k *Importer, aspect ephemera.Named) (err error) {
+func (op *TraitPhrase) ImportTraits(k *Importer, aspect eph.Named) (err error) {
 	for rank, trait := range op.Trait {
 		if t, e := NewTrait(k, trait); e != nil {
 			err = errutil.Append(err, e)

@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"github.com/ionous/errutil"
 )
 
@@ -30,10 +30,10 @@ func (op *TestStatement) ImportPhrase(k *Importer) (err error) {
 }
 
 type Testing interface {
-	ImportTest(k *Importer, testName ephemera.Named) (err error)
+	ImportTest(k *Importer, testName eph.Named) (err error)
 }
 
-func (op *TestOutput) ImportTest(k *Importer, testName ephemera.Named) (err error) {
+func (op *TestOutput) ImportTest(k *Importer, testName eph.Named) (err error) {
 	// note: we use the raw lines here, we don't expect the text output to be a template.
 	k.NewTestExpectation(testName, "execute", op.Lines.Str)
 	return

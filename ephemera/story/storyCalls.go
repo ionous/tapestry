@@ -3,8 +3,8 @@ package story
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 
-	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
@@ -23,7 +23,7 @@ func (op *Determine) ImportStub(k *Importer) (ret interface{}, err error) {
 func (op *Make) ImportStub(k *Importer) (ret interface{}, err error) {
 	// fix: add a reference to the kind.
 	// fix: not recording this against a "pattern" name, but it could be recorded against a kind
-	if args, e := importArgs(k, ephemera.Named{}, op.Arguments); e != nil {
+	if args, e := importArgs(k, eph.Named{}, op.Arguments); e != nil {
 		err = &OpError{Op: op, Err: e}
 	} else {
 		ret = &core.CallMake{Kind: op.Name, Arguments: args}
@@ -42,7 +42,7 @@ func (op *Send) ImportStub(k *Importer) (ret interface{}, err error) {
 	return
 }
 
-func importCall(k *Importer, slot string, n value.PatternName, stubs *Arguments) (retName ephemera.Named, retArgs core.CallArgs, err error) {
+func importCall(k *Importer, slot string, n value.PatternName, stubs *Arguments) (retName eph.Named, retArgs core.CallArgs, err error) {
 	if p, e := NewPatternName(k, n); e != nil {
 		err = e
 	} else if args, e := importArgs(k, p, stubs); e != nil {
@@ -57,7 +57,7 @@ func importCall(k *Importer, slot string, n value.PatternName, stubs *Arguments)
 	return
 }
 
-func importArgs(k *Importer, p ephemera.Named, stubs *Arguments,
+func importArgs(k *Importer, p eph.Named, stubs *Arguments,
 ) (ret core.CallArgs, err error) {
 	if stubs != nil {
 		var argList []core.CallArg

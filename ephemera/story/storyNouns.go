@@ -5,7 +5,7 @@ import (
 	"unicode/utf8"
 
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -141,7 +141,7 @@ func (op *KindOfNoun) ImportNouns(k *Importer) (err error) {
 		err = e
 	} else {
 		//
-		var traits []ephemera.Named
+		var traits []eph.Named
 		if ts := op.Trait; ts != nil {
 			for _, t := range ts {
 				if t, e := NewTrait(k, t); e != nil {

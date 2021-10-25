@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/jsn/chart"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -19,7 +20,7 @@ type Importer struct {
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime       map[string]bool
 	autoCounter   ident.Counters
-	entireGame    ephemera.Named
+	entireGame    eph.Named
 	env           StoryEnv
 	activityDepth int
 }
@@ -40,7 +41,7 @@ func (k *Importer) ImportStory(path string, src *Story) (err error) {
 	return importStory(k, src)
 }
 
-func (k *Importer) NewName(name, category, ofs string) ephemera.Named {
+func (k *Importer) NewName(name, category, ofs string) eph.Named {
 	return k.NewDomainName(k.Env().Current.Domain, name, category, ofs)
 }
 

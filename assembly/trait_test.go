@@ -9,6 +9,7 @@ import (
 	"github.com/kr/pretty"
 
 	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
@@ -19,7 +20,7 @@ func addTraits(rec *ephemera.Recorder, pairs []string) (err error) {
 	els := pairs
 	for i, cnt := 0, len(els); i < cnt; i += 2 {
 		key, value := els[i], els[i+1]
-		var aspect, trait ephemera.Named
+		var aspect, trait eph.Named
 		if len(key) > 0 {
 			aspect = rec.NewName(key, tables.NAMED_ASPECT, "key")
 		}

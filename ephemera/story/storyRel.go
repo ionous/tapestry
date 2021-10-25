@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -20,7 +20,7 @@ func (op *KindOfRelation) ImportPhrase(k *Importer) (err error) {
 
 type importedCardinality struct {
 	cardinality           string // tables.ONE_TO_ONE
-	firstKind, secondKind ephemera.Named
+	firstKind, secondKind eph.Named
 }
 
 func (op *RelationCardinality) ImportCardinality(k *Importer) (ret importedCardinality, err error) {

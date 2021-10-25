@@ -1,23 +1,23 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
 )
 
-func (op *PluralKinds) NewName(k *Importer) (ret ephemera.Named, err error) {
+func (op *PluralKinds) NewName(k *Importer) (ret eph.Named, err error) {
 	return NewPluralKinds(k, *op)
 }
 
-func (op *NamedNoun) NewName(k *Importer) (ret ephemera.Named, err error) {
+func (op *NamedNoun) NewName(k *Importer) (ret eph.Named, err error) {
 	err = errutil.New("named noun for event block not implemented")
 	return
 }
 
 func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 	if opt, ok := op.Target.Opt.(interface {
-		NewName(*Importer) (ephemera.Named, error)
+		NewName(*Importer) (eph.Named, error)
 	}); !ok {
 		err = errutil.Fmt("unknown event block target %T at %s", opt, op.At)
 	} else if tgt, e := opt.NewName(k); e != nil {

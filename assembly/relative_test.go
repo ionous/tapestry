@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/ionous/errutil"
@@ -246,6 +247,6 @@ func addRelative(rec *ephemera.Recorder, noun, stem, otherNoun string) (err erro
 	name := rec.NewName(noun, tables.NAMED_NOUN, "test")
 	namedStem := rec.NewName(stem, tables.NAMED_VERB, "test")
 	otherName := rec.NewName(otherNoun, tables.NAMED_NOUN, "test")
-	rec.NewRelative(name, namedStem, otherName, ephemera.Named{})
+	rec.NewRelative(name, namedStem, otherName, eph.Named{})
 	return
 }

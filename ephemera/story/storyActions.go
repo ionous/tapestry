@@ -2,8 +2,8 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 
-	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
 )
@@ -23,7 +23,7 @@ func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret ephemera.Named, err error) {
+func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret eph.Named, err error) {
 	// declare the pattern
 	n := k.NewName(lang.Breakcase(name), tables.NAMED_PATTERN, op.At.String())
 
@@ -38,12 +38,12 @@ func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret ep
 
 	// then the other parameters...
 	type actionImporter interface {
-		ImportAction(*Importer, ephemera.Named) error
+		ImportAction(*Importer, eph.Named) error
 	}
 	return n, op.ActionParams.Opt.(actionImporter).ImportAction(k, n)
 }
 
-func (op *CommonAction) ImportAction(k *Importer, n ephemera.Named) (err error) {
+func (op *CommonAction) ImportAction(k *Importer, n eph.Named) (err error) {
 	if kind, e := NewSingularKind(k, op.Kind); e != nil {
 		err = e
 	} else {
@@ -57,7 +57,7 @@ func (op *CommonAction) ImportAction(k *Importer, n ephemera.Named) (err error) 
 	return
 }
 
-func (op *ActionContext) ImportContext(k *Importer, n ephemera.Named) (err error) {
+func (op *ActionContext) ImportContext(k *Importer, n eph.Named) (err error) {
 	if kind, e := NewSingularKind(k, op.Kind); e != nil {
 		err = e
 	} else {
@@ -70,7 +70,7 @@ func (op *ActionContext) ImportContext(k *Importer, n ephemera.Named) (err error
 const actionNoun = "noun"
 const actionOtherNoun = "other_noun"
 
-func (op *PairedAction) ImportAction(k *Importer, n ephemera.Named) (err error) {
+func (op *PairedAction) ImportAction(k *Importer, n eph.Named) (err error) {
 	// inform calls the two objects "noun" and "second noun"
 	if kind, e := FixSingular(k, op.Kinds); e != nil {
 		err = e
@@ -82,7 +82,7 @@ func (op *PairedAction) ImportAction(k *Importer, n ephemera.Named) (err error) 
 	}
 	return
 }
-func (op *AbstractAction) ImportAction(k *Importer, n ephemera.Named) (err error) {
+func (op *AbstractAction) ImportAction(k *Importer, n eph.Named) (err error) {
 	// no extra parameters
 	return
 }

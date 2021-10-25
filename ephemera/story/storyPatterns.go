@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -13,7 +14,7 @@ import (
 func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
 	if patternName, e := NewPatternName(k, op.Name); e != nil {
 		err = e
-	} else if e := op.PatternRules.ImportRules(k, patternName, ephemera.Named{}, 0); e != nil {
+	} else if e := op.PatternRules.ImportRules(k, patternName, eph.Named{}, 0); e != nil {
 		err = e
 	} else if e := op.PatternReturn.ImportReturn(k, patternName); e != nil {
 		err = e
@@ -26,7 +27,7 @@ func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *PatternReturn) ImportReturn(k *Importer, patternName ephemera.Named) (err error) {
+func (op *PatternReturn) ImportReturn(k *Importer, patternName eph.Named) (err error) {
 	if op != nil { // pattern returns are optional
 		if val, e := op.Result.ImportVariable(k, tables.NAMED_RETURN); e != nil {
 			err = errutil.Append(err, e)
@@ -79,7 +80,7 @@ func (op *PatternVariablesDecl) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *PatternRules) ImportRules(k *Importer, pattern, target ephemera.Named, flags rt.Flags) (err error) {
+func (op *PatternRules) ImportRules(k *Importer, pattern, target eph.Named, flags rt.Flags) (err error) {
 	if els := op.PatternRule; els != nil {
 		for _, el := range els {
 			if e := el.ImportRule(k, pattern, target, flags); e != nil {
@@ -90,7 +91,7 @@ func (op *PatternRules) ImportRules(k *Importer, pattern, target ephemera.Named,
 	return
 }
 
-func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, tgtFlags rt.Flags) (err error) {
+func (op *PatternRule) ImportRule(k *Importer, pattern, target eph.Named, tgtFlags rt.Flags) (err error) {
 	if hook, e := op.Hook.ImportProgram(k); e != nil {
 		err = e
 	} else if flags, e := op.Flags.ReadFlags(); e != nil {
@@ -150,7 +151,7 @@ func (op *PatternFlags) ReadFlags() (ret rt.Flags, err error) {
 	return
 }
 
-func (op *PatternLocals) ImportLocals(k *Importer, patternName ephemera.Named) (err error) {
+func (op *PatternLocals) ImportLocals(k *Importer, patternName eph.Named) (err error) {
 	for _, el := range op.LocalDecl {
 		if val, e := el.VariableDecl.ImportVariable(k, tables.NAMED_LOCAL); e != nil {
 			err = e
@@ -171,7 +172,7 @@ func (op *PatternLocals) ImportLocals(k *Importer, patternName ephemera.Named) (
 	return
 }
 
-func (op *PatternType) ImportType(k *Importer) (ret ephemera.Named, err error) {
+func (op *PatternType) ImportType(k *Importer) (ret eph.Named, err error) {
 	if t, found := composer.FindChoice(op, op.Str); !found {
 		err = errutil.Fmt("choice %s not found in %T", op.Str, op)
 	} else {

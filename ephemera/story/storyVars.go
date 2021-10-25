@@ -3,13 +3,13 @@ package story
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
 
 type variableDecl struct {
-	name, typeName ephemera.Named
+	name, typeName eph.Named
 	affinity       string
 }
 
@@ -25,9 +25,9 @@ func (op *VariableDecl) ImportVariable(k *Importer, cat string) (ret variableDec
 }
 
 // primitive type, object type, or ext
-func (op *VariableType) ImportVariableType(k *Importer) (retType ephemera.Named, retAff string, err error) {
+func (op *VariableType) ImportVariableType(k *Importer) (retType eph.Named, retAff string, err error) {
 	type variableTypeImporter interface {
-		ImportVariableType(*Importer) (ephemera.Named, string, error)
+		ImportVariableType(*Importer) (eph.Named, string, error)
 	}
 	if opt, ok := op.Opt.(variableTypeImporter); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
@@ -37,7 +37,7 @@ func (op *VariableType) ImportVariableType(k *Importer) (retType ephemera.Named,
 	return
 }
 
-func (op *ObjectType) ImportVariableType(k *Importer) (retType ephemera.Named, retAff string, err error) {
+func (op *ObjectType) ImportVariableType(k *Importer) (retType eph.Named, retAff string, err error) {
 	retType, err = NewSingularKind(k, op.Kind)
 	retAff = affine.Object.String()
 	return
@@ -54,7 +54,7 @@ func (op *PrimitiveType) ImportPrimType(k *Importer) (ret string, err error) {
 
 // returns one of the evalType(s) as a "Named" value --
 // we return a name to normalize references to object kinds which are also used as variables
-func (op *PrimitiveType) ImportVariableType(k *Importer) (retType ephemera.Named, retAff string, err error) {
+func (op *PrimitiveType) ImportVariableType(k *Importer) (retType eph.Named, retAff string, err error) {
 	// fix -- shouldnt this be a different type ??
 	// ie. we should be able to use FindChoie here.
 	var namedType string
