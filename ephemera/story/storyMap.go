@@ -17,8 +17,11 @@ func (callbacks BlockMap) call(b jsn.Block, key string, val interface{}) (err er
 	if b != nil {
 		if kvm, ok := callbacks[b.GetType()]; ok {
 			err = kvm.call(b, key, val)
-		} else if kvm, ok := callbacks[OtherBlocks]; ok {
-			err = kvm.call(b, key, val)
+		}
+		if err == nil {
+			if kvm, ok := callbacks[OtherBlocks]; ok {
+				err = kvm.call(b, key, val)
+			}
 		}
 	}
 	return

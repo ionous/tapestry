@@ -18,6 +18,8 @@ func (p *Position) String() string {
 	if p.IsValid() {
 		if s != "" {
 			s += ":" + p.Offset
+		} else {
+			s = p.Offset
 		}
 	}
 	if s == "" {

@@ -104,11 +104,11 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 			BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
 					err = errutil.Fmt("trying to post import something other than a flow")
-				} else if name, ok := flow.GetFlow().(*TestName); !ok {
+				} else if scene, ok := flow.GetFlow().(*TestScene); !ok {
 					err = errutil.Fmt("trying to post import something other than a flow")
 				} else {
 					// unpack the name, resolving "CurrentTest" to the name of the current test
-					if newDomain, e := NewTestName(k, *name); e != nil {
+					if newDomain, e := NewTestName(k, scene.TestName); e != nil {
 						err = e
 					} else {
 						// the most recent test might become the last popped test value

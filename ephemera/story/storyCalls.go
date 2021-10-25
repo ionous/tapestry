@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/eph"
+	"github.com/ionous/errutil"
 
 	"git.sr.ht/~ionous/iffy/tables"
 )
@@ -18,6 +19,10 @@ func (op *Determine) ImportStub(k *Importer) (ret interface{}, err error) {
 		ret = &core.CallPattern{Pattern: value.PatternName{Str: p.String()}, Arguments: args}
 	}
 	return
+}
+
+func (op *Determine) ImportPhrase(k *Importer) (err error) {
+	return errutil.New("determine should be transformed, not imported")
 }
 
 func (op *Make) ImportStub(k *Importer) (ret interface{}, err error) {

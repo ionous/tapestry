@@ -29,7 +29,7 @@ func TestImportSequence(t *testing.T) {
 		if k.ImportStory(t.Name(), &p); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(p.Val, &_import_target); len(diff) > 0 {
-			t.Fatal(pretty.Print(_import_target, cmd))
+			t.Fatal(pretty.Print("want:", _import_target, "have:", p.Val))
 		}
 	}
 }
