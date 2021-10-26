@@ -1,8 +1,7 @@
-class RemoteCatalog extends Cataloger {
+class StoryCatalog extends Cataloger {
   constructor(nodes) {
-    super();
+    super("/stories/");
     this.store= new CatalogStore(nodes);
-    this.base= "/stories/";
     this._saving= false;
     this._pending= false; // a pending CatalogFile
     // fix: really we should have a global statemachine with states like
@@ -58,37 +57,8 @@ class RemoteCatalog extends Cataloger {
   }
   run(action, file, options, cb) {
     const { path } = file;
-    this._send("POST", `${path}/${action}`, cb, options);
+    this._post(`${path}/${action}`, options, cb);
   }
-  _get(path, cb) {
-    this._send("GET", path, cb);
-  }
-  _put(path, body, cb) {
-    this._send("PUT", path, cb, body);
-  }
-  _send(method, path, cb, body) {
-    const url= this.base+path;
-    console.log("xml http request:", method, url);
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", ()=>{
-      console.log("xml http response:", method, url, xhr.statusText);
-      let data= true;
-      if (xhr.response) {
-        try {
-          data= JSON.parse(xhr.response);
-        } catch (e) {
-          data= false;
-        }
-      }
-      cb(data);
-    });
-    xhr.addEventListener("abort", ()=>cb(false));
-    xhr.addEventListener("error", ()=>cb(false));
-    xhr.open(method, url);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(body);
-  }
-
   // ["/curr","/proj1","/proj2","/shared", "currStory.if"]
   readContents(path, got) {
     console.log("gotten:", got);

@@ -218,7 +218,7 @@ class TagOutput {
 };
 
 // --------------------------------------------------------------------
-module.exports = class TagParser {
+class TagParser {
   static parse(msg, options) {
     const p= new TagParser(msg, options);
     if (msg) {
@@ -370,3 +370,5 @@ module.exports = class TagParser {
     }
   }
 };
+
+module.exports = TagParser;

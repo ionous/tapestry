@@ -14,6 +14,7 @@
 		</head>
 		<body>
 			<mk-composer id="app"
+				v-if="loaded"
 				:copier="copier"
 				:catalog="catalog"
 			></mk-composer>
@@ -29,6 +30,7 @@
 			<script src="src/aButton.js"></script>
 			<script src="src/autoText.js"></script>
 			<!--  -->
+			<script src="src/typeSet.js"></script>
 			<script src="src/items.js"></script>
 			<script src="src/tags.js"></script>
 			<script src="src/redux.js"></script>
@@ -40,7 +42,8 @@
 			<!--  -->
 			<script src="src/catalog/catalogItems.js"></script>
 			<script src="src/catalog/catalogStore.js"></script>
-			<script src="src/catalog/remoteCatalog.js"></script>
+			<script src="src/catalog/storyCatalog.js"></script>
+			<script src="src/catalog/specCatalog.js"></script>
 			<script src="src/catalog/catButton.js"></script>
 			<script src="src/catalog/folderItem.js"></script>
 			<script src="src/catalog/fileItem.js"></script>

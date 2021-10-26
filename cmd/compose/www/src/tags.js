@@ -1,3 +1,5 @@
+'use strict';
+
 // --------------------------------------------------------------------
 // categorize a character from a format string
 // https://github.com/ionous/makisu/wiki/FormatStrings
@@ -143,7 +145,7 @@ class TagBlock {
     if (!keepInnerSpace && v.match(/\s/)) {
       throw new Error(`format ${v} contained unexpected spaces`);
     }
-    return v;
+    return v || '_';
   }
   reduce() {
     // unpack to locals;
@@ -191,7 +193,8 @@ class TagBlock {
 // --------------------------------------------------------------------
 // generator with with specs
 class TagOutput {
-  constructor() {
+  constructor(msg) {
+    this.msg= msg;
     this.keys= [];
     this.args= {};
   }
@@ -217,7 +220,7 @@ class TagOutput {
 // --------------------------------------------------------------------
 class TagParser {
   static parse(msg, options) {
-    const p= new TagParser(options);
+    const p= new TagParser(msg, options);
     if (msg) {
       for (let i=0; i< msg.length; ++i) {
         p.onChar(msg[i], msg[i+1]);
@@ -225,12 +228,12 @@ class TagParser {
     }
     return p.end("");
   }
-  constructor(options) {
+  constructor(msg, options) {
     this.accum= new Accum();
     this.msg= new TagBlock(options);
     this.escaping= false;
     this.state= this.readingText;
-    this.out= new TagOutput();
+    this.out= new TagOutput(msg);
   }
   end() {
     this.onChar("");
@@ -316,7 +319,7 @@ class TagParser {
       this.msg.setValue(key, this.accum.flush());
       this.state= this.readingFilter;
     } else if (char.isSpecial()) {
-      throw new Error("unexpected character");
+      throw new Error(`unexpected character '${char.ch}'`);
     } else if (char.ends()) {
       throw new Error("unexpected end");
     } else {
@@ -366,5 +369,4 @@ class TagParser {
       this.accum.push(char);
     }
   }
-
 };

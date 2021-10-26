@@ -27,7 +27,7 @@ class Node {
   // return argument info for runs, swap options, string choices.
   getParam(token) {
     const spec= this.itemType.with;
-    return spec && spec.params[token];
+    return spec && spec.params && spec.params[token];
   }
   toJSON() {
     return {
