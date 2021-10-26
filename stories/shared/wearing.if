@@ -1029,7 +1029,7 @@
                                                                                     "$TEXT": {
                                                                                       "id": "id-17885664876-227",
                                                                                       "type": "text",
-                                                                                      "value": "not worn"
+                                                                                      "value": "not_worn"
                                                                                     }
                                                                                   }
                                                                                 }
@@ -1434,7 +1434,7 @@
                                                 "$TEXT": {
                                                   "id": "id-17885664876-488",
                                                   "type": "text",
-                                                  "value": "not worn"
+                                                  "value": "not_worn"
                                                 }
                                               }
                                             }
