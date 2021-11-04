@@ -45,6 +45,7 @@ var AllSignatures = []map[uint64]interface{}{
 	reader.Signatures,
 	rel.Signatures,
 	render.Signatures,
+	story.Signatures,
 	value.Signatures,
 }
 

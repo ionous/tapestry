@@ -47,9 +47,7 @@ func TestCompactEncoder(t *testing.T) {
 
 func TestCompactDecode(t *testing.T) {
 	var dst story.Story
-	if e := cin.Decode(&dst, []byte(com),
-		append(iffy.AllSignatures, story.Signatures),
-	); e != nil {
+	if e := cin.Decode(&dst, []byte(com), iffy.AllSignatures); e != nil {
 		pretty.Println(dst)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
