@@ -1210,7 +1210,7 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 type ListGather struct {
 	Var   value.VariableName `if:"label=_"`
 	From  ListSource         `if:"label=from"`
-	Using string             `if:"label=_,type=text"`
+	Using string             `if:"label=using,type=text"`
 }
 
 func (*ListGather) Compose() composer.Spec {
@@ -1277,7 +1277,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListGather_Field_From))
 		}
-		e2 := m.MarshalKey("", ListGather_Field_Using)
+		e2 := m.MarshalKey("using", ListGather_Field_Using)
 		if e2 == nil {
 			e2 = value.Text_Unboxed_Marshal(m, &val.Using)
 		}
@@ -2546,7 +2546,7 @@ var Signatures = map[uint64]interface{}{
 	5893619730181277740:  (*ListEach)(nil),        /* Repeating across:as:do: */
 	4018832586238090637:  (*ListEach)(nil),        /* Repeating across:as:do:else: */
 	10285751875873889942: (*ListFind)(nil),        /* Find:list: */
-	523806146137244572:   (*ListGather)(nil),      /* Gather:from:: */
+	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
 	11936860857815714018: (*ListLen)(nil),         /* Len: */
 	5185210125302469743:  (*ListMap)(nil),         /* Map:fromList:using: */
 	14826188473242626433: (*ListReduce)(nil),      /* Reduce into:fromList:using: */

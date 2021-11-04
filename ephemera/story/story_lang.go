@@ -7257,7 +7257,8 @@ var Signatures = map[uint64]interface{}{
 	475310308664194536:   (*CycleText)(nil),                /* CycleText: */
 	14117144937213193556: (*Determine)(nil),                /* Determine: */
 	18058198214790918510: (*Determine)(nil),                /* Determine:arguments: */
-	16508933934588876743: (*EventBlock)(nil),               /* EventBlock:handlers: */
+	11093854973825287408: (*EventBlock)(nil),               /* EventBlock kinds:handlers: */
+	11855563103941044442: (*EventBlock)(nil),               /* EventBlock namedNoun:handlers: */
 	8929470137779261632:  (*EventHandler)(nil),             /* EventHandler:event:patternRules: */
 	4061872818055525560:  (*EventHandler)(nil),             /* EventHandler:event:locals:patternRules: */
 	6887864790708299171:  (*EventTarget)(nil),              /* EventTarget:kinds: */
@@ -7271,17 +7272,17 @@ var Signatures = map[uint64]interface{}{
 	2174943222093748082:  (*KindOfNoun)(nil),               /* KindOfNoun:trait:kind: */
 	7004049933953251122:  (*KindOfNoun)(nil),               /* KindOfNoun:kind:nounRelation: */
 	9031009285767794428:  (*KindOfNoun)(nil),               /* KindOfNoun:trait:kind:nounRelation: */
-	17103003772384715675: (*KindOfRelation)(nil),           /* KindOfRelation:cardinality one_to_one: */
-	13760602953454050004: (*KindOfRelation)(nil),           /* KindOfRelation:cardinality one_to_many: */
-	10994426186697812284: (*KindOfRelation)(nil),           /* KindOfRelation:cardinality many_to_one: */
-	6159517700304723289:  (*KindOfRelation)(nil),           /* KindOfRelation:cardinality many_to_many: */
+	650960042632654891:   (*KindOfRelation)(nil),           /* KindOfRelation:cardinality oneToOne: */
+	1081167552428580836:  (*KindOfRelation)(nil),           /* KindOfRelation:cardinality oneToMany: */
+	10771046767095423028: (*KindOfRelation)(nil),           /* KindOfRelation:cardinality manyToOne: */
+	5852635308349599025:  (*KindOfRelation)(nil),           /* KindOfRelation:cardinality manyToMany: */
 	16689641787061327381: (*KindsOfAspect)(nil),            /* KindsOfAspect: */
 	18152778218757267226: (*KindsOfKind)(nil),              /* KindsOfKind:singularKind: */
 	12878641740711100222: (*KindsOfRecord)(nil),            /* KindsOfRecord: */
 	7748657468599352730:  (*KindsPossessProperties)(nil),   /* KindsPossessProperties:propertyDecl: */
-	17403355389529444331: (*Lede)(nil),                     /* Lede:nounPhrase kind_of_noun: */
-	10946804106489118898: (*Lede)(nil),                     /* Lede:nounPhrase noun_traits: */
-	1740466021425803333:  (*Lede)(nil),                     /* Lede:nounPhrase noun_relation: */
+	2335979695347311111:  (*Lede)(nil),                     /* Lede:nounPhrase kindOfNoun: */
+	14199050960332677505: (*Lede)(nil),                     /* Lede:nounPhrase nounTraits: */
+	10694393583567459526: (*Lede)(nil),                     /* Lede:nounPhrase nounRelation: */
 	10446315654994385322: (*LocalDecl)(nil),                /* LocalDecl: */
 	6009252662016869003:  (*LocalDecl)(nil),                /* LocalDecl:value: */
 	11789909816860756800: (*LocalInit)(nil),                /* LocalInit: */
@@ -7294,6 +7295,7 @@ var Signatures = map[uint64]interface{}{
 	11861883425272284529: (*NounPhrase)(nil),               /* NounPhrase:kindOfNoun: */
 	12126045192749329611: (*NounPhrase)(nil),               /* NounPhrase:nounTraits: */
 	7293688131970027220:  (*NounPhrase)(nil),               /* NounPhrase:nounRelation: */
+	8358327072078132634:  (*NounRelation)(nil),             /* NounRelation relation:nouns: */
 	3463959207148309224:  (*NounRelation)(nil),             /* NounRelation:relation:nouns: */
 	16756778993528596640: (*NounStatement)(nil),            /* NounStatement: */
 	13104026651265504280: (*NounStatement)(nil),            /* NounStatement:tail: */
@@ -7304,6 +7306,7 @@ var Signatures = map[uint64]interface{}{
 	17075866407822548206: (*OneToMany)(nil),                /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),                 /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),             /* PairedAction: */
+	6457542997147343897:  (*Paragraph)(nil),                /* Paragraph */
 	1044755875845214073:  (*Paragraph)(nil),                /* Paragraph: */
 	10735038169260724899: (*PatternActions)(nil),           /* PatternActions:patternRules: */
 	626108847940444615:   (*PatternActions)(nil),           /* PatternActions:patternLocals:patternRules: */
@@ -7321,16 +7324,17 @@ var Signatures = map[uint64]interface{}{
 	9272141818556957835:  (*PatternReturn)(nil),            /* PatternReturn: */
 	15914753357447503965: (*PatternRule)(nil),              /* PatternRule:hook activity: */
 	14391699440407036198: (*PatternRule)(nil),              /* PatternRule:flags:hook activity: */
+	15881043500959019380: (*PatternRules)(nil),             /* PatternRules */
 	12644281899387438986: (*PatternRules)(nil),             /* PatternRules: */
 	2711635406027692142:  (*PatternVariablesDecl)(nil),     /* PatternVariablesDecl:variableDecl: */
 	2318440529621094838:  (*PatternVariablesTail)(nil),     /* PatternVariablesTail: */
 	10026568271710825232: (*PrimitiveValue)(nil),           /* PrimitiveValue:boxedText: */
 	2609855438821334634:  (*PrimitiveValue)(nil),           /* PrimitiveValue:boxedNumber: */
 	4810952077799758135:  (*ProgramHook)(nil),              /* ProgramHook:activity: */
-	8568607257949030878:  (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType property_aspect: */
+	9994614537641138979:  (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType propertyAspect: */
 	9417869270879260791:  (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType primitive: */
 	18289966116990726001: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType ext: */
-	15558227017670234027: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType property_aspect:comment: */
+	11912820986652752602: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType propertyAspect:comment: */
 	11674503435152513662: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType primitive:comment: */
 	10271231677614855256: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType ext:comment: */
 	17992535257738220455: (*PropertyType)(nil),             /* PropertyType:propertyAspect: */
@@ -7349,11 +7353,12 @@ var Signatures = map[uint64]interface{}{
 	10010483713146895284: (*Send)(nil),                     /* Send:path:arguments: */
 	7279273919312137397:  (*ShuffleText)(nil),              /* ShuffleText: */
 	10085329253831819088: (*StoppingText)(nil),             /* StoppingText: */
+	337251088074141170:   (*Story)(nil),                    /* Story */
 	13392546219852761816: (*Story)(nil),                    /* Story: */
 	7688593191439831819:  (*Summary)(nil),                  /* Summary: */
-	13414258410622497845: (*Tail)(nil),                     /* Tail:nounPhrase kind_of_noun: */
-	13552532623454855284: (*Tail)(nil),                     /* Tail:nounPhrase noun_traits: */
-	17730753679906155267: (*Tail)(nil),                     /* Tail:nounPhrase noun_relation: */
+	5318973557611273585:  (*Tail)(nil),                     /* Tail:nounPhrase kindOfNoun: */
+	5583135325088318667:  (*Tail)(nil),                     /* Tail:nounPhrase nounTraits: */
+	7950604148908680916:  (*Tail)(nil),                     /* Tail:nounPhrase nounRelation: */
 	15090827023293362138: (*TestOutput)(nil),               /* TestOutput: */
 	11231723833188820353: (*TestRule)(nil),                 /* TestRule:hook activity: */
 	15304439741055926590: (*TestScene)(nil),                /* TestScene:story: */

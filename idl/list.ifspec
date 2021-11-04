@@ -117,7 +117,7 @@
     "list_gather":
     {
         "uses": "flow",
-        "spec": "gather {_%var:variable_name} {from:list_source} {_%using:text}",
+        "spec": "gather {_%var:variable_name} {from:list_source} {using:text}",
         "desc": "Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather."
     },
     "into_num_list":

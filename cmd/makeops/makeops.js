@@ -211,70 +211,83 @@ Handlebars.registerHelper('DescOf', function(x) {
 });
 
 const camelize= function(sel) {
-  if (sel.length > 1) {
+  if (sel && sel.length > 1) {
     sel= pascal(sel);
     sel= sel.charAt(0).toLowerCase() + sel.slice(1);
   }
-  return sel;
+  return sel || "";
 }
 
-const appendSelector= function(sig, sel, optional) {
-
+// loop over a subset of parameters generating signatures for them recursively
+// out is an array of signatures, each signature an array of parts.
+const sigParts = function(t, commandName) {
+  const ps= t.params.filter(p => !p.internal);
+  let sets= [[commandName]];
+  ps.forEach((p) => {
+    const sel= camelize(p.sel);
+    const pt= allTypes[p.type];
+    const simpleSwap= !p.repeats && pt.uses === 'swap';
+    if (!simpleSwap) {
+      const rest= sets.map(a => a.concat(sel));
+      if (!p.optional) {
+        sets= rest;
+      } else {
+        sets = sets.concat(rest);
+      }
+    }else {
+      // every choice in a swap gets its own selector for each existing set
+      let mul= [];
+      pt.params.filter(c => !c.internal).forEach((c)=> {
+        const choice= `${sel} ${camelize(c.sel)}`;
+        mul= mul.concat(sets.map(a=> a.concat(choice)));
+      });
+      sets= mul;
+    }
+  });
+  return sets;
 }
 
 // generate a signature hash for the passed type.
 const signType = function(t, out, all) {
   const lede= ledeName(t);
-  const init= pascal(lede || t.name);
-  let sig= [];
+  const commandName= pascal(lede || t.name);
+  const sigs= [];
   if (t.uses === 'swap') {
     for (const p of t.params) {
       if (!p.internal) {
         const sel= camelize(p.sel);
-        sig.push( init + ":" + sel + ":" );
+        sigs.push( commandName + ":" + sel + ":" );
       }
     }
   } else {
-    let i=0;
-    sig.push( init );
-    for (const p of t.params) {
-      if (!p.internal) {
-        const n= i++;
-        let sel= camelize(p.sel);
-        let pad = "";
-        if (!n) { // first non-internal parameter?
-          if (!sel) {
-            sig[0] += ":";
-          } else {
-            pad = " ";
-          }
+    // each part is an array of selectors
+    const sets= sigParts(t, commandName);
+    // console.log("sets", sets);
+    // we need to reduce those arrays into strings
+    for (const set of sets) {
+      let sig= set[0]; // index 0 is the command name itself
+      if (set.length > 1) {
+        // the first parameter doesnt always have selector text
+        // ( and sometimes it might have some choice text with a leading (though possibly also blank) selector )
+        const p1= set[1].trimLeft();
+        if (p1) {
+          sig += ' ' + p1 + ':';
         }
-        if (n || sel) {
-          sel = pad + sel;
-          const pt= allTypes[p.type];
-          if (pt.uses !== 'swap') {
-            const els= p.optional? sig: [];
-            for (let j=0, cnt=sig.length; j< cnt; j++) {
-              els.push(`${sig[j]}${sel}:`);
-            }
-            sig= els;
-          } else {
-            // every choice is added as a possible selector
-            const els= p.optional? sig: [];
-            for (let j=0, cnt=sig.length; j< cnt; j++) {
-              for (const c of pt.params) {
-                if (!c.internal) {
-                  els.push(`${sig[j]}${sel} ${c.sel}:`);
-                }
-              }
-            }
-            sig= els;
-          }
+        // separate all other parameters:
+        const rest= set.slice(p1?2:1);
+        if (rest.length) {
+          sig += rest.join(':') + ':';
         }
       }
+      sigs.push(sig);
     }
   }
-  for (const n of sig) {
+
+  for (const n of sigs) {
+    if (n.includes("::") || n.includes("_")) {
+      console.log(commandName, n);
+      throw new Error(n);
+    }
     const hash= fnv1a(n, {size:64});
     const was= all[hash];
     if (was) {
