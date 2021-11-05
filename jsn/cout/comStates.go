@@ -27,9 +27,6 @@ func Encode(in jsn.Marshalee) (ret interface{}, err error) {
 	return ret, m.Errors()
 }
 
-// debug.FactorialStory.Marshal(out)
-// if d, e := out.Data(); e != nil {
-
 func unpack(pv interface{}) (ret interface{}) {
 	switch pv := pv.(type) {
 	case interface{ GetCompactValue() interface{} }:
