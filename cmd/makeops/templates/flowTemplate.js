@@ -57,11 +57,11 @@ func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, val *{{Pascal name}}) (err 
 {{~#each params}}{{#unless (IsInternal label)}}
     e{{@index}} := m.MarshalKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}})
     if e{{@index}} == nil {
-      e{{@index}} = {{ScopeOf type}}{{Pascal type}}
-      {{~#if (Unboxed type)}}_Unboxed{{/if}}
-      {{~#if repeats}}_Repeats
-      {{~else if optional}}_Optional
-      {{~/if}}_Marshal(m, &val.{{Pascal key}})
+      e{{@index}} = {{ScopeOf type}}{{Pascal type~}}
+      {{#if (Unboxed type)}}_Unboxed{{/if~}}
+      {{#if optional}}_Optional{{/if~}}
+      {{#if repeats}}_Repeats{{/if~}}
+      _Marshal(m, &val.{{Pascal key}})
     }
     if e{{@index}} != nil && e{{@index}} != jsn.Missing {
       m.Error(errutil.New(e{{@index}}, "in flow at", {{Pascal ../name}}_Field_{{Pascal key}}))

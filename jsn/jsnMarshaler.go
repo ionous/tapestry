@@ -73,10 +73,12 @@ type SwapBlock interface {
 
 // starts a series of values
 // the repeat is closed ( written ) with a call to EndBlock()
+// a size of -1 means a nil ( as opposed to an extant slice of zero size )
 type SliceBlock interface {
 	Block
 	GetSize() int
 	SetSize(int)
+	MarshalEl(Marshaler, int) error
 }
 
 // selects one of an unbounded set of possible values

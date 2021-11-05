@@ -5,18 +5,38 @@
 module.exports =`
 type {{name}}{{mod}}_Slice []{{el}}
 
-func (op* {{name}}{{mod}}_Slice) GetType() string { return {{name}}_Type }
-func (op* {{name}}{{mod}}_Slice) GetSize() int    { return len(*op) }
-func (op* {{name}}{{mod}}_Slice) SetSize(cnt int) { (*op) = make({{name}}{{mod}}_Slice, cnt) }
+func (op* {{name}}{{mod}}_Slice) GetType() string {
+  return {{name}}_Type
+}
 
-func {{name}}{{mod}}_Repeats_Marshal(m jsn.Marshaler, vals *[]{{el}}) (err error) {
-  if err = m.MarshalBlock((*{{name}}{{mod}}_Slice)(vals)); err == nil {
-    for i := range *vals {
-      if e := {{name}}{{mod}}_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-        m.Error(errutil.New(e, "in slice at", i))
-      }
-    }
-    m.EndBlock()
+func (op* {{name}}{{mod}}_Slice) GetSize() (ret int) {
+  if els:= *op; els != nil {
+    ret = len(els)
+  } else {
+    ret = -1
+   }
+   return
+}
+
+func (op* {{name}}{{mod}}_Slice) SetSize(cnt int) {
+  var els []{{el}}
+  if cnt >= 0 {
+    els = make({{name}}{{mod}}_Slice, cnt)
+  }
+  (*op) = els
+}
+
+func (op* {{name}}{{mod}}_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+  return {{name}}{{mod}}_Marshal(m, &(*op)[i])
+}
+
+func {{name}}{{mod}}_Repeats_Marshal(m jsn.Marshaler, vals *[]{{el}}) error {
+  return jsn.RepeatBlock(m, (*{{name}}{{mod}}_Slice)(vals))
+}
+
+func {{name}}{{mod}}_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]{{el}}) (err error) {
+  if *pv != nil || !m.IsEncoding() {
+    err = {{name}}{{mod}}_Repeats_Marshal(m, pv)
   }
   return
 }

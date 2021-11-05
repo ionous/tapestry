@@ -95,12 +95,21 @@ func (dec *xDecoder) addBlock(msg json.RawMessage, next *chart.StateMix) *chart.
 		return
 	}
 	next.OnRepeat = func(_ string, slice jsn.SliceBlock) (okay bool) {
-		var vs []json.RawMessage
-		if e := json.Unmarshal(msg, &vs); e != nil {
+		var msgs []json.RawMessage
+		if e := json.Unmarshal(msg, &msgs); e != nil {
 			dec.Error(e)
-		} else if cnt := len(vs); cnt > 0 {
+		} else {
+			// to distinguish b/t missing and empty repeats, set even if size zero.
+			// note: we don't get here if the record was missing
+			var next *chart.StateMix
+			cnt := len(msgs)
 			slice.SetSize(cnt)
-			dec.PushState(dec.newSlice(vs))
+			if cnt == 0 {
+				next = chart.NewBlockResult(&dec.Machine, "empty slice")
+			} else {
+				next = dec.newSlice(msgs)
+			}
+			dec.PushState(next)
 			okay = true
 		}
 		return

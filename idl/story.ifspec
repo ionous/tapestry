@@ -7,7 +7,7 @@
             "story":
             {
                 "uses": "flow",
-                "spec": "{*paragraph}",
+                "spec": "{+paragraph}",
                 "group": "modeling"
             },
             "paragraph":

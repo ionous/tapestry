@@ -35,18 +35,38 @@ func (op *ReciprocalOf) Marshal(m jsn.Marshaler) error {
 
 type ReciprocalOf_Slice []ReciprocalOf
 
-func (op *ReciprocalOf_Slice) GetType() string { return ReciprocalOf_Type }
-func (op *ReciprocalOf_Slice) GetSize() int    { return len(*op) }
-func (op *ReciprocalOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalOf_Slice, cnt) }
+func (op *ReciprocalOf_Slice) GetType() string {
+	return ReciprocalOf_Type
+}
 
-func ReciprocalOf_Repeats_Marshal(m jsn.Marshaler, vals *[]ReciprocalOf) (err error) {
-	if err = m.MarshalBlock((*ReciprocalOf_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := ReciprocalOf_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *ReciprocalOf_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ReciprocalOf_Slice) SetSize(cnt int) {
+	var els []ReciprocalOf
+	if cnt >= 0 {
+		els = make(ReciprocalOf_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ReciprocalOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ReciprocalOf_Marshal(m, &(*op)[i])
+}
+
+func ReciprocalOf_Repeats_Marshal(m jsn.Marshaler, vals *[]ReciprocalOf) error {
+	return jsn.RepeatBlock(m, (*ReciprocalOf_Slice)(vals))
+}
+
+func ReciprocalOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ReciprocalOf) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = ReciprocalOf_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -110,18 +130,38 @@ func (op *ReciprocalsOf) Marshal(m jsn.Marshaler) error {
 
 type ReciprocalsOf_Slice []ReciprocalsOf
 
-func (op *ReciprocalsOf_Slice) GetType() string { return ReciprocalsOf_Type }
-func (op *ReciprocalsOf_Slice) GetSize() int    { return len(*op) }
-func (op *ReciprocalsOf_Slice) SetSize(cnt int) { (*op) = make(ReciprocalsOf_Slice, cnt) }
+func (op *ReciprocalsOf_Slice) GetType() string {
+	return ReciprocalsOf_Type
+}
 
-func ReciprocalsOf_Repeats_Marshal(m jsn.Marshaler, vals *[]ReciprocalsOf) (err error) {
-	if err = m.MarshalBlock((*ReciprocalsOf_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := ReciprocalsOf_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *ReciprocalsOf_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ReciprocalsOf_Slice) SetSize(cnt int) {
+	var els []ReciprocalsOf
+	if cnt >= 0 {
+		els = make(ReciprocalsOf_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ReciprocalsOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ReciprocalsOf_Marshal(m, &(*op)[i])
+}
+
+func ReciprocalsOf_Repeats_Marshal(m jsn.Marshaler, vals *[]ReciprocalsOf) error {
+	return jsn.RepeatBlock(m, (*ReciprocalsOf_Slice)(vals))
+}
+
+func ReciprocalsOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ReciprocalsOf) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = ReciprocalsOf_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -186,18 +226,38 @@ func (op *Relate) Marshal(m jsn.Marshaler) error {
 
 type Relate_Slice []Relate
 
-func (op *Relate_Slice) GetType() string { return Relate_Type }
-func (op *Relate_Slice) GetSize() int    { return len(*op) }
-func (op *Relate_Slice) SetSize(cnt int) { (*op) = make(Relate_Slice, cnt) }
+func (op *Relate_Slice) GetType() string {
+	return Relate_Type
+}
 
-func Relate_Repeats_Marshal(m jsn.Marshaler, vals *[]Relate) (err error) {
-	if err = m.MarshalBlock((*Relate_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Relate_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Relate_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Relate_Slice) SetSize(cnt int) {
+	var els []Relate
+	if cnt >= 0 {
+		els = make(Relate_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Relate_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Relate_Marshal(m, &(*op)[i])
+}
+
+func Relate_Repeats_Marshal(m jsn.Marshaler, vals *[]Relate) error {
+	return jsn.RepeatBlock(m, (*Relate_Slice)(vals))
+}
+
+func Relate_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relate) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Relate_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -268,18 +328,38 @@ func (op *RelativeOf) Marshal(m jsn.Marshaler) error {
 
 type RelativeOf_Slice []RelativeOf
 
-func (op *RelativeOf_Slice) GetType() string { return RelativeOf_Type }
-func (op *RelativeOf_Slice) GetSize() int    { return len(*op) }
-func (op *RelativeOf_Slice) SetSize(cnt int) { (*op) = make(RelativeOf_Slice, cnt) }
+func (op *RelativeOf_Slice) GetType() string {
+	return RelativeOf_Type
+}
 
-func RelativeOf_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativeOf) (err error) {
-	if err = m.MarshalBlock((*RelativeOf_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RelativeOf_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RelativeOf_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RelativeOf_Slice) SetSize(cnt int) {
+	var els []RelativeOf
+	if cnt >= 0 {
+		els = make(RelativeOf_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RelativeOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RelativeOf_Marshal(m, &(*op)[i])
+}
+
+func RelativeOf_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativeOf) error {
+	return jsn.RepeatBlock(m, (*RelativeOf_Slice)(vals))
+}
+
+func RelativeOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelativeOf) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RelativeOf_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -343,18 +423,38 @@ func (op *RelativesOf) Marshal(m jsn.Marshaler) error {
 
 type RelativesOf_Slice []RelativesOf
 
-func (op *RelativesOf_Slice) GetType() string { return RelativesOf_Type }
-func (op *RelativesOf_Slice) GetSize() int    { return len(*op) }
-func (op *RelativesOf_Slice) SetSize(cnt int) { (*op) = make(RelativesOf_Slice, cnt) }
+func (op *RelativesOf_Slice) GetType() string {
+	return RelativesOf_Type
+}
 
-func RelativesOf_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativesOf) (err error) {
-	if err = m.MarshalBlock((*RelativesOf_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RelativesOf_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RelativesOf_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RelativesOf_Slice) SetSize(cnt int) {
+	var els []RelativesOf
+	if cnt >= 0 {
+		els = make(RelativesOf_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RelativesOf_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RelativesOf_Marshal(m, &(*op)[i])
+}
+
+func RelativesOf_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativesOf) error {
+	return jsn.RepeatBlock(m, (*RelativesOf_Slice)(vals))
+}
+
+func RelativesOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelativesOf) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RelativesOf_Repeats_Marshal(m, pv)
 	}
 	return
 }

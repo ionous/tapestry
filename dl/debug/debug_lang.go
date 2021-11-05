@@ -35,18 +35,38 @@ func (op *DebugLog) Marshal(m jsn.Marshaler) error {
 
 type DebugLog_Slice []DebugLog
 
-func (op *DebugLog_Slice) GetType() string { return DebugLog_Type }
-func (op *DebugLog_Slice) GetSize() int    { return len(*op) }
-func (op *DebugLog_Slice) SetSize(cnt int) { (*op) = make(DebugLog_Slice, cnt) }
+func (op *DebugLog_Slice) GetType() string {
+	return DebugLog_Type
+}
 
-func DebugLog_Repeats_Marshal(m jsn.Marshaler, vals *[]DebugLog) (err error) {
-	if err = m.MarshalBlock((*DebugLog_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := DebugLog_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *DebugLog_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DebugLog_Slice) SetSize(cnt int) {
+	var els []DebugLog
+	if cnt >= 0 {
+		els = make(DebugLog_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DebugLog_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DebugLog_Marshal(m, &(*op)[i])
+}
+
+func DebugLog_Repeats_Marshal(m jsn.Marshaler, vals *[]DebugLog) error {
+	return jsn.RepeatBlock(m, (*DebugLog_Slice)(vals))
+}
+
+func DebugLog_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DebugLog) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = DebugLog_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -107,18 +127,38 @@ func (op *DoNothing) Marshal(m jsn.Marshaler) error {
 
 type DoNothing_Slice []DoNothing
 
-func (op *DoNothing_Slice) GetType() string { return DoNothing_Type }
-func (op *DoNothing_Slice) GetSize() int    { return len(*op) }
-func (op *DoNothing_Slice) SetSize(cnt int) { (*op) = make(DoNothing_Slice, cnt) }
+func (op *DoNothing_Slice) GetType() string {
+	return DoNothing_Type
+}
 
-func DoNothing_Repeats_Marshal(m jsn.Marshaler, vals *[]DoNothing) (err error) {
-	if err = m.MarshalBlock((*DoNothing_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := DoNothing_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *DoNothing_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DoNothing_Slice) SetSize(cnt int) {
+	var els []DoNothing
+	if cnt >= 0 {
+		els = make(DoNothing_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DoNothing_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DoNothing_Marshal(m, &(*op)[i])
+}
+
+func DoNothing_Repeats_Marshal(m jsn.Marshaler, vals *[]DoNothing) error {
+	return jsn.RepeatBlock(m, (*DoNothing_Slice)(vals))
+}
+
+func DoNothing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DoNothing) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = DoNothing_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -198,18 +238,38 @@ func LoggingLevel_Marshal(m jsn.Marshaler, val *LoggingLevel) (err error) {
 
 type LoggingLevel_Slice []LoggingLevel
 
-func (op *LoggingLevel_Slice) GetType() string { return LoggingLevel_Type }
-func (op *LoggingLevel_Slice) GetSize() int    { return len(*op) }
-func (op *LoggingLevel_Slice) SetSize(cnt int) { (*op) = make(LoggingLevel_Slice, cnt) }
+func (op *LoggingLevel_Slice) GetType() string {
+	return LoggingLevel_Type
+}
 
-func LoggingLevel_Repeats_Marshal(m jsn.Marshaler, vals *[]LoggingLevel) (err error) {
-	if err = m.MarshalBlock((*LoggingLevel_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := LoggingLevel_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *LoggingLevel_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *LoggingLevel_Slice) SetSize(cnt int) {
+	var els []LoggingLevel
+	if cnt >= 0 {
+		els = make(LoggingLevel_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *LoggingLevel_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return LoggingLevel_Marshal(m, &(*op)[i])
+}
+
+func LoggingLevel_Repeats_Marshal(m jsn.Marshaler, vals *[]LoggingLevel) error {
+	return jsn.RepeatBlock(m, (*LoggingLevel_Slice)(vals))
+}
+
+func LoggingLevel_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LoggingLevel) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = LoggingLevel_Repeats_Marshal(m, pv)
 	}
 	return
 }

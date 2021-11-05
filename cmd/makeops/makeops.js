@@ -490,7 +490,9 @@ for (currentGroup in groups) {
 
   fs.closeSync(fd);
   // re-format the file using go format.
-  child_process.execSync(`gofmt -e -s -w ${filepath}`);
+  // actually, use goimports because its hard sometimes to know where errutil is needed
+  child_process.execSync(`goimports -e -w ${filepath}`);
+  // child_process.execSync(`gofmt -e -s -w ${filepath}`);
 }
 
 

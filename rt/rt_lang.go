@@ -3,7 +3,6 @@ package rt
 
 import (
 	"git.sr.ht/~ionous/iffy/jsn"
-	"github.com/ionous/errutil"
 )
 
 const Assignment_Type = "assignment"
@@ -42,18 +41,38 @@ func Assignment_DefaultMarshal(m jsn.Marshaler, ptr *Assignment) (err error) {
 
 type Assignment_Slice []Assignment
 
-func (op *Assignment_Slice) GetType() string { return Assignment_Type }
-func (op *Assignment_Slice) GetSize() int    { return len(*op) }
-func (op *Assignment_Slice) SetSize(cnt int) { (*op) = make(Assignment_Slice, cnt) }
+func (op *Assignment_Slice) GetType() string {
+	return Assignment_Type
+}
 
-func Assignment_Repeats_Marshal(m jsn.Marshaler, vals *[]Assignment) (err error) {
-	if err = m.MarshalBlock((*Assignment_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Assignment_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Assignment_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Assignment_Slice) SetSize(cnt int) {
+	var els []Assignment
+	if cnt >= 0 {
+		els = make(Assignment_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Assignment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Assignment_Marshal(m, &(*op)[i])
+}
+
+func Assignment_Repeats_Marshal(m jsn.Marshaler, vals *[]Assignment) error {
+	return jsn.RepeatBlock(m, (*Assignment_Slice)(vals))
+}
+
+func Assignment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Assignment) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Assignment_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -94,18 +113,38 @@ func BoolEval_DefaultMarshal(m jsn.Marshaler, ptr *BoolEval) (err error) {
 
 type BoolEval_Slice []BoolEval
 
-func (op *BoolEval_Slice) GetType() string { return BoolEval_Type }
-func (op *BoolEval_Slice) GetSize() int    { return len(*op) }
-func (op *BoolEval_Slice) SetSize(cnt int) { (*op) = make(BoolEval_Slice, cnt) }
+func (op *BoolEval_Slice) GetType() string {
+	return BoolEval_Type
+}
 
-func BoolEval_Repeats_Marshal(m jsn.Marshaler, vals *[]BoolEval) (err error) {
-	if err = m.MarshalBlock((*BoolEval_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := BoolEval_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *BoolEval_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *BoolEval_Slice) SetSize(cnt int) {
+	var els []BoolEval
+	if cnt >= 0 {
+		els = make(BoolEval_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *BoolEval_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return BoolEval_Marshal(m, &(*op)[i])
+}
+
+func BoolEval_Repeats_Marshal(m jsn.Marshaler, vals *[]BoolEval) error {
+	return jsn.RepeatBlock(m, (*BoolEval_Slice)(vals))
+}
+
+func BoolEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]BoolEval) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = BoolEval_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -138,18 +177,38 @@ func Execute_Marshal(m jsn.Marshaler, ptr *Execute) (err error) {
 
 type Execute_Slice []Execute
 
-func (op *Execute_Slice) GetType() string { return Execute_Type }
-func (op *Execute_Slice) GetSize() int    { return len(*op) }
-func (op *Execute_Slice) SetSize(cnt int) { (*op) = make(Execute_Slice, cnt) }
+func (op *Execute_Slice) GetType() string {
+	return Execute_Type
+}
 
-func Execute_Repeats_Marshal(m jsn.Marshaler, vals *[]Execute) (err error) {
-	if err = m.MarshalBlock((*Execute_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Execute_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Execute_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Execute_Slice) SetSize(cnt int) {
+	var els []Execute
+	if cnt >= 0 {
+		els = make(Execute_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Execute_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Execute_Marshal(m, &(*op)[i])
+}
+
+func Execute_Repeats_Marshal(m jsn.Marshaler, vals *[]Execute) error {
+	return jsn.RepeatBlock(m, (*Execute_Slice)(vals))
+}
+
+func Execute_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Execute) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Execute_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -190,18 +249,38 @@ func NumListEval_DefaultMarshal(m jsn.Marshaler, ptr *NumListEval) (err error) {
 
 type NumListEval_Slice []NumListEval
 
-func (op *NumListEval_Slice) GetType() string { return NumListEval_Type }
-func (op *NumListEval_Slice) GetSize() int    { return len(*op) }
-func (op *NumListEval_Slice) SetSize(cnt int) { (*op) = make(NumListEval_Slice, cnt) }
+func (op *NumListEval_Slice) GetType() string {
+	return NumListEval_Type
+}
 
-func NumListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]NumListEval) (err error) {
-	if err = m.MarshalBlock((*NumListEval_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := NumListEval_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *NumListEval_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NumListEval_Slice) SetSize(cnt int) {
+	var els []NumListEval
+	if cnt >= 0 {
+		els = make(NumListEval_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NumListEval_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NumListEval_Marshal(m, &(*op)[i])
+}
+
+func NumListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]NumListEval) error {
+	return jsn.RepeatBlock(m, (*NumListEval_Slice)(vals))
+}
+
+func NumListEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumListEval) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = NumListEval_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -242,18 +321,38 @@ func NumberEval_DefaultMarshal(m jsn.Marshaler, ptr *NumberEval) (err error) {
 
 type NumberEval_Slice []NumberEval
 
-func (op *NumberEval_Slice) GetType() string { return NumberEval_Type }
-func (op *NumberEval_Slice) GetSize() int    { return len(*op) }
-func (op *NumberEval_Slice) SetSize(cnt int) { (*op) = make(NumberEval_Slice, cnt) }
+func (op *NumberEval_Slice) GetType() string {
+	return NumberEval_Type
+}
 
-func NumberEval_Repeats_Marshal(m jsn.Marshaler, vals *[]NumberEval) (err error) {
-	if err = m.MarshalBlock((*NumberEval_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := NumberEval_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *NumberEval_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NumberEval_Slice) SetSize(cnt int) {
+	var els []NumberEval
+	if cnt >= 0 {
+		els = make(NumberEval_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NumberEval_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NumberEval_Marshal(m, &(*op)[i])
+}
+
+func NumberEval_Repeats_Marshal(m jsn.Marshaler, vals *[]NumberEval) error {
+	return jsn.RepeatBlock(m, (*NumberEval_Slice)(vals))
+}
+
+func NumberEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumberEval) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = NumberEval_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -294,18 +393,38 @@ func RecordEval_DefaultMarshal(m jsn.Marshaler, ptr *RecordEval) (err error) {
 
 type RecordEval_Slice []RecordEval
 
-func (op *RecordEval_Slice) GetType() string { return RecordEval_Type }
-func (op *RecordEval_Slice) GetSize() int    { return len(*op) }
-func (op *RecordEval_Slice) SetSize(cnt int) { (*op) = make(RecordEval_Slice, cnt) }
+func (op *RecordEval_Slice) GetType() string {
+	return RecordEval_Type
+}
 
-func RecordEval_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordEval) (err error) {
-	if err = m.MarshalBlock((*RecordEval_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RecordEval_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RecordEval_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RecordEval_Slice) SetSize(cnt int) {
+	var els []RecordEval
+	if cnt >= 0 {
+		els = make(RecordEval_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RecordEval_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RecordEval_Marshal(m, &(*op)[i])
+}
+
+func RecordEval_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordEval) error {
+	return jsn.RepeatBlock(m, (*RecordEval_Slice)(vals))
+}
+
+func RecordEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordEval) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RecordEval_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -346,18 +465,38 @@ func RecordListEval_DefaultMarshal(m jsn.Marshaler, ptr *RecordListEval) (err er
 
 type RecordListEval_Slice []RecordListEval
 
-func (op *RecordListEval_Slice) GetType() string { return RecordListEval_Type }
-func (op *RecordListEval_Slice) GetSize() int    { return len(*op) }
-func (op *RecordListEval_Slice) SetSize(cnt int) { (*op) = make(RecordListEval_Slice, cnt) }
+func (op *RecordListEval_Slice) GetType() string {
+	return RecordListEval_Type
+}
 
-func RecordListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordListEval) (err error) {
-	if err = m.MarshalBlock((*RecordListEval_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RecordListEval_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RecordListEval_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RecordListEval_Slice) SetSize(cnt int) {
+	var els []RecordListEval
+	if cnt >= 0 {
+		els = make(RecordListEval_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RecordListEval_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RecordListEval_Marshal(m, &(*op)[i])
+}
+
+func RecordListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordListEval) error {
+	return jsn.RepeatBlock(m, (*RecordListEval_Slice)(vals))
+}
+
+func RecordListEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordListEval) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RecordListEval_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -398,18 +537,38 @@ func TextEval_DefaultMarshal(m jsn.Marshaler, ptr *TextEval) (err error) {
 
 type TextEval_Slice []TextEval
 
-func (op *TextEval_Slice) GetType() string { return TextEval_Type }
-func (op *TextEval_Slice) GetSize() int    { return len(*op) }
-func (op *TextEval_Slice) SetSize(cnt int) { (*op) = make(TextEval_Slice, cnt) }
+func (op *TextEval_Slice) GetType() string {
+	return TextEval_Type
+}
 
-func TextEval_Repeats_Marshal(m jsn.Marshaler, vals *[]TextEval) (err error) {
-	if err = m.MarshalBlock((*TextEval_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := TextEval_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *TextEval_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *TextEval_Slice) SetSize(cnt int) {
+	var els []TextEval
+	if cnt >= 0 {
+		els = make(TextEval_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *TextEval_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TextEval_Marshal(m, &(*op)[i])
+}
+
+func TextEval_Repeats_Marshal(m jsn.Marshaler, vals *[]TextEval) error {
+	return jsn.RepeatBlock(m, (*TextEval_Slice)(vals))
+}
+
+func TextEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextEval) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = TextEval_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -450,18 +609,38 @@ func TextListEval_DefaultMarshal(m jsn.Marshaler, ptr *TextListEval) (err error)
 
 type TextListEval_Slice []TextListEval
 
-func (op *TextListEval_Slice) GetType() string { return TextListEval_Type }
-func (op *TextListEval_Slice) GetSize() int    { return len(*op) }
-func (op *TextListEval_Slice) SetSize(cnt int) { (*op) = make(TextListEval_Slice, cnt) }
+func (op *TextListEval_Slice) GetType() string {
+	return TextListEval_Type
+}
 
-func TextListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]TextListEval) (err error) {
-	if err = m.MarshalBlock((*TextListEval_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := TextListEval_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *TextListEval_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *TextListEval_Slice) SetSize(cnt int) {
+	var els []TextListEval
+	if cnt >= 0 {
+		els = make(TextListEval_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *TextListEval_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TextListEval_Marshal(m, &(*op)[i])
+}
+
+func TextListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]TextListEval) error {
+	return jsn.RepeatBlock(m, (*TextListEval_Slice)(vals))
+}
+
+func TextListEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextListEval) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = TextListEval_Repeats_Marshal(m, pv)
 	}
 	return
 }

@@ -33,18 +33,38 @@ func (op *RenderExp) Marshal(m jsn.Marshaler) error {
 
 type RenderExp_Slice []RenderExp
 
-func (op *RenderExp_Slice) GetType() string { return RenderExp_Type }
-func (op *RenderExp_Slice) GetSize() int    { return len(*op) }
-func (op *RenderExp_Slice) SetSize(cnt int) { (*op) = make(RenderExp_Slice, cnt) }
+func (op *RenderExp_Slice) GetType() string {
+	return RenderExp_Type
+}
 
-func RenderExp_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderExp) (err error) {
-	if err = m.MarshalBlock((*RenderExp_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RenderExp_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RenderExp_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RenderExp_Slice) SetSize(cnt int) {
+	var els []RenderExp
+	if cnt >= 0 {
+		els = make(RenderExp_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RenderExp_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderExp_Marshal(m, &(*op)[i])
+}
+
+func RenderExp_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderExp) error {
+	return jsn.RepeatBlock(m, (*RenderExp_Slice)(vals))
+}
+
+func RenderExp_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderExp) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RenderExp_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -98,18 +118,38 @@ func (op *RenderField) Marshal(m jsn.Marshaler) error {
 
 type RenderField_Slice []RenderField
 
-func (op *RenderField_Slice) GetType() string { return RenderField_Type }
-func (op *RenderField_Slice) GetSize() int    { return len(*op) }
-func (op *RenderField_Slice) SetSize(cnt int) { (*op) = make(RenderField_Slice, cnt) }
+func (op *RenderField_Slice) GetType() string {
+	return RenderField_Type
+}
 
-func RenderField_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderField) (err error) {
-	if err = m.MarshalBlock((*RenderField_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RenderField_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RenderField_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RenderField_Slice) SetSize(cnt int) {
+	var els []RenderField
+	if cnt >= 0 {
+		els = make(RenderField_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RenderField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderField_Marshal(m, &(*op)[i])
+}
+
+func RenderField_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderField) error {
+	return jsn.RepeatBlock(m, (*RenderField_Slice)(vals))
+}
+
+func RenderField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderField) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RenderField_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -186,18 +226,38 @@ func RenderFlags_Marshal(m jsn.Marshaler, val *RenderFlags) (err error) {
 
 type RenderFlags_Slice []RenderFlags
 
-func (op *RenderFlags_Slice) GetType() string { return RenderFlags_Type }
-func (op *RenderFlags_Slice) GetSize() int    { return len(*op) }
-func (op *RenderFlags_Slice) SetSize(cnt int) { (*op) = make(RenderFlags_Slice, cnt) }
+func (op *RenderFlags_Slice) GetType() string {
+	return RenderFlags_Type
+}
 
-func RenderFlags_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderFlags) (err error) {
-	if err = m.MarshalBlock((*RenderFlags_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RenderFlags_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RenderFlags_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RenderFlags_Slice) SetSize(cnt int) {
+	var els []RenderFlags
+	if cnt >= 0 {
+		els = make(RenderFlags_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RenderFlags_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderFlags_Marshal(m, &(*op)[i])
+}
+
+func RenderFlags_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderFlags) error {
+	return jsn.RepeatBlock(m, (*RenderFlags_Slice)(vals))
+}
+
+func RenderFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderFlags) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RenderFlags_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -225,18 +285,38 @@ func (op *RenderName) Marshal(m jsn.Marshaler) error {
 
 type RenderName_Slice []RenderName
 
-func (op *RenderName_Slice) GetType() string { return RenderName_Type }
-func (op *RenderName_Slice) GetSize() int    { return len(*op) }
-func (op *RenderName_Slice) SetSize(cnt int) { (*op) = make(RenderName_Slice, cnt) }
+func (op *RenderName_Slice) GetType() string {
+	return RenderName_Type
+}
 
-func RenderName_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderName) (err error) {
-	if err = m.MarshalBlock((*RenderName_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RenderName_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RenderName_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RenderName_Slice) SetSize(cnt int) {
+	var els []RenderName
+	if cnt >= 0 {
+		els = make(RenderName_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RenderName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderName_Marshal(m, &(*op)[i])
+}
+
+func RenderName_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderName) error {
+	return jsn.RepeatBlock(m, (*RenderName_Slice)(vals))
+}
+
+func RenderName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderName) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RenderName_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -293,18 +373,38 @@ func (op *RenderPattern) Marshal(m jsn.Marshaler) error {
 
 type RenderPattern_Slice []RenderPattern
 
-func (op *RenderPattern_Slice) GetType() string { return RenderPattern_Type }
-func (op *RenderPattern_Slice) GetSize() int    { return len(*op) }
-func (op *RenderPattern_Slice) SetSize(cnt int) { (*op) = make(RenderPattern_Slice, cnt) }
+func (op *RenderPattern_Slice) GetType() string {
+	return RenderPattern_Type
+}
 
-func RenderPattern_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderPattern) (err error) {
-	if err = m.MarshalBlock((*RenderPattern_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RenderPattern_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RenderPattern_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RenderPattern_Slice) SetSize(cnt int) {
+	var els []RenderPattern
+	if cnt >= 0 {
+		els = make(RenderPattern_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RenderPattern_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderPattern_Marshal(m, &(*op)[i])
+}
+
+func RenderPattern_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderPattern) error {
+	return jsn.RepeatBlock(m, (*RenderPattern_Slice)(vals))
+}
+
+func RenderPattern_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderPattern) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RenderPattern_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -367,18 +467,38 @@ func (op *RenderRef) Marshal(m jsn.Marshaler) error {
 
 type RenderRef_Slice []RenderRef
 
-func (op *RenderRef_Slice) GetType() string { return RenderRef_Type }
-func (op *RenderRef_Slice) GetSize() int    { return len(*op) }
-func (op *RenderRef_Slice) SetSize(cnt int) { (*op) = make(RenderRef_Slice, cnt) }
+func (op *RenderRef_Slice) GetType() string {
+	return RenderRef_Type
+}
 
-func RenderRef_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderRef) (err error) {
-	if err = m.MarshalBlock((*RenderRef_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RenderRef_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RenderRef_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RenderRef_Slice) SetSize(cnt int) {
+	var els []RenderRef
+	if cnt >= 0 {
+		els = make(RenderRef_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RenderRef_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderRef_Marshal(m, &(*op)[i])
+}
+
+func RenderRef_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderRef) error {
+	return jsn.RepeatBlock(m, (*RenderRef_Slice)(vals))
+}
+
+func RenderRef_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderRef) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RenderRef_Repeats_Marshal(m, pv)
 	}
 	return
 }

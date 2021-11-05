@@ -79,12 +79,13 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 		}
 		return okay
 	}
-	next.OnRepeat = func(t string, vs jsn.SliceBlock) (okay bool) {
-		if hint := vs.GetSize(); hint > 0 {
-			m.PushState(newSlice(m, make([]interface{}, 0, hint)))
-			okay = true
+	next.OnRepeat = func(t string, vs jsn.SliceBlock) bool {
+		var slice []interface{}
+		if cnt := vs.GetSize(); cnt >= 0 {
+			slice = make([]interface{}, 0, cnt)
 		}
-		return okay
+		m.PushState(newSlice(m, slice))
+		return true
 	}
 	// next.OnEnd... gets determined by the specific block
 	return next

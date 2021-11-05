@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/jsn"
-	"github.com/ionous/errutil"
 )
 
 // Bool requires a user-specified string.
@@ -41,18 +40,38 @@ func (op *Bool) Marshal(m jsn.Marshaler) error {
 
 type Bool_Unboxed_Slice []bool
 
-func (op *Bool_Unboxed_Slice) GetType() string { return Bool_Type }
-func (op *Bool_Unboxed_Slice) GetSize() int    { return len(*op) }
-func (op *Bool_Unboxed_Slice) SetSize(cnt int) { (*op) = make(Bool_Unboxed_Slice, cnt) }
+func (op *Bool_Unboxed_Slice) GetType() string {
+	return Bool_Type
+}
 
-func Bool_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]bool) (err error) {
-	if err = m.MarshalBlock((*Bool_Unboxed_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Bool_Unboxed_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Bool_Unboxed_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Bool_Unboxed_Slice) SetSize(cnt int) {
+	var els []bool
+	if cnt >= 0 {
+		els = make(Bool_Unboxed_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Bool_Unboxed_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Bool_Unboxed_Marshal(m, &(*op)[i])
+}
+
+func Bool_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]bool) error {
+	return jsn.RepeatBlock(m, (*Bool_Unboxed_Slice)(vals))
+}
+
+func Bool_Unboxed_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]bool) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Bool_Unboxed_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -83,18 +102,38 @@ func Bool_Marshal(m jsn.Marshaler, val *Bool) (err error) {
 
 type Bool_Slice []Bool
 
-func (op *Bool_Slice) GetType() string { return Bool_Type }
-func (op *Bool_Slice) GetSize() int    { return len(*op) }
-func (op *Bool_Slice) SetSize(cnt int) { (*op) = make(Bool_Slice, cnt) }
+func (op *Bool_Slice) GetType() string {
+	return Bool_Type
+}
 
-func Bool_Repeats_Marshal(m jsn.Marshaler, vals *[]Bool) (err error) {
-	if err = m.MarshalBlock((*Bool_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Bool_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Bool_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Bool_Slice) SetSize(cnt int) {
+	var els []Bool
+	if cnt >= 0 {
+		els = make(Bool_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Bool_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Bool_Marshal(m, &(*op)[i])
+}
+
+func Bool_Repeats_Marshal(m jsn.Marshaler, vals *[]Bool) error {
+	return jsn.RepeatBlock(m, (*Bool_Slice)(vals))
+}
+
+func Bool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Bool) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Bool_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -136,18 +175,38 @@ func Lines_Marshal(m jsn.Marshaler, val *Lines) (err error) {
 
 type Lines_Slice []Lines
 
-func (op *Lines_Slice) GetType() string { return Lines_Type }
-func (op *Lines_Slice) GetSize() int    { return len(*op) }
-func (op *Lines_Slice) SetSize(cnt int) { (*op) = make(Lines_Slice, cnt) }
+func (op *Lines_Slice) GetType() string {
+	return Lines_Type
+}
 
-func Lines_Repeats_Marshal(m jsn.Marshaler, vals *[]Lines) (err error) {
-	if err = m.MarshalBlock((*Lines_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Lines_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Lines_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Lines_Slice) SetSize(cnt int) {
+	var els []Lines
+	if cnt >= 0 {
+		els = make(Lines_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Lines_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Lines_Marshal(m, &(*op)[i])
+}
+
+func Lines_Repeats_Marshal(m jsn.Marshaler, vals *[]Lines) error {
+	return jsn.RepeatBlock(m, (*Lines_Slice)(vals))
+}
+
+func Lines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lines) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Lines_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -172,18 +231,38 @@ func (op *Number) Marshal(m jsn.Marshaler) error {
 
 type Number_Unboxed_Slice []float64
 
-func (op *Number_Unboxed_Slice) GetType() string { return Number_Type }
-func (op *Number_Unboxed_Slice) GetSize() int    { return len(*op) }
-func (op *Number_Unboxed_Slice) SetSize(cnt int) { (*op) = make(Number_Unboxed_Slice, cnt) }
+func (op *Number_Unboxed_Slice) GetType() string {
+	return Number_Type
+}
 
-func Number_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]float64) (err error) {
-	if err = m.MarshalBlock((*Number_Unboxed_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Number_Unboxed_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Number_Unboxed_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Number_Unboxed_Slice) SetSize(cnt int) {
+	var els []float64
+	if cnt >= 0 {
+		els = make(Number_Unboxed_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Number_Unboxed_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Number_Unboxed_Marshal(m, &(*op)[i])
+}
+
+func Number_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]float64) error {
+	return jsn.RepeatBlock(m, (*Number_Unboxed_Slice)(vals))
+}
+
+func Number_Unboxed_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]float64) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Number_Unboxed_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -214,18 +293,38 @@ func Number_Marshal(m jsn.Marshaler, val *Number) (err error) {
 
 type Number_Slice []Number
 
-func (op *Number_Slice) GetType() string { return Number_Type }
-func (op *Number_Slice) GetSize() int    { return len(*op) }
-func (op *Number_Slice) SetSize(cnt int) { (*op) = make(Number_Slice, cnt) }
+func (op *Number_Slice) GetType() string {
+	return Number_Type
+}
 
-func Number_Repeats_Marshal(m jsn.Marshaler, vals *[]Number) (err error) {
-	if err = m.MarshalBlock((*Number_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Number_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Number_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Number_Slice) SetSize(cnt int) {
+	var els []Number
+	if cnt >= 0 {
+		els = make(Number_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Number_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Number_Marshal(m, &(*op)[i])
+}
+
+func Number_Repeats_Marshal(m jsn.Marshaler, vals *[]Number) error {
+	return jsn.RepeatBlock(m, (*Number_Slice)(vals))
+}
+
+func Number_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Number) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Number_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -269,18 +368,38 @@ func PatternName_Marshal(m jsn.Marshaler, val *PatternName) (err error) {
 
 type PatternName_Slice []PatternName
 
-func (op *PatternName_Slice) GetType() string { return PatternName_Type }
-func (op *PatternName_Slice) GetSize() int    { return len(*op) }
-func (op *PatternName_Slice) SetSize(cnt int) { (*op) = make(PatternName_Slice, cnt) }
+func (op *PatternName_Slice) GetType() string {
+	return PatternName_Type
+}
 
-func PatternName_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternName) (err error) {
-	if err = m.MarshalBlock((*PatternName_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := PatternName_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *PatternName_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *PatternName_Slice) SetSize(cnt int) {
+	var els []PatternName
+	if cnt >= 0 {
+		els = make(PatternName_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *PatternName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return PatternName_Marshal(m, &(*op)[i])
+}
+
+func PatternName_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternName) error {
+	return jsn.RepeatBlock(m, (*PatternName_Slice)(vals))
+}
+
+func PatternName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternName) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = PatternName_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -324,18 +443,38 @@ func RelationName_Marshal(m jsn.Marshaler, val *RelationName) (err error) {
 
 type RelationName_Slice []RelationName
 
-func (op *RelationName_Slice) GetType() string { return RelationName_Type }
-func (op *RelationName_Slice) GetSize() int    { return len(*op) }
-func (op *RelationName_Slice) SetSize(cnt int) { (*op) = make(RelationName_Slice, cnt) }
+func (op *RelationName_Slice) GetType() string {
+	return RelationName_Type
+}
 
-func RelationName_Repeats_Marshal(m jsn.Marshaler, vals *[]RelationName) (err error) {
-	if err = m.MarshalBlock((*RelationName_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := RelationName_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *RelationName_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RelationName_Slice) SetSize(cnt int) {
+	var els []RelationName
+	if cnt >= 0 {
+		els = make(RelationName_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RelationName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RelationName_Marshal(m, &(*op)[i])
+}
+
+func RelationName_Repeats_Marshal(m jsn.Marshaler, vals *[]RelationName) error {
+	return jsn.RepeatBlock(m, (*RelationName_Slice)(vals))
+}
+
+func RelationName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelationName) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RelationName_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -365,18 +504,38 @@ func (op *Text) Marshal(m jsn.Marshaler) error {
 
 type Text_Unboxed_Slice []string
 
-func (op *Text_Unboxed_Slice) GetType() string { return Text_Type }
-func (op *Text_Unboxed_Slice) GetSize() int    { return len(*op) }
-func (op *Text_Unboxed_Slice) SetSize(cnt int) { (*op) = make(Text_Unboxed_Slice, cnt) }
+func (op *Text_Unboxed_Slice) GetType() string {
+	return Text_Type
+}
 
-func Text_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]string) (err error) {
-	if err = m.MarshalBlock((*Text_Unboxed_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Text_Unboxed_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Text_Unboxed_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Text_Unboxed_Slice) SetSize(cnt int) {
+	var els []string
+	if cnt >= 0 {
+		els = make(Text_Unboxed_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Text_Unboxed_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Text_Unboxed_Marshal(m, &(*op)[i])
+}
+
+func Text_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]string) error {
+	return jsn.RepeatBlock(m, (*Text_Unboxed_Slice)(vals))
+}
+
+func Text_Unboxed_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]string) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Text_Unboxed_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -407,18 +566,38 @@ func Text_Marshal(m jsn.Marshaler, val *Text) (err error) {
 
 type Text_Slice []Text
 
-func (op *Text_Slice) GetType() string { return Text_Type }
-func (op *Text_Slice) GetSize() int    { return len(*op) }
-func (op *Text_Slice) SetSize(cnt int) { (*op) = make(Text_Slice, cnt) }
+func (op *Text_Slice) GetType() string {
+	return Text_Type
+}
 
-func Text_Repeats_Marshal(m jsn.Marshaler, vals *[]Text) (err error) {
-	if err = m.MarshalBlock((*Text_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := Text_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *Text_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Text_Slice) SetSize(cnt int) {
+	var els []Text
+	if cnt >= 0 {
+		els = make(Text_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Text_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Text_Marshal(m, &(*op)[i])
+}
+
+func Text_Repeats_Marshal(m jsn.Marshaler, vals *[]Text) error {
+	return jsn.RepeatBlock(m, (*Text_Slice)(vals))
+}
+
+func Text_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Text) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Text_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -462,18 +641,38 @@ func VariableName_Marshal(m jsn.Marshaler, val *VariableName) (err error) {
 
 type VariableName_Slice []VariableName
 
-func (op *VariableName_Slice) GetType() string { return VariableName_Type }
-func (op *VariableName_Slice) GetSize() int    { return len(*op) }
-func (op *VariableName_Slice) SetSize(cnt int) { (*op) = make(VariableName_Slice, cnt) }
+func (op *VariableName_Slice) GetType() string {
+	return VariableName_Type
+}
 
-func VariableName_Repeats_Marshal(m jsn.Marshaler, vals *[]VariableName) (err error) {
-	if err = m.MarshalBlock((*VariableName_Slice)(vals)); err == nil {
-		for i := range *vals {
-			if e := VariableName_Marshal(m, &(*vals)[i]); e != nil && e != jsn.Missing {
-				m.Error(errutil.New(e, "in slice at", i))
-			}
-		}
-		m.EndBlock()
+func (op *VariableName_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *VariableName_Slice) SetSize(cnt int) {
+	var els []VariableName
+	if cnt >= 0 {
+		els = make(VariableName_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *VariableName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return VariableName_Marshal(m, &(*op)[i])
+}
+
+func VariableName_Repeats_Marshal(m jsn.Marshaler, vals *[]VariableName) error {
+	return jsn.RepeatBlock(m, (*VariableName_Slice)(vals))
+}
+
+func VariableName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]VariableName) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = VariableName_Repeats_Marshal(m, pv)
 	}
 	return
 }
