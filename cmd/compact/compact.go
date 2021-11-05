@@ -35,6 +35,7 @@ func oppositeExt(ext string) (ret string) {
 }
 
 // ex. go run compact.go -in ../../stories/blank.ifx [-out ../../stories/]
+// for f in ../../stories/shared/*.ifx; do go run compact -in $f -out ../../stories/temp; done;
 func main() {
 	var inFile, outFile string
 	flag.StringVar(&inFile, "in", "", "input file name (.if|.ifx)")
@@ -51,6 +52,10 @@ func main() {
 			// create outfile name if needed
 			if len(outFile) == 0 {
 				outFile = inFile[:len(inFile)-len(inext)] + oppositeExt(inext)
+			} else if len(filepath.Ext(outFile)) == 0 {
+				// convert directory
+				base := filepath.Base(inFile)
+				outFile = filepath.Join(outFile, base[:len(base)-len(inext)]+oppositeExt(inext))
 			}
 			// transform the files:
 			var err error
@@ -100,6 +105,7 @@ func expand(inCompact, outDetails string) (err error) {
 }
 
 func writeOut(outPath string, data interface{}) (err error) {
+	log.Println("writing", outPath)
 	if fp, e := os.Create(outPath); e != nil {
 		err = e
 	} else {
