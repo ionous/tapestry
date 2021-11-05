@@ -36,11 +36,15 @@ func newFlowData(k string, msg json.RawMessage) (ret *cinFlow, err error) {
 }
 
 func (f *cinFlow) findArg(label string) (retChoice string, retMsg json.RawMessage) {
-	if i := f.bestIndex; i < len(f.params) && f.params[i].label == label {
+	if i, cnt := f.bestIndex, len(f.params); i < cnt && f.params[i].label == label {
 		retChoice, retMsg = f.getArg(i)
+	} else if i == 0 && len(label) == 0 {
+		// in the case of anonymous swaps -- the label we parsed is actually a choice.
+		// ex. "EventBlock kind:"
+		retChoice, retMsg = f.params[i].label, f.args[i]
 	} else {
-		for i, n := range f.params {
-			if n.label == label {
+		for ; i < cnt; i++ {
+			if n := f.params[i]; n.label == label {
 				retChoice, retMsg = f.getArg(i)
 				break
 			}
