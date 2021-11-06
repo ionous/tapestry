@@ -1,0 +1,99 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " settings",
+            "object"
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "our",
+                      "settings"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [],
+                    "settings"
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " settings",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "some",
+                  "abbreviated room descriptions",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsOfAspect:": " abbreviated room descriptions"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " abbreviated room descriptions",
+            {
+              "TraitPhrase:trait:": [
+                "canbe",
+                [
+                  "brief",
+                  "verbose",
+                  "superbrief"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " settings",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "darkness witnessed",
+                  "bool"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " settings",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:comment:": [
+                  "a",
+                  "mentions",
+                  "number",
+                  ", incremented whenever an object name gets printed. see \"mention object\" and \"print name\". "
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

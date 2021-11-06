@@ -1,0 +1,441 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:patternReturn:": [
+            "patterns",
+            "provides storage",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "obj",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "object"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type primitive:": [
+                  "a",
+                  "success",
+                  "bool"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Comment:": "Does the object allow items to be stored inside or on top of it? "
+        },
+        {
+          "PatternActions:patternRules:": [
+            "provides storage",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "KindOf:is:": [
+                        "@obj",
+                        "containers"
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "success",
+                            {
+                              "FromBool:": true
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "KindOf:is:": [
+                        "@obj",
+                        "supporters"
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "success",
+                            {
+                              "FromBool:": true
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:patternReturn:": [
+            "patterns",
+            "shows storage",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "obj",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "object"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type primitive:": [
+                  "a",
+                  "success",
+                  "bool"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Comment:": "Does the object provide storage, and can that storage be seen from outside? "
+        },
+        {
+          "PatternActions:patternRules:": [
+            "shows storage",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "provides storage",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "success",
+                            {
+                              "FromBool:": {
+                                "Not:": {
+                                  "Determine:arguments:": [
+                                    "fully opaque",
+                                    {
+                                      "Args:": [
+                                        {
+                                          "Arg:from:": [
+                                            "obj",
+                                            "@obj"
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:patternReturn:": [
+            "patterns",
+            "visible storage",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "obj",
+                    {
+                      "ObjectType:kind:": [
+                        "a",
+                        "thing"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type ext:": [
+                  "the",
+                  "out",
+                  {
+                    "ExtType textList:": "list"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Comment:": "Return a list containing any visible contents."
+        },
+        {
+          "PatternActions:patternRules:": [
+            "visible storage",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "shows storage",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Repeating across:as:do:": [
+                            {
+                              "FromTxts:": {
+                                "Determine:arguments:": [
+                                  "childrenOf",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "obj",
+                                          "@obj"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "AsTxt:": "it"
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "If:do:": [
+                                    {
+                                      "Not:": {
+                                        "AnyTrue:": [
+                                          {
+                                            "Cmp:is:txt:": [
+                                              "@it",
+                                              "Equals",
+                                              {
+                                                "Get:from:": [
+                                                  "pawn",
+                                                  {
+                                                    "ObjFields:": "player"
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "Get obj:trait:": [
+                                              "@it",
+                                              "scenery"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "Act:": [
+                                        {
+                                          "Put:into:": [
+                                            "@it",
+                                            {
+                                              "IntoTxts:": "out"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:patternReturn:": [
+            "patterns",
+            "allows storage",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "obj",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "object"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type primitive:": [
+                  "a",
+                  "success",
+                  "bool"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "Comment:": "Returns true when the storage can be accessed."
+        },
+        {
+          "PatternActions:patternRules:": [
+            "allows storage",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "provides storage",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "success",
+                            {
+                              "FromBool:": true
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "KindOf:is:": [
+                            "@obj",
+                            "containers"
+                          ]
+                        },
+                        {
+                          "Get obj:trait:": [
+                            "@obj",
+                            "closed"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "success",
+                            {
+                              "FromBool:": false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

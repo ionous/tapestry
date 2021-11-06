@@ -1,0 +1,581 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "ActionDecl:action:actionParams common:": [
+            "search",
+            "searching",
+            {
+              "CommonAction:": "thing"
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "searching",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "VarFields:": "agent"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@actor"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "If:from:and:do:else:": [
+                            "result",
+                            {
+                              "FromTxt:": {
+                                "Determine:arguments:": [
+                                  "can reach",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "actor",
+                                          "@actor"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "action",
+                                          {
+                                            "FromTxt:": "searching"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "noun",
+                                          "@noun"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "requires light",
+                                          {
+                                            "FromBool:": true
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@result"
+                              }
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Say:": "@result"
+                                }
+                              ]
+                            },
+                            {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
+                                    "If:do:": [
+                                      {
+                                        "Send:path:arguments:": [
+                                          "search",
+                                          {
+                                            "Determine:arguments:": [
+                                              "parentsOf",
+                                              {
+                                                "Args:": [
+                                                  {
+                                                    "Arg:from:": [
+                                                      "obj",
+                                                      "@noun"
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "Args:": [
+                                              {
+                                                "Arg:from:": [
+                                                  "actor",
+                                                  "@actor"
+                                                ]
+                                              },
+                                              {
+                                                "Arg:from:": [
+                                                  "noun",
+                                                  "@noun"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Act:": [
+                                          {
+                                            "Determine:arguments:": [
+                                              "report searching",
+                                              {
+                                                "Args:": [
+                                                  {
+                                                    "Arg:from:": [
+                                                      "actor",
+                                                      "@actor"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "Arg:from:": [
+                                                      "noun",
+                                                      "@noun"
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:": [
+            "patterns",
+            "report searching",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "actor"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "VariableDecl:name:type object:": [
+                    "a",
+                    "noun",
+                    {
+                      "ObjectType:kind:": [
+                        "a",
+                        "thing"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "report searching",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:": {
+                    "VariableDecl:name:type ext:": [
+                      "our",
+                      "items",
+                      {
+                        "ExtType textList:": "list"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "player searches something",
+                              {
+                                "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Not:": {
+                        "Determine:arguments:": [
+                          "isPlayer",
+                          {
+                            "Args:": [
+                              {
+                                "Arg:from:": [
+                                  "obj",
+                                  "@actor"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "someone else searches something",
+                              {
+                                "RenderTemplate:": "{The: .actor|capitalize!} searches {the: .noun}."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Determine:arguments:": [
+                            "isPlayer",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "obj",
+                                    "@actor"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "Determine:arguments:": [
+                            "shows storage",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "obj",
+                                    "@noun"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "items",
+                            {
+                              "FromTxts:": {
+                                "Determine:arguments:": [
+                                  "visible storage",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "obj",
+                                          "@noun"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "If:do:else:": [
+                            {
+                              "Cmp:is:num:": [
+                                {
+                                  "Len:": "@items"
+                                },
+                                "Equals",
+                                0
+                              ]
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Say:": {
+                                    "Response:text:": [
+                                      "player searches empty storage",
+                                      {
+                                        "RenderTemplate:": "There is nothing {on:.noun} {the:.noun}."
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
+                                    "Say:": {
+                                      "Response:text:": [
+                                        "player searches storage",
+                                        {
+                                          "Spaces:": {
+                                            "Act:": [
+                                              {
+                                                "Say:": {
+                                                  "RenderTemplate:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
+                                                }
+                                              },
+                                              {
+                                                "Say:": {
+                                                  "Commas:": {
+                                                    "Act:": [
+                                                      {
+                                                        "Repeating across:as:do:": [
+                                                          "@items",
+                                                          {
+                                                            "AsTxt:": "item"
+                                                          },
+                                                          {
+                                                            "Act:": [
+                                                              {
+                                                                "Say:": {
+                                                                  "RenderTemplate:": "{the: .item}"
+                                                                }
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                }
+                                              },
+                                              {
+                                                "Say:": "."
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternActions:patternRules:": [
+            "can reach",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Cmp:is:txt:": [
+                            "@action",
+                            "Equals",
+                            "searching"
+                          ]
+                        },
+                        {
+                          "Determine:arguments:": [
+                            "fully opaque",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "obj",
+                                    "@noun"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "response",
+                            {
+                              "FromTxt:": {
+                                "Response:text:": [
+                                  "can't search opaque objects",
+                                  {
+                                    "RenderTemplate:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Cmp:is:txt:": [
+                            "@action",
+                            "Equals",
+                            "searching"
+                          ]
+                        },
+                        {
+                          "Not:": {
+                            "Determine:arguments:": [
+                              "provides storage",
+                              {
+                                "Args:": [
+                                  {
+                                    "Arg:from:": [
+                                      "obj",
+                                      "@noun"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "response",
+                            {
+                              "FromTxt:": {
+                                "Response:text:": [
+                                  "can only search storage",
+                                  {
+                                    "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": []
+    }
+  ]
+}

@@ -1,0 +1,543 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " objects",
+            "kind"
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " objects",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "description",
+                  "text"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            "objects",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "grouping label",
+                  "text"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " things",
+            "object"
+          ]
+        },
+        {
+          "KindsOfAspect:": " possessiveness"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " possessiveness",
+            {
+              "TraitPhrase:trait:": [
+                "canbe",
+                [
+                  "not worn",
+                  "worn"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsOfAspect:": " portability"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " portability",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "portable",
+                  "fixed in place"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "portability",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "possessiveness",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "wearability",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsOfAspect:": " scenery status"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " scenery status",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "not scenery",
+                  "scenery"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "scenery status",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "an",
+                  "initial appearance",
+                  "text"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "our",
+                  "mentionable",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsOfAspect:": " mentionable"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " mentionable",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "not mentioned",
+                  "mentioned"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "our",
+                  "handleable",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsOfAspect:": " handleable"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " handleable",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "not handled",
+                  "handled"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsOfAspect:": " wearability"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " wearability",
+            {
+              "TraitPhrase:trait:": [
+                "canbe",
+                [
+                  "not wearable",
+                  "wearable"
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " actors",
+            "thing"
+          ]
+        },
+        {
+          "KindsOfKind:singularKind:": [
+            " animals",
+            "actor"
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " props",
+            "thing"
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " openers",
+            "prop"
+          ]
+        },
+        {
+          "KindsOfAspect:": " open status"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " open status",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "open",
+                  "closed"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsOfAspect:": " openability"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " openability",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "unopenable",
+                  "openable"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsOfAspect:": " locked status"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " locked status",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "unlockable",
+                  "locked"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsOfAspect:": " lockable status"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " lockable status",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "lockable",
+                  "not lockable"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " openers",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "open status",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "openability",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "locked status",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "lockable status",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " containers",
+            "opener"
+          ]
+        },
+        {
+          "KindsOfAspect:": " enterability"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " enterability",
+            {
+              "TraitPhrase:trait:": [
+                "canbe",
+                [
+                  "enterable",
+                  "not enterable"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsOfAspect:": " opacity"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " opacity",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "opaque",
+                  "transparent"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " containers",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "enterability",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "opacity",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfAspect:": " illumination"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " illumination",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "unlit",
+                  "lit"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "illumination",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " rooms",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "illumination",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "Certainties:areBeing:certainty:trait:": [
+            " rooms",
+            "are",
+            "usually",
+            "lit"
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " supporters",
+            "prop"
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " rooms",
+            "object"
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            "rooms",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "visited",
+                  "bool"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " regions",
+            "object"
+          ]
+        }
+      ]
+    }
+  ]
+}

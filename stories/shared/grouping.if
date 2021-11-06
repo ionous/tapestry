@@ -1,0 +1,841 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:patternReturn:about:": [
+            "patterns",
+            "make groups",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type ext:": [
+                    "some",
+                    "objs",
+                    {
+                      "ExtType textList:": "list"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type ext:": [
+                  "our",
+                  "groups",
+                  {
+                    "ExtType records:": {
+                      "RecordList:": "object group"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Comment:": "Returns a list of the objects partitioned into groups."
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "make groups",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:": {
+                    "VariableDecl:name:type ext:": [
+                      "some",
+                      "groupings",
+                      {
+                        "ExtType records:": {
+                          "RecordList:": "grouping"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Comment:": "determine the grouping values for each object"
+                        },
+                        {
+                          "Map:fromList:using:": [
+                            "groupings",
+                            "@objs",
+                            "assign grouping"
+                          ]
+                        },
+                        {
+                          "Comment:": "group the objects by their grouping values"
+                        },
+                        {
+                          "Reduce into:fromList:using:": [
+                            "groups",
+                            "@groupings",
+                            "collate groups"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:patternReturn:": [
+            "patterns",
+            "assign grouping",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "obj",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "object"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type ext:": [
+                  "a",
+                  "grouping",
+                  {
+                    "ExtType record:": {
+                      "RecordType:": "grouping"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "assign grouping",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type ext:": [
+                        "some",
+                        "grouping",
+                        {
+                          "ExtType record:": {
+                            "RecordType:": "grouping"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "FromRec:": {
+                          "Make:arguments:": [
+                            "groupings",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "name",
+                                    {
+                                      "FromTxt:": "@obj"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "grouping",
+                            "@grouping"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Get obj:trait:": [
+                            "@obj",
+                            "counted"
+                          ]
+                        },
+                        {
+                          "Is empty:": {
+                            "Get:from:": [
+                              "label",
+                              {
+                                "VarFields:": "grouping"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Comment:": "unless already grouped, display unnamed counted nouns together using autogenerated text via print several."
+                        },
+                        {
+                          "Put:from:at:": [
+                            {
+                              "VarField:": "grouping"
+                            },
+                            {
+                              "FromTxt:": {
+                                "KindOf:": "@obj"
+                              }
+                            },
+                            "label"
+                          ]
+                        },
+                        {
+                          "Put:from:at:": [
+                            {
+                              "VarField:": "grouping"
+                            },
+                            {
+                              "FromBool:": true
+                            },
+                            "is hide label"
+                          ]
+                        },
+                        {
+                          "Put:from:at:": [
+                            {
+                              "VarField:": "grouping"
+                            },
+                            {
+                              "FromBool:": true
+                            },
+                            "is hide objects"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfRecord:": " groupings"
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " groupings",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:comment:": [
+                  "a",
+                  "name",
+                  "text",
+                  ", containing the name of an object the grouping describes"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "label",
+                  "text"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "hide label",
+                  "bool"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "hide size",
+                  "bool"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "hide objects",
+                  "bool"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfRecord:": " object groups"
+        },
+        {
+          "RecordsPossessProperties:propertyDecl:": [
+            " object groups",
+            [
+              {
+                "PropertyDecl:property:propertyType ext:": [
+                  "a",
+                  "grouping",
+                  {
+                    "ExtType record:": {
+                      "RecordType:": "groupings"
+                    }
+                  }
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType ext:": [
+                  "some",
+                  "objects",
+                  {
+                    "ExtType textList:": "list"
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:": [
+            "patterns",
+            "match groups"
+          ]
+        },
+        {
+          "PatternVariablesDecl:variableDecl:": [
+            "match groups",
+            [
+              {
+                "VariableDecl:name:type ext:": [
+                  "a",
+                  "first",
+                  {
+                    "ExtType record:": {
+                      "RecordType:": "grouping"
+                    }
+                  }
+                ]
+              },
+              {
+                "VariableDecl:name:type ext:": [
+                  "a",
+                  "second",
+                  {
+                    "ExtType record:": {
+                      "RecordType:": "grouping"
+                    }
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "PatternActions:patternReturn:patternRules:": [
+            "match groups",
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type primitive:": [
+                  "a",
+                  "matching",
+                  "bool"
+                ]
+              }
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Cmp:is:txt:": [
+                            {
+                              "Get:from:": [
+                                "label",
+                                {
+                                  "VarFields:": "first"
+                                }
+                              ]
+                            },
+                            "Equals",
+                            {
+                              "Get:from:": [
+                                "label",
+                                {
+                                  "VarFields:": "second"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "Cmp:is:txt:": [
+                            {
+                              "Get:from:": [
+                                "hide label",
+                                {
+                                  "VarFields:": "first"
+                                }
+                              ]
+                            },
+                            "Equals",
+                            {
+                              "Get:from:": [
+                                "hide label",
+                                {
+                                  "VarFields:": "second"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "Cmp:is:txt:": [
+                            {
+                              "Get:from:": [
+                                "hide size",
+                                {
+                                  "VarFields:": "first"
+                                }
+                              ]
+                            },
+                            "Equals",
+                            {
+                              "Get:from:": [
+                                "hide size",
+                                {
+                                  "VarFields:": "second"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "Cmp:is:txt:": [
+                            {
+                              "Get:from:": [
+                                "hide objects",
+                                {
+                                  "VarFields:": "first"
+                                }
+                              ]
+                            },
+                            "Equals",
+                            {
+                              "Get:from:": [
+                                "hide objects",
+                                {
+                                  "VarFields:": "second"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "matching",
+                            {
+                              "FromBool:": true
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AnyTrue:": [
+                        {
+                          "Is empty:": {
+                            "Get:from:": [
+                              "label",
+                              {
+                                "VarFields:": "first"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Is empty:": {
+                            "Get:from:": [
+                              "label",
+                              {
+                                "VarFields:": "second"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "matching",
+                            {
+                              "FromBool:": false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:patternReturn:about:": [
+            "patterns",
+            "collate groups",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type ext:": [
+                    "a",
+                    "grouping",
+                    {
+                      "ExtType record:": {
+                        "RecordType:": "grouping"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "VariableDecl:name:type ext:": [
+                    "some",
+                    "groups",
+                    {
+                      "ExtType records:": {
+                        "RecordList:": "object group"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type ext:": [
+                  "our",
+                  "groups",
+                  {
+                    "ExtType records:": {
+                      "RecordList:": "object group"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Comment:": "Adds a grouping to a collated list of groupings, and returns the new list."
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "collate groups",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:": {
+                    "VariableDecl:name:type primitive:": [
+                      "an",
+                      "idx",
+                      "number"
+                    ]
+                  }
+                },
+                {
+                  "LocalDecl:": {
+                    "VariableDecl:name:type ext:": [
+                      "one",
+                      "group",
+                      {
+                        "ExtType record:": {
+                          "RecordType:": "object group"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "LocalDecl:": {
+                    "VariableDecl:name:type ext:": [
+                      "some",
+                      "names",
+                      {
+                        "ExtType textList:": "list"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Comment:": "find the index of the matching group"
+                        },
+                        {
+                          "Repeating across:as:do:": [
+                            "@groups",
+                            {
+                              "AsRec:": "el"
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "If:do:": [
+                                    {
+                                      "Determine:arguments:": [
+                                        "match groups",
+                                        {
+                                          "Args:": [
+                                            {
+                                              "Arg:from:": [
+                                                "first",
+                                                "@grouping"
+                                              ]
+                                            },
+                                            {
+                                              "Arg:from:": [
+                                                "second",
+                                                {
+                                                  "Get:from:": [
+                                                    "grouping",
+                                                    {
+                                                      "VarFields:": "el"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Act:": [
+                                        {
+                                          "Let:be:": [
+                                            "idx",
+                                            "@index"
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "Comment:": "haven't found a matching group?\npack the object and its settings into a group, and add it into the groups."
+                        },
+                        {
+                          "If:do:else:": [
+                            {
+                              "Cmp:is:num:": [
+                                "@idx",
+                                "Equals",
+                                0
+                              ]
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Put:into:": [
+                                    {
+                                      "Get:from:": [
+                                        "name",
+                                        {
+                                          "VarFields:": "grouping"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "IntoTxts:": "names"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Put:from:at:": [
+                                    {
+                                      "VarField:": "group"
+                                    },
+                                    "@names",
+                                    "objects"
+                                  ]
+                                },
+                                {
+                                  "Put:from:at:": [
+                                    {
+                                      "VarField:": "group"
+                                    },
+                                    "@grouping",
+                                    "grouping"
+                                  ]
+                                },
+                                {
+                                  "Put:into:": [
+                                    "@group",
+                                    {
+                                      "IntoRecs:": "groups"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
+                                    "Comment:": "found a matching group?\nunpack it, add the object name to it, then pack it up again."
+                                  },
+                                  {
+                                    "Let:be:": [
+                                      "group",
+                                      {
+                                        "FromRec:": {
+                                          "Get:index:": [
+                                            "@groups",
+                                            "@idx"
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "Let:be:": [
+                                      "names",
+                                      {
+                                        "Get:from:": [
+                                          "objects",
+                                          {
+                                            "VarFields:": "group"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "Put:into:": [
+                                      {
+                                        "Get:from:": [
+                                          "name",
+                                          {
+                                            "VarFields:": "grouping"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "IntoTxts:": "names"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "Put:from:at:": [
+                                      {
+                                        "VarField:": "group"
+                                      },
+                                      "@names",
+                                      "objects"
+                                    ]
+                                  },
+                                  {
+                                    "Set:index:from:": [
+                                      "groups",
+                                      "@idx",
+                                      "@group"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

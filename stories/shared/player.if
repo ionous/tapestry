@@ -1,0 +1,370 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " agents",
+            "object"
+          ]
+        },
+        {
+          "KindsOfKind:singularKind:": [
+            " players",
+            "agent"
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "player"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [],
+                    "players"
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " agents",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "pawn",
+                  "text"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            "actors",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "an",
+                  "in darkness",
+                  "bool"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "Comment:": "this should be injected rather than be part of the library."
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "our",
+                      "self"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isan",
+                    [],
+                    "actor"
+                  ]
+                }
+              ]
+            },
+            [
+              {
+                "Tail:nounPhrase nounTraits:": [
+                  "it",
+                  {
+                    "NounTraits:trait:": [
+                      "is",
+                      [
+                        "privately named"
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "pawn",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "player"
+                ]
+              }
+            ],
+            "#entire_game::self"
+          ]
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "printed name",
+            [
+              {
+                "NamedNoun:name:": [
+                  "our",
+                  "self"
+                ]
+              }
+            ],
+            "you"
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase nounTraits:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "our",
+                      "self"
+                    ]
+                  }
+                ],
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "proper named"
+                    ]
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:": [
+            "patterns",
+            "isPlayer",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "obj",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "object"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternActions:patternReturn:patternRules:": [
+            "isPlayer",
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type primitive:": [
+                  "our",
+                  "success",
+                  "bool"
+                ]
+              }
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "KindOf:is:": [
+                        "@obj",
+                        "actors"
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "success",
+                            {
+                              "FromBool:": {
+                                "Cmp:is:txt:": [
+                                  "@obj",
+                                  "Equals",
+                                  {
+                                    "Get:from:": [
+                                      "pawn",
+                                      {
+                                        "ObjFields:": "player"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "KindOf:is:": [
+                        "@obj",
+                        "agents"
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "success",
+                            {
+                              "FromBool:": {
+                                "Cmp:is:txt:": [
+                                  "@obj",
+                                  "Equals",
+                                  {
+                                    "IdOf:": "player"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "RelativeToNoun:nouns:areBeing:nouns1:": [
+            " whereabouts",
+            [
+              {
+                "NamedNoun:name:": [
+                  "our",
+                  "self"
+                ]
+              }
+            ],
+            "is",
+            [
+              {
+                "NamedNoun:name:": [
+                  "our",
+                  " kitchen"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestRule:hook activity:": [
+            "player tests",
+            {
+              "Act:": [
+                {
+                  "If:do:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                {
+                                  "FromTxt:": "self"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": "yes"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "TestStatement:test:": [
+            "player tests",
+            {
+              "TestOutput:": "yes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Alias:asNoun:": [
+              [
+                "me",
+                "myself",
+                "self"
+              ],
+              "player"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

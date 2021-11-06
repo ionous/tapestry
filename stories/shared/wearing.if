@@ -1,0 +1,453 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "ActionDecl:action:actionParams common:": [
+            "wear",
+            "wearing",
+            {
+              "CommonAction:": "object"
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "wearing",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "VarFields:": "agent"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@actor"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "If:from:and:do:else:": [
+                            "resp",
+                            {
+                              "FromTxt:": {
+                                "Determine:arguments:": [
+                                  "can handle",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "actor",
+                                          "@actor"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "action",
+                                          {
+                                            "FromTxt:": "wearing"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "noun",
+                                          "@noun"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Say:": "@resp"
+                                }
+                              ]
+                            },
+                            {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
+                                    "Send:path:arguments:": [
+                                      "state change",
+                                      {
+                                        "Determine:arguments:": [
+                                          "parentsOf",
+                                          {
+                                            "Args:": [
+                                              {
+                                                "Arg:from:": [
+                                                  "obj",
+                                                  "@noun"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Args:": [
+                                          {
+                                            "Arg:from:": [
+                                              "actor",
+                                              "@actor"
+                                            ]
+                                          },
+                                          {
+                                            "Arg:from:": [
+                                              "noun",
+                                              "@noun"
+                                            ]
+                                          },
+                                          {
+                                            "Arg:from:": [
+                                              "trait",
+                                              {
+                                                "FromTxt:": "worn"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "Arg:from:": [
+                                              "guard",
+                                              {
+                                                "FromTxt:": "wearable"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "Arg:from:": [
+                                              "change",
+                                              {
+                                                "FromTxt:": "put on"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "ActionDecl:action:actionParams common:": [
+            "remove",
+            "removing",
+            {
+              "CommonAction:": "object"
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "removing",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "VarFields:": "agent"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@actor"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "If:from:and:do:else:": [
+                            "resp",
+                            {
+                              "FromTxt:": {
+                                "Determine:arguments:": [
+                                  "can handle",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "actor",
+                                          "@actor"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "action",
+                                          {
+                                            "FromTxt:": "removing"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "noun",
+                                          "@noun"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Say:": "@resp"
+                                }
+                              ]
+                            },
+                            {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
+                                    "Send:path:arguments:": [
+                                      "state change",
+                                      {
+                                        "Determine:arguments:": [
+                                          "parentsOf",
+                                          {
+                                            "Args:": [
+                                              {
+                                                "Arg:from:": [
+                                                  "obj",
+                                                  "@noun"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Args:": [
+                                          {
+                                            "Arg:from:": [
+                                              "actor",
+                                              "@actor"
+                                            ]
+                                          },
+                                          {
+                                            "Arg:from:": [
+                                              "noun",
+                                              "@noun"
+                                            ]
+                                          },
+                                          {
+                                            "Arg:from:": [
+                                              "trait",
+                                              {
+                                                "FromTxt:": "not_worn"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "Arg:from:": [
+                                              "guard",
+                                              {
+                                                "FromTxt:": "wearable"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "Arg:from:": [
+                                              "change",
+                                              {
+                                                "FromTxt:": "take off"
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "Comment:": "Can only remove what's worn. ( This isn't perfectly symmetrical with can only wear possessions, and that's okay. ) "
+        },
+        {
+          "PatternActions:patternRules:": [
+            "state changing",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Cmp:is:txt:": [
+                            "@trait",
+                            "Equals",
+                            "not_worn"
+                          ]
+                        },
+                        {
+                          "Cmp:is:txt:": [
+                            "@actor",
+                            "OtherThan",
+                            {
+                              "Determine:arguments:": [
+                                "wearerOf",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "obj",
+                                        "@noun"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "result",
+                            {
+                              "FromTxt:": {
+                                "Response:text:": [
+                                  "can only remove what's worn",
+                                  {
+                                    "RenderTemplate:": "{We:|capitalize!} aren't wearing {those:.noun}!"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

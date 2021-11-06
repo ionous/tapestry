@@ -1,0 +1,193 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:patternReturn:": [
+            "patterns",
+            "parser bounds",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "obj",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "object"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type ext:": [
+                  "our",
+                  "bounds",
+                  {
+                    "ExtType textList:": "list"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "parser bounds",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:": {
+                    "VariableDecl:name:type ext:": [
+                      "a",
+                      "queue",
+                      {
+                        "ExtType textList:": "list"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Put:into:atFront:": [
+                            "@obj",
+                            {
+                              "IntoTxts:": "bounds"
+                            },
+                            "Always"
+                          ]
+                        },
+                        {
+                          "Put:into:": [
+                            "@obj",
+                            {
+                              "IntoTxts:": "queue"
+                            }
+                          ]
+                        },
+                        {
+                          "Repeating:do:": [
+                            {
+                              "Cmp:is:num:": [
+                                {
+                                  "Len:": "@queue"
+                                },
+                                "GreaterThan",
+                                0
+                              ]
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Erasing:atFront:as:do:": [
+                                    {
+                                      "VarOfTxts:": "queue"
+                                    },
+                                    "Always",
+                                    "enc",
+                                    {
+                                      "Act:": [
+                                        {
+                                          "Repeating across:as:do:": [
+                                            {
+                                              "FromTxts:": {
+                                                "Determine:arguments:": [
+                                                  "childrenOf",
+                                                  {
+                                                    "Args:": [
+                                                      {
+                                                        "Arg:from:": [
+                                                          "obj",
+                                                          "@enc"
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              "AsTxt:": "kid"
+                                            },
+                                            {
+                                              "Act:": [
+                                                {
+                                                  "Put:into:": [
+                                                    "@kid",
+                                                    {
+                                                      "IntoTxts:": "bounds"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "If:do:": [
+                                                    {
+                                                      "Not:": {
+                                                        "Determine:arguments:": [
+                                                          "fully opaque",
+                                                          {
+                                                            "Args:": [
+                                                              {
+                                                                "Arg:from:": [
+                                                                  "obj",
+                                                                  "@kid"
+                                                                ]
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    },
+                                                    {
+                                                      "Act:": [
+                                                        {
+                                                          "Comment:": "add this kid for additional processing"
+                                                        },
+                                                        {
+                                                          "Put:into:": [
+                                                            "@kid",
+                                                            {
+                                                              "IntoTxts:": "queue"
+                                                            }
+                                                          ]
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

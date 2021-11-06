@@ -1,0 +1,176 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:": [
+            "patterns",
+            "print several",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "obj",
+                    {
+                      "ObjectType:kind:": [
+                        "a",
+                        "thing"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "VariableDecl:name:type primitive:": [
+                    "a",
+                    "group size",
+                    "number"
+                  ]
+                },
+                {
+                  "VariableDecl:name:type primitive:": [
+                    "a",
+                    "label",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Comment:": "Provides a way to describe a generic group of objects. By default, it prints the group size in words, then prints the plural name of the target. It's similar to Inform's \"Printing a number of something.\""
+        },
+        {
+          "PatternActions:patternRules:": [
+            "print several",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Spaces:": {
+                              "Act:": [
+                                {
+                                  "Say:": {
+                                    "RenderTemplate:": "{print_num_word: .group_size}"
+                                  }
+                                },
+                                {
+                                  "If:do:else:": [
+                                    {
+                                      "Is empty:": "@label"
+                                    },
+                                    {
+                                      "Act:": [
+                                        {
+                                          "Say:": {
+                                            "RenderTemplate:": "{if .group_size \u003e 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "ElseDo:": {
+                                        "Act:": [
+                                          {
+                                            "Say:": {
+                                              "RenderTemplate:": "{if .group_size \u003e 1}{pluralize: .label}{else}{singularize: .label}{end}"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestScene:story:": [
+            "print several",
+            {
+              "Story:": [
+                {
+                  "Paragraph:": [
+                    {
+                      "NounStatement:tail:": [
+                        {
+                          "Lede:nounPhrase kindOfNoun:": [
+                            [
+                              {
+                                "NamedNoun:name:": [
+                                  "the",
+                                  "books"
+                                ]
+                              }
+                            ],
+                            {
+                              "KindOfNoun:trait:kind:": [
+                                "area",
+                                [],
+                                "thing"
+                              ]
+                            }
+                          ]
+                        },
+                        []
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestRule:hook activity:": [
+            "print several",
+            {
+              "Act:": [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{print_several: .books}\n{print_several: .books 5}"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "print several",
+            {
+              "TestOutput:": "zero books\nfive books"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

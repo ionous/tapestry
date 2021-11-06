@@ -1,0 +1,1147 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "Comment:": "Since \"domains\" aren't yet hierarchical, to share objects across tests they have to be described globally."
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "NounStatement:tail:summary:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "kitchen"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [],
+                    "room"
+                  ]
+                }
+              ]
+            },
+            [],
+            {
+              "Summary:": "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake."
+            }
+          ]
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "printed name",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "kitchen"
+                ]
+              }
+            ],
+            "Kitchen"
+          ]
+        },
+        {
+          "Comment:": "fix: capitalization is still an issue."
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " cats",
+            "animal"
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase nounRelation:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "broom"
+                    ]
+                  },
+                  {
+                    "NamedNoun:name:": [
+                      "a",
+                      "hat"
+                    ]
+                  },
+                  {
+                    "NamedNoun:name:": [
+                      "two",
+                      "cats"
+                    ]
+                  }
+                ],
+                {
+                  "NounRelation areBeing:relation:nouns:": [
+                    "are",
+                    "whereabouts",
+                    [
+                      {
+                        "NamedNoun:name:": [
+                          "the",
+                          "kitchen"
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "NounStatement:": {
+            "Lede:nounPhrase kindOfNoun:": [
+              [
+                {
+                  "NamedNoun:name:": [
+                    "the",
+                    "broom"
+                  ]
+                },
+                {
+                  "NamedNoun:name:": [
+                    "a",
+                    "hat"
+                  ]
+                }
+              ],
+              {
+                "KindOfNoun:trait:kind:": [
+                  "are",
+                  [],
+                  "things"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "initial appearance",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "hat"
+                ]
+              }
+            ],
+            "A pointed black hat lies discarded on the floor under a dusty shelf."
+          ]
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "description",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "hat"
+                ]
+              }
+            ],
+            "Your aunt's very own witches hat, a Halloween favorite."
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase nounTraits:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "cabinet"
+                    ]
+                  }
+                ],
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "openable",
+                      "enterable",
+                      "scenery"
+                    ]
+                  ]
+                }
+              ]
+            },
+            [
+              {
+                "Tail:nounPhrase kindOfNoun:": [
+                  "it",
+                  {
+                    "KindOfNoun:trait:kind:": [
+                      "isa",
+                      [],
+                      "container"
+                    ]
+                  }
+                ]
+              },
+              {
+                "Tail:nounPhrase nounRelation:": [
+                  "it",
+                  {
+                    "NounRelation areBeing:relation:nouns:": [
+                      "is",
+                      "whereabouts",
+                      [
+                        {
+                          "NamedNoun:name:": [
+                            "the",
+                            "kitchen"
+                          ]
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "book of matches"
+                    ]
+                  },
+                  {
+                    "NamedNoun:name:": [
+                      "a",
+                      "bottle of descaling solution"
+                    ]
+                  },
+                  {
+                    "NamedNoun:name:": [
+                      "a",
+                      "fish hook"
+                    ]
+                  },
+                  {
+                    "NamedNoun:name:": [
+                      "a",
+                      "rusty knife"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:nounRelation:": [
+                    "are",
+                    [],
+                    "things",
+                    {
+                      "NounRelation relation:nouns:": [
+                        "whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "cabinet"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "initial appearance",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "hook"
+                ]
+              }
+            ],
+            "Beneath your feet is a bright and shiny hook."
+          ]
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "description",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "cabinet"
+                ]
+              }
+            ],
+            "An ancient teak wardrobe repurposed as a kitchen cupboard."
+          ]
+        },
+        {
+          "GrammarDecl:": {
+            "Alias:asNoun:": [
+              [
+                "blade"
+              ],
+              "rusty knife"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase nounTraits:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "shelf"
+                    ]
+                  }
+                ],
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "scenery"
+                    ]
+                  ]
+                }
+              ]
+            },
+            [
+              {
+                "Tail:nounPhrase kindOfNoun:": [
+                  "it",
+                  {
+                    "KindOfNoun:trait:kind:nounRelation:": [
+                      "isa",
+                      [],
+                      "supporter",
+                      {
+                        "NounRelation relation:nouns:": [
+                          "whereabouts",
+                          [
+                            {
+                              "NamedNoun:name:": [
+                                "the",
+                                "kitchen"
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "can of tomatoes"
+                    ]
+                  },
+                  {
+                    "NamedNoun:name:": [
+                      "a",
+                      "can of potato leek soup"
+                    ]
+                  },
+                  {
+                    "NamedNoun:name:": [
+                      "a",
+                      "tin of deflating powder"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:nounRelation:": [
+                    "are",
+                    [],
+                    "things",
+                    {
+                      "NounRelation relation:nouns:": [
+                        "whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "shelf"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "counter"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:nounRelation:": [
+                    "isa",
+                    [],
+                    "supporter",
+                    {
+                      "NounRelation relation:nouns:": [
+                        "whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "kitchen"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "espresso machine"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:nounRelation:": [
+                    "isa",
+                    [
+                      "fixed in place",
+                      "closed"
+                    ],
+                    "container",
+                    {
+                      "NounRelation relation:nouns:": [
+                        "whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "counter"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "some",
+                      "coffee beans"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:nounRelation:": [
+                    "area",
+                    [],
+                    "thing",
+                    {
+                      "NounRelation relation:nouns:": [
+                        "whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "espresso machine"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase nounTraits:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "beans"
+                    ]
+                  }
+                ],
+                {
+                  "NounTraits:trait:": [
+                    "are",
+                    [
+                      "plural named"
+                    ]
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "a",
+                      "blender"
+                    ]
+                  },
+                  {
+                    "NamedNoun:name:": [
+                      "a",
+                      "mortar"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:nounRelation:": [
+                    "are",
+                    [],
+                    "containers",
+                    {
+                      "NounRelation relation:nouns:": [
+                        "whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "counter"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "pestle"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:nounRelation:": [
+                    "isa",
+                    [],
+                    "thing",
+                    {
+                      "NounRelation relation:nouns:": [
+                        "whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "mortar"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "initial appearance",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "espresso machine"
+                ]
+              }
+            ],
+            "Steam leaks from the top of a recently used espresso machine."
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "baseVis",
+            {
+              "TestOutput:": "cabinet and Kitchen.\nKitchen.\nshelf and Kitchen.\ncabinet.\nokay. cabinet is open again.\n"
+            }
+          ]
+        },
+        {
+          "TestRule:hook activity:": [
+            "baseVis",
+            {
+              "Act:": [
+                {
+                  "Repeating across:as:do:": [
+                    {
+                      "FromTxts:": [
+                        "cabinet",
+                        "kitchen",
+                        "shelf"
+                      ]
+                    },
+                    {
+                      "AsTxt:": "src"
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Commas:": {
+                              "Act:": [
+                                {
+                                  "Repeating across:as:do:": [
+                                    {
+                                      "FromTxts:": {
+                                        "Determine:arguments:": [
+                                          "transparentList",
+                                          {
+                                            "Args:": [
+                                              {
+                                                "Arg:from:": [
+                                                  "obj",
+                                                  {
+                                                    "FromTxt:": "@src"
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "AsTxt:": "it"
+                                    },
+                                    {
+                                      "Act:": [
+                                        {
+                                          "Say:": {
+                                            "RenderTemplate:": "{.it}"
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "Say:": "."
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Put:from:at:": [
+                    {
+                      "ObjField:": "cabinet"
+                    },
+                    {
+                      "FromBool:": true
+                    },
+                    "closed"
+                  ]
+                },
+                {
+                  "Repeating across:as:do:": [
+                    {
+                      "FromTxts:": {
+                        "Determine:arguments:": [
+                          "transparentList",
+                          {
+                            "Args:": [
+                              {
+                                "Arg:from:": [
+                                  "obj",
+                                  {
+                                    "FromTxt:": "cabinet"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "AsTxt:": "it"
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "RenderTemplate:": "{.it}."
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "If:do:": [
+                    {
+                      "Cmp:is:num:": [
+                        {
+                          "Len:": {
+                            "FromTxts:": {
+                              "Determine:arguments:": [
+                                "transparentList",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "obj",
+                                        {
+                                          "FromTxt:": "cabinet"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "OtherThan",
+                        1
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": "there should be limited visibility in a closed cabinet."
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Put:from:at:": [
+                    {
+                      "ObjField:": "cabinet"
+                    },
+                    {
+                      "FromBool:": true
+                    },
+                    "open"
+                  ]
+                },
+                {
+                  "If:do:": [
+                    {
+                      "Cmp:is:num:": [
+                        {
+                          "Len:": {
+                            "FromTxts:": {
+                              "Determine:arguments:": [
+                                "transparentList",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "obj",
+                                        {
+                                          "FromTxt:": "cabinet"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "GreaterThan",
+                        1
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": "okay. cabinet is open again."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "lookObjectDescription",
+            {
+              "TestOutput:": "A pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nSteam leaks from the top of a recently used espresso machine.\n"
+            }
+          ]
+        },
+        {
+          "TestRule:hook activity:": [
+            "lookObjectDescription",
+            {
+              "Act:": [
+                {
+                  "Determine:arguments:": [
+                    "print object description",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "obj",
+                            {
+                              "FromTxt:": "hat"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "locale",
+                            {
+                              "FromTxt:": "kitchen"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Determine:arguments:": [
+                    "print object description",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "obj",
+                            {
+                              "FromTxt:": "shelf"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "locale",
+                            {
+                              "FromTxt:": "kitchen"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Determine:arguments:": [
+                    "print object description",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "obj",
+                            {
+                              "FromTxt:": "machine"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "locale",
+                            {
+                              "FromTxt:": "kitchen"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "printing vantages",
+            {
+              "TestOutput:": "Darkness.\nIt is pitch dark, and you can't see a thing.\n.....\nKitchen (in the cabinet).\nYour Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.\nA pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nYou can also see a broom, two cats, and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle)).\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nIn the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife.\n"
+            }
+          ]
+        },
+        {
+          "TestRule:hook activity:": [
+            "printing vantages",
+            {
+              "Act:": [
+                {
+                  "Determine:arguments:": [
+                    "Print vantage",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "where",
+                            {
+                              "FromTxt:": "cabinet"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "inDarkness",
+                            {
+                              "FromBool:": true
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": "....."
+                },
+                {
+                  "Determine:arguments:": [
+                    "Print vantage",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "where",
+                            {
+                              "FromTxt:": "cabinet"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": "....."
+                },
+                {
+                  "Put:from:at:": [
+                    {
+                      "ObjField:": "cabinet"
+                    },
+                    {
+                      "FromBool:": true
+                    },
+                    "closed"
+                  ]
+                },
+                {
+                  "Determine:arguments:": [
+                    "Print vantage",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "where",
+                            {
+                              "FromTxt:": "cabinet"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": "....."
+                },
+                {
+                  "Comment:": "remove the hook from the cabinet"
+                },
+                {
+                  "Relate:to:via:": [
+                    "kitchen",
+                    "hook",
+                    "whereabouts"
+                  ]
+                },
+                {
+                  "Determine:arguments:": [
+                    "Print vantage",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "where",
+                            {
+                              "FromTxt:": "cabinet"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "printing inline objects",
+            {
+              "TestOutput:": "a mortar (in which is a pestle), a blender (empty), and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))"
+            }
+          ]
+        },
+        {
+          "TestRule:hook activity:": [
+            "printing inline objects",
+            {
+              "Act:": [
+                {
+                  "Determine:arguments:": [
+                    "print inline objects",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "objs",
+                            {
+                              "FromTxts:": [
+                                "mortar",
+                                "blender",
+                                "counter"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

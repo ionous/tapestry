@@ -1,0 +1,143 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "TestRule:hook activity:": [
+            "countOf",
+            {
+              "Act:": [
+                {
+                  "Repeating across:as:do:": [
+                    {
+                      "FromNums:": {
+                        "Range:": 6
+                      }
+                    },
+                    {
+                      "AsNum:": "i"
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Determine:": "magic symbols"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "countOf",
+            {
+              "TestOutput:": "o*-*x*x"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestScene:story:": [
+            "countOf",
+            {
+              "Story:": [
+                {
+                  "Paragraph:": [
+                    {
+                      "PatternDecl:name:": [
+                        "patterns",
+                        "magic symbols"
+                      ]
+                    },
+                    {
+                      "PatternActions:patternRules:": [
+                        "magic symbols",
+                        {
+                          "PatternRules:": [
+                            {
+                              "PatternRule:hook activity:": [
+                                "Always",
+                                {
+                                  "Act:": [
+                                    {
+                                      "Say:": "o"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "PatternRule:hook activity:": [
+                                {
+                                  "CountOf:num:": [
+                                    "After",
+                                    5
+                                  ]
+                                },
+                                {
+                                  "Act:": [
+                                    {
+                                      "Say:": "x"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "PatternRule:hook activity:": [
+                                {
+                                  "CountOf:num:": [
+                                    "At",
+                                    3
+                                  ]
+                                },
+                                {
+                                  "Act:": [
+                                    {
+                                      "Say:": "-"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "PatternRule:hook activity:": [
+                                {
+                                  "CountOf:num:": [
+                                    "Every",
+                                    2
+                                  ]
+                                },
+                                {
+                                  "Act:": [
+                                    {
+                                      "Say:": "*"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,307 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "ActionDecl:action:actionParams common:": [
+            "peek",
+            "peeking",
+            {
+              "CommonAction:": "thing"
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "peeking",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "VarFields:": "agent"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@actor"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "If:from:and:do:else:": [
+                            "result",
+                            {
+                              "FromTxt:": {
+                                "Determine:arguments:": [
+                                  "can reach",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "actor",
+                                          "@actor"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "action",
+                                          {
+                                            "FromTxt:": "peeking"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "noun",
+                                          "@noun"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "requires light",
+                                          {
+                                            "FromBool:": true
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@result"
+                              }
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Say:": "@result"
+                                }
+                              ]
+                            },
+                            {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
+                                    "If:do:": [
+                                      {
+                                        "Send:path:arguments:": [
+                                          "peek",
+                                          {
+                                            "Determine:arguments:": [
+                                              "parentsOf",
+                                              {
+                                                "Args:": [
+                                                  {
+                                                    "Arg:from:": [
+                                                      "obj",
+                                                      "@noun"
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "Args:": [
+                                              {
+                                                "Arg:from:": [
+                                                  "actor",
+                                                  "@actor"
+                                                ]
+                                              },
+                                              {
+                                                "Arg:from:": [
+                                                  "noun",
+                                                  "@noun"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Act:": [
+                                          {
+                                            "Determine:arguments:": [
+                                              "report peeking",
+                                              {
+                                                "Args:": [
+                                                  {
+                                                    "Arg:from:": [
+                                                      "actor",
+                                                      "@actor"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "Arg:from:": [
+                                                      "noun",
+                                                      "@noun"
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:": [
+            "patterns",
+            "report peeking",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "actor"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "VariableDecl:name:type object:": [
+                    "a",
+                    "noun",
+                    {
+                      "ObjectType:kind:": [
+                        "a",
+                        "thing"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternActions:patternRules:": [
+            "report peeking",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "player peeks",
+                              {
+                                "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Not:": {
+                        "Determine:arguments:": [
+                          "isPlayer",
+                          {
+                            "Args:": [
+                              {
+                                "Arg:from:": [
+                                  "obj",
+                                  "@actor"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "someone else peeks",
+                              {
+                                "RenderTemplate:": "{The: .actor|capitalize!} looks under {the: .noun}."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

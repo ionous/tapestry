@@ -1,0 +1,206 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "activating test",
+            {
+              "TestOutput:": "The control status: deactivated.\nYou switch on the espresso controls.\nThe control status: activated.\nYou switch off the espresso controls.\nThe control status: deactivated.\nTry to activate a regular object.\nIt isn't something you can switch on.\n"
+            }
+          ]
+        },
+        {
+          "TestRule:hook activity:": [
+            "activating test",
+            {
+              "Act:": [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The control status: {.controls.activation}."
+                  }
+                },
+                {
+                  "Determine:arguments:": [
+                    "Activating",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "controls"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The control status: {.controls.activation}."
+                  }
+                },
+                {
+                  "Determine:arguments:": [
+                    "Deactivating",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "controls"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The control status: {.controls.activation}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "Try to activate a regular object."
+                  }
+                },
+                {
+                  "Determine:arguments:": [
+                    "Activating",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "knife"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Comment:": "we don't need to test the whole state changing algorithm; that's shared and tested elsewhere. We just need to test that the engine knows about activation and deactivation."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestScene:story:": [
+            "activating test",
+            {
+              "Story:": [
+                {
+                  "Paragraph:": [
+                    {
+                      "RelativeToNoun:nouns:areBeing:nouns1:": [
+                        " whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "knife"
+                            ]
+                          }
+                        ],
+                        "is",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "our",
+                              "self"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Paragraph:": [
+                    {
+                      "NounStatement:tail:": [
+                        {
+                          "Lede:nounPhrase kindOfNoun:": [
+                            [
+                              {
+                                "NamedNoun:name:": [
+                                  "the",
+                                  "espresso controls"
+                                ]
+                              }
+                            ],
+                            {
+                              "KindOfNoun:trait:kind:nounRelation:": [
+                                "area",
+                                [],
+                                "device",
+                                {
+                                  "NounRelation relation:nouns:": [
+                                    "whereabouts",
+                                    [
+                                      {
+                                        "NamedNoun:name:": [
+                                          "the",
+                                          "kitchen"
+                                        ]
+                                      }
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        []
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": []
+    }
+  ]
+}

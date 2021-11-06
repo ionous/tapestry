@@ -1,0 +1,250 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:": [
+            "patterns",
+            "adjust light"
+          ]
+        },
+        {
+          "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "adjust light",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "ObjFields:": "player"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type primitive:": [
+                        "our",
+                        "was lit",
+                        "bool"
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "FromBool:": {
+                          "Get obj:trait:": [
+                            "@actor",
+                            "not in darkness"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type primitive:": [
+                        "our",
+                        "now lit",
+                        "bool"
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "FromBool:": {
+                          "Determine:arguments:": [
+                            "contains light",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "spot",
+                                    "@actor"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        "@was lit",
+                        {
+                          "Not:": "@now lit"
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Determine:": "Print news of darkness"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        "@now lit",
+                        {
+                          "Not:": "@was lit"
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Determine:": "print news of light"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:flags:hook activity:": [
+                    "Always",
+                    "before",
+                    {
+                      "Act:": [
+                        {
+                          "Put:from:at:": [
+                            {
+                              "VarField:": "actor"
+                            },
+                            "@now lit",
+                            "not in darkness"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:": [
+            "patterns",
+            "Print news of darkness"
+          ]
+        },
+        {
+          "PatternActions:patternRules:": [
+            "Print news of darkness",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "darkness has fallen",
+                              "It is now pitch dark in here!"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:": [
+            "patterns",
+            "Print news of light"
+          ]
+        },
+        {
+          "PatternActions:patternRules:": [
+            "Print news of light",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Determine:arguments:": [
+                            "Print vantage",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "where",
+                                    {
+                                      "Get:from:": [
+                                        "pawn",
+                                        {
+                                          "ObjFields:": "player"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

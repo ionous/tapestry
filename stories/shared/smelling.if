@@ -1,0 +1,439 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "smell",
+                "sniff"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "objects"
+                        },
+                        {
+                          "As:": "smelling"
+                        }
+                      ]
+                    },
+                    {
+                      "As:": "sniffing"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "ActionDecl:action:actionParams none:": [
+            "sniff",
+            "sniffing",
+            "nothing"
+          ]
+        },
+        {
+          "Comment:": "Sniffing implies smelling the current location. "
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "sniffing",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "VarFields:": "agent"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Determine:arguments:": [
+                            "Smelling",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "actor",
+                                    "@actor"
+                                  ]
+                                },
+                                {
+                                  "Arg:from:": [
+                                    "noun",
+                                    {
+                                      "FromTxt:": {
+                                        "Determine:arguments:": [
+                                          "locationOf",
+                                          {
+                                            "Args:": [
+                                              {
+                                                "Arg:from:": [
+                                                  "obj",
+                                                  "@actor"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "ActionDecl:action:actionParams common:": [
+            "smell",
+            "smelling",
+            {
+              "CommonAction:": "object"
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "smelling",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "VarFields:": "agent"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@actor"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "If:from:and:do:else:": [
+                            "resp",
+                            {
+                              "FromTxt:": {
+                                "Determine:arguments:": [
+                                  "can reach",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "actor",
+                                          "@actor"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "action",
+                                          {
+                                            "FromTxt:": "smelling"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "noun",
+                                          "@noun"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Say:": "@resp"
+                                }
+                              ]
+                            },
+                            {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
+                                    "If:from:and:do:else:": [
+                                      "resp",
+                                      {
+                                        "FromTxt:": {
+                                          "Determine:arguments:": [
+                                            "can use",
+                                            {
+                                              "Args:": [
+                                                {
+                                                  "Arg:from:": [
+                                                    "actor",
+                                                    "@actor"
+                                                  ]
+                                                },
+                                                {
+                                                  "Arg:from:": [
+                                                    "action",
+                                                    {
+                                                      "FromTxt:": "smelling"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "Arg:from:": [
+                                                    "noun",
+                                                    "@noun"
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        "Not:": {
+                                          "Is empty:": "@resp"
+                                        }
+                                      },
+                                      {
+                                        "Act:": [
+                                          {
+                                            "Say:": "@resp"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "ElseDo:": {
+                                          "Act:": [
+                                            {
+                                              "Determine:arguments:": [
+                                                "report smelling",
+                                                {
+                                                  "Args:": [
+                                                    {
+                                                      "Arg:from:": [
+                                                        "actor",
+                                                        "@actor"
+                                                      ]
+                                                    },
+                                                    {
+                                                      "Arg:from:": [
+                                                        "noun",
+                                                        "@noun"
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:": [
+            "patterns",
+            "report smelling",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "actor"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "VariableDecl:name:type object:": [
+                    "a",
+                    "noun",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "object"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternActions:patternRules:": [
+            "report smelling",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "actor smelling",
+                              {
+                                "RenderTemplate:": "{the:.actor|capitalize!} sniffs {the: .noun}."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@actor"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "player smelling",
+                              {
+                                "RenderTemplate:": "{we:|capitalize!} smell nothing unexpected."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "ActionDecl:action:actionParams none:": [
+            "wait",
+            "waiting",
+            "nothing"
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "waiting",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "VarFields:": "agent"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@actor"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "If:do:": [
+                            {
+                              "Send:path:arguments:": [
+                                "wait",
+                                {
+                                  "Determine:arguments:": [
+                                    "parentsOf",
+                                    {
+                                      "Args:": [
+                                        {
+                                          "Arg:from:": [
+                                            "obj",
+                                            "@actor"
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "actor",
+                                        "@actor"
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        "@actor"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Determine:arguments:": [
+                                    "report waiting",
+                                    {
+                                      "Args:": [
+                                        {
+                                          "Arg:from:": [
+                                            "actor",
+                                            "@actor"
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:": [
+            "patterns",
+            "report waiting",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "actor"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternActions:patternRules:": [
+            "report waiting",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "the player waits",
+                              {
+                                "RenderTemplate:": "Time passes."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Not:": {
+                        "Determine:arguments:": [
+                          "isPlayer",
+                          {
+                            "Args:": [
+                              {
+                                "Arg:from:": [
+                                  "obj",
+                                  "@actor"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "someone waits",
+                              {
+                                "RenderTemplate:": "{The: .actor|capitalize!} waited."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

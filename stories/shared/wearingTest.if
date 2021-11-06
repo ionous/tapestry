@@ -1,0 +1,361 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "wearing test",
+            {
+              "TestOutput:": "The flower's ogp: you, worn.\nFail to re-wear the flower:It is already worn.\nTake off the flower:You take off the flower.\nThe flower's newg: you, not_worn.\nFail to re-remove the flower:You aren't wearing that!\nWear the flower again:You put on the flower.\nThe flower's newg: you, worn.\nThe knife's parent: you, not_worn.\nFail to wear an unwearable:It isn't something you can put on.\nThe knife's parent: you, not_worn.\nThe purse's parent: the Kitchen, not_worn.\nFail to wear something not held:You haven't got that!\nFail to remove something not held:You haven't got that!\nFail to put on something not reachable:You haven't got that!\nThe purse's parent: the Kitchen, not_worn.\n"
+            }
+          ]
+        },
+        {
+          "TestRule:hook activity:": [
+            "wearing test",
+            {
+              "Act:": [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+                  }
+                },
+                {
+                  "Say:": "Fail to re-wear the flower:"
+                },
+                {
+                  "Determine:arguments:": [
+                    "wearing",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "flower"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": "Take off the flower:"
+                },
+                {
+                  "Determine:arguments:": [
+                    "removing",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "flower"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+                  }
+                },
+                {
+                  "Say:": "Fail to re-remove the flower:"
+                },
+                {
+                  "Determine:arguments:": [
+                    "removing",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "flower"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": "Wear the flower again:"
+                },
+                {
+                  "Determine:arguments:": [
+                    "wearing",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "flower"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+                  }
+                },
+                {
+                  "Say:": "Fail to wear an unwearable:"
+                },
+                {
+                  "Determine:arguments:": [
+                    "wearing",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "knife"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+                  }
+                },
+                {
+                  "Say:": "Fail to wear something not held:"
+                },
+                {
+                  "Determine:arguments:": [
+                    "wearing",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "purse"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": "Fail to remove something not held:"
+                },
+                {
+                  "Determine:arguments:": [
+                    "removing",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "purse"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": "Fail to put on something not reachable:"
+                },
+                {
+                  "Determine:arguments:": [
+                    "wearing",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "agent",
+                            {
+                              "FromTxt:": "player"
+                            }
+                          ]
+                        },
+                        {
+                          "Arg:from:": [
+                            "noun",
+                            {
+                              "FromTxt:": "purse"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestScene:story:": [
+            "wearing test",
+            {
+              "Story:": [
+                {
+                  "Paragraph:": [
+                    {
+                      "RelativeToNoun:nouns:areBeing:nouns1:": [
+                        " whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "flower"
+                            ]
+                          },
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "knife"
+                            ]
+                          }
+                        ],
+                        "is",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "our",
+                              "self"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Paragraph:": [
+                    {
+                      "RelativeToNoun:nouns:areBeing:nouns1:": [
+                        " whereabouts",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "purse"
+                            ]
+                          },
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "knife"
+                            ]
+                          }
+                        ],
+                        "is",
+                        [
+                          {
+                            "NamedNoun:name:": [
+                              "the",
+                              "kitchen"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1018 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "carry",
+                "hold"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "inventory"
+                          ]
+                        },
+                        {
+                          "As:": "inventorying"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "taking"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "close"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "off"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "deactivating"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "off"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "closing"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "AnyOf:": [
+                            {
+                              "AllOf:": [
+                                {
+                                  "Words:": [
+                                    "off"
+                                  ]
+                                },
+                                {
+                                  "As:": "deactivating"
+                                }
+                              ]
+                            },
+                            {
+                              "AllOf:": [
+                                {
+                                  "Words:": [
+                                    "up"
+                                  ]
+                                },
+                                {
+                                  "As:": "closing"
+                                }
+                              ]
+                            },
+                            {
+                              "As:": "closing"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "cover"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "up"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "closing"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "closing"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "doff",
+                "disrobe",
+                "shed"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "removing"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "drop"
+              ],
+              [
+                {
+                  "Noun:": "things"
+                },
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "in",
+                            "into",
+                            "down",
+                            "on",
+                            "onto"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "storing"
+                        }
+                      ]
+                    },
+                    {
+                      "As:": "dropping"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "examine",
+                "x",
+                "watch",
+                "describe",
+                "check"
+              ],
+              [
+                {
+                  "Noun:": "things"
+                },
+                {
+                  "As:": "examining"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "get"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Retarget:": [
+                            {
+                              "Noun:": "things"
+                            },
+                            {
+                              "Words:": [
+                                "from",
+                                "off"
+                              ]
+                            },
+                            {
+                              "Noun:": "things"
+                            }
+                          ]
+                        },
+                        {
+                          "As:": "retrieving"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "taking"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "i",
+                "inv",
+                "inventorying"
+              ],
+              [
+                {
+                  "As:": "inventorying"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "insert"
+              ],
+              [
+                {
+                  "Noun:": "things"
+                },
+                {
+                  "Words:": [
+                    "in",
+                    "into"
+                  ]
+                },
+                {
+                  "Noun:": "things"
+                },
+                {
+                  "As:": "storing"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "look",
+                "l"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "at"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "examining"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "in",
+                            "inside",
+                            "into",
+                            "through",
+                            "on"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "searching"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "under"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "peeking"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "examining"
+                        }
+                      ]
+                    },
+                    {
+                      "As:": "looking"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "open",
+                "unwrap",
+                "uncover"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "opening"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "pick"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "up"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "taking"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "Words:": [
+                            "up"
+                          ]
+                        },
+                        {
+                          "As:": "taking"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "put"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "on"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "wearing"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "AnyOf:": [
+                            {
+                              "AllOf:": [
+                                {
+                                  "Words:": [
+                                    "in",
+                                    "inside",
+                                    "into",
+                                    "onto"
+                                  ]
+                                },
+                                {
+                                  "Noun:": "things"
+                                },
+                                {
+                                  "As:": "storing"
+                                }
+                              ]
+                            },
+                            {
+                              "AllOf:": [
+                                {
+                                  "Words:": [
+                                    "on"
+                                  ]
+                                },
+                                {
+                                  "AnyOf:": [
+                                    {
+                                      "AllOf:": [
+                                        {
+                                          "Noun:": "things"
+                                        },
+                                        {
+                                          "As:": "storing"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "As:": "wearing"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "read"
+              ],
+              [
+                {
+                  "Noun:": "things"
+                },
+                {
+                  "As:": "examining"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "remove"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Retarget:": [
+                            {
+                              "Noun:": "things"
+                            },
+                            {
+                              "Words:": [
+                                "from"
+                              ]
+                            },
+                            {
+                              "Noun:": "things"
+                            }
+                          ]
+                        },
+                        {
+                          "As:": "retrieving"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "removing"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "search"
+              ],
+              [
+                {
+                  "Noun:": "things"
+                },
+                {
+                  "As:": "searching"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "switch",
+                "rotate",
+                "twist",
+                "unscrew",
+                "screw"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "on"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "activating"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "off"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "deactivating"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "AnyOf:": [
+                            {
+                              "AllOf:": [
+                                {
+                                  "Words:": [
+                                    "on"
+                                  ]
+                                },
+                                {
+                                  "As:": "activating"
+                                }
+                              ]
+                            },
+                            {
+                              "AllOf:": [
+                                {
+                                  "Words:": [
+                                    "off"
+                                  ]
+                                },
+                                {
+                                  "As:": "deactivating"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "shut"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "off"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "deactivating"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "up"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "closing"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "AnyOf:": [
+                            {
+                              "AllOf:": [
+                                {
+                                  "Words:": [
+                                    "off"
+                                  ]
+                                },
+                                {
+                                  "As:": "deactivating"
+                                }
+                              ]
+                            },
+                            {
+                              "AllOf:": [
+                                {
+                                  "Words:": [
+                                    "up"
+                                  ]
+                                },
+                                {
+                                  "As:": "closing"
+                                }
+                              ]
+                            },
+                            {
+                              "As:": "closing"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "take"
+              ],
+              [
+                {
+                  "AnyOf:": [
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "inventory"
+                          ]
+                        },
+                        {
+                          "As:": "inventorying"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Words:": [
+                            "off"
+                          ]
+                        },
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "removing"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Retarget:": [
+                            {
+                              "Noun:": "things"
+                            },
+                            {
+                              "Words:": [
+                                "off",
+                                "from"
+                              ]
+                            },
+                            {
+                              "Noun:": "things"
+                            }
+                          ]
+                        },
+                        {
+                          "As:": "removing"
+                        }
+                      ]
+                    },
+                    {
+                      "AllOf:": [
+                        {
+                          "Noun:": "things"
+                        },
+                        {
+                          "As:": "taking"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "wait",
+                "z"
+              ],
+              [
+                {
+                  "As:": "waiting"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Directive:scans:": [
+              [
+                "wear",
+                "don"
+              ],
+              [
+                {
+                  "Noun:": "things"
+                },
+                {
+                  "As:": "wearing"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

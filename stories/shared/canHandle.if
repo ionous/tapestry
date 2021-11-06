@@ -1,0 +1,124 @@
+{
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:patternReturn:": [
+            "patterns",
+            "can handle",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "actor"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "VariableDecl:name:type primitive:": [
+                    "an",
+                    "action",
+                    "text"
+                  ]
+                },
+                {
+                  "VariableDecl:name:type object:": [
+                    "a",
+                    "noun",
+                    {
+                      "ObjectType:kind:": [
+                        "a",
+                        "thing"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "VariableDecl:name:type object:comment:": [
+                    "an",
+                    "other noun",
+                    {
+                      "ObjectType:kind:": [
+                        "a",
+                        "thing"
+                      ]
+                    },
+                    ", not all actions have a second noun and that's okay"
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type primitive:": [
+                  "a",
+                  "response",
+                  "text"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "PatternActions:patternRules:": [
+            "can handle",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Cmp:is:txt:": [
+                        {
+                          "Determine:arguments:": [
+                            "parentOf",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "obj",
+                                    "@noun"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "OtherThan",
+                        "@actor"
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "response",
+                            {
+                              "FromTxt:": {
+                                "Response:text:": [
+                                  "can only use possessions",
+                                  {
+                                    "RenderTemplate:": "{we:|capitalize!} haven't got {those:.noun}!"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
