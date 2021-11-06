@@ -7,7 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/jsn"
 )
 
-// Bool requires a user-specified string.
+// Bool requires a predefined string.
 type Bool struct {
 	Str string
 }
@@ -211,7 +211,7 @@ func Lines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lines) (err error) {
 	return
 }
 
-// Number requires a user-specified string.
+// Number requires a string.
 type Number struct {
 	Num float64
 }

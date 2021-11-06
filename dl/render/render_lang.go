@@ -180,7 +180,7 @@ func RenderField_Marshal(m jsn.Marshaler, val *RenderField) (err error) {
 	return
 }
 
-// RenderFlags requires a user-specified string.
+// RenderFlags requires a predefined string.
 type RenderFlags struct {
 	Str string
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// AbstractAction requires a user-specified string.
+// AbstractAction requires a predefined string.
 type AbstractAction struct {
 	Str string
 }
@@ -462,7 +462,7 @@ func ActionParams_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionParams) 
 	return
 }
 
-// Ana requires a user-specified string.
+// Ana requires a predefined string.
 type Ana struct {
 	Str string
 }
@@ -543,7 +543,7 @@ func Ana_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Ana) (err error) {
 	return
 }
 
-// AreAn requires a user-specified string.
+// AreAn requires a predefined string.
 type AreAn struct {
 	Str string
 }
@@ -628,7 +628,7 @@ func AreAn_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreAn) (err error) {
 	return
 }
 
-// AreBeing requires a user-specified string.
+// AreBeing requires a predefined string.
 type AreBeing struct {
 	Str string
 }
@@ -709,7 +709,7 @@ func AreBeing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreBeing) (err err
 	return
 }
 
-// AreEither requires a user-specified string.
+// AreEither requires a predefined string.
 type AreEither struct {
 	Str string
 }
@@ -1422,7 +1422,7 @@ func Certainties_Marshal(m jsn.Marshaler, val *Certainties) (err error) {
 	return
 }
 
-// Certainty requires a user-specified string.
+// Certainty requires a predefined string.
 type Certainty struct {
 	At  reader.Position `if:"internal"`
 	Str string
@@ -1964,7 +1964,7 @@ func Determine_Marshal(m jsn.Marshaler, val *Determine) (err error) {
 	return
 }
 
-// Determiner requires a user-specified string.
+// Determiner requires a predefined or user-specified string.
 type Determiner struct {
 	Str string
 }
@@ -2330,7 +2330,7 @@ func EventName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventName) (err e
 	return
 }
 
-// EventPhase requires a user-specified string.
+// EventPhase requires a predefined string.
 type EventPhase struct {
 	Str string
 }
@@ -4494,7 +4494,7 @@ func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
 	return
 }
 
-// NumberList requires a user-specified string.
+// NumberList requires a predefined string.
 type NumberList struct {
 	Str string
 }
@@ -5256,7 +5256,7 @@ func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
 	return
 }
 
-// PatternFlags requires a user-specified string.
+// PatternFlags requires a predefined string.
 type PatternFlags struct {
 	Str string
 }
@@ -5692,7 +5692,7 @@ func PatternRules_Marshal(m jsn.Marshaler, val *PatternRules) (err error) {
 	return
 }
 
-// PatternType requires a user-specified string.
+// PatternType requires a predefined or user-specified string.
 type PatternType struct {
 	At  reader.Position `if:"internal"`
 	Str string
@@ -6030,7 +6030,7 @@ func PluralKinds_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PluralKinds) (e
 	return
 }
 
-// PrimitiveType requires a user-specified string.
+// PrimitiveType requires a predefined string.
 type PrimitiveType struct {
 	At  reader.Position `if:"internal"`
 	Str string
@@ -6309,7 +6309,7 @@ func ProgramHook_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ProgramHook) (e
 	return
 }
 
-// Pronoun requires a user-specified string.
+// Pronoun requires a predefined or user-specified string.
 type Pronoun struct {
 	Str string
 }
@@ -6466,7 +6466,7 @@ func Property_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Property) (err err
 	return
 }
 
-// PropertyAspect requires a user-specified string.
+// PropertyAspect requires a predefined string.
 type PropertyAspect struct {
 	At  reader.Position `if:"internal"`
 	Str string
@@ -8164,7 +8164,7 @@ func Tail_Marshal(m jsn.Marshaler, val *Tail) (err error) {
 	return
 }
 
-// TestName requires a user-specified string.
+// TestName requires a predefined or user-specified string.
 type TestName struct {
 	At  reader.Position `if:"internal"`
 	Str string
@@ -8680,7 +8680,7 @@ func Testing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Testing) (err error
 	return
 }
 
-// TextList requires a user-specified string.
+// TextList requires a predefined string.
 type TextList struct {
 	Str string
 }
@@ -9257,9 +9257,9 @@ var Signatures = map[uint64]interface{}{
 	2237475528376444648:  (*ActionDecl)(nil),               /* ActionDecl:action:actionParams common: */
 	18212021549969329253: (*ActionDecl)(nil),               /* ActionDecl:action:actionParams dual: */
 	10825614489046735389: (*ActionDecl)(nil),               /* ActionDecl:action:actionParams none: */
-	18300029595359975322: (*ActionParams)(nil),             /* ActionParams:common: */
-	4752185652171688239:  (*ActionParams)(nil),             /* ActionParams:dual: */
-	17380596181957311395: (*ActionParams)(nil),             /* ActionParams:none: */
+	14902711848163440508: (*ActionParams)(nil),             /* ActionParams common: */
+	11902859627634050329: (*ActionParams)(nil),             /* ActionParams dual: */
+	5868886119925925865:  (*ActionParams)(nil),             /* ActionParams none: */
 	6291103735245333139:  (*Argument)(nil),                 /* Arg:from: */
 	2275326896920679506:  (*Arguments)(nil),                /* Args: */
 	17855209504331534011: (*AspectTraits)(nil),             /* AspectTraits:traitPhrase: */
@@ -9277,12 +9277,12 @@ var Signatures = map[uint64]interface{}{
 	11855563103941044442: (*EventBlock)(nil),               /* EventBlock namedNoun:handlers: */
 	8929470137779261632:  (*EventHandler)(nil),             /* EventHandler:event:patternRules: */
 	4061872818055525560:  (*EventHandler)(nil),             /* EventHandler:event:locals:patternRules: */
-	6887864790708299171:  (*EventTarget)(nil),              /* EventTarget:kinds: */
-	11603761789178301969: (*EventTarget)(nil),              /* EventTarget:namedNoun: */
-	13719335624899508122: (*ExtType)(nil),                  /* ExtType:numbers: */
-	3700250546663585901:  (*ExtType)(nil),                  /* ExtType:textList: */
-	15214188159083551639: (*ExtType)(nil),                  /* ExtType:record: */
-	16675795078091962050: (*ExtType)(nil),                  /* ExtType:records: */
+	18010503397334720257: (*EventTarget)(nil),              /* EventTarget kinds: */
+	17197340468883043891: (*EventTarget)(nil),              /* EventTarget namedNoun: */
+	2682533272643563400:  (*ExtType)(nil),                  /* ExtType numbers: */
+	7466087638889466083:  (*ExtType)(nil),                  /* ExtType textList: */
+	686004221669540097:   (*ExtType)(nil),                  /* ExtType record: */
+	3770798410706626212:  (*ExtType)(nil),                  /* ExtType records: */
 	351838510430560892:   (*GrammarDecl)(nil),              /* GrammarDecl: */
 	8395536647843606072:  (*KindOfNoun)(nil),               /* KindOfNoun:kind: */
 	2174943222093748082:  (*KindOfNoun)(nil),               /* KindOfNoun:trait:kind: */
@@ -9308,9 +9308,9 @@ var Signatures = map[uint64]interface{}{
 	4129025779762507875:  (*ManyToOne)(nil),                /* ManyToOne:kind: */
 	16572015744003324651: (*NamedNoun)(nil),                /* NamedNoun:name: */
 	10597814521259612392: (*NounAssignment)(nil),           /* NounAssignment:nouns:lines: */
-	11861883425272284529: (*NounPhrase)(nil),               /* NounPhrase:kindOfNoun: */
-	12126045192749329611: (*NounPhrase)(nil),               /* NounPhrase:nounTraits: */
-	7293688131970027220:  (*NounPhrase)(nil),               /* NounPhrase:nounRelation: */
+	11271220813702679015: (*NounPhrase)(nil),               /* NounPhrase kindOfNoun: */
+	6923309721749493537:  (*NounPhrase)(nil),               /* NounPhrase nounTraits: */
+	15909676719983789414: (*NounPhrase)(nil),               /* NounPhrase nounRelation: */
 	8358327072078132634:  (*NounRelation)(nil),             /* NounRelation relation:nouns: */
 	7157825634536191111:  (*NounRelation)(nil),             /* NounRelation areBeing:relation:nouns: */
 	16756778993528596640: (*NounStatement)(nil),            /* NounStatement: */
@@ -9344,25 +9344,25 @@ var Signatures = map[uint64]interface{}{
 	12644281899387438986: (*PatternRules)(nil),             /* PatternRules: */
 	2711635406027692142:  (*PatternVariablesDecl)(nil),     /* PatternVariablesDecl:variableDecl: */
 	2318440529621094838:  (*PatternVariablesTail)(nil),     /* PatternVariablesTail: */
-	10026568271710825232: (*PrimitiveValue)(nil),           /* PrimitiveValue:boxedText: */
-	2609855438821334634:  (*PrimitiveValue)(nil),           /* PrimitiveValue:boxedNumber: */
-	4810952077799758135:  (*ProgramHook)(nil),              /* ProgramHook:activity: */
+	15560538006230063914: (*PrimitiveValue)(nil),           /* PrimitiveValue boxedText: */
+	3901649770223814360:  (*PrimitiveValue)(nil),           /* PrimitiveValue boxedNumber: */
+	13417511286363622337: (*ProgramHook)(nil),              /* ProgramHook activity: */
 	9994614537641138979:  (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType propertyAspect: */
 	9417869270879260791:  (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType primitive: */
 	18289966116990726001: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType ext: */
 	11912820986652752602: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType propertyAspect:comment: */
 	11674503435152513662: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType primitive:comment: */
 	10271231677614855256: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType ext:comment: */
-	17992535257738220455: (*PropertyType)(nil),             /* PropertyType:propertyAspect: */
-	13177019507713113035: (*PropertyType)(nil),             /* PropertyType:primitive: */
-	12280377783075176181: (*PropertyType)(nil),             /* PropertyType:ext: */
+	1570075991319589581:  (*PropertyType)(nil),             /* PropertyType propertyAspect: */
+	8224056348026199873:  (*PropertyType)(nil),             /* PropertyType primitive: */
+	6144711520752328411:  (*PropertyType)(nil),             /* PropertyType ext: */
 	1370374852585817674:  (*RecordList)(nil),               /* RecordList: */
 	9391386016837677242:  (*RecordType)(nil),               /* RecordType: */
 	10207737577741406477: (*RecordsPossessProperties)(nil), /* RecordsPossessProperties:propertyDecl: */
-	4728592636183011922:  (*RelationCardinality)(nil),      /* RelationCardinality:oneToOne: */
-	5154141581067052895:  (*RelationCardinality)(nil),      /* RelationCardinality:oneToMany: */
-	1533380520705338807:  (*RelationCardinality)(nil),      /* RelationCardinality:manyToOne: */
-	7880710420710628720:  (*RelationCardinality)(nil),      /* RelationCardinality:manyToMany: */
+	5587008972147064084:  (*RelationCardinality)(nil),      /* RelationCardinality oneToOne: */
+	18092929693239672593: (*RelationCardinality)(nil),      /* RelationCardinality oneToMany: */
+	10453256446593418889: (*RelationCardinality)(nil),      /* RelationCardinality manyToOne: */
+	14287924768394488954: (*RelationCardinality)(nil),      /* RelationCardinality manyToMany: */
 	7151092568991800158:  (*RelativeToNoun)(nil),           /* RelativeToNoun:nouns:areBeing:nouns1: */
 	15988073058027477451: (*RenderTemplate)(nil),           /* RenderTemplate: */
 	2420057392455761494:  (*Send)(nil),                     /* Send:path: */
@@ -9385,7 +9385,7 @@ var Signatures = map[uint64]interface{}{
 	1433602155249308844:  (*VariableDecl)(nil),             /* VariableDecl:name:type primitive:comment: */
 	14918607060645225458: (*VariableDecl)(nil),             /* VariableDecl:name:type object:comment: */
 	158426266364219478:   (*VariableDecl)(nil),             /* VariableDecl:name:type ext:comment: */
-	1065289488566626068:  (*VariableType)(nil),             /* VariableType:primitive: */
-	13072719124953783152: (*VariableType)(nil),             /* VariableType:object: */
-	18283572172781454234: (*VariableType)(nil),             /* VariableType:ext: */
+	13175290884637950866: (*VariableType)(nil),             /* VariableType primitive: */
+	1781325330459017962:  (*VariableType)(nil),             /* VariableType object: */
+	12166747474280799296: (*VariableType)(nil),             /* VariableType ext: */
 }

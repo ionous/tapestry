@@ -189,7 +189,7 @@ func DoNothing_Marshal(m jsn.Marshaler, val *DoNothing) (err error) {
 	return
 }
 
-// LoggingLevel requires a user-specified string.
+// LoggingLevel requires a predefined string.
 type LoggingLevel struct {
 	Str string
 }

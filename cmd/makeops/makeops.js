@@ -256,7 +256,7 @@ const signType = function(t, out, all) {
     for (const p of t.params) {
       if (!p.internal) {
         const sel= camelize(p.sel);
-        sigs.push( commandName + ":" + sel + ":" );
+        sigs.push( commandName + " " + sel + ":" );
       }
     }
   } else {

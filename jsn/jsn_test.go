@@ -85,7 +85,7 @@ func TestAnonymousSwap(t *testing.T) {
 
 // TestAnonymousOptional - unit test for broken parsing case
 func TestAnonymousOptional(t *testing.T) {
-	input := []string{
+	inputs := []string{
 		`{ "NounRelation relation:nouns:":["whereabouts",[]]}`,
 		`{ "NounRelation areBeing:relation:nouns:":["is", "whereabouts",[]]}`,
 	}
@@ -98,7 +98,7 @@ func TestAnonymousOptional(t *testing.T) {
 		Relation: value.RelationName{Str: "whereabouts"},
 		Nouns:    []story.NamedNoun{},
 	}}
-	for i, in := range input {
+	for i, in := range inputs {
 		var have story.NounRelation
 		if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
 			pretty.Println("test", i, "got:", have)
@@ -107,5 +107,22 @@ func TestAnonymousOptional(t *testing.T) {
 			pretty.Println("test", i, "got:", have)
 			t.Fatal(diff)
 		}
+	}
+}
+
+// TestExpandedSwap - unit test for broken parsing case
+func TestExpandedSwap(t *testing.T) {
+	in := `{"ExtType textList:": "list"}`
+	want := story.ExtType{
+		Choice: story.ExtType_TextList_Opt,
+		Value:  &story.TextList{Str: story.TextList_List},
+	}
+	var have story.ExtType
+	if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+		pretty.Println("got:", have)
+		t.Fatal(e)
+	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
+		pretty.Println("got:", have)
+		t.Fatal(diff)
 	}
 }

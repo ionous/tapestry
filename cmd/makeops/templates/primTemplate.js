@@ -2,7 +2,11 @@
 'use strict';
 module.exports = `
 {{~#with type~}}
-// {{Pascal name}} requires a user-specified string.
+// {{Pascal name}} requires a
+{{~#if (Choices this)}} predefined{{/if}}
+{{~#unless (IsClosed this)}}
+  {{~#if (Choices this)}} or{{/if}} user-specified
+{{~/unless}} string.
 type {{Pascal name}} struct {
 {{~#if (IsPositioned this)}}
   At  reader.Position \`if:"internal"\`{{/if}}
