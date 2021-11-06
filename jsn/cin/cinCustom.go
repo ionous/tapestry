@@ -26,7 +26,6 @@ var custom = chart.Customization{
 		if v, ok := readBool(dec); ok {
 			*ptr = v
 		} else if v, ok := readVar(dec); ok {
-			dec.Commit("bool var")
 			*ptr = v
 		} else {
 			err = rt.BoolEval_DefaultMarshal(dec, ptr)

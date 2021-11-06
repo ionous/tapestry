@@ -5,12 +5,14 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy"
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/jsn/din"
+	"git.sr.ht/~ionous/iffy/rt"
 
 	"git.sr.ht/~ionous/iffy/jsn/dout"
 	"github.com/kr/pretty"
@@ -118,6 +120,29 @@ func TestExpandedSwap(t *testing.T) {
 		Value:  &story.TextList{Str: story.TextList_List},
 	}
 	var have story.ExtType
+	if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+		pretty.Println("got:", have)
+		t.Fatal(e)
+	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
+		pretty.Println("got:", have)
+		t.Fatal(diff)
+	}
+}
+
+// TestVarAsBool - unit test for broken parsing case
+// @requires light double commited
+func TestVarAsBool(t *testing.T) {
+	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
+	want := core.AllTrue{[]rt.BoolEval{
+		&core.GetVar{
+			Name: value.VariableName{Str: "requires_light"},
+		},
+		&core.GetAtField{
+			Field: "is in darkness",
+			From:  &core.FromVar{Var: value.VariableName{Str: "actor"}},
+		},
+	}}
+	var have core.AllTrue
 	if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
