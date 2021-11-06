@@ -16,7 +16,7 @@ type State interface {
 type Unhandled string
 
 func (e Unhandled) Error() string {
-	return "Unhandled " + string(e)
+	return "Unhandled state during " + string(e)
 }
 
 // StateMix implements the jsn.State interface
@@ -40,7 +40,7 @@ func NewBlockResult(m *Machine, v interface{}) *StateMix {
 			m.FinishState(v)
 		},
 		OnCommit: func(interface{}) {
-			m.Error(Unhandled("terminal value"))
+			m.Error(Unhandled("OnCommit"))
 		},
 	}
 }
@@ -75,7 +75,7 @@ func (d *StateMix) MapValues(lede, typeName string) (err error) {
 	if call := d.OnMap; call != nil {
 		err = okayMissing(call(lede, typeName))
 	} else {
-		err = Unhandled(errutil.Sprint("unexpected map", lede, typeName))
+		err = Unhandled(errutil.Sprint("MapValues", lede, typeName))
 	}
 	return
 }
@@ -83,7 +83,7 @@ func (d *StateMix) MarshalKey(key, field string) (err error) {
 	if call := d.OnKey; call != nil {
 		err = call(key, field)
 	} else {
-		err = Unhandled(errutil.Sprint("unexpected key", key, field))
+		err = Unhandled(errutil.Sprint("MarshalKey", key, field))
 	}
 	return
 }
@@ -91,7 +91,7 @@ func (d *StateMix) SlotValues(typeName string, val jsn.SlotBlock) (err error) {
 	if call := d.OnSlot; call != nil {
 		err = okayMissing(call(typeName, val))
 	} else {
-		err = Unhandled(errutil.Sprint("unexpected pick", typeName, val))
+		err = Unhandled(errutil.Sprint("SlotValues", typeName, val))
 	}
 	return
 }
@@ -99,7 +99,7 @@ func (d *StateMix) PickValues(typeName string, val jsn.SwapBlock) (err error) {
 	if call := d.OnSwap; call != nil {
 		err = okayMissing(call(typeName, val))
 	} else {
-		err = Unhandled(errutil.Sprint("unexpected pick", typeName, val))
+		err = Unhandled(errutil.Sprint("PickValues", typeName, val))
 	}
 	return
 }
@@ -107,7 +107,7 @@ func (d *StateMix) RepeatValues(typeName string, val jsn.SliceBlock) (err error)
 	if call := d.OnRepeat; call != nil {
 		err = okayMissing(call(typeName, val))
 	} else {
-		err = Unhandled(errutil.Sprint("unexpected repeat", typeName, val))
+		err = Unhandled(errutil.Sprint("RepeatValues", typeName, val))
 	}
 	return
 }
@@ -116,14 +116,14 @@ func (d *StateMix) EndBlock() {
 		call()
 	} /* else {
 		// no way to report on this any more :/
-		err = Unhandled(errutil.Sprint("unexpected end"))
+		err = Unhandled(errutil.Sprint("EndBlock"))
 	}*/
 }
 func (d *StateMix) MarshalValue(typeName string, pv interface{}) (err error) {
 	if call := d.OnValue; call != nil {
 		err = call(typeName, pv)
 	} else {
-		err = Unhandled(errutil.Sprint("unexpected value", typeName, pv))
+		err = Unhandled(errutil.Sprint("MarshalValue", typeName, pv))
 	}
 	return
 }

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/jsn/cin"
@@ -79,5 +80,32 @@ func TestAnonymousSwap(t *testing.T) {
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
 		pretty.Println(have)
 		t.Fatal(diff)
+	}
+}
+
+// TestAnonymousOptional - unit test for broken parsing case
+func TestAnonymousOptional(t *testing.T) {
+	input := []string{
+		`{ "NounRelation relation:nouns:":["whereabouts",[]]}`,
+		`{ "NounRelation areBeing:relation:nouns:":["is", "whereabouts",[]]}`,
+	}
+	wants := []story.NounRelation{{
+		AreBeing: story.AreBeing{},
+		Relation: value.RelationName{Str: "whereabouts"},
+		Nouns:    []story.NamedNoun{},
+	}, {
+		AreBeing: story.AreBeing{Str: story.AreBeing_Is},
+		Relation: value.RelationName{Str: "whereabouts"},
+		Nouns:    []story.NamedNoun{},
+	}}
+	for i, in := range input {
+		var have story.NounRelation
+		if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+			pretty.Println("test", i, "got:", have)
+			t.Fatal(e)
+		} else if diff := pretty.Diff(&wants[i], &have); len(diff) != 0 {
+			pretty.Println("test", i, "got:", have)
+			t.Fatal(diff)
+		}
 	}
 }

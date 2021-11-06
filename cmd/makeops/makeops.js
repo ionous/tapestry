@@ -348,9 +348,9 @@ for (const typeName in allTypes) {
     type.desc = type.desc.join("  ");
   }
   // write over existing parameter data
-  let pi=0;
   let ps=[];
   const params= paramsOf(type);
+  let pt= 0; // non-internal total
   for (const key in params) {
     let param= params[key];
     // str types can have params which are just a string
@@ -359,24 +359,29 @@ for (const typeName in allTypes) {
     if (typeof param === 'string') {
       params[key]= param= { label: param, value: param };
     }
-
-    // commands tagged modeling automatically get anonymous first parameters
-    const m = type.group.includes("modeling");
-    let tag;
-    if (type.uses !== 'swap') {
-      tag= m ? (pi ? lower(key) : '_') : param.label.replaceAll(" ", "_");
-    } else {
-      tag= lower(key);
-    }
-    param.internal= param.label === '-';
     param.key= key;
+    param.internal= param.label === '-';
+    ps.push(param);
+    if (!param.internal) {
+      pt++;
+    }
+  }
+  let pi=0; // non-internal indices
+  ps.forEach((param,i)=> {
+    // commands tagged modeling automatically get anonymous first parameters
+    // unless that first parameter is optional and there are other trailing parameters.
+    let tag= lower(param.key);
+    if (type.uses !== 'swap') {
+      const m= type.group.includes("modeling");
+      const anon= !pi && (!param.optional || pt === 1);
+      tag= m ? (anon ? '_': tag) : param.label.replaceAll(" ", "_");
+    }
     param.tag= tag;
     param.sel= tag !== "_" ? tag: "";
-    ps.push(param);
     if (!param.internal) {
       pi++;
     }
-  }
+  });
   type.params= ps;
 
   //

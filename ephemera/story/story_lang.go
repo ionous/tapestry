@@ -4198,7 +4198,7 @@ func NounPhrase_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounPhrase) (err
 
 // NounRelation
 type NounRelation struct {
-	AreBeing AreBeing           `if:"label=_,optional"`
+	AreBeing AreBeing           `if:"label=are_being,optional"`
 	Relation value.RelationName `if:"label=relation"`
 	Nouns    []NamedNoun        `if:"label=nouns"`
 }
@@ -4272,7 +4272,7 @@ func NounRelation_Optional_Marshal(m jsn.Marshaler, pv **NounRelation) (err erro
 
 func NounRelation_Marshal(m jsn.Marshaler, val *NounRelation) (err error) {
 	if err = m.MarshalBlock(jsn.MakeFlow(NounRelation_Type, NounRelation_Type, val)); err == nil {
-		e0 := m.MarshalKey("", NounRelation_Field_AreBeing)
+		e0 := m.MarshalKey("are_being", NounRelation_Field_AreBeing)
 		if e0 == nil {
 			e0 = AreBeing_Optional_Marshal(m, &val.AreBeing)
 		}
@@ -9312,7 +9312,7 @@ var Signatures = map[uint64]interface{}{
 	12126045192749329611: (*NounPhrase)(nil),               /* NounPhrase:nounTraits: */
 	7293688131970027220:  (*NounPhrase)(nil),               /* NounPhrase:nounRelation: */
 	8358327072078132634:  (*NounRelation)(nil),             /* NounRelation relation:nouns: */
-	3463959207148309224:  (*NounRelation)(nil),             /* NounRelation:relation:nouns: */
+	7157825634536191111:  (*NounRelation)(nil),             /* NounRelation areBeing:relation:nouns: */
 	16756778993528596640: (*NounStatement)(nil),            /* NounStatement: */
 	13104026651265504280: (*NounStatement)(nil),            /* NounStatement:tail: */
 	5039251519992036198:  (*NounStatement)(nil),            /* NounStatement:summary: */
