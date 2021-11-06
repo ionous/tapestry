@@ -130,7 +130,7 @@ func TestExpandedSwap(t *testing.T) {
 }
 
 // TestVarAsBool - unit test for broken parsing case
-// @requires light double commited
+// @requires light double committed
 func TestVarAsBool(t *testing.T) {
 	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
 	want := core.AllTrue{[]rt.BoolEval{

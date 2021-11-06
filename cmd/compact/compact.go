@@ -35,7 +35,19 @@ func oppositeExt(ext string) (ret string) {
 }
 
 // ex. go run compact.go -in ../../stories/blank.ifx [-out ../../stories/]
-// for f in ../../stories/shared/*.ifx; do go run compact -in $f -out ../../stories/temp; done;
+//
+// bulk conversion:
+// go build compact.go
+//
+// generate all .if files from the .ifx files:
+// for f in ../../stories/shared/*.ifx; do ./compact -in $f -out ../../stories/temp; done;
+//
+// from the generated .if files, regenerate the .ifx files:
+// for f in ../../stories/temp/*.if; do ./compact -in $f; done;
+//
+// from the generated .ifx files, regenerate the .if files to ensure stability:
+// for f in ../../stories/temp/*.ifx; do ./compact -in $f -out ../../stories/shared; done;
+//
 func main() {
 	var inFile, outFile string
 	flag.StringVar(&inFile, "in", "", "input file name (.if|.ifx)")
