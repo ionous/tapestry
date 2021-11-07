@@ -339,7 +339,7 @@
                                             "Arg:from:": [
                                               "trait",
                                               {
-                                                "FromTxt:": "not_worn"
+                                                "FromTxt:": "not worn"
                                               }
                                             ]
                                           },
@@ -396,7 +396,7 @@
                           "Cmp:is:txt:": [
                             "@trait",
                             "Equals",
-                            "not_worn"
+                            "not worn"
                           ]
                         },
                         {

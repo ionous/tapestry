@@ -14,6 +14,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -23,6 +24,11 @@ import (
 // Import reads a json file (from the composer editor)
 // and creates a new sqlite database of "ephemera".
 // It uses package export's list of commands for parsing program statements.
+
+const (
+	DetailedExt = ".ifx"
+	CompactExt  = ".if"
+)
 
 // ex. go run import.go -in /Users/ionous/Documents/Iffy/stories/shared -out /Users/ionous/Documents/Iffy/scratch/shared/ephemera.db
 func main() {
@@ -86,18 +92,38 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 					k := story.NewImporter(db)
 					for path, data := range fs {
 						log.Println("importing", path)
-						var curr story.Story
-						if e := din.Decode(&curr, iffy.Registry(), data); e != nil {
-							err = errutil.Append(err, e)
-						} else if e := k.ImportStory(path, &curr); e != nil {
-							err = errutil.Append(err, e)
+						if sptr, e := decodeStory(path, data); e != nil {
+							err = errutil.Append(err, errutil.New("couldnt decode", path, "b/c", e))
+						} else if e := k.ImportStory(path, sptr); e != nil {
+							err = errutil.Append(err, errutil.New("couldnt import", path, "b/c", e))
 						} else {
-							ret = append(ret, &curr)
+							ret = append(ret, sptr)
 						}
 					}
 				}
 			}
 		}
+	}
+	return
+}
+
+func decodeStory(path string, b []byte) (ret *story.Story, err error) {
+	var curr story.Story
+	switch ext := filepath.Ext(path); ext {
+	case CompactExt:
+		if e := cin.Decode(&curr, b, iffy.AllSignatures); e != nil {
+			err = e
+		} else {
+			ret = &curr
+		}
+	case DetailedExt:
+		if e := din.Decode(&curr, iffy.Registry(), b); e != nil {
+			err = e
+		} else {
+			ret = &curr
+		}
+	default:
+		err = errutil.Fmt("unknown file type %q", ext)
 	}
 	return
 }
