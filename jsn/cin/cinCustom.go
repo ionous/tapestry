@@ -1,8 +1,6 @@
 package cin
 
 import (
-	"encoding/json"
-
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
@@ -103,7 +101,7 @@ var custom = chart.Customization{
 
 func readBool(dec *xDecoder) (ret *core.BoolValue, okay bool) {
 	var val bool
-	if e := json.Unmarshal(dec.CurrentMessage, &val); e == nil {
+	if dec.ReadCurrentMessage(&val) {
 		ret, okay = &core.BoolValue{val}, true
 		dec.Commit("bool literal")
 	}
@@ -111,7 +109,7 @@ func readBool(dec *xDecoder) (ret *core.BoolValue, okay bool) {
 }
 func readNum(dec *xDecoder) (ret *core.NumValue, okay bool) {
 	var val float64
-	if e := json.Unmarshal(dec.CurrentMessage, &val); e == nil {
+	if dec.ReadCurrentMessage(&val) {
 		ret, okay = &core.NumValue{val}, true
 		dec.Commit("num literal")
 	}
@@ -119,7 +117,7 @@ func readNum(dec *xDecoder) (ret *core.NumValue, okay bool) {
 }
 func readNumList(dec *xDecoder) (ret *core.Numbers, okay bool) {
 	var val []float64
-	if e := json.Unmarshal(dec.CurrentMessage, &val); e == nil {
+	if dec.ReadCurrentMessage(&val) {
 		ret, okay = &core.Numbers{val}, true
 		dec.Commit("num list literal")
 	}
@@ -127,7 +125,7 @@ func readNumList(dec *xDecoder) (ret *core.Numbers, okay bool) {
 }
 func readTextList(dec *xDecoder) (ret *core.Texts, okay bool) {
 	var val []string
-	if e := json.Unmarshal(dec.CurrentMessage, &val); e == nil {
+	if dec.ReadCurrentMessage(&val) {
 		ret, okay = &core.Texts{val}, true
 		dec.Commit("text list literal")
 	}
@@ -138,7 +136,7 @@ func readTextList(dec *xDecoder) (ret *core.Texts, okay bool) {
 // it could be literal text or a variable providing text.
 func readVarOrText(dec *xDecoder) (ret rt.TextEval, okay bool) {
 	var str string
-	if e := json.Unmarshal(dec.CurrentMessage, &str); e == nil {
+	if dec.ReadCurrentMessage(&str) {
 		if cnt := len(str); cnt == 0 || str[0] != '@' {
 			ret, okay = &core.TextValue{str}, true
 			dec.Commit("simple text literal")
@@ -160,7 +158,7 @@ func readVarOrText(dec *xDecoder) (ret rt.TextEval, okay bool) {
 
 func readVar(dec *xDecoder) (ret *core.GetVar, okay bool) {
 	var str string
-	if e := json.Unmarshal(dec.CurrentMessage, &str); e == nil {
+	if dec.ReadCurrentMessage(&str) {
 		if len(str) > 0 && str[0] == '@' {
 			ret, okay = newVar(str), true
 			dec.Commit("@var")

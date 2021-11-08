@@ -41,7 +41,7 @@ func unpack(pv interface{}) (ret interface{}) {
 
 // compact data represents primitive values as their value.
 func (m *xEncoder) newValue(next *chart.StateMix) *chart.StateMix {
-	next.OnValue = func(typeName string, pv interface{}) error {
+	next.OnValue = func(_ string, pv interface{}) error {
 		m.Commit(unpack(pv))
 		return nil
 	}
@@ -62,7 +62,7 @@ func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 		m.PushState(m.newFlow(newComFlow(lede)))
 		return true
 	}
-	next.OnSlot = func(typeName string, slot jsn.SlotBlock) (okay bool) {
+	next.OnSlot = func(_ string, slot jsn.SlotBlock) (okay bool) {
 		if _, ok := slot.GetSlot(); ok {
 			m.PushState(m.newSlot())
 			okay = true
@@ -92,7 +92,7 @@ func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 func (m *xEncoder) newFlow(d *comFlow) *chart.StateMix {
 	var next chart.StateMix
 	next.OnKey = func(key, _ string) error {
-		m.ChangeState(m.newKey(next, d, key))
+		m.ChangeState(m.newKeyValue(next, d, key))
 		return nil
 	}
 	next.OnEnd = func() {
@@ -104,7 +104,7 @@ func (m *xEncoder) newFlow(d *comFlow) *chart.StateMix {
 }
 
 // writes the value into the key and change back to the flow state
-func (m *xEncoder) newKey(prev chart.StateMix, d *comFlow, key string) *chart.StateMix {
+func (m *xEncoder) newKeyValue(prev chart.StateMix, d *comFlow, key string) *chart.StateMix {
 	next := m.newValue(m.addBlock(&prev))
 	next.OnCommit = func(v interface{}) {
 		if c, ok := v.(*comSwap); ok {

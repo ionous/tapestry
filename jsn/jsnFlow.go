@@ -18,6 +18,8 @@ func (n Flow) GetType() string {
 func (n Flow) GetLede() string {
 	return n.lede
 }
+
+// generic access during custom parsing
 func (n Flow) GetFlow() interface{} {
 	return n.op
 }

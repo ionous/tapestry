@@ -146,7 +146,7 @@ func (dec *xDecoder) newFlow(fields dinFields) *chart.StateMix {
 		if msg, ok := fields[key]; !ok {
 			err = jsn.Missing
 		} else {
-			dec.ChangeState(dec.newKey(next, msg))
+			dec.ChangeState(dec.newKeyValue(next, msg))
 		}
 		return
 	}
@@ -156,7 +156,7 @@ func (dec *xDecoder) newFlow(fields dinFields) *chart.StateMix {
 	return &next
 }
 
-func (dec *xDecoder) newKey(prev chart.StateMix, msg json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newKeyValue(prev chart.StateMix, msg json.RawMessage) *chart.StateMix {
 	// a key's value can be a simple value, or a block.
 	next := dec.newValue(&msg, dec.addBlock(&msg, &prev))
 	next.OnCommit = func(interface{}) {

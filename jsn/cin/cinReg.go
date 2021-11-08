@@ -20,7 +20,8 @@ func newFromType(cmd interface{}) interface{} {
 	return r.New(r.TypeOf(cmd).Elem()).Interface()
 }
 
-func hash(k string) uint64 {
+// Hash helper for generating signatures lookups
+func Hash(k string) uint64 {
 	w := fnv.New64a()
 	io.WriteString(w, k)
 	return w.Sum64()

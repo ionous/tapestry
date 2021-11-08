@@ -97,7 +97,7 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 func newFlow(m *chart.Machine, vals detMap) *chart.StateMix {
 	var next chart.StateMix
 	next.OnKey = func(_, key string) error {
-		m.ChangeState(newKey(m, next, key, vals))
+		m.ChangeState(newKeyValue(m, next, key, vals))
 		return nil
 	}
 	next.OnEnd = func() {
@@ -111,7 +111,7 @@ func newFlow(m *chart.Machine, vals detMap) *chart.StateMix {
 // all keys are considered optional, so we do everything prev does with some extrs.
 // keys wait until they have a value, then write their data into their parent's data;
 // returning to the parent state.
-func newKey(m *chart.Machine, prev chart.StateMix, key string, vals detMap) *chart.StateMix {
+func newKeyValue(m *chart.Machine, prev chart.StateMix, key string, vals detMap) *chart.StateMix {
 	// a key's value can be a simple value, or a block.
 	next := newValue(m, addBlock(m, &prev))
 	next.OnCommit = func(v interface{}) {
