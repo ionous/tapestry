@@ -1,465 +1,101 @@
 {
-  "id": "id-177fe41d8ff-24",
-  "type": "story",
-  "value": {
-    "$PARAGRAPH": [
-      {
-        "id": "id-177fe41d8ff-25",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "TestScene:story:": [
+            "vision test",
             {
-              "id": "id-177fe41d8ff-26",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fe41d8ff-28",
-                "type": "test_scene",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-177fe41d8ff-29",
-                    "type": "test_name",
-                    "value": "vision test"
-                  },
-                  "$STORY": {
-                    "id": "id-177fe41d8ff-30",
-                    "type": "story",
-                    "value": {
-                      "$PARAGRAPH": []
-                    }
-                  }
-                }
-              }
+              "Story:": []
             }
           ]
         }
-      },
-      {
-        "id": "id-177fe41d8ff-31",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "testing vision",
             {
-              "id": "id-177fe41d8ff-32",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fe41d8ff-33",
-                "type": "test_statement",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-177fe41d8ff-34",
-                    "type": "test_name",
-                    "value": "testing vision"
-                  },
-                  "$TEST": {
-                    "id": "id-177fe41d8ff-35",
-                    "type": "testing",
-                    "value": {
-                      "id": "id-177fe41d8ff-36",
-                      "type": "test_output",
-                      "value": {
-                        "$LINES": {
-                          "id": "id-177fe41d8ff-37",
-                          "type": "lines",
-                          "value": "ok: The cabinet is dark.\nok: The cabinet has light.\nok: The cabinet is dark.\nok: The cabinet has light.\n"
-                        }
-                      }
-                    }
+              "TestOutput:": "ok: The cabinet is dark.\nok: The cabinet has light.\nok: The cabinet is dark.\nok: The cabinet has light.\n"
+            }
+          ]
+        },
+        {
+          "TestRule:hook activity:": [
+            "testing vision",
+            {
+              "Act:": [
+                {
+                  "Put:from:at:": [
+                    {
+                      "ObjField:": "Kitchen"
+                    },
+                    {
+                      "FromBool:": true
+                    },
+                    "unlit"
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
+                  }
+                },
+                {
+                  "Put:from:at:": [
+                    {
+                      "ObjField:": "Kitchen"
+                    },
+                    {
+                      "FromBool:": true
+                    },
+                    "lit"
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
+                  }
+                },
+                {
+                  "Put:from:at:": [
+                    {
+                      "ObjField:": "cabinet"
+                    },
+                    {
+                      "FromBool:": true
+                    },
+                    "closed"
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
+                  }
+                },
+                {
+                  "Put:from:at:": [
+                    {
+                      "ObjField:": "matches"
+                    },
+                    {
+                      "FromBool:": true
+                    },
+                    "lit"
+                  ]
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
                   }
                 }
-              }
-            },
-            {
-              "id": "id-177fe41d8ff-39",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fe41d8ff-40",
-                "type": "test_rule",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-177fe41d8ff-41",
-                    "type": "test_name",
-                    "value": "testing vision"
-                  },
-                  "$HOOK": {
-                    "id": "id-177fe41d8ff-42",
-                    "type": "program_hook",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177fe41d8ff-43",
-                        "type": "activity",
-                        "value": {
-                          "$EXE": [
-                            {
-                              "id": "id-177fecc7bcd-0",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177fecc7bcd-1",
-                                "type": "put_at_field",
-                                "value": {
-                                  "$FROM": {
-                                    "id": "id-177fecc7bcd-2",
-                                    "type": "assignment",
-                                    "value": {
-                                      "id": "id-177fecc7bcd-3",
-                                      "type": "from_bool",
-                                      "value": {
-                                        "$VAL": {
-                                          "id": "id-177fecc7bcd-4",
-                                          "type": "bool_eval",
-                                          "value": {
-                                            "id": "id-177fecc7bcd-5",
-                                            "type": "bool_value",
-                                            "value": {
-                                              "$BOOL": {
-                                                "id": "id-177fecc7bcd-6",
-                                                "type": "bool",
-                                                "value": "$TRUE"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$INTO": {
-                                    "id": "id-177fecc7bcd-7",
-                                    "type": "into_target_fields",
-                                    "value": {
-                                      "id": "id-177fecc7bcd-8",
-                                      "type": "into_obj",
-                                      "value": {
-                                        "$OBJECT": {
-                                          "id": "id-177fecc7bcd-9",
-                                          "type": "text_eval",
-                                          "value": {
-                                            "id": "id-177fecc7bcd-10",
-                                            "type": "text_value",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177fecc7bcd-11",
-                                                "type": "text",
-                                                "value": "Kitchen"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$AT_FIELD": {
-                                    "id": "id-177fecc7bcd-12",
-                                    "type": "text",
-                                    "value": "unlit"
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177fecc7bcd-13",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177fecc7bcd-14",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-177fecc7bcd-15",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177fecc7bcd-16",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-177fecc7bcd-17",
-                                          "type": "lines",
-                                          "value": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177fe41d8ff-44",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177fe41d8ff-45",
-                                "type": "put_at_field",
-                                "value": {
-                                  "$FROM": {
-                                    "id": "id-177fe41d8ff-46",
-                                    "type": "assignment",
-                                    "value": {
-                                      "id": "id-177fe41d8ff-49",
-                                      "type": "from_bool",
-                                      "value": {
-                                        "$VAL": {
-                                          "id": "id-177fe41d8ff-50",
-                                          "type": "bool_eval",
-                                          "value": {
-                                            "id": "id-177fe41d8ff-51",
-                                            "type": "bool_value",
-                                            "value": {
-                                              "$BOOL": {
-                                                "id": "id-177fe41d8ff-52",
-                                                "type": "bool",
-                                                "value": "$TRUE"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$INTO": {
-                                    "id": "id-177fe41d8ff-47",
-                                    "type": "into_target_fields",
-                                    "value": {
-                                      "id": "id-177fe86bcf0-0",
-                                      "type": "into_obj",
-                                      "value": {
-                                        "$OBJECT": {
-                                          "id": "id-177fe86bcf0-1",
-                                          "type": "text_eval",
-                                          "value": {
-                                            "id": "id-177fe86bcf0-2",
-                                            "type": "text_value",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177fe86bcf0-3",
-                                                "type": "text",
-                                                "value": "Kitchen"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$AT_FIELD": {
-                                    "id": "id-177fe41d8ff-48",
-                                    "type": "text",
-                                    "value": "lit"
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177fe89b45e-62",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177fe89b45e-63",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-177fe89b45e-64",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177fe89b45e-65",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-177fe89b45e-66",
-                                          "type": "lines",
-                                          "value": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177fecc7bcd-18",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177fecc7bcd-19",
-                                "type": "put_at_field",
-                                "value": {
-                                  "$FROM": {
-                                    "id": "id-177fecc7bcd-20",
-                                    "type": "assignment",
-                                    "value": {
-                                      "id": "id-177fecc7bcd-21",
-                                      "type": "from_bool",
-                                      "value": {
-                                        "$VAL": {
-                                          "id": "id-177fecc7bcd-22",
-                                          "type": "bool_eval",
-                                          "value": {
-                                            "id": "id-177fecc7bcd-23",
-                                            "type": "bool_value",
-                                            "value": {
-                                              "$BOOL": {
-                                                "id": "id-177fecc7bcd-24",
-                                                "type": "bool",
-                                                "value": "$TRUE"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$INTO": {
-                                    "id": "id-177fecc7bcd-25",
-                                    "type": "into_target_fields",
-                                    "value": {
-                                      "id": "id-177fecc7bcd-26",
-                                      "type": "into_obj",
-                                      "value": {
-                                        "$OBJECT": {
-                                          "id": "id-177fecc7bcd-27",
-                                          "type": "text_eval",
-                                          "value": {
-                                            "id": "id-177fecc7bcd-28",
-                                            "type": "text_value",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177fecc7bcd-29",
-                                                "type": "text",
-                                                "value": "cabinet"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$AT_FIELD": {
-                                    "id": "id-177fecc7bcd-30",
-                                    "type": "text",
-                                    "value": "closed"
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177fecc7bcd-31",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177fecc7bcd-32",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-177fecc7bcd-33",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177fecc7bcd-34",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-177fecc7bcd-35",
-                                          "type": "lines",
-                                          "value": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177fecc7bcd-36",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177fecc7bcd-37",
-                                "type": "put_at_field",
-                                "value": {
-                                  "$FROM": {
-                                    "id": "id-177fecc7bcd-38",
-                                    "type": "assignment",
-                                    "value": {
-                                      "id": "id-177fecc7bcd-39",
-                                      "type": "from_bool",
-                                      "value": {
-                                        "$VAL": {
-                                          "id": "id-177fecc7bcd-40",
-                                          "type": "bool_eval",
-                                          "value": {
-                                            "id": "id-177fecc7bcd-41",
-                                            "type": "bool_value",
-                                            "value": {
-                                              "$BOOL": {
-                                                "id": "id-177fecc7bcd-42",
-                                                "type": "bool",
-                                                "value": "$TRUE"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$INTO": {
-                                    "id": "id-177fecc7bcd-43",
-                                    "type": "into_target_fields",
-                                    "value": {
-                                      "id": "id-177fecc7bcd-44",
-                                      "type": "into_obj",
-                                      "value": {
-                                        "$OBJECT": {
-                                          "id": "id-177fecc7bcd-45",
-                                          "type": "text_eval",
-                                          "value": {
-                                            "id": "id-177fecc7bcd-46",
-                                            "type": "text_value",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177fecc7bcd-47",
-                                                "type": "text",
-                                                "value": "matches"
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$AT_FIELD": {
-                                    "id": "id-177fecc7bcd-48",
-                                    "type": "text",
-                                    "value": "lit"
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177fecc7bcd-49",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177fecc7bcd-50",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-177fecc7bcd-51",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177fecc7bcd-52",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-177fecc7bcd-53",
-                                          "type": "lines",
-                                          "value": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+              ]
             }
           ]
         }
-      }
-    ]
-  }
+      ]
+    }
+  ]
 }

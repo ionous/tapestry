@@ -1,47 +1,19 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-// Always returns true
-type Always struct{}
-
-// AnyTrue returns true only when one of its specified tests returns true.
-// It does not necessarily run all of the tests, it exits as soon as any test return true.
-// An empty list returns false.
-type AnyTrue struct {
-	Test []rt.BoolEval
-}
-
-// AllTrue returns false only when one of its specified tests returns false.
-// It does not necessarily run all of the tests, it exits as soon as any test return false.
-// An empty list returns true.
-type AllTrue struct {
-	Test []rt.BoolEval
-}
-
-func (*Always) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "logic",
-		Desc:  "Always: returns true always.",
-	}
+func (op *Never) GetBool(run rt.Runtime) (ret g.Value, err error) {
+	ret = g.BoolOf(false)
+	return
 }
 
 func (op *Always) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	ret = g.BoolOf(true)
 	return
-}
-
-func (*AllTrue) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "logic",
-		Spec:  "allTrue: {test+bool_eval|comma-and}",
-		Desc:  "All True: returns true if all of the evaluations are true.",
-	}
 }
 
 func (op *AllTrue) GetBool(run rt.Runtime) (ret g.Value, err error) {
@@ -54,14 +26,6 @@ func (op *AllTrue) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.True // return true, resolve never found a false statement
 	}
 	return
-}
-
-func (*AnyTrue) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "logic",
-		Spec:  "anyTrue: {test+bool_eval|comma-or}",
-		Desc:  "Any True: returns true if any of the evaluations are true.",
-	}
 }
 
 func (op *AnyTrue) GetBool(run rt.Runtime) (ret g.Value, err error) {

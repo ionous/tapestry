@@ -3,7 +3,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"flag"
 	"io"
 	"log"
@@ -13,8 +12,10 @@ import (
 	"runtime/pprof"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
+	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -23,6 +24,11 @@ import (
 // Import reads a json file (from the composer editor)
 // and creates a new sqlite database of "ephemera".
 // It uses package export's list of commands for parsing program statements.
+
+const (
+	DetailedExt = ".ifx"
+	CompactExt  = ".if"
+)
 
 // ex. go run import.go -in /Users/ionous/Documents/Iffy/stories/shared -out /Users/ionous/Documents/Iffy/scratch/shared/ephemera.db
 func main() {
@@ -75,24 +81,25 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 		if db, e := sql.Open(tables.DefaultDriver, outFile); e != nil {
 			err = errutil.New("couldn't create output file", outFile, e)
 		} else {
-			var ds reader.Dilemmas
 			defer db.Close()
 			if e := tables.CreateEphemera(db); e != nil {
 				err = errutil.New("couldn't create tables", outFile, e)
 			} else {
-				if storyFiles, e := readPath(inFile); e != nil {
-					err = errutil.New("couldn't import  file", inFile, e)
+				fs := make(Files)
+				if e := fs.ReadPaths(inFile); e != nil {
+					err = errutil.New("couldn't read file", inFile, e)
 				} else {
-					k := story.NewImporter(db, ds.Report)
-					for _, storyFile := range storyFiles {
-						if v, e := storyFile.importStory(k); e != nil {
-							err = errutil.Append(err, e)
+					k := story.NewImporter(db)
+					for path, data := range fs {
+						log.Println("importing", path)
+						if sptr, e := decodeStory(path, data); e != nil {
+							err = errutil.Append(err, errutil.New("couldnt decode", path, "b/c", e))
+						} else if e := k.ImportStory(path, sptr); e != nil {
+							err = errutil.Append(err, errutil.New("couldnt import", path, "b/c", e))
 						} else {
-							ret = append(ret, v)
+							ret = append(ret, sptr)
 						}
 					}
-
-					reader.PrintDilemmas(log.Writer(), ds)
 				}
 			}
 		}
@@ -100,24 +107,45 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 	return
 }
 
+func decodeStory(path string, b []byte) (ret *story.Story, err error) {
+	var curr story.Story
+	switch ext := filepath.Ext(path); ext {
+	case CompactExt:
+		if e := cin.Decode(&curr, b, iffy.AllSignatures); e != nil {
+			err = e
+		} else {
+			ret = &curr
+		}
+	case DetailedExt:
+		if e := din.Decode(&curr, iffy.Registry(), b); e != nil {
+			err = e
+		} else {
+			ret = &curr
+		}
+	default:
+		err = errutil.Fmt("unknown file type %q", ext)
+	}
+	return
+}
+
+type Files map[string][]byte
+
 // read a comma-separated list of files and directories
-func readPath(filePaths string) (ret []storyFile, err error) {
+func (fs *Files) ReadPaths(filePaths string) (err error) {
 	split := strings.Split(filePaths, ",")
 	for _, filePath := range split {
 		if info, e := os.Stat(filePath); e != nil {
-			err = e
+			err = errutil.Append(err, e)
 		} else {
-			if !info.IsDir() {
-				if one, e := readOne(filePath); e != nil {
-					err = e
-				} else {
-					ret = append(ret, one)
+			if info.IsDir() {
+				if e := fs.readMany(filePath); e != nil {
+					err = errutil.Append(err, e)
 				}
 			} else {
-				if many, e := readMany(filePath); e != nil {
-					err = e
+				if b, e := readOne(filePath); e != nil {
+					err = errutil.Append(err, e)
 				} else {
-					ret = append(ret, many...)
+					(*fs)[filePath] = b
 				}
 			}
 		}
@@ -125,7 +153,7 @@ func readPath(filePaths string) (ret []storyFile, err error) {
 	return
 }
 
-func readMany(path string) (ret []storyFile, err error) {
+func (fs *Files) readMany(path string) (err error) {
 	if !strings.HasSuffix(path, "/") {
 		path += "/" // for opening symbolic directories
 	}
@@ -133,10 +161,10 @@ func readMany(path string) (ret []storyFile, err error) {
 		if e != nil {
 			err = e
 		} else if !info.IsDir() && filepath.Ext(path) == ".if" {
-			if one, e := readOne(path); e != nil {
+			if b, e := readOne(path); e != nil {
 				err = errutil.New("error reading", path, e)
 			} else {
-				ret = append(ret, one)
+				(*fs)[path] = b
 			}
 		}
 		return
@@ -144,28 +172,13 @@ func readMany(path string) (ret []storyFile, err error) {
 	return
 }
 
-func readOne(filePath string) (ret storyFile, err error) {
+func readOne(filePath string) (ret []byte, err error) {
 	log.Println("reading", filePath)
-	if f, e := os.Open(filePath); e != nil {
+	if fp, e := os.Open(filePath); e != nil {
 		err = e
 	} else {
-		defer f.Close()
-		var one reader.Map
-		if e := json.NewDecoder(f).Decode(&one); e != nil && e != io.EOF {
-			err = e
-		} else {
-			ret = storyFile{filePath, one}
-		}
+		ret, err = io.ReadAll(fp)
+		fp.Close()
 	}
 	return
-}
-
-type storyFile struct {
-	path string
-	data reader.Map
-}
-
-func (fp *storyFile) importStory(k *story.Importer) (ret *story.Story, err error) {
-	log.Println("importing", fp.path)
-	return k.ImportStory(fp.path, fp.data)
 }

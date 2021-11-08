@@ -1,1224 +1,420 @@
 {
-  "id": "id-17847f36750-168",
-  "type": "story",
-  "value": {
-    "$PARAGRAPH": [
-      {
-        "id": "id-17847f36750-258",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-17847f36750-259",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-260",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17847f36750-261",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17847f36750-262",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17847f36750-263",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17847f36750-264",
-                              "type": "noun_name",
-                              "value": "flower"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17847f36750-265",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17847f36750-266",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17847f36750-267",
-                                "type": "are_an",
-                                "value": "$ISA"
-                              },
-                              "$TRAIT": [
-                                {
-                                  "id": "id-17847f36750-269",
-                                  "type": "trait",
-                                  "value": "wearable"
-                                },
-                                {
-                                  "id": "id-17885664876-806",
-                                  "type": "trait",
-                                  "value": "worn"
-                                }
-                              ],
-                              "$KIND": {
-                                "id": "id-17847f36750-268",
-                                "type": "singular_kind",
-                                "value": "thing"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "flower"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [
+                      "wearable",
+                      "worn"
+                    ],
+                    "thing"
+                  ]
                 }
-              }
+              ]
             },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-17847f36750-281",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-282",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17847f36750-283",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17847f36750-284",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17847f36750-285",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17847f36750-286",
-                              "type": "noun_name",
-                              "value": "headlamp"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17847f36750-287",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17847f36750-288",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17847f36750-289",
-                                "type": "are_an",
-                                "value": "$ISA"
-                              },
-                              "$TRAIT": [
-                                {
-                                  "id": "id-17847f36750-290",
-                                  "type": "trait",
-                                  "value": "lit"
-                                },
-                                {
-                                  "id": "id-17847f36750-302",
-                                  "type": "trait",
-                                  "value": "wearable"
-                                },
-                                {
-                                  "id": "id-17885664876-807",
-                                  "type": "trait",
-                                  "value": "worn"
-                                }
-                              ],
-                              "$KIND": {
-                                "id": "id-17847f36750-291",
-                                "type": "singular_kind",
-                                "value": "thing"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "headlamp"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [
+                      "lit",
+                      "wearable",
+                      "worn"
+                    ],
+                    "thing"
+                  ]
                 }
-              }
+              ]
             },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-17847f36750-319",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-320",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17847f36750-321",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17847f36750-322",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17847f36750-323",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17847f36750-324",
-                              "type": "noun_name",
-                              "value": "book of secrets"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17847f36750-325",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17847f36750-326",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17847f36750-327",
-                                "type": "are_an",
-                                "value": "$ISAN"
-                              },
-                              "$TRAIT": [
-                                {
-                                  "id": "id-17848880d04-3",
-                                  "type": "trait",
-                                  "value": "openable"
-                                },
-                                {
-                                  "id": "id-17847f36750-329",
-                                  "type": "trait",
-                                  "value": "closed"
-                                },
-                                {
-                                  "id": "id-17848880d04-0",
-                                  "type": "trait",
-                                  "value": "locked"
-                                }
-                              ],
-                              "$KIND": {
-                                "id": "id-17847f36750-330",
-                                "type": "singular_kind",
-                                "value": "container"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "book of secrets"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isan",
+                    [
+                      "openable",
+                      "closed",
+                      "locked"
+                    ],
+                    "container"
+                  ]
                 }
-              }
+              ]
             },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-17847f36750-306",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-307",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17847f36750-308",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17847f36750-309",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17847f36750-310",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17847f36750-311",
-                              "type": "noun_name",
-                              "value": "book of wisdom"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17847f36750-312",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17847f36750-313",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17847f36750-314",
-                                "type": "are_an",
-                                "value": "$ISAN"
-                              },
-                              "$TRAIT": [
-                                {
-                                  "id": "id-17847f36750-315",
-                                  "type": "trait",
-                                  "value": "openable"
-                                },
-                                {
-                                  "id": "id-17848880d04-1",
-                                  "type": "trait",
-                                  "value": "open"
-                                }
-                              ],
-                              "$KIND": {
-                                "id": "id-17847f36750-317",
-                                "type": "singular_kind",
-                                "value": "container"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "book of wisdom"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isan",
+                    [
+                      "openable",
+                      "open"
+                    ],
+                    "container"
+                  ]
                 }
-              }
+              ]
             },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-17847f36750-304",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-331",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17847f36750-332",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17847f36750-333",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17847f36750-334",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17847f36750-335",
-                              "type": "noun_name",
-                              "value": "clutch"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17847f36750-336",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17847f36750-337",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17847f36750-338",
-                                "type": "are_an",
-                                "value": "$ISAN"
-                              },
-                              "$TRAIT": [
-                                {
-                                  "id": "id-17848880d04-4",
-                                  "type": "trait",
-                                  "value": "openable"
-                                },
-                                {
-                                  "id": "id-17847f36750-340",
-                                  "type": "trait",
-                                  "value": "open"
-                                }
-                              ],
-                              "$KIND": {
-                                "id": "id-17847f36750-339",
-                                "type": "singular_kind",
-                                "value": "container"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "clutch"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isan",
+                    [
+                      "openable",
+                      "open"
+                    ],
+                    "container"
+                  ]
                 }
-              }
+              ]
             },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-17847f36750-342",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-343",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17847f36750-344",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17847f36750-345",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17847f36750-346",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17847f36750-347",
-                              "type": "noun_name",
-                              "value": "purse"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17847f36750-348",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17847f36750-349",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17847f36750-350",
-                                "type": "are_an",
-                                "value": "$ISAN"
-                              },
-                              "$TRAIT": [
-                                {
-                                  "id": "id-17885664876-808",
-                                  "type": "trait",
-                                  "value": "wearable"
-                                },
-                                {
-                                  "id": "id-17848880d04-5",
-                                  "type": "trait",
-                                  "value": "openable"
-                                },
-                                {
-                                  "id": "id-17847f36750-351",
-                                  "type": "trait",
-                                  "value": "open"
-                                }
-                              ],
-                              "$KIND": {
-                                "id": "id-17847f36750-352",
-                                "type": "singular_kind",
-                                "value": "container"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "purse"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isan",
+                    [
+                      "wearable",
+                      "openable",
+                      "open"
+                    ],
+                    "container"
+                  ]
                 }
-              }
+              ]
             },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-17847f36750-354",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-355",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17847f36750-356",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17847f36750-357",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17847f36750-358",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17847f36750-359",
-                              "type": "noun_name",
-                              "value": "flashlight"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17847f36750-360",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17847f36750-361",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17847f36750-362",
-                                "type": "are_an",
-                                "value": "$ISA"
-                              },
-                              "$TRAIT": [
-                                {
-                                  "id": "id-17847f36750-363",
-                                  "type": "trait",
-                                  "value": "lit"
-                                }
-                              ],
-                              "$KIND": {
-                                "id": "id-17847f36750-364",
-                                "type": "singular_kind",
-                                "value": "thing"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "flashlight"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [
+                      "lit"
+                    ],
+                    "thing"
+                  ]
                 }
-              }
+              ]
             },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-17847f36750-366",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-367",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17847f36750-368",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17847f36750-369",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17847f36750-370",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17847f36750-371",
-                              "type": "noun_name",
-                              "value": "coin"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17847f36750-372",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17847f36750-373",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17847f36750-374",
-                                "type": "are_an",
-                                "value": "$ISA"
-                              },
-                              "$KIND": {
-                                "id": "id-17847f36750-376",
-                                "type": "singular_kind",
-                                "value": "thing"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "coin"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:kind:": [
+                    "isa",
+                    "thing"
+                  ]
                 }
-              }
-            }
+              ]
+            },
+            []
           ]
         }
-      },
-      {
-        "id": "id-17866b4a980-2",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-17866b4a980-13",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17866b4a980-14",
-                "type": "relative_to_noun",
-                "value": {
-                  "$RELATION": {
-                    "id": "id-17866b4a980-15",
-                    "type": "relation_name",
-                    "value": "whereabouts"
-                  },
-                  "$NOUNS": [
-                    {
-                      "id": "id-17866b4a980-16",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866b4a980-17",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-17866b4a980-18",
-                          "type": "noun_name",
-                          "value": "flower"
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17866cfb454-0",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866cfb454-1",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-17866cfb454-2",
-                          "type": "noun_name",
-                          "value": "headlamp"
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17866cfb454-3",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866cfb454-4",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-17866cfb454-5",
-                          "type": "noun_name",
-                          "value": "secrets"
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17866cfb454-6",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866cfb454-7",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-17866cfb454-8",
-                          "type": "noun_name",
-                          "value": "wisdom"
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17866cfb454-9",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866cfb454-10",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-17866cfb454-11",
-                          "type": "noun_name",
-                          "value": "clutch"
-                        }
-                      }
-                    }
-                  ],
-                  "$ARE_BEING": {
-                    "id": "id-17866b4a980-19",
-                    "type": "are_being",
-                    "value": "$IS"
-                  },
-                  "$NOUNS1": [
-                    {
-                      "id": "id-17866b4a980-20",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866b4a980-21",
-                          "type": "determiner",
-                          "value": "$OUR"
-                        },
-                        "$NAME": {
-                          "id": "id-17866b4a980-22",
-                          "type": "noun_name",
-                          "value": "Mildred"
-                        }
-                      }
-                    }
-                  ]
-                }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "RelativeToNoun:nouns:areBeing:nouns1:": [
+            "whereabouts",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "flower"
+                ]
+              },
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "headlamp"
+                ]
+              },
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "secrets"
+                ]
+              },
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "wisdom"
+                ]
+              },
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "clutch"
+                ]
               }
-            },
-            {
-              "id": "id-17866b4a980-3",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17866b4a980-4",
-                "type": "relative_to_noun",
-                "value": {
-                  "$RELATION": {
-                    "id": "id-17866b4a980-5",
-                    "type": "relation_name",
-                    "value": "whereabouts"
-                  },
-                  "$NOUNS": [
-                    {
-                      "id": "id-17866b4a980-6",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866b4a980-7",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-17866b4a980-8",
-                          "type": "noun_name",
-                          "value": "coin"
-                        }
-                      }
-                    }
-                  ],
-                  "$ARE_BEING": {
-                    "id": "id-17866b4a980-9",
-                    "type": "are_being",
-                    "value": "$IS"
-                  },
-                  "$NOUNS1": [
-                    {
-                      "id": "id-17866b4a980-10",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866b4a980-11",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-17866b4a980-12",
-                          "type": "noun_name",
-                          "value": "purse"
-                        }
-                      }
-                    }
-                  ]
-                }
+            ],
+            "is",
+            [
+              {
+                "NamedNoun:name:": [
+                  "our",
+                  "Mildred"
+                ]
               }
-            },
-            {
-              "id": "id-17866cfb454-12",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17866cfb454-13",
-                "type": "relative_to_noun",
-                "value": {
-                  "$RELATION": {
-                    "id": "id-17866cfb454-14",
-                    "type": "relation_name",
-                    "value": "whereabouts"
-                  },
-                  "$NOUNS": [
-                    {
-                      "id": "id-17866cfb454-15",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866cfb454-16",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-17866cfb454-17",
-                          "type": "noun_name",
-                          "value": "purse"
-                        }
-                      }
-                    }
-                  ],
-                  "$ARE_BEING": {
-                    "id": "id-17866cfb454-18",
-                    "type": "are_being",
-                    "value": "$IS"
-                  },
-                  "$NOUNS1": [
-                    {
-                      "id": "id-17866cfb454-19",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-17866cfb454-20",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-17866cfb454-21",
-                          "type": "noun_name",
-                          "value": "clutch"
-                        }
-                      }
-                    }
-                  ]
-                }
+            ]
+          ]
+        },
+        {
+          "RelativeToNoun:nouns:areBeing:nouns1:": [
+            "whereabouts",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "coin"
+                ]
               }
-            }
+            ],
+            "is",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "purse"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "RelativeToNoun:nouns:areBeing:nouns1:": [
+            "whereabouts",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "purse"
+                ]
+              }
+            ],
+            "is",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "clutch"
+                ]
+              }
+            ]
           ]
         }
-      },
-      {
-        "id": "id-17847f36750-174",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "status printing test",
             {
-              "id": "id-17847f36750-175",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-176",
-                "type": "test_statement",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-17847f36750-177",
-                    "type": "test_name",
-                    "value": "status printing test"
-                  },
-                  "$TEST": {
-                    "id": "id-17847f36750-178",
-                    "type": "testing",
-                    "value": {
-                      "id": "id-17847f36750-179",
-                      "type": "test_output",
-                      "value": {
-                        "$LINES": {
-                          "id": "id-17847f36750-180",
-                          "type": "lines",
-                          "value": "the flower: (being worn).\nthe headlamp: (providing light and being worn).\nthe book of secrets: (closed and locked).\nthe book of wisdom: (open but empty).\nthe clutch: (open).\nthe purse: (open).\nthe flashlight: (providing light).\nthe coin: .\n"
-                        }
-                      }
-                    }
+              "TestOutput:": "the flower: (being worn).\nthe headlamp: (providing light and being worn).\nthe book of secrets: (closed and locked).\nthe book of wisdom: (open but empty).\nthe clutch: (open).\nthe purse: (open).\nthe flashlight: (providing light).\nthe coin: .\n"
+            }
+          ]
+        },
+        {
+          "TestRule:hook activity:": [
+            "status printing test",
+            {
+              "Act:": [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
                   }
                 }
-              }
-            },
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "default inventory",
             {
-              "id": "id-17847f36750-181",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17847f36750-182",
-                "type": "test_rule",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-17847f36750-183",
-                    "type": "test_name",
-                    "value": "status printing test"
-                  },
-                  "$HOOK": {
-                    "id": "id-17847f36750-184",
-                    "type": "program_hook",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-17847f36750-185",
-                        "type": "activity",
-                        "value": {
-                          "$EXE": [
+              "TestOutput:": "You are carrying:\n  - a book of secrets (closed and locked)\n  - a book of wisdom (open but empty)\n  - a clutch (open) \n    - a purse (open) \n      - a coin\n  - a flower (being worn)\n  - a headlamp (providing light and being worn)\n"
+            }
+          ]
+        },
+        {
+          "Comment:": "Print inventory as a list."
+        },
+        {
+          "TestRule:hook activity:": [
+            "default inventory",
+            {
+              "Act:": [
+                {
+                  "Determine:arguments:": [
+                    "Print inventory",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "actor",
                             {
-                              "id": "id-1784870bc07-5",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-1784870bc07-6",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-1784870bc07-7",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1784870bc07-8",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-1784870bc07-9",
-                                          "type": "lines",
-                                          "value": "{the: .flower}: {print_status:.flower}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-1784870bc07-10",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-1784870bc07-11",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-1784870bc07-12",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1784870bc07-13",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-1784870bc07-14",
-                                          "type": "lines",
-                                          "value": "{the: .headlamp}: {print_status:.headlamp}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-1784870bc07-15",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-1784870bc07-16",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-1784870bc07-17",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1784870bc07-18",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-1784870bc07-19",
-                                          "type": "lines",
-                                          "value": "{the: .secrets}: {print_status:.secrets}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-1784870bc07-20",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-1784870bc07-21",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-1784870bc07-22",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1784870bc07-23",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-1784870bc07-24",
-                                          "type": "lines",
-                                          "value": "{the: .wisdom}: {print_status:.wisdom true}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-1784870bc07-25",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-1784870bc07-26",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-1784870bc07-27",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1784870bc07-28",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-1784870bc07-29",
-                                          "type": "lines",
-                                          "value": "{the: .clutch}: {print_status:.clutch}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-1784870bc07-35",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-1784870bc07-36",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-1784870bc07-37",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1784870bc07-38",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-1784870bc07-39",
-                                          "type": "lines",
-                                          "value": "{the: .purse}: {print_status:.purse}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-1784870bc07-40",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-1784870bc07-41",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-1784870bc07-42",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1784870bc07-43",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-1784870bc07-44",
-                                          "type": "lines",
-                                          "value": "{the: .flashlight}: {print_status:.flashlight}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-1784870bc07-45",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-1784870bc07-46",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-1784870bc07-47",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1784870bc07-48",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-1784870bc07-49",
-                                          "type": "lines",
-                                          "value": "{the: .coin}: {print_status:.coin}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
+                              "FromTxt:": {
+                                "IdOf:": "Mildred"
                               }
                             }
                           ]
                         }
-                      }
+                      ]
                     }
-                  }
+                  ]
                 }
-              }
+              ]
             }
           ]
         }
-      },
-      {
-        "id": "id-178663195c4-1",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-178663195c4-2",
-              "type": "story_statement",
-              "value": {
-                "id": "id-178663195c4-3",
-                "type": "test_statement",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-178663195c4-4",
-                    "type": "test_name",
-                    "value": "default inventory"
-                  },
-                  "$TEST": {
-                    "id": "id-178663195c4-5",
-                    "type": "testing",
-                    "value": {
-                      "id": "id-178663195c4-6",
-                      "type": "test_output",
-                      "value": {
-                        "$LINES": {
-                          "id": "id-178663195c4-7",
-                          "type": "lines",
-                          "value": "You are carrying:\n  - a book of secrets (closed and locked)\n  - a book of wisdom (open but empty)\n  - a clutch (open) \n    - a purse (open) \n      - a coin\n  - a flower (being worn)\n  - a headlamp (providing light and being worn)\n"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-178663195c4-8",
-              "type": "story_statement",
-              "value": {
-                "id": "id-178663195c4-9",
-                "type": "comment",
-                "value": {
-                  "$LINES": {
-                    "id": "id-178663195c4-10",
-                    "type": "lines",
-                    "value": "Print inventory as a list."
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-178663195c4-11",
-              "type": "story_statement",
-              "value": {
-                "id": "id-178663195c4-12",
-                "type": "test_rule",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-178663195c4-13",
-                    "type": "test_name",
-                    "value": "default inventory"
-                  },
-                  "$HOOK": {
-                    "id": "id-178663195c4-14",
-                    "type": "program_hook",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-178663195c4-15",
-                        "type": "activity",
-                        "value": {
-                          "$EXE": [
-                            {
-                              "id": "id-178663195c4-16",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-178663195c4-17",
-                                "type": "determine",
-                                "value": {
-                                  "$NAME": {
-                                    "id": "id-178663195c4-18",
-                                    "type": "pattern_name",
-                                    "value": "Print inventory"
-                                  },
-                                  "$ARGUMENTS": {
-                                    "id": "id-17866d2ac0b-0",
-                                    "type": "arguments",
-                                    "value": {
-                                      "$ARGS": [
-                                        {
-                                          "id": "id-17866d2ac0b-1",
-                                          "type": "argument",
-                                          "value": {
-                                            "$NAME": {
-                                              "id": "id-17866d2ac0b-2",
-                                              "type": "variable_name",
-                                              "value": "actor"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-17866d2ac0b-3",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-17866d2ac0b-4",
-                                                "type": "from_text",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-17866d2ac0b-5",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-17866d2ac0b-6",
-                                                      "type": "id_of",
-                                                      "value": {
-                                                        "$OBJECT": {
-                                                          "id": "id-17866d2ac0b-7",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-17866d2ac0b-8",
-                                                            "type": "text_value",
-                                                            "value": {
-                                                              "$TEXT": {
-                                                                "id": "id-17866d2ac0b-9",
-                                                                "type": "text",
-                                                                "value": "Mildred"
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      ]
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      }
-    ]
-  }
+      ]
+    }
+  ]
 }

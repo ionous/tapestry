@@ -5,24 +5,18 @@ import (
 	"log"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/print"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
 
-type CheckOutput struct {
-	Name, Expect string
-	Test         *core.Activity
-}
-
 func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 	var buf bytes.Buffer
 	prev := run.SetWriter(print.NewAutoWriter(&buf))
 	run.ActivateDomain(t.Name, true)
 	{
-		if e := safe.Run(run, t.Test); e != nil {
+		if e := safe.Run(run, &t.Test); e != nil {
 			err = errutil.Fmt("ng! %s test encountered error: %s", t.Name, e)
 		} else if res := buf.String(); res != t.Expect {
 			if eol := '\n'; strings.ContainsRune(res, eol) || strings.ContainsRune(t.Expect, eol) {

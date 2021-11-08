@@ -3,13 +3,12 @@ package express
 import (
 	r "reflect"
 
-	"git.sr.ht/~ionous/iffy/export"
 	"github.com/ionous/errutil"
 )
 
 func assignProps(out r.Value, args []r.Value) (err error) {
 	outType := out.Type()
-	export.WalkProperties(outType, func(f *r.StructField, path []int) (done bool) {
+	WalkProperties(outType, func(f *r.StructField, path []int) (done bool) {
 		if len(args) <= 0 {
 			done = true
 		} else {

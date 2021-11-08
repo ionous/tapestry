@@ -4,36 +4,10 @@ import (
 	"bytes"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-// IsEmpty determines whether the text contains any characters at all.
-type IsEmpty struct {
-	Text rt.TextEval `if:"selector=empty,placeholder=text"`
-}
-
-// Includes determines whether text contains part.
-type Includes struct {
-	Text rt.TextEval
-	Part rt.TextEval
-}
-
-// Join combines multiple pieces of text.
-type Join struct {
-	Sep   rt.TextEval
-	Parts []rt.TextEval // fix? this should probably? be text list eveal
-}
-
-func (*IsEmpty) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "is", Role: composer.Function},
-		Group:  "strings",
-		Desc:   "Is Empty: True if the text is empty.",
-	}
-}
 
 func (op *IsEmpty) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
@@ -43,13 +17,6 @@ func (op *IsEmpty) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.BoolOf(b)
 	}
 	return
-}
-
-func (*Includes) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "strings",
-		Desc:  "Includes Text: True if text contains text.",
-	}
 }
 
 func (op *Includes) GetBool(run rt.Runtime) (ret g.Value, err error) {
@@ -62,13 +29,6 @@ func (op *Includes) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.BoolOf(contains)
 	}
 	return
-}
-
-func (*Join) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "strings",
-		Desc:  "Join Strings: Returns multiple pieces of text as a single new piece of text.",
-	}
 }
 
 func (op *Join) GetText(run rt.Runtime) (ret g.Value, err error) {

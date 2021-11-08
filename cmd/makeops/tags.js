@@ -145,10 +145,7 @@ class TagBlock {
     if (!keepInnerSpace && v.match(/\s/)) {
       throw new Error(`format ${v} contained unexpected spaces`);
     }
-    if (!v) {
-      throw new Error(`format ${v} was empty`);
-    }
-    return v;
+    return v || '_';
   }
   reduce() {
     // unpack to locals;
@@ -221,7 +218,7 @@ class TagOutput {
 };
 
 // --------------------------------------------------------------------
-module.exports = class TagParser {
+class TagParser {
   static parse(msg, options) {
     const p= new TagParser(msg, options);
     if (msg) {
@@ -373,3 +370,5 @@ module.exports = class TagParser {
     }
   }
 };
+
+module.exports = TagParser;

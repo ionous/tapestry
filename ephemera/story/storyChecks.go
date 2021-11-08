@@ -1,17 +1,16 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"github.com/ionous/errutil"
 )
 
-// ImportPhrase implements StoryStatement
 func (op *TestRule) ImportPhrase(k *Importer) (err error) {
-	if n, e := op.TestName.NewName(k); e != nil {
+	if n, e := NewTestName(k, op.TestName); e != nil {
 		err = e
 	} else if hook, e := op.Hook.ImportProgram(k); e != nil {
 		err = e
-	} else if prog, e := k.NewGob("execute", hook); e != nil {
+	} else if prog, e := k.NewProg("execute", hook); e != nil {
 		err = e
 	} else {
 		k.NewTestProgram(n, prog)
@@ -19,22 +18,15 @@ func (op *TestRule) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-// ImportPhrase implements StoryStatement
 func (op *TestScene) ImportPhrase(k *Importer) (err error) {
-	if n, e := op.TestName.NewName(k); e != nil {
-		err = e
-	} else {
-		err = k.CollectTest(n, func() error {
-			return op.Story.ImportStory(k)
-		})
-	}
+	// handled separately so we can have separate begin/end frames
 	return
 }
 
 func (op *TestStatement) ImportPhrase(k *Importer) (err error) {
 	if t := op.Test; t == nil {
 		err = ImportError(op, op.At, errutil.Fmt("%w Test", MissingSlot))
-	} else if n, e := op.TestName.NewName(k); e != nil {
+	} else if n, e := NewTestName(k, op.TestName); e != nil {
 		err = e
 	} else {
 		err = t.ImportTest(k, n)
@@ -43,10 +35,10 @@ func (op *TestStatement) ImportPhrase(k *Importer) (err error) {
 }
 
 type Testing interface {
-	ImportTest(k *Importer, testName ephemera.Named) (err error)
+	ImportTest(k *Importer, testName eph.Named) (err error)
 }
 
-func (op *TestOutput) ImportTest(k *Importer, testName ephemera.Named) (err error) {
+func (op *TestOutput) ImportTest(k *Importer, testName eph.Named) (err error) {
 	// note: we use the raw lines here, we don't expect the text output to be a template.
 	k.NewTestExpectation(testName, "execute", op.Lines.Str)
 	return

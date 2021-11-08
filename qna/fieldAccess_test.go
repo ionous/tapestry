@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/assembly"
 	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -17,7 +18,7 @@ import (
 func TestFieldAccess(t *testing.T) {
 	db := newFieldAccessTest(t, testdb.Memory)
 	defer db.Close()
-	q := NewRuntime(db)
+	q := NewRuntime(db, iffy.AllSignatures)
 
 	// ensure we can ask for object existence
 	t.Run("object_exists", func(t *testing.T) {

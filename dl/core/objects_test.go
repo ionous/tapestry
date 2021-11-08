@@ -11,8 +11,8 @@ import (
 
 // test some simple functionality of the object commands using a mock runtime
 func TestObjects(t *testing.T) {
-	this, that, nothing := named("this"), named("that"), named("nothing")
-	base, derived := &Text{"base"}, &Text{"derived"}
+	this, that, nothing := T("this"), T("that"), T("nothing")
+	base, derived := T("base"), T("derived")
 
 	run := modelTest{objClass: map[string]string{
 		// objects:
@@ -24,53 +24,49 @@ func TestObjects(t *testing.T) {
 	}}
 
 	t.Run("exists", func(t *testing.T) {
-		if e := testTrue(t, &run, &ObjectExists{this}); e != nil {
+		if e := testTrue(t, &run, &ObjectExists{Object: this}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{&ObjectExists{nothing}}); e != nil {
+		if e := testTrue(t, &run, &Not{Test: &ObjectExists{Object: nothing}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("kind_of", func(t *testing.T) {
-		if cls, e := safe.GetText(&run, &KindOf{this}); e != nil {
+		if cls, e := safe.GetText(&run, &KindOf{Object: this}); e != nil {
 			t.Fatal(e)
 		} else if cls.String() != base.Text {
 			t.Fatal("unexpected", cls)
 		}
 	})
 	t.Run("is_kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &IsKindOf{this, base.Text}); e != nil {
+		if e := testTrue(t, &run, &IsKindOf{Object: this, Kind: base.Text}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsKindOf{that, base.Text}); e != nil {
+		if e := testTrue(t, &run, &IsKindOf{Object: that, Kind: base.Text}); e != nil {
 			t.Fatal(e)
 		}
 
-		if e := testTrue(t, &run, &IsKindOf{that, derived.Text}); e != nil {
+		if e := testTrue(t, &run, &IsKindOf{Object: that, Kind: derived.Text}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{&IsKindOf{this, derived.Text}}); e != nil {
+		if e := testTrue(t, &run, &Not{&IsKindOf{this, derived.Text}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("is_exact_kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &CompareText{&KindOf{this}, &EqualTo{}, base}); e != nil {
+		if e := testTrue(t, &run, &CompareText{A: &KindOf{this}, Is: &Equal{}, B: base}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &CompareText{&KindOf{that}, &NotEqualTo{}, base}); e != nil {
+		if e := testTrue(t, &run, &CompareText{A: &KindOf{that}, Is: &Unequal{}, B: base}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &CompareText{&KindOf{that}, &EqualTo{}, derived}); e != nil {
+		if e := testTrue(t, &run, &CompareText{A: &KindOf{that}, Is: &Equal{}, B: derived}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &CompareText{&KindOf{this}, &NotEqualTo{}, derived}); e != nil {
+		if e := testTrue(t, &run, &CompareText{A: &KindOf{this}, Is: &Unequal{}, B: derived}); e != nil {
 			t.Fatal(e)
 		}
 	})
-}
-
-func named(n string) *Text {
-	return &Text{n}
 }
 
 type modelTest struct {

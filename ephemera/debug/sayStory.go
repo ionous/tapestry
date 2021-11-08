@@ -3,6 +3,8 @@ package debug
 import (
   "git.sr.ht/~ionous/iffy/affine"
   "git.sr.ht/~ionous/iffy/dl/core"
+  "git.sr.ht/~ionous/iffy/dl/value"
+  "git.sr.ht/~ionous/iffy/jsn"
   "git.sr.ht/~ionous/iffy/rt"
   g "git.sr.ht/~ionous/iffy/rt/generic"
   "git.sr.ht/~ionous/iffy/rt/safe"
@@ -10,35 +12,63 @@ import (
 )
 
 func SayIt(s string) rt.Execute {
-  return &core.Say{&core.Text{s}}
+  return &core.Say{&core.TextValue{s}}
 }
 
 type MatchNumber struct {
   Val int
 }
 
-func (m MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
-  if a, e := safe.CheckVariable(run, "num", affine.Number); e != nil {
-    err = e
-  } else {
-    n := a.Int()
-    ret = g.BoolOf(n == m.Val)
+func (op *MatchNumber) Marshal(m jsn.Marshaler) (err error) {
+  if err = m.MarshalBlock(jsn.MakeFlow("match", "", op)); err == nil {
+    e0 := m.MarshalKey("", "")
+    if e0 == nil {
+      e0 = m.MarshalValue("", &op.Val)
+    }
+    if e0 != nil && e0 != jsn.Missing {
+      m.Error(e0)
+    }
+    m.EndBlock()
   }
   return
 }
 
-func DetermineSay(i int) *core.Determine {
-  return &core.Determine{
-    Pattern: "say_me",
+func (op *MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
+  if a, e := safe.CheckVariable(run, numVar, affine.Number); e != nil {
+    err = e
+  } else {
+    n := a.Int()
+    ret = g.BoolOf(n == op.Val)
+  }
+  return
+}
+
+func DetermineSay(i int) *core.CallPattern {
+  return &core.CallPattern{
+    Pattern: value.PatternName{Str: "say_me"},
     Arguments: core.NamedArgs(
       "num", &core.FromNum{
-        &core.Number{float64(i)},
+        &core.NumValue{float64(i)},
       }),
   }
 }
 
 type SayMe struct {
   Num float64
+}
+
+func (op *SayMe) Marshal(m jsn.Marshaler) (err error) {
+  if err = m.MarshalBlock(jsn.MakeFlow("say_me", "", op)); err == nil {
+    e0 := m.MarshalKey("", "")
+    if e0 == nil {
+      e0 = m.MarshalValue("", &op.Num)
+    }
+    if e0 != nil && e0 != jsn.Missing {
+      m.Error(e0)
+    }
+    m.EndBlock()
+  }
+  return
 }
 
 var SayPattern = testpat.Pattern{
@@ -58,13 +88,13 @@ var SayPattern = testpat.Pattern{
 
 var SayHelloGoodbye = core.NewActivity(
   &core.ChooseAction{
-    If: &core.Bool{true},
+    If: &core.BoolValue{true},
     Do: core.MakeActivity(&core.Say{
-      Text: &core.Text{"hello"},
+      Text: &core.TextValue{"hello"},
     }),
     Else: &core.ChooseNothingElse{
       core.MakeActivity(&core.Say{
-        Text: &core.Text{"goodbye"},
+        Text: &core.TextValue{"goodbye"},
       }),
     },
   })

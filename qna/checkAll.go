@@ -6,13 +6,15 @@ import (
 
 	"github.com/ionous/errutil"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/check"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
 // CheckAll tests stored in the passed db.
 // It logs the results of running the tests, and only returns error on critical errors.
-func CheckAll(db *sql.DB, actuallyJustThisOne string) (ret int, err error) {
+func CheckAll(db *sql.DB, actuallyJustThisOne string, signatures []map[uint64]interface{}) (ret int, err error) {
 	var name string
 	var prog []byte
 	var tests []check.CheckOutput
@@ -25,9 +27,9 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string) (ret int, err error) {
 		where type='CheckOutput'
 		order by name`,
 		func() (err error) {
-			if len(actuallyJustThisOne) == 0 || strings.Index(actuallyJustThisOne, name+";") >= 0 {
+			if len(actuallyJustThisOne) == 0 || strings.Contains(actuallyJustThisOne, name+";") {
 				var curr check.CheckOutput
-				if e := tables.DecodeGob(prog, &curr); e != nil {
+				if e := cin.Decode(&curr, prog, signatures); e != nil {
 					err = e
 				} else {
 					tests = append(tests, curr)
@@ -41,7 +43,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string) (ret int, err error) {
 	} else {
 		// FIX: we have to cache the statements b/c we cant use them during QueryAll
 		for _, t := range tests {
-			run := NewRuntime(db)
+			run := NewRuntime(db, iffy.AllSignatures)
 			tables.Must(db, `delete from run_domain; delete from run_pair`)
 			run.ActivateDomain("entire_game", true)
 			if e := t.RunTest(run); e != nil {

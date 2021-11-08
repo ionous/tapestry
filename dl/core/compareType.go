@@ -1,7 +1,5 @@
 package core
 
-import "git.sr.ht/~ionous/iffy/dl/composer"
-
 type CompareType int
 
 // Comparator generates comparison flags.
@@ -10,17 +8,10 @@ type Comparator interface {
 	Compare() CompareType
 }
 
-type EqualTo struct{}
-type NotEqualTo struct{}
-type GreaterThan struct{}
-type LessThan struct{}
-type GreaterOrEqual struct{}
-type LessOrEqual struct{}
-
-func (*EqualTo) Compare() CompareType {
+func (*Equal) Compare() CompareType {
 	return Compare_EqualTo
 }
-func (*NotEqualTo) Compare() CompareType {
+func (*Unequal) Compare() CompareType {
 	return Compare_GreaterThan | Compare_LessThan
 }
 func (*GreaterThan) Compare() CompareType {
@@ -29,10 +20,10 @@ func (*GreaterThan) Compare() CompareType {
 func (*LessThan) Compare() CompareType {
 	return Compare_LessThan
 }
-func (*GreaterOrEqual) Compare() CompareType {
+func (*AtLeast) Compare() CompareType {
 	return Compare_GreaterThan | Compare_EqualTo
 }
-func (*LessOrEqual) Compare() CompareType {
+func (*AtMost) Compare() CompareType {
 	return Compare_LessThan | Compare_EqualTo
 }
 
@@ -42,59 +33,3 @@ const (
 	Compare_GreaterThan
 	Compare_LessThan
 )
-
-func (*EqualTo) Compose() composer.Spec {
-	return composer.Spec{
-		Name:   "equal",
-		Spec:   "==",
-		Fluent: &composer.Fluid{Name: "equalTo", Role: composer.Selector},
-		Group:  "comparison",
-		Desc:   "Equal: Two values exactly match.",
-	}
-}
-
-func (*NotEqualTo) Compose() composer.Spec {
-	return composer.Spec{
-		Name:   "unequal",
-		Spec:   "<>",
-		Fluent: &composer.Fluid{Name: "otherThan", Role: composer.Selector},
-		Group:  "comparison",
-		Desc:   "Not Equal To: Two values don't match exactly.",
-	}
-}
-
-func (*GreaterThan) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "greater_than",
-		Spec:  ">",
-		Group: "comparison",
-		Desc:  "Greater Than: The first value is larger than the second value.",
-	}
-}
-
-func (*LessThan) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "less_than",
-		Spec:  "<",
-		Group: "comparison",
-		Desc:  "Less Than: The first value is less than the second value.",
-	}
-}
-
-func (*GreaterOrEqual) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "at_least",
-		Spec:  ">=",
-		Group: "comparison",
-		Desc:  "Greater Than or Equal To: The first value is larger than the second value.",
-	}
-}
-
-func (*LessOrEqual) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "at_most",
-		Spec:  "<=",
-		Group: "comparison",
-		Desc:  "Less Than or Equal To: The first value is larger than the second value.",
-	}
-}

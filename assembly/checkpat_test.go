@@ -174,17 +174,3 @@ func addEphPattern(rec *ephemera.Recorder, els ...string) {
 		}
 	}
 }
-
-// adds rows of 3 values ( name, type, text ) to the database of test ephemera
-// we dont use actual "programs" here -- just strings as bytes
-func addEphRule(rec *ephemera.Recorder, els ...string) {
-	for i := 0; i < len(els); i += 3 {
-		pat := els[i+0]
-		typ := els[i+1]
-		txt := els[i+2]
-		rec.NewPatternRule(
-			rec.NewName(pat, tables.NAMED_PATTERN, strconv.Itoa(i)),
-			ephemera.Named{}, ephemera.Named{},
-			rec.NewProg(typ, []byte(txt)))
-	}
-}

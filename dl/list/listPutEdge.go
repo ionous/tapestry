@@ -1,28 +1,9 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-/**
- * put: eval(num,txt,rec),
- * intoNum/Txt/RecList: varName,
- * atBack|atFront.
- */
-type PutEdge struct {
-	From   rt.Assignment `if:"selector"`
-	Into   ListTarget    `if:"selector"`
-	AtEdge Edge          `if:"selector"`
-}
-
-func (*PutEdge) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "put", Role: composer.Command},
-		Desc:   "Put at edge: add a value to a list",
-	}
-}
 
 func (op *PutEdge) Execute(run rt.Runtime) (err error) {
 	if e := op.push(run); e != nil {
@@ -39,7 +20,9 @@ func (op *PutEdge) push(run rt.Runtime) (err error) {
 	} else if !IsAppendable(ins, els) {
 		err = insertError{ins, els}
 	} else {
-		if !op.AtEdge.Front() {
+		if atFront, e := safe.GetOptionalBool(run, op.AtEdge, false); e != nil {
+			err = e
+		} else if !atFront.Bool() {
 			els.Append(ins)
 		} else {
 			_, err = els.Splice(0, 0, ins)

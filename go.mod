@@ -12,4 +12,5 @@ require (
 	github.com/kr/text v0.1.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.6
 	github.com/reiver/go-porterstemmer v1.0.1
+	github.com/tidwall/pretty v1.2.0 // indirect
 )

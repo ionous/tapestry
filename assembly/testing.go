@@ -34,7 +34,7 @@ func (pc *Plurals) AddMany(kinds string) {
 
 // WritePlurals to the table.
 func (pc *Plurals) WritePlurals(m *Assembler) {
-	for one, _ := range pc.once {
+	for one := range pc.once {
 		m.WritePlural(one, one+"s")
 	}
 }

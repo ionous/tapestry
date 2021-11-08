@@ -9,9 +9,6 @@ import (
 // we should only be able to get pattern variables via GetVariable...
 // revisit to see what other pattern access should be tested?
 func xTestPatternFields(t *testing.T) {
-	// gob.Register((*core.Text)(nil))
-	// gob.Register((*debug.MatchNumber)(nil))
-
 	// db := newQnaDB(t, testdb.Memory)
 	// defer db.Close()
 	// if e := tables.CreateModel(db); e != nil {
@@ -28,7 +25,7 @@ func xTestPatternFields(t *testing.T) {
 	// 	t.Fatal(e)
 	// }
 	// //
-	// run := NewRuntime(db)
+	// run := NewRuntime(db, iffy.AllSignatures)
 	// if p, e := run.GetField("pat", "param"); e != nil {
 	// 	t.Fatal(e)
 	// } else if v, e := p.GetText(run); e != nil {

@@ -3,22 +3,33 @@
 const fs = require('fs'); // filesystem for loading iffy language file
 const vm = require('vm'); // virtual machine for parsing iffy language file
 const Make = require('./directives.js'); // composer directives
+const TagParser = require('./tags.js');
 
-// load the language file; brings 'localLang()' into global scope.
-vm.runInThisContext(fs.readFileSync(`../compose/www/data/lang/iffy.js`));
-vm.runInThisContext(fs.readFileSync(`../compose/www/data/lang/spec.js`));
-const m= new Make();
-localLang(m);
-// add stubs
-spec.forEach((spec)=> {
-  if (stub.indexOf(spec.name) >= 0) {
-    m.newFromSpec(spec);
+
+// parse the idl
+// shouldnt really be here, but its fine for now.
+let m = new Make();
+const folderPath = "../../idl";
+fs.readdirSync(folderPath).filter(fn => fn.endsWith(".ifspec")).forEach(fn => {
+  const path = folderPath + '/' + fn;
+
+  const raw = fs.readFileSync(path);
+  let dict;
+  try {
+    dict = JSON.parse(raw);
   }
+  catch (e) {
+    console.log(`couldnt't parse ${path}`);
+    throw e;
+  }
+  const gopack = fn.substring(0, fn.length - ".ifspec".length);
+  console.log(`parsing ${path}`);
+  m.readSpec(dict, gopack);
 });
-//
+
 const sorted = {};
 Object.keys(m.types.all).sort().forEach((key) => {
   sorted[key] = m.types.all[key];
 });
 
-module.exports=sorted;
+module.exports = sorted;

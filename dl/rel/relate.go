@@ -1,24 +1,9 @@
 package rel
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-type Relate struct {
-	Object   rt.TextEval `if:"selector"`
-	ToObject rt.TextEval `if:"selector=to"`
-	Via      Relation
-}
-
-func (*Relate) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "relate", Role: composer.Command},
-		Group:  "relations",
-		Desc:   "Relate: Relate two nouns.",
-	}
-}
 
 func (op *Relate) Execute(run rt.Runtime) (err error) {
 	if e := op.setRelation(run); e != nil {

@@ -1,8 +1,8 @@
 package express
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 )
@@ -20,13 +20,14 @@ import (
 //    {.Lantern}  - an object named lantern
 type dotName string
 
-func (on dotName) flags() (ret render.TryAsNoun) {
+func (on dotName) flags() (ret render.RenderFlags) {
+	var flag string
 	if name := string(on); lang.IsCapitalized(name) {
-		ret = render.TryAsObject
+		flag = render.RenderFlags_RenderAsObj
 	} else {
-		ret = render.TryAsBoth
+		flag = render.RenderFlags_RenderAsAny
 	}
-	return
+	return render.RenderFlags{Str: flag}
 }
 
 // when dotted names are used as arguments to concrete functions
@@ -34,7 +35,7 @@ func (on dotName) flags() (ret render.TryAsNoun) {
 // we cant know the type of the variable .count without keeping a name stack during compilation
 // but we can use the existing command Var which implements every eval type.
 func (on dotName) getValueNamed() *render.RenderRef {
-	return &render.RenderRef{core.Var{string(on)}, on.flags()}
+	return &render.RenderRef{value.VariableName{Str: string(on)}, on.flags()}
 }
 
 // when dotted names are as arguments to patterns:

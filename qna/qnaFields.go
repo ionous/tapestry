@@ -33,7 +33,6 @@ type Fields struct {
 	relativeKinds,
 	relativesOf,
 	rulesFor,
-	startOf,
 	traitsFor,
 	typeOf,
 	updatePairs,
@@ -504,7 +503,7 @@ func (n *Runner) queryFieldValue(key keyType) (ret rt.Assignment, err error) {
 	if e := n.fields.valueOf.QueryRow(key.target, key.field).Scan(&i, &a); e != nil {
 		err = e
 	} else {
-		ret, err = decodeValue(a, i)
+		ret, err = decodeValue(a, i, n.signatures)
 	}
 	return
 }

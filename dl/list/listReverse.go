@@ -1,32 +1,18 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
 // A normal reduce would return a value, instead we accumulate into a variable
-type Reverse struct {
-	List ListSource `if:"selector"`
-}
-
-func (*Reverse) Compose() composer.Spec {
-	return composer.Spec{
-		Name:   "list_reverse",
-		Group:  "list",
-		Desc:   `Reverse list: Reverse a list.`,
-		Fluent: &composer.Fluid{Role: composer.Command},
-	}
-}
-
-func (op *Reverse) Execute(run rt.Runtime) (err error) {
+func (op *ListReverse) Execute(run rt.Runtime) (err error) {
 	if e := op.reverse(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *Reverse) reverse(run rt.Runtime) (err error) {
+func (op *ListReverse) reverse(run rt.Runtime) (err error) {
 	if els, e := GetListSource(run, op.List); e != nil {
 		err = e
 	} else {

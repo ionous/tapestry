@@ -2,8 +2,8 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/tables"
 )
 
 // hold potential values.
@@ -21,14 +21,14 @@ func (m *valueMap) storeError(key keyType, err error) rt.Assignment {
 }
 
 // where i is from the db
-func decodeValue(a affine.Affinity, i interface{}) (ret rt.Assignment, err error) {
+func decodeValue(a affine.Affinity, i interface{}, signatures []map[uint64]interface{}) (ret rt.Assignment, err error) {
 	if prog, ok := i.([]byte); !ok {
 		ret = staticValue{a, i}
 	} else {
-		// gob needs a wrapper structure (really a field?) for writing interfaces
-		// the writer ( ex. assembly WritePattern ) has a matching anonymous struct
-		meta := struct{ Init rt.Assignment }{}
-		if e := tables.DecodeGob(prog, &meta); e != nil {
+		// the encoder needs a wrapper structure for writing interfaces
+		// the writer ( ex. assembly WritePattern ) uses the same Fragment container
+		var meta rt.Fragment
+		if e := cin.Decode(&meta, prog, signatures); e != nil {
 			err = e
 		} else {
 			ret = meta.Init

@@ -2,32 +2,64 @@ package render
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
 
-// RenderRef returns the value of a variable or the id of an object.
-type RenderRef struct {
-	core.Var
-	Flags TryAsNoun
-}
-
-// Compose implements composer.Composer
-func (*RenderRef) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "internal",
-	}
-}
-
 func (op *RenderRef) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	if v, e := op.getAssignedValue(run); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
+	}
+	return
+}
+
+func (op *RenderRef) Affinity() (ret affine.Affinity) { return }
+
+// GetText handles unpacking a text variable,
+func (op *RenderRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.getBool(run); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func (op *RenderRef) getBool(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.getAssignedValue(run); e != nil {
+		err = e
+	} else if aff := v.Affinity(); aff == affine.Bool {
+		ret = v
+	} else {
+		err = errutil.Fmt("unexpected %q", aff)
+	}
+	return
+}
+
+// GetText handles unpacking a text variable,
+// turning an object variable into an id, or
+// looking for an object of the passed name ( if no variable of the name exists. )
+func (op *RenderRef) GetNumber(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.getNum(run); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func (op *RenderRef) getNum(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.getAssignedValue(run); e != nil {
+		err = e
+	} else if aff := v.Affinity(); aff == affine.Number {
+		ret = v
+	} else {
+		err = errutil.Fmt("unexpected %q", aff)
 	}
 	return
 }
@@ -58,13 +90,14 @@ func (op *RenderRef) getText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *RenderRef) getAssignedValue(run rt.Runtime) (ret g.Value, err error) {
-	if val, e := getVariable(run, op.Name, op.Flags); e != nil {
+	flags := op.Flags.ToFlags()
+	if val, e := getVariable(run, op.Name, flags); e != nil {
 		err = e
 	} else if val != nil {
 		ret = val
-	} else if !op.Flags.tryObject() {
-		err = g.UnknownVariable(op.Name)
-	} else if obj, e := safe.ObjectFromString(run, op.Name); e != nil {
+	} else if !flags.tryObject() {
+		err = g.UnknownVariable(op.Name.String())
+	} else if obj, e := safe.ObjectFromString(run, op.Name.String()); e != nil {
 		err = e
 	} else {
 		ret = obj
@@ -73,7 +106,7 @@ func (op *RenderRef) getAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 }
 
 // returns nil if the named variable doesnt exist; errors only on critical errors.
-func getVariable(run rt.Runtime, n string, flags TryAsNoun) (ret g.Value, err error) {
+func getVariable(run rt.Runtime, n value.VariableName, flags TryAsNoun) (ret g.Value, err error) {
 	if flags.tryVariable() {
 		ret, err = safe.CheckVariable(run, n, "")
 		if _, isUnknown := err.(g.Unknown); isUnknown {

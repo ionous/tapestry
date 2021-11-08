@@ -46,7 +46,6 @@ func (c *Cache) Must(q string, args ...interface{}) {
 	if _, e := c.Exec(q, args...); e != nil {
 		panic(e)
 	}
-	return
 }
 
 func (c *Cache) MustGetId(q string, args ...interface{}) (ret int64) {

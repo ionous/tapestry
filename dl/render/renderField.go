@@ -2,7 +2,6 @@ package render
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -10,20 +9,6 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
-
-// RenderField -
-// in template phrases, picks between record variables, object variables, and named global objects.
-// ex. could be "ringBearer", "SamWise", or "frodo"
-type RenderField struct {
-	Name rt.TextEval
-}
-
-// Compose implements composer.Composer, although this is a
-func (*RenderField) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "internal",
-	}
-}
 
 // GetSourceFields returns a value supporting field access.
 func (op *RenderField) GetSourceFields(run rt.Runtime) (ret g.Value, err error) {

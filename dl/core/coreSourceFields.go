@@ -2,7 +2,6 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -13,46 +12,6 @@ import (
 // FromSourceFields: part of GetAtField
 type FromSourceFields interface {
 	GetSourceFields(run rt.Runtime) (g.Value, error)
-}
-
-// Sources an object with a computed name.
-type FromObj struct {
-	Object rt.TextEval `if:"selector"`
-}
-
-// Sources a recorded stored in a record
-// RenderRec implements core.FromSourceFields and simply returns the passed record.
-// ( This is used in chains of variable names a.b.c.d )
-type FromRec struct {
-	Rec rt.RecordEval `if:"selector"`
-}
-
-// FromVar returns a record or object from a variable.
-type FromVar struct {
-	Var Variable `if:"selector"`
-}
-
-func (*FromObj) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Role: composer.Selector},
-		Desc:   "Targets an object with a computed name.",
-	}
-}
-
-func (*FromRec) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Role: composer.Selector},
-		Desc:   "Targets a record stored in a record.",
-	}
-}
-
-func (*FromVar) Compose() composer.Spec {
-	// FIX? it'd be great to let this "run-in" to the parent
-	// "get: <var>" instead of "get var: <var>"
-	return composer.Spec{
-		Fluent: &composer.Fluid{Role: composer.Selector},
-		Desc:   "Targets a record stored in a variable.",
-	}
 }
 
 // GetSourceFields returns an object supporting field access.

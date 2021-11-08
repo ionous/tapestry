@@ -1,27 +1,12 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/pattern"
 
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
-
-// During determines whether a pattern is running.
-type During struct {
-	Pattern pattern.PatternName // a text eval here would be like a function pointer maybe..
-}
-
-func (*During) Compose() composer.Spec {
-	return composer.Spec{
-		Group:  "patterns",
-		Desc:   "During: Runs a pattern, and potentially returns a value.",
-		Fluent: &composer.Fluid{Name: "during", Role: composer.Command},
-	}
-}
 
 // GetBool returns the first matching bool evaluation.
 func (op *During) GetBool(run rt.Runtime) (ret g.Value, err error) {

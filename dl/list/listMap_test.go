@@ -119,10 +119,10 @@ func TestMapRecords(t *testing.T) {
 	}
 }
 
-var remap = list.Map{
-	FromList:     &core.Var{Name: "fruits"},
-	ToList:       "results",
-	UsingPattern: "remap",
+var remap = list.ListMap{
+	FromList:     V("fruits"),
+	ToList:       W("results"),
+	UsingPattern: W("remap"),
 }
 
 var reverseRecords = testpat.Pattern{
@@ -132,11 +132,11 @@ var reverseRecords = testpat.Pattern{
 	Rules: []rt.Rule{{
 		Execute: &core.PutAtField{
 			Into:    &core.IntoVar{N("out")},
-			AtField: "name",
+			AtField: W("name"),
 			From: &core.FromText{
 				&core.MakeReversed{
 					&core.GetAtField{
-						Field: "name",
+						Field: W("name"),
 						From:  &core.FromVar{N("in")},
 					},
 				},
@@ -152,13 +152,9 @@ var reverseStrings = testpat.Pattern{
 	Return: "out",
 	Rules: []rt.Rule{{
 		Execute: &core.Assign{
-			Var: core.Variable{Str: "out"},
+			Var: N("out"),
 			From: &core.FromText{
-				&core.MakeReversed{
-					&core.Var{
-						Name: "in",
-					},
-				},
+				&core.MakeReversed{V("in")},
 			},
 		},
 	},

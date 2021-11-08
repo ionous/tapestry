@@ -1,964 +1,362 @@
 {
-  "id": "id-1771724a77b-1",
-  "type": "story",
-  "value": {
-    "$PARAGRAPH": [
-      {
-        "id": "id-1771724a77b-2",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-1771724a77b-3",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1771724a77b-4",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-1771724a77b-5",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-1771724a77b-6",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-1771724a77b-7",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-1771724a77b-8",
-                              "type": "noun_name",
-                              "value": "table"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-1771724a77b-9",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-1771724a77b-10",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-1771724a77b-11",
-                                "type": "are_an",
-                                "value": "$ISA"
-                              },
-                              "$TRAIT": [],
-                              "$KIND": {
-                                "id": "id-1771724a77b-12",
-                                "type": "singular_kind",
-                                "value": "supporter"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
-                }
-              }
-            },
-            {
-              "id": "id-1771724a77b-13",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1771724a77b-14",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-1771724a77b-15",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-1771724a77b-16",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-1771724a77b-17",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-1771724a77b-18",
-                              "type": "noun_name",
-                              "value": "lab"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-1771724a77b-19",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-1771724a77b-20",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-1771724a77b-21",
-                                "type": "are_an",
-                                "value": "$ISA"
-                              },
-                              "$TRAIT": [],
-                              "$KIND": {
-                                "id": "id-1771724a77b-22",
-                                "type": "singular_kind",
-                                "value": "room"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
-                }
-              }
-            },
-            {
-              "id": "id-1771724a77b-23",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1771724a77b-24",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-1771724a77b-25",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-1771724a77b-26",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-1771724a77b-27",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-1771724a77b-28",
-                              "type": "noun_name",
-                              "value": "basket"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-1771724a77b-29",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-1771724a77b-30",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-1771724a77b-31",
-                                "type": "are_an",
-                                "value": "$ISA"
-                              },
-                              "$TRAIT": [],
-                              "$KIND": {
-                                "id": "id-1771724a77b-32",
-                                "type": "singular_kind",
-                                "value": "container"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
-                }
-              }
-            },
-            {
-              "id": "id-1771724a77b-137",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1771724a77b-138",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-1771724a77b-139",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-1771724a77b-140",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-1771724a77b-141",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-1771724a77b-142",
-                              "type": "noun_name",
-                              "value": "scalpel"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-1771724a77b-143",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-1771724a77b-144",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-1771724a77b-145",
-                                "type": "are_an",
-                                "value": "$ISA"
-                              },
-                              "$TRAIT": [
-                                {
-                                  "id": "id-1771724a77b-147",
-                                  "type": "trait",
-                                  "value": "not worn"
-                                }
-                              ],
-                              "$KIND": {
-                                "id": "id-1771724a77b-146",
-                                "type": "singular_kind",
-                                "value": "prop"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": "id-1771724a77b-38",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-1771724a77b-39",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1771724a77b-40",
-                "type": "comment",
-                "value": {
-                  "$LINES": {
-                    "id": "id-1771724a77b-41",
-                    "type": "lines",
-                    "value": "Mildred and the table are in the room. The basket is on the table. The apple is in the basket. Mildred is carrying the scalpel and wearing the pen."
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "table"
+                    ]
                   }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [],
+                    "supporter"
+                  ]
                 }
-              }
-            }
+              ]
+            },
+            []
           ]
-        }
-      },
-      {
-        "id": "id-1771724a77b-33",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-1771724a77b-34",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1771724a77b-35",
-                "type": "test_scene",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-1771724a77b-36",
-                    "type": "test_name",
-                    "value": "whereabouts"
-                  },
-                  "$STORY": {
-                    "id": "id-1771724a77b-37",
-                    "type": "story",
-                    "value": {
-                      "$PARAGRAPH": [
-                        {
-                          "id": "id-1771724a77b-42",
-                          "type": "paragraph",
-                          "value": {
-                            "$STORY_STATEMENT": [
-                              {
-                                "id": "id-1771724a77b-43",
-                                "type": "story_statement",
-                                "value": {
-                                  "id": "id-1771724a77b-56",
-                                  "type": "noun_statement",
-                                  "value": {
-                                    "$LEDE": {
-                                      "id": "id-1771724a77b-57",
-                                      "type": "lede",
-                                      "value": {
-                                        "$NOUNS": [
-                                          {
-                                            "id": "id-1771724a77b-58",
-                                            "type": "named_noun",
-                                            "value": {
-                                              "$DETERMINER": {
-                                                "id": "id-1771724a77b-59",
-                                                "type": "determiner",
-                                                "value": "$THE"
-                                              },
-                                              "$NAME": {
-                                                "id": "id-1771724a77b-60",
-                                                "type": "noun_name",
-                                                "value": "table"
-                                              }
-                                            }
-                                          },
-                                          {
-                                            "id": "id-1771724a77b-62",
-                                            "type": "named_noun",
-                                            "value": {
-                                              "$DETERMINER": {
-                                                "id": "id-1771724a77b-63",
-                                                "type": "determiner",
-                                                "value": "$OUR"
-                                              },
-                                              "$NAME": {
-                                                "id": "id-1771724a77b-64",
-                                                "type": "noun_name",
-                                                "value": "Mildred"
-                                              }
-                                            }
-                                          }
-                                        ],
-                                        "$NOUN_PHRASE": {
-                                          "id": "id-1771724a77b-61",
-                                          "type": "noun_phrase",
-                                          "value": {
-                                            "$NOUN_RELATION": {
-                                              "id": "id-1771724a77b-65",
-                                              "type": "noun_relation",
-                                              "value": {
-                                                "$ARE_BEING": {
-                                                  "id": "id-1771724a77b-70",
-                                                  "type": "are_being",
-                                                  "value": "$ARE"
-                                                },
-                                                "$RELATION": {
-                                                  "id": "id-1771724a77b-66",
-                                                  "type": "relation_name",
-                                                  "value": "whereabouts"
-                                                },
-                                                "$NOUNS": [
-                                                  {
-                                                    "id": "id-1771724a77b-67",
-                                                    "type": "named_noun",
-                                                    "value": {
-                                                      "$DETERMINER": {
-                                                        "id": "id-1771724a77b-68",
-                                                        "type": "determiner",
-                                                        "value": "$THE"
-                                                      },
-                                                      "$NAME": {
-                                                        "id": "id-1771724a77b-69",
-                                                        "type": "noun_name",
-                                                        "value": "lab"
-                                                      }
-                                                    }
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "$TAIL": []
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "id": "id-1771724a77b-123",
-                          "type": "paragraph",
-                          "value": {
-                            "$STORY_STATEMENT": [
-                              {
-                                "id": "id-1771724a77b-124",
-                                "type": "story_statement",
-                                "value": {
-                                  "id": "id-1771724a77b-125",
-                                  "type": "noun_statement",
-                                  "value": {
-                                    "$LEDE": {
-                                      "id": "id-1771724a77b-126",
-                                      "type": "lede",
-                                      "value": {
-                                        "$NOUNS": [
-                                          {
-                                            "id": "id-1771724a77b-127",
-                                            "type": "named_noun",
-                                            "value": {
-                                              "$DETERMINER": {
-                                                "id": "id-1771724a77b-128",
-                                                "type": "determiner",
-                                                "value": "$THE"
-                                              },
-                                              "$NAME": {
-                                                "id": "id-1771724a77b-129",
-                                                "type": "noun_name",
-                                                "value": "basket"
-                                              }
-                                            }
-                                          }
-                                        ],
-                                        "$NOUN_PHRASE": {
-                                          "id": "id-1771724a77b-130",
-                                          "type": "noun_phrase",
-                                          "value": {
-                                            "$NOUN_RELATION": {
-                                              "id": "id-1771724a77b-131",
-                                              "type": "noun_relation",
-                                              "value": {
-                                                "$ARE_BEING": {
-                                                  "id": "id-1771724a77b-136",
-                                                  "type": "are_being",
-                                                  "value": "$IS"
-                                                },
-                                                "$RELATION": {
-                                                  "id": "id-1771724a77b-132",
-                                                  "type": "relation_name",
-                                                  "value": "whereabouts"
-                                                },
-                                                "$NOUNS": [
-                                                  {
-                                                    "id": "id-1771724a77b-133",
-                                                    "type": "named_noun",
-                                                    "value": {
-                                                      "$DETERMINER": {
-                                                        "id": "id-1771724a77b-134",
-                                                        "type": "determiner",
-                                                        "value": "$THE"
-                                                      },
-                                                      "$NAME": {
-                                                        "id": "id-1771724a77b-135",
-                                                        "type": "noun_name",
-                                                        "value": "table"
-                                                      }
-                                                    }
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "$TAIL": []
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "id": "id-1771724a77b-71",
-                          "type": "paragraph",
-                          "value": {
-                            "$STORY_STATEMENT": [
-                              {
-                                "id": "id-1771724a77b-72",
-                                "type": "story_statement",
-                                "value": {
-                                  "id": "id-1771724a77b-73",
-                                  "type": "noun_statement",
-                                  "value": {
-                                    "$LEDE": {
-                                      "id": "id-1771724a77b-74",
-                                      "type": "lede",
-                                      "value": {
-                                        "$NOUNS": [
-                                          {
-                                            "id": "id-1771724a77b-75",
-                                            "type": "named_noun",
-                                            "value": {
-                                              "$DETERMINER": {
-                                                "id": "id-1771724a77b-76",
-                                                "type": "determiner",
-                                                "value": "$THE"
-                                              },
-                                              "$NAME": {
-                                                "id": "id-1771724a77b-77",
-                                                "type": "noun_name",
-                                                "value": "scalpel"
-                                              }
-                                            }
-                                          },
-                                          {
-                                            "id": "id-1771724a77b-78",
-                                            "type": "named_noun",
-                                            "value": {
-                                              "$DETERMINER": {
-                                                "id": "id-1771724a77b-79",
-                                                "type": "determiner",
-                                                "value": "$THE"
-                                              },
-                                              "$NAME": {
-                                                "id": "id-1771724a77b-80",
-                                                "type": "noun_name",
-                                                "value": "pen"
-                                              }
-                                            }
-                                          }
-                                        ],
-                                        "$NOUN_PHRASE": {
-                                          "id": "id-1771724a77b-81",
-                                          "type": "noun_phrase",
-                                          "value": {
-                                            "$NOUN_RELATION": {
-                                              "id": "id-1771724a77b-82",
-                                              "type": "noun_relation",
-                                              "value": {
-                                                "$ARE_BEING": {
-                                                  "id": "id-1771724a77b-83",
-                                                  "type": "are_being",
-                                                  "value": "$ARE"
-                                                },
-                                                "$RELATION": {
-                                                  "id": "id-1771724a77b-84",
-                                                  "type": "relation_name",
-                                                  "value": "whereabouts"
-                                                },
-                                                "$NOUNS": [
-                                                  {
-                                                    "id": "id-1771724a77b-85",
-                                                    "type": "named_noun",
-                                                    "value": {
-                                                      "$DETERMINER": {
-                                                        "id": "id-1771724a77b-86",
-                                                        "type": "determiner",
-                                                        "value": "$OUR"
-                                                      },
-                                                      "$NAME": {
-                                                        "id": "id-1771724a77b-87",
-                                                        "type": "noun_name",
-                                                        "value": "Mildred"
-                                                      }
-                                                    }
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "$TAIL": []
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "id": "id-1771724a77b-148",
-                          "type": "paragraph",
-                          "value": {
-                            "$STORY_STATEMENT": [
-                              {
-                                "id": "id-1771724a77b-99",
-                                "type": "story_statement",
-                                "value": {
-                                  "id": "id-1771724a77b-100",
-                                  "type": "noun_statement",
-                                  "value": {
-                                    "$LEDE": {
-                                      "id": "id-1771724a77b-101",
-                                      "type": "lede",
-                                      "value": {
-                                        "$NOUNS": [
-                                          {
-                                            "id": "id-1771724a77b-102",
-                                            "type": "named_noun",
-                                            "value": {
-                                              "$DETERMINER": {
-                                                "id": "id-1771724a77b-103",
-                                                "type": "determiner",
-                                                "value": "$THE"
-                                              },
-                                              "$NAME": {
-                                                "id": "id-1771724a77b-104",
-                                                "type": "noun_name",
-                                                "value": "pen"
-                                              }
-                                            }
-                                          }
-                                        ],
-                                        "$NOUN_PHRASE": {
-                                          "id": "id-1771724a77b-105",
-                                          "type": "noun_phrase",
-                                          "value": {
-                                            "$NOUN_TRAITS": {
-                                              "id": "id-1771724a77b-120",
-                                              "type": "noun_traits",
-                                              "value": {
-                                                "$ARE_BEING": {
-                                                  "id": "id-1771724a77b-121",
-                                                  "type": "are_being",
-                                                  "value": "$IS"
-                                                },
-                                                "$TRAIT": [
-                                                  {
-                                                    "id": "id-1771724a77b-122",
-                                                    "type": "trait",
-                                                    "value": "worn"
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "$TAIL": []
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "id": "id-17736705b90-46",
-                          "type": "paragraph",
-                          "value": {
-                            "$STORY_STATEMENT": [
-                              {
-                                "id": "id-17736705b90-47",
-                                "type": "story_statement",
-                                "value": {
-                                  "id": "id-17736705b90-48",
-                                  "type": "noun_statement",
-                                  "value": {
-                                    "$LEDE": {
-                                      "id": "id-17736705b90-49",
-                                      "type": "lede",
-                                      "value": {
-                                        "$NOUNS": [
-                                          {
-                                            "id": "id-17736705b90-50",
-                                            "type": "named_noun",
-                                            "value": {
-                                              "$DETERMINER": {
-                                                "id": "id-17736705b90-51",
-                                                "type": "determiner",
-                                                "value": "$THE"
-                                              },
-                                              "$NAME": {
-                                                "id": "id-17736705b90-52",
-                                                "type": "noun_name",
-                                                "value": "apple"
-                                              }
-                                            }
-                                          }
-                                        ],
-                                        "$NOUN_PHRASE": {
-                                          "id": "id-17736705b90-53",
-                                          "type": "noun_phrase",
-                                          "value": {
-                                            "$NOUN_RELATION": {
-                                              "id": "id-17736705b90-54",
-                                              "type": "noun_relation",
-                                              "value": {
-                                                "$ARE_BEING": {
-                                                  "id": "id-17736705b90-59",
-                                                  "type": "are_being",
-                                                  "value": "$IS"
-                                                },
-                                                "$RELATION": {
-                                                  "id": "id-17736705b90-55",
-                                                  "type": "relation_name",
-                                                  "value": "whereabouts"
-                                                },
-                                                "$NOUNS": [
-                                                  {
-                                                    "id": "id-17736705b90-56",
-                                                    "type": "named_noun",
-                                                    "value": {
-                                                      "$DETERMINER": {
-                                                        "id": "id-17736705b90-57",
-                                                        "type": "determiner",
-                                                        "value": "$THE"
-                                                      },
-                                                      "$NAME": {
-                                                        "id": "id-17736705b90-58",
-                                                        "type": "noun_name",
-                                                        "value": "basket"
-                                                      }
-                                                    }
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "$TAIL": []
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "lab"
+                    ]
                   }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [],
+                    "room"
+                  ]
                 }
-              }
-            }
+              ]
+            },
+            []
           ]
-        }
-      },
-      {
-        "id": "id-1771724a77b-149",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-1771724a77b-150",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1771724a77b-151",
-                "type": "test_statement",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-1771724a77b-152",
-                    "type": "test_name",
-                    "value": "whereabouts"
-                  },
-                  "$TEST": {
-                    "id": "id-1771724a77b-153",
-                    "type": "testing",
-                    "value": {
-                      "id": "id-1771724a77b-154",
-                      "type": "test_output",
-                      "value": {
-                        "$LINES": {
-                          "id": "id-1771724a77b-155",
-                          "type": "lines",
-                          "value": "Mildred's parent is the lab.\nThe basket's parent is the table.\nMildred is in the lab.\nThe scalpel is in the lab.\nThe table encloses the basket.\nThe basket encloses the apple.\nThe basket contains the apple.\nThe  contains the basket.\nThe  supports the apple.\nThe table supports the basket.\nThe basket's parent: table.\nThe scalpel's parent: Mildred.\nMildred owns the pen.\nThe  carries the pen.\nMildred carries the scalpel.\nThe pen is in Mildred's pocket.\nThe scalpel is worn by: .\nThe common ancestor of the pen and itself: pen.\nThe common ancestor of the pen and a sibling: Mildred.\nThe common ancestor of the sibling and a pen: Mildred.\nThe common ancestor of the pen and its owner: Mildred.\nThe common ancestor of the pen's owner and the pen: Mildred.\n"
-                        }
-                      }
-                    }
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "basket"
+                    ]
                   }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [],
+                    "container"
+                  ]
                 }
-              }
-            }
+              ]
+            },
+            []
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "scalpel"
+                    ]
+                  }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [
+                      "not worn"
+                    ],
+                    "prop"
+                  ]
+                }
+              ]
+            },
+            []
           ]
         }
-      },
-      {
-        "id": "id-1771724a77b-156",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "Comment:": "Mildred and the table are in the room. The basket is on the table. The apple is in the basket. Mildred is carrying the scalpel and wearing the pen."
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestScene:story:": [
+            "whereabouts",
             {
-              "id": "id-1771724a77b-157",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1771724a77b-158",
-                "type": "test_rule",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-1771724a77b-159",
-                    "type": "test_name",
-                    "value": "whereabouts"
-                  },
-                  "$HOOK": {
-                    "id": "id-1771724a77b-160",
-                    "type": "program_hook",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-1771724a77b-161",
-                        "type": "activity",
-                        "value": {
-                          "$EXE": [
-                            {
-                              "id": "id-17737908c16-0",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-17737908c16-1",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-17737908c16-2",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-1773799a5eb-58",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-1773799a5eb-59",
-                                          "type": "lines",
-                                          "value": "Mildred's parent is {the: {parentOf: .Mildred}}.\nThe basket's parent is {the: {parentOf: .basket}}.\nMildred is in {the: {CurrentRoom: .Mildred}}.\nThe scalpel is in {the: {CurrentRoom: .scalpel}}.\n{The: {locationOf: .basket}|capitalize!} encloses the basket.\n{The: {locationOf: .apple}|capitalize!} encloses the apple.\n{The: {containerOf: .apple}|capitalize!} contains the apple.\n{The: {containerOf: .basket}|capitalize!} contains the basket.\n{The: {supporterOf: .apple}|capitalize!} supports the apple.\n{The: {supporterOf: .basket}|capitalize!} supports the basket.\nThe basket's parent: {name_of: {parentOf: .basket}}.\nThe scalpel's parent: {name_of: {parentOf: .scalpel}}.\n{The: {holderOf: .pen}|capitalize!} owns the pen.\n{The: {carrierOf: .pen}|capitalize!} carries the pen.\n{The: {carrierOf: .scalpel}|capitalize!} carries the scalpel.\nThe pen is in {the: {wearerOf: .pen}}'s pocket.\nThe scalpel is worn by: {name_of: {wearerOf: .scalpel}}.\n"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
+              "Story:": [
+                {
+                  "Paragraph:": [
+                    {
+                      "NounStatement:tail:": [
+                        {
+                          "Lede:nounPhrase nounRelation:": [
+                            [
+                              {
+                                "NamedNoun:name:": [
+                                  "the",
+                                  "table"
+                                ]
+                              },
+                              {
+                                "NamedNoun:name:": [
+                                  "our",
+                                  "Mildred"
+                                ]
                               }
-                            },
+                            ],
                             {
-                              "id": "id-177f1aff274-28",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177f1aff274-29",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-177f1aff274-30",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177f1aff274-31",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-177f1aff274-32",
-                                          "type": "lines",
-                                          "value": "The common ancestor of the pen and itself: {name_of: {common_ancestor: .pen .pen}}."
-                                        }
-                                      }
-                                    }
+                              "NounRelation areBeing:relation:nouns:": [
+                                "are",
+                                "whereabouts",
+                                [
+                                  {
+                                    "NamedNoun:name:": [
+                                      "the",
+                                      "lab"
+                                    ]
                                   }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177f1aff274-33",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177f1aff274-34",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-177f1aff274-35",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177f1aff274-36",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-177f1aff274-37",
-                                          "type": "lines",
-                                          "value": "The common ancestor of the pen and a sibling: {name_of: {common_ancestor: .pen .scalpel}}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177f1aff274-38",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177f1aff274-39",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-177f1aff274-40",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177f1aff274-41",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-177f1aff274-42",
-                                          "type": "lines",
-                                          "value": "The common ancestor of the sibling and a pen: {name_of: {common_ancestor: .scalpel .pen}}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177f1aff274-43",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177f1aff274-44",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-177f1aff274-45",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177f1aff274-46",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-177f1aff274-47",
-                                          "type": "lines",
-                                          "value": "The common ancestor of the pen and its owner: {name_of: {common_ancestor: .Mildred .pen}}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            {
-                              "id": "id-177f1aff274-48",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177f1aff274-49",
-                                "type": "say_text",
-                                "value": {
-                                  "$TEXT": {
-                                    "id": "id-177f1aff274-50",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177f1aff274-51",
-                                      "type": "render_template",
-                                      "value": {
-                                        "$TEMPLATE": {
-                                          "id": "id-177f1aff274-52",
-                                          "type": "lines",
-                                          "value": "The common ancestor of the pen's owner and the pen: {name_of: {common_ancestor: .pen .Mildred}}."
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
+                                ]
+                              ]
                             }
                           ]
-                        }
-                      }
+                        },
+                        []
+                      ]
                     }
-                  }
+                  ]
+                },
+                {
+                  "Paragraph:": [
+                    {
+                      "NounStatement:tail:": [
+                        {
+                          "Lede:nounPhrase nounRelation:": [
+                            [
+                              {
+                                "NamedNoun:name:": [
+                                  "the",
+                                  "basket"
+                                ]
+                              }
+                            ],
+                            {
+                              "NounRelation areBeing:relation:nouns:": [
+                                "is",
+                                "whereabouts",
+                                [
+                                  {
+                                    "NamedNoun:name:": [
+                                      "the",
+                                      "table"
+                                    ]
+                                  }
+                                ]
+                              ]
+                            }
+                          ]
+                        },
+                        []
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Paragraph:": [
+                    {
+                      "NounStatement:tail:": [
+                        {
+                          "Lede:nounPhrase nounRelation:": [
+                            [
+                              {
+                                "NamedNoun:name:": [
+                                  "the",
+                                  "scalpel"
+                                ]
+                              },
+                              {
+                                "NamedNoun:name:": [
+                                  "the",
+                                  "pen"
+                                ]
+                              }
+                            ],
+                            {
+                              "NounRelation areBeing:relation:nouns:": [
+                                "are",
+                                "whereabouts",
+                                [
+                                  {
+                                    "NamedNoun:name:": [
+                                      "our",
+                                      "Mildred"
+                                    ]
+                                  }
+                                ]
+                              ]
+                            }
+                          ]
+                        },
+                        []
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Paragraph:": [
+                    {
+                      "NounStatement:tail:": [
+                        {
+                          "Lede:nounPhrase nounTraits:": [
+                            [
+                              {
+                                "NamedNoun:name:": [
+                                  "the",
+                                  "pen"
+                                ]
+                              }
+                            ],
+                            {
+                              "NounTraits:trait:": [
+                                "is",
+                                [
+                                  "worn"
+                                ]
+                              ]
+                            }
+                          ]
+                        },
+                        []
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Paragraph:": [
+                    {
+                      "NounStatement:tail:": [
+                        {
+                          "Lede:nounPhrase nounRelation:": [
+                            [
+                              {
+                                "NamedNoun:name:": [
+                                  "the",
+                                  "apple"
+                                ]
+                              }
+                            ],
+                            {
+                              "NounRelation areBeing:relation:nouns:": [
+                                "is",
+                                "whereabouts",
+                                [
+                                  {
+                                    "NamedNoun:name:": [
+                                      "the",
+                                      "basket"
+                                    ]
+                                  }
+                                ]
+                              ]
+                            }
+                          ]
+                        },
+                        []
+                      ]
+                    }
+                  ]
                 }
-              }
+              ]
             }
           ]
         }
-      }
-    ]
-  }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestStatement:test:": [
+            "whereabouts",
+            {
+              "TestOutput:": "Mildred's parent is the lab.\nThe basket's parent is the table.\nMildred is in the lab.\nThe scalpel is in the lab.\nThe table encloses the basket.\nThe basket encloses the apple.\nThe basket contains the apple.\nThe  contains the basket.\nThe  supports the apple.\nThe table supports the basket.\nThe basket's parent: table.\nThe scalpel's parent: Mildred.\nMildred owns the pen.\nThe  carries the pen.\nMildred carries the scalpel.\nThe pen is in Mildred's pocket.\nThe scalpel is worn by: .\nThe common ancestor of the pen and itself: pen.\nThe common ancestor of the pen and a sibling: Mildred.\nThe common ancestor of the sibling and a pen: Mildred.\nThe common ancestor of the pen and its owner: Mildred.\nThe common ancestor of the pen's owner and the pen: Mildred.\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestRule:hook activity:": [
+            "whereabouts",
+            {
+              "Act:": [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "Mildred's parent is {the: {parentOf: .Mildred}}.\nThe basket's parent is {the: {parentOf: .basket}}.\nMildred is in {the: {CurrentRoom: .Mildred}}.\nThe scalpel is in {the: {CurrentRoom: .scalpel}}.\n{The: {locationOf: .basket}|capitalize!} encloses the basket.\n{The: {locationOf: .apple}|capitalize!} encloses the apple.\n{The: {containerOf: .apple}|capitalize!} contains the apple.\n{The: {containerOf: .basket}|capitalize!} contains the basket.\n{The: {supporterOf: .apple}|capitalize!} supports the apple.\n{The: {supporterOf: .basket}|capitalize!} supports the basket.\nThe basket's parent: {name_of: {parentOf: .basket}}.\nThe scalpel's parent: {name_of: {parentOf: .scalpel}}.\n{The: {holderOf: .pen}|capitalize!} owns the pen.\n{The: {carrierOf: .pen}|capitalize!} carries the pen.\n{The: {carrierOf: .scalpel}|capitalize!} carries the scalpel.\nThe pen is in {the: {wearerOf: .pen}}'s pocket.\nThe scalpel is worn by: {name_of: {wearerOf: .scalpel}}.\n"
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The common ancestor of the pen and itself: {name_of: {common_ancestor: .pen .pen}}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The common ancestor of the pen and a sibling: {name_of: {common_ancestor: .pen .scalpel}}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The common ancestor of the sibling and a pen: {name_of: {common_ancestor: .scalpel .pen}}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The common ancestor of the pen and its owner: {name_of: {common_ancestor: .Mildred .pen}}."
+                  }
+                },
+                {
+                  "Say:": {
+                    "RenderTemplate:": "The common ancestor of the pen's owner and the pen: {name_of: {common_ancestor: .pen .Mildred}}."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

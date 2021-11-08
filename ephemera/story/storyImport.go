@@ -5,41 +5,18 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type GenericImport interface {
-	Import(*Importer) error
-}
-
+// top level imports
 type StoryStatement interface {
-	ImportPhrase(k *Importer) error
+	ImportPhrase(*Importer) error
 }
 
-// story is a bunch of paragraphs
-func (op *Story) ImportStory(k *Importer) (err error) {
-	if els := op.Paragraph; els != nil {
-		for _, el := range *els {
-			if e := el.ImportParagraph(k); e != nil {
-				err = errutil.Append(err, e)
-			}
-		}
-	}
-	return
-}
-
-// paragraph is a bunch of statements on the same line
-func (op *Paragraph) ImportParagraph(k *Importer) (err error) {
-	if els := op.StoryStatement; els != nil {
-		for _, el := range *els {
-			if e := el.ImportPhrase(k); e != nil {
-				err = errutil.Append(err, e)
-			}
-		}
-	}
-	return
+type nounImporter interface {
+	importNouns(*Importer) error
 }
 
 // (the) colors are red, blue, or green.
 func (op *AspectTraits) ImportPhrase(k *Importer) (err error) {
-	if aspect, e := op.Aspect.NewName(k); e != nil {
+	if aspect, e := NewAspect(k, op.Aspect); e != nil {
 		err = e
 	} else {
 		err = op.TraitPhrase.ImportTraits(k, aspect)
@@ -51,9 +28,9 @@ func (op *AspectTraits) ImportPhrase(k *Importer) (err error) {
 func (op *Certainties) ImportPhrase(k *Importer) (err error) {
 	if certainty, e := op.Certainty.ImportString(k); e != nil {
 		err = e
-	} else if trait, e := op.Trait.NewName(k); e != nil {
+	} else if trait, e := NewTrait(k, op.Trait); e != nil {
 		err = e
-	} else if kind, e := op.PluralKinds.NewName(k); e != nil {
+	} else if kind, e := NewPluralKinds(k, op.PluralKinds); e != nil {
 		err = e
 	} else {
 		k.NewCertainty(certainty, trait, kind)
@@ -67,19 +44,19 @@ func (op *Comment) ImportPhrase(k *Importer) (err error) {
 }
 
 func (op *GrammarDecl) ImportPhrase(k *Importer) error {
-	_, e := k.NewGob("grammar", &grammar.GrammarDecl{op.Grammar})
+	_, e := k.NewProg("grammar", &grammar.Grammar{op.Grammar})
 	return e
 }
 
 // ex. The description of the nets is xxx
 func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
-	if prop, e := op.Property.NewName(k); e != nil {
+	if prop, e := NewProperty(k, op.Property); e != nil {
 		err = e
-	} else if text, e := op.Lines.ConvertText(); e != nil {
+	} else if text, e := ConvertText(op.Lines.String()); e != nil {
 		err = e
-	} else if e := k.Recent.Nouns.CollectSubjects(func() (err error) {
+	} else if e := k.Env().Recent.Nouns.CollectSubjects(func() (err error) {
 		for _, n := range op.Nouns {
-			if e := n.Import(k); e != nil {
+			if e := n.ImportNouns(k); e != nil {
 				err = errutil.Append(err, e)
 			}
 		}
@@ -87,25 +64,26 @@ func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
 	}); e != nil {
 		err = e
 	} else {
-		for _, noun := range k.Recent.Nouns.Subjects {
+		for _, noun := range k.Env().Recent.Nouns.Subjects {
 			k.NewValue(noun, prop, text)
 		}
 	}
 	return
 }
+
 func (op *NounStatement) ImportPhrase(k *Importer) (err error) {
-	if e := op.Lede.Import(k); e != nil {
+	if e := op.Lede.ImportNouns(k); e != nil {
 		err = e
 	} else {
 		if els := op.Tail; els != nil {
-			for _, el := range *els {
-				if e := el.Import(k); e != nil {
+			for _, el := range els {
+				if e := el.ImportNouns(k); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}
 		}
 		if err == nil && op.Summary != nil {
-			err = op.Summary.Import(k)
+			err = op.Summary.ImportNouns(k)
 		}
 	}
 	return
@@ -113,20 +91,20 @@ func (op *NounStatement) ImportPhrase(k *Importer) (err error) {
 
 // ex. On the beach are shells.
 func (op *RelativeToNoun) ImportPhrase(k *Importer) (err error) {
-	if relation, e := op.Relation.NewName(k); e != nil {
+	if relation, e := NewRelation(k, op.Relation); e != nil {
 		err = e
-	} else if e := k.Recent.Nouns.CollectObjects(func() error {
+	} else if e := k.Env().Recent.Nouns.CollectObjects(func() error {
 		return ImportNamedNouns(k, op.Nouns)
 	}); e != nil {
 		err = e
-	} else if e := k.Recent.Nouns.CollectSubjects(func() error {
+	} else if e := k.Env().Recent.Nouns.CollectSubjects(func() error {
 		return ImportNamedNouns(k, op.Nouns1)
 	}); e != nil {
 		err = e
 	} else {
-		domain := k.currentDomain()
-		for _, object := range k.Recent.Nouns.Objects {
-			for _, subject := range k.Recent.Nouns.Subjects {
+		domain := k.Env().Current.Domain
+		for _, object := range k.Env().Recent.Nouns.Objects {
+			for _, subject := range k.Env().Recent.Nouns.Subjects {
 				k.NewRelative(subject, relation, object, domain)
 			}
 		}

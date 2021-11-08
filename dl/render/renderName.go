@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -14,21 +14,6 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
-
-// Name handles changing a template like {.boombip} into text.
-// if the name is a variable containing an object name: return the printed object name ( via "print name" )
-// if the name is a variable with some other text: return that text.
-// if the name isn't a variable but refers to some object: return that object's printed object name.
-// otherwise, its an error.
-type RenderName struct {
-	Name string
-}
-
-func (op *RenderName) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "internal",
-	}
-}
 
 func (op *RenderName) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if v, e := op.getName(run); e != nil {
@@ -77,11 +62,10 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *RenderName) getPrintedNamedOf(run rt.Runtime, objectName string) (ret g.Value, err error) {
-	if printedName, e := safe.GetText(run, &core.Buffer{core.MakeActivity(
-		&core.Determine{
-			Pattern:   "print_name",
-			Arguments: core.Args(&core.FromText{&core.Text{objectName}}),
-		})}); e != nil {
+	if printedName, e := safe.GetText(run, &core.BufferText{core.MakeActivity(
+		&core.CallPattern{
+			Pattern:   value.PatternName{Str: "print_name"},
+			Arguments: core.Args(&core.FromText{&core.TextValue{objectName}})})}); e != nil {
 		err = e
 	} else {
 		ret = printedName

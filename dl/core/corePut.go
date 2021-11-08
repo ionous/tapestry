@@ -1,29 +1,9 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-/**
- * put: eval,
- * intoObj/intoObjNamed/intoRec: varName,objName,textEval,
- * atField: string.
- */
-type PutAtField struct {
-	From    rt.Assignment    `if:"selector"`
-	Into    IntoTargetFields `if:"selector"`
-	AtField string
-}
-
-func (*PutAtField) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "put", Role: composer.Command},
-		Group:  "variables",
-		Desc:   "Put into field: put a value into the field of an record or object",
-	}
-}
 
 func (op *PutAtField) Execute(run rt.Runtime) (err error) {
 	if e := op.pack(run); e != nil {

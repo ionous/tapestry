@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
@@ -52,17 +51,14 @@ func pushBack(src []string, ins ...string) (ret string, err error) {
 func push(src []string, front bool, ins []string) (ret string, err error) {
 	if run, vals, e := newListTime(src, nil); e != nil {
 		err = e
+	} else if e := safe.Run(run, &list.PutEdge{Into: &list.IntoTxtList{N("source")}, From: FromTs(ins), AtEdge: B(front)}); e != nil {
+		err = e
+	} else if strs, e := vals.GetNamedField("source"); e != nil {
+		err = e
 	} else {
-		front := list.Edge(front)
-		if e := safe.Run(run, &list.PutEdge{Into: &list.IntoTxtList{core.Variable{Str: "source"}}, From: FromTs(ins), AtEdge: front}); e != nil {
-			err = e
-		} else if strs, e := vals.GetNamedField("source"); e != nil {
-			err = e
-		} else {
-			strs := strs.Strings()
-			next := joinStrings(strs) // get the variable set by splice
-			ret = strconv.Itoa(len(strs)) + "; " + next
-		}
+		strs := strs.Strings()
+		next := joinStrings(strs) // get the variable set by splice
+		ret = strconv.Itoa(len(strs)) + "; " + next
 	}
 	return
 }

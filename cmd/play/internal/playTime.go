@@ -3,6 +3,7 @@ package internal
 import (
 	"database/sql"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/ident"
 	"git.sr.ht/~ionous/iffy/parser"
 	"git.sr.ht/~ionous/iffy/qna"
@@ -23,7 +24,7 @@ type Playtime struct {
 func NewPlaytime(db *sql.DB, player, startWhere string) *Playtime {
 	var ps tables.Prep
 	return &Playtime{
-		Runner:   qna.NewRuntime(db),
+		Runner:   qna.NewRuntime(db, iffy.AllSignatures),
 		location: startWhere,
 		player:   ident.IdOf(player),
 		hasName: ps.Prep(db,

@@ -69,10 +69,10 @@ func TestReduce(t *testing.T) {
 	}
 }
 
-var reduce = list.Reduce{
-	FromList:     &core.FromRecords{&core.Var{"fruits"}},
-	IntoValue:    "results",
-	UsingPattern: "reduce",
+var reduce = list.ListReduce{
+	FromList:     &core.FromRecords{V("fruits")},
+	IntoValue:    W("results"),
+	UsingPattern: W("reduce"),
 }
 
 // join each record in turn
@@ -85,7 +85,7 @@ var reduceRecords = testpat.Pattern{
 			Var: N("out"),
 			From: &core.FromText{&core.Join{Sep: T(", "), Parts: []rt.TextEval{
 				V("out"),
-				&core.GetAtField{Field: "name", From: &core.FromVar{N("in")}},
+				&core.GetAtField{Field: W("name"), From: &core.FromVar{N("in")}},
 			}}},
 		},
 	},

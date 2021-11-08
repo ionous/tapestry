@@ -2,8 +2,6 @@ package list
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
 )
 
 // ListIterator defines a variable name
@@ -11,37 +9,6 @@ type ListIterator interface {
 	// ? maybe we could be the thing that genates the record?
 	Name() string
 	Affinity() affine.Affinity
-}
-
-type AsNum struct {
-	Var core.Variable `if:"selector"`
-}
-type AsTxt struct {
-	Var core.Variable `if:"selector"`
-}
-type AsRec struct {
-	Var core.Variable `if:"selector"`
-}
-
-func (*AsNum) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Role: composer.Selector},
-		Desc:   "Define the name of a number variable.",
-	}
-}
-
-func (*AsTxt) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Role: composer.Selector},
-		Desc:   "Define the name of a text variable.",
-	}
-}
-
-func (*AsRec) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Role: composer.Selector},
-		Desc:   "Define the name of a record variable.",
-	}
 }
 
 func (op *AsNum) Name() string {

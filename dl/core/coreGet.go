@@ -2,26 +2,11 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
-
-// GetAtField a property value from an object by name.
-type GetAtField struct {
-	Field string           `if:"selector"`
-	From  FromSourceFields `if:"selector"`
-}
-
-func (*GetAtField) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "get", Role: composer.Function},
-		Group:  "variables",
-		Desc:   "Get at field: Get a value from a record.",
-	}
-}
 
 func (op *GetAtField) Affinity() affine.Affinity { return "" }
 

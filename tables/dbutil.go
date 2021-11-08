@@ -16,7 +16,6 @@ func Must(db *sql.DB, q string, args ...interface{}) {
 	if _, e := db.Exec(q, args...); e != nil {
 		panic(e)
 	}
-	return
 }
 
 func MustGetId(db *sql.DB, q string, args ...interface{}) (ret int64) {

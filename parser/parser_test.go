@@ -39,9 +39,9 @@ func nouns(f ...Filter) Scanner {
 }
 
 // changes the bounds of its first scanner in response to the results of its last scanner.
-func retarget(s ...Scanner) Scanner {
-	return &Target{s}
-}
+// func retarget(s ...Scanner) Scanner {
+// 	return &Target{s}
+// }
 
 // swaps the first detected noun with the second detected noun
 func reverse(s ...Scanner) Scanner {

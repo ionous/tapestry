@@ -1,1150 +1,370 @@
 {
-  "id": "id-17798c5d676-19",
-  "type": "story",
-  "value": {
-    "$PARAGRAPH": [
-      {
-        "id": "id-17798c5d676-20",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " agents",
+            "object"
+          ]
+        },
+        {
+          "KindsOfKind:singularKind:": [
+            " players",
+            "agent"
+          ]
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-177fb7e29e7-53",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb7e29e7-54",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-177fb7e29e7-55",
-                    "type": "plural_kinds",
-                    "value": " agents"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-177fb7e29e7-56",
-                    "type": "singular_kind",
-                    "value": "object"
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "the",
+                      "player"
+                    ]
                   }
-                }
-              }
-            },
-            {
-              "id": "id-17798c5d676-21",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798c5d676-22",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798c5d676-23",
-                    "type": "plural_kinds",
-                    "value": " players"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798c5d676-24",
-                    "type": "singular_kind",
-                    "value": "agent"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798c5d676-25",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798c5d676-26",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-17798c5d676-27",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-17798c5d676-28",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-17798c5d676-29",
-                              "type": "determiner",
-                              "value": "$THE"
-                            },
-                            "$NAME": {
-                              "id": "id-17798c5d676-30",
-                              "type": "noun_name",
-                              "value": "player"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-17798c5d676-31",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-17798c5d676-32",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-17798c5d676-33",
-                                "type": "are_an",
-                                "value": "$ISA"
-                              },
-                              "$TRAIT": [],
-                              "$KIND": {
-                                "id": "id-17798c5d676-34",
-                                "type": "singular_kind",
-                                "value": "players"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
-                }
-              }
-            },
-            {
-              "id": "id-17798c5d676-35",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798c5d676-36",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798c5d676-37",
-                    "type": "plural_kinds",
-                    "value": " agents"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798c5d676-38",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798c5d676-39",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798c5d676-40",
-                          "type": "property",
-                          "value": "pawn"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798c5d676-41",
-                          "type": "property_type",
-                          "value": {
-                            "$PRIMITIVE": {
-                              "id": "id-177db4bdeb4-5",
-                              "type": "primitive_type",
-                              "value": "$TEXT"
-                            }
-                          }
-                        }
-                      }
-                    }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isa",
+                    [],
+                    "players"
                   ]
                 }
-              }
+              ]
             },
-            {
-              "id": "id-1783d2aa0bb-153",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1783d2aa0bb-160",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-1783d2aa0bb-161",
-                    "type": "plural_kinds",
-                    "value": "actors"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-1783d2aa0bb-162",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-1783d2aa0bb-163",
-                          "type": "determiner",
-                          "value": "$AN"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-1783d2aa0bb-164",
-                          "type": "property",
-                          "value": "in darkness"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-1783d2aa0bb-165",
-                          "type": "property_type",
-                          "value": {
-                            "$PRIMITIVE": {
-                              "id": "id-1783d2aa0bb-166",
-                              "type": "primitive_type",
-                              "value": "$BOOL"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
+            []
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " agents",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "pawn",
+                  "text"
+                ]
               }
-            }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            "actors",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "an",
+                  "in darkness",
+                  "bool"
+                ]
+              }
+            ]
           ]
         }
-      },
-      {
-        "id": "id-177db4bdeb4-13",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "Comment:": "this should be injected rather than be part of the library."
+        },
+        {
+          "NounStatement:tail:": [
             {
-              "id": "id-177db4bdeb4-14",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177db4bdeb4-15",
-                "type": "comment",
-                "value": {
-                  "$LINES": {
-                    "id": "id-177db4bdeb4-16",
-                    "type": "lines",
-                    "value": "this should be injected rather than be part of the library."
+              "Lede:nounPhrase kindOfNoun:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "our",
+                      "self"
+                    ]
                   }
+                ],
+                {
+                  "KindOfNoun:trait:kind:": [
+                    "isan",
+                    [],
+                    "actor"
+                  ]
                 }
+              ]
+            },
+            [
+              {
+                "Tail:nounPhrase nounTraits:": [
+                  "it",
+                  {
+                    "NounTraits:trait:": [
+                      "is",
+                      [
+                        "privately named"
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "pawn",
+            [
+              {
+                "NamedNoun:name:": [
+                  "the",
+                  "player"
+                ]
+              }
+            ],
+            "#entire_game::self"
+          ]
+        },
+        {
+          "NounAssignment:nouns:lines:": [
+            "printed name",
+            [
+              {
+                "NamedNoun:name:": [
+                  "our",
+                  "self"
+                ]
+              }
+            ],
+            "you"
+          ]
+        },
+        {
+          "NounStatement:tail:": [
+            {
+              "Lede:nounPhrase nounTraits:": [
+                [
+                  {
+                    "NamedNoun:name:": [
+                      "our",
+                      "self"
+                    ]
+                  }
+                ],
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "proper named"
+                    ]
+                  ]
+                }
+              ]
+            },
+            []
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:": [
+            "patterns",
+            "isPlayer",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "obj",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "object"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternActions:patternReturn:patternRules:": [
+            "isPlayer",
+            {
+              "PatternReturn:": {
+                "VariableDecl:name:type primitive:": [
+                  "our",
+                  "success",
+                  "bool"
+                ]
               }
             },
             {
-              "id": "id-177db4bdeb4-17",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177db4bdeb4-18",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-177db4bdeb4-19",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-177db4bdeb4-20",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-177db4bdeb4-21",
-                              "type": "determiner",
-                              "value": "$OUR"
-                            },
-                            "$NAME": {
-                              "id": "id-177db4bdeb4-22",
-                              "type": "noun_name",
-                              "value": "self"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-177db4bdeb4-23",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$KIND_OF_NOUN": {
-                            "id": "id-177db4bdeb4-24",
-                            "type": "kind_of_noun",
-                            "value": {
-                              "$ARE_AN": {
-                                "id": "id-177db4bdeb4-25",
-                                "type": "are_an",
-                                "value": "$ISAN"
-                              },
-                              "$TRAIT": [],
-                              "$KIND": {
-                                "id": "id-177db4bdeb4-26",
-                                "type": "singular_kind",
-                                "value": "actor"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": [
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
                     {
-                      "id": "id-177db4bdeb4-27",
-                      "type": "tail",
-                      "value": {
-                        "$PRONOUN": {
-                          "id": "id-177db4bdeb4-28",
-                          "type": "pronoun",
-                          "value": "$IT"
-                        },
-                        "$NOUN_PHRASE": {
-                          "id": "id-177db4bdeb4-29",
-                          "type": "noun_phrase",
-                          "value": {
-                            "$NOUN_TRAITS": {
-                              "id": "id-177db4bdeb4-30",
-                              "type": "noun_traits",
-                              "value": {
-                                "$ARE_BEING": {
-                                  "id": "id-177db4bdeb4-31",
-                                  "type": "are_being",
-                                  "value": "$IS"
-                                },
-                                "$TRAIT": [
+                      "KindOf:is:": [
+                        "@obj",
+                        "actors"
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "success",
+                            {
+                              "FromBool:": {
+                                "Cmp:is:txt:": [
+                                  "@obj",
+                                  "Equals",
                                   {
-                                    "id": "id-177db4bdeb4-32",
-                                    "type": "trait",
-                                    "value": "privately named"
+                                    "Get:from:": [
+                                      "pawn",
+                                      {
+                                        "ObjFields:": "player"
+                                      }
+                                    ]
                                   }
                                 ]
                               }
                             }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "id-177db4bdeb4-71",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177db4bdeb4-65",
-                "type": "noun_assignment",
-                "value": {
-                  "$PROPERTY": {
-                    "id": "id-177db4bdeb4-66",
-                    "type": "property",
-                    "value": "pawn"
-                  },
-                  "$NOUNS": [
-                    {
-                      "id": "id-177db4bdeb4-67",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-177db4bdeb4-68",
-                          "type": "determiner",
-                          "value": "$THE"
-                        },
-                        "$NAME": {
-                          "id": "id-177db4bdeb4-69",
-                          "type": "noun_name",
-                          "value": "player"
-                        }
-                      }
-                    }
-                  ],
-                  "$LINES": {
-                    "id": "id-177db4bdeb4-70",
-                    "type": "lines",
-                    "value": "#entire_game::self"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-1783e90dd4a-27",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1783e90dd4a-28",
-                "type": "noun_assignment",
-                "value": {
-                  "$PROPERTY": {
-                    "id": "id-1783e90dd4a-29",
-                    "type": "property",
-                    "value": "printed name"
-                  },
-                  "$NOUNS": [
-                    {
-                      "id": "id-1783e90dd4a-30",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-1783e90dd4a-31",
-                          "type": "determiner",
-                          "value": "$OUR"
-                        },
-                        "$NAME": {
-                          "id": "id-1783e90dd4a-32",
-                          "type": "noun_name",
-                          "value": "self"
-                        }
-                      }
-                    }
-                  ],
-                  "$LINES": {
-                    "id": "id-1783e90dd4a-33",
-                    "type": "lines",
-                    "value": "you"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-1783e9a0605-19",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1783e9a0605-20",
-                "type": "noun_statement",
-                "value": {
-                  "$LEDE": {
-                    "id": "id-1783e9a0605-21",
-                    "type": "lede",
-                    "value": {
-                      "$NOUNS": [
-                        {
-                          "id": "id-1783e9a0605-22",
-                          "type": "named_noun",
-                          "value": {
-                            "$DETERMINER": {
-                              "id": "id-1783e9a0605-23",
-                              "type": "determiner",
-                              "value": "$OUR"
-                            },
-                            "$NAME": {
-                              "id": "id-1783e9a0605-24",
-                              "type": "noun_name",
-                              "value": "self"
-                            }
-                          }
-                        }
-                      ],
-                      "$NOUN_PHRASE": {
-                        "id": "id-1783e9a0605-25",
-                        "type": "noun_phrase",
-                        "value": {
-                          "$NOUN_TRAITS": {
-                            "id": "id-1783e9a0605-26",
-                            "type": "noun_traits",
-                            "value": {
-                              "$ARE_BEING": {
-                                "id": "id-1783e9a0605-27",
-                                "type": "are_being",
-                                "value": "$IS"
-                              },
-                              "$TRAIT": [
-                                {
-                                  "id": "id-1783e9a0605-28",
-                                  "type": "trait",
-                                  "value": "proper named"
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$TAIL": []
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": "id-177db4bdeb4-98",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-177db4bdeb4-99",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177db4bdeb4-100",
-                "type": "pattern_decl",
-                "value": {
-                  "$TYPE": {
-                    "id": "id-1781a872257-125",
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
-                  },
-                  "$NAME": {
-                    "id": "id-177db4bdeb4-101",
-                    "type": "pattern_name",
-                    "value": "isPlayer"
-                  },
-                  "$OPTVARS": {
-                    "id": "id-177db4bdeb4-111",
-                    "type": "pattern_variables_tail",
-                    "value": {
-                      "$VARIABLE_DECL": [
-                        {
-                          "id": "id-177db4bdeb4-112",
-                          "type": "variable_decl",
-                          "value": {
-                            "$AN": {
-                              "id": "id-177db4bdeb4-113",
-                              "type": "determiner",
-                              "value": "$AN"
-                            },
-                            "$NAME": {
-                              "id": "id-177db4bdeb4-114",
-                              "type": "variable_name",
-                              "value": "obj"
-                            },
-                            "$TYPE": {
-                              "id": "id-177db4bdeb4-115",
-                              "type": "variable_type",
-                              "value": {
-                                "$OBJECT": {
-                                  "id": "id-177db4bdeb4-116",
-                                  "type": "object_type",
-                                  "value": {
-                                    "$AN": {
-                                      "id": "id-177db4bdeb4-117",
-                                      "type": "ana",
-                                      "value": "$AN"
-                                    },
-                                    "$KIND": {
-                                      "id": "id-177db4bdeb4-118",
-                                      "type": "singular_kind",
-                                      "value": "object"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
+                          ]
                         }
                       ]
                     }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-177db4bdeb4-104",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177db4bdeb4-119",
-                "type": "pattern_actions",
-                "value": {
-                  "$NAME": {
-                    "id": "id-177db4bdeb4-120",
-                    "type": "pattern_name",
-                    "value": "isPlayer"
-                  },
-                  "$PATTERN_RETURN": {
-                    "id": "id-177db4bdeb4-135",
-                    "type": "pattern_return",
-                    "value": {
-                      "$RESULT": {
-                        "id": "id-177db4bdeb4-136",
-                        "type": "variable_decl",
-                        "value": {
-                          "$AN": {
-                            "id": "id-177db4bdeb4-137",
-                            "type": "determiner",
-                            "value": "$OUR"
-                          },
-                          "$NAME": {
-                            "id": "id-177db4bdeb4-138",
-                            "type": "variable_name",
-                            "value": "success"
-                          },
-                          "$TYPE": {
-                            "id": "id-177db4bdeb4-139",
-                            "type": "variable_type",
-                            "value": {
-                              "$PRIMITIVE": {
-                                "id": "id-177db4bdeb4-140",
-                                "type": "primitive_type",
-                                "value": "$BOOL"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "$PATTERN_RULES": {
-                    "id": "id-177db4bdeb4-121",
-                    "type": "pattern_rules",
-                    "value": {
-                      "$PATTERN_RULE": [
-                        {
-                          "id": "id-177db4bdeb4-122",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-177db4bdeb4-123",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-177db4bdeb4-125",
-                                "type": "is_kind_of",
-                                "value": {
-                                  "$OBJECT": {
-                                    "id": "id-177db4bdeb4-126",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-177db4bdeb4-128",
-                                      "type": "get_var",
-                                      "value": {
-                                        "$NAME": {
-                                          "id": "id-177db4bdeb4-129",
-                                          "type": "text",
-                                          "value": "obj"
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$KIND": {
-                                    "id": "id-177db4bdeb4-127",
-                                    "type": "text",
-                                    "value": "actors"
-                                  }
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-177db4bdeb4-124",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-177db4bdeb4-130",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-177db4bdeb4-131",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-177db4bdeb4-132",
-                                          "type": "assign",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-177db4bdeb4-133",
-                                              "type": "variable_name",
-                                              "value": "success"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-177db4bdeb4-134",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-177db4bdeb4-141",
-                                                "type": "from_bool",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-177db4bdeb4-142",
-                                                    "type": "bool_eval",
-                                                    "value": {
-                                                      "id": "id-177db4bdeb4-143",
-                                                      "type": "compare_text",
-                                                      "value": {
-                                                        "$A": {
-                                                          "id": "id-177db4bdeb4-144",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-177db4bdeb4-148",
-                                                            "type": "get_var",
-                                                            "value": {
-                                                              "$NAME": {
-                                                                "id": "id-177db4bdeb4-149",
-                                                                "type": "text",
-                                                                "value": "obj"
-                                                              }
-                                                            }
-                                                          }
-                                                        },
-                                                        "$IS": {
-                                                          "id": "id-177db4bdeb4-145",
-                                                          "type": "comparator",
-                                                          "value": {
-                                                            "id": "id-177db4bdeb4-147",
-                                                            "type": "equal",
-                                                            "value": {}
-                                                          }
-                                                        },
-                                                        "$B": {
-                                                          "id": "id-177db4bdeb4-146",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-177db4bdeb4-150",
-                                                            "type": "get_at_field",
-                                                            "value": {
-                                                              "$FIELD": {
-                                                                "id": "id-177db4bdeb4-151",
-                                                                "type": "text",
-                                                                "value": "pawn"
-                                                              },
-                                                              "$FROM": {
-                                                                "id": "id-177db4bdeb4-152",
-                                                                "type": "from_source_fields",
-                                                                "value": {
-                                                                  "id": "id-177db4bdeb4-153",
-                                                                  "type": "from_obj",
-                                                                  "value": {
-                                                                    "$OBJECT": {
-                                                                      "id": "id-177db4bdeb4-154",
-                                                                      "type": "text_eval",
-                                                                      "value": {
-                                                                        "id": "id-177db4bdeb4-155",
-                                                                        "type": "text_value",
-                                                                        "value": {
-                                                                          "$TEXT": {
-                                                                            "id": "id-177db4bdeb4-156",
-                                                                            "type": "text",
-                                                                            "value": "player"
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          "id": "id-178394e4c20-41",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-178394e4c20-42",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-178394e4c20-44",
-                                "type": "is_kind_of",
-                                "value": {
-                                  "$OBJECT": {
-                                    "id": "id-178394e4c20-45",
-                                    "type": "text_eval",
-                                    "value": {
-                                      "id": "id-178394e4c20-47",
-                                      "type": "get_var",
-                                      "value": {
-                                        "$NAME": {
-                                          "id": "id-178394e4c20-48",
-                                          "type": "text",
-                                          "value": "obj"
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$KIND": {
-                                    "id": "id-178394e4c20-46",
-                                    "type": "text",
-                                    "value": "agents"
-                                  }
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-178394e4c20-43",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-178394e4c20-49",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-178394e4c20-50",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-178394e4c20-51",
-                                          "type": "assign",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-178394e4c20-52",
-                                              "type": "variable_name",
-                                              "value": "success"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-178394e4c20-53",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-178394e4c20-54",
-                                                "type": "from_bool",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-178394e4c20-55",
-                                                    "type": "bool_eval",
-                                                    "value": {
-                                                      "id": "id-178394e4c20-56",
-                                                      "type": "compare_text",
-                                                      "value": {
-                                                        "$A": {
-                                                          "id": "id-178394e4c20-57",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-178394e4c20-58",
-                                                            "type": "get_var",
-                                                            "value": {
-                                                              "$NAME": {
-                                                                "id": "id-178394e4c20-59",
-                                                                "type": "text",
-                                                                "value": "obj"
-                                                              }
-                                                            }
-                                                          }
-                                                        },
-                                                        "$IS": {
-                                                          "id": "id-178394e4c20-60",
-                                                          "type": "comparator",
-                                                          "value": {
-                                                            "id": "id-178394e4c20-61",
-                                                            "type": "equal",
-                                                            "value": {}
-                                                          }
-                                                        },
-                                                        "$B": {
-                                                          "id": "id-178394e4c20-62",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-178394e4c20-70",
-                                                            "type": "id_of",
-                                                            "value": {
-                                                              "$OBJECT": {
-                                                                "id": "id-178394e4c20-71",
-                                                                "type": "text_eval",
-                                                                "value": {
-                                                                  "id": "id-178394e4c20-72",
-                                                                  "type": "text_value",
-                                                                  "value": {
-                                                                    "$TEXT": {
-                                                                      "id": "id-178394e4c20-73",
-                                                                      "type": "text",
-                                                                      "value": "player"
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": "id-177db4bdeb4-169",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-177db4bdeb4-170",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177db4bdeb4-171",
-                "type": "relative_to_noun",
-                "value": {
-                  "$RELATION": {
-                    "id": "id-177db4bdeb4-172",
-                    "type": "relation_name",
-                    "value": " whereabouts"
-                  },
-                  "$NOUNS": [
-                    {
-                      "id": "id-177db4bdeb4-173",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-177db4bdeb4-174",
-                          "type": "determiner",
-                          "value": "$OUR"
-                        },
-                        "$NAME": {
-                          "id": "id-177db4bdeb4-175",
-                          "type": "noun_name",
-                          "value": "self"
-                        }
-                      }
-                    }
-                  ],
-                  "$ARE_BEING": {
-                    "id": "id-177db4bdeb4-176",
-                    "type": "are_being",
-                    "value": "$IS"
-                  },
-                  "$NOUNS1": [
-                    {
-                      "id": "id-177db4bdeb4-177",
-                      "type": "named_noun",
-                      "value": {
-                        "$DETERMINER": {
-                          "id": "id-177db4bdeb4-178",
-                          "type": "determiner",
-                          "value": "$OUR"
-                        },
-                        "$NAME": {
-                          "id": "id-177db4bdeb4-179",
-                          "type": "noun_name",
-                          "value": " kitchen"
-                        }
-                      }
-                    }
                   ]
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": "id-177db4bdeb4-214",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-177db4bdeb4-215",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177db4bdeb4-225",
-                "type": "test_rule",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-177db4bdeb4-226",
-                    "type": "test_name",
-                    "value": "player tests"
-                  },
-                  "$HOOK": {
-                    "id": "id-177db4bdeb4-227",
-                    "type": "program_hook",
-                    "value": {
-                      "$ACTIVITY": {
-                        "id": "id-177db4bdeb4-228",
-                        "type": "activity",
-                        "value": {
-                          "$EXE": [
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "KindOf:is:": [
+                        "@obj",
+                        "agents"
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "success",
                             {
-                              "id": "id-177db4bdeb4-247",
-                              "type": "execute",
-                              "value": {
-                                "id": "id-177db4bdeb4-244",
-                                "type": "choose_action",
-                                "value": {
-                                  "$IF": {
-                                    "id": "id-177db4bdeb4-245",
-                                    "type": "bool_eval",
-                                    "value": {
-                                      "id": "id-177db4bdeb4-248",
-                                      "type": "determine",
-                                      "value": {
-                                        "$NAME": {
-                                          "id": "id-177db4bdeb4-249",
-                                          "type": "pattern_name",
-                                          "value": "isPlayer"
-                                        },
-                                        "$ARGUMENTS": {
-                                          "id": "id-177db4bdeb4-250",
-                                          "type": "arguments",
-                                          "value": {
-                                            "$ARGS": [
-                                              {
-                                                "id": "id-177db4bdeb4-251",
-                                                "type": "argument",
-                                                "value": {
-                                                  "$NAME": {
-                                                    "id": "id-177db4bdeb4-252",
-                                                    "type": "variable_name",
-                                                    "value": "obj"
-                                                  },
-                                                  "$FROM": {
-                                                    "id": "id-177db4bdeb4-253",
-                                                    "type": "assignment",
-                                                    "value": {
-                                                      "id": "id-177db4bdeb4-254",
-                                                      "type": "from_text",
-                                                      "value": {
-                                                        "$VAL": {
-                                                          "id": "id-177db4bdeb4-255",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-177db4bdeb4-256",
-                                                            "type": "text_value",
-                                                            "value": {
-                                                              "$TEXT": {
-                                                                "id": "id-177db4bdeb4-257",
-                                                                "type": "text",
-                                                                "value": "self"
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            ]
-                                          }
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "$DO": {
-                                    "id": "id-177db4bdeb4-246",
-                                    "type": "activity",
-                                    "value": {
-                                      "$EXE": [
-                                        {
-                                          "id": "id-177db4bdeb4-258",
-                                          "type": "execute",
-                                          "value": {
-                                            "id": "id-177db4bdeb4-259",
-                                            "type": "say_text",
-                                            "value": {
-                                              "$TEXT": {
-                                                "id": "id-177db4bdeb4-260",
-                                                "type": "text_eval",
-                                                "value": {
-                                                  "id": "id-177db4bdeb4-261",
-                                                  "type": "text_value",
-                                                  "value": {
-                                                    "$TEXT": {
-                                                      "id": "id-177db4bdeb4-262",
-                                                      "type": "text",
-                                                      "value": "yes"
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      ]
-                                    }
+                              "FromBool:": {
+                                "Cmp:is:txt:": [
+                                  "@obj",
+                                  "Equals",
+                                  {
+                                    "IdOf:": "player"
                                   }
-                                }
+                                ]
                               }
                             }
                           ]
                         }
-                      }
+                      ]
                     }
-                  }
+                  ]
                 }
-              }
-            },
-            {
-              "id": "id-177db4bdeb4-216",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177db4bdeb4-239",
-                "type": "test_statement",
-                "value": {
-                  "$TEST_NAME": {
-                    "id": "id-177db4bdeb4-240",
-                    "type": "test_name",
-                    "value": "player tests"
-                  },
-                  "$TEST": {
-                    "id": "id-177db4bdeb4-241",
-                    "type": "testing",
-                    "value": {
-                      "id": "id-177db4bdeb4-242",
-                      "type": "test_output",
-                      "value": {
-                        "$LINES": {
-                          "id": "id-177db4bdeb4-243",
-                          "type": "lines",
-                          "value": "yes"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+              ]
             }
           ]
         }
-      },
-      {
-        "id": "id-178eb4377c3-189",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-178eb4377c3-190",
-              "type": "story_statement",
-              "value": {
-                "id": "id-178eb4377c3-191",
-                "type": "grammar_decl",
-                "value": {
-                  "$GRAMMAR": {
-                    "id": "id-178eb4377c3-192",
-                    "type": "grammar_maker",
-                    "value": {
-                      "id": "id-178eb4377c3-193",
-                      "type": "alias",
-                      "value": {
-                        "$NAMES": [
-                          {
-                            "id": "id-178eb4377c3-197",
-                            "type": "text",
-                            "value": "me"
-                          },
-                          {
-                            "id": "id-178eb4377c3-194",
-                            "type": "text",
-                            "value": "myself"
-                          },
-                          {
-                            "id": "id-178eb4377c3-196",
-                            "type": "text",
-                            "value": "self"
-                          }
-                        ],
-                        "$AS_NOUN": {
-                          "id": "id-178eb4377c3-195",
-                          "type": "text",
-                          "value": "player"
-                        }
-                      }
-                    }
-                  }
-                }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "RelativeToNoun:nouns:areBeing:nouns1:": [
+            " whereabouts",
+            [
+              {
+                "NamedNoun:name:": [
+                  "our",
+                  "self"
+                ]
               }
+            ],
+            "is",
+            [
+              {
+                "NamedNoun:name:": [
+                  "our",
+                  " kitchen"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "TestRule:hook activity:": [
+            "player tests",
+            {
+              "Act:": [
+                {
+                  "If:do:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                {
+                                  "FromTxt:": "self"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Say:": "yes"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "TestStatement:test:": [
+            "player tests",
+            {
+              "TestOutput:": "yes"
             }
           ]
         }
-      }
-    ]
-  }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "GrammarDecl:": {
+            "Alias:asNoun:": [
+              [
+                "me",
+                "myself",
+                "self"
+              ],
+              "player"
+            ]
+          }
+        }
+      ]
+    }
+  ]
 }

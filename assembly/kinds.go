@@ -73,7 +73,7 @@ func (c *cachedKinds) AddDescendentsOf(db *sql.DB, pluralKind string) (err error
 		// for each kid paired with req in the db, register req as the kid's ancestor.
 		if e := ephemera.KidsOf(db, req.name, func(k string) {
 			kid := c.Get(k)
-			if e, ok := tryPair(kid, req); e != nil {
+			if ok, e := tryPair(kid, req); e != nil {
 				err = errutil.Append(err, e)
 			} else if !ok {
 				pairs = append(pairs, kid, req)
@@ -90,7 +90,7 @@ func (c *cachedKinds) AddDescendentsOf(db *sql.DB, pluralKind string) (err error
 		keepGoing = false // provisionally
 		for i := 0; i < len(pairs); i += 2 {
 			kid, req := pairs[i], pairs[i+1]
-			if e, ok := tryPair(kid, req); e != nil {
+			if ok, e := tryPair(kid, req); e != nil {
 				err = e
 				break
 			} else if ok {
@@ -110,7 +110,7 @@ func (c *cachedKinds) AddDescendentsOf(db *sql.DB, pluralKind string) (err error
 	return
 }
 
-func tryPair(kid, req *cachedKind) (err error, okay bool) {
+func tryPair(kid, req *cachedKind) (okay bool, err error) {
 	// check for cycles
 	if req.HasAncestor(kid) {
 		err = errutil.New("cycle detected", req, req.GetAncestors(), "<>", kid, req)

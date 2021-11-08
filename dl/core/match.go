@@ -3,27 +3,15 @@ package core
 import (
 	"regexp"
 
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-type Matches struct {
-	Text    rt.TextEval
-	Pattern string
-	// fix: should transform into a different command probably during compile
-	exp *regexp.Regexp `if:"internal"`
-	err error
-}
-
-// Compose defines a spec for the composer editor.
-func (*Matches) Compose() composer.Spec {
-	return composer.Spec{
-		Group: "matching",
-		Desc:  `Matches: Determine whether the specified text is similar to the specified regular expression.`,
-		Spec:  "{text:text_eval} matches {pattern:text}",
-	}
+type MatchCache struct {
+	GobNeedsOnePublicField int // https://github.com/golang/go/issues/19969
+	err                    error
+	exp                    *regexp.Regexp
 }
 
 func (op *Matches) GetBool(run rt.Runtime) (ret g.Value, err error) {
@@ -39,15 +27,15 @@ func (op *Matches) GetBool(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *Matches) getRegexp() (ret *regexp.Regexp, err error) {
-	if e := op.err; e != nil {
+	if e := op.Cache.err; e != nil {
 		err = e
-	} else if exp := op.exp; exp != nil {
+	} else if exp := op.Cache.exp; exp != nil {
 		ret = exp
 	} else if exp, e := regexp.Compile(op.Pattern); e != nil {
-		op.err = err
+		op.Cache.err = err
 		err = e
 	} else {
-		op.exp = exp
+		op.Cache.exp = exp
 		ret = exp
 	}
 	return

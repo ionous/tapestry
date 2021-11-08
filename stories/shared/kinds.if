@@ -1,1697 +1,543 @@
 {
-  "id": "id-17798b6dd76-0",
-  "type": "story",
-  "value": {
-    "$PARAGRAPH": [
-      {
-        "id": "id-17798b6dd76-1",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-17798b6dd76-2",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-3",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-4",
-                    "type": "plural_kinds",
-                    "value": " objects"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798b6dd76-5",
-                    "type": "singular_kind",
-                    "value": "kind"
-                  }
-                }
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " objects",
+            "kind"
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " objects",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "description",
+                  "text"
+                ]
               }
-            },
-            {
-              "id": "id-17798b6dd76-238",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-239",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-240",
-                    "type": "plural_kinds",
-                    "value": " objects"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798b6dd76-241",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-242",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-243",
-                          "type": "property",
-                          "value": "description"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-244",
-                          "type": "property_type",
-                          "value": {
-                            "$PRIMITIVE": {
-                              "id": "id-17798b6dd76-245",
-                              "type": "primitive_type",
-                              "value": "$TEXT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            "objects",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "grouping label",
+                  "text"
+                ]
               }
-            },
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " things",
+            "object"
+          ]
+        },
+        {
+          "KindsOfAspect:": " possessiveness"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " possessiveness",
             {
-              "id": "id-17798b6dd76-246",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-247",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-248",
-                    "type": "plural_kinds",
-                    "value": "objects"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798b6dd76-249",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-250",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-251",
-                          "type": "property",
-                          "value": "grouping label"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-252",
-                          "type": "property_type",
-                          "value": {
-                            "$PRIMITIVE": {
-                              "id": "id-17798b6dd76-253",
-                              "type": "primitive_type",
-                              "value": "$TEXT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
+              "TraitPhrase:trait:": [
+                "canbe",
+                [
+                  "not worn",
+                  "worn"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsOfAspect:": " portability"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " portability",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "portable",
+                  "fixed in place"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "portability",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "possessiveness",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "wearability",
+                  "aspect"
+                ]
               }
+            ]
+          ]
+        },
+        {
+          "KindsOfAspect:": " scenery status"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " scenery status",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "not scenery",
+                  "scenery"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "scenery status",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "an",
+                  "initial appearance",
+                  "text"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "our",
+                  "mentionable",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsOfAspect:": " mentionable"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " mentionable",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "not mentioned",
+                  "mentioned"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "our",
+                  "handleable",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsOfAspect:": " handleable"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " handleable",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "not handled",
+                  "handled"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsOfAspect:": " wearability"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " wearability",
+            {
+              "TraitPhrase:trait:": [
+                "canbe",
+                [
+                  "not wearable",
+                  "wearable"
+                ]
+              ]
             }
           ]
         }
-      },
-      {
-        "id": "id-17798b6dd76-6",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-17798b6dd76-7",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-8",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-9",
-                    "type": "plural_kinds",
-                    "value": " things"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798b6dd76-10",
-                    "type": "singular_kind",
-                    "value": "object"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-11",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-12",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-13",
-                    "type": "aspect",
-                    "value": " possessiveness"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-14",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-15",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-16",
-                    "type": "aspect",
-                    "value": " possessiveness"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-17",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-18",
-                        "type": "are_either",
-                        "value": "$CANBE"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-19",
-                          "type": "trait",
-                          "value": "not worn"
-                        },
-                        {
-                          "id": "id-17798b6dd76-21",
-                          "type": "trait",
-                          "value": "worn"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-22",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-23",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-24",
-                    "type": "aspect",
-                    "value": " portability"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-25",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-26",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-27",
-                    "type": "aspect",
-                    "value": " portability"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-28",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-29",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-30",
-                          "type": "trait",
-                          "value": "portable"
-                        },
-                        {
-                          "id": "id-17798b6dd76-31",
-                          "type": "trait",
-                          "value": "fixed in place"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-32",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-33",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-34",
-                    "type": "plural_kinds",
-                    "value": " things"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798b6dd76-35",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-36",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-37",
-                          "type": "property",
-                          "value": "portability"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-38",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-39",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17798b6dd76-40",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-41",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-42",
-                          "type": "property",
-                          "value": "possessiveness"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-43",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-44",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17885664876-820",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17885664876-821",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17885664876-822",
-                          "type": "property",
-                          "value": "wearability"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17885664876-823",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17885664876-824",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-45",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-46",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-47",
-                    "type": "aspect",
-                    "value": " scenery status"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-48",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-49",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-50",
-                    "type": "aspect",
-                    "value": " scenery status"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-51",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-52",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-53",
-                          "type": "trait",
-                          "value": "not scenery"
-                        },
-                        {
-                          "id": "id-17798b6dd76-54",
-                          "type": "trait",
-                          "value": "scenery"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-55",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-56",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-57",
-                    "type": "plural_kinds",
-                    "value": " things"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798b6dd76-58",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-59",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-60",
-                          "type": "property",
-                          "value": "scenery status"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-61",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-62",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-63",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-64",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-65",
-                    "type": "plural_kinds",
-                    "value": " things"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798b6dd76-66",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-67",
-                          "type": "determiner",
-                          "value": "$AN"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-68",
-                          "type": "property",
-                          "value": "initial appearance"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-69",
-                          "type": "property_type",
-                          "value": {
-                            "$PRIMITIVE": {
-                              "id": "id-17798b6dd76-70",
-                              "type": "primitive_type",
-                              "value": "$TEXT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-71",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-72",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-73",
-                    "type": "plural_kinds",
-                    "value": " things"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798b6dd76-74",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-75",
-                          "type": "determiner",
-                          "value": "$OUR"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-76",
-                          "type": "property",
-                          "value": "mentionable"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-77",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-78",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-79",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-80",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-81",
-                    "type": "aspect",
-                    "value": " mentionable"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-82",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-83",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-84",
-                    "type": "aspect",
-                    "value": " mentionable"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-85",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-86",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-87",
-                          "type": "trait",
-                          "value": "not mentioned"
-                        },
-                        {
-                          "id": "id-17798b6dd76-88",
-                          "type": "trait",
-                          "value": "mentioned"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-89",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-90",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-91",
-                    "type": "plural_kinds",
-                    "value": " things"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798b6dd76-92",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-93",
-                          "type": "determiner",
-                          "value": "$OUR"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-94",
-                          "type": "property",
-                          "value": "handleable"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-95",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-96",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-97",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-98",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-99",
-                    "type": "aspect",
-                    "value": " handleable"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-100",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-101",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-102",
-                    "type": "aspect",
-                    "value": " handleable"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-103",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-104",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-105",
-                          "type": "trait",
-                          "value": "not handled"
-                        },
-                        {
-                          "id": "id-17798b6dd76-106",
-                          "type": "trait",
-                          "value": "handled"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17885664876-809",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17885664876-810",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17885664876-811",
-                    "type": "aspect",
-                    "value": " wearability"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17885664876-812",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17885664876-813",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17885664876-814",
-                    "type": "aspect",
-                    "value": " wearability"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17885664876-815",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17885664876-816",
-                        "type": "are_either",
-                        "value": "$CANBE"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17885664876-817",
-                          "type": "trait",
-                          "value": "not wearable"
-                        },
-                        {
-                          "id": "id-17885664876-818",
-                          "type": "trait",
-                          "value": "wearable"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " actors",
+            "thing"
+          ]
+        },
+        {
+          "KindsOfKind:singularKind:": [
+            " animals",
+            "actor"
           ]
         }
-      },
-      {
-        "id": "id-17798b6dd76-107",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-17798b6dd76-108",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-109",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-110",
-                    "type": "plural_kinds",
-                    "value": " actors"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798b6dd76-111",
-                    "type": "singular_kind",
-                    "value": "thing"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-112",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-113",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-114",
-                    "type": "plural_kinds",
-                    "value": " animals"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798b6dd76-115",
-                    "type": "singular_kind",
-                    "value": "actor"
-                  }
-                }
-              }
-            }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " props",
+            "thing"
           ]
         }
-      },
-      {
-        "id": "id-17798b6dd76-116",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " openers",
+            "prop"
+          ]
+        },
+        {
+          "KindsOfAspect:": " open status"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " open status",
             {
-              "id": "id-17798b6dd76-117",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-118",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-119",
-                    "type": "plural_kinds",
-                    "value": " props"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798b6dd76-120",
-                    "type": "singular_kind",
-                    "value": "thing"
-                  }
-                }
-              }
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "open",
+                  "closed"
+                ]
+              ]
             }
           ]
-        }
-      },
-      {
-        "id": "id-17798b6dd76-121",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+        },
+        {
+          "KindsOfAspect:": " openability"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " openability",
             {
-              "id": "id-17798b6dd76-122",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-123",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-124",
-                    "type": "plural_kinds",
-                    "value": " openers"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798b6dd76-125",
-                    "type": "singular_kind",
-                    "value": "prop"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-126",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-127",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-128",
-                    "type": "aspect",
-                    "value": " open status"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-129",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-130",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-131",
-                    "type": "aspect",
-                    "value": " open status"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-132",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-133",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-134",
-                          "type": "trait",
-                          "value": "open"
-                        },
-                        {
-                          "id": "id-17798b6dd76-135",
-                          "type": "trait",
-                          "value": "closed"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-136",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-137",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-138",
-                    "type": "aspect",
-                    "value": " openability"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-139",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-140",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-141",
-                    "type": "aspect",
-                    "value": " openability"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-142",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-143",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-144",
-                          "type": "trait",
-                          "value": "unopenable"
-                        },
-                        {
-                          "id": "id-17798b6dd76-145",
-                          "type": "trait",
-                          "value": "openable"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-146",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-147",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-148",
-                    "type": "aspect",
-                    "value": " locked status"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-149",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-150",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-151",
-                    "type": "aspect",
-                    "value": " locked status"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-152",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-153",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-154",
-                          "type": "trait",
-                          "value": "unlockable"
-                        },
-                        {
-                          "id": "id-17798b6dd76-155",
-                          "type": "trait",
-                          "value": "locked"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-156",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-157",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-158",
-                    "type": "aspect",
-                    "value": " lockable status"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-159",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-160",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-161",
-                    "type": "aspect",
-                    "value": " lockable status"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-162",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-163",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-164",
-                          "type": "trait",
-                          "value": "lockable"
-                        },
-                        {
-                          "id": "id-17798b6dd76-165",
-                          "type": "trait",
-                          "value": "not lockable"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-166",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-167",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-168",
-                    "type": "plural_kinds",
-                    "value": " openers"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798b6dd76-169",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-170",
-                          "type": "determiner",
-                          "value": "$AN"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-171",
-                          "type": "property",
-                          "value": "open status"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-172",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-173",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17798b6dd76-174",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-175",
-                          "type": "determiner",
-                          "value": "$AN"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-176",
-                          "type": "property",
-                          "value": "openability"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-177",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-178",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17798b6dd76-179",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-180",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-181",
-                          "type": "property",
-                          "value": "locked status"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-182",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-183",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17798b6dd76-184",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-185",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-186",
-                          "type": "property",
-                          "value": "lockable status"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-187",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-188",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "unopenable",
+                  "openable"
+                ]
+              ]
             }
           ]
-        }
-      },
-      {
-        "id": "id-17798b6dd76-189",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+        },
+        {
+          "KindsOfAspect:": " locked status"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " locked status",
             {
-              "id": "id-17798b6dd76-190",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-191",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-192",
-                    "type": "plural_kinds",
-                    "value": " containers"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798b6dd76-193",
-                    "type": "singular_kind",
-                    "value": "opener"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-194",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-195",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-196",
-                    "type": "aspect",
-                    "value": " enterability"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-197",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-198",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-199",
-                    "type": "aspect",
-                    "value": " enterability"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-200",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-201",
-                        "type": "are_either",
-                        "value": "$CANBE"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-202",
-                          "type": "trait",
-                          "value": "enterable"
-                        },
-                        {
-                          "id": "id-17798b6dd76-203",
-                          "type": "trait",
-                          "value": "not enterable"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-204",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-205",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-206",
-                    "type": "aspect",
-                    "value": " opacity"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-207",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-208",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-17798b6dd76-209",
-                    "type": "aspect",
-                    "value": " opacity"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-17798b6dd76-210",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-17798b6dd76-211",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-17798b6dd76-212",
-                          "type": "trait",
-                          "value": "opaque"
-                        },
-                        {
-                          "id": "id-17798b6dd76-213",
-                          "type": "trait",
-                          "value": "transparent"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17798b6dd76-214",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-215",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-216",
-                    "type": "plural_kinds",
-                    "value": " containers"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17798b6dd76-217",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-218",
-                          "type": "determiner",
-                          "value": "$AN"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-219",
-                          "type": "property",
-                          "value": "enterability"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-220",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-221",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "id": "id-17798b6dd76-222",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17798b6dd76-223",
-                          "type": "determiner",
-                          "value": "$AN"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17798b6dd76-224",
-                          "type": "property",
-                          "value": "opacity"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17798b6dd76-225",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-17798b6dd76-226",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "unlockable",
+                  "locked"
+                ]
+              ]
             }
           ]
-        }
-      },
-      {
-        "id": "id-177fb15803f-3",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+        },
+        {
+          "KindsOfAspect:": " lockable status"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " lockable status",
             {
-              "id": "id-177fb15803f-2",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb15803f-0",
-                "type": "kinds_of_aspect",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-177fb15803f-1",
-                    "type": "aspect",
-                    "value": " illumination"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-177fb15803f-4",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb15803f-5",
-                "type": "aspect_traits",
-                "value": {
-                  "$ASPECT": {
-                    "id": "id-177fb15803f-6",
-                    "type": "aspect",
-                    "value": " illumination"
-                  },
-                  "$TRAIT_PHRASE": {
-                    "id": "id-177fb15803f-7",
-                    "type": "trait_phrase",
-                    "value": {
-                      "$ARE_EITHER": {
-                        "id": "id-177fb15803f-8",
-                        "type": "are_either",
-                        "value": "$EITHER"
-                      },
-                      "$TRAIT": [
-                        {
-                          "id": "id-177fb15803f-9",
-                          "type": "trait",
-                          "value": "unlit"
-                        },
-                        {
-                          "id": "id-177fb15803f-10",
-                          "type": "trait",
-                          "value": "lit"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-177fb15803f-27",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb15803f-21",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-177fb15803f-22",
-                    "type": "plural_kinds",
-                    "value": " things"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-177fb15803f-23",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-177fb15803f-24",
-                          "type": "determiner",
-                          "value": "$AN"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-177fb15803f-25",
-                          "type": "property",
-                          "value": "illumination"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-177fb15803f-26",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-177fb15803f-28",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "id-177fb15803f-29",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb15803f-30",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-177fb15803f-31",
-                    "type": "plural_kinds",
-                    "value": " rooms"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-177fb15803f-32",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-177fb15803f-33",
-                          "type": "determiner",
-                          "value": "$AN"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-177fb15803f-34",
-                          "type": "property",
-                          "value": "illumination"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-177fb15803f-35",
-                          "type": "property_type",
-                          "value": {
-                            "$PROPERTY_ASPECT": {
-                              "id": "id-177fb15803f-36",
-                              "type": "property_aspect",
-                              "value": "$ASPECT"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "id": "id-177fb15803f-37",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb15803f-43",
-                "type": "certainties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-177fb15803f-44",
-                    "type": "plural_kinds",
-                    "value": " rooms"
-                  },
-                  "$ARE_BEING": {
-                    "id": "id-177fb15803f-45",
-                    "type": "are_being",
-                    "value": "$ARE"
-                  },
-                  "$CERTAINTY": {
-                    "id": "id-177fb15803f-46",
-                    "type": "certainty",
-                    "value": "$USUALLY"
-                  },
-                  "$TRAIT": {
-                    "id": "id-177fb15803f-47",
-                    "type": "trait",
-                    "value": "lit"
-                  }
-                }
-              }
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "lockable",
+                  "not lockable"
+                ]
+              ]
             }
           ]
-        }
-      },
-      {
-        "id": "id-17798b6dd76-227",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-17798b6dd76-228",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-229",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-230",
-                    "type": "plural_kinds",
-                    "value": " supporters"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798b6dd76-231",
-                    "type": "singular_kind",
-                    "value": "prop"
-                  }
-                }
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " openers",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "open status",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "openability",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "locked status",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "a",
+                  "lockable status",
+                  "aspect"
+                ]
               }
-            }
+            ]
           ]
         }
-      },
-      {
-        "id": "id-17798b6dd76-232",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " containers",
+            "opener"
+          ]
+        },
+        {
+          "KindsOfAspect:": " enterability"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " enterability",
             {
-              "id": "id-17798b6dd76-233",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17798b6dd76-234",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17798b6dd76-235",
-                    "type": "plural_kinds",
-                    "value": " rooms"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-17798b6dd76-236",
-                    "type": "singular_kind",
-                    "value": "object"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-17799bae367-32",
-              "type": "story_statement",
-              "value": {
-                "id": "id-17799bae367-33",
-                "type": "kinds_possess_properties",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-17799bae367-34",
-                    "type": "plural_kinds",
-                    "value": "rooms"
-                  },
-                  "$PROPERTY_DECL": [
-                    {
-                      "id": "id-17799bae367-35",
-                      "type": "property_decl",
-                      "value": {
-                        "$AN": {
-                          "id": "id-17799bae367-36",
-                          "type": "determiner",
-                          "value": "$A"
-                        },
-                        "$PROPERTY": {
-                          "id": "id-17799bae367-37",
-                          "type": "property",
-                          "value": "visited"
-                        },
-                        "$PROPERTY_TYPE": {
-                          "id": "id-17799bae367-38",
-                          "type": "property_type",
-                          "value": {
-                            "$PRIMITIVE": {
-                              "id": "id-17799bae367-39",
-                              "type": "primitive_type",
-                              "value": "$BOOL"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
+              "TraitPhrase:trait:": [
+                "canbe",
+                [
+                  "enterable",
+                  "not enterable"
+                ]
+              ]
             }
           ]
-        }
-      },
-      {
-        "id": "id-177f1718d3b-1",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+        },
+        {
+          "KindsOfAspect:": " opacity"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " opacity",
             {
-              "id": "id-177f1718d3b-2",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177f1718d3b-3",
-                "type": "kinds_of_kind",
-                "value": {
-                  "$PLURAL_KINDS": {
-                    "id": "id-177f1718d3b-4",
-                    "type": "plural_kinds",
-                    "value": " regions"
-                  },
-                  "$SINGULAR_KIND": {
-                    "id": "id-177f1718d3b-5",
-                    "type": "singular_kind",
-                    "value": "object"
-                  }
-                }
-              }
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "opaque",
+                  "transparent"
+                ]
+              ]
             }
           ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " containers",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "enterability",
+                  "aspect"
+                ]
+              },
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "opacity",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
         }
-      }
-    ]
-  }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfAspect:": " illumination"
+        },
+        {
+          "AspectTraits:traitPhrase:": [
+            " illumination",
+            {
+              "TraitPhrase:trait:": [
+                "either",
+                [
+                  "unlit",
+                  "lit"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " things",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "illumination",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            " rooms",
+            [
+              {
+                "PropertyDecl:property:propertyType propertyAspect:": [
+                  "an",
+                  "illumination",
+                  "aspect"
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "Certainties:areBeing:certainty:trait:": [
+            " rooms",
+            "are",
+            "usually",
+            "lit"
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " supporters",
+            "prop"
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " rooms",
+            "object"
+          ]
+        },
+        {
+          "KindsPossessProperties:propertyDecl:": [
+            "rooms",
+            [
+              {
+                "PropertyDecl:property:propertyType primitive:": [
+                  "a",
+                  "visited",
+                  "bool"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "KindsOfKind:singularKind:": [
+            " regions",
+            "object"
+          ]
+        }
+      ]
+    }
+  ]
 }

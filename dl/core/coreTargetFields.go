@@ -1,7 +1,6 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -10,30 +9,6 @@ import (
 // IntoTargetFields: part of PutAtField
 type IntoTargetFields interface {
 	GetTargetFields(run rt.Runtime) (g.Value, error)
-}
-
-// IntoObj: Targets an object with a computed name.
-type IntoObj struct {
-	Object rt.TextEval `if:"selector"`
-}
-
-// IntoVar: Targets a record or object name stored in a variable.
-type IntoVar struct {
-	Var Variable `if:"selector"`
-}
-
-func (*IntoObj) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Role: composer.Selector},
-		Desc:   "Targets an object with a computed name.",
-	}
-}
-
-func (*IntoVar) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Role: composer.Selector},
-		Desc:   "Targets an object or record stored in a variable",
-	}
 }
 
 // GetTargetFields returns an object supporting field access.

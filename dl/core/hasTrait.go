@@ -3,26 +3,10 @@ package core
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-// HasTrait - determine if a noun is currently in a particular state.
-type HasTrait struct {
-	Object rt.TextEval
-	Trait  rt.TextEval
-}
-
-// should be "When the target is publicly named"
-func (*HasTrait) Compose() composer.Spec {
-	return composer.Spec{
-		Spec:  "{object:text_eval} has {trait:text_eval}",
-		Group: "objects",
-		Desc:  "Has Trait: Return true if the object is currently in the requested state.",
-	}
-}
 
 func (op *HasTrait) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if obj, e := safe.ObjectText(run, op.Object); e != nil {
@@ -42,21 +26,6 @@ func (op *HasTrait) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		}
 	}
 	return
-}
-
-// SetTrait a property value from an object by name.
-type SetTrait struct {
-	Object rt.TextEval
-	Trait  rt.TextEval
-}
-
-// should be "When the target is publicly named"
-func (*SetTrait) Compose() composer.Spec {
-	return composer.Spec{
-		Spec:  "set {object:text_eval} to {trait:text_eval}",
-		Group: "objects",
-		Desc:  "Set Trait: put an object into a particular state.",
-	}
 }
 
 func (op *SetTrait) Execute(run rt.Runtime) (err error) {

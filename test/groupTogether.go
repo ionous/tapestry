@@ -9,10 +9,11 @@ import (
 	"git.sr.ht/~ionous/iffy/test/testpat"
 )
 
-var runGroupTogther = list.Map{
-	FromList:     &core.Var{Name: "objects"},
-	ToList:       "settings",
-	UsingPattern: "assign_grouping"}
+var runGroupTogther = list.ListMap{
+	FromList:     V("objects"),
+	ToList:       W("settings"),
+	UsingPattern: W("assign_grouping"),
+}
 
 type AssignGrouping struct {
 	In  string
@@ -33,10 +34,10 @@ var assignGrouping = testpat.Pattern{
 			Put("out", "name", V("in")),
 			&core.ChooseAction{
 				If: &core.Matches{
-					Text:    &core.Var{Name: "in"},
+					Text:    V("in"),
 					Pattern: "^thing"},
 				Do: core.MakeActivity(
-					Put("out", "label", &core.FromText{&core.Text{"thingies"}}),
+					Put("out", "label", &core.FromText{T("thingies")}),
 				),
 			},
 		}}},

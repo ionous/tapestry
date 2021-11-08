@@ -13,56 +13,57 @@ func TestSequences(t *testing.T) {
 	t.Run("cycle none", func(t *testing.T) {
 		matchSequence(t, []string{
 			"",
-		}, &CycleText{Sequence{t.Name(),
-			nil,
-		}})
+		}, &CallCycle{
+			Name: t.Name(),
+		})
 	})
 	t.Run("cycle text", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "b", "c", "a", "b", "c", "a",
-		}, &CycleText{Sequence{t.Name(), []rt.TextEval{
-			&Text{"a"},
-			&Text{"b"},
-			&Text{"c"},
-		}}})
+		}, &CallCycle{
+			Name: t.Name(), Parts: []rt.TextEval{
+				T("a"),
+				T("b"),
+				T("c"),
+			}})
 	})
 	t.Run("stopping", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "b", "c", "c", "c", "c", "c",
-		}, &StoppingText{Sequence: Sequence{
-			t.Name(), []rt.TextEval{
-				&Text{"a"},
-				&Text{"b"},
-				&Text{"c"},
-			}}})
+		}, &CallTerminal{
+			Name: t.Name(), Parts: []rt.TextEval{
+				T("a"),
+				T("b"),
+				T("c"),
+			}})
 	})
 	t.Run("once", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "", "", "", "",
-		}, &StoppingText{Sequence: Sequence{
-			t.Name(), []rt.TextEval{
-				&Text{"a"},
-			}}})
+		}, &CallTerminal{
+			Name: t.Name(), Parts: []rt.TextEval{
+				T("a"),
+			}})
 	})
 	t.Run("shuffle one", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "a",
-		}, &ShuffleText{Sequence: Sequence{
-			t.Name(), []rt.TextEval{
-				&Text{"a"},
-			}}})
+		}, &CallShuffle{
+			Name: t.Name(), Parts: []rt.TextEval{
+				T("a"),
+			}})
 	})
 	t.Run("shuffle", func(t *testing.T) {
 		matchSequence(t, []string{
 			"c", "d", "b", "e", "a", "b", "e",
-		}, &ShuffleText{Sequence: Sequence{
-			t.Name(), []rt.TextEval{
-				&Text{"a"},
-				&Text{"b"},
-				&Text{"c"},
-				&Text{"d"},
-				&Text{"e"},
-			}}})
+		}, &CallShuffle{
+			Name: t.Name(), Parts: []rt.TextEval{
+				T("a"),
+				T("b"),
+				T("c"),
+				T("d"),
+				T("e"),
+			}})
 	})
 }
 

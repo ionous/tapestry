@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/export/tag"
 	"git.sr.ht/~ionous/iffy/lang"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/test/tag"
 	"github.com/ionous/errutil"
 )
 

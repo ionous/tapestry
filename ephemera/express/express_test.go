@@ -18,7 +18,7 @@ var False = B(false)
 // ( the parts that normally appear inside curly brackets {here} ).
 func TestExpressions(t *testing.T) {
 	t.Run("num", func(t *testing.T) {
-		if e := testExpression("5", N(5)); e != nil {
+		if e := testExpression("5", F(5)); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -45,7 +45,7 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(
 			"7 >= 8",
 			&core.CompareNum{
-				N(7), &core.GreaterOrEqual{}, N(8),
+				F(7), &core.AtLeast{}, F(8),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -54,8 +54,8 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(
 			"(5+6)*(1+2)",
 			&core.ProductOf{
-				&core.SumOf{N(5), N(6)},
-				&core.SumOf{N(1), N(2)},
+				&core.SumOf{F(5), F(6)},
+				&core.SumOf{F(1), F(2)},
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -66,13 +66,13 @@ func TestExpressions(t *testing.T) {
 			"true and (false or {not: true})",
 			&core.AllTrue{
 				Test: []rt.BoolEval{
-					&core.Bool{true},
+					B(true),
 					&core.AnyTrue{
 						Test: []rt.BoolEval{
-							&core.Bool{false},
+							B(false),
 							// isNot requires command parsing
-							&core.IsNotTrue{
-								&core.Bool{true},
+							&core.Not{
+								B(true),
 							},
 						}},
 				}}); e != nil {
@@ -89,12 +89,12 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(".A.num",
 			// get 'num' out of 'A' ( note: get field at supports any value )
 			&core.GetAtField{
-				Field: "num",
+				Field: W("num"),
 				// get "a" -- some value supporting field access
 				// could be a record or an object variable, or a global object.
 				// ( b/c its capitalized, we know its going to be a global object )
 				From: &render.RenderField{
-					Name: &core.Text{Text: "A"},
+					Name: T("A"),
 				},
 			}); e != nil {
 			t.Fatal(e)
@@ -104,16 +104,16 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(".a.b.c",
 			// c, a value in b, can be anything.
 			&core.GetAtField{
-				Field: "c",
+				Field: W("c"),
 				// to get a value from b, b must have been specifically a record.
 				From: &core.FromRec{
 					// get b out of a ( note: get field at supports any value )
 					Rec: &core.GetAtField{
-						Field: "b",
+						Field: W("b"),
 						// get "a" -- some value supporting field access
 						// could be a record or an object variable, or a global object.
 						From: &render.RenderField{
-							Name: &core.Text{Text: "a"},
+							Name: T("a"),
 						},
 					},
 				}}); e != nil {
@@ -124,16 +124,12 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(".A.num * .b.num",
 			&core.ProductOf{
 				A: &core.GetAtField{
-					Field: "num",
-					From: &render.RenderField{
-						Name: &core.Text{Text: "A"},
-					},
+					Field: W("num"),
+					From:  &render.RenderField{T("A")},
 				},
 				B: &core.GetAtField{
-					Field: "num",
-					From: &render.RenderField{
-						Name: &core.Text{Text: "b"},
-					},
+					Field: W("num"),
+					From:  &render.RenderField{T("b")},
 				},
 			}); e != nil {
 			t.Fatal(e)
@@ -158,8 +154,8 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{print_num_word: .group_size}",
 			&core.PrintNumWord{
 				Num: &render.RenderRef{
-					core.Var{"group_size"},
-					render.TryAsBoth,
+					N("group_size"),
+					render.RenderFlags{Str: render.RenderFlags_RenderAsAny},
 				},
 			}); e != nil {
 			t.Fatal(e)
@@ -167,34 +163,34 @@ func TestTemplates(t *testing.T) {
 	})
 	t.Run("cycle", func(t *testing.T) {
 		if e := testTemplate("{cycle}a{or}b{or}c{end}",
-			&core.CycleText{Sequence: core.Sequence{
-				Seq: "autoexp1",
+			&core.CallCycle{
+				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
 				},
-			}}); e != nil {
+			}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("once", func(t *testing.T) {
 		if e := testTemplate("{once}a{or}b{or}c{end}",
-			&core.StoppingText{Sequence: core.Sequence{
-				Seq: "autoexp1",
+			&core.CallTerminal{
+				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
 				},
-			}}); e != nil {
+			}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("shuffle", func(t *testing.T) {
 		if e := testTemplate("{shuffle}a{or}b{or}c{end}",
-			&core.ShuffleText{Sequence: core.Sequence{
-				Seq: "autoexp1",
+			&core.CallShuffle{
+				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
 				},
-			}}); e != nil {
+			}); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -202,7 +198,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{if 7=7}boop{else}beep{end}",
 			&core.ChooseText{
 				If: &core.CompareNum{
-					N(7), &core.EqualTo{}, N(7),
+					F(7), &core.Equal{}, F(7),
 				},
 				True:  T("boop"),
 				False: T("beep"),
@@ -213,9 +209,9 @@ func TestTemplates(t *testing.T) {
 	t.Run("unless", func(t *testing.T) {
 		if e := testTemplate("{unless 7=7}boop{otherwise}beep{end}",
 			&core.ChooseText{
-				If: &core.IsNotTrue{
+				If: &core.Not{
 					&core.CompareNum{
-						N(7), &core.EqualTo{}, N(7),
+						F(7), &core.Equal{}, F(7),
 					}},
 				True:  T("boop"),
 				False: T("beep"),
@@ -226,7 +222,7 @@ func TestTemplates(t *testing.T) {
 	t.Run("filter", func(t *testing.T) {
 		if e := testTemplate("{15|print_num!}",
 			&core.PrintNum{
-				Num: &core.Number{15},
+				Num: &core.NumValue{15},
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -237,11 +233,11 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{15|print_num!} {if 7=7}boop{end}",
 			&core.Join{
 				Parts: []rt.TextEval{
-					&core.PrintNum{N(15)},
+					&core.PrintNum{F(15)},
 					T(" "),
 					&core.ChooseText{
 						If: &core.CompareNum{
-							N(7), &core.EqualTo{}, N(7),
+							F(7), &core.Equal{}, F(7),
 						},
 						True: T("boop"),
 					},
@@ -254,10 +250,9 @@ func TestTemplates(t *testing.T) {
 	t.Run("indexed", func(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&render.RenderPattern{
-				core.Determine{
-					Pattern: "hello", Arguments: core.Args(
-						&core.FromText{T("world")},
-					)}}); e != nil {
+				Pattern: P("hello"), Arguments: core.Args(
+					&core.FromText{T("world")},
+				)}); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -278,9 +273,9 @@ func TestTemplates(t *testing.T) {
 	t.Run("global prop", func(t *testing.T) {
 		if e := testTemplate("{.Object.prop}",
 			&core.GetAtField{
-				Field: "prop",
+				Field: W("prop"),
 				From: &render.RenderField{
-					Name: &core.Text{Text: "Object"},
+					Name: T("Object"),
 				},
 			},
 		); e != nil {

@@ -3,15 +3,9 @@ package core
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-type While struct {
-	True rt.BoolEval `if:"selector=while"`
-	Do   Activity
-}
 
 // MaxLoopError provides both an error and a counter
 type MaxLoopError int
@@ -19,14 +13,6 @@ type MaxLoopError int
 func (e MaxLoopError) Error() string { return "nearly infinite loop detected" }
 
 var MaxLoopIterations MaxLoopError = 0xbad
-
-func (*While) Compose() composer.Spec {
-	return composer.Spec{
-		Fluent: &composer.Fluid{Name: "repeating", Role: composer.Command},
-		Group:  "flow",
-		Desc:   "Repeating: Keep running a series of actions while a condition is true.",
-	}
-}
 
 func (op *While) Execute(run rt.Runtime) (err error) {
 	if !op.Do.Empty() {

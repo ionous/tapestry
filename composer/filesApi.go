@@ -6,12 +6,14 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy"
+	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
+	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/web"
-	"github.com/iancoleman/orderedmap"
 	"github.com/ionous/errutil"
 )
 
@@ -35,42 +37,32 @@ type rootFolder struct {
 
 func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	var els []struct {
-		Path  string                `json:"path"`
-		Story orderedmap.OrderedMap `json:"story"`
+		Path  string          `json:"path"`
+		Story json.RawMessage `json:"story"`
 	}
 	dec := json.NewDecoder(r)
 	if e := dec.Decode(&els); err != nil {
 		err = e
 	} else {
-		// fix: return status of some sort?
 		root := d.String()
 		for _, el := range els {
-			where := filepath.Join(root, el.Path)
-			if !strings.HasPrefix(where, root) {
-				e := errutil.New("couldnt save", where)
-				err = errutil.Append(err, e)
-			} else if e := saveBytes(where, el.Story); e != nil {
-				e := errutil.New("couldnt save", where)
+			if at := filepath.Join(root, el.Path); !strings.HasPrefix(at, root) {
+				e := errutil.New("cant save to", at)
 				err = errutil.Append(err, e)
 			} else {
-				log.Println("saved", where)
+				var dst story.Story
+				if e := din.Decode(&dst, iffy.Registry(), el.Story); e != nil {
+					err = e
+				} else if data, e := cout.Encode(&dst); e != nil {
+					err = errutil.Append(err, e)
+				} else {
+					err = writeOut(at, data)
+				}
 			}
 		}
 	}
 	if err != nil {
 		log.Println("ERROR", err)
-	}
-	return
-}
-
-func saveBytes(where string, story orderedmap.OrderedMap) (err error) {
-	if f, e := os.Create(where); e != nil {
-		err = e
-	} else {
-		enc := json.NewEncoder(f)
-		enc.SetEscapeHTML(false)
-		enc.SetIndent("", "  ")
-		err = enc.Encode(story)
 	}
 	return
 }

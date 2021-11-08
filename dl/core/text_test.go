@@ -13,33 +13,33 @@ func TestText(t *testing.T) {
 	var run baseRuntime
 
 	t.Run("is", func(t *testing.T) {
-		if e := testTrue(t, &run, &Bool{true}); e != nil {
+		if e := testTrue(t, &run, B(true)); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{&Bool{false}}); e != nil {
+		if e := testTrue(t, &run, &Not{B(false)}); e != nil {
 			t.Fatal(e)
 		}
 	})
 
 	t.Run("isEmpty", func(t *testing.T) {
-		if e := testTrue(t, &run, &IsEmpty{&Text{}}); e != nil {
+		if e := testTrue(t, &run, &IsEmpty{T("")}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{&IsEmpty{&Text{"xxx"}}}); e != nil {
+		if e := testTrue(t, &run, &Not{&IsEmpty{T("xxx")}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 
 	t.Run("includes", func(t *testing.T) {
 		if e := testTrue(t, &run, &Includes{
-			&Text{"full"},
-			&Text{"ll"},
+			T("full"),
+			T("ll"),
 		}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsNotTrue{&Includes{
-			&Text{"full"},
-			&Text{"bull"},
+		if e := testTrue(t, &run, &Not{&Includes{
+			T("full"),
+			T("bull"),
 		}}); e != nil {
 			t.Fatal(e)
 		}
@@ -48,19 +48,19 @@ func TestText(t *testing.T) {
 	t.Run("join", func(t *testing.T) {
 		if e := testTrue(t, &run, &CompareText{
 			&Join{Parts: []rt.TextEval{
-				&Text{"one"}, &Text{"two"}, &Text{"three"},
+				T("one"), T("two"), T("three"),
 			}},
-			&EqualTo{},
-			&Text{"onetwothree"},
+			&Equal{},
+			T("onetwothree"),
 		}); e != nil {
 			t.Fatal(e)
 		}
 		if e := testTrue(t, &run, &CompareText{
-			&Join{&Text{" "}, []rt.TextEval{
-				&Text{"one"}, &Text{"two"}, &Text{"three"},
+			&Join{T(" "), []rt.TextEval{
+				T("one"), T("two"), T("three"),
 			}},
-			&EqualTo{},
-			&Text{"one two three"},
+			&Equal{},
+			T("one two three"),
 		}); e != nil {
 			t.Fatal(e)
 		}

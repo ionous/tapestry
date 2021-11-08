@@ -7,7 +7,6 @@ import (
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testpat"
 	"git.sr.ht/~ionous/iffy/test/testutil"
-	test "git.sr.ht/~ionous/iffy/test/testutil"
 )
 
 func TestMatching(t *testing.T) {
@@ -27,8 +26,8 @@ func TestMatching(t *testing.T) {
 	}
 
 	a, b := k.NewRecord(), k.NewRecord()
-	runMatching := &core.Determine{
-		Pattern: "match_groups", Arguments: core.Args(
+	runMatching := &core.CallPattern{
+		Pattern: P("match_groups"), Arguments: core.Args(
 			&core.FromValue{g.RecordOf(a)},
 			&core.FromValue{g.RecordOf(b)},
 		)}
@@ -42,7 +41,7 @@ func TestMatching(t *testing.T) {
 	}
 	// different labels shouldnt match
 	{
-		if e := test.SetRecord(a, "label", "beep"); e != nil {
+		if e := testutil.SetRecord(a, "label", "beep"); e != nil {
 			t.Fatal(e)
 		} else if ok, e := runMatching.GetBool(&lt); e != nil {
 			t.Fatal(e)
@@ -52,7 +51,7 @@ func TestMatching(t *testing.T) {
 	}
 	// same labels should match
 	{
-		if e := test.SetRecord(b, "label", "beep"); e != nil {
+		if e := testutil.SetRecord(b, "label", "beep"); e != nil {
 			t.Fatal(e)
 		} else if ok, e := runMatching.GetBool(&lt); e != nil {
 			t.Fatal(e)
@@ -62,13 +61,13 @@ func TestMatching(t *testing.T) {
 	}
 	// many fields should match
 	{
-		if e := test.SetRecord(a, "innumerable", "is_innumerable"); e != nil {
+		if e := testutil.SetRecord(a, "innumerable", "is_innumerable"); e != nil {
 			t.Fatal(e)
-		} else if e := test.SetRecord(b, "is_innumerable", true); e != nil {
+		} else if e := testutil.SetRecord(b, "is_innumerable", true); e != nil {
 			t.Fatal(e)
-		} else if e := test.SetRecord(a, "group_options", "objects_with_articles"); e != nil {
+		} else if e := testutil.SetRecord(a, "group_options", "objects_with_articles"); e != nil {
 			t.Fatal(e)
-		} else if e := test.SetRecord(b, "group_options", "objects_with_articles"); e != nil {
+		} else if e := testutil.SetRecord(b, "group_options", "objects_with_articles"); e != nil {
 			t.Fatal(e)
 		} else if ok, e := runMatching.GetBool(&lt); e != nil {
 			t.Fatal(e)
@@ -78,7 +77,7 @@ func TestMatching(t *testing.T) {
 	}
 	// names shouldnt be involved
 	{
-		if e := test.SetRecord(a, "name", "hola"); e != nil {
+		if e := testutil.SetRecord(a, "name", "hola"); e != nil {
 			t.Fatal(e)
 		} else if ok, e := runMatching.GetBool(&lt); e != nil {
 			t.Fatal(e)

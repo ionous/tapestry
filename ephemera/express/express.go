@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
 	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/pattern"
 	"git.sr.ht/~ionous/iffy/template"
 	"git.sr.ht/~ionous/iffy/template/postfix"
 	"git.sr.ht/~ionous/iffy/template/types"
@@ -102,7 +101,7 @@ func (c *Converter) buildCompare(cmp core.Comparator) (err error) {
 	return
 }
 
-func (c *Converter) buildSequence(cmd rt.TextEval, seq *core.Sequence, count int) (err error) {
+func (c *Converter) buildSequence(cmd rt.TextEval, pAt *string, pParts *[]rt.TextEval, count int) (err error) {
 	if args, e := c.stack.pop(count); e != nil {
 		err = e
 	} else {
@@ -120,8 +119,8 @@ func (c *Converter) buildSequence(cmd rt.TextEval, seq *core.Sequence, count int
 			c.autoCounter++
 			counter := "autoexp" + strconv.Itoa(c.autoCounter)
 			// seq is part of cmd
-			seq.Parts = parts
-			seq.Seq = counter
+			(*pParts) = parts
+			(*pAt) = counter
 			// after filling out the cmd, we push it for later processing
 			c.buildOne(cmd)
 		}
@@ -152,13 +151,13 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 	if args, e := c.stack.pop(arity); e != nil {
 		err = e
 	} else {
-		var ps core.Arguments
+		var ps core.CallArgs
 		for i, arg := range args {
 			if newa, e := newAssignment(arg); e != nil {
 				err = errutil.Append(e)
 			} else {
-				newp := &core.Argument{
-					Name: "$" + strconv.Itoa(i+1),
+				newp := core.CallArg{
+					Name: W("$" + strconv.Itoa(i+1)),
 					From: newa,
 				}
 				ps.Args = append(ps.Args, newp)
@@ -166,10 +165,8 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 		}
 		if err == nil {
 			c.buildOne(&render.RenderPattern{
-				core.Determine{
-					Pattern:   pattern.PatternName(name),
-					Arguments: &ps,
-				},
+				Pattern:   P(name),
+				Arguments: ps,
 			})
 		}
 	}
@@ -208,10 +205,10 @@ func (c *Converter) buildUnless(cmd interface{}, arity int) (err error) {
 	} else if len(args) > 0 {
 		arg := unpackArg(args[0])
 		if a, ok := arg.Interface().(rt.BoolEval); !ok {
-			err = errutil.New("argument is not a bool")
+			err = errutil.New("argument is not a bool", arg.Type().String())
 		} else {
-			args[0] = r.ValueOf(&core.IsNotTrue{a}) // rewrite the arg.
-			c.stack.push(args...)                   //
+			args[0] = r.ValueOf(&core.Not{a}) // rewrite the arg.
+			c.stack.push(args...)             //
 			err = c.buildCommand(cmd, arity)
 		}
 	}
@@ -253,7 +250,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 
 	case types.Number:
 		num := fn.Value()
-		c.buildOne(N(num))
+		c.buildOne(F(num))
 
 	case types.Bool:
 		b := fn.Value()
@@ -295,7 +292,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 						fieldSet = &core.FromRec{getField}
 					}
 					getField = &core.GetAtField{
-						Field: field,
+						Field: W(field),
 						From:  fieldSet,
 					}
 				}
@@ -313,14 +310,14 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			err = c.buildUnless(&core.ChooseText{}, fn.ParameterCount)
 
 		case types.Stopping:
-			var seq core.StoppingText
-			err = c.buildSequence(&seq, &seq.Sequence, fn.ParameterCount)
+			var seq core.CallTerminal
+			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Shuffle:
-			var seq core.ShuffleText
-			err = c.buildSequence(&seq, &seq.Sequence, fn.ParameterCount)
+			var seq core.CallShuffle
+			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Cycle:
-			var seq core.CycleText
-			err = c.buildSequence(&seq, &seq.Sequence, fn.ParameterCount)
+			var seq core.CallCycle
+			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Span:
 			err = c.buildSpan(fn.ParameterCount)
 
@@ -343,17 +340,17 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			err = c.buildTwo(&core.DiffOf{})
 
 		case types.EQL:
-			err = c.buildCompare(&core.EqualTo{})
+			err = c.buildCompare(&core.Equal{})
 		case types.NEQ:
-			err = c.buildCompare(&core.NotEqualTo{})
+			err = c.buildCompare(&core.Unequal{})
 		case types.LSS:
 			err = c.buildCompare(&core.LessThan{})
 		case types.LEQ:
-			err = c.buildCompare(&core.LessOrEqual{})
+			err = c.buildCompare(&core.AtMost{})
 		case types.GTR:
 			err = c.buildCompare(&core.GreaterThan{})
 		case types.GEQ:
-			err = c.buildCompare(&core.GreaterOrEqual{})
+			err = c.buildCompare(&core.AtLeast{})
 
 		case types.LAND:
 			err = c.buildTwo(&core.AllTrue{})

@@ -2,13 +2,14 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
 var FactorialStory = &story.Story{
-	Paragraph: &[]story.Paragraph{{
-		StoryStatement: &[]story.StoryStatement{
+	Paragraph: []story.Paragraph{{
+		StoryStatement: []story.StoryStatement{
 			&story.TestStatement{
 				TestName: story.TestName{
 					Str: "factorial",
@@ -22,70 +23,66 @@ var FactorialStory = &story.Story{
 					Str: "factorial",
 				},
 				Hook: story.ProgramHook{
-					Opt: &story.Activity{
-						Exe: []rt.Execute{
-							&core.Say{
-								Text: &core.PrintNum{
-									Num: &core.Determine{
-										Pattern: "factorial",
-										Arguments: &core.Arguments{
-											Args: []*core.Argument{
-												&core.Argument{
-													Name: "num",
-													From: &core.FromNum{
-														Val: &core.Number{Num: 3}},
-												}},
-										}},
-								}},
-						}},
+					Choice: story.ProgramHook_Activity_Opt,
+					Value: &core.Activity{[]rt.Execute{
+						&core.SayText{
+							Text: &core.PrintNum{
+								Num: &core.CallPattern{
+									Pattern: factorialName,
+									Arguments: core.CallArgs{
+										Args: []core.CallArg{
+											core.CallArg{
+												Name: "num",
+												From: &core.FromNum{
+													Val: &core.NumValue{Num: 3}},
+											}},
+									}},
+							}},
+					}},
 				}},
 			&story.PatternDecl{
-				Name: story.PatternName{
-					Str: "factorial",
-				},
+				Name: factorialName,
 				Type: story.PatternType{
-					Str: "$PATTERNS"},
+					Str: story.PatternType_Patterns},
 				Optvars: &story.PatternVariablesTail{
 					VariableDecl: []story.VariableDecl{numberDecl}},
 			},
 			&story.PatternActions{
-				Name: story.PatternName{
-					Str: "factorial",
-				},
+				Name:          factorialName,
 				PatternReturn: &story.PatternReturn{Result: numberDecl},
 				PatternRules: story.PatternRules{
-					PatternRule: &[]story.PatternRule{{
+					PatternRule: []story.PatternRule{{
 						Guard: &core.Always{},
 						Hook: story.ProgramHook{
-							Opt: &story.Activity{[]rt.Execute{
+							Choice: story.ProgramHook_Activity_Opt,
+							Value: &core.Activity{[]rt.Execute{
 								&core.Assign{
-									Var: core.Variable{Str: "num"},
+									Var: numVar,
 									From: &core.FromNum{&core.ProductOf{
-										A: &core.Var{Name: "num"},
+										A: &core.GetVar{Name: numVar},
 										B: &core.DiffOf{
-											A: &core.Var{Name: "num"},
-											B: &core.Number{Num: 1}},
+											A: &core.GetVar{Name: numVar},
+											B: &core.NumValue{Num: 1}},
 									}},
 								},
 							}},
 						}},
 					}}},
 			&story.PatternActions{
-				Name: story.PatternName{
-					Str: "factorial",
-				},
+				Name:          factorialName,
 				PatternReturn: &story.PatternReturn{Result: numberDecl},
 				PatternRules: story.PatternRules{
-					PatternRule: &[]story.PatternRule{{
+					PatternRule: []story.PatternRule{{
 						Guard: &core.CompareNum{
-							A:  &core.Var{Name: "num"},
-							Is: &core.EqualTo{},
-							B:  &core.Number{}},
+							A:  &core.GetVar{Name: numVar},
+							Is: &core.Equal{},
+							B:  &core.NumValue{}},
 						Hook: story.ProgramHook{
-							Opt: &story.Activity{[]rt.Execute{
+							Choice: story.ProgramHook_Activity_Opt,
+							Value: &core.Activity{[]rt.Execute{
 								&core.Assign{
-									Var:  core.Variable{Str: "num"},
-									From: &core.FromNum{&core.Number{Num: 1}},
+									Var:  numVar,
+									From: &core.FromNum{&core.NumValue{Num: 1}},
 								}},
 							}}},
 					}},
@@ -93,16 +90,17 @@ var FactorialStory = &story.Story{
 	}},
 }
 
+var factorialName = value.PatternName{Str: "factorial"}
+var numVar = value.VariableName{Str: "num"}
+
 var numberDecl = story.VariableDecl{
 	An: story.Determiner{
-		Str: "a",
+		Str: story.Determiner_A,
 	},
-	Name: story.VariableName{
-		Variable: core.Variable{
-			Str: "num",
-		}},
+	Name: numVar,
 	Type: story.VariableType{
-		Opt: &story.PrimitiveType{
-			Str: "$NUMBER",
+		Choice: story.VariableType_Primitive_Opt,
+		Value: &story.PrimitiveType{
+			Str: story.PrimitiveType_Number,
 		}},
 }

@@ -10,7 +10,7 @@ func TestMatches(t *testing.T) {
 	var run testutil.PanicRuntime
 	// test a valid regexp
 	// loop to verify(ish) the cache
-	m := &Matches{Text: &Text{"gophergopher"}, Pattern: "(gopher){2}"}
+	m := &Matches{Text: T("gophergopher"), Pattern: "(gopher){2}"}
 	for i := 0; i < 2; i++ {
 		if ok, e := m.GetBool(&run); e != nil {
 			t.Fatal(e)

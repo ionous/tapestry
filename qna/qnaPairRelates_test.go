@@ -3,6 +3,7 @@ package qna
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 )
@@ -44,7 +45,7 @@ func TestPairRelates(t *testing.T) {
 		); e != nil {
 			t.Fatal(e)
 		} else {
-			run := NewRuntime(db)
+			run := NewRuntime(db, iffy.AllSignatures)
 			if vs, e := run.RelativesOf(q, rel); e != nil {
 				t.Fatal(e)
 			} else if len(vs) != 1 || vs[0] != p {

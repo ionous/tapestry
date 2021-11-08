@@ -1,54 +1,138 @@
 'use strict';
 
 const TagParser = require('./tags.js');
+const TypeSet = require('./typeSet.js');
 
-class TypeSet {
-  constructor() {
-    this.all= {};
-    this.slots= {}; // slot name => [ runs that implement the slot ]
-    this.groups= {}; // group name => [ runs that implement the group ]
-  }
-  get(typeName) {
-    return this.all[typeName];
-  }
-  has(typeName) {
-    return !!this.get(typeName);
-  }
-  // implements but isnt the same type as...
-  implements(doesThis, implementThat) {
-    const t= this.get(doesThis);
-    return t && (t.with && t.with.slots && t.with.slots.indexOf(implementThat)>=0);
-  }
-  // implements or is the stame type as...
-  areCompatible(doesThis, implementThat) {
-    const t= this.get(doesThis);
-    return t && ((t.name === implementThat) ||
-                ((t.with && t.with.slots && t.with.slots.indexOf(implementThat)>=0)));
-  }
-  // object { string name; string uses;
-  //  union { string; object { label, short, long string } } desc;
-  //  object with?; }
-  newType(type) {
-    const name= type.name;
-    if (name in this.all) {
-      throw new Error(`redefining type ${name}`);
-    }
-    this.all[ name ]= type;
-    return type;
-  }
-  newItem(typeName, value) {
-    if (!(typeName in this.all)) {
-      throw new Error(`expected type, got '${typeName}'`);
-    }
-    return { type:typeName, value };
-  }
-}
+// change to pascal-cased ( golang public )
+const pascal = function(name, sep = " ") {
+  const els = name.split('_').map(el => el.charAt(0).toUpperCase() + el.slice(1));
+  return els.join(sep);
+};
 
-module.exports = class Make {
+
+class Make {
   constructor() {
     this.types= new TypeSet();
     this.currGroups= [];
   }
+
+  // this.... needs some work.
+  readSpec(spec, group= null) {
+    if (group) {
+      this.currGroups.unshift(group);
+    }
+    this._readSpec(spec);
+    if (group) {
+      this.currGroups.shift();
+    }
+  }
+  _readSpec(dict) {
+    for (const k in dict) {
+      const data = dict[k];
+      // ick.
+      const prevGroups= this.currGroups.length;
+      if (data.group) {
+        this.currGroups= this.currGroups.concat( Array.isArray( data.group )? data.group: data.group );
+      }
+      switch (data.uses) {
+        default:
+          throw new Error(`unknown or missing uses ${k}'`);
+        case "group": {
+          const p = data.specs;
+          this.group(k, data.desc || k, () => {
+            this._readSpec(p);
+          });
+          break;
+        }
+        case "str": {
+          this.str(k, data.spec, data.desc);
+          break;
+        }
+        case "num": {
+          this.num(k, data.spec, data.desc);
+          break;
+        }
+        case "slot": {
+          this.slot(k, data.desc);
+          break;
+        }
+        case "swap": {
+          this.swap(k, data.spec, data.desc);
+          break;
+        }
+        case "flow": {
+          if (this.currGroups.includes("modeling")) {
+            this.flow(k, data.slot || [], data.spec, data.desc || "");
+            break;
+          }
+          // note: doesnt use the "maker" for now
+          const parts = data.spec.split(" ").filter(p => p.length);
+          const lede = parts[0];
+          const fmt = parts.filter((p, i) => i > 0).join("")
+          const tags = fmt && TagParser.parse(fmt);
+
+          const tokens = [lede];
+          if (!tags.keys) {
+            // console.log("no keys for", k);
+            // happens for things like "always", "equal_to", etc.
+          } else {
+            tags.keys.forEach((t, i) => {
+              if (t.startsWith("$")) {
+                const el = tags.args[t];
+                if (!el) {
+                  console.log(`couldnt find ${t} in ${k}`);
+                } else {
+                  // '$STR': { label: 'rel', type: 'relation' },
+                  if (el.label !== "_") {
+                    if (i === 0) {
+                      tokens.push(" ");
+                    } else {
+                      tokens.push(", ");
+                    }
+                    tokens.push(el.label);
+                  }
+                  tokens.push(": ");
+                  tokens.push(t);
+                }
+              }
+            });
+          }
+          const d= {
+            name: k,
+            uses: "flow",
+            group: this.currGroups.slice(),
+            with: {
+              params: tags.args,
+              tokens,
+            }
+            // todo: roles
+          };
+          if (data.slot) {
+            if (typeof data.slot === "string") {
+              d.with.slots = [data.slot];
+            } else {
+              d.with.slots = data.slot;
+            }
+          }
+          const desc = data.desc;
+          if (desc) {
+            d.desc = {
+              label: pascal(k),
+              short: desc,
+            };
+          }
+          this.newFromSpec(d);
+          break;
+        }
+      }
+      // remove groups
+      const rub= this.currGroups.length - prevGroups;
+      if (rub) {
+        this.currGroups.splice(prevGroups, rub);
+      }
+    }
+  }
+
 
   // introduce the passed group name to types
   // created during the passed function.
@@ -97,12 +181,12 @@ module.exports = class Make {
         desc= d;
       }
     }
-    return this.newType(name, "flow", desc,  {
-        slots: slots,
+    return this.newType(name, "flow", desc,
+      // using object assign in case slots dont exist.
+      Object.assign({
         tokens: tags.keys,
-        params: tags.args,
-        spec: tags.msg,
-    });
+        params: tags.args
+      }, slots && {slots}));
   }
 
   slot( name, desc= null ) {
@@ -114,8 +198,7 @@ module.exports = class Make {
     const tags= TagParser.parse(msg);
     return this.newType(name, "swap", desc, {
         tokens: tags.keys,
-        params: tags.args,
-        spec: tags.msg,
+        params: tags.args
     });
   }
   str( name, msg=null, desc= null ) {
@@ -124,6 +207,10 @@ module.exports = class Make {
 
   // pick or enter a small bit of text.
   makeStr( name, uses, msg, desc) {
+    // strTypes dont have normal params:
+    // we aren't fitting types into parameters
+    // the parameters are instead enumerated choices.
+    // ( that should probably be made clearer somehow... )
     const settings={ asValues: true, nullValue: name };
     let tags= TagParser.parse(msg, settings);
     // msg had no tags: it's either a desc, or it was set/left as null.
@@ -134,14 +221,8 @@ module.exports = class Make {
     }
     return this.newType(name, uses, desc, {
         tokens: tags.keys,
-        params: tags.args,
-        spec: tags.msg,
+        params: tags.args
      });
-  }
-
-  // multiline text
-  txt( name, msg=null, desc= null ) {
-    return this.makeStr(name, "txt", msg, desc);
   }
 
   num( name, desc= null ) {
@@ -149,7 +230,7 @@ module.exports = class Make {
   }
 
   newType(name, uses, desc, withspec=null) {
-    const group= this.currGroups.length && this.currGroups;
+    const group= this.currGroups.slice();
     return this.types.newType(Object.assign(
       {name:name},
       desc&&{desc:Make.makeDesc(name, desc)},
@@ -203,7 +284,13 @@ module.exports = class Make {
       w.tokens= tags.keys;
       w.params= tags.args;
       d["with"]= w;
+      // not sure why this is being deleted
+      // maybe just for better logging.
+      delete d.spec;
     }
     this.types.newType(d);
   }
 }
+
+
+module.exports = Make;

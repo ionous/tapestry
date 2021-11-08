@@ -1,21 +1,20 @@
 package story
 
 import (
-	r "reflect"
-
+	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera"
-	"git.sr.ht/~ionous/iffy/ephemera/decode"
-	"git.sr.ht/~ionous/iffy/export"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
+	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
 
 func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
-	if patternName, e := op.Name.NewName(k); e != nil {
+	if patternName, e := NewPatternName(k, op.Name); e != nil {
 		err = e
-	} else if e := op.PatternRules.ImportRules(k, patternName, ephemera.Named{}, 0); e != nil {
+	} else if e := op.PatternRules.ImportRules(k, patternName, eph.Named{}, 0); e != nil {
 		err = e
 	} else if e := op.PatternReturn.ImportReturn(k, patternName); e != nil {
 		err = e
@@ -28,7 +27,7 @@ func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *PatternReturn) ImportReturn(k *Importer, patternName ephemera.Named) (err error) {
+func (op *PatternReturn) ImportReturn(k *Importer, patternName eph.Named) (err error) {
 	if op != nil { // pattern returns are optional
 		if val, e := op.Result.ImportVariable(k, tables.NAMED_RETURN); e != nil {
 			err = errutil.Append(err, e)
@@ -41,7 +40,7 @@ func (op *PatternReturn) ImportReturn(k *Importer, patternName ephemera.Named) (
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
-	if patternName, e := op.Name.NewName(k); e != nil {
+	if patternName, e := NewPatternName(k, op.Name); e != nil {
 		err = e
 	} else if patternType, e := op.Type.ImportType(k); e != nil {
 		err = e
@@ -66,7 +65,7 @@ func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
 }
 
 func (op *PatternVariablesDecl) ImportPhrase(k *Importer) (err error) {
-	if patternName, e := op.PatternName.NewName(k); e != nil {
+	if patternName, e := NewPatternName(k, op.PatternName); e != nil {
 		err = e
 	} else {
 		// fix: shouldnt this be called pattern parameters?
@@ -81,9 +80,9 @@ func (op *PatternVariablesDecl) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *PatternRules) ImportRules(k *Importer, pattern, target ephemera.Named, flags rt.Flags) (err error) {
+func (op *PatternRules) ImportRules(k *Importer, pattern, target eph.Named, flags rt.Flags) (err error) {
 	if els := op.PatternRule; els != nil {
-		for _, el := range *els {
+		for _, el := range els {
 			if e := el.ImportRule(k, pattern, target, flags); e != nil {
 				err = errutil.Append(err, e)
 			}
@@ -92,7 +91,7 @@ func (op *PatternRules) ImportRules(k *Importer, pattern, target ephemera.Named,
 	return
 }
 
-func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, tgtFlags rt.Flags) (err error) {
+func (op *PatternRule) ImportRule(k *Importer, pattern, target eph.Named, tgtFlags rt.Flags) (err error) {
 	if hook, e := op.Hook.ImportProgram(k); e != nil {
 		err = e
 	} else if flags, e := op.Flags.ReadFlags(); e != nil {
@@ -107,48 +106,52 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target ephemera.Named, t
 			flags = rt.Infix
 		}
 		// check if this rule is declared inside a specific domain
-		guard := op.Guard
-		if searchForCounters(r.ValueOf(guard)) {
-			flags |= rt.Filter
-		}
-		// check if this rule is declared inside a specific domain
-		if dom := k.Current.Domain.String(); len(dom) > 0 {
-			guard = &core.AllTrue{[]rt.BoolEval{
-				&core.HasDominion{dom},
-				guard,
-			}}
-		}
-		// a token stream sure would be nice here -- then we could just strstr for countOf
-		rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: flags}
-		if patternProg, e := k.NewGob("rule", rule); e != nil {
-			err = e
+		if guard := op.Guard; guard == nil {
+			err = errutil.New("missing guard in", pattern.String(), "at", op.Hook.At.String())
 		} else {
-			// currentDomain returns "entire_game" when k.Current.Domain is the empty string.
-			k.NewPatternRule(pattern, target, k.currentDomain(), patternProg)
+			if SearchForCounters(guard.(jsn.Marshalee)) {
+				flags |= rt.Filter
+			}
+			domain := k.Env().Current.Domain
+			// check if this rule is declared inside a specific domain
+			if domain != k.Env().Game.Domain {
+				guard = &core.AllTrue{[]rt.BoolEval{
+					&core.HasDominion{domain.String()},
+					guard,
+				}}
+			}
+			// a token stream sure would be nice here -- then we could just strstr for countOf
+			rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: float64(flags)}
+			if patternProg, e := k.NewProg("rule", rule); e != nil {
+				err = errutil.New(e, "while importing pattern rule", pattern.String())
+			} else {
+				// currentDomain returns "entire_game" when k.Current.Domain is the empty string.
+				k.NewPatternRule(pattern, target, domain, patternProg)
+			}
 		}
 	}
 	return
 }
 
 func (op *PatternFlags) ReadFlags() (ret rt.Flags, err error) {
-	if op != nil {
-		switch str := op.Str; str {
-		case "$BEFORE":
-			// run other matching patterns, and then run this pattern. other...this.
-			ret = rt.Postfix
-		case "$AFTER":
-			// keep going after running the current pattern. this...others.
-			ret = rt.Prefix
-		case "$TERMINATE":
-			ret = rt.Infix
-		default:
-			err = errutil.New("unknown pattern flags", str)
+	switch str := op.Str; str {
+	case PatternFlags_Before:
+		// run other matching patterns, and then run this pattern. other...this.
+		ret = rt.Postfix
+	case PatternFlags_After:
+		// keep going after running the current pattern. this...others.
+		ret = rt.Prefix
+	case PatternFlags_Terminate:
+		ret = rt.Infix
+	default:
+		if len(str) > 0 {
+			err = errutil.Fmt("unknown pattern flags %q", str)
 		}
 	}
 	return
 }
 
-func (op *PatternLocals) ImportLocals(k *Importer, patternName ephemera.Named) (err error) {
+func (op *PatternLocals) ImportLocals(k *Importer, patternName eph.Named) (err error) {
 	for _, el := range op.LocalDecl {
 		if val, e := el.VariableDecl.ImportVariable(k, tables.NAMED_LOCAL); e != nil {
 			err = e
@@ -156,7 +159,7 @@ func (op *PatternLocals) ImportLocals(k *Importer, patternName ephemera.Named) (
 		} else {
 			var prog ephemera.Prog
 			if init := el.Value; init != nil {
-				if p, e := k.NewGob("assignment", init); e != nil {
+				if p, e := k.NewProg("assignment", init); e != nil {
 					err = e
 					break
 				} else {
@@ -169,65 +172,11 @@ func (op *PatternLocals) ImportLocals(k *Importer, patternName ephemera.Named) (
 	return
 }
 
-func (op *PatternType) ImportType(k *Importer) (ret ephemera.Named, err error) {
-	if t, found := decode.FindChoice(op, op.Str); !found {
+func (op *PatternType) ImportType(k *Importer) (ret eph.Named, err error) {
+	if t, found := composer.FindChoice(op, op.Str); !found {
 		err = errutil.Fmt("choice %s not found in %T", op.Str, op)
 	} else {
 		ret = k.NewName(t, tables.NAMED_TYPE, op.At.String())
-	}
-	return
-}
-
-func searchForCounters(rval r.Value) bool {
-	return searchForType(rval.Elem(), r.TypeOf((*core.CountOf)(nil)).Elem())
-}
-
-func searchForType(rval r.Value, match r.Type) (ret bool) {
-	if rtype := rval.Type(); rtype == match {
-		ret = true
-	} else {
-		ret = export.WalkProperties(rtype, func(f *r.StructField, path []int) (ret bool) {
-			switch ftype := f.Type; ftype.Kind() {
-			case r.Slice:
-				k := ftype.Elem().Kind()
-				if k == r.Interface {
-					f := rval.FieldByIndex(path)
-					for i, cnt := 0, f.Len(); i < cnt; i++ {
-						if el := f.Index(i); checkInterfaceType(el, match) {
-							ret = true
-							break
-						}
-					}
-				}
-
-			case r.Ptr:
-				f := rval.FieldByIndex(path)
-				ret = checkPtrType(f, match)
-			case r.Interface:
-				f := rval.FieldByIndex(path)
-				ret = checkInterfaceType(f, match)
-			}
-			return
-		})
-	}
-	return
-}
-
-func checkPtrType(f r.Value, match r.Type) (ret bool) {
-	if !f.IsNil() {
-		if el := f.Elem(); el.Kind() == r.Struct {
-			ret = searchForType(el, match)
-		}
-	}
-	return
-}
-
-func checkInterfaceType(f r.Value, match r.Type) (ret bool) {
-	if !f.IsNil() {
-		el := f.Elem()
-		if k := el.Kind(); k == r.Ptr {
-			ret = checkPtrType(el, match)
-		}
 	}
 	return
 }

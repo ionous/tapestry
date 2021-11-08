@@ -1,4 +1,4 @@
-makeLang(new Make(new Types()));
+// makeLang(new Make(new Types()));
 
 const events= new Vue(); // global event bus
 const nodes= new Nodes();
@@ -53,15 +53,21 @@ const app= new Vue({
     this.events= events;
     const catalog= (typeof MockCatalog !== "undefined")?
                 new MockCatalog(nodes):
-                new RemoteCatalog(nodes);
+                new StoryCatalog(nodes);
     this.shortcuts= new Shortcuts(redux, catalog, this.copier);
     this.catalog= catalog;
+    const specs = new SpecCatalog();
+    this.specCatalog= specs;
+    specs.load(() => {
+      this.loaded= true;
+    });
   },
   data() {
     return {
       nodes: nodes,
       dropper: new Dropper(this),
       shift: false,
+      loaded: false,
       copier: {
         active: false,
         cancel(reason) {

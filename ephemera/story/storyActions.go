@@ -2,7 +2,8 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
+
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
 )
@@ -22,7 +23,7 @@ func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret ephemera.Named, err error) {
+func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret eph.Named, err error) {
 	// declare the pattern
 	n := k.NewName(lang.Breakcase(name), tables.NAMED_PATTERN, op.At.String())
 
@@ -36,25 +37,28 @@ func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret ep
 	k.NewPatternDecl(n, paramName, paramType, affine.Object.String())
 
 	// then the other parameters...
-	return n, op.ActionParams.Opt.(actionImporter).ImportAction(k, n)
+	type actionImporter interface {
+		ImportAction(*Importer, eph.Named) error
+	}
+	return n, op.ActionParams.Value.(actionImporter).ImportAction(k, n)
 }
 
-type actionImporter interface {
-	ImportAction(*Importer, ephemera.Named) error
-}
-
-func (op *CommonAction) ImportAction(k *Importer, n ephemera.Named) (err error) {
-	if kind, e := op.Kind.NewName(k); e != nil {
+func (op *CommonAction) ImportAction(k *Importer, n eph.Named) (err error) {
+	if kind, e := NewSingularKind(k, op.Kind); e != nil {
 		err = e
 	} else {
 		noun := k.NewName(actionNoun, tables.NAMED_PARAMETER, op.At.String())
 		k.NewPatternDecl(n, noun, kind, affine.Object.String())
+		// FIX! why wasnt this being imported?
+		// if op.ActionContext != nil {
+		// 	err = op.ActionContext.ImportContext(k, n)
+		// }
 	}
 	return
 }
 
-func (op *ActionContext) ImportContext(k *Importer, n ephemera.Named) (err error) {
-	if kind, e := op.Kind.NewName(k); e != nil {
+func (op *ActionContext) ImportContext(k *Importer, n eph.Named) (err error) {
+	if kind, e := NewSingularKind(k, op.Kind); e != nil {
 		err = e
 	} else {
 		otherNoun := k.NewName(actionOtherNoun, tables.NAMED_PARAMETER, op.At.String())
@@ -66,9 +70,9 @@ func (op *ActionContext) ImportContext(k *Importer, n ephemera.Named) (err error
 const actionNoun = "noun"
 const actionOtherNoun = "other_noun"
 
-func (op *PairedAction) ImportAction(k *Importer, n ephemera.Named) (err error) {
+func (op *PairedAction) ImportAction(k *Importer, n eph.Named) (err error) {
 	// inform calls the two objects "noun" and "second noun"
-	if kind, e := op.Kinds.FixPlurals(k); e != nil {
+	if kind, e := FixSingular(k, op.Kinds); e != nil {
 		err = e
 	} else {
 		for _, name := range []string{actionNoun, actionOtherNoun} {
@@ -78,7 +82,7 @@ func (op *PairedAction) ImportAction(k *Importer, n ephemera.Named) (err error) 
 	}
 	return
 }
-func (op *AbstractAction) ImportAction(k *Importer, n ephemera.Named) (err error) {
+func (op *AbstractAction) ImportAction(k *Importer, n eph.Named) (err error) {
 	// no extra parameters
 	return
 }

@@ -3,44 +3,29 @@ package list
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/pattern"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
-// A normal reduce would return a value, instead we accumulate into a variable
-type Reduce struct {
-	IntoValue    string
-	FromList     rt.Assignment
-	UsingPattern pattern.PatternName
-}
-
-func (*Reduce) Compose() composer.Spec {
-	return composer.Spec{
-		Name:  "list_reduce",
-		Group: "list",
-		Desc: `Reduce list: Transform the values from one list by combining them into a single value.
-		The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).`,
-	}
-}
-
-func (op *Reduce) Execute(run rt.Runtime) (err error) {
+func (op *ListReduce) Execute(run rt.Runtime) (err error) {
 	if e := op.reduce(run); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func (op *Reduce) reduce(run rt.Runtime) (err error) {
+func (op *ListReduce) reduce(run rt.Runtime) (err error) {
+
+	intoValue := value.VariableName{Str: op.IntoValue} // fix
 	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
 		err = e
-	} else if outVal, e := safe.CheckVariable(run, op.IntoValue, ""); e != nil {
+	} else if outVal, e := safe.CheckVariable(run, intoValue, ""); e != nil {
 		err = e
 	} else {
-		pat := op.UsingPattern.String()
+		pat := op.UsingPattern
 		aff := outVal.Affinity()
 		for it := g.ListIt(fromList); it.HasNext(); {
 			if inVal, e := it.GetNext(); e != nil {

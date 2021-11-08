@@ -1,0 +1,70 @@
+{
+    "render_field":
+    {
+        "uses": "flow",
+        "spec": "render_field {_%name:text_eval}",
+        "slot": "from_source_fields",
+        "group": "internal",
+        "desc":
+        [
+            "in template phrases, picks between record variables, object variables, and named global objects.",
+            "ex. could be \"ringBearer\", \"SamWise\", or \"frodo\""
+        ]
+    },
+    "render_name":
+    {
+        "uses": "flow",
+        "spec": "render_name {_%name:text}",
+        "slot": "text_eval",
+        "group": "internal",
+        "desc":
+        [
+            "handles changing a template like {.boombip} into text.",
+            "if the name is a variable containing an object name: return the printed object name ( via \"print name\" )",
+            "if the name is a variable with some other text: return that text.",
+            "if the name isn't a variable but refers to some object: return that object's printed object name.",
+            "otherwise, its an error."
+        ]
+    },
+    "render_pattern":
+    {
+        "uses": "flow",
+        "spec": "render {_%pattern:pattern_name} {args%arguments:call_args}",
+        "slot":
+        [
+            "assignment",
+            "text_eval"
+        ],
+        "group": "internal",
+        "desc":
+        [
+            "printing is generally an activity b/c say is an activity",
+            "and we want the ability to say several things in series."
+        ]
+    },
+    "render_flags":
+    {
+        "uses": "str",
+        "spec": "{as_var%render_as_var}, {as_obj%render_as_obj}, or {as_any%render_as_any}"
+    },
+    "render_ref":
+    {
+        "uses": "flow",
+        "spec": "render_ref {_%name:variable_name} {flags:render_flags}",
+        "slot":
+        [
+            "assignment",
+            "number_eval",
+            "text_eval"
+        ],
+        "group": "internal",
+        "desc": "returns the value of a variable or the id of an object."
+    },
+    "render_exp":
+    {
+        "uses": "flow",
+        "spec": "render_exp {_%expression:text_eval}",
+        "slot": "text_eval",
+        "group": "internal"
+    }
+}

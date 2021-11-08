@@ -3,7 +3,9 @@ package assembly
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/grammar"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -18,9 +20,9 @@ func AssembleGrammar(asm *Assembler) (err error) {
 		from eph_prog where progType='grammar'
 		order by rowid`,
 		func() (err error) {
-			var decl grammar.GrammarDecl
+			var decl grammar.Grammar
 			var name string // try to make a name for ourselves
-			if e := tables.DecodeGob(prog, &decl); e != nil {
+			if e := cin.Decode(&decl, prog, iffy.AllSignatures); e != nil {
 				err = e
 			} else {
 				switch d := decl.Grammar.(type) {
@@ -53,7 +55,7 @@ func AssembleGrammar(asm *Assembler) (err error) {
 func assembleDirectives(asm *Assembler, names []string, directives []*grammar.Directive) (err error) {
 	// write directives
 	for i, d := range directives {
-		if e := asm.WriteGob(names[i], d); e != nil {
+		if e := asm.WriteProgram(names[i], "Directive", d); e != nil {
 			err = e
 			break
 		}

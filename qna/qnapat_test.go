@@ -2,21 +2,21 @@ package qna
 
 import (
 	"bytes"
-	"encoding/gob"
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/assembly"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
+	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
+	"github.com/ionous/errutil"
 )
 
 // manually add an assembled pattern to the database, test that it works as expected.
 func TestSayMe(t *testing.T) {
-	gob.Register((*core.Text)(nil))
-	gob.Register((*debug.MatchNumber)(nil))
-
+	errutil.Panic = true
 	db := testdb.Open(t.Name(), testdb.Memory, assembly.SqlCustomDriver)
 	defer db.Close()
 	if e := tables.CreateModel(db); e != nil {
@@ -39,7 +39,12 @@ func TestSayMe(t *testing.T) {
 	} else if e := tables.CreateRunViews(db); e != nil {
 		t.Fatal(e)
 	}
-	run := NewRuntime(db)
+	run := NewRuntime(db, []map[uint64]interface{}{
+		rt.Signatures,
+		core.Signatures, {
+			cin.Hash("SayMe:"): (*debug.SayMe)(nil),
+			cin.Hash("Match:"): (*debug.MatchNumber)(nil),
+		}})
 	for i, expect := range []string{"One!", "Two!", "Three!", "Not between 1 and 3."} {
 		var buf bytes.Buffer
 		run.SetWriter(&buf)

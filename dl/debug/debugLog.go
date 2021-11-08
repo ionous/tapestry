@@ -2,9 +2,9 @@ package debug
 
 import (
 	"log"
+	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
@@ -13,25 +13,11 @@ import (
 )
 
 // LogLevel controls how much debugging to print
-// The default level (0) means log everything but notes,
+// The default level ( empty string ) means log everything but notes,
 // otherwise it logs only at the named level and higher.
-var LogLevel Level
+var LogLevel LoggingLevel
 
-type Log struct {
-	Value rt.Assignment `if:"selector"`
-	Level Level         `if:"selector"`
-}
-
-func (op *Log) Compose() composer.Spec {
-	return composer.Spec{
-		Name:   "debug_log",
-		Group:  "debug",
-		Fluent: &composer.Fluid{Name: "log", Role: composer.Command},
-		Desc:   "Debug log",
-	}
-}
-
-func (op *Log) Execute(run rt.Runtime) (err error) {
+func (op *DebugLog) Execute(run rt.Runtime) (err error) {
 	// fix? at this time we cant guarantee a lack of side-effects
 	// so we always eval even if we don't print.
 	if v, e := safe.GetAssignedValue(run, op.Value); e != nil {
@@ -59,9 +45,27 @@ func (op *Log) Execute(run rt.Runtime) (err error) {
 			e := errutil.New("unknown affinity", a)
 			err = cmdError(op, e)
 		}
-		if err == nil && ((LogLevel != 0 && op.Level >= LogLevel) || (LogLevel == 0 && (op.Level == 0 || op.Level > Note))) {
-			log.Println(op.Level.Header(), i)
+		global := LogLevel.Index()
+		level := op.LogLevel.Index()
+		if err == nil && ((global >= 0 && level >= global) || (global < 0 && level != 0)) {
+			if level < 0 {
+				level = 0
+			}
+			txt := op.LogLevel.Compose().Strings[level]
+			header := strings.Repeat("#", 1+level)
+			log.Println(header, txt, i)
 		}
+	}
+	return
+}
+
+func (lvl LoggingLevel) Index() (ret int) {
+	// FIX: who comes up with this stuff?
+	if str := lvl.String(); len(str) == 0 {
+		ret = -1
+	} else {
+		spec := lvl.Compose()
+		_, ret = spec.IndexOfChoice(str)
 	}
 	return
 }

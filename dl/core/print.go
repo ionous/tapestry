@@ -3,31 +3,11 @@ package core
 import (
 	"strconv"
 
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
-
-// PrintNum writes a number using numerals, eg. "1".
-type PrintNum struct {
-	Num rt.NumberEval
-}
-
-// PrintNumWord writes a number using english: eg. "one".
-type PrintNumWord struct {
-	Num rt.NumberEval
-}
-
-// Compose defines a spec for the composer editor.
-func (*PrintNum) Compose() composer.Spec {
-	return composer.Spec{
-		Spec:  "as text {num:number_eval}",
-		Desc:  "A number as text: Writes a number using numerals, eg. '1'.",
-		Group: "printing",
-	}
-}
 
 func (op *PrintNum) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if n, e := safe.GetNumber(run, op.Num); e != nil {
@@ -38,14 +18,6 @@ func (op *PrintNum) GetText(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.StringOf("<num>")
 	}
 	return
-}
-
-// Compose defines a spec for the composer editor.
-func (*PrintNumWord) Compose() composer.Spec {
-	return composer.Spec{
-		Desc:  "A number in words: Writes a number in plain english: eg. 'one'",
-		Group: "printing",
-	}
 }
 
 func (op *PrintNumWord) GetText(run rt.Runtime) (ret g.Value, err error) {

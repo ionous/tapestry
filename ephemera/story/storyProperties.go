@@ -2,14 +2,14 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
 
-func (op *PropertyDecl) ImportProperty(k *Importer, kind ephemera.Named) (err error) {
-	if prop, e := op.Property.NewName(k); e != nil {
+func (op *PropertyDecl) ImportProperty(k *Importer, kind eph.Named) (err error) {
+	if prop, e := NewProperty(k, op.Property); e != nil {
 		err = e
 	} else {
 		err = op.PropertyType.ImportPropertyType(k, kind, prop)
@@ -18,12 +18,12 @@ func (op *PropertyDecl) ImportProperty(k *Importer, kind ephemera.Named) (err er
 	return
 }
 
-func (op *PropertyType) ImportPropertyType(k *Importer, kind, prop ephemera.Named) (err error) {
+func (op *PropertyType) ImportPropertyType(k *Importer, kind, prop eph.Named) (err error) {
 	type propertyTypeImporter interface {
-		ImportPropertyType(k *Importer, kind, prop ephemera.Named) error
+		ImportPropertyType(k *Importer, kind, prop eph.Named) error
 	}
-	if opt, ok := op.Opt.(propertyTypeImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+	if opt, ok := op.Value.(propertyTypeImporter); !ok {
+		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
 		err = opt.ImportPropertyType(k, kind, prop)
 		// Comment      *Lines
@@ -35,7 +35,7 @@ func (op *PropertyType) ImportPropertyType(k *Importer, kind, prop ephemera.Name
 // we could only do that with an after the fact reduction, and with some additional mdl data.
 // ( ex. in case the same aspect is assigned twice, or twice at difference depths )
 // for now the name of the field is the name of the aspect
-func (op *PropertyAspect) ImportPropertyType(k *Importer, kind, prop ephemera.Named) (err error) {
+func (op *PropertyAspect) ImportPropertyType(k *Importer, kind, prop eph.Named) (err error) {
 	// record the existence of an aspect with the same name as the property
 	k.NewName(prop.String(), tables.NAMED_ASPECT, op.At.String())
 	// record the use of that property and aspect.
@@ -45,8 +45,8 @@ func (op *PropertyAspect) ImportPropertyType(k *Importer, kind, prop ephemera.Na
 
 // "{a number%number}, {some text%text}, or {a true/false value%bool}");
 // bool properties become implicit aspects
-func (op *PrimitiveType) ImportPropertyType(k *Importer, kind, prop ephemera.Named) (err error) {
-	if op.Str != "$BOOL" {
+func (op *PrimitiveType) ImportPropertyType(k *Importer, kind, prop eph.Named) (err error) {
+	if op.Str != PrimitiveType_Bool {
 		if primType, e := op.ImportPrimType(k); e != nil {
 			err = e
 		} else {
@@ -65,9 +65,9 @@ func (op *PrimitiveType) ImportPropertyType(k *Importer, kind, prop ephemera.Nam
 }
 
 // number_list, text_list, record_type, record_list
-func (op *ExtType) ImportVariableType(k *Importer) (retType ephemera.Named, retAff string, err error) {
-	if imp, ok := op.Opt.(primTypeImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+func (op *ExtType) ImportVariableType(k *Importer) (retType eph.Named, retAff string, err error) {
+	if imp, ok := op.Value.(primTypeImporter); !ok {
+		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else if typeName, aff, e := imp.ImportPrimType(k); e != nil {
 		err = e
 	} else {
@@ -84,9 +84,9 @@ func (op *ExtType) ImportVariableType(k *Importer) (retType ephemera.Named, retA
 }
 
 // number_list, text_list, record_type, record_list
-func (op *ExtType) ImportPropertyType(k *Importer, kind, prop ephemera.Named) (err error) {
-	if imp, ok := op.Opt.(primTypeImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Opt))
+func (op *ExtType) ImportPropertyType(k *Importer, kind, prop eph.Named) (err error) {
+	if imp, ok := op.Value.(primTypeImporter); !ok {
+		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else if primType, primAff, e := imp.ImportPrimType(k); e != nil {
 		err = e
 	} else {

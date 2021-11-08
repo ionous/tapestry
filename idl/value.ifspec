@@ -1,0 +1,47 @@
+{
+    "number":
+    {
+        "uses": "num"
+    },
+    "bool":
+    {
+        "uses": "str",
+        "spec": "{true} or {false}"
+    },
+    "text":
+    {
+        "uses": "str",
+        "desc":
+        [
+            "A sequence of characters of any length, all on one line.",
+            "Examples include letters, words, or short sentences.",
+            "Text is generally something displayed to the player.",
+            "See also: lines."
+        ]
+    },
+    "lines":
+    {
+        "uses": "str",
+        "desc":
+        [
+            "A sequence of characters of any length spanning multiple lines.",
+            "Paragraphs are a prime example. Generally lines are some piece of the story that will be displayed to the player.",
+            "See also: text."
+        ]
+    },
+    "variable_name":
+    {
+        "uses": "str",
+        "group": "positioned"
+    },
+    "pattern_name":
+    {
+        "uses": "str",
+        "group": "positioned"
+    },
+    "relation_name":
+    {
+        "uses": "str",
+        "group": "positioned"
+    }
+}

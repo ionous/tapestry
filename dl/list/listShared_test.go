@@ -1,10 +1,8 @@
 package list_test
 
 import (
-	"strconv"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/test/testpat"
@@ -33,21 +31,6 @@ func newListTime(src []string, p testpat.Map) (ret rt.Runtime, vals *g.Record, e
 	return
 }
 
-func B(i bool) rt.BoolEval     { return &core.Bool{i} }
-func I(i int) rt.NumberEval    { return &core.Number{float64(i)} }
-func T(i string) rt.TextEval   { return &core.Text{i} }
-func V(i string) *core.Var     { return &core.Var{Name: i} }
-func N(n string) core.Variable { return core.Variable{Str: n} }
-
-func FromTs(vs []string) (ret rt.Assignment) {
-	if len(vs) == 1 {
-		ret = &core.FromText{&core.Text{vs[0]}}
-	} else {
-		ret = &core.FromTexts{&core.Texts{vs}}
-	}
-	return
-}
-
 // cmd to collect some text into a list of strings.
 type Write struct {
 	out  *[]string
@@ -60,15 +43,6 @@ func (op *Write) Execute(run rt.Runtime) (err error) {
 		err = e
 	} else {
 		(*op.out) = append((*op.out), t.String())
-	}
-	return
-}
-
-func getNum(run rt.Runtime, op rt.NumberEval) (ret string) {
-	if v, e := op.GetNumber(run); e != nil {
-		ret = e.Error()
-	} else {
-		ret = strconv.FormatFloat(v.Float(), 'g', -1, 64)
 	}
 	return
 }

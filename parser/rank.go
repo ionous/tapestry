@@ -71,7 +71,6 @@ type RankAll struct {
 	Plurals   []string
 	WordCount int
 	Ranking
-	mentioned bool
 }
 
 // RankNoun - never returns fals.

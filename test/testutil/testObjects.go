@@ -18,7 +18,7 @@ func (or *Objects) AddObjects(kind *g.Kind, names ...string) {
 }
 
 func (or *Objects) Names() (ret []string) {
-	for n, _ := range *or {
+	for n := range *or {
 		ret = append(ret, n)
 	}
 	sort.Strings(ret)

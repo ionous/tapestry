@@ -38,8 +38,8 @@ func TestFactorial(t *testing.T) {
 							From: &core.FromNum{
 								&core.ProductOf{
 									A: V("num"),
-									B: &core.Determine{
-										Pattern: "factorial",
+									B: &core.CallPattern{
+										Pattern: P("factorial"),
 										Arguments: core.NamedArgs(
 											"num", &core.FromNum{
 												&core.DiffOf{
@@ -51,7 +51,7 @@ func TestFactorial(t *testing.T) {
 				}, {
 					Filter: &core.CompareNum{
 						V("num"),
-						&core.EqualTo{},
+						&core.Equal{},
 						I(0),
 					},
 					Execute: core.NewActivity(
@@ -63,8 +63,8 @@ func TestFactorial(t *testing.T) {
 				}}},
 		}}
 	// determine the factorial of the number 3
-	det := core.Determine{
-		Pattern: "factorial",
+	det := core.CallPattern{
+		Pattern: P("factorial"),
 		Arguments: core.NamedArgs(
 			"num", &core.FromNum{
 				I(3),

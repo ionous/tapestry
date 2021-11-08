@@ -6,7 +6,7 @@ import (
 
 // ex. colors are a kind of value
 func (op *KindsOfAspect) ImportPhrase(k *Importer) (err error) {
-	if a, e := op.Aspect.NewName(k); e != nil {
+	if a, e := NewAspect(k, op.Aspect); e != nil {
 		err = e
 	} else {
 		k.NewAspect(a)
@@ -16,9 +16,9 @@ func (op *KindsOfAspect) ImportPhrase(k *Importer) (err error) {
 
 // ex. "cats are a kind of animal"
 func (op *KindsOfKind) ImportPhrase(k *Importer) (err error) {
-	if kind, e := op.PluralKinds.NewName(k); e != nil {
+	if kind, e := NewPluralKinds(k, op.PluralKinds); e != nil {
 		err = e
-	} else if parent, e := op.SingularKind.NewName(k); e != nil {
+	} else if parent, e := NewSingularKind(k, op.SingularKind); e != nil {
 		err = e
 	} else {
 		k.NewKind(kind, parent)
@@ -29,7 +29,7 @@ func (op *KindsOfKind) ImportPhrase(k *Importer) (err error) {
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
 func (op *KindsPossessProperties) ImportPhrase(k *Importer) (err error) {
-	if kind, e := op.PluralKinds.NewName(k); e != nil {
+	if kind, e := NewPluralKinds(k, op.PluralKinds); e != nil {
 		err = e
 	} else {
 		for _, n := range op.PropertyDecl {

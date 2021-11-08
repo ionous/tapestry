@@ -1,886 +1,250 @@
 {
-  "id": "id-177fa9c4277-0",
-  "type": "story",
-  "value": {
-    "$PARAGRAPH": [
-      {
-        "id": "id-177fb980e34-50",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:": [
+            "patterns",
+            "adjust light"
+          ]
+        },
+        {
+          "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "adjust light",
             {
-              "id": "id-177fb980e34-54",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb980e34-55",
-                "type": "pattern_decl",
-                "value": {
-                  "$TYPE": {
-                    "id": "id-1781842316a-19",
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
-                  },
-                  "$NAME": {
-                    "id": "id-177fb980e34-56",
-                    "type": "pattern_name",
-                    "value": "adjust light"
-                  }
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "ObjFields:": "player"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type primitive:": [
+                        "our",
+                        "was lit",
+                        "bool"
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "FromBool:": {
+                          "Get obj:trait:": [
+                            "@actor",
+                            "not in darkness"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type primitive:": [
+                        "our",
+                        "now lit",
+                        "bool"
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "FromBool:": {
+                          "Determine:arguments:": [
+                            "contains light",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "spot",
+                                    "@actor"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
                 }
-              }
+              ]
             },
             {
-              "id": "id-177fb980e34-142",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb980e34-140",
-                "type": "comment",
-                "value": {
-                  "$LINES": {
-                    "id": "id-177fb980e34-141",
-                    "type": "lines",
-                    "value": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
-                  }
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        "@was lit",
+                        {
+                          "Not:": "@now lit"
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Determine:": "Print news of darkness"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        "@now lit",
+                        {
+                          "Not:": "@was lit"
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Determine:": "print news of light"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:flags:hook activity:": [
+                    "Always",
+                    "before",
+                    {
+                      "Act:": [
+                        {
+                          "Put:from:at:": [
+                            {
+                              "VarField:": "actor"
+                            },
+                            "@now lit",
+                            "not in darkness"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 }
-              }
-            },
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:": [
+            "patterns",
+            "Print news of darkness"
+          ]
+        },
+        {
+          "PatternActions:patternRules:": [
+            "Print news of darkness",
             {
-              "id": "id-177fb980e34-59",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb980e34-60",
-                "type": "pattern_actions",
-                "value": {
-                  "$NAME": {
-                    "id": "id-177fb980e34-61",
-                    "type": "pattern_name",
-                    "value": "adjust light"
-                  },
-                  "$PATTERN_LOCALS": {
-                    "id": "id-177fb980e34-63",
-                    "type": "pattern_locals",
-                    "value": {
-                      "$LOCAL_DECL": [
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
                         {
-                          "id": "id-1783d2aa0bb-167",
-                          "type": "local_decl",
-                          "value": {
-                            "$VARIABLE_DECL": {
-                              "id": "id-1783d2aa0bb-168",
-                              "type": "variable_decl",
-                              "value": {
-                                "$AN": {
-                                  "id": "id-1783d2aa0bb-169",
-                                  "type": "determiner",
-                                  "value": "$AN"
-                                },
-                                "$NAME": {
-                                  "id": "id-1783d2aa0bb-170",
-                                  "type": "variable_name",
-                                  "value": "actor"
-                                },
-                                "$TYPE": {
-                                  "id": "id-1783d2aa0bb-171",
-                                  "type": "variable_type",
-                                  "value": {
-                                    "$OBJECT": {
-                                      "id": "id-1783d2aa0bb-172",
-                                      "type": "object_type",
-                                      "value": {
-                                        "$AN": {
-                                          "id": "id-1783d2aa0bb-173",
-                                          "type": "ana",
-                                          "value": "$AN"
-                                        },
-                                        "$KIND": {
-                                          "id": "id-1783d2aa0bb-174",
-                                          "type": "singular_kind",
-                                          "value": "actor"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "$VALUE": {
-                              "id": "id-1783d2aa0bb-180",
-                              "type": "local_init",
-                              "value": {
-                                "$VALUE": {
-                                  "id": "id-1783d2aa0bb-181",
-                                  "type": "assignment",
-                                  "value": {
-                                    "id": "id-1783d2aa0bb-182",
-                                    "type": "get_at_field",
-                                    "value": {
-                                      "$FIELD": {
-                                        "id": "id-1783d2aa0bb-183",
-                                        "type": "text",
-                                        "value": "pawn"
-                                      },
-                                      "$FROM": {
-                                        "id": "id-1783d2aa0bb-184",
-                                        "type": "from_source_fields",
-                                        "value": {
-                                          "id": "id-1783d2aa0bb-185",
-                                          "type": "from_obj",
-                                          "value": {
-                                            "$OBJECT": {
-                                              "id": "id-1783d2aa0bb-186",
-                                              "type": "text_eval",
-                                              "value": {
-                                                "id": "id-1783d2aa0bb-187",
-                                                "type": "text_value",
-                                                "value": {
-                                                  "$TEXT": {
-                                                    "id": "id-1783d2aa0bb-188",
-                                                    "type": "text",
-                                                    "value": "player"
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          "id": "id-177fb980e34-64",
-                          "type": "local_decl",
-                          "value": {
-                            "$VARIABLE_DECL": {
-                              "id": "id-177fb980e34-65",
-                              "type": "variable_decl",
-                              "value": {
-                                "$AN": {
-                                  "id": "id-177fb980e34-66",
-                                  "type": "determiner",
-                                  "value": "$OUR"
-                                },
-                                "$NAME": {
-                                  "id": "id-177fb980e34-67",
-                                  "type": "variable_name",
-                                  "value": "was lit"
-                                },
-                                "$TYPE": {
-                                  "id": "id-177fb980e34-68",
-                                  "type": "variable_type",
-                                  "value": {
-                                    "$PRIMITIVE": {
-                                      "id": "id-177fb980e34-69",
-                                      "type": "primitive_type",
-                                      "value": "$BOOL"
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "$VALUE": {
-                              "id": "id-177fb980e34-70",
-                              "type": "local_init",
-                              "value": {
-                                "$VALUE": {
-                                  "id": "id-177fb980e34-71",
-                                  "type": "assignment",
-                                  "value": {
-                                    "id": "id-177ff85b19c-0",
-                                    "type": "from_bool",
-                                    "value": {
-                                      "$VAL": {
-                                        "id": "id-177ff85b19c-1",
-                                        "type": "bool_eval",
-                                        "value": {
-                                          "id": "id-177ff85b19c-2",
-                                          "type": "has_trait",
-                                          "value": {
-                                            "$OBJECT": {
-                                              "id": "id-177ff85b19c-3",
-                                              "type": "text_eval",
-                                              "value": {
-                                                "id": "id-1783d670d60-0",
-                                                "type": "get_var",
-                                                "value": {
-                                                  "$NAME": {
-                                                    "id": "id-1783d670d60-1",
-                                                    "type": "text",
-                                                    "value": "actor"
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "$TRAIT": {
-                                              "id": "id-177ff85b19c-4",
-                                              "type": "text_eval",
-                                              "value": {
-                                                "id": "id-177ff85b19c-7",
-                                                "type": "text_value",
-                                                "value": {
-                                                  "$TEXT": {
-                                                    "id": "id-177ff85b19c-8",
-                                                    "type": "text",
-                                                    "value": "not in darkness"
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          "id": "id-177fb980e34-72",
-                          "type": "local_decl",
-                          "value": {
-                            "$VARIABLE_DECL": {
-                              "id": "id-177fb980e34-73",
-                              "type": "variable_decl",
-                              "value": {
-                                "$AN": {
-                                  "id": "id-177fb980e34-74",
-                                  "type": "determiner",
-                                  "value": "$OUR"
-                                },
-                                "$NAME": {
-                                  "id": "id-177fb980e34-75",
-                                  "type": "variable_name",
-                                  "value": "now lit"
-                                },
-                                "$TYPE": {
-                                  "id": "id-177fb980e34-76",
-                                  "type": "variable_type",
-                                  "value": {
-                                    "$PRIMITIVE": {
-                                      "id": "id-177fb980e34-77",
-                                      "type": "primitive_type",
-                                      "value": "$BOOL"
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "$VALUE": {
-                              "id": "id-177fb980e34-78",
-                              "type": "local_init",
-                              "value": {
-                                "$VALUE": {
-                                  "id": "id-177fb980e34-79",
-                                  "type": "assignment",
-                                  "value": {
-                                    "id": "id-177fb980e34-87",
-                                    "type": "from_bool",
-                                    "value": {
-                                      "$VAL": {
-                                        "id": "id-177fb980e34-88",
-                                        "type": "bool_eval",
-                                        "value": {
-                                          "id": "id-177fb980e34-89",
-                                          "type": "determine",
-                                          "value": {
-                                            "$NAME": {
-                                              "id": "id-177fb980e34-90",
-                                              "type": "pattern_name",
-                                              "value": "contains light"
-                                            },
-                                            "$ARGUMENTS": {
-                                              "id": "id-177fb980e34-91",
-                                              "type": "arguments",
-                                              "value": {
-                                                "$ARGS": [
-                                                  {
-                                                    "id": "id-177fb980e34-92",
-                                                    "type": "argument",
-                                                    "value": {
-                                                      "$NAME": {
-                                                        "id": "id-177fb980e34-93",
-                                                        "type": "variable_name",
-                                                        "value": "spot"
-                                                      },
-                                                      "$FROM": {
-                                                        "id": "id-177fb980e34-94",
-                                                        "type": "assignment",
-                                                        "value": {
-                                                          "id": "id-1783d2aa0bb-189",
-                                                          "type": "get_var",
-                                                          "value": {
-                                                            "$NAME": {
-                                                              "id": "id-1783d2aa0bb-190",
-                                                              "type": "text",
-                                                              "value": "actor"
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
+                          "Say:": {
+                            "Response:text:": [
+                              "darkness has fallen",
+                              "It is now pitch dark in here!"
+                            ]
                           }
                         }
                       ]
                     }
-                  },
-                  "$PATTERN_RULES": {
-                    "id": "id-177fb980e34-62",
-                    "type": "pattern_rules",
-                    "value": {
-                      "$PATTERN_RULE": [
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:": [
+            "patterns",
+            "Print news of light"
+          ]
+        },
+        {
+          "PatternActions:patternRules:": [
+            "Print news of light",
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
                         {
-                          "id": "id-177fb980e34-108",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-177fb980e34-109",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-177fb980e34-111",
-                                "type": "all_true",
-                                "value": {
-                                  "$TEST": [
+                          "Determine:arguments:": [
+                            "Print vantage",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "where",
                                     {
-                                      "id": "id-177fb980e34-112",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-177fb980e34-114",
-                                        "type": "get_var",
-                                        "value": {
-                                          "$NAME": {
-                                            "id": "id-177fb980e34-115",
-                                            "type": "text",
-                                            "value": "was lit"
-                                          }
+                                      "Get:from:": [
+                                        "pawn",
+                                        {
+                                          "ObjFields:": "player"
                                         }
-                                      }
-                                    },
-                                    {
-                                      "id": "id-177fb980e34-113",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-177fb980e34-116",
-                                        "type": "not",
-                                        "value": {
-                                          "$TEST": {
-                                            "id": "id-177fb980e34-117",
-                                            "type": "bool_eval",
-                                            "value": {
-                                              "id": "id-177fb980e34-118",
-                                              "type": "get_var",
-                                              "value": {
-                                                "$NAME": {
-                                                  "id": "id-177fb980e34-119",
-                                                  "type": "text",
-                                                  "value": "now lit"
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
+                                      ]
                                     }
                                   ]
                                 }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-177fb980e34-110",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-177fb980e34-120",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-177fb980e34-134",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-177fb980e34-135",
-                                          "type": "determine",
-                                          "value": {
-                                            "$NAME": {
-                                              "id": "id-177fb980e34-136",
-                                              "type": "pattern_name",
-                                              "value": "Print news of darkness"
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
+                              ]
                             }
-                          }
-                        },
-                        {
-                          "id": "id-177fb980e34-121",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-177fb980e34-122",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-177fb980e34-123",
-                                "type": "all_true",
-                                "value": {
-                                  "$TEST": [
-                                    {
-                                      "id": "id-177fb980e34-124",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-177fb980e34-125",
-                                        "type": "get_var",
-                                        "value": {
-                                          "$NAME": {
-                                            "id": "id-177fb980e34-126",
-                                            "type": "text",
-                                            "value": "now lit"
-                                          }
-                                        }
-                                      }
-                                    },
-                                    {
-                                      "id": "id-177fb980e34-127",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-177fb980e34-128",
-                                        "type": "not",
-                                        "value": {
-                                          "$TEST": {
-                                            "id": "id-177fb980e34-129",
-                                            "type": "bool_eval",
-                                            "value": {
-                                              "id": "id-177fb980e34-130",
-                                              "type": "get_var",
-                                              "value": {
-                                                "$NAME": {
-                                                  "id": "id-177fb980e34-131",
-                                                  "type": "text",
-                                                  "value": "was lit"
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  ]
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-177fb980e34-132",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-177fb980e34-133",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-177fb980e34-137",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-177fb980e34-138",
-                                          "type": "determine",
-                                          "value": {
-                                            "$NAME": {
-                                              "id": "id-177fb980e34-139",
-                                              "type": "pattern_name",
-                                              "value": "print news of light"
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          "id": "id-177fecc7bcd-59",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-177fecc7bcd-60",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-177fecc7bcd-64",
-                                "type": "always",
-                                "value": {}
-                              }
-                            },
-                            "$FLAGS": {
-                              "id": "id-177fecc7bcd-63",
-                              "type": "pattern_flags",
-                              "value": "$BEFORE"
-                            },
-                            "$HOOK": {
-                              "id": "id-177fecc7bcd-61",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-177fecc7bcd-62",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-177fecc7bcd-65",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-177fecc7bcd-66",
-                                          "type": "put_at_field",
-                                          "value": {
-                                            "$FROM": {
-                                              "id": "id-177fecc7bcd-67",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-177fecc7bcd-70",
-                                                "type": "get_var",
-                                                "value": {
-                                                  "$NAME": {
-                                                    "id": "id-177fecc7bcd-71",
-                                                    "type": "text",
-                                                    "value": "now lit"
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "$INTO": {
-                                              "id": "id-177fecc7bcd-68",
-                                              "type": "into_target_fields",
-                                              "value": {
-                                                "id": "id-1783d670d60-2",
-                                                "type": "into_var",
-                                                "value": {
-                                                  "$VAR": {
-                                                    "id": "id-1783d670d60-3",
-                                                    "type": "variable_name",
-                                                    "value": "actor"
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "$AT_FIELD": {
-                                              "id": "id-177fecc7bcd-69",
-                                              "type": "text",
-                                              "value": "not in darkness"
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
+                          ]
                         }
                       ]
                     }
-                  }
+                  ]
                 }
-              }
+              ]
             }
           ]
         }
-      },
-      {
-        "id": "id-177fb980e34-143",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-177fb980e34-144",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb980e34-145",
-                "type": "pattern_decl",
-                "value": {
-                  "$TYPE": {
-                    "id": "id-1781842316a-20",
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
-                  },
-                  "$NAME": {
-                    "id": "id-177fb980e34-146",
-                    "type": "pattern_name",
-                    "value": "Print news of darkness"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-177fb980e34-149",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb980e34-150",
-                "type": "pattern_actions",
-                "value": {
-                  "$NAME": {
-                    "id": "id-177fb980e34-151",
-                    "type": "pattern_name",
-                    "value": "Print news of darkness"
-                  },
-                  "$PATTERN_RULES": {
-                    "id": "id-177fb980e34-152",
-                    "type": "pattern_rules",
-                    "value": {
-                      "$PATTERN_RULE": [
-                        {
-                          "id": "id-177fb980e34-153",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-177fb980e34-154",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-177fb980e34-156",
-                                "type": "always",
-                                "value": {}
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-177fb980e34-155",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-177fb980e34-157",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-177fb980e34-158",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-177fb980e34-159",
-                                          "type": "say_text",
-                                          "value": {
-                                            "$TEXT": {
-                                              "id": "id-177fb980e34-160",
-                                              "type": "text_eval",
-                                              "value": {
-                                                "id": "id-177fb980e34-161",
-                                                "type": "response",
-                                                "value": {
-                                                  "$NAME": {
-                                                    "id": "id-177fb980e34-162",
-                                                    "type": "text",
-                                                    "value": "darkness has fallen"
-                                                  },
-                                                  "$TEXT": {
-                                                    "id": "id-177fb980e34-163",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-177fb980e34-164",
-                                                      "type": "text_value",
-                                                      "value": {
-                                                        "$TEXT": {
-                                                          "id": "id-177fb980e34-165",
-                                                          "type": "text",
-                                                          "value": "It is now pitch dark in here!"
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": "id-177fb980e34-166",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-177fb980e34-167",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb980e34-168",
-                "type": "pattern_decl",
-                "value": {
-                  "$TYPE": {
-                    "id": "id-1781842316a-21",
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
-                  },
-                  "$NAME": {
-                    "id": "id-177fb980e34-169",
-                    "type": "pattern_name",
-                    "value": "Print news of light"
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-177fb980e34-172",
-              "type": "story_statement",
-              "value": {
-                "id": "id-177fb980e34-173",
-                "type": "pattern_actions",
-                "value": {
-                  "$NAME": {
-                    "id": "id-177fb980e34-174",
-                    "type": "pattern_name",
-                    "value": "Print news of light"
-                  },
-                  "$PATTERN_RULES": {
-                    "id": "id-177fb980e34-175",
-                    "type": "pattern_rules",
-                    "value": {
-                      "$PATTERN_RULE": [
-                        {
-                          "id": "id-177fb980e34-176",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-177fb980e34-177",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-177fb980e34-178",
-                                "type": "always",
-                                "value": {}
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-177fb980e34-179",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-177fb980e34-180",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-177fb980e34-189",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-177fb980e34-190",
-                                          "type": "determine",
-                                          "value": {
-                                            "$NAME": {
-                                              "id": "id-177fb980e34-191",
-                                              "type": "pattern_name",
-                                              "value": "Print vantage"
-                                            },
-                                            "$ARGUMENTS": {
-                                              "id": "id-177fb980e34-192",
-                                              "type": "arguments",
-                                              "value": {
-                                                "$ARGS": [
-                                                  {
-                                                    "id": "id-177fb980e34-193",
-                                                    "type": "argument",
-                                                    "value": {
-                                                      "$NAME": {
-                                                        "id": "id-177fb980e34-194",
-                                                        "type": "variable_name",
-                                                        "value": "where"
-                                                      },
-                                                      "$FROM": {
-                                                        "id": "id-177fb980e34-195",
-                                                        "type": "assignment",
-                                                        "value": {
-                                                          "id": "id-177fb980e34-196",
-                                                          "type": "get_at_field",
-                                                          "value": {
-                                                            "$FIELD": {
-                                                              "id": "id-177fb980e34-197",
-                                                              "type": "text",
-                                                              "value": "pawn"
-                                                            },
-                                                            "$FROM": {
-                                                              "id": "id-177fb980e34-198",
-                                                              "type": "from_source_fields",
-                                                              "value": {
-                                                                "id": "id-177fb980e34-199",
-                                                                "type": "from_obj",
-                                                                "value": {
-                                                                  "$OBJECT": {
-                                                                    "id": "id-177fb980e34-200",
-                                                                    "type": "text_eval",
-                                                                    "value": {
-                                                                      "id": "id-177fb980e34-201",
-                                                                      "type": "text_value",
-                                                                      "value": {
-                                                                        "$TEXT": {
-                                                                          "id": "id-177fb980e34-202",
-                                                                          "type": "text",
-                                                                          "value": "player"
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      }
-    ]
-  }
+      ]
+    }
+  ]
 }

@@ -8,7 +8,7 @@ import (
 func ExamplePrintNum() {
 	var run sayTester
 	run.SetWriter(writer.NewStdout())
-	if e := safe.WriteText(&run, &PrintNum{&Number{213}}); e != nil {
+	if e := safe.WriteText(&run, &PrintNum{F(213)}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -18,7 +18,7 @@ func ExamplePrintNum() {
 func ExamplePrintNumWord() {
 	var run sayTester
 	run.SetWriter(writer.NewStdout())
-	if e := safe.WriteText(&run, &PrintNumWord{&Number{213}}); e != nil {
+	if e := safe.WriteText(&run, &PrintNumWord{F(213)}); e != nil {
 		panic(e)
 	}
 	// Output:

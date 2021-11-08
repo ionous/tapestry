@@ -1,10 +1,15 @@
 package assembly
 
 import (
+	"bytes"
 	"database/sql"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -112,10 +117,12 @@ func buildPatternCache(db *sql.DB) (ret patternCache, err error) {
 			// fix: need to handle conflicting prog definitions
 			// fix: should watch for locals which shadow parameter names ( i think, ideally merge them )
 			if last == nil || last.patternName != inPat {
-				last = &patternEntry{patternName: inPat, patternType: inType}
+				last = &patternEntry{patternName: inPat}
 				out[inPat] = last
 			}
-			if err == nil && inParam != inPat {
+			if inParam == inPat {
+				out[inPat].patternType = inType
+			} else {
 				// fix: these should probably be tables.PRIM_ names
 				// ie. "text" not "text_eval" -- tests and other things have to be adjusted
 				// it also seems a bad time to be camelizing things.
@@ -172,7 +179,7 @@ func convertType(inType, inKind, inAff string) (retAff affine.Affinity, retType 
 func decodeProg(prog []byte, aff affine.Affinity) (ret rt.Assignment, err error) {
 	if haveProg := len(prog) > 0; haveProg {
 		var local story.LocalInit
-		if e := tables.DecodeGob(prog, &local); e != nil {
+		if e := cin.Decode(&local, prog, iffy.AllSignatures); e != nil {
 			err = e
 		} else if local.Value == nil {
 			err = errutil.New("empty initializer")
@@ -220,11 +227,15 @@ func WriteFragment(asm *Assembler, kind string, pat *PatternFrag) (err error) {
 			if val != nil { // not every local has an initial value
 				f := pat.Fields[localOfs+i]
 				// fix: write encoded value... which we just recently decoded... :/
-				meta := struct{ Init rt.Assignment }{val}
-				if prog, e := tables.EncodeGob(&meta); e != nil {
-					err = errutil.Append(err, e)
-				} else if e := asm.WriteStart(pat.Name, f.Name, prog); e != nil {
-					err = errutil.Append(err, e)
+				if meta, ok := val.(jsn.Marshalee); !ok {
+					err = errutil.Append(err, errutil.Fmt("expected a marshalable type, got %T", meta))
+				} else {
+					var buf bytes.Buffer
+					if e := cout.Marshal(&buf, &rt.Fragment{val}); e != nil {
+						err = errutil.Append(err, e)
+					} else if e := asm.WriteStart(pat.Name, f.Name, buf.Bytes()); e != nil {
+						err = errutil.Append(err, e)
+					}
 				}
 			}
 		}

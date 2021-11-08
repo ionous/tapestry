@@ -200,7 +200,6 @@ func branchParser(p *TemplateParser, v Directive) (ret State, err error) {
 				} else {
 					p.pending.Append(res)
 				}
-				return
 			}))
 		}
 	case "elsif", "otherwiseIf":
@@ -216,7 +215,6 @@ func branchParser(p *TemplateParser, v Directive) (ret State, err error) {
 				} else {
 					p.pending.Append(res)
 				}
-				return
 			}))
 		}
 	}

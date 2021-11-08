@@ -1,12 +1,14 @@
 package assembly
 
 import (
+	"bytes"
 	"database/sql"
-	r "reflect"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -15,10 +17,6 @@ import (
 )
 
 type IssueReport func(pos reader.Position, msg string)
-
-func cat(str ...string) string {
-	return strings.Join(str, " ")
-}
 
 func NewAssembler(db *sql.DB) *Assembler {
 	reportNothing := func(reader.Position, string) {}
@@ -139,28 +137,12 @@ func (m *Assembler) WritePlural(one, many string) error {
 	return e
 }
 
-func (m *Assembler) WriteProg(progName, typeName string, bytes []byte) (err error) {
-	_, err = m.cache.Exec(mdl_prog, progName, typeName, bytes)
-	return
-}
-
-func (m *Assembler) WriteGob(progName string, cmd interface{}) (err error) {
-	if prog, e := tables.EncodeGob(cmd); e != nil {
+func (m *Assembler) WriteProgram(progName string, typeName string, cmd jsn.Marshalee) (err error) {
+	var buf bytes.Buffer
+	if e := cout.Marshal(&buf, cmd); e != nil {
 		err = e
 	} else {
-		rval := r.ValueOf(cmd)
-		typeName := rval.Elem().Type().Name()
-		err = m.WriteProg(progName, typeName, prog)
-	}
-	return
-}
-
-func (m *Assembler) WriteGobs(gobs map[string]interface{}) (err error) {
-	for k, v := range gobs {
-		if e := m.WriteGob(k, v); e != nil {
-			err = e
-			break
-		}
+		_, err = m.cache.Exec(mdl_prog, progName, typeName, buf.Bytes())
 	}
 	return
 }
@@ -211,16 +193,18 @@ func (m *Assembler) WriteVerb(relation, verb string) (err error) {
 
 var mdl_aspect = tables.Insert("mdl_aspect", "aspect", "trait", "rank")
 var mdl_check = tables.Insert("mdl_check", "name", "type", "expect")
-var mdl_domain = tables.Insert("mdl_domain", "domain", "path")
 var mdl_field = tables.Insert("mdl_field", "kind", "field", "type", "affinity")
 var mdl_kind = tables.Insert("mdl_kind", "kind", "path")
 var mdl_name = tables.Insert("mdl_name", "noun", "name", "rank")
 var mdl_noun = tables.Insert("mdl_noun", "noun", "kind")
-var mdl_pair = tables.Insert("mdl_pair", "noun", "relation", "otherNoun", "domain")
 var mdl_pat = tables.Insert("mdl_pat", "name", "result", "labels")
 var mdl_plural = tables.Insert("mdl_plural", "one", "many")
 var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes")
 var mdl_rel = tables.Insert("mdl_rel", "relation", "kind", "cardinality", "otherKind")
 var mdl_rule = tables.Insert("mdl_rule", "owner", "target", "domain", "phase", "prog", "name")
-var mdl_spec = tables.Insert("mdl_spec", "type", "name", "spec")
 var mdl_start = tables.Insert("mdl_start", "owner", "field", "value")
+
+// inserted with sql statements, not go statements
+// var mdl_domain = tables.Insert("mdl_domain", "domain", "path")
+// var mdl_pair = tables.Insert("mdl_pair", "noun", "relation", "otherNoun", "domain")
+// var mdl_spec = tables.Insert("mdl_spec", "type", "name", "spec")

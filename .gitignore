@@ -5,8 +5,13 @@ node_modules
 cmd/asm/asm
 cmd/atlas/atlas
 cmd/check/check
+cmd/compact/compact
 cmd/compose/compose
+cmd/idl/idl
 cmd/import/import
 cmd/play/play
 cmd/spec/spec
 cmd/stem/stem
+*.zip
+jsn.old.txt
+stories/temp

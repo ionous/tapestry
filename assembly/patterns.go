@@ -48,30 +48,30 @@ func checkPatternSetup(db *sql.DB) (err error) {
 		},
 		&now.pat /*, &now.arg, &now.typ, &now.decl */); e != nil {
 		err = e
-	} else {
+	} /* else {
 		// -- disabled for now,
 		// there are various issues including
 		// 	. inconsistent types ( _eval vs. prim )
 		//  . name casing
 		//  . mixing of params and locals ( which will hurt $1 parameter indexing )
 
-		// // search for other conflicts
-		// // note: these arent complete b/c we'd need to identify the types of vars and fields and carry those out
-		// // ( similar to NewPatternRef )
-		// if e := tables.QueryAll(db,
-		// 	`select distinct pattern, param, type, affinity, decl from asm_pattern
-		// 	order by pattern, param, type, affinity, decl desc`,
-		// 	func() error {
-		// 		e := now.compare(&last, &declaredReturn)
-		// 		last = now
-		// 		return e
-		// 	},
-		// 	&now.pat, &now.arg, &now.typ, &now.aff, &now.decl); e != nil {
-		// 	err = e
-		// } else if e := last.flush(&declaredReturn); e != nil {
-		// 	err = e
-		// }
-	}
+		// search for other conflicts
+		// note: these arent complete b/c we'd need to identify the types of vars and fields and carry those out
+		// ( similar to NewPatternRef )
+		if e := tables.QueryAll(db,
+			`select distinct pattern, param, type, affinity, decl from asm_pattern
+			order by pattern, param, type, affinity, decl desc`,
+			func() error {
+				e := now.compare(&last, &declaredReturn)
+				last = now
+				return e
+			},
+			&now.pat, &now.arg, &now.typ, &now.aff, &now.decl); e != nil {
+			err = e
+		} else if e := last.flush(&declaredReturn); e != nil {
+			err = e
+		}
+	} */
 	return
 }
 

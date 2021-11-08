@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/object"
-	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
@@ -14,10 +13,10 @@ func TestLoopBreak(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
 		&While{
-			&Bool{true}, MakeActivity(
+			B(true), MakeActivity(
 				&Assign{N("i"), &FromNum{&SumOf{V("i"), I(1)}}},
 				&ChooseAction{
-					If: &CompareNum{V("i"), &GreaterOrEqual{}, I(4)},
+					If: &CompareNum{V("i"), &AtLeast{}, I(4)},
 					Do: MakeActivity(
 						&Break{},
 					),
@@ -36,10 +35,10 @@ func TestLoopNext(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
 		&While{
-			&Bool{true}, MakeActivity(
+			B(true), MakeActivity(
 				&Assign{N("i"), &FromNum{&SumOf{V("i"), I(1)}}},
 				&ChooseAction{
-					If: &CompareNum{V("i"), &GreaterOrEqual{}, I(4)},
+					If: &CompareNum{V("i"), &AtLeast{}, I(4)},
 					Do: MakeActivity(
 						&Break{},
 					),
@@ -59,7 +58,7 @@ func TestLoopInfinite(t *testing.T) {
 	var run loopRuntime
 	if e := safe.Run(&run,
 		&While{
-			&Bool{true}, MakeActivity(
+			B(true), MakeActivity(
 				&Assign{N("i"), &FromNum{&SumOf{V("i"), I(1)}}},
 			)},
 	); !errors.Is(e, MaxLoopIterations) {
@@ -100,9 +99,3 @@ func (k *loopRuntime) SetField(target, field string, v g.Value) (err error) {
 	}
 	return
 }
-
-func V(i string) *Var        { return &Var{Name: i} }
-func N(n string) Variable    { return Variable{Str: n} }
-func T(s string) rt.TextEval { return &Text{s} }
-func I(n int) rt.NumberEval  { return &Number{float64(n)} }
-func B(b bool) rt.BoolEval   { return &Bool{b} }

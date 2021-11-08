@@ -1,2029 +1,581 @@
 {
-  "id": "id-1788f214861-0",
-  "type": "story",
-  "value": {
-    "$PARAGRAPH": [
-      {
-        "id": "id-1788f214861-1",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+  "Story:": [
+    {
+      "Paragraph:": [
+        {
+          "ActionDecl:action:actionParams common:": [
+            "search",
+            "searching",
             {
-              "id": "id-1788f214861-2",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1788f214861-3",
-                "type": "action_decl",
-                "value": {
-                  "$EVENT": {
-                    "id": "id-1788f214861-4",
-                    "type": "event_name",
-                    "value": "search"
-                  },
-                  "$ACTION": {
-                    "id": "id-1788f214861-5",
-                    "type": "action_name",
-                    "value": "searching"
-                  },
-                  "$ACTION_PARAMS": {
-                    "id": "id-1788f214861-6",
-                    "type": "action_params",
-                    "value": {
-                      "$COMMON": {
-                        "id": "id-1788f214861-7",
-                        "type": "common_action",
-                        "value": {
-                          "$KIND": {
-                            "id": "id-1788f214861-8",
-                            "type": "singular_kind",
-                            "value": "thing"
-                          }
+              "CommonAction:": "thing"
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "searching",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:value:": [
+                    {
+                      "VariableDecl:name:type object:": [
+                        "an",
+                        "actor",
+                        {
+                          "ObjectType:kind:": [
+                            "an",
+                            "actor"
+                          ]
                         }
+                      ]
+                    },
+                    {
+                      "LocalInit:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "VarFields:": "agent"
+                          }
+                        ]
                       }
                     }
-                  }
+                  ]
                 }
-              }
+              ]
             },
             {
-              "id": "id-1788f214861-9",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1788f214861-10",
-                "type": "pattern_actions",
-                "value": {
-                  "$NAME": {
-                    "id": "id-1788f214861-11",
-                    "type": "pattern_name",
-                    "value": "searching"
-                  },
-                  "$PATTERN_LOCALS": {
-                    "id": "id-1788f214861-12",
-                    "type": "pattern_locals",
-                    "value": {
-                      "$LOCAL_DECL": [
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Determine:arguments:": [
+                        "isPlayer",
                         {
-                          "id": "id-1788f214861-13",
-                          "type": "local_decl",
-                          "value": {
-                            "$VARIABLE_DECL": {
-                              "id": "id-1788f214861-14",
-                              "type": "variable_decl",
-                              "value": {
-                                "$AN": {
-                                  "id": "id-1788f214861-15",
-                                  "type": "determiner",
-                                  "value": "$AN"
-                                },
-                                "$NAME": {
-                                  "id": "id-1788f214861-16",
-                                  "type": "variable_name",
-                                  "value": "actor"
-                                },
-                                "$TYPE": {
-                                  "id": "id-1788f214861-17",
-                                  "type": "variable_type",
-                                  "value": {
-                                    "$OBJECT": {
-                                      "id": "id-1788f214861-18",
-                                      "type": "object_type",
-                                      "value": {
-                                        "$AN": {
-                                          "id": "id-1788f214861-19",
-                                          "type": "ana",
-                                          "value": "$AN"
-                                        },
-                                        "$KIND": {
-                                          "id": "id-1788f214861-20",
-                                          "type": "singular_kind",
-                                          "value": "actor"
-                                        }
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@actor"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "If:from:and:do:else:": [
+                            "result",
+                            {
+                              "FromTxt:": {
+                                "Determine:arguments:": [
+                                  "can reach",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "actor",
+                                          "@actor"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "action",
+                                          {
+                                            "FromTxt:": "searching"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "noun",
+                                          "@noun"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "requires light",
+                                          {
+                                            "FromBool:": true
+                                          }
+                                        ]
                                       }
-                                    }
+                                    ]
                                   }
-                                }
+                                ]
                               }
                             },
-                            "$VALUE": {
-                              "id": "id-1788f214861-21",
-                              "type": "local_init",
-                              "value": {
-                                "$VALUE": {
-                                  "id": "id-1788f214861-22",
-                                  "type": "assignment",
-                                  "value": {
-                                    "id": "id-1788f214861-23",
-                                    "type": "get_at_field",
-                                    "value": {
-                                      "$FIELD": {
-                                        "id": "id-1788f214861-24",
-                                        "type": "text",
-                                        "value": "pawn"
-                                      },
-                                      "$FROM": {
-                                        "id": "id-1788f214861-25",
-                                        "type": "from_source_fields",
-                                        "value": {
-                                          "id": "id-1788f214861-26",
-                                          "type": "from_var",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-1788f214861-27",
-                                              "type": "variable_name",
-                                              "value": "agent"
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
+                            {
+                              "Not:": {
+                                "Is empty:": "@result"
+                              }
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Say:": "@result"
                                 }
+                              ]
+                            },
+                            {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
+                                    "If:do:": [
+                                      {
+                                        "Send:path:arguments:": [
+                                          "search",
+                                          {
+                                            "Determine:arguments:": [
+                                              "parentsOf",
+                                              {
+                                                "Args:": [
+                                                  {
+                                                    "Arg:from:": [
+                                                      "obj",
+                                                      "@noun"
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "Args:": [
+                                              {
+                                                "Arg:from:": [
+                                                  "actor",
+                                                  "@actor"
+                                                ]
+                                              },
+                                              {
+                                                "Arg:from:": [
+                                                  "noun",
+                                                  "@noun"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Act:": [
+                                          {
+                                            "Determine:arguments:": [
+                                              "report searching",
+                                              {
+                                                "Args:": [
+                                                  {
+                                                    "Arg:from:": [
+                                                      "actor",
+                                                      "@actor"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "Arg:from:": [
+                                                      "noun",
+                                                      "@noun"
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
                               }
                             }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternDecl:name:optvars:": [
+            "patterns",
+            "report searching",
+            {
+              "PatternVariablesTail:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "actor"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "VariableDecl:name:type object:": [
+                    "a",
+                    "noun",
+                    {
+                      "ObjectType:kind:": [
+                        "a",
+                        "thing"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternActions:patternLocals:patternRules:": [
+            "report searching",
+            {
+              "PatternLocals:": [
+                {
+                  "LocalDecl:": {
+                    "VariableDecl:name:type ext:": [
+                      "our",
+                      "items",
+                      {
+                        "ExtType textList:": "list"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    "Always",
+                    {
+                      "Act:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "player searches something",
+                              {
+                                "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                              }
+                            ]
                           }
                         }
                       ]
                     }
-                  },
-                  "$PATTERN_RULES": {
-                    "id": "id-1788f214861-28",
-                    "type": "pattern_rules",
-                    "value": {
-                      "$PATTERN_RULE": [
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "Not:": {
+                        "Determine:arguments:": [
+                          "isPlayer",
+                          {
+                            "Args:": [
+                              {
+                                "Arg:from:": [
+                                  "obj",
+                                  "@actor"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "Act:": [
                         {
-                          "id": "id-1788f214861-29",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-1788f214861-30",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-1788f214861-31",
-                                "type": "determine",
-                                "value": {
-                                  "$NAME": {
-                                    "id": "id-1788f214861-32",
-                                    "type": "pattern_name",
-                                    "value": "isPlayer"
-                                  },
-                                  "$ARGUMENTS": {
-                                    "id": "id-1788f214861-33",
-                                    "type": "arguments",
-                                    "value": {
-                                      "$ARGS": [
+                          "Say:": {
+                            "Response:text:": [
+                              "someone else searches something",
+                              {
+                                "RenderTemplate:": "{The: .actor|capitalize!} searches {the: .noun}."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Determine:arguments:": [
+                            "isPlayer",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "obj",
+                                    "@actor"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "Determine:arguments:": [
+                            "shows storage",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "obj",
+                                    "@noun"
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "items",
+                            {
+                              "FromTxts:": {
+                                "Determine:arguments:": [
+                                  "visible storage",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "obj",
+                                          "@noun"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "If:do:else:": [
+                            {
+                              "Cmp:is:num:": [
+                                {
+                                  "Len:": "@items"
+                                },
+                                "Equals",
+                                0
+                              ]
+                            },
+                            {
+                              "Act:": [
+                                {
+                                  "Say:": {
+                                    "Response:text:": [
+                                      "player searches empty storage",
+                                      {
+                                        "RenderTemplate:": "There is nothing {on:.noun} {the:.noun}."
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
+                                    "Say:": {
+                                      "Response:text:": [
+                                        "player searches storage",
                                         {
-                                          "id": "id-1788f214861-34",
-                                          "type": "argument",
-                                          "value": {
-                                            "$NAME": {
-                                              "id": "id-1788f214861-35",
-                                              "type": "variable_name",
-                                              "value": "obj"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-1788f214861-36",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-1788f214861-37",
-                                                "type": "get_var",
-                                                "value": {
-                                                  "$NAME": {
-                                                    "id": "id-1788f214861-38",
-                                                    "type": "text",
-                                                    "value": "actor"
+                                          "Spaces:": {
+                                            "Act:": [
+                                              {
+                                                "Say:": {
+                                                  "RenderTemplate:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
+                                                }
+                                              },
+                                              {
+                                                "Say:": {
+                                                  "Commas:": {
+                                                    "Act:": [
+                                                      {
+                                                        "Repeating across:as:do:": [
+                                                          "@items",
+                                                          {
+                                                            "AsTxt:": "item"
+                                                          },
+                                                          {
+                                                            "Act:": [
+                                                              {
+                                                                "Say:": {
+                                                                  "RenderTemplate:": "{the: .item}"
+                                                                }
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
                                                   }
                                                 }
+                                              },
+                                              {
+                                                "Say:": "."
                                               }
-                                            }
+                                            ]
                                           }
                                         }
                                       ]
                                     }
                                   }
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-1788f214861-39",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-1788f214861-40",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-1788f214861-41",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-1788f214861-42",
-                                          "type": "choose_value",
-                                          "value": {
-                                            "$ASSIGN": {
-                                              "id": "id-1788f214861-69",
-                                              "type": "text",
-                                              "value": "result"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-178ed0ed2c1-0",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-178ed0ed2c1-1",
-                                                "type": "from_text",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-178ed0ed2c1-2",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-178ed0ed2c1-3",
-                                                      "type": "determine",
-                                                      "value": {
-                                                        "$NAME": {
-                                                          "id": "id-1788f214861-43",
-                                                          "type": "pattern_name",
-                                                          "value": "can reach"
-                                                        },
-                                                        "$ARGUMENTS": {
-                                                          "id": "id-1788f214861-44",
-                                                          "type": "arguments",
-                                                          "value": {
-                                                            "$ARGS": [
-                                                              {
-                                                                "id": "id-1788f214861-45",
-                                                                "type": "argument",
-                                                                "value": {
-                                                                  "$NAME": {
-                                                                    "id": "id-1788f214861-46",
-                                                                    "type": "variable_name",
-                                                                    "value": "actor"
-                                                                  },
-                                                                  "$FROM": {
-                                                                    "id": "id-1788f214861-47",
-                                                                    "type": "assignment",
-                                                                    "value": {
-                                                                      "id": "id-1788f214861-48",
-                                                                      "type": "get_var",
-                                                                      "value": {
-                                                                        "$NAME": {
-                                                                          "id": "id-1788f214861-49",
-                                                                          "type": "text",
-                                                                          "value": "actor"
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
-                                                              {
-                                                                "id": "id-1788f214861-50",
-                                                                "type": "argument",
-                                                                "value": {
-                                                                  "$NAME": {
-                                                                    "id": "id-1788f214861-51",
-                                                                    "type": "variable_name",
-                                                                    "value": "action"
-                                                                  },
-                                                                  "$FROM": {
-                                                                    "id": "id-1788f214861-52",
-                                                                    "type": "assignment",
-                                                                    "value": {
-                                                                      "id": "id-1788f214861-53",
-                                                                      "type": "from_text",
-                                                                      "value": {
-                                                                        "$VAL": {
-                                                                          "id": "id-1788f214861-54",
-                                                                          "type": "text_eval",
-                                                                          "value": {
-                                                                            "id": "id-1788f214861-55",
-                                                                            "type": "text_value",
-                                                                            "value": {
-                                                                              "$TEXT": {
-                                                                                "id": "id-1788f214861-56",
-                                                                                "type": "text",
-                                                                                "value": "searching"
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
-                                                              {
-                                                                "id": "id-1788f214861-57",
-                                                                "type": "argument",
-                                                                "value": {
-                                                                  "$NAME": {
-                                                                    "id": "id-1788f214861-58",
-                                                                    "type": "variable_name",
-                                                                    "value": "noun"
-                                                                  },
-                                                                  "$FROM": {
-                                                                    "id": "id-1788f214861-59",
-                                                                    "type": "assignment",
-                                                                    "value": {
-                                                                      "id": "id-1788f214861-60",
-                                                                      "type": "get_var",
-                                                                      "value": {
-                                                                        "$NAME": {
-                                                                          "id": "id-1788f214861-61",
-                                                                          "type": "text",
-                                                                          "value": "noun"
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
-                                                              {
-                                                                "id": "id-1788f214861-62",
-                                                                "type": "argument",
-                                                                "value": {
-                                                                  "$NAME": {
-                                                                    "id": "id-1788f214861-63",
-                                                                    "type": "variable_name",
-                                                                    "value": "requires light"
-                                                                  },
-                                                                  "$FROM": {
-                                                                    "id": "id-1788f214861-64",
-                                                                    "type": "assignment",
-                                                                    "value": {
-                                                                      "id": "id-1788f214861-65",
-                                                                      "type": "from_bool",
-                                                                      "value": {
-                                                                        "$VAL": {
-                                                                          "id": "id-1788f214861-66",
-                                                                          "type": "bool_eval",
-                                                                          "value": {
-                                                                            "id": "id-1788f214861-67",
-                                                                            "type": "bool_value",
-                                                                            "value": {
-                                                                              "$BOOL": {
-                                                                                "id": "id-1788f214861-68",
-                                                                                "type": "bool",
-                                                                                "value": "$TRUE"
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            ]
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "$FILTER": {
-                                              "id": "id-1788f214861-70",
-                                              "type": "bool_eval",
-                                              "value": {
-                                                "id": "id-1788f214861-71",
-                                                "type": "not",
-                                                "value": {
-                                                  "$TEST": {
-                                                    "id": "id-1788f214861-72",
-                                                    "type": "bool_eval",
-                                                    "value": {
-                                                      "id": "id-1788f214861-73",
-                                                      "type": "is_empty",
-                                                      "value": {
-                                                        "$TEXT": {
-                                                          "id": "id-1788f214861-74",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-1788f214861-75",
-                                                            "type": "get_var",
-                                                            "value": {
-                                                              "$NAME": {
-                                                                "id": "id-1788f214861-76",
-                                                                "type": "text",
-                                                                "value": "result"
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "$DO": {
-                                              "id": "id-1788f214861-77",
-                                              "type": "activity",
-                                              "value": {
-                                                "$EXE": [
-                                                  {
-                                                    "id": "id-1788f214861-78",
-                                                    "type": "execute",
-                                                    "value": {
-                                                      "id": "id-1788f214861-79",
-                                                      "type": "say_text",
-                                                      "value": {
-                                                        "$TEXT": {
-                                                          "id": "id-1788f214861-80",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-1788f214861-81",
-                                                            "type": "get_var",
-                                                            "value": {
-                                                              "$NAME": {
-                                                                "id": "id-1788f214861-82",
-                                                                "type": "text",
-                                                                "value": "result"
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                ]
-                                              }
-                                            },
-                                            "$ELSE": {
-                                              "id": "id-1788f214861-83",
-                                              "type": "brancher",
-                                              "value": {
-                                                "id": "id-1788f214861-84",
-                                                "type": "choose_nothing_else",
-                                                "value": {
-                                                  "$DO": {
-                                                    "id": "id-1788f214861-85",
-                                                    "type": "activity",
-                                                    "value": {
-                                                      "$EXE": [
-                                                        {
-                                                          "id": "id-1788f214861-86",
-                                                          "type": "execute",
-                                                          "value": {
-                                                            "id": "id-1788f214861-87",
-                                                            "type": "choose_action",
-                                                            "value": {
-                                                              "$IF": {
-                                                                "id": "id-1788f214861-88",
-                                                                "type": "bool_eval",
-                                                                "value": {
-                                                                  "id": "id-1788f214861-89",
-                                                                  "type": "send",
-                                                                  "value": {
-                                                                    "$EVENT": {
-                                                                      "id": "id-1788f214861-90",
-                                                                      "type": "event_name",
-                                                                      "value": "search"
-                                                                    },
-                                                                    "$ARGUMENTS": {
-                                                                      "id": "id-1788f214861-91",
-                                                                      "type": "arguments",
-                                                                      "value": {
-                                                                        "$ARGS": [
-                                                                          {
-                                                                            "id": "id-1788f214861-92",
-                                                                            "type": "argument",
-                                                                            "value": {
-                                                                              "$NAME": {
-                                                                                "id": "id-1788f214861-93",
-                                                                                "type": "variable_name",
-                                                                                "value": "actor"
-                                                                              },
-                                                                              "$FROM": {
-                                                                                "id": "id-1788f214861-94",
-                                                                                "type": "assignment",
-                                                                                "value": {
-                                                                                  "id": "id-1788f214861-95",
-                                                                                  "type": "get_var",
-                                                                                  "value": {
-                                                                                    "$NAME": {
-                                                                                      "id": "id-1788f214861-96",
-                                                                                      "type": "text",
-                                                                                      "value": "actor"
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          },
-                                                                          {
-                                                                            "id": "id-1788f214861-97",
-                                                                            "type": "argument",
-                                                                            "value": {
-                                                                              "$NAME": {
-                                                                                "id": "id-1788f214861-98",
-                                                                                "type": "variable_name",
-                                                                                "value": "noun"
-                                                                              },
-                                                                              "$FROM": {
-                                                                                "id": "id-1788f214861-99",
-                                                                                "type": "assignment",
-                                                                                "value": {
-                                                                                  "id": "id-1788f214861-100",
-                                                                                  "type": "get_var",
-                                                                                  "value": {
-                                                                                    "$NAME": {
-                                                                                      "id": "id-1788f214861-101",
-                                                                                      "type": "text",
-                                                                                      "value": "noun"
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        ]
-                                                                      }
-                                                                    },
-                                                                    "$PATH": {
-                                                                      "id": "id-1788f214861-102",
-                                                                      "type": "text_list_eval",
-                                                                      "value": {
-                                                                        "id": "id-1788f214861-103",
-                                                                        "type": "determine",
-                                                                        "value": {
-                                                                          "$NAME": {
-                                                                            "id": "id-1788f214861-104",
-                                                                            "type": "pattern_name",
-                                                                            "value": "parentsOf"
-                                                                          },
-                                                                          "$ARGUMENTS": {
-                                                                            "id": "id-1788f214861-105",
-                                                                            "type": "arguments",
-                                                                            "value": {
-                                                                              "$ARGS": [
-                                                                                {
-                                                                                  "id": "id-1788f214861-106",
-                                                                                  "type": "argument",
-                                                                                  "value": {
-                                                                                    "$NAME": {
-                                                                                      "id": "id-1788f214861-107",
-                                                                                      "type": "variable_name",
-                                                                                      "value": "obj"
-                                                                                    },
-                                                                                    "$FROM": {
-                                                                                      "id": "id-1788f214861-108",
-                                                                                      "type": "assignment",
-                                                                                      "value": {
-                                                                                        "id": "id-1788f214861-109",
-                                                                                        "type": "get_var",
-                                                                                        "value": {
-                                                                                          "$NAME": {
-                                                                                            "id": "id-1788f214861-110",
-                                                                                            "type": "text",
-                                                                                            "value": "noun"
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              ]
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              },
-                                                              "$DO": {
-                                                                "id": "id-1788f214861-111",
-                                                                "type": "activity",
-                                                                "value": {
-                                                                  "$EXE": [
-                                                                    {
-                                                                      "id": "id-1788f214861-112",
-                                                                      "type": "execute",
-                                                                      "value": {
-                                                                        "id": "id-1788f214861-113",
-                                                                        "type": "determine",
-                                                                        "value": {
-                                                                          "$NAME": {
-                                                                            "id": "id-1788f214861-114",
-                                                                            "type": "pattern_name",
-                                                                            "value": "report searching"
-                                                                          },
-                                                                          "$ARGUMENTS": {
-                                                                            "id": "id-1788f214861-115",
-                                                                            "type": "arguments",
-                                                                            "value": {
-                                                                              "$ARGS": [
-                                                                                {
-                                                                                  "id": "id-1788f214861-116",
-                                                                                  "type": "argument",
-                                                                                  "value": {
-                                                                                    "$NAME": {
-                                                                                      "id": "id-1788f214861-117",
-                                                                                      "type": "variable_name",
-                                                                                      "value": "actor"
-                                                                                    },
-                                                                                    "$FROM": {
-                                                                                      "id": "id-1788f214861-118",
-                                                                                      "type": "assignment",
-                                                                                      "value": {
-                                                                                        "id": "id-1788f214861-119",
-                                                                                        "type": "get_var",
-                                                                                        "value": {
-                                                                                          "$NAME": {
-                                                                                            "id": "id-1788f214861-120",
-                                                                                            "type": "text",
-                                                                                            "value": "actor"
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                },
-                                                                                {
-                                                                                  "id": "id-1788f214861-121",
-                                                                                  "type": "argument",
-                                                                                  "value": {
-                                                                                    "$NAME": {
-                                                                                      "id": "id-1788f214861-122",
-                                                                                      "type": "variable_name",
-                                                                                      "value": "noun"
-                                                                                    },
-                                                                                    "$FROM": {
-                                                                                      "id": "id-1788f214861-123",
-                                                                                      "type": "assignment",
-                                                                                      "value": {
-                                                                                        "id": "id-1788f214861-124",
-                                                                                        "type": "get_var",
-                                                                                        "value": {
-                                                                                          "$NAME": {
-                                                                                            "id": "id-1788f214861-125",
-                                                                                            "type": "text",
-                                                                                            "value": "noun"
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              ]
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  ]
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      ]
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
+                                ]
                               }
                             }
-                          }
+                          ]
                         }
                       ]
                     }
-                  }
+                  ]
                 }
-              }
+              ]
             }
           ]
         }
-      },
-      {
-        "id": "id-1788f214861-195",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
+      ]
+    },
+    {
+      "Paragraph:": [
+        {
+          "PatternActions:patternRules:": [
+            "can reach",
             {
-              "id": "id-1788f214861-196",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1788f214861-197",
-                "type": "pattern_decl",
-                "value": {
-                  "$TYPE": {
-                    "id": "id-1788f214861-198",
-                    "type": "pattern_type",
-                    "value": "$PATTERNS"
-                  },
-                  "$NAME": {
-                    "id": "id-1788f214861-199",
-                    "type": "pattern_name",
-                    "value": "report searching"
-                  },
-                  "$OPTVARS": {
-                    "id": "id-1788f214861-200",
-                    "type": "pattern_variables_tail",
-                    "value": {
-                      "$VARIABLE_DECL": [
+              "PatternRules:": [
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
                         {
-                          "id": "id-1788f214861-201",
-                          "type": "variable_decl",
-                          "value": {
-                            "$AN": {
-                              "id": "id-1788f214861-202",
-                              "type": "determiner",
-                              "value": "$AN"
-                            },
-                            "$NAME": {
-                              "id": "id-1788f214861-203",
-                              "type": "variable_name",
-                              "value": "actor"
-                            },
-                            "$TYPE": {
-                              "id": "id-1788f214861-204",
-                              "type": "variable_type",
-                              "value": {
-                                "$OBJECT": {
-                                  "id": "id-1788f214861-205",
-                                  "type": "object_type",
-                                  "value": {
-                                    "$AN": {
-                                      "id": "id-1788f214861-206",
-                                      "type": "ana",
-                                      "value": "$AN"
-                                    },
-                                    "$KIND": {
-                                      "id": "id-1788f214861-207",
-                                      "type": "singular_kind",
-                                      "value": "actor"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
+                          "Cmp:is:txt:": [
+                            "@action",
+                            "Equals",
+                            "searching"
+                          ]
                         },
                         {
-                          "id": "id-1788f214861-208",
-                          "type": "variable_decl",
-                          "value": {
-                            "$AN": {
-                              "id": "id-1788f214861-209",
-                              "type": "determiner",
-                              "value": "$A"
-                            },
-                            "$NAME": {
-                              "id": "id-1788f214861-210",
-                              "type": "variable_name",
-                              "value": "noun"
-                            },
-                            "$TYPE": {
-                              "id": "id-1788f214861-211",
-                              "type": "variable_type",
-                              "value": {
-                                "$OBJECT": {
-                                  "id": "id-1788f214861-212",
-                                  "type": "object_type",
-                                  "value": {
-                                    "$AN": {
-                                      "id": "id-1788f214861-213",
-                                      "type": "ana",
-                                      "value": "$A"
-                                    },
-                                    "$KIND": {
-                                      "id": "id-1788f214861-214",
-                                      "type": "singular_kind",
-                                      "value": "thing"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "id-1788f214861-215",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1788f214861-216",
-                "type": "pattern_actions",
-                "value": {
-                  "$NAME": {
-                    "id": "id-1788f214861-217",
-                    "type": "pattern_name",
-                    "value": "report searching"
-                  },
-                  "$PATTERN_LOCALS": {
-                    "id": "id-1788f214861-693",
-                    "type": "pattern_locals",
-                    "value": {
-                      "$LOCAL_DECL": [
-                        {
-                          "id": "id-1788f214861-694",
-                          "type": "local_decl",
-                          "value": {
-                            "$VARIABLE_DECL": {
-                              "id": "id-1788f214861-695",
-                              "type": "variable_decl",
-                              "value": {
-                                "$AN": {
-                                  "id": "id-1788f214861-696",
-                                  "type": "determiner",
-                                  "value": "$OUR"
-                                },
-                                "$NAME": {
-                                  "id": "id-1788f214861-697",
-                                  "type": "variable_name",
-                                  "value": "items"
-                                },
-                                "$TYPE": {
-                                  "id": "id-1788f214861-698",
-                                  "type": "variable_type",
-                                  "value": {
-                                    "$EXT": {
-                                      "id": "id-1788f214861-699",
-                                      "type": "ext_type",
-                                      "value": {
-                                        "$TEXT_LIST": {
-                                          "id": "id-1788f214861-700",
-                                          "type": "text_list",
-                                          "value": "$LIST"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  },
-                  "$PATTERN_RULES": {
-                    "id": "id-1788f214861-218",
-                    "type": "pattern_rules",
-                    "value": {
-                      "$PATTERN_RULE": [
-                        {
-                          "id": "id-1788f214861-219",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-1788f214861-220",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-1788f214861-221",
-                                "type": "always",
-                                "value": {}
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-1788f214861-222",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-1788f214861-223",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-1788f214861-224",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-1788f214861-225",
-                                          "type": "say_text",
-                                          "value": {
-                                            "$TEXT": {
-                                              "id": "id-1788f214861-226",
-                                              "type": "text_eval",
-                                              "value": {
-                                                "id": "id-1788f214861-227",
-                                                "type": "response",
-                                                "value": {
-                                                  "$NAME": {
-                                                    "id": "id-1788f214861-228",
-                                                    "type": "text",
-                                                    "value": "player searches something"
-                                                  },
-                                                  "$TEXT": {
-                                                    "id": "id-1788f214861-229",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-1788f214861-230",
-                                                      "type": "render_template",
-                                                      "value": {
-                                                        "$TEMPLATE": {
-                                                          "id": "id-1788f214861-231",
-                                                          "type": "lines",
-                                                          "value": "{we!|capitalize!} find nothing of interest."
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          "id": "id-1788f214861-232",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-1788f214861-233",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-1788f214861-234",
-                                "type": "not",
-                                "value": {
-                                  "$TEST": {
-                                    "id": "id-1788f214861-235",
-                                    "type": "bool_eval",
-                                    "value": {
-                                      "id": "id-1788f214861-236",
-                                      "type": "determine",
-                                      "value": {
-                                        "$NAME": {
-                                          "id": "id-1788f214861-237",
-                                          "type": "pattern_name",
-                                          "value": "isPlayer"
-                                        },
-                                        "$ARGUMENTS": {
-                                          "id": "id-1788f214861-238",
-                                          "type": "arguments",
-                                          "value": {
-                                            "$ARGS": [
-                                              {
-                                                "id": "id-1788f214861-239",
-                                                "type": "argument",
-                                                "value": {
-                                                  "$NAME": {
-                                                    "id": "id-1788f214861-240",
-                                                    "type": "variable_name",
-                                                    "value": "obj"
-                                                  },
-                                                  "$FROM": {
-                                                    "id": "id-1788f214861-241",
-                                                    "type": "assignment",
-                                                    "value": {
-                                                      "id": "id-1788f214861-242",
-                                                      "type": "get_var",
-                                                      "value": {
-                                                        "$NAME": {
-                                                          "id": "id-1788f214861-243",
-                                                          "type": "text",
-                                                          "value": "actor"
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            ]
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-1788f214861-244",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-1788f214861-245",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-1788f214861-246",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-1788f214861-247",
-                                          "type": "say_text",
-                                          "value": {
-                                            "$TEXT": {
-                                              "id": "id-1788f214861-248",
-                                              "type": "text_eval",
-                                              "value": {
-                                                "id": "id-1788f214861-249",
-                                                "type": "response",
-                                                "value": {
-                                                  "$NAME": {
-                                                    "id": "id-1788f214861-250",
-                                                    "type": "text",
-                                                    "value": "someone else searches something"
-                                                  },
-                                                  "$TEXT": {
-                                                    "id": "id-1788f214861-251",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-1788f214861-252",
-                                                      "type": "render_template",
-                                                      "value": {
-                                                        "$TEMPLATE": {
-                                                          "id": "id-1788f214861-253",
-                                                          "type": "lines",
-                                                          "value": "{The: .actor|capitalize!} searches {the: .noun}."
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          "id": "id-1788f214861-627",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-1788f214861-628",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-1788f214861-649",
-                                "type": "all_true",
-                                "value": {
-                                  "$TEST": [
-                                    {
-                                      "id": "id-1788f214861-650",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-1788f214861-651",
-                                        "type": "determine",
-                                        "value": {
-                                          "$NAME": {
-                                            "id": "id-1788f214861-652",
-                                            "type": "pattern_name",
-                                            "value": "isPlayer"
-                                          },
-                                          "$ARGUMENTS": {
-                                            "id": "id-1788f214861-653",
-                                            "type": "arguments",
-                                            "value": {
-                                              "$ARGS": [
-                                                {
-                                                  "id": "id-1788f214861-654",
-                                                  "type": "argument",
-                                                  "value": {
-                                                    "$NAME": {
-                                                      "id": "id-1788f214861-655",
-                                                      "type": "variable_name",
-                                                      "value": "obj"
-                                                    },
-                                                    "$FROM": {
-                                                      "id": "id-1788f214861-656",
-                                                      "type": "assignment",
-                                                      "value": {
-                                                        "id": "id-1788f214861-657",
-                                                        "type": "get_var",
-                                                        "value": {
-                                                          "$NAME": {
-                                                            "id": "id-1788f214861-658",
-                                                            "type": "text",
-                                                            "value": "actor"
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              ]
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    {
-                                      "id": "id-1788f214861-659",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-1788f62ad6f-45",
-                                        "type": "determine",
-                                        "value": {
-                                          "$NAME": {
-                                            "id": "id-1788f62ad6f-46",
-                                            "type": "pattern_name",
-                                            "value": "shows storage"
-                                          },
-                                          "$ARGUMENTS": {
-                                            "id": "id-1788f62ad6f-47",
-                                            "type": "arguments",
-                                            "value": {
-                                              "$ARGS": [
-                                                {
-                                                  "id": "id-1788f62ad6f-48",
-                                                  "type": "argument",
-                                                  "value": {
-                                                    "$NAME": {
-                                                      "id": "id-1788f62ad6f-49",
-                                                      "type": "variable_name",
-                                                      "value": "obj"
-                                                    },
-                                                    "$FROM": {
-                                                      "id": "id-1788f62ad6f-50",
-                                                      "type": "assignment",
-                                                      "value": {
-                                                        "id": "id-1788f62ad6f-51",
-                                                        "type": "get_var",
-                                                        "value": {
-                                                          "$NAME": {
-                                                            "id": "id-1788f62ad6f-52",
-                                                            "type": "text",
-                                                            "value": "noun"
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              ]
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
+                          "Determine:arguments:": [
+                            "fully opaque",
+                            {
+                              "Args:": [
+                                {
+                                  "Arg:from:": [
+                                    "obj",
+                                    "@noun"
                                   ]
                                 }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-1788f214861-639",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-1788f214861-640",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-1788f73caa9-49",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-1788f73caa9-50",
-                                          "type": "assign",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-1788f73caa9-51",
-                                              "type": "variable_name",
-                                              "value": "items"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-1788f73caa9-52",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-1788f73caa9-53",
-                                                "type": "from_texts",
-                                                "value": {
-                                                  "$VALS": {
-                                                    "id": "id-1788f73caa9-54",
-                                                    "type": "text_list_eval",
-                                                    "value": {
-                                                      "id": "id-1788f73caa9-55",
-                                                      "type": "determine",
-                                                      "value": {
-                                                        "$NAME": {
-                                                          "id": "id-1788f73caa9-56",
-                                                          "type": "pattern_name",
-                                                          "value": "visible storage"
-                                                        },
-                                                        "$ARGUMENTS": {
-                                                          "id": "id-1788f73caa9-57",
-                                                          "type": "arguments",
-                                                          "value": {
-                                                            "$ARGS": [
-                                                              {
-                                                                "id": "id-1788f73caa9-58",
-                                                                "type": "argument",
-                                                                "value": {
-                                                                  "$NAME": {
-                                                                    "id": "id-1788f73caa9-59",
-                                                                    "type": "variable_name",
-                                                                    "value": "obj"
-                                                                  },
-                                                                  "$FROM": {
-                                                                    "id": "id-1788f73caa9-60",
-                                                                    "type": "assignment",
-                                                                    "value": {
-                                                                      "id": "id-1788f73caa9-61",
-                                                                      "type": "get_var",
-                                                                      "value": {
-                                                                        "$NAME": {
-                                                                          "id": "id-1788f73caa9-62",
-                                                                          "type": "text",
-                                                                          "value": "noun"
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            ]
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                      {
-                                        "id": "id-1788f73caa9-63",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-1788f73caa9-64",
-                                          "type": "choose_action",
-                                          "value": {
-                                            "$IF": {
-                                              "id": "id-1788f73caa9-65",
-                                              "type": "bool_eval",
-                                              "value": {
-                                                "id": "id-1788f73caa9-67",
-                                                "type": "compare_num",
-                                                "value": {
-                                                  "$A": {
-                                                    "id": "id-1788f73caa9-68",
-                                                    "type": "number_eval",
-                                                    "value": {
-                                                      "id": "id-1788f73caa9-71",
-                                                      "type": "list_len",
-                                                      "value": {
-                                                        "$LIST": {
-                                                          "id": "id-1788f73caa9-72",
-                                                          "type": "assignment",
-                                                          "value": {
-                                                            "id": "id-1788f73caa9-76",
-                                                            "type": "get_var",
-                                                            "value": {
-                                                              "$NAME": {
-                                                                "id": "id-1788f73caa9-77",
-                                                                "type": "text",
-                                                                "value": "items"
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  },
-                                                  "$IS": {
-                                                    "id": "id-1788f73caa9-69",
-                                                    "type": "comparator",
-                                                    "value": {
-                                                      "id": "id-1788f73caa9-73",
-                                                      "type": "equal",
-                                                      "value": {}
-                                                    }
-                                                  },
-                                                  "$B": {
-                                                    "id": "id-1788f73caa9-70",
-                                                    "type": "number_eval",
-                                                    "value": {
-                                                      "id": "id-1788f73caa9-74",
-                                                      "type": "num_value",
-                                                      "value": {
-                                                        "$NUM": {
-                                                          "id": "id-1788f73caa9-75",
-                                                          "type": "number",
-                                                          "value": 0
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "$DO": {
-                                              "id": "id-1788f73caa9-66",
-                                              "type": "activity",
-                                              "value": {
-                                                "$EXE": [
-                                                  {
-                                                    "id": "id-1788f214861-742",
-                                                    "type": "execute",
-                                                    "value": {
-                                                      "id": "id-1788f214861-743",
-                                                      "type": "say_text",
-                                                      "value": {
-                                                        "$TEXT": {
-                                                          "id": "id-1788f214861-744",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-1788f214861-745",
-                                                            "type": "response",
-                                                            "value": {
-                                                              "$NAME": {
-                                                                "id": "id-1788f214861-746",
-                                                                "type": "text",
-                                                                "value": "player searches empty storage"
-                                                              },
-                                                              "$TEXT": {
-                                                                "id": "id-1788f214861-747",
-                                                                "type": "text_eval",
-                                                                "value": {
-                                                                  "id": "id-1788f214861-748",
-                                                                  "type": "render_template",
-                                                                  "value": {
-                                                                    "$TEMPLATE": {
-                                                                      "id": "id-1788f214861-749",
-                                                                      "type": "lines",
-                                                                      "value": "There is nothing {on:.noun} {the:.noun}."
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                ]
-                                              }
-                                            },
-                                            "$ELSE": {
-                                              "id": "id-1788f73caa9-79",
-                                              "type": "brancher",
-                                              "value": {
-                                                "id": "id-1788f73caa9-80",
-                                                "type": "choose_nothing_else",
-                                                "value": {
-                                                  "$DO": {
-                                                    "id": "id-1788f73caa9-81",
-                                                    "type": "activity",
-                                                    "value": {
-                                                      "$EXE": [
-                                                        {
-                                                          "id": "id-1788f62ad6f-61",
-                                                          "type": "execute",
-                                                          "value": {
-                                                            "id": "id-1788f62ad6f-62",
-                                                            "type": "say_text",
-                                                            "value": {
-                                                              "$TEXT": {
-                                                                "id": "id-1788f62ad6f-63",
-                                                                "type": "text_eval",
-                                                                "value": {
-                                                                  "id": "id-1788f62ad6f-64",
-                                                                  "type": "response",
-                                                                  "value": {
-                                                                    "$NAME": {
-                                                                      "id": "id-1788f62ad6f-65",
-                                                                      "type": "text",
-                                                                      "value": "player searches storage"
-                                                                    },
-                                                                    "$TEXT": {
-                                                                      "id": "id-1788f62ad6f-66",
-                                                                      "type": "text_eval",
-                                                                      "value": {
-                                                                        "id": "id-1788f62ad6f-67",
-                                                                        "type": "span_text",
-                                                                        "value": {
-                                                                          "$DO": {
-                                                                            "id": "id-1788f62ad6f-68",
-                                                                            "type": "activity",
-                                                                            "value": {
-                                                                              "$EXE": [
-                                                                                {
-                                                                                  "id": "id-1788f62ad6f-69",
-                                                                                  "type": "execute",
-                                                                                  "value": {
-                                                                                    "id": "id-1788f62ad6f-70",
-                                                                                    "type": "say_text",
-                                                                                    "value": {
-                                                                                      "$TEXT": {
-                                                                                        "id": "id-1788f62ad6f-71",
-                                                                                        "type": "text_eval",
-                                                                                        "value": {
-                                                                                          "id": "id-1788f62ad6f-72",
-                                                                                          "type": "render_template",
-                                                                                          "value": {
-                                                                                            "$TEMPLATE": {
-                                                                                              "id": "id-1788f62ad6f-73",
-                                                                                              "type": "lines",
-                                                                                              "value": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                },
-                                                                                {
-                                                                                  "id": "id-1788f62ad6f-74",
-                                                                                  "type": "execute",
-                                                                                  "value": {
-                                                                                    "id": "id-1788f62ad6f-75",
-                                                                                    "type": "say_text",
-                                                                                    "value": {
-                                                                                      "$TEXT": {
-                                                                                        "id": "id-1788f62ad6f-76",
-                                                                                        "type": "text_eval",
-                                                                                        "value": {
-                                                                                          "id": "id-1788f62ad6f-77",
-                                                                                          "type": "comma_text",
-                                                                                          "value": {
-                                                                                            "$DO": {
-                                                                                              "id": "id-1788f62ad6f-78",
-                                                                                              "type": "activity",
-                                                                                              "value": {
-                                                                                                "$EXE": [
-                                                                                                  {
-                                                                                                    "id": "id-1788f62ad6f-79",
-                                                                                                    "type": "execute",
-                                                                                                    "value": {
-                                                                                                      "id": "id-1788f62ad6f-80",
-                                                                                                      "type": "list_each",
-                                                                                                      "value": {
-                                                                                                        "$LIST": {
-                                                                                                          "id": "id-1788f62ad6f-81",
-                                                                                                          "type": "assignment",
-                                                                                                          "value": {
-                                                                                                            "id": "id-1788f62ad6f-84",
-                                                                                                            "type": "get_var",
-                                                                                                            "value": {
-                                                                                                              "$NAME": {
-                                                                                                                "id": "id-1788f62ad6f-85",
-                                                                                                                "type": "text",
-                                                                                                                "value": "items"
-                                                                                                              }
-                                                                                                            }
-                                                                                                          }
-                                                                                                        },
-                                                                                                        "$AS": {
-                                                                                                          "id": "id-1788f62ad6f-82",
-                                                                                                          "type": "list_iterator",
-                                                                                                          "value": {
-                                                                                                            "id": "id-1788f62ad6f-86",
-                                                                                                            "type": "as_txt",
-                                                                                                            "value": {
-                                                                                                              "$VAR": {
-                                                                                                                "id": "id-1788f62ad6f-87",
-                                                                                                                "type": "variable_name",
-                                                                                                                "value": "item"
-                                                                                                              }
-                                                                                                            }
-                                                                                                          }
-                                                                                                        },
-                                                                                                        "$DO": {
-                                                                                                          "id": "id-1788f62ad6f-83",
-                                                                                                          "type": "activity",
-                                                                                                          "value": {
-                                                                                                            "$EXE": [
-                                                                                                              {
-                                                                                                                "id": "id-1788f62ad6f-88",
-                                                                                                                "type": "execute",
-                                                                                                                "value": {
-                                                                                                                  "id": "id-1788f62ad6f-89",
-                                                                                                                  "type": "say_text",
-                                                                                                                  "value": {
-                                                                                                                    "$TEXT": {
-                                                                                                                      "id": "id-1788f62ad6f-90",
-                                                                                                                      "type": "text_eval",
-                                                                                                                      "value": {
-                                                                                                                        "id": "id-1788f62ad6f-91",
-                                                                                                                        "type": "render_template",
-                                                                                                                        "value": {
-                                                                                                                          "$TEMPLATE": {
-                                                                                                                            "id": "id-1788f62ad6f-92",
-                                                                                                                            "type": "lines",
-                                                                                                                            "value": "{the: .item}"
-                                                                                                                          }
-                                                                                                                        }
-                                                                                                                      }
-                                                                                                                    }
-                                                                                                                  }
-                                                                                                                }
-                                                                                                              }
-                                                                                                            ]
-                                                                                                          }
-                                                                                                        }
-                                                                                                      }
-                                                                                                    }
-                                                                                                  }
-                                                                                                ]
-                                                                                              }
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                },
-                                                                                {
-                                                                                  "id": "id-1788f9dc134-353",
-                                                                                  "type": "execute",
-                                                                                  "value": {
-                                                                                    "id": "id-1788f9dc134-354",
-                                                                                    "type": "say_text",
-                                                                                    "value": {
-                                                                                      "$TEXT": {
-                                                                                        "id": "id-1788f9dc134-355",
-                                                                                        "type": "text_eval",
-                                                                                        "value": {
-                                                                                          "id": "id-1788f9dc134-356",
-                                                                                          "type": "text_value",
-                                                                                          "value": {
-                                                                                            "$TEXT": {
-                                                                                              "id": "id-1788f9dc134-357",
-                                                                                              "type": "text",
-                                                                                              "value": "."
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              ]
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      ]
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "response",
+                            {
+                              "FromTxt:": {
+                                "Response:text:": [
+                                  "can't search opaque objects",
+                                  {
+                                    "RenderTemplate:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
                                   }
-                                }
+                                ]
                               }
                             }
-                          }
+                          ]
                         }
                       ]
                     }
-                  }
+                  ]
+                },
+                {
+                  "PatternRule:hook activity:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Cmp:is:txt:": [
+                            "@action",
+                            "Equals",
+                            "searching"
+                          ]
+                        },
+                        {
+                          "Not:": {
+                            "Determine:arguments:": [
+                              "provides storage",
+                              {
+                                "Args:": [
+                                  {
+                                    "Arg:from:": [
+                                      "obj",
+                                      "@noun"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "Act:": [
+                        {
+                          "Let:be:": [
+                            "response",
+                            {
+                              "FromTxt:": {
+                                "Response:text:": [
+                                  "can only search storage",
+                                  {
+                                    "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 }
-              }
+              ]
             }
           ]
         }
-      },
-      {
-        "id": "id-1788f214861-254",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": [
-            {
-              "id": "id-1788f214861-255",
-              "type": "story_statement",
-              "value": {
-                "id": "id-1788f214861-256",
-                "type": "pattern_actions",
-                "value": {
-                  "$NAME": {
-                    "id": "id-1788f214861-257",
-                    "type": "pattern_name",
-                    "value": "can reach"
-                  },
-                  "$PATTERN_RULES": {
-                    "id": "id-1788f214861-258",
-                    "type": "pattern_rules",
-                    "value": {
-                      "$PATTERN_RULE": [
-                        {
-                          "id": "id-1788f214861-395",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-1788f214861-396",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-1788f214861-397",
-                                "type": "all_true",
-                                "value": {
-                                  "$TEST": [
-                                    {
-                                      "id": "id-1788f214861-398",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-1788f214861-399",
-                                        "type": "compare_text",
-                                        "value": {
-                                          "$A": {
-                                            "id": "id-1788f214861-400",
-                                            "type": "text_eval",
-                                            "value": {
-                                              "id": "id-1788f214861-401",
-                                              "type": "get_var",
-                                              "value": {
-                                                "$NAME": {
-                                                  "id": "id-1788f214861-402",
-                                                  "type": "text",
-                                                  "value": "action"
-                                                }
-                                              }
-                                            }
-                                          },
-                                          "$IS": {
-                                            "id": "id-1788f214861-403",
-                                            "type": "comparator",
-                                            "value": {
-                                              "id": "id-1788f214861-404",
-                                              "type": "equal",
-                                              "value": {}
-                                            }
-                                          },
-                                          "$B": {
-                                            "id": "id-1788f214861-405",
-                                            "type": "text_eval",
-                                            "value": {
-                                              "id": "id-1788f214861-406",
-                                              "type": "text_value",
-                                              "value": {
-                                                "$TEXT": {
-                                                  "id": "id-1788f214861-407",
-                                                  "type": "text",
-                                                  "value": "searching"
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    {
-                                      "id": "id-1788f214861-408",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-1788f214861-619",
-                                        "type": "determine",
-                                        "value": {
-                                          "$NAME": {
-                                            "id": "id-1788f214861-620",
-                                            "type": "pattern_name",
-                                            "value": "fully opaque"
-                                          },
-                                          "$ARGUMENTS": {
-                                            "id": "id-1788f214861-621",
-                                            "type": "arguments",
-                                            "value": {
-                                              "$ARGS": [
-                                                {
-                                                  "id": "id-1788f214861-622",
-                                                  "type": "argument",
-                                                  "value": {
-                                                    "$NAME": {
-                                                      "id": "id-1788f214861-623",
-                                                      "type": "variable_name",
-                                                      "value": "obj"
-                                                    },
-                                                    "$FROM": {
-                                                      "id": "id-1788f214861-624",
-                                                      "type": "assignment",
-                                                      "value": {
-                                                        "id": "id-1788f214861-625",
-                                                        "type": "get_var",
-                                                        "value": {
-                                                          "$NAME": {
-                                                            "id": "id-1788f214861-626",
-                                                            "type": "text",
-                                                            "value": "noun"
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              ]
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  ]
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-1788f214861-416",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-1788f214861-417",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-1788f214861-418",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-1788f214861-419",
-                                          "type": "assign",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-1788f214861-420",
-                                              "type": "variable_name",
-                                              "value": "response"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-1788f214861-421",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-1788f214861-422",
-                                                "type": "from_text",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-1788f214861-423",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-1788f214861-424",
-                                                      "type": "response",
-                                                      "value": {
-                                                        "$NAME": {
-                                                          "id": "id-1788f214861-425",
-                                                          "type": "text",
-                                                          "value": "can't search opaque objects"
-                                                        },
-                                                        "$TEXT": {
-                                                          "id": "id-1788f214861-426",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-1788f214861-427",
-                                                            "type": "render_template",
-                                                            "value": {
-                                                              "$TEMPLATE": {
-                                                                "id": "id-1788f214861-428",
-                                                                "type": "lines",
-                                                                "value": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          "id": "id-1788f214861-259",
-                          "type": "pattern_rule",
-                          "value": {
-                            "$GUARD": {
-                              "id": "id-1788f214861-260",
-                              "type": "bool_eval",
-                              "value": {
-                                "id": "id-1788f214861-261",
-                                "type": "all_true",
-                                "value": {
-                                  "$TEST": [
-                                    {
-                                      "id": "id-1788f214861-262",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-1788f214861-263",
-                                        "type": "compare_text",
-                                        "value": {
-                                          "$A": {
-                                            "id": "id-1788f214861-264",
-                                            "type": "text_eval",
-                                            "value": {
-                                              "id": "id-1788f214861-265",
-                                              "type": "get_var",
-                                              "value": {
-                                                "$NAME": {
-                                                  "id": "id-1788f214861-266",
-                                                  "type": "text",
-                                                  "value": "action"
-                                                }
-                                              }
-                                            }
-                                          },
-                                          "$IS": {
-                                            "id": "id-1788f214861-267",
-                                            "type": "comparator",
-                                            "value": {
-                                              "id": "id-1788f214861-268",
-                                              "type": "equal",
-                                              "value": {}
-                                            }
-                                          },
-                                          "$B": {
-                                            "id": "id-1788f214861-269",
-                                            "type": "text_eval",
-                                            "value": {
-                                              "id": "id-1788f214861-270",
-                                              "type": "text_value",
-                                              "value": {
-                                                "$TEXT": {
-                                                  "id": "id-1788f214861-271",
-                                                  "type": "text",
-                                                  "value": "searching"
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    {
-                                      "id": "id-1788f214861-272",
-                                      "type": "bool_eval",
-                                      "value": {
-                                        "id": "id-1788f214861-598",
-                                        "type": "not",
-                                        "value": {
-                                          "$TEST": {
-                                            "id": "id-1788f214861-599",
-                                            "type": "bool_eval",
-                                            "value": {
-                                              "id": "id-1788f62ad6f-169",
-                                              "type": "determine",
-                                              "value": {
-                                                "$NAME": {
-                                                  "id": "id-1788f62ad6f-170",
-                                                  "type": "pattern_name",
-                                                  "value": "provides storage"
-                                                },
-                                                "$ARGUMENTS": {
-                                                  "id": "id-1788f62ad6f-171",
-                                                  "type": "arguments",
-                                                  "value": {
-                                                    "$ARGS": [
-                                                      {
-                                                        "id": "id-1788f62ad6f-172",
-                                                        "type": "argument",
-                                                        "value": {
-                                                          "$NAME": {
-                                                            "id": "id-1788f62ad6f-173",
-                                                            "type": "variable_name",
-                                                            "value": "obj"
-                                                          },
-                                                          "$FROM": {
-                                                            "id": "id-1788f62ad6f-174",
-                                                            "type": "assignment",
-                                                            "value": {
-                                                              "id": "id-1788f62ad6f-175",
-                                                              "type": "get_var",
-                                                              "value": {
-                                                                "$NAME": {
-                                                                  "id": "id-1788f62ad6f-176",
-                                                                  "type": "text",
-                                                                  "value": "noun"
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    ]
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  ]
-                                }
-                              }
-                            },
-                            "$HOOK": {
-                              "id": "id-1788f214861-278",
-                              "type": "program_hook",
-                              "value": {
-                                "$ACTIVITY": {
-                                  "id": "id-1788f214861-279",
-                                  "type": "activity",
-                                  "value": {
-                                    "$EXE": [
-                                      {
-                                        "id": "id-1788f214861-280",
-                                        "type": "execute",
-                                        "value": {
-                                          "id": "id-1788f214861-281",
-                                          "type": "assign",
-                                          "value": {
-                                            "$VAR": {
-                                              "id": "id-1788f214861-282",
-                                              "type": "variable_name",
-                                              "value": "response"
-                                            },
-                                            "$FROM": {
-                                              "id": "id-1788f214861-283",
-                                              "type": "assignment",
-                                              "value": {
-                                                "id": "id-1788f214861-284",
-                                                "type": "from_text",
-                                                "value": {
-                                                  "$VAL": {
-                                                    "id": "id-1788f214861-285",
-                                                    "type": "text_eval",
-                                                    "value": {
-                                                      "id": "id-1788f214861-286",
-                                                      "type": "response",
-                                                      "value": {
-                                                        "$NAME": {
-                                                          "id": "id-1788f214861-287",
-                                                          "type": "text",
-                                                          "value": "can only search storage"
-                                                        },
-                                                        "$TEXT": {
-                                                          "id": "id-1788f214861-288",
-                                                          "type": "text_eval",
-                                                          "value": {
-                                                            "id": "id-1788f214861-289",
-                                                            "type": "render_template",
-                                                            "value": {
-                                                              "$TEMPLATE": {
-                                                                "id": "id-1788f214861-290",
-                                                                "type": "lines",
-                                                                "value": "{we!|capitalize!} find nothing of interest."
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": "id-1788f214861-597",
-        "type": "paragraph",
-        "value": {
-          "$STORY_STATEMENT": []
-        }
-      }
-    ]
-  }
+      ]
+    },
+    {
+      "Paragraph:": []
+    }
+  ]
 }
