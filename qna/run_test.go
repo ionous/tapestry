@@ -3,6 +3,7 @@ package qna
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/assembly"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
@@ -30,7 +31,7 @@ func TestFullFactorial(t *testing.T) {
 			t.Fatal("couldnt assemble story", e, ds.Err())
 		} else if len(ds) > 0 {
 			t.Fatal("issues assembling", ds.Err())
-		} else if cnt, e := CheckAll(db, ""); e != nil {
+		} else if cnt, e := CheckAll(db, "", iffy.AllSignatures); e != nil {
 			t.Fatal(e)
 		} else if cnt != 1 {
 			t.Fatal("expected one test", cnt)

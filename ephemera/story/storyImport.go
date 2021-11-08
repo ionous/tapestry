@@ -44,7 +44,7 @@ func (op *Comment) ImportPhrase(k *Importer) (err error) {
 }
 
 func (op *GrammarDecl) ImportPhrase(k *Importer) error {
-	_, e := k.NewGob("grammar", &grammar.Grammar{op.Grammar})
+	_, e := k.NewProg("grammar", &grammar.Grammar{op.Grammar})
 	return e
 }
 

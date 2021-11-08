@@ -1,8 +1,7 @@
 package iffy
 
 import (
-	"encoding/gob"
-
+	"git.sr.ht/~ionous/iffy/dl/check"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/debug"
@@ -19,14 +18,8 @@ import (
 	r "reflect"
 )
 
-var AllSlots = [][]interface{}{
-	core.Slots,
-	grammar.Slots,
-	list.Slots,
-	story.Slots,
-	rt.Slots,
-}
 var AllSlats = [][]composer.Composer{
+	check.Slats,
 	core.Slats,
 	debug.Slats,
 	grammar.Slats,
@@ -34,10 +27,12 @@ var AllSlats = [][]composer.Composer{
 	reader.Slats,
 	rel.Slats,
 	render.Slats,
+	rt.Slats,
 	value.Slats,
 	story.Slats,
 }
 var AllSignatures = []map[uint64]interface{}{
+	check.Signatures,
 	core.Signatures,
 	debug.Signatures,
 	grammar.Signatures,
@@ -45,30 +40,9 @@ var AllSignatures = []map[uint64]interface{}{
 	reader.Signatures,
 	rel.Signatures,
 	render.Signatures,
+	rt.Signatures,
 	story.Signatures,
 	value.Signatures,
-}
-
-func RegisterGobs() {
-	registerGob()
-}
-
-// where should this live?
-func init() {
-	registerGob()
-}
-
-var registeredGob = false
-
-func registerGob() {
-	if !registeredGob {
-		for _, slats := range AllSlats {
-			for _, cmd := range slats {
-				gob.Register(cmd)
-			}
-		}
-		registeredGob = true
-	}
 }
 
 // note: if it were ever to turn out this is the only reflection needed

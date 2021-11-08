@@ -34,5 +34,23 @@
   "text_list_eval": {
     "uses": "slot",
     "desc": "Statements which return a list of text."
+  },
+  "handler": {
+    "uses": "flow",
+    "desc": "triggers a series of statements when its filters are satisfied.",
+    "group": "internal",
+    "spec": "handle {when%filter?bool_eval} {do%exe:execute}"    
+  },
+  "rule": {
+    "uses": "flow",
+    "desc": "triggers a named series of statements when its filters and phase are satisfied.",
+    "group": "internal",
+    "spec": "rule {_%name:text} {flags%raw_flags:number} {when%filter?bool_eval} {do%execute:execute}"
+  },
+  "fragment": {
+    "uses": "flow",
+    "desc": "wrapper to hold assignments to values",
+    "group": "internal",
+    "spec": "assign {_%init:assignment}"
   }
 }

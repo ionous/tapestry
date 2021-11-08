@@ -1,11 +1,13 @@
 package story
 
 import (
+	"bytes"
+
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
 	"git.sr.ht/~ionous/iffy/ephemera/express"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/template"
 	"git.sr.ht/~ionous/iffy/template/types"
 	"github.com/ionous/errutil"
@@ -36,10 +38,13 @@ func ConvertText(str string) (ret interface{}, err error) {
 			err = errutil.New(e, xs)
 		} else if eval, ok := got.(rt.TextEval); !ok {
 			err = errutil.Fmt("render template has unknown expression %T", got)
-		} else if prog, e := tables.EncodeGob(&core.FromText{eval}); e != nil {
-			err = e
 		} else {
-			ret = prog // okay; return bytes.
+			var buf bytes.Buffer
+			if e := cout.Marshal(&buf, &core.FromText{eval}); e != nil {
+				err = e
+			} else {
+				ret = buf.Bytes() // okay; return bytes.
+			}
 		}
 	}
 	return

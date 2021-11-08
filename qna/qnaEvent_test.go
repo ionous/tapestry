@@ -2,9 +2,8 @@ package qna
 
 // import (
 // 	"bytes"
-// 	"encoding/gob"
 // 	"testing"
-
+//
 // 	"git.sr.ht/~ionous/iffy/assembly"
 // 	"git.sr.ht/~ionous/iffy/dl/core"
 // 	"git.sr.ht/~ionous/iffy/ephemera/debug"
@@ -20,9 +19,6 @@ package qna
 
 // // - maybe instead of decoding gobs for now we just record number values
 // func TestEventHooks(t *testing.T) {
-// 	gob.Register((*core.Text)(nil))
-// 	gob.Register((*debug.MatchNumber)(nil))
-
 // 	if db, e:= testdb.Open(t.Name(), dbloc, assembly.SqlCustomDriver); e!= nil {
 // t.Fatal(e)
 // 	defer db.Close()
@@ -39,7 +35,7 @@ package qna
 // 	} else if e := tables.CreateRunViews(db); e != nil {
 // 		t.Fatal(e)
 // 	}
-// 	run := NewRuntime(db)
+// 	run := NewRuntime(db, iffy.AllSignatures)
 // 	for i, expect := range []string{"One!", "Two!", "Three!", "Not between 1 and 3."} {
 // 		var buf bytes.Buffer
 // 		run.SetWriter(&buf)

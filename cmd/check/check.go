@@ -43,12 +43,8 @@ func checkFile(inFile, testName string) (ret int, err error) {
 		} else if e := tables.CreateRunViews(db); e != nil {
 			err = e
 		} else {
-			ret, err = qna.CheckAll(db, testName)
+			ret, err = qna.CheckAll(db, testName, iffy.AllSignatures)
 		}
 	}
 	return
-}
-
-func init() {
-	iffy.RegisterGobs()
 }

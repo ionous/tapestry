@@ -178,7 +178,7 @@
     "choose_num":
     {
         "uses": "flow",
-        "spec": "num {if:bool_eval} {then%true:number_eval} {else%false:number_eval}",
+        "spec": "num {if:bool_eval} {then%true:number_eval} {else%false?number_eval}",
         "slot": "number_eval",
         "desc": "Pick one of two numbers based on a boolean test.",
         "group": "math"
@@ -186,7 +186,7 @@
     "choose_text":
     {
         "uses": "flow",
-        "spec": "txt {if:bool_eval} {then%true:text_eval} {else%false:text_eval}",
+        "spec": "txt {if:bool_eval} {then%true:text_eval} {else%false?text_eval}",
         "slot": "text_eval",
         "desc": "Pick one of two strings based on a boolean test.",
         "group": "format"
@@ -483,7 +483,7 @@
     "join":
     {
         "uses": "flow",
-        "spec": "join {_%sep:text_eval} {parts+text_eval}",
+        "spec": "join {_%sep?text_eval} {parts+text_eval}",
         "slot": "text_eval",
         "desc": "Returns multiple pieces of text as a single new piece of text.",
         "group": "strings"

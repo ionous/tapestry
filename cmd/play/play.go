@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy"
 	play "git.sr.ht/~ionous/iffy/cmd/play/internal"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -81,8 +80,4 @@ func step(p *play.Parser, s string) {
 	} else if res != nil {
 		fmt.Println()
 	}
-}
-
-func init() {
-	iffy.RegisterGobs()
 }

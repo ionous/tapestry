@@ -2,16 +2,17 @@ package qna
 
 import (
 	"database/sql"
-	r "reflect"
 
+	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
 type qnaRules struct {
-	rules    map[keyType]ruleSet // pattern.target -> []rules
-	rulesFor *sql.Stmt
+	signatures []map[uint64]interface{}
+	rules      map[keyType]ruleSet // pattern.target -> []rules
+	rulesFor   *sql.Stmt
 }
 
 type ruleSet struct {
@@ -42,23 +43,27 @@ func (q *qnaRules) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.
 	} else {
 		var rulen string
 		var phase rt.Phase
-		var handler rt.Handler
-		hval := r.ValueOf(&handler).Elem()
+		var prog []byte
 		// NOTE: rulesFor filters by domain, see: reset()
 		if rows, e := q.rulesFor.Query(key.target, key.field); e != nil {
 			err = e
 		} else if e := tables.ScanAll(rows, func() (err error) {
-			flags := rt.MakeFlags(phase)
-			x.rules = append(x.rules, rt.Rule{
-				Name:     rulen,
-				Filter:   handler.Filter,
-				Execute:  handler.Exe,
-				RawFlags: flags,
-			})
-			x.flags |= flags
-			handler = rt.Handler{} // gob doesnt write nil values
+			var handler rt.Handler
+			if e := cin.Decode(&handler, prog, q.signatures); e != nil {
+				err = e
+			} else {
+				flags := rt.MakeFlags(phase)
+				x.rules = append(x.rules, rt.Rule{
+					Name:     rulen,
+					Filter:   handler.Filter,
+					Execute:  handler.Exe,
+					RawFlags: float64(flags),
+				})
+				x.flags |= flags
+			}
+			prog = nil
 			return
-		}, &rulen, &phase, &tables.GobScanner{hval}); e != nil {
+		}, &rulen, &phase, &prog); e != nil {
 			err = e
 		}
 		if err != nil {

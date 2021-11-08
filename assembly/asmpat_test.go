@@ -44,8 +44,6 @@ package assembly
 // assemble patterns and rules into the model rules and programs.
 // doesnt check for consistency -- that's up to pattern and rule checking currently.
 // func xTestRuleAsm(t *testing.T) {
-// 	gob.Register((*core.Text)(nil))
-// 	gob.Register((*debug.MatchNumber)(nil))
 // 	//
 // 	asm := newAssemblyTest(t, testdb.Memory)
 // 	defer asm.db.Close()
@@ -74,16 +72,20 @@ package assembly
 // 			t.Fatal(e)
 // 		} else {
 // 			var visited bool
+//      var pat PatternFrag
 // 			var progName, typeName string
-// 			var pat PatternFrag
 // 			if e := tables.QueryAll(asm.db, "select * from mdl_prog",
 // 				func() (err error) {
 // 					if visited {
 // 						err = errutil.New("multiple programs detected")
-// 					}
-// 					visited = true
+// 					} else if e := cin.Decode(&pat, buf.Bytes(), iffy.AllSignatures); e != nil {
+//            err = e
+//          } else {
+//            buf.Reset()
+//   					visited = true
+//          }
 // 					return
-// 				}, &progName, &typeName, tables.NewGobScanner(&pat)); e != nil {
+// 				}, &progName, &typeName, &buf); e != nil {
 // 				t.Fatal(e)
 // 			} else if progName != "say_me" || typeName != "Pattern" {
 // 				t.Fatalf("mismatched columns %q %q", progName, typeName)

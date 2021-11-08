@@ -4,6 +4,7 @@ import (
   "git.sr.ht/~ionous/iffy/affine"
   "git.sr.ht/~ionous/iffy/dl/core"
   "git.sr.ht/~ionous/iffy/dl/value"
+  "git.sr.ht/~ionous/iffy/jsn"
   "git.sr.ht/~ionous/iffy/rt"
   g "git.sr.ht/~ionous/iffy/rt/generic"
   "git.sr.ht/~ionous/iffy/rt/safe"
@@ -18,12 +19,26 @@ type MatchNumber struct {
   Val int
 }
 
-func (m MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
+func (op *MatchNumber) Marshal(m jsn.Marshaler) (err error) {
+  if err = m.MarshalBlock(jsn.MakeFlow("match", "", op)); err == nil {
+    e0 := m.MarshalKey("", "")
+    if e0 == nil {
+      e0 = m.MarshalValue("", &op.Val)
+    }
+    if e0 != nil && e0 != jsn.Missing {
+      m.Error(e0)
+    }
+    m.EndBlock()
+  }
+  return
+}
+
+func (op *MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
   if a, e := safe.CheckVariable(run, numVar, affine.Number); e != nil {
     err = e
   } else {
     n := a.Int()
-    ret = g.BoolOf(n == m.Val)
+    ret = g.BoolOf(n == op.Val)
   }
   return
 }
@@ -40,6 +55,20 @@ func DetermineSay(i int) *core.CallPattern {
 
 type SayMe struct {
   Num float64
+}
+
+func (op *SayMe) Marshal(m jsn.Marshaler) (err error) {
+  if err = m.MarshalBlock(jsn.MakeFlow("say_me", "", op)); err == nil {
+    e0 := m.MarshalKey("", "")
+    if e0 == nil {
+      e0 = m.MarshalValue("", &op.Num)
+    }
+    if e0 != nil && e0 != jsn.Missing {
+      m.Error(e0)
+    }
+    m.EndBlock()
+  }
+  return
 }
 
 var SayPattern = testpat.Pattern{

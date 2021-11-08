@@ -1,6 +1,11 @@
 package assembly
 
 import (
+	"bytes"
+
+	"git.sr.ht/~ionous/iffy"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/pattern"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -24,9 +29,10 @@ func WriteRules(asm *Assembler, pat, tgt, domain string, rules []rt.Rule) (err e
 	for _, j := range inds {
 		rule := rules[j]
 		handler := rt.Handler{Filter: rule.Filter, Exe: rule.Execute}
-		if prog, e := tables.EncodeGob(&handler); e != nil {
+		var buf bytes.Buffer
+		if e := cout.Marshal(&buf, &handler); e != nil {
 			err = errutil.Append(err, e)
-		} else if e := asm.WriteRule(pat, tgt, domain, rule.Flags(), prog, rule.Name); e != nil {
+		} else if e := asm.WriteRule(pat, tgt, domain, rule.Flags(), buf.Bytes(), rule.Name); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}
@@ -54,7 +60,7 @@ func buildPatternRules(asm *Assembler, cache patternCache) (err error) {
 					curr.rules = make(map[TargetDomain][]rt.Rule)
 				}
 				var rule rt.Rule
-				if e := tables.DecodeGob(prog, &rule); e != nil {
+				if e := cin.Decode(&rule, prog, iffy.AllSignatures); e != nil {
 					err = e
 				} else {
 					key := TargetDomain{target, domain}

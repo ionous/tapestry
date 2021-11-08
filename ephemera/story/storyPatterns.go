@@ -121,8 +121,8 @@ func (op *PatternRule) ImportRule(k *Importer, pattern, target eph.Named, tgtFla
 				}}
 			}
 			// a token stream sure would be nice here -- then we could just strstr for countOf
-			rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: flags}
-			if patternProg, e := k.NewGob("rule", rule); e != nil {
+			rule := &rt.Rule{Filter: guard, Execute: hook, RawFlags: float64(flags)}
+			if patternProg, e := k.NewProg("rule", rule); e != nil {
 				err = errutil.New(e, "while importing pattern rule", pattern.String())
 			} else {
 				// currentDomain returns "entire_game" when k.Current.Domain is the empty string.
@@ -159,7 +159,7 @@ func (op *PatternLocals) ImportLocals(k *Importer, patternName eph.Named) (err e
 		} else {
 			var prog ephemera.Prog
 			if init := el.Value; init != nil {
-				if p, e := k.NewGob("assignment", init); e != nil {
+				if p, e := k.NewProg("assignment", init); e != nil {
 					err = e
 					break
 				} else {

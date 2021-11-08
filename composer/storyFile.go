@@ -52,8 +52,8 @@ func (d storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
 		err = e
 	} else {
 		w.Header().Set("Content-Type", "application/json")
-		out := json.NewEncoder(w)
-		err = out.Encode(data)
+		js := json.NewEncoder(w)
+		err = js.Encode(data)
 	}
 	return
 }
@@ -86,9 +86,10 @@ func writeOut(outPath string, data interface{}) (err error) {
 	if fp, e := os.Create(outPath); e != nil {
 		err = e
 	} else {
-		out := json.NewEncoder(fp)
-		out.SetIndent("", "  ")
-		err = out.Encode(data)
+		js := json.NewEncoder(fp)
+		js.SetIndent("", "  ")
+		js.SetEscapeHTML(false)
+		err = js.Encode(data)
 	}
 	return
 }

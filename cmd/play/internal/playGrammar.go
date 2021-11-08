@@ -3,7 +3,9 @@ package internal
 import (
 	"database/sql"
 
+	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/grammar"
+	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/parser"
 	"git.sr.ht/~ionous/iffy/tables"
 )
@@ -18,7 +20,7 @@ func MakeGrammar(db *sql.DB) (ret parser.Scanner, err error) {
 		`select bytes from mdl_prog where type='Directive' order by rowid`,
 		func() (err error) {
 			var d grammar.Directive
-			if e := tables.DecodeGob(prog, &d); e != nil {
+			if e := cin.Decode(&d, prog, iffy.AllSignatures); e != nil {
 				err = e
 			} else {
 				x := d.MakeScanners()

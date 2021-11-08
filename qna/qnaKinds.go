@@ -15,6 +15,7 @@ import (
 type qnaKinds struct {
 	kinds                       qnaKindMap
 	typeOf, fieldsOf, traitsFor *sql.Stmt // selects field, type for a named kind
+	signatures                  []map[uint64]interface{}
 }
 
 type qnaKindMap map[string]qnaKind
@@ -89,7 +90,7 @@ func (q *qnaKinds) queryFields(kind string) (ret []g.Field, retInit []rt.Assignm
 				Type:     fieldType,
 			})
 			if i != nil {
-				if val, e := decodeValue(affinity, i); e != nil {
+				if val, e := decodeValue(affinity, i, q.signatures); e != nil {
 					err = errutil.New("error while decoding", field, e)
 				} else {
 					// add room for all earlier fields

@@ -2,7 +2,10 @@
 package rt
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
+	"github.com/ionous/errutil"
 )
 
 const Assignment_Type = "assignment"
@@ -209,6 +212,185 @@ func Execute_Repeats_Marshal(m jsn.Marshaler, vals *[]Execute) error {
 func Execute_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Execute) (err error) {
 	if *pv != nil || !m.IsEncoding() {
 		err = Execute_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+// Fragment wrapper to hold assignments to values
+type Fragment struct {
+	Init Assignment `if:"label=_"`
+}
+
+func (*Fragment) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Fragment_Type,
+		Uses: composer.Type_Flow,
+		Lede: "assign",
+	}
+}
+
+const Fragment_Type = "fragment"
+
+const Fragment_Field_Init = "$INIT"
+
+func (op *Fragment) Marshal(m jsn.Marshaler) error {
+	return Fragment_Marshal(m, op)
+}
+
+type Fragment_Slice []Fragment
+
+func (op *Fragment_Slice) GetType() string {
+	return Fragment_Type
+}
+
+func (op *Fragment_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Fragment_Slice) SetSize(cnt int) {
+	var els []Fragment
+	if cnt >= 0 {
+		els = make(Fragment_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Fragment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Fragment_Marshal(m, &(*op)[i])
+}
+
+func Fragment_Repeats_Marshal(m jsn.Marshaler, vals *[]Fragment) error {
+	return jsn.RepeatBlock(m, (*Fragment_Slice)(vals))
+}
+
+func Fragment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Fragment) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Fragment_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+func Fragment_Optional_Marshal(m jsn.Marshaler, pv **Fragment) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Fragment_Marshal(m, *pv)
+	} else if !enc {
+		var v Fragment
+		if err = Fragment_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Fragment_Marshal(m jsn.Marshaler, val *Fragment) (err error) {
+	if err = m.MarshalBlock(jsn.MakeFlow("assign", Fragment_Type, val)); err == nil {
+		e0 := m.MarshalKey("", Fragment_Field_Init)
+		if e0 == nil {
+			e0 = Assignment_Marshal(m, &val.Init)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Fragment_Field_Init))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// Handler triggers a series of statements when its filters are satisfied.
+type Handler struct {
+	Filter BoolEval `if:"label=when,optional"`
+	Exe    Execute  `if:"label=do"`
+}
+
+func (*Handler) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Handler_Type,
+		Uses: composer.Type_Flow,
+		Lede: "handle",
+	}
+}
+
+const Handler_Type = "handler"
+
+const Handler_Field_Filter = "$FILTER"
+const Handler_Field_Exe = "$EXE"
+
+func (op *Handler) Marshal(m jsn.Marshaler) error {
+	return Handler_Marshal(m, op)
+}
+
+type Handler_Slice []Handler
+
+func (op *Handler_Slice) GetType() string {
+	return Handler_Type
+}
+
+func (op *Handler_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Handler_Slice) SetSize(cnt int) {
+	var els []Handler
+	if cnt >= 0 {
+		els = make(Handler_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Handler_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Handler_Marshal(m, &(*op)[i])
+}
+
+func Handler_Repeats_Marshal(m jsn.Marshaler, vals *[]Handler) error {
+	return jsn.RepeatBlock(m, (*Handler_Slice)(vals))
+}
+
+func Handler_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Handler) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Handler_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+func Handler_Optional_Marshal(m jsn.Marshaler, pv **Handler) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Handler_Marshal(m, *pv)
+	} else if !enc {
+		var v Handler
+		if err = Handler_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Handler_Marshal(m jsn.Marshaler, val *Handler) (err error) {
+	if err = m.MarshalBlock(jsn.MakeFlow("handle", Handler_Type, val)); err == nil {
+		e0 := m.MarshalKey("when", Handler_Field_Filter)
+		if e0 == nil {
+			e0 = BoolEval_Optional_Marshal(m, &val.Filter)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Handler_Field_Filter))
+		}
+		e1 := m.MarshalKey("do", Handler_Field_Exe)
+		if e1 == nil {
+			e1 = Execute_Marshal(m, &val.Exe)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Handler_Field_Exe))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -501,6 +683,117 @@ func RecordListEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordListEv
 	return
 }
 
+// Rule triggers a named series of statements when its filters and phase are satisfied.
+type Rule struct {
+	Name     string   `if:"label=_,type=text"`
+	RawFlags float64  `if:"label=flags,type=number"`
+	Filter   BoolEval `if:"label=when,optional"`
+	Execute  Execute  `if:"label=do"`
+}
+
+func (*Rule) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Rule_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Rule_Type = "rule"
+
+const Rule_Field_Name = "$NAME"
+const Rule_Field_RawFlags = "$RAW_FLAGS"
+const Rule_Field_Filter = "$FILTER"
+const Rule_Field_Execute = "$EXECUTE"
+
+func (op *Rule) Marshal(m jsn.Marshaler) error {
+	return Rule_Marshal(m, op)
+}
+
+type Rule_Slice []Rule
+
+func (op *Rule_Slice) GetType() string {
+	return Rule_Type
+}
+
+func (op *Rule_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Rule_Slice) SetSize(cnt int) {
+	var els []Rule
+	if cnt >= 0 {
+		els = make(Rule_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Rule_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Rule_Marshal(m, &(*op)[i])
+}
+
+func Rule_Repeats_Marshal(m jsn.Marshaler, vals *[]Rule) error {
+	return jsn.RepeatBlock(m, (*Rule_Slice)(vals))
+}
+
+func Rule_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Rule) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = Rule_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+func Rule_Optional_Marshal(m jsn.Marshaler, pv **Rule) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Rule_Marshal(m, *pv)
+	} else if !enc {
+		var v Rule
+		if err = Rule_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Rule_Marshal(m jsn.Marshaler, val *Rule) (err error) {
+	if err = m.MarshalBlock(jsn.MakeFlow(Rule_Type, Rule_Type, val)); err == nil {
+		e0 := m.MarshalKey("", Rule_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Rule_Field_Name))
+		}
+		e1 := m.MarshalKey("flags", Rule_Field_RawFlags)
+		if e1 == nil {
+			e1 = value.Number_Unboxed_Marshal(m, &val.RawFlags)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Rule_Field_RawFlags))
+		}
+		e2 := m.MarshalKey("when", Rule_Field_Filter)
+		if e2 == nil {
+			e2 = BoolEval_Optional_Marshal(m, &val.Filter)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", Rule_Field_Filter))
+		}
+		e3 := m.MarshalKey("do", Rule_Field_Execute)
+		if e3 == nil {
+			e3 = Execute_Marshal(m, &val.Execute)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", Rule_Field_Execute))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 const TextEval_Type = "text_eval"
 
 var TextEval_Optional_Marshal = TextEval_Marshal
@@ -657,4 +950,16 @@ var Slots = []interface{}{
 	(*TextListEval)(nil),
 }
 
-var Signatures = map[uint64]interface{}{}
+var Slats = []composer.Composer{
+	(*Fragment)(nil),
+	(*Handler)(nil),
+	(*Rule)(nil),
+}
+
+var Signatures = map[uint64]interface{}{
+	2599336479591478530:  (*Fragment)(nil), /* Assign: */
+	1974630509660097686:  (*Handler)(nil),  /* Handle do: */
+	471702439204592930:   (*Handler)(nil),  /* Handle when:do: */
+	14543757055917034449: (*Rule)(nil),     /* Rule:flags:do: */
+	6115960915711515131:  (*Rule)(nil),     /* Rule:flags:when:do: */
+}

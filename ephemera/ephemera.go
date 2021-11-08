@@ -1,10 +1,13 @@
 package ephemera
 
 import (
+	"bytes"
 	"database/sql"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/ephemera/eph"
+	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
@@ -41,20 +44,13 @@ func (k *Recorder) NewDomainName(domain eph.Named, name, category, ofs string) (
 
 type Prog struct{ eph.Named }
 
-// fix: this should probably take "ofs" just like NewName does.
-func (k *Recorder) NewProg(rootType string, blob []byte) (ret Prog) {
-	id := k.cache.MustGetId(eph_prog, k.srcId, rootType, blob)
-	ret = Prog{eph.MakeName(id, rootType)}
-	return
-}
-
-// fix:  could this be a function in tables somehow?
-// see also: WriteGob in assembler
-func (k *Recorder) NewGob(typeName string, cmd interface{}) (ret Prog, err error) {
-	if prog, e := tables.EncodeGob(cmd); e != nil {
+func (k *Recorder) NewProg(typeName string, cmd jsn.Marshalee) (ret Prog, err error) {
+	var buf bytes.Buffer
+	if e := cout.Marshal(&buf, cmd); e != nil {
 		err = e
 	} else {
-		ret = k.NewProg(typeName, prog)
+		id := k.cache.MustGetId(eph_prog, k.srcId, typeName, buf.Bytes())
+		ret = Prog{eph.MakeName(id, typeName)}
 	}
 	return
 }

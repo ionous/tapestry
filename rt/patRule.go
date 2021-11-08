@@ -7,21 +7,6 @@ package rt
 // The postfix rules run until one decides to end the pattern.
 type Flags int
 
-// Rule triggers a series of statements when its filters are satisfied.
-// ( for backwards compatibility it doesnt directly aggregate Handler )
-type Rule struct {
-	Name     string
-	RawFlags Flags
-	Filter   BoolEval
-	Execute
-}
-
-// Handler executes a statement if its filter passes
-type Handler struct {
-	Filter BoolEval
-	Exe    Execute
-}
-
 type NoResult struct{}
 
 func (e NoResult) Error() string { return "no result" }
@@ -40,10 +25,11 @@ const (
 )
 
 func (l Rule) Flags() (ret Flags) {
-	if l.RawFlags == 0 {
+	flags := Flags(l.RawFlags)
+	if flags == 0 {
 		ret = Infix
 	} else {
-		ret = l.RawFlags
+		ret = flags
 	}
 	return
 }

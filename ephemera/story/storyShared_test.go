@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
@@ -21,7 +20,6 @@ func newImporter(t *testing.T, where string) (*story.Importer, *sql.DB) {
 	if e := tables.CreateEphemera(db); e != nil {
 		t.Fatal("create ephemera", e)
 	}
-	iffy.RegisterGobs()
 	k := story.NewImporter(db)
 	k.SetSource(t.Name())
 	return k, db

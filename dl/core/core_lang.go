@@ -2405,7 +2405,7 @@ func ChooseNothingElse_Marshal(m jsn.Marshaler, val *ChooseNothingElse) (err err
 type ChooseNum struct {
 	If    rt.BoolEval   `if:"label=if"`
 	True  rt.NumberEval `if:"label=then"`
-	False rt.NumberEval `if:"label=else"`
+	False rt.NumberEval `if:"label=else,optional"`
 }
 
 func (*ChooseNum) Compose() composer.Spec {
@@ -2494,7 +2494,7 @@ func ChooseNum_Marshal(m jsn.Marshaler, val *ChooseNum) (err error) {
 		}
 		e2 := m.MarshalKey("else", ChooseNum_Field_False)
 		if e2 == nil {
-			e2 = rt.NumberEval_Marshal(m, &val.False)
+			e2 = rt.NumberEval_Optional_Marshal(m, &val.False)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ChooseNum_Field_False))
@@ -2509,7 +2509,7 @@ func ChooseNum_Marshal(m jsn.Marshaler, val *ChooseNum) (err error) {
 type ChooseText struct {
 	If    rt.BoolEval `if:"label=if"`
 	True  rt.TextEval `if:"label=then"`
-	False rt.TextEval `if:"label=else"`
+	False rt.TextEval `if:"label=else,optional"`
 }
 
 func (*ChooseText) Compose() composer.Spec {
@@ -2598,7 +2598,7 @@ func ChooseText_Marshal(m jsn.Marshaler, val *ChooseText) (err error) {
 		}
 		e2 := m.MarshalKey("else", ChooseText_Field_False)
 		if e2 == nil {
-			e2 = rt.TextEval_Marshal(m, &val.False)
+			e2 = rt.TextEval_Optional_Marshal(m, &val.False)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ChooseText_Field_False))
@@ -5405,7 +5405,7 @@ func IsKindOf_Marshal(m jsn.Marshaler, val *IsKindOf) (err error) {
 // Join Returns multiple pieces of text as a single new piece of text.
 // User implements: TextEval.
 type Join struct {
-	Sep   rt.TextEval   `if:"label=_"`
+	Sep   rt.TextEval   `if:"label=_,optional"`
 	Parts []rt.TextEval `if:"label=parts"`
 }
 
@@ -5479,7 +5479,7 @@ func Join_Marshal(m jsn.Marshaler, val *Join) (err error) {
 	if err = m.MarshalBlock(jsn.MakeFlow(Join_Type, Join_Type, val)); err == nil {
 		e0 := m.MarshalKey("", Join_Field_Sep)
 		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Sep)
+			e0 = rt.TextEval_Optional_Marshal(m, &val.Sep)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Join_Field_Sep))
@@ -9248,7 +9248,9 @@ var Signatures = map[uint64]interface{}{
 	8118318284549648335:  (*ChooseMoreValue)(nil),   /* ElseIf:from:and:do: */
 	15789793076434728188: (*ChooseMoreValue)(nil),   /* ElseIf:from:and:do:else: */
 	10400553141435587369: (*ChooseNothingElse)(nil), /* ElseDo: */
+	12826602301919429895: (*ChooseNum)(nil),         /* Num if:then: */
 	6975806637395575556:  (*ChooseNum)(nil),         /* Num if:then:else: */
+	18209756292302303627: (*ChooseText)(nil),        /* Txt if:then: */
 	3873612904538163080:  (*ChooseText)(nil),        /* Txt if:then:else: */
 	1980715091726959140:  (*ChooseValue)(nil),       /* If:from:and:do: */
 	7009621164357801941:  (*ChooseValue)(nil),       /* If:from:and:do:else: */
@@ -9281,6 +9283,7 @@ var Signatures = map[uint64]interface{}{
 	3262909017575450402:  (*IsEmpty)(nil),           /* Is empty: */
 	9266285462670386846:  (*IsExactKindOf)(nil),     /* KindOf:isExactly: */
 	8240640059307590354:  (*IsKindOf)(nil),          /* KindOf:is: */
+	7663866528507853247:  (*Join)(nil),              /* Join parts: */
 	8856805864711625497:  (*Join)(nil),              /* Join:parts: */
 	11296148874053869044: (*KindOf)(nil),            /* KindOf: */
 	17605671480000835281: (*KindsOf)(nil),           /* KindsOf: */

@@ -10,7 +10,7 @@ func (op *TestRule) ImportPhrase(k *Importer) (err error) {
 		err = e
 	} else if hook, e := op.Hook.ImportProgram(k); e != nil {
 		err = e
-	} else if prog, e := k.NewGob("execute", hook); e != nil {
+	} else if prog, e := k.NewProg("execute", hook); e != nil {
 		err = e
 	} else {
 		k.NewTestProgram(n, prog)

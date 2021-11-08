@@ -1,6 +1,7 @@
 package jsn_test
 
 import (
+	"bytes"
 	"encoding/json"
 	"testing"
 
@@ -15,6 +16,7 @@ import (
 	"git.sr.ht/~ionous/iffy/rt"
 
 	"git.sr.ht/~ionous/iffy/jsn/dout"
+	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
@@ -39,16 +41,16 @@ func TestDetailsDecode(t *testing.T) {
 }
 
 func TestCompactEncoder(t *testing.T) {
-	if d, e := cout.Encode(debug.FactorialStory); e != nil {
+	var buf bytes.Buffer
+	if e := cout.Marshal(&buf, debug.FactorialStory); e != nil {
 		t.Fatal(e)
-	} else if b, e := json.Marshal(d); e != nil {
-		t.Fatal(e)
-	} else if str := string(b); str != com {
+	} else if str := buf.String(); str != com {
 		t.Fatal(str)
 	}
 }
 
 func TestCompactDecode(t *testing.T) {
+	errutil.Panic = true
 	var dst story.Story
 	if e := cin.Decode(&dst, []byte(com), iffy.AllSignatures); e != nil {
 		pretty.Println(dst)
@@ -132,10 +134,11 @@ func TestExpandedSwap(t *testing.T) {
 // TestVarAsBool - unit test for broken parsing case
 // @requires light double committed
 func TestVarAsBool(t *testing.T) {
+	errutil.Panic = true
 	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
 	want := core.AllTrue{[]rt.BoolEval{
 		&core.GetVar{
-			Name: value.VariableName{Str: "requires_light"},
+			Name: value.VariableName{Str: "requires light"},
 		},
 		&core.GetAtField{
 			Field: "is in darkness",
@@ -143,6 +146,21 @@ func TestVarAsBool(t *testing.T) {
 		},
 	}}
 	var have core.AllTrue
+	if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+		pretty.Println("got:", have)
+		t.Fatal(e)
+	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
+		pretty.Println("got:", have)
+		t.Fatal(diff)
+	}
+}
+
+func TestMissingSlot(t *testing.T) {
+	in := `{"Join parts:":["one","two","three"]}`
+	want := core.Join{Parts: []rt.TextEval{
+		core.T("one"), core.T("two"), core.T("three"),
+	}}
+	var have core.Join
 	if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)

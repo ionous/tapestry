@@ -13,7 +13,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func NewRuntime(db *sql.DB) *Runner {
+func NewRuntime(db *sql.DB, signatures []map[uint64]interface{}) *Runner {
 	var run *Runner
 	if plurals, e := NewPlurals(db); e != nil {
 		panic(e) // report?
@@ -22,18 +22,21 @@ func NewRuntime(db *sql.DB) *Runner {
 	} else {
 		values := make(valueMap)
 		run = &Runner{
-			db:       db,
-			counters: make(map[string]int),
-			fields:   fields,
-			plurals:  plurals,
-			values:   values,
+			db:         db,
+			signatures: signatures,
+			counters:   make(map[string]int),
+			fields:     fields,
+			plurals:    plurals,
+			values:     values,
 			qnaKinds: qnaKinds{
-				typeOf:    fields.typeOf,
-				fieldsOf:  fields.fieldsOf,
-				traitsFor: fields.traitsFor,
+				signatures: signatures,
+				typeOf:     fields.typeOf,
+				fieldsOf:   fields.fieldsOf,
+				traitsFor:  fields.traitsFor,
 			},
 			qnaRules: qnaRules{
-				rulesFor: fields.rulesFor,
+				signatures: signatures,
+				rulesFor:   fields.rulesFor,
 			},
 			options: qnaOptions{
 				object.PrintResponseNames.String(): g.BoolOf(false),
@@ -61,6 +64,7 @@ type Runner struct {
 	activeNouns
 	relativeKinds
 	currentPatterns currentPatterns
+	signatures      []map[uint64]interface{}
 }
 
 func (run *Runner) ActivateDomain(domain string, active bool) {

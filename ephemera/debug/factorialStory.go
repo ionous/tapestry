@@ -24,22 +24,21 @@ var FactorialStory = &story.Story{
 				},
 				Hook: story.ProgramHook{
 					Choice: story.ProgramHook_Activity_Opt,
-					Value: &core.Activity{
-						Exe: []rt.Execute{
-							&core.SayText{
-								Text: &core.PrintNum{
-									Num: &core.CallPattern{
-										Pattern: factorialName,
-										Arguments: core.CallArgs{
-											Args: []core.CallArg{
-												core.CallArg{
-													Name: "num",
-													From: &core.FromNum{
-														Val: &core.NumValue{Num: 3}},
-												}},
-										}},
-								}},
-						}},
+					Value: &core.Activity{[]rt.Execute{
+						&core.SayText{
+							Text: &core.PrintNum{
+								Num: &core.CallPattern{
+									Pattern: factorialName,
+									Arguments: core.CallArgs{
+										Args: []core.CallArg{
+											core.CallArg{
+												Name: "num",
+												From: &core.FromNum{
+													Val: &core.NumValue{Num: 3}},
+											}},
+									}},
+							}},
+					}},
 				}},
 			&story.PatternDecl{
 				Name: factorialName,

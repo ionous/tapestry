@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/print"
 	"git.sr.ht/~ionous/iffy/rt/writer"
 	"git.sr.ht/~ionous/iffy/test/testutil"
@@ -13,7 +14,7 @@ func TestCheck(t *testing.T) {
 	prog := &CheckOutput{
 		Name:   "hello",
 		Expect: "hello",
-		Test: core.NewActivity(
+		Test: core.Activity{Exe: []rt.Execute{
 			&core.ChooseAction{
 				If: &core.BoolValue{true},
 				Do: core.MakeActivity(&core.Say{
@@ -23,7 +24,7 @@ func TestCheck(t *testing.T) {
 					Do: core.MakeActivity(&core.Say{
 						Text: &core.TextValue{"goodbye"},
 					})},
-			}),
+			}}},
 	}
 	if e := runTest(prog); e != nil {
 		t.Fatal(e)

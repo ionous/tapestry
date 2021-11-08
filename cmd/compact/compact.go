@@ -121,9 +121,10 @@ func writeOut(outPath string, data interface{}) (err error) {
 	if fp, e := os.Create(outPath); e != nil {
 		err = e
 	} else {
-		out := json.NewEncoder(fp)
-		out.SetIndent("", "  ")
-		err = out.Encode(data)
+		js := json.NewEncoder(fp)
+		js.SetEscapeHTML(false)
+		js.SetIndent("", "  ")
+		err = js.Encode(data)
 	}
 	return
 }

@@ -1,12 +1,14 @@
 package assembly
 
 import (
+	"bytes"
 	"database/sql"
-	r "reflect"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -135,28 +137,12 @@ func (m *Assembler) WritePlural(one, many string) error {
 	return e
 }
 
-func (m *Assembler) WriteProg(progName, typeName string, bytes []byte) (err error) {
-	_, err = m.cache.Exec(mdl_prog, progName, typeName, bytes)
-	return
-}
-
-func (m *Assembler) WriteGob(progName string, cmd interface{}) (err error) {
-	if prog, e := tables.EncodeGob(cmd); e != nil {
+func (m *Assembler) WriteProgram(progName string, typeName string, cmd jsn.Marshalee) (err error) {
+	var buf bytes.Buffer
+	if e := cout.Marshal(&buf, cmd); e != nil {
 		err = e
 	} else {
-		rval := r.ValueOf(cmd)
-		typeName := rval.Elem().Type().Name()
-		err = m.WriteProg(progName, typeName, prog)
-	}
-	return
-}
-
-func (m *Assembler) WriteGobs(gobs map[string]interface{}) (err error) {
-	for k, v := range gobs {
-		if e := m.WriteGob(k, v); e != nil {
-			err = e
-			break
-		}
+		_, err = m.cache.Exec(mdl_prog, progName, typeName, buf.Bytes())
 	}
 	return
 }

@@ -28,8 +28,7 @@ func xTestProcessProg(t *testing.T) {
 	// 		} else {
 	// 			var res check.Testing
 	// 			t.Log(id, typeName)
-	// 			dec := tables.DecodeGob(prog, &res)
-	// 			if e := dec.Decode(&res); e != nil {
+	// 			if e := cin.Decode(&res, prog, iffy.AllSignatures); e != nil {
 	// 				t.Fatal(e)
 	// 			} else if diff := pretty.Diff(&debug.SayHelloGoodbye, res); len(diff) > 0 {
 	// 				t.Fatal(diff)
