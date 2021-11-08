@@ -6,7 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/template"
 	"git.sr.ht/~ionous/iffy/template/postfix"
@@ -102,7 +101,7 @@ func (c *Converter) buildCompare(cmp core.Comparator) (err error) {
 	return
 }
 
-func (c *Converter) buildSequence(cmd rt.TextEval, pAt *reader.Position, pParts *[]rt.TextEval, count int) (err error) {
+func (c *Converter) buildSequence(cmd rt.TextEval, pAt *string, pParts *[]rt.TextEval, count int) (err error) {
 	if args, e := c.stack.pop(count); e != nil {
 		err = e
 	} else {
@@ -121,7 +120,7 @@ func (c *Converter) buildSequence(cmd rt.TextEval, pAt *reader.Position, pParts 
 			counter := "autoexp" + strconv.Itoa(c.autoCounter)
 			// seq is part of cmd
 			(*pParts) = parts
-			(*pAt).Offset = counter
+			(*pAt) = counter
 			// after filling out the cmd, we push it for later processing
 			c.buildOne(cmd)
 		}
@@ -312,13 +311,13 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 
 		case types.Stopping:
 			var seq core.CallTerminal
-			err = c.buildSequence(&seq, &seq.At, &seq.Parts, fn.ParameterCount)
+			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Shuffle:
 			var seq core.CallShuffle
-			err = c.buildSequence(&seq, &seq.At, &seq.Parts, fn.ParameterCount)
+			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Cycle:
 			var seq core.CallCycle
-			err = c.buildSequence(&seq, &seq.At, &seq.Parts, fn.ParameterCount)
+			err = c.buildSequence(&seq, &seq.Name, &seq.Parts, fn.ParameterCount)
 		case types.Span:
 			err = c.buildSpan(fn.ParameterCount)
 

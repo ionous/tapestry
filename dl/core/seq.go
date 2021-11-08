@@ -36,7 +36,7 @@ func getNextText(run rt.Runtime, parts []rt.TextEval, onedex int) (ret g.Value, 
 }
 
 func (op *CallCycle) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if onedex, e := updateCounter(run, op.At.String(), op.Parts, wrap); e != nil {
+	if onedex, e := updateCounter(run, op.Name, op.Parts, wrap); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret, err = getNextText(run, op.Parts, onedex)
@@ -45,7 +45,7 @@ func (op *CallCycle) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *CallShuffle) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if curr, e := updateCounter(run, op.At.String(), op.Parts, wrap); e != nil {
+	if curr, e := updateCounter(run, op.Name, op.Parts, wrap); e != nil {
 		err = cmdError(op, e)
 	} else if curr, max := curr-1, len(op.Parts); curr < max {
 		onedex := op.Indices.shuffle(run, curr, max)
@@ -69,9 +69,9 @@ func (op *CallTerminal) stopping(run rt.Runtime) (ret int, err error) {
 		// no elements, nothing to do.
 	case 1:
 		// when one element, return it once then the empty string after.
-		ret, err = updateCounter(run, op.At.String(), op.Parts, saturate)
+		ret, err = updateCounter(run, op.Name, op.Parts, saturate)
 	default:
-		ret, err = updateCounter(run, op.At.String(), op.Parts, cap)
+		ret, err = updateCounter(run, op.Name, op.Parts, cap)
 	}
 	return
 }

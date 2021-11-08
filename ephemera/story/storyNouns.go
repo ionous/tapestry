@@ -87,7 +87,7 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 
 	for i := 0; i < cnt; i++ {
 		countedNoun := k.newCounter(baseName, reader.Position{})
-		noun := k.NewName(countedNoun.Offset, "noun", at)
+		noun := k.NewName(countedNoun, "noun", at)
 		k.NewNoun(noun, namedSingularKind)
 		k.NewValue(noun, countedTypeTrait, true)
 		k.NewValue(noun, printedNameProp, baseName)

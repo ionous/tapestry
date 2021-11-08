@@ -2,14 +2,12 @@ package core
 
 import (
 	"testing"
-
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
 )
 
 func TestTriggers(t *testing.T) {
 	t.Run("trigger once", func(t *testing.T) {
 		if b := triggerTest(&CallTrigger{
-			At:      reader.Position{Source: t.Name()},
+			Name:    t.Name(),
 			Num:     F(3),
 			Trigger: &TriggerOnce{},
 		}); b != 0b00000100 { // bits are read left to right
@@ -18,7 +16,7 @@ func TestTriggers(t *testing.T) {
 	})
 	t.Run("trigger cycle", func(t *testing.T) {
 		if b := triggerTest(&CallTrigger{
-			At:      reader.Position{Source: t.Name()},
+			Name:    t.Name(),
 			Num:     F(3),
 			Trigger: &TriggerCycle{},
 		}); b != 0b00100100 {
@@ -27,7 +25,7 @@ func TestTriggers(t *testing.T) {
 	})
 	t.Run("trigger switch", func(t *testing.T) {
 		if b := triggerTest(&CallTrigger{
-			At:      reader.Position{Source: t.Name()},
+			Name:    t.Name(),
 			Num:     F(3),
 			Trigger: &TriggerSwitch{},
 		}); b != 0b11111100 {

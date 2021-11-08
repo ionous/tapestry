@@ -230,34 +230,34 @@
     "call_cycle":
     {
         "uses": "flow",
-        "spec": "cycle {_%parts+text_eval}",
+        "spec": "cycle {_%name:text} {over%parts+text_eval}",
         "slot": "text_eval",
         "desc": "Runtime version of cycle_text",
-        "group": ["internal", "positioned"]
+        "group": "internal"
     },
     "call_shuffle":
     {
         "uses": "flow",
-        "spec": "shuffle {_%parts+text_eval} {-%indices:shuffler}",
+        "spec": "shuffle {_%name:text} {over%parts+text_eval} {-%indices:shuffler}",
         "slot": "text_eval",
         "desc": "Runtime version of shuffle_text",
-        "group": ["internal", "positioned"]
+        "group": "internal"
     },
     "call_terminal":
     {
         "uses": "flow",
-        "spec": "stopping {_%parts+text_eval}",
+        "spec": "stopping {_%name:text} {over%parts+text_eval}",
         "slot": "text_eval",
         "desc": "Runtime version of stopping_text",
-        "group": ["internal", "positioned"]
+        "group": "internal"
     },
     "call_trigger":
     {
         "uses": "flow",
-        "spec": "trigger {_%trigger} {num:number_eval}",
+        "spec": "trigger {_%name:text} {on%trigger} {num:number_eval}",
         "slot": "bool_eval",
         "desc": "Runtime version of count_of",
-        "group": ["internal", "positioned"]
+        "group": "internal"
     },
     "diff_of":
     {

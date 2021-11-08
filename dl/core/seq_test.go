@@ -3,7 +3,6 @@ package core
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -15,23 +14,24 @@ func TestSequences(t *testing.T) {
 		matchSequence(t, []string{
 			"",
 		}, &CallCycle{
-			reader.Position{Offset: t.Name()}, nil,
+			Name: t.Name(),
 		})
 	})
 	t.Run("cycle text", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "b", "c", "a", "b", "c", "a",
-		}, &CallCycle{reader.Position{Offset: t.Name()}, []rt.TextEval{
-			T("a"),
-			T("b"),
-			T("c"),
-		}})
+		}, &CallCycle{
+			Name: t.Name(), Parts: []rt.TextEval{
+				T("a"),
+				T("b"),
+				T("c"),
+			}})
 	})
 	t.Run("stopping", func(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "b", "c", "c", "c", "c", "c",
 		}, &CallTerminal{
-			reader.Position{Offset: t.Name()}, []rt.TextEval{
+			Name: t.Name(), Parts: []rt.TextEval{
 				T("a"),
 				T("b"),
 				T("c"),
@@ -41,7 +41,7 @@ func TestSequences(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "", "", "", "",
 		}, &CallTerminal{
-			reader.Position{Offset: t.Name()}, []rt.TextEval{
+			Name: t.Name(), Parts: []rt.TextEval{
 				T("a"),
 			}})
 	})
@@ -49,7 +49,7 @@ func TestSequences(t *testing.T) {
 		matchSequence(t, []string{
 			"a", "a",
 		}, &CallShuffle{
-			At: reader.Position{Offset: t.Name()}, Parts: []rt.TextEval{
+			Name: t.Name(), Parts: []rt.TextEval{
 				T("a"),
 			}})
 	})
@@ -57,7 +57,7 @@ func TestSequences(t *testing.T) {
 		matchSequence(t, []string{
 			"c", "d", "b", "e", "a", "b", "e",
 		}, &CallShuffle{
-			At: reader.Position{Offset: t.Name()}, Parts: []rt.TextEval{
+			Name: t.Name(), Parts: []rt.TextEval{
 				T("a"),
 				T("b"),
 				T("c"),

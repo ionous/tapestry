@@ -3,7 +3,6 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -1249,8 +1248,8 @@ func CallArgs_Marshal(m jsn.Marshaler, val *CallArgs) (err error) {
 // CallCycle Runtime version of cycle_text
 // User implements: TextEval.
 type CallCycle struct {
-	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=_"`
+	Name  string        `if:"label=_,type=text"`
+	Parts []rt.TextEval `if:"label=over"`
 }
 
 func (*CallCycle) Compose() composer.Spec {
@@ -1263,6 +1262,7 @@ func (*CallCycle) Compose() composer.Spec {
 
 const CallCycle_Type = "call_cycle"
 
+const CallCycle_Field_Name = "$NAME"
 const CallCycle_Field_Parts = "$PARTS"
 
 func (op *CallCycle) Marshal(m jsn.Marshaler) error {
@@ -1320,9 +1320,15 @@ func CallCycle_Optional_Marshal(m jsn.Marshaler, pv **CallCycle) (err error) {
 }
 
 func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
-	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(jsn.MakeFlow("cycle", CallCycle_Type, val)); err == nil {
-		e1 := m.MarshalKey("", CallCycle_Field_Parts)
+		e0 := m.MarshalKey("", CallCycle_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", CallCycle_Field_Name))
+		}
+		e1 := m.MarshalKey("over", CallCycle_Field_Parts)
 		if e1 == nil {
 			e1 = rt.TextEval_Repeats_Marshal(m, &val.Parts)
 		}
@@ -1628,9 +1634,9 @@ func CallSend_Marshal(m jsn.Marshaler, val *CallSend) (err error) {
 // CallShuffle Runtime version of shuffle_text
 // User implements: TextEval.
 type CallShuffle struct {
-	At      reader.Position `if:"internal"`
-	Parts   []rt.TextEval   `if:"label=_"`
-	Indices Shuffler        `if:"internal"`
+	Name    string        `if:"label=_,type=text"`
+	Parts   []rt.TextEval `if:"label=over"`
+	Indices Shuffler      `if:"internal"`
 }
 
 func (*CallShuffle) Compose() composer.Spec {
@@ -1643,6 +1649,7 @@ func (*CallShuffle) Compose() composer.Spec {
 
 const CallShuffle_Type = "call_shuffle"
 
+const CallShuffle_Field_Name = "$NAME"
 const CallShuffle_Field_Parts = "$PARTS"
 
 func (op *CallShuffle) Marshal(m jsn.Marshaler) error {
@@ -1700,9 +1707,15 @@ func CallShuffle_Optional_Marshal(m jsn.Marshaler, pv **CallShuffle) (err error)
 }
 
 func CallShuffle_Marshal(m jsn.Marshaler, val *CallShuffle) (err error) {
-	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(jsn.MakeFlow("shuffle", CallShuffle_Type, val)); err == nil {
-		e1 := m.MarshalKey("", CallShuffle_Field_Parts)
+		e0 := m.MarshalKey("", CallShuffle_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", CallShuffle_Field_Name))
+		}
+		e1 := m.MarshalKey("over", CallShuffle_Field_Parts)
 		if e1 == nil {
 			e1 = rt.TextEval_Repeats_Marshal(m, &val.Parts)
 		}
@@ -1717,8 +1730,8 @@ func CallShuffle_Marshal(m jsn.Marshaler, val *CallShuffle) (err error) {
 // CallTerminal Runtime version of stopping_text
 // User implements: TextEval.
 type CallTerminal struct {
-	At    reader.Position `if:"internal"`
-	Parts []rt.TextEval   `if:"label=_"`
+	Name  string        `if:"label=_,type=text"`
+	Parts []rt.TextEval `if:"label=over"`
 }
 
 func (*CallTerminal) Compose() composer.Spec {
@@ -1731,6 +1744,7 @@ func (*CallTerminal) Compose() composer.Spec {
 
 const CallTerminal_Type = "call_terminal"
 
+const CallTerminal_Field_Name = "$NAME"
 const CallTerminal_Field_Parts = "$PARTS"
 
 func (op *CallTerminal) Marshal(m jsn.Marshaler) error {
@@ -1788,9 +1802,15 @@ func CallTerminal_Optional_Marshal(m jsn.Marshaler, pv **CallTerminal) (err erro
 }
 
 func CallTerminal_Marshal(m jsn.Marshaler, val *CallTerminal) (err error) {
-	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(jsn.MakeFlow("stopping", CallTerminal_Type, val)); err == nil {
-		e1 := m.MarshalKey("", CallTerminal_Field_Parts)
+		e0 := m.MarshalKey("", CallTerminal_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", CallTerminal_Field_Name))
+		}
+		e1 := m.MarshalKey("over", CallTerminal_Field_Parts)
 		if e1 == nil {
 			e1 = rt.TextEval_Repeats_Marshal(m, &val.Parts)
 		}
@@ -1805,9 +1825,9 @@ func CallTerminal_Marshal(m jsn.Marshaler, val *CallTerminal) (err error) {
 // CallTrigger Runtime version of count_of
 // User implements: BoolEval.
 type CallTrigger struct {
-	At      reader.Position `if:"internal"`
-	Trigger Trigger         `if:"label=_"`
-	Num     rt.NumberEval   `if:"label=num"`
+	Name    string        `if:"label=_,type=text"`
+	Trigger Trigger       `if:"label=on"`
+	Num     rt.NumberEval `if:"label=num"`
 }
 
 func (*CallTrigger) Compose() composer.Spec {
@@ -1820,6 +1840,7 @@ func (*CallTrigger) Compose() composer.Spec {
 
 const CallTrigger_Type = "call_trigger"
 
+const CallTrigger_Field_Name = "$NAME"
 const CallTrigger_Field_Trigger = "$TRIGGER"
 const CallTrigger_Field_Num = "$NUM"
 
@@ -1878,9 +1899,15 @@ func CallTrigger_Optional_Marshal(m jsn.Marshaler, pv **CallTrigger) (err error)
 }
 
 func CallTrigger_Marshal(m jsn.Marshaler, val *CallTrigger) (err error) {
-	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(jsn.MakeFlow("trigger", CallTrigger_Type, val)); err == nil {
-		e1 := m.MarshalKey("", CallTrigger_Field_Trigger)
+		e0 := m.MarshalKey("", CallTrigger_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", CallTrigger_Field_Name))
+		}
+		e1 := m.MarshalKey("on", CallTrigger_Field_Trigger)
 		if e1 == nil {
 			e1 = Trigger_Marshal(m, &val.Trigger)
 		}
@@ -9233,13 +9260,13 @@ var Signatures = map[uint64]interface{}{
 	1468716792759951334:  (*BufferText)(nil),        /* Buffers: */
 	12587790669191301162: (*CallArg)(nil),           /* Inarg:from: */
 	5369402786275276311:  (*CallArgs)(nil),          /* Inargs: */
-	13830472648721021489: (*CallCycle)(nil),         /* Cycle: */
+	275481607335946827:   (*CallCycle)(nil),         /* Cycle:over: */
 	15946925553828934364: (*CallMake)(nil),          /* CallMake:args: */
 	15968985848252216970: (*CallPattern)(nil),       /* CallPattern:args: */
 	9001627797986963633:  (*CallSend)(nil),          /* CallSend:to:args: */
-	4094744094015329372:  (*CallShuffle)(nil),       /* Shuffle: */
-	397325548209379145:   (*CallTerminal)(nil),      /* Stopping: */
-	6201894317097750905:  (*CallTrigger)(nil),       /* Trigger:num: */
+	10296278955051288620: (*CallShuffle)(nil),       /* Shuffle:over: */
+	14740800495063051091: (*CallTerminal)(nil),      /* Stopping:over: */
+	16403710471411569866: (*CallTrigger)(nil),       /* Trigger:on:num: */
 	11297042870903436571: (*Capitalize)(nil),        /* Capitalize: */
 	801098075024283221:   (*ChooseAction)(nil),      /* If:do: */
 	16837911797943566414: (*ChooseAction)(nil),      /* If:do:else: */

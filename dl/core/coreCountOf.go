@@ -23,7 +23,7 @@ func (op *CallTrigger) GetBool(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *CallTrigger) update(run rt.Runtime) (okay bool, err error) {
-	name := op.At.String()
+	name := op.Name
 	if p, e := run.GetField(object.Counter, name); e != nil {
 		err = e
 	} else if count := p.Int(); count >= 0 {

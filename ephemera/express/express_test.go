@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/template"
 	"github.com/ionous/errutil"
@@ -165,7 +164,7 @@ func TestTemplates(t *testing.T) {
 	t.Run("cycle", func(t *testing.T) {
 		if e := testTemplate("{cycle}a{or}b{or}c{end}",
 			&core.CallCycle{
-				At: reader.Position{Offset: "autoexp1"},
+				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
 				},
@@ -176,7 +175,7 @@ func TestTemplates(t *testing.T) {
 	t.Run("once", func(t *testing.T) {
 		if e := testTemplate("{once}a{or}b{or}c{end}",
 			&core.CallTerminal{
-				At: reader.Position{Offset: "autoexp1"},
+				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
 				},
@@ -187,7 +186,7 @@ func TestTemplates(t *testing.T) {
 	t.Run("shuffle", func(t *testing.T) {
 		if e := testTemplate("{shuffle}a{or}b{or}c{end}",
 			&core.CallShuffle{
-				At: reader.Position{Offset: "autoexp1"},
+				Name: "autoexp1",
 				Parts: []rt.TextEval{
 					T("a"), T("b"), T("c"),
 				},

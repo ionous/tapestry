@@ -6,7 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 
 	"git.sr.ht/~ionous/iffy/jsn/din"
@@ -36,7 +35,7 @@ func TestImportSequence(t *testing.T) {
 
 // the cycle text data should look like this after import
 var _import_target = core.CallCycle{
-	At: reader.Position{Offset: "seq_1"},
+	Name: "seq_1",
 	Parts: []rt.TextEval{
 		T("a"),
 		T("b"),
