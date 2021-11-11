@@ -77,7 +77,7 @@ const ledeName = function(t) {
   // we exclude modeling ( as a opposed to runtime functions )
   // because currently most of those are in sentence form not expression form.
   // if this get fixed, then the WriteValue WriteChoice should be fixed to pass a lede
-  const m = t.group.includes("story");
+  const m = t.group.includes("story") && !t.group.includes("modeling");
   if (!m && t.uses === "flow") {
     const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
     return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
@@ -350,7 +350,7 @@ for (const typeName in allTypes) {
     // unless that first parameter is optional and there are other trailing parameters.
     let tag= lower(param.key);
     if (type.uses !== 'swap') {
-      const m= type.group.includes("story");
+      const m= type.group.includes("story") && !type.group.includes("modeling");
       const anon= !pi && (!param.optional || pt === 1);
       tag= m ? (anon ? '_': tag) : param.label.replaceAll(" ", "_");
     }

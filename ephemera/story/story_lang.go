@@ -843,6 +843,7 @@ func (*Argument) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Argument_Type,
 		Uses: composer.Type_Flow,
+		Lede: "arg",
 	}
 }
 
@@ -898,7 +899,7 @@ func Argument_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Argument) (err err
 type Argument_Flow struct{ ptr *Argument }
 
 func (n Argument_Flow) GetType() string      { return Argument_Type }
-func (n Argument_Flow) GetLede() string      { return Argument_Type }
+func (n Argument_Flow) GetLede() string      { return "arg" }
 func (n Argument_Flow) GetFlow() interface{} { return n.ptr }
 func (n Argument_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Argument); ok {
@@ -951,6 +952,7 @@ func (*Arguments) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Arguments_Type,
 		Uses: composer.Type_Flow,
+		Lede: "args",
 	}
 }
 
@@ -1005,7 +1007,7 @@ func Arguments_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Arguments) (err e
 type Arguments_Flow struct{ ptr *Arguments }
 
 func (n Arguments_Flow) GetType() string      { return Arguments_Type }
-func (n Arguments_Flow) GetLede() string      { return Arguments_Type }
+func (n Arguments_Flow) GetLede() string      { return "args" }
 func (n Arguments_Flow) GetFlow() interface{} { return n.ptr }
 func (n Arguments_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Arguments); ok {
@@ -4341,14 +4343,15 @@ func MapConnection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapConnection
 // MapDeparting
 // User implements: StoryStatement.
 type MapDeparting struct {
-	Door          NamedNoun     `if:"label=_"`
-	MapConnection MapConnection `if:"label=map_connection"`
+	Door          NamedNoun     `if:"label=via"`
+	MapConnection MapConnection `if:"label=_"`
 }
 
 func (*MapDeparting) Compose() composer.Spec {
 	return composer.Spec{
 		Name: MapDeparting_Type,
 		Uses: composer.Type_Flow,
+		Lede: "departing",
 	}
 }
 
@@ -4404,7 +4407,7 @@ func MapDeparting_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDeparting) 
 type MapDeparting_Flow struct{ ptr *MapDeparting }
 
 func (n MapDeparting_Flow) GetType() string      { return MapDeparting_Type }
-func (n MapDeparting_Flow) GetLede() string      { return MapDeparting_Type }
+func (n MapDeparting_Flow) GetLede() string      { return "departing" }
 func (n MapDeparting_Flow) GetFlow() interface{} { return n.ptr }
 func (n MapDeparting_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*MapDeparting); ok {
@@ -4427,14 +4430,14 @@ func MapDeparting_Optional_Marshal(m jsn.Marshaler, pv **MapDeparting) (err erro
 
 func MapDeparting_Marshal(m jsn.Marshaler, val *MapDeparting) (err error) {
 	if err = m.MarshalBlock(MapDeparting_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", MapDeparting_Field_Door)
+		e0 := m.MarshalKey("via", MapDeparting_Field_Door)
 		if e0 == nil {
 			e0 = NamedNoun_Marshal(m, &val.Door)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MapDeparting_Field_Door))
 		}
-		e1 := m.MarshalKey("map_connection", MapDeparting_Field_MapConnection)
+		e1 := m.MarshalKey("", MapDeparting_Field_MapConnection)
 		if e1 == nil {
 			e1 = MapConnection_Marshal(m, &val.MapConnection)
 		}
@@ -4632,14 +4635,15 @@ func MapDirection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDirection) 
 // User implements: StoryStatement.
 type MapHeading struct {
 	MapDirection  MapDirection  `if:"label=_"`
-	Door          *NamedNoun    `if:"label=door,optional"`
-	MapConnection MapConnection `if:"label=map_connection"`
+	Door          *NamedNoun    `if:"label=via,optional"`
+	MapConnection MapConnection `if:"label=_"`
 }
 
 func (*MapHeading) Compose() composer.Spec {
 	return composer.Spec{
 		Name: MapHeading_Type,
 		Uses: composer.Type_Flow,
+		Lede: "heading",
 	}
 }
 
@@ -4696,7 +4700,7 @@ func MapHeading_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapHeading) (err
 type MapHeading_Flow struct{ ptr *MapHeading }
 
 func (n MapHeading_Flow) GetType() string      { return MapHeading_Type }
-func (n MapHeading_Flow) GetLede() string      { return MapHeading_Type }
+func (n MapHeading_Flow) GetLede() string      { return "heading" }
 func (n MapHeading_Flow) GetFlow() interface{} { return n.ptr }
 func (n MapHeading_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*MapHeading); ok {
@@ -4726,14 +4730,14 @@ func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MapHeading_Field_MapDirection))
 		}
-		e1 := m.MarshalKey("door", MapHeading_Field_Door)
+		e1 := m.MarshalKey("via", MapHeading_Field_Door)
 		if e1 == nil {
 			e1 = NamedNoun_Optional_Marshal(m, &val.Door)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", MapHeading_Field_Door))
 		}
-		e2 := m.MarshalKey("map_connection", MapHeading_Field_MapConnection)
+		e2 := m.MarshalKey("", MapHeading_Field_MapConnection)
 		if e2 == nil {
 			e2 = MapConnection_Marshal(m, &val.MapConnection)
 		}
@@ -10741,8 +10745,8 @@ var Signatures = map[uint64]interface{}{
 	14902711848163440508: (*ActionParams)(nil),             /* ActionParams common: */
 	11902859627634050329: (*ActionParams)(nil),             /* ActionParams dual: */
 	5868886119925925865:  (*ActionParams)(nil),             /* ActionParams none: */
-	17869964132499475362: (*Argument)(nil),                 /* Argument:from: */
-	3194594320454226623:  (*Arguments)(nil),                /* Arguments: */
+	6291103735245333139:  (*Argument)(nil),                 /* Arg:from: */
+	2275326896920679506:  (*Arguments)(nil),                /* Args: */
 	17855209504331534011: (*AspectTraits)(nil),             /* AspectTraits:traitPhrase: */
 	13349866918792328232: (*BoxedNumber)(nil),              /* BoxedNumber: */
 	3226924893680341786:  (*BoxedText)(nil),                /* BoxedText: */
@@ -10789,14 +10793,14 @@ var Signatures = map[uint64]interface{}{
 	4129025779762507875:  (*ManyToOne)(nil),                /* ManyToOne:kind: */
 	8834425781559128046:  (*MapConnection)(nil),            /* MapConnection arrivesAt: */
 	8270098892119034481:  (*MapConnection)(nil),            /* MapConnection connectsTo: */
-	4192616881201788658:  (*MapDeparting)(nil),             /* MapDeparting:mapConnection arrivesAt: */
-	15730315980428595533: (*MapDeparting)(nil),             /* MapDeparting:mapConnection connectsTo: */
+	8500238246970321502:  (*MapDeparting)(nil),             /* Departing via: arrivesAt: */
+	16444875323365131585: (*MapDeparting)(nil),             /* Departing via: connectsTo: */
 	13573264837262063235: (*MapDestination)(nil),           /* MapDestination: */
 	16504428073969307483: (*MapDestination)(nil),           /* MapDestination:door: */
-	16124749672207284026: (*MapHeading)(nil),               /* MapHeading:mapConnection arrivesAt: */
-	11837492044118907494: (*MapHeading)(nil),               /* MapHeading:door:mapConnection arrivesAt: */
-	3073194294367094037:  (*MapHeading)(nil),               /* MapHeading:mapConnection connectsTo: */
-	1787300643423049:     (*MapHeading)(nil),               /* MapHeading:door:mapConnection connectsTo: */
+	5006299998918990270:  (*MapHeading)(nil),               /* Heading: arrivesAt: */
+	17844020758094162804: (*MapHeading)(nil),               /* Heading:via: arrivesAt: */
+	5563466876426744737:  (*MapHeading)(nil),               /* Heading: connectsTo: */
+	2450838013521695103:  (*MapHeading)(nil),               /* Heading:via: connectsTo: */
 	16572015744003324651: (*NamedNoun)(nil),                /* NamedNoun:name: */
 	10597814521259612392: (*NounAssignment)(nil),           /* NounAssignment:nouns:lines: */
 	11271220813702679015: (*NounPhrase)(nil),               /* NounPhrase kindOfNoun: */

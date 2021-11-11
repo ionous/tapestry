@@ -642,6 +642,7 @@
             "map_direction":
             {
                 "uses": "str",
+                "group": "modeling",
                 "desc":
                 [
                     "A heading for movement within the game, often connecting one room within the game to another.",
@@ -652,18 +653,20 @@
             {
                 "uses": "flow",
                 "spec": "heading {_%map_direction} {via%door?named_noun} {_%map_connection}",
-                "slot": "story_statement"
+                "slot": "story_statement",
+                "group": "modeling"
             },
             "map_departing": 
             {
                 "uses": "flow",
                 "spec": "departing {via%door:named_noun} {_%map_connection}",
-                "slot": "story_statement"
+                "slot": "story_statement",
+                "group": "modeling"
             },
             "map_connection":
             {
                 "uses": "swap",
-                "spec": "{arrives_at:map_destination}, {connects_to:map_destination}"
+                "spec": "{arrives_at:map_destination} {connects_to:map_destination}"
             },
             "map_destination":
             {
@@ -717,13 +720,13 @@
             {
                 "uses": "flow",
                 "spec": "arg {_%name:text} {from:assignment}",
-                "group": "positioned"
+                "group":["positioned","modeling"]
             },
             "arguments":
             {
                 "uses": "flow",
                 "spec": "args {_%args+argument}",
-                "group":"positioned"
+                "group":["positioned","modeling"]
             },
             "render_template":
             {

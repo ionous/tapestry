@@ -61,7 +61,7 @@ class Make {
           break;
         }
         case "flow": {
-          if (this.currGroups.includes("story")) {
+          if (this.currGroups.includes("story") && !this.currGroups.includes("modeling")) {
             this.flow(k, data.slot || [], data.spec, data.desc || "");
             break;
           }
