@@ -48,17 +48,6 @@ func (c *Cache) Must(q string, args ...interface{}) {
 	}
 }
 
-func (c *Cache) MustGetId(q string, args ...interface{}) (ret int64) {
-	if res, e := c.Exec(q, args...); e != nil {
-		panic(e)
-	} else if id, e := res.LastInsertId(); e != nil {
-		panic(e)
-	} else {
-		ret = id
-	}
-	return
-}
-
 func (c *Cache) Exec(q string, args ...interface{}) (ret sql.Result, err error) {
 	if stmt, e := c.prep(q); e != nil {
 		err = e

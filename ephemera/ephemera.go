@@ -13,15 +13,25 @@ type Recorder struct {
 	srcId   int64
 	cache   *tables.Cache
 	Marshal func(jsn.Marshalee) (string, error)
+	rowids  map[string]int64 // works because we're constantly rebuilding the dbs from scratch
+	// really, i think want to get away from rowids entirely
+
+}
+
+func (k *Recorder) nextid(q string) int64 {
+	next := k.rowids[q] + 1
+	k.rowids[q] = next
+	return next
 }
 
 // marshal lets us write program fragments to the database
 func NewRecorder(db *sql.DB, marshal func(jsn.Marshalee) (string, error)) *Recorder {
-	return &Recorder{cache: tables.NewCache(db), Marshal: marshal}
+	return &Recorder{cache: tables.NewCache(db), Marshal: marshal, rowids: make(map[string]int64)}
 }
 
 func (k *Recorder) SetSource(srcURI string) *Recorder {
-	k.srcId = k.cache.MustGetId(eph_source, srcURI)
+	k.srcId = k.nextid(eph_source)
+	k.cache.Must(eph_source, k.srcId, srcURI)
 	return k
 }
 
@@ -38,7 +48,8 @@ func (k *Recorder) NewDomainName(domain eph.Named, name, category, ofs string) (
 	// many tests would have to be adjusted to be able to handle normalization wholesale
 	// so for now make this opt-in.
 	norm := strings.TrimSpace(name)
-	namedId := k.cache.MustGetId(eph_named, norm, name, category, domain, k.srcId, ofs)
+	namedId := k.nextid(eph_named)
+	k.cache.Must(eph_named, namedId, norm, name, category, domain, k.srcId, ofs)
 	return eph.MakeName(namedId, norm)
 }
 
@@ -48,7 +59,8 @@ func (k *Recorder) NewProg(typeName string, cmd jsn.Marshalee) (ret Prog, err er
 	if str, e := k.Marshal(cmd); e != nil {
 		err = e
 	} else {
-		id := k.cache.MustGetId(eph_prog, k.srcId, typeName, str)
+		id := k.nextid(eph_prog)
+		k.cache.Must(eph_prog, id, k.srcId, typeName, str)
 		ret = Prog{eph.MakeName(id, typeName)}
 	}
 	return
@@ -162,14 +174,14 @@ var eph_expect = tables.Insert("eph_expect", "idNamedTest", "testType", "expect"
 var eph_field = tables.Insert("eph_field", "idNamedKind", "idNamedField", "primType", "primAff")
 var eph_rule = tables.Insert("eph_rule", "idNamedPattern", "idNamedTarget", "idNamedDomain", "idProg")
 var eph_kind = tables.Insert("eph_kind", "idNamedKind", "idNamedParent")
-var eph_named = tables.Insert("eph_named", "name", "og", "category", "domain", "idSource", "offset")
+var eph_named = tables.Insert("eph_named", "rowid", "name", "og", "category", "domain", "idSource", "offset")
 var eph_noun = tables.Insert("eph_noun", "idNamedNoun", "idNamedKind")
 var eph_pattern = tables.Insert("eph_pattern", "idNamedPattern", "idNamedParam", "idNamedType", "affinity", "idProg")
 var eph_plural = tables.Insert("eph_plural", "idNamedPlural", "idNamedSingluar")
-var eph_prog = tables.Insert("eph_prog", "idSource", "progType", "prog")
+var eph_prog = tables.Insert("eph_prog", "rowid", "idSource", "progType", "prog")
 var eph_relation = tables.Insert("eph_relation", "idNamedRelation", "idNamedKind", "idNamedOtherKind", "cardinality")
 var eph_relative = tables.Insert("eph_relative", "idNamedHead", "idNamedStem", "idNamedDependent", "idNamedDomain")
-var eph_source = tables.Insert("eph_source", "src")
+var eph_source = tables.Insert("eph_source", "rowid", "src")
 var eph_trait = tables.Insert("eph_trait", "idNamedTrait", "idNamedAspect", "rank")
 var eph_value = tables.Insert("eph_value", "idNamedNoun", "idNamedProp", "value")
 var eph_verb = tables.Insert("eph_verb", "idNamedStem", "idNamedRelation", "verb")
