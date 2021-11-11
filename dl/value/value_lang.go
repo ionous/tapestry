@@ -40,8 +40,10 @@ func (op *Bool) Marshal(m jsn.Marshaler) error {
 
 type Bool_Unboxed_Slice []bool
 
-func (op *Bool_Unboxed_Slice) GetType() string {
-	return Bool_Type
+func (op *Bool_Unboxed_Slice) GetType() string { return Bool_Type }
+
+func (op *Bool_Unboxed_Slice) Marshal(m jsn.Marshaler) error {
+	return Bool_Unboxed_Repeats_Marshal(m, (*[]bool)(op))
 }
 
 func (op *Bool_Unboxed_Slice) GetSize() (ret int) {
@@ -102,8 +104,10 @@ func Bool_Marshal(m jsn.Marshaler, val *Bool) (err error) {
 
 type Bool_Slice []Bool
 
-func (op *Bool_Slice) GetType() string {
-	return Bool_Type
+func (op *Bool_Slice) GetType() string { return Bool_Type }
+
+func (op *Bool_Slice) Marshal(m jsn.Marshaler) error {
+	return Bool_Repeats_Marshal(m, (*[]Bool)(op))
 }
 
 func (op *Bool_Slice) GetSize() (ret int) {
@@ -175,8 +179,10 @@ func Lines_Marshal(m jsn.Marshaler, val *Lines) (err error) {
 
 type Lines_Slice []Lines
 
-func (op *Lines_Slice) GetType() string {
-	return Lines_Type
+func (op *Lines_Slice) GetType() string { return Lines_Type }
+
+func (op *Lines_Slice) Marshal(m jsn.Marshaler) error {
+	return Lines_Repeats_Marshal(m, (*[]Lines)(op))
 }
 
 func (op *Lines_Slice) GetSize() (ret int) {
@@ -231,8 +237,10 @@ func (op *Number) Marshal(m jsn.Marshaler) error {
 
 type Number_Unboxed_Slice []float64
 
-func (op *Number_Unboxed_Slice) GetType() string {
-	return Number_Type
+func (op *Number_Unboxed_Slice) GetType() string { return Number_Type }
+
+func (op *Number_Unboxed_Slice) Marshal(m jsn.Marshaler) error {
+	return Number_Unboxed_Repeats_Marshal(m, (*[]float64)(op))
 }
 
 func (op *Number_Unboxed_Slice) GetSize() (ret int) {
@@ -293,8 +301,10 @@ func Number_Marshal(m jsn.Marshaler, val *Number) (err error) {
 
 type Number_Slice []Number
 
-func (op *Number_Slice) GetType() string {
-	return Number_Type
+func (op *Number_Slice) GetType() string { return Number_Type }
+
+func (op *Number_Slice) Marshal(m jsn.Marshaler) error {
+	return Number_Repeats_Marshal(m, (*[]Number)(op))
 }
 
 func (op *Number_Slice) GetSize() (ret int) {
@@ -368,8 +378,10 @@ func PatternName_Marshal(m jsn.Marshaler, val *PatternName) (err error) {
 
 type PatternName_Slice []PatternName
 
-func (op *PatternName_Slice) GetType() string {
-	return PatternName_Type
+func (op *PatternName_Slice) GetType() string { return PatternName_Type }
+
+func (op *PatternName_Slice) Marshal(m jsn.Marshaler) error {
+	return PatternName_Repeats_Marshal(m, (*[]PatternName)(op))
 }
 
 func (op *PatternName_Slice) GetSize() (ret int) {
@@ -443,8 +455,10 @@ func RelationName_Marshal(m jsn.Marshaler, val *RelationName) (err error) {
 
 type RelationName_Slice []RelationName
 
-func (op *RelationName_Slice) GetType() string {
-	return RelationName_Type
+func (op *RelationName_Slice) GetType() string { return RelationName_Type }
+
+func (op *RelationName_Slice) Marshal(m jsn.Marshaler) error {
+	return RelationName_Repeats_Marshal(m, (*[]RelationName)(op))
 }
 
 func (op *RelationName_Slice) GetSize() (ret int) {
@@ -504,8 +518,10 @@ func (op *Text) Marshal(m jsn.Marshaler) error {
 
 type Text_Unboxed_Slice []string
 
-func (op *Text_Unboxed_Slice) GetType() string {
-	return Text_Type
+func (op *Text_Unboxed_Slice) GetType() string { return Text_Type }
+
+func (op *Text_Unboxed_Slice) Marshal(m jsn.Marshaler) error {
+	return Text_Unboxed_Repeats_Marshal(m, (*[]string)(op))
 }
 
 func (op *Text_Unboxed_Slice) GetSize() (ret int) {
@@ -566,8 +582,10 @@ func Text_Marshal(m jsn.Marshaler, val *Text) (err error) {
 
 type Text_Slice []Text
 
-func (op *Text_Slice) GetType() string {
-	return Text_Type
+func (op *Text_Slice) GetType() string { return Text_Type }
+
+func (op *Text_Slice) Marshal(m jsn.Marshaler) error {
+	return Text_Repeats_Marshal(m, (*[]Text)(op))
 }
 
 func (op *Text_Slice) GetSize() (ret int) {
@@ -641,8 +659,10 @@ func VariableName_Marshal(m jsn.Marshaler, val *VariableName) (err error) {
 
 type VariableName_Slice []VariableName
 
-func (op *VariableName_Slice) GetType() string {
-	return VariableName_Type
+func (op *VariableName_Slice) GetType() string { return VariableName_Type }
+
+func (op *VariableName_Slice) Marshal(m jsn.Marshaler) error {
+	return VariableName_Repeats_Marshal(m, (*[]VariableName)(op))
 }
 
 func (op *VariableName_Slice) GetSize() (ret int) {

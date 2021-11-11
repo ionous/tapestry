@@ -1,7 +1,6 @@
 package assembly
 
 import (
-	"bytes"
 	"database/sql"
 
 	"git.sr.ht/~ionous/iffy"
@@ -229,13 +228,10 @@ func WriteFragment(asm *Assembler, kind string, pat *PatternFrag) (err error) {
 				// fix: write encoded value... which we just recently decoded... :/
 				if meta, ok := val.(jsn.Marshalee); !ok {
 					err = errutil.Append(err, errutil.Fmt("expected a marshalable type, got %T", meta))
-				} else {
-					var buf bytes.Buffer
-					if e := cout.Marshal(&buf, &rt.Fragment{val}); e != nil {
-						err = errutil.Append(err, e)
-					} else if e := asm.WriteStart(pat.Name, f.Name, buf.Bytes()); e != nil {
-						err = errutil.Append(err, e)
-					}
+				} else if str, e := cout.Marshal(&rt.Fragment{val}); e != nil {
+					err = errutil.Append(err, e)
+				} else if e := asm.WriteStart(pat.Name, f.Name, []byte(str)); e != nil {
+					err = errutil.Append(err, e)
 				}
 			}
 		}

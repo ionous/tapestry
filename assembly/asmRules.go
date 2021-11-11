@@ -1,8 +1,6 @@
 package assembly
 
 import (
-	"bytes"
-
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
@@ -29,10 +27,9 @@ func WriteRules(asm *Assembler, pat, tgt, domain string, rules []rt.Rule) (err e
 	for _, j := range inds {
 		rule := rules[j]
 		handler := rt.Handler{Filter: rule.Filter, Exe: rule.Execute}
-		var buf bytes.Buffer
-		if e := cout.Marshal(&buf, &handler); e != nil {
+		if str, e := cout.Marshal(&handler); e != nil {
 			err = errutil.Append(err, e)
-		} else if e := asm.WriteRule(pat, tgt, domain, rule.Flags(), buf.Bytes(), rule.Name); e != nil {
+		} else if e := asm.WriteRule(pat, tgt, domain, rule.Flags(), []byte(str), rule.Name); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}

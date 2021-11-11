@@ -25,6 +25,18 @@ const {{Pascal ../name}}_Field_{{Pascal key}} = "{{key}}";
 {{>repeat name=(Pascal name) el=(Pascal name)}}
 {{/unless}}
 
+type {{Pascal name}}_Flow struct { ptr* {{Pascal name}} }
+
+func (n {{Pascal name}}_Flow) GetType() string { return {{Pascal name}}_Type }
+func (n {{Pascal name}}_Flow) GetLede() string { return {{#if (LedeName this)}}"{{LedeName this}}"{{else}}{{Pascal name}}_Type{{/if}} }
+func (n {{Pascal name}}_Flow) GetFlow() interface{} { return n.ptr }
+func (n {{Pascal name}}_Flow) SetFlow(i interface{}) (okay bool) {
+  if ptr, ok := i.(*{{Pascal name}}); ok {
+    *n.ptr, okay = *ptr, true
+  }
+  return
+}
+
 func {{Pascal name}}_Optional_Marshal(m jsn.Marshaler, pv **{{Pascal name}}) (err error) {
   if enc := m.IsEncoding(); enc && *pv != nil {
     err = {{Pascal name}}_Marshal(m, *pv)
@@ -38,22 +50,10 @@ func {{Pascal name}}_Optional_Marshal(m jsn.Marshaler, pv **{{Pascal name}}) (er
 }
 
 func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
-{{#if (IsCustom name)}}
-  if fn, ok := m.CustomizedMarshal({{Pascal name}}_Type); ok {
-    err = fn(m, val)
-  } else {
-    err = {{Pascal name}}_DefaultMarshal(m, val)
-  }
-  return
-}
-func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
-{{/if}}
 {{#if (IsPositioned this)}}
   m.SetCursor(val.At.Offset)
 {{/if}}
-  if err = m.MarshalBlock(jsn.MakeFlow(
-{{~#if (LedeName this)}}"{{LedeName this}}"{{else}}{{Pascal name}}_Type{{/if
-}}, {{Pascal name}}_Type, val)); err == nil {
+  if err = m.MarshalBlock({{Pascal name}}_Flow{val}); err == nil {
 {{~#each params}}{{#unless (IsInternal label)}}
     e{{@index}} := m.MarshalKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}})
     if e{{@index}} == nil {

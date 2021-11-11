@@ -32,8 +32,10 @@ func (op *Action) Marshal(m jsn.Marshaler) error {
 
 type Action_Slice []Action
 
-func (op *Action_Slice) GetType() string {
-	return Action_Type
+func (op *Action_Slice) GetType() string { return Action_Type }
+
+func (op *Action_Slice) Marshal(m jsn.Marshaler) error {
+	return Action_Repeats_Marshal(m, (*[]Action)(op))
 }
 
 func (op *Action_Slice) GetSize() (ret int) {
@@ -68,6 +70,18 @@ func Action_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Action) (err error) 
 	return
 }
 
+type Action_Flow struct{ ptr *Action }
+
+func (n Action_Flow) GetType() string      { return Action_Type }
+func (n Action_Flow) GetLede() string      { return "as" }
+func (n Action_Flow) GetFlow() interface{} { return n.ptr }
+func (n Action_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Action); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Action_Optional_Marshal(m jsn.Marshaler, pv **Action) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Action_Marshal(m, *pv)
@@ -81,7 +95,7 @@ func Action_Optional_Marshal(m jsn.Marshaler, pv **Action) (err error) {
 }
 
 func Action_Marshal(m jsn.Marshaler, val *Action) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("as", Action_Type, val)); err == nil {
+	if err = m.MarshalBlock(Action_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Action_Field_Action)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Action)
@@ -119,8 +133,10 @@ func (op *Alias) Marshal(m jsn.Marshaler) error {
 
 type Alias_Slice []Alias
 
-func (op *Alias_Slice) GetType() string {
-	return Alias_Type
+func (op *Alias_Slice) GetType() string { return Alias_Type }
+
+func (op *Alias_Slice) Marshal(m jsn.Marshaler) error {
+	return Alias_Repeats_Marshal(m, (*[]Alias)(op))
 }
 
 func (op *Alias_Slice) GetSize() (ret int) {
@@ -155,6 +171,18 @@ func Alias_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Alias) (err error) {
 	return
 }
 
+type Alias_Flow struct{ ptr *Alias }
+
+func (n Alias_Flow) GetType() string      { return Alias_Type }
+func (n Alias_Flow) GetLede() string      { return Alias_Type }
+func (n Alias_Flow) GetFlow() interface{} { return n.ptr }
+func (n Alias_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Alias); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Alias_Optional_Marshal(m jsn.Marshaler, pv **Alias) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Alias_Marshal(m, *pv)
@@ -168,7 +196,7 @@ func Alias_Optional_Marshal(m jsn.Marshaler, pv **Alias) (err error) {
 }
 
 func Alias_Marshal(m jsn.Marshaler, val *Alias) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Alias_Type, Alias_Type, val)); err == nil {
+	if err = m.MarshalBlock(Alias_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Alias_Field_Names)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Repeats_Marshal(m, &val.Names)
@@ -211,8 +239,10 @@ func (op *AllOf) Marshal(m jsn.Marshaler) error {
 
 type AllOf_Slice []AllOf
 
-func (op *AllOf_Slice) GetType() string {
-	return AllOf_Type
+func (op *AllOf_Slice) GetType() string { return AllOf_Type }
+
+func (op *AllOf_Slice) Marshal(m jsn.Marshaler) error {
+	return AllOf_Repeats_Marshal(m, (*[]AllOf)(op))
 }
 
 func (op *AllOf_Slice) GetSize() (ret int) {
@@ -247,6 +277,18 @@ func AllOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AllOf) (err error) {
 	return
 }
 
+type AllOf_Flow struct{ ptr *AllOf }
+
+func (n AllOf_Flow) GetType() string      { return AllOf_Type }
+func (n AllOf_Flow) GetLede() string      { return AllOf_Type }
+func (n AllOf_Flow) GetFlow() interface{} { return n.ptr }
+func (n AllOf_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*AllOf); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func AllOf_Optional_Marshal(m jsn.Marshaler, pv **AllOf) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = AllOf_Marshal(m, *pv)
@@ -260,7 +302,7 @@ func AllOf_Optional_Marshal(m jsn.Marshaler, pv **AllOf) (err error) {
 }
 
 func AllOf_Marshal(m jsn.Marshaler, val *AllOf) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(AllOf_Type, AllOf_Type, val)); err == nil {
+	if err = m.MarshalBlock(AllOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AllOf_Field_Series)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Series)
@@ -296,8 +338,10 @@ func (op *AnyOf) Marshal(m jsn.Marshaler) error {
 
 type AnyOf_Slice []AnyOf
 
-func (op *AnyOf_Slice) GetType() string {
-	return AnyOf_Type
+func (op *AnyOf_Slice) GetType() string { return AnyOf_Type }
+
+func (op *AnyOf_Slice) Marshal(m jsn.Marshaler) error {
+	return AnyOf_Repeats_Marshal(m, (*[]AnyOf)(op))
 }
 
 func (op *AnyOf_Slice) GetSize() (ret int) {
@@ -332,6 +376,18 @@ func AnyOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AnyOf) (err error) {
 	return
 }
 
+type AnyOf_Flow struct{ ptr *AnyOf }
+
+func (n AnyOf_Flow) GetType() string      { return AnyOf_Type }
+func (n AnyOf_Flow) GetLede() string      { return AnyOf_Type }
+func (n AnyOf_Flow) GetFlow() interface{} { return n.ptr }
+func (n AnyOf_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*AnyOf); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func AnyOf_Optional_Marshal(m jsn.Marshaler, pv **AnyOf) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = AnyOf_Marshal(m, *pv)
@@ -345,7 +401,7 @@ func AnyOf_Optional_Marshal(m jsn.Marshaler, pv **AnyOf) (err error) {
 }
 
 func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(AnyOf_Type, AnyOf_Type, val)); err == nil {
+	if err = m.MarshalBlock(AnyOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AnyOf_Field_Options)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Options)
@@ -383,8 +439,10 @@ func (op *Directive) Marshal(m jsn.Marshaler) error {
 
 type Directive_Slice []Directive
 
-func (op *Directive_Slice) GetType() string {
-	return Directive_Type
+func (op *Directive_Slice) GetType() string { return Directive_Type }
+
+func (op *Directive_Slice) Marshal(m jsn.Marshaler) error {
+	return Directive_Repeats_Marshal(m, (*[]Directive)(op))
 }
 
 func (op *Directive_Slice) GetSize() (ret int) {
@@ -419,6 +477,18 @@ func Directive_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Directive) (err e
 	return
 }
 
+type Directive_Flow struct{ ptr *Directive }
+
+func (n Directive_Flow) GetType() string      { return Directive_Type }
+func (n Directive_Flow) GetLede() string      { return Directive_Type }
+func (n Directive_Flow) GetFlow() interface{} { return n.ptr }
+func (n Directive_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Directive); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Directive_Optional_Marshal(m jsn.Marshaler, pv **Directive) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Directive_Marshal(m, *pv)
@@ -432,7 +502,7 @@ func Directive_Optional_Marshal(m jsn.Marshaler, pv **Directive) (err error) {
 }
 
 func Directive_Marshal(m jsn.Marshaler, val *Directive) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Directive_Type, Directive_Type, val)); err == nil {
+	if err = m.MarshalBlock(Directive_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Directive_Field_Lede)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Repeats_Marshal(m, &val.Lede)
@@ -474,8 +544,10 @@ func (op *Grammar) Marshal(m jsn.Marshaler) error {
 
 type Grammar_Slice []Grammar
 
-func (op *Grammar_Slice) GetType() string {
-	return Grammar_Type
+func (op *Grammar_Slice) GetType() string { return Grammar_Type }
+
+func (op *Grammar_Slice) Marshal(m jsn.Marshaler) error {
+	return Grammar_Repeats_Marshal(m, (*[]Grammar)(op))
 }
 
 func (op *Grammar_Slice) GetSize() (ret int) {
@@ -510,6 +582,18 @@ func Grammar_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Grammar) (err error
 	return
 }
 
+type Grammar_Flow struct{ ptr *Grammar }
+
+func (n Grammar_Flow) GetType() string      { return Grammar_Type }
+func (n Grammar_Flow) GetLede() string      { return Grammar_Type }
+func (n Grammar_Flow) GetFlow() interface{} { return n.ptr }
+func (n Grammar_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Grammar); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Grammar_Optional_Marshal(m jsn.Marshaler, pv **Grammar) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Grammar_Marshal(m, *pv)
@@ -523,7 +607,7 @@ func Grammar_Optional_Marshal(m jsn.Marshaler, pv **Grammar) (err error) {
 }
 
 func Grammar_Marshal(m jsn.Marshaler, val *Grammar) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Grammar_Type, Grammar_Type, val)); err == nil {
+	if err = m.MarshalBlock(Grammar_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Grammar_Field_Grammar)
 		if e0 == nil {
 			e0 = GrammarMaker_Marshal(m, &val.Grammar)
@@ -564,8 +648,10 @@ func GrammarMaker_Marshal(m jsn.Marshaler, ptr *GrammarMaker) (err error) {
 
 type GrammarMaker_Slice []GrammarMaker
 
-func (op *GrammarMaker_Slice) GetType() string {
-	return GrammarMaker_Type
+func (op *GrammarMaker_Slice) GetType() string { return GrammarMaker_Type }
+
+func (op *GrammarMaker_Slice) Marshal(m jsn.Marshaler) error {
+	return GrammarMaker_Repeats_Marshal(m, (*[]GrammarMaker)(op))
 }
 
 func (op *GrammarMaker_Slice) GetSize() (ret int) {
@@ -623,8 +709,10 @@ func (op *Noun) Marshal(m jsn.Marshaler) error {
 
 type Noun_Slice []Noun
 
-func (op *Noun_Slice) GetType() string {
-	return Noun_Type
+func (op *Noun_Slice) GetType() string { return Noun_Type }
+
+func (op *Noun_Slice) Marshal(m jsn.Marshaler) error {
+	return Noun_Repeats_Marshal(m, (*[]Noun)(op))
 }
 
 func (op *Noun_Slice) GetSize() (ret int) {
@@ -659,6 +747,18 @@ func Noun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Noun) (err error) {
 	return
 }
 
+type Noun_Flow struct{ ptr *Noun }
+
+func (n Noun_Flow) GetType() string      { return Noun_Type }
+func (n Noun_Flow) GetLede() string      { return Noun_Type }
+func (n Noun_Flow) GetFlow() interface{} { return n.ptr }
+func (n Noun_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Noun); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Noun_Optional_Marshal(m jsn.Marshaler, pv **Noun) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Noun_Marshal(m, *pv)
@@ -672,7 +772,7 @@ func Noun_Optional_Marshal(m jsn.Marshaler, pv **Noun) (err error) {
 }
 
 func Noun_Marshal(m jsn.Marshaler, val *Noun) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Noun_Type, Noun_Type, val)); err == nil {
+	if err = m.MarshalBlock(Noun_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Noun_Field_Kind)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Kind)
@@ -708,8 +808,10 @@ func (op *Retarget) Marshal(m jsn.Marshaler) error {
 
 type Retarget_Slice []Retarget
 
-func (op *Retarget_Slice) GetType() string {
-	return Retarget_Type
+func (op *Retarget_Slice) GetType() string { return Retarget_Type }
+
+func (op *Retarget_Slice) Marshal(m jsn.Marshaler) error {
+	return Retarget_Repeats_Marshal(m, (*[]Retarget)(op))
 }
 
 func (op *Retarget_Slice) GetSize() (ret int) {
@@ -744,6 +846,18 @@ func Retarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Retarget) (err err
 	return
 }
 
+type Retarget_Flow struct{ ptr *Retarget }
+
+func (n Retarget_Flow) GetType() string      { return Retarget_Type }
+func (n Retarget_Flow) GetLede() string      { return Retarget_Type }
+func (n Retarget_Flow) GetFlow() interface{} { return n.ptr }
+func (n Retarget_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Retarget); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Retarget_Optional_Marshal(m jsn.Marshaler, pv **Retarget) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Retarget_Marshal(m, *pv)
@@ -757,7 +871,7 @@ func Retarget_Optional_Marshal(m jsn.Marshaler, pv **Retarget) (err error) {
 }
 
 func Retarget_Marshal(m jsn.Marshaler, val *Retarget) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Retarget_Type, Retarget_Type, val)); err == nil {
+	if err = m.MarshalBlock(Retarget_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Retarget_Field_Span)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Span)
@@ -793,8 +907,10 @@ func (op *Reverse) Marshal(m jsn.Marshaler) error {
 
 type Reverse_Slice []Reverse
 
-func (op *Reverse_Slice) GetType() string {
-	return Reverse_Type
+func (op *Reverse_Slice) GetType() string { return Reverse_Type }
+
+func (op *Reverse_Slice) Marshal(m jsn.Marshaler) error {
+	return Reverse_Repeats_Marshal(m, (*[]Reverse)(op))
 }
 
 func (op *Reverse_Slice) GetSize() (ret int) {
@@ -829,6 +945,18 @@ func Reverse_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Reverse) (err error
 	return
 }
 
+type Reverse_Flow struct{ ptr *Reverse }
+
+func (n Reverse_Flow) GetType() string      { return Reverse_Type }
+func (n Reverse_Flow) GetLede() string      { return Reverse_Type }
+func (n Reverse_Flow) GetFlow() interface{} { return n.ptr }
+func (n Reverse_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Reverse); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Reverse_Optional_Marshal(m jsn.Marshaler, pv **Reverse) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Reverse_Marshal(m, *pv)
@@ -842,7 +970,7 @@ func Reverse_Optional_Marshal(m jsn.Marshaler, pv **Reverse) (err error) {
 }
 
 func Reverse_Marshal(m jsn.Marshaler, val *Reverse) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Reverse_Type, Reverse_Type, val)); err == nil {
+	if err = m.MarshalBlock(Reverse_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Reverse_Field_Reverses)
 		if e0 == nil {
 			e0 = ScannerMaker_Repeats_Marshal(m, &val.Reverses)
@@ -883,8 +1011,10 @@ func ScannerMaker_Marshal(m jsn.Marshaler, ptr *ScannerMaker) (err error) {
 
 type ScannerMaker_Slice []ScannerMaker
 
-func (op *ScannerMaker_Slice) GetType() string {
-	return ScannerMaker_Type
+func (op *ScannerMaker_Slice) GetType() string { return ScannerMaker_Type }
+
+func (op *ScannerMaker_Slice) Marshal(m jsn.Marshaler) error {
+	return ScannerMaker_Repeats_Marshal(m, (*[]ScannerMaker)(op))
 }
 
 func (op *ScannerMaker_Slice) GetSize() (ret int) {
@@ -942,8 +1072,10 @@ func (op *Self) Marshal(m jsn.Marshaler) error {
 
 type Self_Slice []Self
 
-func (op *Self_Slice) GetType() string {
-	return Self_Type
+func (op *Self_Slice) GetType() string { return Self_Type }
+
+func (op *Self_Slice) Marshal(m jsn.Marshaler) error {
+	return Self_Repeats_Marshal(m, (*[]Self)(op))
 }
 
 func (op *Self_Slice) GetSize() (ret int) {
@@ -978,6 +1110,18 @@ func Self_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Self) (err error) {
 	return
 }
 
+type Self_Flow struct{ ptr *Self }
+
+func (n Self_Flow) GetType() string      { return Self_Type }
+func (n Self_Flow) GetLede() string      { return Self_Type }
+func (n Self_Flow) GetFlow() interface{} { return n.ptr }
+func (n Self_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Self); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Self_Optional_Marshal(m jsn.Marshaler, pv **Self) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Self_Marshal(m, *pv)
@@ -991,7 +1135,7 @@ func Self_Optional_Marshal(m jsn.Marshaler, pv **Self) (err error) {
 }
 
 func Self_Marshal(m jsn.Marshaler, val *Self) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Self_Type, Self_Type, val)); err == nil {
+	if err = m.MarshalBlock(Self_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Self_Field_Player)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Player)
@@ -1027,8 +1171,10 @@ func (op *Words) Marshal(m jsn.Marshaler) error {
 
 type Words_Slice []Words
 
-func (op *Words_Slice) GetType() string {
-	return Words_Type
+func (op *Words_Slice) GetType() string { return Words_Type }
+
+func (op *Words_Slice) Marshal(m jsn.Marshaler) error {
+	return Words_Repeats_Marshal(m, (*[]Words)(op))
 }
 
 func (op *Words_Slice) GetSize() (ret int) {
@@ -1063,6 +1209,18 @@ func Words_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Words) (err error) {
 	return
 }
 
+type Words_Flow struct{ ptr *Words }
+
+func (n Words_Flow) GetType() string      { return Words_Type }
+func (n Words_Flow) GetLede() string      { return Words_Type }
+func (n Words_Flow) GetFlow() interface{} { return n.ptr }
+func (n Words_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Words); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Words_Optional_Marshal(m jsn.Marshaler, pv **Words) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Words_Marshal(m, *pv)
@@ -1076,7 +1234,7 @@ func Words_Optional_Marshal(m jsn.Marshaler, pv **Words) (err error) {
 }
 
 func Words_Marshal(m jsn.Marshaler, val *Words) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Words_Type, Words_Type, val)); err == nil {
+	if err = m.MarshalBlock(Words_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Words_Field_Words)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Repeats_Marshal(m, &val.Words)

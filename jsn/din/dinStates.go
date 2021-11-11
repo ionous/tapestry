@@ -64,7 +64,7 @@ func (dec *xDecoder) newBlock(pm *json.RawMessage) *chart.StateMix {
 }
 
 func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.StateMix {
-	next.OnMap = func(_, typeName string) (okay bool) {
+	next.OnMap = func(typeName string, _ jsn.FlowBlock) (okay bool) {
 		var d dinMap
 		if e := json.Unmarshal(*pm, &d); e != nil {
 			dec.Error(e)

@@ -1,12 +1,9 @@
 package story
 
 import (
-	"bytes"
-
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
 	"git.sr.ht/~ionous/iffy/ephemera/express"
-	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/template"
 	"git.sr.ht/~ionous/iffy/template/types"
@@ -28,7 +25,7 @@ func (op *RenderTemplate) ImportStub(k *Importer) (ret interface{}, err error) {
 }
 
 // returns a string or a FromText assignment as a slice of bytes
-func ConvertText(str string) (ret interface{}, err error) {
+func ConvertText(k *Importer, str string) (ret interface{}, err error) {
 	if xs, e := template.Parse(str); e != nil {
 		err = e
 	} else if str, ok := getSimpleString(xs); ok {
@@ -39,12 +36,7 @@ func ConvertText(str string) (ret interface{}, err error) {
 		} else if eval, ok := got.(rt.TextEval); !ok {
 			err = errutil.Fmt("render template has unknown expression %T", got)
 		} else {
-			var buf bytes.Buffer
-			if e := cout.Marshal(&buf, &core.FromText{eval}); e != nil {
-				err = e
-			} else {
-				ret = buf.Bytes() // okay; return bytes.
-			}
+			ret, err = k.Marshal(&core.FromText{eval})
 		}
 	}
 	return

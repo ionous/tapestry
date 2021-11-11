@@ -5,8 +5,10 @@
 module.exports =`
 type {{name}}{{mod}}_Slice []{{el}}
 
-func (op* {{name}}{{mod}}_Slice) GetType() string {
-  return {{name}}_Type
+func (op* {{name}}{{mod}}_Slice) GetType() string {  return {{name}}_Type }
+
+func (op *{{name}}{{mod}}_Slice) Marshal(m jsn.Marshaler) error {
+  return {{name}}{{mod}}_Repeats_Marshal(m, (*[]{{el}})(op))
 }
 
 func (op* {{name}}{{mod}}_Slice) GetSize() (ret int) {

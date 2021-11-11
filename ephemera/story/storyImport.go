@@ -52,7 +52,7 @@ func (op *GrammarDecl) ImportPhrase(k *Importer) error {
 func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
 	if prop, e := NewProperty(k, op.Property); e != nil {
 		err = e
-	} else if text, e := ConvertText(op.Lines.String()); e != nil {
+	} else if text, e := ConvertText(k, op.Lines.String()); e != nil {
 		err = e
 	} else if e := k.Env().Recent.Nouns.CollectSubjects(func() (err error) {
 		for _, n := range op.Nouns {

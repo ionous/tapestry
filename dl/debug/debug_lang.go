@@ -35,8 +35,10 @@ func (op *DebugLog) Marshal(m jsn.Marshaler) error {
 
 type DebugLog_Slice []DebugLog
 
-func (op *DebugLog_Slice) GetType() string {
-	return DebugLog_Type
+func (op *DebugLog_Slice) GetType() string { return DebugLog_Type }
+
+func (op *DebugLog_Slice) Marshal(m jsn.Marshaler) error {
+	return DebugLog_Repeats_Marshal(m, (*[]DebugLog)(op))
 }
 
 func (op *DebugLog_Slice) GetSize() (ret int) {
@@ -71,6 +73,18 @@ func DebugLog_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DebugLog) (err err
 	return
 }
 
+type DebugLog_Flow struct{ ptr *DebugLog }
+
+func (n DebugLog_Flow) GetType() string      { return DebugLog_Type }
+func (n DebugLog_Flow) GetLede() string      { return "log" }
+func (n DebugLog_Flow) GetFlow() interface{} { return n.ptr }
+func (n DebugLog_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DebugLog); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func DebugLog_Optional_Marshal(m jsn.Marshaler, pv **DebugLog) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = DebugLog_Marshal(m, *pv)
@@ -84,7 +98,7 @@ func DebugLog_Optional_Marshal(m jsn.Marshaler, pv **DebugLog) (err error) {
 }
 
 func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("log", DebugLog_Type, val)); err == nil {
+	if err = m.MarshalBlock(DebugLog_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", DebugLog_Field_Value)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.Value)
@@ -127,8 +141,10 @@ func (op *DoNothing) Marshal(m jsn.Marshaler) error {
 
 type DoNothing_Slice []DoNothing
 
-func (op *DoNothing_Slice) GetType() string {
-	return DoNothing_Type
+func (op *DoNothing_Slice) GetType() string { return DoNothing_Type }
+
+func (op *DoNothing_Slice) Marshal(m jsn.Marshaler) error {
+	return DoNothing_Repeats_Marshal(m, (*[]DoNothing)(op))
 }
 
 func (op *DoNothing_Slice) GetSize() (ret int) {
@@ -163,6 +179,18 @@ func DoNothing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DoNothing) (err e
 	return
 }
 
+type DoNothing_Flow struct{ ptr *DoNothing }
+
+func (n DoNothing_Flow) GetType() string      { return DoNothing_Type }
+func (n DoNothing_Flow) GetLede() string      { return DoNothing_Type }
+func (n DoNothing_Flow) GetFlow() interface{} { return n.ptr }
+func (n DoNothing_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DoNothing); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func DoNothing_Optional_Marshal(m jsn.Marshaler, pv **DoNothing) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = DoNothing_Marshal(m, *pv)
@@ -176,7 +204,7 @@ func DoNothing_Optional_Marshal(m jsn.Marshaler, pv **DoNothing) (err error) {
 }
 
 func DoNothing_Marshal(m jsn.Marshaler, val *DoNothing) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(DoNothing_Type, DoNothing_Type, val)); err == nil {
+	if err = m.MarshalBlock(DoNothing_Flow{val}); err == nil {
 		e0 := m.MarshalKey("why", DoNothing_Field_Reason)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Optional_Marshal(m, &val.Reason)
@@ -238,8 +266,10 @@ func LoggingLevel_Marshal(m jsn.Marshaler, val *LoggingLevel) (err error) {
 
 type LoggingLevel_Slice []LoggingLevel
 
-func (op *LoggingLevel_Slice) GetType() string {
-	return LoggingLevel_Type
+func (op *LoggingLevel_Slice) GetType() string { return LoggingLevel_Type }
+
+func (op *LoggingLevel_Slice) Marshal(m jsn.Marshaler) error {
+	return LoggingLevel_Repeats_Marshal(m, (*[]LoggingLevel)(op))
 }
 
 func (op *LoggingLevel_Slice) GetSize() (ret int) {

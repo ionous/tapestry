@@ -13,25 +13,6 @@ const fnv1a = require('./fnv1a.js');
 // replace the specified typename with specified primitive.
 // types that map to numbers, etc. are added as unbox automatically.
 const unbox = { "text": "string", "bool": "bool" };
-// custom serialization of a type
-// blocks the generation of the inner most serialization function
-const custom = new Set([
-  "assignment",
-  "bool_eval",
-  "number_eval",
-  "num_list_eval",
-  "record_eval",
-  "record_list_eval",
-  "text_eval",
-  "text_list_eval",
-  // core
-  "get_var", // we collapse this into a literal string starting with @
-  "bool_value",
-  "num_value",
-  "numbers",
-  "text_value", // we escape text values to avoid confusion with get_var
-  "texts"
-]);
 
 // change to tokenized like name
 const tokenize = function(name) {
@@ -129,9 +110,6 @@ Handlebars.registerHelper('ScopeOf', scopeOf);
 Handlebars.registerHelper('LowerNameOf', function(key, param) {
   const el = pascal(key) || pascal(param.type);
   return el.charAt(0).toLowerCase() + el.slice(1);
-});
-Handlebars.registerHelper('IsCustom',function(name) {
-  return custom.has(name) ? "_Customized": "";
 });
 Handlebars.registerHelper('IsBool', function(name) {
   return unbox[name] === 'bool';

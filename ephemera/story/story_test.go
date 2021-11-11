@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/jsn/din"
 
 	"git.sr.ht/~ionous/iffy/rt"
@@ -25,7 +26,7 @@ func TestImportStory(t *testing.T) {
 		if e := din.Decode(&curr, iffy.Registry(), []byte(debug.Blob)); e != nil {
 			t.Fatal(e)
 		} else {
-			k := story.NewImporter(db)
+			k := story.NewImporter(db, cout.Marshal)
 			if e := k.ImportStory(t.Name(), &curr); e != nil {
 				t.Fatal("import", e)
 			} else {

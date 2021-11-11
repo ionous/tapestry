@@ -35,8 +35,10 @@ func (op *ReciprocalOf) Marshal(m jsn.Marshaler) error {
 
 type ReciprocalOf_Slice []ReciprocalOf
 
-func (op *ReciprocalOf_Slice) GetType() string {
-	return ReciprocalOf_Type
+func (op *ReciprocalOf_Slice) GetType() string { return ReciprocalOf_Type }
+
+func (op *ReciprocalOf_Slice) Marshal(m jsn.Marshaler) error {
+	return ReciprocalOf_Repeats_Marshal(m, (*[]ReciprocalOf)(op))
 }
 
 func (op *ReciprocalOf_Slice) GetSize() (ret int) {
@@ -71,6 +73,18 @@ func ReciprocalOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ReciprocalOf) 
 	return
 }
 
+type ReciprocalOf_Flow struct{ ptr *ReciprocalOf }
+
+func (n ReciprocalOf_Flow) GetType() string      { return ReciprocalOf_Type }
+func (n ReciprocalOf_Flow) GetLede() string      { return "reciprocal" }
+func (n ReciprocalOf_Flow) GetFlow() interface{} { return n.ptr }
+func (n ReciprocalOf_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ReciprocalOf); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ReciprocalOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalOf) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ReciprocalOf_Marshal(m, *pv)
@@ -84,7 +98,7 @@ func ReciprocalOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalOf) (err erro
 }
 
 func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("reciprocal", ReciprocalOf_Type, val)); err == nil {
+	if err = m.MarshalBlock(ReciprocalOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ReciprocalOf_Field_Via)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Via)
@@ -130,8 +144,10 @@ func (op *ReciprocalsOf) Marshal(m jsn.Marshaler) error {
 
 type ReciprocalsOf_Slice []ReciprocalsOf
 
-func (op *ReciprocalsOf_Slice) GetType() string {
-	return ReciprocalsOf_Type
+func (op *ReciprocalsOf_Slice) GetType() string { return ReciprocalsOf_Type }
+
+func (op *ReciprocalsOf_Slice) Marshal(m jsn.Marshaler) error {
+	return ReciprocalsOf_Repeats_Marshal(m, (*[]ReciprocalsOf)(op))
 }
 
 func (op *ReciprocalsOf_Slice) GetSize() (ret int) {
@@ -166,6 +182,18 @@ func ReciprocalsOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ReciprocalsOf
 	return
 }
 
+type ReciprocalsOf_Flow struct{ ptr *ReciprocalsOf }
+
+func (n ReciprocalsOf_Flow) GetType() string      { return ReciprocalsOf_Type }
+func (n ReciprocalsOf_Flow) GetLede() string      { return "reciprocals" }
+func (n ReciprocalsOf_Flow) GetFlow() interface{} { return n.ptr }
+func (n ReciprocalsOf_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ReciprocalsOf); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ReciprocalsOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalsOf) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ReciprocalsOf_Marshal(m, *pv)
@@ -179,7 +207,7 @@ func ReciprocalsOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalsOf) (err er
 }
 
 func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("reciprocals", ReciprocalsOf_Type, val)); err == nil {
+	if err = m.MarshalBlock(ReciprocalsOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ReciprocalsOf_Field_Via)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Via)
@@ -226,8 +254,10 @@ func (op *Relate) Marshal(m jsn.Marshaler) error {
 
 type Relate_Slice []Relate
 
-func (op *Relate_Slice) GetType() string {
-	return Relate_Type
+func (op *Relate_Slice) GetType() string { return Relate_Type }
+
+func (op *Relate_Slice) Marshal(m jsn.Marshaler) error {
+	return Relate_Repeats_Marshal(m, (*[]Relate)(op))
 }
 
 func (op *Relate_Slice) GetSize() (ret int) {
@@ -262,6 +292,18 @@ func Relate_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relate) (err error) 
 	return
 }
 
+type Relate_Flow struct{ ptr *Relate }
+
+func (n Relate_Flow) GetType() string      { return Relate_Type }
+func (n Relate_Flow) GetLede() string      { return Relate_Type }
+func (n Relate_Flow) GetFlow() interface{} { return n.ptr }
+func (n Relate_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Relate); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Relate_Optional_Marshal(m jsn.Marshaler, pv **Relate) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Relate_Marshal(m, *pv)
@@ -275,7 +317,7 @@ func Relate_Optional_Marshal(m jsn.Marshaler, pv **Relate) (err error) {
 }
 
 func Relate_Marshal(m jsn.Marshaler, val *Relate) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Relate_Type, Relate_Type, val)); err == nil {
+	if err = m.MarshalBlock(Relate_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Relate_Field_Object)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.Object)
@@ -328,8 +370,10 @@ func (op *RelativeOf) Marshal(m jsn.Marshaler) error {
 
 type RelativeOf_Slice []RelativeOf
 
-func (op *RelativeOf_Slice) GetType() string {
-	return RelativeOf_Type
+func (op *RelativeOf_Slice) GetType() string { return RelativeOf_Type }
+
+func (op *RelativeOf_Slice) Marshal(m jsn.Marshaler) error {
+	return RelativeOf_Repeats_Marshal(m, (*[]RelativeOf)(op))
 }
 
 func (op *RelativeOf_Slice) GetSize() (ret int) {
@@ -364,6 +408,18 @@ func RelativeOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelativeOf) (err
 	return
 }
 
+type RelativeOf_Flow struct{ ptr *RelativeOf }
+
+func (n RelativeOf_Flow) GetType() string      { return RelativeOf_Type }
+func (n RelativeOf_Flow) GetLede() string      { return "relative" }
+func (n RelativeOf_Flow) GetFlow() interface{} { return n.ptr }
+func (n RelativeOf_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RelativeOf); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func RelativeOf_Optional_Marshal(m jsn.Marshaler, pv **RelativeOf) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = RelativeOf_Marshal(m, *pv)
@@ -377,7 +433,7 @@ func RelativeOf_Optional_Marshal(m jsn.Marshaler, pv **RelativeOf) (err error) {
 }
 
 func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("relative", RelativeOf_Type, val)); err == nil {
+	if err = m.MarshalBlock(RelativeOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RelativeOf_Field_Via)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Via)
@@ -423,8 +479,10 @@ func (op *RelativesOf) Marshal(m jsn.Marshaler) error {
 
 type RelativesOf_Slice []RelativesOf
 
-func (op *RelativesOf_Slice) GetType() string {
-	return RelativesOf_Type
+func (op *RelativesOf_Slice) GetType() string { return RelativesOf_Type }
+
+func (op *RelativesOf_Slice) Marshal(m jsn.Marshaler) error {
+	return RelativesOf_Repeats_Marshal(m, (*[]RelativesOf)(op))
 }
 
 func (op *RelativesOf_Slice) GetSize() (ret int) {
@@ -459,6 +517,18 @@ func RelativesOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelativesOf) (e
 	return
 }
 
+type RelativesOf_Flow struct{ ptr *RelativesOf }
+
+func (n RelativesOf_Flow) GetType() string      { return RelativesOf_Type }
+func (n RelativesOf_Flow) GetLede() string      { return "relatives" }
+func (n RelativesOf_Flow) GetFlow() interface{} { return n.ptr }
+func (n RelativesOf_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RelativesOf); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func RelativesOf_Optional_Marshal(m jsn.Marshaler, pv **RelativesOf) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = RelativesOf_Marshal(m, *pv)
@@ -472,7 +542,7 @@ func RelativesOf_Optional_Marshal(m jsn.Marshaler, pv **RelativesOf) (err error)
 }
 
 func RelativesOf_Marshal(m jsn.Marshaler, val *RelativesOf) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("relatives", RelativesOf_Type, val)); err == nil {
+	if err = m.MarshalBlock(RelativesOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RelativesOf_Field_Via)
 		if e0 == nil {
 			e0 = value.RelationName_Marshal(m, &val.Via)

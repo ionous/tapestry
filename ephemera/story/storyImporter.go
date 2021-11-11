@@ -26,8 +26,8 @@ type Importer struct {
 }
 
 // low level
-func NewImporter(db *sql.DB) *Importer {
-	rec := ephemera.NewRecorder(db)
+func NewImporter(db *sql.DB, marshal func(jsn.Marshalee) (string, error)) *Importer {
+	rec := ephemera.NewRecorder(db, marshal)
 	k := &Importer{
 		Recorder:    rec,
 		oneTime:     make(map[string]bool),
@@ -88,7 +88,7 @@ func (k *Importer) NewImplicitAspect(aspect, kind string, traits ...string) {
 func importStory(k *Importer, tgt jsn.Marshalee) error {
 	// presumably, this will have to be fixed eventually
 	// so that states can be composited not monolithic.
-	ts := chart.MakeEncoder(nil)
+	ts := chart.MakeEncoder()
 	return ts.Marshal(tgt, Map(&ts, BlockMap{
 		rt.Execute_Type: KeyMap{
 			BlockStart: func(b jsn.Block, _ interface{}) (err error) {

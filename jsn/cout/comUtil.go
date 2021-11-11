@@ -3,12 +3,19 @@ package cout
 import (
 	"encoding/json"
 	"io"
+	"strings"
 
 	"git.sr.ht/~ionous/iffy/jsn"
 )
 
-func Marshal(out io.Writer, cmd jsn.Marshalee) error {
-	return marshal(out, cmd, false)
+func Marshal(cmd jsn.Marshalee) (ret string, err error) {
+	var out strings.Builder
+	if e := marshal(&out, cmd, false); e != nil {
+		err = e
+	} else {
+		ret = out.String()
+	}
+	return
 }
 
 func MarshalIndent(out io.Writer, cmd jsn.Marshalee) error {

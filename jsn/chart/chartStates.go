@@ -23,7 +23,7 @@ func (e Unhandled) Error() string {
 // providing functions which can be overridden one at a time to customize functionality
 type StateMix struct {
 	OnBlock  func(jsn.Block) error
-	OnMap    func(string, string) bool
+	OnMap    func(string, jsn.FlowBlock) bool
 	OnKey    func(string, string) error
 	OnSlot   func(string, jsn.SlotBlock) bool
 	OnSwap   func(string, jsn.SwapBlock) bool
@@ -52,7 +52,7 @@ func (d *StateMix) MarshalBlock(b jsn.Block) (err error) {
 		// backwards compatibility from when there were separate functions for each block type
 		switch block := b.(type) {
 		case jsn.FlowBlock:
-			err = d.MapValues(block.GetLede(), block.GetType())
+			err = d.MapValues(block.GetType(), block)
 		case jsn.SwapBlock:
 			err = d.PickValues(block.GetType(), block)
 		case jsn.SliceBlock:
@@ -71,11 +71,11 @@ func okayMissing(ok bool) (err error) {
 	}
 	return
 }
-func (d *StateMix) MapValues(lede, typeName string) (err error) {
+func (d *StateMix) MapValues(typeName string, val jsn.FlowBlock) (err error) {
 	if call := d.OnMap; call != nil {
-		err = okayMissing(call(lede, typeName))
+		err = okayMissing(call(typeName, val))
 	} else {
-		err = Unhandled(errutil.Sprint("MapValues", lede, typeName))
+		err = Unhandled(errutil.Sprint("MapValues", typeName, val))
 	}
 	return
 }

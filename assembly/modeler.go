@@ -1,7 +1,6 @@
 package assembly
 
 import (
-	"bytes"
 	"database/sql"
 	"strings"
 
@@ -138,11 +137,10 @@ func (m *Assembler) WritePlural(one, many string) error {
 }
 
 func (m *Assembler) WriteProgram(progName string, typeName string, cmd jsn.Marshalee) (err error) {
-	var buf bytes.Buffer
-	if e := cout.Marshal(&buf, cmd); e != nil {
+	if str, e := cout.Marshal(cmd); e != nil {
 		err = e
 	} else {
-		_, err = m.cache.Exec(mdl_prog, progName, typeName, buf.Bytes())
+		_, err = m.cache.Exec(mdl_prog, progName, typeName, str)
 	}
 	return
 }

@@ -11,7 +11,7 @@ type xEncoder struct{ chart.Machine }
 
 // NewEncoder create an empty serializer to produce detailed script data.
 func Encode(in jsn.Marshalee) (ret interface{}, err error) {
-	m := xEncoder{chart.MakeEncoder(nil)}
+	m := xEncoder{chart.MakeEncoder()}
 	next := newBlock(&m.Machine)
 	next.OnCommit = func(v interface{}) {
 		if ret != nil {
@@ -50,7 +50,7 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 }
 
 func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
-	next.OnMap = func(_, typeName string) bool {
+	next.OnMap = func(typeName string, _ jsn.FlowBlock) bool {
 		m.PushState(newFlow(m, detMap{
 			Id:     m.FlushCursor(),
 			Type:   typeName,

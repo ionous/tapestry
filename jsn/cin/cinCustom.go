@@ -1,131 +1,149 @@
 package cin
 
 import (
+	"encoding/json"
+	"strings"
+
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/jsn/chart"
 	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
-var custom = chart.Customization{
-	// package rt:
-	rt.Assignment_Type: func(n jsn.Marshaler, i interface{}) (err error) {
-		dec, ptr := n.(*xDecoder), i.(*rt.Assignment)
-		if v, ok := readVar(dec); ok {
-			*ptr = v
+func (dec *xDecoder) customFlow(flow jsn.FlowBlock, msg json.RawMessage) (err error) {
+	switch typeName := flow.GetType(); typeName {
+	default:
+		err = chart.Unhandled("CustomFlow")
+
+	case story.NamedNoun_Type:
+		var str string
+		if e := json.Unmarshal(msg, &str); e != nil {
+			err = chart.Unhandled(typeName)
 		} else {
-			err = rt.Assignment_DefaultMarshal(dec, ptr)
+			var out story.NamedNoun
+			if space := strings.Index(str, " "); space < 0 {
+				out.Name.Str = str
+			} else {
+				jsn.MakeEnum(&out.Determiner, &out.Determiner.Str).SetValue(str[:space])
+				out.Name.Str = str[space+1:]
+			}
+			if !flow.SetFlow(&out) {
+				err = errutil.New("could set result to flow", typeName, flow)
+			}
 		}
-		return
-	},
-	rt.BoolEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
-		dec, ptr := n.(*xDecoder), i.(*rt.BoolEval)
-		if v, ok := readBool(dec); ok {
-			*ptr = v
-		} else if v, ok := readVar(dec); ok {
-			*ptr = v
+	}
+	return
+}
+func (dec *xDecoder) customSlot(slot jsn.SlotBlock, msg json.RawMessage) (err error) {
+	switch typeName := slot.GetType(); typeName {
+	default:
+		err = chart.Unhandled("CustomSlot")
+
+	case rt.Assignment_Type:
+		if v, ok := readVar(dec, msg); ok {
+			slot.SetSlot(v)
 		} else {
-			err = rt.BoolEval_DefaultMarshal(dec, ptr)
+			err = chart.Unhandled(typeName)
 		}
-		return
-	},
-	rt.NumberEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
-		dec, ptr := n.(*xDecoder), i.(*rt.NumberEval)
-		if v, ok := readNum(dec); ok {
-			*ptr = v
-		} else if v, ok := readVar(dec); ok {
-			*ptr = v
+
+	case rt.BoolEval_Type:
+		if v, ok := readBool(dec, msg); ok {
+			slot.SetSlot(v)
+		} else if v, ok := readVar(dec, msg); ok {
+			slot.SetSlot(v)
 		} else {
-			err = rt.NumberEval_DefaultMarshal(dec, ptr)
+			err = chart.Unhandled(typeName)
 		}
-		return
-	},
-	rt.NumListEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
-		dec, ptr := n.(*xDecoder), i.(*rt.NumListEval)
-		if v, ok := readNumList(dec); ok {
-			*ptr = v
-		} else if v, ok := readVar(dec); ok {
-			*ptr = v
+
+	case rt.NumberEval_Type:
+		if v, ok := readNum(dec, msg); ok {
+			slot.SetSlot(v)
+		} else if v, ok := readVar(dec, msg); ok {
+			slot.SetSlot(v)
 		} else {
-			err = rt.NumListEval_DefaultMarshal(dec, ptr)
+			err = chart.Unhandled(typeName)
 		}
-		return
-	},
-	rt.RecordEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
-		dec, ptr := n.(*xDecoder), i.(*rt.RecordEval)
-		if v, ok := readVar(dec); ok {
-			*ptr = v
+
+	case rt.NumListEval_Type:
+		if v, ok := readNumList(dec, msg); ok {
+			slot.SetSlot(v)
+		} else if v, ok := readVar(dec, msg); ok {
+			slot.SetSlot(v)
 		} else {
-			err = rt.RecordEval_DefaultMarshal(dec, ptr)
+			err = chart.Unhandled(typeName)
 		}
-		return
-	},
-	rt.RecordListEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
-		dec, ptr := n.(*xDecoder), i.(*rt.RecordListEval)
-		if v, ok := readVar(dec); ok {
-			*ptr = v
+
+	case rt.RecordEval_Type:
+		if v, ok := readVar(dec, msg); ok {
+			slot.SetSlot(v)
 		} else {
-			err = rt.RecordListEval_DefaultMarshal(dec, ptr)
+			err = chart.Unhandled(typeName)
 		}
-		return
-	},
-	rt.TextEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
-		dec, ptr := n.(*xDecoder), i.(*rt.TextEval)
+
+	case rt.RecordListEval_Type:
+		if v, ok := readVar(dec, msg); ok {
+			slot.SetSlot(v)
+		} else {
+			err = chart.Unhandled(typeName)
+		}
+
+	case rt.TextEval_Type:
 		// NOTE: a string where a text eval is expected could be a variable providing text or some literal text.
 		// variables start with @, and text that starts with an @ winds up prefixed with two @@s
-		if v, ok := readVarOrText(dec); ok {
-			*ptr = v
+		if v, ok := readVarOrText(dec, msg); ok {
+			slot.SetSlot(v)
 		} else {
-			err = rt.TextEval_DefaultMarshal(dec, ptr)
+			err = chart.Unhandled(typeName)
 		}
-		return
-	},
-	rt.TextListEval_Type: func(n jsn.Marshaler, i interface{}) (err error) {
-		dec, ptr := n.(*xDecoder), i.(*rt.TextListEval)
-		if v, ok := readTextList(dec); ok {
-			*ptr = v
-		} else if v, ok := readVar(dec); ok {
-			*ptr = v
+
+	case rt.TextListEval_Type:
+		if v, ok := readTextList(dec, msg); ok {
+			slot.SetSlot(v)
+		} else if v, ok := readVar(dec, msg); ok {
+			slot.SetSlot(v)
 		} else {
-			err = rt.TextListEval_DefaultMarshal(dec, ptr)
+			err = chart.Unhandled(typeName)
 		}
-		return
-	},
-	// package core:
-	// if someone authored compact data with an explicit text value or get variable
-	// ex. { "TextValue:": "some text" } or { "GetVar:": "var name" }
-	// we can allow the default handlers to handle reading them.
-	// ( we dont expect those to be escaped )
+
+		// package core:
+		// if someone authored compact data with an explicit text value or get variable
+		// ex. { "TextValue:": "some text" } or { "GetVar:": "var name" }
+		// we can allow the default handlers to handle reading them.
+		// ( we dont expect those to be escaped )
+	}
+	return
 }
 
-func readBool(dec *xDecoder) (ret *core.BoolValue, okay bool) {
+func readBool(dec *xDecoder, msg json.RawMessage) (ret *core.BoolValue, okay bool) {
 	var val bool
-	if dec.ReadCurrentMessage(&val) {
+	if e := json.Unmarshal(msg, &val); e == nil {
 		ret, okay = &core.BoolValue{val}, true
 		dec.Commit("bool literal")
 	}
 	return
 }
-func readNum(dec *xDecoder) (ret *core.NumValue, okay bool) {
+func readNum(dec *xDecoder, msg json.RawMessage) (ret *core.NumValue, okay bool) {
 	var val float64
-	if dec.ReadCurrentMessage(&val) {
+	if e := json.Unmarshal(msg, &val); e == nil {
 		ret, okay = &core.NumValue{val}, true
 		dec.Commit("num literal")
 	}
 	return
 }
-func readNumList(dec *xDecoder) (ret *core.Numbers, okay bool) {
+func readNumList(dec *xDecoder, msg json.RawMessage) (ret *core.Numbers, okay bool) {
 	var val []float64
-	if dec.ReadCurrentMessage(&val) {
+	if e := json.Unmarshal(msg, &val); e == nil {
 		ret, okay = &core.Numbers{val}, true
 		dec.Commit("num list literal")
 	}
 	return
 }
-func readTextList(dec *xDecoder) (ret *core.Texts, okay bool) {
+func readTextList(dec *xDecoder, msg json.RawMessage) (ret *core.Texts, okay bool) {
 	var val []string
-	if dec.ReadCurrentMessage(&val) {
+	if e := json.Unmarshal(msg, &val); e == nil {
 		ret, okay = &core.Texts{val}, true
 		dec.Commit("text list literal")
 	}
@@ -134,9 +152,9 @@ func readTextList(dec *xDecoder) (ret *core.Texts, okay bool) {
 
 // when there's just a single string that fits a text eval..
 // it could be literal text or a variable providing text.
-func readVarOrText(dec *xDecoder) (ret rt.TextEval, okay bool) {
+func readVarOrText(dec *xDecoder, msg json.RawMessage) (ret rt.TextEval, okay bool) {
 	var str string
-	if dec.ReadCurrentMessage(&str) {
+	if e := json.Unmarshal(msg, &str); e == nil {
 		if cnt := len(str); cnt == 0 || str[0] != '@' {
 			ret, okay = &core.TextValue{str}, true
 			dec.Commit("simple text literal")
@@ -156,9 +174,9 @@ func readVarOrText(dec *xDecoder) (ret rt.TextEval, okay bool) {
 	return
 }
 
-func readVar(dec *xDecoder) (ret *core.GetVar, okay bool) {
+func readVar(dec *xDecoder, msg json.RawMessage) (ret *core.GetVar, okay bool) {
 	var str string
-	if dec.ReadCurrentMessage(&str) {
+	if e := json.Unmarshal(msg, &str); e == nil {
 		if len(str) > 0 && str[0] == '@' {
 			ret, okay = newVar(str), true
 			dec.Commit("@var")

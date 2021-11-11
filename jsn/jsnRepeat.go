@@ -8,7 +8,8 @@ func RepeatBlock(m Marshaler, slice SliceBlock) (err error) {
 	} else {
 		// note: marshals the block even if it lacks elements in order to record the empty "[]"
 		for i, cnt := 0, slice.GetSize(); i < cnt; i++ {
-			if e := slice.MarshalEl(m, i); e != nil {
+			// fix: we exclude missing right now b/c of the way slot cin reading works :/
+			if e := slice.MarshalEl(m, i); e != nil && e != Missing {
 				m.Error(errutil.New(e, "in slice at", i))
 			}
 		}

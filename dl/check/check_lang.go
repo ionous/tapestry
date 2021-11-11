@@ -36,8 +36,10 @@ func (op *CheckOutput) Marshal(m jsn.Marshaler) error {
 
 type CheckOutput_Slice []CheckOutput
 
-func (op *CheckOutput_Slice) GetType() string {
-	return CheckOutput_Type
+func (op *CheckOutput_Slice) GetType() string { return CheckOutput_Type }
+
+func (op *CheckOutput_Slice) Marshal(m jsn.Marshaler) error {
+	return CheckOutput_Repeats_Marshal(m, (*[]CheckOutput)(op))
 }
 
 func (op *CheckOutput_Slice) GetSize() (ret int) {
@@ -72,6 +74,18 @@ func CheckOutput_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CheckOutput) (e
 	return
 }
 
+type CheckOutput_Flow struct{ ptr *CheckOutput }
+
+func (n CheckOutput_Flow) GetType() string      { return CheckOutput_Type }
+func (n CheckOutput_Flow) GetLede() string      { return "check" }
+func (n CheckOutput_Flow) GetFlow() interface{} { return n.ptr }
+func (n CheckOutput_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*CheckOutput); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func CheckOutput_Optional_Marshal(m jsn.Marshaler, pv **CheckOutput) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = CheckOutput_Marshal(m, *pv)
@@ -85,7 +99,7 @@ func CheckOutput_Optional_Marshal(m jsn.Marshaler, pv **CheckOutput) (err error)
 }
 
 func CheckOutput_Marshal(m jsn.Marshaler, val *CheckOutput) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("check", CheckOutput_Type, val)); err == nil {
+	if err = m.MarshalBlock(CheckOutput_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CheckOutput_Field_Name)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Name)

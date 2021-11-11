@@ -39,16 +39,6 @@ func (op* {{Pascal name}}) SetSwap(c string) (okay bool) {
 {{#if ../marshal}}
 {{>sig}}
 func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
-{{#if (IsCustom name)}}
-  if fn, ok := m.CustomizedMarshal({{Pascal name}}_Type); ok {
-    err = fn(m, val)
-  } else {
-    err = {{Pascal name}}_DefaultMarshal(m, val)
-  }
-  return
-}
-func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
-{{/if}}
 {{~#if (IsPositioned this)}}
   m.SetCursor(val.At.Offset)
 {{/if}}

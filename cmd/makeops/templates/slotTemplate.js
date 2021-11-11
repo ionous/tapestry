@@ -16,16 +16,6 @@ func (at {{Pascal name}}_Slot) SetSlot(v interface{}) (okay bool) {
 }
 
 func {{Pascal name}}_Marshal(m jsn.Marshaler, ptr *{{Pascal name}}) (err error) {
-{{#if (IsCustom name)}}
-  if fn, exists := m.CustomizedMarshal({{Pascal name}}_Type); exists {
-    err = fn(m, ptr)
-  } else {
-    err = {{Pascal name}}_DefaultMarshal(m, ptr)
-  }
-  return
-}
-func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, ptr *{{Pascal name}}) (err error) {
-{{/if}}
 {{~#if (IsPositioned this)}}
   m.SetCursor(ptr.At.Offset)
 {{/if}}

@@ -11,25 +11,21 @@ type Machine struct {
 	stack    chartStack
 	cursor   string
 	err      error
-	custom   Customization
 }
 
-// Customization
-type Customization map[string]jsn.CustomizedMarshal
-
 // MakeEncoder writes json data
-func MakeEncoder(custom Customization) Machine {
-	return makeMachine(custom, true)
+func MakeEncoder() Machine {
+	return makeMachine(true)
 }
 
 // MakeDecoder reads json data
-func MakeDecoder(custom Customization) Machine {
-	return makeMachine(custom, false)
+func MakeDecoder() Machine {
+	return makeMachine(false)
 }
 
 // newMachine create an empty serializer to produce compact script data.
-func makeMachine(custom Customization, encoding bool) Machine {
-	return Machine{encoding: encoding, custom: custom}
+func makeMachine(encoding bool) Machine {
+	return Machine{encoding: encoding}
 }
 
 func (m *Machine) Marshal(tgt jsn.Marshalee, init State) error {
@@ -42,11 +38,6 @@ func (m *Machine) Marshal(tgt jsn.Marshalee, init State) error {
 // IsEncoding indicates whether the machine is writing json ( or reading json. )
 func (m *Machine) IsEncoding() bool {
 	return m.encoding
-}
-
-func (m *Machine) CustomizedMarshal(typeName string) (ret jsn.CustomizedMarshal, okay bool) {
-	ret, okay = m.custom[typeName]
-	return
 }
 
 func (m *Machine) SetCursor(id string) {

@@ -51,15 +51,6 @@ func {{Pascal name}}_Optional_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (er
 }
 
 func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
-{{#if (IsCustom name)}}
-  if fn, ok := m.CustomizedMarshal({{Pascal name}}_Type); ok {
-    err = fn(m, val)
-  } else {
-    err = {{Pascal name}}_DefaultMarshal(m, val)
-  }
-}
-func {{Pascal name}}_DefaultMarshal(m jsn.Marshaler, val *{{Pascal name}}) error {
-{{/if}}
 {{#if (IsPositioned this)}}
   m.SetCursor(val.At.Offset)
 {{/if}}

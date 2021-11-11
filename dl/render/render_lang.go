@@ -33,8 +33,10 @@ func (op *RenderExp) Marshal(m jsn.Marshaler) error {
 
 type RenderExp_Slice []RenderExp
 
-func (op *RenderExp_Slice) GetType() string {
-	return RenderExp_Type
+func (op *RenderExp_Slice) GetType() string { return RenderExp_Type }
+
+func (op *RenderExp_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderExp_Repeats_Marshal(m, (*[]RenderExp)(op))
 }
 
 func (op *RenderExp_Slice) GetSize() (ret int) {
@@ -69,6 +71,18 @@ func RenderExp_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderExp) (err e
 	return
 }
 
+type RenderExp_Flow struct{ ptr *RenderExp }
+
+func (n RenderExp_Flow) GetType() string      { return RenderExp_Type }
+func (n RenderExp_Flow) GetLede() string      { return RenderExp_Type }
+func (n RenderExp_Flow) GetFlow() interface{} { return n.ptr }
+func (n RenderExp_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RenderExp); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func RenderExp_Optional_Marshal(m jsn.Marshaler, pv **RenderExp) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = RenderExp_Marshal(m, *pv)
@@ -82,7 +96,7 @@ func RenderExp_Optional_Marshal(m jsn.Marshaler, pv **RenderExp) (err error) {
 }
 
 func RenderExp_Marshal(m jsn.Marshaler, val *RenderExp) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(RenderExp_Type, RenderExp_Type, val)); err == nil {
+	if err = m.MarshalBlock(RenderExp_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderExp_Field_Expression)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.Expression)
@@ -118,8 +132,10 @@ func (op *RenderField) Marshal(m jsn.Marshaler) error {
 
 type RenderField_Slice []RenderField
 
-func (op *RenderField_Slice) GetType() string {
-	return RenderField_Type
+func (op *RenderField_Slice) GetType() string { return RenderField_Type }
+
+func (op *RenderField_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderField_Repeats_Marshal(m, (*[]RenderField)(op))
 }
 
 func (op *RenderField_Slice) GetSize() (ret int) {
@@ -154,6 +170,18 @@ func RenderField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderField) (e
 	return
 }
 
+type RenderField_Flow struct{ ptr *RenderField }
+
+func (n RenderField_Flow) GetType() string      { return RenderField_Type }
+func (n RenderField_Flow) GetLede() string      { return RenderField_Type }
+func (n RenderField_Flow) GetFlow() interface{} { return n.ptr }
+func (n RenderField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RenderField); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func RenderField_Optional_Marshal(m jsn.Marshaler, pv **RenderField) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = RenderField_Marshal(m, *pv)
@@ -167,7 +195,7 @@ func RenderField_Optional_Marshal(m jsn.Marshaler, pv **RenderField) (err error)
 }
 
 func RenderField_Marshal(m jsn.Marshaler, val *RenderField) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(RenderField_Type, RenderField_Type, val)); err == nil {
+	if err = m.MarshalBlock(RenderField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderField_Field_Name)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.Name)
@@ -226,8 +254,10 @@ func RenderFlags_Marshal(m jsn.Marshaler, val *RenderFlags) (err error) {
 
 type RenderFlags_Slice []RenderFlags
 
-func (op *RenderFlags_Slice) GetType() string {
-	return RenderFlags_Type
+func (op *RenderFlags_Slice) GetType() string { return RenderFlags_Type }
+
+func (op *RenderFlags_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderFlags_Repeats_Marshal(m, (*[]RenderFlags)(op))
 }
 
 func (op *RenderFlags_Slice) GetSize() (ret int) {
@@ -285,8 +315,10 @@ func (op *RenderName) Marshal(m jsn.Marshaler) error {
 
 type RenderName_Slice []RenderName
 
-func (op *RenderName_Slice) GetType() string {
-	return RenderName_Type
+func (op *RenderName_Slice) GetType() string { return RenderName_Type }
+
+func (op *RenderName_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderName_Repeats_Marshal(m, (*[]RenderName)(op))
 }
 
 func (op *RenderName_Slice) GetSize() (ret int) {
@@ -321,6 +353,18 @@ func RenderName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderName) (err
 	return
 }
 
+type RenderName_Flow struct{ ptr *RenderName }
+
+func (n RenderName_Flow) GetType() string      { return RenderName_Type }
+func (n RenderName_Flow) GetLede() string      { return RenderName_Type }
+func (n RenderName_Flow) GetFlow() interface{} { return n.ptr }
+func (n RenderName_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RenderName); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func RenderName_Optional_Marshal(m jsn.Marshaler, pv **RenderName) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = RenderName_Marshal(m, *pv)
@@ -334,7 +378,7 @@ func RenderName_Optional_Marshal(m jsn.Marshaler, pv **RenderName) (err error) {
 }
 
 func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(RenderName_Type, RenderName_Type, val)); err == nil {
+	if err = m.MarshalBlock(RenderName_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderName_Field_Name)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
@@ -373,8 +417,10 @@ func (op *RenderPattern) Marshal(m jsn.Marshaler) error {
 
 type RenderPattern_Slice []RenderPattern
 
-func (op *RenderPattern_Slice) GetType() string {
-	return RenderPattern_Type
+func (op *RenderPattern_Slice) GetType() string { return RenderPattern_Type }
+
+func (op *RenderPattern_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderPattern_Repeats_Marshal(m, (*[]RenderPattern)(op))
 }
 
 func (op *RenderPattern_Slice) GetSize() (ret int) {
@@ -409,6 +455,18 @@ func RenderPattern_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderPattern
 	return
 }
 
+type RenderPattern_Flow struct{ ptr *RenderPattern }
+
+func (n RenderPattern_Flow) GetType() string      { return RenderPattern_Type }
+func (n RenderPattern_Flow) GetLede() string      { return "render" }
+func (n RenderPattern_Flow) GetFlow() interface{} { return n.ptr }
+func (n RenderPattern_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RenderPattern); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func RenderPattern_Optional_Marshal(m jsn.Marshaler, pv **RenderPattern) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = RenderPattern_Marshal(m, *pv)
@@ -422,7 +480,7 @@ func RenderPattern_Optional_Marshal(m jsn.Marshaler, pv **RenderPattern) (err er
 }
 
 func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("render", RenderPattern_Type, val)); err == nil {
+	if err = m.MarshalBlock(RenderPattern_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderPattern_Field_Pattern)
 		if e0 == nil {
 			e0 = value.PatternName_Marshal(m, &val.Pattern)
@@ -467,8 +525,10 @@ func (op *RenderRef) Marshal(m jsn.Marshaler) error {
 
 type RenderRef_Slice []RenderRef
 
-func (op *RenderRef_Slice) GetType() string {
-	return RenderRef_Type
+func (op *RenderRef_Slice) GetType() string { return RenderRef_Type }
+
+func (op *RenderRef_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderRef_Repeats_Marshal(m, (*[]RenderRef)(op))
 }
 
 func (op *RenderRef_Slice) GetSize() (ret int) {
@@ -503,6 +563,18 @@ func RenderRef_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderRef) (err e
 	return
 }
 
+type RenderRef_Flow struct{ ptr *RenderRef }
+
+func (n RenderRef_Flow) GetType() string      { return RenderRef_Type }
+func (n RenderRef_Flow) GetLede() string      { return RenderRef_Type }
+func (n RenderRef_Flow) GetFlow() interface{} { return n.ptr }
+func (n RenderRef_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RenderRef); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func RenderRef_Optional_Marshal(m jsn.Marshaler, pv **RenderRef) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = RenderRef_Marshal(m, *pv)
@@ -516,7 +588,7 @@ func RenderRef_Optional_Marshal(m jsn.Marshaler, pv **RenderRef) (err error) {
 }
 
 func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(RenderRef_Type, RenderRef_Type, val)); err == nil {
+	if err = m.MarshalBlock(RenderRef_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderRef_Field_Name)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Name)

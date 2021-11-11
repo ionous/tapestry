@@ -15,6 +15,7 @@ import (
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/jsn/cin"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
@@ -89,7 +90,7 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 				if e := fs.ReadPaths(inFile); e != nil {
 					err = errutil.New("couldn't read file", inFile, e)
 				} else {
-					k := story.NewImporter(db)
+					k := story.NewImporter(db, cout.Marshal)
 					for path, data := range fs {
 						log.Println("importing", path)
 						if sptr, e := decodeStory(path, data); e != nil {

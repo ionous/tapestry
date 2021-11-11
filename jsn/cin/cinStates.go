@@ -2,6 +2,7 @@ package cin
 
 import (
 	"encoding/json"
+	"errors"
 	"unicode"
 
 	"git.sr.ht/~ionous/iffy/jsn"
@@ -11,14 +12,11 @@ import (
 
 type xDecoder struct {
 	chart.Machine
-	reg     []map[uint64]interface{}
-	curMsg  json.RawMessage // can be set explicitly by the currently parsing context
-	curFlow *cinFlow        // or, curMsg can be set via the current flow and key
-	curKey  string
+	reg []map[uint64]interface{}
 }
 
 func Decode(dst jsn.Marshalee, msg json.RawMessage, reg []map[uint64]interface{}) error {
-	dec := xDecoder{reg: reg, Machine: chart.MakeDecoder(custom)}
+	dec := xDecoder{reg: reg, Machine: chart.MakeDecoder()}
 	next := dec.newBlock(msg, new(chart.StateMix))
 	next.OnCommit = func(interface{}) {}
 	dec.ChangeState(next)
@@ -26,26 +24,36 @@ func Decode(dst jsn.Marshalee, msg json.RawMessage, reg []map[uint64]interface{}
 	return dec.Errors()
 }
 
-func (dec *xDecoder) readMap(msg json.RawMessage) (okay bool) {
-	if _, k, args, e := dec.readCmd(msg); e != nil {
-		dec.Error(e)
-	} else if flow, e := newFlowData(k, args); e != nil {
-		dec.Error(e)
-	} else {
-		dec.PushState(dec.newFlow(flow))
-		okay = true
+func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay bool) {
+	if e := dec.customFlow(flow, msg); e != nil {
+		var unhandled chart.Unhandled
+		if !errors.As(e, &unhandled) {
+			dec.Error(e)
+		} else if _, k, args, e := dec.readCmd(msg); e != nil {
+			dec.Error(e)
+		} else if flow, e := newFlowData(k, args); e != nil {
+			dec.Error(e)
+		} else {
+			dec.PushState(dec.newFlow(flow))
+			okay = true
+		}
 	}
 	return
 }
 
 func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay bool) {
-	if t, k, args, e := dec.readCmd(msg); e != nil {
-		dec.Error(e)
-	} else if v := newFromType(t); !slot.SetSlot(v) {
-		dec.Error(errutil.Fmt("couldn't put %T into slot %T", v, slot))
-	} else {
-		dec.PushState(dec.newSlot(k, args))
-		okay = true
+	if e := dec.customSlot(slot, msg); e != nil {
+		var unhandled chart.Unhandled
+		if !errors.As(e, &unhandled) {
+			dec.Error(e)
+		} else if t, k, args, e := dec.readCmd(msg); e != nil {
+			dec.Error(e)
+		} else if v := newFromType(t); !slot.SetSlot(v) {
+			dec.Error(errutil.Fmt("couldn't put %T into slot %T", v, slot))
+		} else {
+			dec.PushState(dec.newSlot(k, args))
+			okay = true
+		}
 	}
 	return
 }
@@ -113,16 +121,15 @@ func (dec *xDecoder) readValue(pv interface{}, msg json.RawMessage) (err error) 
 }
 
 func (dec *xDecoder) newBlock(msg json.RawMessage, next *chart.StateMix) *chart.StateMix {
-	dec.curMsg = msg
-	next.OnMap = func(_, _ string) bool {
-		return dec.readMap(msg)
+	next.OnMap = func(_ string, flow jsn.FlowBlock) bool {
+		return dec.readFlow(flow, msg)
 	}
 	next.OnSlot = func(_ string, slot jsn.SlotBlock) bool {
 		return dec.readSlot(slot, msg)
 	}
 	// ex."noun_phrase" "$KIND_OF_NOUN"
-	next.OnSwap = func(_ string, p jsn.SwapBlock) bool {
-		return dec.readFullSwap(p, msg)
+	next.OnSwap = func(_ string, swap jsn.SwapBlock) bool {
+		return dec.readFullSwap(swap, msg)
 	}
 	next.OnRepeat = func(_ string, slice jsn.SliceBlock) bool {
 		return dec.readRepeat(slice, msg)
@@ -154,61 +161,34 @@ func (dec *xDecoder) newFlow(flow *cinFlow) *chart.StateMix {
 	return &next
 }
 
-func (dec *xDecoder) GetCurrentMessage() (ret json.RawMessage) {
-	if msg := dec.curMsg; msg != nil {
-		ret = msg
-	} else if flow, key := dec.curFlow, dec.curKey; flow != nil {
-		if msg, e := flow.getArg(key); e != nil {
-			dec.Error(e)
-		} else {
-			ret = msg
-		}
-		if ret != nil {
-			dec.curMsg = ret // cache
-		} else {
-			dec.curMsg = emptyMessage // mark it
-		}
-	}
-	return
-}
-
 var emptyMessage = make([]byte, 0, 0)
-
-func (dec *xDecoder) ReadCurrentMessage(pv interface{}) (okay bool) {
-	if msg := dec.GetCurrentMessage(); len(msg) > 0 {
-		if e := json.Unmarshal(msg, pv); e == nil {
-			okay = true
-		}
-	}
-	return
-}
 
 // given a specific key, we have to look up the corresponding msg value before we can process it
 // some states however treat that key differently... ie. embedded swaps
-func (dec *xDecoder) newKeyValue(flow *cinFlow, key string, prev chart.StateMix) *chart.StateMix {
+func (dec *xDecoder) newKeyValue(msgs *cinFlow, key string, prev chart.StateMix) *chart.StateMix {
 	next := prev // copy
 	//
-	dec.curFlow = flow
-	dec.curKey = key
-	dec.curMsg = nil
-	//
-	next.OnMap = func(_, _ string) (okay bool) {
-		if msg := dec.GetCurrentMessage(); len(msg) > 0 {
-			okay = dec.readMap(msg)
+	next.OnMap = func(_ string, flow jsn.FlowBlock) (okay bool) {
+		if msg, e := msgs.getArg(key); e != nil {
+			dec.Error(e)
+		} else if len(msg) > 0 {
+			okay = dec.readFlow(flow, msg)
 		}
 		return
 	}
 	next.OnSlot = func(_ string, slot jsn.SlotBlock) (okay bool) {
-		if msg := dec.GetCurrentMessage(); len(msg) > 0 {
+		if msg, e := msgs.getArg(key); e != nil {
+			dec.Error(e)
+		} else if len(msg) > 0 {
 			okay = dec.readSlot(slot, msg)
 		}
 		return
 	}
-	next.OnSwap = func(_ string, p jsn.SwapBlock) (okay bool) {
-		if msg, pick, e := flow.getPick(key); e != nil {
+	next.OnSwap = func(_ string, swap jsn.SwapBlock) (okay bool) {
+		if msg, pick, e := msgs.getPick(key); e != nil {
 			dec.Error(e)
 		} else if len(msg) > 0 {
-			if ok := p.SetSwap(newStringKey(pick)); !ok {
+			if ok := swap.SetSwap(newStringKey(pick)); !ok {
 				dec.Error(errutil.Fmt("embedded swap at %q has unexpected choice %q", key, pick))
 			} else {
 				dec.PushState(dec.newSwap(msg))
@@ -218,13 +198,17 @@ func (dec *xDecoder) newKeyValue(flow *cinFlow, key string, prev chart.StateMix)
 		return
 	}
 	next.OnRepeat = func(_ string, slice jsn.SliceBlock) (okay bool) {
-		if msg := dec.GetCurrentMessage(); len(msg) > 0 {
+		if msg, e := msgs.getArg(key); e != nil {
+			dec.Error(e)
+		} else if len(msg) > 0 {
 			okay = dec.readRepeat(slice, msg)
 		}
 		return
 	}
 	next.OnValue = func(_ string, pv interface{}) (err error) {
-		if msg := dec.GetCurrentMessage(); len(msg) == 0 {
+		if msg, e := msgs.getArg(key); e != nil {
+			dec.Error(e)
+		} else if len(msg) == 0 {
 			err = jsn.Missing
 		} else {
 			err = dec.readValue(pv, msg)
@@ -232,9 +216,6 @@ func (dec *xDecoder) newKeyValue(flow *cinFlow, key string, prev chart.StateMix)
 		return
 	}
 	next.OnCommit = func(interface{}) {
-		dec.curFlow = nil
-		dec.curKey = ""
-		dec.curMsg = nil
 		dec.ChangeState(&prev)
 	}
 	return &next
@@ -262,7 +243,7 @@ func (dec *xDecoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 // in compact format, the msg holds the slat which fills the slot
 func (dec *xDecoder) newSlot(k string, args json.RawMessage) *chart.StateMix {
 	var next chart.StateMix
-	next.OnMap = func(_, _ string) (okay bool) {
+	next.OnMap = func(string, jsn.FlowBlock) (okay bool) {
 		if flow, e := newFlowData(k, args); e != nil {
 			dec.Error(e)
 		} else {

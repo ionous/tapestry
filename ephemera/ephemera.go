@@ -1,23 +1,23 @@
 package ephemera
 
 import (
-	"bytes"
 	"database/sql"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
 type Recorder struct {
-	srcId int64
-	cache *tables.Cache
+	srcId   int64
+	cache   *tables.Cache
+	Marshal func(jsn.Marshalee) (string, error)
 }
 
-func NewRecorder(db *sql.DB) *Recorder {
-	return &Recorder{cache: tables.NewCache(db)}
+// marshal lets us write program fragments to the database
+func NewRecorder(db *sql.DB, marshal func(jsn.Marshalee) (string, error)) *Recorder {
+	return &Recorder{cache: tables.NewCache(db), Marshal: marshal}
 }
 
 func (k *Recorder) SetSource(srcURI string) *Recorder {
@@ -45,11 +45,10 @@ func (k *Recorder) NewDomainName(domain eph.Named, name, category, ofs string) (
 type Prog struct{ eph.Named }
 
 func (k *Recorder) NewProg(typeName string, cmd jsn.Marshalee) (ret Prog, err error) {
-	var buf bytes.Buffer
-	if e := cout.Marshal(&buf, cmd); e != nil {
+	if str, e := k.Marshal(cmd); e != nil {
 		err = e
 	} else {
-		id := k.cache.MustGetId(eph_prog, k.srcId, typeName, buf.Bytes())
+		id := k.cache.MustGetId(eph_prog, k.srcId, typeName, str)
 		ret = Prog{eph.MakeName(id, typeName)}
 	}
 	return

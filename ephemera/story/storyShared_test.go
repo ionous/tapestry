@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 )
@@ -20,7 +21,7 @@ func newImporter(t *testing.T, where string) (*story.Importer, *sql.DB) {
 	if e := tables.CreateEphemera(db); e != nil {
 		t.Fatal("create ephemera", e)
 	}
-	k := story.NewImporter(db)
+	k := story.NewImporter(db, cout.Marshal)
 	k.SetSource(t.Name())
 	return k, db
 }

@@ -20,7 +20,7 @@ type MatchNumber struct {
 }
 
 func (op *MatchNumber) Marshal(m jsn.Marshaler) (err error) {
-  if err = m.MarshalBlock(jsn.MakeFlow("match", "", op)); err == nil {
+  if err = m.MarshalBlock(MakeFlow(op)); err == nil {
     e0 := m.MarshalKey("", "")
     if e0 == nil {
       e0 = m.MarshalValue("", &op.Val)
@@ -58,7 +58,7 @@ type SayMe struct {
 }
 
 func (op *SayMe) Marshal(m jsn.Marshaler) (err error) {
-  if err = m.MarshalBlock(jsn.MakeFlow("say_me", "", op)); err == nil {
+  if err = m.MarshalBlock(MakeFlow(op)); err == nil {
     e0 := m.MarshalKey("", "")
     if e0 == nil {
       e0 = m.MarshalValue("", &op.Num)

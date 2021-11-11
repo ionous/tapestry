@@ -16,7 +16,7 @@ func SearchForCounters(i jsn.Marshalee) (okay bool) {
 }
 
 func searchForType(src jsn.Marshalee, typeName string) (okay bool, err error) {
-	ts := chart.MakeEncoder(nil)
+	ts := chart.MakeEncoder()
 	// fix use panic / recover to early exit?
 	var earlyOut error
 	err = ts.Marshal(src, &chart.StateMix{

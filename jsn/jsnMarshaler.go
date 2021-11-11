@@ -14,8 +14,6 @@ type Marshalee interface {
 type Marshaler interface {
 	// is the implementation writing json or reading it.
 	IsEncoding() bool
-	// some types may need special handling in a particular scenarios
-	CustomizedMarshal(typeName string) (CustomizedMarshal, bool)
 	// sets a unique id for the next block or primitive value.
 	SetCursor(id string)
 	// report an error
@@ -61,6 +59,7 @@ type FlowBlock interface {
 	Block
 	GetLede() string
 	GetFlow() interface{}
+	SetFlow(interface{}) bool
 }
 
 // selects one of a closed set of possible values

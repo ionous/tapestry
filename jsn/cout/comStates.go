@@ -1,6 +1,8 @@
 package cout
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/jsn/chart"
 	"github.com/ionous/errutil"
@@ -13,8 +15,8 @@ type xEncoder struct {
 
 // NewEncoder create an empty serializer to produce compact script data.
 func Encode(in jsn.Marshalee) (ret interface{}, err error) {
-	m := xEncoder{Machine: chart.MakeEncoder(custom)}
-	next := m.newBlock()
+	m := xEncoder{Machine: chart.MakeEncoder()}
+	next := m.newValue(m.newBlock())
 	next.OnCommit = func(v interface{}) {
 		if ret != nil {
 			m.Error(errutil.New("can only write data once"))
@@ -58,9 +60,17 @@ func (m *xEncoder) newBlock() *chart.StateMix {
 func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
-	next.OnMap = func(lede, _ string) bool {
-		m.PushState(m.newFlow(newComFlow(lede)))
-		return true
+	next.OnMap = func(typeName string, block jsn.FlowBlock) (okay bool) {
+		if e := m.customFlow(block); e != nil {
+			var unhandled chart.Unhandled
+			if !errors.As(e, &unhandled) {
+				m.Error(e)
+			} else {
+				m.PushState(m.newFlow(newComFlow(block.GetLede())))
+				okay = true // return true to indicate caller should descend into the flow
+			}
+		}
+		return
 	}
 	next.OnSlot = func(_ string, slot jsn.SlotBlock) (okay bool) {
 		if _, ok := slot.GetSlot(); ok {

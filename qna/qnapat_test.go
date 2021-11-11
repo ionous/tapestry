@@ -42,8 +42,8 @@ func TestSayMe(t *testing.T) {
 	run := NewRuntime(db, []map[uint64]interface{}{
 		rt.Signatures,
 		core.Signatures, {
-			cin.Hash("SayMe:"): (*debug.SayMe)(nil),
-			cin.Hash("Match:"): (*debug.MatchNumber)(nil),
+			cin.Hash("SayMe:"):       (*debug.SayMe)(nil),
+			cin.Hash("MatchNumber:"): (*debug.MatchNumber)(nil),
 		}})
 	for i, expect := range []string{"One!", "Two!", "Three!", "Not between 1 and 3."} {
 		var buf bytes.Buffer

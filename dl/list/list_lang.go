@@ -33,8 +33,10 @@ func (op *AsNum) Marshal(m jsn.Marshaler) error {
 
 type AsNum_Slice []AsNum
 
-func (op *AsNum_Slice) GetType() string {
-	return AsNum_Type
+func (op *AsNum_Slice) GetType() string { return AsNum_Type }
+
+func (op *AsNum_Slice) Marshal(m jsn.Marshaler) error {
+	return AsNum_Repeats_Marshal(m, (*[]AsNum)(op))
 }
 
 func (op *AsNum_Slice) GetSize() (ret int) {
@@ -69,6 +71,18 @@ func AsNum_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsNum) (err error) {
 	return
 }
 
+type AsNum_Flow struct{ ptr *AsNum }
+
+func (n AsNum_Flow) GetType() string      { return AsNum_Type }
+func (n AsNum_Flow) GetLede() string      { return AsNum_Type }
+func (n AsNum_Flow) GetFlow() interface{} { return n.ptr }
+func (n AsNum_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*AsNum); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func AsNum_Optional_Marshal(m jsn.Marshaler, pv **AsNum) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = AsNum_Marshal(m, *pv)
@@ -82,7 +96,7 @@ func AsNum_Optional_Marshal(m jsn.Marshaler, pv **AsNum) (err error) {
 }
 
 func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(AsNum_Type, AsNum_Type, val)); err == nil {
+	if err = m.MarshalBlock(AsNum_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AsNum_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -118,8 +132,10 @@ func (op *AsRec) Marshal(m jsn.Marshaler) error {
 
 type AsRec_Slice []AsRec
 
-func (op *AsRec_Slice) GetType() string {
-	return AsRec_Type
+func (op *AsRec_Slice) GetType() string { return AsRec_Type }
+
+func (op *AsRec_Slice) Marshal(m jsn.Marshaler) error {
+	return AsRec_Repeats_Marshal(m, (*[]AsRec)(op))
 }
 
 func (op *AsRec_Slice) GetSize() (ret int) {
@@ -154,6 +170,18 @@ func AsRec_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsRec) (err error) {
 	return
 }
 
+type AsRec_Flow struct{ ptr *AsRec }
+
+func (n AsRec_Flow) GetType() string      { return AsRec_Type }
+func (n AsRec_Flow) GetLede() string      { return AsRec_Type }
+func (n AsRec_Flow) GetFlow() interface{} { return n.ptr }
+func (n AsRec_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*AsRec); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func AsRec_Optional_Marshal(m jsn.Marshaler, pv **AsRec) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = AsRec_Marshal(m, *pv)
@@ -167,7 +195,7 @@ func AsRec_Optional_Marshal(m jsn.Marshaler, pv **AsRec) (err error) {
 }
 
 func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(AsRec_Type, AsRec_Type, val)); err == nil {
+	if err = m.MarshalBlock(AsRec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AsRec_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -203,8 +231,10 @@ func (op *AsTxt) Marshal(m jsn.Marshaler) error {
 
 type AsTxt_Slice []AsTxt
 
-func (op *AsTxt_Slice) GetType() string {
-	return AsTxt_Type
+func (op *AsTxt_Slice) GetType() string { return AsTxt_Type }
+
+func (op *AsTxt_Slice) Marshal(m jsn.Marshaler) error {
+	return AsTxt_Repeats_Marshal(m, (*[]AsTxt)(op))
 }
 
 func (op *AsTxt_Slice) GetSize() (ret int) {
@@ -239,6 +269,18 @@ func AsTxt_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsTxt) (err error) {
 	return
 }
 
+type AsTxt_Flow struct{ ptr *AsTxt }
+
+func (n AsTxt_Flow) GetType() string      { return AsTxt_Type }
+func (n AsTxt_Flow) GetLede() string      { return AsTxt_Type }
+func (n AsTxt_Flow) GetFlow() interface{} { return n.ptr }
+func (n AsTxt_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*AsTxt); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func AsTxt_Optional_Marshal(m jsn.Marshaler, pv **AsTxt) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = AsTxt_Marshal(m, *pv)
@@ -252,7 +294,7 @@ func AsTxt_Optional_Marshal(m jsn.Marshaler, pv **AsTxt) (err error) {
 }
 
 func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(AsTxt_Type, AsTxt_Type, val)); err == nil {
+	if err = m.MarshalBlock(AsTxt_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AsTxt_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -291,8 +333,10 @@ func (op *EraseEdge) Marshal(m jsn.Marshaler) error {
 
 type EraseEdge_Slice []EraseEdge
 
-func (op *EraseEdge_Slice) GetType() string {
-	return EraseEdge_Type
+func (op *EraseEdge_Slice) GetType() string { return EraseEdge_Type }
+
+func (op *EraseEdge_Slice) Marshal(m jsn.Marshaler) error {
+	return EraseEdge_Repeats_Marshal(m, (*[]EraseEdge)(op))
 }
 
 func (op *EraseEdge_Slice) GetSize() (ret int) {
@@ -327,6 +371,18 @@ func EraseEdge_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EraseEdge) (err e
 	return
 }
 
+type EraseEdge_Flow struct{ ptr *EraseEdge }
+
+func (n EraseEdge_Flow) GetType() string      { return EraseEdge_Type }
+func (n EraseEdge_Flow) GetLede() string      { return "erase" }
+func (n EraseEdge_Flow) GetFlow() interface{} { return n.ptr }
+func (n EraseEdge_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EraseEdge); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func EraseEdge_Optional_Marshal(m jsn.Marshaler, pv **EraseEdge) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = EraseEdge_Marshal(m, *pv)
@@ -340,7 +396,7 @@ func EraseEdge_Optional_Marshal(m jsn.Marshaler, pv **EraseEdge) (err error) {
 }
 
 func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("erase", EraseEdge_Type, val)); err == nil {
+	if err = m.MarshalBlock(EraseEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EraseEdge_Field_From)
 		if e0 == nil {
 			e0 = ListSource_Marshal(m, &val.From)
@@ -388,8 +444,10 @@ func (op *EraseIndex) Marshal(m jsn.Marshaler) error {
 
 type EraseIndex_Slice []EraseIndex
 
-func (op *EraseIndex_Slice) GetType() string {
-	return EraseIndex_Type
+func (op *EraseIndex_Slice) GetType() string { return EraseIndex_Type }
+
+func (op *EraseIndex_Slice) Marshal(m jsn.Marshaler) error {
+	return EraseIndex_Repeats_Marshal(m, (*[]EraseIndex)(op))
 }
 
 func (op *EraseIndex_Slice) GetSize() (ret int) {
@@ -424,6 +482,18 @@ func EraseIndex_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EraseIndex) (err
 	return
 }
 
+type EraseIndex_Flow struct{ ptr *EraseIndex }
+
+func (n EraseIndex_Flow) GetType() string      { return EraseIndex_Type }
+func (n EraseIndex_Flow) GetLede() string      { return "erase" }
+func (n EraseIndex_Flow) GetFlow() interface{} { return n.ptr }
+func (n EraseIndex_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EraseIndex); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func EraseIndex_Optional_Marshal(m jsn.Marshaler, pv **EraseIndex) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = EraseIndex_Marshal(m, *pv)
@@ -437,7 +507,7 @@ func EraseIndex_Optional_Marshal(m jsn.Marshaler, pv **EraseIndex) (err error) {
 }
 
 func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("erase", EraseIndex_Type, val)); err == nil {
+	if err = m.MarshalBlock(EraseIndex_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EraseIndex_Field_Count)
 		if e0 == nil {
 			e0 = rt.NumberEval_Marshal(m, &val.Count)
@@ -495,8 +565,10 @@ func (op *Erasing) Marshal(m jsn.Marshaler) error {
 
 type Erasing_Slice []Erasing
 
-func (op *Erasing_Slice) GetType() string {
-	return Erasing_Type
+func (op *Erasing_Slice) GetType() string { return Erasing_Type }
+
+func (op *Erasing_Slice) Marshal(m jsn.Marshaler) error {
+	return Erasing_Repeats_Marshal(m, (*[]Erasing)(op))
 }
 
 func (op *Erasing_Slice) GetSize() (ret int) {
@@ -531,6 +603,18 @@ func Erasing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Erasing) (err error
 	return
 }
 
+type Erasing_Flow struct{ ptr *Erasing }
+
+func (n Erasing_Flow) GetType() string      { return Erasing_Type }
+func (n Erasing_Flow) GetLede() string      { return Erasing_Type }
+func (n Erasing_Flow) GetFlow() interface{} { return n.ptr }
+func (n Erasing_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Erasing); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Erasing_Optional_Marshal(m jsn.Marshaler, pv **Erasing) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Erasing_Marshal(m, *pv)
@@ -544,7 +628,7 @@ func Erasing_Optional_Marshal(m jsn.Marshaler, pv **Erasing) (err error) {
 }
 
 func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Erasing_Type, Erasing_Type, val)); err == nil {
+	if err = m.MarshalBlock(Erasing_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Erasing_Field_Count)
 		if e0 == nil {
 			e0 = rt.NumberEval_Marshal(m, &val.Count)
@@ -617,8 +701,10 @@ func (op *ErasingEdge) Marshal(m jsn.Marshaler) error {
 
 type ErasingEdge_Slice []ErasingEdge
 
-func (op *ErasingEdge_Slice) GetType() string {
-	return ErasingEdge_Type
+func (op *ErasingEdge_Slice) GetType() string { return ErasingEdge_Type }
+
+func (op *ErasingEdge_Slice) Marshal(m jsn.Marshaler) error {
+	return ErasingEdge_Repeats_Marshal(m, (*[]ErasingEdge)(op))
 }
 
 func (op *ErasingEdge_Slice) GetSize() (ret int) {
@@ -653,6 +739,18 @@ func ErasingEdge_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ErasingEdge) (e
 	return
 }
 
+type ErasingEdge_Flow struct{ ptr *ErasingEdge }
+
+func (n ErasingEdge_Flow) GetType() string      { return ErasingEdge_Type }
+func (n ErasingEdge_Flow) GetLede() string      { return "erasing" }
+func (n ErasingEdge_Flow) GetFlow() interface{} { return n.ptr }
+func (n ErasingEdge_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ErasingEdge); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ErasingEdge_Optional_Marshal(m jsn.Marshaler, pv **ErasingEdge) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ErasingEdge_Marshal(m, *pv)
@@ -666,7 +764,7 @@ func ErasingEdge_Optional_Marshal(m jsn.Marshaler, pv **ErasingEdge) (err error)
 }
 
 func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("erasing", ErasingEdge_Type, val)); err == nil {
+	if err = m.MarshalBlock(ErasingEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ErasingEdge_Field_From)
 		if e0 == nil {
 			e0 = ListSource_Marshal(m, &val.From)
@@ -731,8 +829,10 @@ func (op *FromNumList) Marshal(m jsn.Marshaler) error {
 
 type FromNumList_Slice []FromNumList
 
-func (op *FromNumList_Slice) GetType() string {
-	return FromNumList_Type
+func (op *FromNumList_Slice) GetType() string { return FromNumList_Type }
+
+func (op *FromNumList_Slice) Marshal(m jsn.Marshaler) error {
+	return FromNumList_Repeats_Marshal(m, (*[]FromNumList)(op))
 }
 
 func (op *FromNumList_Slice) GetSize() (ret int) {
@@ -767,6 +867,18 @@ func FromNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromNumList) (e
 	return
 }
 
+type FromNumList_Flow struct{ ptr *FromNumList }
+
+func (n FromNumList_Flow) GetType() string      { return FromNumList_Type }
+func (n FromNumList_Flow) GetLede() string      { return "var_of_nums" }
+func (n FromNumList_Flow) GetFlow() interface{} { return n.ptr }
+func (n FromNumList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*FromNumList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func FromNumList_Optional_Marshal(m jsn.Marshaler, pv **FromNumList) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = FromNumList_Marshal(m, *pv)
@@ -780,7 +892,7 @@ func FromNumList_Optional_Marshal(m jsn.Marshaler, pv **FromNumList) (err error)
 }
 
 func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("var_of_nums", FromNumList_Type, val)); err == nil {
+	if err = m.MarshalBlock(FromNumList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromNumList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -817,8 +929,10 @@ func (op *FromRecList) Marshal(m jsn.Marshaler) error {
 
 type FromRecList_Slice []FromRecList
 
-func (op *FromRecList_Slice) GetType() string {
-	return FromRecList_Type
+func (op *FromRecList_Slice) GetType() string { return FromRecList_Type }
+
+func (op *FromRecList_Slice) Marshal(m jsn.Marshaler) error {
+	return FromRecList_Repeats_Marshal(m, (*[]FromRecList)(op))
 }
 
 func (op *FromRecList_Slice) GetSize() (ret int) {
@@ -853,6 +967,18 @@ func FromRecList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRecList) (e
 	return
 }
 
+type FromRecList_Flow struct{ ptr *FromRecList }
+
+func (n FromRecList_Flow) GetType() string      { return FromRecList_Type }
+func (n FromRecList_Flow) GetLede() string      { return "var_of_recs" }
+func (n FromRecList_Flow) GetFlow() interface{} { return n.ptr }
+func (n FromRecList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*FromRecList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func FromRecList_Optional_Marshal(m jsn.Marshaler, pv **FromRecList) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = FromRecList_Marshal(m, *pv)
@@ -866,7 +992,7 @@ func FromRecList_Optional_Marshal(m jsn.Marshaler, pv **FromRecList) (err error)
 }
 
 func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("var_of_recs", FromRecList_Type, val)); err == nil {
+	if err = m.MarshalBlock(FromRecList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromRecList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -903,8 +1029,10 @@ func (op *FromTxtList) Marshal(m jsn.Marshaler) error {
 
 type FromTxtList_Slice []FromTxtList
 
-func (op *FromTxtList_Slice) GetType() string {
-	return FromTxtList_Type
+func (op *FromTxtList_Slice) GetType() string { return FromTxtList_Type }
+
+func (op *FromTxtList_Slice) Marshal(m jsn.Marshaler) error {
+	return FromTxtList_Repeats_Marshal(m, (*[]FromTxtList)(op))
 }
 
 func (op *FromTxtList_Slice) GetSize() (ret int) {
@@ -939,6 +1067,18 @@ func FromTxtList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromTxtList) (e
 	return
 }
 
+type FromTxtList_Flow struct{ ptr *FromTxtList }
+
+func (n FromTxtList_Flow) GetType() string      { return FromTxtList_Type }
+func (n FromTxtList_Flow) GetLede() string      { return "var_of_txts" }
+func (n FromTxtList_Flow) GetFlow() interface{} { return n.ptr }
+func (n FromTxtList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*FromTxtList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func FromTxtList_Optional_Marshal(m jsn.Marshaler, pv **FromTxtList) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = FromTxtList_Marshal(m, *pv)
@@ -952,7 +1092,7 @@ func FromTxtList_Optional_Marshal(m jsn.Marshaler, pv **FromTxtList) (err error)
 }
 
 func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("var_of_txts", FromTxtList_Type, val)); err == nil {
+	if err = m.MarshalBlock(FromTxtList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromTxtList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -989,8 +1129,10 @@ func (op *IntoNumList) Marshal(m jsn.Marshaler) error {
 
 type IntoNumList_Slice []IntoNumList
 
-func (op *IntoNumList_Slice) GetType() string {
-	return IntoNumList_Type
+func (op *IntoNumList_Slice) GetType() string { return IntoNumList_Type }
+
+func (op *IntoNumList_Slice) Marshal(m jsn.Marshaler) error {
+	return IntoNumList_Repeats_Marshal(m, (*[]IntoNumList)(op))
 }
 
 func (op *IntoNumList_Slice) GetSize() (ret int) {
@@ -1025,6 +1167,18 @@ func IntoNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoNumList) (e
 	return
 }
 
+type IntoNumList_Flow struct{ ptr *IntoNumList }
+
+func (n IntoNumList_Flow) GetType() string      { return IntoNumList_Type }
+func (n IntoNumList_Flow) GetLede() string      { return "into_nums" }
+func (n IntoNumList_Flow) GetFlow() interface{} { return n.ptr }
+func (n IntoNumList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*IntoNumList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func IntoNumList_Optional_Marshal(m jsn.Marshaler, pv **IntoNumList) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = IntoNumList_Marshal(m, *pv)
@@ -1038,7 +1192,7 @@ func IntoNumList_Optional_Marshal(m jsn.Marshaler, pv **IntoNumList) (err error)
 }
 
 func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("into_nums", IntoNumList_Type, val)); err == nil {
+	if err = m.MarshalBlock(IntoNumList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoNumList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -1075,8 +1229,10 @@ func (op *IntoRecList) Marshal(m jsn.Marshaler) error {
 
 type IntoRecList_Slice []IntoRecList
 
-func (op *IntoRecList_Slice) GetType() string {
-	return IntoRecList_Type
+func (op *IntoRecList_Slice) GetType() string { return IntoRecList_Type }
+
+func (op *IntoRecList_Slice) Marshal(m jsn.Marshaler) error {
+	return IntoRecList_Repeats_Marshal(m, (*[]IntoRecList)(op))
 }
 
 func (op *IntoRecList_Slice) GetSize() (ret int) {
@@ -1111,6 +1267,18 @@ func IntoRecList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoRecList) (e
 	return
 }
 
+type IntoRecList_Flow struct{ ptr *IntoRecList }
+
+func (n IntoRecList_Flow) GetType() string      { return IntoRecList_Type }
+func (n IntoRecList_Flow) GetLede() string      { return "into_recs" }
+func (n IntoRecList_Flow) GetFlow() interface{} { return n.ptr }
+func (n IntoRecList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*IntoRecList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func IntoRecList_Optional_Marshal(m jsn.Marshaler, pv **IntoRecList) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = IntoRecList_Marshal(m, *pv)
@@ -1124,7 +1292,7 @@ func IntoRecList_Optional_Marshal(m jsn.Marshaler, pv **IntoRecList) (err error)
 }
 
 func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("into_recs", IntoRecList_Type, val)); err == nil {
+	if err = m.MarshalBlock(IntoRecList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoRecList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -1161,8 +1329,10 @@ func (op *IntoTxtList) Marshal(m jsn.Marshaler) error {
 
 type IntoTxtList_Slice []IntoTxtList
 
-func (op *IntoTxtList_Slice) GetType() string {
-	return IntoTxtList_Type
+func (op *IntoTxtList_Slice) GetType() string { return IntoTxtList_Type }
+
+func (op *IntoTxtList_Slice) Marshal(m jsn.Marshaler) error {
+	return IntoTxtList_Repeats_Marshal(m, (*[]IntoTxtList)(op))
 }
 
 func (op *IntoTxtList_Slice) GetSize() (ret int) {
@@ -1197,6 +1367,18 @@ func IntoTxtList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoTxtList) (e
 	return
 }
 
+type IntoTxtList_Flow struct{ ptr *IntoTxtList }
+
+func (n IntoTxtList_Flow) GetType() string      { return IntoTxtList_Type }
+func (n IntoTxtList_Flow) GetLede() string      { return "into_txts" }
+func (n IntoTxtList_Flow) GetFlow() interface{} { return n.ptr }
+func (n IntoTxtList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*IntoTxtList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func IntoTxtList_Optional_Marshal(m jsn.Marshaler, pv **IntoTxtList) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = IntoTxtList_Marshal(m, *pv)
@@ -1210,7 +1392,7 @@ func IntoTxtList_Optional_Marshal(m jsn.Marshaler, pv **IntoTxtList) (err error)
 }
 
 func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("into_txts", IntoTxtList_Type, val)); err == nil {
+	if err = m.MarshalBlock(IntoTxtList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoTxtList_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -1249,8 +1431,10 @@ func (op *ListAt) Marshal(m jsn.Marshaler) error {
 
 type ListAt_Slice []ListAt
 
-func (op *ListAt_Slice) GetType() string {
-	return ListAt_Type
+func (op *ListAt_Slice) GetType() string { return ListAt_Type }
+
+func (op *ListAt_Slice) Marshal(m jsn.Marshaler) error {
+	return ListAt_Repeats_Marshal(m, (*[]ListAt)(op))
 }
 
 func (op *ListAt_Slice) GetSize() (ret int) {
@@ -1285,6 +1469,18 @@ func ListAt_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListAt) (err error) 
 	return
 }
 
+type ListAt_Flow struct{ ptr *ListAt }
+
+func (n ListAt_Flow) GetType() string      { return ListAt_Type }
+func (n ListAt_Flow) GetLede() string      { return "get" }
+func (n ListAt_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListAt_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListAt); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListAt_Optional_Marshal(m jsn.Marshaler, pv **ListAt) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListAt_Marshal(m, *pv)
@@ -1298,7 +1494,7 @@ func ListAt_Optional_Marshal(m jsn.Marshaler, pv **ListAt) (err error) {
 }
 
 func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("get", ListAt_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListAt_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListAt_Field_List)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.List)
@@ -1348,8 +1544,10 @@ func (op *ListEach) Marshal(m jsn.Marshaler) error {
 
 type ListEach_Slice []ListEach
 
-func (op *ListEach_Slice) GetType() string {
-	return ListEach_Type
+func (op *ListEach_Slice) GetType() string { return ListEach_Type }
+
+func (op *ListEach_Slice) Marshal(m jsn.Marshaler) error {
+	return ListEach_Repeats_Marshal(m, (*[]ListEach)(op))
 }
 
 func (op *ListEach_Slice) GetSize() (ret int) {
@@ -1384,6 +1582,18 @@ func ListEach_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListEach) (err err
 	return
 }
 
+type ListEach_Flow struct{ ptr *ListEach }
+
+func (n ListEach_Flow) GetType() string      { return ListEach_Type }
+func (n ListEach_Flow) GetLede() string      { return "repeating" }
+func (n ListEach_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListEach_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListEach); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListEach_Optional_Marshal(m jsn.Marshaler, pv **ListEach) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListEach_Marshal(m, *pv)
@@ -1397,7 +1607,7 @@ func ListEach_Optional_Marshal(m jsn.Marshaler, pv **ListEach) (err error) {
 }
 
 func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("repeating", ListEach_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListEach_Flow{val}); err == nil {
 		e0 := m.MarshalKey("across", ListEach_Field_List)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.List)
@@ -1457,8 +1667,10 @@ func (op *ListFind) Marshal(m jsn.Marshaler) error {
 
 type ListFind_Slice []ListFind
 
-func (op *ListFind_Slice) GetType() string {
-	return ListFind_Type
+func (op *ListFind_Slice) GetType() string { return ListFind_Type }
+
+func (op *ListFind_Slice) Marshal(m jsn.Marshaler) error {
+	return ListFind_Repeats_Marshal(m, (*[]ListFind)(op))
 }
 
 func (op *ListFind_Slice) GetSize() (ret int) {
@@ -1493,6 +1705,18 @@ func ListFind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFind) (err err
 	return
 }
 
+type ListFind_Flow struct{ ptr *ListFind }
+
+func (n ListFind_Flow) GetType() string      { return ListFind_Type }
+func (n ListFind_Flow) GetLede() string      { return "find" }
+func (n ListFind_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListFind_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListFind); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListFind_Optional_Marshal(m jsn.Marshaler, pv **ListFind) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListFind_Marshal(m, *pv)
@@ -1506,7 +1730,7 @@ func ListFind_Optional_Marshal(m jsn.Marshaler, pv **ListFind) (err error) {
 }
 
 func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("find", ListFind_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListFind_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListFind_Field_Value)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.Value)
@@ -1553,8 +1777,10 @@ func (op *ListGather) Marshal(m jsn.Marshaler) error {
 
 type ListGather_Slice []ListGather
 
-func (op *ListGather_Slice) GetType() string {
-	return ListGather_Type
+func (op *ListGather_Slice) GetType() string { return ListGather_Type }
+
+func (op *ListGather_Slice) Marshal(m jsn.Marshaler) error {
+	return ListGather_Repeats_Marshal(m, (*[]ListGather)(op))
 }
 
 func (op *ListGather_Slice) GetSize() (ret int) {
@@ -1589,6 +1815,18 @@ func ListGather_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListGather) (err
 	return
 }
 
+type ListGather_Flow struct{ ptr *ListGather }
+
+func (n ListGather_Flow) GetType() string      { return ListGather_Type }
+func (n ListGather_Flow) GetLede() string      { return "gather" }
+func (n ListGather_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListGather_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListGather); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListGather_Optional_Marshal(m jsn.Marshaler, pv **ListGather) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListGather_Marshal(m, *pv)
@@ -1602,7 +1840,7 @@ func ListGather_Optional_Marshal(m jsn.Marshaler, pv **ListGather) (err error) {
 }
 
 func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("gather", ListGather_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListGather_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListGather_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -1657,8 +1895,10 @@ func ListIterator_Marshal(m jsn.Marshaler, ptr *ListIterator) (err error) {
 
 type ListIterator_Slice []ListIterator
 
-func (op *ListIterator_Slice) GetType() string {
-	return ListIterator_Type
+func (op *ListIterator_Slice) GetType() string { return ListIterator_Type }
+
+func (op *ListIterator_Slice) Marshal(m jsn.Marshaler) error {
+	return ListIterator_Repeats_Marshal(m, (*[]ListIterator)(op))
 }
 
 func (op *ListIterator_Slice) GetSize() (ret int) {
@@ -1717,8 +1957,10 @@ func (op *ListLen) Marshal(m jsn.Marshaler) error {
 
 type ListLen_Slice []ListLen
 
-func (op *ListLen_Slice) GetType() string {
-	return ListLen_Type
+func (op *ListLen_Slice) GetType() string { return ListLen_Type }
+
+func (op *ListLen_Slice) Marshal(m jsn.Marshaler) error {
+	return ListLen_Repeats_Marshal(m, (*[]ListLen)(op))
 }
 
 func (op *ListLen_Slice) GetSize() (ret int) {
@@ -1753,6 +1995,18 @@ func ListLen_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListLen) (err error
 	return
 }
 
+type ListLen_Flow struct{ ptr *ListLen }
+
+func (n ListLen_Flow) GetType() string      { return ListLen_Type }
+func (n ListLen_Flow) GetLede() string      { return "len" }
+func (n ListLen_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListLen_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListLen); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListLen_Optional_Marshal(m jsn.Marshaler, pv **ListLen) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListLen_Marshal(m, *pv)
@@ -1766,7 +2020,7 @@ func ListLen_Optional_Marshal(m jsn.Marshaler, pv **ListLen) (err error) {
 }
 
 func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("len", ListLen_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListLen_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListLen_Field_List)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.List)
@@ -1807,8 +2061,10 @@ func (op *ListMap) Marshal(m jsn.Marshaler) error {
 
 type ListMap_Slice []ListMap
 
-func (op *ListMap_Slice) GetType() string {
-	return ListMap_Type
+func (op *ListMap_Slice) GetType() string { return ListMap_Type }
+
+func (op *ListMap_Slice) Marshal(m jsn.Marshaler) error {
+	return ListMap_Repeats_Marshal(m, (*[]ListMap)(op))
 }
 
 func (op *ListMap_Slice) GetSize() (ret int) {
@@ -1843,6 +2099,18 @@ func ListMap_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListMap) (err error
 	return
 }
 
+type ListMap_Flow struct{ ptr *ListMap }
+
+func (n ListMap_Flow) GetType() string      { return ListMap_Type }
+func (n ListMap_Flow) GetLede() string      { return "map" }
+func (n ListMap_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListMap_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListMap); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListMap_Optional_Marshal(m jsn.Marshaler, pv **ListMap) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListMap_Marshal(m, *pv)
@@ -1856,7 +2124,7 @@ func ListMap_Optional_Marshal(m jsn.Marshaler, pv **ListMap) (err error) {
 }
 
 func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("map", ListMap_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListMap_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListMap_Field_ToList)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.ToList)
@@ -1911,8 +2179,10 @@ func (op *ListReduce) Marshal(m jsn.Marshaler) error {
 
 type ListReduce_Slice []ListReduce
 
-func (op *ListReduce_Slice) GetType() string {
-	return ListReduce_Type
+func (op *ListReduce_Slice) GetType() string { return ListReduce_Type }
+
+func (op *ListReduce_Slice) Marshal(m jsn.Marshaler) error {
+	return ListReduce_Repeats_Marshal(m, (*[]ListReduce)(op))
 }
 
 func (op *ListReduce_Slice) GetSize() (ret int) {
@@ -1947,6 +2217,18 @@ func ListReduce_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListReduce) (err
 	return
 }
 
+type ListReduce_Flow struct{ ptr *ListReduce }
+
+func (n ListReduce_Flow) GetType() string      { return ListReduce_Type }
+func (n ListReduce_Flow) GetLede() string      { return "reduce" }
+func (n ListReduce_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListReduce_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListReduce); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListReduce_Optional_Marshal(m jsn.Marshaler, pv **ListReduce) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListReduce_Marshal(m, *pv)
@@ -1960,7 +2242,7 @@ func ListReduce_Optional_Marshal(m jsn.Marshaler, pv **ListReduce) (err error) {
 }
 
 func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("reduce", ListReduce_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListReduce_Flow{val}); err == nil {
 		e0 := m.MarshalKey("into", ListReduce_Field_IntoValue)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.IntoValue)
@@ -2011,8 +2293,10 @@ func (op *ListReverse) Marshal(m jsn.Marshaler) error {
 
 type ListReverse_Slice []ListReverse
 
-func (op *ListReverse_Slice) GetType() string {
-	return ListReverse_Type
+func (op *ListReverse_Slice) GetType() string { return ListReverse_Type }
+
+func (op *ListReverse_Slice) Marshal(m jsn.Marshaler) error {
+	return ListReverse_Repeats_Marshal(m, (*[]ListReverse)(op))
 }
 
 func (op *ListReverse_Slice) GetSize() (ret int) {
@@ -2047,6 +2331,18 @@ func ListReverse_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListReverse) (e
 	return
 }
 
+type ListReverse_Flow struct{ ptr *ListReverse }
+
+func (n ListReverse_Flow) GetType() string      { return ListReverse_Type }
+func (n ListReverse_Flow) GetLede() string      { return "reverse" }
+func (n ListReverse_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListReverse_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListReverse); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListReverse_Optional_Marshal(m jsn.Marshaler, pv **ListReverse) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListReverse_Marshal(m, *pv)
@@ -2060,7 +2356,7 @@ func ListReverse_Optional_Marshal(m jsn.Marshaler, pv **ListReverse) (err error)
 }
 
 func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("reverse", ListReverse_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListReverse_Flow{val}); err == nil {
 		e0 := m.MarshalKey("list", ListReverse_Field_List)
 		if e0 == nil {
 			e0 = ListSource_Marshal(m, &val.List)
@@ -2101,8 +2397,10 @@ func (op *ListSet) Marshal(m jsn.Marshaler) error {
 
 type ListSet_Slice []ListSet
 
-func (op *ListSet_Slice) GetType() string {
-	return ListSet_Type
+func (op *ListSet_Slice) GetType() string { return ListSet_Type }
+
+func (op *ListSet_Slice) Marshal(m jsn.Marshaler) error {
+	return ListSet_Repeats_Marshal(m, (*[]ListSet)(op))
 }
 
 func (op *ListSet_Slice) GetSize() (ret int) {
@@ -2137,6 +2435,18 @@ func ListSet_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSet) (err error
 	return
 }
 
+type ListSet_Flow struct{ ptr *ListSet }
+
+func (n ListSet_Flow) GetType() string      { return ListSet_Type }
+func (n ListSet_Flow) GetLede() string      { return "set" }
+func (n ListSet_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListSet_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListSet); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListSet_Optional_Marshal(m jsn.Marshaler, pv **ListSet) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListSet_Marshal(m, *pv)
@@ -2150,7 +2460,7 @@ func ListSet_Optional_Marshal(m jsn.Marshaler, pv **ListSet) (err error) {
 }
 
 func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("set", ListSet_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListSet_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSet_Field_List)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.List)
@@ -2205,8 +2515,10 @@ func (op *ListSlice) Marshal(m jsn.Marshaler) error {
 
 type ListSlice_Slice []ListSlice
 
-func (op *ListSlice_Slice) GetType() string {
-	return ListSlice_Type
+func (op *ListSlice_Slice) GetType() string { return ListSlice_Type }
+
+func (op *ListSlice_Slice) Marshal(m jsn.Marshaler) error {
+	return ListSlice_Repeats_Marshal(m, (*[]ListSlice)(op))
 }
 
 func (op *ListSlice_Slice) GetSize() (ret int) {
@@ -2241,6 +2553,18 @@ func ListSlice_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSlice) (err e
 	return
 }
 
+type ListSlice_Flow struct{ ptr *ListSlice }
+
+func (n ListSlice_Flow) GetType() string      { return ListSlice_Type }
+func (n ListSlice_Flow) GetLede() string      { return "slice" }
+func (n ListSlice_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListSlice_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListSlice); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListSlice_Optional_Marshal(m jsn.Marshaler, pv **ListSlice) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListSlice_Marshal(m, *pv)
@@ -2254,7 +2578,7 @@ func ListSlice_Optional_Marshal(m jsn.Marshaler, pv **ListSlice) (err error) {
 }
 
 func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("slice", ListSlice_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListSlice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSlice_Field_List)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.List)
@@ -2309,8 +2633,10 @@ func (op *ListSortNumbers) Marshal(m jsn.Marshaler) error {
 
 type ListSortNumbers_Slice []ListSortNumbers
 
-func (op *ListSortNumbers_Slice) GetType() string {
-	return ListSortNumbers_Type
+func (op *ListSortNumbers_Slice) GetType() string { return ListSortNumbers_Type }
+
+func (op *ListSortNumbers_Slice) Marshal(m jsn.Marshaler) error {
+	return ListSortNumbers_Repeats_Marshal(m, (*[]ListSortNumbers)(op))
 }
 
 func (op *ListSortNumbers_Slice) GetSize() (ret int) {
@@ -2345,6 +2671,18 @@ func ListSortNumbers_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSortNum
 	return
 }
 
+type ListSortNumbers_Flow struct{ ptr *ListSortNumbers }
+
+func (n ListSortNumbers_Flow) GetType() string      { return ListSortNumbers_Type }
+func (n ListSortNumbers_Flow) GetLede() string      { return "sort_numbers" }
+func (n ListSortNumbers_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListSortNumbers_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListSortNumbers); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListSortNumbers_Optional_Marshal(m jsn.Marshaler, pv **ListSortNumbers) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListSortNumbers_Marshal(m, *pv)
@@ -2358,7 +2696,7 @@ func ListSortNumbers_Optional_Marshal(m jsn.Marshaler, pv **ListSortNumbers) (er
 }
 
 func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("sort_numbers", ListSortNumbers_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListSortNumbers_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortNumbers_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -2415,8 +2753,10 @@ func (op *ListSortText) Marshal(m jsn.Marshaler) error {
 
 type ListSortText_Slice []ListSortText
 
-func (op *ListSortText_Slice) GetType() string {
-	return ListSortText_Type
+func (op *ListSortText_Slice) GetType() string { return ListSortText_Type }
+
+func (op *ListSortText_Slice) Marshal(m jsn.Marshaler) error {
+	return ListSortText_Repeats_Marshal(m, (*[]ListSortText)(op))
 }
 
 func (op *ListSortText_Slice) GetSize() (ret int) {
@@ -2451,6 +2791,18 @@ func ListSortText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSortText) 
 	return
 }
 
+type ListSortText_Flow struct{ ptr *ListSortText }
+
+func (n ListSortText_Flow) GetType() string      { return ListSortText_Type }
+func (n ListSortText_Flow) GetLede() string      { return "sort_texts" }
+func (n ListSortText_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListSortText_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListSortText); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListSortText_Optional_Marshal(m jsn.Marshaler, pv **ListSortText) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListSortText_Marshal(m, *pv)
@@ -2464,7 +2816,7 @@ func ListSortText_Optional_Marshal(m jsn.Marshaler, pv **ListSortText) (err erro
 }
 
 func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("sort_texts", ListSortText_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListSortText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortText_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -2524,8 +2876,10 @@ func (op *ListSortUsing) Marshal(m jsn.Marshaler) error {
 
 type ListSortUsing_Slice []ListSortUsing
 
-func (op *ListSortUsing_Slice) GetType() string {
-	return ListSortUsing_Type
+func (op *ListSortUsing_Slice) GetType() string { return ListSortUsing_Type }
+
+func (op *ListSortUsing_Slice) Marshal(m jsn.Marshaler) error {
+	return ListSortUsing_Repeats_Marshal(m, (*[]ListSortUsing)(op))
 }
 
 func (op *ListSortUsing_Slice) GetSize() (ret int) {
@@ -2560,6 +2914,18 @@ func ListSortUsing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSortUsing
 	return
 }
 
+type ListSortUsing_Flow struct{ ptr *ListSortUsing }
+
+func (n ListSortUsing_Flow) GetType() string      { return ListSortUsing_Type }
+func (n ListSortUsing_Flow) GetLede() string      { return "sort" }
+func (n ListSortUsing_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListSortUsing_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListSortUsing); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListSortUsing_Optional_Marshal(m jsn.Marshaler, pv **ListSortUsing) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListSortUsing_Marshal(m, *pv)
@@ -2573,7 +2939,7 @@ func ListSortUsing_Optional_Marshal(m jsn.Marshaler, pv **ListSortUsing) (err er
 }
 
 func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("sort", ListSortUsing_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListSortUsing_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortUsing_Field_Var)
 		if e0 == nil {
 			e0 = value.VariableName_Marshal(m, &val.Var)
@@ -2621,8 +2987,10 @@ func ListSource_Marshal(m jsn.Marshaler, ptr *ListSource) (err error) {
 
 type ListSource_Slice []ListSource
 
-func (op *ListSource_Slice) GetType() string {
-	return ListSource_Type
+func (op *ListSource_Slice) GetType() string { return ListSource_Type }
+
+func (op *ListSource_Slice) Marshal(m jsn.Marshaler) error {
+	return ListSource_Repeats_Marshal(m, (*[]ListSource)(op))
 }
 
 func (op *ListSource_Slice) GetSize() (ret int) {
@@ -2687,8 +3055,10 @@ func (op *ListSplice) Marshal(m jsn.Marshaler) error {
 
 type ListSplice_Slice []ListSplice
 
-func (op *ListSplice_Slice) GetType() string {
-	return ListSplice_Type
+func (op *ListSplice_Slice) GetType() string { return ListSplice_Type }
+
+func (op *ListSplice_Slice) Marshal(m jsn.Marshaler) error {
+	return ListSplice_Repeats_Marshal(m, (*[]ListSplice)(op))
 }
 
 func (op *ListSplice_Slice) GetSize() (ret int) {
@@ -2723,6 +3093,18 @@ func ListSplice_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSplice) (err
 	return
 }
 
+type ListSplice_Flow struct{ ptr *ListSplice }
+
+func (n ListSplice_Flow) GetType() string      { return ListSplice_Type }
+func (n ListSplice_Flow) GetLede() string      { return "splice" }
+func (n ListSplice_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListSplice_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListSplice); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func ListSplice_Optional_Marshal(m jsn.Marshaler, pv **ListSplice) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = ListSplice_Marshal(m, *pv)
@@ -2736,7 +3118,7 @@ func ListSplice_Optional_Marshal(m jsn.Marshaler, pv **ListSplice) (err error) {
 }
 
 func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("splice", ListSplice_Type, val)); err == nil {
+	if err = m.MarshalBlock(ListSplice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSplice_Field_List)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.List)
@@ -2798,8 +3180,10 @@ func ListTarget_Marshal(m jsn.Marshaler, ptr *ListTarget) (err error) {
 
 type ListTarget_Slice []ListTarget
 
-func (op *ListTarget_Slice) GetType() string {
-	return ListTarget_Type
+func (op *ListTarget_Slice) GetType() string { return ListTarget_Type }
+
+func (op *ListTarget_Slice) Marshal(m jsn.Marshaler) error {
+	return ListTarget_Repeats_Marshal(m, (*[]ListTarget)(op))
 }
 
 func (op *ListTarget_Slice) GetSize() (ret int) {
@@ -2862,8 +3246,10 @@ func (op *PutEdge) Marshal(m jsn.Marshaler) error {
 
 type PutEdge_Slice []PutEdge
 
-func (op *PutEdge_Slice) GetType() string {
-	return PutEdge_Type
+func (op *PutEdge_Slice) GetType() string { return PutEdge_Type }
+
+func (op *PutEdge_Slice) Marshal(m jsn.Marshaler) error {
+	return PutEdge_Repeats_Marshal(m, (*[]PutEdge)(op))
 }
 
 func (op *PutEdge_Slice) GetSize() (ret int) {
@@ -2898,6 +3284,18 @@ func PutEdge_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PutEdge) (err error
 	return
 }
 
+type PutEdge_Flow struct{ ptr *PutEdge }
+
+func (n PutEdge_Flow) GetType() string      { return PutEdge_Type }
+func (n PutEdge_Flow) GetLede() string      { return "put" }
+func (n PutEdge_Flow) GetFlow() interface{} { return n.ptr }
+func (n PutEdge_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*PutEdge); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func PutEdge_Optional_Marshal(m jsn.Marshaler, pv **PutEdge) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = PutEdge_Marshal(m, *pv)
@@ -2911,7 +3309,7 @@ func PutEdge_Optional_Marshal(m jsn.Marshaler, pv **PutEdge) (err error) {
 }
 
 func PutEdge_Marshal(m jsn.Marshaler, val *PutEdge) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("put", PutEdge_Type, val)); err == nil {
+	if err = m.MarshalBlock(PutEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PutEdge_Field_From)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.From)
@@ -2966,8 +3364,10 @@ func (op *PutIndex) Marshal(m jsn.Marshaler) error {
 
 type PutIndex_Slice []PutIndex
 
-func (op *PutIndex_Slice) GetType() string {
-	return PutIndex_Type
+func (op *PutIndex_Slice) GetType() string { return PutIndex_Type }
+
+func (op *PutIndex_Slice) Marshal(m jsn.Marshaler) error {
+	return PutIndex_Repeats_Marshal(m, (*[]PutIndex)(op))
 }
 
 func (op *PutIndex_Slice) GetSize() (ret int) {
@@ -3002,6 +3402,18 @@ func PutIndex_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PutIndex) (err err
 	return
 }
 
+type PutIndex_Flow struct{ ptr *PutIndex }
+
+func (n PutIndex_Flow) GetType() string      { return PutIndex_Type }
+func (n PutIndex_Flow) GetLede() string      { return "put" }
+func (n PutIndex_Flow) GetFlow() interface{} { return n.ptr }
+func (n PutIndex_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*PutIndex); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func PutIndex_Optional_Marshal(m jsn.Marshaler, pv **PutIndex) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = PutIndex_Marshal(m, *pv)
@@ -3015,7 +3427,7 @@ func PutIndex_Optional_Marshal(m jsn.Marshaler, pv **PutIndex) (err error) {
 }
 
 func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow("put", PutIndex_Type, val)); err == nil {
+	if err = m.MarshalBlock(PutIndex_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PutIndex_Field_From)
 		if e0 == nil {
 			e0 = rt.Assignment_Marshal(m, &val.From)
@@ -3069,8 +3481,10 @@ func (op *Range) Marshal(m jsn.Marshaler) error {
 
 type Range_Slice []Range
 
-func (op *Range_Slice) GetType() string {
-	return Range_Type
+func (op *Range_Slice) GetType() string { return Range_Type }
+
+func (op *Range_Slice) Marshal(m jsn.Marshaler) error {
+	return Range_Repeats_Marshal(m, (*[]Range)(op))
 }
 
 func (op *Range_Slice) GetSize() (ret int) {
@@ -3105,6 +3519,18 @@ func Range_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Range) (err error) {
 	return
 }
 
+type Range_Flow struct{ ptr *Range }
+
+func (n Range_Flow) GetType() string      { return Range_Type }
+func (n Range_Flow) GetLede() string      { return Range_Type }
+func (n Range_Flow) GetFlow() interface{} { return n.ptr }
+func (n Range_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Range); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
 func Range_Optional_Marshal(m jsn.Marshaler, pv **Range) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
 		err = Range_Marshal(m, *pv)
@@ -3118,7 +3544,7 @@ func Range_Optional_Marshal(m jsn.Marshaler, pv **Range) (err error) {
 }
 
 func Range_Marshal(m jsn.Marshaler, val *Range) (err error) {
-	if err = m.MarshalBlock(jsn.MakeFlow(Range_Type, Range_Type, val)); err == nil {
+	if err = m.MarshalBlock(Range_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Range_Field_To)
 		if e0 == nil {
 			e0 = rt.NumberEval_Marshal(m, &val.To)

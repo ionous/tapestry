@@ -23,7 +23,7 @@ func (op *Lede) ImportNouns(k *Importer) (err error) {
 }
 
 func (op *Summary) ImportNouns(k *Importer) (err error) {
-	if text, e := ConvertText(op.Lines.String()); e != nil {
+	if text, e := ConvertText(k, op.Lines.String()); e != nil {
 		err = e
 	} else {
 		// give "things" an "description"

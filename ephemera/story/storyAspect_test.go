@@ -23,7 +23,7 @@ func TestEventually(t *testing.T) {
 	}
 	var aspect string
 	var out []string
-	ts := chart.MakeEncoder(nil)
+	ts := chart.MakeEncoder()
 	if e := ts.Marshal(&asp,
 		story.Map(&ts, story.BlockMap{
 			story.AspectTraits_Type: story.KeyMap{
@@ -53,12 +53,12 @@ func TestEndBlock(t *testing.T) {
 		PluralKinds: story.PluralKinds{Str: "test"},
 	}
 	found := false
-	ts := chart.MakeEncoder(nil)
+	ts := chart.MakeEncoder()
 	if e := ts.Marshal(&asp,
 		story.Map(&ts, story.BlockMap{
 			story.Certainties_Type: story.KeyMap{
 				story.BlockEnd: func(b jsn.Block, v interface{}) (err error) {
-					cs := b.(jsn.Flow).GetFlow().(*story.Certainties) // ick
+					cs := b.(jsn.FlowBlock).GetFlow().(*story.Certainties) // ick
 					found = cs.PluralKinds.Str == "test"
 					return
 				},
