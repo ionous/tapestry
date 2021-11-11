@@ -90,7 +90,15 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 				if e := fs.ReadPaths(inFile); e != nil {
 					err = errutil.New("couldn't read file", inFile, e)
 				} else {
-					k := story.NewImporter(db, cout.Marshal)
+					type qel struct {
+						tgt  string
+						args []interface{}
+					}
+					var queue []qel
+					writer := func(q string, args ...interface{}) {
+						queue = append(queue, qel{q, args})
+					}
+					k := story.NewImporter(writer, cout.Marshal)
 					for path, data := range fs {
 						log.Println("importing", path)
 						if sptr, e := decodeStory(path, data); e != nil {
@@ -99,6 +107,26 @@ func distill(outFile, inFile string) (ret []*story.Story, err error) {
 							err = errutil.Append(err, errutil.New("couldnt import", path, "b/c", e))
 						} else {
 							ret = append(ret, sptr)
+						}
+					}
+					// if this gets too big, could accumulate and flush every set size
+					// or -- do some sort of fancy channel that does the same in the background
+					// ( maybe half accumulating , half writing )
+					log.Println("writing", len(queue), "entries")
+					if tx, e := db.Begin(); e != nil {
+						err = e
+					} else {
+						for _, q := range queue {
+							if _, e := tx.Exec(q.tgt, q.args...); e != nil {
+								tx.Rollback()
+								err = e
+								break
+							}
+						}
+						if err == nil {
+							if e := tx.Commit(); e != nil {
+								err = e
+							}
 						}
 					}
 				}

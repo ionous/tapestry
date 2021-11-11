@@ -19,7 +19,7 @@ func TestFactorialStory(t *testing.T) {
 	if e := tables.CreateEphemera(db); e != nil {
 		t.Fatal("create tables", e)
 	} else {
-		k := story.NewImporter(db, cout.Marshal)
+		k := story.NewImporter(dbwriter(db), cout.Marshal)
 		if e := k.ImportStory(t.Name(), debug.FactorialStory); e != nil {
 			t.Fatal(e)
 		} else {

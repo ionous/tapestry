@@ -1,10 +1,12 @@
 package qna
 
 import (
+	"database/sql"
 	"testing"
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/assembly"
+	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
@@ -25,7 +27,7 @@ func TestFullFactorial(t *testing.T) {
 	if e := tables.CreateAll(db); e != nil {
 		t.Fatal("couldn't create tables", e)
 	} else {
-		k := story.NewImporter(db, cout.Marshal)
+		k := story.NewImporter(dbwriter(db), cout.Marshal)
 		if e := k.ImportStory(t.Name(), debug.FactorialStory); e != nil {
 			t.Fatal("couldn't import story", e)
 		} else if e := assembly.AssembleStory(db, "kinds", ds.Add); e != nil {
@@ -39,5 +41,12 @@ func TestFullFactorial(t *testing.T) {
 		} else {
 			t.Log("ok", cnt)
 		}
+	}
+}
+
+func dbwriter(db *sql.DB) ephemera.WriterFun {
+	cache := tables.NewCache(db)
+	return func(q string, args ...interface{}) {
+		cache.Must(q, args...)
 	}
 }

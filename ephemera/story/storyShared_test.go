@@ -21,7 +21,7 @@ func newImporter(t *testing.T, where string) (*story.Importer, *sql.DB) {
 	if e := tables.CreateEphemera(db); e != nil {
 		t.Fatal("create ephemera", e)
 	}
-	k := story.NewImporter(db, cout.Marshal)
+	k := story.NewImporter(dbwriter(db), cout.Marshal)
 	k.SetSource(t.Name())
 	return k, db
 }

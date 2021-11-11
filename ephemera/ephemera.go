@@ -1,7 +1,6 @@
 package ephemera
 
 import (
-	"database/sql"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/ephemera/eph"
@@ -12,11 +11,14 @@ import (
 type Recorder struct {
 	srcId   int64
 	cache   *tables.Cache
-	Marshal func(jsn.Marshalee) (string, error)
+	Marshal MarshalFun
+	write   WriterFun
 	rowids  map[string]int64 // works because we're constantly rebuilding the dbs from scratch
 	// really, i think want to get away from rowids entirely
-
 }
+
+type MarshalFun func(jsn.Marshalee) (string, error)
+type WriterFun func(q string, args ...interface{})
 
 func (k *Recorder) nextid(q string) int64 {
 	next := k.rowids[q] + 1
@@ -25,13 +27,13 @@ func (k *Recorder) nextid(q string) int64 {
 }
 
 // marshal lets us write program fragments to the database
-func NewRecorder(db *sql.DB, marshal func(jsn.Marshalee) (string, error)) *Recorder {
-	return &Recorder{cache: tables.NewCache(db), Marshal: marshal, rowids: make(map[string]int64)}
+func NewRecorder(writer WriterFun, marshal MarshalFun) *Recorder {
+	return &Recorder{write: writer, Marshal: marshal, rowids: make(map[string]int64)}
 }
 
 func (k *Recorder) SetSource(srcURI string) *Recorder {
 	k.srcId = k.nextid(eph_source)
-	k.cache.Must(eph_source, k.srcId, srcURI)
+	k.write(eph_source, k.srcId, srcURI)
 	return k
 }
 
@@ -49,7 +51,7 @@ func (k *Recorder) NewDomainName(domain eph.Named, name, category, ofs string) (
 	// so for now make this opt-in.
 	norm := strings.TrimSpace(name)
 	namedId := k.nextid(eph_named)
-	k.cache.Must(eph_named, namedId, norm, name, category, domain, k.srcId, ofs)
+	k.write(eph_named, namedId, norm, name, category, domain, k.srcId, ofs)
 	return eph.MakeName(namedId, norm)
 }
 
@@ -60,7 +62,7 @@ func (k *Recorder) NewProg(typeName string, cmd jsn.Marshalee) (ret Prog, err er
 		err = e
 	} else {
 		id := k.nextid(eph_prog)
-		k.cache.Must(eph_prog, id, k.srcId, typeName, str)
+		k.write(eph_prog, id, k.srcId, typeName, str)
 		ret = Prog{eph.MakeName(id, typeName)}
 	}
 	return
@@ -70,99 +72,99 @@ var None eph.Named
 
 // NewAlias provides a new name for another name.
 func (k *Recorder) NewAlias(alias, actual eph.Named) {
-	k.cache.Must(eph_alias, alias, actual)
+	k.write(eph_alias, alias, actual)
 }
 
 // NewAspect explicitly declares the existence of an aspect.
 func (k *Recorder) NewAspect(aspect eph.Named) {
-	k.cache.Must(eph_aspect, aspect)
+	k.write(eph_aspect, aspect)
 }
 
 // NewCertainty supplies a kind with a default trait.
 func (k *Recorder) NewCertainty(certainty string, trait, kind eph.Named) {
 	// usually fast horses.
-	k.cache.Must(eph_certainty, certainty, trait, kind)
+	k.write(eph_certainty, certainty, trait, kind)
 }
 
 // NewDefault supplies a kind with a default value;
 // see also NewValue
 func (k *Recorder) NewDefault(kind, field eph.Named, value interface{}) {
 	// horses height 5.
-	k.cache.Must(eph_default, kind, field, value)
+	k.write(eph_default, kind, field, value)
 }
 
 // NewKind connects a kind (plural) to its parent kind (singular).
 // ex. cats are a kind of animal.
 func (k *Recorder) NewKind(kind, parent eph.Named) {
-	k.cache.Must(eph_kind, kind, parent)
+	k.write(eph_kind, kind, parent)
 }
 
 // NewNoun connects a noun to its kind (singular).
 func (k *Recorder) NewNoun(noun, kind eph.Named) {
-	k.cache.Must(eph_noun, noun, kind)
+	k.write(eph_noun, noun, kind)
 }
 
 //  a pattern or pattern parameter
 func (k *Recorder) NewPatternDecl(pattern, param, patternType eph.Named, affinity string) {
-	k.cache.Must(eph_pattern, pattern, param, patternType, affinity, Prog{})
+	k.write(eph_pattern, pattern, param, patternType, affinity, Prog{})
 }
 
 //  a pattern initializer
 func (k *Recorder) NewPatternInit(pattern, param, patternType eph.Named, affinity string, prog Prog) {
-	k.cache.Must(eph_pattern, pattern, param, patternType, affinity, prog)
+	k.write(eph_pattern, pattern, param, patternType, affinity, prog)
 }
 
 // a reference to a pattern declared elsewhere
 func (k *Recorder) NewPatternRef(pattern, param, patternType eph.Named, affinity string) {
-	k.cache.Must(eph_pattern, pattern, param, patternType, affinity, -1)
+	k.write(eph_pattern, pattern, param, patternType, affinity, -1)
 }
 
 func (k *Recorder) NewPatternRule(pattern, target, domain eph.Named, handler Prog) {
-	k.cache.Must(eph_rule, pattern, target, domain, handler)
+	k.write(eph_rule, pattern, target, domain, handler)
 }
 
 // NewPlural maps the plural form of a name to its singular form.
 func (k *Recorder) NewPlural(plural, singular eph.Named) {
-	k.cache.Must(eph_plural, plural, singular)
+	k.write(eph_plural, plural, singular)
 }
 
 // NewField property in the named kind.
 func (k *Recorder) NewField(kind, prop eph.Named, primType, primAff string) {
-	k.cache.Must(eph_field, kind, prop, primType, primAff)
+	k.write(eph_field, kind, prop, primType, primAff)
 }
 
 // NewRelation defines a connection between a primary and secondary kind.
 func (k *Recorder) NewRelation(relation, primaryKind, secondaryKind eph.Named, cardinality string) {
-	k.cache.Must(eph_relation, relation, primaryKind, secondaryKind, cardinality)
+	k.write(eph_relation, relation, primaryKind, secondaryKind, cardinality)
 }
 
 // NewRelative connects two named nouns using a verb stem.
 func (k *Recorder) NewRelative(primary, stem, secondary, domain eph.Named) {
-	k.cache.Must(eph_relative, primary, stem, secondary, domain)
+	k.write(eph_relative, primary, stem, secondary, domain)
 }
 
 func (k *Recorder) NewTestProgram(test eph.Named, prog Prog) {
-	k.cache.Must(eph_check, test, prog)
+	k.write(eph_check, test, prog)
 }
 
 func (k *Recorder) NewTestExpectation(test eph.Named, testType string, expect string) {
-	k.cache.Must(eph_expect, test, testType, expect)
+	k.write(eph_expect, test, testType, expect)
 }
 
 // NewTrait records a member of an aspect and its order ( rank. )
 func (k *Recorder) NewTrait(trait, aspect eph.Named, rank int) {
-	k.cache.Must(eph_trait, trait, aspect, rank)
+	k.write(eph_trait, trait, aspect, rank)
 }
 
 // NewValue assigns the property of a noun a value;
 // traits can be assigned by naming the individual trait and setting a true ( or false ) value.
 func (k *Recorder) NewValue(noun, prop eph.Named, value interface{}) {
-	k.cache.Must(eph_value, noun, prop, value)
+	k.write(eph_value, noun, prop, value)
 }
 
 // NewRelative connects two specific nouns using a verb.
 func (k *Recorder) NewVerb(stem, relation eph.Named, verb string) {
-	k.cache.Must(eph_verb, stem, relation, verb)
+	k.write(eph_verb, stem, relation, verb)
 }
 
 var eph_alias = tables.Insert("eph_alias", "idNamedAlias", "idNamedActual")

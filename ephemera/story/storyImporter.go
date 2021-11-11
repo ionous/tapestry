@@ -1,8 +1,6 @@
 package story
 
 import (
-	"database/sql"
-
 	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/eph"
 	"git.sr.ht/~ionous/iffy/jsn"
@@ -26,8 +24,8 @@ type Importer struct {
 }
 
 // low level
-func NewImporter(db *sql.DB, marshal func(jsn.Marshalee) (string, error)) *Importer {
-	rec := ephemera.NewRecorder(db, marshal)
+func NewImporter(writer ephemera.WriterFun, marshal ephemera.MarshalFun) *Importer {
+	rec := ephemera.NewRecorder(writer, marshal)
 	k := &Importer{
 		Recorder:    rec,
 		oneTime:     make(map[string]bool),

@@ -1,11 +1,13 @@
 package story_test
 
 import (
+	"database/sql"
 	"testing"
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/ephemera"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
@@ -26,7 +28,7 @@ func TestImportStory(t *testing.T) {
 		if e := din.Decode(&curr, iffy.Registry(), []byte(debug.Blob)); e != nil {
 			t.Fatal(e)
 		} else {
-			k := story.NewImporter(db, cout.Marshal)
+			k := story.NewImporter(dbwriter(db), cout.Marshal)
 			if e := k.ImportStory(t.Name(), &curr); e != nil {
 				t.Fatal("import", e)
 			} else {
@@ -44,3 +46,10 @@ func N(v string) value.VariableName { return value.VariableName{Str: v} }
 func T(s string) *core.TextValue    { return &core.TextValue{W(s)} }
 func V(i string) *core.GetVar       { return &core.GetVar{N(i)} }
 func W(v string) string             { return v }
+
+func dbwriter(db *sql.DB) ephemera.WriterFun {
+	cache := tables.NewCache(db)
+	return func(q string, args ...interface{}) {
+		cache.Must(q, args...)
+	}
+}

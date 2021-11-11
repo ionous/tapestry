@@ -22,7 +22,11 @@ func newAssemblyTest(t *testing.T, path string) (ret *assemblyTest) {
 		t.Fatal(e)
 	} else {
 		var ds reader.Dilemmas
-		rec := ephemera.NewRecorder(db, cout.Marshal).SetSource(t.Name())
+		cache := tables.NewCache(db)
+		dbout := func(q string, args ...interface{}) {
+			cache.Must(q, args...)
+		}
+		rec := ephemera.NewRecorder(dbout, cout.Marshal).SetSource(t.Name())
 		mdl := NewAssemblerReporter(db, ds.Add)
 		ret = &assemblyTest{
 			T:         t,
