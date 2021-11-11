@@ -262,7 +262,7 @@ const signType = function(t, out, all) {
   }
 
   for (const n of sigs) {
-    if (n.includes("::") || n.includes("_")) {
+    if (n.includes("::") || n.includes("_") || n.includes(": ")) {
       console.log(commandName, n);
       throw new Error(n);
     }

@@ -652,21 +652,21 @@
             "map_heading": 
             {
                 "uses": "flow",
-                "spec": "heading {_%map_direction} {via%door?named_noun} {_%map_connection}",
+                "spec": "heading {_%map_direction} {via%door?named_noun} {and%map_connection}",
                 "slot": "story_statement",
                 "group": "modeling"
             },
             "map_departing": 
             {
                 "uses": "flow",
-                "spec": "departing {via%door:named_noun} {_%map_connection}",
+                "spec": "departing {via%door:named_noun} {and%map_connection}",
                 "slot": "story_statement",
                 "group": "modeling"
             },
             "map_connection":
             {
                 "uses": "swap",
-                "spec": "{arrives_at:map_destination} {connects_to:map_destination}"
+                "spec": "{arriving_at:map_destination} {connecting_to:map_destination}"
             },
             "map_destination":
             {

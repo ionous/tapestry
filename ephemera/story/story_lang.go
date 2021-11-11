@@ -4245,15 +4245,15 @@ type MapConnection struct {
 	Choice string
 }
 
-const MapConnection_ArrivesAt_Opt = "$ARRIVES_AT"
-const MapConnection_ConnectsTo_Opt = "$CONNECTS_TO"
+const MapConnection_ArrivingAt_Opt = "$ARRIVING_AT"
+const MapConnection_ConnectingTo_Opt = "$CONNECTING_TO"
 
 func (*MapConnection) Compose() composer.Spec {
 	return composer.Spec{
 		Name: MapConnection_Type,
 		Uses: composer.Type_Swap,
 		Choices: []string{
-			MapConnection_ArrivesAt_Opt, MapConnection_ConnectsTo_Opt,
+			MapConnection_ArrivingAt_Opt, MapConnection_ConnectingTo_Opt,
 		},
 		Swaps: []interface{}{
 			(*MapDestination)(nil),
@@ -4275,10 +4275,10 @@ func (op *MapConnection) SetSwap(c string) (okay bool) {
 	case "":
 		op.Choice, op.Value = c, nil
 		okay = true
-	case MapConnection_ArrivesAt_Opt:
+	case MapConnection_ArrivingAt_Opt:
 		op.Choice, op.Value = c, new(MapDestination)
 		okay = true
-	case MapConnection_ConnectsTo_Opt:
+	case MapConnection_ConnectingTo_Opt:
 		op.Choice, op.Value = c, new(MapDestination)
 		okay = true
 	}
@@ -4344,7 +4344,7 @@ func MapConnection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapConnection
 // User implements: StoryStatement.
 type MapDeparting struct {
 	Door          NamedNoun     `if:"label=via"`
-	MapConnection MapConnection `if:"label=_"`
+	MapConnection MapConnection `if:"label=and"`
 }
 
 func (*MapDeparting) Compose() composer.Spec {
@@ -4437,7 +4437,7 @@ func MapDeparting_Marshal(m jsn.Marshaler, val *MapDeparting) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MapDeparting_Field_Door))
 		}
-		e1 := m.MarshalKey("", MapDeparting_Field_MapConnection)
+		e1 := m.MarshalKey("and", MapDeparting_Field_MapConnection)
 		if e1 == nil {
 			e1 = MapConnection_Marshal(m, &val.MapConnection)
 		}
@@ -4636,7 +4636,7 @@ func MapDirection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDirection) 
 type MapHeading struct {
 	MapDirection  MapDirection  `if:"label=_"`
 	Door          *NamedNoun    `if:"label=via,optional"`
-	MapConnection MapConnection `if:"label=_"`
+	MapConnection MapConnection `if:"label=and"`
 }
 
 func (*MapHeading) Compose() composer.Spec {
@@ -4737,7 +4737,7 @@ func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", MapHeading_Field_Door))
 		}
-		e2 := m.MarshalKey("", MapHeading_Field_MapConnection)
+		e2 := m.MarshalKey("and", MapHeading_Field_MapConnection)
 		if e2 == nil {
 			e2 = MapConnection_Marshal(m, &val.MapConnection)
 		}
@@ -10791,16 +10791,16 @@ var Signatures = map[uint64]interface{}{
 	12609627593403083413: (*Make)(nil),                     /* Make:arguments: */
 	17563761532337350103: (*ManyToMany)(nil),               /* ManyToMany:otherKinds: */
 	4129025779762507875:  (*ManyToOne)(nil),                /* ManyToOne:kind: */
-	8834425781559128046:  (*MapConnection)(nil),            /* MapConnection arrivesAt: */
-	8270098892119034481:  (*MapConnection)(nil),            /* MapConnection connectsTo: */
-	8500238246970321502:  (*MapDeparting)(nil),             /* Departing via: arrivesAt: */
-	16444875323365131585: (*MapDeparting)(nil),             /* Departing via: connectsTo: */
+	4746882967578843264:  (*MapConnection)(nil),            /* MapConnection arrivingAt: */
+	165100527430166082:   (*MapConnection)(nil),            /* MapConnection connectingTo: */
+	12664747872301222635: (*MapDeparting)(nil),             /* Departing via:and arrivingAt: */
+	10592711885881153145: (*MapDeparting)(nil),             /* Departing via:and connectingTo: */
 	13573264837262063235: (*MapDestination)(nil),           /* MapDestination: */
 	16504428073969307483: (*MapDestination)(nil),           /* MapDestination:door: */
-	5006299998918990270:  (*MapHeading)(nil),               /* Heading: arrivesAt: */
-	17844020758094162804: (*MapHeading)(nil),               /* Heading:via: arrivesAt: */
-	5563466876426744737:  (*MapHeading)(nil),               /* Heading: connectsTo: */
-	2450838013521695103:  (*MapHeading)(nil),               /* Heading:via: connectsTo: */
+	14572254943646304587: (*MapHeading)(nil),               /* Heading:and arrivingAt: */
+	1270222318052581361:  (*MapHeading)(nil),               /* Heading:via:and arrivingAt: */
+	3571539926920082009:  (*MapHeading)(nil),               /* Heading:and connectingTo: */
+	6820364618168717163:  (*MapHeading)(nil),               /* Heading:via:and connectingTo: */
 	16572015744003324651: (*NamedNoun)(nil),                /* NamedNoun:name: */
 	10597814521259612392: (*NounAssignment)(nil),           /* NounAssignment:nouns:lines: */
 	11271220813702679015: (*NounPhrase)(nil),               /* NounPhrase kindOfNoun: */
