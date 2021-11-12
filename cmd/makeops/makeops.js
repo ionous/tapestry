@@ -73,15 +73,23 @@ Handlebars.registerHelper('IsToken', function(str) {
 Handlebars.registerHelper('NoHelpers', function(name) {
   return name === "position";
 });
+// generate a custom compact format command name for a type
 const ledeName = function(t) {
-  // we exclude modeling ( as a opposed to runtime functions )
-  // because currently most of those are in sentence form not expression form.
-  // if this get fixed, then the WriteValue WriteChoice should be fixed to pass a lede
-  const m = t.group.includes("story") && !t.group.includes("modeling");
-  if (!m && t.uses === "flow") {
-    const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
-    return (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
+  // note: we dont give plain english commands a special lede
+  // ( those are the story commands not marked as "modeling" )
+  let ret;
+  if (t.uses === "flow") {
+    const plainEnglish = t.group.includes("story") && !t.group.includes("modeling");
+    if (plainEnglish) {
+      ret= t.lede;
+    } else {
+      // get the first token
+      const lede = t && t.with && t.with.tokens && t.with.tokens.length > 0 && t.with.tokens[0];
+      // and if the first token is english text, then use that as the lede
+      ret= (lede && lede.length > 0 && lede[0] !== "$" && lede !== t.name) ? lede : "";
+    }
   }
+  return ret;
 }
 Handlebars.registerHelper('LedeName', ledeName);
 
@@ -346,13 +354,15 @@ for (const typeName in allTypes) {
   }
   let pi=0; // non-internal indices
   ps.forEach((param,i)=> {
-    // commands tagged modeling automatically get anonymous first parameters
+    // story commands are assumed to be written in plain english, except for those few tagged modeling.
+    // all of those plain english commands get anonymous first parameters
     // unless that first parameter is optional and there are other trailing parameters.
+    // all of the other commands -- the fluent commands -- control their parameters via their spec.
     let tag= lower(param.key);
     if (type.uses !== 'swap') {
-      const m= type.group.includes("story") && !type.group.includes("modeling");
+      const plainEnglish = type.group.includes("story") && !type.group.includes("modeling");
       const anon= !pi && (!param.optional || pt === 1);
-      tag= m ? (anon ? '_': tag) : param.label.replaceAll(" ", "_");
+      tag= plainEnglish ? (anon ? '_': tag) : param.label.replaceAll(" ", "_");
     }
     param.tag= tag;
     param.sel= tag !== "_" ? tag: "";

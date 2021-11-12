@@ -57,7 +57,8 @@ class Make {
           break;
         }
         case "flow": {
-          if (this.currGroups.includes("modeling")) {
+          const plainEnglish = t.group.includes("story") && !t.group.includes("modeling");
+          if (plainEnglish) {
             this.flow(k, data.slot || [], data.spec, data.desc || "");
             break;
           }

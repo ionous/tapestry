@@ -61,8 +61,11 @@ class Make {
           break;
         }
         case "flow": {
-          if (this.currGroups.includes("story") && !this.currGroups.includes("modeling")) {
-            this.flow(k, data.slot || [], data.spec, data.desc || "");
+          // use the english phrase parser ( as opposed to the programmery fluent parser )
+          const plainEnglish = this.currGroups.includes("story") && !this.currGroups.includes("modeling");
+          if (plainEnglish) {
+            const newFlow= this.flow(k, data.slot || [], data.spec, data.desc || "");
+            newFlow.lede= data.lede;
             break;
           }
           // note: doesnt use the "maker" for now

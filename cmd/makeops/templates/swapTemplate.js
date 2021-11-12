@@ -10,6 +10,8 @@ type {{Pascal name}} struct {
   Choice string
 }
 
+var {{Pascal name}}_Optional_Marshal = {{Pascal name}}_Marshal
+
 {{#each with.params}}
 const {{Pascal ../name}}_{{Pascal @key}}_Opt= "{{@key}}";
 {{/each}}
