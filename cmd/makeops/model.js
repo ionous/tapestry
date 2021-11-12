@@ -12,6 +12,7 @@ let m = new Make();
 const folderPath = "../../idl";
 fs.readdirSync(folderPath).filter(fn => fn.endsWith(".ifspec")).forEach(fn => {
   const path = folderPath + '/' + fn;
+
   const raw = fs.readFileSync(path);
   let dict;
   try {
@@ -21,8 +22,9 @@ fs.readdirSync(folderPath).filter(fn => fn.endsWith(".ifspec")).forEach(fn => {
     console.log(`couldnt't parse ${path}`);
     throw e;
   }
+  const gopack = fn.substring(0, fn.length - ".ifspec".length);
   console.log(`parsing ${path}`);
-  m.readSpec(dict);
+  m.readSpec(dict, gopack);
 });
 
 const sorted = {};

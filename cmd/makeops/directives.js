@@ -18,11 +18,12 @@ class Make {
 
   // this.... needs some work.
   readSpec(spec, group= null) {
-    if (group) {
+    const addGroup= group && !group.includes(group);
+    if (addGroup) {
       this.currGroups.unshift(group);
     }
     this._readSpec(spec);
-    if (group) {
+    if (addGroup) {
       this.currGroups.shift();
     }
   }
