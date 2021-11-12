@@ -1,4 +1,4 @@
-{
+{ "list": { "uses": "group", "specs": {
     "list_iterator":
     {
         "uses": "slot",
@@ -259,4 +259,4 @@
         ],
         "desc": "Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed."
     }
-}
+}}}

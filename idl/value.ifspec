@@ -1,4 +1,4 @@
-{
+{ "value": { "uses": "group", "specs": {
     "number":
     {
         "uses": "num"
@@ -44,4 +44,4 @@
         "uses": "str",
         "group": "positioned"
     }
-}
+}}}

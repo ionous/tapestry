@@ -1,4 +1,4 @@
-{
+{ "render": { "uses": "group", "specs": {
     "render_field":
     {
         "uses": "flow",
@@ -67,4 +67,4 @@
         "slot": "text_eval",
         "group": "internal"
     }
-}
+}}}

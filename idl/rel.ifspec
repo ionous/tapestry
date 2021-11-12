@@ -1,4 +1,4 @@
-{
+{ "rel": { "uses": "group", "specs": {
   "reciprocal_of": {
     "uses": "flow",
     "spec": "reciprocal {_%via:relation_name} {object:text_eval}",
@@ -29,4 +29,4 @@
     "slot": "text_list_eval",
     "desc": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation)."
   }
-}
+}}}

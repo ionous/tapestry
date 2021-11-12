@@ -1,4 +1,4 @@
-{
+{ "rt": { "uses": "group", "specs": {
   "assignment": {
     "uses": "slot",
     "desc": "Helper for setting variables."
@@ -53,4 +53,4 @@
     "group": "internal",
     "spec": "assign {_%init:assignment}"
   }
-}
+}}}

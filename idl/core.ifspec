@@ -1,4 +1,4 @@
-{
+{   "core": { "uses": "group", "specs": {
     "brancher":
     {
         "uses": "slot",
@@ -851,4 +851,4 @@
         "desc": "Keep running a series of actions while a condition is true.",
         "group": "flow"
     }
-}
+}}}

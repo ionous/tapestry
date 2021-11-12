@@ -1,4 +1,4 @@
-{
+{ "grammar": { "uses": "group", "specs": {
   "grammar_maker": {
     "uses": "slot",
     "desc": "Helper for defining parser grammars."
@@ -73,4 +73,4 @@
     "slot": "scanner_maker",
     "desc": "makes a parser scanner"
   }
-}
+}}}

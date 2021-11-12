@@ -1,4 +1,4 @@
-{
+{ "story": { "uses": "group", "specs": {
     "statements":
     {
         "uses": "group",
@@ -793,4 +793,4 @@
             }
         }
     }
-}
+}}}
