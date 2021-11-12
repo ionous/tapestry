@@ -1,9 +1,16 @@
-{   "check": { "uses": "group", "specs": {
-    "check_output":
+{
+    "check":
     {
-        "spec": "check {_%name:text} {expect:text} {do%test:activity}",
-        "uses": "flow",
-        "desc": "Run an activity and verify that it produces the expected output.",
-        "group": "internal"
+        "uses": "group",
+        "specs":
+        {
+            "check_output":
+            {
+                "spec": "check {_%name:text} {expect:text} {do%test:activity}",
+                "uses": "flow",
+                "desc": "Run an activity and verify that it produces the expected output.",
+                "group": "internal"
+            }
+        }
     }
-}}}
+}

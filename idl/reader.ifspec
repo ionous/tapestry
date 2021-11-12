@@ -1,8 +1,16 @@
-{ "render": { "uses": "group", "specs": {
-  "position": {
-    "uses": "flow",
-    "spec": "src {_%offset:text} {in%source:text}",
-    "desc": "Identifies the location of a specific command ( ex. from an .if file ).",
-    "group": "internal"
-  }
-}}}
+{
+    "render":
+    {
+        "uses": "group",
+        "specs":
+        {
+            "position":
+            {
+                "uses": "flow",
+                "spec": "src {_%offset:text} {in%source:text}",
+                "desc": "Identifies the location of a specific command ( ex. from an .if file ).",
+                "group": "internal"
+            }
+        }
+    }
+}

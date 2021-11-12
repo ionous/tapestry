@@ -1,76 +1,96 @@
-{ "grammar": { "uses": "group", "specs": {
-  "grammar_maker": {
-    "uses": "slot",
-    "desc": "Helper for defining parser grammars."
-  },
-  "scanner_maker": {
-    "uses": "slot",
-    "desc": "Helper for defining input scanners."
-  },
-  "action": {
-    "uses": "flow",
-    "spec": "as {_%action:text}",
-    "slot": "scanner_maker",
-    "desc": "makes a parser scanner producing a script defined action."
-  },
-  "alias": {
-    "uses": "flow",
-    "spec": "alias {_%names+text} {as_noun:text}",
-    "slot": "grammar_maker",
-    "desc": "allows the user to refer to a noun by one or more other terms."
-  },
-  "all_of": {
-    "uses": "flow",
-    "spec": "all_of {_%series+scanner_maker}",
-    "slot": "scanner_maker",
-    "desc": "makes a parser scanner"
-  },
-  "any_of": {
-    "uses": "flow",
-    "spec": "any_of {_%options+scanner_maker}",
-    "slot": "scanner_maker",
-    "desc": "makes a parser scanner"
-  },
-  "directive": {
-    "uses": "flow",
-    "spec": "directive {_%lede+text} {scans+scanner_maker}",
-    "slot": "grammar_maker",
-    "desc": "starts a parser scanner"
-  },
-  "grammar": {
-    "uses": "flow",
-    "spec": "grammar {_%grammar:grammar_maker}",
-    "desc": "Read what the player types and turn it into actions.",
-    "group": "internal"
-  },
-  "noun": {
-    "uses": "flow",
-    "spec": "noun {_%kind:text}",
-    "slot": "scanner_maker",
-    "desc": "makes a parser scanner"
-  },
-  "retarget": {
-    "uses": "flow",
-    "spec": "retarget {_%span+scanner_maker}",
-    "slot": "scanner_maker",
-    "desc": "makes a parser scanner"
-  },
-  "reverse": {
-    "uses": "flow",
-    "spec": "reverse {_%reverses+scanner_maker}",
-    "slot": "scanner_maker",
-    "desc": "makes a parser scanner"
-  },
-  "self": {
-    "uses": "flow",
-    "spec": "self {_%player:text}",
-    "slot": "scanner_maker",
-    "desc": "makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )"
-  },
-  "words": {
-    "uses": "flow",
-    "spec": "words {_%words+text}",
-    "slot": "scanner_maker",
-    "desc": "makes a parser scanner"
-  }
-}}}
+{
+    "grammar":
+    {
+        "uses": "group",
+        "specs":
+        {
+            "grammar_maker":
+            {
+                "uses": "slot",
+                "desc": "Helper for defining parser grammars."
+            },
+            "scanner_maker":
+            {
+                "uses": "slot",
+                "desc": "Helper for defining input scanners."
+            },
+            "action":
+            {
+                "uses": "flow",
+                "spec": "as {_%action:text}",
+                "slot": "scanner_maker",
+                "desc": "makes a parser scanner producing a script defined action."
+            },
+            "alias":
+            {
+                "uses": "flow",
+                "spec": "alias {_%names+text} {as_noun:text}",
+                "slot": "grammar_maker",
+                "desc": "allows the user to refer to a noun by one or more other terms."
+            },
+            "all_of":
+            {
+                "uses": "flow",
+                "spec": "all_of {_%series+scanner_maker}",
+                "slot": "scanner_maker",
+                "desc": "makes a parser scanner"
+            },
+            "any_of":
+            {
+                "uses": "flow",
+                "spec": "any_of {_%options+scanner_maker}",
+                "slot": "scanner_maker",
+                "desc": "makes a parser scanner"
+            },
+            "directive":
+            {
+                "uses": "flow",
+                "spec": "directive {_%lede+text} {scans+scanner_maker}",
+                "slot": "grammar_maker",
+                "desc": "starts a parser scanner"
+            },
+            "grammar":
+            {
+                "uses": "flow",
+                "spec": "grammar {_%grammar:grammar_maker}",
+                "desc": "Read what the player types and turn it into actions.",
+                "group": "internal"
+            },
+            "noun":
+            {
+                "uses": "flow",
+                "spec": "noun {_%kind:text}",
+                "slot": "scanner_maker",
+                "desc": "makes a parser scanner"
+            },
+            "retarget":
+            {
+                "uses": "flow",
+                "spec": "retarget {_%span+scanner_maker}",
+                "slot": "scanner_maker",
+                "desc": "makes a parser scanner"
+            },
+            "reverse":
+            {
+                "uses": "flow",
+                "spec": "reverse {_%reverses+scanner_maker}",
+                "slot": "scanner_maker",
+                "desc": "makes a parser scanner"
+            },
+            "self":
+            {
+                "uses": "flow",
+                "spec": "self {_%player:text}",
+                "slot": "scanner_maker",
+                "desc": "makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )"
+            },
+            "words":
+            {
+                "uses": "flow",
+                "spec": "words {_%words+text}",
+                "slot": "scanner_maker",
+                "desc": "makes a parser scanner"
+            }
+        }
+    }
+}
