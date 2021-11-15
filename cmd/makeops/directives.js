@@ -61,6 +61,7 @@ class Make {
           this.swap(k, data.spec, data.desc);
           break;
         }
+        case undefined:
         case "flow": {
           // use the english phrase parser ( as opposed to the programmery fluent parser )
           const plainEnglish = this.currGroups.includes("story") && !this.currGroups.includes("modeling");
