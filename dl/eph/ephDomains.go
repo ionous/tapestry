@@ -5,36 +5,36 @@ import (
 	"github.com/ionous/inflect"
 )
 
+type Resolution int
+
+const (
+	Unresolved Resolution = iota
+	Processing
+	Resolved
+	Errored
+)
+
 type Domain struct {
-	name, at string
-	inflect  inflect.Ruleset
-	deps     domainList
+	name, at     string
+	originalName string
+	inflect      inflect.Ruleset
+	deps         DomainList
+	eph          EphList
+	status       Resolution
+	resolved     UniqueNames
+	err          error
 }
 
-// is it better to store pointers or names?
-type domainList []*Domain
-
-type Domains struct {
-	pool       domainPool
-	processing domainStack
-	ephemera   EphList
-}
+type DomainList []*Domain
 
 // for now, duplicates are okay.
-func (dl *domainList) add(d *Domain) {
-	(*dl) = append(*dl, d)
-}
-func (dl *domainList) remove(d *Domain) {
-	end := len(*dl) - 1
-	for i := end; i >= 0; i-- {
-		if (*dl)[i] == d {
-			(*dl)[i] = (*dl)[end]
-			(*dl) = (*dl)[:end]
-			break
-		}
+func (dl *DomainList) add(d *Domain) {
+	if !dl.contains(d) {
+		(*dl) = append(*dl, d)
 	}
 }
-func (dl *domainList) contains(d *Domain) (okay bool) {
+
+func (dl *DomainList) contains(d *Domain) (okay bool) {
 	for _, el := range *dl {
 		if el == d {
 			okay = true
@@ -44,65 +44,67 @@ func (dl *domainList) contains(d *Domain) (okay bool) {
 	return
 }
 
-func (d *Domain) resolve(resolved *domainList, unresolved *domainList) (err error) {
-	unresolved.add(d)
-	for _, edge := range d.deps {
-		if !resolved.contains(edge) {
-			if unresolved.contains(edge) {
-				err = errutil.New("Circular reference detected:", d.name, "->", edge.name)
-				break
-			} else if e := edge.resolve(resolved, unresolved); e != nil {
-				err = errutil.New(e, "->", edge.name)
-				break
-			}
-		}
-	}
-	if err == nil {
-		resolved.add(d)
-		unresolved.remove(d)
-	}
-	return
+func (d *Domain) Resolved() []string {
+	return []string(d.resolved)
 }
 
-func (ds *Domains) Resolve() (ret domainList, err error) {
-	var unresolved domainList
-	for _, d := range ds.pool {
-		if !ret.contains(d) {
-			if e := d.resolve(&ret, &unresolved); e != nil {
-				err = e
+// Recursively determine the domain's dependency list
+func (d *Domain) Resolve(newlyResolved func(*Domain) error) (err error) {
+	switch d.status {
+	case Resolved:
+		// ignore things that are already resolved
+
+	case Processing:
+		d.status, d.err = Errored, errutil.New("Circular reference detected:", d.name)
+		err = d.err
+
+	case Unresolved:
+		d.status = Processing
+		var res UniqueNames
+		for _, dep := range d.deps {
+			if e := dep.Resolve(newlyResolved); e != nil {
+				d.status, d.err = Errored, errutil.New(e, "->", d.name)
+				err = d.err
 				break
+			} else {
+				res.AddName(dep.name)
+				for _, n := range dep.resolved {
+					res.AddName(n)
+				}
 			}
 		}
-	}
-	return
-}
-
-func (ds *Domains) GetDomain(n string) (ret *Domain) {
-	if d, ok := ds.pool[n]; ok {
-		ret = d
-	} else {
-		d = &Domain{name: n}
-		if ds.pool == nil {
-			ds.pool = domainPool{n: d}
+		if err == nil {
+			d.status = Resolved
+			d.resolved = res
+			//
+			if newlyResolved != nil {
+				if e := newlyResolved(d); e != nil {
+					d.status, d.err = Errored, e
+					err = d.err
+				}
+			}
+		}
+	default:
+		if e := d.err; e != nil {
+			err = e
 		} else {
-			ds.pool[n] = d
+			err = errutil.New("Unknown error processing", d.name)
 		}
-		ret = d
 	}
 	return
 }
 
-type domainPool map[string]*Domain
+type AllDomains map[string]*Domain
 
-// domainStack - keep track of the current block while marshaling.
+// DomainStack - keep track of the current block while marshaling.
 // ( so that end block can be called. )
-type domainStack []*Domain
+type DomainStack []*Domain
 
-func (k *domainStack) Push(b *Domain) {
+func (k *DomainStack) Push(b *Domain) {
 	(*k) = append(*k, b)
 }
 
-func (k *domainStack) Top() (ret *Domain, okay bool) {
+func (k *DomainStack) Top() (ret *Domain, okay bool) {
 	if end := len(*k) - 1; end >= 0 {
 		ret, okay = (*k)[end], true
 	}
@@ -110,7 +112,7 @@ func (k *domainStack) Top() (ret *Domain, okay bool) {
 }
 
 // return false if empty
-func (k *domainStack) Pop() (ret *Domain, okay bool) {
+func (k *DomainStack) Pop() (ret *Domain, okay bool) {
 	if end := len(*k) - 1; end >= 0 {
 		ret, (*k) = (*k)[end], (*k)[:end]
 		okay = true

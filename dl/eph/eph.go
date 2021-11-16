@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/iffy/lang"
 	"github.com/ionous/errutil"
 )
 
@@ -9,52 +10,45 @@ type Ephemera interface {
 	Catalog(c *Catalog, d *Domain, at string) error
 }
 
-// receive ephemera from the importer
-type Catalog struct {
-	domains Domains
-}
-
-//
-func (c *Catalog) AddEphemera(pat EphAt) (err error) {
-	if d, ok := c.domains.processing.Top(); !ok {
-		err = errutil.New("no domain")
-	} else if e := pat.Eph.Catalog(c, d, pat.At); e != nil {
-		err = e
-	}
-	return
-}
-
 //
 func (el *EphBeginDomain) Catalog(c *Catalog, p *Domain, at string) (err error) {
-	if kid := c.domains.GetDomain(el.Name); len(kid.at) > 0 {
+	name := lang.Underscore(el.Name)
+	if kid := c.GetDomain(name); len(kid.at) > 0 {
 		err = errutil.New("domain", p.name, " at", p.at, "redeclared", at)
 	} else {
 		// initialize domain:
+		kid.originalName = el.Name
 		kid.at = at
 		kid.inflect = p.inflect
 		kid.deps.add(p) // we are dependent on the parent domain
-		// add all the other dependencies too
+		// add any explicit dependencies too
 		for _, req := range el.Requires {
-			kid.deps.add(c.domains.GetDomain(req))
+			name := lang.Underscore(req)
+			kid.deps.add(c.GetDomain(name))
 		}
-		c.domains.processing.Push(kid)
+		c.processing.Push(kid)
 	}
 	return
 }
 
 // pop the most recent domain
-func (el *EphEndDomain) Catalog(c *Catalog, d *Domain, at string) (err error) {
-	if d.name != el.Name {
-		err = errutil.New("unexpected domain ending, requested", el.Name, "have", d.name)
+func (el *EphEndDomain) Catalog(c *Catalog, p *Domain, at string) (err error) {
+	// we expect it's the current domain, the parent of this command, that's the one ending
+	if name := lang.Underscore(el.Name); name != p.name {
+		err = errutil.New("unexpected domain ending, requested", el.Name, "have", p.name)
 	} else {
-		c.domains.processing.Pop()
+		c.processing.Pop()
 	}
 	return
 }
 
-// add to the plurals to the database and remember the plural for the current domain's set of rules
+// add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // eph_plural: plural, singular, domain, path
+// note: i can actually add things to the dbs and resolve the domain order later.
 func (el *EphPlural) Catalog(c *Catalog, d *Domain, at string) (err error) {
+
+	// next
+
 	d.inflect.AddPluralExact(el.Singular, el.Plural, true)
 	return
 }
