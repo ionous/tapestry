@@ -117,7 +117,7 @@ func TestDomainWhenUndeclared(t *testing.T) {
 	}
 }
 
-// various white spacing and casing should become more friendly underscore case1
+// various white spacing and casing should become more friendly underscore case
 func TestDomainCase(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(ds("alpha   domain", "beta domain"))

@@ -481,7 +481,8 @@ for (currentGroup in groups) {
   }));
 
   fs.closeSync(fd);
-  // re-format the file using goimports because its hard sometimes to know where errutil is needed
+  // re-format the file using go format.
+  // actually, use goimports because its hard sometimes to know where errutil is needed
   child_process.execSync(`goimports -e -w ${filepath}`);
   // child_process.execSync(`gofmt -e -s -w ${filepath}`);
 }
