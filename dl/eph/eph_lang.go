@@ -437,7 +437,7 @@ func EphEndDomain_Marshal(m jsn.Marshaler, val *EphEndDomain) (err error) {
 
 // EphList
 type EphList struct {
-	EphAt []EphAt `if:"label=list"`
+	All []EphAt `if:"label=list"`
 }
 
 func (*EphList) Compose() composer.Spec {
@@ -450,7 +450,7 @@ func (*EphList) Compose() composer.Spec {
 
 const EphList_Type = "eph_list"
 
-const EphList_Field_EphAt = "$EPH_AT"
+const EphList_Field_All = "$ALL"
 
 func (op *EphList) Marshal(m jsn.Marshaler) error {
 	return EphList_Marshal(m, op)
@@ -522,12 +522,12 @@ func EphList_Optional_Marshal(m jsn.Marshaler, pv **EphList) (err error) {
 
 func EphList_Marshal(m jsn.Marshaler, val *EphList) (err error) {
 	if err = m.MarshalBlock(EphList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("list", EphList_Field_EphAt)
+		e0 := m.MarshalKey("list", EphList_Field_All)
 		if e0 == nil {
-			e0 = EphAt_Repeats_Marshal(m, &val.EphAt)
+			e0 = EphAt_Repeats_Marshal(m, &val.All)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphList_Field_EphAt))
+			m.Error(errutil.New(e0, "in flow at", EphList_Field_All))
 		}
 		m.EndBlock()
 	}
@@ -643,7 +643,8 @@ func EphNameRef_Marshal(m jsn.Marshaler, val *EphNameRef) (err error) {
 	return
 }
 
-// EphPlural
+// EphPlural plurals are needed at runtime to help parser what the user inputs.
+// plurals are also needed at assembly time to understand what the author wrote.
 // User implements: Ephemera.
 type EphPlural struct {
 	Plural   string `if:"label=plural,type=text"`

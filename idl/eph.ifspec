@@ -12,7 +12,7 @@
                 "spec": "eph {at:text} {eph:ephemera}"
             },
             "eph_list": {
-                "spec": "eph {list%eph_at+eph_at}"
+                "spec": "eph {list%all+eph_at}"
             },
             "eph_begin_domain": {
                 "spec": "eph {domain%name:text} {requires+text}",
@@ -24,7 +24,11 @@
             },
             "eph_plural": {
                 "spec": "eph {plural:text} {singular:text}",
-                "slot": "ephemera"
+                "slot": "ephemera",
+                "desc": [
+                    "plurals are needed at runtime to help parser what the user inputs.",
+                    "plurals are also needed at assembly time to understand what the author wrote."
+                ]
             },
             "eph_name_ref": {
                 "spec": "eph {ref%name:text} {of%type:text}",

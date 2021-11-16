@@ -2487,7 +2487,13 @@ func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
 	return
 }
 
-// ListSlice Create a new list from a section of another list.,Start is optional, if omitted slice starts at the first element.,If start is greater the length, an empty array is returned.,Slice doesnt include the ending index.,Negatives indices indicates an offset from the end.,When end is omitted, copy up to and including the last element;,and do the same if the end is greater than the length
+// ListSlice Create a new list from a section of another list.
+// Start is optional, if omitted slice starts at the first element.
+// If start is greater the length, an empty array is returned.
+// Slice doesnt include the ending index.
+// Negatives indices indicates an offset from the end.
+// When end is omitted, copy up to and including the last element;
+// and do the same if the end is greater than the length
 // User implements: NumListEval, TextListEval, RecordListEval.
 type ListSlice struct {
 	List  rt.Assignment `if:"label=_"`
@@ -3454,7 +3460,12 @@ func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
 	return
 }
 
-// Range Generates a series of numbers r[i] &#x3D; (start + step*i) where i&gt;&#x3D;0.,Start and step default to 1, stop defaults to start;,the inputs are truncated to produce whole numbers;,a zero step returns an error.,A positive step ends the series when the returned value would exceed stop,while a negative step ends before generating a value less than stop.
+// Range Generates a series of numbers r[i] &#x3D; (start + step*i) where i&gt;&#x3D;0.
+// Start and step default to 1, stop defaults to start;
+// the inputs are truncated to produce whole numbers;
+// a zero step returns an error.
+// A positive step ends the series when the returned value would exceed stop
+// while a negative step ends before generating a value less than stop.
 // User implements: NumListEval.
 type Range struct {
 	To     rt.NumberEval `if:"label=_"`

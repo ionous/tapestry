@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/grammar"
 	"git.sr.ht/~ionous/iffy/dl/reader"
+	"git.sr.ht/~ionous/iffy/dl/render"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -96,7 +97,7 @@ func AbstractAction_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AbstractActi
 
 // ActionContext
 type ActionContext struct {
-	At   reader.Position `if:"internal"`
+	At   render.Position `if:"internal"`
 	Kind SingularKind    `if:"label=_"`
 }
 
@@ -197,7 +198,7 @@ func ActionContext_Marshal(m jsn.Marshaler, val *ActionContext) (err error) {
 // ActionDecl
 // User implements: StoryStatement.
 type ActionDecl struct {
-	At           reader.Position `if:"internal"`
+	At           render.Position `if:"internal"`
 	Event        EventName       `if:"label=_"`
 	Action       ActionName      `if:"label=action"`
 	ActionParams ActionParams    `if:"label=action_params"`
@@ -395,6 +396,8 @@ type ActionParams struct {
 	Value  interface{}
 	Choice string
 }
+
+var ActionParams_Optional_Marshal = ActionParams_Marshal
 
 const ActionParams_Common_Opt = "$COMMON"
 const ActionParams_Dual_Opt = "$DUAL"
@@ -834,7 +837,7 @@ func AreEither_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreEither) (err e
 
 // Argument
 type Argument struct {
-	At   reader.Position `if:"internal"`
+	At   render.Position `if:"internal"`
 	Name string          `if:"label=_,type=text"`
 	From rt.Assignment   `if:"label=from"`
 }
@@ -944,7 +947,7 @@ func Argument_Marshal(m jsn.Marshaler, val *Argument) (err error) {
 
 // Arguments
 type Arguments struct {
-	At   reader.Position `if:"internal"`
+	At   render.Position `if:"internal"`
 	Args []Argument      `if:"label=_"`
 }
 
@@ -1738,7 +1741,7 @@ func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
 
 // CommonAction
 type CommonAction struct {
-	At            reader.Position `if:"internal"`
+	At            render.Position `if:"internal"`
 	Kind          SingularKind    `if:"label=_"`
 	ActionContext *ActionContext  `if:"label=action_context,optional"`
 }
@@ -1848,7 +1851,7 @@ func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
 // CountOf A guard which returns true based on a counter.
 // User implements: BoolEval.
 type CountOf struct {
-	At      reader.Position `if:"internal"`
+	At      render.Position `if:"internal"`
 	Trigger core.Trigger    `if:"label=_"`
 	Num     rt.NumberEval   `if:"label=num"`
 }
@@ -1958,7 +1961,7 @@ func CountOf_Marshal(m jsn.Marshaler, val *CountOf) (err error) {
 // CycleText
 // User implements: TextEval.
 type CycleText struct {
-	At    reader.Position `if:"internal"`
+	At    render.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
 }
 
@@ -2253,7 +2256,7 @@ func Determiner_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Determiner) (err
 // EventBlock Listeners let objects in the game world react to changes before, during, or after they happen.
 // User implements: StoryStatement.
 type EventBlock struct {
-	At       reader.Position `if:"internal"`
+	At       render.Position `if:"internal"`
 	Target   EventTarget     `if:"label=_"`
 	Handlers []EventHandler  `if:"label=handlers"`
 }
@@ -2652,6 +2655,8 @@ type EventTarget struct {
 	Choice string
 }
 
+var EventTarget_Optional_Marshal = EventTarget_Marshal
+
 const EventTarget_Kinds_Opt = "$KINDS"
 const EventTarget_NamedNoun_Opt = "$NAMED_NOUN"
 
@@ -2753,6 +2758,8 @@ type ExtType struct {
 	Value  interface{}
 	Choice string
 }
+
+var ExtType_Optional_Marshal = ExtType_Marshal
 
 const ExtType_Numbers_Opt = "$NUMBERS"
 const ExtType_TextList_Opt = "$TEXT_LIST"
@@ -4025,6 +4032,115 @@ func Make_Marshal(m jsn.Marshaler, val *Make) (err error) {
 	return
 }
 
+// MakePlural The plural of person is people.
+// User implements: StoryStatement.
+type MakePlural struct {
+	Singular string `if:"label=_,type=text"`
+	Plural   string `if:"label=plural,type=text"`
+}
+
+func (*MakePlural) Compose() composer.Spec {
+	return composer.Spec{
+		Name: MakePlural_Type,
+		Uses: composer.Type_Flow,
+		Lede: "make",
+	}
+}
+
+const MakePlural_Type = "make_plural"
+
+const MakePlural_Field_Singular = "$SINGULAR"
+const MakePlural_Field_Plural = "$PLURAL"
+
+func (op *MakePlural) Marshal(m jsn.Marshaler) error {
+	return MakePlural_Marshal(m, op)
+}
+
+type MakePlural_Slice []MakePlural
+
+func (op *MakePlural_Slice) GetType() string { return MakePlural_Type }
+
+func (op *MakePlural_Slice) Marshal(m jsn.Marshaler) error {
+	return MakePlural_Repeats_Marshal(m, (*[]MakePlural)(op))
+}
+
+func (op *MakePlural_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *MakePlural_Slice) SetSize(cnt int) {
+	var els []MakePlural
+	if cnt >= 0 {
+		els = make(MakePlural_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *MakePlural_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return MakePlural_Marshal(m, &(*op)[i])
+}
+
+func MakePlural_Repeats_Marshal(m jsn.Marshaler, vals *[]MakePlural) error {
+	return jsn.RepeatBlock(m, (*MakePlural_Slice)(vals))
+}
+
+func MakePlural_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MakePlural) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = MakePlural_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type MakePlural_Flow struct{ ptr *MakePlural }
+
+func (n MakePlural_Flow) GetType() string      { return MakePlural_Type }
+func (n MakePlural_Flow) GetLede() string      { return "make" }
+func (n MakePlural_Flow) GetFlow() interface{} { return n.ptr }
+func (n MakePlural_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*MakePlural); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func MakePlural_Optional_Marshal(m jsn.Marshaler, pv **MakePlural) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = MakePlural_Marshal(m, *pv)
+	} else if !enc {
+		var v MakePlural
+		if err = MakePlural_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func MakePlural_Marshal(m jsn.Marshaler, val *MakePlural) (err error) {
+	if err = m.MarshalBlock(MakePlural_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", MakePlural_Field_Singular)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Singular)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", MakePlural_Field_Singular))
+		}
+		e1 := m.MarshalKey("plural", MakePlural_Field_Plural)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Plural)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", MakePlural_Field_Plural))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // ManyToMany
 type ManyToMany struct {
 	Kinds      PluralKinds `if:"label=_"`
@@ -4244,6 +4360,8 @@ type MapConnection struct {
 	Value  interface{}
 	Choice string
 }
+
+var MapConnection_Optional_Marshal = MapConnection_Marshal
 
 const MapConnection_ArrivingAt_Opt = "$ARRIVING_AT"
 const MapConnection_ConnectingTo_Opt = "$CONNECTING_TO"
@@ -5056,6 +5174,8 @@ type NounPhrase struct {
 	Value  interface{}
 	Choice string
 }
+
+var NounPhrase_Optional_Marshal = NounPhrase_Marshal
 
 const NounPhrase_KindOfNoun_Opt = "$KIND_OF_NOUN"
 const NounPhrase_NounTraits_Opt = "$NOUN_TRAITS"
@@ -5903,7 +6023,7 @@ func OneToOne_Marshal(m jsn.Marshaler, val *OneToOne) (err error) {
 
 // PairedAction
 type PairedAction struct {
-	At    reader.Position `if:"internal"`
+	At    render.Position `if:"internal"`
 	Kinds PluralKinds     `if:"label=_"`
 }
 
@@ -7316,6 +7436,8 @@ type PrimitiveValue struct {
 	Choice string
 }
 
+var PrimitiveValue_Optional_Marshal = PrimitiveValue_Marshal
+
 const PrimitiveValue_BoxedText_Opt = "$BOXED_TEXT"
 const PrimitiveValue_BoxedNumber_Opt = "$BOXED_NUMBER"
 
@@ -7417,6 +7539,8 @@ type ProgramHook struct {
 	Value  interface{}
 	Choice string
 }
+
+var ProgramHook_Optional_Marshal = ProgramHook_Marshal
 
 const ProgramHook_Activity_Opt = "$ACTIVITY"
 
@@ -7885,6 +8009,8 @@ type PropertyType struct {
 	Value  interface{}
 	Choice string
 }
+
+var PropertyType_Optional_Marshal = PropertyType_Marshal
 
 const PropertyType_PropertyAspect_Opt = "$PROPERTY_ASPECT"
 const PropertyType_Primitive_Opt = "$PRIMITIVE"
@@ -8452,6 +8578,8 @@ type RelationCardinality struct {
 	Choice string
 }
 
+var RelationCardinality_Optional_Marshal = RelationCardinality_Marshal
+
 const RelationCardinality_OneToOne_Opt = "$ONE_TO_ONE"
 const RelationCardinality_OneToMany_Opt = "$ONE_TO_MANY"
 const RelationCardinality_ManyToOne_Opt = "$MANY_TO_ONE"
@@ -8903,7 +9031,7 @@ func Send_Marshal(m jsn.Marshaler, val *Send) (err error) {
 // ShuffleText
 // User implements: TextEval.
 type ShuffleText struct {
-	At    reader.Position `if:"internal"`
+	At    render.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
 }
 
@@ -9081,7 +9209,7 @@ func SingularKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SingularKind) 
 // StoppingText
 // User implements: TextEval.
 type StoppingText struct {
-	At    reader.Position `if:"internal"`
+	At    render.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
 }
 
@@ -9345,7 +9473,7 @@ func StoryStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryStateme
 
 // Summary
 type Summary struct {
-	At    reader.Position `if:"internal"`
+	At    render.Position `if:"internal"`
 	Lines value.Lines     `if:"label=_"`
 }
 
@@ -9953,7 +10081,7 @@ func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
 // TestStatement
 // User implements: StoryStatement.
 type TestStatement struct {
-	At       reader.Position `if:"internal"`
+	At       render.Position `if:"internal"`
 	TestName TestName        `if:"label=_"`
 	Test     Testing         `if:"label=test"`
 }
@@ -10524,6 +10652,8 @@ type VariableType struct {
 	Choice string
 }
 
+var VariableType_Optional_Marshal = VariableType_Marshal
+
 const VariableType_Primitive_Opt = "$PRIMITIVE"
 const VariableType_Object_Opt = "$OBJECT"
 const VariableType_Ext_Opt = "$EXT"
@@ -10671,6 +10801,7 @@ var Slats = []composer.Composer{
 	(*LocalDecl)(nil),
 	(*LocalInit)(nil),
 	(*Make)(nil),
+	(*MakePlural)(nil),
 	(*ManyToMany)(nil),
 	(*ManyToOne)(nil),
 	(*MapConnection)(nil),
@@ -10789,6 +10920,7 @@ var Signatures = map[uint64]interface{}{
 	11789909816860756800: (*LocalInit)(nil),                /* LocalInit: */
 	9981010364372027439:  (*Make)(nil),                     /* Make: */
 	12609627593403083413: (*Make)(nil),                     /* Make:arguments: */
+	3572160234867157749:  (*MakePlural)(nil),               /* Make:plural: */
 	17563761532337350103: (*ManyToMany)(nil),               /* ManyToMany:otherKinds: */
 	4129025779762507875:  (*ManyToOne)(nil),                /* ManyToOne:kind: */
 	4746882967578843264:  (*MapConnection)(nil),            /* MapConnection arrivingAt: */

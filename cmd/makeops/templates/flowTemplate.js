@@ -1,8 +1,16 @@
 // runTemplate.js
 'use strict';
 module.exports = `
-{{~#with type~}}
-// {{Pascal name}} {{desc.short}}
+{{#with type~}}
+// {{Pascal name}}
+{{~#if (IsString desc.short)}} {{desc.short}}
+{{else~}}
+{{#each desc.short}}
+{{#if @index}}//{{/if}} {{this}}
+{{else}}
+
+{{/each}}
+{{/if}}
 {{#if with.slots}}
 // User implements:{{#each with.slots}} {{Pascal this}}{{#unless @last}},{{/unless}}{{/each}}.
 {{/if}}
@@ -14,7 +22,6 @@ type {{Pascal name}} struct {
   {{~#if (Unboxed type)}},type={{type}}{{/if}}"\`
 {{/each}}
 }
-
 {{>spec~}}
 {{~#each params}}{{#unless internal}}
 const {{Pascal ../name}}_Field_{{Pascal key}} = "{{key}}";

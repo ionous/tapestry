@@ -73,6 +73,9 @@ Handlebars.registerHelper('IsToken', function(str) {
 Handlebars.registerHelper('NoHelpers', function(name) {
   return name === "position";
 });
+Handlebars.registerHelper('IsString', function(el) {
+  return typeof el === 'string';
+});
 // generate a custom compact format command name for a type
 const ledeName = function(t) {
   // note: we dont give plain english commands a special lede
@@ -298,12 +301,8 @@ const locationOf = function(x) {
       case "rt":
         where = `git.sr.ht/~ionous/iffy/rt`;
         break;
-      case "story":
-        // FIX: should move all the story files to the dl folder instead.
-        where = `git.sr.ht/~ionous/iffy/ephemera/story`;
-        break;
       default:
-        where = `git.sr.ht/~ionous/iffy/dl/${x}`
+        where = `git.sr.ht/~ionous/iffy/dl/${x}`;
         break;
     }
   }
@@ -482,8 +481,7 @@ for (currentGroup in groups) {
   }));
 
   fs.closeSync(fd);
-  // re-format the file using go format.
-  // actually, use goimports because its hard sometimes to know where errutil is needed
+  // re-format the file using goimports because its hard sometimes to know where errutil is needed
   child_process.execSync(`goimports -e -w ${filepath}`);
   // child_process.execSync(`gofmt -e -s -w ${filepath}`);
 }
