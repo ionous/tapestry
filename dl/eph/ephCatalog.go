@@ -1,11 +1,20 @@
 package eph
 
-import "github.com/ionous/errutil"
+import (
+	"log"
 
-// receive ephemera from the importer
+	"github.com/ionous/errutil"
+)
+
+// Catalog - receives ephemera from the importer.
 type Catalog struct {
+	Writer     // not a huge fan of this here.... hrm...
 	domains    AllDomains
 	processing DomainStack
+}
+
+func (c *Catalog) Warn(e error) {
+	log.Println(e) // for now good enough
 }
 
 func (c *Catalog) GetDomain(n string) (ret *Domain) {
@@ -38,6 +47,6 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 	return
 }
 
-func (c *Catalog) WriteDomains(out Writer) error {
-	return writeDomains(out, c.domains)
+func (c *Catalog) WriteDomains() error {
+	return writeDomains(c.Writer, c.domains)
 }

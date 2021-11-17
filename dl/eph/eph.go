@@ -1,6 +1,8 @@
 package eph
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/iffy/lang"
 	"github.com/ionous/errutil"
 )
@@ -11,16 +13,16 @@ type Ephemera interface {
 }
 
 //
-func (el *EphBeginDomain) Catalog(c *Catalog, p *Domain, at string) (err error) {
+func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) {
 	name := lang.Underscore(el.Name)
 	if kid := c.GetDomain(name); len(kid.at) > 0 {
-		err = errutil.New("domain", p.name, " at", p.at, "redeclared", at)
+		err = errutil.New("domain", d.name, " at", d.at, "redeclared", at)
 	} else {
 		// initialize domain:
 		kid.originalName = el.Name
 		kid.at = at
-		kid.inflect = p.inflect
-		kid.deps.add(p) // we are dependent on the parent domain
+		kid.inflect = d.inflect
+		kid.deps.add(d) // we are dependent on the parent domain
 		// add any explicit dependencies too
 		for _, req := range el.Requires {
 			name := lang.Underscore(req)
@@ -32,10 +34,10 @@ func (el *EphBeginDomain) Catalog(c *Catalog, p *Domain, at string) (err error) 
 }
 
 // pop the most recent domain
-func (el *EphEndDomain) Catalog(c *Catalog, p *Domain, at string) (err error) {
+func (el *EphEndDomain) Catalog(c *Catalog, d *Domain, at string) (err error) {
 	// we expect it's the current domain, the parent of this command, that's the one ending
-	if name := lang.Underscore(el.Name); name != p.name {
-		err = errutil.New("unexpected domain ending, requested", el.Name, "have", p.name)
+	if name := lang.Underscore(el.Name); name != d.name {
+		err = errutil.New("unexpected domain ending, requested", el.Name, "have", d.name)
 	} else {
 		c.processing.Pop()
 	}
@@ -43,12 +45,32 @@ func (el *EphEndDomain) Catalog(c *Catalog, p *Domain, at string) (err error) {
 }
 
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
-// eph_plural: plural, singular, domain, path
-// note: i can actually add things to the dbs and resolve the domain order later.
+// not more than one singular per plural ( but the other way around is fine. )
 func (el *EphPlural) Catalog(c *Catalog, d *Domain, at string) (err error) {
+	var conflict *Conflict
+	if e := d.CheckConflicts(mdl_plural, at, el.Plural, el.Singular); e == nil {
+		el.store(c, d)
+	} else if !errors.As(e, &conflict) {
+		err = e // some unknown error?
+	} else if conflict.Reason != Duplicated {
+		// duplicated definitions are okay, but we dont need to store them.
+		// redefined definitions are only a problem in this domain
+		// ( we test for !redefined in case there's some unexpected error code. )
+		if d.name == conflict.Domain || conflict.Reason != Redefined {
+			err = e
+		} else {
+			el.store(c, d)
+			c.Warn(e) // redefined vs an earlier domain: let the user know.
+		}
+	}
+	return
+}
 
-	// next
-
-	d.inflect.AddPluralExact(el.Singular, el.Plural, true)
+func (el *EphPlural) store(c *Catalog, d *Domain) (err error) {
+	if e := c.Write(mdl_plural, d.name, el.Plural, el.Singular); e != nil {
+		err = e
+	} else {
+		d.inflect.AddPluralExact(el.Singular, el.Plural, true)
+	}
 	return
 }

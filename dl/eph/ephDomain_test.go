@@ -1,7 +1,6 @@
 package eph
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/kr/pretty"
@@ -18,7 +17,7 @@ func TestDomainSimpleTest(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		a := cat.GetDomain("a")
-		if e := a.Resolve(nil); e != nil {
+		if _, e := a.Resolve(); e != nil {
 			t.Fatal(e)
 		} else {
 			names := a.Resolved()
@@ -40,7 +39,7 @@ func TestDomainCatchCycles(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		a := cat.GetDomain("a")
-		if e := a.Resolve(nil); e == nil {
+		if _, e := a.Resolve(); e == nil {
 			t.Fatal(a.Resolved()) // we expect failure
 		} else {
 			t.Log("ok:", e)
@@ -57,43 +56,41 @@ func TestDomainTable(t *testing.T) {
 	dt.makeDomain(ds("c", "e"))
 	dt.makeDomain(ds("d"))
 	dt.makeDomain(ds("e"))
-	var cat Catalog
+	var out testOut
+	cat := Catalog{Writer: &out}
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
+	} else if e := cat.WriteDomains(); e != nil {
+		t.Fatal(e)
 	} else {
-		var out testOut
-		if e := cat.WriteDomains(&out); e != nil {
-			t.Fatal(e)
-		} else {
-			// domain name and the table
-			got := out[mdl_domain]
-			// we expect that we start generating dependencies in alphabetical domain order
-			// so: "a" gets evaluated first, recursively
-			if diff := pretty.Diff(got, []outEl{{
-				// everything depends on g, so we see that first
-				"g", "",
-			}, {
-				// a's first dep is "b", b's is "c", c's is "e"... so we see "e" next.
-				// it only depends on g.
-				"e", "g",
-			}, {
-				// c has no other dependencies other than e and g
-				"c", "e,g",
-			}, {
-				// back in "b"'s dependencies, it's also dependent on "d"
-				// and "d" -- like everything else -- depends on the global "g"
-				"d", "g",
-			}, {
-				// we're done with the dependencies of b's dependencies
-				// everything b needs, has been written into the table at this point
-				"b", "c,d,e,g",
-			}, {
-				// and, likewise that's true for "a"
-				"a", "b,c,d,e,g",
-			}}); len(diff) > 0 {
-				t.Log(pretty.Sprint(got))
-				// t.Fatal(got, diff)
-			}
+		// domain name and the table
+		got := out[mdl_domain]
+		// we expect that we start generating dependencies in alphabetical domain order
+		// so: "a" gets evaluated first, recursively
+		if diff := pretty.Diff(got, []outEl{{
+			// everything depends on g, so we see that first
+			"g", "",
+		}, {
+			// a's first dep is "b", b's is "c", c's is "e"... so we see "e" next.
+			// it only depends on g.
+			"e", "g",
+		}, {
+			// c has no other dependencies other than e and g
+			"c", "e,g",
+		}, {
+			// back in "b"'s dependencies, it's also dependent on "d"
+			// and "d" -- like everything else -- depends on the global "g"
+			"d", "g",
+		}, {
+			// we're done with the dependencies of b's dependencies
+			// everything b needs, has been written into the table at this point
+			"b", "c,d,e,g",
+		}, {
+			// and, likewise that's true for "a"
+			"a", "b,c,d,e,g",
+		}}); len(diff) > 0 {
+			t.Log(pretty.Sprint(got))
+			t.Fatal(diff)
 		}
 	}
 }
@@ -104,16 +101,14 @@ func TestDomainWhenUndeclared(t *testing.T) {
 	// we never explicitly declare "b" --
 	// and this should result in an error.
 	dt.makeDomain(ds("a", "b"))
-	var cat Catalog
+	var out testOut
+	cat := Catalog{Writer: &out}
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
+	} else if e := cat.WriteDomains(); e == nil {
+		t.Fatal("expected failure", out)
 	} else {
-		var out testOut
-		if e := cat.WriteDomains(&out); e == nil {
-			t.Fatal("expected failure", out)
-		} else {
-			t.Log("okay:", e)
-		}
+		t.Log("okay:", e)
 	}
 }
 
@@ -127,7 +122,7 @@ func TestDomainCase(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		a := cat.GetDomain("alpha_domain")
-		if e := a.Resolve(nil); e != nil {
+		if _, e := a.Resolve(); e != nil {
 			t.Fatal(e)
 		} else {
 			got, want := a.Resolved(), []string{"beta_domain", "g"}
@@ -136,37 +131,4 @@ func TestDomainCase(t *testing.T) {
 			}
 		}
 	}
-}
-
-type domainTest struct {
-	out []Ephemera
-}
-
-func ds(names ...string) []string {
-	return names
-}
-
-func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
-	dt.out = append(dt.out, &EphBeginDomain{
-		Name:     names[0],
-		Requires: names[1:],
-	})
-	dt.out = append(dt.out, add...)
-	dt.out = append(dt.out, &EphEndDomain{
-		Name: names[0],
-	})
-	return
-}
-
-func (dt *domainTest) addToCat(cat *Catalog) (err error) {
-	g := cat.GetDomain("g")
-	g.at = "global"
-	cat.processing.Push(g)
-	for i, el := range dt.out {
-		if e := cat.AddEphemera(EphAt{At: strconv.Itoa(i), Eph: el}); e != nil {
-			err = e
-			break
-		}
-	}
-	return
 }

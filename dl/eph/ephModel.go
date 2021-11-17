@@ -16,6 +16,11 @@ type Writer interface {
 // domain name and materialized parents separated by commas
 var mdl_domain = tables.Insert("mdl_domain", "domain", "path")
 
+// a plural word ("many") can have at most one singular definition per domain
+// ie. "people" and "persons" are valid plurals of "person",
+// but "people" as a singular can only be defined as "person" ( not "cat" )
+var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one")
+
 // domains should be in "most" core to least order
 // each line should have all the dependencies it needs
 func writeDomains(out Writer, ds AllDomains) (err error) {
@@ -33,7 +38,7 @@ func writeDomains(out Writer, ds AllDomains) (err error) {
 		sort.Strings(sorted)
 		for _, n := range sorted {
 			d := ds[n]
-			if e := d.Resolve(func(d *Domain) (err error) {
+			if e := d.resolveCb(func(d *Domain) (err error) {
 				deps := d.Resolved()
 				sort.Strings(deps) // sort for some amount of consistency
 				ls := strings.Join(deps, ",")

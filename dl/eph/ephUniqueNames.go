@@ -4,15 +4,18 @@ import "sort"
 
 type UniqueNames []string
 
-func (ns *UniqueNames) AddName(name string) {
+// returns true if newly added
+func (ns *UniqueNames) AddName(name string) (okay bool) {
 	s := *ns
-	i := sort.SearchStrings(s, name)
-	if i == len(s) {
+	if i := sort.SearchStrings(s, name); i == len(s) {
 		(*ns) = append(s, name)
+		okay = true
 	} else if s[i] != name {
 		s = append(s, "")
 		copy(s[i+1:], s[i:])
 		s[i] = name
 		(*ns) = s
+		okay = true
 	}
+	return
 }
