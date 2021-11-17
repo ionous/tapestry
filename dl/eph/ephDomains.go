@@ -5,130 +5,42 @@ import (
 	"github.com/ionous/inflect"
 )
 
-type Resolution int
-
-const (
-	Unresolved Resolution = iota
-	Processing
-	Resolved
-	Errored
-)
-
 type Domain struct {
-	name, at     string
-	originalName string
-	inflect      inflect.Ruleset
-	deps         DomainList
-	eph          EphList
-	status       Resolution
-	resolved     DomainList
-	parents      DomainList
-	defines      defines
-	err          error
+	name, at string
+	inflect  inflect.Ruleset
+	eph      EphList
+	deps     Dependencies
 }
 
-type AllDomains map[string]*Domain
-
-// walks the domain's dependencies ( non-recursively ) to find
-// whether the new key,value pair contradicts or duplicates any existing value.
-func (d *Domain) CheckConflicts(cat, at, key, value string) (err error) {
-	if deps, e := d.Resolve(); e != nil {
-		err = e
+//
+func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) {
+	if kid := c.GetDomain(el.Name); len(kid.at) > 0 {
+		err = errutil.New("domain", d.name, " at", d.at, "redeclared", at)
 	} else {
-		fullKey := cat + " " + key
-		if e := checkConflict(d, fullKey, value); e != nil {
-			err = e
-		} else {
-			for _, dep := range deps {
-				if e := checkConflict(dep, fullKey, value); e != nil {
-					err = e
-					break
-				}
-			}
-			if d.defines == nil {
-				d.defines = make(defines)
-			}
-			// store the result: rather than checking through all the resolved domains the next time
-			// ( if there is a next time )
-			d.defines[fullKey] = Definition{
-				at:    at,
-				value: value,
-				err:   err, // might be null and that's cool.
-			}
+		// initialize domain:
+		kid.at = at
+		kid.inflect = d.inflect
+		// add any explicit dependencies
+		for _, req := range el.Requires {
+			d := c.GetDomain(req)
+			kid.deps.AddDependency(d.name)
 		}
+		// we are dependent on the parent domain too
+		// ( adding it last keeps it closer to the right side of the parent list )
+		kid.deps.AddDependency(d.name)
+		c.processing.Push(kid)
 	}
 	return
 }
 
-func checkConflict(d *Domain, key, value string) (err error) {
-	if def, ok := d.defines[key]; ok {
-		if def.err != nil {
-			err = def.err
-		} else {
-			var why ReasonForConflict
-			if def.value == value {
-				why = Duplicated
-			} else {
-				why = Redefined
-			}
-			err = &Conflict{why, d.name, def}
-		}
-	}
-	return
-}
-
-func (d *Domain) Resolve() (ret DomainList, err error) {
-	if e := d.resolve(); e != nil {
-		err = e
+// pop the most recent domain
+func (el *EphEndDomain) Catalog(c *Catalog, d *Domain, at string) (err error) {
+	// we expect it's the current domain, the parent of this command, that's the one ending
+	kid := c.GetDomain(el.Name)
+	if name := kid.name; name != d.name {
+		err = errutil.New("unexpected domain ending, requested", el.Name, "have", d.name)
 	} else {
-		ret = d.resolved
-	}
-	return
-}
-
-// Recursively determine the domain's dependency list;
-// calling the passed function for each newly resolved dependency
-func (d *Domain) resolve() (err error) {
-	switch d.status {
-	case Resolved:
-		// ignore things that are already resolved
-
-	case Processing:
-		d.status, d.err = Errored, errutil.New("Circular reference detected:", d.name)
-		err = d.err
-
-	case Unresolved:
-		d.status = Processing
-		var res UniqueNames
-		var deps, parents DomainList
-		for _, dep := range d.deps {
-			// recurse
-			if e := dep.resolve(); e != nil {
-				d.status, d.err = Errored, errutil.New(e, "->", d.name)
-				err = d.err
-				break
-			} else {
-				for _, sub := range dep.resolved {
-					if res.AddName(sub.name) {
-						deps = append(deps, sub)
-					}
-				}
-				if res.AddName(dep.name) {
-					parents = append(parents, dep)
-				}
-			}
-		}
-		if err == nil {
-			d.status = Resolved
-			d.parents = parents
-			d.resolved = append(parents, deps...)
-		}
-	default:
-		if e := d.err; e != nil {
-			err = e
-		} else {
-			err = errutil.New("Unknown error processing", d.name)
-		}
+		c.processing.Pop()
 	}
 	return
 }

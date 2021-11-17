@@ -15,17 +15,11 @@ func TestDomainSimpleTest(t *testing.T) {
 	var cat Catalog // the catalog processing requires a global (root) domain.
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else {
-		a := cat.GetDomain("a")
-		if _, e := a.Resolve(); e != nil {
-			t.Fatal(e)
-		} else {
-			got := a.resolved.names()
-			if diff := pretty.Diff(got, []string{"b", "c", "d", "e", "g"}); len(diff) > 0 {
-				t.Log("got:", pretty.Sprint(got))
-				t.Fatal(diff)
-			}
-		}
+	} else if got, e := cat.GetDependentDomains("a"); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(got, []string{"b", "c", "d", "e", "g"}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(got))
+		t.Fatal(diff)
 	}
 }
 
@@ -38,13 +32,10 @@ func TestDomainCatchCycles(t *testing.T) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
+	} else if got, e := cat.GetDependentDomains("a"); e == nil {
+		t.Fatal(got) // we expected failure
 	} else {
-		a := cat.GetDomain("a")
-		if _, e := a.Resolve(); e == nil {
-			t.Fatal(a.resolved.names()) // we expected failure
-		} else {
-			t.Log("ok:", e)
-		}
+		t.Log("ok:", e)
 	}
 }
 
@@ -141,15 +132,9 @@ func TestDomainCase(t *testing.T) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else {
-		a := cat.GetDomain("alpha_domain")
-		if _, e := a.Resolve(); e != nil {
-			t.Fatal(e)
-		} else {
-			got := a.resolved.names()
-			if diff := pretty.Diff(got, []string{"beta_domain", "g"}); len(diff) > 0 {
-				t.Fatal(got, diff)
-			}
-		}
+	} else if got, e := cat.GetDependentDomains("alpha domain"); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(got, []string{"beta_domain", "g"}); len(diff) > 0 {
+		t.Fatal(got, diff)
 	}
 }
