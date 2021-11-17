@@ -15,25 +15,22 @@ const (
 )
 
 type Domain struct {
-	name, at      string
-	originalName  string
-	inflect       inflect.Ruleset
-	deps          DomainList
-	eph           EphList
-	status        Resolution
-	resolvedNames UniqueNames
-	resolved      DomainList
-	defines       defines
-	err           error
+	name, at     string
+	originalName string
+	inflect      inflect.Ruleset
+	deps         DomainList
+	eph          EphList
+	status       Resolution
+	resolved     DomainList
+	parents      DomainList
+	defines      defines
+	err          error
 }
 
 type AllDomains map[string]*Domain
 
-func (d *Domain) Resolved() []string {
-	return []string(d.resolvedNames)
-}
-
-// returns:
+// walks the domain's dependencies ( non-recursively ) to find
+// whether the new key,value pair contradicts or duplicates any existing value.
 func (d *Domain) CheckConflicts(cat, at, key, value string) (err error) {
 	if deps, e := d.Resolve(); e != nil {
 		err = e
@@ -81,7 +78,7 @@ func checkConflict(d *Domain, key, value string) (err error) {
 }
 
 func (d *Domain) Resolve() (ret DomainList, err error) {
-	if e := d.resolveCb(nil); e != nil {
+	if e := d.resolve(); e != nil {
 		err = e
 	} else {
 		ret = d.resolved
@@ -89,8 +86,9 @@ func (d *Domain) Resolve() (ret DomainList, err error) {
 	return
 }
 
-// Recursively determine the domain's dependency list
-func (d *Domain) resolveCb(newlyResolved func(*Domain) error) (err error) {
+// Recursively determine the domain's dependency list;
+// calling the passed function for each newly resolved dependency
+func (d *Domain) resolve() (err error) {
 	switch d.status {
 	case Resolved:
 		// ignore things that are already resolved
@@ -102,34 +100,28 @@ func (d *Domain) resolveCb(newlyResolved func(*Domain) error) (err error) {
 	case Unresolved:
 		d.status = Processing
 		var res UniqueNames
-		var deps DomainList
+		var deps, parents DomainList
 		for _, dep := range d.deps {
-			if e := dep.resolveCb(newlyResolved); e != nil {
+			// recurse
+			if e := dep.resolve(); e != nil {
 				d.status, d.err = Errored, errutil.New(e, "->", d.name)
 				err = d.err
 				break
 			} else {
-				if res.AddName(dep.name) {
-					deps = append(deps, dep)
-				}
 				for _, sub := range dep.resolved {
 					if res.AddName(sub.name) {
 						deps = append(deps, sub)
 					}
 				}
+				if res.AddName(dep.name) {
+					parents = append(parents, dep)
+				}
 			}
 		}
 		if err == nil {
 			d.status = Resolved
-			d.resolvedNames = res
-			d.resolved = deps
-			//
-			if newlyResolved != nil {
-				if e := newlyResolved(d); e != nil {
-					d.status, d.err = Errored, e
-					err = d.err
-				}
-			}
+			d.parents = parents
+			d.resolved = append(parents, deps...)
 		}
 	default:
 		if e := d.err; e != nil {

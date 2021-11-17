@@ -22,12 +22,14 @@ func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) 
 		kid.originalName = el.Name
 		kid.at = at
 		kid.inflect = d.inflect
-		kid.deps.add(d) // we are dependent on the parent domain
-		// add any explicit dependencies too
+		// add any explicit dependencies
 		for _, req := range el.Requires {
 			name := lang.Underscore(req)
 			kid.deps.add(c.GetDomain(name))
 		}
+		// we are dependent on the parent domain too
+		// ( adding it last keeps it closer to the right side of the parent list )
+		kid.deps.add(d)
 		c.processing.Push(kid)
 	}
 	return

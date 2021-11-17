@@ -20,9 +20,10 @@ func TestDomainSimpleTest(t *testing.T) {
 		if _, e := a.Resolve(); e != nil {
 			t.Fatal(e)
 		} else {
-			names := a.Resolved()
-			if diff := pretty.Diff(names, []string{"b", "c", "d", "e", "g"}); len(diff) > 0 {
-				t.Fatal(diff, names)
+			got := a.resolved.names()
+			if diff := pretty.Diff(got, []string{"b", "c", "d", "e", "g"}); len(diff) > 0 {
+				t.Log("got:", pretty.Sprint(got))
+				t.Fatal(diff)
 			}
 		}
 	}
@@ -40,7 +41,7 @@ func TestDomainCatchCycles(t *testing.T) {
 	} else {
 		a := cat.GetDomain("a")
 		if _, e := a.Resolve(); e == nil {
-			t.Fatal(a.Resolved()) // we expect failure
+			t.Fatal(a.resolved.names()) // we expected failure
 		} else {
 			t.Log("ok:", e)
 		}
@@ -50,6 +51,52 @@ func TestDomainCatchCycles(t *testing.T) {
 // domains should be in "most" core to least order
 // each line should have all the dependencies it needs
 func TestDomainTable(t *testing.T) {
+	if got, e := writeDomainTable(true); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(got, []outEl{{
+		// we expect that we start generating dependencies in alphabetical domain order
+		// so: "a" gets evaluated first, recursively
+		"a", "b,c,d,e,g",
+	}, {
+		"b", "c,d,e,g",
+	}, {
+		"c", "e,g",
+	}, {
+		"d", "g",
+	}, {
+		"e", "g",
+	}, {
+		"g", "",
+	}}); len(diff) > 0 {
+		t.Log(pretty.Sprint(got))
+		t.Fatal(diff)
+	}
+}
+
+// same as table test, but the exclusive parents of each domain
+func TestDomainParents(t *testing.T) {
+	if got, e := writeDomainTable(false); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(got, []outEl{{
+		"a", "b",
+	}, {
+		"b", "c,d",
+	}, {
+		"c", "e",
+	}, {
+		"d", "g",
+	}, {
+		"e", "g",
+	}, {
+		"g", "",
+	}}); len(diff) > 0 {
+		t.Log(pretty.Sprint(got))
+		t.Fatal(diff)
+	}
+}
+
+// build a set of domains, and write them as if to a sql table
+func writeDomainTable(fullTree bool) (ret []outEl, err error) {
 	var dt domainTest
 	dt.makeDomain(ds("a", "b", "d"))
 	dt.makeDomain(ds("b", "c", "d"))
@@ -59,40 +106,14 @@ func TestDomainTable(t *testing.T) {
 	var out testOut
 	cat := Catalog{Writer: &out}
 	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.WriteDomains(); e != nil {
-		t.Fatal(e)
+		err = e
+	} else if e := cat.WriteDomains(fullTree); e != nil {
+		err = e
 	} else {
 		// domain name and the table
-		got := out[mdl_domain]
-		// we expect that we start generating dependencies in alphabetical domain order
-		// so: "a" gets evaluated first, recursively
-		if diff := pretty.Diff(got, []outEl{{
-			// everything depends on g, so we see that first
-			"g", "",
-		}, {
-			// a's first dep is "b", b's is "c", c's is "e"... so we see "e" next.
-			// it only depends on g.
-			"e", "g",
-		}, {
-			// c has no other dependencies other than e and g
-			"c", "e,g",
-		}, {
-			// back in "b"'s dependencies, it's also dependent on "d"
-			// and "d" -- like everything else -- depends on the global "g"
-			"d", "g",
-		}, {
-			// we're done with the dependencies of b's dependencies
-			// everything b needs, has been written into the table at this point
-			"b", "c,d,e,g",
-		}, {
-			// and, likewise that's true for "a"
-			"a", "b,c,d,e,g",
-		}}); len(diff) > 0 {
-			t.Log(pretty.Sprint(got))
-			t.Fatal(diff)
-		}
+		ret = out[mdl_domain]
 	}
+	return
 }
 
 func TestDomainWhenUndeclared(t *testing.T) {
@@ -105,7 +126,7 @@ func TestDomainWhenUndeclared(t *testing.T) {
 	cat := Catalog{Writer: &out}
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteDomains(); e == nil {
+	} else if e := cat.WriteDomains(true); e == nil {
 		t.Fatal("expected failure", out)
 	} else {
 		t.Log("okay:", e)
@@ -125,8 +146,8 @@ func TestDomainCase(t *testing.T) {
 		if _, e := a.Resolve(); e != nil {
 			t.Fatal(e)
 		} else {
-			got, want := a.Resolved(), []string{"beta_domain", "g"}
-			if diff := pretty.Diff(got, want); len(diff) > 0 {
+			got := a.resolved.names()
+			if diff := pretty.Diff(got, []string{"beta_domain", "g"}); len(diff) > 0 {
 				t.Fatal(got, diff)
 			}
 		}

@@ -23,7 +23,7 @@ var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one")
 
 // domains should be in "most" core to least order
 // each line should have all the dependencies it needs
-func writeDomains(out Writer, ds AllDomains) (err error) {
+func writeDomains(out Writer, fullTree bool, ds AllDomains) (err error) {
 	// we *try* as much as possible to keep the order stableish
 	sorted := make([]string, 0, len(ds))
 	for _, d := range ds {
@@ -38,16 +38,21 @@ func writeDomains(out Writer, ds AllDomains) (err error) {
 		sort.Strings(sorted)
 		for _, n := range sorted {
 			d := ds[n]
-			if e := d.resolveCb(func(d *Domain) (err error) {
-				deps := d.Resolved()
+			if _, e := d.Resolve(); e != nil {
+				err = errutil.Append(err, e)
+			} else {
+				// v is a visited dependency; and its "deps" is its complete list of dependencies
+				var deps []string
+				if fullTree {
+					deps = d.resolved.names()
+				} else {
+					deps = d.parents.names()
+				}
 				sort.Strings(deps) // sort for some amount of consistency
 				ls := strings.Join(deps, ",")
 				if e := out.Write(mdl_domain, d.name, ls); e != nil {
-					err = errutil.New("domain", d.name, "couldn't output", e)
+					err = errutil.Append(err, errutil.New("domain", d.name, "couldn't write", e))
 				}
-				return
-			}); e != nil {
-				err = errutil.Append(err, e)
 			}
 		}
 	}

@@ -18,3 +18,12 @@ func (dl *DomainList) contains(d *Domain) (okay bool) {
 	}
 	return
 }
+
+// return a new list of the resolved names
+func (dl *DomainList) names() []string {
+	out := make([]string, len(*dl))
+	for i, d := range *dl {
+		out[i] = d.name
+	}
+	return out
+}

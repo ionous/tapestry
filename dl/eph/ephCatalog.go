@@ -47,6 +47,6 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 	return
 }
 
-func (c *Catalog) WriteDomains() error {
-	return writeDomains(c.Writer, c.domains)
+func (c *Catalog) WriteDomains(fullTree bool) error {
+	return writeDomains(c.Writer, fullTree, c.domains)
 }
