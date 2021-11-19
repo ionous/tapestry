@@ -24,7 +24,7 @@ type ResolvedDependencies struct {
 }
 
 // if not the full tree returns just the parents
-func (d *ResolvedDependencies) GetFullTree(fullTree bool) (ret []string) {
+func (d *ResolvedDependencies) Ancestors(fullTree bool) (ret []string) {
 	if fullTree {
 		ret = d.fullTree
 	} else {
@@ -80,7 +80,7 @@ func (d *Dependencies) Resolve(name string, names DependencyFinder) (ret Resolve
 				break
 			} else {
 				// add the resolved dependencies of our dependency
-				for _, sub := range subdeps.GetFullTree(true) {
+				for _, sub := range subdeps.Ancestors(true) {
 					if all.AddName(sub) {
 						subs = append(subs, sub)
 					}

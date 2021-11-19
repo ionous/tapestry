@@ -5,15 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/lang"
 	"github.com/ionous/errutil"
 )
-
-// implemented by individual commands
-type Ephemera interface {
-	Catalog(c *Catalog, d *Domain, at string) error
-	// Phase?
-}
 
 // Catalog - receives ephemera from the importer.
 type Catalog struct {
@@ -44,13 +37,12 @@ func (c *Catalog) CheckConflicts(name, cat, at, key, value string) (err error) {
 	return c.conflicts.CheckConflicts(name, (*catDependencyFinder)(c), cat, at, key, value)
 }
 
-// primarily for testing: return list of all the domains that the passed named domain requires
-func (c *Catalog) GetDependentDomains(name string) (ret []string, err error) {
-	n := lang.Underscore(name)
+// primarily for testing: return list of all the domains that the passed uniformly named domain requires
+func (c *Catalog) GetDependentDomains(n string) (ret []string, err error) {
 	if dep, e := c.getDependentDomains(n); e != nil {
 		err = e
 	} else {
-		ret = dep.GetFullTree(true)
+		ret = dep.Ancestors(true)
 	}
 	return
 }
@@ -64,9 +56,8 @@ func (c *Catalog) getDependentDomains(n string) (ret ResolvedDependencies, err e
 	return
 }
 
-// return the named domain ( creating it if necessary )
-func (c *Catalog) GetDomain(name string) (ret *Domain) {
-	n := lang.Underscore(name)
+// return the uniformly named domain ( creating it if necessary )
+func (c *Catalog) GetDomain(n string) (ret *Domain) {
 	if d, ok := c.domains[n]; ok {
 		ret = d
 	} else {
@@ -86,11 +77,11 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 	if d, ok := c.processing.Top(); !ok {
 		err = errutil.New("no domain")
 	} else {
-		switch el := ephAt.Eph.(type) {
-		case *EphEndDomain, *EphBeginDomain:
-			err = el.Catalog(c, d, ephAt.At)
-		default:
-			d.eph.All = append(d.eph.All, ephAt)
+		phase := ephAt.Eph.Phase()
+		if phase == Domains {
+			err = ephAt.Eph.Catalog(c, d, ephAt.At)
+		} else {
+			d.phases[phase] = append(d.phases[phase], ephAt)
 		}
 	}
 	return
@@ -113,7 +104,7 @@ func (c *Catalog) WriteDomains(fullTree bool) (err error) {
 		for _, n := range sorted {
 			if deps, e := c.getDependentDomains(n); e != nil {
 				err = errutil.Append(err, e)
-			} else if e := c.Write(mdl_domain, n, strings.Join(deps.GetFullTree(fullTree), ",")); e != nil {
+			} else if e := c.Write(mdl_domain, n, strings.Join(deps.Ancestors(fullTree), ",")); e != nil {
 				err = errutil.Append(err, errutil.New("domain", n, "couldn't write", e))
 			}
 		}

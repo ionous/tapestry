@@ -435,6 +435,115 @@ func EphEndDomain_Marshal(m jsn.Marshaler, val *EphEndDomain) (err error) {
 	return
 }
 
+// EphKinds
+// User implements: Ephemera.
+type EphKinds struct {
+	Kinds string `if:"label=kinds,type=text"`
+	Kind  string `if:"label=from,type=text"`
+}
+
+func (*EphKinds) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphKinds_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphKinds_Type = "eph_kinds"
+
+const EphKinds_Field_Kinds = "$KINDS"
+const EphKinds_Field_Kind = "$KIND"
+
+func (op *EphKinds) Marshal(m jsn.Marshaler) error {
+	return EphKinds_Marshal(m, op)
+}
+
+type EphKinds_Slice []EphKinds
+
+func (op *EphKinds_Slice) GetType() string { return EphKinds_Type }
+
+func (op *EphKinds_Slice) Marshal(m jsn.Marshaler) error {
+	return EphKinds_Repeats_Marshal(m, (*[]EphKinds)(op))
+}
+
+func (op *EphKinds_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphKinds_Slice) SetSize(cnt int) {
+	var els []EphKinds
+	if cnt >= 0 {
+		els = make(EphKinds_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphKinds_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphKinds_Marshal(m, &(*op)[i])
+}
+
+func EphKinds_Repeats_Marshal(m jsn.Marshaler, vals *[]EphKinds) error {
+	return jsn.RepeatBlock(m, (*EphKinds_Slice)(vals))
+}
+
+func EphKinds_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphKinds) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphKinds_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphKinds_Flow struct{ ptr *EphKinds }
+
+func (n EphKinds_Flow) GetType() string      { return EphKinds_Type }
+func (n EphKinds_Flow) GetLede() string      { return "eph" }
+func (n EphKinds_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphKinds_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphKinds); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphKinds_Optional_Marshal(m jsn.Marshaler, pv **EphKinds) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphKinds_Marshal(m, *pv)
+	} else if !enc {
+		var v EphKinds
+		if err = EphKinds_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphKinds_Marshal(m jsn.Marshaler, val *EphKinds) (err error) {
+	if err = m.MarshalBlock(EphKinds_Flow{val}); err == nil {
+		e0 := m.MarshalKey("kinds", EphKinds_Field_Kinds)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphKinds_Field_Kinds))
+		}
+		e1 := m.MarshalKey("from", EphKinds_Field_Kind)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Kind)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphKinds_Field_Kind))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // EphList
 type EphList struct {
 	All []EphAt `if:"label=list"`
@@ -928,6 +1037,7 @@ var Slats = []composer.Composer{
 	(*EphBeginDomain)(nil),
 	(*EphCheckPrint)(nil),
 	(*EphEndDomain)(nil),
+	(*EphKinds)(nil),
 	(*EphList)(nil),
 	(*EphNameRef)(nil),
 	(*EphPlural)(nil),
@@ -939,6 +1049,7 @@ var Signatures = map[uint64]interface{}{
 	12209727080993772760: (*EphBeginDomain)(nil), /* Eph domain:requires: */
 	18354563224792793196: (*EphCheckPrint)(nil),  /* Eph check:prints: */
 	4379746949646135194:  (*EphEndDomain)(nil),   /* Eph domain: */
+	9386889860419880175:  (*EphKinds)(nil),       /* Eph kinds:from: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
 	9956475014949920846:  (*EphNameRef)(nil),     /* Eph ref:of: */
 	890409142408471553:   (*EphPlural)(nil),      /* Eph plural:singular: */

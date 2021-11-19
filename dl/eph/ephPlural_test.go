@@ -41,10 +41,12 @@ func TestPluralAssembly(t *testing.T) {
 		var err error
 		for _, n := range ds("a", "b", "c") {
 			d := cat.GetDomain(n)
-			for _, el := range d.eph.All {
-				if e := el.Eph.Catalog(&cat, d, el.At); e != nil {
-					err = e
-					break
+			for _, phase := range d.phases {
+				for _, el := range phase {
+					if e := el.Eph.Catalog(&cat, d, el.At); e != nil {
+						err = e
+						break
+					}
 				}
 			}
 		}
@@ -92,10 +94,12 @@ func TestPluralDomainConflict(t *testing.T) {
 		var err error
 		for _, n := range ds("a", "b", "c") {
 			d := cat.GetDomain(n)
-			for _, el := range d.eph.All {
-				if e := el.Eph.Catalog(&cat, d, el.At); e != nil {
-					err = e
-					break
+			for _, phase := range d.phases {
+				for _, el := range phase {
+					if e := el.Eph.Catalog(&cat, d, el.At); e != nil {
+						err = e
+						break
+					}
 				}
 			}
 		}

@@ -132,7 +132,7 @@ func TestDomainCase(t *testing.T) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if got, e := cat.GetDependentDomains("alpha domain"); e != nil {
+	} else if got, e := cat.GetDependentDomains("alpha_domain"); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(got, []string{"beta_domain", "g"}); len(diff) > 0 {
 		t.Fatal(got, diff)

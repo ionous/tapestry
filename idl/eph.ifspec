@@ -26,8 +26,8 @@
                 "spec": "eph {plural:text} {singular:text}",
                 "slot": "ephemera",
                 "desc": [
-                    "plurals are needed at runtime to help parser what the user inputs.",
-                    "plurals are also needed at assembly time to understand what the author wrote."
+                    "Plurals are needed at runtime to help parser what the user inputs.",
+                    "Plurals are also needed at assembly time to understand what the author wrote."
                 ]
             },
             "eph_name_ref": {
@@ -41,8 +41,17 @@
             "eph_run": {
                 "spec": "eph {run+execute}",
                 "slot": "ephemera"
+            },
+            "eph_kinds": {
+                "spec": "eph {kinds:text} {from%kind:text}",
+                "slot": "ephemera",
+                "desc": [
+                    "Declare a new kind deriving from another.",
+                    "The new kind has all of the properties of all of its ancestor kinds",
+                    "and it can be used wherever one of its ancestor kinds is needed."
+                    "( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )"
+                ]
             }
-
         }
     }
 }

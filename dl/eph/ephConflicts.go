@@ -36,7 +36,7 @@ func (dc DomainConflicts) CheckConflicts(n string, l DependencyFinder, cat, at, 
 	} else if deps, e := GetResolvedDependencies(n, l); e != nil {
 		err = e
 	} else {
-		for _, depName := range deps.GetFullTree(true) {
+		for _, depName := range deps.Ancestors(true) {
 			if e := dc.checkConflict(depName, fullKey, value); e != nil {
 				err = e
 				break
@@ -67,7 +67,7 @@ func (dc DomainConflicts) checkConflict(n, key, value string) (err error) {
 			} else {
 				var why ReasonForConflict
 				if def.value == value {
-					why = Duplicated
+					why = Duplicated // if its duplicated, the previous entry would have checked for redefined
 				} else {
 					why = Redefined
 				}
