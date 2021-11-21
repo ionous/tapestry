@@ -14,16 +14,17 @@ func (el *EphPlural) Catalog(c *Catalog, d *Domain, at string) (err error) {
 	} else if one, ok := UniformString(el.Singular); !ok {
 		err = InvalidString(el.Singular)
 	} else {
+		var de DomainError
 		var conflict *Conflict
-		if e := c.CheckConflicts(d.name, mdl_plural, at, many, one); e == nil {
+		if e := c.CheckConflict(d.name, mdl_plural, at, many, one); e == nil {
 			writePlural(c, d, many, one)
-		} else if !errors.As(e, &conflict) {
+		} else if !errors.As(e, &de) || !errors.As(de.Err, &conflict) {
 			err = e // some unknown error?
 		} else if conflict.Reason != Duplicated {
 			// duplicated definitions are okay, but we dont need to store them.
 			// redefined definitions are only a problem in this domain
 			// ( we test for !redefined in case there's some unexpected error code. )
-			if d.name == conflict.Domain || conflict.Reason != Redefined {
+			if d.name == de.Domain || conflict.Reason != Redefined {
 				err = e
 			} else {
 				writePlural(c, d, many, one)

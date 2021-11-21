@@ -10,6 +10,10 @@ type Domain struct {
 	deps     Dependencies
 }
 
+func (d *Domain) GetDependencies() (ResolvedDependencies, error) {
+	return d.deps.GetDependencies()
+}
+
 func (el *EphBeginDomain) Phase() Phase { return Domains }
 
 //

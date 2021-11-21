@@ -20,7 +20,7 @@ type domainTest struct {
 	out []Ephemera
 }
 
-func ds(names ...string) []string {
+func dd(names ...string) []string {
 	return names
 }
 

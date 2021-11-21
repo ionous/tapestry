@@ -13,7 +13,7 @@ type Catalog struct {
 	Writer     // not a huge fan of this here.... hrm...
 	domains    map[string]*Domain
 	processing DomainStack
-	conflicts  DomainConflicts
+	artifacts  DomainArtifacts
 }
 
 // helper to make the catalog compatible with the DependencyFinder ( for domains )
@@ -27,14 +27,17 @@ func (c *catDependencyFinder) GetDependencies(name string) (ret *Dependencies, o
 }
 
 func (c *Catalog) Warn(e error) {
-	log.Println(e) // for now good enough
+	log.Println("Warning:", e) // for now good enough
 }
 
-func (c *Catalog) CheckConflicts(name, cat, at, key, value string) (err error) {
-	if c.conflicts == nil {
-		c.conflicts = make(DomainConflicts)
+// used by ephemera during assembly to record some piece of information
+// that would cause problems it were specified differently elsewhere.
+// ex. some in game password specified as the word "secret" in one place, but "mongoose" somewhere else.
+func (c *Catalog) CheckConflict(name, cat, at, key, value string) (err error) {
+	if c.artifacts == nil {
+		c.artifacts = make(DomainArtifacts)
 	}
-	return c.conflicts.CheckConflicts(name, (*catDependencyFinder)(c), cat, at, key, value)
+	return c.artifacts.CheckConflict(name, (*catDependencyFinder)(c), cat, at, key, value)
 }
 
 // primarily for testing: return list of all the domains that the passed uniformly named domain requires
@@ -87,48 +90,8 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 	return
 }
 
-// Process
-// func (c *Catalog) EphemeraAssemble() (err error) {
-// 	// we need to handle the case(s) where one parent domain contains ephemera that conflicts with another parent domain:
-// 	// ex. "plane: a flying vehicle" and "plane: a woodworking tool" both included by some child domain.
-// 	// i dont really have a good way of doing this.... just have to do it manually.
-// 	for n, _ := range c.domains {
-// 		if res, e := c.getDependentDomains(n); e != nil {
-// 			err = e
-// 		} else {
-// 			if parents := res.Ancestors(false); len(parents) > 0 {
-// 				def := make(Definitions) // start with nothing and merge in to check for conflicts
-// 				for _, p := range parents {
-// 					pdef := c.conflicts[p]
-// 					if e := def.Merge(p, pdef); e != nil {
-// 						err = e
-// 						break
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-// 	// need to walk over domains --
-
-// 	return
-// }
-
-// for each domain in the passed list, output its full ancestry tree ( or just its parents )
-func (c *Catalog) WriteDomains(list ResolvedDomains, fullTree bool) (err error) {
-	for _, n := range list {
-		if deps, e := c.getDependentDomains(n); e != nil {
-			err = errutil.Append(err, e)
-		} else if e := c.Write(mdl_domain, n, strings.Join(deps.Ancestors(fullTree), ",")); e != nil {
-			err = errutil.Append(err, errutil.New("domain", n, "couldn't write", e))
-		}
-	}
-	return
-}
-
-type ResolvedDomains []string
-
-func (c *Catalog) ResolveAllDomains() (ret ResolvedDomains, err error) {
-	names := make([]string, 0, len(c.domains))
+func (c *Catalog) ResolveDomains() (ret ResolvedDomains, err error) {
+	out := make([]*Domain, 0, len(c.domains))
 	deps := make([]int, 0, len(c.domains))
 	// walk all domains in the map
 	for n, d := range c.domains {
@@ -137,37 +100,72 @@ func (c *Catalog) ResolveAllDomains() (ret ResolvedDomains, err error) {
 		} else if dep, e := c.getDependentDomains(n); e != nil {
 			err = errutil.Append(err, e)
 		} else {
-			names = append(names, n) // add the depth of the tree
+			out = append(out, d) // add the depth of the tree
 			deps = append(deps, len(dep.Ancestors(true)))
 		}
 	}
 	if err == nil {
-		sort.Sort(&nameDeps{names, deps})
-		ret = names
+		sort.Sort(&nameDeps{out, deps})
+		ret = out
+	}
+	return
+}
+
+// used by assembler to check that domains with multiple parents don't contain conflicting information.
+// ex. "plane: a flying vehicle" and "plane: a woodworking tool" both included by some child domain.
+func (c *Catalog) checkRivals(d *Domain) (err error) {
+	// if this succeeds, then our dependencies have been at least resolved; and,
+	// since a child domain by definition has a greater depth than a parent dependency
+	// we also know that its parent domains have been processed.
+	if res, e := d.GetDependencies(); e != nil {
+		err = e
+	} else if parents := res.Ancestors(false); len(parents) > 1 {
+		def := make(Definitions) // start with nothing and merge in to check for artifacts
+		for _, p := range parents {
+			// get the artifacts built from the named domain p
+			if pdef, ok := c.artifacts[p]; ok {
+				if e := def.Merge(pdef, c.Warn); e != nil {
+					err = DomainError{p, e}
+					break
+				}
+			}
+		}
+	}
+	return
+}
+
+// for each domain in the passed list, output its full ancestry tree ( or just its parents )
+func (c *Catalog) WriteDomains(ds ResolvedDomains, fullTree bool) (err error) {
+	for _, d := range ds {
+		if deps, e := d.GetDependencies(); e != nil {
+			err = errutil.Append(err, e)
+		} else if e := c.Write(mdl_domain, d.name, strings.Join(deps.Ancestors(fullTree), ",")); e != nil {
+			err = errutil.Append(err, errutil.New("domain", d.name, "couldn't write", e))
+		}
 	}
 	return
 }
 
 // private helper to sort domains by least to most dependencies
 type nameDeps struct {
-	names []string
-	deps  []int
+	domains []*Domain
+	deps    []int
 }
 
 func (n *nameDeps) Len() int {
-	return len(n.names)
+	return len(n.deps)
 }
 func (n *nameDeps) Less(i, j int) (okay bool) {
 	if adep, bdep := n.deps[i], n.deps[j]; adep < bdep {
 		okay = true
 	} else if adep == bdep {
-		if a, b := n.names[i], n.names[j]; a > b {
+		if a, b := n.domains[i], n.domains[j]; a.name < b.name {
 			okay = true
 		}
 	}
 	return
 }
 func (n *nameDeps) Swap(i, j int) {
-	n.names[i], n.names[j] = n.names[j], n.names[i]
+	n.domains[i], n.domains[j] = n.domains[j], n.domains[i]
 	n.deps[i], n.deps[j] = n.deps[j], n.deps[i]
 }

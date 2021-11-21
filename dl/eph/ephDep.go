@@ -56,6 +56,18 @@ func (d *Dependencies) AddDependency(dep string) {
 	}
 }
 
+// return previously resolved dependencies
+func (d *Dependencies) GetDependencies() (ret ResolvedDependencies, err error) {
+	if e := d.status; e == nil {
+		err = errutil.New("dependencies not resolved")
+	} else if e != xResolved {
+		err = e
+	} else {
+		ret = d.resolved // okay
+	}
+	return
+}
+
 // return the graph of all dependencies ( recursively creating that graph when needed. )
 func (d *Dependencies) Resolve(name string, names DependencyFinder) (ret ResolvedDependencies, err error) {
 	switch d.status {
