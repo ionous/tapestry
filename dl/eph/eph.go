@@ -36,7 +36,7 @@ const (
 // punctuation gets removed entirely.
 // letters are lowercased.
 func UniformString(s string) (ret string, okay bool) {
-	out := lang.LowerBreakcase(s)
+	out := lang.Underscore(s)
 	return out, len(out) > 0
 }
 

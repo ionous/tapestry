@@ -1,7 +1,6 @@
 package lang
 
 import (
-	"bytes"
 	"strings"
 	"unicode"
 )
@@ -90,7 +89,7 @@ func HasBadPunct(s string) bool {
 // the same rules as Camelize
 func Fields(name string) []string {
 	p := combineCase(name, false, false)
-	return p.flush()
+	return p.flush(true)
 }
 
 // Turns names from mixed case to breakcase
@@ -109,7 +108,7 @@ func Underscore(name string) string {
 // itd be fine i think to split first and then combine with word rules even
 // possibly worth considering ditching camelCasing anyway:
 // only support de-camelization into lower fields for template matching.
-func combineCase(name string, changeFirst, changeAny bool) parts {
+func combineCase(name string, changeFirst, changeAny bool) *parts {
 	type word int
 	const (
 		noword word = iota
@@ -117,57 +116,84 @@ func combineCase(name string, changeFirst, changeAny bool) parts {
 		number
 	)
 	var parts parts
-	inword, wasUpper := noword, false
+	inword, wasUpper := noword, 0
 	changeCase := changeFirst
 	for _, r := range name {
-		if r == '-' || r == '_' || r == '=' || unicode.IsSpace(r) {
+		if r == '_' || unicode.In(r, unicode.Hyphen) || unicode.IsSpace(r) {
 			inword = noword
+			wasUpper = 0
 			continue
 		}
 		if unicode.IsDigit(r) {
 			if sameWord := inword == number; !sameWord {
-				parts.flush()
+				parts.flush(true)
 			}
 			parts.WriteRune(r)
-			wasUpper = false
+			wasUpper = 0
 			inword = number
-		} else if unicode.IsLetter(r) || r == '#' {
-			currUpper := unicode.IsUpper(r)
+		} else if unicode.IsLetter(r) {
 			// classify some common word changes
-			sameWord := (inword == letter) && ((wasUpper == currUpper) || (wasUpper && !currUpper))
+			lower := unicode.ToLower(r)
+			currUpper := lower != r
+			// what should we do after a string of uppercase characters?
+			var afterUpper bool
+			if changeAny { // switch to make old behavior happy.
+				afterUpper = (wasUpper > 0 && !currUpper)
+			} else {
+				afterUpper = (wasUpper == 1 && !currUpper)
+			}
+			sameWord := (inword == letter) && ((wasUpper > 0 == currUpper) || afterUpper)
 			// everything gets lowered
 			if currUpper && changeCase {
-				r = unicode.ToLower(r)
+				r = lower
 			}
 			changeCase = true
 			if !sameWord {
-				parts.flush()
+				parts.flush(wasUpper <= 1)
+				wasUpper = 0
+
 				// hack for camelCasing.
 				if len(parts.arr) > 0 && changeAny {
 					r = unicode.ToUpper(r)
 				}
 			}
 			parts.WriteRune(r) // docs say err is always nil
-			wasUpper = currUpper
+			if currUpper {
+				wasUpper++
+			} else {
+				wasUpper = 0
+			}
 			inword = letter
 		}
 	}
-	return parts
+	return &parts
 }
 
 type parts struct {
-	bytes.Buffer
-	arr []string
+	queued rune
+	str    strings.Builder
+	arr    []string
 }
 
-func (p *parts) flush() []string {
-	if p.Len() > 0 {
-		p.arr = append(p.arr, p.String())
-		p.Reset()
+func (p *parts) WriteRune(r rune) {
+	if prev := p.queued; prev > 0 {
+		p.str.WriteRune(prev)
+	}
+	p.queued = r
+}
+
+func (p *parts) flush(all bool) []string {
+	if prev := p.queued; all && prev > 0 {
+		p.str.WriteRune(prev)
+		p.queued = 0
+	}
+	if p.str.Len() > 0 {
+		p.arr = append(p.arr, p.str.String())
+		p.str.Reset()
 	}
 	return p.arr
 }
 
 func (p *parts) join() string {
-	return strings.Join(p.flush(), "")
+	return strings.Join(p.flush(true), "")
 }
