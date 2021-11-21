@@ -2,15 +2,12 @@ package eph
 
 import (
 	"github.com/ionous/errutil"
-	"github.com/ionous/inflect"
 )
 
 type Domain struct {
 	name, at string
-	inflect  inflect.Ruleset
 	phases   [NumPhases][]EphAt
 	deps     Dependencies
-	plurals  map[string]string
 }
 
 func (el *EphBeginDomain) Phase() Phase { return Domains }
@@ -24,7 +21,7 @@ func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) 
 	} else {
 		// initialize domain:
 		kid.at = at
-		kid.inflect = d.inflect
+		// kid.inflect = d.inflect
 		// add any explicit dependencies
 		for _, req := range el.Requires {
 			if sub, ok := UniformString(req); !ok {

@@ -38,7 +38,7 @@ func writePlural(c *Catalog, d *Domain, many, one string) (err error) {
 	if e := c.Write(mdl_plural, d.name, many, one); e != nil {
 		err = e
 	} else {
-		d.inflect.AddPluralExact(one, many, true)
+		// d.inflect.AddPluralExact(one, many, true)
 	}
 	return
 }

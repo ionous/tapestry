@@ -87,27 +87,87 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 	return
 }
 
-// domains should be in "most" core to least order
-// each line should have all the dependencies it needs
-func (c *Catalog) WriteDomains(fullTree bool) (err error) {
-	sorted := make([]string, 0, len(c.domains))
-	for _, d := range c.domains {
-		if len(d.at) == 0 {
-			err = errutil.Append(err, errutil.New("domain never declared", d.name))
-		} else {
-			sorted = append(sorted, d.name)
-		}
-	}
-	if err == nil {
-		// we *try* as much as possible to keep the order stableish
-		sort.Strings(sorted)
-		for _, n := range sorted {
-			if deps, e := c.getDependentDomains(n); e != nil {
-				err = errutil.Append(err, e)
-			} else if e := c.Write(mdl_domain, n, strings.Join(deps.Ancestors(fullTree), ",")); e != nil {
-				err = errutil.Append(err, errutil.New("domain", n, "couldn't write", e))
-			}
+// Process
+// func (c *Catalog) EphemeraAssemble() (err error) {
+// 	// we need to handle the case(s) where one parent domain contains ephemera that conflicts with another parent domain:
+// 	// ex. "plane: a flying vehicle" and "plane: a woodworking tool" both included by some child domain.
+// 	// i dont really have a good way of doing this.... just have to do it manually.
+// 	for n, _ := range c.domains {
+// 		if res, e := c.getDependentDomains(n); e != nil {
+// 			err = e
+// 		} else {
+// 			if parents := res.Ancestors(false); len(parents) > 0 {
+// 				def := make(Definitions) // start with nothing and merge in to check for conflicts
+// 				for _, p := range parents {
+// 					pdef := c.conflicts[p]
+// 					if e := def.Merge(p, pdef); e != nil {
+// 						err = e
+// 						break
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// 	// need to walk over domains --
+
+// 	return
+// }
+
+// for each domain in the passed list, output its full ancestry tree ( or just its parents )
+func (c *Catalog) WriteDomains(list ResolvedDomains, fullTree bool) (err error) {
+	for _, n := range list {
+		if deps, e := c.getDependentDomains(n); e != nil {
+			err = errutil.Append(err, e)
+		} else if e := c.Write(mdl_domain, n, strings.Join(deps.Ancestors(fullTree), ",")); e != nil {
+			err = errutil.Append(err, errutil.New("domain", n, "couldn't write", e))
 		}
 	}
 	return
+}
+
+type ResolvedDomains []string
+
+func (c *Catalog) ResolveAllDomains() (ret ResolvedDomains, err error) {
+	names := make([]string, 0, len(c.domains))
+	deps := make([]int, 0, len(c.domains))
+	// walk all domains in the map
+	for n, d := range c.domains {
+		if len(d.at) == 0 {
+			err = errutil.Append(err, errutil.New("domain never declared", d.name))
+		} else if dep, e := c.getDependentDomains(n); e != nil {
+			err = errutil.Append(err, e)
+		} else {
+			names = append(names, n) // add the depth of the tree
+			deps = append(deps, len(dep.Ancestors(true)))
+		}
+	}
+	if err == nil {
+		sort.Sort(&nameDeps{names, deps})
+		ret = names
+	}
+	return
+}
+
+// private helper to sort domains by least to most dependencies
+type nameDeps struct {
+	names []string
+	deps  []int
+}
+
+func (n *nameDeps) Len() int {
+	return len(n.names)
+}
+func (n *nameDeps) Less(i, j int) (okay bool) {
+	if adep, bdep := n.deps[i], n.deps[j]; adep < bdep {
+		okay = true
+	} else if adep == bdep {
+		if a, b := n.names[i], n.names[j]; a > b {
+			okay = true
+		}
+	}
+	return
+}
+func (n *nameDeps) Swap(i, j int) {
+	n.names[i], n.names[j] = n.names[j], n.names[i]
+	n.deps[i], n.deps[j] = n.deps[j], n.deps[i]
 }

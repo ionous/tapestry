@@ -1,8 +1,10 @@
 package eph
 
+import "github.com/ionous/errutil"
+
 type Conflict struct {
-	Reason ReasonForConflict
 	Domain string
+	Reason ReasonForConflict
 	Def    Definition
 }
 
@@ -26,6 +28,34 @@ type Definition struct {
 }
 
 type DomainConflicts map[string]Definitions
+
+func (defines Definitions) Merge(name string, src Definitions) (err error) {
+	for k, v := range src {
+		if e := defines.checkConflict(name, k, v.value); e != nil {
+			err = errutil.Append(err, e)
+		} else {
+			defines[k] = v
+		}
+	}
+	return
+}
+
+func (defines Definitions) checkConflict(name, key, value string) (err error) {
+	if def, ok := defines[key]; ok {
+		if def.err != nil {
+			err = def.err
+		} else {
+			var why ReasonForConflict
+			if def.value == value {
+				why = Duplicated // if its duplicated, the previous entry would have checked for redefined
+			} else {
+				why = Redefined
+			}
+			err = &Conflict{name, why, def}
+		}
+	}
+	return
+}
 
 // walks the properly cased named domain's dependencies ( non-recursively ) to find
 // whether the new key,value pair contradicts or duplicates any existing value.
@@ -60,20 +90,8 @@ func (dc DomainConflicts) CheckConflicts(n string, l DependencyFinder, cat, at, 
 
 // was anything stored before?
 func (dc DomainConflicts) checkConflict(n, key, value string) (err error) {
-	if defines, ok := dc[n]; ok {
-		if def, ok := defines[key]; ok {
-			if def.err != nil {
-				err = def.err
-			} else {
-				var why ReasonForConflict
-				if def.value == value {
-					why = Duplicated // if its duplicated, the previous entry would have checked for redefined
-				} else {
-					why = Redefined
-				}
-				err = &Conflict{why, n, def}
-			}
-		}
+	if def, ok := dc[n]; ok {
+		err = def.checkConflict(n, key, value)
 	}
 	return
 }

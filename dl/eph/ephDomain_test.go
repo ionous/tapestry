@@ -12,12 +12,19 @@ func TestDomainSimpleTest(t *testing.T) {
 	dt.makeDomain(ds("b", "c", "d"))
 	dt.makeDomain(ds("c", "d", "e"))
 	dt.makeDomain(ds("e", "d"))
+	dt.makeDomain(ds("d"))
 	var cat Catalog // the catalog processing requires a global (root) domain.
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
 	} else if got, e := cat.GetDependentDomains("a"); e != nil {
-		t.Fatal(e)
+		t.Fatal(e) // test getting just the domains related to "a"
 	} else if diff := pretty.Diff(got, []string{"b", "c", "d", "e", "g"}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(got))
+		t.Fatal(diff)
+	} else if got, e := cat.ResolveAllDomains(); e != nil {
+		t.Fatal(e) // test getting the list of domains sorted from least to most dependent
+	} else if diff := pretty.Diff(got, ResolvedDomains{"g", "d", "e", "c", "b", "a"}); len(diff) > 0 {
+		// g:0, d:0, e:2, c:3, b:4, a:5
 		t.Log("got:", pretty.Sprint(got))
 		t.Fatal(diff)
 	}
@@ -44,21 +51,14 @@ func TestDomainCatchCycles(t *testing.T) {
 func TestDomainTable(t *testing.T) {
 	if got, e := writeDomainTable(true); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []outEl{{
-		// we expect that we start generating dependencies in alphabetical domain order
-		// so: "a" gets evaluated first, recursively
-		"a", "b,c,d,e,g",
-	}, {
-		"b", "c,d,e,g",
-	}, {
-		"c", "e,g",
-	}, {
-		"d", "g",
-	}, {
-		"e", "g",
-	}, {
-		"g", "",
-	}}); len(diff) > 0 {
+	} else if diff := pretty.Diff(got, []outEl{
+		{"g", ""},
+		{"e", "g"},
+		{"d", "g"},
+		{"c", "e,g"},
+		{"b", "c,d,e,g"},
+		{"a", "b,c,d,e,g"},
+	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(got))
 		t.Fatal(diff)
 	}
@@ -68,19 +68,14 @@ func TestDomainTable(t *testing.T) {
 func TestDomainParents(t *testing.T) {
 	if got, e := writeDomainTable(false); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []outEl{{
-		"a", "b",
-	}, {
-		"b", "c,d",
-	}, {
-		"c", "e",
-	}, {
-		"d", "g",
-	}, {
-		"e", "g",
-	}, {
-		"g", "",
-	}}); len(diff) > 0 {
+	} else if diff := pretty.Diff(got, []outEl{
+		{"g", ""},
+		{"e", "g"},
+		{"d", "g"},
+		{"c", "e"},
+		{"b", "c,d"},
+		{"a", "b"},
+	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(got))
 		t.Fatal(diff)
 	}
@@ -98,7 +93,9 @@ func writeDomainTable(fullTree bool) (ret []outEl, err error) {
 	cat := Catalog{Writer: &out}
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
-	} else if e := cat.WriteDomains(fullTree); e != nil {
+	} else if ds, e := cat.ResolveAllDomains(); e != nil {
+		err = e
+	} else if e := cat.WriteDomains(ds, fullTree); e != nil {
 		err = e
 	} else {
 		// domain name and the table
@@ -117,8 +114,8 @@ func TestDomainWhenUndeclared(t *testing.T) {
 	cat := Catalog{Writer: &out}
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteDomains(true); e == nil {
-		t.Fatal("expected failure", out)
+	} else if ds, e := cat.ResolveAllDomains(); e == nil {
+		t.Fatal("expected failure", ds)
 	} else {
 		t.Log("okay:", e)
 	}
