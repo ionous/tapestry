@@ -4,23 +4,29 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// type DomainFinder interface {
+// 	GetDomain(n string) (*Domain, bool)
+// }
+
 type Domain struct {
 	name, at string
 	phases   [NumPhases][]EphAt
 	deps     Dependencies
+	// finder   DomainFinder
+	kinds Kinds
 }
 
 func (d *Domain) GetDependencies() (ResolvedDependencies, error) {
 	return d.deps.GetDependencies()
 }
 
-func (el *EphBeginDomain) Phase() Phase { return Domains }
+func (el *EphBeginDomain) Phase() Phase { return DomainPhase }
 
 //
 func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) {
 	if n, ok := UniformString(el.Name); !ok {
 		err = InvalidString(el.Name)
-	} else if kid := c.GetDomain(n); len(kid.at) > 0 {
+	} else if kid := c.EnsureDomain(n); len(kid.at) > 0 {
 		err = errutil.New("domain", n, " at", d.at, "redeclared", at)
 	} else {
 		// initialize domain:
@@ -31,7 +37,7 @@ func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) 
 			if sub, ok := UniformString(req); !ok {
 				err = errutil.Append(err, InvalidString(req))
 			} else {
-				d := c.GetDomain(sub)
+				d := c.EnsureDomain(sub)
 				kid.deps.AddDependency(d.name)
 			}
 		}
@@ -45,7 +51,7 @@ func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) 
 	return
 }
 
-func (el *EphEndDomain) Phase() Phase { return Domains }
+func (el *EphEndDomain) Phase() Phase { return DomainPhase }
 
 // pop the most recent domain
 func (el *EphEndDomain) Catalog(c *Catalog, d *Domain, at string) (err error) {

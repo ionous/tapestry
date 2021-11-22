@@ -29,7 +29,7 @@ func TestPluralAssembly(t *testing.T) {
 		&EphPlural{Singular: "bat", Plural: "cauldron"},
 	)
 	var out testOut
-	cat := Catalog{Writer: &out}
+	var cat Catalog
 	// addToCat will define all of the above domains
 	// and then it will.... queue all of the ephemera
 	// FIX? should end domain write the domain? hmm... maybe?
@@ -38,9 +38,9 @@ func TestPluralAssembly(t *testing.T) {
 		t.Fatal(e)
 	} else if ds, e := cat.ResolveDomains(); e != nil {
 		t.Fatal(e)
-	} else if e := ds.ProcessDomains(&cat); e != nil {
+	} else if e := ds.ProcessDomains(&cat, nil); e != nil {
 		t.Fatal(e)
-	} else {
+	} else if e := cat.plurals.WritePlurals(&out); e != nil {
 		// try seeing what we made
 		got := out[mdl_plural]
 		if diff := pretty.Diff(got, []outEl{{
@@ -53,8 +53,8 @@ func TestPluralAssembly(t *testing.T) {
 			"b", "school", "fish",
 		}, {
 			// we dont expect to see our duplicated definition of cauldron of bat(s)
-			// we do expect that its okay to redefine the collective "witch" as "unkindness"
-			// ( but wicca good and love the earth, and i'll be over here. )
+			// we do expect that it's okay to redefine the collective "witch" as "unkindness"
+			// ( wicca good and love the earth, and i'll be over here. )
 			"c", "unkindness", "witch",
 		}}); len(diff) > 0 {
 			t.Log(pretty.Sprint(got))
@@ -72,14 +72,13 @@ func TestPluralDomainConflict(t *testing.T) {
 		&EphPlural{Singular: "raven", Plural: "unkindness"},
 		&EphPlural{Singular: "witch", Plural: "unkindness"},
 	)
-	var out testOut // fix? should plural implicitly write?
-	cat := Catalog{Writer: &out}
+	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
 	} else {
 		if ds, e := cat.ResolveDomains(); e != nil {
 			t.Fatal(e)
-		} else if e := ds.ProcessDomains(&cat); e == nil {
+		} else if e := ds.ProcessDomains(&cat, nil); e == nil {
 			t.Fatal("expected an error")
 		} else {
 			t.Log("ok:", e)

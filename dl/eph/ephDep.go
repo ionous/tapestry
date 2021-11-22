@@ -19,11 +19,15 @@ func GetResolvedDependencies(name string, names DependencyFinder) (ret ResolvedD
 
 // contains all dependencies of dependencies and all dependencies not listed in another dependency.
 type ResolvedDependencies struct {
-	fullTree UniqueNames
+	fullTree []string // direct parents are at slice's start; ancestors ( and the root ) at the end.
 	parents  int
 }
 
-// if not the full tree returns just the parents
+func (d *ResolvedDependencies) NumParents() int   { return d.parents }
+func (d *ResolvedDependencies) NumAncestors() int { return len(d.fullTree) }
+
+// if not the full tree returns just the parents.
+// direct parents are at slice's start; ancestors ( and the root ) at the end.
 func (d *ResolvedDependencies) Ancestors(fullTree bool) (ret []string) {
 	if fullTree {
 		ret = d.fullTree
@@ -85,7 +89,8 @@ func (d *Dependencies) Resolve(name string, names DependencyFinder) (ret Resolve
 	case nil: // Unresolved
 		d.status = xProcessing
 		// resolved dependencies will go in "all" and either "subs" or "parents" depending
-		var all, subs, parents UniqueNames
+		var all UniqueNames
+		var subs, parents []string
 		for _, depName := range d.deps {
 			if subdeps, e := GetResolvedDependencies(depName, names); e != nil {
 				err = errutil.New(e, "->", name)

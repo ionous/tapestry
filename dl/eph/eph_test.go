@@ -37,7 +37,7 @@ func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 }
 
 func (dt *domainTest) addToCat(cat *Catalog) (err error) {
-	g := cat.GetDomain("g")
+	g := cat.EnsureDomain("g")
 	g.at = "global"
 	cat.processing.Push(g)
 	for i, el := range dt.out {

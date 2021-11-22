@@ -102,12 +102,12 @@ func writeDomainTable(fullTree bool) (ret []outEl, err error) {
 	dt.makeDomain(dd("d"))
 	dt.makeDomain(dd("e"))
 	var out testOut
-	cat := Catalog{Writer: &out}
+	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
 	} else if ds, e := cat.ResolveDomains(); e != nil {
 		err = e
-	} else if e := cat.WriteDomains(ds, fullTree); e != nil {
+	} else if e := ds.WriteDomains(&out, fullTree); e != nil {
 		err = e
 	} else {
 		// domain name and the table
@@ -156,7 +156,7 @@ func TestRivalStandalone(t *testing.T) {
 		t.Fatal(e)
 	} else if ds, e := cat.ResolveDomains(); e != nil {
 		t.Fatal(e)
-	} else if e := ds.ProcessDomains(&cat); e != nil {
+	} else if e := ds.ProcessDomains(&cat, nil); e != nil {
 		t.Fatal(e)
 	}
 }
@@ -173,7 +173,7 @@ func TestRivalConflict(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		var conflict *Conflict
-		if e := ds.ProcessDomains(&cat); !errors.As(e, &conflict) {
+		if e := ds.ProcessDomains(&cat, nil); !errors.As(e, &conflict) {
 			t.Fatal("expected a conflict", e)
 		} else if conflict.Reason != Redefined {
 			t.Fatal("expected a redefinition error", e)
@@ -186,7 +186,7 @@ func TestRivalConflict(t *testing.T) {
 // ephemera for testing which enters a "
 type rivalFact string
 
-func (el rivalFact) Phase() Phase { return Tests }
+func (el rivalFact) Phase() Phase { return TestPhase }
 
 func (el rivalFact) Catalog(c *Catalog, d *Domain, at string) (err error) {
 	key, value := "rivalFact", string(el)

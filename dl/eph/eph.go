@@ -15,18 +15,18 @@ type Phase int
 
 //go:generate stringer -type=Phase
 const (
-	Domains Phase = iota
-	Plurals
-	Ancestry
-	Fields
-	Relations
-	Defaults
-	Nouns
-	Relatives
-	Patterns
-	Grammar
-	Tests
-	References
+	DomainPhase Phase = iota
+	PluralPhase
+	AncestryPhase
+	FieldPhase
+	RelationPhase
+	DefaultPhase
+	NounPhase
+	RelativePhase
+	PatternPhase
+	GrammarPhase
+	TestPhase
+	ReferencePhase
 	//
 	NumPhases
 )
@@ -51,3 +51,6 @@ type invalidStringError struct {
 func (x invalidStringError) Error() string {
 	return errutil.Sprint("invalid string %q", x.str)
 }
+
+type PhaseActions map[Phase]PhaseAction
+type PhaseAction func(c *Catalog, d *Domain) (err error)

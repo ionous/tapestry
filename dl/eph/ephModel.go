@@ -16,3 +16,6 @@ var mdl_domain = tables.Insert("mdl_domain", "domain", "path")
 // ie. "people" and "persons" are valid plurals of "person",
 // but "people" as a singular can only be defined as "person" ( not "cat" )
 var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one")
+
+// singular name of kind and materialized hierarchy of ancestors separated by commas
+var mdl_kind = tables.Insert("mdl_kind", "kind", "path")

@@ -1,33 +1,30 @@
 package eph
 
 import (
-	"log"
 	"sort"
-	"strings"
 
 	"github.com/ionous/errutil"
+	"github.com/ionous/inflect"
 )
 
 // Catalog - receives ephemera from the importer.
 type Catalog struct {
-	Writer     // not a huge fan of this here.... hrm...
 	domains    map[string]*Domain
 	processing DomainStack
 	artifacts  DomainArtifacts
+	plurals    PluralTable
 }
 
-// helper to make the catalog compatible with the DependencyFinder ( for domains )
-type catDependencyFinder Catalog
-
-func (c *catDependencyFinder) GetDependencies(name string) (ret *Dependencies, okay bool) {
-	if d, ok := c.domains[name]; ok {
-		ret, okay = &d.deps, true
+// use the domain rules ( and hierarchy ) to turn the passed plural into its singular form
+func (c *Catalog) Singularize(domain, plural string) (ret string, err error) {
+	if explict, e := c.plurals.FindSingular((*catDependencyFinder)(c), domain, plural); e != nil {
+		err = e
+	} else if len(explict) > 0 {
+		ret = explict
+	} else {
+		ret = inflect.Singularize(plural)
 	}
 	return
-}
-
-func (c *Catalog) Warn(e error) {
-	log.Println("Warning:", e) // for now good enough
 }
 
 // used by ephemera during assembly to record some piece of information
@@ -50,21 +47,18 @@ func (c *Catalog) GetDependentDomains(n string) (ret []string, err error) {
 	return
 }
 
-func (c *Catalog) getDependentDomains(n string) (ret ResolvedDependencies, err error) {
-	if d, ok := c.domains[n]; !ok {
-		err = errutil.New("unknown domains have no dependencies")
-	} else {
-		ret, err = d.deps.Resolve(d.name, (*catDependencyFinder)(c))
-	}
-	return
-}
+// return the uniformly named domain ( if it exists )
+// func (c *Catalog) GetDomain(n string) (*Domain, bool) {
+// 	d, ok := c.domains[n]
+// 	return d, ok
+// }
 
 // return the uniformly named domain ( creating it if necessary )
-func (c *Catalog) GetDomain(n string) (ret *Domain) {
+func (c *Catalog) EnsureDomain(n string) (ret *Domain) {
 	if d, ok := c.domains[n]; ok {
 		ret = d
 	} else {
-		d = &Domain{name: n}
+		d = &Domain{name: n /*, finder: c*/}
 		if c.domains == nil {
 			c.domains = map[string]*Domain{n: d}
 		} else {
@@ -81,7 +75,7 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 		err = errutil.New("no domain")
 	} else {
 		phase := ephAt.Eph.Phase()
-		if phase == Domains {
+		if phase == DomainPhase {
 			err = ephAt.Eph.Catalog(c, d, ephAt.At)
 		} else {
 			d.phases[phase] = append(d.phases[phase], ephAt)
@@ -90,6 +84,8 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 	return
 }
 
+// work out the hierarchy of all the domains, and return them in a list.
+// the list has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
 func (c *Catalog) ResolveDomains() (ret ResolvedDomains, err error) {
 	out := make([]*Domain, 0, len(c.domains))
 	deps := make([]int, 0, len(c.domains))
@@ -111,6 +107,15 @@ func (c *Catalog) ResolveDomains() (ret ResolvedDomains, err error) {
 	return
 }
 
+func (c *Catalog) getDependentDomains(n string) (ret ResolvedDependencies, err error) {
+	if d, ok := c.domains[n]; !ok {
+		err = errutil.New("unknown domains have no dependencies")
+	} else {
+		ret, err = d.deps.Resolve(d.name, (*catDependencyFinder)(c))
+	}
+	return
+}
+
 // used by assembler to check that domains with multiple parents don't contain conflicting information.
 // ex. "plane: a flying vehicle" and "plane: a woodworking tool" both included by some child domain.
 func (c *Catalog) checkRivals(d *Domain) (err error) {
@@ -124,7 +129,7 @@ func (c *Catalog) checkRivals(d *Domain) (err error) {
 		for _, p := range parents {
 			// get the artifacts built from the named domain p
 			if pdef, ok := c.artifacts[p]; ok {
-				if e := def.Merge(pdef, c.Warn); e != nil {
+				if e := def.Merge(pdef); e != nil {
 					err = DomainError{p, e}
 					break
 				}
@@ -134,14 +139,12 @@ func (c *Catalog) checkRivals(d *Domain) (err error) {
 	return
 }
 
-// for each domain in the passed list, output its full ancestry tree ( or just its parents )
-func (c *Catalog) WriteDomains(ds ResolvedDomains, fullTree bool) (err error) {
-	for _, d := range ds {
-		if deps, e := d.GetDependencies(); e != nil {
-			err = errutil.Append(err, e)
-		} else if e := c.Write(mdl_domain, d.name, strings.Join(deps.Ancestors(fullTree), ",")); e != nil {
-			err = errutil.Append(err, errutil.New("domain", d.name, "couldn't write", e))
-		}
+// private helper to make the catalog compatible with the DependencyFinder ( for domains )
+type catDependencyFinder Catalog
+
+func (c *catDependencyFinder) GetDependencies(name string) (ret *Dependencies, okay bool) {
+	if d, ok := c.domains[name]; ok {
+		ret, okay = &d.deps, true
 	}
 	return
 }
