@@ -7,9 +7,9 @@ import (
 )
 
 // a mapping of a kind to its ancestors that can be resolved into a flat list of kinds
-type Kinds map[string]*Dependencies
+type Kinds map[string]*Requires
 
-// we only allow each kind to be given a single parent ( via check conflicts )
+// we only allow each kind to be given a single parent ( via resolve )
 // but we still have to determine what the hierarchy is ( so we reuse the same bits as domain )
 func (ks *Kinds) AddKind(k, p string) {
 	if *ks == nil {
@@ -17,11 +17,11 @@ func (ks *Kinds) AddKind(k, p string) {
 	}
 	kind, ok := (*ks)[k]
 	if !ok {
-		kind = new(Dependencies)
+		kind = new(Requires)
 		(*ks)[k] = kind
 	}
 	if len(p) > 0 {
-		kind.AddDependency(p)
+		kind.AddRequirement(p)
 	}
 }
 
@@ -29,6 +29,9 @@ func (ks *Kinds) AddKind(k, p string) {
 func (ks *Kinds) ResolveKinds(out *ResolvedKinds) (err error) {
 	for kind, deps := range *ks {
 		if res, e := deps.Resolve(kind, (*kindFinder)(ks)); e != nil {
+			err = errutil.Append(err, e)
+		} else if res.NumParents() > 1 {
+			e := errutil.Fmt("kind %q should have at most one parent (has: %v)", kind, res.Ancestors(false))
 			err = errutil.Append(err, e)
 		} else {
 			kinds := res.Ancestors(true)
@@ -41,7 +44,7 @@ func (ks *Kinds) ResolveKinds(out *ResolvedKinds) (err error) {
 // private helper to make the kinds compatible with the DependencyFinder ( for resolve )
 type kindFinder Kinds
 
-func (c kindFinder) GetDependencies(name string) (ret *Dependencies, okay bool) {
+func (c kindFinder) GetRequirements(name string) (ret *Requires, okay bool) {
 	ret, okay = c[name]
 	return
 }

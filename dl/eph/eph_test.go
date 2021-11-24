@@ -1,17 +1,27 @@
 package eph
 
-import "strconv"
+import (
+	"fmt"
+	"math/rand"
+	"strconv"
+	"strings"
+)
 
-type testOut map[string][]outEl
-
-type outEl []interface{}
+type testOut map[string][]string
 
 func (x *testOut) Write(q string, args ...interface{}) (err error) {
 	if *x == nil {
-		*x = make(map[string][]outEl)
+		*x = make(map[string][]string)
+	}
+	var b strings.Builder
+	for i, arg := range args {
+		if i > 0 {
+			b.WriteRune(':')
+		}
+		b.WriteString(fmt.Sprint(arg))
 	}
 	els := (*x)[q]
-	els = append(els, args)
+	els = append(els, b.String())
 	(*x)[q] = els
 	return
 }
@@ -25,13 +35,15 @@ func dd(names ...string) []string {
 }
 
 func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
+	n, req := names[0], names[1:]
+	rand.Shuffle(len(req), func(i, j int) { req[i], req[j] = req[j], req[i] })
 	dt.out = append(dt.out, &EphBeginDomain{
-		Name:     names[0],
-		Requires: names[1:],
+		Name:     n,
+		Requires: req,
 	})
 	dt.out = append(dt.out, add...)
 	dt.out = append(dt.out, &EphEndDomain{
-		Name: names[0],
+		Name: n,
 	})
 	return
 }

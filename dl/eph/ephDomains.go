@@ -11,12 +11,12 @@ import (
 type Domain struct {
 	name, at string
 	phases   [NumPhases][]EphAt
-	deps     Dependencies
+	deps     Requires
 	// finder   DomainFinder
 	kinds Kinds
 }
 
-func (d *Domain) GetDependencies() (ResolvedDependencies, error) {
+func (d *Domain) GetDependencies() (Dependents, error) {
 	return d.deps.GetDependencies()
 }
 
@@ -38,13 +38,13 @@ func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) 
 				err = errutil.Append(err, InvalidString(req))
 			} else {
 				d := c.EnsureDomain(sub)
-				kid.deps.AddDependency(d.name)
+				kid.deps.AddRequirement(d.name)
 			}
 		}
 		if err == nil {
 			// we are dependent on the parent domain too
 			// ( adding it last keeps it closer to the right side of the parent list )
-			kid.deps.AddDependency(d.name)
+			kid.deps.AddRequirement(d.name)
 			c.processing.Push(kid)
 		}
 	}

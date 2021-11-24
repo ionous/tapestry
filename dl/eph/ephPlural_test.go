@@ -36,27 +36,21 @@ func TestPluralAssembly(t *testing.T) {
 	// ( and for example -- run any queued commands? )
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if ds, e := cat.ResolveDomains(); e != nil {
-		t.Fatal(e)
-	} else if e := ds.ProcessDomains(&cat, nil); e != nil {
+	} else if e := cat.ProcessDomains(nil); e != nil {
 		t.Fatal(e)
 	} else if e := cat.plurals.WritePlurals(&out); e != nil {
 		// try seeing what we made
 		got := out[mdl_plural]
-		if diff := pretty.Diff(got, []outEl{{
-			"a", "unkindness", "raven",
-		}, {
-			"a", "cloud", "bat",
-		}, {
-			"a", "cauldron", "bat",
-		}, {
-			"b", "school", "fish",
-		}, {
+		if diff := pretty.Diff(got, []string{
+			"a:unkindness:raven",
+			"a:cloud:bat",
+			"a:cauldron:bat",
+			"b:school:fish",
 			// we dont expect to see our duplicated definition of cauldron of bat(s)
 			// we do expect that it's okay to redefine the collective "witch" as "unkindness"
 			// ( wicca good and love the earth, and i'll be over here. )
-			"c", "unkindness", "witch",
-		}}); len(diff) > 0 {
+			"c:unkindness:witch",
+		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(got))
 			t.Fatal(diff)
 		}
@@ -75,13 +69,9 @@ func TestPluralDomainConflict(t *testing.T) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
+	} else if e := cat.ProcessDomains(nil); e == nil {
+		t.Fatal("expected an error")
 	} else {
-		if ds, e := cat.ResolveDomains(); e != nil {
-			t.Fatal(e)
-		} else if e := ds.ProcessDomains(&cat, nil); e == nil {
-			t.Fatal("expected an error")
-		} else {
-			t.Log("ok:", e)
-		}
+		t.Log("ok:", e)
 	}
 }
