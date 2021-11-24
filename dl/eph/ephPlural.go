@@ -69,7 +69,7 @@ func (el *EphPlural) Phase() Phase { return PluralPhase }
 
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
-func (el *EphPlural) Catalog(c *Catalog, d *Domain, at string) (err error) {
+func (el *EphPlural) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if many, ok := UniformString(el.Plural); !ok {
 		err = InvalidString(el.Plural)
 	} else if one, ok := UniformString(el.Singular); !ok {

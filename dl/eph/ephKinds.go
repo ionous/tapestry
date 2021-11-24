@@ -51,7 +51,7 @@ func (c kindFinder) GetRequirements(name string) (ret *Requires, okay bool) {
 
 func (el *EphKinds) Phase() Phase { return AncestryPhase }
 
-func (el *EphKinds) Catalog(c *Catalog, d *Domain, at string) (err error) {
+func (el *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if kinds, ok := UniformString(el.Kinds); !ok {
 		err = InvalidString(el.Kinds)
 	} else if parentKind, ok := UniformString(el.Kind); !ok {

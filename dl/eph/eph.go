@@ -7,7 +7,7 @@ import (
 
 // implemented by individual commands
 type Ephemera interface {
-	Catalog(c *Catalog, d *Domain, at string) error
+	Assemble(c *Catalog, d *Domain, at string) error
 	Phase() Phase
 }
 

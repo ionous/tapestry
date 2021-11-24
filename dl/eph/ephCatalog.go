@@ -73,7 +73,7 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 	} else {
 		phase := ephAt.Eph.Phase()
 		if phase == DomainPhase {
-			err = ephAt.Eph.Catalog(c, d, ephAt.At)
+			err = ephAt.Eph.Assemble(c, d, ephAt.At)
 		} else {
 			d.phases[phase] = append(d.phases[phase], ephAt)
 		}
@@ -132,7 +132,7 @@ func (c *Catalog) ProcessDomains(phaseActions PhaseActions) (err error) {
 			} else {
 				for phase, ephlist := range d.phases {
 					for _, el := range ephlist {
-						if e := el.Eph.Catalog(c, d, el.At); e != nil {
+						if e := el.Eph.Assemble(c, d, el.At); e != nil {
 							err = errutil.Append(err, e)
 						}
 					}

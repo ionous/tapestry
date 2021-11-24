@@ -250,7 +250,7 @@ type rivalFact string
 
 func (el rivalFact) Phase() Phase { return TestPhase }
 
-func (el rivalFact) Catalog(c *Catalog, d *Domain, at string) (err error) {
+func (el rivalFact) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	key, value := "rivalFact", string(el)
 	return c.CheckConflict(d.name, "rivalFacts", at, key, value)
 }

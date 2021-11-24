@@ -23,7 +23,7 @@ func (d *Domain) GetDependencies() (Dependents, error) {
 func (el *EphBeginDomain) Phase() Phase { return DomainPhase }
 
 //
-func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) {
+func (el *EphBeginDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if n, ok := UniformString(el.Name); !ok {
 		err = InvalidString(el.Name)
 	} else if kid := c.EnsureDomain(n); len(kid.at) > 0 {
@@ -54,7 +54,7 @@ func (el *EphBeginDomain) Catalog(c *Catalog, d *Domain, at string) (err error) 
 func (el *EphEndDomain) Phase() Phase { return DomainPhase }
 
 // pop the most recent domain
-func (el *EphEndDomain) Catalog(c *Catalog, d *Domain, at string) (err error) {
+func (el *EphEndDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// we expect it's the current domain, the parent of this command, that's the one ending
 	if n, ok := UniformString(el.Name); !ok {
 		err = InvalidString(el.Name)
