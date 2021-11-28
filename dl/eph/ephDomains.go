@@ -95,7 +95,7 @@ func (el *EphBeginDomain) Assemble(c *Catalog, d *Domain, at string) (err error)
 	if n, ok := UniformString(el.Name); !ok {
 		err = InvalidString(el.Name)
 	} else if kid, ok := c.GetDomain(n); ok {
-		err = errutil.New("domain", n, " at", kid.at, "redeclared", kid.at)
+		err = errutil.New("domain", n, "at", kid.at, "redeclared", kid.at)
 	} else {
 		kid := c.EnsureDomain(n, at)
 		// add any explicit dependencies
