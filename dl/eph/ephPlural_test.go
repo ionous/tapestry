@@ -40,8 +40,7 @@ func TestPluralAssembly(t *testing.T) {
 		t.Fatal(e)
 	} else if e := cat.plurals.WritePlurals(&out); e != nil {
 		// try seeing what we made
-		got := out[mdl_plural]
-		if diff := pretty.Diff(got, []string{
+		if diff := pretty.Diff(out, testOut{
 			"a:unkindness:raven",
 			"a:cloud:bat",
 			"a:cauldron:bat",
@@ -51,7 +50,7 @@ func TestPluralAssembly(t *testing.T) {
 			// ( wicca good and love the earth, and i'll be over here. )
 			"c:unkindness:witch",
 		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(got))
+			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)
 		}
 	}

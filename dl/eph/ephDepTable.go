@@ -7,39 +7,63 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type DependencyTable []Dependents
-
-// contains all dependencies of dependencies and all dependencies not listed in another dependency.
-type Dependents struct {
-	ancestors []string // sorted in root/s first order, name last
-	parents   []string
+// given a name, return an object which describes the other names on which it depends.
+type DependencyFinder interface {
+	FindDependency(name string) (Dependency, bool)
 }
 
-func (d *Dependents) Name() string           { return d.ancestors[len(d.ancestors)-1] }
-func (d *Dependents) AllAncestors() []string { return d.ancestors }
-func (d *Dependents) Ancestors() []string    { return d.ancestors[:len(d.ancestors)-1] }
-func (d *Dependents) Parents() []string      { return d.parents }
+type DependencyTable []Dependencies
 
-func MakeTable(reqs []string, names DependencyFinder) (ret DependencyTable, err error) {
-	var ds DependencyTable
-	for _, req := range reqs {
-		if res, e := GetResolvedDependencies(req, names); e != nil {
-			err = errutil.Append(err, e)
-		} else {
-			ds = append(ds, res)
-		}
-	}
-	if err == nil {
-		ret = ds
+type tableMaker struct {
+	deps []Dependencies
+	err  error
+}
+
+// a helper for creating a DependencyTable regardless of whether its Dependencies are stored in slices or maps.
+func TableMaker(cnt int) tableMaker {
+	return tableMaker{make([]Dependencies, 0, cnt), nil}
+}
+
+func (t *tableMaker) GetSortedTable() (ret DependencyTable, err error) {
+	if e := t.err; e != nil {
+		err = e
+	} else {
+		ret = t.deps
+		ret.SortTable()
 	}
 	return
+}
+
+// accumulates errors for reporting via GetSortedTable, but returns true/false in the meantime
+func (t *tableMaker) ResolveDep(dep Dependency) (ret Dependencies, okay bool) {
+	if res, e := dep.Resolve(); e != nil {
+		t.onerror(e)
+	} else {
+		t.deps = append(t.deps, res)
+		ret, okay = res, true
+	}
+	return
+}
+
+// accumulates errors for reporting via GetSortedTable, but returns true/false in the meantime
+func (t *tableMaker) ResolveReq(finder DependencyFinder, req string) (ret Dependencies, okay bool) {
+	if dep, ok := finder.FindDependency(req); !ok {
+		t.onerror(errutil.New("unknown dependency", req))
+	} else {
+		ret, okay = t.ResolveDep(dep)
+	}
+	return
+}
+
+func (t *tableMaker) onerror(e error) {
+	t.err = errutil.Append(t.err, e)
 }
 
 // build a list of just the "column names" -- the resolved objects.
 func (ds DependencyTable) Names() []string {
 	out := make([]string, len(ds))
 	for i, d := range ds {
-		out[i] = d.Name()
+		out[i] = d.Leaf().Name()
 	}
 	return out
 }
@@ -69,7 +93,7 @@ func (ds DependencyTable) SortTable() {
 						break Match // jn is shorter, and therefore not less
 					}
 					// ( keep looping. we will finish eventually. )
-				case a < b:
+				case a.Name() < b.Name():
 					less = true
 					break Match // a is lexically lesser
 				default:
@@ -85,7 +109,7 @@ func (ds DependencyTable) SortTable() {
 // for each domain in the passed list, output its full ancestry tree ( or just its parents )
 func (ds DependencyTable) WriteTable(w Writer, target string, fullTree bool) (err error) {
 	for _, d := range ds {
-		var list []string
+		var list []Dependency
 		if fullTree {
 			list = d.Ancestors()
 		} else {
@@ -97,11 +121,11 @@ func (ds DependencyTable) WriteTable(w Writer, target string, fullTree bool) (er
 			if i > 0 {
 				b.WriteRune(',')
 			}
-			b.WriteString(el)
+			b.WriteString(el.Name())
 		}
-		name, row := d.Name(), b.String()
+		name, row := d.Leaf().Name(), b.String()
 		if e := w.Write(target, name, row); e != nil {
-			err = errutil.Append(err, errutil.Fmt("couldn't write %q %e", name, e))
+			err = errutil.Append(err, errutil.Fmt("couldn't write %q %w", name, e))
 		}
 	}
 	return

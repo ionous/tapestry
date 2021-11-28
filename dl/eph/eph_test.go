@@ -7,12 +7,10 @@ import (
 	"strings"
 )
 
-type testOut map[string][]string
+type testOut []string
 
-func (x *testOut) Write(q string, args ...interface{}) (err error) {
-	if *x == nil {
-		*x = make(map[string][]string)
-	}
+// ignores the category for simpler testing
+func (x *testOut) Write(_cat string, args ...interface{}) (err error) {
 	var b strings.Builder
 	for i, arg := range args {
 		if i > 0 {
@@ -20,9 +18,7 @@ func (x *testOut) Write(q string, args ...interface{}) (err error) {
 		}
 		b.WriteString(fmt.Sprint(arg))
 	}
-	els := (*x)[q]
-	els = append(els, b.String())
-	(*x)[q] = els
+	(*x) = append((*x), b.String())
 	return
 }
 
@@ -49,9 +45,7 @@ func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 }
 
 func (dt *domainTest) addToCat(cat *Catalog) (err error) {
-	g := cat.EnsureDomain("g")
-	g.at = "global"
-	cat.processing.Push(g)
+	cat.processing.Push(cat.EnsureDomain("g", "global"))
 	for i, el := range dt.out {
 		if e := cat.AddEphemera(EphAt{At: strconv.Itoa(i), Eph: el}); e != nil {
 			err = e

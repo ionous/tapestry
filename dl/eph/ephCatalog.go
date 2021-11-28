@@ -30,65 +30,13 @@ func (c *Catalog) Singularize(domain, plural string) (ret string, err error) {
 // that would cause problems it were specified differently elsewhere.
 // ex. some in game password specified as the word "secret" in one place, but "mongoose" somewhere else.
 func (c *Catalog) AddDefinition(domain, cat, at, key, value string) (err error) {
-	if d, e := c.GetDependentDomains(domain); e != nil {
+	if d, ok := c.GetDomain(domain); !ok {
+		err = errutil.New("unknown domain", domain)
+	} else if ds, e := d.GetDependencies(); e != nil {
 		err = e
 	} else {
 		key := CategoryKey{cat, key}
-		err = CheckConflicts(d.AllAncestors(), (*catArtifactFinder)(c), key, at, value)
-	}
-	return
-}
-
-// setting fields is a bit .... painful.
-// traits want to set the same value to multiple keys so we place the key list last..
-func (c *Catalog) AddFields(currDomain *Domain, namedKind string, field FieldDefinition) (err error) {
-	var tgtKind *Kind // add the field to this
-	var ks []string   // ancestors of the kind
-	for {
-		if dk, e := FindScopedKind(c, currDomain.name, namedKind); e != nil {
-			err = e
-			break
-		} else {
-			currDomain = dk.Domain
-			currKind := dk.Kind
-			if e := field.CheckConflict(currKind); e != nil {
-				err = KindError{currKind.name, currDomain.name, e}
-				break
-			} else {
-				// handle if the current kind was the first kind.
-				if tgtKind == nil {
-					tgtKind = currKind
-					// we will need the kind hierarchy to search parents
-					if pks, e := currKind.reqs.GetDependencies(); e != nil {
-						err = e
-						break // our ancestor kinds
-					} else {
-						ks = pks.Ancestors()
-					}
-				}
-			}
-			// move up to the next kind.
-			if pop := len(ks) - 1; pop < 0 {
-				break
-			} else {
-				namedKind, ks = ks[pop], ks[:pop]
-				// loop!
-			}
-		}
-	}
-	// if everything worked out store definition in our first kind.
-	if err == nil && tgtKind != nil {
-		field.AddToKind(tgtKind)
-	}
-
-	return
-}
-
-func (c *Catalog) GetDependentDomains(n string) (ret Dependents, err error) {
-	if d, ok := c.domains[n]; !ok {
-		err = errutil.New("unknown domains have no dependencies")
-	} else {
-		ret, err = d.reqs.Resolve(d.name, (*catDependencyFinder)(c))
+		err = CheckConflicts(ds.FullTree(), (*catArtifactFinder)(c), key, at, value)
 	}
 	return
 }
@@ -100,11 +48,11 @@ func (c *Catalog) GetDomain(n string) (*Domain, bool) {
 }
 
 // return the uniformly named domain ( creating it if necessary )
-func (c *Catalog) EnsureDomain(n string) (ret *Domain) {
+func (c *Catalog) EnsureDomain(n, at string) (ret *Domain) {
 	if d, ok := c.domains[n]; ok {
 		ret = d
 	} else {
-		d = &Domain{name: n /*, finder: c*/}
+		d = &Domain{name: n, at: at, catalog: c}
 		if c.domains == nil {
 			c.domains = map[string]*Domain{n: d}
 		} else {
@@ -135,67 +83,18 @@ func (c *Catalog) ResolveDomains() (ret DependencyTable, err error) {
 	if len(c.resolvedDomains) != 0 {
 		ret = c.resolvedDomains
 	} else {
-		out := make([]Dependents, 0, len(c.domains))
-		// walk all domains in the map
-		for n, d := range c.domains {
-			if len(d.at) == 0 {
-				err = errutil.Append(err, errutil.New("domain never declared", d.name))
-			} else if dep, e := c.GetDependentDomains(n); e != nil {
-				err = errutil.Append(err, e)
-			} else {
-				out = append(out, dep)
-			}
+		m := TableMaker(len(c.domains))
+		for _, d := range c.domains {
+			m.ResolveDep(d) // accumulates any errors
 		}
-		if err == nil {
-			c.resolvedDomains = out
-			ret = out
-			ret.SortTable()
+		if res, e := m.GetSortedTable(); e != nil {
+			err = e
+		} else {
+			ret, c.resolvedDomains = res, res
 		}
 	}
 	return
 }
-
-// for given the passed domain hierarchy, determine the kinds that it defined
-// func (c *Catalog) ResolveKinds(ds DependencyTable) (ret ResolvedKinds, err error) {
-// 	var out ResolvedKinds
-// 	for _, n := range ds {
-// 		if d, ok := c.GetDomain(n.Name()); !ok {
-// 			err = errutil.Fmt("unknown domain %q", n.Name())
-// 			break
-// 		} else {
-// 			for _, k := range d.kinds {
-// 				kf := catKindFinder{c, d}
-// 				if res, e := kind.reqs.Resolve(kind, &kf); e != nil {
-// 					err = errutil.Append(err, e)
-// 				} else if ps := res.Parents(); len(ps) > 1 {
-// 					e := errutil.Fmt("kind %q should have at most one parent (has: %v)", kn, ps)
-// 					err = errutil.Append(err, e)
-// 				} else {
-// 					kinds := res.Ancestors()
-// 					*out = append(*out, ResolvedKind{kn, kinds})
-// 				}
-// 			}
-// 		}
-// 	}
-// 	return
-// }
-
-// type catKindFinder struct {
-// 	c      *Catalog
-// 	domain *Domain
-// }
-
-// func (kf *catKindFinder) GetRequirements(name string) (ret *Requires, err error) {
-// 	// the interface for this assumes its one flat pool
-// 	// when really, every kind we find should move up its domain path upwards
-// 	// perhaps this does mean we should be returning "Node(s)" so that the nodes can implement search themselves
-// 	if res, e := FindScopedKind(c, kf.domain.name, name); e != nil {
-// 		err = e
-// 	} else {
-// 		ret = &res.Kind.reqs
-// 	}
-// 	return
-// }
 
 // walk the domains and run the commands remaining in their queues
 func (c *Catalog) ProcessDomains(phaseActions PhaseActions) (err error) {
@@ -212,9 +111,10 @@ func (c *Catalog) ProcessDomains(phaseActions PhaseActions) (err error) {
 	return
 }
 
-func (c *Catalog) AssembleDomain(deps Dependents, phaseActions PhaseActions) (err error) {
-	if d, ok := c.GetDomain(deps.Name()); !ok {
-		err = errutil.New("unknown domain", deps.Name())
+func (c *Catalog) AssembleDomain(deps Dependencies, phaseActions PhaseActions) (err error) {
+	n := deps.Leaf().Name()
+	if d, ok := c.GetDomain(n); !ok {
+		err = errutil.New("unknown domain", n)
 	} else {
 		c.processing = DomainStack{d} // so ephemera can add other ephemera
 		if e := c.checkRivals(deps); e != nil {
@@ -242,13 +142,13 @@ func (c *Catalog) AssembleDomain(deps Dependents, phaseActions PhaseActions) (er
 
 // used by assembler to check that domains with multiple parents don't contain conflicting information.
 // ex. "plane: a flying vehicle" and "plane: a woodworking tool" both included by some child domain.
-func (c *Catalog) checkRivals(res Dependents) (err error) {
+func (c *Catalog) checkRivals(res Dependencies) (err error) {
 	if parents := res.Parents(); len(parents) > 1 {
 		def := make(Artifacts) // start with nothing and merge in to check for artifacts
 		for _, p := range parents {
-			if d, ok := c.domains[p]; ok {
+			if d, ok := p.(*Domain); ok {
 				if e := def.Merge(d.defs); e != nil {
-					err = DomainError{p, e}
+					err = DomainError{d.name, e}
 					break
 				}
 			}
@@ -270,9 +170,9 @@ func (c *catArtifactFinder) GetArtifacts(name string) (ret *Artifacts, okay bool
 // private helper to make the catalog compatible with the DependencyFinder ( for domains )
 type catDependencyFinder Catalog
 
-func (c *catDependencyFinder) GetRequirements(name string) (ret *Requires, okay bool) {
+func (c *catDependencyFinder) FindDependency(name string) (ret Dependency, okay bool) {
 	if d, ok := c.domains[name]; ok {
-		ret, okay = &d.reqs, true
+		ret, okay = d, true
 	}
 	return
 }

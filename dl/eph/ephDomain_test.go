@@ -2,69 +2,11 @@ package eph
 
 import (
 	"errors"
-	"math/rand"
 	"testing"
 
+	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
-
-// sorting resolved dependencies should work as expected.
-func TestDomainSort(t *testing.T) {
-	{
-		og, tx := sorter("a", "b", "abc")
-		if diff := pretty.Diff(tx, []string{"a", "b", "c"}); len(diff) > 0 {
-			t.Log(pretty.Sprint(og, "->", tx))
-			t.Fatal(diff)
-		}
-	}
-	{
-		og, tx := sorter("g", "gec", "gd", "ge", "gecdb", "gecdba")
-		if diff := pretty.Diff(tx, []string{"g", "d", "e", "c", "b", "a"}); len(diff) > 0 {
-			t.Log(pretty.Sprint(og, "->", tx))
-			t.Fatal(diff)
-		}
-	}
-	{
-		og, tx := sorter("g", "gdec", "gd", "gde", "gdecb", "gdecba")
-		if diff := pretty.Diff(tx, []string{"g", "d", "e", "c", "b", "a"}); len(diff) > 0 {
-			t.Log(pretty.Sprint(og, "->", tx))
-			t.Fatal(diff)
-		}
-	}
-	{
-		og, tx := sorter("t", "tu", "tuv", "a", "ab", "abc")
-		if diff := pretty.Diff(tx, []string{"a", "b", "c", "t", "u", "v"}); len(diff) > 0 {
-			t.Log(pretty.Sprint(og, "->", tx))
-			t.Fatal(diff)
-		}
-	}
-	{
-		og, tx := sorter("a", "ab", "ac")
-		if diff := pretty.Diff(tx, []string{"a", "b", "c"}); len(diff) > 0 {
-			t.Log(pretty.Sprint(og, "->", tx))
-			t.Fatal(diff)
-		}
-	}
-}
-
-// single letter domains, root on the left, name on the right.
-// ie. "agc" means "a" domain with ancestors "g" and "c"
-func sorter(strs ...string) ([]string, []string) {
-	ds := make(DependencyTable, len(strs))
-	for i, str := range strs {
-		row := make([]string, len(str))
-		for j, el := range str {
-			row[j] = string(el)
-		}
-		ds[i] = Dependents{ancestors: row}
-	}
-	rand.Shuffle(len(ds), func(i, j int) {
-		ds[i], ds[j] = ds[j], ds[i]
-	})
-	was := ds.Names()
-	ds.SortTable()
-	return was, ds.Names()
-}
 
 func TestDomainSimplest(t *testing.T) {
 	var dt domainTest
@@ -73,12 +15,12 @@ func TestDomainSimplest(t *testing.T) {
 	var cat Catalog // the catalog adds a global "g" domain.
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if a, e := cat.GetDependentDomains("a"); e != nil {
+	} else if a, e := cat.resolveDomain("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
-	} else if diff := pretty.Diff(a.Ancestors(), []string{"g", "b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(namesOf(a.Ancestors()), []string{"g", "b"}); len(diff) > 0 {
 		t.Log("a has unexpected ancestors:", pretty.Sprint(a))
 		t.Fatal(diff)
-	} else if diff := pretty.Diff(a.Parents(), []string{"b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(namesOf(a.Parents()), []string{"b"}); len(diff) > 0 {
 		t.Log("a has unexpected parents:", pretty.Sprint(a))
 		t.Fatal(diff)
 	}
@@ -94,13 +36,13 @@ func TestDomainSimpleTest(t *testing.T) {
 	var cat Catalog // the catalog adds a global "g" domain.
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if a, e := cat.GetDependentDomains("a"); e != nil {
+	} else if a, e := cat.resolveDomain("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
-	} else if diff := pretty.Diff(a.Ancestors(), []string{"g", "d", "e", "c", "b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(namesOf(a.Ancestors()), []string{"g", "d", "e", "c", "b"}); len(diff) > 0 {
 		// note: c requires d and e; but e requires d; so d is closest to the root, and g is root of all.
 		t.Log("a has unexpected ancestors:", pretty.Sprint(a))
 		t.Fatal(diff)
-	} else if diff := pretty.Diff(a.Parents(), []string{"b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(namesOf(a.Parents()), []string{"b"}); len(diff) > 0 {
 		t.Log("a has unexpected parents:", pretty.Sprint(a))
 		t.Fatal(diff)
 	} else if ds, e := cat.ResolveDomains(); e != nil {
@@ -125,7 +67,8 @@ func TestDomainCatchCycles(t *testing.T) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if got, e := cat.GetDependentDomains("a"); e == nil {
+	} else if got, e := cat.resolveDomain(
+		"a"); e == nil {
 		t.Fatal(got) // we expected failure
 	} else {
 		t.Log("ok:", e)
@@ -147,10 +90,10 @@ func TestDomainTable(t *testing.T) {
 	} else if ds, e := cat.ResolveDomains(); e != nil {
 		t.Fatal(e)
 	} else {
-		var ancestors testOut
-		if e := ds.WriteTable(&ancestors, mdl_domain, true); e != nil {
+		var out testOut
+		if e := ds.WriteTable(&out, "", true); e != nil {
 			t.Fatal(e)
-		} else if diff := pretty.Diff(ancestors[mdl_domain], []string{
+		} else if diff := pretty.Diff(out, testOut{
 			"g:",
 			"d:g",
 			"e:g",
@@ -158,13 +101,13 @@ func TestDomainTable(t *testing.T) {
 			"b:d,c,e,g",
 			"a:b,d,c,e,g",
 		}); len(diff) > 0 {
-			t.Log("ancestors:", pretty.Sprint(ancestors))
+			t.Log("ancestors:", pretty.Sprint(out))
 			t.Fatal(diff)
 		} else {
-			var parents testOut
-			if e := ds.WriteTable(&parents, mdl_domain, false); e != nil {
+			var out testOut
+			if e := ds.WriteTable(&out, "", false); e != nil {
 				t.Fatal(e)
-			} else if diff := pretty.Diff(parents[mdl_domain], []string{
+			} else if diff := pretty.Diff(out, testOut{
 				"g:",
 				"d:g",
 				"e:g",
@@ -172,7 +115,7 @@ func TestDomainTable(t *testing.T) {
 				"b:d,c", // fix? why does d wind up being listed before c? ( and in ancestors too )
 				"a:b",
 			}); len(diff) > 0 {
-				t.Log("parents:", pretty.Sprint(parents))
+				t.Log("parents:", pretty.Sprint(out))
 				t.Fatal(diff)
 			}
 		}
@@ -202,10 +145,10 @@ func TestDomainCase(t *testing.T) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if ds, e := cat.GetDependentDomains("alpha_domain"); e != nil {
+	} else if ds, e := cat.resolveDomain("alpha_domain"); e != nil {
 		t.Fatal(e)
 	} else {
-		got := ds.Ancestors()
+		got := namesOf(ds.Ancestors())
 		if diff := pretty.Diff(got, []string{"g", "beta_domain"}); len(diff) > 0 {
 			t.Fatal(got)
 			t.Fatal(got, diff)
@@ -245,6 +188,14 @@ func TestRivalConflict(t *testing.T) {
 	}
 }
 
+func namesOf(ds []Dependency) []string {
+	out := make([]string, len(ds))
+	for i, d := range ds {
+		out[i] = d.Name()
+	}
+	return out
+}
+
 // ephemera for testing which enters a "
 type rivalFact string
 
@@ -253,4 +204,13 @@ func (el rivalFact) Phase() Phase { return TestPhase }
 func (el rivalFact) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	key, value := "rivalFact", string(el)
 	return c.AddDefinition(d.name, "rivalFacts", at, key, value)
+}
+
+func (cat *Catalog) resolveDomain(n string) (ret Dependencies, err error) {
+	if d, ok := cat.GetDomain(n); !ok {
+		err = errutil.New("unknown domain", n)
+	} else {
+		ret, err = d.Resolve()
+	}
+	return
 }

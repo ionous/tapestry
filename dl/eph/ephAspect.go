@@ -9,12 +9,12 @@ func (el *EphAspect) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = InvalidString(el.Aspect)
 	} else if traits, e := UniformStrings(el.Traits); e != nil {
 		err = e
-	} else if e := addKind(c, d, at, aspect, AspectKinds); e != nil {
-		err = e
 	} else {
+		kid := d.EnsureKind(aspect, at)
+		kid.AddRequirement(AspectKinds)
 		err = c.AddEphemera(EphAt{at, PhaseFunction{AspectPhase,
 			func(c *Catalog, d *Domain, at string) error {
-				return c.AddFields(d, aspect, &traitDef{at, aspect, traits})
+				return kid.AddFields(&traitDef{at, aspect, traits})
 			}}})
 	}
 	return

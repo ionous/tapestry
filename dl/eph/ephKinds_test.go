@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/kr/pretty"
@@ -9,7 +10,7 @@ import (
 // test the kind mapping to kind list resolution
 // probably didnt have to be exhaustive because its built on the dependency system which is already tested
 func TestKindTree(t *testing.T) {
-	ks := makeKinds(
+	ks := makeKinds(t,
 		"a", "",
 		"b", "a",
 		"c", "b",
@@ -17,20 +18,21 @@ func TestKindTree(t *testing.T) {
 		"f", "e",
 		"d", "c",
 	)
-	var res ResolvedKinds
-	if e := ks.ResolveKinds(&res); e != nil {
+	if ks, e := ks.ResolveKinds(); e != nil {
 		t.Fatal(e)
 	} else {
-		SortKinds(res)
-		if diff := pretty.Diff(res, ResolvedKinds{
-			{"a", nil},
-			{"b", dd("a")},
-			{"c", dd("a", "b")},
-			{"e", dd("a", "b")},
-			{"d", dd("a", "b", "c")},
-			{"f", dd("a", "b", "e")},
+		var out testOut
+		if e := ks.WriteTable(&out, "", true); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(out, testOut{
+			"a:",
+			"b:a",
+			"c:b,a",
+			"d:c,b,a",
+			"e:b,a",
+			"f:e,b,a",
 		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(res))
+			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)
 		}
 	}
@@ -38,22 +40,23 @@ func TestKindTree(t *testing.T) {
 
 // this is considered okay - it's in the same tree
 func TestKindDescendants(t *testing.T) {
-	ks := makeKinds(
+	ks := makeKinds(t,
 		"a", "",
 		"b", "a",
 		"c", "a",
 		"c", "b",
 	)
-	var res ResolvedKinds
-	if e := ks.ResolveKinds(&res); e != nil {
+	if res, e := ks.ResolveKinds(); e != nil {
 		t.Log(res)
 		t.Fatal(e)
 	} else {
-		SortKinds(res)
-		if diff := pretty.Diff(res, ResolvedKinds{
-			{"a", nil},
-			{"b", dd("a")},
-			{"c", dd("a", "b")},
+		var out testOut
+		if e := res.WriteTable(&out, "", true); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(out, testOut{
+			"a:",
+			"b:a",
+			"c:b,a",
 		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(res))
 			t.Fatal(diff)
@@ -62,39 +65,44 @@ func TestKindDescendants(t *testing.T) {
 }
 
 func TestKindMissing(t *testing.T) {
-	ks := makeKinds(
+	ks := makeKinds(t,
 		"c", "d",
 		"b", "a",
 		"a", "",
 	)
-	var res ResolvedKinds
-	if e := ks.ResolveKinds(&res); e == nil {
-		t.Fatal("expected error")
+	if res, e := ks.ResolveKinds(); e == nil {
+		var out testOut
+		res.WriteTable(&out, "", true)
+		t.Fatal("expected error", out)
 	} else {
 		t.Log("ok:", e)
 	}
 }
 
-func TestKindConflict(t *testing.T) {
-	ks := makeKinds(
+func TestKindSingleParent(t *testing.T) {
+	ks := makeKinds(t,
 		"a", "",
 		"b", "a",
 		"c", "a",
 		"d", "b",
 		"d", "c",
 	)
-	var res ResolvedKinds
-	if e := ks.ResolveKinds(&res); e == nil {
-		t.Fatal("expected error")
+	if res, e := ks.ResolveKinds(); e == nil {
+		var out testOut
+		res.WriteTable(&out, "", true)
+		t.Fatal("expected error", out)
 	} else {
 		t.Log("ok:", e)
 	}
 }
 
-func makeKinds(strs ...string) Kinds {
-	var ks Kinds
+func makeKinds(t *testing.T, strs ...string) *Domain {
+	d := Domain{name: "kinds", at: t.Name()}
 	for i, cnt := 0, len(strs); i < cnt; i += 2 {
-		ks.AddKind(strs[i], strs[i+1])
+		a := d.EnsureKind(strs[i], strconv.Itoa(i))
+		if b := strs[i+1]; len(b) > 0 {
+			a.AddRequirement(b)
+		}
 	}
-	return ks
+	return &d
 }

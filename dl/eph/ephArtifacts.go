@@ -33,7 +33,7 @@ type DomainError struct {
 }
 
 func (n DomainError) Error() string {
-	return errutil.Sprint(n.Err, "in", n.Domain)
+	return errutil.Sprintf("%v in domain %q", n.Err, n.Domain)
 }
 func (n DomainError) Unwrap() error {
 	return n.Err
@@ -53,10 +53,10 @@ type ArtifactFinder interface {
 
 // walks the properly cased named domain's dependencies ( non-recursively ) to find
 // whether the new key,value pair contradicts or duplicates any existing value.
-func CheckConflicts(collections []string, as ArtifactFinder, key CategoryKey, at, value string) (err error) {
+func CheckConflicts(collections []Dependency, as ArtifactFinder, key CategoryKey, at, value string) (err error) {
 	var pf *Artifacts
 	for i, cnt := 0, len(collections)-1; i <= cnt; i++ {
-		n := collections[cnt-i]
+		n := collections[cnt-i].Name() // fix?
 		if art, ok := as.GetArtifacts(n); !ok {
 			err = errutil.New("%q unknown when checking for conflicts ", n)
 			break

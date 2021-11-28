@@ -7,11 +7,11 @@ type traitDef struct {
 	traits []string
 }
 
-func (td *traitDef) AddToKind(k *Kind) {
+func (td *traitDef) AddToKind(k *ScopedKind) {
 	k.traits = append(k.traits, *td)
 }
 
-func (td *traitDef) CheckConflict(k *Kind) (err error) {
+func (td *traitDef) CheckConflict(k *ScopedKind) (err error) {
 	if e := td.checkProps(k); e != nil {
 		err = e
 	} else if td.checkTraits(k); e != nil {
@@ -20,7 +20,7 @@ func (td *traitDef) CheckConflict(k *Kind) (err error) {
 	return
 }
 
-func (td *traitDef) checkProps(k *Kind) (err error) {
+func (td *traitDef) checkProps(k *ScopedKind) (err error) {
 	for _, kf := range k.fields {
 		for _, in := range td.traits {
 			if in == kf.name {
@@ -32,7 +32,7 @@ func (td *traitDef) checkProps(k *Kind) (err error) {
 	return
 }
 
-func (td *traitDef) checkTraits(k *Kind) (err error) {
+func (td *traitDef) checkTraits(k *ScopedKind) (err error) {
 	for _, ka := range k.traits {
 		for _, t := range ka.traits {
 			for _, in := range td.traits {

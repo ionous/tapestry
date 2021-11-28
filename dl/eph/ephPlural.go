@@ -25,7 +25,9 @@ func (pd *PluralTable) AddPair(domain, plural, singular string) (okay bool) {
 func (pd PluralTable) FindSingular(names DependencyFinder, domain, plural string) (ret string, err error) {
 	if s, ok := pd.findSingular(domain, plural); ok {
 		ret = s
-	} else if requires, e := GetResolvedDependencies(domain, names); e != nil {
+	} else if dep, ok := names.FindDependency(domain); !ok {
+		err = errutil.New("unknown dependency", domain)
+	} else if requires, e := dep.GetDependencies(); e != nil {
 		err = e
 	} else {
 		search := requires.Ancestors()
@@ -33,8 +35,8 @@ func (pd PluralTable) FindSingular(names DependencyFinder, domain, plural string
 			if cnt := len(search); cnt == 0 {
 				break
 			} else {
-				domain, search = search[cnt-1], search[:cnt-1]
-				if s, ok := pd.findSingular(domain, plural); ok {
+				dep, search = search[cnt-1], search[:cnt-1]
+				if s, ok := pd.findSingular(dep.Name(), plural); ok {
 					ret = s
 					break
 				}
