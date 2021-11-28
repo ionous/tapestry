@@ -78,6 +78,7 @@ func (d *Requires) Resolve(name string, names DependencyFinder) (ret Dependents,
 
 func resolve(name string, reqs []string, names DependencyFinder) (ret Dependents, err error) {
 	// capital-R resolve each specified dependency
+	// ( which winds us up back here -- one requirement deeper -- unless its results are cached already )
 	if ds, e := MakeTable(reqs, names); e != nil {
 		err = e
 	} else {

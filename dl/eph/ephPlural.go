@@ -25,10 +25,10 @@ func (pd *PluralTable) AddPair(domain, plural, singular string) (okay bool) {
 func (pd PluralTable) FindSingular(names DependencyFinder, domain, plural string) (ret string, err error) {
 	if s, ok := pd.findSingular(domain, plural); ok {
 		ret = s
-	} else if deps, e := GetResolvedDependencies(domain, names); e != nil {
+	} else if requires, e := GetResolvedDependencies(domain, names); e != nil {
 		err = e
 	} else {
-		search := deps.Ancestors(true)
+		search := requires.Ancestors()
 		for {
 			if cnt := len(search); cnt == 0 {
 				break
@@ -77,7 +77,7 @@ func (el *EphPlural) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else {
 		var de DomainError
 		var conflict *Conflict
-		if e := c.CheckConflict(d.name, mdl_plural, at, many, one); e == nil {
+		if e := c.AddDefinition(d.name, mdl_plural, at, many, one); e == nil {
 			c.plurals.AddPair(d.name, many, one)
 		} else if !errors.As(e, &de) || !errors.As(de.Err, &conflict) {
 			err = e // some unknown error?

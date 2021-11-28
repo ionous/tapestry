@@ -42,13 +42,21 @@
                 "spec": "eph {run+execute}",
                 "slot": "ephemera"
             },
+            "eph_aspect": {
+                "spec": "eph {aspect:text} {traits+text}",
+                "slot": "ephemera",
+                "desc": [
+                    "Declares a set of related object states such that exactly one member of the set is true for a given object at a single time.",
+                    "Generates an implicit kind of 'aspect' where every field of the kind is a boolean property."
+                ]
+            },
             "eph_kinds": {
-                "spec": "eph {kinds:text} {from%kind:text}",
+                "spec": "eph {kinds:text} {from:text}",
                 "slot": "ephemera",
                 "desc": [
                     "Declare a new kind deriving from another.",
                     "The new kind has all of the properties of all of its ancestor kinds",
-                    "and it can be used wherever one of its ancestor kinds is needed."
+                    "and it can be used wherever one of its ancestor kinds is needed.",
                     "( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )"
                 ]
             }

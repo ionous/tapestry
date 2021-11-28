@@ -15,20 +15,10 @@ type Dependents struct {
 	parents   []string
 }
 
-func (d *Dependents) Name() string      { return d.ancestors[len(d.ancestors)-1] }
-func (d *Dependents) NumParents() int   { return len(d.parents) }
-func (d *Dependents) NumAncestors() int { return len(d.ancestors) - 1 }
-
-// if not the full tree returns just the parents.
-// direct parents are at slice's start; ancestors ( and the root ) at the end.
-func (d *Dependents) Ancestors(fullTree bool) (ret []string) {
-	if fullTree {
-		ret = d.ancestors[:len(d.ancestors)-1]
-	} else {
-		ret = d.parents
-	}
-	return
-}
+func (d *Dependents) Name() string           { return d.ancestors[len(d.ancestors)-1] }
+func (d *Dependents) AllAncestors() []string { return d.ancestors }
+func (d *Dependents) Ancestors() []string    { return d.ancestors[:len(d.ancestors)-1] }
+func (d *Dependents) Parents() []string      { return d.parents }
 
 func MakeTable(reqs []string, names DependencyFinder) (ret DependencyTable, err error) {
 	var ds DependencyTable
@@ -95,7 +85,12 @@ func (ds DependencyTable) SortTable() {
 // for each domain in the passed list, output its full ancestry tree ( or just its parents )
 func (ds DependencyTable) WriteTable(w Writer, target string, fullTree bool) (err error) {
 	for _, d := range ds {
-		name, list := d.Name(), d.Ancestors(fullTree)
+		var list []string
+		if fullTree {
+			list = d.Ancestors()
+		} else {
+			list = d.Parents()
+		}
 		var b strings.Builder
 		for i, cnt := 0, len(list); i < cnt; i++ {
 			el := list[cnt-i-1]
@@ -104,7 +99,7 @@ func (ds DependencyTable) WriteTable(w Writer, target string, fullTree bool) (er
 			}
 			b.WriteString(el)
 		}
-		row := b.String()
+		name, row := d.Name(), b.String()
 		if e := w.Write(target, name, row); e != nil {
 			err = errutil.Append(err, errutil.Fmt("couldn't write %q %e", name, e))
 		}

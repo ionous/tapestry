@@ -18,4 +18,6 @@ var mdl_domain = tables.Insert("mdl_domain", "domain", "path")
 var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one")
 
 // singular name of kind and materialized hierarchy of ancestors separated by commas
-var mdl_kind = tables.Insert("mdl_kind", "kind", "path")
+var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "path")
+
+var mdl_field = tables.Insert("mdl_field", "kind", "field", "affinity", "type")

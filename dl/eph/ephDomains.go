@@ -4,22 +4,23 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// type DomainFinder interface {
-// 	GetDomain(n string) (*Domain, bool)
-// }
+type DomainFinder interface {
+	GetDomain(n string) (*Domain, bool)
+}
 
 type Domain struct {
 	name, at string
 	phases   [NumPhases][]EphAt
-	deps     Requires
-	// finder   DomainFinder
-	kinds Kinds
+	reqs     Requires // other domains this needs ( can have multiple direct parents )
+	defs     Artifacts
+	kinds    Kinds
 }
 
 func (d *Domain) GetDependencies() (Dependents, error) {
-	return d.deps.GetDependencies()
+	return d.reqs.GetDependencies()
 }
 
+// EphBeginDomain
 func (el *EphBeginDomain) Phase() Phase { return DomainPhase }
 
 //
@@ -38,19 +39,20 @@ func (el *EphBeginDomain) Assemble(c *Catalog, d *Domain, at string) (err error)
 				err = errutil.Append(err, InvalidString(req))
 			} else {
 				d := c.EnsureDomain(sub)
-				kid.deps.AddRequirement(d.name)
+				kid.reqs.AddRequirement(d.name)
 			}
 		}
 		if err == nil {
 			// we are dependent on the parent domain too
 			// ( adding it last keeps it closer to the right side of the parent list )
-			kid.deps.AddRequirement(d.name)
+			kid.reqs.AddRequirement(d.name)
 			c.processing.Push(kid)
 		}
 	}
 	return
 }
 
+// EphEndDomain
 func (el *EphEndDomain) Phase() Phase { return DomainPhase }
 
 // pop the most recent domain

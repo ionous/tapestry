@@ -75,10 +75,10 @@ func TestDomainSimplest(t *testing.T) {
 		t.Fatal(e)
 	} else if a, e := cat.GetDependentDomains("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
-	} else if diff := pretty.Diff(a.Ancestors(true), []string{"g", "b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(a.Ancestors(), []string{"g", "b"}); len(diff) > 0 {
 		t.Log("a has unexpected ancestors:", pretty.Sprint(a))
 		t.Fatal(diff)
-	} else if diff := pretty.Diff(a.Ancestors(false), []string{"b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(a.Parents(), []string{"b"}); len(diff) > 0 {
 		t.Log("a has unexpected parents:", pretty.Sprint(a))
 		t.Fatal(diff)
 	}
@@ -96,11 +96,11 @@ func TestDomainSimpleTest(t *testing.T) {
 		t.Fatal(e)
 	} else if a, e := cat.GetDependentDomains("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
-	} else if diff := pretty.Diff(a.Ancestors(true), []string{"g", "d", "e", "c", "b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(a.Ancestors(), []string{"g", "d", "e", "c", "b"}); len(diff) > 0 {
 		// note: c requires d and e; but e requires d; so d is closest to the root, and g is root of all.
 		t.Log("a has unexpected ancestors:", pretty.Sprint(a))
 		t.Fatal(diff)
-	} else if diff := pretty.Diff(a.Ancestors(false), []string{"b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(a.Parents(), []string{"b"}); len(diff) > 0 {
 		t.Log("a has unexpected parents:", pretty.Sprint(a))
 		t.Fatal(diff)
 	} else if ds, e := cat.ResolveDomains(); e != nil {
@@ -205,7 +205,7 @@ func TestDomainCase(t *testing.T) {
 	} else if ds, e := cat.GetDependentDomains("alpha_domain"); e != nil {
 		t.Fatal(e)
 	} else {
-		got := ds.Ancestors(true)
+		got := ds.Ancestors()
 		if diff := pretty.Diff(got, []string{"g", "beta_domain"}); len(diff) > 0 {
 			t.Fatal(got)
 			t.Fatal(got, diff)
@@ -252,5 +252,5 @@ func (el rivalFact) Phase() Phase { return TestPhase }
 
 func (el rivalFact) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	key, value := "rivalFact", string(el)
-	return c.CheckConflict(d.name, "rivalFacts", at, key, value)
+	return c.AddDefinition(d.name, "rivalFacts", at, key, value)
 }

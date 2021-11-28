@@ -2,12 +2,38 @@ package eph
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/ionous/errutil"
 )
 
-// a mapping of a kind to its ancestors that can be resolved into a flat list of kinds
-type Kinds map[string]*Requires
+const (
+	AspectKinds = "aspect"
+	RecordKinds = "record"
+)
+
+// name of a kind to assembly info
+// ready after phase Ancestry
+type Kinds map[string]*Kind
+
+type Kind struct {
+	name   string
+	reqs   Requires // references to ancestors ( at most it can have one direct parent )
+	traits []traitDef
+	fields []fieldDef
+}
+
+type KindError struct {
+	Kind, Domain string
+	Err          error
+}
+
+func (n KindError) Error() string {
+	return errutil.Sprint(n.Err, n.Kind, "in", n.Domain)
+}
+func (n KindError) Unwrap() error {
+	return n.Err
+}
 
 // we only allow each kind to be given a single parent ( via resolve )
 // but we still have to determine what the hierarchy is ( so we reuse the same bits as domain )
@@ -17,48 +43,57 @@ func (ks *Kinds) AddKind(k, p string) {
 	}
 	kind, ok := (*ks)[k]
 	if !ok {
-		kind = new(Requires)
+		kind = &Kind{name: k}
 		(*ks)[k] = kind
 	}
 	if len(p) > 0 {
-		kind.AddRequirement(p)
+		kind.reqs.AddRequirement(p)
 	}
 }
 
 // distill a tree of kinds into a set of names and their hierarchy
 func (ks *Kinds) ResolveKinds(out *ResolvedKinds) (err error) {
-	for kind, deps := range *ks {
-		if res, e := deps.Resolve(kind, (*kindFinder)(ks)); e != nil {
+	for kind, info := range *ks {
+		if res, e := info.reqs.Resolve(kind, (*kindOfDependencies)(ks)); e != nil {
 			err = errutil.Append(err, e)
-		} else if res.NumParents() > 1 {
-			e := errutil.Fmt("kind %q should have at most one parent (has: %v)", kind, res.Ancestors(false))
+		} else if ps := res.Parents(); len(ps) > 1 {
+			e := errutil.Fmt("kind %q should have at most one parent (has: %v)", kind, ps)
 			err = errutil.Append(err, e)
 		} else {
-			kinds := res.Ancestors(true)
+			kinds := res.Ancestors()
 			*out = append(*out, ResolvedKind{kind, kinds})
 		}
 	}
 	return
 }
 
-// private helper to make the kinds compatible with the DependencyFinder ( for resolve )
-type kindFinder Kinds
+// private helper to make the kinds compatible with the DependencyFinder  ( for resolve )
+type kindOfDependencies Kinds
 
-func (c kindFinder) GetRequirements(name string) (ret *Requires, okay bool) {
-	ret, okay = c[name]
+func (c kindOfDependencies) GetRequirements(name string) (ret *Requires, okay bool) {
+	if k, ok := c[name]; ok {
+		ret, okay = &k.reqs, true
+	}
 	return
 }
 
 func (el *EphKinds) Phase() Phase { return AncestryPhase }
 
 func (el *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if kinds, ok := UniformString(el.Kinds); !ok {
-		err = InvalidString(el.Kinds)
-	} else if parentKind, ok := UniformString(el.Kind); !ok {
-		err = InvalidString(el.Kind)
-	} else if newKind, e := c.Singularize(d.name, kinds); e != nil {
+	if singleKind, e := c.Singularize(d.name, strings.TrimSpace(el.Kinds)); e != nil {
 		err = e
-	} else if e := c.CheckConflict(d.name, mdl_kind, at, newKind, parentKind); e != nil {
+	} else if newKind, ok := UniformString(singleKind); !ok {
+		err = InvalidString(el.Kinds)
+	} else if parentKind, ok := UniformString(el.From); !ok {
+		err = InvalidString(el.From)
+	} else {
+		err = addKind(c, d, at, newKind, parentKind)
+	}
+	return
+}
+
+func addKind(c *Catalog, d *Domain, at string, newKind, parentKind string) (err error) {
+	if e := c.AddDefinition(d.name, mdl_kind, at, newKind, parentKind); e != nil {
 		var de DomainError
 		var conflict *Conflict
 		if !errors.As(e, &de) || !errors.As(de.Err, &conflict) || conflict.Reason != Duplicated {

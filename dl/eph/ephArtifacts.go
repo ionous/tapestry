@@ -6,16 +6,13 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// domain to definitions
-type DomainArtifacts map[string]Definitions
-
 type CategoryKey struct {
 	Category string
 	Key      string // arbitrary key dependent on the category
 }
 
 // key to value and source of declaration.
-type Definitions map[CategoryKey]Definition
+type Artifacts map[CategoryKey]Definition
 
 type Definition struct {
 	at, value string
@@ -36,7 +33,7 @@ type DomainError struct {
 }
 
 func (n DomainError) Error() string {
-	return errutil.Sprint(n.Err, "in domain", n.Domain)
+	return errutil.Sprint(n.Err, "in", n.Domain)
 }
 func (n DomainError) Unwrap() error {
 	return n.Err
@@ -50,50 +47,42 @@ const (
 	Duplicated
 )
 
+type ArtifactFinder interface {
+	GetArtifacts(collection string) (*Artifacts, bool)
+}
+
 // walks the properly cased named domain's dependencies ( non-recursively ) to find
 // whether the new key,value pair contradicts or duplicates any existing value.
-func (dc DomainArtifacts) CheckConflict(n string, l DependencyFinder, cat, at, key, value string) (err error) {
-	fullKey := CategoryKey{cat, key}
-	if e := dc.checkConflict(n, fullKey, value); e != nil {
-		err = e
-	} else if deps, e := GetResolvedDependencies(n, l); e != nil {
-		err = e
-	} else {
-		// ensure the definition maps exist:
-		defs := dc[n]
-		if defs == nil {
-			defs = make(Definitions)
-			dc[n] = defs
-		}
-		// slow: check for conflicts in all of our ancestors
-		for _, depName := range deps.Ancestors(true) {
-			if e := dc.checkConflict(depName, fullKey, value); e != nil {
-				err = e
+func CheckConflicts(collections []string, as ArtifactFinder, key CategoryKey, at, value string) (err error) {
+	var pf *Artifacts
+	for i, cnt := 0, len(collections)-1; i <= cnt; i++ {
+		n := collections[cnt-i]
+		if art, ok := as.GetArtifacts(n); !ok {
+			err = errutil.New("%q unknown when checking for conflicts ", n)
+			break
+		} else {
+			if pf == nil {
+				pf = art
+			}
+			if e := art.CheckConflict(key, value); e != nil {
+				err = DomainError{n, e} // reuse the domain error for now... ( collection name is often domain name )
 				break
 			}
 		}
-		// store the new definition if there was no conflict with existing defs
-		if err == nil {
-			defs[fullKey] = Definition{at: at, value: value}
+	}
+	if err == nil && pf != nil {
+		if *pf == nil {
+			*pf = make(Artifacts)
 		}
+		(*pf)[key] = Definition{at: at, value: value}
 	}
 	return
 }
 
-// was anything stored before?
-func (dc DomainArtifacts) checkConflict(n string, key CategoryKey, value string) (err error) {
-	if def, ok := dc[n]; ok {
-		if e := def.checkConflict(key, value); e != nil {
-			err = DomainError{n, e}
-		}
-	}
-	return
-}
-
-func (defs Definitions) Merge(from Definitions) (err error) {
+func (defs Artifacts) Merge(from Artifacts) (err error) {
 	for k, def := range from {
 		var conflict *Conflict
-		if e := defs.checkConflict(k, def.value); e == nil {
+		if e := defs.CheckConflict(k, def.value); e == nil {
 			defs[k] = def // store if there was no conflict
 		} else if errors.As(e, &conflict) && conflict.Reason == Duplicated {
 			LogWarning(e) // warn if it was a duplicated definition
@@ -104,7 +93,7 @@ func (defs Definitions) Merge(from Definitions) (err error) {
 	return
 }
 
-func (defs Definitions) checkConflict(key CategoryKey, value string) (err error) {
+func (defs Artifacts) CheckConflict(key CategoryKey, value string) (err error) {
 	if def, ok := defs[key]; ok {
 		var why ReasonForConflict
 		if def.value == value {
