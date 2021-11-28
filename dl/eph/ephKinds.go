@@ -31,11 +31,15 @@ func (el *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = e
 	} else if newKind, ok := UniformString(singleKind); !ok {
 		err = InvalidString(el.Kinds)
-	} else if parentKind, ok := UniformString(el.From); !ok {
-		err = InvalidString(el.From)
 	} else {
 		kid := d.EnsureKind(newKind, at)
-		kid.AddRequirement(parentKind)
+		if len(el.From) > 0 {
+			if parentKind, ok := UniformString(el.From); !ok {
+				err = InvalidString(el.From)
+			} else {
+				kid.AddRequirement(parentKind)
+			}
+		}
 	}
 	return
 }
