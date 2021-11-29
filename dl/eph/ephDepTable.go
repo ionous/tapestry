@@ -47,8 +47,10 @@ func (t *tableMaker) ResolveDep(dep Dependency) (ret Dependencies, okay bool) {
 
 // accumulates errors for reporting via GetSortedTable, but returns true/false in the meantime
 func (t *tableMaker) ResolveReq(finder DependencyFinder, req string) (ret Dependencies, okay bool) {
-	if dep, ok := finder.FindDependency(req); !ok {
-		t.onerror(errutil.New("unknown dependency", req))
+	if finder == nil {
+		t.onerror(errutil.New("unknown dependencies"))
+	} else if dep, ok := finder.FindDependency(req); !ok {
+		t.onerror(errutil.Fmt("unknown dependency %q", req))
 	} else {
 		ret, okay = t.ResolveDep(dep)
 	}

@@ -58,7 +58,7 @@ func TestKindDescendants(t *testing.T) {
 			"b:a",
 			"c:b,a",
 		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(res))
+			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)
 		}
 	}
@@ -104,5 +104,6 @@ func makeKinds(t *testing.T, strs ...string) *Domain {
 			a.AddRequirement(b)
 		}
 	}
+	d.Resolve()
 	return &d
 }

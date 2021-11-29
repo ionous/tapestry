@@ -2,6 +2,7 @@ package eph
 
 // implemented by individual commands
 type Ephemera interface {
+	// fix? remove catalog from the signature?
 	Assemble(c *Catalog, d *Domain, at string) error
 	Phase() Phase
 }
@@ -28,7 +29,10 @@ const (
 )
 
 type PhaseActions map[Phase]PhaseAction
-type PhaseAction func(c *Catalog, d *Domain) (err error)
+type PhaseAction struct {
+	Flags PhaseFlags
+	Do    func(d *Domain) (err error)
+}
 
 // wrapper for implementing Ephemera with free functions
 type PhaseFunction struct {
@@ -39,4 +43,8 @@ type PhaseFunction struct {
 func (fn PhaseFunction) Phase() Phase { return fn.OnPhase }
 func (fn PhaseFunction) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	return fn.Do(c, d, at)
+}
+
+type PhaseFlags struct {
+	NoDuplicates bool
 }

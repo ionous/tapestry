@@ -41,7 +41,7 @@ func (el *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
 			if len(parentKind) > 0 {
 				kid.AddRequirement(parentKind)
 			}
-		} else if ok, e := kid.HasParent(parentKind); e != nil {
+		} else if ok, e := kid.HasAncestor(parentKind); e != nil {
 			err = e
 		} else if !ok {
 			err = KindError{newKind, errutil.Fmt("can't redefine parent as %q", parentKind)}

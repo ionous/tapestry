@@ -18,18 +18,19 @@ type ScopedKinds map[string]*ScopedKind
 func (k *ScopedKind) Name() string                           { return k.name }
 func (k *ScopedKind) AddRequirement(name string)             { k.reqs.AddRequirement(name) }
 func (d *ScopedKind) GetDependencies() (Dependencies, error) { return d.reqs.GetDependencies() }
+
 func (k *ScopedKind) Resolve() (ret Dependencies, err error) {
 	if len(k.at) == 0 {
 		err = KindError{k.name, errutil.New("never defined")}
-	} else if k.domain == nil {
-		err = KindError{k.name, errutil.New("no domain")}
+	} else if ks, e := k.reqs.Resolve(k, (*kindFinder)(k.domain)); e != nil {
+		err = KindError{k.name, e}
 	} else {
-		ret, err = k.reqs.Resolve(k, (*kindFinder)(k.domain))
+		ret = ks
 	}
 	return
 }
 
-func (k *ScopedKind) HasParent(name string) (okay bool, err error) {
+func (k *ScopedKind) HasAncestor(name string) (okay bool, err error) {
 	if dep, e := k.GetDependencies(); e != nil {
 		err = e
 	} else if as := dep.Ancestors(); len(name) == 0 && len(as) == 0 {

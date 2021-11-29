@@ -26,21 +26,6 @@ func (c *Catalog) Singularize(domain, plural string) (ret string, err error) {
 	return
 }
 
-// used by ephemera during assembly to record some piece of information
-// that would cause problems it were specified differently elsewhere.
-// ex. some in game password specified as the word "secret" in one place, but "mongoose" somewhere else.
-func (c *Catalog) AddDefinition(domain, cat, at, key, value string) (err error) {
-	if d, ok := c.GetDomain(domain); !ok {
-		err = errutil.New("unknown domain", domain)
-	} else if ds, e := d.GetDependencies(); e != nil {
-		err = e
-	} else {
-		key := CategoryKey{cat, key}
-		err = CheckConflicts(ds.FullTree(), (*catArtifactFinder)(c), key, at, value)
-	}
-	return
-}
-
 // return the uniformly named domain ( if it exists )
 func (c *Catalog) GetDomain(n string) (*Domain, bool) {
 	d, ok := c.domains[n]
@@ -63,7 +48,6 @@ func (c *Catalog) EnsureDomain(n, at string) (ret *Domain) {
 	return
 }
 
-// creates domains, suspends all other ephemera until the domains are resolved.
 func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 	if d, ok := c.processing.Top(); !ok {
 		err = errutil.New("no domain")
@@ -72,7 +56,9 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 	} else if phase == DomainPhase {
 		err = ephAt.Eph.Assemble(c, d, ephAt.At)
 	} else {
-		d.phases[phase] = append(d.phases[phase], ephAt)
+		els := d.phases[phase]
+		els.eph = append(els.eph, ephAt)
+		d.phases[phase] = els
 	}
 	return
 }
@@ -101,68 +87,13 @@ func (c *Catalog) ProcessDomains(phaseActions PhaseActions) (err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
-		for _, deps := range ds {
-			if e := c.AssembleDomain(deps, phaseActions); e != nil {
+		for _, deps := range ds { // list of dependencies
+			d := deps.Leaf().(*Domain) // panics if it fails
+			if e := d.Assemble(phaseActions); e != nil {
 				err = e
 				break
 			}
 		}
-	}
-	return
-}
-
-func (c *Catalog) AssembleDomain(deps Dependencies, phaseActions PhaseActions) (err error) {
-	n := deps.Leaf().Name()
-	if d, ok := c.GetDomain(n); !ok {
-		err = errutil.New("unknown domain", n)
-	} else {
-		c.processing = DomainStack{d} // so ephemera can add other ephemera
-		if e := c.checkRivals(deps); e != nil {
-			err = e
-		} else {
-			for w, ephlist := range d.phases {
-				for _, el := range ephlist {
-					if e := el.Eph.Assemble(c, d, el.At); e != nil {
-						err = errutil.Append(err, e)
-					}
-				}
-				if err != nil {
-					break
-				} else if act, ok := phaseActions[Phase(w)]; ok {
-					if e := act(c, d); e != nil {
-						err = e
-						break
-					}
-				}
-			}
-		}
-	}
-	return
-}
-
-// used by assembler to check that domains with multiple parents don't contain conflicting information.
-// ex. "plane: a flying vehicle" and "plane: a woodworking tool" both included by some child domain.
-func (c *Catalog) checkRivals(res Dependencies) (err error) {
-	if parents := res.Parents(); len(parents) > 1 {
-		def := make(Artifacts) // start with nothing and merge in to check for artifacts
-		for _, p := range parents {
-			if d, ok := p.(*Domain); ok {
-				if e := def.Merge(d.defs); e != nil {
-					err = DomainError{d.name, e}
-					break
-				}
-			}
-		}
-	}
-	return
-}
-
-// private helper to make the catalog compatible with the ArtifactFinder ( for domains )
-type catArtifactFinder Catalog
-
-func (c *catArtifactFinder) GetArtifacts(name string) (ret *Artifacts, okay bool) {
-	if d, ok := c.domains[name]; ok {
-		ret, okay = &d.defs, true
 	}
 	return
 }

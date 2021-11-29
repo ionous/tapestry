@@ -26,7 +26,7 @@ func (pd PluralTable) FindSingular(names DependencyFinder, domain, plural string
 	if s, ok := pd.findSingular(domain, plural); ok {
 		ret = s
 	} else if dep, ok := names.FindDependency(domain); !ok {
-		err = errutil.New("unknown dependency", domain)
+		err = errutil.Fmt("unknown dependency %q", domain)
 	} else if requires, e := dep.GetDependencies(); e != nil {
 		err = e
 	} else {
@@ -79,7 +79,7 @@ func (el *EphPlural) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else {
 		var de DomainError
 		var conflict *Conflict
-		if e := c.AddDefinition(d.name, mdl_plural, at, many, one); e == nil {
+		if e := d.AddDefinition(many, at, one); e == nil {
 			c.plurals.AddPair(d.name, many, one)
 		} else if !errors.As(e, &de) || !errors.As(de.Err, &conflict) {
 			err = e // some unknown error?

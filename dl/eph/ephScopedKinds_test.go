@@ -6,8 +6,6 @@ import (
 	"github.com/kr/pretty"
 )
 
-// fix: add failure tests
-
 // the basic TestKind(s) test kinds in a single domain
 // so we want to to make sure we can handle multiple domains too
 func TestScopedKinds(t *testing.T) {
@@ -67,7 +65,7 @@ func TestScopedKindMissing(t *testing.T) {
 		&EphKinds{Kinds: "m", From: "x"},
 	)
 	var out testOut
-	if e := writeKinds(dt, &out); e == nil || e.Error() != `unknown dependency x` {
+	if e := writeKinds(dt, &out); e == nil || e.Error() != `unknown dependency "x" for kind "m"` {
 		t.Fatal("expected error", e, out)
 	} else {
 		t.Log("ok", e)
@@ -101,18 +99,57 @@ func TestScopedKindConflict(t *testing.T) {
 	}
 }
 
-// FIX -- rivals
+func TestScopedRivalsOkay(t *testing.T) {
+	var dt domainTest
+	var warnings []error
+	unwarn := catchWarnings(&warnings)
+	defer unwarn()
+	dt.makeDomain(dd("a"),
+		&EphKinds{Kinds: "k"},
+	)
+	dt.makeDomain(dd("b", "a"),
+		&EphKinds{Kinds: "m", From: "k"},
+	)
+	dt.makeDomain(dd("d", "a"),
+		&EphKinds{Kinds: "m", From: "k"}, // second in a parallel domain should be fine
+	)
+	var out testOut
+	if e := writeKinds(dt, &out); e != nil {
+		t.Fatal(e)
+	} else if len(warnings) > 0 {
+		t.Fatal(warnings) // didnt expect any warnings.
+	}
+}
+
+func TestScopedRivalConflict(t *testing.T) {
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		&EphKinds{Kinds: "k"},
+	)
+	dt.makeDomain(dd("b", "a"),
+		&EphKinds{Kinds: "m", From: "k"},
+	)
+	dt.makeDomain(dd("d", "a"),
+		&EphKinds{Kinds: "m", From: "k"}, // re: TestScopedRivalsOkay, should be okay.
+	)
+	dt.makeDomain(dd("z", "b", "d")) // trying to include both should be a problem; they are two unique kinds...
+	var out testOut
+	if e := writeKinds(dt, &out); e == nil {
+		t.Fatal("expected an error", out)
+	} else {
+		t.Log("ok", e)
+	}
+}
 
 func writeKinds(dt domainTest, pout *testOut) (err error) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
-	} else if ks, e := cat.ResolveDomains(); e != nil {
-		err = e
 	} else {
-		for _, deps := range ks {
-			if e := cat.AssembleDomain(deps, PhaseActions{
-				AncestryPhase: func(c *Catalog, d *Domain) (err error) {
+		err = cat.ProcessDomains(PhaseActions{
+			AncestryPhase: PhaseAction{
+				PhaseFlags{NoDuplicates: true},
+				func(d *Domain) (err error) {
 					if ks, e := d.ResolveKinds(); e != nil {
 						err = e
 					} else if e := ks.WriteTable(pout, "", false); e != nil {
@@ -120,11 +157,8 @@ func writeKinds(dt domainTest, pout *testOut) (err error) {
 					}
 					return
 				},
-			}); e != nil {
-				err = e
-				break
-			}
-		}
+			},
+		})
 	}
 	return
 }
