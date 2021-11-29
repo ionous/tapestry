@@ -6,9 +6,11 @@ import (
 	"github.com/kr/pretty"
 )
 
+// fix: add failure tests
+
 // the basic TestKind(s) test kinds in a single domain
 // so we want to to make sure we can handle multiple domains too
-func TestSameScopedKinds(t *testing.T) {
+func TestScopedKinds(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: "k"},
@@ -21,33 +23,108 @@ func TestSameScopedKinds(t *testing.T) {
 		&EphKinds{Kinds: "n", From: "k"}, // root domain
 		&EphKinds{Kinds: "j", From: "m"}, // parent domain
 	)
+	var out testOut
+	if e := writeKinds(dt, &out); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(out, testOut{
+		"k:", "m:k", "j:m", "q:j", "n:k",
+	}); len(diff) > 0 {
+		t.Log(pretty.Sprint(out))
+		t.Fatal(diff)
+	}
+}
+
+func TestScopedRedundant(t *testing.T) {
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		&EphKinds{Kinds: "k"},
+	)
+	dt.makeDomain(dd("b", "a"),
+		&EphKinds{Kinds: "m", From: "k"}, // parent/root domain
+	)
+	dt.makeDomain(dd("c", "b"),
+		&EphKinds{Kinds: "n", From: "k"}, // root domain
+		&EphKinds{Kinds: "n", From: "m"}, // more specific
+		&EphKinds{Kinds: "n", From: "k"}, // duped
+	)
+	var out testOut
+	if e := writeKinds(dt, &out); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(out, testOut{
+		"k:", "m:k", "n:m",
+	}); len(diff) > 0 {
+		t.Log(pretty.Sprint(out))
+		t.Fatal(diff)
+	}
+}
+
+func TestScopedKindMissing(t *testing.T) {
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		&EphKinds{Kinds: "k"},
+	)
+	dt.makeDomain(dd("b", "a"),
+		&EphKinds{Kinds: "m", From: "x"},
+	)
+	var out testOut
+	if e := writeKinds(dt, &out); e == nil || e.Error() != `unknown dependency x` {
+		t.Fatal("expected error", e, out)
+	} else {
+		t.Log("ok", e)
+	}
+}
+
+func TestScopedKindConflict(t *testing.T) {
+	var warnings []error
+	unwarn := catchWarnings(&warnings)
+	defer unwarn()
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		&EphKinds{Kinds: "k"},
+		&EphKinds{Kinds: "q", From: "k"},
+	)
+	dt.makeDomain(dd("b", "a"),
+		&EphKinds{Kinds: "m", From: "k"},
+		&EphKinds{Kinds: "n", From: "k"},
+		&EphKinds{Kinds: "q", From: "k"}, // should be okay.
+	)
+	dt.makeDomain(dd("c", "b"),
+		&EphKinds{Kinds: "m", From: "n"},
+	)
+	var out testOut
+	if e := writeKinds(dt, &out); e == nil || e.Error() != `can't redefine parent as "n" for kind "m"` {
+		t.Fatal("expected error", e, out)
+	} else if len(warnings) != 1 {
+		t.Fatal("expected one warning", warnings)
+	} else {
+		t.Log("ok", e, warnings)
+	}
+}
+
+// FIX -- rivals
+
+func writeKinds(dt domainTest, pout *testOut) (err error) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
+		err = e
 	} else if ks, e := cat.ResolveDomains(); e != nil {
-		t.Fatal(e)
+		err = e
 	} else {
-		var out testOut
 		for _, deps := range ks {
 			if e := cat.AssembleDomain(deps, PhaseActions{
 				AncestryPhase: func(c *Catalog, d *Domain) (err error) {
 					if ks, e := d.ResolveKinds(); e != nil {
 						err = e
-					} else if e := ks.WriteTable(&out, "", true); e != nil {
+					} else if e := ks.WriteTable(pout, "", false); e != nil {
 						err = e
 					}
 					return
 				},
 			}); e != nil {
-				t.Fatal(e)
+				err = e
 				break
 			}
 		}
-		if diff := pretty.Diff(out, testOut{
-			"k:", "m:k", "j:m,k", "q:j,m,k", "n:k",
-		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(out))
-			t.Fatal(diff)
-		}
 	}
+	return
 }
