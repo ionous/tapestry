@@ -22,6 +22,16 @@ func (x *testOut) Write(_cat string, args ...interface{}) (err error) {
 	return
 }
 
+func catchWarnings(out *[]error) func() {
+	was := LogWarning
+	LogWarning = func(e error) {
+		*out = append(*out, e)
+	}
+	return func() {
+		LogWarning = was
+	}
+}
+
 type domainTest struct {
 	out []Ephemera
 }
