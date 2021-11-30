@@ -873,7 +873,7 @@ func BoolValue_Marshal(m jsn.Marshaler, val *BoolValue) (err error) {
 	return
 }
 
-// BracketText Sandwiches text printed during a block and puts them inside parenthesis &#x27;()&#x27;.
+// BracketText Sandwiches text printed during a block and puts them inside parenthesis '()'.
 // User implements: TextEval.
 type BracketText struct {
 	Do Activity `if:"label=_"`
@@ -3157,7 +3157,7 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 	return
 }
 
-// CommaText Separates words with commas, and &#x27;and&#x27;.
+// CommaText Separates words with commas, and 'and'.
 // User implements: TextEval.
 type CommaText struct {
 	Do Activity `if:"label=_"`
@@ -6327,7 +6327,7 @@ func Join_Marshal(m jsn.Marshaler, val *Join) (err error) {
 	return
 }
 
-// KindOf Friendly name of the object&#x27;s kind.
+// KindOf Friendly name of the object's kind.
 // User implements: TextEval.
 type KindOf struct {
 	Object rt.TextEval `if:"label=_"`
@@ -6614,7 +6614,7 @@ func LessThan_Marshal(m jsn.Marshaler, val *LessThan) (err error) {
 	return
 }
 
-// MakeLowercase Returns new text, with every letter turned into lowercase. For example, &#x27;shout&#x27; from &#x27;SHOUT&#x27;.
+// MakeLowercase Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.
 // User implements: TextEval.
 type MakeLowercase struct {
 	Text rt.TextEval `if:"label=_"`
@@ -6714,7 +6714,7 @@ func MakeLowercase_Marshal(m jsn.Marshaler, val *MakeLowercase) (err error) {
 	return
 }
 
-// MakeReversed Returns new text flipped back to front. For example, &#x27;elppA&#x27; from &#x27;Apple&#x27;, or &#x27;noon&#x27; from &#x27;noon&#x27;.
+// MakeReversed Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.
 // User implements: TextEval.
 type MakeReversed struct {
 	Text rt.TextEval `if:"label=text"`
@@ -6814,7 +6814,7 @@ func MakeReversed_Marshal(m jsn.Marshaler, val *MakeReversed) (err error) {
 	return
 }
 
-// MakeSentenceCase Returns new text, start each sentence with a capital letter. For example, &#x27;Empire Apple.&#x27; from &#x27;Empire apple.&#x27;.
+// MakeSentenceCase Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.
 // User implements: TextEval.
 type MakeSentenceCase struct {
 	Text rt.TextEval `if:"label=_"`
@@ -6914,7 +6914,7 @@ func MakeSentenceCase_Marshal(m jsn.Marshaler, val *MakeSentenceCase) (err error
 	return
 }
 
-// MakeTitleCase Returns new text, starting each word with a capital letter. For example, &#x27;Empire Apple&#x27; from &#x27;empire apple&#x27;.
+// MakeTitleCase Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.
 // User implements: TextEval.
 type MakeTitleCase struct {
 	Text rt.TextEval `if:"label=_"`
@@ -7014,7 +7014,7 @@ func MakeTitleCase_Marshal(m jsn.Marshaler, val *MakeTitleCase) (err error) {
 	return
 }
 
-// MakeUppercase Returns new text, with every letter turned into uppercase. For example, &#x27;APPLE&#x27; from &#x27;apple&#x27;.
+// MakeUppercase Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.
 // User implements: TextEval.
 type MakeUppercase struct {
 	Text rt.TextEval `if:"label=_"`
@@ -8089,7 +8089,7 @@ func Pluralize_Marshal(m jsn.Marshaler, val *Pluralize) (err error) {
 	return
 }
 
-// PrintNum Writes a number using numerals, eg. &#x27;1&#x27;.
+// PrintNum Writes a number using numerals, eg. '1'.
 // User implements: TextEval.
 type PrintNum struct {
 	Num rt.NumberEval `if:"label=_"`
@@ -8189,7 +8189,7 @@ func PrintNum_Marshal(m jsn.Marshaler, val *PrintNum) (err error) {
 	return
 }
 
-// PrintNumWord Writes a number in plain english: eg. &#x27;one&#x27;
+// PrintNumWord Writes a number in plain english: eg. 'one'
 // User implements: TextEval.
 type PrintNumWord struct {
 	Num rt.NumberEval `if:"label=words"`
@@ -9349,7 +9349,7 @@ func Singularize_Marshal(m jsn.Marshaler, val *Singularize) (err error) {
 	return
 }
 
-// SlashText Separates words with left-leaning slashes &#x27;/&#x27;.
+// SlashText Separates words with left-leaning slashes '/'.
 // User implements: TextEval.
 type SlashText struct {
 	Do Activity `if:"label=_"`
@@ -10284,7 +10284,7 @@ func TriggerSwitch_Marshal(m jsn.Marshaler, val *TriggerSwitch) (err error) {
 	return
 }
 
-// Unequal The first value doesn&#x27;t equal the second value.
+// Unequal The first value doesn't equal the second value.
 // User implements: Comparator.
 type Unequal struct {
 }

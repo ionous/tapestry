@@ -178,7 +178,7 @@ func RenderExp_Marshal(m jsn.Marshaler, val *RenderExp) (err error) {
 }
 
 // RenderField in template phrases, picks between record variables, object variables, and named global objects.
-// ex. could be &quot;ringBearer&quot;, &quot;SamWise&quot;, or &quot;frodo&quot;
+// ex. could be "ringBearer", "SamWise", or "frodo"
 // User implements: FromSourceFields.
 type RenderField struct {
 	Name rt.TextEval `if:"label=_"`
@@ -362,9 +362,9 @@ func RenderFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderFlags) (e
 }
 
 // RenderName handles changing a template like {.boombip} into text.
-// if the name is a variable containing an object name: return the printed object name ( via &quot;print name&quot; )
+// if the name is a variable containing an object name: return the printed object name ( via "print name" )
 // if the name is a variable with some other text: return that text.
-// if the name isn&#x27;t a variable but refers to some object: return that object&#x27;s printed object name.
+// if the name isn't a variable but refers to some object: return that object's printed object name.
 // otherwise, its an error.
 // User implements: TextEval.
 type RenderName struct {

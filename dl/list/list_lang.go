@@ -1514,7 +1514,7 @@ func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
 	return
 }
 
-// ListEach Loops over the elements in the passed list, or runs the &#x27;else&#x27; activity if empty.
+// ListEach Loops over the elements in the passed list, or runs the 'else' activity if empty.
 // User implements: Execute.
 type ListEach struct {
 	List rt.Assignment `if:"label=across"`
@@ -1750,7 +1750,7 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 	return
 }
 
-// ListGather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: &#x27;in&#x27; as each value from the list, and &#x27;out&#x27; as the var passed to the gather.
+// ListGather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
 	Var   value.VariableName `if:"label=_"`
 	From  ListSource         `if:"label=from"`
@@ -2033,7 +2033,7 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 	return
 }
 
-// ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the &#x27;from list&#x27;, one value at a time.
+// ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time.
 // User implements: Execute.
 type ListMap struct {
 	ToList       string        `if:"label=_,type=text"`
@@ -2151,7 +2151,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 	return
 }
 
-// ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: &#x27;in&#x27; ( each element of the list ) and &#x27;out&#x27; ( ex. a record ).
+// ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).
 // User implements: Execute.
 type ListReduce struct {
 	IntoValue    string        `if:"label=into,type=text"`
@@ -3031,7 +3031,7 @@ func ListSource_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSource) (err
 	return
 }
 
-// ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list&#x27;s length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
+// ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
 // User implements: Execute, NumListEval, TextListEval, RecordListEval.
 type ListSplice struct {
 	List   string        `if:"label=_,type=text"`
@@ -3460,7 +3460,7 @@ func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
 	return
 }
 
-// Range Generates a series of numbers r[i] &#x3D; (start + step*i) where i&gt;&#x3D;0.
+// Range Generates a series of numbers r[i] = (start + step*i) where i>=0.
 // Start and step default to 1, stop defaults to start;
 // the inputs are truncated to produce whole numbers;
 // a zero step returns an error.

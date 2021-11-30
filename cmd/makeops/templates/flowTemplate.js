@@ -3,10 +3,10 @@
 module.exports = `
 {{#with type~}}
 // {{Pascal name}}
-{{~#if (IsString desc.short)}} {{desc.short}}
+{{~#if (IsString desc.short)}} {{{desc.short}}}
 {{else~}}
 {{#each desc.short}}
-{{#if @index}}//{{/if}} {{this}}
+{{#if @index}}//{{/if}} {{{this}}}
 {{else}}
 
 {{/each}}

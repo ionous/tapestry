@@ -9763,7 +9763,7 @@ func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err err
 	return
 }
 
-// TestOutput Expect that a test uses &#x27;Say&#x27; to print some specific text.
+// TestOutput Expect that a test uses 'Say' to print some specific text.
 // User implements: Testing.
 type TestOutput struct {
 	Lines value.Lines `if:"label=_"`
