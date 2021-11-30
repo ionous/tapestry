@@ -61,6 +61,28 @@ func (t *tableMaker) onerror(e error) {
 	t.err = errutil.Append(t.err, e)
 }
 
+type cachedTable struct {
+	res    DependencyTable
+	status error
+}
+
+func (t *cachedTable) resolve(do func() (DependencyTable, error)) (ret DependencyTable, err error) {
+	switch t.status {
+	case xResolved:
+		ret = t.res
+	case nil:
+		t.status = xProcessing
+		if res, e := do(); e != nil {
+			err, t.status = e, e
+		} else {
+			ret, t.res, t.status = res, res, xResolved
+		}
+	default:
+		err = t.status
+	}
+	return
+}
+
 // build a list of just the "column names" -- the resolved objects.
 func (ds DependencyTable) Names() []string {
 	out := make([]string, len(ds))

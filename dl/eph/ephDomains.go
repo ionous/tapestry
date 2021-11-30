@@ -9,12 +9,13 @@ type DomainFinder interface {
 }
 
 type Domain struct {
-	name, at  string
-	catalog   *Catalog
-	phases    [NumPhases]PhaseData
-	reqs      Requires // other domains this needs ( can have multiple direct parents )
-	kinds     ScopedKinds
-	currPhase Phase // lift into some "ProcessingDomain" structure?
+	name, at      string
+	catalog       *Catalog
+	phases        [NumPhases]PhaseData
+	reqs          Requires // other domains this needs ( can have multiple direct parents )
+	kinds         ScopedKinds
+	currPhase     Phase // lift into some "ProcessingDomain" structure?
+	resolvedKinds cachedTable
 }
 
 type PhaseData struct {
@@ -124,32 +125,34 @@ func (d *Domain) EnsureKind(n, at string) (ret *ScopedKind) {
 	return
 }
 
-// // distill a tree of kinds into a set of names and their hierarchy
-func (d *Domain) ResolveKinds() (ret DependencyTable, err error) {
-	m := TableMaker(len(d.kinds))
-	for n, k := range d.kinds {
-		if res, ok := m.ResolveDep(k); ok {
-			var parentName string
-			switch ps := res.Parents(); len(ps) {
-			case 1:
-				parentName = ps[0].Name()
-				fallthrough
-			case 0:
-				// feels a little after the fact.... but not sure what'd be better.
-				if e := d.AddDefinition(k.name, k.at, parentName); e != nil {
-					err = errutil.Append(err, e)
+// distill a tree of kinds into a set of names and their hierarchy
+func (d *Domain) ResolveKinds() (DependencyTable, error) {
+	return d.resolvedKinds.resolve(func() (ret DependencyTable, err error) {
+		m := TableMaker(len(d.kinds))
+		for n, k := range d.kinds {
+			if res, ok := m.ResolveDep(k); ok {
+				var parentName string
+				switch ps := res.Parents(); len(ps) {
+				case 1:
+					parentName = ps[0].Name()
+					fallthrough
+				case 0:
+					// feels a little after the fact.... but not sure what'd be better.
+					if e := d.AddDefinition(k.name, k.at, parentName); e != nil {
+						err = errutil.Append(err, e)
+					}
+				default:
+					err = errutil.Append(err, errutil.New(n, "has more than one parent"))
 				}
-			default:
-				err = errutil.Append(err, errutil.New(n, "has more than one parent"))
 			}
 		}
-	}
-	if dt, e := m.GetSortedTable(); e != nil {
-		err = errutil.Append(err, e)
-	} else {
-		ret = dt
-	}
-	return
+		if dt, e := m.GetSortedTable(); e != nil {
+			err = errutil.Append(err, e)
+		} else {
+			ret = dt
+		}
+		return
+	})
 }
 
 // the domain is resolved already.

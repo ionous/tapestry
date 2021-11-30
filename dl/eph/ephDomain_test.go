@@ -163,7 +163,7 @@ func TestRivalStandalone(t *testing.T) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if e := cat.ProcessDomains(nil); e != nil {
+	} else if e := cat.AssembleCatalog(nil); e != nil {
 		t.Fatal(e)
 	}
 }
@@ -178,7 +178,7 @@ func TestRivalConflict(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		var conflict *Conflict
-		if e := cat.ProcessDomains(nil); !errors.As(e, &conflict) {
+		if e := cat.AssembleCatalog(nil); !errors.As(e, &conflict) {
 			t.Fatal("expected a conflict", e)
 		} else if conflict.Reason != Redefined {
 			t.Fatal("expected a redefinition error", e)

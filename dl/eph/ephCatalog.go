@@ -11,7 +11,7 @@ type Catalog struct {
 	processing      DomainStack
 	plurals         PluralTable
 	phase           Phase
-	resolvedDomains DependencyTable
+	resolvedDomains cachedTable
 }
 
 // use the domain rules ( and hierarchy ) to turn the passed plural into its singular form
@@ -65,25 +65,18 @@ func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
 
 // work out the hierarchy of all the domains, and return them in a list.
 // the list has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
-func (c *Catalog) ResolveDomains() (ret DependencyTable, err error) {
-	if len(c.resolvedDomains) != 0 {
-		ret = c.resolvedDomains
-	} else {
+func (c *Catalog) ResolveDomains() (DependencyTable, error) {
+	return c.resolvedDomains.resolve(func() (ret DependencyTable, err error) {
 		m := TableMaker(len(c.domains))
 		for _, d := range c.domains {
 			m.ResolveDep(d) // accumulates any errors
 		}
-		if res, e := m.GetSortedTable(); e != nil {
-			err = e
-		} else {
-			ret, c.resolvedDomains = res, res
-		}
-	}
-	return
+		return m.GetSortedTable()
+	})
 }
 
 // walk the domains and run the commands remaining in their queues
-func (c *Catalog) ProcessDomains(phaseActions PhaseActions) (err error) {
+func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
@@ -96,6 +89,38 @@ func (c *Catalog) ProcessDomains(phaseActions PhaseActions) (err error) {
 		}
 	}
 	return
+}
+
+//  traverse the domains and then kinds in a reasonable order
+func (cat *Catalog) WriteFields(w Writer) (err error) {
+	if ds, e := cat.ResolveDomains(); e != nil {
+		err = e
+	} else {
+		for _, dep := range ds {
+			d := dep.Leaf().(*Domain)
+			if ks, e := d.ResolveKinds(); e != nil {
+				err = e
+				break
+			} else {
+				for _, kep := range ks {
+					k := kep.Leaf().(*ScopedKind)
+					for _, f := range k.fields {
+						f.Write(&partialFields{w: w, fields: []interface{}{d.Name(), k.Name()}})
+					}
+				}
+			}
+		}
+	}
+	return
+}
+
+type partialFields struct {
+	w      Writer
+	fields []interface{}
+}
+
+func (p *partialFields) Write(q string, args ...interface{}) error {
+	return p.w.Write(q, append(p.fields, args...)...)
 }
 
 // private helper to make the catalog compatible with the DependencyFinder ( for domains )

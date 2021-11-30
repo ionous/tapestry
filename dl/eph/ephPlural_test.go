@@ -18,21 +18,21 @@ func TestPluralAssembly(t *testing.T) {
 	var dt domainTest
 	// yes, these are collective nouns not plurals... shhh...
 	dt.makeDomain(dd("a"),
-		&EphPlural{Singular: "raven", Plural: "unkindness"},
+		&EphPlurals{Singular: "raven", Plural: "unkindness"},
 		// one singular can have several plurals:
 		// ex. "person" can be "people" or "persons".
-		&EphPlural{Singular: "bat", Plural: "cloud"},
-		&EphPlural{Singular: "bat", Plural: "cauldron"},
+		&EphPlurals{Singular: "bat", Plural: "cloud"},
+		&EphPlurals{Singular: "bat", Plural: "cauldron"},
 	)
 	dt.makeDomain(dd("b", "a"),
 		// add something new:
-		&EphPlural{Singular: "fish", Plural: "school"},
+		&EphPlurals{Singular: "fish", Plural: "school"},
 	)
 	dt.makeDomain(dd("c", "a"),
 		// redefine:
-		&EphPlural{Singular: "witch", Plural: "unkindness"},
+		&EphPlurals{Singular: "witch", Plural: "unkindness"},
 		// collapse:
-		&EphPlural{Singular: "bat", Plural: "cauldron"},
+		&EphPlurals{Singular: "bat", Plural: "cauldron"},
 	)
 	var out testOut
 	var cat Catalog
@@ -42,7 +42,7 @@ func TestPluralAssembly(t *testing.T) {
 	// ( and for example -- run any queued commands? )
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if e := cat.ProcessDomains(nil); e != nil {
+	} else if e := cat.AssembleCatalog(nil); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Redefined, warnings[0]); e != nil {
 		t.Fatal(e)
@@ -84,13 +84,13 @@ func TestPluralDomainConflict(t *testing.T) {
 		// one singular can have several plurals:
 		// ex. "person" can be "people" or "persons".
 		// but the same plural "persons" cant have multiple singular definitions
-		&EphPlural{Singular: "raven", Plural: "unkindness"},
-		&EphPlural{Singular: "witch", Plural: "unkindness"},
+		&EphPlurals{Singular: "raven", Plural: "unkindness"},
+		&EphPlurals{Singular: "witch", Plural: "unkindness"},
 	)
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if e := cat.ProcessDomains(nil); e == nil {
+	} else if e := cat.AssembleCatalog(nil); e == nil {
 		t.Fatal("expected an error")
 	} else {
 		t.Log("ok:", e)

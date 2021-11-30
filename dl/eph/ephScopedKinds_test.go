@@ -146,7 +146,7 @@ func writeKinds(dt domainTest, pout *testOut) (err error) {
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
 	} else {
-		err = cat.ProcessDomains(PhaseActions{
+		err = cat.AssembleCatalog(PhaseActions{
 			AncestryPhase: PhaseAction{
 				PhaseFlags{NoDuplicates: true},
 				func(d *Domain) (err error) {

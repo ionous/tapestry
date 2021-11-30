@@ -3,10 +3,15 @@ package eph
 type FieldDefinition interface {
 	CheckConflict(*ScopedKind) error
 	AddToKind(*ScopedKind)
+	Write(w Writer)
 }
 
 type fieldDef struct {
 	name, affinity, class, at string
+}
+
+func (fd *fieldDef) Write(w Writer) {
+	w.Write(mdl_field, fd.name, fd.affinity, fd.class, fd.at)
 }
 
 func (fd *fieldDef) AddToKind(k *ScopedKind) {

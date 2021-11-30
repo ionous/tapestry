@@ -42,6 +42,7 @@ func dd(names ...string) []string {
 
 func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 	n, req := names[0], names[1:]
+	// shuffle the order of domain dependencies
 	rand.Shuffle(len(req), func(i, j int) { req[i], req[j] = req[j], req[i] })
 	dt.out = append(dt.out, &EphBeginDomain{
 		Name:     n,
@@ -55,6 +56,7 @@ func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 }
 
 func (dt *domainTest) addToCat(cat *Catalog) (err error) {
+	// fix: it would be nice to not need an explicit top domain.
 	cat.processing.Push(cat.EnsureDomain("g", "global"))
 	for i, el := range dt.out {
 		if e := cat.AddEphemera(EphAt{At: strconv.Itoa(i), Eph: el}); e != nil {

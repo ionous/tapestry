@@ -7,6 +7,7 @@ import (
 )
 
 // domain name to plural lookup
+// fix: consider moving into the domain rather than looking up the domain by name?
 type PluralTable map[string]PluralPairs
 
 // returns true if newly added
@@ -67,11 +68,11 @@ func (pd PluralTable) WritePlurals(w Writer) (err error) {
 	return
 }
 
-func (el *EphPlural) Phase() Phase { return PluralPhase }
+func (el *EphPlurals) Phase() Phase { return PluralPhase }
 
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
-func (el *EphPlural) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (el *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if many, ok := UniformString(el.Plural); !ok {
 		err = InvalidString(el.Plural)
 	} else if one, ok := UniformString(el.Singular); !ok {

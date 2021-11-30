@@ -1,6 +1,10 @@
 package eph
 
-import "github.com/ionous/errutil"
+import (
+	"errors"
+
+	"github.com/ionous/errutil"
+)
 
 type ScopedKind struct {
 	name, at string
@@ -55,7 +59,10 @@ func (k *ScopedKind) AddFields(field FieldDefinition) (err error) {
 		// the full tree includes the kind itself; its a bit weird, but it keeps this loop simple.
 		for _, dep := range deps.FullTree() {
 			kind := dep.(*ScopedKind)
-			if e := field.CheckConflict(kind); e != nil {
+			var conflict *Conflict
+			if e := field.CheckConflict(kind); errors.As(e, &conflict) && conflict.Reason == Duplicated {
+				LogWarning(e) // warn if it was a duplicated definition
+			} else if e != nil {
 				err = KindError{kind.name, e}
 				break
 			}

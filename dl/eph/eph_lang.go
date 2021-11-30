@@ -9,40 +9,63 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// EphAspect Declares a set of related object states such that exactly one member of the set is true for a given object at a single time.
-// Generates an implicit kind of &#x27;aspect&#x27; where every field of the kind is a boolean property.
-// User implements: Ephemera.
-type EphAspect struct {
-	Aspect string   `if:"label=aspect,type=text"`
-	Traits []string `if:"label=traits,type=text"`
+// Affinity requires a predefined string.
+type Affinity struct {
+	Str string
 }
 
-func (*EphAspect) Compose() composer.Spec {
+func (op *Affinity) String() string {
+	return op.Str
+}
+
+const Affinity_Bool = "$BOOL"
+const Affinity_Number = "$NUMBER"
+const Affinity_NumList = "$NUM_LIST"
+const Affinity_Text = "$TEXT"
+const Affinity_TextList = "$TEXT_LIST"
+const Affinity_Record = "$RECORD"
+const Affinity_RecordList = "$RECORD_LIST"
+
+func (*Affinity) Compose() composer.Spec {
 	return composer.Spec{
-		Name: EphAspect_Type,
-		Uses: composer.Type_Flow,
-		Lede: "eph",
+		Name: Affinity_Type,
+		Uses: composer.Type_Str,
+		Choices: []string{
+			Affinity_Bool, Affinity_Number, Affinity_NumList, Affinity_Text, Affinity_TextList, Affinity_Record, Affinity_RecordList,
+		},
+		Strings: []string{
+			"bool", "number", "num_list", "text", "text_list", "record", "record_list",
+		},
 	}
 }
 
-const EphAspect_Type = "eph_aspect"
+const Affinity_Type = "affinity"
 
-const EphAspect_Field_Aspect = "$ASPECT"
-const EphAspect_Field_Traits = "$TRAITS"
-
-func (op *EphAspect) Marshal(m jsn.Marshaler) error {
-	return EphAspect_Marshal(m, op)
+func (op *Affinity) Marshal(m jsn.Marshaler) error {
+	return Affinity_Marshal(m, op)
 }
 
-type EphAspect_Slice []EphAspect
-
-func (op *EphAspect_Slice) GetType() string { return EphAspect_Type }
-
-func (op *EphAspect_Slice) Marshal(m jsn.Marshaler) error {
-	return EphAspect_Repeats_Marshal(m, (*[]EphAspect)(op))
+func Affinity_Optional_Marshal(m jsn.Marshaler, val *Affinity) (err error) {
+	var zero Affinity
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = Affinity_Marshal(m, val)
+	}
+	return
 }
 
-func (op *EphAspect_Slice) GetSize() (ret int) {
+func Affinity_Marshal(m jsn.Marshaler, val *Affinity) (err error) {
+	return m.MarshalValue(Affinity_Type, jsn.MakeEnum(val, &val.Str))
+}
+
+type Affinity_Slice []Affinity
+
+func (op *Affinity_Slice) GetType() string { return Affinity_Type }
+
+func (op *Affinity_Slice) Marshal(m jsn.Marshaler) error {
+	return Affinity_Repeats_Marshal(m, (*[]Affinity)(op))
+}
+
+func (op *Affinity_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -51,68 +74,133 @@ func (op *EphAspect_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *EphAspect_Slice) SetSize(cnt int) {
-	var els []EphAspect
+func (op *Affinity_Slice) SetSize(cnt int) {
+	var els []Affinity
 	if cnt >= 0 {
-		els = make(EphAspect_Slice, cnt)
+		els = make(Affinity_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *EphAspect_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphAspect_Marshal(m, &(*op)[i])
+func (op *Affinity_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Affinity_Marshal(m, &(*op)[i])
 }
 
-func EphAspect_Repeats_Marshal(m jsn.Marshaler, vals *[]EphAspect) error {
-	return jsn.RepeatBlock(m, (*EphAspect_Slice)(vals))
+func Affinity_Repeats_Marshal(m jsn.Marshaler, vals *[]Affinity) error {
+	return jsn.RepeatBlock(m, (*Affinity_Slice)(vals))
 }
 
-func EphAspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphAspect) (err error) {
+func Affinity_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Affinity) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = EphAspect_Repeats_Marshal(m, pv)
+		err = Affinity_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type EphAspect_Flow struct{ ptr *EphAspect }
+// EphAspects A set of related object states such that exactly one member of the set is true for a given object at a single time.
+// Generates an implicit kind of 'aspect' where every field of the kind is a boolean property.
+// User implements: Ephemera.
+type EphAspects struct {
+	Aspects string   `if:"label=aspects,type=text"`
+	Traits  []string `if:"label=traits,type=text"`
+}
 
-func (n EphAspect_Flow) GetType() string      { return EphAspect_Type }
-func (n EphAspect_Flow) GetLede() string      { return "eph" }
-func (n EphAspect_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphAspect_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphAspect); ok {
+func (*EphAspects) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphAspects_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphAspects_Type = "eph_aspects"
+
+const EphAspects_Field_Aspects = "$ASPECTS"
+const EphAspects_Field_Traits = "$TRAITS"
+
+func (op *EphAspects) Marshal(m jsn.Marshaler) error {
+	return EphAspects_Marshal(m, op)
+}
+
+type EphAspects_Slice []EphAspects
+
+func (op *EphAspects_Slice) GetType() string { return EphAspects_Type }
+
+func (op *EphAspects_Slice) Marshal(m jsn.Marshaler) error {
+	return EphAspects_Repeats_Marshal(m, (*[]EphAspects)(op))
+}
+
+func (op *EphAspects_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphAspects_Slice) SetSize(cnt int) {
+	var els []EphAspects
+	if cnt >= 0 {
+		els = make(EphAspects_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphAspects_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphAspects_Marshal(m, &(*op)[i])
+}
+
+func EphAspects_Repeats_Marshal(m jsn.Marshaler, vals *[]EphAspects) error {
+	return jsn.RepeatBlock(m, (*EphAspects_Slice)(vals))
+}
+
+func EphAspects_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphAspects) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphAspects_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphAspects_Flow struct{ ptr *EphAspects }
+
+func (n EphAspects_Flow) GetType() string      { return EphAspects_Type }
+func (n EphAspects_Flow) GetLede() string      { return "eph" }
+func (n EphAspects_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphAspects_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphAspects); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func EphAspect_Optional_Marshal(m jsn.Marshaler, pv **EphAspect) (err error) {
+func EphAspects_Optional_Marshal(m jsn.Marshaler, pv **EphAspects) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphAspect_Marshal(m, *pv)
+		err = EphAspects_Marshal(m, *pv)
 	} else if !enc {
-		var v EphAspect
-		if err = EphAspect_Marshal(m, &v); err == nil {
+		var v EphAspects
+		if err = EphAspects_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func EphAspect_Marshal(m jsn.Marshaler, val *EphAspect) (err error) {
-	if err = m.MarshalBlock(EphAspect_Flow{val}); err == nil {
-		e0 := m.MarshalKey("aspect", EphAspect_Field_Aspect)
+func EphAspects_Marshal(m jsn.Marshaler, val *EphAspects) (err error) {
+	if err = m.MarshalBlock(EphAspects_Flow{val}); err == nil {
+		e0 := m.MarshalKey("aspects", EphAspects_Field_Aspects)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Aspect)
+			e0 = value.Text_Unboxed_Marshal(m, &val.Aspects)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphAspect_Field_Aspect))
+			m.Error(errutil.New(e0, "in flow at", EphAspects_Field_Aspects))
 		}
-		e1 := m.MarshalKey("traits", EphAspect_Field_Traits)
+		e1 := m.MarshalKey("traits", EphAspects_Field_Traits)
 		if e1 == nil {
 			e1 = value.Text_Unboxed_Repeats_Marshal(m, &val.Traits)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphAspect_Field_Traits))
+			m.Error(errutil.New(e1, "in flow at", EphAspects_Field_Traits))
 		}
 		m.EndBlock()
 	}
@@ -545,10 +633,139 @@ func EphEndDomain_Marshal(m jsn.Marshaler, val *EphEndDomain) (err error) {
 	return
 }
 
-// EphKinds Declare a new kind deriving from another.
+// EphFields Contents of a kind.
+// 'Affinity' designates the storage type of a given field
+// while 'class' is used to indicate an interpretation of that field, for example a reference to a kind.
+// User implements: Ephemera.
+type EphFields struct {
+	Kinds    string   `if:"label=kinds,type=text"`
+	Affinity Affinity `if:"label=have"`
+	Name     string   `if:"label=called,type=text"`
+	Class    string   `if:"label=of,optional,type=text"`
+}
+
+func (*EphFields) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphFields_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphFields_Type = "eph_fields"
+
+const EphFields_Field_Kinds = "$KINDS"
+const EphFields_Field_Affinity = "$AFFINITY"
+const EphFields_Field_Name = "$NAME"
+const EphFields_Field_Class = "$CLASS"
+
+func (op *EphFields) Marshal(m jsn.Marshaler) error {
+	return EphFields_Marshal(m, op)
+}
+
+type EphFields_Slice []EphFields
+
+func (op *EphFields_Slice) GetType() string { return EphFields_Type }
+
+func (op *EphFields_Slice) Marshal(m jsn.Marshaler) error {
+	return EphFields_Repeats_Marshal(m, (*[]EphFields)(op))
+}
+
+func (op *EphFields_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphFields_Slice) SetSize(cnt int) {
+	var els []EphFields
+	if cnt >= 0 {
+		els = make(EphFields_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphFields_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphFields_Marshal(m, &(*op)[i])
+}
+
+func EphFields_Repeats_Marshal(m jsn.Marshaler, vals *[]EphFields) error {
+	return jsn.RepeatBlock(m, (*EphFields_Slice)(vals))
+}
+
+func EphFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphFields) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphFields_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphFields_Flow struct{ ptr *EphFields }
+
+func (n EphFields_Flow) GetType() string      { return EphFields_Type }
+func (n EphFields_Flow) GetLede() string      { return "eph" }
+func (n EphFields_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphFields_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphFields); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphFields_Optional_Marshal(m jsn.Marshaler, pv **EphFields) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphFields_Marshal(m, *pv)
+	} else if !enc {
+		var v EphFields
+		if err = EphFields_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphFields_Marshal(m jsn.Marshaler, val *EphFields) (err error) {
+	if err = m.MarshalBlock(EphFields_Flow{val}); err == nil {
+		e0 := m.MarshalKey("kinds", EphFields_Field_Kinds)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphFields_Field_Kinds))
+		}
+		e1 := m.MarshalKey("have", EphFields_Field_Affinity)
+		if e1 == nil {
+			e1 = Affinity_Marshal(m, &val.Affinity)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphFields_Field_Affinity))
+		}
+		e2 := m.MarshalKey("called", EphFields_Field_Name)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphFields_Field_Name))
+		}
+		e3 := m.MarshalKey("of", EphFields_Field_Class)
+		if e3 == nil {
+			e3 = value.Text_Unboxed_Optional_Marshal(m, &val.Class)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", EphFields_Field_Class))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// EphKinds A new type deriving from another existing type.
 // The new kind has all of the properties of all of its ancestor kinds
 // and it can be used wherever one of its ancestor kinds is needed.
-// ( The reverse isn&#x27;t true because the new kind can have its own unique properties not available to its ancestors. )
+// ( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )
 // User implements: Ephemera.
 type EphKinds struct {
 	Kinds string `if:"label=kinds,type=text"`
@@ -865,40 +1082,41 @@ func EphNameRef_Marshal(m jsn.Marshaler, val *EphNameRef) (err error) {
 	return
 }
 
-// EphPlural Plurals are needed at runtime to help parser what the user inputs.
-// Plurals are also needed at assembly time to understand what the author wrote.
+// EphPlurals Rules for transforming plural text to singular text and back again.
+// Used by the assembler to help interpret author definitions,
+// and at runtime to help the parser interpret user input.
 // User implements: Ephemera.
-type EphPlural struct {
+type EphPlurals struct {
 	Plural   string `if:"label=plural,type=text"`
 	Singular string `if:"label=singular,type=text"`
 }
 
-func (*EphPlural) Compose() composer.Spec {
+func (*EphPlurals) Compose() composer.Spec {
 	return composer.Spec{
-		Name: EphPlural_Type,
+		Name: EphPlurals_Type,
 		Uses: composer.Type_Flow,
 		Lede: "eph",
 	}
 }
 
-const EphPlural_Type = "eph_plural"
+const EphPlurals_Type = "eph_plurals"
 
-const EphPlural_Field_Plural = "$PLURAL"
-const EphPlural_Field_Singular = "$SINGULAR"
+const EphPlurals_Field_Plural = "$PLURAL"
+const EphPlurals_Field_Singular = "$SINGULAR"
 
-func (op *EphPlural) Marshal(m jsn.Marshaler) error {
-	return EphPlural_Marshal(m, op)
+func (op *EphPlurals) Marshal(m jsn.Marshaler) error {
+	return EphPlurals_Marshal(m, op)
 }
 
-type EphPlural_Slice []EphPlural
+type EphPlurals_Slice []EphPlurals
 
-func (op *EphPlural_Slice) GetType() string { return EphPlural_Type }
+func (op *EphPlurals_Slice) GetType() string { return EphPlurals_Type }
 
-func (op *EphPlural_Slice) Marshal(m jsn.Marshaler) error {
-	return EphPlural_Repeats_Marshal(m, (*[]EphPlural)(op))
+func (op *EphPlurals_Slice) Marshal(m jsn.Marshaler) error {
+	return EphPlurals_Repeats_Marshal(m, (*[]EphPlurals)(op))
 }
 
-func (op *EphPlural_Slice) GetSize() (ret int) {
+func (op *EphPlurals_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -907,68 +1125,68 @@ func (op *EphPlural_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *EphPlural_Slice) SetSize(cnt int) {
-	var els []EphPlural
+func (op *EphPlurals_Slice) SetSize(cnt int) {
+	var els []EphPlurals
 	if cnt >= 0 {
-		els = make(EphPlural_Slice, cnt)
+		els = make(EphPlurals_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *EphPlural_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphPlural_Marshal(m, &(*op)[i])
+func (op *EphPlurals_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphPlurals_Marshal(m, &(*op)[i])
 }
 
-func EphPlural_Repeats_Marshal(m jsn.Marshaler, vals *[]EphPlural) error {
-	return jsn.RepeatBlock(m, (*EphPlural_Slice)(vals))
+func EphPlurals_Repeats_Marshal(m jsn.Marshaler, vals *[]EphPlurals) error {
+	return jsn.RepeatBlock(m, (*EphPlurals_Slice)(vals))
 }
 
-func EphPlural_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphPlural) (err error) {
+func EphPlurals_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphPlurals) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = EphPlural_Repeats_Marshal(m, pv)
+		err = EphPlurals_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type EphPlural_Flow struct{ ptr *EphPlural }
+type EphPlurals_Flow struct{ ptr *EphPlurals }
 
-func (n EphPlural_Flow) GetType() string      { return EphPlural_Type }
-func (n EphPlural_Flow) GetLede() string      { return "eph" }
-func (n EphPlural_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphPlural_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphPlural); ok {
+func (n EphPlurals_Flow) GetType() string      { return EphPlurals_Type }
+func (n EphPlurals_Flow) GetLede() string      { return "eph" }
+func (n EphPlurals_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphPlurals_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphPlurals); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func EphPlural_Optional_Marshal(m jsn.Marshaler, pv **EphPlural) (err error) {
+func EphPlurals_Optional_Marshal(m jsn.Marshaler, pv **EphPlurals) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphPlural_Marshal(m, *pv)
+		err = EphPlurals_Marshal(m, *pv)
 	} else if !enc {
-		var v EphPlural
-		if err = EphPlural_Marshal(m, &v); err == nil {
+		var v EphPlurals
+		if err = EphPlurals_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func EphPlural_Marshal(m jsn.Marshaler, val *EphPlural) (err error) {
-	if err = m.MarshalBlock(EphPlural_Flow{val}); err == nil {
-		e0 := m.MarshalKey("plural", EphPlural_Field_Plural)
+func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
+	if err = m.MarshalBlock(EphPlurals_Flow{val}); err == nil {
+		e0 := m.MarshalKey("plural", EphPlurals_Field_Plural)
 		if e0 == nil {
 			e0 = value.Text_Unboxed_Marshal(m, &val.Plural)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphPlural_Field_Plural))
+			m.Error(errutil.New(e0, "in flow at", EphPlurals_Field_Plural))
 		}
-		e1 := m.MarshalKey("singular", EphPlural_Field_Singular)
+		e1 := m.MarshalKey("singular", EphPlurals_Field_Singular)
 		if e1 == nil {
 			e1 = value.Text_Unboxed_Marshal(m, &val.Singular)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphPlural_Field_Singular))
+			m.Error(errutil.New(e1, "in flow at", EphPlurals_Field_Singular))
 		}
 		m.EndBlock()
 	}
@@ -1146,27 +1364,31 @@ var Slots = []interface{}{
 }
 
 var Slats = []composer.Composer{
-	(*EphAspect)(nil),
+	(*Affinity)(nil),
+	(*EphAspects)(nil),
 	(*EphAt)(nil),
 	(*EphBeginDomain)(nil),
 	(*EphCheckPrint)(nil),
 	(*EphEndDomain)(nil),
+	(*EphFields)(nil),
 	(*EphKinds)(nil),
 	(*EphList)(nil),
 	(*EphNameRef)(nil),
-	(*EphPlural)(nil),
+	(*EphPlurals)(nil),
 	(*EphRun)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
-	16084109084952235843: (*EphAspect)(nil),      /* Eph aspect:traits: */
+	18295658173337269930: (*EphAspects)(nil),     /* Eph aspects:traits: */
 	9182060341586636438:  (*EphAt)(nil),          /* Eph at:eph: */
 	12209727080993772760: (*EphBeginDomain)(nil), /* Eph domain:requires: */
 	18354563224792793196: (*EphCheckPrint)(nil),  /* Eph check:prints: */
 	4379746949646135194:  (*EphEndDomain)(nil),   /* Eph domain: */
+	8381163068622333334:  (*EphFields)(nil),      /* Eph kinds:have:called: */
+	12374005136224423943: (*EphFields)(nil),      /* Eph kinds:have:called:of: */
 	9386889860419880175:  (*EphKinds)(nil),       /* Eph kinds:from: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
 	9956475014949920846:  (*EphNameRef)(nil),     /* Eph ref:of: */
-	890409142408471553:   (*EphPlural)(nil),      /* Eph plural:singular: */
+	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
 	4420716908411308437:  (*EphRun)(nil),         /* Eph run: */
 }
