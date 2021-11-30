@@ -274,7 +274,7 @@ const signType = function(t, out, all) {
 
   for (const n of sigs) {
     if (n.includes("::") || n.includes("_") || n.includes(": ")) {
-      console.log(commandName, n);
+      console.log(`Invalid command: ${commandName} "${n}"`);
       throw new Error(n);
     }
     const hash= fnv1a(n, {size:64});
