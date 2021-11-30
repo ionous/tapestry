@@ -12,7 +12,6 @@ func SpecName(c Composer) (ret string) {
 }
 
 // translate a choice, typically a $TOKEN, to a value.
-// note: go-code doesnt currently have a way to find a string's label.
 func FindChoice(op Composer, choice string) (ret string, found bool) {
 	spec := op.Compose()
 	if s, i := spec.IndexOfChoice(choice); i >= 0 {

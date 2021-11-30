@@ -35,6 +35,7 @@ func (spec *Spec) UsesStr() bool {
 	return spec.OpenStrings || len(spec.Strings) > 0
 }
 
+// given a choice like "$NAME" return the friendly value, ex. "name"
 // fix: could use some cleanup based on how its actually getting used.
 func (spec Spec) FindChoice(choice string) (ret string, okay bool) {
 	if len(choice) > 0 {
@@ -51,6 +52,7 @@ func (spec Spec) FindChoice(choice string) (ret string, okay bool) {
 	return
 }
 
+// given a choice like "$NAME" return the friendly value, ex. "name"
 func (spec *Spec) IndexOfChoice(key string) (retVal string, retInd int) {
 	retInd = -1 // provisionally
 	for i, k := range spec.Choices {
@@ -62,6 +64,7 @@ func (spec *Spec) IndexOfChoice(key string) (retVal string, retInd int) {
 	return
 }
 
+// given a value like "name" return the more predefined choice, ex. "$NAME"
 func (spec *Spec) IndexOfValue(val string) (retKey string, retInd int) {
 	retInd = -1 // provisionally
 	for i, str := range spec.Strings {
