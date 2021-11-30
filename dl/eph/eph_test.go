@@ -5,6 +5,9 @@ import (
 	"math/rand"
 	"strconv"
 	"strings"
+	"testing"
+
+	"github.com/ionous/errutil"
 )
 
 type testOut []string
@@ -22,14 +25,39 @@ func (x *testOut) Write(_cat string, args ...interface{}) (err error) {
 	return
 }
 
-func catchWarnings(out *[]error) func() {
+type Warnings []error
+
+// override the global eph warning function
+// returns a defer-able function which:
+// 1. restores the warning function; and,
+// 2. raises a Fatal error if there are any unhandled warnings.
+func (w *Warnings) catch(t *testing.T) func() {
 	was := LogWarning
 	LogWarning = func(e error) {
-		*out = append(*out, e)
+		(*w) = append((*w), e)
 	}
 	return func() {
+		if len(*w) > 0 {
+			t.Fatal("unhandled warnings", *w)
+		}
 		LogWarning = was
 	}
+}
+
+// return the warnings as a raw list, clear all stored errors.
+func (w *Warnings) all() (ret []error) {
+	ret, (*w) = (*w), nil
+	return ret
+}
+
+// remove and return the first warning, or error if there are none left.
+func (w *Warnings) shift() (err error) {
+	if cnt := len(*w); cnt == 0 {
+		err = errutil.New("out of warnings")
+	} else {
+		err, (*w) = (*w)[0], (*w)[1:]
+	}
+	return
 }
 
 type domainTest struct {

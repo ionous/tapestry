@@ -1,6 +1,9 @@
 package eph
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 // uses the ancestry phase because it generates kinds ( one per aspect. )
 // the assembly statement generates new ephemera for the aspect phase
@@ -19,8 +22,14 @@ func (el *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		kid := d.EnsureKind(aspect, at)
 		kid.AddRequirement(AspectKinds)
 		err = c.AddEphemera(EphAt{at, PhaseFunction{AspectPhase,
-			func(c *Catalog, d *Domain, at string) error {
-				return kid.AddFields(&traitDef{at, aspect, traits})
+			func(c *Catalog, d *Domain, at string) (err error) {
+				var conflict *Conflict // checks for conflicts, allows duplicates.
+				if e := kid.AddField(&traitDef{at, aspect, traits}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
+					LogWarning(e) // warn if it was a duplicated definition
+				} else {
+					err = e // some other error ( or nil )
+				}
+				return
 			}}})
 	}
 	return

@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"errors"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/composer"
@@ -25,14 +26,19 @@ func (el *EphFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else if aff, ok := composer.FindChoice(&el.Affinity, el.Affinity.Str); !ok && len(el.Affinity.Str) > 0 {
 		err = errutil.New("unknown affinity", aff)
 	} else if class, ok := UniformString(el.Class); !ok && len(el.Class) > 0 {
-		err = InvalidString(el.Class)
+		err = DomainError{d.name, KindError{kind.name, InvalidString(el.Class)}}
 	} else if _, ok := d.GetKind(class); !ok && len(class) > 0 {
-		err = errutil.New("unknown field class", class)
+		err = DomainError{d.name, KindError{kind.name, errutil.New("unknown field class", class)}}
 	} else {
 		// checks for conflicts, allows duplicates.
-		err = kind.AddFields(&fieldDef{
+		var conflict *Conflict
+		if e := kind.AddField(&fieldDef{
 			name: name, affinity: aff, class: class, at: at,
-		})
+		}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
+			LogWarning(e) // warn if it was a duplicated definition
+		} else {
+			err = e // some other error ( or nil )
+		}
 	}
 	return
 }

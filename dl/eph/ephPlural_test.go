@@ -11,8 +11,8 @@ import (
 // catalog some plural ephemera from different domain levels
 // and verify things wind up in the right place
 func TestPluralAssembly(t *testing.T) {
-	var warnings []error
-	unwarn := catchWarnings(&warnings)
+	var warnings Warnings
+	unwarn := warnings.catch(t)
 	defer unwarn()
 	//
 	var dt domainTest
@@ -44,9 +44,9 @@ func TestPluralAssembly(t *testing.T) {
 		t.Fatal(e)
 	} else if e := cat.AssembleCatalog(nil); e != nil {
 		t.Fatal(e)
-	} else if e := okDomainConflict("a", Redefined, warnings[0]); e != nil {
+	} else if e := okDomainConflict("a", Redefined, warnings.shift()); e != nil {
 		t.Fatal(e)
-	} else if e := okDomainConflict("a", Duplicated, warnings[1]); e != nil {
+	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
 	} else {
 		if e := cat.plurals.WritePlurals(&out); e != nil {

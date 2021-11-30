@@ -20,5 +20,5 @@ var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one")
 // singular name of kind and materialized hierarchy of ancestors separated by commas
 var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "path")
 
-// while the domain does tell us where the field was defined, it primarily exists to differentiate rival kinds
+// note: the domain does tells where the kind was defined, not the field
 var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")

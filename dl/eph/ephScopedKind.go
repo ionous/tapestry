@@ -1,8 +1,6 @@
 package eph
 
 import (
-	"errors"
-
 	"github.com/ionous/errutil"
 )
 
@@ -52,18 +50,15 @@ func (k *ScopedKind) HasAncestor(name string) (okay bool, err error) {
 }
 
 // the kind must have been resolved for this to work
-func (k *ScopedKind) AddFields(field FieldDefinition) (err error) {
+func (k *ScopedKind) AddField(field FieldDefinition) (err error) {
 	if deps, e := k.GetDependencies(); e != nil {
 		err = e
 	} else {
 		// the full tree includes the kind itself; its a bit weird, but it keeps this loop simple.
 		for _, dep := range deps.FullTree() {
 			kind := dep.(*ScopedKind)
-			var conflict *Conflict
-			if e := field.CheckConflict(kind); errors.As(e, &conflict) && conflict.Reason == Duplicated {
-				LogWarning(e) // warn if it was a duplicated definition
-			} else if e != nil {
-				err = KindError{kind.name, e}
+			if e := field.CheckConflict(kind); e != nil {
+				err = DomainError{kind.domain.name, KindError{kind.name, e}}
 				break
 			}
 		}

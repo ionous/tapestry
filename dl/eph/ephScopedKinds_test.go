@@ -73,8 +73,8 @@ func TestScopedKindMissing(t *testing.T) {
 }
 
 func TestScopedKindConflict(t *testing.T) {
-	var warnings []error
-	unwarn := catchWarnings(&warnings)
+	var warnings Warnings
+	unwarn := warnings.catch(t)
 	defer unwarn()
 	var dt domainTest
 	dt.makeDomain(dd("a"),
@@ -92,18 +92,18 @@ func TestScopedKindConflict(t *testing.T) {
 	var out testOut
 	if e := writeKinds(dt, &out); e == nil || e.Error() != `can't redefine parent as "n" for kind "m"` {
 		t.Fatal("expected error", e, out)
-	} else if len(warnings) != 1 {
-		t.Fatal("expected one warning", warnings)
+	} else if warned := warnings.all(); len(warned) != 1 {
+		t.Fatal("expected one warning", warned)
 	} else {
-		t.Log("ok", e, warnings)
+		t.Log("ok", e, warned)
 	}
 }
 
 func TestScopedRivalsOkay(t *testing.T) {
-	var dt domainTest
-	var warnings []error
-	unwarn := catchWarnings(&warnings)
+	var warnings Warnings
+	unwarn := warnings.catch(t)
 	defer unwarn()
+	var dt domainTest
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: "k"},
 	)
@@ -116,8 +116,6 @@ func TestScopedRivalsOkay(t *testing.T) {
 	var out testOut
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
-	} else if len(warnings) > 0 {
-		t.Fatal(warnings) // didnt expect any warnings.
 	}
 }
 
