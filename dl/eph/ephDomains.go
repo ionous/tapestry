@@ -9,13 +9,15 @@ type DomainFinder interface {
 }
 
 type Domain struct {
-	name, at      string
-	catalog       *Catalog
-	phases        [NumPhases]PhaseData
-	reqs          Requires // other domains this needs ( can have multiple direct parents )
-	kinds         ScopedKinds
-	currPhase     Phase // lift into some "ProcessingDomain" structure?
-	resolvedKinds cachedTable
+	name, at  string
+	catalog   *Catalog
+	currPhase Phase // lift into some "ProcessingDomain" structure?
+	phases    [NumPhases]PhaseData
+	reqs      Requires // other domains this needs ( can have multiple direct parents )
+	kinds     ScopedKinds
+	nouns     ScopedNouns
+	resolvedKinds,
+	resolvedNouns cachedTable
 }
 
 type PhaseData struct {
@@ -84,75 +86,6 @@ func (d *Domain) AddDefinition(key, at, value string) (err error) {
 		}
 	}
 	return
-}
-
-// return the uniformly named domain ( if it exists )
-func (d *Domain) GetKind(n string) (ret *ScopedKind, okay bool) {
-	if k, ok := d.kinds[n]; ok {
-		ret, okay = k, true
-	} else if d.catalog != nil { // skip for tests.
-		// if not in this domain, then maybe in a parent domain....
-		// ( dont force resolve here, if its not resolved... then stop trying )
-		if deps, e := d.reqs.GetDependencies(); e != nil {
-			LogWarning(e)
-		} else {
-			list := deps.Ancestors()
-			for i, cnt := 0, len(list); i < cnt; i++ {
-				el := list[cnt-i-1].(*Domain)
-				if k, ok := el.kinds[n]; ok {
-					ret, okay = k, true
-					break
-				}
-			}
-		}
-	}
-	return
-}
-
-// return the uniformly named domain ( creating it in this domain if necessary )
-func (d *Domain) EnsureKind(n, at string) (ret *ScopedKind) {
-	if k, ok := d.GetKind(n); ok {
-		ret = k
-	} else {
-		k = &ScopedKind{name: n, at: at, domain: d}
-		if d.kinds == nil {
-			d.kinds = map[string]*ScopedKind{n: k}
-		} else {
-			d.kinds[n] = k
-		}
-		ret = k
-	}
-	return
-}
-
-// distill a tree of kinds into a set of names and their hierarchy
-func (d *Domain) ResolveKinds() (DependencyTable, error) {
-	return d.resolvedKinds.resolve(func() (ret DependencyTable, err error) {
-		m := TableMaker(len(d.kinds))
-		for n, k := range d.kinds {
-			if res, ok := m.ResolveDep(k); ok {
-				var parentName string
-				switch ps := res.Parents(); len(ps) {
-				case 1:
-					parentName = ps[0].Name()
-					fallthrough
-				case 0:
-					// feels a little after the fact.... but not sure what'd be better.
-					if e := d.AddDefinition(k.name, k.at, parentName); e != nil {
-						err = errutil.Append(err, e)
-					}
-				default:
-					err = errutil.Append(err, errutil.New(n, "has more than one parent"))
-				}
-			}
-		}
-		if dt, e := m.GetSortedTable(); e != nil {
-			err = errutil.Append(err, e)
-		} else {
-			ret = dt
-		}
-		return
-	})
 }
 
 // the domain is resolved already.

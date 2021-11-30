@@ -57,6 +57,21 @@ func (t *tableMaker) ResolveReq(finder DependencyFinder, req string) (ret Depend
 	return
 }
 
+// same as resolve dep -- but adds an error if there's more than one parent
+func (t *tableMaker) ResolveParent(dep Dependency) (ret string, okay bool) {
+	if res, ok := t.ResolveDep(dep); ok {
+		switch ps := res.Parents(); len(ps) {
+		case 0:
+			okay = true
+		case 1:
+			ret, okay = ps[0].Name(), true
+		default:
+			t.onerror(errutil.New(dep.Name(), "has more than one parent"))
+		}
+	}
+	return
+}
+
 func (t *tableMaker) onerror(e error) {
 	t.err = errutil.Append(t.err, e)
 }

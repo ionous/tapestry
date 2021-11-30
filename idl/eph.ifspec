@@ -74,6 +74,34 @@
                     "'Affinity' designates the storage type of a given field",
                     "while 'class' is used to indicate an interpretation of that field, for example a reference to a kind."
                 ]
+            },
+            "eph_nouns": {
+                "spec": "eph {noun:text} {kind:text}",
+                "slot": "ephemera"
+            },
+            "eph_cardinality": {
+                "uses": "swap",
+                "spec": "{one_one}, {one_many}, {many_one}, or {many_many}"
+            },
+            "one_one": {
+                "uses": "flow",
+                "spec": "kind {_%kind:text} {to_kind%other_kind:text}"
+            },
+            "one_many": {
+                "uses": "flow",
+                "spec": "kind {_%kind:text} {to_kinds%other_kinds:text}"
+            },
+            "many_one": {
+                "uses": "flow",
+                "spec": "kinds {_%kinds:text} {to_kind%other_kind:text}"
+            },
+            "many_many": {
+                "uses": "flow",
+                "spec": "kinds {_%kinds:text} {to_kinds%other_kinds:text}"
+            },
+            "eph_relations": {
+                "spec": "eph {_%relations:text} {relate%cardinality:eph_cardinality}",
+                "slot": "ephemera"
             }
         }
     }

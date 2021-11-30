@@ -12,14 +12,10 @@ type ScopedKind struct {
 	fields   []fieldDef
 }
 
-// name of a kind to assembly info
-// ready after phase Ancestry
-type ScopedKinds map[string]*ScopedKind
-
 // implement the Dependency interface
 func (k *ScopedKind) Name() string                           { return k.name }
 func (k *ScopedKind) AddRequirement(name string)             { k.reqs.AddRequirement(name) }
-func (d *ScopedKind) GetDependencies() (Dependencies, error) { return d.reqs.GetDependencies() }
+func (k *ScopedKind) GetDependencies() (Dependencies, error) { return k.reqs.GetDependencies() }
 
 func (k *ScopedKind) Resolve() (ret Dependencies, err error) {
 	if len(k.at) == 0 {
@@ -33,20 +29,7 @@ func (k *ScopedKind) Resolve() (ret Dependencies, err error) {
 }
 
 func (k *ScopedKind) HasAncestor(name string) (okay bool, err error) {
-	if dep, e := k.GetDependencies(); e != nil {
-		err = e
-	} else if as := dep.Ancestors(); len(name) == 0 && len(as) == 0 {
-		okay = true // if an empty parent is required and there are no parents
-	} else {
-		// otherwise... make sure whatever kind the child domain is specifying lines up
-		for _, a := range as {
-			if a.Name() == name {
-				okay = true
-				break
-			}
-		}
-	}
-	return
+	return HasAncestor(k, name)
 }
 
 // the kind must have been resolved for this to work

@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	AspectKinds = "aspect"
-	RecordKinds = "record"
+	AspectKinds   = "aspect"
+	RecordKinds   = "record"
+	RelationKinds = "relation"
 )
 
 type KindError struct {

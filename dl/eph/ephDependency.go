@@ -11,6 +11,23 @@ type Dependency interface {
 	GetDependencies() (Dependencies, error)
 }
 
+func HasAncestor(dep Dependency, name string) (okay bool, err error) {
+	if dep, e := dep.GetDependencies(); e != nil {
+		err = e
+	} else if as := dep.Ancestors(); len(name) == 0 && len(as) == 0 {
+		okay = true // if an empty parent is required and there are no parents
+	} else {
+		// otherwise... make sure whatever kind the child domain is specifying lines up
+		for _, a := range as {
+			if a.Name() == name {
+				okay = true
+				break
+			}
+		}
+	}
+	return
+}
+
 // contains all dependencies of dependencies and all dependencies not listed in another dependency.
 type Dependencies struct {
 	ancestors []Dependency // sorted root/s first, leaf last.

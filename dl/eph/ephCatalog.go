@@ -48,17 +48,30 @@ func (c *Catalog) EnsureDomain(n, at string) (ret *Domain) {
 	return
 }
 
-func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
-	if d, ok := c.processing.Top(); !ok {
-		err = errutil.New("no domain")
-	} else if currPhase, phase := c.phase, ephAt.Eph.Phase(); currPhase > phase {
-		err = errutil.New("unexpected phase")
-	} else if phase == DomainPhase {
-		err = ephAt.Eph.Assemble(c, d, ephAt.At)
-	} else {
-		els := d.phases[phase]
-		els.eph = append(els.eph, ephAt)
-		d.phases[phase] = els
+func (c *Catalog) AddEphemera(ephs ...EphAt) (err error) {
+Out:
+	for _, ephAt := range ephs {
+		if d, ok := c.processing.Top(); !ok {
+			err = errutil.New("no domain")
+			break
+		} else if currPhase, phase := c.phase, ephAt.Eph.Phase(); currPhase > phase {
+			err = errutil.New("unexpected phase")
+			break
+		} else if phase == DomainPhase {
+			// fix: queue first, and then run?
+			for _, ephAt := range ephs {
+				if e := ephAt.Eph.Assemble(c, d, ephAt.At); e != nil {
+					err = errutil.Append(err, e)
+					break Out
+				}
+			}
+		} else {
+			// fix? consider storing sorted by phase? or storing linear in order and scanning by phase?
+			// that way we dont need all the separate lists and we can append....
+			els := d.phases[phase]
+			els.eph = append(els.eph, ephAt)
+			d.phases[phase] = els
+		}
 	}
 	return
 }

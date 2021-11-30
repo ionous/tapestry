@@ -424,6 +424,119 @@ func EphBeginDomain_Marshal(m jsn.Marshaler, val *EphBeginDomain) (err error) {
 	return
 }
 
+// EphCardinality swaps between various options
+type EphCardinality struct {
+	Value  interface{}
+	Choice string
+}
+
+var EphCardinality_Optional_Marshal = EphCardinality_Marshal
+
+const EphCardinality_OneOne_Opt = "$ONE_ONE"
+const EphCardinality_OneMany_Opt = "$ONE_MANY"
+const EphCardinality_ManyOne_Opt = "$MANY_ONE"
+const EphCardinality_ManyMany_Opt = "$MANY_MANY"
+
+func (*EphCardinality) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphCardinality_Type,
+		Uses: composer.Type_Swap,
+		Choices: []string{
+			EphCardinality_OneOne_Opt, EphCardinality_OneMany_Opt, EphCardinality_ManyOne_Opt, EphCardinality_ManyMany_Opt,
+		},
+		Swaps: []interface{}{
+			(*OneOne)(nil),
+			(*OneMany)(nil),
+			(*ManyOne)(nil),
+			(*ManyMany)(nil),
+		},
+	}
+}
+
+const EphCardinality_Type = "eph_cardinality"
+
+func (op *EphCardinality) GetType() string { return EphCardinality_Type }
+
+func (op *EphCardinality) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
+}
+
+func (op *EphCardinality) SetSwap(c string) (okay bool) {
+	switch c {
+	case "":
+		op.Choice, op.Value = c, nil
+		okay = true
+	case EphCardinality_OneOne_Opt:
+		op.Choice, op.Value = c, new(OneOne)
+		okay = true
+	case EphCardinality_OneMany_Opt:
+		op.Choice, op.Value = c, new(OneMany)
+		okay = true
+	case EphCardinality_ManyOne_Opt:
+		op.Choice, op.Value = c, new(ManyOne)
+		okay = true
+	case EphCardinality_ManyMany_Opt:
+		op.Choice, op.Value = c, new(ManyMany)
+		okay = true
+	}
+	return
+}
+
+func (op *EphCardinality) Marshal(m jsn.Marshaler) error {
+	return EphCardinality_Marshal(m, op)
+}
+func EphCardinality_Marshal(m jsn.Marshaler, val *EphCardinality) (err error) {
+	if err = m.MarshalBlock(val); err == nil {
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+type EphCardinality_Slice []EphCardinality
+
+func (op *EphCardinality_Slice) GetType() string { return EphCardinality_Type }
+
+func (op *EphCardinality_Slice) Marshal(m jsn.Marshaler) error {
+	return EphCardinality_Repeats_Marshal(m, (*[]EphCardinality)(op))
+}
+
+func (op *EphCardinality_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphCardinality_Slice) SetSize(cnt int) {
+	var els []EphCardinality
+	if cnt >= 0 {
+		els = make(EphCardinality_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphCardinality_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphCardinality_Marshal(m, &(*op)[i])
+}
+
+func EphCardinality_Repeats_Marshal(m jsn.Marshaler, vals *[]EphCardinality) error {
+	return jsn.RepeatBlock(m, (*EphCardinality_Slice)(vals))
+}
+
+func EphCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphCardinality) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphCardinality_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // EphCheckPrint
 // User implements: Ephemera.
 type EphCheckPrint struct {
@@ -1082,6 +1195,115 @@ func EphNameRef_Marshal(m jsn.Marshaler, val *EphNameRef) (err error) {
 	return
 }
 
+// EphNouns
+// User implements: Ephemera.
+type EphNouns struct {
+	Noun string `if:"label=noun,type=text"`
+	Kind string `if:"label=kind,type=text"`
+}
+
+func (*EphNouns) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphNouns_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphNouns_Type = "eph_nouns"
+
+const EphNouns_Field_Noun = "$NOUN"
+const EphNouns_Field_Kind = "$KIND"
+
+func (op *EphNouns) Marshal(m jsn.Marshaler) error {
+	return EphNouns_Marshal(m, op)
+}
+
+type EphNouns_Slice []EphNouns
+
+func (op *EphNouns_Slice) GetType() string { return EphNouns_Type }
+
+func (op *EphNouns_Slice) Marshal(m jsn.Marshaler) error {
+	return EphNouns_Repeats_Marshal(m, (*[]EphNouns)(op))
+}
+
+func (op *EphNouns_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphNouns_Slice) SetSize(cnt int) {
+	var els []EphNouns
+	if cnt >= 0 {
+		els = make(EphNouns_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphNouns_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphNouns_Marshal(m, &(*op)[i])
+}
+
+func EphNouns_Repeats_Marshal(m jsn.Marshaler, vals *[]EphNouns) error {
+	return jsn.RepeatBlock(m, (*EphNouns_Slice)(vals))
+}
+
+func EphNouns_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphNouns) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphNouns_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphNouns_Flow struct{ ptr *EphNouns }
+
+func (n EphNouns_Flow) GetType() string      { return EphNouns_Type }
+func (n EphNouns_Flow) GetLede() string      { return "eph" }
+func (n EphNouns_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphNouns_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphNouns); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphNouns_Optional_Marshal(m jsn.Marshaler, pv **EphNouns) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphNouns_Marshal(m, *pv)
+	} else if !enc {
+		var v EphNouns
+		if err = EphNouns_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphNouns_Marshal(m jsn.Marshaler, val *EphNouns) (err error) {
+	if err = m.MarshalBlock(EphNouns_Flow{val}); err == nil {
+		e0 := m.MarshalKey("noun", EphNouns_Field_Noun)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Noun)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphNouns_Field_Noun))
+		}
+		e1 := m.MarshalKey("kind", EphNouns_Field_Kind)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Kind)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphNouns_Field_Kind))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // EphPlurals Rules for transforming plural text to singular text and back again.
 // Used by the assembler to help interpret author definitions,
 // and at runtime to help the parser interpret user input.
@@ -1187,6 +1409,115 @@ func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphPlurals_Field_Singular))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// EphRelations
+// User implements: Ephemera.
+type EphRelations struct {
+	Relations   string         `if:"label=_,type=text"`
+	Cardinality EphCardinality `if:"label=relate"`
+}
+
+func (*EphRelations) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphRelations_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphRelations_Type = "eph_relations"
+
+const EphRelations_Field_Relations = "$RELATIONS"
+const EphRelations_Field_Cardinality = "$CARDINALITY"
+
+func (op *EphRelations) Marshal(m jsn.Marshaler) error {
+	return EphRelations_Marshal(m, op)
+}
+
+type EphRelations_Slice []EphRelations
+
+func (op *EphRelations_Slice) GetType() string { return EphRelations_Type }
+
+func (op *EphRelations_Slice) Marshal(m jsn.Marshaler) error {
+	return EphRelations_Repeats_Marshal(m, (*[]EphRelations)(op))
+}
+
+func (op *EphRelations_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphRelations_Slice) SetSize(cnt int) {
+	var els []EphRelations
+	if cnt >= 0 {
+		els = make(EphRelations_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphRelations_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphRelations_Marshal(m, &(*op)[i])
+}
+
+func EphRelations_Repeats_Marshal(m jsn.Marshaler, vals *[]EphRelations) error {
+	return jsn.RepeatBlock(m, (*EphRelations_Slice)(vals))
+}
+
+func EphRelations_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphRelations) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphRelations_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphRelations_Flow struct{ ptr *EphRelations }
+
+func (n EphRelations_Flow) GetType() string      { return EphRelations_Type }
+func (n EphRelations_Flow) GetLede() string      { return "eph" }
+func (n EphRelations_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphRelations_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphRelations); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphRelations_Optional_Marshal(m jsn.Marshaler, pv **EphRelations) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphRelations_Marshal(m, *pv)
+	} else if !enc {
+		var v EphRelations
+		if err = EphRelations_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphRelations_Marshal(m jsn.Marshaler, val *EphRelations) (err error) {
+	if err = m.MarshalBlock(EphRelations_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", EphRelations_Field_Relations)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Relations)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphRelations_Field_Relations))
+		}
+		e1 := m.MarshalKey("relate", EphRelations_Field_Cardinality)
+		if e1 == nil {
+			e1 = EphCardinality_Marshal(m, &val.Cardinality)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphRelations_Field_Cardinality))
 		}
 		m.EndBlock()
 	}
@@ -1359,6 +1690,438 @@ func Ephemera_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Ephemera) (err err
 	return
 }
 
+// ManyMany
+type ManyMany struct {
+	Kinds      string `if:"label=_,type=text"`
+	OtherKinds string `if:"label=to_kinds,type=text"`
+}
+
+func (*ManyMany) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ManyMany_Type,
+		Uses: composer.Type_Flow,
+		Lede: "kinds",
+	}
+}
+
+const ManyMany_Type = "many_many"
+
+const ManyMany_Field_Kinds = "$KINDS"
+const ManyMany_Field_OtherKinds = "$OTHER_KINDS"
+
+func (op *ManyMany) Marshal(m jsn.Marshaler) error {
+	return ManyMany_Marshal(m, op)
+}
+
+type ManyMany_Slice []ManyMany
+
+func (op *ManyMany_Slice) GetType() string { return ManyMany_Type }
+
+func (op *ManyMany_Slice) Marshal(m jsn.Marshaler) error {
+	return ManyMany_Repeats_Marshal(m, (*[]ManyMany)(op))
+}
+
+func (op *ManyMany_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ManyMany_Slice) SetSize(cnt int) {
+	var els []ManyMany
+	if cnt >= 0 {
+		els = make(ManyMany_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ManyMany_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ManyMany_Marshal(m, &(*op)[i])
+}
+
+func ManyMany_Repeats_Marshal(m jsn.Marshaler, vals *[]ManyMany) error {
+	return jsn.RepeatBlock(m, (*ManyMany_Slice)(vals))
+}
+
+func ManyMany_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ManyMany) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = ManyMany_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ManyMany_Flow struct{ ptr *ManyMany }
+
+func (n ManyMany_Flow) GetType() string      { return ManyMany_Type }
+func (n ManyMany_Flow) GetLede() string      { return "kinds" }
+func (n ManyMany_Flow) GetFlow() interface{} { return n.ptr }
+func (n ManyMany_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ManyMany); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ManyMany_Optional_Marshal(m jsn.Marshaler, pv **ManyMany) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ManyMany_Marshal(m, *pv)
+	} else if !enc {
+		var v ManyMany
+		if err = ManyMany_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ManyMany_Marshal(m jsn.Marshaler, val *ManyMany) (err error) {
+	if err = m.MarshalBlock(ManyMany_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ManyMany_Field_Kinds)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ManyMany_Field_Kinds))
+		}
+		e1 := m.MarshalKey("to_kinds", ManyMany_Field_OtherKinds)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.OtherKinds)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ManyMany_Field_OtherKinds))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// ManyOne
+type ManyOne struct {
+	Kinds     string `if:"label=_,type=text"`
+	OtherKind string `if:"label=to_kind,type=text"`
+}
+
+func (*ManyOne) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ManyOne_Type,
+		Uses: composer.Type_Flow,
+		Lede: "kinds",
+	}
+}
+
+const ManyOne_Type = "many_one"
+
+const ManyOne_Field_Kinds = "$KINDS"
+const ManyOne_Field_OtherKind = "$OTHER_KIND"
+
+func (op *ManyOne) Marshal(m jsn.Marshaler) error {
+	return ManyOne_Marshal(m, op)
+}
+
+type ManyOne_Slice []ManyOne
+
+func (op *ManyOne_Slice) GetType() string { return ManyOne_Type }
+
+func (op *ManyOne_Slice) Marshal(m jsn.Marshaler) error {
+	return ManyOne_Repeats_Marshal(m, (*[]ManyOne)(op))
+}
+
+func (op *ManyOne_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ManyOne_Slice) SetSize(cnt int) {
+	var els []ManyOne
+	if cnt >= 0 {
+		els = make(ManyOne_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ManyOne_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ManyOne_Marshal(m, &(*op)[i])
+}
+
+func ManyOne_Repeats_Marshal(m jsn.Marshaler, vals *[]ManyOne) error {
+	return jsn.RepeatBlock(m, (*ManyOne_Slice)(vals))
+}
+
+func ManyOne_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ManyOne) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = ManyOne_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ManyOne_Flow struct{ ptr *ManyOne }
+
+func (n ManyOne_Flow) GetType() string      { return ManyOne_Type }
+func (n ManyOne_Flow) GetLede() string      { return "kinds" }
+func (n ManyOne_Flow) GetFlow() interface{} { return n.ptr }
+func (n ManyOne_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ManyOne); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ManyOne_Optional_Marshal(m jsn.Marshaler, pv **ManyOne) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ManyOne_Marshal(m, *pv)
+	} else if !enc {
+		var v ManyOne
+		if err = ManyOne_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ManyOne_Marshal(m jsn.Marshaler, val *ManyOne) (err error) {
+	if err = m.MarshalBlock(ManyOne_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ManyOne_Field_Kinds)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ManyOne_Field_Kinds))
+		}
+		e1 := m.MarshalKey("to_kind", ManyOne_Field_OtherKind)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.OtherKind)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ManyOne_Field_OtherKind))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// OneMany
+type OneMany struct {
+	Kind       string `if:"label=_,type=text"`
+	OtherKinds string `if:"label=to_kinds,type=text"`
+}
+
+func (*OneMany) Compose() composer.Spec {
+	return composer.Spec{
+		Name: OneMany_Type,
+		Uses: composer.Type_Flow,
+		Lede: "kind",
+	}
+}
+
+const OneMany_Type = "one_many"
+
+const OneMany_Field_Kind = "$KIND"
+const OneMany_Field_OtherKinds = "$OTHER_KINDS"
+
+func (op *OneMany) Marshal(m jsn.Marshaler) error {
+	return OneMany_Marshal(m, op)
+}
+
+type OneMany_Slice []OneMany
+
+func (op *OneMany_Slice) GetType() string { return OneMany_Type }
+
+func (op *OneMany_Slice) Marshal(m jsn.Marshaler) error {
+	return OneMany_Repeats_Marshal(m, (*[]OneMany)(op))
+}
+
+func (op *OneMany_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *OneMany_Slice) SetSize(cnt int) {
+	var els []OneMany
+	if cnt >= 0 {
+		els = make(OneMany_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *OneMany_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return OneMany_Marshal(m, &(*op)[i])
+}
+
+func OneMany_Repeats_Marshal(m jsn.Marshaler, vals *[]OneMany) error {
+	return jsn.RepeatBlock(m, (*OneMany_Slice)(vals))
+}
+
+func OneMany_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]OneMany) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = OneMany_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type OneMany_Flow struct{ ptr *OneMany }
+
+func (n OneMany_Flow) GetType() string      { return OneMany_Type }
+func (n OneMany_Flow) GetLede() string      { return "kind" }
+func (n OneMany_Flow) GetFlow() interface{} { return n.ptr }
+func (n OneMany_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*OneMany); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func OneMany_Optional_Marshal(m jsn.Marshaler, pv **OneMany) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = OneMany_Marshal(m, *pv)
+	} else if !enc {
+		var v OneMany
+		if err = OneMany_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func OneMany_Marshal(m jsn.Marshaler, val *OneMany) (err error) {
+	if err = m.MarshalBlock(OneMany_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", OneMany_Field_Kind)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Kind)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", OneMany_Field_Kind))
+		}
+		e1 := m.MarshalKey("to_kinds", OneMany_Field_OtherKinds)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.OtherKinds)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", OneMany_Field_OtherKinds))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// OneOne
+type OneOne struct {
+	Kind      string `if:"label=_,type=text"`
+	OtherKind string `if:"label=to_kind,type=text"`
+}
+
+func (*OneOne) Compose() composer.Spec {
+	return composer.Spec{
+		Name: OneOne_Type,
+		Uses: composer.Type_Flow,
+		Lede: "kind",
+	}
+}
+
+const OneOne_Type = "one_one"
+
+const OneOne_Field_Kind = "$KIND"
+const OneOne_Field_OtherKind = "$OTHER_KIND"
+
+func (op *OneOne) Marshal(m jsn.Marshaler) error {
+	return OneOne_Marshal(m, op)
+}
+
+type OneOne_Slice []OneOne
+
+func (op *OneOne_Slice) GetType() string { return OneOne_Type }
+
+func (op *OneOne_Slice) Marshal(m jsn.Marshaler) error {
+	return OneOne_Repeats_Marshal(m, (*[]OneOne)(op))
+}
+
+func (op *OneOne_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *OneOne_Slice) SetSize(cnt int) {
+	var els []OneOne
+	if cnt >= 0 {
+		els = make(OneOne_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *OneOne_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return OneOne_Marshal(m, &(*op)[i])
+}
+
+func OneOne_Repeats_Marshal(m jsn.Marshaler, vals *[]OneOne) error {
+	return jsn.RepeatBlock(m, (*OneOne_Slice)(vals))
+}
+
+func OneOne_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]OneOne) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = OneOne_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type OneOne_Flow struct{ ptr *OneOne }
+
+func (n OneOne_Flow) GetType() string      { return OneOne_Type }
+func (n OneOne_Flow) GetLede() string      { return "kind" }
+func (n OneOne_Flow) GetFlow() interface{} { return n.ptr }
+func (n OneOne_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*OneOne); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func OneOne_Optional_Marshal(m jsn.Marshaler, pv **OneOne) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = OneOne_Marshal(m, *pv)
+	} else if !enc {
+		var v OneOne
+		if err = OneOne_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func OneOne_Marshal(m jsn.Marshaler, val *OneOne) (err error) {
+	if err = m.MarshalBlock(OneOne_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", OneOne_Field_Kind)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Kind)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", OneOne_Field_Kind))
+		}
+		e1 := m.MarshalKey("to_kind", OneOne_Field_OtherKind)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.OtherKind)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", OneOne_Field_OtherKind))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 var Slots = []interface{}{
 	(*Ephemera)(nil),
 }
@@ -1368,20 +2131,31 @@ var Slats = []composer.Composer{
 	(*EphAspects)(nil),
 	(*EphAt)(nil),
 	(*EphBeginDomain)(nil),
+	(*EphCardinality)(nil),
 	(*EphCheckPrint)(nil),
 	(*EphEndDomain)(nil),
 	(*EphFields)(nil),
 	(*EphKinds)(nil),
 	(*EphList)(nil),
 	(*EphNameRef)(nil),
+	(*EphNouns)(nil),
 	(*EphPlurals)(nil),
+	(*EphRelations)(nil),
 	(*EphRun)(nil),
+	(*ManyMany)(nil),
+	(*ManyOne)(nil),
+	(*OneMany)(nil),
+	(*OneOne)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
 	18295658173337269930: (*EphAspects)(nil),     /* Eph aspects:traits: */
 	9182060341586636438:  (*EphAt)(nil),          /* Eph at:eph: */
 	12209727080993772760: (*EphBeginDomain)(nil), /* Eph domain:requires: */
+	12717235098097470366: (*EphCardinality)(nil), /* EphCardinality oneOne: */
+	13014334328963404635: (*EphCardinality)(nil), /* EphCardinality oneMany: */
+	874627862825420357:   (*EphCardinality)(nil), /* EphCardinality manyOne: */
+	18342259850011553446: (*EphCardinality)(nil), /* EphCardinality manyMany: */
 	18354563224792793196: (*EphCheckPrint)(nil),  /* Eph check:prints: */
 	4379746949646135194:  (*EphEndDomain)(nil),   /* Eph domain: */
 	8381163068622333334:  (*EphFields)(nil),      /* Eph kinds:have:called: */
@@ -1389,6 +2163,15 @@ var Signatures = map[uint64]interface{}{
 	9386889860419880175:  (*EphKinds)(nil),       /* Eph kinds:from: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
 	9956475014949920846:  (*EphNameRef)(nil),     /* Eph ref:of: */
+	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
 	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
+	9811567312656774933:  (*EphRelations)(nil),   /* Eph:relate oneOne: */
+	2078507782755484470:  (*EphRelations)(nil),   /* Eph:relate oneMany: */
+	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */
+	15063335060652852941: (*EphRelations)(nil),   /* Eph:relate manyMany: */
 	4420716908411308437:  (*EphRun)(nil),         /* Eph run: */
+	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */
+	15407091527463396937: (*ManyOne)(nil),        /* Kinds:toKind: */
+	8349208709908405809:  (*OneMany)(nil),        /* Kind:toKinds: */
+	11329972991603205158: (*OneOne)(nil),         /* Kind:toKind: */
 }
