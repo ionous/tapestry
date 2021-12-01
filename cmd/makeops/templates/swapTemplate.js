@@ -6,8 +6,8 @@ module.exports = `
 type {{Pascal name}} struct {
 {{~#if (IsPositioned this)}}
   At     reader.Position \`if:"internal"\`{{/if}}
-  Value  interface{}
   Choice string
+  Value  interface{}
 }
 
 var {{Pascal name}}_Optional_Marshal = {{Pascal name}}_Marshal

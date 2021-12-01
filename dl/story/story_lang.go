@@ -393,8 +393,8 @@ func ActionName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionName) (err
 
 // ActionParams swaps between various options
 type ActionParams struct {
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var ActionParams_Optional_Marshal = ActionParams_Marshal
@@ -2651,8 +2651,8 @@ func EventPhase_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventPhase) (err
 
 // EventTarget swaps between various options
 type EventTarget struct {
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var EventTarget_Optional_Marshal = EventTarget_Marshal
@@ -2755,8 +2755,8 @@ func EventTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventTarget) (e
 // ExtType swaps between various options
 type ExtType struct {
 	At     reader.Position `if:"internal"`
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var ExtType_Optional_Marshal = ExtType_Marshal
@@ -4357,8 +4357,8 @@ func ManyToOne_Marshal(m jsn.Marshaler, val *ManyToOne) (err error) {
 
 // MapConnection swaps between various options
 type MapConnection struct {
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var MapConnection_Optional_Marshal = MapConnection_Marshal
@@ -5171,8 +5171,8 @@ func NounName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounName) (err err
 // NounPhrase swaps between various options
 type NounPhrase struct {
 	At     reader.Position `if:"internal"`
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var NounPhrase_Optional_Marshal = NounPhrase_Marshal
@@ -7432,8 +7432,8 @@ func PrimitiveType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PrimitiveType
 
 // PrimitiveValue swaps between various options
 type PrimitiveValue struct {
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var PrimitiveValue_Optional_Marshal = PrimitiveValue_Marshal
@@ -7536,8 +7536,8 @@ func PrimitiveValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PrimitiveVal
 // ProgramHook swaps between various options
 type ProgramHook struct {
 	At     reader.Position `if:"internal"`
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var ProgramHook_Optional_Marshal = ProgramHook_Marshal
@@ -8006,8 +8006,8 @@ func PropertyDecl_Marshal(m jsn.Marshaler, val *PropertyDecl) (err error) {
 // PropertyType swaps between various options
 type PropertyType struct {
 	At     reader.Position `if:"internal"`
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var PropertyType_Optional_Marshal = PropertyType_Marshal
@@ -8574,8 +8574,8 @@ func RecordsPossessProperties_Marshal(m jsn.Marshaler, val *RecordsPossessProper
 // RelationCardinality swaps between various options
 type RelationCardinality struct {
 	At     reader.Position `if:"internal"`
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var RelationCardinality_Optional_Marshal = RelationCardinality_Marshal
@@ -10648,8 +10648,8 @@ func VariableDecl_Marshal(m jsn.Marshaler, val *VariableDecl) (err error) {
 // VariableType swaps between various options
 type VariableType struct {
 	At     reader.Position `if:"internal"`
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var VariableType_Optional_Marshal = VariableType_Marshal

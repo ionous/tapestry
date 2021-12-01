@@ -425,8 +425,8 @@ func TestSlot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestSlot) (err err
 
 // TestSwap swaps between various options
 type TestSwap struct {
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var TestSwap_Optional_Marshal = TestSwap_Marshal
