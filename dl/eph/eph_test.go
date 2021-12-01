@@ -3,7 +3,6 @@ package eph
 import (
 	"fmt"
 	"math/rand"
-	"strconv"
 	"strings"
 	"testing"
 
@@ -13,15 +12,19 @@ import (
 type testOut []string
 
 // ignores the category for simpler testing
-func (x *testOut) Write(_cat string, args ...interface{}) (err error) {
-	var b strings.Builder
-	for i, arg := range args {
-		if i > 0 {
-			b.WriteRune(':')
+func (log *testOut) Write(cat string, args ...interface{}) (err error) {
+	if len(*log) == 0 {
+		err = errutil.New("testOut not initialized")
+	} else if (*log)[0] == cat {
+		var b strings.Builder
+		for i, arg := range args {
+			if i > 0 {
+				b.WriteRune(':')
+			}
+			b.WriteString(fmt.Sprint(arg))
 		}
-		b.WriteString(fmt.Sprint(arg))
+		(*log) = append((*log), b.String())
 	}
-	(*x) = append((*x), b.String())
 	return
 }
 
@@ -85,9 +88,12 @@ func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 
 func (dt *domainTest) addToCat(cat *Catalog) (err error) {
 	// fix: it would be nice to not need an explicit top domain.
-	cat.processing.Push(cat.EnsureDomain("g", "global"))
-	for i, el := range dt.out {
-		if e := cat.AddEphemera(EphAt{At: strconv.Itoa(i), Eph: el}); e != nil {
+	cat.processing.Push(cat.EnsureDomain("g", "x"))
+	for _, el := range dt.out {
+		if d, ok := cat.processing.Top(); !ok {
+			err = errutil.New("no top domain")
+			break
+		} else if e := d.AddEphemera(EphAt{At: "x", Eph: el}); e != nil {
 			err = e
 			break
 		}

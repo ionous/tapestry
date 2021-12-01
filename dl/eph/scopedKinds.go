@@ -10,7 +10,7 @@ type ScopedKinds map[string]*ScopedKind
 func (d *Domain) GetKind(name string) (ret *ScopedKind, okay bool) {
 	if k, ok := d.kinds[name]; ok {
 		ret, okay = k, true
-	} else if deps, e := d.reqs.GetDependencies(); e != nil {
+	} else if deps, e := d.GetDependencies(); e != nil {
 		// if not in this domain, then maybe in a parent domain....
 		// ( dont force resolve here, if its not resolved... then stop trying )
 		LogWarning(e)
@@ -32,7 +32,7 @@ func (d *Domain) EnsureKind(name, at string) (ret *ScopedKind) {
 	if k, ok := d.GetKind(name); ok {
 		ret = k
 	} else {
-		k = &ScopedKind{name: name, at: at, domain: d}
+		k = &ScopedKind{Requires: Requires{name: name, at: at}, domain: d}
 		if d.kinds == nil {
 			d.kinds = map[string]*ScopedKind{name: k}
 		} else {

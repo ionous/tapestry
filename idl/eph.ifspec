@@ -100,7 +100,7 @@
                 "spec": "kinds {_%kinds:text} {to_kinds%other_kinds:text}"
             },
             "eph_relations": {
-                "spec": "eph {_%relations:text} {relate%cardinality:eph_cardinality}",
+                "spec": "eph {_%rel:text} {relate%cardinality:eph_cardinality}",
                 "slot": "ephemera"
             }
         }

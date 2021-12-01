@@ -5,31 +5,21 @@ import (
 )
 
 type ScopedKind struct {
-	name, at string
+	Requires // references to ancestors ( at most it can have one direct parent )
 	domain   *Domain
-	reqs     Requires // references to ancestors ( at most it can have one direct parent )
 	traits   []traitDef
 	fields   []fieldDef
 }
 
-// implement the Dependency interface
-func (k *ScopedKind) Name() string                           { return k.name }
-func (k *ScopedKind) AddRequirement(name string)             { k.reqs.AddRequirement(name) }
-func (k *ScopedKind) GetDependencies() (Dependencies, error) { return k.reqs.GetDependencies() }
-
 func (k *ScopedKind) Resolve() (ret Dependencies, err error) {
 	if len(k.at) == 0 {
 		err = KindError{k.name, errutil.New("never defined")}
-	} else if ks, e := k.reqs.Resolve(k, (*kindFinder)(k.domain)); e != nil {
+	} else if ks, e := k.resolve(k, (*kindFinder)(k.domain)); e != nil {
 		err = KindError{k.name, e}
 	} else {
 		ret = ks
 	}
 	return
-}
-
-func (k *ScopedKind) HasAncestor(name string) (okay bool, err error) {
-	return HasAncestor(k, name)
 }
 
 // the kind must have been resolved for this to work

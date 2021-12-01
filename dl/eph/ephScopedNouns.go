@@ -13,7 +13,7 @@ type ScopedNouns map[string]*ScopedNoun
 func (d *Domain) GetNoun(name string) (ret *ScopedNoun, okay bool) {
 	if n, ok := d.nouns[name]; ok {
 		ret, okay = n, true
-	} else if deps, e := d.reqs.GetDependencies(); e != nil {
+	} else if deps, e := d.GetDependencies(); e != nil {
 		// if not in this domain, then maybe in a parent domain....
 		// ( dont force resolve here, if its not resolved... then stop trying )
 		LogWarning(e)
@@ -35,7 +35,7 @@ func (d *Domain) EnsureNoun(name, at string) (ret *ScopedNoun) {
 	if n, ok := d.GetNoun(name); ok {
 		ret = n
 	} else {
-		n = &ScopedNoun{name: name, at: at, domain: d}
+		n = &ScopedNoun{Requires: Requires{name: name, at: at}, domain: d}
 		if d.nouns == nil {
 			d.nouns = map[string]*ScopedNoun{name: n}
 		} else {

@@ -34,7 +34,6 @@ func TestPluralAssembly(t *testing.T) {
 		// collapse:
 		&EphPlurals{Singular: "bat", Plural: "cauldron"},
 	)
-	var out testOut
 	var cat Catalog
 	// addToCat will define all of the above domains
 	// and then it will.... queue all of the ephemera
@@ -49,9 +48,10 @@ func TestPluralAssembly(t *testing.T) {
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
 	} else {
+		out := testOut{mdl_plural}
 		if e := cat.plurals.WritePlurals(&out); e != nil {
 			// try seeing what we made
-			if diff := pretty.Diff(out, testOut{
+			if diff := pretty.Diff(out[1:], testOut{
 				"a:unkindness:raven",
 				"a:cloud:bat",
 				"a:cauldron:bat",

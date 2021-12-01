@@ -7,10 +7,35 @@ import (
 )
 
 const (
-	AspectKinds   = "aspect"
-	RecordKinds   = "record"
-	RelationKinds = "relation"
+	KindsOfAspect   = "aspect"
+	KindsOfRecord   = "record"
+	KindsOfRelation = "relation"
 )
+
+//  traverse the domains and then kinds in a reasonable order
+func (cat *Catalog) WriteKinds(w Writer) (err error) {
+	if ds, e := cat.ResolveDomains(); e != nil {
+		err = e
+	} else {
+		for _, dep := range ds {
+			d := dep.Leaf().(*Domain)
+			if ks, e := d.ResolveKinds(); e != nil {
+				err = errutil.Append(err, e)
+			} else if e := ks.WriteTable(w, mdl_kind, false); e != nil {
+				err = errutil.Append(err, e)
+			}
+		}
+	}
+	return
+}
+
+var AncestryPhaseActions = PhaseAction{
+	PhaseFlags{NoDuplicates: true},
+	func(d *Domain) error {
+		_, e := d.ResolveKinds()
+		return e
+	},
+}
 
 type KindError struct {
 	Kind string

@@ -8,6 +8,29 @@ import (
 	"github.com/ionous/errutil"
 )
 
+//  traverse the domains and then kinds in a reasonable order
+func (cat *Catalog) WriteFields(w Writer) (err error) {
+	if ds, e := cat.ResolveDomains(); e != nil {
+		err = e
+	} else {
+		for _, dep := range ds {
+			d := dep.Leaf().(*Domain)
+			if ks, e := d.ResolveKinds(); e != nil {
+				err = e
+				break
+			} else {
+				for _, kep := range ks {
+					k := kep.Leaf().(*ScopedKind)
+					for _, f := range k.fields {
+						f.Write(&partialFields{w: w, fields: []interface{}{d.Name(), k.Name()}})
+					}
+				}
+			}
+		}
+	}
+	return
+}
+
 func (el *EphFields) Phase() Phase { return FieldPhase }
 
 // add some fields to a kind.

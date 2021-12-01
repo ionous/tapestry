@@ -90,32 +90,32 @@ func TestDomainTable(t *testing.T) {
 	} else if ds, e := cat.ResolveDomains(); e != nil {
 		t.Fatal(e)
 	} else {
-		var out testOut
-		if e := ds.WriteTable(&out, "", true); e != nil {
+		out := testOut{""} // write just the parents
+		if e := ds.WriteTable(&out, "", false); e != nil {
 			t.Fatal(e)
-		} else if diff := pretty.Diff(out, testOut{
-			"g:",
-			"d:g",
-			"e:g",
-			"c:e,g",
-			"b:d,c,e,g",
-			"a:b,d,c,e,g",
+		} else if diff := pretty.Diff(out[1:], testOut{
+			"g::x",
+			"d:g:x",
+			"e:g:x",
+			"c:e:x",
+			"b:d,c:x", // fix? why does d wind up being listed before c? ( and in ancestors too )
+			"a:b:x",
 		}); len(diff) > 0 {
-			t.Log("ancestors:", pretty.Sprint(out))
+			t.Log("parents:", pretty.Sprint(out))
 			t.Fatal(diff)
 		} else {
-			var out testOut
-			if e := ds.WriteTable(&out, "", false); e != nil {
+			out := testOut{mdl_domain}
+			if e := cat.WriteDomains(&out); e != nil {
 				t.Fatal(e)
-			} else if diff := pretty.Diff(out, testOut{
-				"g:",
-				"d:g",
-				"e:g",
-				"c:e",
-				"b:d,c", // fix? why does d wind up being listed before c? ( and in ancestors too )
-				"a:b",
+			} else if diff := pretty.Diff(out[1:], testOut{
+				"g::x",
+				"d:g:x",
+				"e:g:x",
+				"c:e,g:x",
+				"b:d,c,e,g:x",
+				"a:b,d,c,e,g:x",
 			}); len(diff) > 0 {
-				t.Log("parents:", pretty.Sprint(out))
+				t.Log("ancestors:", pretty.Sprint(out))
 				t.Fatal(diff)
 			}
 		}

@@ -14,14 +14,14 @@ func TestFields(t *testing.T) {
 		&EphFields{Kinds: "k", Name: "t", Class: "k", Affinity: Affinity{Affinity_Text}},
 		&EphFields{Kinds: "k", Name: "n", Affinity: Affinity{Affinity_Number}},
 	)
-	var out testOut
+	out := testOut{mdl_field}
 	if cat, e := buildFields(dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out, testOut{
-		"a:k:t:text:k:2",
-		"a:k:n:number::3",
+	} else if diff := pretty.Diff(out[1:], testOut{
+		"a:k:t:text:k:x",
+		"a:k:n:number::x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -38,14 +38,14 @@ func TestFieldsCrossDomain(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphFields{Kinds: "k", Name: "b", Affinity: Affinity{Affinity_Bool}},
 	)
-	var out testOut
+	out := testOut{mdl_field}
 	if cat, e := buildFields(dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out, testOut{
-		"a:k:n:number::2",
-		"a:k:b:bool::5",
+	} else if diff := pretty.Diff(out[1:], testOut{
+		"a:k:n:number::x",
+		"a:k:b:bool::x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -67,7 +67,7 @@ func TestFieldsRedefine(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphFields{Kinds: "k", Name: "n", Affinity: Affinity{Affinity_Number}},
 	)
-	var out testOut
+	out := testOut{mdl_field}
 	if cat, e := buildFields(dt); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
@@ -76,8 +76,8 @@ func TestFieldsRedefine(t *testing.T) {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out, testOut{
-		"a:k:n:number::1",
+	} else if diff := pretty.Diff(out[1:], testOut{
+		"a:k:n:number::x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -122,15 +122,15 @@ func TestFieldsMatchingRivals(t *testing.T) {
 		&EphFields{Kinds: "k", Name: "t", Affinity: Affinity{Affinity_Text}},
 	)
 	dt.makeDomain(dd("z", "c", "d"))
-	var out testOut
+	out := testOut{mdl_field}
 	if cat, e := buildFields(dt); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out, testOut{
-		"a:k:t:text::4",
+	} else if diff := pretty.Diff(out[1:], testOut{
+		"a:k:t:text::x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -186,13 +186,7 @@ func buildFields(dt domainTest) (ret *Catalog, err error) {
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
 	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: PhaseAction{
-			PhaseFlags{NoDuplicates: true},
-			func(d *Domain) error {
-				_, e := d.ResolveKinds()
-				return e
-			},
-		},
+		AncestryPhase: AncestryPhaseActions,
 	}); e != nil {
 		err = e
 	} else {

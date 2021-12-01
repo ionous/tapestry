@@ -68,6 +68,7 @@ func sorter(strs ...string) ([]string, []string) {
 type panicDep string
 
 func (d panicDep) Name() string                           { return string(d) }
+func (d panicDep) OriginAt() string                       { return "panicDep:" + string(d) }
 func (d panicDep) AddRequirement(name string)             { panic("not implemented") }
 func (d panicDep) GetDependencies() (Dependencies, error) { panic("not implemented") }
 func (d panicDep) Resolve() (ret Dependencies, err error) { panic("not implemented") }

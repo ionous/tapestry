@@ -426,8 +426,8 @@ func EphBeginDomain_Marshal(m jsn.Marshaler, val *EphBeginDomain) (err error) {
 
 // EphCardinality swaps between various options
 type EphCardinality struct {
-	Value  interface{}
 	Choice string
+	Value  interface{}
 }
 
 var EphCardinality_Optional_Marshal = EphCardinality_Marshal
@@ -1418,7 +1418,7 @@ func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
 // EphRelations
 // User implements: Ephemera.
 type EphRelations struct {
-	Relations   string         `if:"label=_,type=text"`
+	Rel         string         `if:"label=_,type=text"`
 	Cardinality EphCardinality `if:"label=relate"`
 }
 
@@ -1432,7 +1432,7 @@ func (*EphRelations) Compose() composer.Spec {
 
 const EphRelations_Type = "eph_relations"
 
-const EphRelations_Field_Relations = "$RELATIONS"
+const EphRelations_Field_Rel = "$REL"
 const EphRelations_Field_Cardinality = "$CARDINALITY"
 
 func (op *EphRelations) Marshal(m jsn.Marshaler) error {
@@ -1505,12 +1505,12 @@ func EphRelations_Optional_Marshal(m jsn.Marshaler, pv **EphRelations) (err erro
 
 func EphRelations_Marshal(m jsn.Marshaler, val *EphRelations) (err error) {
 	if err = m.MarshalBlock(EphRelations_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", EphRelations_Field_Relations)
+		e0 := m.MarshalKey("", EphRelations_Field_Rel)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Relations)
+			e0 = value.Text_Unboxed_Marshal(m, &val.Rel)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphRelations_Field_Relations))
+			m.Error(errutil.New(e0, "in flow at", EphRelations_Field_Rel))
 		}
 		e1 := m.MarshalKey("relate", EphRelations_Field_Cardinality)
 		if e1 == nil {

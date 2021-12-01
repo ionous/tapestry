@@ -21,11 +21,11 @@ func TestScopedKinds(t *testing.T) {
 		&EphKinds{Kinds: "n", From: "k"}, // root domain
 		&EphKinds{Kinds: "j", From: "m"}, // parent domain
 	)
-	var out testOut
+	out := testOut{mdl_kind}
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out, testOut{
-		"k:", "m:k", "j:m", "q:j", "n:k",
+	} else if diff := pretty.Diff(out[1:], testOut{
+		"k::x", "m:k:x", "j:m:x", "q:j:x", "n:k:x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -45,11 +45,11 @@ func TestScopedRedundant(t *testing.T) {
 		&EphKinds{Kinds: "n", From: "m"}, // more specific
 		&EphKinds{Kinds: "n", From: "k"}, // duped
 	)
-	var out testOut
+	out := testOut{mdl_kind}
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out, testOut{
-		"k:", "m:k", "n:m",
+	} else if diff := pretty.Diff(out[1:], testOut{
+		"k::x", "m:k:x", "n:m:x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -64,7 +64,7 @@ func TestScopedKindMissing(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kinds: "m", From: "x"},
 	)
-	var out testOut
+	out := testOut{mdl_domain}
 	if e := writeKinds(dt, &out); e == nil || e.Error() != `unknown dependency "x" for kind "m"` {
 		t.Fatal("expected error", e, out)
 	} else {
@@ -89,7 +89,7 @@ func TestScopedKindConflict(t *testing.T) {
 	dt.makeDomain(dd("c", "b"),
 		&EphKinds{Kinds: "m", From: "n"},
 	)
-	var out testOut
+	out := testOut{mdl_domain}
 	if e := writeKinds(dt, &out); e == nil || e.Error() != `can't redefine parent as "n" for kind "m"` {
 		t.Fatal("expected error", e, out)
 	} else if warned := warnings.all(); len(warned) != 1 {
@@ -113,9 +113,14 @@ func TestScopedRivalsOkay(t *testing.T) {
 	dt.makeDomain(dd("d", "a"),
 		&EphKinds{Kinds: "m", From: "k"}, // second in a parallel domain should be fine
 	)
-	var out testOut
+	out := testOut{mdl_kind}
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
+	} else if diff := pretty.Diff(out[1:], testOut{
+		"k::x", "m:k:x", "m:k:x",
+	}); len(diff) > 0 {
+		t.Log(pretty.Sprint(out))
+		t.Fatal(diff)
 	}
 }
 
@@ -131,7 +136,7 @@ func TestScopedRivalConflict(t *testing.T) {
 		&EphKinds{Kinds: "m", From: "k"}, // re: TestScopedRivalsOkay, should be okay.
 	)
 	dt.makeDomain(dd("z", "b", "d")) // trying to include both should be a problem; they are two unique kinds...
-	var out testOut
+	out := testOut{mdl_domain}
 	if e := writeKinds(dt, &out); e == nil {
 		t.Fatal("expected an error", out)
 	} else {
@@ -139,24 +144,16 @@ func TestScopedRivalConflict(t *testing.T) {
 	}
 }
 
-func writeKinds(dt domainTest, pout *testOut) (err error) {
+func writeKinds(dt domainTest, w *testOut) (err error) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
+	} else if e := cat.AssembleCatalog(PhaseActions{
+		AncestryPhase: AncestryPhaseActions,
+	}); e != nil {
+		err = e
 	} else {
-		err = cat.AssembleCatalog(PhaseActions{
-			AncestryPhase: PhaseAction{
-				PhaseFlags{NoDuplicates: true},
-				func(d *Domain) (err error) {
-					if ks, e := d.ResolveKinds(); e != nil {
-						err = e
-					} else if e := ks.WriteTable(pout, "", false); e != nil {
-						err = e
-					}
-					return
-				},
-			},
-		})
+		err = cat.WriteKinds(w)
 	}
 	return
 }

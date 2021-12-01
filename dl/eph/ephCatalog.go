@@ -1,7 +1,6 @@
 package eph
 
 import (
-	"github.com/ionous/errutil"
 	"github.com/ionous/inflect"
 )
 
@@ -10,7 +9,6 @@ type Catalog struct {
 	domains         map[string]*Domain
 	processing      DomainStack
 	plurals         PluralTable
-	phase           Phase
 	resolvedDomains cachedTable
 }
 
@@ -37,41 +35,13 @@ func (c *Catalog) EnsureDomain(n, at string) (ret *Domain) {
 	if d, ok := c.domains[n]; ok {
 		ret = d
 	} else {
-		d = &Domain{name: n, at: at, catalog: c}
+		d = &Domain{Requires: Requires{name: n, at: at}, catalog: c}
 		if c.domains == nil {
 			c.domains = map[string]*Domain{n: d}
 		} else {
 			c.domains[n] = d
 		}
 		ret = d
-	}
-	return
-}
-
-func (c *Catalog) AddEphemera(ephs ...EphAt) (err error) {
-Out:
-	for _, ephAt := range ephs {
-		if d, ok := c.processing.Top(); !ok {
-			err = errutil.New("no domain")
-			break
-		} else if currPhase, phase := c.phase, ephAt.Eph.Phase(); currPhase > phase {
-			err = errutil.New("unexpected phase")
-			break
-		} else if phase == DomainPhase {
-			// fix: queue first, and then run?
-			for _, ephAt := range ephs {
-				if e := ephAt.Eph.Assemble(c, d, ephAt.At); e != nil {
-					err = errutil.Append(err, e)
-					break Out
-				}
-			}
-		} else {
-			// fix? consider storing sorted by phase? or storing linear in order and scanning by phase?
-			// that way we dont need all the separate lists and we can append....
-			els := d.phases[phase]
-			els.eph = append(els.eph, ephAt)
-			d.phases[phase] = els
-		}
 	}
 	return
 }
@@ -98,29 +68,6 @@ func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
 			if e := d.Assemble(phaseActions); e != nil {
 				err = e
 				break
-			}
-		}
-	}
-	return
-}
-
-//  traverse the domains and then kinds in a reasonable order
-func (cat *Catalog) WriteFields(w Writer) (err error) {
-	if ds, e := cat.ResolveDomains(); e != nil {
-		err = e
-	} else {
-		for _, dep := range ds {
-			d := dep.Leaf().(*Domain)
-			if ks, e := d.ResolveKinds(); e != nil {
-				err = e
-				break
-			} else {
-				for _, kep := range ks {
-					k := kep.Leaf().(*ScopedKind)
-					for _, f := range k.fields {
-						f.Write(&partialFields{w: w, fields: []interface{}{d.Name(), k.Name()}})
-					}
-				}
 			}
 		}
 	}

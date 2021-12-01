@@ -9,11 +9,10 @@ type DomainFinder interface {
 }
 
 type Domain struct {
-	name, at  string
+	Requires  // other domains this needs ( can have multiple direct parents )
 	catalog   *Catalog
 	currPhase Phase // lift into some "ProcessingDomain" structure?
 	phases    [NumPhases]PhaseData
-	reqs      Requires // other domains this needs ( can have multiple direct parents )
 	kinds     ScopedKinds
 	nouns     ScopedNouns
 	resolvedKinds,
@@ -32,15 +31,10 @@ func (dp *PhaseData) AddDefinition(k string, v Definition) {
 	dp.defs[k] = v
 }
 
-// implement the Dependency interface
-func (d *Domain) Name() string                           { return d.name }
-func (d *Domain) AddRequirement(name string)             { d.reqs.AddRequirement(name) }
-func (d *Domain) GetDependencies() (Dependencies, error) { return d.reqs.GetDependencies() }
-
 func (d *Domain) Resolve() (ret Dependencies, err error) {
 	if len(d.at) == 0 {
 		err = DomainError{d.name, errutil.New("never defined")}
-	} else if ds, e := d.reqs.Resolve(d, (*catDependencyFinder)(d.catalog)); e != nil {
+	} else if ds, e := d.resolve(d, (*catDependencyFinder)(d.catalog)); e != nil {
 		err = DomainError{d.name, e}
 	} else {
 		ret = ds
@@ -52,11 +46,14 @@ func (d *Domain) AddEphemera(ephAt EphAt) (err error) {
 	if currPhase, phase := d.currPhase, ephAt.Eph.Phase(); currPhase > phase {
 		err = errutil.New("unexpected phase")
 	} else if phase == DomainPhase {
+		// fix: queue first, and then run?
 		err = ephAt.Eph.Assemble(d.catalog, d, ephAt.At)
 	} else {
-		phase := d.phases[d.currPhase]
-		phase.eph = append(phase.eph, ephAt)
-		d.phases[d.currPhase] = phase
+		// fix? consider all ephemera in a flat slice ( again ) scanning by phase instead of partitioning.
+		// that way we dont need all the separate lists and we can append....
+		els := d.phases[phase]
+		els.eph = append(els.eph, ephAt)
+		d.phases[phase] = els
 	}
 	return
 }
@@ -80,9 +77,9 @@ func (d *Domain) AddDefinition(key, at, value string) (err error) {
 		}
 		//
 		if err == nil {
-			phase := d.phases[d.currPhase]
-			phase.AddDefinition(key, Definition{at: at, value: value})
-			d.phases[d.currPhase] = phase
+			defs := d.phases[d.currPhase]
+			defs.AddDefinition(key, Definition{at: at, value: value})
+			d.phases[d.currPhase] = defs
 		}
 	}
 	return
@@ -90,14 +87,17 @@ func (d *Domain) AddDefinition(key, at, value string) (err error) {
 
 // the domain is resolved already.
 func (d *Domain) Assemble(phaseActions PhaseActions) (err error) {
-	if ds, e := d.reqs.GetDependencies(); e != nil {
+	if ds, e := d.GetDependencies(); e != nil {
 		err = e
 	} else {
-		for w, phaseData := range d.phases {
+		// don't "range" over the phases since the contents can change during traversal.
+		for w := 0; w < int(NumPhases); w++ {
+			// note: even if there are no ephemera... in a given phase..
+			// there can still be rivals and other results to process
+			phaseData := d.phases[w]
 			currPhase := Phase(w)
 			d.currPhase = currPhase // hrmmm...
 			act := phaseActions[currPhase]
-
 			if e := d.checkRivals(currPhase, ds, !act.Flags.NoDuplicates); e != nil {
 				err = e
 				break
@@ -141,6 +141,15 @@ func (d *Domain) checkRivals(phase Phase, ds Dependencies, allowDupes bool) (err
 				}
 			}
 		}
+	}
+	return
+}
+
+func (c *Catalog) WriteDomains(w Writer) (err error) {
+	if ds, e := c.ResolveDomains(); e != nil {
+		err = e
+	} else {
+		err = ds.WriteTable(w, mdl_domain, true)
 	}
 	return
 }

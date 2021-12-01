@@ -4,7 +4,9 @@ import "github.com/ionous/errutil"
 
 // generator for a dependency graph
 // designed to be embedded in a map by pointer or in embedded in some other object to store dependencies about that object.
+// partially implements "Dependency" ( missing the Resolve() method )
 type Requires struct {
+	name, at string
 	reqs     UniqueNames  // original list of dependencies
 	resolved Dependencies // valid after Resolve()
 	status   error        // nil status means "unresolved"
@@ -16,6 +18,15 @@ const (
 	xResolved   = errutil.Error("resolved")   // marks a successfully completed Resolve()
 	// Resolved = nil -- except go doesnt allow nil const
 )
+
+// implements Dependency
+func (d *Requires) Name() string {
+	return d.name
+}
+
+func (d *Requires) OriginAt() string {
+	return d.at
+}
 
 // make the name or object this set of dependencies represents require the passed dep
 // clears any previous cached resolution data or internal errors
@@ -37,8 +48,26 @@ func (d *Requires) GetDependencies() (ret Dependencies, err error) {
 	return
 }
 
+// ( must be previously
+func (d *Requires) HasAncestor(name string) (okay bool, err error) {
+	if dep, e := d.GetDependencies(); e != nil {
+		err = e
+	} else if as := dep.Ancestors(); len(name) == 0 && len(as) == 0 {
+		okay = true // if an empty parent is required and there are no parents
+	} else {
+		// otherwise... make sure whatever kind the child domain is specifying lines up
+		for _, a := range as {
+			if a.Name() == name {
+				okay = true
+				break
+			}
+		}
+	}
+	return
+}
+
 // return the graph of all dependencies ( recursively creating that graph when needed. )
-func (d *Requires) Resolve(node Dependency, names DependencyFinder) (ret Dependencies, err error) {
+func (d *Requires) resolve(node Dependency, names DependencyFinder) (ret Dependencies, err error) {
 	switch d.status {
 	case xResolved: // already resolved? return the list.
 		ret = d.resolved

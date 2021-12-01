@@ -163,8 +163,9 @@ func (ds DependencyTable) WriteTable(w Writer, target string, fullTree bool) (er
 			b.WriteString(el.Name())
 		}
 		name, row := d.Leaf().Name(), b.String()
-		if e := w.Write(target, name, row); e != nil {
-			err = errutil.Append(err, errutil.Fmt("couldn't write %q %w", name, e))
+		if e := w.Write(target, name, row, d.Leaf().OriginAt()); e != nil {
+			err = e
+			break
 		}
 	}
 	return
