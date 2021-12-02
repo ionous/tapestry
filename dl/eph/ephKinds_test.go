@@ -97,13 +97,13 @@ func TestKindSingleParent(t *testing.T) {
 
 func makeKinds(t *testing.T, strs ...string) *Domain {
 	// fake a domain to hold the kinds...
-	d := Domain{Requires: Requires{name: "kinds", at: t.Name(), status: xResolved}}
+	d := Domain{Requires: Requires{name: "kinds", at: t.Name()}}
+	d.Resolve() // resolve the domain
 	for i, cnt := 0, len(strs); i < cnt; i += 2 {
 		a := d.EnsureKind(strs[i], "x")
 		if b := strs[i+1]; len(b) > 0 {
 			a.AddRequirement(b)
 		}
 	}
-	d.Resolve()
 	return &d
 }

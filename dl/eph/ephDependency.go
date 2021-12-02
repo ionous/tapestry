@@ -1,6 +1,10 @@
 package eph
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/ionous/errutil"
+)
 
 type Dependency interface {
 	// semi-unique name for the dependency ( uniqueness depends on type and scope of declaration )
@@ -68,4 +72,22 @@ func (d *Dependencies) Strings(fullTree bool) string {
 		b.WriteString(el.Name())
 	}
 	return b.String()
+}
+
+const Visited = errutil.Error("git.sr.ht/~ionous/iffy/dl/eph/Visited")
+
+func VisitTree(d Dependency, visit func(Dependency) error) (err error) {
+	if deps, e := d.GetDependencies(); e != nil {
+		err = e
+	} else if ancestors := deps.ancestors; len(ancestors) == 0 {
+		err = visit(d) // ugh - for testing where things may not actually have valid dependencies.
+	} else {
+		for i := len(ancestors) - 1; i >= 0; i-- {
+			if e := visit(ancestors[i]); e != nil {
+				err = e
+				break
+			}
+		}
+	}
+	return
 }

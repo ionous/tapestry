@@ -53,7 +53,7 @@ func oneOrAny(out *strings.Builder, s string) (ret string) {
 func (el *EphRelations) Phase() Phase { return AncestryPhase }
 
 func (el *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if rel, e := c.Singularize(d.name, strings.TrimSpace(el.Rel)); e != nil {
+	if rel, e := d.Singularize(strings.TrimSpace(el.Rel)); e != nil {
 		err = e
 	} else if a, b, card := el.getCard(); len(card) == 0 {
 		err = errutil.New("unknown cardinality")
@@ -111,7 +111,7 @@ func (k *relKind) getKind(c *Catalog, d *Domain) (ret string, err error) {
 	if n := strings.TrimSpace(k.name); len(n) == 0 {
 		err = errutil.New("missing name")
 	} else if k.plural {
-		ret, err = c.Singularize(d.name, n)
+		ret, err = d.Singularize(n)
 	} else {
 		ret = n
 	}

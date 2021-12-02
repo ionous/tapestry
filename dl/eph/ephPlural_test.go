@@ -50,7 +50,7 @@ func TestPluralAssembly(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl_plural}
-		if e := cat.plurals.WritePlurals(&out); e != nil {
+		if e := cat.WritePlurals(&out); e != nil {
 			// try seeing what we made
 			if diff := pretty.Diff(out[1:], testOut{
 				"a:unkindness:raven",

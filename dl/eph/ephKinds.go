@@ -52,7 +52,7 @@ func (n KindError) Unwrap() error {
 func (el *EphKinds) Phase() Phase { return AncestryPhase }
 
 func (el *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if singleKind, e := c.Singularize(d.name, strings.TrimSpace(el.Kinds)); e != nil {
+	if singleKind, e := d.Singularize(strings.TrimSpace(el.Kinds)); e != nil {
 		err = e
 	} else if newKind, ok := UniformString(singleKind); !ok {
 		err = InvalidString(el.Kinds)

@@ -4,64 +4,52 @@ import (
 	"errors"
 
 	"github.com/ionous/errutil"
+	"github.com/ionous/inflect"
 )
 
-// domain name to plural lookup
-// fix: consider moving into the domain rather than looking up the domain by name?
-type PluralTable map[string]PluralPairs
-
 // returns true if newly added
-func (pd *PluralTable) AddPair(domain, plural, singular string) (okay bool) {
-	if *pd == nil {
-		*pd = make(map[string]PluralPairs)
-	}
-	pairs := (*pd)[domain] // this is a copy
-	if pairs.AddPair(plural, singular) {
-		(*pd)[domain] = pairs // so we have to write any changes back
-		okay = true
-	}
-	return
+func (d *Domain) AddPlural(plural, singular string) (okay bool) {
+	return d.pairs.AddPair(plural, singular)
 }
 
-func (pd PluralTable) FindSingular(names DependencyFinder, domain, plural string) (ret string, err error) {
-	if s, ok := pd.findSingular(domain, plural); ok {
-		ret = s
-	} else if dep, ok := names.FindDependency(domain); !ok {
-		err = errutil.Fmt("unknown dependency %q", domain)
-	} else if requires, e := dep.GetDependencies(); e != nil {
+// use the domain rules ( and hierarchy ) to turn the passed plural into its singular form
+func (d *Domain) Singularize(plural string) (ret string, err error) {
+	if explict, e := d.FindSingluar(plural); e != nil {
 		err = e
+	} else if len(explict) > 0 {
+		ret = explict
 	} else {
-		search := requires.Ancestors()
-		for {
-			if cnt := len(search); cnt == 0 {
-				break
-			} else {
-				dep, search = search[cnt-1], search[:cnt-1]
-				if s, ok := pd.findSingular(dep.Name(), plural); ok {
-					ret = s
-					break
-				}
-			}
-		}
+		ret = inflect.Singularize(plural)
 	}
 	return
 }
 
-func (pd PluralTable) findSingular(n, plural string) (ret string, okay bool) {
-	if ps, ok := pd[n]; ok {
-		ret, okay = ps.FindSingular(plural)
+func (d *Domain) FindSingluar(plural string) (ret string, err error) {
+	if e := VisitTree(d, func(dep Dependency) (err error) {
+		scope := dep.(*Domain)
+		if n, ok := scope.pairs.FindSingular(plural); ok {
+			ret, err = n, Visited
+		}
+		return
+	}); e != nil && e != Visited {
+		err = e
 	}
 	return
 }
 
 // while it'd probably be faster to do this while we assemble,
 // keep this assembly separate from the writing produces nicer code and tests.
-func (pd PluralTable) WritePlurals(w Writer) (err error) {
-	for d, ps := range pd {
-		for i, p := range ps.plural {
-			s := ps.singular[i]
-			if e := w.Write(mdl_plural, d, p, s); e != nil {
-				err = errutil.Append(err, DomainError{d, e})
+func (c *Catalog) WritePlurals(w Writer) (err error) {
+	if deps, e := c.ResolveDomains(); e != nil {
+		err = e
+	} else {
+		for _, dep := range deps {
+			d := dep.Leaf().(*Domain)
+			for i, p := range d.pairs.plural {
+				s := d.pairs.singular[i]
+				if e := w.Write(mdl_plural, d.name, p, s); e != nil {
+					err = errutil.Append(err, DomainError{d.name, e})
+				}
 			}
 		}
 	}
@@ -81,7 +69,7 @@ func (el *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		var de DomainError
 		var conflict *Conflict
 		if e := d.AddDefinition(many, at, one); e == nil {
-			c.plurals.AddPair(d.name, many, one)
+			d.AddPlural(many, one)
 		} else if !errors.As(e, &de) || !errors.As(de.Err, &conflict) {
 			err = e // some unknown error?
 		} else {
@@ -92,7 +80,7 @@ func (el *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {
 				if d.name == de.Domain {
 					err = e
 				} else {
-					c.plurals.AddPair(d.name, many, one)
+					d.AddPlural(many, one)
 					LogWarning(e) // even though its okay, let the user know.
 				}
 			case Duplicated:

@@ -1,6 +1,10 @@
 package eph
 
-import "github.com/ionous/errutil"
+import (
+	"math"
+
+	"github.com/ionous/errutil"
+)
 
 // name of a noun to assembly info
 // ready after phase Ancestry
@@ -8,24 +12,48 @@ import "github.com/ionous/errutil"
 // fix? this is an exact copy of scopeKinds -- but its difficult to share.
 type ScopedNouns map[string]*ScopedNoun
 
-// return the uniformly named domain ( if it exists )
-// fix? move to table? ( ex. search for row "d", see if it contains "name" )
+// find the noun with the ( exact ) name in this scope
 func (d *Domain) GetNoun(name string) (ret *ScopedNoun, okay bool) {
-	if n, ok := d.nouns[name]; ok {
-		ret, okay = n, true
-	} else if deps, e := d.GetDependencies(); e != nil {
-		// if not in this domain, then maybe in a parent domain....
-		// ( dont force resolve here, if its not resolved... then stop trying )
+	if e := VisitTree(d, func(dep Dependency) (err error) {
+		scope := dep.(*Domain)
+		if n, ok := scope.nouns[name]; ok {
+			ret, okay, err = n, true, Visited
+		}
+		return
+	}); e != nil && e != Visited {
 		LogWarning(e)
-	} else {
-		list := deps.Ancestors()
-		for i, cnt := 0, len(list); i < cnt; i++ {
-			el := list[cnt-i-1].(*Domain)
-			if n, ok := el.nouns[name]; ok {
-				ret, okay = n, true
-				break
+	}
+	return
+}
+
+// find the noun with the closest name in this scope
+func (d *Domain) GetClosestNoun(name string) (ret *ScopedNoun, okay bool) {
+	bestRank, bestNoun := math.MaxInt, ret
+	if e := VisitTree(d, func(dep Dependency) (err error) {
+		scope := dep.(*Domain) // used the resolved nouns to generate a consistent ordering
+		if nouns, e := scope.resolvedNouns.GetTable(); e != nil {
+			err = e
+		} else {
+			for _, el := range nouns {
+				noun := el.Leaf().(*ScopedNoun)
+				names := noun.Names()
+				for i, cnt := 0, len(names); i < cnt && i < bestRank; i++ {
+					if name == names[i] {
+						bestRank, bestNoun = i, noun
+						// cant do better than the best
+						if i == 0 {
+							err = Visited
+							break
+						}
+					}
+				}
 			}
 		}
+		return
+	}); e != nil && e != Visited {
+		LogWarning(e)
+	} else if bestRank < math.MaxInt {
+		ret, okay = bestNoun, true
 	}
 	return
 }
@@ -46,7 +74,7 @@ func (d *Domain) EnsureNoun(name, at string) (ret *ScopedNoun) {
 	return
 }
 
-// distill a tree of nouns into a set of names and their hierarchy
+// distill the nouns from this domain into a table sorted by kind.
 func (d *Domain) ResolveNouns() (ret DependencyTable, err error) {
 	if _, e := d.ResolveKinds(); e != nil {
 		err = errutil.Append(err, e)

@@ -17,6 +17,7 @@ type Domain struct {
 	nouns     ScopedNouns
 	resolvedKinds,
 	resolvedNouns cachedTable
+	pairs PluralPairs
 }
 
 type PhaseData struct {
@@ -62,25 +63,18 @@ func (d *Domain) AddEphemera(ephAt EphAt) (err error) {
 // that would cause problems it were specified differently elsewhere.
 // ex. some in game password specified as the word "secret" in one place, but "mongoose" somewhere else.
 func (d *Domain) AddDefinition(key, at, value string) (err error) {
-	if ds, e := d.GetDependencies(); e != nil {
+	if e := VisitTree(d, func(dep Dependency) (err error) {
+		scope := dep.(*Domain)
+		if e := scope.phases[d.currPhase].defs.CheckConflict(key, value); e != nil {
+			err = DomainError{scope.name, e}
+		}
+		return
+	}); e != nil {
 		err = e
 	} else {
-		// walks the properly cased named domain's dependencies ( non-recursively ) to find
-		// whether the new key,value pair contradicts or duplicates any existing value.
-		phase := d.currPhase
-		for _, dep := range ds.FullTree() {
-			sub := dep.(*Domain) // let this panic if it fails...
-			if e := sub.phases[phase].defs.CheckConflict(key, value); e != nil {
-				err = DomainError{sub.name, e}
-				break
-			}
-		}
-		//
-		if err == nil {
-			defs := d.phases[d.currPhase]
-			defs.AddDefinition(key, Definition{at: at, value: value})
-			d.phases[d.currPhase] = defs
-		}
+		defs := d.phases[d.currPhase]
+		defs.AddDefinition(key, Definition{at: at, value: value})
+		d.phases[d.currPhase] = defs
 	}
 	return
 }

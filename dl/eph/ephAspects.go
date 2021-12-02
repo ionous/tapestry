@@ -12,7 +12,7 @@ func (el *EphAspects) Phase() Phase { return AncestryPhase }
 
 // generates traits and adds them to a custom aspect kind.
 func (el *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if singleAspect, e := c.Singularize(d.name, strings.TrimSpace(el.Aspects)); e != nil {
+	if singleAspect, e := d.Singularize(strings.TrimSpace(el.Aspects)); e != nil {
 		err = e
 	} else if aspect, ok := UniformString(singleAspect); !ok {
 		err = InvalidString(el.Aspects)

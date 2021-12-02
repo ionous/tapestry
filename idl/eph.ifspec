@@ -79,6 +79,14 @@
                 "spec": "eph {noun:text} {kind:text}",
                 "slot": "ephemera"
             },
+            "eph_grammar_alias": {
+                "spec": "eph {understand%short_name:text} {as%aliases+text}",
+                "slot": "ephemera"
+            },
+            "eph_grammar_directive": {
+                "spec": "eph {grammar%prog:text}",
+                "slot": "ephemera"
+            },
             "eph_cardinality": {
                 "uses": "swap",
                 "spec": "{one_one}, {one_many}, {many_one}, or {many_many}"

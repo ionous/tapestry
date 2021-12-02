@@ -2,27 +2,13 @@ package eph
 
 import (
 	"github.com/ionous/errutil"
-	"github.com/ionous/inflect"
 )
 
 // Catalog - receives ephemera from the importer.
 type Catalog struct {
 	domains         map[string]*Domain
 	processing      DomainStack
-	plurals         PluralTable
 	resolvedDomains cachedTable
-}
-
-// use the domain rules ( and hierarchy ) to turn the passed plural into its singular form
-func (c *Catalog) Singularize(domain, plural string) (ret string, err error) {
-	if explict, e := c.plurals.FindSingular((*catDependencyFinder)(c), domain, plural); e != nil {
-		err = e
-	} else if len(explict) > 0 {
-		ret = explict
-	} else {
-		ret = inflect.Singularize(plural)
-	}
-	return
 }
 
 // return the uniformly named domain ( if it exists )

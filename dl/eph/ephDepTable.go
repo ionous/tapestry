@@ -80,6 +80,18 @@ type cachedTable struct {
 	status error
 }
 
+// return previously resolved dependencies
+func (t *cachedTable) GetTable() (ret DependencyTable, err error) {
+	if e := t.status; e == nil {
+		err = errutil.New("dependency table not resolved")
+	} else if e != xResolved {
+		err = e
+	} else {
+		ret = t.res // okay
+	}
+	return
+}
+
 func (t *cachedTable) resolve(do func() (DependencyTable, error)) (ret DependencyTable, err error) {
 	switch t.status {
 	case xResolved:

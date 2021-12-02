@@ -34,7 +34,7 @@ func (el *EphFields) Phase() Phase { return FieldPhase }
 func (el *EphFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// hooray parameter validation
 	// note: the kinds must exist ( and are resolved if they do ) already ( re: phased processing )
-	if singleKind, e := c.Singularize(d.name, strings.TrimSpace(el.Kinds)); e != nil {
+	if singleKind, e := d.Singularize(strings.TrimSpace(el.Kinds)); e != nil {
 		err = e
 	} else if newKind, ok := UniformString(singleKind); !ok {
 		err = InvalidString(el.Kinds)

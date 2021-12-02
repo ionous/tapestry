@@ -8,21 +8,13 @@ type ScopedKinds map[string]*ScopedKind
 
 // return the uniformly named domain ( if it exists )
 func (d *Domain) GetKind(name string) (ret *ScopedKind, okay bool) {
-	if k, ok := d.kinds[name]; ok {
-		ret, okay = k, true
-	} else if deps, e := d.GetDependencies(); e != nil {
-		// if not in this domain, then maybe in a parent domain....
-		// ( dont force resolve here, if its not resolved... then stop trying )
-		LogWarning(e)
-	} else {
-		list := deps.Ancestors()
-		for i, cnt := 0, len(list); i < cnt; i++ {
-			el := list[cnt-i-1].(*Domain)
-			if k, ok := el.kinds[name]; ok {
-				ret, okay = k, true
-				break
-			}
+	if e := VisitTree(d, func(dep Dependency) (err error) {
+		if n, ok := dep.(*Domain).kinds[name]; ok {
+			ret, okay, err = n, true, Visited
 		}
+		return
+	}); e != nil && e != Visited {
+		LogWarning(e)
 	}
 	return
 }
