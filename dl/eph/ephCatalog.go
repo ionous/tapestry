@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"github.com/ionous/errutil"
 	"github.com/ionous/inflect"
 )
 
@@ -46,18 +47,6 @@ func (c *Catalog) EnsureDomain(n, at string) (ret *Domain) {
 	return
 }
 
-// work out the hierarchy of all the domains, and return them in a list.
-// the list has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
-func (c *Catalog) ResolveDomains() (DependencyTable, error) {
-	return c.resolvedDomains.resolve(func() (ret DependencyTable, err error) {
-		m := TableMaker(len(c.domains))
-		for _, d := range c.domains {
-			m.ResolveDep(d) // accumulates any errors
-		}
-		return m.GetSortedTable()
-	})
-}
-
 // walk the domains and run the commands remaining in their queues
 func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
@@ -74,12 +63,66 @@ func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
 	return
 }
 
-type partialFields struct {
+// work out the hierarchy of all the domains, and return them in a list.
+// the list has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
+func (c *Catalog) ResolveDomains() (DependencyTable, error) {
+	return c.resolvedDomains.resolve(func() (ret DependencyTable, err error) {
+		m := TableMaker(len(c.domains))
+		for _, d := range c.domains {
+			m.ResolveDep(d) // accumulates any errors
+		}
+		return m.GetSortedTable()
+	})
+}
+
+func (c *Catalog) ResolveKinds() (ret DependencyTable, err error) {
+	var out DependencyTable
+	if ds, e := c.ResolveDomains(); e != nil {
+		err = e
+	} else {
+		for _, dep := range ds {
+			d := dep.Leaf().(*Domain)
+			if ks, e := d.ResolveKinds(); e != nil {
+				err = errutil.Append(err, e)
+			} else {
+				out = append(out, ks...)
+			}
+		}
+	}
+	if err == nil {
+		ret = out
+	}
+	return
+}
+
+func (c *Catalog) ResolveNouns() (ret DependencyTable, err error) {
+	// fix? is there anyway to make this more "automatically" resolve domains and kinds?
+	var out DependencyTable
+	if ds, e := c.ResolveDomains(); e != nil {
+		err = e
+	} else {
+		for _, dep := range ds {
+			d := dep.Leaf().(*Domain)
+			if ns, e := d.ResolveNouns(); e != nil {
+				err = e
+				break
+			} else {
+				out = append(out, ns...)
+			}
+		}
+	}
+	if err == nil {
+		ret = out
+	}
+	return
+}
+
+type partialWriter struct {
 	w      Writer
 	fields []interface{}
 }
 
-func (p *partialFields) Write(q string, args ...interface{}) error {
+func (p *partialWriter) Write(q string, args ...interface{}) error {
 	return p.w.Write(q, append(p.fields, args...)...)
 }
 

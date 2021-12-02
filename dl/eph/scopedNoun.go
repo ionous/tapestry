@@ -19,3 +19,14 @@ func (n *ScopedNoun) Resolve() (ret Dependencies, err error) {
 	}
 	return
 }
+
+func (n *ScopedNoun) Kind() (ret *ScopedKind, err error) {
+	if dep, e := n.GetDependencies(); e != nil {
+		err = e
+	} else if ks := dep.Parents(); len(ks) != 1 {
+		err = errutil.Fmt("noun %q has unexpected %d parents", n.name, len(ks))
+	} else {
+		ret = ks[0].(*ScopedKind)
+	}
+	return
+}

@@ -205,8 +205,8 @@ func (el rivalFact) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	return d.AddDefinition("rivalFact", at, string(el))
 }
 
-func (cat *Catalog) resolveDomain(n string) (ret Dependencies, err error) {
-	if d, ok := cat.GetDomain(n); !ok {
+func (c *Catalog) resolveDomain(n string) (ret Dependencies, err error) {
+	if d, ok := c.GetDomain(n); !ok {
 		err = errutil.New("unknown domain", n)
 	} else {
 		ret, err = d.Resolve()

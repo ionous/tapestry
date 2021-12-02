@@ -47,21 +47,26 @@ func (d *Domain) EnsureNoun(name, at string) (ret *ScopedNoun) {
 }
 
 // distill a tree of nouns into a set of names and their hierarchy
-func (d *Domain) ResolveNouns() (DependencyTable, error) {
-	return d.resolvedNouns.resolve(func() (ret DependencyTable, err error) {
-		m := TableMaker(len(d.nouns))
-		for _, n := range d.nouns {
-			if parentName, ok := m.ResolveParent(n); ok {
-				if e := d.AddDefinition(n.name, n.at, parentName); e != nil {
-					err = errutil.Append(err, e)
+func (d *Domain) ResolveNouns() (ret DependencyTable, err error) {
+	if _, e := d.ResolveKinds(); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		ret, err = d.resolvedNouns.resolve(func() (ret DependencyTable, err error) {
+			m := TableMaker(len(d.nouns))
+			for _, n := range d.nouns {
+				if parentName, ok := m.ResolveParent(n); ok {
+					if e := d.AddDefinition(n.name, n.at, parentName); e != nil {
+						err = errutil.Append(err, e)
+					}
 				}
 			}
-		}
-		if dt, e := m.GetSortedTable(); e != nil {
-			err = errutil.Append(err, e)
-		} else {
-			ret = dt
-		}
-		return
-	})
+			if dt, e := m.GetSortedTable(); e != nil {
+				err = errutil.Append(err, e)
+			} else {
+				ret = dt
+			}
+			return
+		})
+	}
+	return
 }

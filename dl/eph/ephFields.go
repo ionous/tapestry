@@ -9,21 +9,17 @@ import (
 )
 
 //  traverse the domains and then kinds in a reasonable order
-func (cat *Catalog) WriteFields(w Writer) (err error) {
-	if ds, e := cat.ResolveDomains(); e != nil {
+func (c *Catalog) WriteFields(w Writer) (err error) {
+	if deps, e := c.ResolveKinds(); e != nil {
 		err = e
 	} else {
-		for _, dep := range ds {
-			d := dep.Leaf().(*Domain)
-			if ks, e := d.ResolveKinds(); e != nil {
-				err = e
-				break
-			} else {
-				for _, kep := range ks {
-					k := kep.Leaf().(*ScopedKind)
-					for _, f := range k.fields {
-						f.Write(&partialFields{w: w, fields: []interface{}{d.Name(), k.Name()}})
-					}
+		for _, dep := range deps {
+			k := dep.Leaf().(*ScopedKind)
+			d := k.domain // for simplicity, fields exist at the  scope of the kind: regardless of the scope of the field's declaration.
+			for _, f := range k.fields {
+				if e := f.Write(&partialWriter{w: w, fields: []interface{}{d.Name(), k.Name()}}); e != nil {
+					err = e
+					break
 				}
 			}
 		}

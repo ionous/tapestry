@@ -12,17 +12,16 @@ const (
 	KindsOfRelation = "relation"
 )
 
-//  traverse the domains and then kinds in a reasonable order
-func (cat *Catalog) WriteKinds(w Writer) (err error) {
-	if ds, e := cat.ResolveDomains(); e != nil {
+// traverse the domains and then kinds in a reasonable order
+func (c *Catalog) WriteKinds(w Writer) (err error) {
+	if deps, e := c.ResolveKinds(); e != nil {
 		err = e
 	} else {
-		for _, dep := range ds {
-			d := dep.Leaf().(*Domain)
-			if ks, e := d.ResolveKinds(); e != nil {
-				err = errutil.Append(err, e)
-			} else if e := ks.WriteTable(w, mdl_kind, false); e != nil {
-				err = errutil.Append(err, e)
+		for _, dep := range deps {
+			k, ancestors := dep.Leaf().(*ScopedKind), dep.Strings(true)
+			if e := w.Write(mdl_kind, k.domain.name, k.name, ancestors, k.at); e != nil {
+				err = e
+				break
 			}
 		}
 	}

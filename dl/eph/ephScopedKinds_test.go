@@ -25,7 +25,7 @@ func TestScopedKinds(t *testing.T) {
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
-		"k::x", "m:k:x", "j:m:x", "q:j:x", "n:k:x",
+		"a:k::x", "b:m:k:x", "c:j:m,k:x", "c:q:j,m,k:x", "c:n:k:x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -49,7 +49,7 @@ func TestScopedRedundant(t *testing.T) {
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
-		"k::x", "m:k:x", "n:m:x",
+		"a:k::x", "b:m:k:x", "c:n:m,k:x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -117,7 +117,7 @@ func TestScopedRivalsOkay(t *testing.T) {
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
-		"k::x", "m:k:x", "m:k:x",
+		"a:k::x", "b:m:k:x", "d:m:k:x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)

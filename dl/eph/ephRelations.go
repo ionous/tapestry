@@ -8,22 +8,18 @@ import (
 )
 
 func (c *Catalog) WriteRelations(w Writer) (err error) {
-	if ds, e := c.ResolveDomains(); e != nil {
+	if ks, e := c.ResolveKinds(); e != nil {
 		err = e
 	} else {
-		for _, dep := range ds {
-			d := dep.Leaf().(*Domain)
-			if ks, e := d.ResolveKinds(); e != nil {
-				err = errutil.Append(err, e)
-			} else {
-				for _, kdep := range ks {
-					if as := kdep.Parents(); len(as) > 0 && as[0].Name() == KindsOfRelation {
-						k := kdep.Leaf().(*ScopedKind)
-						one := k.fields[0]   // a field of affinity text referencing some other kind.
-						other := k.fields[1] // the name is the cardinality, and the class is the kind.
-						card := makeCard(one.name, other.name)
-						w.Write(mdl_rel, k.name, one.class, card, other.class, k.at)
-					}
+		for _, kdep := range ks {
+			if as := kdep.Parents(); len(as) > 0 && as[0].Name() == KindsOfRelation {
+				k := kdep.Leaf().(*ScopedKind)
+				one := k.fields[0]   // a field of affinity text referencing some other kind.
+				other := k.fields[1] // the name is the cardinality, and the class is the kind.
+				card := makeCard(one.name, other.name)
+				if e := w.Write(mdl_rel, k.domain.name, k.name, one.class, card, other.class, k.at); e != nil {
+					err = e
+					break
 				}
 			}
 		}

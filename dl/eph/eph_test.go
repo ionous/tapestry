@@ -16,14 +16,18 @@ func (log *testOut) Write(cat string, args ...interface{}) (err error) {
 	if len(*log) == 0 {
 		err = errutil.New("testOut not initialized")
 	} else if (*log)[0] == cat {
-		var b strings.Builder
-		for i, arg := range args {
-			if i > 0 {
-				b.WriteRune(':')
+		if argcnt, catcnt := len(args), strings.Count(cat, "?"); cat != "" && catcnt != argcnt {
+			err = errutil.Fmt("not enough parameters. want %d have %d", catcnt, argcnt)
+		} else {
+			var b strings.Builder
+			for i, arg := range args {
+				if i > 0 {
+					b.WriteRune(':')
+				}
+				b.WriteString(fmt.Sprint(arg))
 			}
-			b.WriteString(fmt.Sprint(arg))
+			(*log) = append((*log), b.String())
 		}
-		(*log) = append((*log), b.String())
 	}
 	return
 }
@@ -64,7 +68,8 @@ func (w *Warnings) shift() (err error) {
 }
 
 type domainTest struct {
-	out []Ephemera
+	out       []Ephemera
+	noShuffle bool
 }
 
 func dd(names ...string) []string {
@@ -73,8 +78,12 @@ func dd(names ...string) []string {
 
 func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 	n, req := names[0], names[1:]
-	// shuffle the order of domain dependencies
-	rand.Shuffle(len(req), func(i, j int) { req[i], req[j] = req[j], req[i] })
+	if !dt.noShuffle {
+		// shuffle the incoming ephemera
+		rand.Shuffle(len(add), func(i, j int) { add[i], add[j] = add[j], add[i] })
+		// shuffle the order of domain dependencies
+		rand.Shuffle(len(req), func(i, j int) { req[i], req[j] = req[j], req[i] })
+	}
 	dt.out = append(dt.out, &EphBeginDomain{
 		Name:     n,
 		Requires: req,

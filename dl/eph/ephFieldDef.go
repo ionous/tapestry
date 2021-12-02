@@ -3,15 +3,15 @@ package eph
 type FieldDefinition interface {
 	CheckConflict(*ScopedKind) error
 	AddToKind(*ScopedKind)
-	Write(w Writer)
+	Write(w Writer) error
 }
 
 type fieldDef struct {
 	name, affinity, class, at string
 }
 
-func (fd *fieldDef) Write(w Writer) {
-	w.Write(mdl_field, fd.name, fd.affinity, fd.class, fd.at)
+func (fd *fieldDef) Write(w Writer) error {
+	return w.Write(mdl_field, fd.name, fd.affinity, fd.class, fd.at)
 }
 
 func (fd *fieldDef) AddToKind(k *ScopedKind) {
@@ -31,6 +31,8 @@ func (fd *fieldDef) checkProps(k *ScopedKind) (err error) {
 	for _, kf := range k.fields {
 		if kf.name == fd.name {
 			var reason ReasonForConflict
+			// fix? it might be nice to treat class as a dependency
+			// then resolve to determine compatibility
 			if kf.affinity == fd.affinity && kf.class == fd.class {
 				reason = Duplicated
 			} else {

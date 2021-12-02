@@ -2,7 +2,6 @@ package eph
 
 import (
 	"sort"
-	"strings"
 
 	"github.com/ionous/errutil"
 )
@@ -66,7 +65,7 @@ func (t *tableMaker) ResolveParent(dep Dependency) (ret string, okay bool) {
 		case 1:
 			ret, okay = ps[0].Name(), true
 		default:
-			t.onerror(errutil.New(dep.Name(), "has more than one parent"))
+			t.onerror(errutil.Fmt("%q has more than one parent", dep.Name()))
 		}
 	}
 	return
@@ -147,23 +146,9 @@ func (ds DependencyTable) SortTable() {
 
 // for each domain in the passed list, output its full ancestry tree ( or just its parents )
 func (ds DependencyTable) WriteTable(w Writer, target string, fullTree bool) (err error) {
-	for _, d := range ds {
-		var list []Dependency
-		if fullTree {
-			list = d.Ancestors()
-		} else {
-			list = d.Parents()
-		}
-		var b strings.Builder
-		for i, cnt := 0, len(list); i < cnt; i++ {
-			el := list[cnt-i-1]
-			if i > 0 {
-				b.WriteRune(',')
-			}
-			b.WriteString(el.Name())
-		}
-		name, row := d.Leaf().Name(), b.String()
-		if e := w.Write(target, name, row, d.Leaf().OriginAt()); e != nil {
+	for _, dep := range ds {
+		name, row, at := dep.Leaf().Name(), dep.Strings(fullTree), dep.Leaf().OriginAt()
+		if e := w.Write(target, name, row, at); e != nil {
 			err = e
 			break
 		}

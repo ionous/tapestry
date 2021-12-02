@@ -14,8 +14,9 @@ func TestPluralAssembly(t *testing.T) {
 	var warnings Warnings
 	unwarn := warnings.catch(t)
 	defer unwarn()
-	//
-	var dt domainTest
+	// because this test picks out two warnings, one by one...
+	// we cant shuffle the statements...
+	dt := domainTest{noShuffle: true}
 	// yes, these are collective nouns not plurals... shhh...
 	dt.makeDomain(dd("a"),
 		&EphPlurals{Singular: "raven", Plural: "unkindness"},

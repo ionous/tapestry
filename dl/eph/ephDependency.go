@@ -1,5 +1,7 @@
 package eph
 
+import "strings"
+
 type Dependency interface {
 	// semi-unique name for the dependency ( uniqueness depends on type and scope of declaration )
 	Name() string
@@ -48,4 +50,22 @@ func (d *Dependencies) Leaf() (ret Dependency) {
 		ret = d.ancestors[cnt-1]
 	}
 	return
+}
+
+func (d *Dependencies) Strings(fullTree bool) string {
+	var b strings.Builder
+	var list []Dependency
+	if fullTree {
+		list = d.Ancestors()
+	} else {
+		list = d.Parents()
+	}
+	for i, cnt := 0, len(list); i < cnt; i++ {
+		el := list[cnt-i-1]
+		if i > 0 {
+			b.WriteRune(',')
+		}
+		b.WriteString(el.Name())
+	}
+	return b.String()
 }

@@ -7,10 +7,10 @@ type traitDef struct {
 	traits []string
 }
 
-func (fd *traitDef) Write(w Writer) {
+func (fd *traitDef) Write(w Writer) error {
 	// fix: this is "old" format... i really want the specific aspect as the class. (fd.aspect)
 	// table: [domain, kind], name, affinity, class, pos
-	w.Write(mdl_field, fd.aspect, Affinity_Text, KindsOfAspect, fd.at)
+	return w.Write(mdl_field, fd.aspect, Affinity_Text, KindsOfAspect, fd.at)
 }
 
 func (td *traitDef) AddToKind(k *ScopedKind) {
