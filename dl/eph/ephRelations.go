@@ -67,7 +67,7 @@ func (el *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		if e := d.AddEphemera(
 			EphAt{at, &EphFields{
 				Kinds:    rel,
-				Affinity: Affinity{Affinity_Text},
+				Affinity: a.affinity(),
 				Name:     a.short(false),
 				Class:    ak}},
 		); e != nil {
@@ -75,7 +75,7 @@ func (el *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		} else if e := d.AddEphemera(
 			EphAt{at, &EphFields{
 				Kinds:    rel,
-				Affinity: Affinity{Affinity_Text},
+				Affinity: b.affinity(),
 				Name:     b.short(true),
 				Class:    bk}},
 		); e != nil {
@@ -90,7 +90,17 @@ type relKind struct {
 	plural bool
 }
 
+func (k *relKind) affinity() (ret Affinity) {
+	if k.plural {
+		ret = Affinity{Affinity_TextList}
+	} else {
+		ret = Affinity{Affinity_Text}
+	}
+	return
+}
+
 // matches tables cardinality
+// fix? could also name the fields after the specific kind
 func (k *relKind) short(other bool) (ret string) {
 	if other {
 		if k.plural {
