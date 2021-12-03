@@ -21,6 +21,7 @@ const (
 	RelativePhase // initial relations between nouns
 	PatternPhase
 	GrammarPhase
+	DirectivePhase // more grammar
 	TestPhase
 	ReferencePhase // tdb: names used by things already built;
 	/*          */ // might be redundant if patterns, etc. are looking up the things they need
@@ -28,6 +29,7 @@ const (
 )
 
 type PhaseActions map[Phase]PhaseAction
+
 type PhaseAction struct {
 	Flags PhaseFlags
 	Do    func(d *Domain) (err error)

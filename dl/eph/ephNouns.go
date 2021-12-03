@@ -4,6 +4,13 @@ import (
 	"github.com/ionous/errutil"
 )
 
+var NounPhaseActions = PhaseAction{
+	Do: func(d *Domain) error {
+		_, e := d.ResolveNouns()
+		return e
+	},
+}
+
 func (c *Catalog) WriteNouns(w Writer) (err error) {
 	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
 		return w.Write(mdl_noun, d.name, n.name, k.name, n.at)
@@ -12,10 +19,22 @@ func (c *Catalog) WriteNouns(w Writer) (err error) {
 
 func (c *Catalog) WriteNames(w Writer) (err error) {
 	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
-		for ofs, name := range n.Names() {
-			if e := w.Write(mdl_name, d.name, n.name, name, ofs, n.at); e != nil {
-				err = e
-				break
+		{
+			const ofs = -1 // aliases are forced first, in order of declaration.
+			for i, a := range n.aliases {
+				at := n.aliasat[i]
+				if e := w.Write(mdl_name, d.name, n.name, a, ofs, at); e != nil {
+					err = e
+					break
+				}
+			}
+		}
+		if err == nil {
+			for ofs, name := range n.Names() {
+				if e := w.Write(mdl_name, d.name, n.name, name, ofs, n.at); e != nil {
+					err = e
+					break
+				}
 			}
 		}
 		return

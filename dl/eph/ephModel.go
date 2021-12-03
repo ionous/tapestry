@@ -34,3 +34,6 @@ var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 // words for authors and game players refer to nouns
 // follows the domain rules of mdl_noun.
 var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
+
+//
+var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes")

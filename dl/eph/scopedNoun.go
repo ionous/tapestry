@@ -13,6 +13,7 @@ type ScopedNoun struct {
 	domain   *Domain
 	names    []string
 	aliases  []string
+	aliasat  []string // origin of each alias
 }
 
 func (n *ScopedNoun) Resolve() (ret Dependencies, err error) {
@@ -35,6 +36,11 @@ func (n *ScopedNoun) Kind() (ret *ScopedKind, err error) {
 		ret = ks[0].(*ScopedKind)
 	}
 	return
+}
+
+func (n *ScopedNoun) AddAlias(a, at string) {
+	n.aliases = append(n.aliases, a)
+	n.aliasat = append(n.aliasat, at)
 }
 
 func (n *ScopedNoun) Names() []string {

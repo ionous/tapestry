@@ -97,6 +97,115 @@ func Affinity_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Affinity) (err err
 	return
 }
 
+// EphAliases
+// User implements: Ephemera.
+type EphAliases struct {
+	ShortName string   `if:"label=understand,type=text"`
+	Aliases   []string `if:"label=as,type=text"`
+}
+
+func (*EphAliases) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphAliases_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphAliases_Type = "eph_aliases"
+
+const EphAliases_Field_ShortName = "$SHORT_NAME"
+const EphAliases_Field_Aliases = "$ALIASES"
+
+func (op *EphAliases) Marshal(m jsn.Marshaler) error {
+	return EphAliases_Marshal(m, op)
+}
+
+type EphAliases_Slice []EphAliases
+
+func (op *EphAliases_Slice) GetType() string { return EphAliases_Type }
+
+func (op *EphAliases_Slice) Marshal(m jsn.Marshaler) error {
+	return EphAliases_Repeats_Marshal(m, (*[]EphAliases)(op))
+}
+
+func (op *EphAliases_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphAliases_Slice) SetSize(cnt int) {
+	var els []EphAliases
+	if cnt >= 0 {
+		els = make(EphAliases_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphAliases_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphAliases_Marshal(m, &(*op)[i])
+}
+
+func EphAliases_Repeats_Marshal(m jsn.Marshaler, vals *[]EphAliases) error {
+	return jsn.RepeatBlock(m, (*EphAliases_Slice)(vals))
+}
+
+func EphAliases_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphAliases) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphAliases_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphAliases_Flow struct{ ptr *EphAliases }
+
+func (n EphAliases_Flow) GetType() string      { return EphAliases_Type }
+func (n EphAliases_Flow) GetLede() string      { return "eph" }
+func (n EphAliases_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphAliases_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphAliases); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphAliases_Optional_Marshal(m jsn.Marshaler, pv **EphAliases) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphAliases_Marshal(m, *pv)
+	} else if !enc {
+		var v EphAliases
+		if err = EphAliases_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphAliases_Marshal(m jsn.Marshaler, val *EphAliases) (err error) {
+	if err = m.MarshalBlock(EphAliases_Flow{val}); err == nil {
+		e0 := m.MarshalKey("understand", EphAliases_Field_ShortName)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.ShortName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphAliases_Field_ShortName))
+		}
+		e1 := m.MarshalKey("as", EphAliases_Field_Aliases)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Repeats_Marshal(m, &val.Aliases)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphAliases_Field_Aliases))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // EphAspects A set of related object states such that exactly one member of the set is true for a given object at a single time.
 // Generates an implicit kind of 'aspect' where every field of the kind is a boolean property.
 // User implements: Ephemera.
@@ -646,6 +755,115 @@ func EphCheckPrint_Marshal(m jsn.Marshaler, val *EphCheckPrint) (err error) {
 	return
 }
 
+// EphDirectives
+// User implements: Ephemera.
+type EphDirectives struct {
+	Lede string `if:"label=parse,type=text"`
+	Prog string `if:"label=using,type=text"`
+}
+
+func (*EphDirectives) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphDirectives_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphDirectives_Type = "eph_directives"
+
+const EphDirectives_Field_Lede = "$LEDE"
+const EphDirectives_Field_Prog = "$PROG"
+
+func (op *EphDirectives) Marshal(m jsn.Marshaler) error {
+	return EphDirectives_Marshal(m, op)
+}
+
+type EphDirectives_Slice []EphDirectives
+
+func (op *EphDirectives_Slice) GetType() string { return EphDirectives_Type }
+
+func (op *EphDirectives_Slice) Marshal(m jsn.Marshaler) error {
+	return EphDirectives_Repeats_Marshal(m, (*[]EphDirectives)(op))
+}
+
+func (op *EphDirectives_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphDirectives_Slice) SetSize(cnt int) {
+	var els []EphDirectives
+	if cnt >= 0 {
+		els = make(EphDirectives_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphDirectives_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphDirectives_Marshal(m, &(*op)[i])
+}
+
+func EphDirectives_Repeats_Marshal(m jsn.Marshaler, vals *[]EphDirectives) error {
+	return jsn.RepeatBlock(m, (*EphDirectives_Slice)(vals))
+}
+
+func EphDirectives_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphDirectives) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphDirectives_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphDirectives_Flow struct{ ptr *EphDirectives }
+
+func (n EphDirectives_Flow) GetType() string      { return EphDirectives_Type }
+func (n EphDirectives_Flow) GetLede() string      { return "eph" }
+func (n EphDirectives_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphDirectives_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphDirectives); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphDirectives_Optional_Marshal(m jsn.Marshaler, pv **EphDirectives) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphDirectives_Marshal(m, *pv)
+	} else if !enc {
+		var v EphDirectives
+		if err = EphDirectives_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphDirectives_Marshal(m jsn.Marshaler, val *EphDirectives) (err error) {
+	if err = m.MarshalBlock(EphDirectives_Flow{val}); err == nil {
+		e0 := m.MarshalKey("parse", EphDirectives_Field_Lede)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Lede)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphDirectives_Field_Lede))
+		}
+		e1 := m.MarshalKey("using", EphDirectives_Field_Prog)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Prog)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphDirectives_Field_Prog))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // EphEndDomain
 // User implements: Ephemera.
 type EphEndDomain struct {
@@ -869,215 +1087,6 @@ func EphFields_Marshal(m jsn.Marshaler, val *EphFields) (err error) {
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", EphFields_Field_Class))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// EphGrammarAlias
-// User implements: Ephemera.
-type EphGrammarAlias struct {
-	ShortName string   `if:"label=understand,type=text"`
-	Aliases   []string `if:"label=as,type=text"`
-}
-
-func (*EphGrammarAlias) Compose() composer.Spec {
-	return composer.Spec{
-		Name: EphGrammarAlias_Type,
-		Uses: composer.Type_Flow,
-		Lede: "eph",
-	}
-}
-
-const EphGrammarAlias_Type = "eph_grammar_alias"
-
-const EphGrammarAlias_Field_ShortName = "$SHORT_NAME"
-const EphGrammarAlias_Field_Aliases = "$ALIASES"
-
-func (op *EphGrammarAlias) Marshal(m jsn.Marshaler) error {
-	return EphGrammarAlias_Marshal(m, op)
-}
-
-type EphGrammarAlias_Slice []EphGrammarAlias
-
-func (op *EphGrammarAlias_Slice) GetType() string { return EphGrammarAlias_Type }
-
-func (op *EphGrammarAlias_Slice) Marshal(m jsn.Marshaler) error {
-	return EphGrammarAlias_Repeats_Marshal(m, (*[]EphGrammarAlias)(op))
-}
-
-func (op *EphGrammarAlias_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *EphGrammarAlias_Slice) SetSize(cnt int) {
-	var els []EphGrammarAlias
-	if cnt >= 0 {
-		els = make(EphGrammarAlias_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *EphGrammarAlias_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphGrammarAlias_Marshal(m, &(*op)[i])
-}
-
-func EphGrammarAlias_Repeats_Marshal(m jsn.Marshaler, vals *[]EphGrammarAlias) error {
-	return jsn.RepeatBlock(m, (*EphGrammarAlias_Slice)(vals))
-}
-
-func EphGrammarAlias_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphGrammarAlias) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = EphGrammarAlias_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type EphGrammarAlias_Flow struct{ ptr *EphGrammarAlias }
-
-func (n EphGrammarAlias_Flow) GetType() string      { return EphGrammarAlias_Type }
-func (n EphGrammarAlias_Flow) GetLede() string      { return "eph" }
-func (n EphGrammarAlias_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphGrammarAlias_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphGrammarAlias); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func EphGrammarAlias_Optional_Marshal(m jsn.Marshaler, pv **EphGrammarAlias) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphGrammarAlias_Marshal(m, *pv)
-	} else if !enc {
-		var v EphGrammarAlias
-		if err = EphGrammarAlias_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func EphGrammarAlias_Marshal(m jsn.Marshaler, val *EphGrammarAlias) (err error) {
-	if err = m.MarshalBlock(EphGrammarAlias_Flow{val}); err == nil {
-		e0 := m.MarshalKey("understand", EphGrammarAlias_Field_ShortName)
-		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.ShortName)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphGrammarAlias_Field_ShortName))
-		}
-		e1 := m.MarshalKey("as", EphGrammarAlias_Field_Aliases)
-		if e1 == nil {
-			e1 = value.Text_Unboxed_Repeats_Marshal(m, &val.Aliases)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphGrammarAlias_Field_Aliases))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// EphGrammarDirective
-// User implements: Ephemera.
-type EphGrammarDirective struct {
-	Prog string `if:"label=grammar,type=text"`
-}
-
-func (*EphGrammarDirective) Compose() composer.Spec {
-	return composer.Spec{
-		Name: EphGrammarDirective_Type,
-		Uses: composer.Type_Flow,
-		Lede: "eph",
-	}
-}
-
-const EphGrammarDirective_Type = "eph_grammar_directive"
-
-const EphGrammarDirective_Field_Prog = "$PROG"
-
-func (op *EphGrammarDirective) Marshal(m jsn.Marshaler) error {
-	return EphGrammarDirective_Marshal(m, op)
-}
-
-type EphGrammarDirective_Slice []EphGrammarDirective
-
-func (op *EphGrammarDirective_Slice) GetType() string { return EphGrammarDirective_Type }
-
-func (op *EphGrammarDirective_Slice) Marshal(m jsn.Marshaler) error {
-	return EphGrammarDirective_Repeats_Marshal(m, (*[]EphGrammarDirective)(op))
-}
-
-func (op *EphGrammarDirective_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *EphGrammarDirective_Slice) SetSize(cnt int) {
-	var els []EphGrammarDirective
-	if cnt >= 0 {
-		els = make(EphGrammarDirective_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *EphGrammarDirective_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphGrammarDirective_Marshal(m, &(*op)[i])
-}
-
-func EphGrammarDirective_Repeats_Marshal(m jsn.Marshaler, vals *[]EphGrammarDirective) error {
-	return jsn.RepeatBlock(m, (*EphGrammarDirective_Slice)(vals))
-}
-
-func EphGrammarDirective_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphGrammarDirective) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = EphGrammarDirective_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type EphGrammarDirective_Flow struct{ ptr *EphGrammarDirective }
-
-func (n EphGrammarDirective_Flow) GetType() string      { return EphGrammarDirective_Type }
-func (n EphGrammarDirective_Flow) GetLede() string      { return "eph" }
-func (n EphGrammarDirective_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphGrammarDirective_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphGrammarDirective); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func EphGrammarDirective_Optional_Marshal(m jsn.Marshaler, pv **EphGrammarDirective) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphGrammarDirective_Marshal(m, *pv)
-	} else if !enc {
-		var v EphGrammarDirective
-		if err = EphGrammarDirective_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func EphGrammarDirective_Marshal(m jsn.Marshaler, val *EphGrammarDirective) (err error) {
-	if err = m.MarshalBlock(EphGrammarDirective_Flow{val}); err == nil {
-		e0 := m.MarshalKey("grammar", EphGrammarDirective_Field_Prog)
-		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Prog)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphGrammarDirective_Field_Prog))
 		}
 		m.EndBlock()
 	}
@@ -2337,15 +2346,15 @@ var Slots = []interface{}{
 
 var Slats = []composer.Composer{
 	(*Affinity)(nil),
+	(*EphAliases)(nil),
 	(*EphAspects)(nil),
 	(*EphAt)(nil),
 	(*EphBeginDomain)(nil),
 	(*EphCardinality)(nil),
 	(*EphCheckPrint)(nil),
+	(*EphDirectives)(nil),
 	(*EphEndDomain)(nil),
 	(*EphFields)(nil),
-	(*EphGrammarAlias)(nil),
-	(*EphGrammarDirective)(nil),
 	(*EphKinds)(nil),
 	(*EphList)(nil),
 	(*EphNameRef)(nil),
@@ -2360,31 +2369,31 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	18295658173337269930: (*EphAspects)(nil),          /* Eph aspects:traits: */
-	9182060341586636438:  (*EphAt)(nil),               /* Eph at:eph: */
-	12209727080993772760: (*EphBeginDomain)(nil),      /* Eph domain:requires: */
-	12717235098097470366: (*EphCardinality)(nil),      /* EphCardinality oneOne: */
-	13014334328963404635: (*EphCardinality)(nil),      /* EphCardinality oneMany: */
-	874627862825420357:   (*EphCardinality)(nil),      /* EphCardinality manyOne: */
-	18342259850011553446: (*EphCardinality)(nil),      /* EphCardinality manyMany: */
-	18354563224792793196: (*EphCheckPrint)(nil),       /* Eph check:prints: */
-	4379746949646135194:  (*EphEndDomain)(nil),        /* Eph domain: */
-	8381163068622333334:  (*EphFields)(nil),           /* Eph kinds:have:called: */
-	12374005136224423943: (*EphFields)(nil),           /* Eph kinds:have:called:of: */
-	15711422147190391894: (*EphGrammarAlias)(nil),     /* Eph understand:as: */
-	16793788128771228385: (*EphGrammarDirective)(nil), /* Eph grammar: */
-	9386889860419880175:  (*EphKinds)(nil),            /* Eph kinds:from: */
-	11648725103497180078: (*EphList)(nil),             /* Eph list: */
-	9956475014949920846:  (*EphNameRef)(nil),          /* Eph ref:of: */
-	4810543164949198614:  (*EphNouns)(nil),            /* Eph noun:kind: */
-	890409142408471553:   (*EphPlurals)(nil),          /* Eph plural:singular: */
-	9811567312656774933:  (*EphRelations)(nil),        /* Eph:relate oneOne: */
-	2078507782755484470:  (*EphRelations)(nil),        /* Eph:relate oneMany: */
-	1697062231687722288:  (*EphRelations)(nil),        /* Eph:relate manyOne: */
-	15063335060652852941: (*EphRelations)(nil),        /* Eph:relate manyMany: */
-	4420716908411308437:  (*EphRun)(nil),              /* Eph run: */
-	13111067660678472252: (*ManyMany)(nil),            /* Kinds:toKinds: */
-	15407091527463396937: (*ManyOne)(nil),             /* Kinds:toKind: */
-	8349208709908405809:  (*OneMany)(nil),             /* Kind:toKinds: */
-	11329972991603205158: (*OneOne)(nil),              /* Kind:toKind: */
+	15711422147190391894: (*EphAliases)(nil),     /* Eph understand:as: */
+	18295658173337269930: (*EphAspects)(nil),     /* Eph aspects:traits: */
+	9182060341586636438:  (*EphAt)(nil),          /* Eph at:eph: */
+	12209727080993772760: (*EphBeginDomain)(nil), /* Eph domain:requires: */
+	12717235098097470366: (*EphCardinality)(nil), /* EphCardinality oneOne: */
+	13014334328963404635: (*EphCardinality)(nil), /* EphCardinality oneMany: */
+	874627862825420357:   (*EphCardinality)(nil), /* EphCardinality manyOne: */
+	18342259850011553446: (*EphCardinality)(nil), /* EphCardinality manyMany: */
+	18354563224792793196: (*EphCheckPrint)(nil),  /* Eph check:prints: */
+	1063977366539294377:  (*EphDirectives)(nil),  /* Eph parse:using: */
+	4379746949646135194:  (*EphEndDomain)(nil),   /* Eph domain: */
+	8381163068622333334:  (*EphFields)(nil),      /* Eph kinds:have:called: */
+	12374005136224423943: (*EphFields)(nil),      /* Eph kinds:have:called:of: */
+	9386889860419880175:  (*EphKinds)(nil),       /* Eph kinds:from: */
+	11648725103497180078: (*EphList)(nil),        /* Eph list: */
+	9956475014949920846:  (*EphNameRef)(nil),     /* Eph ref:of: */
+	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
+	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
+	9811567312656774933:  (*EphRelations)(nil),   /* Eph:relate oneOne: */
+	2078507782755484470:  (*EphRelations)(nil),   /* Eph:relate oneMany: */
+	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */
+	15063335060652852941: (*EphRelations)(nil),   /* Eph:relate manyMany: */
+	4420716908411308437:  (*EphRun)(nil),         /* Eph run: */
+	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */
+	15407091527463396937: (*ManyOne)(nil),        /* Kinds:toKind: */
+	8349208709908405809:  (*OneMany)(nil),        /* Kind:toKinds: */
+	11329972991603205158: (*OneOne)(nil),         /* Kind:toKind: */
 }

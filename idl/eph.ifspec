@@ -79,12 +79,12 @@
                 "spec": "eph {noun:text} {kind:text}",
                 "slot": "ephemera"
             },
-            "eph_grammar_alias": {
+            "eph_aliases": {
                 "spec": "eph {understand%short_name:text} {as%aliases+text}",
                 "slot": "ephemera"
             },
-            "eph_grammar_directive": {
-                "spec": "eph {grammar%prog:text}",
+            "eph_directives": {
+                "spec": "eph {parse%lede:text} {using%prog:text}",
                 "slot": "ephemera"
             },
             "eph_cardinality": {

@@ -51,7 +51,7 @@ func TestNounFailure(t *testing.T) {
 		&EphNouns{Noun: "bad apple", Kind: "t"},
 	)
 	if e := writeNouns(dt, nil, nil); e == nil ||
-		e.Error() != `error writing nouns: unknown dependency "t" for noun "bad_apple"` {
+		e.Error() != `unknown dependency "t" for noun "bad_apple"` {
 		t.Fatal("unexpected failure", e)
 	} else {
 		t.Log("ok", e)
@@ -103,7 +103,7 @@ func TestNounHierarchyFailure(t *testing.T) {
 		&EphNouns{Noun: "apple", Kind: "d"},
 	)
 	if e := writeNouns(dt, nil, nil); e == nil ||
-		e.Error() != `error writing nouns: "apple" has more than one parent` {
+		e.Error() != `"apple" has more than one parent` {
 		t.Fatal("unexpected failure", e)
 	} else {
 		t.Log("ok", e)
@@ -136,18 +136,93 @@ func TestNounParts(t *testing.T) {
 	}
 }
 
+func TestNounAliases(t *testing.T) {
+	var dt domainTest
+	dt.makeDomain(dd("b"),
+		&EphKinds{Kinds: "k"},
+		&EphNouns{Noun: "toy boat", Kind: "k"},
+		&EphNouns{Noun: "apple", Kind: "k"},
+		&EphAliases{ShortName: "toy", Aliases: dd("model")},
+		&EphAliases{ShortName: "boat", Aliases: dd("ship")},
+		&EphAliases{ShortName: "apple", Aliases: dd("delicious", "fruit")},
+	)
+	names := testOut{mdl_name}
+	if e := writeNouns(dt, nil, &names); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(names[1:], testOut{
+		"b:apple:delicious:-1:x", // aliases first
+		"b:apple:fruit:-1:x",
+		"b:apple:apple:0:x",
+		"b:toy_boat:model:-1:x", // aliases first
+		"b:toy_boat:ship:-1:x",
+		"b:toy_boat:toy boat:0:x", // spaces
+		"b:toy_boat:toy_boat:1:x", // breaks
+		"b:toy_boat:boat:2:x",     // left word
+		"b:toy_boat:toy:3:x",      // right word
+	}); len(diff) > 0 {
+		t.Log("names:", pretty.Sprint(names))
+		t.Fatal(diff)
+	}
+}
+
+// simple words should pick out reasonable nouns
+func TestNounDistance(t *testing.T) {
+	var warnings Warnings
+	unwarn := warnings.catch(t)
+	defer unwarn()
+
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		&EphKinds{Kinds: "k"},
+		&EphNouns{Noun: "toy boat", Kind: "k"},
+		&EphNouns{Noun: "boat", Kind: "k"},
+	)
+	var cat Catalog
+	if e := dt.addToCat(&cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(nil); e != nil {
+		t.Fatal(e)
+	} else if _, e := cat.ResolveNouns(); e != nil {
+		t.Fatal(e)
+	} else if d, ok := cat.GetDomain("a"); !ok {
+		t.Fatal("unknown domain")
+	} else {
+		tests := []string{
+			// word(s), noun(s)
+			"toy", "toy_boat",
+			"boat", "boat",
+			"toy boat", "toy_boat",
+		}
+		for i, cnt := 0, len(tests); i < cnt; i += 2 {
+			name, want := tests[i], tests[i+1]
+			if n, ok := d.GetClosestNoun(name); !ok {
+				t.Error("couldnt get noun for name", name)
+			} else if got := n.Name(); want != got {
+				t.Errorf("wanted %q got %q", want, got)
+			}
+		}
+	}
+}
+
 func writeNouns(dt domainTest, nouns, names *testOut) (err error) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
 	} else if e := cat.AssembleCatalog(PhaseActions{
 		AncestryPhase: AncestryPhaseActions,
+		NounPhase:     NounPhaseActions,
 	}); e != nil {
 		err = e
-	} else if e := cat.WriteNouns(nouns); e != nil {
-		err = errutil.New("error writing nouns:", e)
-	} else if e := cat.WriteNames(names); e != nil {
-		err = errutil.New("error writing names:", e)
+	}
+	if nouns != nil && err == nil {
+		if e := cat.WriteNouns(nouns); e != nil {
+			err = errutil.New("error writing nouns:", e)
+		}
+	}
+	if names != nil && err == nil {
+		if e := cat.WriteNames(names); e != nil {
+			err = errutil.New("error writing names:", e)
+		}
 	}
 	return
 }
