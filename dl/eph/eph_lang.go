@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
 )
 
@@ -646,224 +645,6 @@ func EphCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphCardinali
 	return
 }
 
-// EphCheckPrint
-// User implements: Ephemera.
-type EphCheckPrint struct {
-	Name string `if:"label=check,type=text"`
-	Text string `if:"label=prints,type=text"`
-}
-
-func (*EphCheckPrint) Compose() composer.Spec {
-	return composer.Spec{
-		Name: EphCheckPrint_Type,
-		Uses: composer.Type_Flow,
-		Lede: "eph",
-	}
-}
-
-const EphCheckPrint_Type = "eph_check_print"
-
-const EphCheckPrint_Field_Name = "$NAME"
-const EphCheckPrint_Field_Text = "$TEXT"
-
-func (op *EphCheckPrint) Marshal(m jsn.Marshaler) error {
-	return EphCheckPrint_Marshal(m, op)
-}
-
-type EphCheckPrint_Slice []EphCheckPrint
-
-func (op *EphCheckPrint_Slice) GetType() string { return EphCheckPrint_Type }
-
-func (op *EphCheckPrint_Slice) Marshal(m jsn.Marshaler) error {
-	return EphCheckPrint_Repeats_Marshal(m, (*[]EphCheckPrint)(op))
-}
-
-func (op *EphCheckPrint_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *EphCheckPrint_Slice) SetSize(cnt int) {
-	var els []EphCheckPrint
-	if cnt >= 0 {
-		els = make(EphCheckPrint_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *EphCheckPrint_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphCheckPrint_Marshal(m, &(*op)[i])
-}
-
-func EphCheckPrint_Repeats_Marshal(m jsn.Marshaler, vals *[]EphCheckPrint) error {
-	return jsn.RepeatBlock(m, (*EphCheckPrint_Slice)(vals))
-}
-
-func EphCheckPrint_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphCheckPrint) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = EphCheckPrint_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type EphCheckPrint_Flow struct{ ptr *EphCheckPrint }
-
-func (n EphCheckPrint_Flow) GetType() string      { return EphCheckPrint_Type }
-func (n EphCheckPrint_Flow) GetLede() string      { return "eph" }
-func (n EphCheckPrint_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphCheckPrint_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphCheckPrint); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func EphCheckPrint_Optional_Marshal(m jsn.Marshaler, pv **EphCheckPrint) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphCheckPrint_Marshal(m, *pv)
-	} else if !enc {
-		var v EphCheckPrint
-		if err = EphCheckPrint_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func EphCheckPrint_Marshal(m jsn.Marshaler, val *EphCheckPrint) (err error) {
-	if err = m.MarshalBlock(EphCheckPrint_Flow{val}); err == nil {
-		e0 := m.MarshalKey("check", EphCheckPrint_Field_Name)
-		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphCheckPrint_Field_Name))
-		}
-		e1 := m.MarshalKey("prints", EphCheckPrint_Field_Text)
-		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Text)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphCheckPrint_Field_Text))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// EphDirectives
-// User implements: Ephemera.
-type EphDirectives struct {
-	Lede string `if:"label=parse,type=text"`
-	Prog string `if:"label=using,type=text"`
-}
-
-func (*EphDirectives) Compose() composer.Spec {
-	return composer.Spec{
-		Name: EphDirectives_Type,
-		Uses: composer.Type_Flow,
-		Lede: "eph",
-	}
-}
-
-const EphDirectives_Type = "eph_directives"
-
-const EphDirectives_Field_Lede = "$LEDE"
-const EphDirectives_Field_Prog = "$PROG"
-
-func (op *EphDirectives) Marshal(m jsn.Marshaler) error {
-	return EphDirectives_Marshal(m, op)
-}
-
-type EphDirectives_Slice []EphDirectives
-
-func (op *EphDirectives_Slice) GetType() string { return EphDirectives_Type }
-
-func (op *EphDirectives_Slice) Marshal(m jsn.Marshaler) error {
-	return EphDirectives_Repeats_Marshal(m, (*[]EphDirectives)(op))
-}
-
-func (op *EphDirectives_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *EphDirectives_Slice) SetSize(cnt int) {
-	var els []EphDirectives
-	if cnt >= 0 {
-		els = make(EphDirectives_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *EphDirectives_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphDirectives_Marshal(m, &(*op)[i])
-}
-
-func EphDirectives_Repeats_Marshal(m jsn.Marshaler, vals *[]EphDirectives) error {
-	return jsn.RepeatBlock(m, (*EphDirectives_Slice)(vals))
-}
-
-func EphDirectives_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphDirectives) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = EphDirectives_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type EphDirectives_Flow struct{ ptr *EphDirectives }
-
-func (n EphDirectives_Flow) GetType() string      { return EphDirectives_Type }
-func (n EphDirectives_Flow) GetLede() string      { return "eph" }
-func (n EphDirectives_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphDirectives_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphDirectives); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func EphDirectives_Optional_Marshal(m jsn.Marshaler, pv **EphDirectives) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphDirectives_Marshal(m, *pv)
-	} else if !enc {
-		var v EphDirectives
-		if err = EphDirectives_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func EphDirectives_Marshal(m jsn.Marshaler, val *EphDirectives) (err error) {
-	if err = m.MarshalBlock(EphDirectives_Flow{val}); err == nil {
-		e0 := m.MarshalKey("parse", EphDirectives_Field_Lede)
-		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Lede)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphDirectives_Field_Lede))
-		}
-		e1 := m.MarshalKey("using", EphDirectives_Field_Prog)
-		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Prog)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphDirectives_Field_Prog))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // EphEndDomain
 // User implements: Ephemera.
 type EphEndDomain struct {
@@ -1304,115 +1085,6 @@ func EphList_Marshal(m jsn.Marshaler, val *EphList) (err error) {
 	return
 }
 
-// EphNameRef
-// User implements: Ephemera.
-type EphNameRef struct {
-	Name string `if:"label=ref,type=text"`
-	Type string `if:"label=of,type=text"`
-}
-
-func (*EphNameRef) Compose() composer.Spec {
-	return composer.Spec{
-		Name: EphNameRef_Type,
-		Uses: composer.Type_Flow,
-		Lede: "eph",
-	}
-}
-
-const EphNameRef_Type = "eph_name_ref"
-
-const EphNameRef_Field_Name = "$NAME"
-const EphNameRef_Field_Type = "$TYPE"
-
-func (op *EphNameRef) Marshal(m jsn.Marshaler) error {
-	return EphNameRef_Marshal(m, op)
-}
-
-type EphNameRef_Slice []EphNameRef
-
-func (op *EphNameRef_Slice) GetType() string { return EphNameRef_Type }
-
-func (op *EphNameRef_Slice) Marshal(m jsn.Marshaler) error {
-	return EphNameRef_Repeats_Marshal(m, (*[]EphNameRef)(op))
-}
-
-func (op *EphNameRef_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *EphNameRef_Slice) SetSize(cnt int) {
-	var els []EphNameRef
-	if cnt >= 0 {
-		els = make(EphNameRef_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *EphNameRef_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphNameRef_Marshal(m, &(*op)[i])
-}
-
-func EphNameRef_Repeats_Marshal(m jsn.Marshaler, vals *[]EphNameRef) error {
-	return jsn.RepeatBlock(m, (*EphNameRef_Slice)(vals))
-}
-
-func EphNameRef_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphNameRef) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = EphNameRef_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type EphNameRef_Flow struct{ ptr *EphNameRef }
-
-func (n EphNameRef_Flow) GetType() string      { return EphNameRef_Type }
-func (n EphNameRef_Flow) GetLede() string      { return "eph" }
-func (n EphNameRef_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphNameRef_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphNameRef); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func EphNameRef_Optional_Marshal(m jsn.Marshaler, pv **EphNameRef) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphNameRef_Marshal(m, *pv)
-	} else if !enc {
-		var v EphNameRef
-		if err = EphNameRef_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func EphNameRef_Marshal(m jsn.Marshaler, val *EphNameRef) (err error) {
-	if err = m.MarshalBlock(EphNameRef_Flow{val}); err == nil {
-		e0 := m.MarshalKey("ref", EphNameRef_Field_Name)
-		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphNameRef_Field_Name))
-		}
-		e1 := m.MarshalKey("of", EphNameRef_Field_Type)
-		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Type)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphNameRef_Field_Type))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // EphNouns
 // User implements: Ephemera.
 type EphNouns struct {
@@ -1633,6 +1305,124 @@ func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
 	return
 }
 
+// EphPrograms
+// User implements: Ephemera.
+type EphPrograms struct {
+	Name string `if:"label=go,type=text"`
+	Type string `if:"label=run,type=text"`
+	Prog string `if:"label=using,type=text"`
+}
+
+func (*EphPrograms) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphPrograms_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphPrograms_Type = "eph_programs"
+
+const EphPrograms_Field_Name = "$NAME"
+const EphPrograms_Field_Type = "$TYPE"
+const EphPrograms_Field_Prog = "$PROG"
+
+func (op *EphPrograms) Marshal(m jsn.Marshaler) error {
+	return EphPrograms_Marshal(m, op)
+}
+
+type EphPrograms_Slice []EphPrograms
+
+func (op *EphPrograms_Slice) GetType() string { return EphPrograms_Type }
+
+func (op *EphPrograms_Slice) Marshal(m jsn.Marshaler) error {
+	return EphPrograms_Repeats_Marshal(m, (*[]EphPrograms)(op))
+}
+
+func (op *EphPrograms_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphPrograms_Slice) SetSize(cnt int) {
+	var els []EphPrograms
+	if cnt >= 0 {
+		els = make(EphPrograms_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphPrograms_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphPrograms_Marshal(m, &(*op)[i])
+}
+
+func EphPrograms_Repeats_Marshal(m jsn.Marshaler, vals *[]EphPrograms) error {
+	return jsn.RepeatBlock(m, (*EphPrograms_Slice)(vals))
+}
+
+func EphPrograms_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphPrograms) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphPrograms_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphPrograms_Flow struct{ ptr *EphPrograms }
+
+func (n EphPrograms_Flow) GetType() string      { return EphPrograms_Type }
+func (n EphPrograms_Flow) GetLede() string      { return "eph" }
+func (n EphPrograms_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphPrograms_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphPrograms); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphPrograms_Optional_Marshal(m jsn.Marshaler, pv **EphPrograms) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphPrograms_Marshal(m, *pv)
+	} else if !enc {
+		var v EphPrograms
+		if err = EphPrograms_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphPrograms_Marshal(m jsn.Marshaler, val *EphPrograms) (err error) {
+	if err = m.MarshalBlock(EphPrograms_Flow{val}); err == nil {
+		e0 := m.MarshalKey("go", EphPrograms_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphPrograms_Field_Name))
+		}
+		e1 := m.MarshalKey("run", EphPrograms_Field_Type)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Type)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphPrograms_Field_Type))
+		}
+		e2 := m.MarshalKey("using", EphPrograms_Field_Prog)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Marshal(m, &val.Prog)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphPrograms_Field_Prog))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // EphRelations
 // User implements: Ephemera.
 type EphRelations struct {
@@ -1736,106 +1526,6 @@ func EphRelations_Marshal(m jsn.Marshaler, val *EphRelations) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphRelations_Field_Cardinality))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// EphRun
-// User implements: Ephemera.
-type EphRun struct {
-	Run []rt.Execute `if:"label=run"`
-}
-
-func (*EphRun) Compose() composer.Spec {
-	return composer.Spec{
-		Name: EphRun_Type,
-		Uses: composer.Type_Flow,
-		Lede: "eph",
-	}
-}
-
-const EphRun_Type = "eph_run"
-
-const EphRun_Field_Run = "$RUN"
-
-func (op *EphRun) Marshal(m jsn.Marshaler) error {
-	return EphRun_Marshal(m, op)
-}
-
-type EphRun_Slice []EphRun
-
-func (op *EphRun_Slice) GetType() string { return EphRun_Type }
-
-func (op *EphRun_Slice) Marshal(m jsn.Marshaler) error {
-	return EphRun_Repeats_Marshal(m, (*[]EphRun)(op))
-}
-
-func (op *EphRun_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *EphRun_Slice) SetSize(cnt int) {
-	var els []EphRun
-	if cnt >= 0 {
-		els = make(EphRun_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *EphRun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphRun_Marshal(m, &(*op)[i])
-}
-
-func EphRun_Repeats_Marshal(m jsn.Marshaler, vals *[]EphRun) error {
-	return jsn.RepeatBlock(m, (*EphRun_Slice)(vals))
-}
-
-func EphRun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphRun) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = EphRun_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type EphRun_Flow struct{ ptr *EphRun }
-
-func (n EphRun_Flow) GetType() string      { return EphRun_Type }
-func (n EphRun_Flow) GetLede() string      { return "eph" }
-func (n EphRun_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphRun_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphRun); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func EphRun_Optional_Marshal(m jsn.Marshaler, pv **EphRun) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphRun_Marshal(m, *pv)
-	} else if !enc {
-		var v EphRun
-		if err = EphRun_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func EphRun_Marshal(m jsn.Marshaler, val *EphRun) (err error) {
-	if err = m.MarshalBlock(EphRun_Flow{val}); err == nil {
-		e0 := m.MarshalKey("run", EphRun_Field_Run)
-		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Run)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphRun_Field_Run))
 		}
 		m.EndBlock()
 	}
@@ -2351,17 +2041,14 @@ var Slats = []composer.Composer{
 	(*EphAt)(nil),
 	(*EphBeginDomain)(nil),
 	(*EphCardinality)(nil),
-	(*EphCheckPrint)(nil),
-	(*EphDirectives)(nil),
 	(*EphEndDomain)(nil),
 	(*EphFields)(nil),
 	(*EphKinds)(nil),
 	(*EphList)(nil),
-	(*EphNameRef)(nil),
 	(*EphNouns)(nil),
 	(*EphPlurals)(nil),
+	(*EphPrograms)(nil),
 	(*EphRelations)(nil),
-	(*EphRun)(nil),
 	(*ManyMany)(nil),
 	(*ManyOne)(nil),
 	(*OneMany)(nil),
@@ -2377,21 +2064,18 @@ var Signatures = map[uint64]interface{}{
 	13014334328963404635: (*EphCardinality)(nil), /* EphCardinality oneMany: */
 	874627862825420357:   (*EphCardinality)(nil), /* EphCardinality manyOne: */
 	18342259850011553446: (*EphCardinality)(nil), /* EphCardinality manyMany: */
-	18354563224792793196: (*EphCheckPrint)(nil),  /* Eph check:prints: */
-	1063977366539294377:  (*EphDirectives)(nil),  /* Eph parse:using: */
 	4379746949646135194:  (*EphEndDomain)(nil),   /* Eph domain: */
 	8381163068622333334:  (*EphFields)(nil),      /* Eph kinds:have:called: */
 	12374005136224423943: (*EphFields)(nil),      /* Eph kinds:have:called:of: */
 	9386889860419880175:  (*EphKinds)(nil),       /* Eph kinds:from: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
-	9956475014949920846:  (*EphNameRef)(nil),     /* Eph ref:of: */
 	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
 	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
+	17377027355382879147: (*EphPrograms)(nil),    /* Eph go:run:using: */
 	9811567312656774933:  (*EphRelations)(nil),   /* Eph:relate oneOne: */
 	2078507782755484470:  (*EphRelations)(nil),   /* Eph:relate oneMany: */
 	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */
 	15063335060652852941: (*EphRelations)(nil),   /* Eph:relate manyMany: */
-	4420716908411308437:  (*EphRun)(nil),         /* Eph run: */
 	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */
 	15407091527463396937: (*ManyOne)(nil),        /* Kinds:toKind: */
 	8349208709908405809:  (*OneMany)(nil),        /* Kind:toKinds: */

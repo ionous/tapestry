@@ -36,18 +36,6 @@
                     "and at runtime to help the parser interpret user input."
                 ]
             },
-            "eph_name_ref": {
-                "spec": "eph {ref%name:text} {of%type:text}",
-                "slot": "ephemera"
-            },
-            "eph_check_print": {
-                "spec": "eph {check%name:text} {prints%text:text}",
-                "slot": "ephemera"
-            },
-            "eph_run": {
-                "spec": "eph {run+execute}",
-                "slot": "ephemera"
-            },
             "eph_aspects": {
                 "spec": "eph {aspects:text} {traits+text}",
                 "slot": "ephemera",
@@ -83,8 +71,8 @@
                 "spec": "eph {understand%short_name:text} {as%aliases+text}",
                 "slot": "ephemera"
             },
-            "eph_directives": {
-                "spec": "eph {parse%lede:text} {using%prog:text}",
+            "eph_programs": {
+                "spec": "eph {go%name:text} {run%type:text} {using%prog:text}",
                 "slot": "ephemera"
             },
             "eph_cardinality": {

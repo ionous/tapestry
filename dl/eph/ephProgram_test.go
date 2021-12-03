@@ -11,8 +11,9 @@ import (
 func TestGrammarDirectives(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("b"),
-		&EphDirectives{
-			Lede: `jump/skip/hop`,
+		&EphPrograms{
+			Name: `jump/skip/hop`,
+			Type: `Directive`,
 			Prog: `{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}`,
 		},
 	)
@@ -32,5 +33,4 @@ func TestGrammarDirectives(t *testing.T) {
 			t.Fatal(diff)
 		}
 	}
-
 }
