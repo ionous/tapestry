@@ -36,4 +36,4 @@ var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
 
 //
-var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes")
+var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes", "at")

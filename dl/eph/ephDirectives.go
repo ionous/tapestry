@@ -19,20 +19,19 @@ func (c *Catalog) WriteDirectives(w Writer) (err error) {
 
 func (d *Domain) WriteDirectives(w Writer) (err error) {
 	defs := d.phases[DirectivePhase].defs
-	for k, v := range defs {
-		if e := w.Write(mdl_prog, k, "Directive", v); e != nil {
+	for k, def := range defs {
+		if e := w.Write(mdl_prog, k, "Directive", def.value, def.at); e != nil {
 			err = e
 			break
 		}
 	}
 	return
-
 }
 
 // we give it its own phase so we can keep its definitions separated out.
 func (el *EphDirectives) Phase() Phase { return DirectivePhase }
 
-// jump/skip/hop	Directive	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
+// jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
 func (el *EphDirectives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// fix? the original code decoded the grammar here and invented the lede from it
 	// that would require us doing some work on the compact reader to separate story dependencies
