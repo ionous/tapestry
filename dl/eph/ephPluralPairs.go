@@ -18,7 +18,7 @@ func (ps PluralPairs) FindSingular(plural string) (ret string, okay bool) {
 	}
 	return
 }
-func (ps PluralPairs) AddPair(plural, singular string) (okay bool) {
+func (ps *PluralPairs) AddPair(plural, singular string) (okay bool) {
 	if len(plural) > 0 && len(singular) > 0 {
 		// is the pairing unique?
 		_, havep := find(plural, ps.plural)

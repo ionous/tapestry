@@ -47,7 +47,9 @@ func (c *Catalog) WritePlurals(w Writer) (err error) {
 			d := dep.Leaf().(*Domain)
 			for i, p := range d.pairs.plural {
 				s := d.pairs.singular[i]
-				if e := w.Write(mdl_plural, d.name, p, s); e != nil {
+				defs := d.phases[PluralPhase].defs
+				at := defs[p].at
+				if e := w.Write(mdl_plural, d.name, p, s, at); e != nil {
 					err = errutil.Append(err, DomainError{d.name, e})
 				}
 			}
@@ -81,6 +83,13 @@ func (el *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {
 					err = e
 				} else {
 					d.AddPlural(many, one)
+					// FIX! see Domain.AddDefinition
+					// the earlier "AddDefinition" doesnt actually add it because this is a redefinition
+					// *but* we actually do want that information....
+					defs := d.phases[d.currPhase]
+					defs.AddDefinition(many, Definition{at: at, value: one})
+					d.phases[d.currPhase] = defs
+					//
 					LogWarning(e) // even though its okay, let the user know.
 				}
 			case Duplicated:

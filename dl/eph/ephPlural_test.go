@@ -51,16 +51,17 @@ func TestPluralAssembly(t *testing.T) {
 	} else {
 		out := testOut{mdl_plural}
 		if e := cat.WritePlurals(&out); e != nil {
-			// try seeing what we made
+			t.Fatal(e)
+		} else {
 			if diff := pretty.Diff(out[1:], testOut{
-				"a:unkindness:raven",
-				"a:cloud:bat",
-				"a:cauldron:bat",
-				"b:school:fish",
+				"a:unkindness:raven:x",
+				"a:cloud:bat:x",
+				"a:cauldron:bat:x",
+				"b:school:fish:x",
 				// we dont expect to see our duplicated definition of cauldron of bat(s)
 				// we do expect that it's okay to redefine the collective "witch" as "unkindness"
 				// ( wicca good and love the earth, and i'll be over here. )
-				"c:unkindness:witch",
+				"c:unkindness:witch:x",
 			}); len(diff) > 0 {
 				t.Log(pretty.Sprint(out))
 				t.Fatal(diff)
@@ -74,7 +75,7 @@ func okDomainConflict(d string, y ReasonForConflict, e error) (err error) {
 	var conflict *Conflict
 	if !errors.As(e, &de) || de.Domain != d ||
 		!errors.As(de.Err, &conflict) || conflict.Reason != y {
-		err = errutil.New("unexpected warning", e)
+		err = errutil.New("unexpected warning:", e)
 	}
 	return
 }
