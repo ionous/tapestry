@@ -63,6 +63,14 @@
                     "while 'class' is used to indicate an interpretation of that field, for example a reference to a kind."
                 ]
             },
+            "eph_params": {
+                "spec": "eph {have%affinity:affinity} {called%name:text} {of%class?text}",
+                "slot": "ephemera",
+                "desc": [
+                    "'Affinity' designates the storage type of a given parameter",
+                    "while 'class' is used to indicate an interpretation of that parameter, for example a reference to a kind."
+                ]
+            },
             "eph_nouns": {
                 "spec": "eph {noun:text} {kind:text}",
                 "slot": "ephemera"
@@ -74,6 +82,18 @@
             "eph_programs": {
                 "spec": "eph {go%name:text} {run%type:text} {using%prog:text}",
                 "slot": "ephemera"
+            },
+            "eph_patterns": {
+                "spec": "eph {pattern%name:text} {args*eph_params} {locals*eph_params} {return?eph_params}",
+                "slot": "ephemera",
+                "desc": [
+                    "Patterns provide author reusable code.",
+                    "Arguments define values provided by the caller.",
+                    "Locals provide scratch values for use during pattern processing.",
+                    "The return allows the pattern to hand back a value to the caller of pattern.",
+                    "While multiple pattern commands can be used to define a pattern,",
+                    "the set of arguments and the return can only be specified once."
+                ]
             },
             "eph_cardinality": {
                 "uses": "swap",

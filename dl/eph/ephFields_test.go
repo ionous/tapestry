@@ -98,7 +98,7 @@ func TestFieldsConflict(t *testing.T) {
 	if _, e := buildFields(dt); e == nil {
 		t.Fatal("expected error")
 	} else if e := okDomainConflict("a", Redefined, e); e != nil {
-		t.Fatal("expected a different error", e)
+		t.Fatal(e)
 	} else {
 		t.Log("ok:", e)
 	}
@@ -156,9 +156,9 @@ func TestFieldsMismatchingRivals(t *testing.T) {
 	)
 	// dt.makeDomain(dd("z", "c", "d")) <-- fails even without this.
 	if _, e := buildFields(dt); e == nil {
-		t.Fatal("expected error")
+		t.Fatal("expected error, got:")
 	} else if e := okDomainConflict("a", Redefined, e); e != nil {
-		t.Fatal("expected a different error", e)
+		t.Fatal(e)
 	} else {
 		t.Log("ok:", e)
 	}
@@ -174,7 +174,7 @@ func TestFieldsUnknownClass(t *testing.T) {
 	dt.makeDomain(dd("c", "a"),
 		&EphKinds{Kinds: "m"},
 	)
-	if _, e := buildFields(dt); e == nil || e.Error() != `unknown field class m for kind "k" in domain "a"` {
+	if _, e := buildFields(dt); e == nil || e.Error() != `unknown class "m" for field "t" for kind "k"` {
 		t.Fatal("expected error", e)
 	} else {
 		t.Log("ok:", e)

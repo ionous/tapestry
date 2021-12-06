@@ -1194,6 +1194,257 @@ func EphNouns_Marshal(m jsn.Marshaler, val *EphNouns) (err error) {
 	return
 }
 
+// EphParams 'Affinity' designates the storage type of a given parameter
+// while 'class' is used to indicate an interpretation of that parameter, for example a reference to a kind.
+// User implements: Ephemera.
+type EphParams struct {
+	Affinity Affinity `if:"label=have"`
+	Name     string   `if:"label=called,type=text"`
+	Class    string   `if:"label=of,optional,type=text"`
+}
+
+func (*EphParams) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphParams_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphParams_Type = "eph_params"
+
+const EphParams_Field_Affinity = "$AFFINITY"
+const EphParams_Field_Name = "$NAME"
+const EphParams_Field_Class = "$CLASS"
+
+func (op *EphParams) Marshal(m jsn.Marshaler) error {
+	return EphParams_Marshal(m, op)
+}
+
+type EphParams_Slice []EphParams
+
+func (op *EphParams_Slice) GetType() string { return EphParams_Type }
+
+func (op *EphParams_Slice) Marshal(m jsn.Marshaler) error {
+	return EphParams_Repeats_Marshal(m, (*[]EphParams)(op))
+}
+
+func (op *EphParams_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphParams_Slice) SetSize(cnt int) {
+	var els []EphParams
+	if cnt >= 0 {
+		els = make(EphParams_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphParams_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphParams_Marshal(m, &(*op)[i])
+}
+
+func EphParams_Repeats_Marshal(m jsn.Marshaler, vals *[]EphParams) error {
+	return jsn.RepeatBlock(m, (*EphParams_Slice)(vals))
+}
+
+func EphParams_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphParams) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphParams_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphParams_Flow struct{ ptr *EphParams }
+
+func (n EphParams_Flow) GetType() string      { return EphParams_Type }
+func (n EphParams_Flow) GetLede() string      { return "eph" }
+func (n EphParams_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphParams_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphParams); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphParams_Optional_Marshal(m jsn.Marshaler, pv **EphParams) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphParams_Marshal(m, *pv)
+	} else if !enc {
+		var v EphParams
+		if err = EphParams_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
+	if err = m.MarshalBlock(EphParams_Flow{val}); err == nil {
+		e0 := m.MarshalKey("have", EphParams_Field_Affinity)
+		if e0 == nil {
+			e0 = Affinity_Marshal(m, &val.Affinity)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphParams_Field_Affinity))
+		}
+		e1 := m.MarshalKey("called", EphParams_Field_Name)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphParams_Field_Name))
+		}
+		e2 := m.MarshalKey("of", EphParams_Field_Class)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Optional_Marshal(m, &val.Class)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphParams_Field_Class))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// EphPatterns Patterns provide author reusable code.
+// Arguments define values provided by the caller.
+// Locals provide scratch values for use during pattern processing.
+// The return allows the pattern to hand back a value to the caller of pattern.
+// While multiple pattern commands can be used to define a pattern,
+// the set of arguments and the return can only be specified once.
+// User implements: Ephemera.
+type EphPatterns struct {
+	Name   string      `if:"label=pattern,type=text"`
+	Args   []EphParams `if:"label=args,optional"`
+	Locals []EphParams `if:"label=locals,optional"`
+	Return *EphParams  `if:"label=return,optional"`
+}
+
+func (*EphPatterns) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphPatterns_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphPatterns_Type = "eph_patterns"
+
+const EphPatterns_Field_Name = "$NAME"
+const EphPatterns_Field_Args = "$ARGS"
+const EphPatterns_Field_Locals = "$LOCALS"
+const EphPatterns_Field_Return = "$RETURN"
+
+func (op *EphPatterns) Marshal(m jsn.Marshaler) error {
+	return EphPatterns_Marshal(m, op)
+}
+
+type EphPatterns_Slice []EphPatterns
+
+func (op *EphPatterns_Slice) GetType() string { return EphPatterns_Type }
+
+func (op *EphPatterns_Slice) Marshal(m jsn.Marshaler) error {
+	return EphPatterns_Repeats_Marshal(m, (*[]EphPatterns)(op))
+}
+
+func (op *EphPatterns_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphPatterns_Slice) SetSize(cnt int) {
+	var els []EphPatterns
+	if cnt >= 0 {
+		els = make(EphPatterns_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphPatterns_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphPatterns_Marshal(m, &(*op)[i])
+}
+
+func EphPatterns_Repeats_Marshal(m jsn.Marshaler, vals *[]EphPatterns) error {
+	return jsn.RepeatBlock(m, (*EphPatterns_Slice)(vals))
+}
+
+func EphPatterns_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphPatterns) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphPatterns_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphPatterns_Flow struct{ ptr *EphPatterns }
+
+func (n EphPatterns_Flow) GetType() string      { return EphPatterns_Type }
+func (n EphPatterns_Flow) GetLede() string      { return "eph" }
+func (n EphPatterns_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphPatterns_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphPatterns); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphPatterns_Optional_Marshal(m jsn.Marshaler, pv **EphPatterns) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphPatterns_Marshal(m, *pv)
+	} else if !enc {
+		var v EphPatterns
+		if err = EphPatterns_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphPatterns_Marshal(m jsn.Marshaler, val *EphPatterns) (err error) {
+	if err = m.MarshalBlock(EphPatterns_Flow{val}); err == nil {
+		e0 := m.MarshalKey("pattern", EphPatterns_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphPatterns_Field_Name))
+		}
+		e1 := m.MarshalKey("args", EphPatterns_Field_Args)
+		if e1 == nil {
+			e1 = EphParams_Optional_Repeats_Marshal(m, &val.Args)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphPatterns_Field_Args))
+		}
+		e2 := m.MarshalKey("locals", EphPatterns_Field_Locals)
+		if e2 == nil {
+			e2 = EphParams_Optional_Repeats_Marshal(m, &val.Locals)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphPatterns_Field_Locals))
+		}
+		e3 := m.MarshalKey("return", EphPatterns_Field_Return)
+		if e3 == nil {
+			e3 = EphParams_Optional_Marshal(m, &val.Return)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", EphPatterns_Field_Return))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // EphPlurals Rules for transforming plural text to singular text and back again.
 // Used by the assembler to help interpret author definitions,
 // and at runtime to help the parser interpret user input.
@@ -2046,6 +2297,8 @@ var Slats = []composer.Composer{
 	(*EphKinds)(nil),
 	(*EphList)(nil),
 	(*EphNouns)(nil),
+	(*EphParams)(nil),
+	(*EphPatterns)(nil),
 	(*EphPlurals)(nil),
 	(*EphPrograms)(nil),
 	(*EphRelations)(nil),
@@ -2070,6 +2323,16 @@ var Signatures = map[uint64]interface{}{
 	9386889860419880175:  (*EphKinds)(nil),       /* Eph kinds:from: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
 	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
+	12259359132675429189: (*EphParams)(nil),      /* Eph have:called: */
+	277028977564474262:   (*EphParams)(nil),      /* Eph have:called:of: */
+	1611161010098549912:  (*EphPatterns)(nil),    /* Eph pattern: */
+	14764503916681519581: (*EphPatterns)(nil),    /* Eph pattern:args: */
+	7324201728182884878:  (*EphPatterns)(nil),    /* Eph pattern:locals: */
+	11512083512716742729: (*EphPatterns)(nil),    /* Eph pattern:args:locals: */
+	11252849383664709948: (*EphPatterns)(nil),    /* Eph pattern:return: */
+	13754500090075776327: (*EphPatterns)(nil),    /* Eph pattern:args:return: */
+	386808170159152854:   (*EphPatterns)(nil),    /* Eph pattern:locals:return: */
+	10703276746650528267: (*EphPatterns)(nil),    /* Eph pattern:args:locals:return: */
 	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
 	17377027355382879147: (*EphPrograms)(nil),    /* Eph go:run:using: */
 	9811567312656774933:  (*EphRelations)(nil),   /* Eph:relate oneOne: */

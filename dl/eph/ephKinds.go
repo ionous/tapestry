@@ -10,9 +10,10 @@ const (
 	KindsOfAspect   = "aspect"
 	KindsOfRecord   = "record"
 	KindsOfRelation = "relation"
+	KindsOfPattern  = "pattern"
 )
 
-// traverse the domains and then kinds in a reasonable order
+// write the kinds in a reasonable order
 func (c *Catalog) WriteKinds(w Writer) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
 		err = e

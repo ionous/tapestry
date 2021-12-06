@@ -40,19 +40,39 @@ func (el *EphFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = InvalidString(el.Kinds)
 	} else if kind, ok := d.GetKind(newKind); !ok {
 		err = errutil.New("unknown kind", newKind)
-	} else if name, ok := UniformString(el.Name); !ok {
+	} else if param, e := MakeUniformField(EphParams{Affinity: el.Affinity, Name: el.Name, Class: el.Class}); e != nil {
+		err = e
+	} else if e := param.AssembleField(kind, at); e != nil {
+		err = e // hrm.
+	}
+	return
+}
+
+type UniformField struct {
+	name, affinity, class string
+}
+
+func MakeUniformField(el EphParams) (ret UniformField, err error) {
+	if name, ok := UniformString(el.Name); !ok {
 		err = InvalidString(el.Name)
 	} else if aff, ok := composer.FindChoice(&el.Affinity, el.Affinity.Str); !ok && len(el.Affinity.Str) > 0 {
 		err = errutil.New("unknown affinity", aff)
 	} else if class, ok := UniformString(el.Class); !ok && len(el.Class) > 0 {
-		err = DomainError{d.name, KindError{kind.name, InvalidString(el.Class)}}
-	} else if _, ok := d.GetKind(class); !ok && len(class) > 0 {
-		err = DomainError{d.name, KindError{kind.name, errutil.New("unknown field class", class)}}
+		err = InvalidString(el.Class)
+	} else {
+		ret = UniformField{name, aff, class}
+	}
+	return
+}
+
+func (el *UniformField) AssembleField(kind *ScopedKind, at string) (err error) {
+	if _, ok := kind.domain.GetKind(el.class); !ok && len(el.class) > 0 {
+		err = KindError{kind.name, errutil.Fmt("unknown class %q for field %q", el.class, el.name)}
 	} else {
 		// checks for conflicts, allows duplicates.
 		var conflict *Conflict
 		if e := kind.AddField(&fieldDef{
-			name: name, affinity: aff, class: class, at: at,
+			name: el.name, affinity: el.affinity, class: el.class, at: at,
 		}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
 			LogWarning(e) // warn if it was a duplicated definition
 		} else {
