@@ -84,13 +84,13 @@
                 "slot": "ephemera"
             },
             "eph_patterns": {
-                "spec": "eph {pattern%name:text} {args*eph_params} {locals*eph_params} {return?eph_params}",
+                "spec": "eph {pattern%name:text} {args*eph_params} {locals*eph_params} {result?eph_params}",
                 "slot": "ephemera",
                 "desc": [
                     "Patterns provide author reusable code.",
                     "Arguments define values provided by the caller.",
                     "Locals provide scratch values for use during pattern processing.",
-                    "The return allows the pattern to hand back a value to the caller of pattern.",
+                    "The result allows the pattern to return a value to the caller of pattern.",
                     "While multiple pattern commands can be used to define a pattern,",
                     "the set of arguments and the return can only be specified once."
                 ]

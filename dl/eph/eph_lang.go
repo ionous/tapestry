@@ -1316,7 +1316,7 @@ func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
 // EphPatterns Patterns provide author reusable code.
 // Arguments define values provided by the caller.
 // Locals provide scratch values for use during pattern processing.
-// The return allows the pattern to hand back a value to the caller of pattern.
+// The result allows the pattern to return a value to the caller of pattern.
 // While multiple pattern commands can be used to define a pattern,
 // the set of arguments and the return can only be specified once.
 // User implements: Ephemera.
@@ -1324,7 +1324,7 @@ type EphPatterns struct {
 	Name   string      `if:"label=pattern,type=text"`
 	Args   []EphParams `if:"label=args,optional"`
 	Locals []EphParams `if:"label=locals,optional"`
-	Return *EphParams  `if:"label=return,optional"`
+	Result *EphParams  `if:"label=result,optional"`
 }
 
 func (*EphPatterns) Compose() composer.Spec {
@@ -1340,7 +1340,7 @@ const EphPatterns_Type = "eph_patterns"
 const EphPatterns_Field_Name = "$NAME"
 const EphPatterns_Field_Args = "$ARGS"
 const EphPatterns_Field_Locals = "$LOCALS"
-const EphPatterns_Field_Return = "$RETURN"
+const EphPatterns_Field_Result = "$RESULT"
 
 func (op *EphPatterns) Marshal(m jsn.Marshaler) error {
 	return EphPatterns_Marshal(m, op)
@@ -1433,12 +1433,12 @@ func EphPatterns_Marshal(m jsn.Marshaler, val *EphPatterns) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EphPatterns_Field_Locals))
 		}
-		e3 := m.MarshalKey("return", EphPatterns_Field_Return)
+		e3 := m.MarshalKey("result", EphPatterns_Field_Result)
 		if e3 == nil {
-			e3 = EphParams_Optional_Marshal(m, &val.Return)
+			e3 = EphParams_Optional_Marshal(m, &val.Result)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", EphPatterns_Field_Return))
+			m.Error(errutil.New(e3, "in flow at", EphPatterns_Field_Result))
 		}
 		m.EndBlock()
 	}
@@ -2329,10 +2329,10 @@ var Signatures = map[uint64]interface{}{
 	14764503916681519581: (*EphPatterns)(nil),    /* Eph pattern:args: */
 	7324201728182884878:  (*EphPatterns)(nil),    /* Eph pattern:locals: */
 	11512083512716742729: (*EphPatterns)(nil),    /* Eph pattern:args:locals: */
-	11252849383664709948: (*EphPatterns)(nil),    /* Eph pattern:return: */
-	13754500090075776327: (*EphPatterns)(nil),    /* Eph pattern:args:return: */
-	386808170159152854:   (*EphPatterns)(nil),    /* Eph pattern:locals:return: */
-	10703276746650528267: (*EphPatterns)(nil),    /* Eph pattern:args:locals:return: */
+	14244437562331442113: (*EphPatterns)(nil),    /* Eph pattern:result: */
+	8685621910062338690:  (*EphPatterns)(nil),    /* Eph pattern:args:result: */
+	16745375238637686855: (*EphPatterns)(nil),    /* Eph pattern:locals:result: */
+	4635029837466971126:  (*EphPatterns)(nil),    /* Eph pattern:args:locals:result: */
 	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
 	17377027355382879147: (*EphPrograms)(nil),    /* Eph go:run:using: */
 	9811567312656774933:  (*EphRelations)(nil),   /* Eph:relate oneOne: */

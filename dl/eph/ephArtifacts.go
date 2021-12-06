@@ -22,6 +22,7 @@ func (n *Conflict) Error() string {
 	return errutil.Sprintf("%s definition at %s value %q", n.Reason.String(), n.Def.at, n.Def.value)
 }
 
+// fix? consider moving domain error to catalog processing internals ( and removing explicit external use )
 type DomainError struct {
 	Domain string
 	Err    error
