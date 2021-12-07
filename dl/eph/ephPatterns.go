@@ -12,8 +12,7 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 		err = e
 	} else {
 		for _, dep := range deps {
-			k, parents := dep.Leaf().(*ScopedKind), dep.Parents()
-			if len(parents) == 1 && parents[0].Name() == KindsOfPattern {
+			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(KindsOfPattern) {
 				pat := k.name
 				defs := k.domain.phases[AncestryPhase].defs
 				result := defs[pat+"?res"].value

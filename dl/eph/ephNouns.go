@@ -84,9 +84,7 @@ func (el *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		// if in a different domain: the nouns have to match up
 		if noun.domain == d {
 			noun.AddRequirement(k)
-		} else if ok, e := noun.HasAncestor(k); e != nil {
-			err = e
-		} else if !ok {
+		} else if !noun.HasAncestor(k) {
 			err = NounError{name, errutil.Fmt("can't redefine parent as %q", k)}
 		} else {
 			e := errutil.New("duplicate noun definition at", at)

@@ -95,6 +95,18 @@
                     "the set of arguments and the return can only be specified once."
                 ]
             },
+            "eph_rules": {
+                "spec": "eph {pattern%name:text} {if%filter:text} {when:eph_timing} {do%prog:text} {touch?eph_always}",
+                "slot": "ephemera"
+            },
+            "eph_timing": {
+                "uses": "str",
+                "spec": "{before}, {during}, {after}, or {later}"
+            },
+            "eph_always": {
+                "uses": "str",
+                "spec": "{always}"
+            },
             "eph_cardinality": {
                 "uses": "swap",
                 "spec": "{one_one}, {one_many}, {many_one}, or {many_many}"

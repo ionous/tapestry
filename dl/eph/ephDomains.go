@@ -9,15 +9,16 @@ type DomainFinder interface {
 }
 
 type Domain struct {
-	Requires  // other domains this needs ( can have multiple direct parents )
-	catalog   *Catalog
-	currPhase Phase // lift into some "ProcessingDomain" structure?
-	phases    [NumPhases]PhaseData
-	kinds     ScopedKinds
-	nouns     ScopedNouns
-	resolvedKinds,
+	Requires      // other domains this needs ( can have multiple direct parents )
+	catalog       *Catalog
+	currPhase     Phase // lift into some "ProcessingDomain" structure?
+	phases        [NumPhases]PhaseData
+	kinds         ScopedKinds
+	nouns         ScopedNouns
+	resolvedKinds cachedTable
 	resolvedNouns cachedTable
-	pairs PluralPairs
+	pairs         PluralPairs
+	rules         map[string]Rulesets // pattern name to rules for that pattern
 }
 
 type PhaseData struct {

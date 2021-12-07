@@ -48,18 +48,18 @@ func (d *Requires) GetDependencies() (ret Dependencies, err error) {
 	return
 }
 
-// ( must be previously
-func (d *Requires) HasAncestor(name string) (okay bool, err error) {
-	if dep, e := d.GetDependencies(); e != nil {
-		err = e
-	} else if as := dep.Ancestors(); len(name) == 0 && len(as) == 0 {
-		okay = true // if an empty parent is required and there are no parents
-	} else {
-		// otherwise... make sure whatever kind the child domain is specifying lines up
-		for _, a := range as {
-			if a.Name() == name {
-				okay = true
-				break
+// ( must be previously resolved to work properly )
+func (d *Requires) HasAncestor(name string) (okay bool) {
+	if dep, e := d.GetDependencies(); e == nil {
+		if as := dep.Ancestors(); len(name) == 0 && len(as) == 0 {
+			okay = true // if an empty parent is required and there are no parents
+		} else {
+			// otherwise... make sure whatever kind the child domain is specifying lines up
+			for _, a := range as {
+				if a.Name() == name {
+					okay = true
+					break
+				}
 			}
 		}
 	}

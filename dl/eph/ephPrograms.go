@@ -45,7 +45,7 @@ func (el *EphPrograms) Phase() Phase { return DirectivePhase }
 
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
 func (el *EphPrograms) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	prog := el.Type + ":" + el.Prog //fix: definitions probably need to be smarter.
+	prog := el.Type + ":" + el.Prog // fix: definitions probably need to be smarter.
 	return d.AddDefinition(el.Name, at, prog)
 }
 

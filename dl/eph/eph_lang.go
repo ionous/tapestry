@@ -205,6 +205,88 @@ func EphAliases_Marshal(m jsn.Marshaler, val *EphAliases) (err error) {
 	return
 }
 
+// EphAlways requires a predefined string.
+type EphAlways struct {
+	Str string
+}
+
+func (op *EphAlways) String() string {
+	return op.Str
+}
+
+const EphAlways_Always = "$ALWAYS"
+
+func (*EphAlways) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphAlways_Type,
+		Uses: composer.Type_Str,
+		Choices: []string{
+			EphAlways_Always,
+		},
+		Strings: []string{
+			"always",
+		},
+	}
+}
+
+const EphAlways_Type = "eph_always"
+
+func (op *EphAlways) Marshal(m jsn.Marshaler) error {
+	return EphAlways_Marshal(m, op)
+}
+
+func EphAlways_Optional_Marshal(m jsn.Marshaler, val *EphAlways) (err error) {
+	var zero EphAlways
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = EphAlways_Marshal(m, val)
+	}
+	return
+}
+
+func EphAlways_Marshal(m jsn.Marshaler, val *EphAlways) (err error) {
+	return m.MarshalValue(EphAlways_Type, jsn.MakeEnum(val, &val.Str))
+}
+
+type EphAlways_Slice []EphAlways
+
+func (op *EphAlways_Slice) GetType() string { return EphAlways_Type }
+
+func (op *EphAlways_Slice) Marshal(m jsn.Marshaler) error {
+	return EphAlways_Repeats_Marshal(m, (*[]EphAlways)(op))
+}
+
+func (op *EphAlways_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphAlways_Slice) SetSize(cnt int) {
+	var els []EphAlways
+	if cnt >= 0 {
+		els = make(EphAlways_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphAlways_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphAlways_Marshal(m, &(*op)[i])
+}
+
+func EphAlways_Repeats_Marshal(m jsn.Marshaler, vals *[]EphAlways) error {
+	return jsn.RepeatBlock(m, (*EphAlways_Slice)(vals))
+}
+
+func EphAlways_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphAlways) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphAlways_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // EphAspects A set of related object states such that exactly one member of the set is true for a given object at a single time.
 // Generates an implicit kind of 'aspect' where every field of the kind is a boolean property.
 // User implements: Ephemera.
@@ -1783,6 +1865,227 @@ func EphRelations_Marshal(m jsn.Marshaler, val *EphRelations) (err error) {
 	return
 }
 
+// EphRules
+// User implements: Ephemera.
+type EphRules struct {
+	Name   string    `if:"label=pattern,type=text"`
+	Filter string    `if:"label=if,type=text"`
+	When   EphTiming `if:"label=when"`
+	Prog   string    `if:"label=do,type=text"`
+	Touch  EphAlways `if:"label=touch,optional"`
+}
+
+func (*EphRules) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphRules_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphRules_Type = "eph_rules"
+
+const EphRules_Field_Name = "$NAME"
+const EphRules_Field_Filter = "$FILTER"
+const EphRules_Field_When = "$WHEN"
+const EphRules_Field_Prog = "$PROG"
+const EphRules_Field_Touch = "$TOUCH"
+
+func (op *EphRules) Marshal(m jsn.Marshaler) error {
+	return EphRules_Marshal(m, op)
+}
+
+type EphRules_Slice []EphRules
+
+func (op *EphRules_Slice) GetType() string { return EphRules_Type }
+
+func (op *EphRules_Slice) Marshal(m jsn.Marshaler) error {
+	return EphRules_Repeats_Marshal(m, (*[]EphRules)(op))
+}
+
+func (op *EphRules_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphRules_Slice) SetSize(cnt int) {
+	var els []EphRules
+	if cnt >= 0 {
+		els = make(EphRules_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphRules_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphRules_Marshal(m, &(*op)[i])
+}
+
+func EphRules_Repeats_Marshal(m jsn.Marshaler, vals *[]EphRules) error {
+	return jsn.RepeatBlock(m, (*EphRules_Slice)(vals))
+}
+
+func EphRules_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphRules) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphRules_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphRules_Flow struct{ ptr *EphRules }
+
+func (n EphRules_Flow) GetType() string      { return EphRules_Type }
+func (n EphRules_Flow) GetLede() string      { return "eph" }
+func (n EphRules_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphRules_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphRules); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphRules_Optional_Marshal(m jsn.Marshaler, pv **EphRules) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphRules_Marshal(m, *pv)
+	} else if !enc {
+		var v EphRules
+		if err = EphRules_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphRules_Marshal(m jsn.Marshaler, val *EphRules) (err error) {
+	if err = m.MarshalBlock(EphRules_Flow{val}); err == nil {
+		e0 := m.MarshalKey("pattern", EphRules_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphRules_Field_Name))
+		}
+		e1 := m.MarshalKey("if", EphRules_Field_Filter)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Filter)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphRules_Field_Filter))
+		}
+		e2 := m.MarshalKey("when", EphRules_Field_When)
+		if e2 == nil {
+			e2 = EphTiming_Marshal(m, &val.When)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphRules_Field_When))
+		}
+		e3 := m.MarshalKey("do", EphRules_Field_Prog)
+		if e3 == nil {
+			e3 = value.Text_Unboxed_Marshal(m, &val.Prog)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", EphRules_Field_Prog))
+		}
+		e4 := m.MarshalKey("touch", EphRules_Field_Touch)
+		if e4 == nil {
+			e4 = EphAlways_Optional_Marshal(m, &val.Touch)
+		}
+		if e4 != nil && e4 != jsn.Missing {
+			m.Error(errutil.New(e4, "in flow at", EphRules_Field_Touch))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// EphTiming requires a predefined string.
+type EphTiming struct {
+	Str string
+}
+
+func (op *EphTiming) String() string {
+	return op.Str
+}
+
+const EphTiming_Before = "$BEFORE"
+const EphTiming_During = "$DURING"
+const EphTiming_After = "$AFTER"
+const EphTiming_Later = "$LATER"
+
+func (*EphTiming) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphTiming_Type,
+		Uses: composer.Type_Str,
+		Choices: []string{
+			EphTiming_Before, EphTiming_During, EphTiming_After, EphTiming_Later,
+		},
+		Strings: []string{
+			"before", "during", "after", "later",
+		},
+	}
+}
+
+const EphTiming_Type = "eph_timing"
+
+func (op *EphTiming) Marshal(m jsn.Marshaler) error {
+	return EphTiming_Marshal(m, op)
+}
+
+func EphTiming_Optional_Marshal(m jsn.Marshaler, val *EphTiming) (err error) {
+	var zero EphTiming
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = EphTiming_Marshal(m, val)
+	}
+	return
+}
+
+func EphTiming_Marshal(m jsn.Marshaler, val *EphTiming) (err error) {
+	return m.MarshalValue(EphTiming_Type, jsn.MakeEnum(val, &val.Str))
+}
+
+type EphTiming_Slice []EphTiming
+
+func (op *EphTiming_Slice) GetType() string { return EphTiming_Type }
+
+func (op *EphTiming_Slice) Marshal(m jsn.Marshaler) error {
+	return EphTiming_Repeats_Marshal(m, (*[]EphTiming)(op))
+}
+
+func (op *EphTiming_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphTiming_Slice) SetSize(cnt int) {
+	var els []EphTiming
+	if cnt >= 0 {
+		els = make(EphTiming_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphTiming_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphTiming_Marshal(m, &(*op)[i])
+}
+
+func EphTiming_Repeats_Marshal(m jsn.Marshaler, vals *[]EphTiming) error {
+	return jsn.RepeatBlock(m, (*EphTiming_Slice)(vals))
+}
+
+func EphTiming_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphTiming) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphTiming_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 const Ephemera_Type = "ephemera"
 
 var Ephemera_Optional_Marshal = Ephemera_Marshal
@@ -2288,6 +2591,7 @@ var Slots = []interface{}{
 var Slats = []composer.Composer{
 	(*Affinity)(nil),
 	(*EphAliases)(nil),
+	(*EphAlways)(nil),
 	(*EphAspects)(nil),
 	(*EphAt)(nil),
 	(*EphBeginDomain)(nil),
@@ -2302,6 +2606,8 @@ var Slats = []composer.Composer{
 	(*EphPlurals)(nil),
 	(*EphPrograms)(nil),
 	(*EphRelations)(nil),
+	(*EphRules)(nil),
+	(*EphTiming)(nil),
 	(*ManyMany)(nil),
 	(*ManyOne)(nil),
 	(*OneMany)(nil),
@@ -2339,6 +2645,8 @@ var Signatures = map[uint64]interface{}{
 	2078507782755484470:  (*EphRelations)(nil),   /* Eph:relate oneMany: */
 	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */
 	15063335060652852941: (*EphRelations)(nil),   /* Eph:relate manyMany: */
+	17570881590226414756: (*EphRules)(nil),       /* Eph pattern:if:when:do: */
+	10757199676611909587: (*EphRules)(nil),       /* Eph pattern:if:when:do:touch: */
 	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */
 	15407091527463396937: (*ManyOne)(nil),        /* Kinds:toKind: */
 	8349208709908405809:  (*OneMany)(nil),        /* Kind:toKinds: */

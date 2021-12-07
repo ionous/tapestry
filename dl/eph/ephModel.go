@@ -36,7 +36,10 @@ var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
 var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 
 //
-var mdl_prog = tables.Insert("mdl_prog", "name", "type", "bytes", "at")
+var mdl_prog = tables.Insert("mdl_prog", "name", "type", "prog", "at")
 
 //
 var mdl_rel = tables.Insert("mdl_rel", "domain", "relation", "kind", "cardinality", "otherKind", "at")
+
+// note: this differs from the original declaration..
+var mdl_rule = tables.Insert("mdl_rule", "domain", "pattern", "phase", "filter", "prog", "at")
