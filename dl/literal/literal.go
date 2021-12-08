@@ -1,4 +1,4 @@
-package literals
+package literal
 
 import (
 	"strconv"
@@ -8,8 +8,8 @@ import (
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
-// Literal marks script constant values.
-type Literal interface {
+// LiteralValue marks script constants.
+type LiteralValue interface {
 	Affinity() affine.Affinity
 }
 

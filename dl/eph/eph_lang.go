@@ -3,7 +3,7 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/literals"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"github.com/ionous/errutil"
@@ -2208,9 +2208,9 @@ func EphTiming_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphTiming) (err e
 // EphValues
 // User implements: Ephemera.
 type EphValues struct {
-	Noun  string           `if:"label=noun,type=text"`
-	Field string           `if:"label=has,type=text"`
-	Value literals.Literal `if:"label=value"`
+	Noun  string               `if:"label=noun,type=text"`
+	Field string               `if:"label=has,type=text"`
+	Value literal.LiteralValue `if:"label=value"`
 }
 
 func (*EphValues) Compose() composer.Spec {
@@ -2313,7 +2313,7 @@ func EphValues_Marshal(m jsn.Marshaler, val *EphValues) (err error) {
 		}
 		e2 := m.MarshalKey("value", EphValues_Field_Value)
 		if e2 == nil {
-			e2 = literals.Literal_Marshal(m, &val.Value)
+			e2 = literal.LiteralValue_Marshal(m, &val.Value)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EphValues_Field_Value))

@@ -1,56 +1,56 @@
 {
-    "literals": {
+    "literal": {
         "uses": "group",
         "specs": {
-        	"literal": {
+        	"literal_value": {
         		"uses": "slot",
         		"desc": "Slot for constant values."
         	},
         	"bool_value": {
                 "uses": "flow",
                 "spec": "bool {_%bool}",
-                "slot": ["bool_eval", "literal"],
+                "slot": ["bool_eval", "literal_value"],
                 "desc": "Specify an explicit true or false."
             },
            "num_value": {
                 "uses": "flow",
                 "spec": "num {_%num:number}",
-                "slot": ["number_eval", "literal"],
+                "slot": ["number_eval", "literal_value"],
                 "desc": "Specify a particular number."
             },
             "text_value": {
                 "uses": "flow",
                 "spec": "txt {_%text}",
-                "slot": ["text_eval", "literal"],
+                "slot": ["text_eval", "literal_value"],
                 "desc": "Specify a small bit of text."
             },
             "number_values": {
                 "uses": "flow",
                 "spec": "nums {_%values+number}",
-                "slot": ["num_list_eval", "literal"],
+                "slot": ["num_list_eval", "literal_value"],
                 "desc": "Number List: Specify a list of numbers."
             },
          	"text_values": {
                 "uses": "flow",
                 "spec": "txts {_%values+text}",
-                "slot": ["text_list_eval", "literal"],
+                "slot": ["text_list_eval", "literal_value"],
                 "desc": "Text List: Specifies a set of string values."
             },
             "record_value": {
                 "uses": "flow",
                 "spec": "rec {_%kind:text} {fields?field_value}",
-                "slot": ["record_eval", "literal"],
+                "slot": ["record_eval", "literal_value"],
                 "desc": "Specify a record composed of literal values."
             },
             "record_values": {
                 "uses": "flow",
                 "spec": "recs {_%kind:text} {containing+field_values}",
-                "slot": ["record_eval", "literal"],
+                "slot": ["record_eval", "literal_value"],
                 "desc": "Specify a series of records, all of the same kind."
             },
             "field_value": {
                 "uses": "flow",
-                "spec": "field {name:text} {value:literal}",
+                "spec": "field {name:text} {value:literal_value}",
                 "desc": "A fixed value of a record."
             },
             "field_values": {

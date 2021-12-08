@@ -11,7 +11,7 @@ func (el *EphValues) Phase() Phase { return ValuePhase }
 
 // Noun  string           `if:"label=noun,type=text"`
 // Field string           `if:"label=has,type=text"`
-// Value literals.Literal `if:"label=value"`
+// Value literal.LiteralValue `if:"label=value"`
 func (el *EphValues) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if noun, e := getClosestNoun(d, el.Noun); e != nil {
 		err = e

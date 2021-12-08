@@ -3,6 +3,7 @@ package eph
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/kr/pretty"
 )
@@ -195,11 +196,29 @@ func addKinds(out *[]Ephemera, kps ...string) {
 	}
 }
 
+// kind, name, affinity(key), class
+func addFields(out *[]Ephemera, knacs ...string) {
+	for i, cnt := 0, len(knacs); i < cnt; i += 4 {
+		k, n, a, c := knacs[i], knacs[i+1], knacs[i+2], knacs[i+3]
+		*out = append(*out, &EphFields{
+			Kinds: k, Name: n, Affinity: Affinity{a}, Class: c,
+		})
+	}
+}
+
 // noun, kind
 func addNouns(out *[]Ephemera, nks ...string) {
 	for i, cnt := 0, len(nks); i < cnt; i += 2 {
 		n, k := nks[i], nks[i+1]
 		*out = append(*out, &EphNouns{Noun: n, Kind: k})
+	}
+}
+
+// noun(string), field(string), value(literal)
+func addValues(out *[]Ephemera, nfvs ...interface{}) {
+	for i, cnt := 0, len(nfvs); i < cnt; i += 2 {
+		n, f, v := nfvs[i].(string), nfvs[i+1].(string), nfvs[i+2].(literal.LiteralValue)
+		*out = append(*out, &EphValues{Noun: n, Field: f, Value: v})
 	}
 }
 

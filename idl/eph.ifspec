@@ -76,7 +76,7 @@
                 "slot": "ephemera"
             },
             "eph_values": {
-                "spec": "eph {noun:text} {has%field:text} {value:literal}",
+                "spec": "eph {noun:text} {has%field:text} {value:literal_value}",
                 "slot": "ephemera"
             },
             "eph_aliases": {

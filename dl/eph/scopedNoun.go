@@ -4,7 +4,7 @@ import (
 	"math"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/dl/literals"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/lang"
 	"github.com/ionous/errutil"
 )
@@ -20,7 +20,7 @@ type ScopedNoun struct {
 
 type NounValue struct {
 	field string
-	value literals.Literal
+	value literal.LiteralValue
 	at    string
 }
 
@@ -51,7 +51,7 @@ func (n *ScopedNoun) AddAlias(a, at string) {
 	n.aliasat = append(n.aliasat, at)
 }
 
-func (n *ScopedNoun) AddLiteralValue(field string, value literals.Literal, at string) (err error) {
+func (n *ScopedNoun) AddLiteralValue(field string, value literal.LiteralValue, at string) (err error) {
 	if k, e := n.Kind(); e != nil {
 		err = e
 	} else if name, e := k.findCompatibleValue(field, value); e != nil {
@@ -60,7 +60,7 @@ func (n *ScopedNoun) AddLiteralValue(field string, value literals.Literal, at st
 		// the field was a trait, the returned name was an aspect
 		if name != field {
 			// redo the value we are setting as the trait of the aspect
-			value = &literals.TextValue{
+			value = &literal.TextValue{
 				Text: field,
 			}
 		}
@@ -70,7 +70,7 @@ func (n *ScopedNoun) AddLiteralValue(field string, value literals.Literal, at st
 }
 
 // assumes the value is known to be compatible, and the field is a field... not a trait.
-func (n *ScopedNoun) addLiteral(field string, value literals.Literal, at string) (err error) {
+func (n *ScopedNoun) addLiteral(field string, value literal.LiteralValue, at string) (err error) {
 	// verify we havent already stored a field of this value
 	for _, q := range n.values {
 		if q.field == field {

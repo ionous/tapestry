@@ -2,7 +2,7 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/literals"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"github.com/ionous/errutil"
 )
 
@@ -47,7 +47,7 @@ func (k *ScopedKind) AddField(field FieldDefinition) (err error) {
 
 // check that the kind can store the requested value at the passed field
 // returns the name of the field ( in case the originally specified field was a trait )
-func (k *ScopedKind) findCompatibleValue(field string, value literals.Literal) (ret string, err error) {
+func (k *ScopedKind) findCompatibleValue(field string, value literal.LiteralValue) (ret string, err error) {
 	if value.Affinity() == affine.Bool {
 		if aspect, ok := k.findCompatibleTrait(field); ok {
 			ret = aspect
@@ -66,8 +66,7 @@ func (k *ScopedKind) findCompatibleValue(field string, value literals.Literal) (
 	return
 }
 
-// fix: rename "literals" to "literal"; can "Literal" be "Value" ( probably would conflict with the value group ) or maybe "LiteralValue"
-func (k *ScopedKind) findCompatibleField(field string, value literals.Literal) (okay bool, err error) {
+func (k *ScopedKind) findCompatibleField(field string, value literal.LiteralValue) (okay bool, err error) {
 	for _, def := range k.fields {
 		if def.name == field {
 			if aff := value.Affinity(); def.affinity == aff.String() {
