@@ -27,7 +27,7 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 		if it := op.As; it == nil {
 			err = errutil.New("list iterator was undefined")
 		} else if itAff, elAff := it.Affinity(), affine.Element(vs.Affinity()); itAff != elAff {
-			err = errutil.New("iterator of %s doesnt support elements of %s", itAff, elAff)
+			err = errutil.Fmt("iterator of %s doesnt support elements of %s", itAff, elAff)
 		} else {
 			// could cache this -- just trying to keep it simple right now.
 			// hopefully could live right in the db.

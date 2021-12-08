@@ -7,6 +7,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 
@@ -25,7 +26,7 @@ func TestDetermineNum(t *testing.T) {
 			Args: []core.CallArg{{
 				Name: "num",
 				From: &core.FromNum{
-					&core.NumValue{3},
+					&literal.NumValue{3},
 				}}}}}
 	k, db := newImporter(t, testdb.Memory)
 	defer db.Close()

@@ -2,6 +2,7 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -34,7 +35,7 @@ var FactorialStory = &story.Story{
 											core.CallArg{
 												Name: "num",
 												From: &core.FromNum{
-													Val: &core.NumValue{Num: 3}},
+													Val: &literal.NumValue{Num: 3}},
 											}},
 									}},
 							}},
@@ -62,7 +63,7 @@ var FactorialStory = &story.Story{
 										A: &core.GetVar{Name: numVar},
 										B: &core.DiffOf{
 											A: &core.GetVar{Name: numVar},
-											B: &core.NumValue{Num: 1}},
+											B: &literal.NumValue{Num: 1}},
 									}},
 								},
 							}},
@@ -76,13 +77,13 @@ var FactorialStory = &story.Story{
 						Guard: &core.CompareNum{
 							A:  &core.GetVar{Name: numVar},
 							Is: &core.Equal{},
-							B:  &core.NumValue{}},
+							B:  &literal.NumValue{}},
 						Hook: story.ProgramHook{
 							Choice: story.ProgramHook_Activity_Opt,
 							Value: &core.Activity{[]rt.Execute{
 								&core.Assign{
 									Var:  numVar,
-									From: &core.FromNum{&core.NumValue{Num: 1}},
+									From: &core.FromNum{&literal.NumValue{Num: 1}},
 								}},
 							}}},
 					}},

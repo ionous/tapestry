@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/parser"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -85,7 +86,7 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 					args.add(
 						&core.FromText{
 							&core.IdOf{
-								&core.TextValue{"player"},
+								&literal.TextValue{"player"},
 							}})
 					//
 					out.Nouns = make([]string, cnt)

@@ -24,7 +24,7 @@
                 "slot": ["text_eval", "literal_value"],
                 "desc": "Specify a small bit of text."
             },
-            "number_values": {
+            "num_values": {
                 "uses": "flow",
                 "spec": "nums {_%values+number}",
                 "slot": ["num_list_eval", "literal_value"],

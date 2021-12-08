@@ -481,37 +481,37 @@ func NumValue_Marshal(m jsn.Marshaler, val *NumValue) (err error) {
 	return
 }
 
-// NumberValues Number List: Specify a list of numbers.
+// NumValues Number List: Specify a list of numbers.
 // User implements: NumListEval, LiteralValue.
-type NumberValues struct {
+type NumValues struct {
 	Values []float64 `if:"label=_,type=number"`
 }
 
-func (*NumberValues) Compose() composer.Spec {
+func (*NumValues) Compose() composer.Spec {
 	return composer.Spec{
-		Name: NumberValues_Type,
+		Name: NumValues_Type,
 		Uses: composer.Type_Flow,
 		Lede: "nums",
 	}
 }
 
-const NumberValues_Type = "number_values"
+const NumValues_Type = "number_values"
 
-const NumberValues_Field_Values = "$VALUES"
+const NumValues_Field_Values = "$VALUES"
 
-func (op *NumberValues) Marshal(m jsn.Marshaler) error {
-	return NumberValues_Marshal(m, op)
+func (op *NumValues) Marshal(m jsn.Marshaler) error {
+	return NumValues_Marshal(m, op)
 }
 
-type NumberValues_Slice []NumberValues
+type NumValues_Slice []NumValues
 
-func (op *NumberValues_Slice) GetType() string { return NumberValues_Type }
+func (op *NumValues_Slice) GetType() string { return NumValues_Type }
 
-func (op *NumberValues_Slice) Marshal(m jsn.Marshaler) error {
-	return NumberValues_Repeats_Marshal(m, (*[]NumberValues)(op))
+func (op *NumValues_Slice) Marshal(m jsn.Marshaler) error {
+	return NumValues_Repeats_Marshal(m, (*[]NumValues)(op))
 }
 
-func (op *NumberValues_Slice) GetSize() (ret int) {
+func (op *NumValues_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -520,61 +520,61 @@ func (op *NumberValues_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *NumberValues_Slice) SetSize(cnt int) {
-	var els []NumberValues
+func (op *NumValues_Slice) SetSize(cnt int) {
+	var els []NumValues
 	if cnt >= 0 {
-		els = make(NumberValues_Slice, cnt)
+		els = make(NumValues_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *NumberValues_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NumberValues_Marshal(m, &(*op)[i])
+func (op *NumValues_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NumValues_Marshal(m, &(*op)[i])
 }
 
-func NumberValues_Repeats_Marshal(m jsn.Marshaler, vals *[]NumberValues) error {
-	return jsn.RepeatBlock(m, (*NumberValues_Slice)(vals))
+func NumValues_Repeats_Marshal(m jsn.Marshaler, vals *[]NumValues) error {
+	return jsn.RepeatBlock(m, (*NumValues_Slice)(vals))
 }
 
-func NumberValues_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumberValues) (err error) {
+func NumValues_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumValues) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = NumberValues_Repeats_Marshal(m, pv)
+		err = NumValues_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type NumberValues_Flow struct{ ptr *NumberValues }
+type NumValues_Flow struct{ ptr *NumValues }
 
-func (n NumberValues_Flow) GetType() string      { return NumberValues_Type }
-func (n NumberValues_Flow) GetLede() string      { return "nums" }
-func (n NumberValues_Flow) GetFlow() interface{} { return n.ptr }
-func (n NumberValues_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NumberValues); ok {
+func (n NumValues_Flow) GetType() string      { return NumValues_Type }
+func (n NumValues_Flow) GetLede() string      { return "nums" }
+func (n NumValues_Flow) GetFlow() interface{} { return n.ptr }
+func (n NumValues_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NumValues); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func NumberValues_Optional_Marshal(m jsn.Marshaler, pv **NumberValues) (err error) {
+func NumValues_Optional_Marshal(m jsn.Marshaler, pv **NumValues) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NumberValues_Marshal(m, *pv)
+		err = NumValues_Marshal(m, *pv)
 	} else if !enc {
-		var v NumberValues
-		if err = NumberValues_Marshal(m, &v); err == nil {
+		var v NumValues
+		if err = NumValues_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func NumberValues_Marshal(m jsn.Marshaler, val *NumberValues) (err error) {
-	if err = m.MarshalBlock(NumberValues_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NumberValues_Field_Values)
+func NumValues_Marshal(m jsn.Marshaler, val *NumValues) (err error) {
+	if err = m.MarshalBlock(NumValues_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NumValues_Field_Values)
 		if e0 == nil {
 			e0 = value.Number_Unboxed_Repeats_Marshal(m, &val.Values)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NumberValues_Field_Values))
+			m.Error(errutil.New(e0, "in flow at", NumValues_Field_Values))
 		}
 		m.EndBlock()
 	}
@@ -1008,7 +1008,7 @@ var Slats = []composer.Composer{
 	(*FieldValue)(nil),
 	(*FieldValues)(nil),
 	(*NumValue)(nil),
-	(*NumberValues)(nil),
+	(*NumValues)(nil),
 	(*RecordValue)(nil),
 	(*RecordValues)(nil),
 	(*TextValue)(nil),
@@ -1020,7 +1020,7 @@ var Signatures = map[uint64]interface{}{
 	8393454129252355509:  (*FieldValue)(nil),   /* Field name:value: */
 	2198313742266461362:  (*FieldValues)(nil),  /* Fields: */
 	9668407916590545547:  (*NumValue)(nil),     /* Num: */
-	17428560025310008846: (*NumberValues)(nil), /* Nums: */
+	17428560025310008846: (*NumValues)(nil),    /* Nums: */
 	8364493114742675433:  (*RecordValue)(nil),  /* Rec: */
 	7274569038616904990:  (*RecordValue)(nil),  /* Rec:fields: */
 	5776881376101857802:  (*RecordValues)(nil), /* Recs:containing: */

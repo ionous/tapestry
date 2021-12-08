@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/print"
 	"git.sr.ht/~ionous/iffy/rt/writer"
@@ -18,11 +19,11 @@ func TestCheck(t *testing.T) {
 			&core.ChooseAction{
 				If: &core.BoolValue{true},
 				Do: core.MakeActivity(&core.Say{
-					Text: &core.TextValue{"hello"},
+					Text: &literal.TextValue{"hello"},
 				}),
 				Else: &core.ChooseNothingElse{
 					Do: core.MakeActivity(&core.Say{
-						Text: &core.TextValue{"goodbye"},
+						Text: &literal.TextValue{"goodbye"},
 					})},
 			}}},
 	}

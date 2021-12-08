@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/render"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/template"
@@ -222,7 +223,7 @@ func TestTemplates(t *testing.T) {
 	t.Run("filter", func(t *testing.T) {
 		if e := testTemplate("{15|print_num!}",
 			&core.PrintNum{
-				Num: &core.NumValue{15},
+				Num: &literal.NumValue{15},
 			}); e != nil {
 			t.Fatal(e)
 		}

@@ -3,6 +3,7 @@ package debug
 import (
   "git.sr.ht/~ionous/iffy/affine"
   "git.sr.ht/~ionous/iffy/dl/core"
+  "git.sr.ht/~ionous/iffy/dl/literal"
   "git.sr.ht/~ionous/iffy/dl/value"
   "git.sr.ht/~ionous/iffy/jsn"
   "git.sr.ht/~ionous/iffy/rt"
@@ -12,7 +13,7 @@ import (
 )
 
 func SayIt(s string) rt.Execute {
-  return &core.Say{&core.TextValue{s}}
+  return &core.Say{&literal.TextValue{s}}
 }
 
 type MatchNumber struct {
@@ -48,7 +49,7 @@ func DetermineSay(i int) *core.CallPattern {
     Pattern: value.PatternName{Str: "say_me"},
     Arguments: core.NamedArgs(
       "num", &core.FromNum{
-        &core.NumValue{float64(i)},
+        &literal.NumValue{float64(i)},
       }),
   }
 }
@@ -90,11 +91,11 @@ var SayHelloGoodbye = core.NewActivity(
   &core.ChooseAction{
     If: &core.BoolValue{true},
     Do: core.MakeActivity(&core.Say{
-      Text: &core.TextValue{"hello"},
+      Text: &literal.TextValue{"hello"},
     }),
     Else: &core.ChooseNothingElse{
       core.MakeActivity(&core.Say{
-        Text: &core.TextValue{"goodbye"},
+        Text: &literal.TextValue{"goodbye"},
       }),
     },
   })

@@ -83,12 +83,12 @@ func (op *TextValue) String() string {
 }
 
 // Affinity returns affine.NumList
-func (op *NumberValues) Affinity() affine.Affinity {
+func (op *NumValues) Affinity() affine.Affinity {
 	return affine.NumList
 }
 
 // GetNumList implements rt.NumListEval providing the dl with a literal list of numbers.
-func (op *NumberValues) GetNumList(rt.Runtime) (ret g.Value, _ error) {
+func (op *NumValues) GetNumList(rt.Runtime) (ret g.Value, _ error) {
 	// fix: would aliasing be better?
 	dst := make([]float64, len(op.Values))
 	copy(dst, op.Values)
