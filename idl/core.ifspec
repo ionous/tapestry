@@ -76,14 +76,6 @@
                 "desc": "Assigns a variable to a value.",
                 "group": "variables"
             },
-            "bool_value":
-            {
-                "uses": "flow",
-                "spec": "bool {_%bool}",
-                "slot": "bool_eval",
-                "desc": "Specify an explicit true or false value.",
-                "group": "literals"
-            },
             "bracket_text":
             {
                 "uses": "flow",
@@ -629,22 +621,6 @@
                 "desc": "The first value doesn't equal the second value.",
                 "group": "comparison"
             },
-            "numbers":
-            {
-                "uses": "flow",
-                "spec": "nums {_%values+number}",
-                "slot": "num_list_eval",
-                "desc": "Number List: Specify a list of numbers.",
-                "group": "literals"
-            },
-            "num_value":
-            {
-                "uses": "flow",
-                "spec": "num {_%num:number}",
-                "slot": "number_eval",
-                "desc": "Specify a particular number.",
-                "group": "literals"
-            },
             "object_exists":
             {
                 "uses": "flow",
@@ -792,22 +768,6 @@
                 "slot": "number_eval",
                 "desc": "Add two numbers.",
                 "group": "math"
-            },
-            "texts":
-            {
-                "uses": "flow",
-                "spec": "txts {_%values+text}",
-                "slot": "text_list_eval",
-                "desc": "Text List: Specifies a set of string values.",
-                "group": "literals"
-            },
-            "text_value":
-            {
-                "uses": "flow",
-                "spec": "txt {_%text}",
-                "slot": "text_eval",
-                "desc": "Specify a small bit of text.",
-                "group": "literals"
             },
             "trigger_cycle":
             {

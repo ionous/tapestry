@@ -1,13 +1,24 @@
-package core
+package literals
 
 import (
 	"strconv"
 
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
-// GetBool implements BoolEval; providing the dl with a boolean literal.
+// Literal marks script constant values.
+type Literal interface {
+	Affinity() affine.Affinity
+}
+
+// Affinity returns affine.Bool
+func (op *BoolValue) Affinity() affine.Affinity {
+	return affine.Bool
+}
+
+// GetBool implements rt.BoolEval; providing the dl with a boolean literal.
 func (op *BoolValue) GetBool(rt.Runtime) (ret g.Value, _ error) {
 	ret = g.BoolOf(op.Bool)
 	return
@@ -18,7 +29,12 @@ func (op *BoolValue) String() string {
 	return strconv.FormatBool(op.Bool)
 }
 
-// GetNumber implements NumberEval providing the dl with a number literal.
+// Affinity returns affine.Number
+func (op *NumValue) Affinity() affine.Affinity {
+	return affine.Number
+}
+
+// GetNumber implements rt.NumberEval providing the dl with a number literal.
 func (op *NumValue) GetNumber(rt.Runtime) (ret g.Value, _ error) {
 	ret = g.FloatOf(op.Num)
 	return
@@ -39,9 +55,25 @@ func (op *NumValue) String() string {
 	return strconv.FormatFloat(op.Num, 'g', -1, 64)
 }
 
-// GetText implements interface TextEval providing the dl with a text literal.
+// Affinity returns affine.Text
+func (op *TextValue) Affinity() affine.Affinity {
+	return affine.Text
+}
+
+// GetText implements interface rt.TextEval providing the dl with a text literal.
 func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
 	ret = g.StringOf(op.Text)
+	return
+}
+
+// Affinity returns affine.Record
+func (op *RecordValue) Affinity() affine.Affinity {
+	return affine.Record
+}
+
+// GetRecord implements interface rt.RecordEval providing the dl with a text literal.
+func (op *RecordValue) GetRecord(run rt.Runtime) (ret g.Value, _ error) {
+	panic("not implemented")
 	return
 }
 
@@ -50,7 +82,13 @@ func (op *TextValue) String() string {
 	return op.Text
 }
 
-func (op *Numbers) GetNumList(rt.Runtime) (ret g.Value, _ error) {
+// Affinity returns affine.NumList
+func (op *NumberValues) Affinity() affine.Affinity {
+	return affine.NumList
+}
+
+// GetNumList implements rt.NumListEval providing the dl with a literal list of numbers.
+func (op *NumberValues) GetNumList(rt.Runtime) (ret g.Value, _ error) {
 	// fix: would aliasing be better?
 	dst := make([]float64, len(op.Values))
 	copy(dst, op.Values)
@@ -58,10 +96,27 @@ func (op *Numbers) GetNumList(rt.Runtime) (ret g.Value, _ error) {
 	return
 }
 
-func (op *Texts) GetTextList(rt.Runtime) (ret g.Value, _ error) {
+// Affinity returns affine.TextList
+func (op *TextValues) Affinity() affine.Affinity {
+	return affine.TextList
+}
+
+// GetTextList implements rt.TextListEval providing the dl with a literal list of text.
+func (op *TextValues) GetTextList(rt.Runtime) (ret g.Value, _ error) {
 	// fix: would aliasing be better?
 	dst := make([]string, len(op.Values))
 	copy(dst, op.Values)
 	ret = g.StringsOf(dst)
+	return
+}
+
+// Affinity returns affine.RecordList
+func (op *RecordValues) Affinity() affine.Affinity {
+	return affine.RecordList
+}
+
+// GetNumList implements rt.RecordListEval providing the dl with a literal list of records.
+func (op *RecordValues) GetRecordList(rt.Runtime) (ret g.Value, _ error) {
+	panic("not implemented")
 	return
 }
