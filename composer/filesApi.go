@@ -53,7 +53,7 @@ func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 				var dst story.Story
 				if e := din.Decode(&dst, iffy.Registry(), el.Story); e != nil {
 					err = e
-				} else if data, e := cout.Encode(&dst); e != nil {
+				} else if data, e := cout.Encode(&dst, story.CompactEncoder); e != nil {
 					err = errutil.Append(err, e)
 				} else {
 					err = writeOut(at, data)

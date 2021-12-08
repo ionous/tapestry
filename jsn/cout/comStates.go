@@ -11,11 +11,14 @@ import (
 // xEncoder - marker so callers can see where a machine pointer came from.
 type xEncoder struct {
 	chart.Machine
+	customFlow CustomFlow
 }
 
+type CustomFlow func(jsn.Marshaler, jsn.FlowBlock) error
+
 // NewEncoder create an empty serializer to produce compact script data.
-func Encode(in jsn.Marshalee) (ret interface{}, err error) {
-	m := xEncoder{Machine: chart.MakeEncoder()}
+func Encode(in jsn.Marshalee, customFlow CustomFlow) (ret interface{}, err error) {
+	m := xEncoder{Machine: chart.MakeEncoder(), customFlow: customFlow}
 	next := m.newValue(m.newBlock())
 	next.OnCommit = func(v interface{}) {
 		if ret != nil {
@@ -61,7 +64,7 @@ func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
 	next.OnMap = func(typeName string, block jsn.FlowBlock) (okay bool) {
-		if e := m.customFlow(block); e != nil {
+		if e := m.customFlow(m, block); e != nil {
 			var unhandled chart.Unhandled
 			if !errors.As(e, &unhandled) {
 				m.Error(e)

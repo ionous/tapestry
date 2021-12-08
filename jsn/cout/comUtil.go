@@ -8,9 +8,9 @@ import (
 	"git.sr.ht/~ionous/iffy/jsn"
 )
 
-func Marshal(cmd jsn.Marshalee) (ret string, err error) {
+func Marshal(cmd jsn.Marshalee, customFlow CustomFlow) (ret string, err error) {
 	var out strings.Builder
-	if e := marshal(&out, cmd, false); e != nil {
+	if e := marshal(&out, cmd, customFlow, false); e != nil {
 		err = e
 	} else {
 		ret = out.String()
@@ -18,12 +18,12 @@ func Marshal(cmd jsn.Marshalee) (ret string, err error) {
 	return
 }
 
-func MarshalIndent(out io.Writer, cmd jsn.Marshalee) error {
-	return marshal(out, cmd, true)
+func MarshalIndent(out io.Writer, cmd jsn.Marshalee, customFlow CustomFlow) error {
+	return marshal(out, cmd, customFlow, true)
 }
 
-func marshal(out io.Writer, cmd jsn.Marshalee, indent bool) (err error) {
-	if data, e := Encode(cmd); e != nil {
+func marshal(out io.Writer, cmd jsn.Marshalee, customFlow CustomFlow, indent bool) (err error) {
+	if data, e := Encode(cmd, customFlow); e != nil {
 		err = e
 	} else {
 		js := json.NewEncoder(&noNewLine{out: out})

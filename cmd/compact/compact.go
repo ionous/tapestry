@@ -94,7 +94,7 @@ func compact(inDetails, outCompact string) (err error) {
 		err = e
 	} else if e := din.Decode(&dst, iffy.Registry(), b); e != nil {
 		err = e
-	} else if data, e := cout.Encode(&dst); e != nil {
+	} else if data, e := cout.Encode(&dst, story.CompactEncoder); e != nil {
 		err = e
 	} else {
 		err = writeOut(outCompact, data)

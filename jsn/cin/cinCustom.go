@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/jsn"
@@ -125,26 +126,26 @@ func readBool(dec *xDecoder, msg json.RawMessage) (ret *core.BoolValue, okay boo
 	}
 	return
 }
-func readNum(dec *xDecoder, msg json.RawMessage) (ret *core.NumValue, okay bool) {
+func readNum(dec *xDecoder, msg json.RawMessage) (ret *literal.NumValue, okay bool) {
 	var val float64
 	if e := json.Unmarshal(msg, &val); e == nil {
-		ret, okay = &core.NumValue{val}, true
+		ret, okay = &literal.NumValue{val}, true
 		dec.Commit("num literal")
 	}
 	return
 }
-func readNumList(dec *xDecoder, msg json.RawMessage) (ret *core.Numbers, okay bool) {
+func readNumList(dec *xDecoder, msg json.RawMessage) (ret *literal.NumValues, okay bool) {
 	var val []float64
 	if e := json.Unmarshal(msg, &val); e == nil {
-		ret, okay = &core.Numbers{val}, true
+		ret, okay = &literal.NumValues{val}, true
 		dec.Commit("num list literal")
 	}
 	return
 }
-func readTextList(dec *xDecoder, msg json.RawMessage) (ret *core.Texts, okay bool) {
+func readTextList(dec *xDecoder, msg json.RawMessage) (ret *literal.TextValues, okay bool) {
 	var val []string
 	if e := json.Unmarshal(msg, &val); e == nil {
-		ret, okay = &core.Texts{val}, true
+		ret, okay = &literal.TextValues{val}, true
 		dec.Commit("text list literal")
 	}
 	return
@@ -156,13 +157,13 @@ func readVarOrText(dec *xDecoder, msg json.RawMessage) (ret rt.TextEval, okay bo
 	var str string
 	if e := json.Unmarshal(msg, &str); e == nil {
 		if cnt := len(str); cnt == 0 || str[0] != '@' {
-			ret, okay = &core.TextValue{str}, true
+			ret, okay = &literal.TextValue{str}, true
 			dec.Commit("simple text literal")
 		} else {
 			if cnt > 2 && str[1] == '@' {
 				// any text primitive with an @ gets another @ prefixed to it
 				// so.. strip that off here.
-				ret, okay = &core.TextValue{str[1:]}, true
+				ret, okay = &literal.TextValue{str[1:]}, true
 				dec.Commit("escaped text literal")
 			} else {
 				// only has one @.. that means its a var

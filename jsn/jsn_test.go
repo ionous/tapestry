@@ -41,7 +41,7 @@ func TestDetailsDecode(t *testing.T) {
 }
 
 func TestCompactEncoder(t *testing.T) {
-	if str, e := cout.Marshal(debug.FactorialStory); e != nil {
+	if str, e := cout.Marshal(debug.FactorialStory, story.CompactEncoder); e != nil {
 		t.Fatal(e)
 	} else if str != com {
 		t.Fatal(str)
@@ -137,7 +137,7 @@ func TestCompactNamedNouns(t *testing.T) {
 		`{"NamedNoun:name:":["the",""]}`,
 	}
 	for i, n := range nouns {
-		if have, e := cout.Marshal(&n); e != nil {
+		if have, e := cout.Marshal(&n, story.CompactEncoder); e != nil {
 			t.Fatal(e)
 		} else if want := want[i]; want != have {
 			t.Fatal("writing out", i, "want:", want, "made:", have)
@@ -152,7 +152,7 @@ func TestCompactNamedNouns(t *testing.T) {
 	}
 	// test a slce of things
 	slice := story.NamedNoun_Slice(nouns)
-	if have, e := cout.Marshal(&slice); e != nil {
+	if have, e := cout.Marshal(&slice, story.CompactEncoder); e != nil {
 		t.Fatal(e)
 	} else if want := "[" + strings.Join(want, ",") + "]"; have != want {
 		t.Fatal("want:", want, "have:", have)
