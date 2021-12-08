@@ -76,6 +76,8 @@ func (d *Dependencies) Strings(fullTree bool) string {
 
 const Visited = errutil.Error("git.sr.ht/~ionous/iffy/dl/eph/Visited")
 
+// returns nil after visiting d and all of its ancestors.
+// the passed visitor function can return Visited, or any other error, to exit early.
 func VisitTree(d Dependency, visit func(Dependency) error) (err error) {
 	if deps, e := d.GetDependencies(); e != nil {
 		err = e

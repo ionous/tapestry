@@ -11,13 +11,13 @@ var NounPhaseActions = PhaseAction{
 	},
 }
 
-func (c *Catalog) WriteNouns(w Writer) (err error) {
+func (c *Catalog) WriteNouns(w Writer) error {
 	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
 		return w.Write(mdl_noun, d.name, n.name, k.name, n.at)
 	})
 }
 
-func (c *Catalog) WriteNames(w Writer) (err error) {
+func (c *Catalog) WriteNames(w Writer) error {
 	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
 		{
 			const ofs = -1 // aliases are forced first, in order of declaration.

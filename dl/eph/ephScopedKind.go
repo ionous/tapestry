@@ -26,21 +26,16 @@ func (k *ScopedKind) Resolve() (ret Dependencies, err error) {
 
 // the kind must have been resolved for this to work
 func (k *ScopedKind) AddField(field FieldDefinition) (err error) {
-	if deps, e := k.GetDependencies(); e != nil {
+	if e := VisitTree(k, func(dep Dependency) (err error) {
+		kind := dep.(*ScopedKind)
+		if e := field.CheckConflict(kind); e != nil {
+			err = DomainError{kind.domain.name, KindError{kind.name, e}}
+		}
+		return
+	}); e != nil {
 		err = e
 	} else {
-		// the full tree includes the kind itself; its a bit weird, but it keeps this loop simple.
-		for _, dep := range deps.FullTree() {
-			kind := dep.(*ScopedKind)
-			if e := field.CheckConflict(kind); e != nil {
-				err = DomainError{kind.domain.name, KindError{kind.name, e}}
-				break
-			}
-		}
-		// if everything worked out store definition locally
-		if err == nil {
-			field.AddToKind(k)
-		}
+		field.AddToKind(k) // if everything worked out store definition locally
 	}
 	return
 }
@@ -49,18 +44,30 @@ func (k *ScopedKind) AddField(field FieldDefinition) (err error) {
 // returns the name of the field ( in case the originally specified field was a trait )
 func (k *ScopedKind) findCompatibleValue(field string, value literal.LiteralValue) (ret string, err error) {
 	if value.Affinity() == affine.Bool {
-		if aspect, ok := k.findCompatibleTrait(field); ok {
-			ret = aspect
-		} else {
-			err = errutil.New("trait not found '%s.%s'", k.name, field)
+		if e := VisitTree(k, func(dep Dependency) (err error) {
+			kind := dep.(*ScopedKind)
+			if aspect, ok := kind.findCompatibleTrait(field); ok {
+				ret, err = aspect, Visited
+			}
+			return
+		}); e == nil {
+			err = errutil.Fmt("field not found '%s.%s'", k.name, field)
+		} else if e != Visited {
+			err = e
 		}
 	} else {
-		if ok, e := k.findCompatibleField(field, value); e != nil {
+		if e := VisitTree(k, func(dep Dependency) (err error) {
+			kind := dep.(*ScopedKind)
+			if ok, e := kind.findCompatibleField(field, value); e != nil {
+				err = e
+			} else if ok {
+				ret, err = field, Visited
+			}
+			return
+		}); e == nil {
+			err = errutil.Fmt("trait not found '%s.%s'", k.name, field)
+		} else if e != Visited {
 			err = e
-		} else if ok {
-			ret = field
-		} else {
-			err = errutil.New("field not found '%s.%s'", k.name, field)
 		}
 	}
 	return
@@ -72,7 +79,7 @@ func (k *ScopedKind) findCompatibleField(field string, value literal.LiteralValu
 			if aff := value.Affinity(); def.affinity == aff.String() {
 				okay = true
 			} else {
-				err = errutil.New("value of affinity %s incompatible with '%s.%s:%s'",
+				err = errutil.Fmt("value of affinity %s incompatible with '%s.%s:%s'",
 					aff, k.name, field, def.affinity)
 			}
 			break

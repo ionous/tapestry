@@ -46,3 +46,6 @@ var mdl_rel = tables.Insert("mdl_rel", "domain", "relation", "kind", "cardinalit
 
 // note: this differs from the original declaration..
 var mdl_rule = tables.Insert("mdl_rule", "domain", "pattern", "phase", "filter", "prog", "at")
+
+// the noun half of mdl_start
+var mdl_val = tables.Insert("mdl_val", "domain", "noun", "field", "value", "at")
