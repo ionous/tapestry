@@ -1,6 +1,8 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/literals"
 	"github.com/ionous/errutil"
 )
 
@@ -38,6 +40,56 @@ func (k *ScopedKind) AddField(field FieldDefinition) (err error) {
 		// if everything worked out store definition locally
 		if err == nil {
 			field.AddToKind(k)
+		}
+	}
+	return
+}
+
+// check that the kind can store the requested value at the passed field
+// returns the name of the field ( in case the originally specified field was a trait )
+func (k *ScopedKind) findCompatibleValue(field string, value literals.Literal) (ret string, err error) {
+	if value.Affinity() == affine.Bool {
+		if aspect, ok := k.findCompatibleTrait(field); ok {
+			ret = aspect
+		} else {
+			err = errutil.New("trait not found '%s.%s'", k.name, field)
+		}
+	} else {
+		if ok, e := k.findCompatibleField(field, value); e != nil {
+			err = e
+		} else if ok {
+			ret = field
+		} else {
+			err = errutil.New("field not found '%s.%s'", k.name, field)
+		}
+	}
+	return
+}
+
+// fix: rename "literals" to "literal"; can "Literal" be "Value" ( probably would conflict with the value group ) or maybe "LiteralValue"
+func (k *ScopedKind) findCompatibleField(field string, value literals.Literal) (okay bool, err error) {
+	for _, def := range k.fields {
+		if def.name == field {
+			if aff := value.Affinity(); def.affinity == aff.String() {
+				okay = true
+			} else {
+				err = errutil.New("value of affinity %s incompatible with '%s.%s:%s'",
+					aff, k.name, field, def.affinity)
+			}
+			break
+		}
+	}
+	return
+}
+
+func (k *ScopedKind) findCompatibleTrait(field string) (ret string, okay bool) {
+	for _, def := range k.traits {
+		// the names of traits of that aspect
+		for _, trait := range def.traits {
+			if trait == field {
+				ret, okay = def.aspect, true
+				break
+			}
 		}
 	}
 	return

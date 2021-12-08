@@ -15,11 +15,12 @@ type Definition struct {
 
 type Conflict struct {
 	Reason ReasonForConflict
-	Def    Definition
+	Was    Definition
+	Value  string
 }
 
 func (n *Conflict) Error() string {
-	return errutil.Sprintf("%s %q at %s", n.Reason.String(), n.Def.value, n.Def.at)
+	return errutil.Sprintf("%s %q at %s with %q", n.Reason.String(), n.Was.value, n.Was.at, n.Value)
 }
 
 // fix? consider moving domain error to catalog processing internals ( and removing explicit external use )
@@ -65,7 +66,7 @@ func (defs Artifacts) CheckConflict(key, value string) (err error) {
 		} else {
 			why = Redefined
 		}
-		err = &Conflict{why, def}
+		err = &Conflict{Reason: why, Was: def, Value: value}
 	}
 	return
 }

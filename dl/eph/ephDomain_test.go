@@ -199,7 +199,7 @@ func namesOf(ds []Dependency) []string {
 // ephemera for testing which enters a "
 type rivalFact string
 
-func (el rivalFact) Phase() Phase { return TestPhase }
+func (el rivalFact) Phase() Phase { return ValuePhase }
 
 func (el rivalFact) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	return d.AddDefinition("rivalFact", at, string(el))

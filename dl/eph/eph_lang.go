@@ -3,6 +3,7 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/literals"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"github.com/ionous/errutil"
@@ -2204,6 +2205,124 @@ func EphTiming_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphTiming) (err e
 	return
 }
 
+// EphValues
+// User implements: Ephemera.
+type EphValues struct {
+	Noun  string           `if:"label=noun,type=text"`
+	Field string           `if:"label=has,type=text"`
+	Value literals.Literal `if:"label=value"`
+}
+
+func (*EphValues) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphValues_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphValues_Type = "eph_values"
+
+const EphValues_Field_Noun = "$NOUN"
+const EphValues_Field_Field = "$FIELD"
+const EphValues_Field_Value = "$VALUE"
+
+func (op *EphValues) Marshal(m jsn.Marshaler) error {
+	return EphValues_Marshal(m, op)
+}
+
+type EphValues_Slice []EphValues
+
+func (op *EphValues_Slice) GetType() string { return EphValues_Type }
+
+func (op *EphValues_Slice) Marshal(m jsn.Marshaler) error {
+	return EphValues_Repeats_Marshal(m, (*[]EphValues)(op))
+}
+
+func (op *EphValues_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphValues_Slice) SetSize(cnt int) {
+	var els []EphValues
+	if cnt >= 0 {
+		els = make(EphValues_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphValues_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphValues_Marshal(m, &(*op)[i])
+}
+
+func EphValues_Repeats_Marshal(m jsn.Marshaler, vals *[]EphValues) error {
+	return jsn.RepeatBlock(m, (*EphValues_Slice)(vals))
+}
+
+func EphValues_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphValues) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphValues_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphValues_Flow struct{ ptr *EphValues }
+
+func (n EphValues_Flow) GetType() string      { return EphValues_Type }
+func (n EphValues_Flow) GetLede() string      { return "eph" }
+func (n EphValues_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphValues_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphValues); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphValues_Optional_Marshal(m jsn.Marshaler, pv **EphValues) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphValues_Marshal(m, *pv)
+	} else if !enc {
+		var v EphValues
+		if err = EphValues_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphValues_Marshal(m jsn.Marshaler, val *EphValues) (err error) {
+	if err = m.MarshalBlock(EphValues_Flow{val}); err == nil {
+		e0 := m.MarshalKey("noun", EphValues_Field_Noun)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Noun)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphValues_Field_Noun))
+		}
+		e1 := m.MarshalKey("has", EphValues_Field_Field)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Field)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphValues_Field_Field))
+		}
+		e2 := m.MarshalKey("value", EphValues_Field_Value)
+		if e2 == nil {
+			e2 = literals.Literal_Marshal(m, &val.Value)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphValues_Field_Value))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 const Ephemera_Type = "ephemera"
 
 var Ephemera_Optional_Marshal = Ephemera_Marshal
@@ -2727,6 +2846,7 @@ var Slats = []composer.Composer{
 	(*EphRelatives)(nil),
 	(*EphRules)(nil),
 	(*EphTiming)(nil),
+	(*EphValues)(nil),
 	(*ManyMany)(nil),
 	(*ManyOne)(nil),
 	(*OneMany)(nil),
@@ -2767,6 +2887,7 @@ var Signatures = map[uint64]interface{}{
 	17218035188999844343: (*EphRelatives)(nil),   /* Eph:relates:to: */
 	17570881590226414756: (*EphRules)(nil),       /* Eph pattern:if:when:do: */
 	10757199676611909587: (*EphRules)(nil),       /* Eph pattern:if:when:do:touch: */
+	17160611285654896437: (*EphValues)(nil),      /* Eph noun:has:value: */
 	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */
 	15407091527463396937: (*ManyOne)(nil),        /* Kinds:toKind: */
 	8349208709908405809:  (*OneMany)(nil),        /* Kind:toKinds: */

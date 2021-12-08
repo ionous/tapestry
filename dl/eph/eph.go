@@ -14,15 +14,14 @@ const (
 	DomainPhase Phase = iota
 	PluralPhase
 	AncestryPhase
-	AspectPhase   // traits of kinds
-	FieldPhase    // other properties of kinds
-	DefaultPhase  // default values of fields
-	NounPhase     // instances ( of kinds )
+	AspectPhase // traits of kinds
+	FieldPhase  // other properties of kinds
+	NounPhase   // instances ( of kinds )
+	ValuePhase
 	RelativePhase // initial relations between nouns
 	PatternPhase
 	GrammarPhase
 	DirectivePhase // more grammar
-	TestPhase
 	ReferencePhase // tdb: names used by things already built;
 	/*          */ // might be redundant if patterns, etc. are looking up the things they need
 	NumPhases

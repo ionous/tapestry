@@ -30,7 +30,11 @@ func (td *traitDef) checkProps(k *ScopedKind) (err error) {
 	for _, kf := range k.fields {
 		for _, in := range td.traits {
 			if in == kf.name {
-				err = &Conflict{Redefined, Definition{kf.at, kf.name}}
+				err = &Conflict{
+					Reason: Redefined,
+					Was:    Definition{kf.at, kf.name},
+					Value:  td.aspect,
+				}
 				break
 			}
 		}
@@ -43,7 +47,11 @@ func (td *traitDef) checkTraits(k *ScopedKind) (err error) {
 		for _, t := range ka.traits {
 			for _, in := range td.traits {
 				if t == in {
-					err = &Conflict{Redefined, Definition{ka.at, ka.aspect}}
+					err = &Conflict{
+						Reason: Redefined,
+						Was:    Definition{ka.at, ka.aspect},
+						Value:  td.aspect,
+					}
 					break
 				}
 			}

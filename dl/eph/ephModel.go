@@ -24,7 +24,7 @@ var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "path", "at")
 var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
 
 // the domain tells the scope in which the noun was defined
-// ( implicitly the same as or the child of the domain for kind )
+// ( the same as - or a child of - the domain of the kind )
 var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 
 //

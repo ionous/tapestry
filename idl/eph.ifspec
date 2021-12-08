@@ -75,6 +75,10 @@
                 "spec": "eph {noun:text} {kind:text}",
                 "slot": "ephemera"
             },
+            "eph_values": {
+                "spec": "eph {noun:text} {has%field:text} {value:literal}",
+                "slot": "ephemera"
+            },
             "eph_aliases": {
                 "spec": "eph {understand%short_name:text} {as%aliases+text}",
                 "slot": "ephemera"

@@ -4,6 +4,7 @@ import (
 	"math"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/dl/literals"
 	"git.sr.ht/~ionous/iffy/lang"
 	"github.com/ionous/errutil"
 )
@@ -14,6 +15,13 @@ type ScopedNoun struct {
 	names    []string
 	aliases  []string
 	aliasat  []string // origin of each alias
+	values   []NounValue
+}
+
+type NounValue struct {
+	field string
+	value literals.Literal
+	at    string
 }
 
 func (n *ScopedNoun) Resolve() (ret Dependencies, err error) {
@@ -41,6 +49,52 @@ func (n *ScopedNoun) Kind() (ret *ScopedKind, err error) {
 func (n *ScopedNoun) AddAlias(a, at string) {
 	n.aliases = append(n.aliases, a)
 	n.aliasat = append(n.aliasat, at)
+}
+
+func (n *ScopedNoun) AddLiteralValue(field string, value literals.Literal, at string) (err error) {
+	if k, e := n.Kind(); e != nil {
+		err = e
+	} else if name, e := k.findCompatibleValue(field, value); e != nil {
+		err = e
+	} else {
+		// the field was a trait, the returned name was an aspect
+		if name != field {
+			// redo the value we are setting as the trait of the aspect
+			value = &literals.TextValue{
+				Text: field,
+			}
+		}
+		err = n.addLiteral(field, value, at)
+	}
+	return
+}
+
+// assumes the value is known to be compatible, and the field is a field... not a trait.
+func (n *ScopedNoun) addLiteral(field string, value literals.Literal, at string) (err error) {
+	// verify we havent already stored a field of this value
+	for _, q := range n.values {
+		if q.field == field {
+			why, was, wants := Redefined, q.field, field
+			type stringer interface{ String() string }
+			if try, ok := value.(stringer); ok {
+				if curr, ok := q.value.(stringer); ok {
+					if try, curr := try.String(), curr.String(); try == curr {
+						was, wants, why = curr, try, Duplicated
+					}
+				}
+			}
+			err = &Conflict{
+				Reason: why,
+				Was:    Definition{q.at, was},
+				Value:  wants,
+			}
+			break
+		}
+	}
+	if err == nil {
+		n.values = append(n.values, NounValue{field, value, at})
+	}
+	return
 }
 
 func (n *ScopedNoun) Names() []string {
