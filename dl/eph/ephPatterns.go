@@ -14,9 +14,8 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 		for _, dep := range deps {
 			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(KindsOfPattern) {
 				pat := k.name
-				defs := k.domain.phases[AncestryPhase].defs
-				result := defs[pat+"?res"].value
-				labels := defs[pat+"?args"].value
+				result := k.domain.GetDefinition(AncestryPhase, pat+"?res")
+				labels := k.domain.GetDefinition(AncestryPhase, pat+"?args")
 				//
 				if e := w.Write(mdl_pat, k.domain.name, k.name, labels, result); e != nil {
 					err = e

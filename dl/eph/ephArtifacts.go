@@ -19,7 +19,7 @@ type Conflict struct {
 }
 
 func (n *Conflict) Error() string {
-	return errutil.Sprintf("%s definition at %s value %q", n.Reason.String(), n.Def.at, n.Def.value)
+	return errutil.Sprintf("%s %q at %s", n.Reason.String(), n.Def.value, n.Def.at)
 }
 
 // fix? consider moving domain error to catalog processing internals ( and removing explicit external use )

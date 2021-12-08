@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"errors"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/tables"
@@ -12,8 +13,7 @@ func (c *Catalog) WriteRelations(w Writer) (err error) {
 		err = e
 	} else {
 		for _, kdep := range ks {
-			if as := kdep.Parents(); len(as) > 0 && as[0].Name() == KindsOfRelation {
-				k := kdep.Leaf().(*ScopedKind)
+			if k := kdep.Leaf().(*ScopedKind); k.HasParent(KindsOfRelation) {
 				one := k.fields[0]   // a field of affinity text referencing some other kind.
 				other := k.fields[1] // the name is the cardinality, and the class is the kind.
 				card := makeCard(one.name, other.name)
@@ -62,24 +62,31 @@ func (el *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else if bk, e := b.getKind(c, d); e != nil {
 		err = e
 	} else {
-		kid := d.EnsureKind(rel, at)
-		kid.AddRequirement(KindsOfRelation)
-		if e := d.AddEphemera(
-			EphAt{at, &EphFields{
-				Kinds:    rel,
-				Affinity: a.affinity(),
-				Name:     a.short(false),
-				Class:    ak}},
-		); e != nil {
+		// add the cardinality as a definition
+		// ( used by EphRelatives to determine the cardinality )
+		var conflict *Conflict
+		if e := d.AddDefinition(rel+"?card", at, card); e != nil && !errors.As(e, &conflict) && conflict.Reason != Duplicated {
 			err = e
-		} else if e := d.AddEphemera(
-			EphAt{at, &EphFields{
-				Kinds:    rel,
-				Affinity: b.affinity(),
-				Name:     b.short(true),
-				Class:    bk}},
-		); e != nil {
-			err = e
+		} else {
+			kid := d.EnsureKind(rel, at)
+			kid.AddRequirement(KindsOfRelation)
+			if e := d.AddEphemera(
+				EphAt{at, &EphFields{
+					Kinds:    rel,
+					Affinity: a.affinity(),
+					Name:     a.short(false),
+					Class:    ak}},
+			); e != nil {
+				err = e
+			} else if e := d.AddEphemera(
+				EphAt{at, &EphFields{
+					Kinds:    rel,
+					Affinity: b.affinity(),
+					Name:     b.short(true),
+					Class:    bk}},
+			); e != nil {
+				err = e
+			}
 		}
 	}
 	return

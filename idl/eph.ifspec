@@ -107,6 +107,14 @@
                 "uses": "str",
                 "spec": "{always}"
             },
+            "eph_relations": {
+                "spec": "eph {_%rel:text} {relate%cardinality:eph_cardinality}",
+                "slot": "ephemera"
+            },
+            "eph_relatives": {
+                "spec": "eph {_%rel:text} {relates%noun:text} {to%other_noun:text}",
+                "slot": "ephemera"
+            },
             "eph_cardinality": {
                 "uses": "swap",
                 "spec": "{one_one}, {one_many}, {many_one}, or {many_many}"
@@ -126,10 +134,6 @@
             "many_many": {
                 "uses": "flow",
                 "spec": "kinds {_%kinds:text} {to_kinds%other_kinds:text}"
-            },
-            "eph_relations": {
-                "spec": "eph {_%rel:text} {relate%cardinality:eph_cardinality}",
-                "slot": "ephemera"
             }
         }
     }

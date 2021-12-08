@@ -10,10 +10,8 @@ import (
 func (el *EphAliases) Phase() Phase { return GrammarPhase }
 
 func (el *EphAliases) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if short, ok := UniformString(el.ShortName); !ok {
-		err = InvalidString(el.ShortName)
-	} else if noun, ok := d.GetClosestNoun(short); !ok {
-		err = errutil.New("unknown noun", el.ShortName)
+	if noun, e := getClosestNoun(d, el.ShortName); e != nil {
+		err = e
 	} else {
 		for _, a := range el.Aliases {
 			if a, ok := UniformString(a); !ok {
@@ -22,6 +20,17 @@ func (el *EphAliases) Assemble(c *Catalog, d *Domain, at string) (err error) {
 				noun.AddAlias(a, at)
 			}
 		}
+	}
+	return
+}
+
+func getClosestNoun(d *Domain, rawName string) (ret *ScopedNoun, err error) {
+	if short, ok := UniformString(rawName); !ok {
+		err = InvalidString(rawName)
+	} else if noun, ok := d.GetClosestNoun(short); !ok {
+		err = errutil.New("unknown noun", rawName)
+	} else {
+		ret = noun
 	}
 	return
 }

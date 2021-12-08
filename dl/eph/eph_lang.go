@@ -1865,6 +1865,124 @@ func EphRelations_Marshal(m jsn.Marshaler, val *EphRelations) (err error) {
 	return
 }
 
+// EphRelatives
+// User implements: Ephemera.
+type EphRelatives struct {
+	Rel       string `if:"label=_,type=text"`
+	Noun      string `if:"label=relates,type=text"`
+	OtherNoun string `if:"label=to,type=text"`
+}
+
+func (*EphRelatives) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphRelatives_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphRelatives_Type = "eph_relatives"
+
+const EphRelatives_Field_Rel = "$REL"
+const EphRelatives_Field_Noun = "$NOUN"
+const EphRelatives_Field_OtherNoun = "$OTHER_NOUN"
+
+func (op *EphRelatives) Marshal(m jsn.Marshaler) error {
+	return EphRelatives_Marshal(m, op)
+}
+
+type EphRelatives_Slice []EphRelatives
+
+func (op *EphRelatives_Slice) GetType() string { return EphRelatives_Type }
+
+func (op *EphRelatives_Slice) Marshal(m jsn.Marshaler) error {
+	return EphRelatives_Repeats_Marshal(m, (*[]EphRelatives)(op))
+}
+
+func (op *EphRelatives_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphRelatives_Slice) SetSize(cnt int) {
+	var els []EphRelatives
+	if cnt >= 0 {
+		els = make(EphRelatives_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphRelatives_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphRelatives_Marshal(m, &(*op)[i])
+}
+
+func EphRelatives_Repeats_Marshal(m jsn.Marshaler, vals *[]EphRelatives) error {
+	return jsn.RepeatBlock(m, (*EphRelatives_Slice)(vals))
+}
+
+func EphRelatives_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphRelatives) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphRelatives_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphRelatives_Flow struct{ ptr *EphRelatives }
+
+func (n EphRelatives_Flow) GetType() string      { return EphRelatives_Type }
+func (n EphRelatives_Flow) GetLede() string      { return "eph" }
+func (n EphRelatives_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphRelatives_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphRelatives); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphRelatives_Optional_Marshal(m jsn.Marshaler, pv **EphRelatives) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphRelatives_Marshal(m, *pv)
+	} else if !enc {
+		var v EphRelatives
+		if err = EphRelatives_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphRelatives_Marshal(m jsn.Marshaler, val *EphRelatives) (err error) {
+	if err = m.MarshalBlock(EphRelatives_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", EphRelatives_Field_Rel)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Rel)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphRelatives_Field_Rel))
+		}
+		e1 := m.MarshalKey("relates", EphRelatives_Field_Noun)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Noun)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphRelatives_Field_Noun))
+		}
+		e2 := m.MarshalKey("to", EphRelatives_Field_OtherNoun)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Marshal(m, &val.OtherNoun)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphRelatives_Field_OtherNoun))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // EphRules
 // User implements: Ephemera.
 type EphRules struct {
@@ -2606,6 +2724,7 @@ var Slats = []composer.Composer{
 	(*EphPlurals)(nil),
 	(*EphPrograms)(nil),
 	(*EphRelations)(nil),
+	(*EphRelatives)(nil),
 	(*EphRules)(nil),
 	(*EphTiming)(nil),
 	(*ManyMany)(nil),
@@ -2645,6 +2764,7 @@ var Signatures = map[uint64]interface{}{
 	2078507782755484470:  (*EphRelations)(nil),   /* Eph:relate oneMany: */
 	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */
 	15063335060652852941: (*EphRelations)(nil),   /* Eph:relate manyMany: */
+	17218035188999844343: (*EphRelatives)(nil),   /* Eph:relates:to: */
 	17570881590226414756: (*EphRules)(nil),       /* Eph pattern:if:when:do: */
 	10757199676611909587: (*EphRules)(nil),       /* Eph pattern:if:when:do:touch: */
 	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */

@@ -18,7 +18,8 @@ type Domain struct {
 	resolvedKinds cachedTable
 	resolvedNouns cachedTable
 	pairs         PluralPairs
-	rules         map[string]Rulesets // pattern name to rules for that pattern
+	rules         map[string]Rulesets  // pattern name to rules for that pattern
+	relatives     map[string]Relatives // relation name to pairs of nouns
 }
 
 type PhaseData struct {
@@ -31,6 +32,11 @@ func (dp *PhaseData) AddDefinition(k string, v Definition) {
 		dp.defs = make(Artifacts)
 	}
 	dp.defs[k] = v
+}
+
+func (d *Domain) GetDefinition(phase Phase, key string) (ret string) {
+	defs := d.phases[phase].defs
+	return defs[key].value
 }
 
 func (d *Domain) Resolve() (ret Dependencies, err error) {
