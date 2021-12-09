@@ -50,17 +50,17 @@ func (n KindError) Unwrap() error {
 }
 
 // name of a kind to assembly info
-func (el *EphKinds) Phase() Phase { return AncestryPhase }
+func (op *EphKinds) Phase() Phase { return AncestryPhase }
 
-func (el *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if singleKind, e := d.Singularize(strings.TrimSpace(el.Kinds)); e != nil {
+func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if singleKind, e := d.Singularize(strings.TrimSpace(op.Kinds)); e != nil {
 		err = e
 	} else if newKind, ok := UniformString(singleKind); !ok {
-		err = InvalidString(el.Kinds)
+		err = InvalidString(op.Kinds)
 	} else {
 		kid := d.EnsureKind(newKind, at)
-		if parentKind, ok := UniformString(el.From); !ok && len(el.From) > 0 {
-			err = InvalidString(el.From)
+		if parentKind, ok := UniformString(op.From); !ok && len(op.From) > 0 {
+			err = InvalidString(op.From)
 		} else if kid.domain == d {
 			// we can only add requirements to the kind in the same domain that it was declared
 			// if in a different domain: the kinds have to match up

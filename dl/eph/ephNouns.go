@@ -70,14 +70,14 @@ func (n NounError) Unwrap() error {
 }
 
 // name of a noun to assembly info
-func (el *EphNouns) Phase() Phase { return NounPhase }
+func (op *EphNouns) Phase() Phase { return NounPhase }
 
 // noun, kind
-func (el *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if name, ok := UniformString(el.Noun); !ok {
-		err = InvalidString(el.Noun)
-	} else if k, ok := UniformString(el.Kind); !ok {
-		err = InvalidString(el.Kind)
+func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if name, ok := UniformString(op.Noun); !ok {
+		err = InvalidString(op.Noun)
+	} else if k, ok := UniformString(op.Kind); !ok {
+		err = InvalidString(op.Kind)
 	} else {
 		noun := d.EnsureNoun(name, at)
 		// we can only add requirements to the noun in the same domain that it was declared

@@ -105,8 +105,8 @@ func (d *Domain) Assemble(phaseActions PhaseActions) (err error) {
 			} else {
 				// fix: if we were merging in the definitions we wouldnt have to walk upwards...
 				// what's best? see note in checkRivals()
-				for _, el := range phaseData.eph {
-					if e := el.Eph.Assemble(d.catalog, d, el.At); e != nil {
+				for _, op := range phaseData.eph {
+					if e := op.Eph.Assemble(d.catalog, d, op.At); e != nil {
 						err = errutil.Append(err, e)
 					}
 				}
@@ -156,18 +156,18 @@ func (c *Catalog) WriteDomains(w Writer) (err error) {
 }
 
 // EphBeginDomain
-func (el *EphBeginDomain) Phase() Phase { return DomainPhase }
+func (op *EphBeginDomain) Phase() Phase { return DomainPhase }
 
 //
-func (el *EphBeginDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if n, ok := UniformString(el.Name); !ok {
-		err = InvalidString(el.Name)
+func (op *EphBeginDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if n, ok := UniformString(op.Name); !ok {
+		err = InvalidString(op.Name)
 	} else if kid, ok := c.GetDomain(n); ok {
 		err = errutil.New("domain", n, "at", kid.at, "redeclared", kid.at)
 	} else {
 		kid := c.EnsureDomain(n, at)
 		// add any explicit dependencies
-		for _, req := range el.Requires {
+		for _, req := range op.Requires {
 			if sub, ok := UniformString(req); !ok {
 				err = errutil.Append(err, InvalidString(req))
 			} else {
@@ -185,15 +185,15 @@ func (el *EphBeginDomain) Assemble(c *Catalog, d *Domain, at string) (err error)
 }
 
 // EphEndDomain
-func (el *EphEndDomain) Phase() Phase { return DomainPhase }
+func (op *EphEndDomain) Phase() Phase { return DomainPhase }
 
 // pop the most recent domain
-func (el *EphEndDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphEndDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// we expect it's the current domain, the parent of this command, that's the one ending
-	if n, ok := UniformString(el.Name); !ok {
-		err = InvalidString(el.Name)
+	if n, ok := UniformString(op.Name); !ok {
+		err = InvalidString(op.Name)
 	} else if n != d.name {
-		err = errutil.New("unexpected domain ending, requested", el.Name, "have", d.name)
+		err = errutil.New("unexpected domain ending, requested", op.Name, "have", d.name)
 	} else {
 		c.processing.Pop()
 	}

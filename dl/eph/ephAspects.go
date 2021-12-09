@@ -10,6 +10,7 @@ func (c *Catalog) WriteAspects(w Writer) (err error) {
 		err = e
 	} else {
 		for _, dep := range deps {
+			// this is a kind of aspect:
 			if k := dep.Leaf().(*ScopedKind); k.HasParent(KindsOfAspect) {
 				a := k.aspects[0] // we only expect to see 1 -- probably not worth error checking it.
 				for i, t := range a.traits {
@@ -27,15 +28,15 @@ func (c *Catalog) WriteAspects(w Writer) (err error) {
 // uses the ancestry phase because it generates kinds ( one per aspect. )
 // the assembly statement generates new ephemera for the aspect phase
 // ( to fill the aspect's kind with bool fields representing the traits. )
-func (el *EphAspects) Phase() Phase { return AncestryPhase }
+func (op *EphAspects) Phase() Phase { return AncestryPhase }
 
 // generates traits and adds them to a custom aspect kind.
-func (el *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if singleAspect, e := d.Singularize(strings.TrimSpace(el.Aspects)); e != nil {
+func (op *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if singleAspect, e := d.Singularize(strings.TrimSpace(op.Aspects)); e != nil {
 		err = e
 	} else if aspect, ok := UniformString(singleAspect); !ok {
-		err = InvalidString(el.Aspects)
-	} else if traits, e := UniformStrings(el.Traits); e != nil {
+		err = InvalidString(op.Aspects)
+	} else if traits, e := UniformStrings(op.Traits); e != nil {
 		err = e
 	} else {
 		kid := d.EnsureKind(aspect, at)

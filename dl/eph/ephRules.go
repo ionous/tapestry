@@ -19,7 +19,7 @@ func (c *Catalog) WriteRules(w Writer) (err error) {
 			// rules are stored by pattern name
 			// we sort to give some consistency, although the order shouldnt really matter.
 			names := make([]string, 0, len(d.rules))
-			for k, _ := range d.rules {
+			for k := range d.rules {
 				names = append(names, k)
 			}
 			sort.Strings(names)
@@ -62,23 +62,23 @@ type Partition struct {
 }
 
 // rules are assembled after kinds and their fields...
-func (el *EphRules) Phase() Phase { return PatternPhase }
+func (op *EphRules) Phase() Phase { return PatternPhase }
 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
-func (el *EphRules) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if name, ok := UniformString(el.Name); !ok {
-		err = InvalidString(el.Name)
+func (op *EphRules) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if name, ok := UniformString(op.Name); !ok {
+		err = InvalidString(op.Name)
 	} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(KindsOfPattern) {
-		err = errutil.Fmt("unknown or invalid pattern %q ", el.Name)
-	} else if part, ok := el.When.GetPartition(); !ok {
-		err = errutil.Fmt("couldn't compute flags for %q", el.When.Str)
+		err = errutil.Fmt("unknown or invalid pattern %q ", op.Name)
+	} else if part, ok := op.When.GetPartition(); !ok {
+		err = errutil.Fmt("couldn't compute flags for %q", op.When.Str)
 	} else {
 		if d.rules == nil {
 			d.rules = make(map[string]Rulesets)
 		}
 		rules := d.rules[name]
-		rules.AppendRule(el, part, at)
+		rules.AppendRule(op, part, at)
 		d.rules[name] = rules
 	}
 	return

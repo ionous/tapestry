@@ -58,15 +58,15 @@ func (c *Catalog) WritePlurals(w Writer) (err error) {
 	return
 }
 
-func (el *EphPlurals) Phase() Phase { return PluralPhase }
+func (op *EphPlurals) Phase() Phase { return PluralPhase }
 
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
-func (el *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if many, ok := UniformString(el.Plural); !ok {
-		err = InvalidString(el.Plural)
-	} else if one, ok := UniformString(el.Singular); !ok {
-		err = InvalidString(el.Singular)
+func (op *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if many, ok := UniformString(op.Plural); !ok {
+		err = InvalidString(op.Plural)
+	} else if one, ok := UniformString(op.Singular); !ok {
+		err = InvalidString(op.Singular)
 	} else if ok, e := refine(d, many, at, one); e != nil {
 		err = e
 	} else if ok {

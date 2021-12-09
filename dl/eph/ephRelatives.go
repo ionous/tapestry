@@ -20,7 +20,7 @@ func (c *Catalog) WritePairs(w Writer) (err error) {
 			// pairs are stored by relation name
 			// we sort to give some consistency, the order shouldnt really matter.
 			names := make([]string, 0, len(d.relatives))
-			for k, _ := range d.relatives {
+			for k := range d.relatives {
 				names = append(names, k)
 			}
 			sort.Strings(names)
@@ -60,20 +60,20 @@ func (rs *Relatives) AddPair(a, b, at string) {
 	rs.pairs = append(rs.pairs, Relative{a, b, at})
 }
 
-func (el *EphRelatives) Phase() Phase { return RelativePhase }
+func (op *EphRelatives) Phase() Phase { return RelativePhase }
 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
-func (el *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if name, ok := UniformString(el.Rel); !ok {
-		err = InvalidString(el.Rel)
+func (op *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if name, ok := UniformString(op.Rel); !ok {
+		err = InvalidString(op.Rel)
 	} else if rel, ok := d.GetKind(name); !ok || !rel.HasAncestor(KindsOfRelation) {
-		err = errutil.Fmt("unknown or invalid relation %q", el.Rel)
+		err = errutil.Fmt("unknown or invalid relation %q", op.Rel)
 	} else if card := rel.domain.GetDefinition(AncestryPhase, rel.name+"?card"); len(card) == 0 {
-		err = errutil.Fmt("unknown or invalid cardinality for %q", el.Rel)
-	} else if first, e := getClosestNoun(d, el.Noun); e != nil {
+		err = errutil.Fmt("unknown or invalid cardinality for %q", op.Rel)
+	} else if first, e := getClosestNoun(d, op.Noun); e != nil {
 		err = e
-	} else if second, e := getClosestNoun(d, el.OtherNoun); e != nil {
+	} else if second, e := getClosestNoun(d, op.OtherNoun); e != nil {
 		err = e
 	} else {
 		var addPair bool
@@ -98,7 +98,7 @@ func (el *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 			uniquePair := first.name + second.name
 			addPair, err = relate(d, rel, uniquePair, at, uniquePair)
 		default:
-			err = errutil.Fmt("unknown or invalid cardinality %q for %q", card, el.Rel)
+			err = errutil.Fmt("unknown or invalid cardinality %q for %q", card, op.Rel)
 		}
 		//
 		if err == nil && addPair {

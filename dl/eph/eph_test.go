@@ -95,7 +95,6 @@ func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 	dt.out = append(dt.out, &EphEndDomain{
 		Name: n,
 	})
-	return
 }
 
 func (dt *domainTest) addToCat(cat *Catalog) (err error) {

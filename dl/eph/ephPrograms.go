@@ -41,12 +41,12 @@ func (d *Domain) WriteDirectives(w Writer) (err error) {
 }
 
 // we give it its own phase so we can keep its definitions separated out.
-func (el *EphPrograms) Phase() Phase { return DirectivePhase }
+func (op *EphPrograms) Phase() Phase { return DirectivePhase }
 
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
-func (el *EphPrograms) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	prog := el.Type + ":" + el.Prog // fix: definitions probably need to be smarter.
-	return d.AddDefinition(el.Name, at, prog)
+func (op *EphPrograms) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	prog := op.Type + ":" + op.Prog // fix: definitions probably need to be smarter.
+	return d.AddDefinition(op.Name, at, prog)
 }
 
 // fix? the original code decoded the grammar here and invented the lede from it

@@ -28,21 +28,21 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 }
 
 // pattern commands generate ancestry, fields, and pattern entries....
-func (el *EphPatterns) Phase() Phase { return AncestryPhase }
+func (op *EphPatterns) Phase() Phase { return AncestryPhase }
 
-func (el *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if name, ok := UniformString(el.Name); !ok {
-		err = InvalidString(el.Name)
+func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if name, ok := UniformString(op.Name); !ok {
+		err = InvalidString(op.Name)
 	} else {
 		k := d.EnsureKind(name, at)
 		k.AddRequirement(KindsOfPattern)
 		// size of fields is usually > 0, so dont worry too much about the edge case
-		fields := make([]UniformField, 0, measurePattern(el))
-		if e := el.assembleRet(d, k, at, &fields); e != nil {
+		fields := make([]UniformField, 0, measurePattern(op))
+		if e := op.assembleRet(d, k, at, &fields); e != nil {
 			err = e
-		} else if e := el.assembleArgs(d, k, at, &fields); e != nil {
+		} else if e := op.assembleArgs(d, k, at, &fields); e != nil {
 			err = e
-		} else if e := reduceLocals(el.Locals, &fields); e != nil {
+		} else if e := reduceLocals(op.Locals, &fields); e != nil {
 			err = e
 		} else {
 			err = d.AddEphemera(EphAt{at, PhaseFunction{FieldPhase,
@@ -60,8 +60,8 @@ func (el *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	return
 }
 
-func (el *EphPatterns) assembleRet(d *Domain, k *ScopedKind, at string, outp *[]UniformField) (err error) {
-	if patres, e := reduceRes(el.Result, outp); e != nil {
+func (op *EphPatterns) assembleRet(d *Domain, k *ScopedKind, at string, outp *[]UniformField) (err error) {
+	if patres, e := reduceRes(op.Result, outp); e != nil {
 		err = e
 	} else if len(patres) > 0 {
 		err = addPatternDef(d, k, "res", at, patres)
@@ -69,8 +69,8 @@ func (el *EphPatterns) assembleRet(d *Domain, k *ScopedKind, at string, outp *[]
 	return
 }
 
-func (el *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *[]UniformField) (err error) {
-	if patlabels, e := reduceArgs(el.Args, outp); e != nil {
+func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *[]UniformField) (err error) {
+	if patlabels, e := reduceArgs(op.Args, outp); e != nil {
 		err = e
 	} else if len(patlabels) > 0 {
 		err = addPatternDef(d, k, "args", at, patlabels)
@@ -132,9 +132,9 @@ func reduceLocals(params []EphParams, outp *[]UniformField) (err error) {
 	return
 }
 
-func measurePattern(el *EphPatterns) (ret int) {
-	ret = len(el.Args) + len(el.Locals)
-	if el.Result != nil {
+func measurePattern(op *EphPatterns) (ret int) {
+	ret = len(op.Args) + len(op.Locals)
+	if op.Result != nil {
 		ret++
 	}
 	return
