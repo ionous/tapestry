@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -112,77 +111,28 @@ func (dt *domainTest) addToCat(cat *Catalog) (err error) {
 	return
 }
 
-// kind, parent
-func addKinds(out *[]Ephemera, kps ...string) {
-	for i, cnt := 0, len(kps); i < cnt; i += 2 {
-		k, p := kps[i], kps[i+1]
-		*out = append(*out, &EphKinds{Kinds: k, From: p})
-	}
-}
-
-// kind, name, affinity(key), class
-func addFields(out *[]Ephemera, knacs ...string) {
-	for i, cnt := 0, len(knacs); i < cnt; i += 4 {
-		k, n, a, c := knacs[i], knacs[i+1], knacs[i+2], knacs[i+3]
-		*out = append(*out, &EphFields{
-			Kinds: k, Name: n, Affinity: Affinity{a}, Class: c,
-		})
-	}
-}
-
-// noun, kind
-func addNouns(out *[]Ephemera, nks ...string) {
-	for i, cnt := 0, len(nks); i < cnt; i += 2 {
-		n, k := nks[i], nks[i+1]
-		*out = append(*out, &EphNouns{Noun: n, Kind: k})
-	}
-}
-
-// noun(string), field(string), value(literal)
-func addValues(out *[]Ephemera, nfvs ...interface{}) {
-	for i, cnt := 0, len(nfvs); i < cnt; i += 3 {
-		n, f, v := nfvs[i].(string), nfvs[i+1].(string), nfvs[i+2].(literal.LiteralValue)
-		*out = append(*out, &EphValues{Noun: n, Field: f, Value: v})
-	}
-}
-
 // relation, kind, cardinality, otherKinds
-func addRelations(out *[]Ephemera, rkcos ...string) {
-	for i, cnt := 0, len(rkcos); i < cnt; i += 4 {
-		r, k, c, o := rkcos[i], rkcos[i+1], rkcos[i+2], rkcos[i+3]
-		var card EphCardinality
-		switch c {
-		case tables.ONE_TO_ONE:
-			card = EphCardinality{EphCardinality_OneOne_Opt, &OneOne{k, o}}
-		case tables.ONE_TO_MANY:
-			card = EphCardinality{EphCardinality_OneMany_Opt, &OneMany{k, o}}
-		case tables.MANY_TO_ONE:
-			card = EphCardinality{EphCardinality_ManyOne_Opt, &ManyOne{k, o}}
-		case tables.MANY_TO_MANY:
-			card = EphCardinality{EphCardinality_ManyMany_Opt, &ManyMany{k, o}}
-		default:
-			panic("unknown cardinality")
-		}
-		*out = append(*out, &EphRelations{
-			Rel:         r,
-			Cardinality: card,
-		})
+func newRelation(r, k, c, o string) *EphRelations {
+	var card EphCardinality
+	switch c {
+	case tables.ONE_TO_ONE:
+		card = EphCardinality{EphCardinality_OneOne_Opt, &OneOne{k, o}}
+	case tables.ONE_TO_MANY:
+		card = EphCardinality{EphCardinality_OneMany_Opt, &OneMany{k, o}}
+	case tables.MANY_TO_ONE:
+		card = EphCardinality{EphCardinality_ManyOne_Opt, &ManyOne{k, o}}
+	case tables.MANY_TO_MANY:
+		card = EphCardinality{EphCardinality_ManyMany_Opt, &ManyMany{k, o}}
+	default:
+		panic("unknown cardinality")
+	}
+	return &EphRelations{
+		Rel:         r,
+		Cardinality: card,
 	}
 }
 
-// add noun, stem/rel, otherNoun ephemera
-func addRelatives(out *[]Ephemera, nros ...string) {
-	for i, cnt := 0, len(nros); i < cnt; i += 3 {
-		n, r, o := nros[i], nros[i+1], nros[i+2]
-		*out = append(*out, &EphRelatives{
-			Noun:      n,
-			Rel:       r,
-			OtherNoun: o,
-		})
-	}
-}
-
-func B(b bool) rt.BoolEval          { return &literal.BoolValue{b} }
-func I(n int) rt.NumberEval         { return &literal.NumValue{float64(n)} }
-func F(n float64) rt.NumberEval     { return &literal.NumValue{n} }
+func B(b bool) *literal.BoolValue   { return &literal.BoolValue{b} }
+func I(n int) *literal.NumValue     { return &literal.NumValue{float64(n)} }
+func F(n float64) *literal.NumValue { return &literal.NumValue{n} }
 func T(s string) *literal.TextValue { return &literal.TextValue{s} }

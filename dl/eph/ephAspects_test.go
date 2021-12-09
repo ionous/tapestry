@@ -6,6 +6,8 @@ import (
 	"github.com/kr/pretty"
 )
 
+// fix: test two aspects with overlapping traits used in the same kind ( or a derived one i guess )
+
 // generate a kind of aspect containing a few traits.
 func TestAspectFormation(t *testing.T) {
 	var dt domainTest
@@ -59,7 +61,7 @@ func TestAspectUsage(t *testing.T) {
 	}
 }
 
-// fail to generate a kind that has a normal field named the same as the aspect.
+// fail to generate a kind that has a field named the same as a trait.
 func TestAspectConflictingFields(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
@@ -80,7 +82,3 @@ func TestAspectConflictingFields(t *testing.T) {
 		t.Log("ok", e)
 	}
 }
-
-// 4. fail to generate a kind that has a field named the same as a trait.
-// x. how do you write the literal back into the db -- its not a "value",
-//    do you need an StoredValue() interface or something :/

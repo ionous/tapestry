@@ -69,7 +69,7 @@ func (n *ScopedNoun) AddLiteralValue(field string, value literal.LiteralValue, a
 				Text: field,
 			}
 		}
-		err = n.addLiteral(field, value, at)
+		err = n.addLiteral(name, value, at)
 	}
 	return
 }

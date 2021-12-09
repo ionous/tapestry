@@ -34,7 +34,7 @@ func TestPatternRules(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl_rule}
-		if cat.WriteRules(&out); e != nil {
+		if e := cat.WriteRules(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
 			// domain, pattern, phase, filter, prog, at

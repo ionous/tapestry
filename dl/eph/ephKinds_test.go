@@ -69,10 +69,8 @@ func TestKindMissing(t *testing.T) {
 		"b", "a",
 		"a", "",
 	)
-	if res, e := ks.ResolveKinds(); e == nil {
-		out := testOut{""}
-		res.WriteTable(&out, "", true)
-		t.Fatal("expected error", out)
+	if _, e := ks.ResolveKinds(); e == nil {
+		t.Fatal("expected error")
 	} else {
 		t.Log("ok:", e)
 	}
@@ -86,10 +84,8 @@ func TestKindSingleParent(t *testing.T) {
 		"d", "b",
 		"d", "c",
 	)
-	if res, e := ks.ResolveKinds(); e == nil {
-		out := testOut{""}
-		res.WriteTable(&out, "", true)
-		t.Fatal("expected error", out)
+	if _, e := ks.ResolveKinds(); e == nil {
+		t.Fatal("expected error")
 	} else {
 		t.Log("ok:", e)
 	}
@@ -98,7 +94,9 @@ func TestKindSingleParent(t *testing.T) {
 func makeKinds(t *testing.T, strs ...string) *Domain {
 	// fake a domain to hold the kinds...
 	d := Domain{Requires: Requires{name: "kinds", at: t.Name()}}
-	d.Resolve() // resolve the domain
+	if _, e := d.Resolve(); e != nil { // resolve the domain
+		panic(e)
+	}
 	for i, cnt := 0, len(strs); i < cnt; i += 2 {
 		a := d.EnsureKind(strs[i], "x")
 		if b := strs[i+1]; len(b) > 0 {

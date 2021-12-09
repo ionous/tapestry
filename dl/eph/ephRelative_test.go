@@ -159,30 +159,39 @@ func TestRelativeManyOneViolation(t *testing.T) {
 }
 
 func newRelativeTest(nros ...string) []Ephemera {
-	var out []Ephemera
-	addKinds(&out,
-		KindsOfRelation, "", // declare the relation table
-		"k", "",
-		"l", "k",
-		"n", "k",
-	)
-	addNouns(&out,
-		"a", "k",
-		"b", "k",
-		"c", "k",
-		"d", "k",
-		"e", "k",
-		"f", "k",
-		"l", "l",
-		"n", "n",
-		"z", "k",
-	)
-	addRelations(&out,
-		"r_1_1", "k", tables.ONE_TO_ONE, "k",
-		"r_1_x", "k", tables.ONE_TO_MANY, "k",
-		"r_x_1", "k", tables.MANY_TO_ONE, "k",
-		"r_x_x", "k", tables.MANY_TO_MANY, "k",
-	)
+	out := []Ephemera{
+		&EphKinds{KindsOfRelation, ""}, // declare the relation table
+		&EphKinds{"k", ""},
+		&EphKinds{"l", "k"},
+		&EphKinds{"n", "k"},
+		// nouns:
+		&EphNouns{"a", "k"},
+		&EphNouns{"b", "k"},
+		&EphNouns{"c", "k"},
+		&EphNouns{"d", "k"},
+		&EphNouns{"e", "k"},
+		&EphNouns{"f", "k"},
+		&EphNouns{"l", "l"},
+		&EphNouns{"n", "n"},
+		&EphNouns{"z", "k"},
+		// some relations those nouns can participate in.
+		newRelation("r_1_1", "k", tables.ONE_TO_ONE, "k"),
+		newRelation("r_1_x", "k", tables.ONE_TO_MANY, "k"),
+		newRelation("r_x_1", "k", tables.MANY_TO_ONE, "k"),
+		newRelation("r_x_x", "k", tables.MANY_TO_MANY, "k"),
+	}
 	addRelatives(&out, nros...)
 	return out
+}
+
+// add noun, stem/rel, otherNoun ephemera
+func addRelatives(out *[]Ephemera, nros ...string) {
+	for i, cnt := 0, len(nros); i < cnt; i += 3 {
+		n, r, o := nros[i], nros[i+1], nros[i+2]
+		*out = append(*out, &EphRelatives{
+			Noun:      n,
+			Rel:       r,
+			OtherNoun: o,
+		})
+	}
 }
