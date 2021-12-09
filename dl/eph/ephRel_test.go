@@ -49,7 +49,7 @@ func TestRelAssembly(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl_rel}
-		if cat.WriteRelations(&out); e != nil {
+		if e := cat.WriteRelations(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
 			"b:r:p:one_one:q:x",

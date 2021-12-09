@@ -25,7 +25,7 @@ func (fd *fieldDef) CheckConflict(k *ScopedKind) (err error) {
 		err = errutil.New("can't add fields to kinds of aspect")
 	} else if e := fd.checkProps(k); e != nil {
 		err = e
-	} else if fd.checkTraits(k); e != nil {
+	} else if e := fd.checkTraits(k); e != nil {
 		err = e
 	}
 	return

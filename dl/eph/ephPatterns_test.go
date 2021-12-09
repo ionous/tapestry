@@ -125,7 +125,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 		t.Fatal(e)
 	} else {
 		outkind := testOut{mdl_kind}
-		if cat.WriteKinds(&outkind); e != nil {
+		if e := cat.WriteKinds(&outkind); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outkind[1:], testOut{
 			"a:k::x",
@@ -136,7 +136,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 			t.Fatal(diff)
 		}
 		outfields := testOut{mdl_field}
-		if cat.WriteFields(&outfields); e != nil {
+		if e := cat.WriteFields(&outfields); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outfields[1:], testOut{
 			"a:p:success:bool::x",
@@ -148,7 +148,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 			t.Fatal(diff)
 		}
 		outpat := testOut{mdl_pat}
-		if cat.WritePatterns(&outpat); e != nil {
+		if e := cat.WritePatterns(&outpat); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outpat[1:], testOut{
 			// fix? run-in number suffixes?

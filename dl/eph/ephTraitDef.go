@@ -12,8 +12,8 @@ type traitDef struct {
 	traits []string
 }
 
-func (fd *traitDef) Write(w Writer) error {
-	return w.Write(mdl_field, fd.aspect, Affinity_Text, fd.aspect, fd.at)
+func (td *traitDef) Write(w Writer) error {
+	return w.Write(mdl_field, td.aspect, Affinity_Text, td.aspect, td.at)
 }
 
 func (td *traitDef) AddToKind(k *ScopedKind) {
@@ -32,10 +32,10 @@ func (td *traitDef) HasTrait(n string) (ret bool) {
 
 func (td *traitDef) CheckConflict(k *ScopedKind) (err error) {
 	if k.HasParent(KindsOfAspect) && (len(k.aspects) > 0 || k.name != td.aspect) {
-		err = errutil.New("aspect can only have one set of traits")
+		err = errutil.New("kinds of aspect can only have one set of traits")
 	} else if e := td.checkProps(k); e != nil {
 		err = e
-	} else if td.checkTraits(k); e != nil {
+	} else if e := td.checkTraits(k); e != nil {
 		err = e
 	}
 	return
