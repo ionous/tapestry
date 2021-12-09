@@ -136,3 +136,32 @@ func B(b bool) *literal.BoolValue   { return &literal.BoolValue{b} }
 func I(n int) *literal.NumValue     { return &literal.NumValue{float64(n)} }
 func F(n float64) *literal.NumValue { return &literal.NumValue{n} }
 func T(s string) *literal.TextValue { return &literal.TextValue{s} }
+
+func buildAncestors(dt domainTest) (ret *Catalog, err error) {
+	var cat Catalog
+	if e := dt.addToCat(&cat); e != nil {
+		err = e
+	} else if e := cat.AssembleCatalog(PhaseActions{
+		AncestryPhase: AncestryPhaseActions,
+	}); e != nil {
+		err = e
+	} else {
+		ret = &cat
+	}
+	return
+}
+
+func buildNouns(dt domainTest) (ret *Catalog, err error) {
+	var cat Catalog
+	if e := dt.addToCat(&cat); e != nil {
+		err = e
+	} else if e := cat.AssembleCatalog(PhaseActions{
+		AncestryPhase: AncestryPhaseActions,
+		NounPhase:     NounPhaseActions,
+	}); e != nil {
+		err = e
+	} else {
+		ret = &cat
+	}
+	return
+}

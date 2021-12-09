@@ -1,12 +1,11 @@
 package eph
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/kr/pretty"
 )
-
-// fix: test two aspects with overlapping traits used in the same kind ( or a derived one i guess )
 
 // generate a kind of aspect containing a few traits.
 func TestAspectFormation(t *testing.T) {
@@ -19,7 +18,7 @@ func TestAspectFormation(t *testing.T) {
 		}},
 	)
 	out := testOut{mdl_aspect}
-	if cat, e := buildFields(dt); e != nil {
+	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteAspects(&out); e != nil {
 		t.Fatal(e)
@@ -40,7 +39,7 @@ func TestAspectUsage(t *testing.T) {
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: KindsOfAspect},            // say that aspects exist
 		&EphKinds{Kinds: "a", From: KindsOfAspect}, // make an aspect
-		&EphAspects{Aspects: "a", Traits: []string{ // fix? should "Aspects" be singular?
+		&EphAspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
 	)
@@ -49,7 +48,7 @@ func TestAspectUsage(t *testing.T) {
 		&EphFields{Kinds: "k", Name: "a", Affinity: Affinity{Affinity_Text}, Class: "a"},
 	)
 	out := testOut{mdl_field}
-	if cat, e := buildFields(dt); e != nil {
+	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
@@ -67,7 +66,7 @@ func TestAspectConflictingFields(t *testing.T) {
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: KindsOfAspect},            // say that aspects exist
 		&EphKinds{Kinds: "a", From: KindsOfAspect}, // make an aspect
-		&EphAspects{Aspects: "a", Traits: []string{ // fix? should "Aspects" be singular?
+		&EphAspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
 	)
@@ -76,7 +75,33 @@ func TestAspectConflictingFields(t *testing.T) {
 		&EphFields{Kinds: "k", Name: "a", Affinity: Affinity{Affinity_Text}, Class: "a"},
 		&EphFields{Kinds: "k", Name: "one", Affinity: Affinity{Affinity_Text}},
 	)
-	if _, e := buildFields(dt); e == nil {
+	if _, e := buildAncestors(dt); e == nil {
+		t.Fatal("expected error")
+	} else {
+		t.Log("ok", e)
+	}
+}
+
+func TestAspectConflictingTraits(t *testing.T) {
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		&EphKinds{Kinds: KindsOfAspect},            // say that aspects exist
+		&EphKinds{Kinds: "a", From: KindsOfAspect}, // make an aspect
+		&EphAspects{Aspects: "a", Traits: []string{ // add some traits
+			"one", "several", "oh so many", //
+		}},
+		&EphKinds{Kinds: "b", From: KindsOfAspect}, // make an aspect
+		&EphAspects{Aspects: "b", Traits: []string{ // add some traits
+			"one", "two", "blue", //
+		}},
+	)
+	dt.makeDomain(dd("b", "a"),
+		&EphKinds{Kinds: "k"},
+		&EphFields{Kinds: "k", Name: "a", Affinity: Affinity{Affinity_Text}, Class: "a"},
+		&EphFields{Kinds: "k", Name: "b", Affinity: Affinity{Affinity_Text}, Class: "b"},
+	)
+	var conflict *Conflict
+	if _, e := buildAncestors(dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)

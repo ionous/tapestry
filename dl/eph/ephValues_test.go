@@ -28,13 +28,7 @@ func TestInitialFieldAssignment(t *testing.T) {
 		&EphValues{"toy", "d", I(321)},
 		&EphValues{"boat", "t", T("more text")},
 	)
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-		NounPhase:     NounPhaseActions,
-	}); e != nil {
+	if cat, e := buildNouns(dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl_value}
@@ -49,6 +43,25 @@ func TestInitialFieldAssignment(t *testing.T) {
 			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)
 		}
+	}
+}
+
+func TestMissingField(t *testing.T) {
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		// some random set of kinds
+		&EphKinds{"k", ""},
+		// a field
+		&EphFields{"k", Affinity{Affinity_Number}, "d", ""},
+		// a noun
+		&EphNouns{"n", "k"},
+		// and not that field
+		&EphValues{"n", "t", T("no such field")},
+	)
+	if _, e := buildNouns(dt); e == nil || e.Error() != `field not found 'k.t'` {
+		t.Fatal("expected error", e)
+	} else {
+		t.Log("ok", e)
 	}
 }
 
@@ -78,13 +91,7 @@ func TestInitialTraitAssignment(t *testing.T) {
 		&EphValues{"toy", "w", B(true)},
 		&EphValues{"boat", "z", B(true)},
 	)
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-		NounPhase:     NounPhaseActions,
-	}); e != nil {
+	if cat, e := buildNouns(dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl_value}

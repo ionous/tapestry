@@ -47,11 +47,11 @@ func (fd *fieldDef) checkProps(k *ScopedKind) (err error) {
 			} else {
 				reason = Redefined
 			}
-			err = &Conflict{
-				Reason: reason,
-				Was:    Definition{kf.at, kf.name},
-				Value:  fd.name,
-			}
+			err = newConflict(
+				reason,
+				Definition{kf.at, kf.name},
+				fd.name,
+			)
 			break
 		}
 	}
@@ -61,11 +61,11 @@ func (fd *fieldDef) checkProps(k *ScopedKind) (err error) {
 // does this field conflict with any existing traits?
 func (fd *fieldDef) checkTraits(k *ScopedKind) (err error) {
 	if a, ok := k.FindTrait(fd.name); ok {
-		err = &Conflict{
-			Reason: Redefined,
-			Was:    Definition{a.at, a.aspect},
-			Value:  fd.name,
-		}
+		err = newConflict(
+			Redefined,
+			Definition{a.at, a.aspect},
+			fd.name,
+		)
 	}
 	return
 }

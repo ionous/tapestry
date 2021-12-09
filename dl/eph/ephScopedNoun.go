@@ -88,11 +88,11 @@ func (n *ScopedNoun) addLiteral(field string, value literal.LiteralValue, at str
 					}
 				}
 			}
-			err = &Conflict{
-				Reason: why,
-				Was:    Definition{q.at, was},
-				Value:  wants,
-			}
+			err = newConflict(
+				why,
+				Definition{q.at, was},
+				wants,
+			)
 			break
 		}
 	}

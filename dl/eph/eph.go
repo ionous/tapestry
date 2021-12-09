@@ -22,8 +22,6 @@ const (
 	PatternPhase
 	GrammarPhase
 	DirectivePhase // more grammar
-	ReferencePhase // tdb: names used by things already built;
-	/*          */ // might be redundant if patterns, etc. are looking up the things they need
 	NumPhases
 )
 

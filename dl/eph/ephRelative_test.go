@@ -47,13 +47,7 @@ func TestRelativeFormation(t *testing.T) {
 			"a", "r_x_x", "b",
 		)...,
 	)
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-		NounPhase:     NounPhaseActions,
-	}); e != nil {
+	if cat, e := buildNouns(dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl_pair}
@@ -101,13 +95,7 @@ func TestRelativeOneOneViolation(t *testing.T) {
 			"b", "r_1_1", "d",
 		)...,
 	)
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-		NounPhase:     NounPhaseActions,
-	}); e == nil {
+	if _, e := buildNouns(dt); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -123,13 +111,7 @@ func TestRelativeOneManyViolation(t *testing.T) {
 			"c", "r_1_x", "e",
 		)...,
 	)
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-		NounPhase:     NounPhaseActions,
-	}); e == nil {
+	if _, e := buildNouns(dt); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -145,13 +127,7 @@ func TestRelativeManyOneViolation(t *testing.T) {
 			"e", "r_x_1", "c",
 		)...,
 	)
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-		NounPhase:     NounPhaseActions,
-	}); e == nil {
+	if _, e := buildNouns(dt); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)

@@ -7,8 +7,8 @@ import (
 	"github.com/kr/pretty"
 )
 
-// nouns
-func TestNounNames(t *testing.T) {
+// test nouns and their names
+func TestNounFormation(t *testing.T) {
 	var warnings Warnings
 	unwarn := warnings.catch(t)
 	defer unwarn()
@@ -205,23 +205,18 @@ func TestNounDistance(t *testing.T) {
 }
 
 func writeNouns(dt domainTest, nouns, names *testOut) (err error) {
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if cat, e := buildNouns(dt); e != nil {
 		err = e
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-		NounPhase:     NounPhaseActions,
-	}); e != nil {
-		err = e
-	}
-	if nouns != nil && err == nil {
-		if e := cat.WriteNouns(nouns); e != nil {
-			err = errutil.New("error writing nouns:", e)
+	} else {
+		if nouns != nil && err == nil {
+			if e := cat.WriteNouns(nouns); e != nil {
+				err = errutil.New("error writing nouns:", e)
+			}
 		}
-	}
-	if names != nil && err == nil {
-		if e := cat.WriteNames(names); e != nil {
-			err = errutil.New("error writing names:", e)
+		if names != nil && err == nil {
+			if e := cat.WriteNames(names); e != nil {
+				err = errutil.New("error writing names:", e)
+			}
 		}
 	}
 	return

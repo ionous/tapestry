@@ -23,6 +23,10 @@ func (n *Conflict) Error() string {
 	return errutil.Sprintf("%s %q at %s with %q", n.Reason.String(), n.Was.value, n.Was.at, n.Value)
 }
 
+func newConflict(why ReasonForConflict, was Definition, val string) *Conflict {
+	return &Conflict{why, was, val}
+}
+
 // fix? consider moving domain error to catalog processing internals ( and removing explicit external use )
 type DomainError struct {
 	Domain string
@@ -66,7 +70,7 @@ func (defs Artifacts) CheckConflict(key, value string) (err error) {
 		} else {
 			why = Redefined
 		}
-		err = &Conflict{Reason: why, Was: def, Value: value}
+		err = newConflict(why, def, value)
 	}
 	return
 }
