@@ -109,10 +109,14 @@ func (k *ScopedKind) findCompatibleTrait(field string) (ret string, err error) {
 			if cls := def.class; len(cls) > 0 {
 				// see if that kind is an aspect
 				if a, ok := k.domain.GetKind(cls); ok && a.HasParent(KindsOfAspect) {
-					// and search through its traits
-					if _, ok := a.FindTrait(field); ok {
-						ret, err = cls, Visited // to exit hierarchy search
-						break                   // to exit the field search
+					// when the name of the field is the same as the name of the aspect
+					// that is our special "acts as trait" field.
+					if a.name == def.name && def.affinity == affine.Text.String() {
+						// and search through its traits
+						if _, ok := a.FindTrait(field); ok {
+							ret, err = cls, Visited // to exit hierarchy search
+							break                   // to exit the field search
+						}
 					}
 				}
 			}
