@@ -50,12 +50,12 @@ func oneOrAny(out *strings.Builder, s string) (ret string) {
 // and an entirely new verification mechanism...
 // we create a relation kind with fields of an appropriate type
 // and use the kind resolving mechanism
-func (el *EphRelations) Phase() Phase { return AncestryPhase }
+func (op *EphRelations) Phase() Phase { return AncestryPhase }
 
-func (el *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if rel, e := d.Singularize(strings.TrimSpace(el.Rel)); e != nil {
+func (op *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if rel, e := d.Singularize(strings.TrimSpace(op.Rel)); e != nil {
 		err = e
-	} else if a, b, card := el.getCard(); len(card) == 0 {
+	} else if a, b, card := op.getCard(); len(card) == 0 {
 		err = errutil.New("unknown cardinality")
 	} else if ak, e := a.getKind(c, d); e != nil {
 		err = e
@@ -135,8 +135,8 @@ func (k *relKind) getKind(c *Catalog, d *Domain) (ret string, err error) {
 	return
 }
 
-func (el *EphRelations) getCard() (first, second relKind, ret string) {
-	switch c := el.Cardinality.Value.(type) {
+func (op *EphRelations) getCard() (first, second relKind, ret string) {
+	switch c := op.Cardinality.Value.(type) {
 	case *OneOne:
 		first = relKind{c.Kind, false}
 		second = relKind{c.OtherKind, false}
