@@ -31,7 +31,8 @@ func (d *Requires) OriginAt() string {
 // make the name or object this set of dependencies represents require the passed dep
 // clears any previous cached resolution data or internal errors
 func (d *Requires) AddRequirement(name string) {
-	if d.reqs.AddName(name) {
+	if d.reqs.AddName(name) >= 0 && d.status != nil {
+		// println("clearing dependencies for", d.name, "while adding", name)
 		d.status = nil // not seen before, then clear any cache.
 	}
 }
@@ -39,7 +40,7 @@ func (d *Requires) AddRequirement(name string) {
 // return previously resolved dependencies
 func (d *Requires) GetDependencies() (ret Dependencies, err error) {
 	if e := d.status; e == nil {
-		err = errutil.New("dependencies not resolved")
+		err = errutil.New(d.name, "dependencies not resolved")
 	} else if e != xResolved {
 		err = e
 	} else {
@@ -92,6 +93,7 @@ func (d *Requires) resolve(node Dependency, names DependencyFinder) (ret Depende
 			err, d.status = e, e
 		} else {
 			ret, d.resolved, d.status = res, res, xResolved
+			// println("resolved", d.name)
 		}
 
 	default: // otherwise return the cached error.

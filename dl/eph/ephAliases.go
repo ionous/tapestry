@@ -7,17 +7,19 @@ import (
 // fix? right now we're adding aliases in grammar --
 // so its only going to affect player input
 // but... we could add this after noun declaration to allow fields, etc. to use aliased names
-func (el *EphAliases) Phase() Phase { return GrammarPhase }
+func (op *EphAliases) Phase() Phase { return GrammarPhase }
 
-func (el *EphAliases) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if noun, e := getClosestNoun(d, el.ShortName); e != nil {
+func (op *EphAliases) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if noun, e := getClosestNoun(d, op.ShortName); e != nil {
 		err = e
 	} else {
-		for _, a := range el.Aliases {
+		for _, a := range op.Aliases {
 			if a, ok := UniformString(a); !ok {
 				err = errutil.Append(err, InvalidString(a))
 			} else {
-				noun.AddAlias(a, at)
+				if !noun.AddAlias(a, at) {
+					LogWarning(errutil.Fmt("duplicate alias %q for %q at %s", a, noun.name, at))
+				}
 			}
 		}
 	}

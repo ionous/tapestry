@@ -1,7 +1,6 @@
 package eph
 
 import (
-	"math"
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/dl/literal"
@@ -12,8 +11,8 @@ import (
 type ScopedNoun struct {
 	Requires // kinds ( when resolved, can have one direct parent )
 	domain   *Domain
-	names    []string
-	aliases  []string
+	names    UniqueNames
+	aliases  UniqueNames
 	aliasat  []string // origin of each alias
 	values   []NounValue
 }
@@ -46,9 +45,15 @@ func (n *ScopedNoun) Kind() (ret *ScopedKind, err error) {
 	return
 }
 
-func (n *ScopedNoun) AddAlias(a, at string) {
-	n.aliases = append(n.aliases, a)
-	n.aliasat = append(n.aliasat, at)
+// returns false if the alias already existed
+func (n *ScopedNoun) AddAlias(a, at string) (okay bool) {
+	if i := n.aliases.AddName(a); i >= 0 {
+		s := append(n.aliasat, "")
+		copy(s[i+1:], s[i:])
+		n.aliasat, s[i] = s, at
+		okay = true
+	}
+	return
 }
 
 func (n *ScopedNoun) AddLiteralValue(field string, value literal.LiteralValue, at string) (err error) {
@@ -102,19 +107,6 @@ func (n *ScopedNoun) Names() []string {
 		n.names = n.makeNames()
 	}
 	return n.names
-}
-
-const UnknownRank = math.MaxInt
-
-func (n *ScopedNoun) FindName(name string, rank int) {
-	rank = UnknownRank
-	for i, el := range n.Names() {
-		if el == name && i < rank {
-			rank = i
-			break
-		}
-	}
-	return
 }
 
 func (n *ScopedNoun) makeNames() []string {
