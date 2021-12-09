@@ -37,7 +37,7 @@ func TestInitialFieldAssignment(t *testing.T) {
 	}); e != nil {
 		t.Fatal(e)
 	} else {
-		out := testOut{mdl_val}
+		out := testOut{mdl_value}
 		if e := cat.WriteValues(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
@@ -87,7 +87,7 @@ func TestInitialTraitAssignment(t *testing.T) {
 	}); e != nil {
 		t.Fatal(e)
 	} else {
-		out := testOut{mdl_val}
+		out := testOut{mdl_value}
 		if e := cat.WriteValues(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{

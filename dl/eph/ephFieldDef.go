@@ -1,6 +1,9 @@
 package eph
 
-import "github.com/ionous/errutil"
+import (
+	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
+)
 
 type FieldDefinition interface {
 	CheckConflict(*ScopedKind) error
@@ -10,6 +13,7 @@ type FieldDefinition interface {
 
 type fieldDef struct {
 	name, affinity, class, at string
+	initially                 rt.Assignment
 }
 
 func (fd *fieldDef) Write(w Writer) error {

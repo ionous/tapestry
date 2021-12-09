@@ -12,10 +12,12 @@ import (
 func (c *Catalog) WriteValues(w Writer) error {
 	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
 		for _, v := range n.values {
+			// we can use encode to get the raw values because everything is a literal
+			// alt: give the literal interface a "get literal value" function.
 			if value, e := cout.Encode(v.value.(jsn.Marshalee), literal.CompactEncoder); e != nil {
 				err = errutil.Append(err, e)
 				break
-			} else if e := w.Write(mdl_val, d.name, n.name, v.field, value, v.at); e != nil {
+			} else if e := w.Write(mdl_value, d.name, n.name, v.field, value, v.at); e != nil {
 				err = e
 				break
 			}

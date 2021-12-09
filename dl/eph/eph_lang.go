@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
 )
 
@@ -1279,11 +1280,13 @@ func EphNouns_Marshal(m jsn.Marshaler, val *EphNouns) (err error) {
 
 // EphParams 'Affinity' designates the storage type of a given parameter
 // while 'class' is used to indicate an interpretation of that parameter, for example a reference to a kind.
+// Pattern locals can have an initial value, other uses of parameter cannot.
 // User implements: Ephemera.
 type EphParams struct {
-	Affinity Affinity `if:"label=have"`
-	Name     string   `if:"label=called,type=text"`
-	Class    string   `if:"label=of,optional,type=text"`
+	Affinity  Affinity      `if:"label=have"`
+	Name      string        `if:"label=called,type=text"`
+	Class     string        `if:"label=of,optional,type=text"`
+	Initially rt.Assignment `if:"label=initially,optional"`
 }
 
 func (*EphParams) Compose() composer.Spec {
@@ -1299,6 +1302,7 @@ const EphParams_Type = "eph_params"
 const EphParams_Field_Affinity = "$AFFINITY"
 const EphParams_Field_Name = "$NAME"
 const EphParams_Field_Class = "$CLASS"
+const EphParams_Field_Initially = "$INITIALLY"
 
 func (op *EphParams) Marshal(m jsn.Marshaler) error {
 	return EphParams_Marshal(m, op)
@@ -1390,6 +1394,13 @@ func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EphParams_Field_Class))
+		}
+		e3 := m.MarshalKey("initially", EphParams_Field_Initially)
+		if e3 == nil {
+			e3 = rt.Assignment_Optional_Marshal(m, &val.Initially)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", EphParams_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -2870,6 +2881,8 @@ var Signatures = map[uint64]interface{}{
 	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
 	12259359132675429189: (*EphParams)(nil),      /* Eph have:called: */
 	277028977564474262:   (*EphParams)(nil),      /* Eph have:called:of: */
+	16868970960604249858: (*EphParams)(nil),      /* Eph have:called:initially: */
+	16991751007965772137: (*EphParams)(nil),      /* Eph have:called:of:initially: */
 	1611161010098549912:  (*EphPatterns)(nil),    /* Eph pattern: */
 	14764503916681519581: (*EphPatterns)(nil),    /* Eph pattern:args: */
 	7324201728182884878:  (*EphPatterns)(nil),    /* Eph pattern:locals: */

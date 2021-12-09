@@ -60,6 +60,7 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	return
 }
 
+// writes a definition of patternName?res=name
 func (op *EphPatterns) assembleRet(d *Domain, k *ScopedKind, at string, outp *[]UniformField) (err error) {
 	if patres, e := reduceRes(op.Result, outp); e != nil {
 		err = e
@@ -69,6 +70,7 @@ func (op *EphPatterns) assembleRet(d *Domain, k *ScopedKind, at string, outp *[]
 	return
 }
 
+// writes a definition of patternName?args=arg1,arg2,arg3
 func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *[]UniformField) (err error) {
 	if patlabels, e := reduceArgs(op.Args, outp); e != nil {
 		err = e
@@ -89,7 +91,9 @@ func addPatternDef(d *Domain, k *ScopedKind, key, at, v string) (err error) {
 
 func reduceRes(param *EphParams, outp *[]UniformField) (ret string, err error) {
 	if param != nil {
-		if p, e := MakeUniformField(*param); e != nil {
+		if param.Initially != nil {
+			err = errutil.New("return values dont currently support initial values")
+		} else if p, e := MakeUniformField(*param); e != nil {
 			err = e
 		} else {
 			*outp = append(*outp, p)
@@ -102,7 +106,9 @@ func reduceRes(param *EphParams, outp *[]UniformField) (ret string, err error) {
 func reduceArgs(params []EphParams, outp *[]UniformField) (ret string, err error) {
 	var labels strings.Builder
 	for i, param := range params {
-		if p, e := MakeUniformField(param); e != nil {
+		if param.Initially != nil {
+			err = errutil.New("args dont currently support initial values")
+		} else if p, e := MakeUniformField(param); e != nil {
 			err = e
 			break
 		} else {

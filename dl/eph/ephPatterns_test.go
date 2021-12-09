@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"github.com/kr/pretty"
 )
 
@@ -25,8 +26,9 @@ func TestPatternSingle(t *testing.T) {
 				Name:     "l1",
 				Affinity: Affinity{Affinity_NumList},
 			}, {
-				Name:     "l2",
-				Affinity: Affinity{Affinity_Number},
+				Name:      "l2",
+				Affinity:  Affinity{Affinity_Number},
+				Initially: &core.FromNum{I(10)},
 			}},
 			Result: &EphParams{
 				Name:     "success",
@@ -68,8 +70,9 @@ func TestPatternSeparateLocals(t *testing.T) {
 		&EphPatterns{
 			Name: "p",
 			Locals: []EphParams{{
-				Name:     "l2",
-				Affinity: Affinity{Affinity_Number},
+				Name:      "l2",
+				Affinity:  Affinity{Affinity_Number},
+				Initially: &core.FromNum{I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -108,8 +111,9 @@ func TestPatternSeparateDomains(t *testing.T) {
 		&EphPatterns{
 			Name: "p",
 			Locals: []EphParams{{
-				Name:     "l2",
-				Affinity: Affinity{Affinity_Number},
+				Name:      "l2",
+				Affinity:  Affinity{Affinity_Number},
+				Initially: &core.FromNum{I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -155,6 +159,15 @@ func expectFullResults(t *testing.T, dt domainTest) {
 			"a:p:p_1:success",
 		}); len(diff) > 0 {
 			t.Log("got:", pretty.Sprint(outpat))
+			t.Fatal(diff)
+		}
+		outlocals := testOut{mdl_local}
+		if e := cat.WriteLocals(&outlocals); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(outlocals[1:], testOut{
+			`a:p:l_2:{"FromNum:":10}`,
+		}); len(diff) > 0 {
+			t.Log("got:", pretty.Sprint(outlocals))
 			t.Fatal(diff)
 		}
 	}
@@ -256,5 +269,26 @@ func TestPatternMultipleArgSets(t *testing.T) {
 		t.Fatal("expected an redefined conflict; got", e)
 	} else {
 		t.Log("okay", e)
+	}
+}
+
+// fail conflicting assignment
+func TestPatternConflictingInit(t *testing.T) {
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		&EphKinds{Kinds: KindsOfPattern}, // declare the patterns table
+		&EphPatterns{
+			Name: "p",
+			Locals: []EphParams{{
+				Name:      "n",
+				Affinity:  Affinity{Affinity_Number},
+				Initially: &core.FromText{T("mismatched")},
+			}},
+		},
+	)
+	if _, e := buildFields(dt); e == nil || e.Error() != `mismatched affinity of initial value (a text) for field "n" (a number)` {
+		t.Fatal("expected an error")
+	} else {
+		t.Log("ok", e)
 	}
 }

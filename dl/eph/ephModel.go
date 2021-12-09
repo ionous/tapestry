@@ -22,6 +22,9 @@ var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity"
 // singular name of kind and materialized hierarchy of ancestors separated by commas
 var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "path", "at")
 
+// the pattern half of mdl_start; "domain, kind, field" are a pointer into mdl_field
+var mdl_local = tables.Insert("mdl_local", "domain", "kind", "field", "value")
+
 // words for authors and game players refer to nouns
 // follows the domain rules of mdl_noun.
 var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
@@ -50,5 +53,6 @@ var mdl_rel = tables.Insert("mdl_rel", "domain", "relation", "kind", "cardinalit
 // note: this differs from the original declaration..
 var mdl_rule = tables.Insert("mdl_rule", "domain", "pattern", "phase", "filter", "prog", "at")
 
-// the noun half of mdl_start
-var mdl_val = tables.Insert("mdl_val", "domain", "noun", "field", "value", "at")
+// the noun half of mdl_start.
+// "domain, noun, field" reference a join of mdl_noun and mdl_kind to get a filtered mdl_field.
+var mdl_value = tables.Insert("mdl_value", "domain", "noun", "field", "value", "at")

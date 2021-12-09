@@ -495,7 +495,7 @@ func (*NumValues) Compose() composer.Spec {
 	}
 }
 
-const NumValues_Type = "number_values"
+const NumValues_Type = "num_values"
 
 const NumValues_Field_Values = "$VALUES"
 

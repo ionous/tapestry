@@ -6,6 +6,10 @@ import (
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/literal"
+	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/iffy/jsn/cout"
+	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
 )
 
@@ -21,6 +25,29 @@ func (c *Catalog) WriteFields(w Writer) (err error) {
 				if e := f.Write(&partialWriter{w: w, fields: []interface{}{d.Name(), k.Name()}}); e != nil {
 					err = e
 					break
+				}
+			}
+		}
+	}
+	return
+}
+
+func (c *Catalog) WriteLocals(w Writer) (err error) {
+	if deps, e := c.ResolveKinds(); e != nil {
+		err = e
+	} else {
+		for _, dep := range deps {
+			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(KindsOfPattern) {
+				for _, fd := range k.fields {
+					if init := fd.initially; init != nil {
+						if value, e := cout.Marshal(init.(jsn.Marshalee), literal.CompactEncoder); e != nil {
+							err = e
+							break
+						} else if e := w.Write(mdl_local, k.domain.name, k.name, fd.name, value); e != nil {
+							err = e
+							break
+						}
+					}
 				}
 			}
 		}
@@ -51,6 +78,7 @@ func (op *EphFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
 
 type UniformField struct {
 	name, affinity, class string
+	initially             rt.Assignment
 }
 
 func MakeUniformField(op EphParams) (ret UniformField, err error) {
@@ -61,7 +89,15 @@ func MakeUniformField(op EphParams) (ret UniformField, err error) {
 	} else if class, ok := UniformString(op.Class); !ok && len(op.Class) > 0 {
 		err = InvalidString(op.Class)
 	} else {
-		ret = UniformField{name, aff, class}
+		// if there's an initial value, make sure it works with our field
+		if init := op.Initially; init != nil {
+			if initAff := init.Affinity(); initAff.String() != aff {
+				err = errutil.Fmt("mismatched affinity of initial value (a %s) for field %q (a %s)", initAff, op.Name, aff)
+			}
+		}
+		if err == nil {
+			ret = UniformField{name, aff, class, op.Initially}
+		}
 	}
 	return
 }
@@ -72,10 +108,15 @@ func (op *UniformField) AssembleField(kind *ScopedKind, at string) (err error) {
 	} else if ok && (op.affinity != affine.Text.String() && op.affinity != affine.TextList.String()) {
 		err = KindError{kind.name, errutil.Fmt("text affinity expected for field %q of class %q", op.name, op.class)}
 	} else {
+
 		// checks for conflicts, allows duplicates.
 		var conflict *Conflict
 		if e := kind.AddField(&fieldDef{
-			name: op.name, affinity: op.affinity, class: op.class, at: at,
+			at:        at,
+			name:      op.name,
+			affinity:  op.affinity,
+			class:     op.class,
+			initially: op.initially,
 		}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
 			LogWarning(e) // warn if it was a duplicated definition
 		} else if e != nil {
