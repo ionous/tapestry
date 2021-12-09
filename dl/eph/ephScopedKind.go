@@ -9,8 +9,8 @@ import (
 type ScopedKind struct {
 	Requires // references to ancestors ( at most it can have one direct parent )
 	domain   *Domain
-	traits   []traitDef
-	fields   []fieldDef
+	aspects  []traitDef // used for kinds of aspects *and* for fields which use those aspects.
+	fields   []fieldDef // otherwise, everything is a field
 }
 
 func (k *ScopedKind) Resolve() (ret Dependencies, err error) {
@@ -40,63 +40,86 @@ func (k *ScopedKind) AddField(field FieldDefinition) (err error) {
 	return
 }
 
-// check that the kind can store the requested value at the passed field
-// returns the name of the field ( in case the originally specified field was a trait )
-func (k *ScopedKind) findCompatibleValue(field string, value literal.LiteralValue) (ret string, err error) {
-	if value.Affinity() == affine.Bool {
-		if e := VisitTree(k, func(dep Dependency) (err error) {
-			kind := dep.(*ScopedKind)
-			if aspect, ok := kind.findCompatibleTrait(field); ok {
-				ret, err = aspect, Visited
-			}
-			return
-		}); e == nil {
-			err = errutil.Fmt("field not found '%s.%s'", k.name, field)
-		} else if e != Visited {
-			err = e
-		}
-	} else {
-		if e := VisitTree(k, func(dep Dependency) (err error) {
-			kind := dep.(*ScopedKind)
-			if ok, e := kind.findCompatibleField(field, value); e != nil {
-				err = e
-			} else if ok {
-				ret, err = field, Visited
-			}
-			return
-		}); e == nil {
-			err = errutil.Fmt("trait not found '%s.%s'", k.name, field)
-		} else if e != Visited {
-			err = e
-		}
-	}
-	return
-}
-
-func (k *ScopedKind) findCompatibleField(field string, value literal.LiteralValue) (okay bool, err error) {
-	for _, def := range k.fields {
-		if def.name == field {
-			if aff := value.Affinity(); def.affinity == aff.String() {
-				okay = true
-			} else {
-				err = errutil.Fmt("value of affinity %s incompatible with '%s.%s:%s'",
-					aff, k.name, field, def.affinity)
-			}
+// utility to check if this kind has the named trait
+func (k *ScopedKind) FindTrait(name string) (ret traitDef, okay bool) {
+	for _, a := range k.aspects {
+		if a.HasTrait(name) {
+			ret, okay = a, true
 			break
 		}
 	}
 	return
 }
 
-func (k *ScopedKind) findCompatibleTrait(field string) (ret string, okay bool) {
-	for _, def := range k.traits {
-		// the names of traits of that aspect
-		for _, trait := range def.traits {
-			if trait == field {
-				ret, okay = def.aspect, true
+// check that the kind can store the requested value at the passed field
+// returns the name of the field ( in case the originally specified field was a trait )
+func (k *ScopedKind) findCompatibleValue(field string, value literal.LiteralValue) (ret string, err error) {
+	if value.Affinity() != affine.Bool {
+		if ok, e := k.findCompatibleField(field, value); e != nil {
+			err = e
+		} else if !ok {
+			err = errutil.Fmt("field not found '%s.%s'", k.name, field)
+		} else {
+			ret = field
+		}
+	} else {
+		if aspect, e := k.findCompatibleTrait(field); e != nil {
+			err = e
+		} else if len(aspect) == 0 {
+			err = errutil.Fmt("field not found '%s.%s'", k.name, field)
+		} else {
+			ret = aspect
+		}
+	}
+	return
+}
+
+// returns true if the named field was found in this kind
+// returns an error if it encountered a critical error along the way.
+func (k *ScopedKind) findCompatibleField(field string, value literal.LiteralValue) (okay bool, err error) {
+	if e := VisitTree(k, func(dep Dependency) (err error) {
+		// search through hierarchy's fields
+		search := dep.(*ScopedKind)
+		for _, def := range search.fields {
+			if def.name == field {
+				if aff := value.Affinity(); def.affinity == aff.String() {
+					okay, err = true, Visited
+				} else {
+					err = errutil.Fmt("value of affinity %s incompatible with '%s.%s:%s'",
+						aff, search.name, field, def.affinity)
+				}
 				break
 			}
 		}
+		return
+	}); e != Visited {
+		err = e
+	}
+	return
+}
+
+// returns the name of the aspect if the trait was found in this kind, or the empty string if not found.
+// returns an error if it encountered a critical error along the way.
+func (k *ScopedKind) findCompatibleTrait(field string) (ret string, err error) {
+	if e := VisitTree(k, func(dep Dependency) (err error) {
+		// search through hierarchy's fields
+		search := dep.(*ScopedKind)
+		for _, def := range search.fields {
+			// for fields that (probably) refer to a kind
+			if cls := def.class; len(cls) > 0 {
+				// see if that kind is an aspect
+				if a, ok := k.domain.GetKind(cls); ok && a.HasParent(KindsOfAspect) {
+					// and search through its traits
+					if _, ok := a.FindTrait(field); ok {
+						ret, err = cls, Visited // to exit hierarchy search
+						break                   // to exit the field search
+					}
+				}
+			}
+		}
+		return
+	}); e != Visited {
+		err = e
 	}
 	return
 }

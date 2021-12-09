@@ -9,6 +9,9 @@ type Writer interface {
 	Write(q string, args ...interface{}) error
 }
 
+// for backwards compat
+var mdl_aspect = tables.Insert("mdl_aspect", "aspect", "trait", "rank")
+
 // domain name and materialized parents separated by commas
 var mdl_domain = tables.Insert("mdl_domain", "domain", "path", "at")
 

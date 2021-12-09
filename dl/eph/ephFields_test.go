@@ -8,7 +8,7 @@ import (
 
 // add some fields to a kind
 func TestFields(t *testing.T) {
-	var dt domainTest
+	dt := domainTest{noShuffle: true} // fields arent sorted
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: "k"},
 		&EphFields{Kinds: "k", Name: "t", Class: "k", Affinity: Affinity{Affinity_Text}},
@@ -30,7 +30,7 @@ func TestFields(t *testing.T) {
 
 // we can define a kind in one domain, and its fields in another
 func TestFieldsCrossDomain(t *testing.T) {
-	var dt domainTest
+	var dt domainTest // fields arent sorted, but are probably added in domain order so...
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: "k"},
 		&EphFields{Kinds: "k", Name: "n", Affinity: Affinity{Affinity_Number}},

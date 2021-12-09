@@ -66,7 +66,7 @@ func MakeUniformField(el EphParams) (ret UniformField, err error) {
 }
 
 func (el *UniformField) AssembleField(kind *ScopedKind, at string) (err error) {
-	if _, ok := kind.domain.GetKind(el.class); !ok && len(el.class) > 0 {
+	if cls, ok := kind.domain.GetKind(el.class); !ok && len(el.class) > 0 {
 		err = KindError{kind.name, errutil.Fmt("unknown class %q for field %q", el.class, el.name)}
 	} else {
 		// checks for conflicts, allows duplicates.
@@ -75,8 +75,12 @@ func (el *UniformField) AssembleField(kind *ScopedKind, at string) (err error) {
 			name: el.name, affinity: el.affinity, class: el.class, at: at,
 		}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
 			LogWarning(e) // warn if it was a duplicated definition
-		} else {
-			err = e // some other error ( or nil )
+		} else if e != nil {
+			err = e // some other error
+		} else if cls != nil && cls.HasParent(KindsOfAspect) && len(cls.aspects) > 0 {
+			// if the field is a kind of aspect, then we not only add the aspect as a field
+			// we add the set of traits as well
+			err = kind.AddField(&cls.aspects[0])
 		}
 	}
 	return

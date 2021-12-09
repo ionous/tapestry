@@ -1,6 +1,11 @@
 package eph
 
+import "github.com/ionous/errutil"
+
 // implements FieldDefinition
+// when the owner kind is the kind of aspect --
+// the owner will only have one trait def
+// and the name of the aspect will match the name of the kind
 type traitDef struct {
 	at     string
 	aspect string
@@ -8,17 +13,27 @@ type traitDef struct {
 }
 
 func (fd *traitDef) Write(w Writer) error {
-	// fix: this is "old" format... i really want the specific aspect as the class. (fd.aspect)
-	// table: [domain, kind], name, affinity, class, pos
-	return w.Write(mdl_field, fd.aspect, Affinity_Text, KindsOfAspect, fd.at)
+	return w.Write(mdl_field, fd.aspect, Affinity_Text, fd.aspect, fd.at)
 }
 
 func (td *traitDef) AddToKind(k *ScopedKind) {
-	k.traits = append(k.traits, *td)
+	k.aspects = append(k.aspects, *td)
+}
+
+func (td *traitDef) HasTrait(n string) (ret bool) {
+	for _, trait := range td.traits {
+		if n == trait {
+			ret = true
+			break
+		}
+	}
+	return
 }
 
 func (td *traitDef) CheckConflict(k *ScopedKind) (err error) {
-	if e := td.checkProps(k); e != nil {
+	if k.HasParent(KindsOfAspect) && (len(k.aspects) > 0 || k.name != td.aspect) {
+		err = errutil.New("aspect can only have one set of traits")
+	} else if e := td.checkProps(k); e != nil {
 		err = e
 	} else if td.checkTraits(k); e != nil {
 		err = e
@@ -26,35 +41,32 @@ func (td *traitDef) CheckConflict(k *ScopedKind) (err error) {
 	return
 }
 
+// does this set of traits conflict with any existing fields?
 func (td *traitDef) checkProps(k *ScopedKind) (err error) {
 	for _, kf := range k.fields {
-		for _, in := range td.traits {
-			if in == kf.name {
-				err = &Conflict{
-					Reason: Redefined,
-					Was:    Definition{kf.at, kf.name},
-					Value:  td.aspect,
-				}
-				break
+		// see if this set of traits contains the a field from the kind
+		if td.HasTrait(kf.name) {
+			err = &Conflict{
+				Reason: Redefined,
+				Was:    Definition{kf.at, kf.name},
+				Value:  td.aspect,
 			}
+			break
 		}
 	}
 	return
 }
 
+// does this set of traits conflict with any existing set of traits?
 func (td *traitDef) checkTraits(k *ScopedKind) (err error) {
-	for _, ka := range k.traits {
-		for _, t := range ka.traits {
-			for _, in := range td.traits {
-				if t == in {
-					err = &Conflict{
-						Reason: Redefined,
-						Was:    Definition{ka.at, ka.aspect},
-						Value:  td.aspect,
-					}
-					break
-				}
+	for _, t := range td.traits {
+		if a, ok := k.FindTrait(t); ok {
+			err = &Conflict{
+				Reason: Redefined,
+				Was:    Definition{a.at, a.aspect},
+				Value:  td.aspect,
 			}
+			break
 		}
 	}
 	return

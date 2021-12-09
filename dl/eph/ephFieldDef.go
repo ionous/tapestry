@@ -1,5 +1,7 @@
 package eph
 
+import "github.com/ionous/errutil"
+
 type FieldDefinition interface {
 	CheckConflict(*ScopedKind) error
 	AddToKind(*ScopedKind)
@@ -19,7 +21,9 @@ func (fd *fieldDef) AddToKind(k *ScopedKind) {
 }
 
 func (fd *fieldDef) CheckConflict(k *ScopedKind) (err error) {
-	if e := fd.checkProps(k); e != nil {
+	if k.HasParent(KindsOfAspect) {
+		err = errutil.New("can't add fields to kinds of aspect")
+	} else if e := fd.checkProps(k); e != nil {
 		err = e
 	} else if fd.checkTraits(k); e != nil {
 		err = e
@@ -27,6 +31,7 @@ func (fd *fieldDef) CheckConflict(k *ScopedKind) (err error) {
 	return
 }
 
+// does this field conflict with any existing fields?
 func (fd *fieldDef) checkProps(k *ScopedKind) (err error) {
 	for _, kf := range k.fields {
 		if kf.name == fd.name {
@@ -49,17 +54,13 @@ func (fd *fieldDef) checkProps(k *ScopedKind) (err error) {
 	return
 }
 
+// does this field conflict with any existing traits?
 func (fd *fieldDef) checkTraits(k *ScopedKind) (err error) {
-	for _, ka := range k.traits {
-		for _, t := range ka.traits {
-			if t == fd.name {
-				err = &Conflict{
-					Reason: Redefined,
-					Was:    Definition{ka.at, ka.aspect},
-					Value:  fd.name,
-				}
-				break
-			}
+	if a, ok := k.FindTrait(fd.name); ok {
+		err = &Conflict{
+			Reason: Redefined,
+			Was:    Definition{a.at, a.aspect},
+			Value:  fd.name,
 		}
 	}
 	return
