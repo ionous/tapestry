@@ -136,10 +136,10 @@ func TestRelativeManyOneViolation(t *testing.T) {
 
 func newRelativeTest(nros ...string) []Ephemera {
 	out := []Ephemera{
-		&EphKinds{KindsOfRelation, ""}, // declare the relation table
-		&EphKinds{"k", ""},
-		&EphKinds{"l", "k"},
-		&EphKinds{"n", "k"},
+		&EphKinds{Kinds: KindsOfRelation}, // declare the relation table
+		&EphKinds{Kinds: "k"},
+		&EphKinds{Kinds: "l", From: "k"},
+		&EphKinds{Kinds: "n", From: "k"},
 		// nouns:
 		&EphNouns{"a", "k"},
 		&EphNouns{"b", "k"},

@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+// ensure fields which reference aspects use the necessary formatting
+func AspectParam(aspectName string) EphParams {
+	return EphParams{Name: aspectName, Affinity: Affinity{Affinity_Text}, Class: aspectName}
+}
+
 func (c *Catalog) WriteAspects(w Writer) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
 		err = e

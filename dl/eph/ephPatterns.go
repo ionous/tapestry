@@ -72,7 +72,7 @@ func (op *EphPatterns) assembleRet(d *Domain, k *ScopedKind, at string, outp *[]
 
 // writes a definition of patternName?args=arg1,arg2,arg3
 func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *[]UniformField) (err error) {
-	if patlabels, e := reduceArgs(op.Args, outp); e != nil {
+	if patlabels, e := reduceArgs(op.Params, outp); e != nil {
 		err = e
 	} else if len(patlabels) > 0 {
 		err = addPatternDef(d, k, "args", at, patlabels)
@@ -139,7 +139,7 @@ func reduceLocals(params []EphParams, outp *[]UniformField) (err error) {
 }
 
 func measurePattern(op *EphPatterns) (ret int) {
-	ret = len(op.Args) + len(op.Locals)
+	ret = len(op.Params) + len(op.Locals)
 	if op.Result != nil {
 		ret++
 	}

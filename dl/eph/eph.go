@@ -20,7 +20,7 @@ const (
 	ValuePhase
 	RelativePhase // initial relations between nouns
 	PatternPhase
-	GrammarPhase
+	AliasPhase
 	DirectivePhase // more grammar
 	NumPhases
 )

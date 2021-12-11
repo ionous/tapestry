@@ -95,7 +95,6 @@ func (d *Domain) Assemble(phaseActions PhaseActions) (err error) {
 		for w := 0; w < int(NumPhases); w++ {
 			// note: even if there are no ephemera... in a given phase..
 			// there can still be rivals and other results to process
-			phaseData := d.phases[w]
 			currPhase := Phase(w)
 			d.currPhase = currPhase // hrmmm...
 			act := phaseActions[currPhase]
@@ -103,9 +102,11 @@ func (d *Domain) Assemble(phaseActions PhaseActions) (err error) {
 				err = e
 				break
 			} else {
+				// don't "range" over the phase data since the contents can change during traversal.
 				// fix: if we were merging in the definitions we wouldnt have to walk upwards...
 				// what's best? see note in checkRivals()
-				for _, op := range phaseData.eph {
+				for i := 0; i < len(d.phases[w].eph); i++ {
+					op := d.phases[w].eph[i]
 					if e := op.Eph.Assemble(d.catalog, d, op.At); e != nil {
 						err = errutil.Append(err, e)
 					}
@@ -190,9 +191,9 @@ func (op *EphEndDomain) Phase() Phase { return DomainPhase }
 // pop the most recent domain
 func (op *EphEndDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// we expect it's the current domain, the parent of this command, that's the one ending
-	if n, ok := UniformString(op.Name); !ok {
+	if n, ok := UniformString(op.Name); !ok && len(op.Name) > 0 {
 		err = InvalidString(op.Name)
-	} else if n != d.name {
+	} else if n != d.name && len(op.Name) > 0 {
 		err = errutil.New("unexpected domain ending, requested", op.Name, "have", d.name)
 	} else {
 		c.processing.Pop()

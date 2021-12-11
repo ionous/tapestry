@@ -45,7 +45,7 @@ func TestAspectUsage(t *testing.T) {
 	)
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kinds: "k"},
-		&EphFields{Kinds: "k", Name: "a", Affinity: Affinity{Affinity_Text}, Class: "a"},
+		&EphKinds{Kinds: "k", Contain: []EphParams{AspectParam("a")}},
 	)
 	out := testOut{mdl_field}
 	if cat, e := buildAncestors(dt); e != nil {
@@ -72,8 +72,8 @@ func TestAspectConflictingFields(t *testing.T) {
 	)
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kinds: "k"},
-		&EphFields{Kinds: "k", Name: "a", Affinity: Affinity{Affinity_Text}, Class: "a"},
-		&EphFields{Kinds: "k", Name: "one", Affinity: Affinity{Affinity_Text}},
+		&EphKinds{Kinds: "k", Contain: []EphParams{AspectParam("a")}},
+		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "one", Affinity: Affinity{Affinity_Text}}}},
 	)
 	if _, e := buildAncestors(dt); e == nil {
 		t.Fatal("expected error")
@@ -97,8 +97,8 @@ func TestAspectConflictingTraits(t *testing.T) {
 	)
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kinds: "k"},
-		&EphFields{Kinds: "k", Name: "a", Affinity: Affinity{Affinity_Text}, Class: "a"},
-		&EphFields{Kinds: "k", Name: "b", Affinity: Affinity{Affinity_Text}, Class: "b"},
+		&EphKinds{Kinds: "k", Contain: []EphParams{AspectParam("a")}},
+		&EphKinds{Kinds: "k", Contain: []EphParams{AspectParam("b")}},
 	)
 	var conflict *Conflict
 	if _, e := buildAncestors(dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {

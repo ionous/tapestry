@@ -57,21 +57,40 @@ func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = e
 	} else if newKind, ok := UniformString(singleKind); !ok {
 		err = InvalidString(op.Kinds)
+	} else if e := op.addFields(d, newKind, at); e != nil {
+		err = e
 	} else {
 		kid := d.EnsureKind(newKind, at)
-		if parentKind, ok := UniformString(op.From); !ok && len(op.From) > 0 {
-			err = InvalidString(op.From)
-		} else if kid.domain == d {
-			// we can only add requirements to the kind in the same domain that it was declared
-			// if in a different domain: the kinds have to match up
-			if len(parentKind) > 0 {
-				kid.AddRequirement(parentKind)
+		// is there a "parent kind specified?"
+		if trim := strings.TrimSpace(op.From); len(trim) > 0 {
+			if parentKind, ok := UniformString(trim); !ok {
+				err = InvalidString(trim)
+			} else {
+				// we can only add requirements to the kind in the same domain that it was declared
+				if kid.domain == d {
+					kid.AddRequirement(parentKind) // fix? maybe it'd make sense for requirements to have origin at?
+				} else {
+					// if in a different domain: the kinds have to match up
+					if !kid.HasAncestor(parentKind) {
+						err = KindError{newKind, errutil.Fmt("can't redefine parent as %q", parentKind)}
+					} else {
+						e := errutil.New("duplicate parent definition at", at)
+						LogWarning(KindError{newKind, e})
+					}
+				}
 			}
-		} else if !kid.HasAncestor(parentKind) {
-			err = KindError{newKind, errutil.Fmt("can't redefine parent as %q", parentKind)}
-		} else {
-			e := errutil.New("duplicate parent definition at", at)
-			LogWarning(KindError{newKind, e})
+		}
+	}
+	return
+}
+
+func (op *EphKinds) addFields(d *Domain, n, at string) (err error) {
+	// fix? for backwards compat, every param becomes a "field" command
+	// probably better to loop inside of the fields command rather than here.
+	for _, p := range op.Contain {
+		if e := d.AddEphemera(EphAt{at, &ephFields{Kinds: n, EphParams: p}}); e != nil {
+			err = e
+			break
 		}
 	}
 	return

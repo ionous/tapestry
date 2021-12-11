@@ -41,10 +41,10 @@ func (d *Domain) WriteDirectives(w Writer) (err error) {
 }
 
 // we give it its own phase so we can keep its definitions separated out.
-func (op *EphPrograms) Phase() Phase { return DirectivePhase }
+func (op *EphDirectives) Phase() Phase { return DirectivePhase }
 
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
-func (op *EphPrograms) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphDirectives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	prog := op.Type + ":" + op.Prog // fix: definitions probably need to be smarter.
 	return d.AddDefinition(op.Name, at, prog)
 }

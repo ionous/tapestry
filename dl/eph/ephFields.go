@@ -13,6 +13,12 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// eph fields handles the parameter declarations that exist as part of the kinds
+type ephFields struct {
+	Kinds string
+	EphParams
+}
+
 //  traverse the domains and then kinds in a reasonable order
 func (c *Catalog) WriteFields(w Writer) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
@@ -55,11 +61,11 @@ func (c *Catalog) WriteLocals(w Writer) (err error) {
 	return
 }
 
-func (op *EphFields) Phase() Phase { return FieldPhase }
+func (op *ephFields) Phase() Phase { return FieldPhase }
 
 // add some fields to a kind.
 // see also: EphAspects which generates traits and adds them to a custom aspect kind.
-func (op *EphFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *ephFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// hooray parameter validation
 	// note: the kinds must exist ( and are resolved if they do ) already ( re: phased processing )
 	if singleKind, e := d.Singularize(strings.TrimSpace(op.Kinds)); e != nil {

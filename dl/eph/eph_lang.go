@@ -729,6 +729,242 @@ func EphCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphCardinali
 	return
 }
 
+// EphChecks
+// User implements: Ephemera.
+type EphChecks struct {
+	Name   string               `if:"label=check,type=text"`
+	Expect literal.LiteralValue `if:"label=expect,optional"`
+	Prog   string               `if:"label=do,type=text"`
+}
+
+func (*EphChecks) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphChecks_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphChecks_Type = "eph_checks"
+
+const EphChecks_Field_Name = "$NAME"
+const EphChecks_Field_Expect = "$EXPECT"
+const EphChecks_Field_Prog = "$PROG"
+
+func (op *EphChecks) Marshal(m jsn.Marshaler) error {
+	return EphChecks_Marshal(m, op)
+}
+
+type EphChecks_Slice []EphChecks
+
+func (op *EphChecks_Slice) GetType() string { return EphChecks_Type }
+
+func (op *EphChecks_Slice) Marshal(m jsn.Marshaler) error {
+	return EphChecks_Repeats_Marshal(m, (*[]EphChecks)(op))
+}
+
+func (op *EphChecks_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphChecks_Slice) SetSize(cnt int) {
+	var els []EphChecks
+	if cnt >= 0 {
+		els = make(EphChecks_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphChecks_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphChecks_Marshal(m, &(*op)[i])
+}
+
+func EphChecks_Repeats_Marshal(m jsn.Marshaler, vals *[]EphChecks) error {
+	return jsn.RepeatBlock(m, (*EphChecks_Slice)(vals))
+}
+
+func EphChecks_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphChecks) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphChecks_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphChecks_Flow struct{ ptr *EphChecks }
+
+func (n EphChecks_Flow) GetType() string      { return EphChecks_Type }
+func (n EphChecks_Flow) GetLede() string      { return "eph" }
+func (n EphChecks_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphChecks_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphChecks); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphChecks_Optional_Marshal(m jsn.Marshaler, pv **EphChecks) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphChecks_Marshal(m, *pv)
+	} else if !enc {
+		var v EphChecks
+		if err = EphChecks_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphChecks_Marshal(m jsn.Marshaler, val *EphChecks) (err error) {
+	if err = m.MarshalBlock(EphChecks_Flow{val}); err == nil {
+		e0 := m.MarshalKey("check", EphChecks_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphChecks_Field_Name))
+		}
+		e1 := m.MarshalKey("expect", EphChecks_Field_Expect)
+		if e1 == nil {
+			e1 = literal.LiteralValue_Optional_Marshal(m, &val.Expect)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphChecks_Field_Expect))
+		}
+		e2 := m.MarshalKey("do", EphChecks_Field_Prog)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Marshal(m, &val.Prog)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphChecks_Field_Prog))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// EphDirectives
+// User implements: Ephemera.
+type EphDirectives struct {
+	Name string `if:"label=go,type=text"`
+	Type string `if:"label=run,type=text"`
+	Prog string `if:"label=using,type=text"`
+}
+
+func (*EphDirectives) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphDirectives_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphDirectives_Type = "eph_directives"
+
+const EphDirectives_Field_Name = "$NAME"
+const EphDirectives_Field_Type = "$TYPE"
+const EphDirectives_Field_Prog = "$PROG"
+
+func (op *EphDirectives) Marshal(m jsn.Marshaler) error {
+	return EphDirectives_Marshal(m, op)
+}
+
+type EphDirectives_Slice []EphDirectives
+
+func (op *EphDirectives_Slice) GetType() string { return EphDirectives_Type }
+
+func (op *EphDirectives_Slice) Marshal(m jsn.Marshaler) error {
+	return EphDirectives_Repeats_Marshal(m, (*[]EphDirectives)(op))
+}
+
+func (op *EphDirectives_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphDirectives_Slice) SetSize(cnt int) {
+	var els []EphDirectives
+	if cnt >= 0 {
+		els = make(EphDirectives_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphDirectives_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphDirectives_Marshal(m, &(*op)[i])
+}
+
+func EphDirectives_Repeats_Marshal(m jsn.Marshaler, vals *[]EphDirectives) error {
+	return jsn.RepeatBlock(m, (*EphDirectives_Slice)(vals))
+}
+
+func EphDirectives_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphDirectives) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphDirectives_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphDirectives_Flow struct{ ptr *EphDirectives }
+
+func (n EphDirectives_Flow) GetType() string      { return EphDirectives_Type }
+func (n EphDirectives_Flow) GetLede() string      { return "eph" }
+func (n EphDirectives_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphDirectives_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphDirectives); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphDirectives_Optional_Marshal(m jsn.Marshaler, pv **EphDirectives) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphDirectives_Marshal(m, *pv)
+	} else if !enc {
+		var v EphDirectives
+		if err = EphDirectives_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphDirectives_Marshal(m jsn.Marshaler, val *EphDirectives) (err error) {
+	if err = m.MarshalBlock(EphDirectives_Flow{val}); err == nil {
+		e0 := m.MarshalKey("go", EphDirectives_Field_Name)
+		if e0 == nil {
+			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphDirectives_Field_Name))
+		}
+		e1 := m.MarshalKey("run", EphDirectives_Field_Type)
+		if e1 == nil {
+			e1 = value.Text_Unboxed_Marshal(m, &val.Type)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphDirectives_Field_Type))
+		}
+		e2 := m.MarshalKey("using", EphDirectives_Field_Prog)
+		if e2 == nil {
+			e2 = value.Text_Unboxed_Marshal(m, &val.Prog)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphDirectives_Field_Prog))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // EphEndDomain
 // User implements: Ephemera.
 type EphEndDomain struct {
@@ -829,143 +1065,15 @@ func EphEndDomain_Marshal(m jsn.Marshaler, val *EphEndDomain) (err error) {
 	return
 }
 
-// EphFields Contents of a kind.
-// 'Affinity' designates the storage type of a given field
-// while 'class' is used to indicate an interpretation of that field, for example a reference to a kind.
-// User implements: Ephemera.
-type EphFields struct {
-	Kinds    string   `if:"label=kinds,type=text"`
-	Affinity Affinity `if:"label=have"`
-	Name     string   `if:"label=called,type=text"`
-	Class    string   `if:"label=of,optional,type=text"`
-}
-
-func (*EphFields) Compose() composer.Spec {
-	return composer.Spec{
-		Name: EphFields_Type,
-		Uses: composer.Type_Flow,
-		Lede: "eph",
-	}
-}
-
-const EphFields_Type = "eph_fields"
-
-const EphFields_Field_Kinds = "$KINDS"
-const EphFields_Field_Affinity = "$AFFINITY"
-const EphFields_Field_Name = "$NAME"
-const EphFields_Field_Class = "$CLASS"
-
-func (op *EphFields) Marshal(m jsn.Marshaler) error {
-	return EphFields_Marshal(m, op)
-}
-
-type EphFields_Slice []EphFields
-
-func (op *EphFields_Slice) GetType() string { return EphFields_Type }
-
-func (op *EphFields_Slice) Marshal(m jsn.Marshaler) error {
-	return EphFields_Repeats_Marshal(m, (*[]EphFields)(op))
-}
-
-func (op *EphFields_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *EphFields_Slice) SetSize(cnt int) {
-	var els []EphFields
-	if cnt >= 0 {
-		els = make(EphFields_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *EphFields_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphFields_Marshal(m, &(*op)[i])
-}
-
-func EphFields_Repeats_Marshal(m jsn.Marshaler, vals *[]EphFields) error {
-	return jsn.RepeatBlock(m, (*EphFields_Slice)(vals))
-}
-
-func EphFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphFields) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = EphFields_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type EphFields_Flow struct{ ptr *EphFields }
-
-func (n EphFields_Flow) GetType() string      { return EphFields_Type }
-func (n EphFields_Flow) GetLede() string      { return "eph" }
-func (n EphFields_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphFields_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphFields); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func EphFields_Optional_Marshal(m jsn.Marshaler, pv **EphFields) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphFields_Marshal(m, *pv)
-	} else if !enc {
-		var v EphFields
-		if err = EphFields_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func EphFields_Marshal(m jsn.Marshaler, val *EphFields) (err error) {
-	if err = m.MarshalBlock(EphFields_Flow{val}); err == nil {
-		e0 := m.MarshalKey("kinds", EphFields_Field_Kinds)
-		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphFields_Field_Kinds))
-		}
-		e1 := m.MarshalKey("have", EphFields_Field_Affinity)
-		if e1 == nil {
-			e1 = Affinity_Marshal(m, &val.Affinity)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphFields_Field_Affinity))
-		}
-		e2 := m.MarshalKey("called", EphFields_Field_Name)
-		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", EphFields_Field_Name))
-		}
-		e3 := m.MarshalKey("of", EphFields_Field_Class)
-		if e3 == nil {
-			e3 = value.Text_Unboxed_Optional_Marshal(m, &val.Class)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", EphFields_Field_Class))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // EphKinds A new type deriving from another existing type.
 // The new kind has all of the properties of all of its ancestor kinds
 // and it can be used wherever one of its ancestor kinds is needed.
 // ( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )
 // User implements: Ephemera.
 type EphKinds struct {
-	Kinds string `if:"label=kinds,type=text"`
-	From  string `if:"label=from,type=text"`
+	Kinds   string      `if:"label=kinds,type=text"`
+	From    string      `if:"label=from,type=text"`
+	Contain []EphParams `if:"label=contain"`
 }
 
 func (*EphKinds) Compose() composer.Spec {
@@ -980,6 +1088,7 @@ const EphKinds_Type = "eph_kinds"
 
 const EphKinds_Field_Kinds = "$KINDS"
 const EphKinds_Field_From = "$FROM"
+const EphKinds_Field_Contain = "$CONTAIN"
 
 func (op *EphKinds) Marshal(m jsn.Marshaler) error {
 	return EphKinds_Marshal(m, op)
@@ -1064,6 +1173,13 @@ func EphKinds_Marshal(m jsn.Marshaler, val *EphKinds) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphKinds_Field_From))
+		}
+		e2 := m.MarshalKey("contain", EphKinds_Field_Contain)
+		if e2 == nil {
+			e2 = EphParams_Repeats_Marshal(m, &val.Contain)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphKinds_Field_Contain))
 		}
 		m.EndBlock()
 	}
@@ -1408,7 +1524,7 @@ func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
 }
 
 // EphPatterns Patterns provide author reusable code.
-// Arguments define values provided by the caller.
+// The parameters define values provided by the caller.
 // Locals provide scratch values for use during pattern processing.
 // The result allows the pattern to return a value to the caller of pattern.
 // While multiple pattern commands can be used to define a pattern,
@@ -1416,7 +1532,7 @@ func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
 // User implements: Ephemera.
 type EphPatterns struct {
 	Name   string      `if:"label=pattern,type=text"`
-	Args   []EphParams `if:"label=args,optional"`
+	Params []EphParams `if:"label=with,optional"`
 	Locals []EphParams `if:"label=locals,optional"`
 	Result *EphParams  `if:"label=result,optional"`
 }
@@ -1432,7 +1548,7 @@ func (*EphPatterns) Compose() composer.Spec {
 const EphPatterns_Type = "eph_patterns"
 
 const EphPatterns_Field_Name = "$NAME"
-const EphPatterns_Field_Args = "$ARGS"
+const EphPatterns_Field_Params = "$PARAMS"
 const EphPatterns_Field_Locals = "$LOCALS"
 const EphPatterns_Field_Result = "$RESULT"
 
@@ -1513,12 +1629,12 @@ func EphPatterns_Marshal(m jsn.Marshaler, val *EphPatterns) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphPatterns_Field_Name))
 		}
-		e1 := m.MarshalKey("args", EphPatterns_Field_Args)
+		e1 := m.MarshalKey("with", EphPatterns_Field_Params)
 		if e1 == nil {
-			e1 = EphParams_Optional_Repeats_Marshal(m, &val.Args)
+			e1 = EphParams_Optional_Repeats_Marshal(m, &val.Params)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphPatterns_Field_Args))
+			m.Error(errutil.New(e1, "in flow at", EphPatterns_Field_Params))
 		}
 		e2 := m.MarshalKey("locals", EphPatterns_Field_Locals)
 		if e2 == nil {
@@ -1650,41 +1766,42 @@ func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
 	return
 }
 
-// EphPrograms
+// EphRefs Validates references to members of an existing kind.
+// If no parameters are specified, it simply ensures existence of the kind.
 // User implements: Ephemera.
-type EphPrograms struct {
-	Name string `if:"label=go,type=text"`
-	Type string `if:"label=run,type=text"`
-	Prog string `if:"label=using,type=text"`
+type EphRefs struct {
+	Kinds   string      `if:"label=kinds,type=text"`
+	From    string      `if:"label=from,optional,type=text"`
+	ReferTo []EphParams `if:"label=refer_to"`
 }
 
-func (*EphPrograms) Compose() composer.Spec {
+func (*EphRefs) Compose() composer.Spec {
 	return composer.Spec{
-		Name: EphPrograms_Type,
+		Name: EphRefs_Type,
 		Uses: composer.Type_Flow,
 		Lede: "eph",
 	}
 }
 
-const EphPrograms_Type = "eph_programs"
+const EphRefs_Type = "eph_refs"
 
-const EphPrograms_Field_Name = "$NAME"
-const EphPrograms_Field_Type = "$TYPE"
-const EphPrograms_Field_Prog = "$PROG"
+const EphRefs_Field_Kinds = "$KINDS"
+const EphRefs_Field_From = "$FROM"
+const EphRefs_Field_ReferTo = "$REFER_TO"
 
-func (op *EphPrograms) Marshal(m jsn.Marshaler) error {
-	return EphPrograms_Marshal(m, op)
+func (op *EphRefs) Marshal(m jsn.Marshaler) error {
+	return EphRefs_Marshal(m, op)
 }
 
-type EphPrograms_Slice []EphPrograms
+type EphRefs_Slice []EphRefs
 
-func (op *EphPrograms_Slice) GetType() string { return EphPrograms_Type }
+func (op *EphRefs_Slice) GetType() string { return EphRefs_Type }
 
-func (op *EphPrograms_Slice) Marshal(m jsn.Marshaler) error {
-	return EphPrograms_Repeats_Marshal(m, (*[]EphPrograms)(op))
+func (op *EphRefs_Slice) Marshal(m jsn.Marshaler) error {
+	return EphRefs_Repeats_Marshal(m, (*[]EphRefs)(op))
 }
 
-func (op *EphPrograms_Slice) GetSize() (ret int) {
+func (op *EphRefs_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -1693,75 +1810,75 @@ func (op *EphPrograms_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *EphPrograms_Slice) SetSize(cnt int) {
-	var els []EphPrograms
+func (op *EphRefs_Slice) SetSize(cnt int) {
+	var els []EphRefs
 	if cnt >= 0 {
-		els = make(EphPrograms_Slice, cnt)
+		els = make(EphRefs_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *EphPrograms_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EphPrograms_Marshal(m, &(*op)[i])
+func (op *EphRefs_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphRefs_Marshal(m, &(*op)[i])
 }
 
-func EphPrograms_Repeats_Marshal(m jsn.Marshaler, vals *[]EphPrograms) error {
-	return jsn.RepeatBlock(m, (*EphPrograms_Slice)(vals))
+func EphRefs_Repeats_Marshal(m jsn.Marshaler, vals *[]EphRefs) error {
+	return jsn.RepeatBlock(m, (*EphRefs_Slice)(vals))
 }
 
-func EphPrograms_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphPrograms) (err error) {
+func EphRefs_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphRefs) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = EphPrograms_Repeats_Marshal(m, pv)
+		err = EphRefs_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type EphPrograms_Flow struct{ ptr *EphPrograms }
+type EphRefs_Flow struct{ ptr *EphRefs }
 
-func (n EphPrograms_Flow) GetType() string      { return EphPrograms_Type }
-func (n EphPrograms_Flow) GetLede() string      { return "eph" }
-func (n EphPrograms_Flow) GetFlow() interface{} { return n.ptr }
-func (n EphPrograms_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*EphPrograms); ok {
+func (n EphRefs_Flow) GetType() string      { return EphRefs_Type }
+func (n EphRefs_Flow) GetLede() string      { return "eph" }
+func (n EphRefs_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphRefs_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphRefs); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func EphPrograms_Optional_Marshal(m jsn.Marshaler, pv **EphPrograms) (err error) {
+func EphRefs_Optional_Marshal(m jsn.Marshaler, pv **EphRefs) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = EphPrograms_Marshal(m, *pv)
+		err = EphRefs_Marshal(m, *pv)
 	} else if !enc {
-		var v EphPrograms
-		if err = EphPrograms_Marshal(m, &v); err == nil {
+		var v EphRefs
+		if err = EphRefs_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func EphPrograms_Marshal(m jsn.Marshaler, val *EphPrograms) (err error) {
-	if err = m.MarshalBlock(EphPrograms_Flow{val}); err == nil {
-		e0 := m.MarshalKey("go", EphPrograms_Field_Name)
+func EphRefs_Marshal(m jsn.Marshaler, val *EphRefs) (err error) {
+	if err = m.MarshalBlock(EphRefs_Flow{val}); err == nil {
+		e0 := m.MarshalKey("kinds", EphRefs_Field_Kinds)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphPrograms_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", EphRefs_Field_Kinds))
 		}
-		e1 := m.MarshalKey("run", EphPrograms_Field_Type)
+		e1 := m.MarshalKey("from", EphRefs_Field_From)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Type)
+			e1 = value.Text_Unboxed_Optional_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphPrograms_Field_Type))
+			m.Error(errutil.New(e1, "in flow at", EphRefs_Field_From))
 		}
-		e2 := m.MarshalKey("using", EphPrograms_Field_Prog)
+		e2 := m.MarshalKey("refer_to", EphRefs_Field_ReferTo)
 		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.Prog)
+			e2 = EphParams_Repeats_Marshal(m, &val.ReferTo)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", EphPrograms_Field_Prog))
+			m.Error(errutil.New(e2, "in flow at", EphRefs_Field_ReferTo))
 		}
 		m.EndBlock()
 	}
@@ -2844,15 +2961,16 @@ var Slats = []composer.Composer{
 	(*EphAt)(nil),
 	(*EphBeginDomain)(nil),
 	(*EphCardinality)(nil),
+	(*EphChecks)(nil),
+	(*EphDirectives)(nil),
 	(*EphEndDomain)(nil),
-	(*EphFields)(nil),
 	(*EphKinds)(nil),
 	(*EphList)(nil),
 	(*EphNouns)(nil),
 	(*EphParams)(nil),
 	(*EphPatterns)(nil),
 	(*EphPlurals)(nil),
-	(*EphPrograms)(nil),
+	(*EphRefs)(nil),
 	(*EphRelations)(nil),
 	(*EphRelatives)(nil),
 	(*EphRules)(nil),
@@ -2873,10 +2991,11 @@ var Signatures = map[uint64]interface{}{
 	13014334328963404635: (*EphCardinality)(nil), /* EphCardinality oneMany: */
 	874627862825420357:   (*EphCardinality)(nil), /* EphCardinality manyOne: */
 	18342259850011553446: (*EphCardinality)(nil), /* EphCardinality manyMany: */
+	7963757310721049403:  (*EphChecks)(nil),      /* Eph check:do: */
+	1948835363584093228:  (*EphChecks)(nil),      /* Eph check:expect:do: */
+	17377027355382879147: (*EphDirectives)(nil),  /* Eph go:run:using: */
 	4379746949646135194:  (*EphEndDomain)(nil),   /* Eph domain: */
-	8381163068622333334:  (*EphFields)(nil),      /* Eph kinds:have:called: */
-	12374005136224423943: (*EphFields)(nil),      /* Eph kinds:have:called:of: */
-	9386889860419880175:  (*EphKinds)(nil),       /* Eph kinds:from: */
+	16835204245478660337: (*EphKinds)(nil),       /* Eph kinds:from:contain: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
 	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
 	12259359132675429189: (*EphParams)(nil),      /* Eph have:called: */
@@ -2884,15 +3003,16 @@ var Signatures = map[uint64]interface{}{
 	16868970960604249858: (*EphParams)(nil),      /* Eph have:called:initially: */
 	16991751007965772137: (*EphParams)(nil),      /* Eph have:called:of:initially: */
 	1611161010098549912:  (*EphPatterns)(nil),    /* Eph pattern: */
-	14764503916681519581: (*EphPatterns)(nil),    /* Eph pattern:args: */
+	13289385533668993470: (*EphPatterns)(nil),    /* Eph pattern:with: */
 	7324201728182884878:  (*EphPatterns)(nil),    /* Eph pattern:locals: */
-	11512083512716742729: (*EphPatterns)(nil),    /* Eph pattern:args:locals: */
+	3398548629283569576:  (*EphPatterns)(nil),    /* Eph pattern:with:locals: */
 	14244437562331442113: (*EphPatterns)(nil),    /* Eph pattern:result: */
-	8685621910062338690:  (*EphPatterns)(nil),    /* Eph pattern:args:result: */
+	8353842745201753207:  (*EphPatterns)(nil),    /* Eph pattern:with:result: */
 	16745375238637686855: (*EphPatterns)(nil),    /* Eph pattern:locals:result: */
-	4635029837466971126:  (*EphPatterns)(nil),    /* Eph pattern:args:locals:result: */
+	1340667739035001681:  (*EphPatterns)(nil),    /* Eph pattern:with:locals:result: */
 	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
-	17377027355382879147: (*EphPrograms)(nil),    /* Eph go:run:using: */
+	9545501520147782308:  (*EphRefs)(nil),        /* Eph kinds:referTo: */
+	6260245743972736232:  (*EphRefs)(nil),        /* Eph kinds:from:referTo: */
 	9811567312656774933:  (*EphRelations)(nil),   /* Eph:relate oneOne: */
 	2078507782755484470:  (*EphRelations)(nil),   /* Eph:relate oneMany: */
 	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */

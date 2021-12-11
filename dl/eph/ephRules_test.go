@@ -25,12 +25,7 @@ func TestPatternRules(t *testing.T) {
 		makeRules("p", "a", EphTiming_After, 3)...,
 	)
 	//
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-	}); e != nil {
+	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl_rule}

@@ -17,7 +17,7 @@ func TestPatternSingle(t *testing.T) {
 		//
 		&EphPatterns{
 			Name: "p",
-			Args: []EphParams{{
+			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
 				Class:    "k",
@@ -56,7 +56,7 @@ func TestPatternSeparateLocals(t *testing.T) {
 			}},
 		&EphPatterns{
 			Name: "p",
-			Args: []EphParams{{
+			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
 				Class:    "k",
@@ -95,7 +95,7 @@ func TestPatternSeparateDomains(t *testing.T) {
 			}},
 		&EphPatterns{
 			Name: "p",
-			Args: []EphParams{{
+			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
 				Class:    "k",
@@ -120,12 +120,7 @@ func TestPatternSeparateDomains(t *testing.T) {
 }
 
 func expectFullResults(t *testing.T, dt domainTest) {
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-	}); e != nil {
+	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else {
 		outkind := testOut{mdl_kind}
@@ -188,17 +183,12 @@ func TestPatternSplitDomain(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphPatterns{
 			Name: "p",
-			Args: []EphParams{{
+			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
 			}}},
 	)
-	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-	}); e == nil {
+	if _, e := buildAncestors(dt); e == nil {
 		t.Fatal("expected an error")
 	} else {
 		t.Log("okay", e)
@@ -226,13 +216,8 @@ func TestPatternMultipleReturn(t *testing.T) {
 			},
 		},
 	)
-	var cat Catalog
 	var conflict *Conflict
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-	}); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+	if _, e := buildAncestors(dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 		t.Fatal("expected an redefined conflict; got", e)
 	} else {
 		t.Log("okay", e)
@@ -246,26 +231,21 @@ func TestPatternMultipleArgSets(t *testing.T) {
 		&EphKinds{Kinds: KindsOfPattern},
 		&EphPatterns{
 			Name: "p",
-			Args: []EphParams{{
+			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
 			}},
 		},
 		&EphPatterns{
 			Name: "p",
-			Args: []EphParams{{
+			Params: []EphParams{{
 				Name:     "p2",
 				Affinity: Affinity{Affinity_Text},
 			}},
 		},
 	)
-	var cat Catalog
 	var conflict *Conflict
-	if e := dt.addToCat(&cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-	}); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+	if _, e := buildAncestors(dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 		t.Fatal("expected an redefined conflict; got", e)
 	} else {
 		t.Log("okay", e)

@@ -10,13 +10,15 @@ func TestInitialFieldAssignment(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
-		&EphKinds{"k", ""},
-		&EphKinds{"l", "k"},
-		&EphKinds{"m", "l"},
+		&EphKinds{Kinds: "k"},
+		&EphKinds{Kinds: "l", From: "k"},
+		&EphKinds{Kinds: "m", From: "l"},
 		// some simple fields
 		// the name of the field has to match the name of the aspect
-		&EphFields{"k", Affinity{Affinity_Text}, "t", ""},
-		&EphFields{"k", Affinity{Affinity_Number}, "d", ""},
+		&EphKinds{Kinds: "k", Contain: []EphParams{
+			{Name: "t", Affinity: Affinity{Affinity_Text}},
+			{Name: "d", Affinity: Affinity{Affinity_Number}},
+		}},
 		// nouns with those fields
 		&EphNouns{"apple", "k"},
 		&EphNouns{"pear", "l"},
@@ -50,9 +52,9 @@ func TestMissingField(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
-		&EphKinds{"k", ""},
+		&EphKinds{Kinds: "k"},
 		// a field
-		&EphFields{"k", Affinity{Affinity_Number}, "d", ""},
+		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "d", Affinity: Affinity{Affinity_Number}}}},
 		// a noun
 		&EphNouns{"n", "k"},
 		// and not that field
@@ -69,17 +71,19 @@ func TestInitialTraitAssignment(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
-		&EphKinds{"k", ""},
-		&EphKinds{"l", "k"},
-		&EphKinds{"m", "l"},
+		&EphKinds{Kinds: "k"},
+		&EphKinds{Kinds: "l", From: "k"},
+		&EphKinds{Kinds: "m", From: "l"},
 		// aspects
-		&EphKinds{KindsOfAspect, ""},
+		&EphKinds{Kinds: KindsOfAspect},
 		&EphAspects{"a", dd("w", "x", "y")},
 		&EphAspects{"b", dd("z")},
 		// fields using those aspects:
 		// the name of the field has to match the name of the aspect
-		&EphFields{"k", Affinity{Affinity_Text}, "a", "a"},
-		&EphFields{"k", Affinity{Affinity_Text}, "b", "b"},
+		&EphKinds{Kinds: "k", Contain: []EphParams{
+			AspectParam("a"),
+			AspectParam("b"),
+		}},
 		// nouns with those aspects
 		&EphNouns{"apple", "k"},
 		&EphNouns{"pear", "l"},

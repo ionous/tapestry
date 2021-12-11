@@ -13,7 +13,7 @@ func (c *Catalog) WriteRelations(w Writer) (err error) {
 		err = e
 	} else {
 		for _, kdep := range ks {
-			if k := kdep.Leaf().(*ScopedKind); k.HasParent(KindsOfRelation) {
+			if k := kdep.Leaf().(*ScopedKind); k.HasParent(KindsOfRelation) && len(k.fields) > 0 {
 				one := k.fields[0]   // a field of affinity text referencing some other kind.
 				other := k.fields[1] // the name is the cardinality, and the class is the kind.
 				card := makeCard(one.name, other.name)
@@ -70,23 +70,19 @@ func (op *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		} else {
 			kid := d.EnsureKind(rel, at)
 			kid.AddRequirement(KindsOfRelation)
-			if e := d.AddEphemera(
-				EphAt{at, &EphFields{
-					Kinds:    rel,
-					Affinity: a.affinity(),
-					Name:     a.short(false),
-					Class:    ak}},
-			); e != nil {
-				err = e
-			} else if e := d.AddEphemera(
-				EphAt{at, &EphFields{
-					Kinds:    rel,
-					Affinity: b.affinity(),
-					Name:     b.short(true),
-					Class:    bk}},
-			); e != nil {
-				err = e
-			}
+			err = d.AddEphemera(
+				EphAt{at, &EphKinds{
+					Kinds: rel,
+					Contain: []EphParams{{
+						Affinity: a.affinity(),
+						Name:     a.short(false),
+						Class:    ak,
+					}, {
+						Affinity: b.affinity(),
+						Name:     b.short(true),
+						Class:    bk,
+					}},
+				}})
 		}
 	}
 	return
