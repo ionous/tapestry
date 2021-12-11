@@ -19,6 +19,8 @@ var mdl_domain = tables.Insert("mdl_domain", "domain", "path", "at")
 // it's not the (sub)domain in which the field was declared.
 var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
 
+var mdl_gram = tables.Insert("mdl_gram", "name", "prog", "at")
+
 // singular name of kind and materialized hierarchy of ancestors separated by commas
 var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "path", "at")
 
@@ -45,8 +47,6 @@ var mdl_pat = tables.Insert("mdl_pat", "domain", "kind", "labels", "result")
 var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one", "at")
 
 //
-var mdl_prog = tables.Insert("mdl_prog", "name", "type", "prog", "at")
-
 //
 var mdl_rel = tables.Insert("mdl_rel", "domain", "relation", "kind", "cardinality", "otherKind", "at")
 

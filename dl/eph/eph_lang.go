@@ -3,8 +3,8 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/iffy/dl/grammar"
 	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
@@ -190,14 +190,14 @@ func EphAliases_Marshal(m jsn.Marshaler, val *EphAliases) (err error) {
 	if err = m.MarshalBlock(EphAliases_Flow{val}); err == nil {
 		e0 := m.MarshalKey("understand", EphAliases_Field_ShortName)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.ShortName)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.ShortName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphAliases_Field_ShortName))
 		}
 		e1 := m.MarshalKey("as", EphAliases_Field_Aliases)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Repeats_Marshal(m, &val.Aliases)
+			e1 = literal.Text_Unboxed_Repeats_Marshal(m, &val.Aliases)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphAliases_Field_Aliases))
@@ -382,14 +382,14 @@ func EphAspects_Marshal(m jsn.Marshaler, val *EphAspects) (err error) {
 	if err = m.MarshalBlock(EphAspects_Flow{val}); err == nil {
 		e0 := m.MarshalKey("aspects", EphAspects_Field_Aspects)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Aspects)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Aspects)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphAspects_Field_Aspects))
 		}
 		e1 := m.MarshalKey("traits", EphAspects_Field_Traits)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Repeats_Marshal(m, &val.Traits)
+			e1 = literal.Text_Unboxed_Repeats_Marshal(m, &val.Traits)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphAspects_Field_Traits))
@@ -490,7 +490,7 @@ func EphAt_Marshal(m jsn.Marshaler, val *EphAt) (err error) {
 	if err = m.MarshalBlock(EphAt_Flow{val}); err == nil {
 		e0 := m.MarshalKey("at", EphAt_Field_At)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.At)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.At)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphAt_Field_At))
@@ -599,14 +599,14 @@ func EphBeginDomain_Marshal(m jsn.Marshaler, val *EphBeginDomain) (err error) {
 	if err = m.MarshalBlock(EphBeginDomain_Flow{val}); err == nil {
 		e0 := m.MarshalKey("domain", EphBeginDomain_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphBeginDomain_Field_Name))
 		}
 		e1 := m.MarshalKey("requires", EphBeginDomain_Field_Requires)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Repeats_Marshal(m, &val.Requires)
+			e1 = literal.Text_Unboxed_Repeats_Marshal(m, &val.Requires)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphBeginDomain_Field_Requires))
@@ -734,7 +734,7 @@ func EphCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphCardinali
 type EphChecks struct {
 	Name   string               `if:"label=check,type=text"`
 	Expect literal.LiteralValue `if:"label=expect,optional"`
-	Prog   string               `if:"label=do,type=text"`
+	Exe    rt.Execute           `if:"label=do"`
 }
 
 func (*EphChecks) Compose() composer.Spec {
@@ -749,7 +749,7 @@ const EphChecks_Type = "eph_checks"
 
 const EphChecks_Field_Name = "$NAME"
 const EphChecks_Field_Expect = "$EXPECT"
-const EphChecks_Field_Prog = "$PROG"
+const EphChecks_Field_Exe = "$EXE"
 
 func (op *EphChecks) Marshal(m jsn.Marshaler) error {
 	return EphChecks_Marshal(m, op)
@@ -823,7 +823,7 @@ func EphChecks_Marshal(m jsn.Marshaler, val *EphChecks) (err error) {
 	if err = m.MarshalBlock(EphChecks_Flow{val}); err == nil {
 		e0 := m.MarshalKey("check", EphChecks_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphChecks_Field_Name))
@@ -835,12 +835,12 @@ func EphChecks_Marshal(m jsn.Marshaler, val *EphChecks) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphChecks_Field_Expect))
 		}
-		e2 := m.MarshalKey("do", EphChecks_Field_Prog)
+		e2 := m.MarshalKey("do", EphChecks_Field_Exe)
 		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.Prog)
+			e2 = rt.Execute_Marshal(m, &val.Exe)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", EphChecks_Field_Prog))
+			m.Error(errutil.New(e2, "in flow at", EphChecks_Field_Exe))
 		}
 		m.EndBlock()
 	}
@@ -850,9 +850,8 @@ func EphChecks_Marshal(m jsn.Marshaler, val *EphChecks) (err error) {
 // EphDirectives
 // User implements: Ephemera.
 type EphDirectives struct {
-	Name string `if:"label=go,type=text"`
-	Type string `if:"label=run,type=text"`
-	Prog string `if:"label=using,type=text"`
+	Name      string            `if:"label=go,type=text"`
+	Directive grammar.Directive `if:"label=parse"`
 }
 
 func (*EphDirectives) Compose() composer.Spec {
@@ -866,8 +865,7 @@ func (*EphDirectives) Compose() composer.Spec {
 const EphDirectives_Type = "eph_directives"
 
 const EphDirectives_Field_Name = "$NAME"
-const EphDirectives_Field_Type = "$TYPE"
-const EphDirectives_Field_Prog = "$PROG"
+const EphDirectives_Field_Directive = "$DIRECTIVE"
 
 func (op *EphDirectives) Marshal(m jsn.Marshaler) error {
 	return EphDirectives_Marshal(m, op)
@@ -941,24 +939,17 @@ func EphDirectives_Marshal(m jsn.Marshaler, val *EphDirectives) (err error) {
 	if err = m.MarshalBlock(EphDirectives_Flow{val}); err == nil {
 		e0 := m.MarshalKey("go", EphDirectives_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphDirectives_Field_Name))
 		}
-		e1 := m.MarshalKey("run", EphDirectives_Field_Type)
+		e1 := m.MarshalKey("parse", EphDirectives_Field_Directive)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Type)
+			e1 = grammar.Directive_Marshal(m, &val.Directive)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphDirectives_Field_Type))
-		}
-		e2 := m.MarshalKey("using", EphDirectives_Field_Prog)
-		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.Prog)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", EphDirectives_Field_Prog))
+			m.Error(errutil.New(e1, "in flow at", EphDirectives_Field_Directive))
 		}
 		m.EndBlock()
 	}
@@ -1055,7 +1046,7 @@ func EphEndDomain_Marshal(m jsn.Marshaler, val *EphEndDomain) (err error) {
 	if err = m.MarshalBlock(EphEndDomain_Flow{val}); err == nil {
 		e0 := m.MarshalKey("domain", EphEndDomain_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphEndDomain_Field_Name))
@@ -1162,14 +1153,14 @@ func EphKinds_Marshal(m jsn.Marshaler, val *EphKinds) (err error) {
 	if err = m.MarshalBlock(EphKinds_Flow{val}); err == nil {
 		e0 := m.MarshalKey("kinds", EphKinds_Field_Kinds)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Kinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphKinds_Field_Kinds))
 		}
 		e1 := m.MarshalKey("from", EphKinds_Field_From)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.From)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphKinds_Field_From))
@@ -1377,14 +1368,14 @@ func EphNouns_Marshal(m jsn.Marshaler, val *EphNouns) (err error) {
 	if err = m.MarshalBlock(EphNouns_Flow{val}); err == nil {
 		e0 := m.MarshalKey("noun", EphNouns_Field_Noun)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Noun)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Noun)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphNouns_Field_Noun))
 		}
 		e1 := m.MarshalKey("kind", EphNouns_Field_Kind)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Kind)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphNouns_Field_Kind))
@@ -1499,14 +1490,14 @@ func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
 		}
 		e1 := m.MarshalKey("called", EphParams_Field_Name)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphParams_Field_Name))
 		}
 		e2 := m.MarshalKey("of", EphParams_Field_Class)
 		if e2 == nil {
-			e2 = value.Text_Unboxed_Optional_Marshal(m, &val.Class)
+			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Class)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EphParams_Field_Class))
@@ -1624,7 +1615,7 @@ func EphPatterns_Marshal(m jsn.Marshaler, val *EphPatterns) (err error) {
 	if err = m.MarshalBlock(EphPatterns_Flow{val}); err == nil {
 		e0 := m.MarshalKey("pattern", EphPatterns_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphPatterns_Field_Name))
@@ -1749,14 +1740,14 @@ func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
 	if err = m.MarshalBlock(EphPlurals_Flow{val}); err == nil {
 		e0 := m.MarshalKey("plural", EphPlurals_Field_Plural)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Plural)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Plural)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphPlurals_Field_Plural))
 		}
 		e1 := m.MarshalKey("singular", EphPlurals_Field_Singular)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Singular)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Singular)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphPlurals_Field_Singular))
@@ -1861,14 +1852,14 @@ func EphRefs_Marshal(m jsn.Marshaler, val *EphRefs) (err error) {
 	if err = m.MarshalBlock(EphRefs_Flow{val}); err == nil {
 		e0 := m.MarshalKey("kinds", EphRefs_Field_Kinds)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Kinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphRefs_Field_Kinds))
 		}
 		e1 := m.MarshalKey("from", EphRefs_Field_From)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Optional_Marshal(m, &val.From)
+			e1 = literal.Text_Unboxed_Optional_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphRefs_Field_From))
@@ -1977,7 +1968,7 @@ func EphRelations_Marshal(m jsn.Marshaler, val *EphRelations) (err error) {
 	if err = m.MarshalBlock(EphRelations_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EphRelations_Field_Rel)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Rel)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Rel)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphRelations_Field_Rel))
@@ -2088,21 +2079,21 @@ func EphRelatives_Marshal(m jsn.Marshaler, val *EphRelatives) (err error) {
 	if err = m.MarshalBlock(EphRelatives_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EphRelatives_Field_Rel)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Rel)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Rel)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphRelatives_Field_Rel))
 		}
 		e1 := m.MarshalKey("relates", EphRelatives_Field_Noun)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Noun)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Noun)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphRelatives_Field_Noun))
 		}
 		e2 := m.MarshalKey("to", EphRelatives_Field_OtherNoun)
 		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.OtherNoun)
+			e2 = literal.Text_Unboxed_Marshal(m, &val.OtherNoun)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EphRelatives_Field_OtherNoun))
@@ -2115,11 +2106,11 @@ func EphRelatives_Marshal(m jsn.Marshaler, val *EphRelatives) (err error) {
 // EphRules
 // User implements: Ephemera.
 type EphRules struct {
-	Name   string    `if:"label=pattern,type=text"`
-	Filter string    `if:"label=if,type=text"`
-	When   EphTiming `if:"label=when"`
-	Prog   string    `if:"label=do,type=text"`
-	Touch  EphAlways `if:"label=touch,optional"`
+	Name   string      `if:"label=pattern,type=text"`
+	Filter rt.BoolEval `if:"label=if"`
+	When   EphTiming   `if:"label=when"`
+	Exe    rt.Execute  `if:"label=do"`
+	Touch  EphAlways   `if:"label=touch,optional"`
 }
 
 func (*EphRules) Compose() composer.Spec {
@@ -2135,7 +2126,7 @@ const EphRules_Type = "eph_rules"
 const EphRules_Field_Name = "$NAME"
 const EphRules_Field_Filter = "$FILTER"
 const EphRules_Field_When = "$WHEN"
-const EphRules_Field_Prog = "$PROG"
+const EphRules_Field_Exe = "$EXE"
 const EphRules_Field_Touch = "$TOUCH"
 
 func (op *EphRules) Marshal(m jsn.Marshaler) error {
@@ -2210,14 +2201,14 @@ func EphRules_Marshal(m jsn.Marshaler, val *EphRules) (err error) {
 	if err = m.MarshalBlock(EphRules_Flow{val}); err == nil {
 		e0 := m.MarshalKey("pattern", EphRules_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphRules_Field_Name))
 		}
 		e1 := m.MarshalKey("if", EphRules_Field_Filter)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Filter)
+			e1 = rt.BoolEval_Marshal(m, &val.Filter)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphRules_Field_Filter))
@@ -2229,12 +2220,12 @@ func EphRules_Marshal(m jsn.Marshaler, val *EphRules) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EphRules_Field_When))
 		}
-		e3 := m.MarshalKey("do", EphRules_Field_Prog)
+		e3 := m.MarshalKey("do", EphRules_Field_Exe)
 		if e3 == nil {
-			e3 = value.Text_Unboxed_Marshal(m, &val.Prog)
+			e3 = rt.Execute_Marshal(m, &val.Exe)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", EphRules_Field_Prog))
+			m.Error(errutil.New(e3, "in flow at", EphRules_Field_Exe))
 		}
 		e4 := m.MarshalKey("touch", EphRules_Field_Touch)
 		if e4 == nil {
@@ -2427,14 +2418,14 @@ func EphValues_Marshal(m jsn.Marshaler, val *EphValues) (err error) {
 	if err = m.MarshalBlock(EphValues_Flow{val}); err == nil {
 		e0 := m.MarshalKey("noun", EphValues_Field_Noun)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Noun)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Noun)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphValues_Field_Noun))
 		}
 		e1 := m.MarshalKey("has", EphValues_Field_Field)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Field)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Field)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphValues_Field_Field))
@@ -2608,14 +2599,14 @@ func ManyMany_Marshal(m jsn.Marshaler, val *ManyMany) (err error) {
 	if err = m.MarshalBlock(ManyMany_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ManyMany_Field_Kinds)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Kinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ManyMany_Field_Kinds))
 		}
 		e1 := m.MarshalKey("to_kinds", ManyMany_Field_OtherKinds)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.OtherKinds)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.OtherKinds)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ManyMany_Field_OtherKinds))
@@ -2716,14 +2707,14 @@ func ManyOne_Marshal(m jsn.Marshaler, val *ManyOne) (err error) {
 	if err = m.MarshalBlock(ManyOne_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ManyOne_Field_Kinds)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Kinds)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Kinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ManyOne_Field_Kinds))
 		}
 		e1 := m.MarshalKey("to_kind", ManyOne_Field_OtherKind)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.OtherKind)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.OtherKind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ManyOne_Field_OtherKind))
@@ -2824,14 +2815,14 @@ func OneMany_Marshal(m jsn.Marshaler, val *OneMany) (err error) {
 	if err = m.MarshalBlock(OneMany_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", OneMany_Field_Kind)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Kind)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", OneMany_Field_Kind))
 		}
 		e1 := m.MarshalKey("to_kinds", OneMany_Field_OtherKinds)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.OtherKinds)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.OtherKinds)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", OneMany_Field_OtherKinds))
@@ -2932,14 +2923,14 @@ func OneOne_Marshal(m jsn.Marshaler, val *OneOne) (err error) {
 	if err = m.MarshalBlock(OneOne_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", OneOne_Field_Kind)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Kind)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", OneOne_Field_Kind))
 		}
 		e1 := m.MarshalKey("to_kind", OneOne_Field_OtherKind)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.OtherKind)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.OtherKind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", OneOne_Field_OtherKind))
@@ -2993,7 +2984,7 @@ var Signatures = map[uint64]interface{}{
 	18342259850011553446: (*EphCardinality)(nil), /* EphCardinality manyMany: */
 	7963757310721049403:  (*EphChecks)(nil),      /* Eph check:do: */
 	1948835363584093228:  (*EphChecks)(nil),      /* Eph check:expect:do: */
-	17377027355382879147: (*EphDirectives)(nil),  /* Eph go:run:using: */
+	1520695377871896491:  (*EphDirectives)(nil),  /* Eph go:parse: */
 	4379746949646135194:  (*EphEndDomain)(nil),   /* Eph domain: */
 	16835204245478660337: (*EphKinds)(nil),       /* Eph kinds:from:contain: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */

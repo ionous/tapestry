@@ -11,6 +11,8 @@ const (
 	KindsOfRecord   = "record"
 	KindsOfRelation = "relation"
 	KindsOfPattern  = "pattern"
+	KindsOfEvent    = "event"
+	KindsOfAction   = "action"
 )
 
 // write the kinds in a reasonable order

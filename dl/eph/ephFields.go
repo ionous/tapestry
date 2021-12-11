@@ -6,9 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
 )
@@ -46,7 +43,7 @@ func (c *Catalog) WriteLocals(w Writer) (err error) {
 			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(KindsOfPattern) {
 				for _, fd := range k.fields {
 					if init := fd.initially; init != nil {
-						if value, e := cout.Marshal(init.(jsn.Marshalee), literal.CompactEncoder); e != nil {
+						if value, e := marshalout(init); e != nil {
 							err = e
 							break
 						} else if e := w.Write(mdl_local, k.domain.name, k.name, fd.name, value); e != nil {

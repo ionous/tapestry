@@ -44,11 +44,11 @@
                 ]
             },
             "eph_checks": {
-                "spec": "eph {check%name:text} {expect?literal_value} {do%prog:text}",
+                "spec": "eph {check%name:text} {expect?literal_value} {do%exe:execute}",
                 "slot": "ephemera"
             },
             "eph_directives": {
-                "spec": "eph {go%name:text} {run%type:text} {using%prog:text}",
+                "spec": "eph {go%name:text} {parse%directive}",
                 "slot": "ephemera"
             },
             "eph_kinds": {
@@ -112,7 +112,7 @@
                 "slot": "ephemera"
             },
             "eph_rules": {
-                "spec": "eph {pattern%name:text} {if%filter:text} {when:eph_timing} {do%prog:text} {touch?eph_always}",
+                "spec": "eph {pattern%name:text} {if%filter:bool_eval} {when:eph_timing} {do%exe:execute} {touch?eph_always}",
                 "slot": "ephemera"
             },
             "eph_timing": {

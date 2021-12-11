@@ -31,7 +31,7 @@ func (c *Catalog) WriteRules(w Writer) (err error) {
 						el, at := p.els[i], p.at[i]
 						//
 						flags := j + int(rt.FirstPhase)
-						if len(el.Touch.Str) > 0 {
+						if el.Touch {
 							flags = -flags // marker for rules that need to always run (ex. counters "every third try" )
 						}
 						if e := w.Write(mdl_rule, d.name, patternName, flags, el.Filter, el.Prog, at); e != nil {
@@ -50,15 +50,30 @@ type Rulesets struct {
 	partitions [rt.NumPhases]Partition
 }
 
-func (rs *Rulesets) AppendRule(el *EphRules, part int, at string) {
-	p := &rs.partitions[part]
-	p.els = append(p.els, el)
-	p.at = append(p.at, at)
+func (rs *Rulesets) AppendRule(el *EphRules, part int, at string) (err error) {
+	if filter, e := marshalout(el.Filter); e != nil {
+		err = e
+	} else if prog, e := marshalout(el.Exe); e != nil {
+		err = e
+	} else {
+		p := &rs.partitions[part]
+		p.els = append(p.els, ephRules{
+			Filter: filter, Prog: prog, Touch: len(el.Touch.String()) > 0,
+		})
+		p.at = append(p.at, at)
+	}
+	return
 }
 
 type Partition struct {
-	els []*EphRules
+	els []ephRules
 	at  []string
+}
+
+type ephRules struct {
+	Filter string
+	Prog   string
+	Touch  bool
 }
 
 // rules are assembled after kinds and their fields...

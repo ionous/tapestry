@@ -12,7 +12,8 @@ import (
 func (c *Catalog) WriteValues(w Writer) error {
 	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
 		for _, v := range n.values {
-			// we can use encode to get the raw values because everything is a literal
+			// we can use encode instead of marshal to get the raw unquoted values
+			// it works because everything here is a literal value.
 			// alt: give the literal interface a "get literal value" function.
 			if value, e := cout.Encode(v.value.(jsn.Marshalee), literal.CompactEncoder); e != nil {
 				err = errutil.Append(err, e)
