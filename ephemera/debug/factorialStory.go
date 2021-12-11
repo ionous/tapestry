@@ -3,11 +3,11 @@ package debug
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/dl/value"
-	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
+// a program that can check factorials
 var FactorialStory = &story.Story{
 	Paragraph: []story.Paragraph{{
 		StoryStatement: []story.StoryStatement{
@@ -25,21 +25,7 @@ var FactorialStory = &story.Story{
 				},
 				Hook: story.ProgramHook{
 					Choice: story.ProgramHook_Activity_Opt,
-					Value: &core.Activity{[]rt.Execute{
-						&core.SayText{
-							Text: &core.PrintNum{
-								Num: &core.CallPattern{
-									Pattern: factorialName,
-									Arguments: core.CallArgs{
-										Args: []core.CallArg{
-											core.CallArg{
-												Name: "num",
-												From: &core.FromNum{
-													Val: &literal.NumValue{Num: 3}},
-											}},
-									}},
-							}},
-					}},
+					Value:  FactorialCheck,
 				}},
 			&story.PatternDecl{
 				Name: factorialName,
@@ -56,43 +42,67 @@ var FactorialStory = &story.Story{
 						Guard: &core.Always{},
 						Hook: story.ProgramHook{
 							Choice: story.ProgramHook_Activity_Opt,
-							Value: &core.Activity{[]rt.Execute{
-								&core.Assign{
-									Var: numVar,
-									From: &core.FromNum{&core.ProductOf{
-										A: &core.GetVar{Name: numVar},
-										B: &core.DiffOf{
-											A: &core.GetVar{Name: numVar},
-											B: &literal.NumValue{Num: 1}},
-									}},
-								},
-							}},
-						}},
-					}}},
+							Value:  FactorialMulMinusOne,
+						}}}}},
 			&story.PatternActions{
 				Name:          factorialName,
 				PatternReturn: &story.PatternReturn{Result: numberDecl},
 				PatternRules: story.PatternRules{
 					PatternRule: []story.PatternRule{{
-						Guard: &core.CompareNum{
-							A:  &core.GetVar{Name: numVar},
-							Is: &core.Equal{},
-							B:  &literal.NumValue{}},
+						Guard: FactorialIsZero,
 						Hook: story.ProgramHook{
 							Choice: story.ProgramHook_Activity_Opt,
-							Value: &core.Activity{[]rt.Execute{
-								&core.Assign{
-									Var:  numVar,
-									From: &core.FromNum{&literal.NumValue{Num: 1}},
-								}},
-							}}},
-					}},
+							Value:  FactorialUseOne,
+						}}}},
 			}},
 	}},
 }
 
-var factorialName = value.PatternName{Str: "factorial"}
-var numVar = value.VariableName{Str: "num"}
+// run 3! factorial
+var FactorialCheck = &core.Activity{[]rt.Execute{
+	&core.SayText{
+		Text: &core.PrintNum{
+			Num: &core.CallPattern{
+				Pattern: factorialName,
+				Arguments: core.CallArgs{
+					Args: []core.CallArg{
+						core.CallArg{
+							Name: "num",
+							From: &core.FromNum{
+								Val: &literal.NumValue{Num: 3}},
+						}},
+				}},
+		}},
+}}
+
+// subtracts 1 from the num and multiples by one
+var FactorialMulMinusOne = &core.Activity{[]rt.Execute{
+	&core.Assign{
+		Var: numVar,
+		From: &core.FromNum{&core.ProductOf{
+			A: &core.GetVar{Name: numVar},
+			B: &core.DiffOf{
+				A: &core.GetVar{Name: numVar},
+				B: &literal.NumValue{Num: 1}},
+		}},
+	},
+}}
+
+// at 0, use the number 1
+var FactorialUseOne = &core.Activity{[]rt.Execute{
+	&core.Assign{
+		Var:  numVar,
+		From: &core.FromNum{&literal.NumValue{Num: 1}},
+	}},
+}
+
+var FactorialIsZero = &core.CompareNum{
+	A:  &core.GetVar{Name: numVar},
+	Is: &core.Equal{},
+	B:  &literal.NumValue{}}
+
+var factorialName = core.PatternName{Str: "factorial"}
+var numVar = core.VariableName{Str: "num"}
 
 var numberDecl = story.VariableDecl{
 	An: story.Determiner{

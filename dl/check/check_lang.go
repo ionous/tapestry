@@ -4,7 +4,7 @@ package check
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"github.com/ionous/errutil"
 )
@@ -102,14 +102,14 @@ func CheckOutput_Marshal(m jsn.Marshaler, val *CheckOutput) (err error) {
 	if err = m.MarshalBlock(CheckOutput_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CheckOutput_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CheckOutput_Field_Name))
 		}
 		e1 := m.MarshalKey("expect", CheckOutput_Field_Expect)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Expect)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Expect)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", CheckOutput_Field_Expect))

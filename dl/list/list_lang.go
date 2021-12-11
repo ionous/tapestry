@@ -4,7 +4,7 @@ package list
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
@@ -13,7 +13,7 @@ import (
 // AsNum Define the name of a number variable.
 // User implements: ListIterator.
 type AsNum struct {
-	Var value.VariableName `if:"label=_"`
+	Var core.VariableName `if:"label=_"`
 }
 
 func (*AsNum) Compose() composer.Spec {
@@ -99,7 +99,7 @@ func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
 	if err = m.MarshalBlock(AsNum_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AsNum_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", AsNum_Field_Var))
@@ -112,7 +112,7 @@ func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
 // AsRec Define the name of a record variable.
 // User implements: ListIterator.
 type AsRec struct {
-	Var value.VariableName `if:"label=_"`
+	Var core.VariableName `if:"label=_"`
 }
 
 func (*AsRec) Compose() composer.Spec {
@@ -198,7 +198,7 @@ func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
 	if err = m.MarshalBlock(AsRec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AsRec_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", AsRec_Field_Var))
@@ -211,7 +211,7 @@ func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
 // AsTxt Define the name of a text variable.
 // User implements: ListIterator.
 type AsTxt struct {
-	Var value.VariableName `if:"label=_"`
+	Var core.VariableName `if:"label=_"`
 }
 
 func (*AsTxt) Compose() composer.Spec {
@@ -297,7 +297,7 @@ func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
 	if err = m.MarshalBlock(AsTxt_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AsTxt_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", AsTxt_Field_Var))
@@ -652,7 +652,7 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 		}
 		e3 := m.MarshalKey("as", Erasing_Field_As)
 		if e3 == nil {
-			e3 = value.Text_Unboxed_Marshal(m, &val.As)
+			e3 = literal.Text_Unboxed_Marshal(m, &val.As)
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", Erasing_Field_As))
@@ -781,7 +781,7 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 		}
 		e2 := m.MarshalKey("as", ErasingEdge_Field_As)
 		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.As)
+			e2 = literal.Text_Unboxed_Marshal(m, &val.As)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ErasingEdge_Field_As))
@@ -808,7 +808,7 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 // FromNumList Uses a list of numbers
 // User implements: ListSource.
 type FromNumList struct {
-	Var value.VariableName `if:"label=_"`
+	Var core.VariableName `if:"label=_"`
 }
 
 func (*FromNumList) Compose() composer.Spec {
@@ -895,7 +895,7 @@ func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
 	if err = m.MarshalBlock(FromNumList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromNumList_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", FromNumList_Field_Var))
@@ -908,7 +908,7 @@ func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
 // FromRecList Uses a list of records
 // User implements: ListSource.
 type FromRecList struct {
-	Var value.VariableName `if:"label=_"`
+	Var core.VariableName `if:"label=_"`
 }
 
 func (*FromRecList) Compose() composer.Spec {
@@ -995,7 +995,7 @@ func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
 	if err = m.MarshalBlock(FromRecList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromRecList_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", FromRecList_Field_Var))
@@ -1008,7 +1008,7 @@ func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
 // FromTxtList Uses a list of text
 // User implements: ListSource.
 type FromTxtList struct {
-	Var value.VariableName `if:"label=_"`
+	Var core.VariableName `if:"label=_"`
 }
 
 func (*FromTxtList) Compose() composer.Spec {
@@ -1095,7 +1095,7 @@ func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
 	if err = m.MarshalBlock(FromTxtList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromTxtList_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", FromTxtList_Field_Var))
@@ -1108,7 +1108,7 @@ func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
 // IntoNumList Targets a list of numbers
 // User implements: ListTarget.
 type IntoNumList struct {
-	Var value.VariableName `if:"label=_"`
+	Var core.VariableName `if:"label=_"`
 }
 
 func (*IntoNumList) Compose() composer.Spec {
@@ -1195,7 +1195,7 @@ func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
 	if err = m.MarshalBlock(IntoNumList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoNumList_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", IntoNumList_Field_Var))
@@ -1208,7 +1208,7 @@ func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
 // IntoRecList Targets a list of records
 // User implements: ListTarget.
 type IntoRecList struct {
-	Var value.VariableName `if:"label=_"`
+	Var core.VariableName `if:"label=_"`
 }
 
 func (*IntoRecList) Compose() composer.Spec {
@@ -1295,7 +1295,7 @@ func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
 	if err = m.MarshalBlock(IntoRecList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoRecList_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", IntoRecList_Field_Var))
@@ -1308,7 +1308,7 @@ func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
 // IntoTxtList Targets a list of text
 // User implements: ListTarget.
 type IntoTxtList struct {
-	Var value.VariableName `if:"label=_"`
+	Var core.VariableName `if:"label=_"`
 }
 
 func (*IntoTxtList) Compose() composer.Spec {
@@ -1395,7 +1395,7 @@ func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
 	if err = m.MarshalBlock(IntoTxtList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoTxtList_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", IntoTxtList_Field_Var))
@@ -1752,9 +1752,9 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 
 // ListGather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
-	Var   value.VariableName `if:"label=_"`
-	From  ListSource         `if:"label=from"`
-	Using string             `if:"label=using,type=text"`
+	Var   core.VariableName `if:"label=_"`
+	From  ListSource        `if:"label=from"`
+	Using string            `if:"label=using,type=text"`
 }
 
 func (*ListGather) Compose() composer.Spec {
@@ -1843,7 +1843,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 	if err = m.MarshalBlock(ListGather_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListGather_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListGather_Field_Var))
@@ -1857,7 +1857,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 		}
 		e2 := m.MarshalKey("using", ListGather_Field_Using)
 		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.Using)
+			e2 = literal.Text_Unboxed_Marshal(m, &val.Using)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ListGather_Field_Using))
@@ -2127,7 +2127,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 	if err = m.MarshalBlock(ListMap_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListMap_Field_ToList)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.ToList)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.ToList)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListMap_Field_ToList))
@@ -2141,7 +2141,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 		}
 		e2 := m.MarshalKey("using", ListMap_Field_UsingPattern)
 		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = literal.Text_Unboxed_Marshal(m, &val.UsingPattern)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ListMap_Field_UsingPattern))
@@ -2245,7 +2245,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 	if err = m.MarshalBlock(ListReduce_Flow{val}); err == nil {
 		e0 := m.MarshalKey("into", ListReduce_Field_IntoValue)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.IntoValue)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.IntoValue)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListReduce_Field_IntoValue))
@@ -2259,7 +2259,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 		}
 		e2 := m.MarshalKey("using", ListReduce_Field_UsingPattern)
 		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = literal.Text_Unboxed_Marshal(m, &val.UsingPattern)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ListReduce_Field_UsingPattern))
@@ -2463,7 +2463,7 @@ func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
 	if err = m.MarshalBlock(ListSet_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSet_Field_List)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.List)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSet_Field_List))
@@ -2614,9 +2614,9 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 // ListSortNumbers
 // User implements: Execute.
 type ListSortNumbers struct {
-	Var        value.VariableName `if:"label=_"`
-	ByField    string             `if:"label=by_field,type=text"`
-	Descending rt.BoolEval        `if:"label=descending,optional"`
+	Var        core.VariableName `if:"label=_"`
+	ByField    string            `if:"label=by_field,type=text"`
+	Descending rt.BoolEval       `if:"label=descending,optional"`
 }
 
 func (*ListSortNumbers) Compose() composer.Spec {
@@ -2705,14 +2705,14 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 	if err = m.MarshalBlock(ListSortNumbers_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortNumbers_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSortNumbers_Field_Var))
 		}
 		e1 := m.MarshalKey("by_field", ListSortNumbers_Field_ByField)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.ByField)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.ByField)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListSortNumbers_Field_ByField))
@@ -2732,10 +2732,10 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 // User implements: Execute.
 type ListSortText struct {
-	Var        value.VariableName `if:"label=_"`
-	ByField    string             `if:"label=by_field,type=text"`
-	Descending rt.BoolEval        `if:"label=descending,optional"`
-	UsingCase  rt.BoolEval        `if:"label=using_case,optional"`
+	Var        core.VariableName `if:"label=_"`
+	ByField    string            `if:"label=by_field,type=text"`
+	Descending rt.BoolEval       `if:"label=descending,optional"`
+	UsingCase  rt.BoolEval       `if:"label=using_case,optional"`
 }
 
 func (*ListSortText) Compose() composer.Spec {
@@ -2825,14 +2825,14 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 	if err = m.MarshalBlock(ListSortText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortText_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSortText_Field_Var))
 		}
 		e1 := m.MarshalKey("by_field", ListSortText_Field_ByField)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.ByField)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.ByField)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListSortText_Field_ByField))
@@ -2859,8 +2859,8 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 // ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 // User implements: Execute.
 type ListSortUsing struct {
-	Var   value.VariableName `if:"label=_"`
-	Using string             `if:"label=using,type=text"`
+	Var   core.VariableName `if:"label=_"`
+	Using string            `if:"label=using,type=text"`
 }
 
 func (*ListSortUsing) Compose() composer.Spec {
@@ -2948,14 +2948,14 @@ func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
 	if err = m.MarshalBlock(ListSortUsing_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortUsing_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = core.VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSortUsing_Field_Var))
 		}
 		e1 := m.MarshalKey("using", ListSortUsing_Field_Using)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Using)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Using)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListSortUsing_Field_Using))
@@ -3127,7 +3127,7 @@ func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 	if err = m.MarshalBlock(ListSplice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSplice_Field_List)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.List)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSplice_Field_List))

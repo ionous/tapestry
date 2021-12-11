@@ -7,9 +7,9 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
-	"git.sr.ht/~ionous/iffy/ephemera/story"
 	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/jsn/din"
@@ -183,11 +183,11 @@ func TestVarAsBool(t *testing.T) {
 	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
 	want := core.AllTrue{[]rt.BoolEval{
 		&core.GetVar{
-			Name: value.VariableName{Str: "requires light"},
+			Name: core.VariableName{Str: "requires light"},
 		},
 		&core.GetAtField{
 			Field: "is in darkness",
-			From:  &core.FromVar{Var: value.VariableName{Str: "actor"}},
+			From:  &core.FromVar{Var: core.VariableName{Str: "actor"}},
 		},
 	}}
 	var have core.AllTrue

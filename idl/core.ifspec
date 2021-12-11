@@ -4,6 +4,16 @@
         "uses": "group",
         "specs":
         {
+            "variable_name":
+            {
+                "uses": "str",
+                "group": "positioned"
+            },
+            "pattern_name":
+            {
+                "uses": "str",
+                "group": "positioned"
+            },
             "brancher":
             {
                 "uses": "slot",

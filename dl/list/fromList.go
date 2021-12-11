@@ -28,7 +28,7 @@ func (*FromTxtList) Affinity() affine.Affinity { return affine.TextList }
 func (*FromRecList) Affinity() affine.Affinity { return affine.RecordList }
 
 func (op *FromNumList) GetListSource(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := safe.CheckVariable(run, op.Var, op.Affinity()); e != nil {
+	if v, e := safe.CheckVariable(run, op.Var.String(), op.Affinity()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -37,7 +37,7 @@ func (op *FromNumList) GetListSource(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *FromRecList) GetListSource(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := safe.CheckVariable(run, op.Var, op.Affinity()); e != nil {
+	if v, e := safe.CheckVariable(run, op.Var.String(), op.Affinity()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -46,7 +46,7 @@ func (op *FromRecList) GetListSource(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *FromTxtList) GetListSource(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := safe.CheckVariable(run, op.Var, op.Affinity()); e != nil {
+	if v, e := safe.CheckVariable(run, op.Var.String(), op.Affinity()); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v

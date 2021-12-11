@@ -4,7 +4,6 @@ import (
   "git.sr.ht/~ionous/iffy/affine"
   "git.sr.ht/~ionous/iffy/dl/core"
   "git.sr.ht/~ionous/iffy/dl/literal"
-  "git.sr.ht/~ionous/iffy/dl/value"
   "git.sr.ht/~ionous/iffy/jsn"
   "git.sr.ht/~ionous/iffy/rt"
   g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -35,7 +34,7 @@ func (op *MatchNumber) Marshal(m jsn.Marshaler) (err error) {
 }
 
 func (op *MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
-  if a, e := safe.CheckVariable(run, numVar, affine.Number); e != nil {
+  if a, e := safe.CheckVariable(run, numVar.String(), affine.Number); e != nil {
     err = e
   } else {
     n := a.Int()
@@ -46,7 +45,7 @@ func (op *MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
 
 func DetermineSay(i int) *core.CallPattern {
   return &core.CallPattern{
-    Pattern: value.PatternName{Str: "say_me"},
+    Pattern: core.PatternName{Str: "say_me"},
     Arguments: core.NamedArgs(
       "num", &core.FromNum{
         &literal.NumValue{float64(i)},
@@ -89,7 +88,7 @@ var SayPattern = testpat.Pattern{
 
 var SayHelloGoodbye = core.NewActivity(
   &core.ChooseAction{
-    If: &core.BoolValue{true},
+    If: &literal.BoolValue{true},
     Do: core.MakeActivity(&core.Say{
       Text: &literal.TextValue{"hello"},
     }),

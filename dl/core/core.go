@@ -3,7 +3,6 @@ package core
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/dl/value"
 	"github.com/ionous/errutil"
 )
 
@@ -27,7 +26,7 @@ func I(n int) *literal.NumValue     { return &literal.NumValue{float64(n)} }
 func F(n float64) *literal.NumValue { return &literal.NumValue{n} }
 func T(s string) *literal.TextValue { return &literal.TextValue{s} }
 
-func P(p string) value.PatternName  { return value.PatternName{Str: p} }
-func N(v string) value.VariableName { return value.VariableName{Str: v} }
-func V(i string) *GetVar            { return &GetVar{N(i)} }
-func W(v string) string             { return v }
+func P(p string) PatternName  { return PatternName{Str: p} }
+func N(v string) VariableName { return VariableName{Str: v} }
+func V(i string) *GetVar      { return &GetVar{N(i)} }
+func W(v string) string       { return v }

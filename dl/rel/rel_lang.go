@@ -3,7 +3,7 @@ package rel
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
@@ -12,8 +12,8 @@ import (
 // ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.)
 // User implements: TextEval.
 type ReciprocalOf struct {
-	Via    value.RelationName `if:"label=_"`
-	Object rt.TextEval        `if:"label=object"`
+	Via    RelationName `if:"label=_"`
+	Object rt.TextEval  `if:"label=object"`
 }
 
 func (*ReciprocalOf) Compose() composer.Spec {
@@ -101,7 +101,7 @@ func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
 	if err = m.MarshalBlock(ReciprocalOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ReciprocalOf_Field_Via)
 		if e0 == nil {
-			e0 = value.RelationName_Marshal(m, &val.Via)
+			e0 = RelationName_Marshal(m, &val.Via)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ReciprocalOf_Field_Via))
@@ -121,8 +121,8 @@ func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
 // ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)
 // User implements: TextListEval.
 type ReciprocalsOf struct {
-	Via    value.RelationName `if:"label=_"`
-	Object rt.TextEval        `if:"label=object"`
+	Via    RelationName `if:"label=_"`
+	Object rt.TextEval  `if:"label=object"`
 }
 
 func (*ReciprocalsOf) Compose() composer.Spec {
@@ -210,7 +210,7 @@ func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
 	if err = m.MarshalBlock(ReciprocalsOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ReciprocalsOf_Field_Via)
 		if e0 == nil {
-			e0 = value.RelationName_Marshal(m, &val.Via)
+			e0 = RelationName_Marshal(m, &val.Via)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ReciprocalsOf_Field_Via))
@@ -230,9 +230,9 @@ func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
 // Relate Relate two nouns.
 // User implements: Execute.
 type Relate struct {
-	Object   rt.TextEval        `if:"label=_"`
-	ToObject rt.TextEval        `if:"label=to"`
-	Via      value.RelationName `if:"label=via"`
+	Object   rt.TextEval  `if:"label=_"`
+	ToObject rt.TextEval  `if:"label=to"`
+	Via      RelationName `if:"label=via"`
 }
 
 func (*Relate) Compose() composer.Spec {
@@ -334,7 +334,7 @@ func Relate_Marshal(m jsn.Marshaler, val *Relate) (err error) {
 		}
 		e2 := m.MarshalKey("via", Relate_Field_Via)
 		if e2 == nil {
-			e2 = value.RelationName_Marshal(m, &val.Via)
+			e2 = RelationName_Marshal(m, &val.Via)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", Relate_Field_Via))
@@ -344,11 +344,88 @@ func Relate_Marshal(m jsn.Marshaler, val *Relate) (err error) {
 	return
 }
 
+// RelationName requires a user-specified string.
+type RelationName struct {
+	At  reader.Position `if:"internal"`
+	Str string
+}
+
+func (op *RelationName) String() string {
+	return op.Str
+}
+
+func (*RelationName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        RelationName_Type,
+		Uses:        composer.Type_Str,
+		OpenStrings: true,
+	}
+}
+
+const RelationName_Type = "relation_name"
+
+func (op *RelationName) Marshal(m jsn.Marshaler) error {
+	return RelationName_Marshal(m, op)
+}
+
+func RelationName_Optional_Marshal(m jsn.Marshaler, val *RelationName) (err error) {
+	var zero RelationName
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = RelationName_Marshal(m, val)
+	}
+	return
+}
+
+func RelationName_Marshal(m jsn.Marshaler, val *RelationName) (err error) {
+	m.SetCursor(val.At.Offset)
+	return m.MarshalValue(RelationName_Type, &val.Str)
+}
+
+type RelationName_Slice []RelationName
+
+func (op *RelationName_Slice) GetType() string { return RelationName_Type }
+
+func (op *RelationName_Slice) Marshal(m jsn.Marshaler) error {
+	return RelationName_Repeats_Marshal(m, (*[]RelationName)(op))
+}
+
+func (op *RelationName_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RelationName_Slice) SetSize(cnt int) {
+	var els []RelationName
+	if cnt >= 0 {
+		els = make(RelationName_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RelationName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RelationName_Marshal(m, &(*op)[i])
+}
+
+func RelationName_Repeats_Marshal(m jsn.Marshaler, vals *[]RelationName) error {
+	return jsn.RepeatBlock(m, (*RelationName_Slice)(vals))
+}
+
+func RelationName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelationName) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = RelationName_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.)
 // User implements: TextEval.
 type RelativeOf struct {
-	Via    value.RelationName `if:"label=_"`
-	Object rt.TextEval        `if:"label=object"`
+	Via    RelationName `if:"label=_"`
+	Object rt.TextEval  `if:"label=object"`
 }
 
 func (*RelativeOf) Compose() composer.Spec {
@@ -436,7 +513,7 @@ func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
 	if err = m.MarshalBlock(RelativeOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RelativeOf_Field_Via)
 		if e0 == nil {
-			e0 = value.RelationName_Marshal(m, &val.Via)
+			e0 = RelationName_Marshal(m, &val.Via)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RelativeOf_Field_Via))
@@ -456,8 +533,8 @@ func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
 // RelativesOf Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
 // User implements: TextListEval.
 type RelativesOf struct {
-	Via    value.RelationName `if:"label=_"`
-	Object rt.TextEval        `if:"label=object"`
+	Via    RelationName `if:"label=_"`
+	Object rt.TextEval  `if:"label=object"`
 }
 
 func (*RelativesOf) Compose() composer.Spec {
@@ -545,7 +622,7 @@ func RelativesOf_Marshal(m jsn.Marshaler, val *RelativesOf) (err error) {
 	if err = m.MarshalBlock(RelativesOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RelativesOf_Field_Via)
 		if e0 == nil {
-			e0 = value.RelationName_Marshal(m, &val.Via)
+			e0 = RelationName_Marshal(m, &val.Via)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RelativesOf_Field_Via))
@@ -566,6 +643,7 @@ var Slats = []composer.Composer{
 	(*ReciprocalOf)(nil),
 	(*ReciprocalsOf)(nil),
 	(*Relate)(nil),
+	(*RelationName)(nil),
 	(*RelativeOf)(nil),
 	(*RelativesOf)(nil),
 }

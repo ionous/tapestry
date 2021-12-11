@@ -1,5 +1,5 @@
 {
-    "render":
+    "reader":
     {
         "uses": "group",
         "specs":

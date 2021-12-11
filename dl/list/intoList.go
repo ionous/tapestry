@@ -12,7 +12,7 @@ type ListTarget interface {
 }
 
 func (op *IntoNumList) GetListTarget(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := safe.CheckVariable(run, op.Var, affine.NumList); e != nil {
+	if v, e := safe.CheckVariable(run, op.Var.String(), affine.NumList); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -21,7 +21,7 @@ func (op *IntoNumList) GetListTarget(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *IntoRecList) GetListTarget(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := safe.CheckVariable(run, op.Var, affine.RecordList); e != nil {
+	if v, e := safe.CheckVariable(run, op.Var.String(), affine.RecordList); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -30,7 +30,7 @@ func (op *IntoRecList) GetListTarget(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *IntoTxtList) GetListTarget(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := safe.CheckVariable(run, op.Var, affine.TextList); e != nil {
+	if v, e := safe.CheckVariable(run, op.Var.String(), affine.TextList); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v

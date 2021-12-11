@@ -4,79 +4,11 @@ package render
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
 )
-
-// Position Identifies the location of a specific command ( ex. from an .if file ).
-type Position struct {
-	Offset string `if:"label=_,type=text"`
-	Source string `if:"label=in,type=text"`
-}
-
-func (*Position) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Position_Type,
-		Uses: composer.Type_Flow,
-		Lede: "src",
-	}
-}
-
-const Position_Type = "position"
-
-const Position_Field_Offset = "$OFFSET"
-const Position_Field_Source = "$SOURCE"
-
-func (op *Position) Marshal(m jsn.Marshaler) error {
-	return Position_Marshal(m, op)
-}
-
-type Position_Flow struct{ ptr *Position }
-
-func (n Position_Flow) GetType() string      { return Position_Type }
-func (n Position_Flow) GetLede() string      { return "src" }
-func (n Position_Flow) GetFlow() interface{} { return n.ptr }
-func (n Position_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Position); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Position_Optional_Marshal(m jsn.Marshaler, pv **Position) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Position_Marshal(m, *pv)
-	} else if !enc {
-		var v Position
-		if err = Position_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Position_Marshal(m jsn.Marshaler, val *Position) (err error) {
-	if err = m.MarshalBlock(Position_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Position_Field_Offset)
-		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Offset)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Position_Field_Offset))
-		}
-		e1 := m.MarshalKey("in", Position_Field_Source)
-		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Source)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Position_Field_Source))
-		}
-		m.EndBlock()
-	}
-	return
-}
 
 // RenderExp
 // User implements: TextEval.
@@ -454,7 +386,7 @@ func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
 	if err = m.MarshalBlock(RenderName_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderName_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RenderName_Field_Name))
@@ -468,8 +400,8 @@ func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
 // and we want the ability to say several things in series.
 // User implements: Assignment, TextEval.
 type RenderPattern struct {
-	Pattern   value.PatternName `if:"label=_"`
-	Arguments core.CallArgs     `if:"label=args"`
+	Pattern   core.PatternName `if:"label=_"`
+	Arguments core.CallArgs    `if:"label=args"`
 }
 
 func (*RenderPattern) Compose() composer.Spec {
@@ -557,7 +489,7 @@ func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
 	if err = m.MarshalBlock(RenderPattern_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderPattern_Field_Pattern)
 		if e0 == nil {
-			e0 = value.PatternName_Marshal(m, &val.Pattern)
+			e0 = core.PatternName_Marshal(m, &val.Pattern)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RenderPattern_Field_Pattern))
@@ -577,8 +509,8 @@ func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
 // RenderRef returns the value of a variable or the id of an object.
 // User implements: Assignment, NumberEval, TextEval.
 type RenderRef struct {
-	Name  value.VariableName `if:"label=_"`
-	Flags RenderFlags        `if:"label=flags"`
+	Name  core.VariableName `if:"label=_"`
+	Flags RenderFlags       `if:"label=flags"`
 }
 
 func (*RenderRef) Compose() composer.Spec {
@@ -665,7 +597,7 @@ func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
 	if err = m.MarshalBlock(RenderRef_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderRef_Field_Name)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Name)
+			e0 = core.VariableName_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RenderRef_Field_Name))
@@ -683,7 +615,6 @@ func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
 }
 
 var Slats = []composer.Composer{
-	(*Position)(nil),
 	(*RenderExp)(nil),
 	(*RenderField)(nil),
 	(*RenderFlags)(nil),
@@ -693,7 +624,6 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	1994392263685226704:  (*Position)(nil),      /* Src:in: */
 	16799527360025986462: (*RenderExp)(nil),     /* RenderExp: */
 	8103562808853847007:  (*RenderField)(nil),   /* RenderField: */
 	2017102261165852124:  (*RenderName)(nil),    /* RenderName: */

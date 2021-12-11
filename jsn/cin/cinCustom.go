@@ -6,8 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/dl/value"
-	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/jsn/chart"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -187,5 +186,5 @@ func readVar(dec *xDecoder, msg json.RawMessage) (ret *core.GetVar, okay bool) {
 }
 
 func newVar(str string) *core.GetVar {
-	return &core.GetVar{Name: value.VariableName{Str: str[1:]}}
+	return &core.GetVar{Name: core.VariableName{Str: str[1:]}}
 }

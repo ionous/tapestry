@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/dout"
 	"git.sr.ht/~ionous/iffy/web"

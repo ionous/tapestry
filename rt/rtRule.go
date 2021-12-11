@@ -24,6 +24,14 @@ const (
 	Filter                      // internal flag to find (and always update) counters in rules
 )
 
+// Rule triggers a named series of statements when its filters and phase are satisfied.
+type Rule struct {
+	Name     string   `if:"label=_,type=text"`
+	RawFlags float64  `if:"label=flags,type=number"`
+	Filter   BoolEval `if:"label=when,optional"`
+	Execute  Execute  `if:"label=do"`
+}
+
 func (l Rule) Flags() (ret Flags) {
 	flags := Flags(l.RawFlags)
 	if flags == 0 {

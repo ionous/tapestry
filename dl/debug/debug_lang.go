@@ -3,7 +3,7 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
@@ -207,7 +207,7 @@ func DoNothing_Marshal(m jsn.Marshaler, val *DoNothing) (err error) {
 	if err = m.MarshalBlock(DoNothing_Flow{val}); err == nil {
 		e0 := m.MarshalKey("why", DoNothing_Field_Reason)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Optional_Marshal(m, &val.Reason)
+			e0 = literal.Text_Unboxed_Optional_Marshal(m, &val.Reason)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DoNothing_Field_Reason))

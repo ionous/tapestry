@@ -36,17 +36,6 @@
                                 "slot": "story_statement",
                                 "spec": "{:lede} {*tail} {?summary}",
                                 "desc": "Declare a noun: Describes people, places, or things."
-                            },
-                            "comment":
-                            {
-                                "uses": "flow",
-                                "slot":
-                                [
-                                    "story_statement",
-                                    "execute"
-                                ],
-                                "spec": "Note: {comment%lines}",
-                                "desc": "Add a note: Information about the story for you and other authors."
                             }
                         }
                     },
@@ -257,6 +246,27 @@
                                 "spec": "The plural of {singular:text} is {plural:text}.",
                                 "lede": "make",
                                 "desc": "The plural of person is people. The plural of person is persons."
+                            },
+                            "comment":
+                            {
+                                "uses": "flow",
+                                "slot":
+                                [
+                                    "story_statement",
+                                    "execute"
+                                ],
+                                "spec": "Note: {comment%lines}",
+                                "desc": "Add a note: Information about the story for you and other authors."
+                            },
+                            "lines":
+                            {
+                                "uses": "str",
+                                "desc":
+                                [
+                                    "A sequence of characters of any length spanning multiple lines.",
+                                    "Paragraphs are a prime example. Generally lines are some piece of the story that will be displayed to the player.",
+                                    "See also: text."
+                                ]
                             }
                         }
                     },

@@ -4,6 +4,11 @@
         "uses": "group",
         "specs":
         {
+            "relation_name":
+            {
+                "uses": "str",
+                "group": "positioned"
+            },
             "reciprocal_of":
             {
                 "uses": "flow",

@@ -11,8 +11,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/rel"
 	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/dl/value"
-	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
 
@@ -29,8 +28,6 @@ var AllSlats = [][]composer.Composer{
 	reader.Slats,
 	rel.Slats,
 	render.Slats,
-	rt.Slats,
-	value.Slats,
 	story.Slats,
 }
 var AllSignatures = []map[uint64]interface{}{
@@ -45,7 +42,6 @@ var AllSignatures = []map[uint64]interface{}{
 	render.Signatures,
 	rt.Signatures,
 	story.Signatures,
-	value.Signatures,
 }
 
 // note: if it were ever to turn out this is the only reflection needed

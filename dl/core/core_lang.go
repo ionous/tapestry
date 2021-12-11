@@ -3,7 +3,8 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/value"
+	"git.sr.ht/~ionous/iffy/dl/literal"
+	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
@@ -399,8 +400,8 @@ func AnyTrue_Marshal(m jsn.Marshaler, val *AnyTrue) (err error) {
 // Assign Assigns a variable to a value.
 // User implements: Execute.
 type Assign struct {
-	Var  value.VariableName `if:"label=_"`
-	From rt.Assignment      `if:"label=be"`
+	Var  VariableName  `if:"label=_"`
+	From rt.Assignment `if:"label=be"`
 }
 
 func (*Assign) Compose() composer.Spec {
@@ -488,7 +489,7 @@ func Assign_Marshal(m jsn.Marshaler, val *Assign) (err error) {
 	if err = m.MarshalBlock(Assign_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Assign_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Assign_Field_Var))
@@ -1219,7 +1220,7 @@ func CallArg_Marshal(m jsn.Marshaler, val *CallArg) (err error) {
 	if err = m.MarshalBlock(CallArg_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallArg_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallArg_Field_Name))
@@ -1427,7 +1428,7 @@ func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
 	if err = m.MarshalBlock(CallCycle_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallCycle_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallCycle_Field_Name))
@@ -1535,7 +1536,7 @@ func CallMake_Marshal(m jsn.Marshaler, val *CallMake) (err error) {
 	if err = m.MarshalBlock(CallMake_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallMake_Field_Kind)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Kind)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallMake_Field_Kind))
@@ -1555,8 +1556,8 @@ func CallMake_Marshal(m jsn.Marshaler, val *CallMake) (err error) {
 // CallPattern Runtime version of determine
 // User implements: Execute, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type CallPattern struct {
-	Pattern   value.PatternName `if:"label=_"`
-	Arguments CallArgs          `if:"label=args"`
+	Pattern   PatternName `if:"label=_"`
+	Arguments CallArgs    `if:"label=args"`
 }
 
 func (*CallPattern) Compose() composer.Spec {
@@ -1643,7 +1644,7 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 	if err = m.MarshalBlock(CallPattern_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallPattern_Field_Pattern)
 		if e0 == nil {
-			e0 = value.PatternName_Marshal(m, &val.Pattern)
+			e0 = PatternName_Marshal(m, &val.Pattern)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallPattern_Field_Pattern))
@@ -1753,7 +1754,7 @@ func CallSend_Marshal(m jsn.Marshaler, val *CallSend) (err error) {
 	if err = m.MarshalBlock(CallSend_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallSend_Field_Event)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Event)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Event)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallSend_Field_Event))
@@ -1870,7 +1871,7 @@ func CallShuffle_Marshal(m jsn.Marshaler, val *CallShuffle) (err error) {
 	if err = m.MarshalBlock(CallShuffle_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallShuffle_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallShuffle_Field_Name))
@@ -1979,7 +1980,7 @@ func CallTerminal_Marshal(m jsn.Marshaler, val *CallTerminal) (err error) {
 	if err = m.MarshalBlock(CallTerminal_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallTerminal_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallTerminal_Field_Name))
@@ -2090,7 +2091,7 @@ func CallTrigger_Marshal(m jsn.Marshaler, val *CallTrigger) (err error) {
 	if err = m.MarshalBlock(CallTrigger_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallTrigger_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallTrigger_Field_Name))
@@ -2547,7 +2548,7 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 	if err = m.MarshalBlock(ChooseMoreValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseMoreValue_Field_Assign)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Assign)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Assign)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseMoreValue_Field_Assign))
@@ -3019,7 +3020,7 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 	if err = m.MarshalBlock(ChooseValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseValue_Field_Assign)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Assign)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Assign)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseValue_Field_Assign))
@@ -3571,7 +3572,7 @@ func DiffOf_Marshal(m jsn.Marshaler, val *DiffOf) (err error) {
 // During Decide whether a pattern is running.
 // User implements: BoolEval, NumberEval.
 type During struct {
-	Pattern value.PatternName `if:"label=_"`
+	Pattern PatternName `if:"label=_"`
 }
 
 func (*During) Compose() composer.Spec {
@@ -3657,7 +3658,7 @@ func During_Marshal(m jsn.Marshaler, val *During) (err error) {
 	if err = m.MarshalBlock(During_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", During_Field_Pattern)
 		if e0 == nil {
-			e0 = value.PatternName_Marshal(m, &val.Pattern)
+			e0 = PatternName_Marshal(m, &val.Pattern)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", During_Field_Pattern))
@@ -4724,7 +4725,7 @@ func FromTexts_Marshal(m jsn.Marshaler, val *FromTexts) (err error) {
 // FromVar Targets a record stored in a variable.
 // User implements: FromSourceFields.
 type FromVar struct {
-	Var value.VariableName `if:"label=_"`
+	Var VariableName `if:"label=_"`
 }
 
 func (*FromVar) Compose() composer.Spec {
@@ -4811,7 +4812,7 @@ func FromVar_Marshal(m jsn.Marshaler, val *FromVar) (err error) {
 	if err = m.MarshalBlock(FromVar_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromVar_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", FromVar_Field_Var))
@@ -4913,7 +4914,7 @@ func GetAtField_Marshal(m jsn.Marshaler, val *GetAtField) (err error) {
 	if err = m.MarshalBlock(GetAtField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", GetAtField_Field_Field)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Field)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Field)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", GetAtField_Field_Field))
@@ -4933,7 +4934,7 @@ func GetAtField_Marshal(m jsn.Marshaler, val *GetAtField) (err error) {
 // GetVar Get Variable: Return the value of the named variable.
 // User implements: Assignment, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type GetVar struct {
-	Name value.VariableName `if:"label=_"`
+	Name VariableName `if:"label=_"`
 }
 
 func (*GetVar) Compose() composer.Spec {
@@ -5020,7 +5021,7 @@ func GetVar_Marshal(m jsn.Marshaler, val *GetVar) (err error) {
 	if err = m.MarshalBlock(GetVar_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", GetVar_Field_Name)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Name)
+			e0 = VariableName_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", GetVar_Field_Name))
@@ -5208,7 +5209,7 @@ func HasDominion_Marshal(m jsn.Marshaler, val *HasDominion) (err error) {
 	if err = m.MarshalBlock(HasDominion_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", HasDominion_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", HasDominion_Field_Name))
@@ -5704,7 +5705,7 @@ func IntoTargetFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoTarget
 // IntoVar Targets an object or record stored in a variable
 // User implements: IntoTargetFields.
 type IntoVar struct {
-	Var value.VariableName `if:"label=_"`
+	Var VariableName `if:"label=_"`
 }
 
 func (*IntoVar) Compose() composer.Spec {
@@ -5791,7 +5792,7 @@ func IntoVar_Marshal(m jsn.Marshaler, val *IntoVar) (err error) {
 	if err = m.MarshalBlock(IntoVar_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoVar_Field_Var)
 		if e0 == nil {
-			e0 = value.VariableName_Marshal(m, &val.Var)
+			e0 = VariableName_Marshal(m, &val.Var)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", IntoVar_Field_Var))
@@ -6000,7 +6001,7 @@ func IsExactKindOf_Marshal(m jsn.Marshaler, val *IsExactKindOf) (err error) {
 		}
 		e1 := m.MarshalKey("is_exactly", IsExactKindOf_Field_Kind)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Kind)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", IsExactKindOf_Field_Kind))
@@ -6109,7 +6110,7 @@ func IsKindOf_Marshal(m jsn.Marshaler, val *IsKindOf) (err error) {
 		}
 		e1 := m.MarshalKey("is", IsKindOf_Field_Kind)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Kind)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", IsKindOf_Field_Kind))
@@ -6415,7 +6416,7 @@ func KindsOf_Marshal(m jsn.Marshaler, val *KindsOf) (err error) {
 	if err = m.MarshalBlock(KindsOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindsOf_Field_Kind)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Kind)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindsOf_Field_Kind))
@@ -7113,7 +7114,7 @@ func Matches_Marshal(m jsn.Marshaler, val *Matches) (err error) {
 		}
 		e1 := m.MarshalKey("to", Matches_Field_Pattern)
 		if e1 == nil {
-			e1 = value.Text_Unboxed_Marshal(m, &val.Pattern)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Pattern)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Matches_Field_Pattern))
@@ -7689,6 +7690,83 @@ func ObjectExists_Marshal(m jsn.Marshaler, val *ObjectExists) (err error) {
 	return
 }
 
+// PatternName requires a user-specified string.
+type PatternName struct {
+	At  reader.Position `if:"internal"`
+	Str string
+}
+
+func (op *PatternName) String() string {
+	return op.Str
+}
+
+func (*PatternName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        PatternName_Type,
+		Uses:        composer.Type_Str,
+		OpenStrings: true,
+	}
+}
+
+const PatternName_Type = "pattern_name"
+
+func (op *PatternName) Marshal(m jsn.Marshaler) error {
+	return PatternName_Marshal(m, op)
+}
+
+func PatternName_Optional_Marshal(m jsn.Marshaler, val *PatternName) (err error) {
+	var zero PatternName
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = PatternName_Marshal(m, val)
+	}
+	return
+}
+
+func PatternName_Marshal(m jsn.Marshaler, val *PatternName) (err error) {
+	m.SetCursor(val.At.Offset)
+	return m.MarshalValue(PatternName_Type, &val.Str)
+}
+
+type PatternName_Slice []PatternName
+
+func (op *PatternName_Slice) GetType() string { return PatternName_Type }
+
+func (op *PatternName_Slice) Marshal(m jsn.Marshaler) error {
+	return PatternName_Repeats_Marshal(m, (*[]PatternName)(op))
+}
+
+func (op *PatternName_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *PatternName_Slice) SetSize(cnt int) {
+	var els []PatternName
+	if cnt >= 0 {
+		els = make(PatternName_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *PatternName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return PatternName_Marshal(m, &(*op)[i])
+}
+
+func PatternName_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternName) error {
+	return jsn.RepeatBlock(m, (*PatternName_Slice)(vals))
+}
+
+func PatternName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternName) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = PatternName_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // Pluralize Returns the plural form of a singular word. (ex. apples for apple. )
 // User implements: TextEval.
 type Pluralize struct {
@@ -8206,7 +8284,7 @@ func PutAtField_Marshal(m jsn.Marshaler, val *PutAtField) (err error) {
 		}
 		e2 := m.MarshalKey("at", PutAtField_Field_AtField)
 		if e2 == nil {
-			e2 = value.Text_Unboxed_Marshal(m, &val.AtField)
+			e2 = literal.Text_Unboxed_Marshal(m, &val.AtField)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", PutAtField_Field_AtField))
@@ -8525,7 +8603,7 @@ func Response_Marshal(m jsn.Marshaler, val *Response) (err error) {
 	if err = m.MarshalBlock(Response_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Response_Field_Name)
 		if e0 == nil {
-			e0 = value.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Response_Field_Name))
@@ -9874,6 +9952,83 @@ func Unequal_Marshal(m jsn.Marshaler, val *Unequal) (err error) {
 	return
 }
 
+// VariableName requires a user-specified string.
+type VariableName struct {
+	At  reader.Position `if:"internal"`
+	Str string
+}
+
+func (op *VariableName) String() string {
+	return op.Str
+}
+
+func (*VariableName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        VariableName_Type,
+		Uses:        composer.Type_Str,
+		OpenStrings: true,
+	}
+}
+
+const VariableName_Type = "variable_name"
+
+func (op *VariableName) Marshal(m jsn.Marshaler) error {
+	return VariableName_Marshal(m, op)
+}
+
+func VariableName_Optional_Marshal(m jsn.Marshaler, val *VariableName) (err error) {
+	var zero VariableName
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = VariableName_Marshal(m, val)
+	}
+	return
+}
+
+func VariableName_Marshal(m jsn.Marshaler, val *VariableName) (err error) {
+	m.SetCursor(val.At.Offset)
+	return m.MarshalValue(VariableName_Type, &val.Str)
+}
+
+type VariableName_Slice []VariableName
+
+func (op *VariableName_Slice) GetType() string { return VariableName_Type }
+
+func (op *VariableName_Slice) Marshal(m jsn.Marshaler) error {
+	return VariableName_Repeats_Marshal(m, (*[]VariableName)(op))
+}
+
+func (op *VariableName_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *VariableName_Slice) SetSize(cnt int) {
+	var els []VariableName
+	if cnt >= 0 {
+		els = make(VariableName_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *VariableName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return VariableName_Marshal(m, &(*op)[i])
+}
+
+func VariableName_Repeats_Marshal(m jsn.Marshaler, vals *[]VariableName) error {
+	return jsn.RepeatBlock(m, (*VariableName_Slice)(vals))
+}
+
+func VariableName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]VariableName) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = VariableName_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // While Keep running a series of actions while a condition is true.
 // User implements: Execute.
 type While struct {
@@ -10064,6 +10219,7 @@ var Slats = []composer.Composer{
 	(*Next)(nil),
 	(*Not)(nil),
 	(*ObjectExists)(nil),
+	(*PatternName)(nil),
 	(*Pluralize)(nil),
 	(*PrintNum)(nil),
 	(*PrintNumWord)(nil),
@@ -10085,6 +10241,7 @@ var Slats = []composer.Composer{
 	(*TriggerOnce)(nil),
 	(*TriggerSwitch)(nil),
 	(*Unequal)(nil),
+	(*VariableName)(nil),
 	(*While)(nil),
 }
 

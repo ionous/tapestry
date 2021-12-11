@@ -48,7 +48,7 @@ func (op *GetVar) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *GetVar) getVar(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if v, e := safe.CheckVariable(run, op.Name, aff); e != nil {
+	if v, e := safe.CheckVariable(run, op.Name.String(), aff); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
