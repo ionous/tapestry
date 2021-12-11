@@ -1,32 +1,22 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/ephemera/eph"
-	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/dl/eph"
 	"github.com/ionous/errutil"
 )
 
-func (op *PropertyDecl) ImportProperty(k *Importer, kind eph.Named) (err error) {
-	if prop, e := NewProperty(k, op.Property); e != nil {
-		err = e
-	} else {
-		err = op.PropertyType.ImportPropertyType(k, kind, prop)
-		// Comment      *Lines
-	}
-	return
+func (op *PropertyDecl) ImportProperty(k *Importer, kind string) (err error) {
+	return op.PropertyType.ImportPropertyType(k, kind, op.Property.Str)
 }
 
-func (op *PropertyType) ImportPropertyType(k *Importer, kind, prop eph.Named) (err error) {
+func (op *PropertyType) ImportPropertyType(k *Importer, kind, prop string) (err error) {
 	type propertyTypeImporter interface {
-		ImportPropertyType(k *Importer, kind, prop eph.Named) error
+		ImportPropertyType(k *Importer, kind, prop string) error
 	}
 	if opt, ok := op.Value.(propertyTypeImporter); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
 		err = opt.ImportPropertyType(k, kind, prop)
-		// Comment      *Lines
 	}
 	return
 }
@@ -35,93 +25,68 @@ func (op *PropertyType) ImportPropertyType(k *Importer, kind, prop eph.Named) (e
 // we could only do that with an after the fact reduction, and with some additional mdl data.
 // ( ex. in case the same aspect is assigned twice, or twice at difference depths )
 // for now the name of the field is the name of the aspect
-func (op *PropertyAspect) ImportPropertyType(k *Importer, kind, prop eph.Named) (err error) {
+func (op *PropertyAspect) ImportPropertyType(k *Importer, kind, prop string) (err error) {
 	// record the existence of an aspect with the same name as the property
-	k.NewName(prop.String(), tables.NAMED_ASPECT, op.At.String())
-	// record the use of that property and aspect.
-	k.NewField(kind, prop, tables.PRIM_ASPECT, "")
+	k.Write(&eph.EphKinds{Kinds: kind, Contain: []eph.EphParams{eph.AspectParam(prop)}})
 	return
 }
 
 // "{a number%number}, {some text%text}, or {a true/false value%bool}");
 // bool properties become implicit aspects
-func (op *PrimitiveType) ImportPropertyType(k *Importer, kind, prop eph.Named) (err error) {
+func (op *PrimitiveType) ImportPropertyType(k *Importer, kind, aspect string) (err error) {
 	if op.Str != PrimitiveType_Bool {
-		if primType, e := op.ImportPrimType(k); e != nil {
-			err = e
-		} else {
-			k.NewField(kind, prop, primType, "")
-		}
+		primType := eph.Affinity{op.Str} // these are the same
+		k.Write(&eph.EphKinds{Kinds: kind, Contain: []eph.EphParams{{Name: aspect, Affinity: primType}}})
 	} else {
 		// ex. innumerable, not innumerable, is innumerable
-		aspect := prop.String()
-		k.NewImplicitAspect(aspect, kind.String(),
+		k.AddImplicitAspect(aspect, kind,
 			"not_"+aspect, // false first ( so that the default is the zero value )
 			"is_"+aspect,
 		)
-		k.NewField(kind, prop, tables.PRIM_ASPECT, "")
+		k.Write(&eph.EphKinds{Kinds: kind, Contain: []eph.EphParams{eph.AspectParam(aspect)}})
 	}
 	return
 }
 
 // number_list, text_list, record_type, record_list
-func (op *ExtType) ImportVariableType(k *Importer) (retType eph.Named, retAff string, err error) {
-	if imp, ok := op.Value.(primTypeImporter); !ok {
+func (op *ExtType) ImportVariableType(k *Importer) (retType string, retAff eph.Affinity, err error) {
+	if imp, ok := op.Value.(primTypeAffer); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
-	} else if typeName, aff, e := imp.ImportPrimType(k); e != nil {
-		err = e
 	} else {
-		// currently, when affinity is set, the type name is a record ( or object ) kind
-		var cat string
-		if len(aff) > 0 {
-			cat = tables.NAMED_KIND
-		} else {
-			cat = tables.NAMED_TYPE
-		}
-		retType, retAff = k.NewName(typeName, cat, op.At.String()), aff
+		retType, retAff = imp.GetTypeAffinity(k)
 	}
 	return
 }
 
 // number_list, text_list, record_type, record_list
-func (op *ExtType) ImportPropertyType(k *Importer, kind, prop eph.Named) (err error) {
-	if imp, ok := op.Value.(primTypeImporter); !ok {
+func (op *ExtType) ImportPropertyType(k *Importer, kind, prop string) (err error) {
+	if imp, ok := op.Value.(primTypeAffer); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
-	} else if primType, primAff, e := imp.ImportPrimType(k); e != nil {
-		err = e
 	} else {
-		// fix: field table ( and the assembler ) need affinity
-		// ( see also record list import )
-		k.NewField(kind, prop, primType, primAff)
+		primType, primAff := imp.GetTypeAffinity(k)
+		k.Write(&eph.EphKinds{Kinds: kind, Contain: []eph.EphParams{
+			{Name: prop, Affinity: primAff, Class: primType},
+		}})
 	}
 	return
 }
 
-type primTypeImporter interface {
-	// unlike the runtime the affinity is usually empty
-	// when it is empty, the type hold the affinity instead.
-	// ( b/c records are glombed on to the existing runtime )
-	ImportPrimType(*Importer) (retType, retAff string, err error)
+type primTypeAffer interface {
+	GetTypeAffinity(*Importer) (string, eph.Affinity)
 }
 
-func (op *NumberList) ImportPrimType(k *Importer) (retType, retAff string, err error) {
-	retType = affine.NumList.String()
-	return
+func (op *NumberList) GetTypeAffinity(k *Importer) (string, eph.Affinity) {
+	return "", eph.Affinity{eph.Affinity_NumList}
 }
 
-func (op *TextList) ImportPrimType(k *Importer) (retType, retAff string, err error) {
-	retType = affine.TextList.String()
-	return
+func (op *TextList) GetTypeAffinity(k *Importer) (string, eph.Affinity) {
+	return "", eph.Affinity{eph.Affinity_TextList}
 }
 
-func (op *RecordType) ImportPrimType(k *Importer) (retType, retAff string, err error) {
-	retType = lang.Breakcase(op.Kind.Str) // fix? not happy that this has to manually match NAMED_KIND munging
-	retAff = affine.Record.String()
-	return
+func (op *RecordType) GetTypeAffinity(k *Importer) (string, eph.Affinity) {
+	return op.Kind.Str, eph.Affinity{eph.Affinity_Record}
 }
 
-func (op *RecordList) ImportPrimType(k *Importer) (retType, retAff string, err error) {
-	retType = lang.Breakcase(op.Kind.Str) // fix? not happy that this has to manually match NAMED_KIND munging
-	retAff = affine.RecordList.String()
-	return
+func (op *RecordList) GetTypeAffinity(k *Importer) (string, eph.Affinity) {
+	return op.Kind.Str, eph.Affinity{eph.Affinity_RecordList}
 }

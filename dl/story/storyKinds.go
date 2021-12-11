@@ -1,41 +1,28 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/dl/eph"
 	"github.com/ionous/errutil"
 )
 
 // ex. colors are a kind of value
 func (op *KindsOfAspect) ImportPhrase(k *Importer) (err error) {
-	if a, e := NewAspect(k, op.Aspect); e != nil {
-		err = e
-	} else {
-		k.NewAspect(a)
-	}
+	k.Write(&eph.EphAspects{Aspects: op.Aspect.Str})
 	return
 }
 
 // ex. "cats are a kind of animal"
 func (op *KindsOfKind) ImportPhrase(k *Importer) (err error) {
-	if kind, e := NewPluralKinds(k, op.PluralKinds); e != nil {
-		err = e
-	} else if parent, e := NewSingularKind(k, op.SingularKind); e != nil {
-		err = e
-	} else {
-		k.NewKind(kind, parent)
-	}
+	k.Write(&eph.EphKinds{Kinds: op.PluralKinds.Str, From: op.SingularKind.Str})
 	return
 }
 
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
 func (op *KindsPossessProperties) ImportPhrase(k *Importer) (err error) {
-	if kind, e := NewPluralKinds(k, op.PluralKinds); e != nil {
-		err = e
-	} else {
-		for _, n := range op.PropertyDecl {
-			if e := n.ImportProperty(k, kind); e != nil {
-				err = errutil.Append(err, e)
-			}
+	for _, n := range op.PropertyDecl {
+		if e := n.ImportProperty(k, op.PluralKinds.Str); e != nil {
+			err = errutil.Append(err, e)
 		}
 	}
 	return

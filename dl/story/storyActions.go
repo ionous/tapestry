@@ -1,88 +1,68 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/ephemera/eph"
-
-	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/dl/eph"
 )
 
 // ImportPhrase - action generates pattern ephemera for now.
 func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
-	if _, e := op.makePattern(k, op.Action.Str, "agent", "actions"); e != nil {
-		err = e
-	} else if evt, e := op.makePattern(k, op.Event.Str, "actor", "events"); e != nil {
-		err = e
-	} else {
-		// return success
-		retName := k.NewName("success", tables.NAMED_RETURN, op.At.String())
-		retType := k.NewName("bool_eval", tables.NAMED_TYPE, op.At.String())
-		k.NewPatternDecl(evt, retName, retType, "")
-	}
+	extra := op.ActionParams.Value.(actionImporter).GetExtraParams()
+	op.makePattern(k, op.Action.Str, "agent", "actions", extra, nil)
+	op.makePattern(k, op.Event.Str, "actor", "events", extra, &eph.EphParams{
+		Name:     "success",
+		Affinity: eph.Affinity{eph.Affinity_Bool},
+	})
 	return
 }
 
-func (op *ActionDecl) makePattern(k *Importer, name, kind, group string) (ret eph.Named, err error) {
-	// declare the pattern
-	n := k.NewName(lang.Breakcase(name), tables.NAMED_PATTERN, op.At.String())
-
-	// need to declare the group itself at least once
-	groupName := k.NewName(group, tables.NAMED_TYPE, op.At.String())
-	k.NewPatternDecl(n, n, groupName, "")
-
-	// the first parameter is always "agent"
-	paramName := k.NewName(kind, tables.NAMED_PARAMETER, op.At.String())
-	paramType := k.NewName(kind, tables.NAMED_KIND, op.At.String())
-	k.NewPatternDecl(n, paramName, paramType, affine.Object.String())
-
-	// then the other parameters...
-	type actionImporter interface {
-		ImportAction(*Importer, eph.Named) error
-	}
-	return n, op.ActionParams.Value.(actionImporter).ImportAction(k, n)
-}
-
-func (op *CommonAction) ImportAction(k *Importer, n eph.Named) (err error) {
-	if kind, e := NewSingularKind(k, op.Kind); e != nil {
-		err = e
-	} else {
-		noun := k.NewName(actionNoun, tables.NAMED_PARAMETER, op.At.String())
-		k.NewPatternDecl(n, noun, kind, affine.Object.String())
-		// FIX! why wasnt this being imported?
-		// if op.ActionContext != nil {
-		// 	err = op.ActionContext.ImportContext(k, n)
-		// }
-	}
-	return
-}
-
-func (op *ActionContext) ImportContext(k *Importer, n eph.Named) (err error) {
-	if kind, e := NewSingularKind(k, op.Kind); e != nil {
-		err = e
-	} else {
-		otherNoun := k.NewName(actionOtherNoun, tables.NAMED_PARAMETER, op.At.String())
-		k.NewPatternDecl(n, otherNoun, kind, affine.Object.String())
-	}
-	return
+func (op *ActionDecl) makePattern(k *Importer, name, tgt, sub string, extra []eph.EphParams, res *eph.EphParams) {
+	// pattern subtype -- maybe if we really need this an optional parameter of patterns?
+	k.Write(&eph.EphKinds{
+		Kinds: name,
+		From:  sub,
+	})
+	// the first parameter is always "agent" of type "agent"
+	ps := []eph.EphParams{{
+		Name:     tgt,
+		Affinity: eph.Affinity{eph.Affinity_Text},
+		Class:    tgt,
+	}}
+	k.Write(&eph.EphPatterns{
+		Name:   name,
+		Params: append(ps, extra...),
+		Result: res,
+	})
 }
 
 const actionNoun = "noun"
 const actionOtherNoun = "other_noun"
 
-func (op *PairedAction) ImportAction(k *Importer, n eph.Named) (err error) {
-	// inform calls the two objects "noun" and "second noun"
-	if kind, e := FixSingular(k, op.Kinds); e != nil {
-		err = e
-	} else {
-		for _, name := range []string{actionNoun, actionOtherNoun} {
-			noun := k.NewName(name, tables.NAMED_PARAMETER, op.At.String())
-			k.NewPatternDecl(n, noun, kind, affine.Object.String())
-		}
-	}
-	return
+func (op *CommonAction) GetExtraParams() []eph.EphParams {
+	return []eph.EphParams{{
+		Name:     actionNoun,
+		Affinity: eph.Affinity{eph.Affinity_Text},
+		Class:    op.Kind.Str,
+	}}
 }
-func (op *AbstractAction) ImportAction(k *Importer, n eph.Named) (err error) {
+
+func (op *PairedAction) GetExtraParams() (ret []eph.EphParams) {
+	return []eph.EphParams{{
+		Name:     actionNoun,
+		Affinity: eph.Affinity{eph.Affinity_Text},
+		Class:    op.Kinds.Str,
+	}, {
+		Name:     actionOtherNoun,
+		Affinity: eph.Affinity{eph.Affinity_Text},
+		Class:    op.Kinds.Str,
+	}}
+}
+
+func (op *AbstractAction) GetExtraParams() (ret []eph.EphParams) {
 	// no extra parameters
 	return
+}
+
+// then the other parameters...
+type actionImporter interface {
+	GetExtraParams() []eph.EphParams
 }

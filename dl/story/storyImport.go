@@ -1,7 +1,11 @@
 package story
 
 import (
+	"strings"
+
+	"git.sr.ht/~ionous/iffy/dl/eph"
 	"git.sr.ht/~ionous/iffy/dl/grammar"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"github.com/ionous/errutil"
 )
 
@@ -16,25 +20,26 @@ type nounImporter interface {
 
 // (the) colors are red, blue, or green.
 func (op *AspectTraits) ImportPhrase(k *Importer) (err error) {
-	if aspect, e := NewAspect(k, op.Aspect); e != nil {
-		err = e
-	} else {
-		err = op.TraitPhrase.ImportTraits(k, aspect)
+	var ts []string
+	for _, t := range op.TraitPhrase.Trait {
+		ts = append(ts, t.String())
 	}
+	k.Write(&eph.EphAspects{Aspects: op.Aspect.String(), Traits: ts})
 	return
 }
 
 // horses are usually fast.
 func (op *Certainties) ImportPhrase(k *Importer) (err error) {
-	if certainty, e := op.Certainty.ImportString(k); e != nil {
-		err = e
-	} else if trait, e := NewTrait(k, op.Trait); e != nil {
-		err = e
-	} else if kind, e := NewPluralKinds(k, op.PluralKinds); e != nil {
-		err = e
-	} else {
-		k.NewCertainty(certainty, trait, kind)
-	}
+	err = errutil.New("not implemented")
+	// if certainty, e := op.Certainty.ImportString(k); e != nil {
+	// 	err = e
+	// } else if trait, e := NewTrait(k, op.Trait); e != nil {
+	// 	err = e
+	// } else if kind, e := NewPluralKinds(k, op.PluralKinds); e != nil {
+	// 	err = e
+	// } else {
+	// 	k.NewCertainty(certainty, trait, kind)
+	// }
 	return
 }
 
@@ -43,16 +48,20 @@ func (op *Comment) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *GrammarDecl) ImportPhrase(k *Importer) error {
-	_, e := k.NewProg("grammar", &grammar.Grammar{op.Grammar})
-	return e
+func (op *GrammarDecl) ImportPhrase(k *Importer) (err error) {
+	switch el := op.Grammar.(type) {
+	case *grammar.Alias:
+		k.Write(&eph.EphAliases{ShortName: el.AsNoun, Aliases: el.Names})
+	case *grammar.Directive:
+		name := strings.Join(el.Lede, "/")
+		k.Write(&eph.EphDirectives{Name: name, Directive: *el})
+	}
+	return
 }
 
 // ex. The description of the nets is xxx
 func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
-	if prop, e := NewProperty(k, op.Property); e != nil {
-		err = e
-	} else if text, e := ConvertText(k, op.Lines.String()); e != nil {
+	if text, e := ConvertText(k, op.Lines.String()); e != nil {
 		err = e
 	} else if e := k.Env().Recent.Nouns.CollectSubjects(func() (err error) {
 		for _, n := range op.Nouns {
@@ -64,8 +73,9 @@ func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
 	}); e != nil {
 		err = e
 	} else {
+		prop := op.Property.String()
 		for _, noun := range k.Env().Recent.Nouns.Subjects {
-			k.NewValue(noun, prop, text)
+			k.Write(&eph.EphValues{Noun: noun, Field: prop, Value: &literal.TextValue{text}})
 		}
 	}
 	return
@@ -91,9 +101,7 @@ func (op *NounStatement) ImportPhrase(k *Importer) (err error) {
 
 // ex. On the beach are shells.
 func (op *RelativeToNoun) ImportPhrase(k *Importer) (err error) {
-	if relation, e := NewRelation(k, op.Relation); e != nil {
-		err = e
-	} else if e := k.Env().Recent.Nouns.CollectObjects(func() error {
+	if e := k.Env().Recent.Nouns.CollectObjects(func() error {
 		return ImportNamedNouns(k, op.Nouns)
 	}); e != nil {
 		err = e
@@ -102,10 +110,10 @@ func (op *RelativeToNoun) ImportPhrase(k *Importer) (err error) {
 	}); e != nil {
 		err = e
 	} else {
-		domain := k.Env().Current.Domain
+		relation := op.Relation.String()
 		for _, object := range k.Env().Recent.Nouns.Objects {
 			for _, subject := range k.Env().Recent.Nouns.Subjects {
-				k.NewRelative(subject, relation, object, domain)
+				k.Write(&eph.EphRelatives{Rel: relation, Noun: subject, OtherNoun: object})
 			}
 		}
 	}

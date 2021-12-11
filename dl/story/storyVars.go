@@ -1,75 +1,51 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/ephemera/eph"
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/dl/eph"
 	"github.com/ionous/errutil"
 )
 
-type variableDecl struct {
-	name, typeName eph.Named
-	affinity       string
-}
-
-func (op *VariableDecl) ImportVariable(k *Importer, cat string) (ret variableDecl, err error) {
-	if n, e := NewVariableName(k, op.Name, cat); e != nil {
-		err = e
-	} else if t, aff, e := op.Type.ImportVariableType(k); e != nil {
+func (op *VariableDecl) GetParam() (ret eph.EphParams, err error) {
+	if t, aff, e := op.Type.GetParameterType(); e != nil {
 		err = e
 	} else {
-		ret = variableDecl{n, t, aff}
+		ret = eph.EphParams{
+			Name:     op.Name.String(),
+			Affinity: aff,
+			Class:    t,
+		}
 	}
 	return
 }
 
 // primitive type, object type, or ext
-func (op *VariableType) ImportVariableType(k *Importer) (retType eph.Named, retAff string, err error) {
-	type variableTypeImporter interface {
-		ImportVariableType(*Importer) (eph.Named, string, error)
-	}
+func (op *VariableType) GetParameterType() (retType string, retAff eph.Affinity, err error) {
 	if opt, ok := op.Value.(variableTypeImporter); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
-		retType, retAff, err = opt.ImportVariableType(k)
+		retType, retAff, err = opt.GetParameterType()
 	}
 	return
 }
 
-func (op *ObjectType) ImportVariableType(k *Importer) (retType eph.Named, retAff string, err error) {
-	retType, err = NewSingularKind(k, op.Kind)
-	retAff = affine.Object.String()
-	return
-}
-
-func (op *PrimitiveType) ImportPrimType(k *Importer) (ret string, err error) {
-	if str, ok := composer.FindChoice(op, op.Str); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w %q", InvalidValue, op.Str))
-	} else {
-		ret = str
-	}
+func (op *ObjectType) GetParameterType() (retType string, retAff eph.Affinity, err error) {
+	retType = op.Kind.String()
+	retAff = eph.Affinity{eph.Affinity_Text}
 	return
 }
 
 // returns one of the evalType(s) as a "Named" value --
 // we return a name to normalize references to object kinds which are also used as variables
-func (op *PrimitiveType) ImportVariableType(k *Importer) (retType eph.Named, retAff string, err error) {
-	// fix -- shouldnt this be a different type ??
-	// ie. we should be able to use FindChoie here.
-	var namedType string
+func (op *PrimitiveType) GetParameterType() (retType string, retAff eph.Affinity, err error) {
 	switch str := op.Str; str {
-	case PrimitiveType_Number:
-		namedType = "number_eval"
-	case PrimitiveType_Text:
-		namedType = "text_eval"
-	case PrimitiveType_Bool:
-		namedType = "bool_eval"
+	case PrimitiveType_Number, PrimitiveType_Text, PrimitiveType_Bool:
+		retAff = eph.Affinity{str}
 	default:
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", InvalidValue, str))
 	}
-	if err == nil {
-		retType = k.NewName(namedType, tables.NAMED_TYPE, op.At.String())
-	}
 	return
+}
+
+type variableTypeImporter interface {
+	GetParameterType() (string, eph.Affinity, error)
 }

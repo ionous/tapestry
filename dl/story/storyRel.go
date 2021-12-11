@@ -1,77 +1,53 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/ephemera/eph"
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/dl/eph"
 	"github.com/ionous/errutil"
 )
 
 func (op *KindOfRelation) ImportPhrase(k *Importer) (err error) {
-	// rec.NewRelation(r, k, q, c)
-	if rel, e := NewRelation(k, op.Relation); e != nil {
-		err = e
-	} else if card, e := op.Cardinality.ImportCardinality(k); e != nil {
+	if card, e := op.Cardinality.GetCardinality(); e != nil {
 		err = e
 	} else {
-		k.NewRelation(rel, card.firstKind, card.secondKind, card.cardinality)
+		k.Write(&eph.EphRelations{op.Relation.String(), card})
 	}
 	return
 }
 
-type importedCardinality struct {
-	cardinality           string // tables.ONE_TO_ONE
-	firstKind, secondKind eph.Named
-}
-
-func (op *RelationCardinality) ImportCardinality(k *Importer) (ret importedCardinality, err error) {
-	type cardinalityImporter interface {
-		ImportCardinality(k *Importer) (importedCardinality, error)
-	}
+func (op *RelationCardinality) GetCardinality() (ret eph.EphCardinality, err error) {
 	if c, ok := op.Value.(cardinalityImporter); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
-		ret, err = c.ImportCardinality(k)
+		ret = c.GetCardinality()
 	}
 	return
 }
 
-func (op *OneToOne) ImportCardinality(k *Importer) (ret importedCardinality, err error) {
-	if first, e := FixPlurals(k, op.Kind); e != nil {
-		err = e
-	} else if second, e := FixPlurals(k, op.OtherKind); e != nil {
-		err = e
-	} else {
-		ret = importedCardinality{tables.ONE_TO_ONE, first, second}
+func (op *OneToOne) GetCardinality() eph.EphCardinality {
+	return eph.EphCardinality{
+		eph.EphCardinality_OneOne_Opt,
+		&eph.OneOne{op.Kind.String(), op.OtherKind.String()},
 	}
-	return
 }
-func (op *OneToMany) ImportCardinality(k *Importer) (ret importedCardinality, err error) {
-	if first, e := FixPlurals(k, op.Kind); e != nil {
-		err = e
-	} else if second, e := NewPluralKinds(k, op.Kinds); e != nil {
-		err = e
-	} else {
-		ret = importedCardinality{tables.ONE_TO_MANY, first, second}
+func (op *OneToMany) GetCardinality() eph.EphCardinality {
+	return eph.EphCardinality{
+		eph.EphCardinality_OneMany_Opt,
+		&eph.OneMany{op.Kind.String(), op.Kinds.String()},
 	}
-	return
 }
-func (op *ManyToOne) ImportCardinality(k *Importer) (ret importedCardinality, err error) {
-	if first, e := NewPluralKinds(k, op.Kinds); e != nil {
-		err = e
-	} else if second, e := FixPlurals(k, op.Kind); e != nil {
-		err = e
-	} else {
-		ret = importedCardinality{tables.MANY_TO_ONE, first, second}
+func (op *ManyToOne) GetCardinality() eph.EphCardinality {
+	return eph.EphCardinality{
+		eph.EphCardinality_ManyOne_Opt,
+		&eph.ManyOne{op.Kinds.String(), op.Kind.String()},
 	}
-	return
 }
-func (op *ManyToMany) ImportCardinality(k *Importer) (ret importedCardinality, err error) {
-	if first, e := NewPluralKinds(k, op.Kinds); e != nil {
-		err = e
-	} else if second, e := NewPluralKinds(k, op.OtherKinds); e != nil {
-		err = e
-	} else {
-		ret = importedCardinality{tables.MANY_TO_MANY, first, second}
+func (op *ManyToMany) GetCardinality() eph.EphCardinality {
+	return eph.EphCardinality{
+		eph.EphCardinality_ManyMany_Opt,
+		&eph.ManyMany{op.Kinds.String(), op.OtherKinds.String()},
 	}
-	return
+}
+
+type cardinalityImporter interface {
+	GetCardinality() eph.EphCardinality
 }

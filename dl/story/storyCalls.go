@@ -1,88 +1,64 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/value"
-	"git.sr.ht/~ionous/iffy/ephemera/eph"
-	"github.com/ionous/errutil"
-
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/dl/eph"
 )
 
-// a stub so that we can record the pattern and its arguments as referenced
-// note: "send" should be doing something similar, and it isnt.
-// a simpler way of recording this -- handwaving something about template parsing -- would be nice.
-func (op *Determine) ImportStub(k *Importer) (ret interface{}, err error) {
-	if p, args, e := importCall(k, "patterns", op.Name, op.Arguments); e != nil {
-		err = &OpError{Op: op, Err: e}
-	} else {
-		ret = &core.CallPattern{Pattern: value.PatternName{Str: p.String()}, Arguments: args}
-	}
-	return
+// transforms "story.Determine" into the "core.CallPattern" command.
+// while the two commands are equivalent, this provides a hook to verify
+// the caller's arguments and the pattern's parameters match up.
+func (op *Determine) ImportStub(k *Importer) (interface{}, error) {
+	refs, args := op.Arguments.xform(op.Name.String(), eph.KindsOfPattern)
+	k.Write(&refs)
+	return &core.CallPattern{Pattern: op.Name, Arguments: args}, nil
 }
 
-func (op *Determine) ImportPhrase(k *Importer) (err error) {
-	return errutil.New("determine should be transformed, not imported")
+func (op *Make) ImportStub(k *Importer) (interface{}, error) {
+	refs, args := op.Arguments.xform(op.Name, eph.KindsOfRecord)
+	k.Write(&refs)
+	return &core.CallMake{Kind: op.Name, Arguments: args}, nil
 }
 
-func (op *Make) ImportStub(k *Importer) (ret interface{}, err error) {
-	// fix: add a reference to the kind.
-	// fix: not recording this against a "pattern" name, but it could be recorded against a kind
-	if args, e := importArgs(k, eph.Named{}, op.Arguments); e != nil {
-		err = &OpError{Op: op, Err: e}
-	} else {
-		ret = &core.CallMake{Kind: op.Name, Arguments: args}
-	}
-	return
+func (op *Send) ImportStub(k *Importer) (interface{}, error) {
+	refs, args := op.Arguments.xform(op.Event, eph.KindsOfEvent)
+	k.Write(&refs)
+	return &core.CallSend{Event: op.Event, Path: op.Path, Arguments: args}, nil
 }
 
-func (op *Send) ImportStub(k *Importer) (ret interface{}, err error) {
-	pn := value.PatternName{Str: op.Event}
-	if p, args, e := importCall(k, "actions", pn, op.Arguments); e != nil {
-		err = &OpError{Op: op, Err: e}
-	} else {
-		// event, path ( list ), args
-		ret = &core.CallSend{Event: p.String(), Path: op.Path, Arguments: args}
-	}
-	return
-}
-
-func importCall(k *Importer, slot string, n value.PatternName, stubs *Arguments) (retName eph.Named, retArgs core.CallArgs, err error) {
-	if p, e := NewPatternName(k, n); e != nil {
-		err = e
-	} else if args, e := importArgs(k, p, stubs); e != nil {
-		err = e
-	} else {
-		// fix: tests expect pattern type to be declared last :'(
-		// fix: object type names will need adaption of some sort re plural_kinds
-		patternType := k.NewName(slot, tables.NAMED_TYPE, n.At.String())
-		k.NewPatternRef(p, p, patternType, "")
-		retName, retArgs = p, args
-	}
-	return
-}
-
-func importArgs(k *Importer, p eph.Named, stubs *Arguments,
-) (ret core.CallArgs, err error) {
+func (stubs *Arguments) xform(k, t string) (refRef eph.EphRefs, retCall core.CallArgs) {
+	var args []core.CallArg
+	var refs []eph.EphParams
 	if stubs != nil {
-		var argList []core.CallArg
-		for _, stub := range stubs.Args {
-			paramName := k.NewName(stub.Name, tables.NAMED_ARGUMENT, stub.At.String())
+		for _, arg := range stubs.Args {
+			args = append(args, core.CallArg{
+				Name: arg.Name, // string
+				From: arg.From, // assignment
+			})
+			//
+			refs = append(refs, eph.EphParams{
+				Name:     arg.Name,
+				Affinity: infinityToAffinity(arg.From),
+			})
+		}
+	}
+	return eph.EphRefs{k, t, refs}, core.CallArgs{args}
+}
 
-			if aff := stub.From.Affinity(); p.IsValid() && len(aff) > 0 {
-				// fix: this shouldnt be "eval" here.
-				// see buildPatternCache
-				paramType := k.NewName(string(aff)+"_eval", tables.NAMED_TYPE, stub.At.String())
-				k.NewPatternRef(p, paramName, paramType, "")
-			}
-			// after recording the "fact" of the parameter...
-			// copy the stubbed argument data into the real argument list.
-			newArg := core.CallArg{Name: stub.Name, From: stub.From}
-			argList = append(argList, newArg)
-		}
-		if err == nil {
-			ret = core.CallArgs{Args: argList}
-		}
+func infinityToAffinity(a interface{ Affinity() affine.Affinity }) (ret eph.Affinity) {
+	if a != nil {
+		ret = affineToAffinity(a.Affinity())
+	}
+	return
+}
+
+func affineToAffinity(a affine.Affinity) (ret eph.Affinity) {
+	spec := ret.Compose()
+	if k, i := spec.IndexOfValue(a.String()); i < 0 {
+		println("unknown affinity", a.String())
+	} else {
+		ret.Str = k
 	}
 	return
 }

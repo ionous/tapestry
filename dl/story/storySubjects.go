@@ -1,9 +1,7 @@
 package story
 
-import "git.sr.ht/~ionous/iffy/ephemera/eph"
-
 type Nouns struct {
-	Subjects, Objects []eph.Named
+	Subjects, Objects []string
 	Objectifying      bool // phrases discuss noun subjects by default
 }
 
@@ -25,7 +23,7 @@ func (n *Nouns) CollectObjects(fn func() error) error {
 	return err
 }
 
-func (n *Nouns) pList() (ret *[]eph.Named) {
+func (n *Nouns) pList() (ret *[]string) {
 	if n.Objectifying {
 		ret = &n.Objects
 	} else {
@@ -34,7 +32,7 @@ func (n *Nouns) pList() (ret *[]eph.Named) {
 	return
 }
 
-func (n *Nouns) Add(name eph.Named) {
+func (n *Nouns) Add(name string) {
 	pn := n.pList()
 	(*pn) = append((*pn), name)
 }

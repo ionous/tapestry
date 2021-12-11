@@ -4,7 +4,8 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/dl/story"
+
 	"git.sr.ht/~ionous/iffy/rt"
 )
 

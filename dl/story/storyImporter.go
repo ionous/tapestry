@@ -1,37 +1,38 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/ephemera"
-	"git.sr.ht/~ionous/iffy/ephemera/eph"
+	"git.sr.ht/~ionous/iffy/dl/eph"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/jsn/chart"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
 
 	"git.sr.ht/~ionous/iffy/ident"
-	"git.sr.ht/~ionous/iffy/tables"
 )
 
 // Importer helps read story specific json.
 type Importer struct {
-	*ephemera.Recorder
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime       map[string]bool
 	autoCounter   ident.Counters
-	entireGame    eph.Named
+	entireGame    string
 	env           StoryEnv
 	activityDepth int
+	Write         WriterFun
+	Marshal       MarshalFun
 }
 
-// low level
-func NewImporter(writer ephemera.WriterFun, marshal ephemera.MarshalFun) *Importer {
-	rec := ephemera.NewRecorder(writer, marshal)
-	k := &Importer{
-		Recorder:    rec,
+// fix: add origin
+type WriterFun func(eph eph.Ephemera)
+type MarshalFun func(jsn.Marshalee) (string, error)
+
+func NewImporter(writer WriterFun, marshal MarshalFun) *Importer {
+	return &Importer{
+		Write:       writer,
+		Marshal:     marshal,
 		oneTime:     make(map[string]bool),
 		autoCounter: make(ident.Counters),
 	}
-	return k
 }
 
 func (k *Importer) ImportStory(path string, tgt jsn.Marshalee) (err error) {
@@ -39,17 +40,11 @@ func (k *Importer) ImportStory(path string, tgt jsn.Marshalee) (err error) {
 	return importStory(k, tgt)
 }
 
-func (k *Importer) NewName(name, category, ofs string) eph.Named {
-	return k.NewDomainName(k.Env().Current.Domain, name, category, ofs)
+func (k *Importer) SetSource(path string) {
+	//
 }
 
 func (k *Importer) Env() *StoryEnv {
-	if !k.env.Game.Domain.IsValid() {
-		k.env.Game.Domain = k.Recorder.NewName("entire_game", tables.NAMED_SCENE, "internal")
-	}
-	if !k.env.Current.Domain.IsValid() {
-		k.env.Current.Domain = k.env.Game.Domain
-	}
 	return &k.env
 }
 
@@ -68,18 +63,12 @@ func (k *Importer) InProgram() bool {
 	return k.activityDepth > 0
 }
 
-// NewImplicitAspect declares an assembler specified aspect and its traits
-func (k *Importer) NewImplicitAspect(aspect, kind string, traits ...string) {
+// AddImplicitAspect declares an assembler specified aspect and its traits
+func (k *Importer) AddImplicitAspect(aspect, kind string, traits ...string) {
 	if src := "implicit " + kind + "." + aspect; k.Once(src) {
-		domain := k.Env().Game.Domain
-		kKind := k.NewDomainName(domain, kind, tables.NAMED_KINDS, src)
-		kAspect := k.NewDomainName(domain, aspect, tables.NAMED_ASPECT, src)
-		k.NewAspect(kAspect)
-		k.NewField(kKind, kAspect, tables.PRIM_ASPECT, "")
-		for i, trait := range traits {
-			kTrait := k.NewDomainName(domain, trait, tables.NAMED_TRAIT, src)
-			k.NewTrait(kTrait, kAspect, i)
-		}
+		k.Write(&eph.EphAspects{Aspects: aspect, Traits: traits})
+		k.Write(&eph.EphKinds{Kinds: kind, From: "kind"})
+		k.Write(&eph.EphKinds{Kinds: kind, Contain: []eph.EphParams{eph.AspectParam(aspect)}})
 	}
 }
 
@@ -106,19 +95,19 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 					err = errutil.Fmt("trying to post import something other than a flow")
 				} else {
 					// unpack the name, resolving "CurrentTest" to the name of the current test
-					if newDomain, e := NewTestName(k, scene.TestName); e != nil {
-						err = e
+					// fix? the most recent test might become the last popped test value
+					n := scene.TestName.String()
+					if n == TestName_CurrentTest {
+						n = k.env.Recent.Test
 					} else {
-						// the most recent test might become the last popped test value
-						// ( once domains and tests are stackable )
-						k.env.Recent.Test = newDomain
-						k.env.PushDomain(newDomain)
+						k.env.Recent.Test = n
 					}
+					k.Write(&eph.EphBeginDomain{Name: n})
 				}
 				return
 			},
 			BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
-				k.env.PopDomain()
+				k.Write(&eph.EphEndDomain{})
 				return
 			},
 		},

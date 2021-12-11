@@ -1,56 +1,51 @@
 package story_test
 
 import (
-	"database/sql"
 	"testing"
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/eph"
 	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/dl/value"
-	"git.sr.ht/~ionous/iffy/ephemera"
+	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
-	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/jsn"
+
 	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/jsn/din"
-
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/tables"
-	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
 func TestImportStory(t *testing.T) {
-	db := testdb.Open(t.Name(), testdb.Memory, "")
-	defer db.Close()
-	if e := tables.CreateEphemera(db); e != nil {
-		t.Fatal("create tables", e)
+	var curr story.Story
+	if e := din.Decode(&curr, iffy.Registry(), []byte(debug.Blob)); e != nil {
+		t.Fatal(e)
 	} else {
-		var curr story.Story
-		if e := din.Decode(&curr, iffy.Registry(), []byte(debug.Blob)); e != nil {
-			t.Fatal(e)
+		var els []eph.Ephemera
+		k := story.NewImporter(collectEphemera(&els), storyMarshaller)
+		if e := k.ImportStory(t.Name(), &curr); e != nil {
+			t.Fatal("import", e)
 		} else {
-			k := story.NewImporter(dbwriter(db), cout.Marshal)
-			if e := k.ImportStory(t.Name(), &curr); e != nil {
-				t.Fatal("import", e)
-			} else {
-				t.Log("ok")
-			}
+			t.Log("ok")
 		}
 	}
 }
 
-func B(b bool) rt.BoolEval          { return &core.BoolValue{b} }
-func F(n float64) rt.NumberEval     { return &literal.NumValue{n} }
-func I(n int) rt.NumberEval         { return &literal.NumValue{float64(n)} }
-func P(p string) value.PatternName  { return value.PatternName{Str: p} }
-func N(v string) value.VariableName { return value.VariableName{Str: v} }
-func T(s string) *literal.TextValue { return &literal.TextValue{W(s)} }
-func V(i string) *core.GetVar       { return &core.GetVar{N(i)} }
-func W(v string) string             { return v }
+func B(b bool) *literal.BoolValue   { return &literal.BoolValue{b} }
+func I(n int) *literal.NumValue     { return &literal.NumValue{float64(n)} }
+func F(n float64) *literal.NumValue { return &literal.NumValue{n} }
+func T(s string) *literal.TextValue { return &literal.TextValue{s} }
 
-func dbwriter(db *sql.DB) ephemera.WriterFun {
-	cache := tables.NewCache(db)
-	return func(q string, args ...interface{}) {
-		cache.Must(q, args...)
+func P(p string) core.PatternName  { return core.PatternName{Str: p} }
+func N(v string) core.VariableName { return core.VariableName{Str: v} }
+func V(i string) *core.GetVar      { return &core.GetVar{N(i)} }
+func W(v string) string            { return v }
+
+func storyMarshaller(m jsn.Marshalee) (string, error) {
+	return cout.Marshal(m, story.CompactEncoder)
+}
+
+func collectEphemera(sink *[]eph.Ephemera) story.WriterFun {
+	return func(el eph.Ephemera) {
+		*sink = append(*sink, el)
 	}
 }

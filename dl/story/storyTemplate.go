@@ -25,7 +25,7 @@ func (op *RenderTemplate) ImportStub(k *Importer) (ret interface{}, err error) {
 }
 
 // returns a string or a FromText assignment as a slice of bytes
-func ConvertText(k *Importer, str string) (ret interface{}, err error) {
+func ConvertText(k *Importer, str string) (ret string, err error) {
 	if xs, e := template.Parse(str); e != nil {
 		err = e
 	} else if str, ok := getSimpleString(xs); ok {

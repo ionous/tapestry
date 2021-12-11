@@ -6,18 +6,19 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/ephemera/story"
+	"git.sr.ht/~ionous/iffy/dl/eph"
+	"git.sr.ht/~ionous/iffy/dl/story"
 
 	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/kr/pretty"
 )
 
 // test that importing cycling text transforms to the proper runtime command
 func TestImportSequence(t *testing.T) {
-	k, db := newImporter(t, testdb.Memory)
-	defer db.Close()
+	var els []eph.Ephemera
+	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
+
 	var cmd story.CycleText
 	if b, e := json.Marshal(_cycle_text); e != nil {
 		t.Fatal(e)
