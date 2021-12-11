@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/debug"
 	"git.sr.ht/~ionous/iffy/dl/grammar"
 	"git.sr.ht/~ionous/iffy/dl/list"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/rel"
 	"git.sr.ht/~ionous/iffy/dl/render"
@@ -23,6 +24,7 @@ var AllSlats = [][]composer.Composer{
 	core.Slats,
 	debug.Slats,
 	grammar.Slats,
+	literal.Slats,
 	list.Slats,
 	reader.Slats,
 	rel.Slats,
@@ -36,6 +38,7 @@ var AllSignatures = []map[uint64]interface{}{
 	core.Signatures,
 	debug.Signatures,
 	grammar.Signatures,
+	literal.Signatures,
 	list.Signatures,
 	reader.Signatures,
 	rel.Signatures,
