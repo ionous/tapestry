@@ -161,13 +161,13 @@ func storyMarshaller(m jsn.Marshalee) (string, error) {
 }
 
 func collectEphemera(cat *eph.Catalog, out *error) story.WriterFun {
-	// fix: maybe i could make a stack wrapper for catalog that wraps .AddAssembly and snifs for Begin/EndDomain
-	cat.Stack.Push(cat.EnsureDomain("entire_game", "asm"))
+	// fix: needs to be more clever eventually...
+	if e := cat.AddEphemera(eph.EphAt{At: "asm", Eph: &eph.EphBeginDomain{Name: "entire_game"}}); e != nil {
+		panic(e)
+	}
 	var i int
 	return func(el eph.Ephemera) {
-		if d, ok := cat.Stack.Top(); !ok {
-			*out = errutil.Append(*out, errutil.New("no top domain"))
-		} else if e := d.AddEphemera(eph.EphAt{At: strconv.Itoa(i), Eph: el}); e != nil {
+		if e := cat.AddEphemera(eph.EphAt{At: strconv.Itoa(i), Eph: el}); e != nil {
 			*out = errutil.Append(*out, e)
 		}
 		i++ // temp
