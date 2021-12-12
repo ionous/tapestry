@@ -179,7 +179,7 @@ func (op *EphBeginDomain) Assemble(c *Catalog, d *Domain, at string) (err error)
 			// we are dependent on the parent domain too
 			// ( adding it last keeps it closer to the right side of the parent list )
 			kid.AddRequirement(d.name)
-			c.processing.Push(kid)
+			c.Stack.Push(kid)
 		}
 	}
 	return
@@ -196,7 +196,7 @@ func (op *EphEndDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else if n != d.name && len(op.Name) > 0 {
 		err = errutil.New("unexpected domain ending, requested", op.Name, "have", d.name)
 	} else {
-		c.processing.Pop()
+		c.Stack.Pop()
 	}
 	return
 }

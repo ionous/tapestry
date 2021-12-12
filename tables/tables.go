@@ -9,24 +9,6 @@ import (
 
 const DefaultDriver = "sqlite3"
 
-// CreateEphemera creates the tables listed in ephemera.sql
-//go:generate templify -p tables -o ephemera.gen.go ephemera.sql
-func CreateEphemera(db *sql.DB) (err error) {
-	if _, e := db.Exec(ephemeraTemplate()); e != nil {
-		err = errutil.New("Couldn't create ephemera tables", e)
-	}
-	return
-}
-
-// CreateAssembly creates the tables listed in assembly.sql
-//go:generate templify -p tables -o assembly.gen.go assembly.sql
-func CreateAssembly(db *sql.DB) (err error) {
-	if _, e := db.Exec(assemblyTemplate()); e != nil {
-		err = errutil.New("Couldn't create assembly tables", e)
-	}
-	return
-}
-
 // CreateModel creates the tables listed in model.sql
 //go:generate templify -p tables -o model.gen.go model.sql
 func CreateModel(db *sql.DB) (err error) {
@@ -57,11 +39,7 @@ func CreateRunViews(db *sql.DB) (err error) {
 // CreateAll tables listed in the various .sql files.
 // fix? long term, iffy should throw out the ephemera and assembly after we are done with them.
 func CreateAll(db *sql.DB) (err error) {
-	if e := CreateEphemera(db); e != nil {
-		err = e
-	} else if e := CreateAssembly(db); e != nil {
-		err = e
-	} else if e := CreateModel(db); e != nil {
+	if e := CreateModel(db); e != nil {
 		err = e
 	} else if e := CreateRun(db); e != nil {
 		err = e

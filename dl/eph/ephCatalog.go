@@ -7,7 +7,7 @@ import (
 // Catalog - receives ephemera from the importer.
 type Catalog struct {
 	domains         map[string]*Domain
-	processing      DomainStack
+	Stack           DomainStack
 	resolvedDomains cachedTable
 }
 
