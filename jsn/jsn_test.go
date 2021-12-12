@@ -7,8 +7,8 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/dl/rel"
 	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/dl/value"
 	"git.sr.ht/~ionous/iffy/ephemera/debug"
 	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
@@ -94,11 +94,11 @@ func TestAnonymousOptional(t *testing.T) {
 	}
 	wants := []story.NounRelation{{
 		AreBeing: story.AreBeing{},
-		Relation: value.RelationName{Str: "whereabouts"},
+		Relation: rel.RelationName{Str: "whereabouts"},
 		Nouns:    []story.NamedNoun{},
 	}, {
 		AreBeing: story.AreBeing{Str: story.AreBeing_Is},
-		Relation: value.RelationName{Str: "whereabouts"},
+		Relation: rel.RelationName{Str: "whereabouts"},
 		Nouns:    []story.NamedNoun{},
 	}}
 	for i, in := range inputs {

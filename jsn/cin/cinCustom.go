@@ -117,10 +117,10 @@ func (dec *xDecoder) customSlot(slot jsn.SlotBlock, msg json.RawMessage) (err er
 	return
 }
 
-func readBool(dec *xDecoder, msg json.RawMessage) (ret *core.BoolValue, okay bool) {
+func readBool(dec *xDecoder, msg json.RawMessage) (ret *literal.BoolValue, okay bool) {
 	var val bool
 	if e := json.Unmarshal(msg, &val); e == nil {
-		ret, okay = &core.BoolValue{val}, true
+		ret, okay = &literal.BoolValue{val}, true
 		dec.Commit("bool literal")
 	}
 	return

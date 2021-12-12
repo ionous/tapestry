@@ -17,7 +17,7 @@ func TestCheck(t *testing.T) {
 		Expect: "hello",
 		Test: core.Activity{Exe: []rt.Execute{
 			&core.ChooseAction{
-				If: &core.BoolValue{true},
+				If: &literal.BoolValue{true},
 				Do: core.MakeActivity(&core.Say{
 					Text: &literal.TextValue{"hello"},
 				}),
