@@ -10,8 +10,8 @@ import (
 	"github.com/kr/pretty"
 )
 
-// assemble the factorial story
-func TestFactorialStory(t *testing.T) {
+// read the factorial story
+func TestFactorialImport(t *testing.T) {
 	var els []eph.Ephemera
 	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
 	if e := k.ImportStory(t.Name(), debug.FactorialStory); e != nil {
@@ -56,7 +56,6 @@ func TestFactorialStory(t *testing.T) {
 				Filter: &core.Always{},
 				When:   eph.EphTiming{eph.EphTiming_During},
 				Exe:    debug.FactorialMulMinusOne,
-				Touch:  eph.EphAlways{},
 			},
 			// the story happens to declare the return value twice
 			// once before each rule.... that's fine it will be logged but it wont fail.

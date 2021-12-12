@@ -65,9 +65,11 @@ func (k *Importer) InProgram() bool {
 
 // AddImplicitAspect declares an assembler specified aspect and its traits
 func (k *Importer) AddImplicitAspect(aspect, kind string, traits ...string) {
+	if src := "implicit " + kind; k.Once(src) {
+		k.Write(&eph.EphKinds{Kinds: kind, From: "kind"})
+	}
 	if src := "implicit " + kind + "." + aspect; k.Once(src) {
 		k.Write(&eph.EphAspects{Aspects: aspect, Traits: traits})
-		k.Write(&eph.EphKinds{Kinds: kind, From: "kind"})
 		k.Write(&eph.EphKinds{Kinds: kind, Contain: []eph.EphParams{eph.AspectParam(aspect)}})
 	}
 }

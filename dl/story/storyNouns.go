@@ -82,28 +82,21 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 	noun := op.Name.String()
 	k.Env().Recent.Nouns.Add(noun)
-	// pick common or proper based on noun capitalization.
-	// fix: implicitly generated facts should be considered preliminary
-	// so that authors can override them.
-	var traitStr string
 	detStr, detFound := composer.FindChoice(&op.Determiner, op.Determiner.Str)
-	if detStr == "our" {
-		if first, _ := utf8.DecodeRuneInString(noun); unicode.ToUpper(first) == first {
-			traitStr = "proper_named"
-		}
-	}
-	if len(traitStr) > 0 {
-		k.Write(&eph.EphValues{Noun: noun, Field: traitStr, Value: &literal.BoolValue{true}})
-	}
-
-	// record any custom determiner
+	// setup the indefinite article
 	if !detFound {
+		// create a "indefinite article" field for all objects
+		if k.Once("named_noun") {
+			k.Write(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
+		}
 		// set the indefinite article field
 		k.Write(&eph.EphValues{Noun: noun, Field: "indefinite_article", Value: &literal.TextValue{detStr}})
-
-		// create a "indefinite article" field for all objects
-		if once := "named_noun"; k.Once(once) {
-			k.Write(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
+	}
+	// pick common or proper based on noun capitalization.
+	// fix: implicitly generated facts should be considered preliminary so that authors can override them.
+	if detStr == "our" {
+		if first, _ := utf8.DecodeRuneInString(noun); unicode.ToUpper(first) == first {
+			k.Write(&eph.EphValues{Noun: noun, Field: "proper_named", Value: &literal.BoolValue{true}})
 		}
 	}
 	return
