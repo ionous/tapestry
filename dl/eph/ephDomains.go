@@ -53,9 +53,6 @@ func (d *Domain) Resolve() (ret Dependencies, err error) {
 func (d *Domain) AddEphemera(ephAt EphAt) (err error) {
 	if currPhase, phase := d.currPhase, ephAt.Eph.Phase(); currPhase > phase {
 		err = errutil.New("unexpected phase")
-	} else if phase == DomainPhase {
-		// fix: queue first, and then run?
-		err = ephAt.Eph.Assemble(d.catalog, d, ephAt.At)
 	} else {
 		// fix? consider all ephemera in a flat slice ( again ) scanning by phase instead of partitioning.
 		// that way we dont need all the separate lists and we can append....
@@ -160,27 +157,15 @@ func (c *Catalog) WriteDomains(w Writer) (err error) {
 func (op *EphBeginDomain) Phase() Phase { return DomainPhase }
 
 //
-func (op *EphBeginDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphBeginDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {
 	if n, ok := UniformString(op.Name); !ok {
 		err = InvalidString(op.Name)
-	} else if kid, ok := c.GetDomain(n); ok {
-		err = errutil.New("domain", n, "at", kid.at, "redeclared", kid.at)
+	} else if reqs, e := UniformStrings(op.Requires); e != nil {
+		err = e // transform all the names first to determine any errors
+	} else if d, e := c.EnsureDomain(n, at, reqs...); e != nil {
+		err = e
 	} else {
-		kid := c.EnsureDomain(n, at)
-		// add any explicit dependencies
-		for _, req := range op.Requires {
-			if sub, ok := UniformString(req); !ok {
-				err = errutil.Append(err, InvalidString(req))
-			} else {
-				kid.AddRequirement(sub)
-			}
-		}
-		if err == nil {
-			// we are dependent on the parent domain too
-			// ( adding it last keeps it closer to the right side of the parent list )
-			kid.AddRequirement(d.name)
-			c.Stack.Push(kid)
-		}
+		c.processing.Push(d)
 	}
 	return
 }
@@ -189,14 +174,16 @@ func (op *EphBeginDomain) Assemble(c *Catalog, d *Domain, at string) (err error)
 func (op *EphEndDomain) Phase() Phase { return DomainPhase }
 
 // pop the most recent domain
-func (op *EphEndDomain) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphEndDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {
 	// we expect it's the current domain, the parent of this command, that's the one ending
 	if n, ok := UniformString(op.Name); !ok && len(op.Name) > 0 {
 		err = InvalidString(op.Name)
+	} else if d, ok := c.processing.Top(); !ok {
+		err = errutil.New("unexpected domain ending when there's no domain")
 	} else if n != d.name && len(op.Name) > 0 {
 		err = errutil.New("unexpected domain ending, requested", op.Name, "have", d.name)
 	} else {
-		c.Stack.Pop()
+		c.processing.Pop()
 	}
 	return
 }

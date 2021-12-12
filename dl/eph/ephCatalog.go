@@ -7,8 +7,22 @@ import (
 // Catalog - receives ephemera from the importer.
 type Catalog struct {
 	domains         map[string]*Domain
-	Stack           DomainStack
+	processing      DomainStack
 	resolvedDomains cachedTable
+}
+
+func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
+	// fix: queue first, and then run?
+	if phase := ephAt.Eph.Phase(); phase == DomainPhase {
+		err = ephAt.Eph.Assemble(c, nil, ephAt.At)
+	} else {
+		if d, ok := c.processing.Top(); !ok {
+			err = errutil.New("no top domain")
+		} else {
+			err = d.AddEphemera(ephAt)
+		}
+	}
+	return
 }
 
 // return the uniformly named domain ( if it exists )
@@ -18,7 +32,8 @@ func (c *Catalog) GetDomain(n string) (*Domain, bool) {
 }
 
 // return the uniformly named domain ( creating it if necessary )
-func (c *Catalog) EnsureDomain(n, at string) (ret *Domain) {
+func (c *Catalog) EnsureDomain(n, at string, reqs ...string) (ret *Domain, err error) {
+	// find or create the domain
 	if d, ok := c.domains[n]; ok {
 		ret = d
 	} else {
@@ -29,6 +44,16 @@ func (c *Catalog) EnsureDomain(n, at string) (ret *Domain) {
 			c.domains[n] = d
 		}
 		ret = d
+	}
+	// add the passed requirements
+	// ( it filters for uniqueness )
+	for _, req := range reqs {
+		ret.AddRequirement(req)
+	}
+	// we are dependent on the parent domain too
+	// ( adding it last keeps it closer to the right side of the parent list )
+	if p, ok := c.processing.Top(); ok {
+		ret.AddRequirement(p.name)
 	}
 	return
 }

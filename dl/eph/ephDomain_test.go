@@ -12,12 +12,12 @@ func TestDomainSimplest(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a", "b"))
 	dt.makeDomain(dd("b"))
-	var cat Catalog // the catalog adds a global "g" domain.
+	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
 	} else if a, e := cat.resolveDomain("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
-	} else if diff := pretty.Diff(namesOf(a.Ancestors()), []string{"g", "b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(namesOf(a.Ancestors()), []string{"b"}); len(diff) > 0 {
 		t.Log("a has unexpected ancestors:", pretty.Sprint(a))
 		t.Fatal(diff)
 	} else if diff := pretty.Diff(namesOf(a.Parents()), []string{"b"}); len(diff) > 0 {
@@ -33,12 +33,12 @@ func TestDomainSimpleTest(t *testing.T) {
 	dt.makeDomain(dd("c", "d", "e"))
 	dt.makeDomain(dd("e", "d"))
 	dt.makeDomain(dd("d"))
-	var cat Catalog // the catalog adds a global "g" domain.
+	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
 	} else if a, e := cat.resolveDomain("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
-	} else if diff := pretty.Diff(namesOf(a.Ancestors()), []string{"g", "d", "e", "c", "b"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(namesOf(a.Ancestors()), []string{"d", "e", "c", "b"}); len(diff) > 0 {
 		// note: c requires d and e; but e requires d; so d is closest to the root, and g is root of all.
 		t.Log("a has unexpected ancestors:", pretty.Sprint(a))
 		t.Fatal(diff)
@@ -49,9 +49,8 @@ func TestDomainSimpleTest(t *testing.T) {
 		t.Fatal(e) // test getting the list of domains sorted from least to most dependent
 	} else {
 		names := ds.Names()
-		if diff := pretty.Diff(names, []string{"g", "d", "e", "c", "b", "a"}); len(diff) > 0 {
-			// g:0, d:1, e:2, c:3, b:4, a:5
-			// ----- {"c", "d", "e", "b", "a", "g"}
+		if diff := pretty.Diff(names, []string{"d", "e", "c", "b", "a"}); len(diff) > 0 {
+			// d:1, e:2, c:3, b:4, a:5
 			t.Log("domain names:", pretty.Sprint(names))
 			t.Fatal(diff)
 		}
@@ -94,9 +93,8 @@ func TestDomainTable(t *testing.T) {
 		if e := ds.WriteTable(&out, "", false); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
-			"g::x",
-			"d:g:x",
-			"e:g:x",
+			"d::x",
+			"e::x",
 			"c:e:x",
 			"b:d,c:x", // fix? why does d wind up being listed before c? ( and in ancestors too )
 			"a:b:x",
@@ -108,12 +106,11 @@ func TestDomainTable(t *testing.T) {
 			if e := cat.WriteDomains(&out); e != nil {
 				t.Fatal(e)
 			} else if diff := pretty.Diff(out[1:], testOut{
-				"g::x",
-				"d:g:x",
-				"e:g:x",
-				"c:e,g:x",
-				"b:d,c,e,g:x",
-				"a:b,d,c,e,g:x",
+				"d::x",
+				"e::x",
+				"c:e:x",
+				"b:d,c,e:x",
+				"a:b,d,c,e:x",
 			}); len(diff) > 0 {
 				t.Log("ancestors:", pretty.Sprint(out))
 				t.Fatal(diff)
@@ -149,7 +146,7 @@ func TestDomainCase(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		got := namesOf(ds.Ancestors())
-		if diff := pretty.Diff(got, []string{"g", "beta_domain"}); len(diff) > 0 {
+		if diff := pretty.Diff(got, []string{"beta_domain"}); len(diff) > 0 {
 			t.Fatal(got)
 			t.Fatal(got, diff)
 		}

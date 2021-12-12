@@ -97,13 +97,8 @@ func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 }
 
 func (dt *domainTest) addToCat(cat *Catalog) (err error) {
-	// fix: it would be nice to not need an explicit top domain.
-	cat.processing.Push(cat.EnsureDomain("g", "x"))
 	for _, el := range dt.out {
-		if d, ok := cat.processing.Top(); !ok {
-			err = errutil.New("no top domain")
-			break
-		} else if e := d.AddEphemera(EphAt{At: "x", Eph: el}); e != nil {
+		if e := cat.AddEphemera(EphAt{At: "x", Eph: el}); e != nil {
 			err = e
 			break
 		}
