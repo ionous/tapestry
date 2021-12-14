@@ -4,10 +4,8 @@
 
 /* enumerated values used by kinds and nouns */
 create table mdl_aspect( domain text, aspect text, trait text, rank int, primary key( aspect, trait ));
-/* stored tests, a work in progress 
- * ex. determine if "sources" should be listed in model ( for debugging )
- */ 
-create table mdl_check( name text, type text, expect text, primary key( name ));
+/* stored tests, which run a program to verify it produces the expected output. */ 
+create table mdl_check( domain text, name text, expect blob, prog blob, at text, primary key( domain, name ));
 /* hierarchy of domains */
 create table mdl_domain( domain text, path text, at text, primary key( domain ));
 /* properties of a kind. type is a PRIM_ */
@@ -35,6 +33,6 @@ create table mdl_plural( domain text, many text, one text, at text, primary key(
 /* relation and constraint between two kinds of nouns */
 create table mdl_rel( domain text, relation text, kind text, cardinality text, otherKind text, at text, primary key( domain, relation ));
 /*  */
-create table mdl_rule( domain text, pattern text, phase int, filter blob, prog blob, at text );
+create table mdl_rule( domain text, pattern text, target text, phase int, filter blob, prog blob, at text );
 /* initial values for various nouns; changed values are stored in run_start */
 create table mdl_value(domain text, noun text, field text, value blob, at text, primary key( domain, noun, field ));

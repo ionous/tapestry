@@ -121,7 +121,13 @@ func (op *PatternRule) importRule(k *Importer, pattern, target string, tgtFlags 
 			// 		&core.HasDominion{domain.String()},
 			// 		guard,
 			// 	}}
-			k.Write(&eph.EphRules{Name: pattern, Filter: op.Guard, When: flags, Exe: &act, Touch: always})
+			k.Write(&eph.EphRules{
+				Name:   pattern,
+				Target: target, // fix: this should become part of the guards i think, even if its less slightly less efficient
+				Filter: op.Guard,
+				When:   flags,
+				Exe:    &act,
+				Touch:  always})
 		}
 	}
 	return

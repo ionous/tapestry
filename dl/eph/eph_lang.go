@@ -2107,6 +2107,7 @@ func EphRelatives_Marshal(m jsn.Marshaler, val *EphRelatives) (err error) {
 // User implements: Ephemera.
 type EphRules struct {
 	Name   string      `if:"label=pattern,type=text"`
+	Target string      `if:"label=target,optional,type=text"`
 	Filter rt.BoolEval `if:"label=if"`
 	When   EphTiming   `if:"label=when"`
 	Exe    rt.Execute  `if:"label=do"`
@@ -2124,6 +2125,7 @@ func (*EphRules) Compose() composer.Spec {
 const EphRules_Type = "eph_rules"
 
 const EphRules_Field_Name = "$NAME"
+const EphRules_Field_Target = "$TARGET"
 const EphRules_Field_Filter = "$FILTER"
 const EphRules_Field_When = "$WHEN"
 const EphRules_Field_Exe = "$EXE"
@@ -2206,33 +2208,40 @@ func EphRules_Marshal(m jsn.Marshaler, val *EphRules) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EphRules_Field_Name))
 		}
-		e1 := m.MarshalKey("if", EphRules_Field_Filter)
+		e1 := m.MarshalKey("target", EphRules_Field_Target)
 		if e1 == nil {
-			e1 = rt.BoolEval_Marshal(m, &val.Filter)
+			e1 = literal.Text_Unboxed_Optional_Marshal(m, &val.Target)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphRules_Field_Filter))
+			m.Error(errutil.New(e1, "in flow at", EphRules_Field_Target))
 		}
-		e2 := m.MarshalKey("when", EphRules_Field_When)
+		e2 := m.MarshalKey("if", EphRules_Field_Filter)
 		if e2 == nil {
-			e2 = EphTiming_Marshal(m, &val.When)
+			e2 = rt.BoolEval_Marshal(m, &val.Filter)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", EphRules_Field_When))
+			m.Error(errutil.New(e2, "in flow at", EphRules_Field_Filter))
 		}
-		e3 := m.MarshalKey("do", EphRules_Field_Exe)
+		e3 := m.MarshalKey("when", EphRules_Field_When)
 		if e3 == nil {
-			e3 = rt.Execute_Marshal(m, &val.Exe)
+			e3 = EphTiming_Marshal(m, &val.When)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", EphRules_Field_Exe))
+			m.Error(errutil.New(e3, "in flow at", EphRules_Field_When))
 		}
-		e4 := m.MarshalKey("touch", EphRules_Field_Touch)
+		e4 := m.MarshalKey("do", EphRules_Field_Exe)
 		if e4 == nil {
-			e4 = EphAlways_Optional_Marshal(m, &val.Touch)
+			e4 = rt.Execute_Marshal(m, &val.Exe)
 		}
 		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", EphRules_Field_Touch))
+			m.Error(errutil.New(e4, "in flow at", EphRules_Field_Exe))
+		}
+		e5 := m.MarshalKey("touch", EphRules_Field_Touch)
+		if e5 == nil {
+			e5 = EphAlways_Optional_Marshal(m, &val.Touch)
+		}
+		if e5 != nil && e5 != jsn.Missing {
+			m.Error(errutil.New(e5, "in flow at", EphRules_Field_Touch))
 		}
 		m.EndBlock()
 	}
@@ -3010,7 +3019,9 @@ var Signatures = map[uint64]interface{}{
 	15063335060652852941: (*EphRelations)(nil),   /* Eph:relate manyMany: */
 	17218035188999844343: (*EphRelatives)(nil),   /* Eph:relates:to: */
 	17570881590226414756: (*EphRules)(nil),       /* Eph pattern:if:when:do: */
+	7214067641252607715:  (*EphRules)(nil),       /* Eph pattern:target:if:when:do: */
 	10757199676611909587: (*EphRules)(nil),       /* Eph pattern:if:when:do:touch: */
+	10406184722562866480: (*EphRules)(nil),       /* Eph pattern:target:if:when:do:touch: */
 	17160611285654896437: (*EphValues)(nil),      /* Eph noun:has:value: */
 	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */
 	15407091527463396937: (*ManyOne)(nil),        /* Kinds:toKind: */

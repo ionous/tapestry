@@ -34,7 +34,7 @@ func (c *Catalog) WriteRules(w Writer) (err error) {
 						if el.Touch {
 							flags = -flags // marker for rules that need to always run (ex. counters "every third try" )
 						}
-						if e := w.Write(mdl_rule, d.name, patternName, flags, el.Filter, el.Prog, at); e != nil {
+						if e := w.Write(mdl_rule, d.name, patternName, el.Target, flags, el.Filter, el.Prog, at); e != nil {
 							err = e
 							break Done
 						}
@@ -50,7 +50,7 @@ type Rulesets struct {
 	partitions [rt.NumPhases]Partition
 }
 
-func (rs *Rulesets) AppendRule(el *EphRules, part int, at string) (err error) {
+func (rs *Rulesets) AppendRule(el *EphRules, tgt string, part int, at string) (err error) {
 	if filter, e := marshalout(el.Filter); e != nil {
 		err = e
 	} else if prog, e := marshalout(el.Exe); e != nil {
@@ -58,7 +58,7 @@ func (rs *Rulesets) AppendRule(el *EphRules, part int, at string) (err error) {
 	} else {
 		p := &rs.partitions[part]
 		p.els = append(p.els, ephRules{
-			Filter: filter, Prog: prog, Touch: len(el.Touch.String()) > 0,
+			Target: tgt, Filter: filter, Prog: prog, Touch: len(el.Touch.String()) > 0,
 		})
 		p.at = append(p.at, at)
 	}
@@ -71,6 +71,7 @@ type Partition struct {
 }
 
 type ephRules struct {
+	Target string
 	Filter string
 	Prog   string
 	Touch  bool
@@ -85,16 +86,27 @@ func (op *EphRules) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if name, ok := UniformString(op.Name); !ok {
 		err = InvalidString(op.Name)
 	} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(KindsOfPattern) {
-		err = errutil.Fmt("unknown or invalid pattern %q ", op.Name)
+		err = errutil.Fmt("unknown or invalid pattern %q", op.Name)
 	} else if part, ok := op.When.GetPartition(); !ok {
-		err = errutil.Fmt("couldn't compute flags for %q", op.When.Str)
+		err = errutil.Fmt("couldn't compute flags for %q for pattern", op.When.Str, op.Name)
+	} else if tgt, ok := op.getTargetName(d); !ok {
+		err = errutil.Fmt("unknown or invalid target %q for pattern", op.Target, op.Name)
 	} else {
 		if d.rules == nil {
 			d.rules = make(map[string]Rulesets)
 		}
 		rules := d.rules[name]
-		rules.AppendRule(op, part, at)
+		rules.AppendRule(op, tgt, part, at)
 		d.rules[name] = rules
+	}
+	return
+}
+
+func (op *EphRules) getTargetName(d *Domain) (ret string, okay bool) {
+	if tgt := op.Target; len(tgt) == 0 {
+		okay = true
+	} else if k, ok := d.GetKind(op.Target); ok {
+		ret, okay = k.name, true
 	}
 	return
 }

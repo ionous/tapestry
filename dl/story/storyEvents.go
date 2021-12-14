@@ -23,21 +23,21 @@ func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 	} else if tgt, e := opt.GetName(k); e != nil {
 		err = e
 	} else {
-		if err == nil {
-			for _, h := range op.Handlers {
-				evt := h.Event.String()
-				if flags, e := h.EventPhase.ReadFlags(k); e != nil {
-					err = e
-					break
-				} else if e := h.PatternRules.ImportRules(k, evt, tgt, flags); e != nil {
-					err = e
-				} else {
-					println("EventBlock not implemented")
-					// if h.Locals != nil {
-					// 	if e := h.Locals.ImportLocals(k, evt); e != nil {
-					// 		break
-					// 	}
-					// }
+		// each handler is a rule...
+		for _, h := range op.Handlers {
+			evt := h.Event.String()
+			if flags, e := h.EventPhase.ReadFlags(k); e != nil {
+				err = errutil.Append(e)
+			} else if e := h.PatternRules.ImportRules(k, evt, tgt, flags); e != nil {
+				err = errutil.Append(e)
+			} else {
+				// and these are locals used by those rules
+				if h.Locals != nil {
+					if locals, e := h.Locals.ImportLocals(k, evt); e != nil {
+						err = errutil.Append(e)
+					} else if len(locals) > 0 {
+						k.Write(&eph.EphPatterns{Name: evt, Locals: locals})
+					}
 				}
 			}
 		}

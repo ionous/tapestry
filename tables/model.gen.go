@@ -15,10 +15,8 @@ func modelTemplate() string {
 		"\n" +
 		"/* enumerated values used by kinds and nouns */\n" +
 		"create table mdl_aspect( domain text, aspect text, trait text, rank int, primary key( aspect, trait ));\n" +
-		"/* stored tests, a work in progress \n" +
-		" * ex. determine if \"sources\" should be listed in model ( for debugging )\n" +
-		" */ \n" +
-		"create table mdl_check( name text, type text, expect text, primary key( name ));\n" +
+		"/* stored tests, which run a program to verify it produces the expected output. */ \n" +
+		"create table mdl_check( domain text, name text, expect blob, prog blob, at text, primary key( domain, name ));\n" +
 		"/* hierarchy of domains */\n" +
 		"create table mdl_domain( domain text, path text, at text, primary key( domain ));\n" +
 		"/* properties of a kind. type is a PRIM_ */\n" +
@@ -46,7 +44,7 @@ func modelTemplate() string {
 		"/* relation and constraint between two kinds of nouns */\n" +
 		"create table mdl_rel( domain text, relation text, kind text, cardinality text, otherKind text, at text, primary key( domain, relation ));\n" +
 		"/*  */\n" +
-		"create table mdl_rule( domain text, pattern text, phase int, filter blob, prog blob, at text );\n" +
+		"create table mdl_rule( domain text, pattern text, target text, phase int, filter blob, prog blob, at text );\n" +
 		"/* initial values for various nouns; changed values are stored in run_start */\n" +
 		"create table mdl_value(domain text, noun text, field text, value blob, at text, primary key( domain, noun, field ));\n" +
 		""

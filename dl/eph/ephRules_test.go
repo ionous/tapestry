@@ -35,17 +35,17 @@ func TestPatternRules(t *testing.T) {
 		if e := cat.WriteRules(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
-			// domain, pattern, phase, filter, prog, at
-			`b:p:3:"filter-a2":"prog-a2":x`, // for now at least, we list domains backwards for rules.
-			`b:p:3:"filter-a1":"prog-a1":x`,
-			`b:p:3:"filter-a0":"prog-a0":x`,
+			// domain, pattern, target, phase, filter, prog, at
+			`b:p::3:"filter-a2":"prog-a2":x`, // for now at least, we list domains backwards for rules.
+			`b:p::3:"filter-a1":"prog-a1":x`,
+			`b:p::3:"filter-a0":"prog-a0":x`,
 			//
-			`a:p:1:"filter-b1":"prog-b1":x`, // even though the `b` items were specified second, `before` rules get listed first.
-			`a:p:1:"filter-b0":"prog-b0":x`,
+			`a:p::1:"filter-b1":"prog-b1":x`, // even though the `b` items were specified second, `before` rules get listed first.
+			`a:p::1:"filter-b0":"prog-b0":x`,
 			//
-			`a:p:2:"filter-d2":"prog-d2":x`,
-			`a:p:2:"filter-d1":"prog-d1":x`,
-			`a:p:2:"filter-d0":"prog-d0":x`,
+			`a:p::2:"filter-d2":"prog-d2":x`,
+			`a:p::2:"filter-d1":"prog-d1":x`,
+			`a:p::2:"filter-d0":"prog-d0":x`,
 		}); len(diff) > 0 {
 			t.Log("got:", pretty.Sprint(out))
 			t.Fatal(diff)

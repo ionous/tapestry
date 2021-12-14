@@ -9,8 +9,12 @@ type Writer interface {
 	Write(q string, args ...interface{}) error
 }
 
-// for backwards compat
+// for backwards compat...
+// the data is duplicated in kinds and fields
 var mdl_aspect = tables.Insert("mdl_aspect", "domain", "aspect", "trait", "rank")
+
+// author tests of stories
+var mdl_check = tables.Insert("mdl_check", "domain", "name", "expect", "prog", "at")
 
 // domain name and materialized parents separated by commas
 var mdl_domain = tables.Insert("mdl_domain", "domain", "path", "at")
@@ -49,11 +53,10 @@ var mdl_pat = tables.Insert("mdl_pat", "domain", "kind", "labels", "result")
 var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one", "at")
 
 //
-//
 var mdl_rel = tables.Insert("mdl_rel", "domain", "relation", "kind", "cardinality", "otherKind", "at")
 
-// note: this differs from the original declaration..
-var mdl_rule = tables.Insert("mdl_rule", "domain", "pattern", "phase", "filter", "prog", "at")
+//
+var mdl_rule = tables.Insert("mdl_rule", "domain", "pattern", "target", "phase", "filter", "prog", "at")
 
 // the noun half of mdl_start.
 // "domain, noun, field" reference a join of mdl_noun and mdl_kind to get a filtered mdl_field.

@@ -112,7 +112,7 @@
                 "slot": "ephemera"
             },
             "eph_rules": {
-                "spec": "eph {pattern%name:text} {if%filter:bool_eval} {when:eph_timing} {do%exe:execute} {touch?eph_always}",
+                "spec": "eph {pattern%name:text} {target?text} {if%filter:bool_eval} {when:eph_timing} {do%exe:execute} {touch?eph_always}",
                 "slot": "ephemera"
             },
             "eph_timing": {
