@@ -88,9 +88,9 @@ func (op *EphRules) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(KindsOfPattern) {
 		err = errutil.Fmt("unknown or invalid pattern %q", op.Name)
 	} else if part, ok := op.When.GetPartition(); !ok {
-		err = errutil.Fmt("couldn't compute flags for %q for pattern", op.When.Str, op.Name)
+		err = errutil.Fmt("couldn't compute flags for %q for pattern %q", op.When.Str, op.Name)
 	} else if tgt, ok := op.getTargetName(d); !ok {
-		err = errutil.Fmt("unknown or invalid target %q for pattern", op.Target, op.Name)
+		err = errutil.Fmt("unknown or invalid target %q for pattern %q", op.Target, op.Name)
 	} else {
 		if d.rules == nil {
 			d.rules = make(map[string]Rulesets)
