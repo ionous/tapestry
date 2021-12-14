@@ -51,7 +51,7 @@ func TestNounFailure(t *testing.T) {
 		&EphNouns{Noun: "bad apple", Kind: "t"},
 	)
 	if e := writeNouns(dt, nil, nil); e == nil ||
-		e.Error() != `unknown dependency "t" for noun "bad_apple"` {
+		e.Error() != `unknown kind t` {
 		t.Fatal("unexpected failure", e)
 	} else {
 		t.Log("ok", e)

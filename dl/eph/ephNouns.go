@@ -79,7 +79,7 @@ func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else if kn, ok := UniformString(op.Kind); !ok {
 		err = InvalidString(op.Kind)
 	} else if k, ok := d.GetPluralKind(kn); !ok {
-		err = errutil.New("unknown kind", k)
+		err = errutil.New("unknown kind", op.Kind)
 	} else {
 		noun := d.EnsureNoun(name, at)
 		// we can only add requirements to the noun in the same domain that it was declared

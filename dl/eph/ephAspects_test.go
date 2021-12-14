@@ -10,7 +10,7 @@ import (
 // generate a kind of aspect containing a few traits.
 func TestAspectFormation(t *testing.T) {
 	var dt domainTest
-	dt.makeDomain(dd("a"),
+	dt.makeDomain(dd("d"),
 		&EphKinds{Kinds: KindsOfAspect},            // say that aspects exist
 		&EphKinds{Kinds: "a", From: KindsOfAspect}, // make an aspect
 		&EphAspects{Aspects: "a", Traits: []string{ // fix? should "Aspects" be singular?
@@ -23,9 +23,9 @@ func TestAspectFormation(t *testing.T) {
 	} else if e := cat.WriteAspects(&out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
-		"a:one:0",
-		"a:several:1",
-		"a:oh_so_many:2",
+		"d:a:one:0",
+		"d:a:several:1",
+		"d:a:oh_so_many:2",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
