@@ -30,7 +30,7 @@ func (op *AspectTraits) ImportPhrase(k *Importer) (err error) {
 
 // horses are usually fast.
 func (op *Certainties) ImportPhrase(k *Importer) (err error) {
-	err = errutil.New("not implemented")
+	println("Certainties not implemented")
 	// if certainty, e := op.Certainty.ImportString(k); e != nil {
 	// 	err = e
 	// } else if trait, e := NewTrait(k, op.Trait); e != nil {

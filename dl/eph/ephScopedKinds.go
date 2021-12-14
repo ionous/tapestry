@@ -6,6 +6,21 @@ import "github.com/ionous/errutil"
 // ready after phase Ancestry
 type ScopedKinds map[string]*ScopedKind
 
+// fix: the previous version specified all kinds as plurals
+// moving from singular to plural doesnt always work well person/persons/people
+// so i decided to make things singular instead --
+// but the "singularize" routine is chopping s's off singular nouns ending in s like darkness, and status
+// leading to confusion -- the most common places the zealous s-chopping happen is with aspects
+// so i made those keep their specified names -- which conflicts with places where the names arent kept.
+func (d *Domain) GetPluralKind(name string) (ret *ScopedKind, okay bool) {
+	if a, ok := d.GetKind(name); ok {
+		ret, okay = a, true
+	} else if x, e := d.Singularize(name); e == nil {
+		ret, okay = d.GetKind(x)
+	}
+	return
+}
+
 // return the uniformly named domain ( if it exists )
 func (d *Domain) GetKind(name string) (ret *ScopedKind, okay bool) {
 	if e := VisitTree(d, func(dep Dependency) (err error) {

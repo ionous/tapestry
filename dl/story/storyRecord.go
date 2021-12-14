@@ -8,7 +8,7 @@ import (
 // ex. "cats are a kind of record"
 func (op *KindsOfRecord) ImportPhrase(k *Importer) (err error) {
 	kinds := op.RecordPlural.String()
-	k.Write(&eph.EphKinds{Kinds: kinds, From: "record"})
+	k.Write(&eph.EphKinds{Kinds: kinds, From: eph.KindsOfRecord})
 	return
 }
 

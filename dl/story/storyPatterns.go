@@ -1,7 +1,6 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/eph"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"github.com/ionous/errutil"
@@ -31,28 +30,40 @@ func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
 		err = e
 	} else {
 		patternName := op.Name.String()
+		if e := op.writeSubType(k, patternName); e != nil {
+			err = e
+		} else if ps, e := op.reduceParams(); e != nil {
+			err = e
+		} else {
+			k.Write(&eph.EphPatterns{Name: patternName, Result: res, Params: ps})
+		}
+	}
+	return
+}
 
-		// tell the system about the pattern subtype ( if any )
-		if patternType, ok := composer.FindChoice(&op.Type, op.Type.Str); ok {
-			// fix: subtypes ( do we really need them? ) end with (s)
-			// but the actual kinds do not :/
-			patternType = patternType[:len(patternType)-1]
-			if patternType != eph.KindsOfPattern {
-				k.Write(&eph.EphKinds{Kinds: patternName, From: patternType})
-			}
+func (op *PatternDecl) reduceParams() (ret []eph.EphParams, err error) {
+	if els := op.Optvars; els != nil {
+		if ps, e := reduceParams(els.VariableDecl); e != nil {
+			err = e
+		} else {
+			ret = ps
 		}
-		//
-		var params []eph.EphParams
-		if els := op.Optvars; els != nil && err == nil {
-			if ps, e := reduceParams(els.VariableDecl); e != nil {
-				err = e
-			} else {
-				params = ps
-			}
-		}
-		if err == nil {
-			k.Write(&eph.EphPatterns{Name: patternName, Result: res, Params: params})
-		}
+	}
+	return
+}
+
+// tell the system about the pattern subtype ( if any )
+func (op *PatternDecl) writeSubType(k *Importer, patternName string) (err error) {
+	var patternType string
+	switch str := op.Type.Str; str {
+	case "", PatternType_Patterns:
+		// dont need to write
+	case PatternType_Actions:
+		k.Write(&eph.EphKinds{Kinds: patternName, From: patternType})
+	case PatternType_Events:
+		k.Write(&eph.EphKinds{Kinds: patternName, From: patternType})
+	default:
+		err = errutil.New("unknown pattern type", str)
 	}
 	return
 }
@@ -153,14 +164,14 @@ func (op *PatternLocals) ImportLocals(k *Importer, patternName string) (ret []ep
 	return
 }
 
-func (op *PatternType) ImportType(k *Importer) (ret string, err error) {
-	if t, found := composer.FindChoice(op, op.Str); !found {
-		err = errutil.Fmt("choice %s not found in %T", op.Str, op)
-	} else {
-		ret = t
-	}
-	return
-}
+// func (op *PatternType) ImportType(k *Importer) (ret string, err error) {
+// 	if t, found := composer.FindChoice(op, op.Str); !found {
+// 		err = errutil.Fmt("choice %s not found in %T", op.Str, op)
+// 	} else {
+// 		ret = t
+// 	}
+// 	return
+// }
 
 func convertRes(res *PatternReturn) (ret *eph.EphParams, err error) {
 	if res != nil {

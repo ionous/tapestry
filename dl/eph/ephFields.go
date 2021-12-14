@@ -94,7 +94,8 @@ func MakeUniformField(op EphParams) (ret UniformField, err error) {
 	} else {
 		// if there's an initial value, make sure it works with our field
 		if init := op.Initially; init != nil {
-			if initAff := init.Affinity(); initAff.String() != aff {
+			// fix? some statements have unknown affinity ( statements that pivot )
+			if initAff := init.Affinity(); len(initAff) > 0 && initAff.String() != aff {
 				err = errutil.Fmt("mismatched affinity of initial value (a %s) for field %q (a %s)", initAff, op.Name, aff)
 			}
 		}
@@ -105,21 +106,24 @@ func MakeUniformField(op EphParams) (ret UniformField, err error) {
 	return
 }
 
-func (op *UniformField) AssembleField(kind *ScopedKind, at string) (err error) {
-	if cls, ok := kind.domain.GetKind(op.class); !ok && len(op.class) > 0 {
-		err = KindError{kind.name, errutil.Fmt("unknown class %q for field %q", op.class, op.name)}
-	} else if ok && (op.affinity != affine.Text.String() && op.affinity != affine.TextList.String()) {
-		err = KindError{kind.name, errutil.Fmt("text affinity expected for field %q of class %q", op.name, op.class)}
+func (uf *UniformField) AssembleField(kind *ScopedKind, at string) (err error) {
+	if cls, classOk := kind.domain.GetPluralKind(uf.class); !classOk && len(uf.class) > 0 {
+		err = KindError{kind.name, errutil.Fmt("unknown class %q for field %q", uf.class, uf.name)}
+	} else if aff := affine.Affinity(uf.affinity); classOk && !isClassAffinity(aff) {
+		err = KindError{kind.name, errutil.Fmt("unexpected for field %q of class %q", uf.name, uf.class)}
 	} else {
-
+		var clsName string
+		if classOk {
+			clsName = cls.name
+		}
 		// checks for conflicts, allows duplicates.
 		var conflict *Conflict
 		if e := kind.AddField(&fieldDef{
 			at:        at,
-			name:      op.name,
-			affinity:  op.affinity,
-			class:     op.class,
-			initially: op.initially,
+			name:      uf.name, // fieldName; already "uniform"
+			affinity:  aff.String(),
+			class:     clsName,
+			initially: uf.initially,
 		}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
 			LogWarning(e) // warn if it was a duplicated definition
 		} else if e != nil {
@@ -129,10 +133,19 @@ func (op *UniformField) AssembleField(kind *ScopedKind, at string) (err error) {
 			isAspect := cls != nil && cls.HasParent(KindsOfAspect) && len(cls.aspects) > 0
 			// when the name of the field is the same as the name of the aspect
 			// that is our special "acts as trait" field, so add the set of traits.
-			if isAspect && op.name == op.class && op.affinity == affine.Text.String() {
+			if isAspect && uf.name == clsName && aff == affine.Text {
 				err = kind.AddField(&cls.aspects[0])
 			}
 		}
+	}
+	return
+}
+
+// if there is a class specified, only certain affinities are allowed.
+func isClassAffinity(a affine.Affinity) (okay bool) {
+	switch a {
+	case "", affine.Text, affine.TextList, affine.Record, affine.RecordList:
+		okay = true
 	}
 	return
 }

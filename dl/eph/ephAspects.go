@@ -2,7 +2,6 @@ package eph
 
 import (
 	"errors"
-	"strings"
 )
 
 // ensure fields which reference aspects use the necessary formatting
@@ -19,7 +18,7 @@ func (c *Catalog) WriteAspects(w Writer) (err error) {
 			if k := dep.Leaf().(*ScopedKind); k.HasParent(KindsOfAspect) {
 				a := k.aspects[0] // we only expect to see 1 -- probably not worth error checking it.
 				for i, t := range a.traits {
-					if e := w.Write(mdl_aspect, a.aspect, t, i); e != nil {
+					if e := w.Write(mdl_aspect, k.domain.name, a.aspect, t, i); e != nil {
 						err = e
 						break
 					}
@@ -37,25 +36,27 @@ func (op *EphAspects) Phase() Phase { return AncestryPhase }
 
 // generates traits and adds them to a custom aspect kind.
 func (op *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if singleAspect, e := d.Singularize(strings.TrimSpace(op.Aspects)); e != nil {
-		err = e
-	} else if aspect, ok := UniformString(singleAspect); !ok {
+	// we dont singularize aspects even thought its a kind;
+	// most are really singularizable anyway, and some common things like "darkness" dont singularize correctly.
+	if aspect, ok := UniformString(op.Aspects); !ok {
 		err = InvalidString(op.Aspects)
 	} else if traits, e := UniformStrings(op.Traits); e != nil {
 		err = e
 	} else {
 		kid := d.EnsureKind(aspect, at)
 		kid.AddRequirement(KindsOfAspect)
-		err = d.AddEphemera(EphAt{at, PhaseFunction{AspectPhase,
-			func(c *Catalog, d *Domain, at string) (err error) {
-				var conflict *Conflict // checks for conflicts, allows duplicates.
-				if e := kid.AddField(&traitDef{at, aspect, traits}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
-					LogWarning(e) // warn if it was a duplicated definition
-				} else {
-					err = e // some other error ( or nil )
-				}
-				return
-			}}})
+		if len(traits) > 0 {
+			err = d.AddEphemera(EphAt{at, PhaseFunction{AspectPhase,
+				func(c *Catalog, d *Domain, at string) (err error) {
+					var conflict *Conflict // checks for conflicts, allows duplicates.
+					if e := kid.AddField(&traitDef{at, aspect, traits}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
+						LogWarning(e) // warn if it was a duplicated definition
+					} else {
+						err = e // some other error ( or nil )
+					}
+					return
+				}}})
+		}
 	}
 	return
 }

@@ -32,7 +32,7 @@ func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 				} else if e := h.PatternRules.ImportRules(k, evt, tgt, flags); e != nil {
 					err = e
 				} else {
-					panic("fixme")
+					println("EventBlock not implemented")
 					// if h.Locals != nil {
 					// 	if e := h.Locals.ImportLocals(k, evt); e != nil {
 					// 		break

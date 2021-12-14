@@ -36,24 +36,6 @@
           ]
         },
         {
-          "PatternVariablesDecl:variableDecl:": [
-            "print group",
-            [
-              {
-                "VariableDecl:name:type ext:": [
-                  "a",
-                  "group",
-                  {
-                    "ExtType record:": {
-                      "RecordType:": "object groups"
-                    }
-                  }
-                ]
-              }
-            ]
-          ]
-        },
-        {
           "PatternActions:patternLocals:patternRules:": [
             "print group",
             {

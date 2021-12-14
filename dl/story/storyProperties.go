@@ -49,11 +49,11 @@ func (op *PrimitiveType) ImportPropertyType(k *Importer, kind, aspect string) (e
 }
 
 // number_list, text_list, record_type, record_list
-func (op *ExtType) ImportVariableType(k *Importer) (retType string, retAff eph.Affinity, err error) {
+func (op *ExtType) GetParameterType() (retType string, retAff eph.Affinity, err error) {
 	if imp, ok := op.Value.(primTypeAffer); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
-		retType, retAff = imp.GetTypeAffinity(k)
+		retType, retAff = imp.GetTypeAffinity()
 	}
 	return
 }
@@ -63,7 +63,7 @@ func (op *ExtType) ImportPropertyType(k *Importer, kind, prop string) (err error
 	if imp, ok := op.Value.(primTypeAffer); !ok {
 		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
-		primType, primAff := imp.GetTypeAffinity(k)
+		primType, primAff := imp.GetTypeAffinity()
 		k.Write(&eph.EphKinds{Kinds: kind, Contain: []eph.EphParams{
 			{Name: prop, Affinity: primAff, Class: primType},
 		}})
@@ -71,22 +71,20 @@ func (op *ExtType) ImportPropertyType(k *Importer, kind, prop string) (err error
 	return
 }
 
-type primTypeAffer interface {
-	GetTypeAffinity(*Importer) (string, eph.Affinity)
-}
+type primTypeAffer interface{ GetTypeAffinity() (string, eph.Affinity) }
 
-func (op *NumberList) GetTypeAffinity(k *Importer) (string, eph.Affinity) {
+func (op *NumberList) GetTypeAffinity() (string, eph.Affinity) {
 	return "", eph.Affinity{eph.Affinity_NumList}
 }
 
-func (op *TextList) GetTypeAffinity(k *Importer) (string, eph.Affinity) {
+func (op *TextList) GetTypeAffinity() (string, eph.Affinity) {
 	return "", eph.Affinity{eph.Affinity_TextList}
 }
 
-func (op *RecordType) GetTypeAffinity(k *Importer) (string, eph.Affinity) {
+func (op *RecordType) GetTypeAffinity() (string, eph.Affinity) {
 	return op.Kind.Str, eph.Affinity{eph.Affinity_Record}
 }
 
-func (op *RecordList) GetTypeAffinity(k *Importer) (string, eph.Affinity) {
+func (op *RecordList) GetTypeAffinity() (string, eph.Affinity) {
 	return op.Kind.Str, eph.Affinity{eph.Affinity_RecordList}
 }

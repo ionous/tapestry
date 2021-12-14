@@ -67,7 +67,7 @@ func (op *EphRelatives) Phase() Phase { return RelativePhase }
 func (op *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if name, ok := UniformString(op.Rel); !ok {
 		err = InvalidString(op.Rel)
-	} else if rel, ok := d.GetKind(name); !ok || !rel.HasAncestor(KindsOfRelation) {
+	} else if rel, ok := d.GetPluralKind(name); !ok || !rel.HasAncestor(KindsOfRelation) {
 		err = errutil.Fmt("unknown or invalid relation %q", op.Rel)
 	} else if card := rel.domain.GetDefinition(AncestryPhase, rel.name+"?card"); len(card) == 0 {
 		err = errutil.Fmt("unknown or invalid cardinality for %q", op.Rel)

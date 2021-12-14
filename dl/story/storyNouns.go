@@ -42,6 +42,7 @@ func ImportNamedNouns(k *Importer, els []NamedNoun) (err error) {
 func (op *NamedNoun) ImportNouns(k *Importer) (err error) {
 	// declare a noun class that has several default fields
 	if once := "noun"; k.Once(once) {
+		k.WriteOnce(&eph.EphKinds{Kinds: "objects", From: eph.KindsOfKind})
 		// common or proper nouns ( rabbit, vs. Roger )
 		k.AddImplicitAspect("noun_types", "objects", "common_named", "proper_named", "counted")
 		// whether a player can refer to an object by its name.
@@ -61,7 +62,7 @@ func (op *NamedNoun) ImportNouns(k *Importer) (err error) {
 // also, we probably want noun stacks not individually duplicated names
 func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 	if once := "printed_name"; k.Once(once) {
-		k.Write(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "printed_name", Affinity: eph.Affinity{eph.Affinity_Text}}}})
+		k.WriteOnce(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "printed_name", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 	}
 
 	kind := op.Name.String()
@@ -87,7 +88,7 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 	if !detFound {
 		// create a "indefinite article" field for all objects
 		if k.Once("named_noun") {
-			k.Write(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
+			k.WriteOnce(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 		}
 		// set the indefinite article field
 		k.Write(&eph.EphValues{Noun: noun, Field: "indefinite_article", Value: &literal.TextValue{detStr}})

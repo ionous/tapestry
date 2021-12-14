@@ -7,6 +7,7 @@ import (
 
 // ex. colors are a kind of value
 func (op *KindsOfAspect) ImportPhrase(k *Importer) (err error) {
+	// fix: is this even useful? see EphAspects.Assemble which has to work around the empty traits list.
 	k.Write(&eph.EphAspects{Aspects: op.Aspect.Str})
 	return
 }

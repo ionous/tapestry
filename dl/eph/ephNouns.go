@@ -76,16 +76,18 @@ func (op *EphNouns) Phase() Phase { return NounPhase }
 func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if name, ok := UniformString(op.Noun); !ok {
 		err = InvalidString(op.Noun)
-	} else if k, ok := UniformString(op.Kind); !ok {
+	} else if kn, ok := UniformString(op.Kind); !ok {
 		err = InvalidString(op.Kind)
+	} else if k, ok := d.GetPluralKind(kn); !ok {
+		err = errutil.New("unknown kind", k)
 	} else {
 		noun := d.EnsureNoun(name, at)
 		// we can only add requirements to the noun in the same domain that it was declared
 		// if in a different domain: the nouns have to match up
 		if noun.domain == d {
-			noun.AddRequirement(k)
-		} else if !noun.HasAncestor(k) {
-			err = NounError{name, errutil.Fmt("can't redefine parent as %q", k)}
+			noun.AddRequirement(k.name)
+		} else if !noun.HasAncestor(k.name) {
+			err = NounError{name, errutil.Fmt("can't redefine parent as %q", op.Kind)}
 		} else {
 			e := errutil.New("duplicate noun definition at", at)
 			LogWarning(NounError{name, e})

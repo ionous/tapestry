@@ -14,17 +14,18 @@ type Definition struct {
 }
 
 type Conflict struct {
+	Key    string
 	Reason ReasonForConflict
 	Was    Definition
 	Value  string
 }
 
 func (n *Conflict) Error() string {
-	return errutil.Sprintf("%s %q at %s with %q", n.Reason.String(), n.Was.value, n.Was.at, n.Value)
+	return errutil.Sprintf("%s %s was %q at %s now %q", n.Reason.String(), n.Key, n.Was.value, n.Was.at, n.Value)
 }
 
-func newConflict(why ReasonForConflict, was Definition, val string) *Conflict {
-	return &Conflict{why, was, val}
+func newConflict(key string, why ReasonForConflict, was Definition, newval string) *Conflict {
+	return &Conflict{key, why, was, newval}
 }
 
 // fix? consider moving domain error to catalog processing internals ( and removing explicit external use )
@@ -70,7 +71,7 @@ func (defs Artifacts) CheckConflict(key, value string) (err error) {
 		} else {
 			why = Redefined
 		}
-		err = newConflict(why, def, value)
+		err = newConflict(key, why, def, value)
 	}
 	return
 }

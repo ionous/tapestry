@@ -53,11 +53,10 @@ func infinityToAffinity(a interface{ Affinity() affine.Affinity }) (ret eph.Affi
 	return
 }
 
+// note: can return "" ( unknown affinity )
 func affineToAffinity(a affine.Affinity) (ret eph.Affinity) {
 	spec := ret.Compose()
-	if k, i := spec.IndexOfValue(a.String()); i < 0 {
-		println("unknown affinity", a.String())
-	} else {
+	if k, i := spec.IndexOfValue(a.String()); i >= 0 {
 		ret.Str = k
 	}
 	return

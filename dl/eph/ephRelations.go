@@ -53,8 +53,9 @@ func oneOrAny(out *strings.Builder, s string) (ret string) {
 func (op *EphRelations) Phase() Phase { return AncestryPhase }
 
 func (op *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if rel, e := d.Singularize(strings.TrimSpace(op.Rel)); e != nil {
-		err = e
+	// like aspects, we dont try to singularize these.
+	if rel, ok := UniformString(op.Rel); !ok {
+		err = InvalidString(op.Rel)
 	} else if a, b, card := op.getCard(); len(card) == 0 {
 		err = errutil.New("unknown cardinality")
 	} else if ak, e := a.getKind(c, d); e != nil {

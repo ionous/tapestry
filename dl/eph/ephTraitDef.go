@@ -47,6 +47,7 @@ func (td *traitDef) checkProps(k *ScopedKind) (err error) {
 		// see if this set of traits contains the a field from the kind
 		if td.HasTrait(kf.name) {
 			err = newConflict(
+				k.name,
 				Redefined,
 				Definition{kf.at, kf.name},
 				td.aspect,
@@ -62,6 +63,7 @@ func (td *traitDef) checkTraits(k *ScopedKind) (err error) {
 	for _, t := range td.traits {
 		if a, ok := k.FindTrait(t); ok {
 			err = newConflict(
+				k.name,
 				Redefined,
 				Definition{a.at, a.aspect},
 				td.aspect,

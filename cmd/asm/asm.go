@@ -133,20 +133,20 @@ func Assemble(cat *eph.Catalog, outFile string) (err error) {
 			} else {
 				defer db.Close()
 				if e := tables.CreateModel(db); e != nil {
-					err = e
+					err = errutil.New("couldnt create model", e)
 				} else if tx, e := db.Begin(); e != nil {
-					err = e
+					err = errutil.New("couldnt create transaction", e)
 				} else {
 					for _, q := range queue {
 						if _, e := tx.Exec(q.tgt, q.args...); e != nil {
 							tx.Rollback()
-							err = e
+							err = errutil.New("couldnt write to", q.tgt, e)
 							break
 						}
 					}
 					if err == nil {
 						if e := tx.Commit(); e != nil {
-							err = e
+							err = errutil.New("couldnt commit", e)
 						}
 					}
 				}
@@ -162,8 +162,31 @@ func storyMarshaller(m jsn.Marshalee) (string, error) {
 
 func collectEphemera(cat *eph.Catalog, out *error) story.WriterFun {
 	// fix: needs to be more clever eventually...
-	if e := cat.AddEphemera(eph.EphAt{At: "asm", Eph: &eph.EphBeginDomain{Name: "entire_game"}}); e != nil {
+	if e := cat.AddEphemera(
+		eph.EphAt{
+			At:  "asm",
+			Eph: &eph.EphBeginDomain{Name: "entire_game"}}); e != nil {
 		panic(e)
+	}
+	// built in kinds -- see ephKinds.go
+	// fix? move to an .if file?
+	kinds := []string{
+		eph.KindsOfAction, eph.KindsOfPattern,
+		eph.KindsOfAspect, "",
+		eph.KindsOfEvent, eph.KindsOfPattern,
+		eph.KindsOfKind, "",
+		eph.KindsOfPattern, "",
+		eph.KindsOfRecord, "",
+		eph.KindsOfRelation, "",
+	}
+	for i := 0; i < len(kinds); i += 2 {
+		k, p := kinds[i], kinds[i+1]
+		if e := cat.AddEphemera(
+			eph.EphAt{
+				At:  "built in kinds",
+				Eph: &eph.EphKinds{Kinds: k, From: p}}); e != nil {
+			panic(e)
+		}
 	}
 	var i int
 	return func(el eph.Ephemera) {
@@ -179,6 +202,8 @@ func distill(k *story.Importer, srcPath string) (err error) {
 		err = e
 	} else if e := readPaths(k, srcPath); e != nil {
 		err = errutil.New("couldn't read file", srcPath, e)
+	} else {
+		k.Flush()
 	}
 	return
 }

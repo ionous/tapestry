@@ -7,12 +7,14 @@ import (
 )
 
 const (
+	// default kinds
+	KindsOfAction   = "action"
 	KindsOfAspect   = "aspect"
+	KindsOfEvent    = "event"
+	KindsOfKind     = "kind"
+	KindsOfPattern  = "pattern"
 	KindsOfRecord   = "record"
 	KindsOfRelation = "relation"
-	KindsOfPattern  = "pattern"
-	KindsOfEvent    = "event"
-	KindsOfAction   = "action"
 )
 
 // write the kinds in a reasonable order

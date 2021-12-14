@@ -7,8 +7,8 @@ import (
 // ImportPhrase - action generates pattern ephemera for now.
 func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
 	extra := op.ActionParams.Value.(actionImporter).GetExtraParams()
-	op.makePattern(k, op.Action.Str, "agent", "actions", extra, nil)
-	op.makePattern(k, op.Event.Str, "actor", "events", extra, &eph.EphParams{
+	op.makePattern(k, op.Action.Str, "agent", eph.KindsOfAction, extra, nil)
+	op.makePattern(k, op.Event.Str, "actor", eph.KindsOfEvent, extra, &eph.EphParams{
 		Name:     "success",
 		Affinity: eph.Affinity{eph.Affinity_Bool},
 	})
