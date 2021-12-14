@@ -93,7 +93,7 @@ func reduceRes(param *EphParams, outp *[]UniformField) (ret string, err error) {
 	if param != nil {
 		if param.Initially != nil {
 			err = errutil.New("return values dont currently support initial values")
-		} else if p, e := MakeUniformField(*param); e != nil {
+		} else if p, e := MakeUniformField(param.Affinity, param.Name, param.Class); e != nil {
 			err = e
 		} else {
 			*outp = append(*outp, p)
@@ -108,7 +108,7 @@ func reduceArgs(params []EphParams, outp *[]UniformField) (ret string, err error
 	for i, param := range params {
 		if param.Initially != nil {
 			err = errutil.New("args dont currently support initial values")
-		} else if p, e := MakeUniformField(param); e != nil {
+		} else if p, e := MakeUniformField(param.Affinity, param.Name, param.Class); e != nil {
 			err = e
 			break
 		} else {
@@ -128,9 +128,11 @@ func reduceArgs(params []EphParams, outp *[]UniformField) (ret string, err error
 
 func reduceLocals(params []EphParams, outp *[]UniformField) (err error) {
 	for _, param := range params {
-		if p, e := MakeUniformField(param); e != nil {
+		if p, e := MakeUniformField(param.Affinity, param.Name, param.Class); e != nil {
 			err = e
 			break
+		} else if e := p.setAssignment(param.Initially); e != nil {
+			err = e
 		} else {
 			*outp = append(*outp, p)
 		}

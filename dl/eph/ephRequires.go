@@ -106,8 +106,11 @@ func resolve(node Dependency, reqs []string, names DependencyFinder) (ret Depend
 	// capital-R resolve each specified dependency
 	// ( which winds us up back here -- one requirement deeper -- unless its results are cached already )
 	m := TableMaker(len(reqs))
-	for _, req := range reqs {
-		m.ResolveReq(names, req) // accumulates any errors
+	for i, req := range reqs {
+		// accumulates any errors
+		if d, ok := m.ResolveReq(names, req); ok {
+			reqs[i] = d.Leaf().Name() // we rewrite the names to handle plural lookups
+		}
 	}
 	if ds, e := m.GetSortedTable(); e != nil {
 		err = e

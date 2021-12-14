@@ -128,8 +128,8 @@ func expectFullResults(t *testing.T, dt domainTest) {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outkind[1:], testOut{
 			"a:k::x",
-			"a:pattern::x",
-			"a:p:pattern:x",
+			"a:patterns::x",
+			"a:p:patterns:x",
 		}); len(diff) > 0 {
 			t.Log("got:", pretty.Sprint(outkind))
 			t.Fatal(diff)

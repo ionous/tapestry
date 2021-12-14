@@ -134,7 +134,7 @@ type kindFinder Domain
 // look upwards through the domains to find the named kind
 func (kf *kindFinder) FindDependency(name string) (ret Dependency, okay bool) {
 	domain := (*Domain)(kf)
-	if k, ok := domain.GetKind(name); ok {
+	if k, ok := domain.GetPluralKind(name); ok {
 		ret, okay = k, true
 	}
 	return

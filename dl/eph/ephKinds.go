@@ -8,13 +8,13 @@ import (
 
 const (
 	// default kinds
-	KindsOfAction   = "action"
-	KindsOfAspect   = "aspect"
-	KindsOfEvent    = "event"
-	KindsOfKind     = "kind"
-	KindsOfPattern  = "pattern"
-	KindsOfRecord   = "record"
-	KindsOfRelation = "relation"
+	KindsOfAction   = "actions"
+	KindsOfAspect   = "aspects"
+	KindsOfEvent    = "events"
+	KindsOfKind     = "kinds"
+	KindsOfPattern  = "patterns"
+	KindsOfRecord   = "records"
+	KindsOfRelation = "relations"
 )
 
 // write the kinds in a reasonable order
@@ -57,15 +57,15 @@ func (n KindError) Unwrap() error {
 func (op *EphKinds) Phase() Phase { return AncestryPhase }
 
 func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if singleKind, e := d.Singularize(strings.TrimSpace(op.Kinds)); e != nil {
-		err = e
-	} else if newKind, ok := UniformString(singleKind); !ok {
+	if newKind, ok := UniformString(op.Kinds); !ok {
 		err = InvalidString(op.Kinds)
 	} else if e := op.addFields(d, newKind, at); e != nil {
 		err = e
 	} else {
 		kid := d.EnsureKind(newKind, at)
-		// is there a "parent kind specified?"
+		// if a parent kind is specified, make the newKind dependent on it.
+		// note: the parent is usually specified in singular form.
+		// the xform from singular to plural is handled by the dependency resolver's kindFinder and GetPluralKind()
 		if trim := strings.TrimSpace(op.From); len(trim) > 0 {
 			if parentKind, ok := UniformString(trim); !ok {
 				err = InvalidString(trim)
@@ -75,8 +75,10 @@ func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
 					kid.AddRequirement(parentKind) // fix? maybe it'd make sense for requirements to have origin at?
 				} else {
 					// if in a different domain: the kinds have to match up
-					if !kid.HasAncestor(parentKind) {
-						err = KindError{newKind, errutil.Fmt("can't redefine parent as %q", parentKind)}
+					if pk, ok := d.GetPluralKind(parentKind); !ok {
+						err = errutil.New("unknown parent kind", op.From)
+					} else if !kid.HasAncestor(pk.name) {
+						err = KindError{newKind, errutil.Fmt("can't redefine parent as %q", op.From)}
 					} else {
 						e := errutil.New("duplicate parent definition at", at)
 						LogWarning(KindError{newKind, e})

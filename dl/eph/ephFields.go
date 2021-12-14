@@ -2,7 +2,6 @@ package eph
 
 import (
 	"errors"
-	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
@@ -63,15 +62,12 @@ func (op *ephFields) Phase() Phase { return FieldPhase }
 // add some fields to a kind.
 // see also: EphAspects which generates traits and adds them to a custom aspect kind.
 func (op *ephFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	// hooray parameter validation
 	// note: the kinds must exist ( and are resolved if they do ) already ( re: phased processing )
-	if singleKind, e := d.Singularize(strings.TrimSpace(op.Kinds)); e != nil {
-		err = e
-	} else if newKind, ok := UniformString(singleKind); !ok {
+	if newKind, ok := UniformString(op.Kinds); !ok {
 		err = InvalidString(op.Kinds)
-	} else if kind, ok := d.GetKind(newKind); !ok {
+	} else if kind, ok := d.GetPluralKind(newKind); !ok {
 		err = errutil.New("unknown kind", newKind)
-	} else if param, e := MakeUniformField(EphParams{Affinity: op.Affinity, Name: op.Name, Class: op.Class}); e != nil {
+	} else if param, e := MakeUniformField(op.Affinity, op.Name, op.Class); e != nil {
 		err = e
 	} else {
 		err = param.AssembleField(kind, at)
@@ -84,23 +80,28 @@ type UniformField struct {
 	initially             rt.Assignment
 }
 
-func MakeUniformField(op EphParams) (ret UniformField, err error) {
-	if name, ok := UniformString(op.Name); !ok {
-		err = InvalidString(op.Name)
-	} else if aff, ok := composer.FindChoice(&op.Affinity, op.Affinity.Str); !ok && len(op.Affinity.Str) > 0 {
+// normalize the values of the field
+func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass string) (ret UniformField, err error) {
+	if name, ok := UniformString(fieldName); !ok {
+		err = InvalidString(fieldName)
+	} else if aff, ok := composer.FindChoice(&fieldAffinity, fieldAffinity.Str); !ok && len(fieldAffinity.Str) > 0 {
 		err = errutil.New("unknown affinity", aff)
-	} else if class, ok := UniformString(op.Class); !ok && len(op.Class) > 0 {
-		err = InvalidString(op.Class)
+	} else if class, ok := UniformString(fieldClass); !ok && len(fieldClass) > 0 {
+		err = InvalidString(fieldClass)
 	} else {
-		// if there's an initial value, make sure it works with our field
-		if init := op.Initially; init != nil {
-			// fix? some statements have unknown affinity ( statements that pivot )
-			if initAff := init.Affinity(); len(initAff) > 0 && initAff.String() != aff {
-				err = errutil.Fmt("mismatched affinity of initial value (a %s) for field %q (a %s)", initAff, op.Name, aff)
-			}
-		}
-		if err == nil {
-			ret = UniformField{name, aff, class, op.Initially}
+		ret = UniformField{name: name, affinity: aff, class: class}
+	}
+	return
+}
+
+// if there's an initial value, make sure it works with our field
+func (uf *UniformField) setAssignment(init rt.Assignment) (err error) {
+	if init != nil {
+		// fix? some statements have unknown affinity ( statements that pivot )
+		if initAff := init.Affinity(); len(initAff) > 0 && initAff.String() != uf.affinity {
+			err = errutil.Fmt("mismatched affinity of initial value (a %s) for field %q (a %s)", initAff, uf.name, uf.affinity)
+		} else {
+			uf.initially = init
 		}
 	}
 	return

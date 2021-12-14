@@ -13,21 +13,23 @@ func (d *Domain) AddPlural(plural, singular string) (okay bool) {
 }
 
 // use the domain rules ( and hierarchy ) to turn the passed plural into its singular form
-func (d *Domain) Singularize(plural string) (ret string, err error) {
-	if explict, e := d.FindSingluar(plural); e != nil {
+// the way plurals are defined, there can be more than one plural word for a given singular word.
+// in that case, attempts to pick one.
+func (d *Domain) Pluralize(singular string) (ret string, err error) {
+	if explict, e := d.FindPlural(singular); e != nil {
 		err = e
 	} else if len(explict) > 0 {
 		ret = explict
 	} else {
-		ret = inflect.Singularize(plural)
+		ret = inflect.Pluralize(singular)
 	}
 	return
 }
 
-func (d *Domain) FindSingluar(plural string) (ret string, err error) {
+func (d *Domain) FindPlural(word string) (ret string, err error) {
 	if e := VisitTree(d, func(dep Dependency) (err error) {
 		scope := dep.(*Domain)
-		if n, ok := scope.pairs.FindSingular(plural); ok {
+		if n, ok := scope.pairs.FindPlural(word); ok {
 			ret, err = n, Visited
 		}
 		return

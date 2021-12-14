@@ -124,8 +124,6 @@ func (k *relKind) short(other bool) (ret string) {
 func (k *relKind) getKind(c *Catalog, d *Domain) (ret string, err error) {
 	if n := strings.TrimSpace(k.name); len(n) == 0 {
 		err = errutil.New("missing name")
-	} else if k.plural {
-		ret, err = d.Singularize(n)
 	} else {
 		ret = n
 	}

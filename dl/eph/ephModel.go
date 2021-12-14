@@ -35,7 +35,9 @@ var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
 // ( the same as - or a child of - the domain of the kind )
 var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 
-//
+// domain captures the scope in which the pairing was defined.
+// within that scope: the noun, relation, and otherNoun are all unique names --
+// even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
 var mdl_pair = tables.Insert("mdl_pair", "domain", "noun", "relation", "otherNoun", "at")
 
 // doesn't store "at" because its kind already defines that

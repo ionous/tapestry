@@ -7,14 +7,12 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// FIX! sort columns lexically
 func (c *Catalog) WritePairs(w Writer) (err error) {
 	if _, e := c.ResolveNouns(); e != nil {
 		err = e
 	} else if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
-	Done:
 		for _, deps := range ds {
 			d := deps.Leaf().(*Domain)
 			// pairs are stored by relation name
@@ -25,24 +23,41 @@ func (c *Catalog) WritePairs(w Writer) (err error) {
 			}
 			sort.Strings(names)
 			for _, relName := range names {
-				rs := d.relatives[relName].pairs
-				sort.Slice(rs, func(i, j int) (less bool) {
-					a, b := rs[i], rs[j]
-					switch {
-					case a.firstNoun < b.firstNoun:
-						less = true
-					case a.firstNoun == b.firstNoun:
-						less = a.secondNoun < b.secondNoun
-					}
-					return
-				})
-				for _, p := range rs {
-					if e := w.Write(mdl_pair, d.name, p.firstNoun, relName, p.secondNoun, p.at); e != nil {
-						err = e
-						break Done
-					}
+				if e := writePairs(w, d, relName, d.relatives[relName].pairs); e != nil {
+					err = e
+					break
 				}
 			}
+		}
+	}
+	return
+}
+
+func writePairs(w Writer, d *Domain, relName string, rs []Relative) (err error) {
+	// note: we dont have to test the existence of the kinds and nouns, assembly has already done that
+	// sometimes, though... its helpful for testing.
+	/*if rel, ok := d.GetKind(relName); !ok {
+		err = errutil.New("couldnt find relation", relName)
+	} else */sort.Slice(rs, func(i, j int) (less bool) {
+		a, b := rs[i], rs[j]
+		switch {
+		case a.firstNoun < b.firstNoun:
+			less = true
+		case a.firstNoun == b.firstNoun:
+			less = a.secondNoun < b.secondNoun
+		}
+		return
+	})
+	for _, p := range rs {
+		/*if n1, ok := d.GetNoun(p.firstNoun); !ok {
+			err = errutil.New("couldnt find first noun", p.firstNoun)
+			break
+		} else if n1, ok := d.GetNoun(p.secondNoun); !ok {
+			err = errutil.New("couldnt find second noun", p.secondNoun)
+			break
+		} else*/if e := w.Write(mdl_pair, d.name, p.firstNoun, relName, p.secondNoun, p.at); e != nil {
+			err = e
+			break
 		}
 	}
 	return
