@@ -117,6 +117,8 @@ func Assemble(cat *eph.Catalog, outFile string) (err error) {
 		err = e
 	} else if e := cat.WriteValues(w); e != nil {
 		err = e
+	} else if e := cat.WriteChecks(w); e != nil {
+		err = e
 	} else {
 		log.Println("writing", len(queue), "entries")
 		if outFile, e := filepath.Abs(outFile); e != nil {

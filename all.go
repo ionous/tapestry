@@ -1,7 +1,6 @@
 package iffy
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/check"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/debug"
@@ -19,7 +18,6 @@ import (
 )
 
 var AllSlats = [][]composer.Composer{
-	check.Slats,
 	core.Slats,
 	debug.Slats,
 	grammar.Slats,
@@ -31,7 +29,6 @@ var AllSlats = [][]composer.Composer{
 	story.Slats,
 }
 var AllSignatures = []map[uint64]interface{}{
-	check.Signatures,
 	core.Signatures,
 	debug.Signatures,
 	grammar.Signatures,

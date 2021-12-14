@@ -15,6 +15,7 @@ type Domain struct {
 	phases        [NumPhases]PhaseData
 	kinds         ScopedKinds
 	nouns         ScopedNouns
+	checks        asmChecks
 	resolvedKinds cachedTable
 	resolvedNouns cachedTable
 	pairs         PluralPairs
