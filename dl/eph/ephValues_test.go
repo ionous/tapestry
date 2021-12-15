@@ -3,6 +3,7 @@ package eph
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -33,7 +34,7 @@ func TestInitialFieldAssignment(t *testing.T) {
 	if cat, e := buildNouns(dt); e != nil {
 		t.Fatal(e)
 	} else {
-		out := testOut{mdl_value}
+		out := testOut{mdl.Value}
 		if e := cat.WriteValues(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
@@ -98,7 +99,7 @@ func TestInitialTraitAssignment(t *testing.T) {
 	if cat, e := buildNouns(dt); e != nil {
 		t.Fatal(e)
 	} else {
-		out := testOut{mdl_value}
+		out := testOut{mdl.Value}
 		if e := cat.WriteValues(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{

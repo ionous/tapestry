@@ -4,6 +4,7 @@ import (
 	"sort"
 
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -34,7 +35,7 @@ func (c *Catalog) WriteRules(w Writer) (err error) {
 						if el.Touch {
 							flags = -flags // marker for rules that need to always run (ex. counters "every third try" )
 						}
-						if e := w.Write(mdl_rule, d.name, patternName, el.Target, flags, el.Filter, el.Prog, at); e != nil {
+						if e := w.Write(mdl.Rule, d.name, patternName, el.Target, flags, el.Filter, el.Prog, at); e != nil {
 							err = e
 							break Done
 						}

@@ -1,10 +1,11 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
-// mdl_prog, lede, "Directive", str
+// mdl.Prog, lede, "Directive", str
 // fix? each phase seems to be getting its own writer.... should that be formalized?
 func (c *Catalog) WriteDirectives(w Writer) (err error) {
 	if deps, e := c.ResolveDomains(); e != nil {
@@ -24,7 +25,7 @@ func (c *Catalog) WriteDirectives(w Writer) (err error) {
 func (d *Domain) WriteDirectives(w Writer) (err error) {
 	defs := d.phases[DirectivePhase].defs
 	for k, def := range defs {
-		if e := w.Write(mdl_grammar, k, def.value, def.at); e != nil {
+		if e := w.Write(mdl.Grammar, k, def.value, def.at); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}

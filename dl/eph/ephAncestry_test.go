@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -22,7 +23,7 @@ func TestAncestry(t *testing.T) {
 		&EphKinds{Kinds: "n", From: "k"}, // root domain
 		&EphKinds{Kinds: "j", From: "m"}, // parent domain
 	)
-	out := testOut{mdl_kind}
+	out := testOut{mdl.Kind}
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
@@ -79,7 +80,7 @@ func TestAncestryRedundancy(t *testing.T) {
 		&EphKinds{Kinds: "n", From: "m"}, // more specific
 		&EphKinds{Kinds: "n", From: "k"}, // duped
 	)
-	out := testOut{mdl_kind}
+	out := testOut{mdl.Kind}
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
@@ -98,7 +99,7 @@ func TestAncestryMissing(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kinds: "m", From: "x"},
 	)
-	out := testOut{mdl_domain}
+	out := testOut{mdl.Domain}
 	if e := writeKinds(dt, &out); e == nil || e.Error() != `unknown dependency "x" for kind "m"` {
 		t.Fatal("expected error", e, out)
 	} else {
@@ -123,7 +124,7 @@ func TestAncestryRedefined(t *testing.T) {
 	dt.makeDomain(dd("c", "b"),
 		&EphKinds{Kinds: "m", From: "n"},
 	)
-	out := testOut{mdl_domain}
+	out := testOut{mdl.Domain}
 	if e := writeKinds(dt, &out); e == nil || e.Error() != `can't redefine parent as "n" for kind "m"` {
 		t.Fatal("expected error", e, out)
 	} else if warned := warnings.all(); len(warned) != 1 {
@@ -148,7 +149,7 @@ func TestAncestryRivalsOkay(t *testing.T) {
 	dt.makeDomain(dd("d", "a"),
 		&EphKinds{Kinds: "m", From: "k"}, // second in a parallel domain should be fine
 	)
-	out := testOut{mdl_kind}
+	out := testOut{mdl.Kind}
 	if e := writeKinds(dt, &out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
@@ -172,7 +173,7 @@ func TestAncestryRivalConflict(t *testing.T) {
 		&EphKinds{Kinds: "m", From: "k"}, // re: TestScopedRivalsOkay, should be okay.
 	)
 	dt.makeDomain(dd("z", "b", "d")) // trying to include both should be a problem; they are two unique kinds...
-	out := testOut{mdl_domain}
+	out := testOut{mdl.Domain}
 	if e := writeKinds(dt, &out); e == nil {
 		t.Fatal("expected an error", out)
 	} else {

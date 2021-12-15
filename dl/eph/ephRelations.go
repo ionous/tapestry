@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -17,7 +18,7 @@ func (c *Catalog) WriteRelations(w Writer) (err error) {
 				one := k.fields[0]   // a field of affinity text referencing some other kind.
 				other := k.fields[1] // the name is the cardinality, and the class is the kind.
 				card := makeCard(one.name, other.name)
-				if e := w.Write(mdl_rel, k.domain.name, k.name, one.class, card, other.class, k.at); e != nil {
+				if e := w.Write(mdl.Rel, k.domain.name, k.name, one.class, card, other.class, k.at); e != nil {
 					err = e
 					break
 				}

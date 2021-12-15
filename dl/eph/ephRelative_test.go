@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -50,7 +51,7 @@ func TestRelativeFormation(t *testing.T) {
 	if cat, e := buildNouns(dt); e != nil {
 		t.Fatal(e)
 	} else {
-		out := testOut{mdl_pair}
+		out := testOut{mdl.Pair}
 		if e := cat.WritePairs(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{

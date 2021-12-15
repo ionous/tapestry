@@ -1,6 +1,9 @@
 package eph
 
-import "github.com/ionous/errutil"
+import (
+	"git.sr.ht/~ionous/iffy/tables/mdl"
+	"github.com/ionous/errutil"
+)
 
 // implements FieldDefinition
 // when the owner kind is the kind of aspect --
@@ -13,7 +16,7 @@ type traitDef struct {
 }
 
 func (td *traitDef) Write(w Writer) error {
-	return w.Write(mdl_field, td.aspect, Affinity_Text, td.aspect, td.at)
+	return w.Write(mdl.Field, td.aspect, Affinity_Text, td.aspect, td.at)
 }
 
 func (td *traitDef) AddToKind(k *ScopedKind) {

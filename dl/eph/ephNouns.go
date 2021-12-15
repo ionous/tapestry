@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -13,7 +14,7 @@ var NounPhaseActions = PhaseAction{
 
 func (c *Catalog) WriteNouns(w Writer) error {
 	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
-		return w.Write(mdl_noun, d.name, n.name, k.name, n.at)
+		return w.Write(mdl.Noun, d.name, n.name, k.name, n.at)
 	})
 }
 
@@ -23,7 +24,7 @@ func (c *Catalog) WriteNames(w Writer) error {
 			const ofs = -1 // aliases are forced first, in order of declaration.
 			for i, a := range n.aliases {
 				at := n.aliasat[i]
-				if e := w.Write(mdl_name, d.name, n.name, a, ofs, at); e != nil {
+				if e := w.Write(mdl.Name, d.name, n.name, a, ofs, at); e != nil {
 					err = e
 					break
 				}
@@ -31,7 +32,7 @@ func (c *Catalog) WriteNames(w Writer) error {
 		}
 		if err == nil {
 			for ofs, name := range n.Names() {
-				if e := w.Write(mdl_name, d.name, n.name, name, ofs, n.at); e != nil {
+				if e := w.Write(mdl.Name, d.name, n.name, name, ofs, n.at); e != nil {
 					err = e
 					break
 				}

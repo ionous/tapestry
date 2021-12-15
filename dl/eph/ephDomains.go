@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -149,7 +150,7 @@ func (c *Catalog) WriteDomains(w Writer) (err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
-		err = ds.WriteTable(w, mdl_domain, true)
+		err = ds.WriteTable(w, mdl.Domain, true)
 	}
 	return
 }

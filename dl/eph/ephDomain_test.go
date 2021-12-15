@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -102,7 +103,7 @@ func TestDomainTable(t *testing.T) {
 			t.Log("parents:", pretty.Sprint(out))
 			t.Fatal(diff)
 		} else {
-			out := testOut{mdl_domain}
+			out := testOut{mdl.Domain}
 			if e := cat.WriteDomains(&out); e != nil {
 				t.Fatal(e)
 			} else if diff := pretty.Diff(out[1:], testOut{

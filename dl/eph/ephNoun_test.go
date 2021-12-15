@@ -3,6 +3,7 @@ package eph
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -22,7 +23,7 @@ func TestNounFormation(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphNouns{Noun: "toy boat", Kind: "k"},
 	)
-	nouns, names := testOut{mdl_noun}, testOut{mdl_name}
+	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
 	if e := writeNouns(dt, &nouns, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns[1:], testOut{
@@ -71,7 +72,7 @@ func TestNounHierarchy(t *testing.T) {
 		&EphNouns{Noun: "pear", Kind: "t"},
 		&EphNouns{Noun: "bandanna", Kind: "c"},
 	)
-	nouns, names := testOut{mdl_noun}, testOut{mdl_name}
+	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
 	if e := writeNouns(dt, &nouns, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns[1:], testOut{
@@ -116,7 +117,7 @@ func TestNounParts(t *testing.T) {
 		&EphKinds{Kinds: "t"},
 		&EphNouns{Noun: "collection of words", Kind: "t"},
 	)
-	nouns, names := testOut{mdl_noun}, testOut{mdl_name}
+	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
 	if e := writeNouns(dt, &nouns, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns[1:], testOut{
@@ -146,7 +147,7 @@ func TestNounAliases(t *testing.T) {
 		&EphAliases{ShortName: "boat", Aliases: dd("ship")},
 		&EphAliases{ShortName: "apple", Aliases: dd("delicious", "fruit")},
 	)
-	names := testOut{mdl_name}
+	names := testOut{mdl.Name}
 	if e := writeNouns(dt, nil, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(names[1:], testOut{

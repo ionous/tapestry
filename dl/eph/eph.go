@@ -7,6 +7,11 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// database/sql like interface
+type Writer interface {
+	Write(q string, args ...interface{}) error
+}
+
 // implemented by individual commands
 type Ephemera interface {
 	// fix? remove catalog from the signature?

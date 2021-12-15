@@ -3,6 +3,7 @@ package eph
 import (
 	"errors"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 	"github.com/ionous/inflect"
 )
@@ -51,7 +52,7 @@ func (c *Catalog) WritePlurals(w Writer) (err error) {
 				s := d.pairs.singular[i]
 				defs := d.phases[PluralPhase].defs
 				at := defs[p].at
-				if e := w.Write(mdl_plural, d.name, p, s, at); e != nil {
+				if e := w.Write(mdl.Plural, d.name, p, s, at); e != nil {
 					err = errutil.Append(err, DomainError{d.name, e})
 				}
 			}

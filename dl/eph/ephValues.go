@@ -3,6 +3,7 @@ package eph
 import (
 	"errors"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -11,7 +12,7 @@ func (c *Catalog) WriteValues(w Writer) error {
 		for _, v := range n.values {
 			if value, e := encodeLiteral(v.value); e != nil {
 				err = errutil.Append(err, e)
-			} else if e := w.Write(mdl_value, d.name, n.name, v.field, value, v.at); e != nil {
+			} else if e := w.Write(mdl.Value, d.name, n.name, v.field, value, v.at); e != nil {
 				err = e
 				break
 			}

@@ -2,6 +2,7 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -17,7 +18,7 @@ type fieldDef struct {
 }
 
 func (fd *fieldDef) Write(w Writer) error {
-	return w.Write(mdl_field, fd.name, fd.affinity, fd.class, fd.at)
+	return w.Write(mdl.Field, fd.name, fd.affinity, fd.class, fd.at)
 }
 
 func (fd *fieldDef) AddToKind(k *ScopedKind) {

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -17,7 +18,7 @@ func TestAspectFormation(t *testing.T) {
 			"one", "several", "oh so many", //
 		}},
 	)
-	out := testOut{mdl_aspect}
+	out := testOut{mdl.Aspect}
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteAspects(&out); e != nil {
@@ -47,7 +48,7 @@ func TestAspectUsage(t *testing.T) {
 		&EphKinds{Kinds: "k"},
 		&EphKinds{Kinds: "k", Contain: []EphParams{AspectParam("a")}},
 	)
-	out := testOut{mdl_field}
+	out := testOut{mdl.Field}
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {

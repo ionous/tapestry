@@ -2,6 +2,8 @@ package eph
 
 import (
 	"errors"
+
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 )
 
 // ensure fields which reference aspects use the necessary formatting
@@ -18,7 +20,7 @@ func (c *Catalog) WriteAspects(w Writer) (err error) {
 			if k := dep.Leaf().(*ScopedKind); k.HasParent(KindsOfAspect) {
 				a := k.aspects[0] // we only expect to see 1 -- probably not worth error checking it.
 				for i, t := range a.traits {
-					if e := w.Write(mdl_aspect, k.domain.name, a.aspect, t, i); e != nil {
+					if e := w.Write(mdl.Aspect, k.domain.name, a.aspect, t, i); e != nil {
 						err = e
 						break
 					}

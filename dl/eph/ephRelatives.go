@@ -4,6 +4,7 @@ import (
 	"sort"
 
 	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -55,7 +56,7 @@ func writePairs(w Writer, d *Domain, relName string, rs []Relative) (err error) 
 		} else if n1, ok := d.GetNoun(p.secondNoun); !ok {
 			err = errutil.New("couldnt find second noun", p.secondNoun)
 			break
-		} else*/if e := w.Write(mdl_pair, d.name, p.firstNoun, relName, p.secondNoun, p.at); e != nil {
+		} else*/if e := w.Write(mdl.Pair, d.name, p.firstNoun, relName, p.secondNoun, p.at); e != nil {
 			err = e
 			break
 		}

@@ -3,6 +3,7 @@ package eph
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -17,7 +18,7 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 				result := k.domain.GetDefinition(AncestryPhase, pat+"?res")
 				labels := k.domain.GetDefinition(AncestryPhase, pat+"?args")
 				//
-				if e := w.Write(mdl_pat, k.domain.name, k.name, labels, result); e != nil {
+				if e := w.Write(mdl.Pat, k.domain.name, k.name, labels, result); e != nil {
 					err = e
 					break
 				}

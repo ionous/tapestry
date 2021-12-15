@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -31,7 +32,7 @@ func TestPatternRules(t *testing.T) {
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else {
-		out := testOut{mdl_rule}
+		out := testOut{mdl.Rule}
 		if e := cat.WriteRules(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{

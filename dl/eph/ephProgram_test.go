@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/grammar"
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -28,7 +29,7 @@ func TestGrammarDirectives(t *testing.T) {
 	} else if e := cat.AssembleCatalog(nil); e != nil {
 		t.Fatal(e)
 	} else {
-		out := testOut{mdl_grammar}
+		out := testOut{mdl.Grammar}
 		if e := cat.WriteDirectives(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{

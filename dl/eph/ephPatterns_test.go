@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -123,7 +124,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else {
-		outkind := testOut{mdl_kind}
+		outkind := testOut{mdl.Kind}
 		if e := cat.WriteKinds(&outkind); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outkind[1:], testOut{
@@ -134,7 +135,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 			t.Log("got:", pretty.Sprint(outkind))
 			t.Fatal(diff)
 		}
-		outfields := testOut{mdl_field}
+		outfields := testOut{mdl.Field}
 		if e := cat.WriteFields(&outfields); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outfields[1:], testOut{
@@ -146,7 +147,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 			t.Log("got:", pretty.Sprint(outfields))
 			t.Fatal(diff)
 		}
-		outpat := testOut{mdl_pat}
+		outpat := testOut{mdl.Pat}
 		if e := cat.WritePatterns(&outpat); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outpat[1:], testOut{
@@ -156,7 +157,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 			t.Log("got:", pretty.Sprint(outpat))
 			t.Fatal(diff)
 		}
-		outlocals := testOut{mdl_local}
+		outlocals := testOut{mdl.Local}
 		if e := cat.WriteLocals(&outlocals); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outlocals[1:], testOut{

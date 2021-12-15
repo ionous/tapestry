@@ -3,6 +3,7 @@ package eph
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -14,7 +15,7 @@ func TestFields(t *testing.T) {
 		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Text}, Class: "k"}}},
 		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Number}}}},
 	)
-	out := testOut{mdl_field}
+	out := testOut{mdl.Field}
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
@@ -38,7 +39,7 @@ func TestFieldsCrossDomain(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "b", Affinity: Affinity{Affinity_Bool}}}},
 	)
-	out := testOut{mdl_field}
+	out := testOut{mdl.Field}
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
@@ -67,7 +68,7 @@ func TestFieldsRedefine(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Number}}}},
 	)
-	out := testOut{mdl_field}
+	out := testOut{mdl.Field}
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
@@ -122,7 +123,7 @@ func TestFieldsMatchingRivals(t *testing.T) {
 		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Text}}}},
 	)
 	dt.makeDomain(dd("z", "c", "d"))
-	out := testOut{mdl_field}
+	out := testOut{mdl.Field}
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
@@ -192,7 +193,7 @@ func TestFieldLca(t *testing.T) {
 		&EphKinds{Kinds: "p", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Text}}}},
 		&EphKinds{Kinds: "q", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Text}}}},
 	)
-	out := testOut{mdl_field}
+	out := testOut{mdl.Field}
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {

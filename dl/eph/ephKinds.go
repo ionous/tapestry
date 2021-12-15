@@ -3,6 +3,7 @@ package eph
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -24,7 +25,7 @@ func (c *Catalog) WriteKinds(w Writer) (err error) {
 	} else {
 		for _, dep := range deps {
 			k, ancestors := dep.Leaf().(*ScopedKind), dep.Strings(true)
-			if e := w.Write(mdl_kind, k.domain.name, k.name, ancestors, k.at); e != nil {
+			if e := w.Write(mdl.Kind, k.domain.name, k.name, ancestors, k.at); e != nil {
 				err = e
 				break
 			}

@@ -3,6 +3,7 @@ package eph
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -43,7 +44,7 @@ func TestRelAssembly(t *testing.T) {
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
 	} else {
-		out := testOut{mdl_rel}
+		out := testOut{mdl.Rel}
 		if e := cat.WriteRelations(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -49,7 +50,7 @@ func TestPluralAssembly(t *testing.T) {
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
 	} else {
-		out := testOut{mdl_plural}
+		out := testOut{mdl.Plural}
 		if e := cat.WritePlurals(&out); e != nil {
 			t.Fatal(e)
 		} else {

@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -45,7 +46,7 @@ func (c *Catalog) WriteLocals(w Writer) (err error) {
 						if value, e := marshalout(init); e != nil {
 							err = e
 							break
-						} else if e := w.Write(mdl_local, k.domain.name, k.name, fd.name, value); e != nil {
+						} else if e := w.Write(mdl.Local, k.domain.name, k.name, fd.name, value); e != nil {
 							err = e
 							break
 						}
