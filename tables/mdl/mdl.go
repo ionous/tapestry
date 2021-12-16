@@ -1,7 +1,7 @@
 package mdl
 
 import (
-	"git.sr.ht/~ionous/iffy/tables"
+  "git.sr.ht/~ionous/iffy/tables"
 )
 
 // see additional notes for these in the model.sql file
@@ -21,7 +21,7 @@ var Domain = tables.Insert("mdl_domain", "domain", "path", "at")
 // it's not the (sub)domain in which the field was declared.
 var Field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
 
-var Grammar = tables.Insert("mdl_grammar", "name", "prog", "at")
+var Grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")
 
 // singular name of kind and materialized hierarchy of ancestors separated by commas
 var Kind = tables.Insert("mdl_kind", "domain", "kind", "path", "at")
@@ -54,7 +54,7 @@ var Plural = tables.Insert("mdl_plural", "domain", "many", "one", "at")
  * relation and constraint between two kinds of nouns
  * fix? the data is duplicated in kinds and fields... should this be removed?
  */
-var Rel = tables.Insert("mdl_rel", "domain", "relation", "kind", "cardinality", "otherKind", "at")
+var Rel = tables.Insert("mdl_rel", "domain", "rel", "kind", "cardinality", "otherKind", "at")
 
 //
 var Rule = tables.Insert("mdl_rule", "domain", "pattern", "target", "phase", "filter", "prog", "at")

@@ -25,7 +25,7 @@ func (c *Catalog) WriteDirectives(w Writer) (err error) {
 func (d *Domain) WriteDirectives(w Writer) (err error) {
 	defs := d.phases[DirectivePhase].defs
 	for k, def := range defs {
-		if e := w.Write(mdl.Grammar, k, def.value, def.at); e != nil {
+		if e := w.Write(mdl.Grammar, d.name, k, def.value, def.at); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}

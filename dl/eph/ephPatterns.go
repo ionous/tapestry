@@ -49,7 +49,7 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 			err = d.AddEphemera(EphAt{at, PhaseFunction{FieldPhase,
 				func(c *Catalog, d *Domain, at string) (err error) {
 					for _, p := range fields {
-						if e := p.AssembleField(k, at); e != nil {
+						if e := p.assembleField(k, at); e != nil {
 							err = e
 							break
 						}

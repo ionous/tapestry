@@ -23,7 +23,7 @@ func (c *Catalog) WriteFields(w Writer) (err error) {
 	} else {
 		for _, dep := range deps {
 			k := dep.Leaf().(*ScopedKind)
-			d := k.domain // for simplicity, fields exist at the  scope of the kind: regardless of the scope of the field's declaration.
+			d := k.domain // for simplicity, fields exist at the scope of the kind: regardless of the scope of the field's declaration.
 			for _, f := range k.fields {
 				if e := f.Write(&partialWriter{w: w, fields: []interface{}{d.Name(), k.Name()}}); e != nil {
 					err = e
@@ -71,7 +71,7 @@ func (op *ephFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else if param, e := MakeUniformField(op.Affinity, op.Name, op.Class); e != nil {
 		err = e
 	} else {
-		err = param.AssembleField(kind, at)
+		err = param.assembleField(kind, at)
 	}
 	return
 }
@@ -108,7 +108,7 @@ func (uf *UniformField) setAssignment(init rt.Assignment) (err error) {
 	return
 }
 
-func (uf *UniformField) AssembleField(kind *ScopedKind, at string) (err error) {
+func (uf *UniformField) assembleField(kind *ScopedKind, at string) (err error) {
 	if cls, classOk := kind.domain.GetPluralKind(uf.class); !classOk && len(uf.class) > 0 {
 		err = KindError{kind.name, errutil.Fmt("unknown class %q for field %q", uf.class, uf.name)}
 	} else if aff := affine.Affinity(uf.affinity); classOk && !isClassAffinity(aff) {

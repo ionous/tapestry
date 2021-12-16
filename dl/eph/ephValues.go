@@ -8,11 +8,11 @@ import (
 )
 
 func (c *Catalog) WriteValues(w Writer) error {
-	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
+	return forEachNoun(c, func(k *ScopedKind, n *ScopedNoun) (err error) {
 		for _, v := range n.values {
 			if value, e := encodeLiteral(v.value); e != nil {
 				err = errutil.Append(err, e)
-			} else if e := w.Write(mdl.Value, d.name, n.name, v.field, value, v.at); e != nil {
+			} else if e := w.Write(mdl.Value, n.domain.name, n.name, v.field, value, v.at); e != nil {
 				err = e
 				break
 			}
@@ -35,6 +35,7 @@ func (op *EphValues) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else if value := op.Value; value == nil {
 		err = errutil.New("null value", op.Noun, op.Field)
 	} else {
+		// fix? should values be written per domain instead of per noun?
 		if e := noun.AddLiteralValue(field, value, at); e != nil {
 			var conflict *Conflict
 			if errors.As(e, &conflict) && conflict.Reason == Duplicated {

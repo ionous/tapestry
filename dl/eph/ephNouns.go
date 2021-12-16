@@ -13,18 +13,18 @@ var NounPhaseActions = PhaseAction{
 }
 
 func (c *Catalog) WriteNouns(w Writer) error {
-	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
-		return w.Write(mdl.Noun, d.name, n.name, k.name, n.at)
+	return forEachNoun(c, func(k *ScopedKind, n *ScopedNoun) (err error) {
+		return w.Write(mdl.Noun, n.domain.name, n.name, k.name, n.at)
 	})
 }
 
 func (c *Catalog) WriteNames(w Writer) error {
-	return forEachNoun(c, func(d *Domain, k *ScopedKind, n *ScopedNoun) (err error) {
+	return forEachNoun(c, func(k *ScopedKind, n *ScopedNoun) (err error) {
 		{
 			const ofs = -1 // aliases are forced first, in order of declaration.
 			for i, a := range n.aliases {
 				at := n.aliasat[i]
-				if e := w.Write(mdl.Name, d.name, n.name, a, ofs, at); e != nil {
+				if e := w.Write(mdl.Name, n.domain.name, n.name, a, ofs, at); e != nil {
 					err = e
 					break
 				}
@@ -32,7 +32,7 @@ func (c *Catalog) WriteNames(w Writer) error {
 		}
 		if err == nil {
 			for ofs, name := range n.Names() {
-				if e := w.Write(mdl.Name, d.name, n.name, name, ofs, n.at); e != nil {
+				if e := w.Write(mdl.Name, n.domain.name, n.name, name, ofs, n.at); e != nil {
 					err = e
 					break
 				}
@@ -42,7 +42,7 @@ func (c *Catalog) WriteNames(w Writer) error {
 	})
 }
 
-func forEachNoun(c *Catalog, it func(*Domain, *ScopedKind, *ScopedNoun) error) (err error) {
+func forEachNoun(c *Catalog, it func(*ScopedKind, *ScopedNoun) error) (err error) {
 	if ns, e := c.ResolveNouns(); e != nil {
 		err = e
 	} else {
@@ -50,7 +50,7 @@ func forEachNoun(c *Catalog, it func(*Domain, *ScopedKind, *ScopedNoun) error) (
 			n := ndep.Leaf().(*ScopedNoun)
 			if k, e := n.Kind(); e != nil {
 				err = errutil.Append(err, e)
-			} else if e := it(n.domain, k, n); e != nil {
+			} else if e := it(k, n); e != nil {
 				err = errutil.Append(err, e)
 			}
 		}
