@@ -33,7 +33,7 @@ func TestGrammarDirectives(t *testing.T) {
 		if e := cat.WriteDirectives(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
-			`jump/skip/hop:{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}:x`,
+			`b:jump/skip/hop:{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}:x`,
 		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)

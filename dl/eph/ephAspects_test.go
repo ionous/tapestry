@@ -54,6 +54,9 @@ func TestAspectUsage(t *testing.T) {
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
+		"a:a:one:$BOOL::x",
+		"a:a:several:$BOOL::x",
+		"a:a:oh_so_many:$BOOL::x",
 		"b:k:a:text:a:x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))

@@ -11,6 +11,7 @@ import (
 // LiteralValue marks script constants.
 type LiteralValue interface {
 	Affinity() affine.Affinity
+	// Class() string <- fix? wont this be needed to support records, unless maybe bake class into affinity with "?" and alter comparisons...
 }
 
 // Affinity returns affine.Bool

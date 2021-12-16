@@ -16,8 +16,9 @@ func modelTemplate() string {
 		"/* enumerated values used by kinds and nouns.\n" +
 		" * fix: the data is duplicated in kinds and fields */\n" +
 		"create table mdl_aspect( domain int, aspect int, trait text, rank int, primary key( aspect, trait ));\n" +
-		"/* stored tests, which run a program to verify it produces the expected output. */ \n" +
-		"create table mdl_check( domain int, name text, expect blob, prog blob, at text, primary key( domain, name ));\n" +
+		"/* stored tests, which run a program to verify it produces the expected value. \n" +
+		" * fix: shouldnt we also be writing class of the value ? */ \n" +
+		"create table mdl_check( domain int, name text, value blob, affinity text, prog blob, at text, primary key( domain, name ));\n" +
 		"/* hierarchy of domains */\n" +
 		"create table mdl_domain( domain text, path text, at text, primary key( domain ));\n" +
 		"/* properties of a kind. type is a PRIM_ */\n" +
@@ -27,8 +28,8 @@ func modelTemplate() string {
 		"/* a class of objects with shared characteristics */\n" +
 		"create table mdl_kind( domain int, kind text, path text, at text, primary key( domain, kind ));\n" +
 		"/* initialization for pattern local variables\n" +
-		" * the initialization value is defined when the field is defined, so there's no separate origin at here. */ \n" +
-		"create table  mdl_local( domain int, kind int, field int, value blob, primary key( domain, kind, field ) );\n" +
+		" * the initialization value ( an Assignment ) is defined when the field is defined, so there's no separate origin at here. */ \n" +
+		"create table  mdl_local( domain int, kind int, field int, assign blob, primary key( domain, kind, field ) );\n" +
 		"/* words which refer to nouns. in cases where two words may refer to the same noun, \n" +
 		"   the lower rank of the association wins. */\n" +
 		"create table mdl_name( domain int, noun int, name int, rank int, at text );\n" +
@@ -47,8 +48,9 @@ func modelTemplate() string {
 		"create table mdl_rel( domain int, rel text, kind int, cardinality text, otherKind int, at text, primary key( domain, rel ));\n" +
 		"/*  note: the \"pattern\" id is actually a reference to the core kind */\n" +
 		"create table mdl_rule( domain int, kind int, target int, phase int, filter blob, prog blob, at text );\n" +
-		"/* initial values for various nouns; changed values are stored in run_start */\n" +
-		"create table mdl_value( domain int, noun int, field int, value blob, at text, primary key( domain, noun, field ));\n" +
+		"/* initial values for various nouns; changed values are stored in run_start \n" +
+		" * fix: shouldnt we also be writing class of the value ? */\n" +
+		"create table mdl_value( domain int, noun int, field int, value blob, affinity text, at text, primary key( domain, noun, field ));\n" +
 		""
 	return tmpl
 }

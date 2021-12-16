@@ -21,13 +21,25 @@ func (c *Catalog) WriteFields(w Writer) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
 		err = e
 	} else {
+	Out:
 		for _, dep := range deps {
 			k := dep.Leaf().(*ScopedKind)
 			d := k.domain // for simplicity, fields exist at the scope of the kind: regardless of the scope of the field's declaration.
-			for _, f := range k.fields {
-				if e := f.Write(&partialWriter{w: w, fields: []interface{}{d.Name(), k.Name()}}); e != nil {
+			p := &partialWriter{w: w, fields: []interface{}{d.Name(), k.Name()}}
+			if len(k.fields) > 0 {
+				// note: fields might include an aspect field which is capable of storing the active trait ( the trait name text )
+				for _, f := range k.fields {
+					if e := f.Write(p); e != nil {
+						err = e
+						break Out
+					}
+				}
+			} else if len(k.aspects) == 1 {
+				// if there are no explicit fields; we might be a kind of aspect
+				// and all we have are the traits for our aspect.
+				if e := k.aspects[0].Write(p); e != nil {
 					err = e
-					break
+					break Out
 				}
 			}
 		}

@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/literal"
 	"github.com/ionous/errutil"
 )
@@ -8,26 +9,29 @@ import (
 type asmChecks map[string]*asmCheck
 
 type asmCheck struct {
-	name   string
-	domain *Domain
-	expect interface{}
-	prog   string
-	at     string
+	name      string
+	domain    *Domain
+	expectVal interface{}
+	expectAff affine.Affinity
+	prog      string
+	at        string
 }
 
 // sometimes test are disabled in the script by renaming bits of them
 // we dont consider than error -- though possible we should warn about it.
 func (c *asmCheck) isValidCheck() bool {
-	return c.expect != nil && len(c.prog) > 0
+	return len(c.expectAff) > 0 && len(c.prog) > 0
 }
 
 func (c *asmCheck) setExpectation(v literal.LiteralValue) (err error) {
-	if v != nil && c.expect != nil {
-		err = errutil.New("check %q cant have multiple expectations", c.name)
-	} else if expect, e := encodeLiteral(v); e != nil {
-		err = e
-	} else if expect != nil {
-		c.expect = expect
+	if v != nil {
+		if len(c.expectAff) > 0 {
+			err = errutil.New("check %q cant have multiple expectations", c.name)
+		} else if v, aff, e := encodeLiteral(v); e != nil {
+			err = e
+		} else {
+			c.expectVal, c.expectAff = v, aff
+		}
 	}
 	return
 }

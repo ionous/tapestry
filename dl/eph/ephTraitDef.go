@@ -15,8 +15,14 @@ type traitDef struct {
 	traits []string
 }
 
-func (td *traitDef) Write(w Writer) error {
-	return w.Write(mdl.Field, td.aspect, Affinity_Text, td.aspect, td.at)
+func (td *traitDef) Write(w Writer) (err error) {
+	for _, t := range td.traits {
+		if e := w.Write(mdl.Field, t, Affinity_Bool, "", td.at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
 }
 
 func (td *traitDef) AddToKind(k *ScopedKind) {

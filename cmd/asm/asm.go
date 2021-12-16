@@ -178,7 +178,8 @@ var idswriter = map[string]string{
 	mdl.Check: insert("mdl_check",
 		"domain", idOf("domain", 1),
 		"name", unchanged,
-		"expect", unchanged,
+		"value", unchanged,
+		"affinity", unchanged,
 		"prog", unchanged,
 		"at", unchanged,
 	),
@@ -214,7 +215,7 @@ var idswriter = map[string]string{
 			"path", materialized,
 			"at", unchanged,
 		),
-	// turn domain, kind, field into ids, associated with the local var's initial value.
+	// turn domain, kind, field into ids, associated with the local var's initial assignment.
 	// domain and kind become redundant b/c fields exist at the scope of the kind.
 	mdl.Local: string(`with parts(did, domain, kid, kind, fid, field) as (
 		select md.rowid, md.domain, mk.rowid, mk.kind, mf.rowid, mf.field
@@ -223,7 +224,7 @@ var idswriter = map[string]string{
 			on (mk.rowid = mf.kind)
 		join mdl_domain md
 			on (mk.domain = md.rowid))
-		insert into mdl_local(domain, kind, field, value)
+		insert into mdl_local(domain, kind, field, assign)
 		select did, kid, fid, ?4
 		from parts where domain=?1 and kind=?2 and field=?3`,
 	),
@@ -290,8 +291,8 @@ var idswriter = map[string]string{
 				on (mn.kind = mk.rowid)
 			left join mdl_field mf
 				where instr(',' || mk.rowid || ',' || mk.path, ',' || mf.kind || ','))
-			insert into mdl_value(domain, noun, field, value, at)
-			select did, nin, fid, ?4, ?5
+			insert into mdl_value(domain, noun, field, value, affinity, at)
+			select did, nin, fid, ?4, ?5, ?6
 			from parts where domain=?1 and noun=?2 and field=?3`,
 	),
 }

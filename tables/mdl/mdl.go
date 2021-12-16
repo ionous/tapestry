@@ -4,7 +4,7 @@ import (
   "git.sr.ht/~ionous/iffy/tables"
 )
 
-// see additional notes for these in the model.sql file
+// see sql table definitions and additional notes in "model.sql"
 
 /* enumerated values used by kinds and nouns.
  * fix? exists for backwards compat... the data is duplicated in kinds and fields
@@ -12,7 +12,7 @@ import (
 var Aspect = tables.Insert("mdl_aspect", "domain", "aspect", "trait", "rank")
 
 // author tests of stories
-var Check = tables.Insert("mdl_check", "domain", "name", "expect", "prog", "at")
+var Check = tables.Insert("mdl_check", "domain", "name", "value", "affinity", "prog", "at")
 
 // domain name and materialized parents separated by commas
 var Domain = tables.Insert("mdl_domain", "domain", "path", "at")
@@ -27,7 +27,7 @@ var Grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")
 var Kind = tables.Insert("mdl_kind", "domain", "kind", "path", "at")
 
 // the pattern half of Start; "domain, kind, field" are a pointer into Field
-var Local = tables.Insert("mdl_local", "domain", "kind", "field", "value")
+var Local = tables.Insert("mdl_local", "domain", "kind", "field", "assign")
 
 // words for authors and game players refer to nouns
 // follows the domain rules of Noun.
@@ -61,4 +61,4 @@ var Rule = tables.Insert("mdl_rule", "domain", "pattern", "target", "phase", "fi
 
 // the noun half of what was Start.
 // "domain, noun, field" reference a join of Noun and Kind to get a filtered Field.
-var Value = tables.Insert("mdl_value", "domain", "noun", "field", "value", "at")
+var Value = tables.Insert("mdl_value", "domain", "noun", "field", "value", "affinity", "at")

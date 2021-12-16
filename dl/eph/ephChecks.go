@@ -25,7 +25,7 @@ func (c *Catalog) WriteChecks(w Writer) (err error) {
 			sort.Strings(names)
 			for _, n := range names {
 				t := d.checks[n]
-				if e := w.Write(mdl.Check, d.name, t.name, t.expect, t.prog, t.at); e != nil {
+				if e := w.Write(mdl.Check, d.name, t.name, t.expectVal, t.expectAff, t.prog, t.at); e != nil {
 					err = e
 					break
 				}
