@@ -3,7 +3,7 @@ package pattern_test
 import (
 	"fmt"
 
-	"git.sr.ht/~ionous/iffy/ephemera/debug"
+	"git.sr.ht/~ionous/iffy/test/debug"
 	"git.sr.ht/~ionous/iffy/test/testpat"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 )

@@ -3,7 +3,7 @@ package story
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/ephemera/express"
+	"git.sr.ht/~ionous/iffy/express"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/template"
 	"git.sr.ht/~ionous/iffy/template/types"

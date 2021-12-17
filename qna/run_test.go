@@ -6,12 +6,11 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/assembly"
+	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/ephemera"
-	"git.sr.ht/~ionous/iffy/ephemera/debug"
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/iffy/test/debug"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 )
 
@@ -44,7 +43,7 @@ func TestFullFactorial(t *testing.T) {
 	}
 }
 
-func dbwriter(db *sql.DB) ephemera.WriterFun {
+func dbwriter(db *sql.DB) story.WriterFun {
 	cache := tables.NewCache(db)
 	return func(q string, args ...interface{}) {
 		cache.Must(q, args...)

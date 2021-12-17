@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/assembly"
 	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -174,7 +173,7 @@ func TestFieldAccess(t *testing.T) {
 }
 
 func newFieldAccessTest(t *testing.T, dbloc string) (ret *sql.DB) {
-	db := testdb.Open(t.Name(), dbloc, assembly.SqlCustomDriver)
+	db := testdb.Open(t.Name(), dbloc, "")
 	if e := tables.CreateModel(db); e != nil {
 		t.Fatal(e)
 	} else if e := tables.CreateRun(db); e != nil {
