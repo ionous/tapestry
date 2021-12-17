@@ -9,7 +9,6 @@ import (
 
 // Dilemma presents an situation unresolvable without user intervention.
 // Branched ( is that a good euphemism? ) from go/scanner#Error, go/scanner#Dilemmas
-//
 type Dilemma struct {
 	Pos Position
 	Err error
