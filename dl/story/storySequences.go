@@ -2,7 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/dl/reader"
 )
 
 // ensure that a valid counter exists

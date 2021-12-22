@@ -2,7 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/dl/reader"
 	"github.com/ionous/errutil"
 )
 
