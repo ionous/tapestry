@@ -2,9 +2,9 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -48,7 +48,7 @@ func (op *FromVar) GetSourceFields(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func fieldsFromVar(run rt.Runtime, name string) (ret g.Value, err error) {
-	if v, e := run.GetField(object.Variables, name); e != nil {
+	if v, e := run.GetField(meta.Variables, name); e != nil {
 		err = e
 	} else {
 		switch aff := v.Affinity(); aff {

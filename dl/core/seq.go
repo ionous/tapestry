@@ -1,9 +1,9 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
@@ -11,12 +11,12 @@ import (
 // if persistence wasn't necessary, we could use in-memory private fields of the commands
 func updateCounter(run rt.Runtime, seq string, parts []rt.TextEval, inc func(int, int) int) (ret int, err error) {
 	if max := len(parts); max > 0 {
-		if p, e := run.GetField(object.Counter, seq); e != nil {
+		if p, e := run.GetField(meta.Counter, seq); e != nil {
 			err = e
 		} else {
 			curr := p.Int()
 			next := g.IntOf(inc(curr, max))
-			if e := run.SetField(object.Counter, seq, next); e != nil {
+			if e := run.SetField(meta.Counter, seq, next); e != nil {
 				err = e
 			} else {
 				ret = curr + 1

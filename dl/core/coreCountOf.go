@@ -1,9 +1,9 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
@@ -24,7 +24,7 @@ func (op *CallTrigger) GetBool(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *CallTrigger) update(run rt.Runtime) (okay bool, err error) {
 	name := op.Name
-	if p, e := run.GetField(object.Counter, name); e != nil {
+	if p, e := run.GetField(meta.Counter, name); e != nil {
 		err = e
 	} else if count := p.Int(); count >= 0 {
 		//
@@ -45,7 +45,7 @@ func (op *CallTrigger) update(run rt.Runtime) (okay bool, err error) {
 				}
 			}
 			// set back the counter
-			if e := run.SetField(object.Counter, name, g.IntOf(next)); e != nil {
+			if e := run.SetField(meta.Counter, name, g.IntOf(next)); e != nil {
 				err = e
 			}
 		}

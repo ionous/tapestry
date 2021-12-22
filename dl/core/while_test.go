@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
@@ -77,9 +77,9 @@ type loopRuntime struct {
 
 func (k *loopRuntime) GetField(target, field string) (ret g.Value, err error) {
 	switch {
-	case field == "i" && target == object.Variables:
+	case field == "i" && target == meta.Variables:
 		ret = g.IntOf(k.i)
-	case field == "j" && target == object.Variables:
+	case field == "j" && target == meta.Variables:
 		ret = g.IntOf(k.j)
 	default:
 		panic("unexpected get")
@@ -90,9 +90,9 @@ func (k *loopRuntime) GetField(target, field string) (ret g.Value, err error) {
 // SetField writes the value of 'v' into the value at 'name'.
 func (k *loopRuntime) SetField(target, field string, v g.Value) (err error) {
 	switch {
-	case field == "i" && target == object.Variables:
+	case field == "i" && target == meta.Variables:
 		k.i = v.Int()
-	case field == "j" && target == object.Variables:
+	case field == "j" && target == meta.Variables:
 		k.j = v.Int()
 	default:
 		panic("unexpected set")

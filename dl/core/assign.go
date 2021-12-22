@@ -2,16 +2,16 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 func (op *Assign) Execute(run rt.Runtime) (err error) {
 	if v, e := safe.GetAssignedValue(run, op.From); e != nil {
 		err = cmdError(op, e)
-	} else if e := run.SetField(object.Variables, op.Var.String(), v); e != nil {
+	} else if e := run.SetField(meta.Variables, op.Var.String(), v); e != nil {
 		err = cmdError(op, e)
 	}
 	return

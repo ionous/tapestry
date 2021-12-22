@@ -6,7 +6,8 @@ import (
 
 	"git.sr.ht/~ionous/iffy/ident"
 	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt/meta"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 type Noun struct {
@@ -35,19 +36,22 @@ func (n *Noun) HasName(s string) bool {
 }
 
 func (n *Noun) HasClass(s string) (ret bool) {
-	if objectPath, e := n.run.GetField(object.Kinds, n.String()); e != nil {
+	if objectPath, e := n.run.GetField(meta.Kinds, n.String()); e != nil {
 		log.Println("parser error", e)
 	} else {
 		// Contains reports whether second is within first.
-		kind := lang.Breakcase(s)
+		kind := lang.Underscore(s)
 		cp, ck := objectPath.String()+",", kind+","
 		ret = strings.Contains(cp, ck)
 	}
 	return
 }
 
-// does the noun have the passed name attribute?
+// does the noun have the passed trait?
 func (n *Noun) HasAttribute(s string) (ret bool) {
+	if obj, e := safe.ObjectText(run, op.Object); e != nil {
+		err = cmdError(op, e)
+	}
 	if p, e := n.run.GetField(n.String(), s); e != nil {
 		log.Println("parser error", e)
 	} else {

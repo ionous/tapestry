@@ -3,8 +3,8 @@ package core
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -79,13 +79,13 @@ func (m *modelTest) GetField(target, field string) (ret g.Value, err error) {
 		err = g.UnknownField(target, field)
 	} else {
 		switch target {
-		case object.Id:
+		case meta.Id:
 			ret = g.StringOf(field)
 
-		case object.Kind:
+		case meta.Kind:
 			ret = g.StringOf(cls)
 
-		case object.Kinds:
+		case meta.Kinds:
 			if path, ok := m.objClass[cls]; !ok {
 				err = errutil.New("modelTest: unknown class", cls)
 			} else {

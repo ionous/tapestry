@@ -8,9 +8,9 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -30,7 +30,7 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 		ret, err = op.getPrintedNamedOf(run, name)
 	} else {
 		// first check if there's a variable of the requested name
-		switch v, e := run.GetField(object.Variables, op.Name); e.(type) {
+		switch v, e := run.GetField(meta.Variables, op.Name); e.(type) {
 		default:
 			err = e
 		case g.Unknown:

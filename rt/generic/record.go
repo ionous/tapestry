@@ -2,7 +2,7 @@ package generic
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"github.com/ionous/errutil"
 )
 
@@ -24,26 +24,25 @@ func (d *Record) Type() string {
 // GetNamedField picks out a value from this record.
 func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	switch k := d.kind; field {
-	case object.Name:
+	case meta.Name:
 		err = errutil.New("records don't have names")
 
-	case object.Kind, object.Kinds:
+	case meta.Kind, meta.Kinds:
 		ret = StringOf(d.kind.name)
 
 	default:
+		// note: the field is a trait when the field that was found doesnt match the field requested
 		if i := k.FieldIndex(field); i < 0 {
 			err = UnknownField(k.name, field)
 		} else if v, e := d.GetIndexedField(i); e != nil {
 			err = e
+		} else if ft := k.fields[i]; ft.Name == field {
+			ret = v
 		} else {
-			ft := k.fields[i] // isTrait if we found aspect (a) while looking for field (t)
-			if isTrait := ft.Type == "aspect" && ft.Name != field; !isTrait {
-				ret = v
-			} else {
-				// we were looking for trait (t)
-				trait := v.String()
-				ret = BoolFrom(trait == field, "trait")
-			}
+			trait := v.String()
+			ret = BoolFrom(trait == field, "" /*"trait"*/)
+			// fix? the assembler doesnt flag these as class trait
+			// we could add that, or put the name of the aspect they came from ( so class stays a "kind" )
 		}
 	}
 	return
@@ -54,13 +53,13 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 	if fv, ft := d.values[i], d.kind.fields[i]; fv != nil {
 		ret = fv
 	} else {
-		if ft.Type == "aspect" {
+		if cls, ok := ft.isAspectLike(); ok {
 			// if we're asking for an aspect, the default value will be the string of its first trait
-			if k, e := d.kind.kinds.GetKindByName(ft.Name); e != nil {
+			if k, e := d.kind.kinds.GetKindByName(cls); e != nil {
 				err = e
 			} else {
-				firstTrait := k.Field(0)                   // first trait is the default
-				nv := StringFrom(firstTrait.Name, "trait") // better as "aspect", "trait", or something else?
+				firstTrait := k.Field(0)                          // first trait is the default
+				nv := StringFrom(firstTrait.Name, "" /*"trait"*/) // fix? should the class be set to something intersting?
 				ret, d.values[i] = nv, nv
 			}
 		} else {
@@ -77,19 +76,16 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 // SetNamedField - pokes the passed value into the record.
 // Unlike the Value interface, this doesnt panic and it doesnt copy values.
 func (d *Record) SetNamedField(field string, val Value) (err error) {
-	k := d.kind
+	k := d.kind // note: the field is a trait when the field that was found doesnt match the field requested
 	if i := k.FieldIndex(field); i < 0 {
 		err = UnknownField(k.name, field)
+	} else if ft := k.fields[i]; ft.Name == field {
+		err = d.SetIndexedField(i, val)
+	} else if yes := val.Affinity() == affine.Bool && val.Bool(); !yes {
+		err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s %v", field, val.Affinity(), val)
 	} else {
-		ft := k.fields[i] // isTrait if we found aspect (a) while looking for field (t)
-		if isTrait := ft.Type == "aspect" && ft.Name != field; !isTrait {
-			err = d.SetIndexedField(i, val)
-		} else if yes := val.Affinity() == affine.Bool && val.Bool(); !yes {
-			err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s %v", field, val.Affinity(), val)
-		} else {
-			// set the aspect to the value of the requested trait
-			d.values[i] = StringFrom(field, "aspect")
-		}
+		// set the aspect to the value of the requested trait
+		d.values[i] = StringFrom(field, "" /*"aspect"*/)
 	}
 	return
 }

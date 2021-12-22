@@ -72,7 +72,6 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 }
 
 // generate fields from type t using reflection
-//
 func kindsForType(ks *Kinds, kinds FieldMap, t r.Type) FieldMap {
 	type stringer interface{ String() string }
 	rstringer := r.TypeOf((*stringer)(nil)).Elem()
@@ -97,13 +96,13 @@ func kindsForType(ks *Kinds, kinds FieldMap, t r.Type) FieldMap {
 			if _, ok := tags.Find("bool"); ok {
 				pending.Aff, pending.Type = affine.Bool, k.String()
 			} else {
-				pending.Aff, pending.Type = affine.Text, "aspect"
+				// the name of the aspect is the name of the field and its class
 				n := lang.Underscore(f.Name)
-				// the name of the aspect is the name of the field
+				pending.Aff, pending.Type = affine.Text, n
 				kinds[n] = []g.Field{
 					// false first.
-					{Name: "not_" + n, Affinity: affine.Bool, Type: "trait"},
-					{Name: "is_" + n, Affinity: affine.Bool, Type: "trait"},
+					{Name: "not_" + n, Affinity: affine.Bool /*, Type: "trait"*/},
+					{Name: "is_" + n, Affinity: affine.Bool /*, Type: "trait"*/},
 				}
 			}
 
@@ -143,7 +142,8 @@ func kindsForType(ks *Kinds, kinds FieldMap, t r.Type) FieldMap {
 			pending.Aff, pending.Type = affine.Number, k.String()
 
 		case r.Int:
-			pending.Aff, pending.Type = affine.Text, "aspect"
+			aspect := nameOfType(fieldType)
+			pending.Aff, pending.Type = affine.Text, aspect
 			if !fieldType.Implements(rstringer) {
 				panic("unknown enum")
 			}
@@ -157,9 +157,8 @@ func kindsForType(ks *Kinds, kinds FieldMap, t r.Type) FieldMap {
 					break
 				}
 				name := lang.Underscore(trait)
-				traits = append(traits, g.Field{Name: name, Affinity: affine.Bool, Type: "trait"})
+				traits = append(traits, g.Field{Name: name, Affinity: affine.Bool /*, Type: "trait"*/})
 			}
-			aspect := nameOfType(fieldType)
 			kinds[aspect] = traits
 		}
 		if len(pending.Aff) > 0 || len(path) > 0 {

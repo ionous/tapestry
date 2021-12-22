@@ -21,7 +21,7 @@ func (k *nameCache) get(n string) (ret interface{}, okay bool) {
 		els := make(map[string]interface{})
 		for _, v := range core.Slats {
 			spec := composer.SpecName(v)
-			n := lang.Breakcase(spec)
+			n := lang.Underscore(spec)
 			els[n] = v
 		}
 		k.els = els

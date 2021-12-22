@@ -3,9 +3,9 @@ package render
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -25,10 +25,10 @@ func (op *RenderField) GetSourceFields(run rt.Runtime) (ret g.Value, err error) 
 func getSourceFields(run rt.Runtime, name string) (ret g.Value, err error) {
 	// uppercase names are assumed to be requests for object names.
 	if lang.IsCapitalized(name) {
-		ret, err = run.GetField(object.Value, name)
+		ret, err = run.GetField(meta.Value, name)
 	} else {
 		// try as a variable:
-		switch v, e := run.GetField(object.Variables, name); e.(type) {
+		switch v, e := run.GetField(meta.Variables, name); e.(type) {
 		case nil:
 			// convert the variable to a set of fields
 			switch aff := v.Affinity(); aff {
@@ -41,7 +41,7 @@ func getSourceFields(run rt.Runtime, name string) (ret g.Value, err error) {
 			}
 		case g.Unknown:
 			// no such variable? try as an object
-			ret, err = run.GetField(object.Value, name)
+			ret, err = run.GetField(meta.Value, name)
 		default:
 			err = e
 		}

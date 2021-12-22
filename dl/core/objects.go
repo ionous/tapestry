@@ -4,9 +4,9 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
@@ -40,7 +40,7 @@ func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 		err = cmdError(op, e)
 	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.Empty // fix: or, should it be "nothing"
-	} else if v, e := run.GetField(object.Name, obj); e != nil {
+	} else if v, e := run.GetField(meta.Name, obj); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -53,7 +53,7 @@ func (op *KindOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 		err = cmdError(op, e)
 	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.Empty
-	} else if v, e := run.GetField(object.Kind, obj); e != nil {
+	} else if v, e := run.GetField(meta.Kind, obj); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -67,8 +67,8 @@ func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.False
 	} else {
-		kind := lang.Breakcase(op.Kind)
-		if objectPath, e := run.GetField(object.Kinds, obj); e != nil {
+		kind := lang.Underscore(op.Kind)
+		if objectPath, e := run.GetField(meta.Kinds, obj); e != nil {
 			err = cmdError(op, e)
 		} else {
 			// Contains reports whether second is within first.
@@ -86,8 +86,8 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.False
 	} else {
-		kind := lang.Breakcase(op.Kind)
-		if objectPath, e := run.GetField(object.Kinds, obj); e != nil {
+		kind := lang.Underscore(op.Kind)
+		if objectPath, e := run.GetField(meta.Kinds, obj); e != nil {
 			err = cmdError(op, e)
 		} else {
 			// Contains reports whether second is within first.
@@ -100,6 +100,6 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *KindsOf) GetTextList(run rt.Runtime) (g.Value, error) {
-	kind := lang.Breakcase(op.Kind) // fix: break case at assembly time.
-	return run.GetField(object.Nouns, kind)
+	kind := lang.Underscore(op.Kind) // fix: break case at assembly time.
+	return run.GetField(meta.KindsOf, kind)
 }

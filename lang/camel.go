@@ -92,7 +92,7 @@ func Fields(name string) []string {
 	return p.flush(true)
 }
 
-// Turns names from mixed case to breakcase
+// Turns names from mixed case to lowercase breakcase
 func Underscore(name string) string {
 	var b strings.Builder
 	for i, el := range Fields(name) {

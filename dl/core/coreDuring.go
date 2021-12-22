@@ -2,8 +2,8 @@ package core
 
 import (
 	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
@@ -21,7 +21,7 @@ func (op *During) GetBool(run rt.Runtime) (ret g.Value, err error) {
 
 func (op *During) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 	name := lang.Underscore(op.Pattern.String())
-	if depth, e := run.GetField(object.Running, name); e != nil {
+	if depth, e := run.GetField(meta.Running, name); e != nil {
 		err = cmdError(op, e)
 	} else {
 		depth := depth.Int()

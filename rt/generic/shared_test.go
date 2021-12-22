@@ -2,8 +2,8 @@ package generic_test
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/ionous/errutil"
 )
@@ -30,7 +30,7 @@ func (n *recordTest) GetKindByName(name string) (ret *g.Kind, err error) {
 
 func (n *recordTest) GetField(target, field string) (ret g.Value, err error) {
 	switch target {
-	case object.Variables:
+	case meta.Variables:
 		if v, ok := n.vars[field]; !ok {
 			err = g.UnknownField(target, field)
 		} else {
@@ -51,14 +51,14 @@ type recordTest struct {
 func newRecordAccessTest() *recordTest {
 	rt := new(recordTest)
 	rt.NewKind("a", []g.Field{
-		{"x", affine.Bool, "trait"},
-		{"w", affine.Bool, "trait"},
-		{"y", affine.Bool, "trait"},
+		{"x", affine.Bool, "" /*"trait"*/},
+		{"w", affine.Bool, "" /*"trait"*/},
+		{"y", affine.Bool, "" /*"trait"*/},
 	})
 	ks := rt.NewKind("Ks", []g.Field{
 		{"d", affine.Number, "float64"},
 		{"t", affine.Text, "string"},
-		{"a", affine.Text, "aspect"},
+		{"a", affine.Text, "a"},
 	})
 	rt.vars = map[string]*g.Record{
 		"boop": ks.NewRecord(),

@@ -3,9 +3,9 @@ package core
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
@@ -92,7 +92,7 @@ func (m *seqTest) Random(inclusiveMin, exclusiveMax int) int {
 }
 
 func (m *seqTest) GetField(target, field string) (ret g.Value, err error) {
-	if target != object.Counter {
+	if target != meta.Counter {
 		err = g.UnknownField(target, field)
 	} else {
 		v := m.counters[field]
@@ -102,7 +102,7 @@ func (m *seqTest) GetField(target, field string) (ret g.Value, err error) {
 }
 
 func (m *seqTest) SetField(target, field string, value g.Value) (err error) {
-	if target != object.Counter {
+	if target != meta.Counter {
 		err = g.UnknownField(target, field)
 	} else {
 		m.counters[field] = value.Int()

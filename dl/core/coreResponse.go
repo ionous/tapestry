@@ -1,15 +1,15 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
 
 func (op *Response) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if safe.GetFlag(run, object.PrintResponseNames) {
+	if safe.GetFlag(run, meta.PrintResponseNames) {
 		ret = g.StringOf(op.Name)
 	} else if op.Text == nil {
 		err = cmdError(op, errutil.New("response doesnt have external lookup yet"))

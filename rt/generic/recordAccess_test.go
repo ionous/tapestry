@@ -3,8 +3,8 @@ package generic_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/object"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 )
 
 //
@@ -13,7 +13,7 @@ func TestRecordAccess(t *testing.T) {
 	t.Run("numbers", func(t *testing.T) {
 		q := newRecordAccessTest()
 		// beep, number
-		if beep, e := q.GetField(object.Variables, "beep"); e != nil {
+		if beep, e := q.GetField(meta.Variables, "beep"); e != nil {
 			t.Fatal(e)
 		} else if el, e := beep.FieldByName("d"); e != nil {
 			t.Fatal(e)
@@ -30,7 +30,7 @@ func TestRecordAccess(t *testing.T) {
 	t.Run("text", func(t *testing.T) {
 		q := newRecordAccessTest()
 		//
-		if boop, e := q.GetField(object.Variables, "boop"); e != nil {
+		if boop, e := q.GetField(meta.Variables, "boop"); e != nil {
 			t.Fatal(e)
 		} else if el, e := boop.FieldByName("t"); e != nil {
 			t.Fatal(e)
@@ -47,7 +47,7 @@ func TestRecordAccess(t *testing.T) {
 	t.Run("aspects", func(t *testing.T) {
 		q := newRecordAccessTest()
 		//
-		if beep, e := q.GetField(object.Variables, "beep"); e != nil {
+		if beep, e := q.GetField(meta.Variables, "beep"); e != nil {
 			t.Fatal(e)
 		} else if el, e := beep.FieldByName("x"); e != nil {
 			t.Fatal(e)
@@ -74,7 +74,7 @@ func TestRecordAccess(t *testing.T) {
 	t.Run("failures", func(t *testing.T) {
 		q := newRecordAccessTest()
 		//
-		if beep, e := q.GetField(object.Variables, "beep"); e != nil {
+		if beep, e := q.GetField(meta.Variables, "beep"); e != nil {
 			t.Fatal(e)
 		} else if _, e := beep.FieldByName("nope"); e == nil {
 			t.Fatal("expected no such field")
@@ -85,7 +85,7 @@ func TestRecordAccess(t *testing.T) {
 		} else if e := beep.SetFieldByName("x", g.False); e == nil {
 			// we dont have support for opposite values right now.
 			t.Fatal("traits should be set with true values only")
-		} else if _, e := q.GetField(object.Variables, "blip"); e == nil {
+		} else if _, e := q.GetField(meta.Variables, "blip"); e == nil {
 			// really this tests the testing mock not the record code, but whatev.
 			t.Fatal("expected no such variable")
 		}

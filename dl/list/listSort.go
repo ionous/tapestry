@@ -6,9 +6,9 @@ import (
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -32,10 +32,10 @@ func (op *ListSortUsing) Execute(rt.Runtime) (err error) {
 }
 
 func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
-	if v, e := run.GetField(object.Variables, op.Var.String()); e != nil {
+	if v, e := run.GetField(meta.Variables, op.Var.String()); e != nil {
 		err = e
 	} else {
-		name := lang.Breakcase(op.ByField)
+		name := lang.Underscore(op.ByField)
 		switch aff := v.Affinity(); aff {
 		case affine.RecordList:
 			err = sortRecords(run, v.Records(), name, affine.Number, op.numSorter)
@@ -51,10 +51,10 @@ func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
 }
 
 func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
-	if v, e := run.GetField(object.Variables, op.Var.String()); e != nil {
+	if v, e := run.GetField(meta.Variables, op.Var.String()); e != nil {
 		err = e
 	} else {
-		name := lang.Breakcase(op.ByField)
+		name := lang.Underscore(op.ByField)
 		switch aff := v.Affinity(); aff {
 		case affine.RecordList:
 			// fix? would any of this be clearer/smaller if we used v.Index?

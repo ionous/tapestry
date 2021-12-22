@@ -3,9 +3,9 @@ package testutil
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/scope"
 	"git.sr.ht/~ionous/iffy/rt/writer"
 )
@@ -35,7 +35,7 @@ func (x *Runtime) ReplaceScope(s rt.Scope, init bool) (ret rt.Scope, err error) 
 
 func (x *Runtime) SetField(target, field string, value g.Value) (err error) {
 	switch target {
-	case object.Variables:
+	case meta.Variables:
 		err = x.Stack.SetFieldByName(field, value)
 	default:
 		err = g.UnknownField(target, field)
@@ -46,22 +46,22 @@ func (x *Runtime) SetField(target, field string, value g.Value) (err error) {
 func (x *Runtime) GetField(target, field string) (ret g.Value, err error) {
 	switch target {
 	// return type of an object
-	case object.Kind:
+	case meta.Kind:
 		if a, ok := x.ObjectMap[field]; !ok {
 			err = g.UnknownObject(field)
 		} else {
 			ret = g.StringOf(a.Type())
 		}
 		// hierarchy of an object's types ( a path )
-	case object.Kinds:
+	case meta.Kinds:
 		if a, ok := x.ObjectMap[field]; !ok {
 			err = g.UnknownObject(field)
 		} else {
 			ret = g.StringOf(strings.Join(a.Kind().Path(), ","))
 		}
-	case object.Variables:
+	case meta.Variables:
 		ret, err = x.Stack.FieldByName(field)
-	case object.Value:
+	case meta.Value:
 		if obj, ok := x.ObjectMap[field]; ok {
 			ret = g.RecordOf(obj)
 		} else {

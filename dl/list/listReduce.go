@@ -4,9 +4,9 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
@@ -47,7 +47,7 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 			}
 			if err == nil {
 				// write back the completed value
-				err = run.SetField(object.Variables, op.IntoValue, outVal)
+				err = run.SetField(meta.Variables, op.IntoValue, outVal)
 			}
 		}
 	}

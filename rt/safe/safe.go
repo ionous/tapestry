@@ -4,15 +4,15 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/object"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"github.com/ionous/errutil"
 )
 
 // resolve a requested variable name into any list type.
 func List(run rt.Runtime, n string) (ret g.Value, err error) {
-	if vs, e := run.GetField(object.Variables, n); e != nil {
+	if vs, e := run.GetField(meta.Variables, n); e != nil {
 		err = e
 	} else if a := vs.Affinity(); !affine.IsList(a) {
 		err = errutil.Fmt("%s of %q is not a list", n, a)
@@ -24,7 +24,7 @@ func List(run rt.Runtime, n string) (ret g.Value, err error) {
 
 // resolve a requested variable name into any non-list type
 func Scalar(run rt.Runtime, n string) (ret g.Value, err error) {
-	if vs, e := run.GetField(object.Variables, n); e != nil {
+	if vs, e := run.GetField(meta.Variables, n); e != nil {
 		err = e
 	} else if a := vs.Affinity(); !affine.IsList(a) {
 		err = errutil.Fmt("%s of %q is not a scalar", n, a)
@@ -218,7 +218,7 @@ func ObjectFromString(run rt.Runtime, n string) (ret g.Value, err error) {
 	if len(n) == 0 {
 		err = g.NothingObject
 	} else {
-		ret, err = run.GetField(object.Value, n)
+		ret, err = run.GetField(meta.Value, n)
 	}
 	return
 }
@@ -232,7 +232,7 @@ func ObjectText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
 	} else if n := t.String(); len(n) == 0 {
 		ret = g.Empty
 	} else {
-		ret, err = run.GetField(object.Id, n)
+		ret, err = run.GetField(meta.Id, n)
 	}
 	return
 }
@@ -240,7 +240,7 @@ func ObjectText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
 // fix: see also kind.Implements and qna.compatibleKind
 func Compatible(obj g.Value, kind string, exact bool) (ret bool) {
 	if obj != nil {
-		if objectPath, e := Unpack(obj, object.Kinds, affine.Text); e == nil {
+		if objectPath, e := Unpack(obj, meta.Kinds, affine.Text); e == nil {
 			if cp, ck := objectPath.String()+",", kind+","; exact {
 				ret = cp == ck
 			} else {

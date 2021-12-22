@@ -1,7 +1,7 @@
 package generic
 
 import (
-	"git.sr.ht/~ionous/iffy/object"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"github.com/ionous/errutil"
 )
 
@@ -32,7 +32,7 @@ func (e Overflow) Error() string {
 func (e Unknown) Error() (ret string) {
 	if len(e.Target) == 0 {
 		ret = errutil.Sprintf("unknown variable %q", e.Field)
-	} else if e.Target == object.Value {
+	} else if e.Target == meta.Value {
 		ret = errutil.Sprintf("unknown object %q", e.Field)
 	} else {
 		ret = errutil.Sprintf(`unknown field "%s.%s"`, e.Target, e.Field)
@@ -45,7 +45,7 @@ func UnknownVariable(v string) error {
 }
 
 func UnknownObject(o string) error {
-	return Unknown{Target: object.Value, Field: o}
+	return Unknown{Target: meta.Value, Field: o}
 }
 
 func UnknownField(target, field string) error {
