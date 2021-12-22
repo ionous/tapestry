@@ -27,23 +27,11 @@ func CreateRun(db *sql.DB) (err error) {
 	return
 }
 
-// CreateRunViews creates the tables listed in runViews.sql
-//go:generate templify -p tables -o runViews.gen.go runViews.sql
-func CreateRunViews(db *sql.DB) (err error) {
-	if _, e := db.Exec(runViewsTemplate()); e != nil {
-		err = errutil.New("Couldn't create run views", e)
-	}
-	return
-}
-
 // CreateAll tables listed in the various .sql files.
-// fix? long term, iffy should throw out the ephemera and assembly after we are done with them.
 func CreateAll(db *sql.DB) (err error) {
 	if e := CreateModel(db); e != nil {
 		err = e
 	} else if e := CreateRun(db); e != nil {
-		err = e
-	} else if e := CreateRunViews(db); e != nil {
 		err = e
 	}
 	return
