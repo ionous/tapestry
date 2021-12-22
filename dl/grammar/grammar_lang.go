@@ -624,19 +624,11 @@ const GrammarMaker_Type = "grammar_maker"
 
 var GrammarMaker_Optional_Marshal = GrammarMaker_Marshal
 
-type GrammarMaker_Slot struct{ ptr *GrammarMaker }
+type GrammarMaker_Slot struct{ Value *GrammarMaker }
 
-func (at GrammarMaker_Slot) GetType() string              { return GrammarMaker_Type }
-func (at GrammarMaker_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
-func (at GrammarMaker_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.ptr), okay = v.(GrammarMaker)
-	return
-}
-
-func GrammarMaker_Marshal(m jsn.Marshaler, ptr *GrammarMaker) (err error) {
-	slot := GrammarMaker_Slot{ptr}
-	if err = m.MarshalBlock(slot); err == nil {
-		if a, ok := slot.GetSlot(); ok {
+func (at *GrammarMaker_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
@@ -644,6 +636,17 @@ func GrammarMaker_Marshal(m jsn.Marshaler, ptr *GrammarMaker) (err error) {
 		m.EndBlock()
 	}
 	return
+}
+func (at *GrammarMaker_Slot) GetType() string              { return GrammarMaker_Type }
+func (at *GrammarMaker_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at *GrammarMaker_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(GrammarMaker)
+	return
+}
+
+func GrammarMaker_Marshal(m jsn.Marshaler, ptr *GrammarMaker) (err error) {
+	slot := GrammarMaker_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type GrammarMaker_Slice []GrammarMaker
@@ -987,19 +990,11 @@ const ScannerMaker_Type = "scanner_maker"
 
 var ScannerMaker_Optional_Marshal = ScannerMaker_Marshal
 
-type ScannerMaker_Slot struct{ ptr *ScannerMaker }
+type ScannerMaker_Slot struct{ Value *ScannerMaker }
 
-func (at ScannerMaker_Slot) GetType() string              { return ScannerMaker_Type }
-func (at ScannerMaker_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
-func (at ScannerMaker_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.ptr), okay = v.(ScannerMaker)
-	return
-}
-
-func ScannerMaker_Marshal(m jsn.Marshaler, ptr *ScannerMaker) (err error) {
-	slot := ScannerMaker_Slot{ptr}
-	if err = m.MarshalBlock(slot); err == nil {
-		if a, ok := slot.GetSlot(); ok {
+func (at *ScannerMaker_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
@@ -1007,6 +1002,17 @@ func ScannerMaker_Marshal(m jsn.Marshaler, ptr *ScannerMaker) (err error) {
 		m.EndBlock()
 	}
 	return
+}
+func (at *ScannerMaker_Slot) GetType() string              { return ScannerMaker_Type }
+func (at *ScannerMaker_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at *ScannerMaker_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(ScannerMaker)
+	return
+}
+
+func ScannerMaker_Marshal(m jsn.Marshaler, ptr *ScannerMaker) (err error) {
+	slot := ScannerMaker_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type ScannerMaker_Slice []ScannerMaker

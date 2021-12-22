@@ -9484,19 +9484,11 @@ const StoryStatement_Type = "story_statement"
 
 var StoryStatement_Optional_Marshal = StoryStatement_Marshal
 
-type StoryStatement_Slot struct{ ptr *StoryStatement }
+type StoryStatement_Slot struct{ Value *StoryStatement }
 
-func (at StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
-func (at StoryStatement_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
-func (at StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.ptr), okay = v.(StoryStatement)
-	return
-}
-
-func StoryStatement_Marshal(m jsn.Marshaler, ptr *StoryStatement) (err error) {
-	slot := StoryStatement_Slot{ptr}
-	if err = m.MarshalBlock(slot); err == nil {
-		if a, ok := slot.GetSlot(); ok {
+func (at *StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
@@ -9504,6 +9496,17 @@ func StoryStatement_Marshal(m jsn.Marshaler, ptr *StoryStatement) (err error) {
 		m.EndBlock()
 	}
 	return
+}
+func (at *StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
+func (at *StoryStatement_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at *StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(StoryStatement)
+	return
+}
+
+func StoryStatement_Marshal(m jsn.Marshaler, ptr *StoryStatement) (err error) {
+	slot := StoryStatement_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type StoryStatement_Slice []StoryStatement
@@ -10267,19 +10270,11 @@ const Testing_Type = "testing"
 
 var Testing_Optional_Marshal = Testing_Marshal
 
-type Testing_Slot struct{ ptr *Testing }
+type Testing_Slot struct{ Value *Testing }
 
-func (at Testing_Slot) GetType() string              { return Testing_Type }
-func (at Testing_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
-func (at Testing_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.ptr), okay = v.(Testing)
-	return
-}
-
-func Testing_Marshal(m jsn.Marshaler, ptr *Testing) (err error) {
-	slot := Testing_Slot{ptr}
-	if err = m.MarshalBlock(slot); err == nil {
-		if a, ok := slot.GetSlot(); ok {
+func (at *Testing_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
@@ -10287,6 +10282,17 @@ func Testing_Marshal(m jsn.Marshaler, ptr *Testing) (err error) {
 		m.EndBlock()
 	}
 	return
+}
+func (at *Testing_Slot) GetType() string              { return Testing_Type }
+func (at *Testing_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at *Testing_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(Testing)
+	return
+}
+
+func Testing_Marshal(m jsn.Marshaler, ptr *Testing) (err error) {
+	slot := Testing_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type Testing_Slice []Testing

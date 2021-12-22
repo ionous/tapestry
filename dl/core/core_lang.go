@@ -878,19 +878,11 @@ const Brancher_Type = "brancher"
 
 var Brancher_Optional_Marshal = Brancher_Marshal
 
-type Brancher_Slot struct{ ptr *Brancher }
+type Brancher_Slot struct{ Value *Brancher }
 
-func (at Brancher_Slot) GetType() string              { return Brancher_Type }
-func (at Brancher_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
-func (at Brancher_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.ptr), okay = v.(Brancher)
-	return
-}
-
-func Brancher_Marshal(m jsn.Marshaler, ptr *Brancher) (err error) {
-	slot := Brancher_Slot{ptr}
-	if err = m.MarshalBlock(slot); err == nil {
-		if a, ok := slot.GetSlot(); ok {
+func (at *Brancher_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
@@ -898,6 +890,17 @@ func Brancher_Marshal(m jsn.Marshaler, ptr *Brancher) (err error) {
 		m.EndBlock()
 	}
 	return
+}
+func (at *Brancher_Slot) GetType() string              { return Brancher_Type }
+func (at *Brancher_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at *Brancher_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(Brancher)
+	return
+}
+
+func Brancher_Marshal(m jsn.Marshaler, ptr *Brancher) (err error) {
+	slot := Brancher_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type Brancher_Slice []Brancher
@@ -3162,19 +3165,11 @@ const Comparator_Type = "comparator"
 
 var Comparator_Optional_Marshal = Comparator_Marshal
 
-type Comparator_Slot struct{ ptr *Comparator }
+type Comparator_Slot struct{ Value *Comparator }
 
-func (at Comparator_Slot) GetType() string              { return Comparator_Type }
-func (at Comparator_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
-func (at Comparator_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.ptr), okay = v.(Comparator)
-	return
-}
-
-func Comparator_Marshal(m jsn.Marshaler, ptr *Comparator) (err error) {
-	slot := Comparator_Slot{ptr}
-	if err = m.MarshalBlock(slot); err == nil {
-		if a, ok := slot.GetSlot(); ok {
+func (at *Comparator_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
@@ -3182,6 +3177,17 @@ func Comparator_Marshal(m jsn.Marshaler, ptr *Comparator) (err error) {
 		m.EndBlock()
 	}
 	return
+}
+func (at *Comparator_Slot) GetType() string              { return Comparator_Type }
+func (at *Comparator_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at *Comparator_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(Comparator)
+	return
+}
+
+func Comparator_Marshal(m jsn.Marshaler, ptr *Comparator) (err error) {
+	slot := Comparator_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type Comparator_Slice []Comparator
@@ -4460,19 +4466,11 @@ const FromSourceFields_Type = "from_source_fields"
 
 var FromSourceFields_Optional_Marshal = FromSourceFields_Marshal
 
-type FromSourceFields_Slot struct{ ptr *FromSourceFields }
+type FromSourceFields_Slot struct{ Value *FromSourceFields }
 
-func (at FromSourceFields_Slot) GetType() string              { return FromSourceFields_Type }
-func (at FromSourceFields_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
-func (at FromSourceFields_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.ptr), okay = v.(FromSourceFields)
-	return
-}
-
-func FromSourceFields_Marshal(m jsn.Marshaler, ptr *FromSourceFields) (err error) {
-	slot := FromSourceFields_Slot{ptr}
-	if err = m.MarshalBlock(slot); err == nil {
-		if a, ok := slot.GetSlot(); ok {
+func (at *FromSourceFields_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
@@ -4480,6 +4478,17 @@ func FromSourceFields_Marshal(m jsn.Marshaler, ptr *FromSourceFields) (err error
 		m.EndBlock()
 	}
 	return
+}
+func (at *FromSourceFields_Slot) GetType() string              { return FromSourceFields_Type }
+func (at *FromSourceFields_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at *FromSourceFields_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(FromSourceFields)
+	return
+}
+
+func FromSourceFields_Marshal(m jsn.Marshaler, ptr *FromSourceFields) (err error) {
+	slot := FromSourceFields_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type FromSourceFields_Slice []FromSourceFields
@@ -5640,19 +5649,11 @@ const IntoTargetFields_Type = "into_target_fields"
 
 var IntoTargetFields_Optional_Marshal = IntoTargetFields_Marshal
 
-type IntoTargetFields_Slot struct{ ptr *IntoTargetFields }
+type IntoTargetFields_Slot struct{ Value *IntoTargetFields }
 
-func (at IntoTargetFields_Slot) GetType() string              { return IntoTargetFields_Type }
-func (at IntoTargetFields_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
-func (at IntoTargetFields_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.ptr), okay = v.(IntoTargetFields)
-	return
-}
-
-func IntoTargetFields_Marshal(m jsn.Marshaler, ptr *IntoTargetFields) (err error) {
-	slot := IntoTargetFields_Slot{ptr}
-	if err = m.MarshalBlock(slot); err == nil {
-		if a, ok := slot.GetSlot(); ok {
+func (at *IntoTargetFields_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
@@ -5660,6 +5661,17 @@ func IntoTargetFields_Marshal(m jsn.Marshaler, ptr *IntoTargetFields) (err error
 		m.EndBlock()
 	}
 	return
+}
+func (at *IntoTargetFields_Slot) GetType() string              { return IntoTargetFields_Type }
+func (at *IntoTargetFields_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at *IntoTargetFields_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(IntoTargetFields)
+	return
+}
+
+func IntoTargetFields_Marshal(m jsn.Marshaler, ptr *IntoTargetFields) (err error) {
+	slot := IntoTargetFields_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type IntoTargetFields_Slice []IntoTargetFields
@@ -9530,19 +9542,11 @@ const Trigger_Type = "trigger"
 
 var Trigger_Optional_Marshal = Trigger_Marshal
 
-type Trigger_Slot struct{ ptr *Trigger }
+type Trigger_Slot struct{ Value *Trigger }
 
-func (at Trigger_Slot) GetType() string              { return Trigger_Type }
-func (at Trigger_Slot) GetSlot() (interface{}, bool) { return *at.ptr, *at.ptr != nil }
-func (at Trigger_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.ptr), okay = v.(Trigger)
-	return
-}
-
-func Trigger_Marshal(m jsn.Marshaler, ptr *Trigger) (err error) {
-	slot := Trigger_Slot{ptr}
-	if err = m.MarshalBlock(slot); err == nil {
-		if a, ok := slot.GetSlot(); ok {
+func (at *Trigger_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
@@ -9550,6 +9554,17 @@ func Trigger_Marshal(m jsn.Marshaler, ptr *Trigger) (err error) {
 		m.EndBlock()
 	}
 	return
+}
+func (at *Trigger_Slot) GetType() string              { return Trigger_Type }
+func (at *Trigger_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at *Trigger_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(Trigger)
+	return
+}
+
+func Trigger_Marshal(m jsn.Marshaler, ptr *Trigger) (err error) {
+	slot := Trigger_Slot{ptr}
+	return slot.Marshal(m)
 }
 
 type Trigger_Slice []Trigger
