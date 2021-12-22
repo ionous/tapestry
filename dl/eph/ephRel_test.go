@@ -3,6 +3,7 @@ package eph
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
@@ -17,7 +18,7 @@ func TestRelAssembly(t *testing.T) {
 
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: KindsOfRelation}, // declare the relation table
+		&EphKinds{Kinds: kindsOf.Relation.String()}, // declare the relation table
 		&EphKinds{Kinds: "p"},
 	)
 	dt.makeDomain(dd("b", "a"),
@@ -48,10 +49,10 @@ func TestRelAssembly(t *testing.T) {
 		if e := cat.WriteRelations(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
-			"b:r:p:one_one:q:x",
-			"b:s:p:any_one:q:x",
-			"c:t:p:one_any:p:x",
-			"c:u:q:any_any:p:x",
+			"b:r:p:q:one_one:x",
+			"b:s:p:q:any_one:x",
+			"c:t:p:p:one_any:x",
+			"c:u:q:p:any_any:x",
 		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)

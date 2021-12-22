@@ -4,6 +4,7 @@ import (
 	"sort"
 
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -86,7 +87,7 @@ func (op *EphRules) Phase() Phase { return PatternPhase }
 func (op *EphRules) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if name, ok := UniformString(op.Name); !ok {
 		err = InvalidString(op.Name)
-	} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(KindsOfPattern) {
+	} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(kindsOf.Pattern) {
 		err = errutil.Fmt("unknown or invalid pattern %q", op.Name)
 	} else if part, ok := op.When.GetPartition(); !ok {
 		err = errutil.Fmt("couldn't compute flags for %q for pattern %q", op.When.Str, op.Name)

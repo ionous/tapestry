@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/eph"
 	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/story"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 
 	"git.sr.ht/~ionous/iffy/jsn/din"
 	"github.com/kr/pretty"
@@ -39,7 +40,7 @@ func TestDetermineNum(t *testing.T) {
 	} else if diff := pretty.Diff(els, []eph.Ephemera{
 		&eph.EphRefs{
 			Kinds: "factorial",
-			From:  eph.KindsOfPattern,
+			From:  kindsOf.Pattern,
 			ReferTo: []eph.EphParams{{
 				Affinity: eph.Affinity{eph.Affinity_Number},
 				Name:     "num",

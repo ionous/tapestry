@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/eph"
 	"git.sr.ht/~ionous/iffy/dl/story"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"github.com/kr/pretty"
 )
 
@@ -29,7 +30,7 @@ func TestImportNamedNouns(t *testing.T) {
 		// implicitly generated object type
 		&eph.EphKinds{
 			Kinds: "objects",
-			From:  eph.KindsOfKind,
+			From:  kindsOf.Kind,
 		},
 		// various implicitly defined aspects
 		&eph.EphAspects{

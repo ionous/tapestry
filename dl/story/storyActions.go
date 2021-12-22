@@ -2,24 +2,25 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/eph"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 )
 
 // ImportPhrase - action generates pattern ephemera for now.
 func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
 	extra := op.ActionParams.Value.(actionImporter).GetExtraParams()
-	op.makePattern(k, op.Action.Str, "agent", eph.KindsOfAction, extra, nil)
-	op.makePattern(k, op.Event.Str, "actor", eph.KindsOfEvent, extra, &eph.EphParams{
+	op.makePattern(k, op.Action.Str, "agent", kindsOf.Action, extra, nil)
+	op.makePattern(k, op.Event.Str, "actor", kindsOf.Event, extra, &eph.EphParams{
 		Name:     "success",
 		Affinity: eph.Affinity{eph.Affinity_Bool},
 	})
 	return
 }
 
-func (op *ActionDecl) makePattern(k *Importer, name, tgt, sub string, extra []eph.EphParams, res *eph.EphParams) {
+func (op *ActionDecl) makePattern(k *Importer, name, tgt string, sub kindsOf.Kinds, extra []eph.EphParams, res *eph.EphParams) {
 	// pattern subtype -- maybe if we really need this an optional parameter of patterns?
 	k.Write(&eph.EphKinds{
 		Kinds: name,
-		From:  sub,
+		From:  sub.String(),
 	})
 	// the first parameter is always "agent" of type "agent"
 	ps := []eph.EphParams{{

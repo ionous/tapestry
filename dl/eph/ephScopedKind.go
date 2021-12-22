@@ -3,6 +3,7 @@ package eph
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/literal"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
@@ -11,6 +12,14 @@ type ScopedKind struct {
 	domain   *Domain
 	aspects  []traitDef // used for kinds of aspects *and* for fields which use those aspects.
 	fields   []fieldDef // otherwise, everything is a field
+}
+
+func (k *ScopedKind) HasParent(other kindsOf.Kinds) bool {
+	return k.Requires.HasParent(other.String())
+}
+
+func (k *ScopedKind) HasAncestor(other kindsOf.Kinds) bool {
+	return k.Requires.HasAncestor(other.String())
 }
 
 func (k *ScopedKind) Resolve() (ret Dependencies, err error) {
@@ -108,7 +117,7 @@ func (k *ScopedKind) findCompatibleTrait(field string) (ret string, err error) {
 			// for fields that (probably) refer to a kind
 			if cls := def.class; len(cls) > 0 {
 				// see if that kind is an aspect
-				if a, ok := k.domain.GetKind(cls); ok && a.HasParent(KindsOfAspect) {
+				if a, ok := k.domain.GetKind(cls); ok && a.HasParent(kindsOf.Aspect) {
 					// when the name of the field is the same as the name of the aspect
 					// that is our special "acts as trait" field.
 					if a.name == def.name && def.affinity == affine.Text.String() {

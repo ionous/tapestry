@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
@@ -14,11 +15,11 @@ func (c *Catalog) WriteRelations(w Writer) (err error) {
 		err = e
 	} else {
 		for _, kdep := range ks {
-			if k := kdep.Leaf().(*ScopedKind); k.HasParent(KindsOfRelation) && len(k.fields) > 0 {
+			if k := kdep.Leaf().(*ScopedKind); k.HasParent(kindsOf.Relation) && len(k.fields) > 0 {
 				one := k.fields[0]   // a field of affinity text referencing some other kind.
 				other := k.fields[1] // the name is the cardinality, and the class is the kind.
 				card := makeCard(one.name, other.name)
-				if e := w.Write(mdl.Rel, k.domain.name, k.name, one.class, card, other.class, k.at); e != nil {
+				if e := w.Write(mdl.Rel, k.domain.name, k.name, one.class, other.class, card, k.at); e != nil {
 					err = e
 					break
 				}
@@ -71,7 +72,7 @@ func (op *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
 			err = e
 		} else {
 			kid := d.EnsureKind(rel, at)
-			kid.AddRequirement(KindsOfRelation)
+			kid.AddRequirement(kindsOf.Relation.String())
 			err = d.AddEphemera(
 				EphAt{at, &EphKinds{
 					Kinds: rel,

@@ -3,6 +3,7 @@ package eph
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
@@ -55,31 +56,31 @@ func TestRelativeFormation(t *testing.T) {
 		if e := cat.WritePairs(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
-			"a:a:r_1_1:a:x",
-			"a:b:r_1_1:c:x",
-			"a:e:r_1_1:z:x",
+			"a:r_1_1:a:a:x",
+			"a:r_1_1:b:c:x",
+			"a:r_1_1:e:z:x",
 			//
-			"a:b:r_1_x:e:x",
-			"a:c:r_1_x:a:x",
-			"a:c:r_1_x:b:x",
-			"a:c:r_1_x:c:x",
-			"a:z:r_1_x:d:x",
-			"a:z:r_1_x:f:x",
+			"a:r_1_x:b:e:x",
+			"a:r_1_x:c:a:x",
+			"a:r_1_x:c:b:x",
+			"a:r_1_x:c:c:x",
+			"a:r_1_x:z:d:x",
+			"a:r_1_x:z:f:x",
 			//
-			"a:b:r_x_1:a:x",
-			"a:c:r_x_1:d:x",
-			"a:d:r_x_1:b:x",
-			"a:e:r_x_1:f:x",
-			"a:f:r_x_1:f:x",
-			"a:l:r_x_1:b:x",
-			"a:z:r_x_1:b:x",
+			"a:r_x_1:b:a:x",
+			"a:r_x_1:c:d:x",
+			"a:r_x_1:d:b:x",
+			"a:r_x_1:e:f:x",
+			"a:r_x_1:f:f:x",
+			"a:r_x_1:l:b:x",
+			"a:r_x_1:z:b:x",
 			//
-			"a:a:r_x_x:a:x",
-			"a:a:r_x_x:b:x",
-			"a:a:r_x_x:c:x",
-			"a:e:r_x_x:d:x",
-			"a:f:r_x_x:d:x",
-			"a:l:r_x_x:d:x",
+			"a:r_x_x:a:a:x",
+			"a:r_x_x:a:b:x",
+			"a:r_x_x:a:c:x",
+			"a:r_x_x:e:d:x",
+			"a:r_x_x:f:d:x",
+			"a:r_x_x:l:d:x",
 		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)
@@ -137,7 +138,7 @@ func TestRelativeManyOneViolation(t *testing.T) {
 
 func newRelativeTest(nros ...string) []Ephemera {
 	out := []Ephemera{
-		&EphKinds{Kinds: KindsOfRelation}, // declare the relation table
+		&EphKinds{Kinds: kindsOf.Relation.String()}, // declare the relation table
 		&EphKinds{Kinds: "k"},
 		&EphKinds{Kinds: "l", From: "k"},
 		&EphKinds{Kinds: "n", From: "k"},

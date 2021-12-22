@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
@@ -12,21 +13,21 @@ import (
 func TestAspectFormation(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("d"),
-		&EphKinds{Kinds: KindsOfAspect},            // say that aspects exist
-		&EphKinds{Kinds: "a", From: KindsOfAspect}, // make an aspect
+		&EphKinds{Kinds: kindsOf.Aspect.String()},            // say that aspects exist
+		&EphKinds{Kinds: "a", From: kindsOf.Aspect.String()}, // make an aspect
 		&EphAspects{Aspects: "a", Traits: []string{ // fix? should "Aspects" be singular?
 			"one", "several", "oh so many", //
 		}},
 	)
-	out := testOut{mdl.Aspect}
+	out := testOut{mdl.Field}
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteAspects(&out); e != nil {
+	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
-		"d:a:one:0",
-		"d:a:several:1",
-		"d:a:oh_so_many:2",
+		"d:a:one:bool::x",
+		"d:a:several:bool::x",
+		"d:a:oh_so_many:bool::x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -38,8 +39,8 @@ func TestAspectFormation(t *testing.T) {
 func TestAspectUsage(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: KindsOfAspect},            // say that aspects exist
-		&EphKinds{Kinds: "a", From: KindsOfAspect}, // make an aspect
+		&EphKinds{Kinds: kindsOf.Aspect.String()},            // say that aspects exist
+		&EphKinds{Kinds: "a", From: kindsOf.Aspect.String()}, // make an aspect
 		&EphAspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
@@ -54,9 +55,9 @@ func TestAspectUsage(t *testing.T) {
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out[1:], testOut{
-		"a:a:one:$BOOL::x",
-		"a:a:several:$BOOL::x",
-		"a:a:oh_so_many:$BOOL::x",
+		"a:a:one:bool::x",
+		"a:a:several:bool::x",
+		"a:a:oh_so_many:bool::x",
 		"b:k:a:text:a:x",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
@@ -68,8 +69,8 @@ func TestAspectUsage(t *testing.T) {
 func TestAspectConflictingFields(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: KindsOfAspect},            // say that aspects exist
-		&EphKinds{Kinds: "a", From: KindsOfAspect}, // make an aspect
+		&EphKinds{Kinds: kindsOf.Aspect.String()},            // say that aspects exist
+		&EphKinds{Kinds: "a", From: kindsOf.Aspect.String()}, // make an aspect
 		&EphAspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
@@ -89,12 +90,12 @@ func TestAspectConflictingFields(t *testing.T) {
 func TestAspectConflictingTraits(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: KindsOfAspect},            // say that aspects exist
-		&EphKinds{Kinds: "a", From: KindsOfAspect}, // make an aspect
+		&EphKinds{Kinds: kindsOf.Aspect.String()},            // say that aspects exist
+		&EphKinds{Kinds: "a", From: kindsOf.Aspect.String()}, // make an aspect
 		&EphAspects{Aspects: "a", Traits: []string{ // add some traits
 			"one", "several", "oh so many", //
 		}},
-		&EphKinds{Kinds: "b", From: KindsOfAspect}, // make an aspect
+		&EphKinds{Kinds: "b", From: kindsOf.Aspect.String()}, // make an aspect
 		&EphAspects{Aspects: "b", Traits: []string{ // add some traits
 			"one", "two", "blue", //
 		}},

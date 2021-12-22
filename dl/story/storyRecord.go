@@ -2,13 +2,14 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/eph"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
 // ex. "cats are a kind of record"
 func (op *KindsOfRecord) ImportPhrase(k *Importer) (err error) {
 	kinds := op.RecordPlural.String()
-	k.Write(&eph.EphKinds{Kinds: kinds, From: eph.KindsOfRecord})
+	k.Write(&eph.EphKinds{Kinds: kinds, From: kindsOf.Record.String()})
 	return
 }
 

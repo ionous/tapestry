@@ -7,17 +7,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-const (
-	// default kinds
-	KindsOfAction   = "actions"
-	KindsOfAspect   = "aspects"
-	KindsOfEvent    = "events"
-	KindsOfKind     = "kinds"
-	KindsOfPattern  = "patterns"
-	KindsOfRecord   = "records"
-	KindsOfRelation = "relations"
-)
-
 // write the kinds in a reasonable order
 func (c *Catalog) WriteKinds(w Writer) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
@@ -78,7 +67,7 @@ func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
 					// if in a different domain: the kinds have to match up
 					if pk, ok := d.GetPluralKind(parentKind); !ok {
 						err = errutil.New("unknown parent kind", op.From)
-					} else if !kid.HasAncestor(pk.name) {
+					} else if !kid.Requires.HasAncestor(pk.name) {
 						err = KindError{newKind, errutil.Fmt("can't redefine parent as %q", op.From)}
 					} else {
 						e := errutil.New("duplicate parent definition at", at)

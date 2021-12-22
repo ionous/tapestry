@@ -3,6 +3,7 @@ package eph
 import (
 	"sort"
 
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
@@ -56,7 +57,7 @@ func writePairs(w Writer, d *Domain, relName string, rs []Relative) (err error) 
 		} else if n1, ok := d.GetNoun(p.secondNoun); !ok {
 			err = errutil.New("couldnt find second noun", p.secondNoun)
 			break
-		} else*/if e := w.Write(mdl.Pair, d.name, p.firstNoun, relName, p.secondNoun, p.at); e != nil {
+		} else*/if e := w.Write(mdl.Pair, d.name, relName, p.firstNoun, p.secondNoun, p.at); e != nil {
 			err = e
 			break
 		}
@@ -83,7 +84,7 @@ func (op *EphRelatives) Phase() Phase { return RelativePhase }
 func (op *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if name, ok := UniformString(op.Rel); !ok {
 		err = InvalidString(op.Rel)
-	} else if rel, ok := d.GetPluralKind(name); !ok || !rel.HasAncestor(KindsOfRelation) {
+	} else if rel, ok := d.GetPluralKind(name); !ok || !rel.HasAncestor(kindsOf.Relation) {
 		err = errutil.Fmt("unknown or invalid relation %q", op.Rel)
 	} else if card := rel.domain.GetDefinition(AncestryPhase, rel.name+"?card"); len(card) == 0 {
 		err = errutil.Fmt("unknown or invalid cardinality for %q", op.Rel)

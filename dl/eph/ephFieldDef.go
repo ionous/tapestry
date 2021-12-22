@@ -2,6 +2,7 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -26,7 +27,7 @@ func (fd *fieldDef) AddToKind(k *ScopedKind) {
 }
 
 func (fd *fieldDef) CheckConflict(k *ScopedKind) (err error) {
-	if k.HasParent(KindsOfAspect) {
+	if k.HasParent(kindsOf.Aspect) {
 		err = errutil.New("can't add fields to kinds of aspect")
 	} else if e := fd.checkProps(k); e != nil {
 		err = e

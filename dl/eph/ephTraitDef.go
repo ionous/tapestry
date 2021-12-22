@@ -1,6 +1,8 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -17,7 +19,7 @@ type traitDef struct {
 
 func (td *traitDef) Write(w Writer) (err error) {
 	for _, t := range td.traits {
-		if e := w.Write(mdl.Field, t, Affinity_Bool, "", td.at); e != nil {
+		if e := w.Write(mdl.Field, t, affine.Bool, "", td.at); e != nil {
 			err = e
 			break
 		}
@@ -40,7 +42,7 @@ func (td *traitDef) HasTrait(n string) (ret bool) {
 }
 
 func (td *traitDef) CheckConflict(k *ScopedKind) (err error) {
-	if k.HasParent(KindsOfAspect) && (len(k.aspects) > 0 || k.name != td.aspect) {
+	if k.HasParent(kindsOf.Aspect) && (len(k.aspects) > 0 || k.name != td.aspect) {
 		err = errutil.New("kinds of aspect can only have one set of traits")
 	} else if e := td.checkProps(k); e != nil {
 		err = e

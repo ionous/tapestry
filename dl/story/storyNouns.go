@@ -7,8 +7,9 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/eph"
 	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/ephemera/reader"
+	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
@@ -42,7 +43,7 @@ func ImportNamedNouns(k *Importer, els []NamedNoun) (err error) {
 func (op *NamedNoun) ImportNouns(k *Importer) (err error) {
 	// declare a noun class that has several default fields
 	if once := "noun"; k.Once(once) {
-		k.WriteOnce(&eph.EphKinds{Kinds: "objects", From: eph.KindsOfKind})
+		k.WriteOnce(&eph.EphKinds{Kinds: "objects", From: kindsOf.Kind.String()})
 		// common or proper nouns ( rabbit, vs. Roger )
 		k.AddImplicitAspect("noun_types", "objects", "common_named", "proper_named", "counted")
 		// whether a player can refer to an object by its name.

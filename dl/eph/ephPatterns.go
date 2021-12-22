@@ -3,6 +3,7 @@ package eph
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -13,7 +14,7 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 		err = e
 	} else {
 		for _, dep := range deps {
-			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(KindsOfPattern) {
+			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(kindsOf.Pattern) {
 				pat := k.name
 				result := k.domain.GetDefinition(AncestryPhase, pat+"?res")
 				labels := k.domain.GetDefinition(AncestryPhase, pat+"?args")
@@ -36,7 +37,7 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = InvalidString(op.Name)
 	} else {
 		k := d.EnsureKind(name, at)
-		k.AddRequirement(KindsOfPattern)
+		k.AddRequirement(kindsOf.Pattern.String())
 		// size of fields is usually > 0, so dont worry too much about the edge case
 		fields := make([]UniformField, 0, measurePattern(op))
 		if e := op.assembleRet(d, k, at, &fields); e != nil {

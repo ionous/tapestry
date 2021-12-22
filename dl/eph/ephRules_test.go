@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
@@ -15,7 +16,7 @@ func TestPatternRules(t *testing.T) {
 	dt := domainTest{noShuffle: true}
 	dt.makeDomain(dd("a"),
 		append(append([]Ephemera{
-			&EphKinds{Kinds: KindsOfPattern}, // declare the patterns table
+			&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
 			&EphPatterns{
 				Name: "p",
 				Result: &EphParams{

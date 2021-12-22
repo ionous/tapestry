@@ -3,6 +3,7 @@ package eph
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/kr/pretty"
 )
@@ -76,7 +77,7 @@ func TestInitialTraitAssignment(t *testing.T) {
 		&EphKinds{Kinds: "l", From: "k"},
 		&EphKinds{Kinds: "m", From: "l"},
 		// aspects
-		&EphKinds{Kinds: KindsOfAspect},
+		&EphKinds{Kinds: kindsOf.Aspect.String()},
 		&EphAspects{"a", dd("w", "x", "y")},
 		&EphAspects{"b", dd("z")},
 		// fields using those aspects:

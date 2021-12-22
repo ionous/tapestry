@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -52,13 +53,13 @@ func (c *Catalog) WriteLocals(w Writer) (err error) {
 		err = e
 	} else {
 		for _, dep := range deps {
-			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(KindsOfPattern) {
+			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(kindsOf.Pattern) {
 				for _, fd := range k.fields {
 					if init := fd.initially; init != nil {
 						if value, e := marshalout(init); e != nil {
 							err = e
 							break
-						} else if e := w.Write(mdl.Local, k.domain.name, k.name, fd.name, value); e != nil {
+						} else if e := w.Write(mdl.Assign, k.domain.name, k.name, fd.name, value); e != nil {
 							err = e
 							break
 						}
@@ -144,7 +145,7 @@ func (uf *UniformField) assembleField(kind *ScopedKind, at string) (err error) {
 			err = e // some other error
 		} else {
 			// if the field is a kind of aspect
-			isAspect := cls != nil && cls.HasParent(KindsOfAspect) && len(cls.aspects) > 0
+			isAspect := cls != nil && cls.HasParent(kindsOf.Aspect) && len(cls.aspects) > 0
 			// when the name of the field is the same as the name of the aspect
 			// that is our special "acts as trait" field, so add the set of traits.
 			if isAspect && uf.name == clsName && aff == affine.Text {
