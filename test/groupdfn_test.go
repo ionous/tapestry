@@ -12,19 +12,19 @@ func TestKindsForType(t *testing.T) {
 	ks.AddKinds((*GroupCollation)(nil))
 	if diff := pretty.Diff(ks.Fields, testutil.FieldMap{
 		"innumerable": {
-			{"not_innumerable", "bool", "trait"},
-			{"is_innumerable", "bool", "trait"},
+			{"not_innumerable", "bool", "" /*"trait"*/},
+			{"is_innumerable", "bool", "" /*"trait"*/},
 		},
 		"group_options": {
-			{"without_objects", "bool", "trait"},
-			{"objects_with_articles", "bool", "trait"},
-			{"objects_without_articles", "bool", "trait"},
+			{"without_objects", "bool", "" /*"trait"*/},
+			{"objects_with_articles", "bool", "" /*"trait"*/},
+			{"objects_without_articles", "bool", "" /*"trait"*/},
 		},
 		"group_settings": {
 			{"name", "text", "string"},
 			{"label", "text", "string"},
-			{"innumerable", "text", "aspect"},
-			{"group_options", "text", "aspect"},
+			{"innumerable", "text", "innumerable"},
+			{"group_options", "text", "group_options"},
 		},
 		"grouped_objects": {
 			{"settings", "record", "group_settings"},

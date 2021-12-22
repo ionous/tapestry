@@ -6,7 +6,6 @@ import (
 
 // Value represents any one of the built in types.
 // It's similar to reflect.Value in golang's standard library.
-//
 type Value interface {
 	// identifies the general category of the value.
 	Affinity() affine.Affinity

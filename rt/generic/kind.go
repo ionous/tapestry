@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
-	"github.com/ionous/errutil"
 )
 
 // we bake it down for faster, easier indexed access.
@@ -20,7 +19,15 @@ type Kind struct {
 type Field struct {
 	Name     string
 	Affinity affine.Affinity
-	Type     string // ex. record name, "aspect", "trait", "float64", ...
+	Type     string // ex. kind, "aspect", "trait", "float64", ...
+}
+
+// see also eph.AspectParm
+func (ft *Field) isAspectLike() (ret string, okay bool) {
+	if cls := ft.Type; ft.Affinity == affine.Text && ft.Name == cls {
+		ret, okay = cls, true
+	}
+	return
 }
 
 // aspects are a specific kind of record where every field is a boolean trait
@@ -45,6 +52,13 @@ func (k *Kind) NewRecord() *Record {
 
 func (k *Kind) Path() (ret []string) {
 	ret = append(ret, k.path...) // copies the slice
+	return
+}
+
+func (k *Kind) Parent() (ret string) {
+	if len(k.path) > 0 {
+		ret = k.path[0]
+	}
 	return
 }
 
@@ -105,10 +119,10 @@ func (k *Kind) ensureTraits() {
 	if k.traits == nil {
 		var ts []trait
 		for _, ft := range k.fields {
-			if ft.Type == "aspect" {
-				if aspect, e := k.kinds.GetKindByName(ft.Name); e != nil {
-					panic(errutil.Sprint("unknown aspect", ft.Name, e))
-				} else {
+			if cls, ok := ft.isAspectLike(); ok {
+				// if this fails, we are likely to return an error through GetIndexedField at some point so...
+				// FIX: "aspects" matches "KindsOfAspect" in ephKinds.go -- move somewhere shareable?
+				if aspect, e := k.kinds.GetKindByName(cls); e == nil && aspect.Parent() == "aspects" {
 					ts = makeTraits(aspect, ts)
 				}
 			}

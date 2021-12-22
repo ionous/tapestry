@@ -10,20 +10,22 @@ import (
 type trait struct {
 	Trait  string
 	Aspect string
+	Rank   int
 }
 
 func makeTraits(aspect *Kind, traits []trait) []trait {
 	for i, cnt := 0, aspect.NumField(); i < cnt; i++ {
 		// fix: check if Type() is set to trait?
-		if ft := aspect.Field(i); ft.Affinity != affine.Bool || ft.Type != "trait" {
+		if ft := aspect.Field(i); ft.Affinity != affine.Bool {
 			panic(aspect.name + "aspect has non trait fields")
 		} else {
-			traits = append(traits, trait{Trait: ft.Name, Aspect: aspect.name})
+			traits = append(traits, trait{Trait: ft.Name, Aspect: aspect.name, Rank: i})
 		}
 	}
 	return traits
 }
 
+// we sort all traits for all aspects in a kind sorted by name so we can (more) quickly look them up when needed.
 func sortTraits(ts []trait) {
 	sort.Slice(ts, func(i, j int) bool {
 		it, jt := ts[i], ts[j]

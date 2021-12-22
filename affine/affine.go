@@ -1,7 +1,11 @@
+// Package affine - names for all of Tapestry's built-in data types: primitives, structured types, and arrays thereof.
 package affine
 
+// Affinity - name of one of Tapestry's built-in data type.
 type Affinity string
 
+// a helper for input/output of affinities including logging:
+// returns the stored string or "unknown affinity" if the string is empty.
 func (a Affinity) String() (ret string) {
 	if a := string(a); len(a) > 0 {
 		ret = a
@@ -20,22 +24,9 @@ const (
 	Object     Affinity = "object"
 	Record     Affinity = "record"
 	RecordList Affinity = "record_list"
-
-	// extended text types
-	// Aspect      Affinity = "aspect"
-	// Check       Affinity = "check"
-	// Kind        Affinity = "singular_kind"
-	// Kinds       Affinity = "kind"
-	// Noun        Affinity = "noun"
-	// Pattern     Affinity = "pattern"
-	// PluralKinds Affinity = "plural_kinds"
-	// Primitive   Affinity = "primitive"
-	// Relation    Affinity = "relation"
-	// Scene       Affinity = "scene"
-	// Trait       Affinity = "trait"
-	// Verb        Affinity = "verb"
 )
 
+// true if one of three list types
 func IsList(a Affinity) bool {
 	elAffinity := Element(a)
 	return len(elAffinity) > 0
@@ -54,6 +45,7 @@ func Element(list Affinity) (ret Affinity) {
 	return
 }
 
+// true if a structured type.
 func HasFields(a Affinity) bool {
 	return a == Record || a == Object
 }

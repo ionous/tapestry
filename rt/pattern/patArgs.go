@@ -23,7 +23,7 @@ func NewRecord(run rt.Runtime, name, labels string, args []rt.Arg) (rec *g.Recor
 		parts := strings.Split(labels, ",") //
 		//
 		for i, a := range args {
-			n := lang.Breakcase(a.Name)
+			n := lang.Underscore(a.Name)
 			// search for a matching label.
 			if len(n) == 0 {
 				err = errutil.New("unnamed arg at", i)
