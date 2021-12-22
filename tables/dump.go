@@ -5,8 +5,10 @@ import (
 	"io"
 )
 
+// query data from the passed db, and write the comma separated results to the passed writer.
+// q holds the query string, cols holds the number of expected columns in the output.
 // ex. WriteCsv(db, os.Stdout, "select col1, col2 from table", 2)
-func WriteCsv(db Query, w io.Writer, q string, cols int) (err error) {
+func WriteCsv(db Querier, w io.Writer, q string, cols int) (err error) {
 	if rows, e := db.Query(q); e != nil {
 		err = e
 	} else {

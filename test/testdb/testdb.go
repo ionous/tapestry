@@ -25,22 +25,17 @@ func PathFromName(name string) (ret string, err error) {
 	return
 }
 
-// given the table name, and column names return a super-secret helper
+// given a table name, and list of column names return a super-secret helper.
+// ( used for Ins, and WriteCsv )
 func TableCols(table_cols ...string) []string {
 	return table_cols
 }
 
-// compatible with sql.DB for use with caches, etc.
-type Executer interface {
-	Exec(q string, args ...interface{}) (sql.Result, error)
-}
-
-// compatible with sql.DB for use with caches, etc.
-type Querier interface {
-	Query(q string, args ...interface{}) (*sql.Rows, error)
-}
-
-// Open panics on error
+// Opens a (sqlite) database in memory or on disk, panicking on error.
+// To create a memory table: pass "Memory" as the path.
+// If path is empty, uses the users's home directory.
+// If driver is empty, assumes a sqlite database.
+// If the db/file does not already exist, it will be created.
 func Open(name, path, driver string) (ret *sql.DB) {
 	if len(driver) == 0 {
 		driver = tables.DefaultDriver
@@ -61,7 +56,10 @@ func Open(name, path, driver string) (ret *sql.DB) {
 	return
 }
 
-func Ins(db Executer, tablecols []string, els ...interface{}) (err error) {
+// insert an arbitrary number of rows into the passed db.
+// tablecols holds the names of the table and columns to query,
+// els can hold multiple rows of data, each containing the number of cols specified by tablecols.
+func Ins(db tables.Executer, tablecols []string, els ...interface{}) (err error) {
 	ins, width := tables.Insert(tablecols[0], tablecols[1:]...), len(tablecols)-1
 	for i, cnt := 0, len(els); i < cnt; i += width {
 		if _, e := db.Exec(ins, els[i:i+width]...); e != nil {
@@ -72,7 +70,10 @@ func Ins(db Executer, tablecols []string, els ...interface{}) (err error) {
 	return
 }
 
-func WriteCsv(db Querier, w io.Writer, tablecols []string, where string) (err error) {
+// query the passed db and write the results to w --
+// builds the query from "tablecols" which holds the names of the table and columns to query;
+// "where" can filter that data. ( see also: tables.WriteCsv. )
+func WriteCsv(db tables.Querier, w io.Writer, tablecols []string, where string) (err error) {
 	table, cols := tablecols[0], strings.Join(tablecols[1:], ", ")
 	q := strings.Join(sliceOf.String("select", cols, "from", table, where, "order by", cols), " ")
 	return tables.WriteCsv(db, w, q, len(tablecols)-1)

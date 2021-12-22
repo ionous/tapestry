@@ -8,8 +8,13 @@ import (
 )
 
 // Query used for QueryAll to hide differences b/t tables.Cache and sql.DB
-type Query interface {
+type Querier interface {
 	Query(query string, args ...interface{}) (*sql.Rows, error)
+}
+
+// compatible with sql.DB for use with caches, etc.
+type Executer interface {
+	Exec(q string, args ...interface{}) (sql.Result, error)
 }
 
 func Must(db *sql.DB, q string, args ...interface{}) {
@@ -40,7 +45,7 @@ func RowsAffected(res sql.Result) (ret int) {
 
 // QueryAll queries the db ( or statement cache ) for one or more rows.
 // For each row, it writes the row to the 'dest' args and calls 'cb' for processing.
-func QueryAll(db Query, q string, cb func() error, dest ...interface{}) (err error) {
+func QueryAll(db Querier, q string, cb func() error, dest ...interface{}) (err error) {
 	if rows, e := db.Query(q); e != nil {
 		err = errutil.New("QueryAll error:", e, "for", q)
 	} else {
