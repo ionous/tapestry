@@ -126,7 +126,7 @@ func (op *PatternRule) importRule(k *Importer, pattern, target string, tgtFlags 
 				Target: target, // fix: this should become part of the guards i think, even if its less slightly less efficient
 				Filter: op.Guard,
 				When:   flags,
-				Exe:    &act,
+				Exe:    act,
 				Touch:  always})
 		}
 	}

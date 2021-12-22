@@ -9,10 +9,10 @@ import (
 func (op *TestRule) ImportPhrase(k *Importer) (err error) {
 	if n, e := makeTestName(k, op.TestName); e != nil {
 		err = e
-	} else if act, e := op.Hook.ImportProgram(k); e != nil {
+	} else if exe, e := op.Hook.ImportProgram(k); e != nil {
 		err = e
 	} else {
-		k.Write(&eph.EphChecks{Name: n, Exe: &act})
+		k.Write(&eph.EphChecks{Name: n, Exe: exe})
 	}
 	return
 }
