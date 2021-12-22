@@ -1,4 +1,4 @@
-package pattern_test
+package testpat_test
 
 import (
 	"fmt"
@@ -8,8 +8,10 @@ import (
 	"git.sr.ht/~ionous/iffy/test/testutil"
 )
 
-// ExampleSayMe converts numbers to text
-// http://learnyouahaskell.com/syntax-in-functions
+// ExampleSayMe converts numbers to text.
+// note: this relies almost entirely on debug functionality,
+// so it's just an example not a test of runtime behavior.
+// see also: http://learnyouahaskell.com/syntax-in-functions
 func ExampleSayMe() {
 	// rules are run in reverse order.
 	var kinds testutil.Kinds
@@ -24,6 +26,7 @@ func ExampleSayMe() {
 	// say 4 numbers
 	for i := 1; i <= 4; i++ {
 		fmt.Printf(`say_me %d = "`, i)
+		// creates a core.CallPattern and runs it through the debug runtime
 		if e := debug.DetermineSay(i).Execute(&run); e != nil {
 			fmt.Println("Error:", e)
 		}

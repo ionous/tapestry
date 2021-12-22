@@ -1,4 +1,4 @@
-package pattern
+package testpat
 
 import (
 	"testing"
@@ -7,6 +7,7 @@ import (
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
+//
 func TestRuleSorting(t *testing.T) {
 	ps := []rt.Rule{
 		{RawFlags: float64(rt.Infix), Execute: Text("1")},
