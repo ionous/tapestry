@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 
+	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/qna/pdb"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -14,7 +15,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func NewRuntime(db *sql.DB, signatures signatures) *Runner {
+func NewRuntime(db *sql.DB, signatures cin.Signatures) *Runner {
 	var run *Runner
 	if qdb, e := pdb.NewQueries(db); e != nil {
 		panic(e) //fix: report
@@ -41,7 +42,7 @@ type Runner struct {
 	values     cache
 	nounValues cache
 	counters
-	signatures
+	signatures cin.Signatures
 	qnaOptions
 	//
 	scope.Stack
@@ -49,8 +50,6 @@ type Runner struct {
 	writer.Sink
 	currentPatterns
 }
-
-type signatures []map[uint64]interface{}
 
 func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
 	if prev, e := run.qdb.ActivateDomain(domain); e != nil {

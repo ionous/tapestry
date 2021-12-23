@@ -10,12 +10,14 @@ import (
 	"github.com/ionous/errutil"
 )
 
+type Signatures []map[uint64]interface{}
+
 type xDecoder struct {
 	chart.Machine
-	reg []map[uint64]interface{}
+	reg Signatures
 }
 
-func Decode(dst jsn.Marshalee, msg json.RawMessage, reg []map[uint64]interface{}) error {
+func Decode(dst jsn.Marshalee, msg json.RawMessage, reg Signatures) error {
 	dec := xDecoder{reg: reg, Machine: chart.MakeDecoder()}
 	next := dec.newBlock(msg, new(chart.StateMix))
 	next.OnCommit = func(interface{}) {}
