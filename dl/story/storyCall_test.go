@@ -40,7 +40,7 @@ func TestDetermineNum(t *testing.T) {
 	} else if diff := pretty.Diff(els, []eph.Ephemera{
 		&eph.EphRefs{
 			Kinds: "factorial",
-			From:  kindsOf.Pattern,
+			From:  kindsOf.Pattern.String(),
 			ReferTo: []eph.EphParams{{
 				Affinity: eph.Affinity{eph.Affinity_Number},
 				Name:     "num",

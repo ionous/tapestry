@@ -30,7 +30,7 @@ func TestImportNamedNouns(t *testing.T) {
 		// implicitly generated object type
 		&eph.EphKinds{
 			Kinds: "objects",
-			From:  kindsOf.Kind,
+			From:  kindsOf.Kind.String(),
 		},
 		// various implicitly defined aspects
 		&eph.EphAspects{
