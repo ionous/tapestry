@@ -37,7 +37,9 @@ with newPairs as (
 	and dn.domain = ?1   -- select just the current named domain with dn
 )`
 
-// FIX: current domain is most recent activation, cache locally.
+// fix? this doesnt change to see whether the nouns are compatible with the relation
+// ex. if oneNoun is compatible with mdl_rel.oneKind; for now, the caller does that instead...
+// ( see also: Runner.RelateTo )
 var newPairsFromNames = `
 with newPairs as (
 	select md.rowid as domain, rel.relKind, one.rowid as oneNoun, other.rowid as otherNoun, rel.cardinality

@@ -9,12 +9,9 @@ package tables
 // runTemplate is a generated function returning the template as a string.
 // That string should be parsed by the functions of the golang's template package.
 func runTemplate() string {
-	var tmpl = "/**\n" +
-		" * for saving, restoring a player's game session.\n" +
-		" */\n" +
+	var tmpl = "/* for saving, restoring a player's game session. */\n" +
 		"create table if not exists \n" +
 		"\trun_domain( domain int, active int, primary key( domain )); \n" +
-		"\n" +
 		"\n" +
 		"/* we dont need an \"active\" -- we can join against run_domain, or write 0 to domain to disable a pair. */\n" +
 		"create table if not exists \n" +
@@ -33,33 +30,35 @@ func runTemplate() string {
 		"\n" +
 		"create view if not exists\n" +
 		"kind_scope as \n" +
-		"select mk.rowid as kind, mk.kind as name, mk.path\n" +
-		"from domain_scope\n" +
+		"select ds.name as domain, mk.rowid as kind, mk.kind as name, mk.path\n" +
+		"from domain_scope ds\n" +
 		"join mdl_kind mk \n" +
 		"\tusing (domain);\n" +
 		"\n" +
+		"/* domain name, noun id, noun name, and kind id\n" +
+		"* the domain name is a nod towards needing the domain name to fully scope the noun */ \n" +
 		"create view if not exists\n" +
 		"noun_scope as \n" +
-		"select mn.rowid as noun, mn.noun as name, mn.kind\n" +
-		"from domain_scope\n" +
+		"select ds.name as domain, mn.rowid as noun, mn.noun as name, mn.kind\n" +
+		"from domain_scope ds\n" +
 		"join mdl_noun mn \n" +
 		"\tusing (domain);\n" +
 		"\n" +
-		"/* returns the kind's id as 'relKind' */ \n" +
+		"/* not needed right now:\n" +
 		"create view if not exists\n" +
 		"rel_scope as \n" +
-		"select mk.rowid as relKind, mk.kind as name, mr.oneKind, mr.otherKind, mr.cardinality\n" +
-		"from domain_scope\n" +
+		"select ds.name as domain, mk.rowid as relKind, mk.kind as name, mr.oneKind, mr.otherKind, mr.cardinality\n" +
+		"from domain_scope ds\n" +
 		"join mdl_kind mk \n" +
 		"\tusing (domain)\n" +
 		"join mdl_rel mr\n" +
 		"\ton (mk.rowid = mr.relKind);\n" +
+		"*/ \n" +
 		"\n" +
-		"\n" +
-		"/* */\n" +
+		"/* for finding relatives and reciprocals: returns relName, nounName, otherName */\n" +
 		"create view if not exists\n" +
 		"rp_names as\n" +
-		"select rp.domain, mk.kind as relName, rp.relKind, one.noun as oneName, rp.oneNoun, other.noun as otherName, rp.otherNoun, rel.cardinality\n" +
+		"select mk.kind as relName, one.noun as oneName, other.noun as otherName\n" +
 		"from run_pair rp\n" +
 		"join mdl_kind mk\n" +
 		"\ton (mk.rowid = rp.relKind)\n" +

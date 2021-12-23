@@ -1,9 +1,6 @@
-/**
- * for saving, restoring a player's game session.
- */
+/* for saving, restoring a player's game session. */
 create table if not exists 
 	run_domain( domain int, active int, primary key( domain )); 
-
 
 /* we dont need an "active" -- we can join against run_domain, or write 0 to domain to disable a pair. */
 create table if not exists 
@@ -22,32 +19,24 @@ join mdl_domain md
 
 create view if not exists
 kind_scope as 
-select mk.rowid as kind, mk.kind as name, mk.path
-from domain_scope
+select ds.name as domain, mk.rowid as kind, mk.kind as name, mk.path
+from domain_scope ds
 join mdl_kind mk 
 	using (domain);
 
+/* domain name, noun id, noun name, and kind id
+* the domain name is a nod towards needing the domain name to fully scope the noun */ 
 create view if not exists
 noun_scope as 
-select mn.rowid as noun, mn.noun as name, mn.kind
-from domain_scope
+select ds.name as domain, mn.rowid as noun, mn.noun as name, mn.kind
+from domain_scope ds
 join mdl_noun mn 
 	using (domain);
 
-/* returns the kind's id as 'relKind' */ 
-create view if not exists
-rel_scope as 
-select mk.rowid as relKind, mk.kind as name, mr.oneKind, mr.otherKind, mr.cardinality
-from domain_scope
-join mdl_kind mk 
-	using (domain)
-join mdl_rel mr
-	on (mk.rowid = mr.relKind);
-
-/* */
+/* for finding relatives and reciprocals: returns relName, nounName, otherName */
 create view if not exists
 rp_names as
-select rp.domain, mk.kind as relName, rp.relKind, one.noun as oneName, rp.oneNoun, other.noun as otherName, rp.otherNoun, rel.cardinality
+select mk.kind as relName, one.noun as oneName, other.noun as otherName
 from run_pair rp
 join mdl_kind mk
 	on (mk.rowid = rp.relKind)

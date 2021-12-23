@@ -1,19 +1,19 @@
-package pdb
+package pdb_test
 
 import (
-	"database/sql"
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/eph"
+	"git.sr.ht/~ionous/iffy/qna/pdb"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
-// write test data to the database, and ensure we can query it back.
-// this exercises the asm.writer ( xforming from strings to ids )
-// and the various runtime queries we need.
+// write low level activation of domains
+// ( not deletion of nouns, or setup of relative pairs --
+// just hierarchical selection and detection of changes )
 func TestActivate(t *testing.T) {
 	// db := testdb.Open(t.Name(), "", "")
 	db := testdb.Open(t.Name(), testdb.Memory, "")
@@ -32,19 +32,11 @@ func TestActivate(t *testing.T) {
 			)
 		}); e != nil {
 		t.Fatal("failed to create table", e)
-	} else if q, e := NewQueries(db); e != nil {
-		t.Fatal(e)
-	} else if scan, e := db.Prepare(
-		`select md.domain || ':' || rd.active
-		from run_domain rd
-		join mdl_domain md
-			on (rd.domain=md.rowid)
-		where rd.active > 0
-		`); e != nil {
+	} else if q, e := pdb.NewQueryTest(db); e != nil {
 		t.Fatal(e)
 	} else if e := isActive(q, false, "main", "sub", "boop", "beep"); e != nil {
 		t.Fatal(e)
-	} else if e := activate(q, scan, "boop", 1,
+	} else if e := activate(q, "boop", 1,
 		"main:1", "sub:1", "boop:1",
 	); e != nil {
 		t.Fatal(e)
@@ -52,20 +44,20 @@ func TestActivate(t *testing.T) {
 		t.Fatal(e)
 	} else if e := isActive(q, false, "beep"); e != nil {
 		t.Fatal(e)
-	} else if e := activate(q, scan, "beep", 2,
+	} else if e := activate(q, "beep", 2,
 		"beep:2",
 	); e != nil {
 		t.Fatal(e)
-	} else if e := activate(q, scan, "main", 3,
+	} else if e := activate(q, "main", 3,
 		"main:3",
 	); e != nil {
 		t.Fatal(e)
-	} else if e := activate(q, scan, "sub", 4,
+	} else if e := activate(q, "sub", 4,
 		"main:3",
 		"sub:4",
 	); e != nil {
 		t.Fatal(e)
-	} else if e := activate(q, scan, "sub", 5,
+	} else if e := activate(q, "sub", 5,
 		"main:3",
 		"sub:4",
 	); e != nil {
@@ -77,7 +69,7 @@ func TestActivate(t *testing.T) {
 	}
 }
 
-func isActive(q *Query, want bool, names ...string) (err error) {
+func isActive(q *pdb.QueryTest, want bool, names ...string) (err error) {
 	for _, n := range names {
 		if ok, e := q.IsDomainActive(n); e != nil || ok != want {
 			err = errutil.New("expected", n, "active", want, e)
@@ -87,11 +79,9 @@ func isActive(q *Query, want bool, names ...string) (err error) {
 	return
 }
 
-func activate(q *Query, scan *sql.Stmt, name string, act int, expect ...string) (err error) {
-	if _, e := q.domainActivation.Exec(name, act); e != nil {
+func activate(q *pdb.QueryTest, name string, act int, expect ...string) (err error) {
+	if els, e := q.InnerActivate(name, act); e != nil {
 		err = errutil.New("couldnt activate", name, e)
-	} else if els, e := scanStrings(scan); e != nil {
-		err = errutil.New("couldnt scan", name, e)
 	} else if diff := pretty.Diff(els, expect); len(diff) > 0 {
 		err = errutil.New("diff", name, els, diff)
 	}

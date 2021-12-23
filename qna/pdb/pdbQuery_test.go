@@ -1,4 +1,4 @@
-package pdb
+package pdb_test
 
 import (
 	"database/sql"
@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/asm"
 	"git.sr.ht/~ionous/iffy/dl/eph"
+	"git.sr.ht/~ionous/iffy/qna/pdb"
 	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
@@ -30,6 +31,8 @@ func TestQueries(t *testing.T) {
 	const pattern = "common_ancestor"
 	const relation = "whereabouts"
 	const otherRelation = "otherRel"
+	const plural = "clutches"
+	const singular = "purse"
 	const kind = "k"
 	const subKind = "j"
 	const aspect = "a"
@@ -43,13 +46,20 @@ func TestQueries(t *testing.T) {
 				subDomain, domain, at); e != nil {
 				err = e
 			} else if e := write(w,
+				// name, path, at
+				// -------------------------
+				mdl.Plural,
+				domain, plural, singular, at); e != nil {
+				err = e
+			} else if e := write(w,
 				mdl.Kind,
 				append(defaultKinds(domain, at),
-					// domain, kind, parent, at
+					// "domain", "kind", "path", "at"
 					// ---------------------------
 					domain, kind, kindsOf.Kind.String(), at,
 					domain, aspect, kindsOf.Aspect.String(), at,
-					subDomain, subKind, kind, at,
+					// root is to the right
+					subDomain, subKind, strings.Join([]string{kind, kindsOf.Kind.String()}, ","), at,
 					// patterns:
 					domain, pattern, kindsOf.Pattern.String(), at,
 					// relations:
@@ -155,7 +165,7 @@ func TestQueries(t *testing.T) {
 	}
 
 	// start querying
-	if q, e := NewQueries(db); e != nil {
+	if q, e := pdb.NewQueries(db); e != nil {
 		t.Fatal(e)
 	} else if domainPoke, e := db.Prepare(
 		// turn on / off a domain regardless of hierarchy
@@ -168,72 +178,77 @@ func TestQueries(t *testing.T) {
 		t.Fatal(e)
 	} else if _, e := domainPoke.Exec(domain, true); e != nil {
 		t.Fatal(e)
+	} else if one, e := q.PluralToSingular(plural); e != nil || one != singular {
+		t.Fatal("singular", one, e)
+	} else if many, e := q.PluralFromSingular(singular); e != nil || many != plural {
+		t.Fatal("plural", many, e)
+	} else if one, e := q.PluralToSingular("x" + plural); e != nil || one != "" {
+		t.Fatal("singular", one, e)
+	} else if many, e := q.PluralFromSingular("x" + singular); e != nil || many != "" {
+		t.Fatal("plural", many, e)
 	} else if fd, e := q.FieldsOf(aspect); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(fd, []FieldData{
+	} else if diff := pretty.Diff(fd, []pdb.FieldData{
 		{Name: "brief", Affinity: affine.Bool},
 		{Name: "verbose", Affinity: affine.Bool},
 		{Name: "superbrief", Affinity: affine.Bool},
 	}); len(diff) > 0 {
 		t.Fatal(fd, diff)
-	} else if ks, e := q.KindsOf(kind); e != nil {
-		t.Fatal(e)
-	} else if diff := pretty.Diff(ks, []string{
-		kind,
-	}); len(diff) > 0 {
-		t.Fatal(ks, diff)
+	} else if path, e := q.KindOfAncestors("j"); e != nil || len(path) != 0 {
+		t.Fatal("KindOfAncestors", path, e)
 	} else if _, e := domainPoke.Exec(subDomain, true); e != nil {
 		t.Fatal(e)
-	} else if ks, e := q.KindsOf(kind); e != nil {
-		t.Fatal(e)
-	} else if diff := pretty.Diff(ks, []string{
-		kind, "j",
-	}); len(diff) > 0 {
-		t.Fatal(ks, diff)
+	} else if path, e := q.KindOfAncestors("j"); e != nil || strings.Join(path, ",") != "k,kinds" {
+		t.Fatal("KindOfAncestors", path, e)
 	} else if _, e := domainPoke.Exec(subDomain, false); e != nil {
 		t.Fatal(e)
-	} else if ok, e := q.IsNounInScope("apple"); e != nil || ok != true {
+	} else if ok, e := q.NounActive("apple"); e != nil || ok != true {
 		t.Fatal(e, ok)
-	} else if ok, e := q.IsNounInScope("table"); e != nil || ok != false {
+	} else if ok, e := q.NounActive("table"); e != nil || ok != false {
 		t.Fatal(e, ok)
-	} else if kindOfApple, e := q.KindOfNoun("apple"); e != nil || kindOfApple != kind {
+	} else if kindOfApple, e := q.NounKind("apple"); e != nil || kindOfApple != kind {
 		t.Fatal(kindOfApple, e)
-	} else if kindOfTable, e := q.KindOfNoun("table"); e != nil || kindOfTable != "" {
+	} else if kindOfTable, e := q.NounKind("table"); e != nil || kindOfTable != "" {
 		t.Fatal(kindOfTable, e) // should be blank because the table is out of scope
 	} else if aff, val, e := q.NounValue("apple", aspect); e != nil || aff != affine.Text || val.(string) != "brief" {
 		t.Fatal(aff, val, e)
 	} else if aff, val, e := q.NounValue("table", aspect); e != nil || aff != "" || val != nil {
 		t.Fatal(aff, e) // should be out of scope
-	} else if name, e := q.NameOfNoun("empire_apple"); e != nil || name != "empire apple" {
+	} else if name, e := q.NounName("empire_apple"); e != nil || name != "empire apple" {
 		t.Fatal(name, e)
-	} else if id, e := q.NounByName("apple"); e != nil || id != "apple" {
+	} else if id, e := q.NounInfo("apple"); e != nil || id != (pdb.NounInfo{Domain: domain, Name: "apple", Kind: kind}) {
 		t.Fatal(e, id)
-	} else if id, e := q.NounByName("empire"); e != nil || id != "empire_apple" {
+	} else if id, e := q.NounInfo("empire"); e != nil || id != (pdb.NounInfo{Domain: domain, Name: "empire_apple", Kind: kind}) {
 		t.Fatal(e, id)
-	} else if l, r, e := q.PatternLabels(pattern); e != nil ||
-		l != "object,other_object" || r != "ancestor" {
-		t.Fatal(e, l, r)
+	} else if got, e := q.PatternLabels(pattern); e != nil {
+		t.Fatal("patternLabels:", e)
+	} else if diff := pretty.Diff(got, pdb.PatternLabels{
+		"ancestor",
+		[]string{"object", "other_object"},
+	}); len(diff) > 0 {
+		t.Fatal(e, diff)
 	} else if got, e := q.RulesFor(pattern, ""); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []RuleData{
+	} else if diff := pretty.Diff(got, []pdb.Rules{
 		{"1", 1, []byte("filter1"), []byte("prog1")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
 	} else if got, e := q.RulesFor(pattern, kind); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []RuleData{
+	} else if diff := pretty.Diff(got, []pdb.Rules{
 		{"2", 2, []byte("filter2"), []byte("prog2")},
 		{"3", 3, []byte("filter3"), []byte("prog3")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
-	} else if got, e := q.Relation(relation); e != nil {
+	} else /*if got, e := q.Relation(relation); e != nil {
 		t.Fatal("relation:", e)
 	} else if diff := pretty.Diff(got, RelationData{
 		kind, kind, tables.ONE_TO_MANY,
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
-	} else if e := q.ActivateDomain(subDomain); e != nil {
-		t.Fatal("ActivateDomain", e) // enable the sub domain again to get reasonable pairs
+	} else */if prev, e := q.ActivateDomain(subDomain); e != nil || len(prev) > 0 {
+		t.Fatal("ActivateDomain", prev, e) // enable the sub domain again to get reasonable pairs
+		// note: we never previously fully activated a domain, so prev is empty.
 	} else if rel, e := q.RelativesOf(relation, "table"); e != nil ||
 		len(rel) != 2 || rel[0] != "empire_apple" || rel[1] != "apple" {
 		t.Fatal("RelativesOf: table", e, rel)

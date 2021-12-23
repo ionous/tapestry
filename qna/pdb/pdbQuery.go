@@ -4,6 +4,7 @@ package pdb
 
 import (
 	"database/sql"
+	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -16,21 +17,23 @@ type Query struct {
 	domainActivation,
 	domainScope,
 	domainDelete,
-	//
 	fieldsOf,
-	kindOf,
-	kindsOf,
-	nameOf,
-	objOf,
-	objScope,
+	kindOfAncestors,
+	nounActive,
+	nounInfo,
+	nounKind,
+	nounName,
+	nounValue,
+	nounsByKind,
 	patternOf,
+	pluralToSingular,
+	pluralFromSingular,
 	reciprocalOf,
 	relateChanges,
 	relateNames,
-	relativeKinds,
 	relativesOf,
-	rulesFor,
-	valueOf *sql.Stmt
+	rulesFor *sql.Stmt
+
 	//
 	domain     string // name of the most recently activated domain ( for scoping new run_pair entries )
 	activation int    // number of domain activation requests ( to find new domains in run_domain )
@@ -47,8 +50,10 @@ func (q *Query) IsDomainActive(name string) (okay bool, err error) {
 
 // changing domains can establish new relations ( abandoning now conflicting ones )
 // and cause nouns to fall out of scope
-func (q *Query) ActivateDomain(name string) (err error) {
-	if tx, e := q.db.Begin(); e != nil {
+func (q *Query) ActivateDomain(name string) (ret string, err error) {
+	if name == q.domain {
+		ret = q.domain
+	} else if tx, e := q.db.Begin(); e != nil {
 		err = e
 	} else {
 		// register the new scope(s)
@@ -69,7 +74,7 @@ func (q *Query) ActivateDomain(name string) (err error) {
 			}
 		}
 		if err == nil {
-			q.domain, q.activation = name, act
+			q.domain, q.activation, ret = name, act, q.domain
 			err = tx.Commit()
 		} else if e := tx.Rollback(); e != nil {
 			err = errutil.Append(err, e)
@@ -98,83 +103,96 @@ func (q *Query) FieldsOf(kind string) (ret []FieldData, err error) {
 	return
 }
 
-func (q *Query) KindsOf(kind string) ([]string, error) {
-	return scanStrings(q.kindsOf, kind)
+// returns the ancestor hierarchy, not including the kind itself
+func (q *Query) KindOfAncestors(kind string) ([]string, error) {
+	return scanStrings(q.kindOfAncestors, kind)
 }
 
-func (q *Query) IsNounInScope(id string) (okay bool, err error) {
-	if e := q.objScope.QueryRow(id).Scan(&okay); e != nil && e != sql.ErrNoRows {
+func (q *Query) NounActive(id string) (okay bool, err error) {
+	if e := q.nounActive.QueryRow(id).Scan(&okay); e != nil && e != sql.ErrNoRows {
 		err = e
 	}
 	return
+}
+
+// given a name, find a noun ( and some useful other context )
+func (q *Query) NounInfo(name string) (ret NounInfo, err error) {
+	if e := q.nounInfo.QueryRow(name).Scan(&ret.Domain, &ret.Name, &ret.Kind); e != nil && e != sql.ErrNoRows {
+		err = e
+	}
+	return
+}
+
+type NounInfo struct {
+	Domain, Name, Kind string
+}
+
+func (n *NounInfo) IsValid() bool {
+	return len(n.Name) != 0
 }
 
 // return the noun's kind ( or blank if not known or not in scope )
-func (q *Query) KindOfNoun(id string) (ret string, err error) {
-	if e := q.kindOf.QueryRow(id).Scan(&ret); e != nil && e != sql.ErrNoRows {
-		err = e
-	}
-	return
+func (q *Query) NounKind(id string) (ret string, err error) {
+	return scanString(q.nounKind, id)
 }
 
+// return the best "short name" for a noun ( or blank if the noun isnt known or isnt in scope )
+func (q *Query) NounName(id string) (ret string, err error) {
+	return scanString(q.nounName, id)
+}
+
+//
 func (q *Query) NounValue(id, field string) (retAff affine.Affinity, retVal interface{}, err error) {
-	if e := q.valueOf.QueryRow(id, field).Scan(&retVal, &retAff); e != nil && e != sql.ErrNoRows {
+	if e := q.nounValue.QueryRow(id, field).Scan(&retVal, &retAff); e != nil && e != sql.ErrNoRows {
 		err = e
 	}
 	return
 }
 
-// return the best "short name" for a noun ( or blank if the noun isnt known or isnt in scope )
-func (q *Query) NameOfNoun(id string) (ret string, err error) {
-	if e := q.nameOf.QueryRow(id).Scan(&ret); e != nil && e != sql.ErrNoRows {
+func (q *Query) NounsByKind(kind string) ([]string, error) {
+	return scanStrings(q.nounsByKind, kind)
+}
+
+func (q *Query) PluralToSingular(plural string) (ret string, err error) {
+	return scanString(q.pluralToSingular, plural)
+}
+
+func (q *Query) PluralFromSingular(singular string) (ret string, err error) {
+	return scanString(q.pluralFromSingular, singular)
+}
+
+type PatternLabels struct {
+	Result string
+	Labels []string
+}
+
+func (q *Query) PatternLabels(pat string) (ret PatternLabels, err error) {
+	var labels, result string
+	if e := q.patternOf.QueryRow(pat).Scan(&labels, &result); e != nil && e != sql.ErrNoRows {
 		err = e
+	} else {
+		ret = PatternLabels{result, strings.Split(labels, ",")}
 	}
 	return
 }
 
-// return the best "short name" for a noun ( or blank if the noun isnt known or isnt in scope )
-func (q *Query) NounByName(name string) (ret string, err error) {
-	if e := q.objOf.QueryRow(name).Scan(&ret); e != nil && e != sql.ErrNoRows {
-		err = e
-	}
-	return
-}
-func (q *Query) PatternLabels(pat string) (retLabels, retResult string, err error) {
-	if e := q.patternOf.QueryRow(pat).Scan(&retLabels, &retResult); e != nil && e != sql.ErrNoRows {
-		err = e
-	}
-	return
-}
-
-type RuleData struct {
+type Rules struct {
 	Id           string // really an id, but we'll let the driver convert
 	Phase        int
 	Filter, Prog []byte
 }
 
-func (q *Query) RulesFor(pat, target string) (ret []RuleData, err error) {
+func (q *Query) RulesFor(pat, target string) (ret []Rules, err error) {
 	if rows, e := q.rulesFor.Query(pat, target); e != nil {
 		err = e
 	} else {
-		var rule RuleData
+		var rule Rules
 		if e := tables.ScanAll(rows, func() (err error) {
 			ret = append(ret, rule)
 			return
 		}, &rule.Id, &rule.Phase, &rule.Filter, &rule.Prog); e != nil {
 			err = e // scan error...
 		}
-	}
-	return
-}
-
-type RelationData struct {
-	Kind, OtherKind, Cardinality string
-}
-
-// find kinds and cardinality for the named relation.
-func (q *Query) Relation(rel string) (ret RelationData, err error) {
-	if e := q.relativeKinds.QueryRow(rel).Scan(&ret.Kind, &ret.OtherKind, &ret.Cardinality); e != nil && e != sql.ErrNoRows {
-		err = e
 	}
 	return
 }
@@ -232,7 +250,6 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			from domain_scope ds 
 			where name = ?1`,
 		),
-
 		// every field of a given kind, and its initial assignment if any.
 		// ( interestingly the order by seems to generate a shorter query than without )
 		fieldsOf: ps.Prep(db,
@@ -245,8 +262,48 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			where ks.name = ?1
 			order by mf.rowid`,
 		),
+		// path is materialized ids so we return multiple values of resolved names
+		kindOfAncestors: ps.Prep(db,
+			`select mk.kind 
+			from  kind_scope ks
+			join mdl_kind mk
+				-- is Y (is their name) a part of X (our path)
+				on instr(',' || ks.path, 
+								 ',' || mk.rowid || ',' )
+			where ks.name = ?1`,
+		),
+		// FIX: what do i even need this for????
+		// find all of the kinds of the named kind that are currently in scope.
+		// ie. descendants
+		// kindOfChildren: ps.Prep(db,
+		// 	`select ks.name
+		// 		from kind_scope ks
+		// 		join kind_scope matching
+		// 		on matching.name = ?1
+		// 		where instr(',' ||ks.kind || ',' || ks.path, ','|| matching.kind)`,
+		// ),
+		// determine if the named noun is in scope
+		// see also the nounInScope struct
+		nounActive: ps.Prep(db,
+			`select 1
+			from noun_scope ns
+			where name = ?1`,
+		),
+		// given a short name, find the noun's fullname.
+		// we filter out parser understandings (which have ranks < 0)
+		nounInfo: ps.Prep(db,
+			`select ns.domain, ns.name, mk.kind
+			from noun_scope ns
+			join mdl_name my
+				using (noun)
+			join mdl_kind mk
+				on (mk.rowid = ns.kind)
+			where rank >= 0 and my.name = ?1
+			order by rank
+			limit 1`,
+		),
 		// select the kind of the given noun
-		kindOf: ps.Prep(db,
+		nounKind: ps.Prep(db,
 			`select mk.kind
 			from noun_scope ns
 			join mdl_kind mk
@@ -254,16 +311,8 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			where ns.name = ?1
 			limit 1`,
 		),
-		// find all of the kinds of the named kind that are currently in scope.
-		kindsOf: ps.Prep(db,
-			`select ks.name
- 			from kind_scope ks
- 			join kind_scope matching
-				on matching.name = ?1
- 			where instr(',' ||ks.kind || ',' || ks.path, ','|| matching.kind)`,
-		),
 		// given the fullname of a noun, find the best short name
-		nameOf: ps.Prep(db,
+		nounName: ps.Prep(db,
 			`select my.name as nameOf
 			from noun_scope ns
 			join mdl_name my
@@ -272,23 +321,13 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			order by rank
 			limit 1`,
 		),
-		// given a short name, find the noun's fullname.
-		// we filter out parser understandings (which have ranks < 0)
-		objOf: ps.Prep(db,
-			`select ns.name as objOf
-			from noun_scope ns
-			join mdl_name my
-				using (noun)
-			where rank >= 0 and my.name = ?1
-			order by rank
-			limit 1`,
-		),
-		// determine if the named noun is in scope
-		// see also the objScope struct
-		objScope: ps.Prep(db,
-			`select 1
-			from noun_scope ns
-			where name = ?1`,
+		// given a named kind, find the nouns
+		nounsByKind: ps.Prep(db,
+			`select ns.name
+			from kind_scope ks
+			join noun_scope ns 
+				using(kind)
+			where ks.name=?1`,
 		),
 		// find the names of a given pattern ( kind's ) args and results
 		patternOf: ps.Prep(db,
@@ -299,10 +338,26 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			where ks.name = ?1
 			limit 1`,
 		),
+		pluralToSingular: ps.Prep(db,
+			`select one 
+			from mdl_plural
+			join domain_scope
+				using(domain)
+			where many=?
+			limit 1`,
+		),
+		pluralFromSingular: ps.Prep(db,
+			`select many 
+			from mdl_plural
+			join domain_scope
+				using(domain)
+			where one=?
+			limit 1`,
+		),
 		// given the "right side" of some related nouns, return the left side noun(s).
 		reciprocalOf: ps.Prep(db,
 			`select oneName 
-			from rp_names 
+			from rp_names
 			where relName=?1
 			and otherName=?2`,
 		),
@@ -312,22 +367,34 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 		relateNames: ps.Prep(db,
 			newPairsFromNames+relatePair,
 		),
+		// type Relation struct {
+		// 	Kind, OtherKind, Cardinality string
+		// }
+		// create view if not exists
+		// rel_scope as
+		// select ds.name as domain, mk.rowid as relKind, mk.kind as name, mr.oneKind, mr.otherKind, mr.cardinality
+		// from domain_scope ds
+		// join mdl_kind mk
+		// 	using (domain)
+		// join mdl_rel mr
+		// 	on (mk.rowid = mr.relKind);
+		//
 		// find kinds and cardinality for the named relation.
-		relativeKinds: ps.Prep(db,
-			`select mk.kind as kind, 
-				ok.kind as otherKind,
-				rs.cardinality
-			from rel_scope rs
-			join mdl_kind mk
-				on (mk.rowid = rs.oneKind)
-			join mdl_kind ok 
-				on (ok.rowid = rs.otherKind)
-			where rs.name = ?1`,
-		),
+		// relativeKinds: ps.Prep(db,
+		// 	`select mk.kind as kind,
+		// 		ok.kind as otherKind,
+		// 		rs.cardinality
+		// 	from rel_scope rs
+		// 	join mdl_kind mk
+		// 		on (mk.rowid = rs.oneKind)
+		// 	join mdl_kind ok
+		// 		on (ok.rowid = rs.otherKind)
+		// 	where rs.name = ?1`,
+		// ),
 		// given the "left side" of some related nouns, return the right side noun(s).
 		relativesOf: ps.Prep(db,
 			`select otherName 
-			from rp_names 
+			from rp_names
 			where relName=?1
 			and oneName=?2`,
 		),
@@ -347,7 +414,7 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 		),
 		// query the db for the value of a given field for a given noun
 		// fix: future, we will want to save values to a "run_value" table and union those in here.
-		valueOf: ps.Prep(db,
+		nounValue: ps.Prep(db,
 			`select mv.value, mv.affinity
 			from mdl_value mv
 			join noun_scope ns

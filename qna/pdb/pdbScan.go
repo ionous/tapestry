@@ -6,6 +6,13 @@ import (
 	"git.sr.ht/~ionous/iffy/tables"
 )
 
+func scanString(q *sql.Stmt, args ...interface{}) (ret string, err error) {
+	if e := q.QueryRow(args...).Scan(&ret); e != nil && e != sql.ErrNoRows {
+		err = e
+	}
+	return
+}
+
 func scanStrings(q *sql.Stmt, args ...interface{}) (ret []string, err error) {
 	if rows, e := q.Query(args...); e != nil {
 		err = e
