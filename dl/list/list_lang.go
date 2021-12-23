@@ -1873,7 +1873,7 @@ var ListIterator_Optional_Marshal = ListIterator_Marshal
 
 type ListIterator_Slot struct{ Value *ListIterator }
 
-func (at *ListIterator_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at ListIterator_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -1884,9 +1884,9 @@ func (at *ListIterator_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *ListIterator_Slot) GetType() string              { return ListIterator_Type }
-func (at *ListIterator_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *ListIterator_Slot) SetSlot(v interface{}) (okay bool) {
+func (at ListIterator_Slot) GetType() string              { return ListIterator_Type }
+func (at ListIterator_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at ListIterator_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(ListIterator)
 	return
 }
@@ -2974,7 +2974,7 @@ var ListSource_Optional_Marshal = ListSource_Marshal
 
 type ListSource_Slot struct{ Value *ListSource }
 
-func (at *ListSource_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at ListSource_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -2985,9 +2985,9 @@ func (at *ListSource_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *ListSource_Slot) GetType() string              { return ListSource_Type }
-func (at *ListSource_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *ListSource_Slot) SetSlot(v interface{}) (okay bool) {
+func (at ListSource_Slot) GetType() string              { return ListSource_Type }
+func (at ListSource_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at ListSource_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(ListSource)
 	return
 }
@@ -3170,7 +3170,7 @@ var ListTarget_Optional_Marshal = ListTarget_Marshal
 
 type ListTarget_Slot struct{ Value *ListTarget }
 
-func (at *ListTarget_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at ListTarget_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -3181,9 +3181,9 @@ func (at *ListTarget_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *ListTarget_Slot) GetType() string              { return ListTarget_Type }
-func (at *ListTarget_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *ListTarget_Slot) SetSlot(v interface{}) (okay bool) {
+func (at ListTarget_Slot) GetType() string              { return ListTarget_Type }
+func (at ListTarget_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at ListTarget_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(ListTarget)
 	return
 }

@@ -8,7 +8,7 @@ var {{Pascal name}}_Optional_Marshal = {{Pascal name}}_Marshal
 
 type {{Pascal name}}_Slot struct { Value *{{Pascal name}} }
 
-func (at *{{Pascal name}}_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at {{Pascal name}}_Slot) Marshal(m jsn.Marshaler) (err error) {
   if err = m.MarshalBlock(at); err == nil {
     if a, ok := at.GetSlot(); ok {
       if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -19,9 +19,9 @@ func (at *{{Pascal name}}_Slot) Marshal(m jsn.Marshaler) (err error) {
   }
   return
 }
-func (at *{{Pascal name}}_Slot) GetType() string { return {{Pascal name}}_Type }
-func (at *{{Pascal name}}_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *{{Pascal name}}_Slot) SetSlot(v interface{}) (okay bool) {
+func (at {{Pascal name}}_Slot) GetType() string { return {{Pascal name}}_Type }
+func (at {{Pascal name}}_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at {{Pascal name}}_Slot) SetSlot(v interface{}) (okay bool) {
   (*at.Value), okay = v.({{Pascal name}})
   return
 }

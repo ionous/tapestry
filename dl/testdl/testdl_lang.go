@@ -363,7 +363,7 @@ var TestSlot_Optional_Marshal = TestSlot_Marshal
 
 type TestSlot_Slot struct{ Value *TestSlot }
 
-func (at *TestSlot_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at TestSlot_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -374,9 +374,9 @@ func (at *TestSlot_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *TestSlot_Slot) GetType() string              { return TestSlot_Type }
-func (at *TestSlot_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *TestSlot_Slot) SetSlot(v interface{}) (okay bool) {
+func (at TestSlot_Slot) GetType() string              { return TestSlot_Type }
+func (at TestSlot_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at TestSlot_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(TestSlot)
 	return
 }

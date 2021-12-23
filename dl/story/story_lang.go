@@ -9486,7 +9486,7 @@ var StoryStatement_Optional_Marshal = StoryStatement_Marshal
 
 type StoryStatement_Slot struct{ Value *StoryStatement }
 
-func (at *StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -9497,9 +9497,9 @@ func (at *StoryStatement_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
-func (at *StoryStatement_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
+func (at StoryStatement_Slot) GetType() string              { return StoryStatement_Type }
+func (at StoryStatement_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at StoryStatement_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(StoryStatement)
 	return
 }
@@ -10272,7 +10272,7 @@ var Testing_Optional_Marshal = Testing_Marshal
 
 type Testing_Slot struct{ Value *Testing }
 
-func (at *Testing_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at Testing_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -10283,9 +10283,9 @@ func (at *Testing_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *Testing_Slot) GetType() string              { return Testing_Type }
-func (at *Testing_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *Testing_Slot) SetSlot(v interface{}) (okay bool) {
+func (at Testing_Slot) GetType() string              { return Testing_Type }
+func (at Testing_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at Testing_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(Testing)
 	return
 }

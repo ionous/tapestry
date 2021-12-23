@@ -2457,7 +2457,7 @@ var Ephemera_Optional_Marshal = Ephemera_Marshal
 
 type Ephemera_Slot struct{ Value *Ephemera }
 
-func (at *Ephemera_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at Ephemera_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -2468,9 +2468,9 @@ func (at *Ephemera_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *Ephemera_Slot) GetType() string              { return Ephemera_Type }
-func (at *Ephemera_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *Ephemera_Slot) SetSlot(v interface{}) (okay bool) {
+func (at Ephemera_Slot) GetType() string              { return Ephemera_Type }
+func (at Ephemera_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at Ephemera_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(Ephemera)
 	return
 }

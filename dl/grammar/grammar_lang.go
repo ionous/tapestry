@@ -626,7 +626,7 @@ var GrammarMaker_Optional_Marshal = GrammarMaker_Marshal
 
 type GrammarMaker_Slot struct{ Value *GrammarMaker }
 
-func (at *GrammarMaker_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at GrammarMaker_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -637,9 +637,9 @@ func (at *GrammarMaker_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *GrammarMaker_Slot) GetType() string              { return GrammarMaker_Type }
-func (at *GrammarMaker_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *GrammarMaker_Slot) SetSlot(v interface{}) (okay bool) {
+func (at GrammarMaker_Slot) GetType() string              { return GrammarMaker_Type }
+func (at GrammarMaker_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at GrammarMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(GrammarMaker)
 	return
 }
@@ -992,7 +992,7 @@ var ScannerMaker_Optional_Marshal = ScannerMaker_Marshal
 
 type ScannerMaker_Slot struct{ Value *ScannerMaker }
 
-func (at *ScannerMaker_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at ScannerMaker_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -1003,9 +1003,9 @@ func (at *ScannerMaker_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *ScannerMaker_Slot) GetType() string              { return ScannerMaker_Type }
-func (at *ScannerMaker_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *ScannerMaker_Slot) SetSlot(v interface{}) (okay bool) {
+func (at ScannerMaker_Slot) GetType() string              { return ScannerMaker_Type }
+func (at ScannerMaker_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at ScannerMaker_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(ScannerMaker)
 	return
 }

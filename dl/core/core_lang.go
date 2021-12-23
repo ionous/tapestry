@@ -880,7 +880,7 @@ var Brancher_Optional_Marshal = Brancher_Marshal
 
 type Brancher_Slot struct{ Value *Brancher }
 
-func (at *Brancher_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at Brancher_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -891,9 +891,9 @@ func (at *Brancher_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *Brancher_Slot) GetType() string              { return Brancher_Type }
-func (at *Brancher_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *Brancher_Slot) SetSlot(v interface{}) (okay bool) {
+func (at Brancher_Slot) GetType() string              { return Brancher_Type }
+func (at Brancher_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at Brancher_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(Brancher)
 	return
 }
@@ -3167,7 +3167,7 @@ var Comparator_Optional_Marshal = Comparator_Marshal
 
 type Comparator_Slot struct{ Value *Comparator }
 
-func (at *Comparator_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at Comparator_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -3178,9 +3178,9 @@ func (at *Comparator_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *Comparator_Slot) GetType() string              { return Comparator_Type }
-func (at *Comparator_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *Comparator_Slot) SetSlot(v interface{}) (okay bool) {
+func (at Comparator_Slot) GetType() string              { return Comparator_Type }
+func (at Comparator_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at Comparator_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(Comparator)
 	return
 }
@@ -4468,7 +4468,7 @@ var FromSourceFields_Optional_Marshal = FromSourceFields_Marshal
 
 type FromSourceFields_Slot struct{ Value *FromSourceFields }
 
-func (at *FromSourceFields_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at FromSourceFields_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -4479,9 +4479,9 @@ func (at *FromSourceFields_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *FromSourceFields_Slot) GetType() string              { return FromSourceFields_Type }
-func (at *FromSourceFields_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *FromSourceFields_Slot) SetSlot(v interface{}) (okay bool) {
+func (at FromSourceFields_Slot) GetType() string              { return FromSourceFields_Type }
+func (at FromSourceFields_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at FromSourceFields_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(FromSourceFields)
 	return
 }
@@ -5651,7 +5651,7 @@ var IntoTargetFields_Optional_Marshal = IntoTargetFields_Marshal
 
 type IntoTargetFields_Slot struct{ Value *IntoTargetFields }
 
-func (at *IntoTargetFields_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at IntoTargetFields_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -5662,9 +5662,9 @@ func (at *IntoTargetFields_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *IntoTargetFields_Slot) GetType() string              { return IntoTargetFields_Type }
-func (at *IntoTargetFields_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *IntoTargetFields_Slot) SetSlot(v interface{}) (okay bool) {
+func (at IntoTargetFields_Slot) GetType() string              { return IntoTargetFields_Type }
+func (at IntoTargetFields_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at IntoTargetFields_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(IntoTargetFields)
 	return
 }
@@ -9544,7 +9544,7 @@ var Trigger_Optional_Marshal = Trigger_Marshal
 
 type Trigger_Slot struct{ Value *Trigger }
 
-func (at *Trigger_Slot) Marshal(m jsn.Marshaler) (err error) {
+func (at Trigger_Slot) Marshal(m jsn.Marshaler) (err error) {
 	if err = m.MarshalBlock(at); err == nil {
 		if a, ok := at.GetSlot(); ok {
 			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
@@ -9555,9 +9555,9 @@ func (at *Trigger_Slot) Marshal(m jsn.Marshaler) (err error) {
 	}
 	return
 }
-func (at *Trigger_Slot) GetType() string              { return Trigger_Type }
-func (at *Trigger_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at *Trigger_Slot) SetSlot(v interface{}) (okay bool) {
+func (at Trigger_Slot) GetType() string              { return Trigger_Type }
+func (at Trigger_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at Trigger_Slot) SetSlot(v interface{}) (okay bool) {
 	(*at.Value), okay = v.(Trigger)
 	return
 }
