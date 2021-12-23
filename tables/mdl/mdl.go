@@ -55,4 +55,4 @@ var Rule = tables.Insert("mdl_rule", "domain", "pattern", "target", "phase", "fi
 
 // the noun half of what was Start.
 // "domain, noun, field" reference a join of Noun and Kind to get a filtered Field.
-var Value = tables.Insert("mdl_value", "domain", "noun", "field", "value", "affinity", "at")
+var Value = tables.Insert("mdl_value", "domain", "noun", "field", "value", "at")

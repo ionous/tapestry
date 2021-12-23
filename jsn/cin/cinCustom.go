@@ -37,6 +37,8 @@ func (dec *xDecoder) customFlow(flow jsn.FlowBlock, msg json.RawMessage) (err er
 	}
 	return
 }
+
+// unhandled reads are attempted via default readSlot evaluation.
 func (dec *xDecoder) customSlot(slot jsn.SlotBlock, msg json.RawMessage) (err error) {
 	switch typeName := slot.GetType(); typeName {
 	default:
@@ -150,8 +152,11 @@ func readTextList(dec *xDecoder, msg json.RawMessage) (ret *literal.TextValues, 
 	return
 }
 
-// when there's just a single string that fits a text eval..
+// when there's just a single string that fits a text eval...
 // it could be literal text or a variable providing text.
+// fix? tbd: it might be that coming from sqlite, this will be unable to determine
+// the difference between raw text and an eval stored as text --
+// in that case, like looking at @, might change it to look for "{"
 func readVarOrText(dec *xDecoder, msg json.RawMessage) (ret rt.TextEval, okay bool) {
 	var str string
 	if e := json.Unmarshal(msg, &str); e == nil {
@@ -160,8 +165,8 @@ func readVarOrText(dec *xDecoder, msg json.RawMessage) (ret rt.TextEval, okay bo
 			dec.Commit("simple text literal")
 		} else {
 			if cnt > 2 && str[1] == '@' {
-				// any text primitive with an @ gets another @ prefixed to it
-				// so.. strip that off here.
+				// text primitives with an @ gets another @ prefixed to it; strip that off.
+				// fix? instead of writing @@ maybe write it as an eval instead.
 				ret, okay = &literal.TextValue{str[1:]}, true
 				dec.Commit("escaped text literal")
 			} else {

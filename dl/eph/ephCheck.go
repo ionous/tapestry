@@ -27,10 +27,10 @@ func (c *asmCheck) setExpectation(v literal.LiteralValue) (err error) {
 	if v != nil {
 		if len(c.expectAff) > 0 {
 			err = errutil.New("check %q cant have multiple expectations", c.name)
-		} else if v, aff, e := encodeLiteral(v); e != nil {
+		} else if res, e := encodeLiteral(v); e != nil {
 			err = e
 		} else {
-			c.expectVal, c.expectAff = v, aff
+			c.expectVal, c.expectAff = res, v.Affinity()
 		}
 	}
 	return

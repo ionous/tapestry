@@ -2,7 +2,6 @@ package qna
 
 import (
 	"database/sql"
-	"encoding/json"
 	"strings"
 
 	"github.com/ionous/errutil"
@@ -19,7 +18,7 @@ import (
 func CheckAll(db *sql.DB, actuallyJustThisOne string, signatures []map[uint64]interface{}) (ret int, err error) {
 	var name, domain string
 	var aff affine.Affinity
-	var prog json.RawMessage
+	var prog []byte
 	var value interface{}
 	//
 	if len(actuallyJustThisOne) > 0 {

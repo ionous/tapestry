@@ -2,6 +2,7 @@ package pdb_test
 
 import (
 	"database/sql"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -102,11 +103,11 @@ func TestQueries(t *testing.T) {
 				t.Fatal(e)
 			} else if e := write(w,
 				mdl.Value,
-				// "domain", "noun", "field", "value", "affinity", "at"
+				// "domain", "noun", "field", "value", "at"
 				// ---------------------------------------
-				domain, "apple", aspect, "brief", affine.Text, at,
-				domain, "empire_apple", aspect, "verbose", affine.Text, at,
-				subDomain, "table", aspect, "superbrief", affine.Text, at,
+				domain, "apple", aspect, "brief", at,
+				domain, "empire_apple", aspect, "verbose", at,
+				subDomain, "table", aspect, "superbrief", at,
 			); e != nil {
 				err = e
 				t.Fatal(e)
@@ -186,6 +187,12 @@ func TestQueries(t *testing.T) {
 		t.Fatal("singular", one, e)
 	} else if many, e := q.PluralFromSingular("x" + singular); e != nil || many != "" {
 		t.Fatal("plural", many, e)
+	} else if fd, e := q.FieldsOf(kind); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(fd, []pdb.FieldData{
+		{Name: aspect, Affinity: affine.Text, Class: aspect},
+	}); len(diff) > 0 {
+		t.Fatal(fd, diff)
 	} else if fd, e := q.FieldsOf(aspect); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(fd, []pdb.FieldData{
@@ -210,10 +217,10 @@ func TestQueries(t *testing.T) {
 		t.Fatal(kindOfApple, e)
 	} else if kindOfTable, e := q.NounKind("table"); e != nil || kindOfTable != "" {
 		t.Fatal(kindOfTable, e) // should be blank because the table is out of scope
-	} else if aff, val, e := q.NounValue("apple", aspect); e != nil || aff != affine.Text || val.(string) != "brief" {
-		t.Fatal(aff, val, e)
-	} else if aff, val, e := q.NounValue("table", aspect); e != nil || aff != "" || val != nil {
-		t.Fatal(aff, e) // should be out of scope
+	} else if val, e := q.NounValue("apple", aspect); e != nil || !reflect.DeepEqual(val, []byte("brief")) {
+		t.Fatal(val, e)
+	} else if val, e := q.NounValue("table", aspect); e != nil || val != nil {
+		t.Fatal(e) // should be out of scope
 	} else if name, e := q.NounName("empire_apple"); e != nil || name != "empire apple" {
 		t.Fatal(name, e)
 	} else if id, e := q.NounInfo("apple"); e != nil || id != (pdb.NounInfo{Domain: domain, Name: "apple", Kind: kind}) {

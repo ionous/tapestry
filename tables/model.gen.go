@@ -51,11 +51,12 @@ func modelTemplate() string {
 		"/* the scope of a rule can be narrower than its parent kind ( or target )\n" +
 		" * fix? can target (kind of nouns the rule applies to) be moved to filter? */\n" +
 		"create table mdl_rule( domain int not null, kind int not null, target int, phase int, filter blob, prog blob, at text );\n" +
-		"/* initial values for various nouns; changed values are stored in run_start \n" +
-		" * currently the domain of the value is the same as the domain of the noun --\n" +
-		" * there's only one value per noun, per field; not values that change as new domains are activated.\n" +
-		" * fix: shouldnt we also be writing class of the value? */\n" +
-		"create table mdl_value( noun int not null, field int not null, value blob, affinity text, at text, primary key( noun, field ));\n" +
+		"/* initial values for various nouns.\n" +
+		" * note: currently, the scope of the value is the same as the noun.\n" +
+		" * ( ie. one value per noun per field; not values that change as new domains are activated. )\n" +
+		" + the affinity and subtype of the value come from the field.\n" +
+		" */\n" +
+		"create table mdl_value( noun int not null, field int not null, value blob, at text, primary key( noun, field ));\n" +
 		""
 	return tmpl
 }

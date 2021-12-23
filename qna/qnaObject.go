@@ -3,6 +3,7 @@ package qna
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
 )
@@ -65,10 +66,10 @@ func (obj *qnaObject) FieldByName(rawField string) (ret g.Value, err error) {
 	} else {
 		// just a regular field?
 		if ft := obj.kind.Field(i); ft.Name == field {
-			ret, err = getObjectField(obj.run, obj.domain, obj.name, field)
+			ret, err = getObjectField(obj.run, obj.domain, obj.name, ft)
 		} else {
 			// asking for a trait; so ft.Name is now the aspect field
-			if v, e := getObjectField(obj.run, obj.domain, obj.name, ft.Name); e != nil {
+			if v, e := getObjectField(obj.run, obj.domain, obj.name, ft); e != nil {
 				err = e
 			} else {
 				// return true if the aspect field holds the particular requested field
@@ -87,7 +88,7 @@ func (obj *qnaObject) SetFieldByName(rawField string, val g.Value) (err error) {
 	} else {
 		// just a regular field?
 		if ft := obj.kind.Field(i); ft.Name == field {
-			setObjectField(obj.run, obj.domain, obj.name, field, val)
+			setObjectField(obj.run, obj.domain, obj.name, ft, val)
 		} else {
 			// asking for a trait
 			// FIX: records dont have opposite day so this seems ... unfair.
@@ -98,43 +99,57 @@ func (obj *qnaObject) SetFieldByName(rawField string, val g.Value) (err error) {
 				err = e
 			} else {
 				// set the aspect to the value of the requested trait
-				setObjectField(obj.run, obj.domain, obj.name, ft.Name, g.StringFrom(trait /*trait*/, ""))
+				setObjectField(obj.run, obj.domain, obj.name, ft, g.StringFrom(trait /*trait*/, ""))
 			}
 		}
 	}
 	return
 }
 
-// FIX? object properties can hold templates ( ex. a room description ) so this generate, not hold, values.
-// but mdl_value is storing literals right now ( and note: affinity there is redundant -- its the affinity of the field. )
-// [ ideas: you could switch on the first character being { or something -- escaping { by putting it in a command
-//   or, you could make everything constant a literal value -- should be fine just for the second ]
-func getObjectField(run *Runner, domain, noun, field string) (ret g.Value, err error) {
+// to support text templates stored in object properties:
+// calls to get the object field result in "dynamic values".
+func getObjectField(run *Runner, domain, noun string, field g.Field) (ret g.Value, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
-		if _, v, e := run.qdb.NounValue(noun, field); e != nil {
+		if b, e := run.qdb.NounValue(noun, field.Name); e != nil {
 			err = e
-		} else if str, ok := v.(string); !ok {
-			err = errutil.New("todo: see notes")
+		} else if a, e := readValue(field.Affinity, b, run.signatures); e != nil {
+			err = e
 		} else {
-			ret = g.StringOf(str)
+			ret = &objectValue{dynamic: a}
 		}
 		return
-	}, domain, noun, field); e != nil {
+	}, domain, noun, field.Name); e != nil {
 		err = e
 	} else {
-		ret = c.(g.Value)
+		ov := c.(*objectValue)
+		ret, err = ov.getValue(run)
 	}
 	return
 }
 
 // both obj and field are normalized, and field is not a trait
-func setObjectField(run *Runner, domain, noun, field string, val g.Value) (err error) {
-	if v, e := g.CopyValue(val); e != nil {
-		err = e
+func setObjectField(run *Runner, domain, noun string, field g.Field, val g.Value) (err error) {
+	if aff := val.Affinity(); aff != field.Affinity {
+		err = errutil.New(`mismatched affinity "#%s::%s.%s(%s)" writing %s`, domain, noun, field.Name, field.Affinity, aff)
 	} else {
-		// FIX: unless the object also includes domain, and we push to
-		key := makeKey(domain, noun, field)
-		run.nounValues[key] = cachedValue{v: v}
+		key := makeKey(domain, noun, field.Name)
+		run.nounValues[key] = cachedValue{v: &objectValue{shared: g.CopyValue(val)}}
+	}
+	return
+}
+
+type objectValue struct {
+	dynamic rt.Assignment // from the db, calls to the get the field result in "dynamic values"
+	shared  g.Value       // when runtime code sets fields, it can only set concrete values
+}
+
+func (ov *objectValue) getValue(run rt.Runtime) (ret g.Value, err error) {
+	if v := ov.shared; v != nil {
+		ret = v
+	} else if a := ov.dynamic; a != nil {
+		ret, err = a.GetAssignedValue(run)
+	} else {
+		err = errutil.New("unexpectedly empty object value")
 	}
 	return
 }

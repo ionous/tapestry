@@ -6,35 +6,8 @@ import (
 )
 
 // CopyValue: create a new value from a snapshot of the passed value
-func CopyValue(val Value) (ret interface{}, err error) {
-	if val == nil {
-		err = errutil.New("failed to copy nil value")
-	} else {
-		switch a := val.Affinity(); a {
-		case affine.Bool:
-			ret = val.Bool()
-		case affine.Number:
-			ret = val.Float()
-		case affine.Text:
-			ret = val.String()
-		case affine.Record:
-			ret = copyRecord(val.Record())
-		case affine.NumList:
-			ret = copyFloats(val.Floats())
-		case affine.TextList:
-			ret = copyStrings(val.Strings())
-		case affine.RecordList:
-			ret = copyRecords(val.Records())
-		default:
-			err = errutil.Fmt("failed to copy value of %s:%v(%T)", a, val, val)
-		}
-	}
-	return
-}
-
-// dupeValue is what copy value probably should be
 // panics on error because it assumes all values should be copyable
-func dupeValue(val Value) (ret Value) {
+func CopyValue(val Value) (ret Value) {
 	if val == nil {
 		panic("failed to copy nil value")
 	}
@@ -87,7 +60,7 @@ func copyRecord(v *Record) (ret *Record) {
 		if el, e := v.GetIndexedField(i); e != nil {
 			panic(e)
 		} else {
-			values[i] = dupeValue(el)
+			values[i] = CopyValue(el)
 		}
 	}
 	return &Record{kind: v.kind, values: values}

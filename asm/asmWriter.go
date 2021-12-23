@@ -175,7 +175,7 @@ var idswriter = map[string]string{
 			on (mk.rowid = mf.kind)
 		join mdl_domain md
 			on (mk.domain = md.rowid))
-		insert into mdl_assign(field, assign)
+		insert into mdl_assign(field, value)
 		select fid, ?4
 		from parts where domain=?1 and kind=?2 and field=?3`,
 	),
@@ -242,8 +242,8 @@ var idswriter = map[string]string{
 				on (mn.kind = mk.rowid)
 			left join mdl_field mf
 				where instr(',' || mk.rowid || ',' || mk.path, ',' || mf.kind || ','))
-			insert into mdl_value(noun, field, value, affinity, at)
-			select nin, fid, ?4, ?5, ?6
+			insert into mdl_value(noun, field, value, at)
+			select nin, fid, ?4, ?5
 			from parts where domain=?1 and noun=?2 and field=?3`,
 	),
 }

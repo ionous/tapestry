@@ -141,9 +141,10 @@ func (q *Query) NounName(id string) (ret string, err error) {
 	return scanString(q.nounName, id)
 }
 
-//
-func (q *Query) NounValue(id, field string) (retAff affine.Affinity, retVal interface{}, err error) {
-	if e := q.nounValue.QueryRow(id, field).Scan(&retVal, &retAff); e != nil && e != sql.ErrNoRows {
+// interpreting the value is left to the caller ( re: field affinity )
+// fix? would it make more sense to pass a pointer to the value so that sqlite can do the value transformation
+func (q *Query) NounValue(id, field string) (retVal []byte, err error) {
+	if e := q.nounValue.QueryRow(id, field).Scan(&retVal); e != nil && e != sql.ErrNoRows {
 		err = e
 	}
 	return
@@ -253,11 +254,13 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 		// every field of a given kind, and its initial assignment if any.
 		// ( interestingly the order by seems to generate a shorter query than without )
 		fieldsOf: ps.Prep(db,
-			`select mf.field, mf.affinity, ifnull(mf.type, ''), ma.value
-			from kind_scope ks
+			`select mf.field, mf.affinity, ifnull(mk.kind, '') as type, ma.value
+			from kind_scope ks  -- search for the kind in question
 			join mdl_field mf
 				using (kind)
-			left join mdl_assign ma 
+			left join mdl_kind mk  -- search for the kind of type 
+				on (mk.rowid = mf.type)
+			left join mdl_assign ma
 				on (ma.field = mf.rowid)
 			where ks.name = ?1
 			order by mf.rowid`,
@@ -415,7 +418,7 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 		// query the db for the value of a given field for a given noun
 		// fix: future, we will want to save values to a "run_value" table and union those in here.
 		nounValue: ps.Prep(db,
-			`select mv.value, mv.affinity
+			`select mv.value
 			from mdl_value mv
 			join noun_scope ns
 				using (noun)

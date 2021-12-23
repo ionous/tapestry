@@ -44,17 +44,6 @@ func runTemplate() string {
 		"join mdl_noun mn \n" +
 		"\tusing (domain);\n" +
 		"\n" +
-		"/* not needed right now:\n" +
-		"create view if not exists\n" +
-		"rel_scope as \n" +
-		"select ds.name as domain, mk.rowid as relKind, mk.kind as name, mr.oneKind, mr.otherKind, mr.cardinality\n" +
-		"from domain_scope ds\n" +
-		"join mdl_kind mk \n" +
-		"\tusing (domain)\n" +
-		"join mdl_rel mr\n" +
-		"\ton (mk.rowid = mr.relKind);\n" +
-		"*/ \n" +
-		"\n" +
 		"/* for finding relatives and reciprocals: returns relName, nounName, otherName */\n" +
 		"create view if not exists\n" +
 		"rp_names as\n" +

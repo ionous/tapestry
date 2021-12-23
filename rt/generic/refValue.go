@@ -127,7 +127,7 @@ func (n refValue) FieldByName(f string) (ret Value, err error) {
 func (n refValue) SetFieldByName(f string, v Value) (err error) {
 	rec := n.Record()
 	name := lang.SpecialUnderscore(f)
-	newVal := dupeValue(v)
+	newVal := CopyValue(v)
 	return rec.SetNamedField(name, newVal)
 }
 

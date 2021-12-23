@@ -10,9 +10,11 @@ import (
 func (c *Catalog) WriteValues(w Writer) error {
 	return forEachNoun(c, func(k *ScopedKind, n *ScopedNoun) (err error) {
 		for _, v := range n.values {
-			if value, aff, e := encodeLiteral(v.value); e != nil {
+			// FIX: nouns should be able to store EVALS too
+			// example: an object with a counter in its description.
+			if value, e := encodeLiteral(v.value); e != nil {
 				err = errutil.Append(err, e)
-			} else if e := w.Write(mdl.Value, n.domain.name, n.name, v.field, value, aff, v.at); e != nil {
+			} else if e := w.Write(mdl.Value, n.domain.name, n.name, v.field, value, v.at); e != nil {
 				err = e
 				break
 			}
@@ -24,9 +26,6 @@ func (c *Catalog) WriteValues(w Writer) error {
 // name of a noun to assembly info
 func (op *EphValues) Phase() Phase { return ValuePhase }
 
-// Noun  string           `if:"label=noun,type=text"`
-// Field string           `if:"label=has,type=text"`
-// Value literal.LiteralValue `if:"label=value"`
 func (op *EphValues) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if noun, e := getClosestNoun(d, op.Noun); e != nil {
 		err = e

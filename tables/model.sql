@@ -40,8 +40,9 @@ create table mdl_rel( relKind int not null, oneKind int not null, otherKind int 
 /* the scope of a rule can be narrower than its parent kind ( or target )
  * fix? can target (kind of nouns the rule applies to) be moved to filter? */
 create table mdl_rule( domain int not null, kind int not null, target int, phase int, filter blob, prog blob, at text );
-/* initial values for various nouns; changed values are stored in run_start 
- * currently the domain of the value is the same as the domain of the noun --
- * there's only one value per noun, per field; not values that change as new domains are activated.
- * fix: shouldnt we also be writing class of the value? */
-create table mdl_value( noun int not null, field int not null, value blob, affinity text, at text, primary key( noun, field ));
+/* initial values for various nouns.
+ * note: currently, the scope of the value is the same as the noun.
+ * ( ie. one value per noun per field; not values that change as new domains are activated. )
+ + the affinity and subtype of the value come from the field.
+ */
+create table mdl_value( noun int not null, field int not null, value blob, at text, primary key( noun, field ));
