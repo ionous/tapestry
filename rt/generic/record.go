@@ -24,10 +24,10 @@ func (d *Record) Type() string {
 // GetNamedField picks out a value from this record.
 func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	switch k := d.kind; field {
-	case meta.Name:
+	case meta.ObjectName:
 		err = errutil.New("records don't have names")
 
-	case meta.Kind, meta.Kinds:
+	case meta.ObjectKind, meta.ObjectKinds:
 		ret = StringOf(d.kind.name)
 
 	default:

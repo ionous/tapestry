@@ -72,7 +72,7 @@ func BuildPath(run rt.Runtime, event string, up []string, allFlags *rt.Flags) (r
 // return the ancestors of the passed noun as a slice of strings
 // root is to the right: ex. props,things,objects,kinds
 func AncestryOf(run rt.Runtime, noun string) (ret []string, err error) {
-	if kinds, e := run.GetField(meta.Kinds, noun); e != nil {
+	if kinds, e := run.GetField(meta.ObjectKinds, noun); e != nil {
 		err = e
 	} else {
 		// fix? maybe kinds itself should be returning text list

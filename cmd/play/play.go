@@ -43,29 +43,30 @@ func playGame(inFile, testString string) (ret int, err error) {
 		defer db.Close()
 		if e := tables.CreateRun(db); e != nil {
 			err = e
-		} else if e := tables.CreateRunViews(db); e != nil {
-			err = e
 		} else if grammar, e := play.MakeGrammar(db); e != nil {
 			err = e
 		} else {
 			run := play.NewPlaytime(db, "#entire_game::player", "#entire_game::kitchen")
-			run.ActivateDomain("entire_game", true)
-			parser := play.NewParser(run, grammar)
-			//
-			if len(testString) > 0 {
-				for _, cmd := range strings.Split(testString, ";") {
-					fmt.Println("> ", cmd)
-					step(parser, cmd)
-				}
+			if _, e := run.ActivateDomain("entire_game"); e != nil {
+				err = e
 			} else {
-				reader := bufio.NewReader(os.Stdin)
-				for {
-					fmt.Printf("> ")
-					if in, _ := reader.ReadString('\n'); len(in) <= 1 {
-						break
-					} else {
-						words := in[:len(in)-1] // strip the enter.
-						step(parser, words)
+				parser := play.NewParser(run, grammar)
+				//
+				if len(testString) > 0 {
+					for _, cmd := range strings.Split(testString, ";") {
+						fmt.Println("> ", cmd)
+						step(parser, cmd)
+					}
+				} else {
+					reader := bufio.NewReader(os.Stdin)
+					for {
+						fmt.Printf("> ")
+						if in, _ := reader.ReadString('\n'); len(in) <= 1 {
+							break
+						} else {
+							words := in[:len(in)-1] // strip the enter.
+							step(parser, words)
+						}
 					}
 				}
 			}

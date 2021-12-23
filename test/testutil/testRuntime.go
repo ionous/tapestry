@@ -46,27 +46,31 @@ func (x *Runtime) SetField(target, field string, value g.Value) (err error) {
 func (x *Runtime) GetField(target, field string) (ret g.Value, err error) {
 	switch target {
 	// return type of an object
-	case meta.Kind:
+	case meta.ObjectKind:
 		if a, ok := x.ObjectMap[field]; !ok {
 			err = g.UnknownObject(field)
 		} else {
 			ret = g.StringOf(a.Type())
 		}
+
 		// hierarchy of an object's types ( a path )
-	case meta.Kinds:
+	case meta.ObjectKinds:
 		if a, ok := x.ObjectMap[field]; !ok {
 			err = g.UnknownObject(field)
 		} else {
 			ret = g.StringOf(strings.Join(a.Kind().Path(), ","))
 		}
-	case meta.Variables:
-		ret, err = x.Stack.FieldByName(field)
-	case meta.Value:
+
+	case meta.ObjectValue:
 		if obj, ok := x.ObjectMap[field]; ok {
 			ret = g.RecordOf(obj)
 		} else {
 			err = g.UnknownObject(field)
 		}
+
+	case meta.Variables:
+		ret, err = x.Stack.FieldByName(field)
+
 	default:
 		err = g.UnknownField(target, field)
 	}

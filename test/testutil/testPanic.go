@@ -12,7 +12,7 @@ type PanicRuntime struct{}
 
 var _ rt.Runtime = (*PanicRuntime)(nil)
 
-func (PanicRuntime) ActivateDomain(name string, enable bool) {
+func (PanicRuntime) ActivateDomain(name string) (string, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {

@@ -25,7 +25,7 @@ func (op *RenderField) GetSourceFields(run rt.Runtime) (ret g.Value, err error) 
 func getSourceFields(run rt.Runtime, name string) (ret g.Value, err error) {
 	// uppercase names are assumed to be requests for object names.
 	if lang.IsCapitalized(name) {
-		ret, err = run.GetField(meta.Value, name)
+		ret, err = run.GetField(meta.ObjectValue, name)
 	} else {
 		// try as a variable:
 		switch v, e := run.GetField(meta.Variables, name); e.(type) {
@@ -41,7 +41,7 @@ func getSourceFields(run rt.Runtime, name string) (ret g.Value, err error) {
 			}
 		case g.Unknown:
 			// no such variable? try as an object
-			ret, err = run.GetField(meta.Value, name)
+			ret, err = run.GetField(meta.ObjectValue, name)
 		default:
 			err = e
 		}

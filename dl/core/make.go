@@ -26,7 +26,7 @@ func (op *CallMake) makeRecord(run rt.Runtime) (ret *g.Record, err error) {
 			ret = out // return the empty record
 		} else {
 			for _, arg := range args {
-				name := lang.Breakcase(arg.Name)
+				name := lang.Underscore(arg.Name)
 				if fin := k.FieldIndex(name); fin < 0 {
 					e := g.UnknownField(op.Kind, arg.Name)
 					err = errutil.Append(err, e)

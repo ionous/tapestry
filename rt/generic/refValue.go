@@ -31,6 +31,7 @@ func (n refValue) Bool() bool {
 }
 
 func (n refValue) Float() (ret float64) {
+	// see also: MakeLiteral
 	switch v := n.i.(type) {
 	case float64:
 		ret = v
@@ -114,7 +115,7 @@ func (n refValue) Index(i int) (ret Value) {
 }
 
 func (n refValue) FieldByName(f string) (ret Value, err error) {
-	name := lang.SpecialBreakcase(f)
+	name := lang.SpecialUnderscore(f)
 	if v, e := n.Record().GetNamedField(name); e != nil {
 		err = e
 	} else {
@@ -125,7 +126,7 @@ func (n refValue) FieldByName(f string) (ret Value, err error) {
 
 func (n refValue) SetFieldByName(f string, v Value) (err error) {
 	rec := n.Record()
-	name := lang.SpecialBreakcase(f)
+	name := lang.SpecialUnderscore(f)
 	newVal := dupeValue(v)
 	return rec.SetNamedField(name, newVal)
 }

@@ -218,7 +218,7 @@ func ObjectFromString(run rt.Runtime, n string) (ret g.Value, err error) {
 	if len(n) == 0 {
 		err = g.NothingObject
 	} else {
-		ret, err = run.GetField(meta.Value, n)
+		ret, err = run.GetField(meta.ObjectValue, n)
 	}
 	return
 }
@@ -232,7 +232,7 @@ func ObjectText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
 	} else if n := t.String(); len(n) == 0 {
 		ret = g.Empty
 	} else {
-		ret, err = run.GetField(meta.Id, n)
+		ret, err = run.GetField(meta.ObjectId, n)
 	}
 	return
 }
@@ -240,7 +240,7 @@ func ObjectText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
 // fix: see also kind.Implements and qna.compatibleKind
 func Compatible(obj g.Value, kind string, exact bool) (ret bool) {
 	if obj != nil {
-		if objectPath, e := Unpack(obj, meta.Kinds, affine.Text); e == nil {
+		if objectPath, e := Unpack(obj, meta.ObjectKinds, affine.Text); e == nil {
 			if cp, ck := objectPath.String()+",", kind+","; exact {
 				ret = cp == ck
 			} else {

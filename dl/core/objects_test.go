@@ -79,13 +79,13 @@ func (m *modelTest) GetField(target, field string) (ret g.Value, err error) {
 		err = g.UnknownField(target, field)
 	} else {
 		switch target {
-		case meta.Id:
+		case meta.ObjectId:
 			ret = g.StringOf(field)
 
-		case meta.Kind:
+		case meta.ObjectKind:
 			ret = g.StringOf(cls)
 
-		case meta.Kinds:
+		case meta.ObjectKinds:
 			if path, ok := m.objClass[cls]; !ok {
 				err = errutil.New("modelTest: unknown class", cls)
 			} else {

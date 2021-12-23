@@ -3,13 +3,14 @@ package generic_test
 import (
 	"git.sr.ht/~ionous/iffy/affine"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/test/testutil"
 	"github.com/ionous/errutil"
 )
 
-func (n *recordTest) NewKind(name string, fields []g.Field) (ret *g.Kind) {
-	k := g.NewKind(n, name, fields)
+func (n *recordTest) NewKind(name string, path []string, fields []g.Field) (ret *g.Kind) {
+	k := g.NewKind(n, name, path, fields)
 	n.ks = append(n.ks, k)
 	return k
 }
@@ -50,14 +51,14 @@ type recordTest struct {
 
 func newRecordAccessTest() *recordTest {
 	rt := new(recordTest)
-	rt.NewKind("a", []g.Field{
+	rt.NewKind("a", []string{kindsOf.Aspect.String()}, []g.Field{
 		{"x", affine.Bool, "" /*"trait"*/},
 		{"w", affine.Bool, "" /*"trait"*/},
 		{"y", affine.Bool, "" /*"trait"*/},
 	})
-	ks := rt.NewKind("Ks", []g.Field{
-		{"d", affine.Number, "float64"},
-		{"t", affine.Text, "string"},
+	ks := rt.NewKind("Ks", nil, []g.Field{
+		{"d", affine.Number, "" /*"float64"*/},
+		{"t", affine.Text, "" /*"string"*/},
 		{"a", affine.Text, "a"},
 	})
 	rt.vars = map[string]*g.Record{

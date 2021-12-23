@@ -40,7 +40,7 @@ func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 		err = cmdError(op, e)
 	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.Empty // fix: or, should it be "nothing"
-	} else if v, e := run.GetField(meta.Name, obj); e != nil {
+	} else if v, e := run.GetField(meta.ObjectName, obj); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -53,7 +53,7 @@ func (op *KindOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 		err = cmdError(op, e)
 	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.Empty
-	} else if v, e := run.GetField(meta.Kind, obj); e != nil {
+	} else if v, e := run.GetField(meta.ObjectKind, obj); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -68,7 +68,7 @@ func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.False
 	} else {
 		kind := lang.Underscore(op.Kind)
-		if objectPath, e := run.GetField(meta.Kinds, obj); e != nil {
+		if objectPath, e := run.GetField(meta.ObjectKinds, obj); e != nil {
 			err = cmdError(op, e)
 		} else {
 			// Contains reports whether second is within first.
@@ -87,7 +87,7 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.False
 	} else {
 		kind := lang.Underscore(op.Kind)
-		if objectPath, e := run.GetField(meta.Kinds, obj); e != nil {
+		if objectPath, e := run.GetField(meta.ObjectKinds, obj); e != nil {
 			err = cmdError(op, e)
 		} else {
 			// Contains reports whether second is within first.
@@ -99,7 +99,8 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
+// ex. repeating across all things
 func (op *KindsOf) GetTextList(run rt.Runtime) (g.Value, error) {
-	kind := lang.Underscore(op.Kind) // fix: break case at assembly time.
-	return run.GetField(meta.KindsOf, kind)
+	kind := lang.Underscore(op.Kind) // fix: at assembly time.
+	return run.GetField(meta.ObjectsOfKind, kind)
 }

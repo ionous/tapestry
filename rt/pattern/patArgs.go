@@ -2,7 +2,6 @@ package pattern
 
 import (
 	"strconv"
-	"strings"
 
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -13,17 +12,16 @@ import (
 
 // args run in the scope of their parent context
 // they write to the record that will become the new context
-func NewRecord(run rt.Runtime, name, labels string, args []rt.Arg) (rec *g.Record, err error) {
+func NewRecord(run rt.Runtime, name string, parts []string, args []rt.Arg) (rec *g.Record, err error) {
 	// create a container to hold results of args, locals, and the pending return value
 	if k, e := run.GetKindByName(name); e != nil {
 		err = e
 	} else {
 		rec = k.NewRecord()
 		var labelIndex, fieldIndex int
-		parts := strings.Split(labels, ",") //
 		//
 		for i, a := range args {
-			n := lang.Underscore(a.Name)
+			n := lang.SpecialUnderscore(a.Name) // because args can be $1, $2, etc.
 			// search for a matching label.
 			if len(n) == 0 {
 				err = errutil.New("unnamed arg at", i)

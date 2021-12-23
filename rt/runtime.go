@@ -34,7 +34,7 @@ type Runtime interface {
 	// objects are grouped into potentially hierarchical "domains"
 	// de/activating makes those groups hidden/visible to the runtime.
 	// Domain hierarchy is defined at assembly time.
-	ActivateDomain(name string, enable bool)
+	ActivateDomain(name string) (ret string, err error)
 	// record manipulation
 	GetKindByName(name string) (*g.Kind, error)
 	// return the runtime rules matching the passed pattern and target
@@ -44,20 +44,19 @@ type Runtime interface {
 	// trigger the named event, passing the objects to visit: target first, root-most last.
 	Send(name string, up []string, arg []Arg) (g.Value, error)
 	//
-	RelateTo(a, b, relation string) error
 	RelativesOf(a, relation string) ([]string, error)
 	ReciprocalsOf(b, relation string) ([]string, error)
-	// modifies the behavior of Get/SetField object.Variable
+	RelateTo(a, b, relation string) error
+	// modifies the behavior of Get/SetField meta.Variable
 	VariableStack
 	// various runtime objects (ex. nouns, kinds, etc. ) store data addressed by name.
 	// the objects and their fields depend on implementation and context.
-	// see package object for a variety of common objects.
-	GetField(object, field string) (g.Value, error)
+	// see package meta for a variety of common objects.
+	GetField(meta, field string) (g.Value, error)
 	// store, or at least attempt to store, the passed value at the named field in the named object.
 	// it may return an error if the value is not of a compatible type,
 	// if its considered to be read-only, or if there is no predeclared value of that name.
-	SetField(object, field string, value g.Value) error
-	//
+	SetField(meta, field string, value g.Value) error
 	// turn single words into their plural variants, and vice-versa
 	PluralOf(single string) string
 	SingularOf(plural string) string

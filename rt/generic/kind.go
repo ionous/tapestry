@@ -1,9 +1,8 @@
 package generic
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 )
 
 // we bake it down for faster, easier indexed access.
@@ -19,7 +18,7 @@ type Kind struct {
 type Field struct {
 	Name     string
 	Affinity affine.Affinity
-	Type     string // ex. kind, "aspect", "trait", "float64", ...
+	Type     string // ex. kind for text types ( future? "aspect", "trait", "float64", ... )
 }
 
 // see also eph.AspectParm
@@ -31,18 +30,13 @@ func (ft *Field) isAspectLike() (ret string, okay bool) {
 }
 
 // aspects are a specific kind of record where every field is a boolean trait
-func NewKind(kinds Kinds, path string, fields []Field) *Kind {
-	parts := strings.Split(path, ",")
-	return &Kind{kinds: kinds, name: parts[0], path: parts, fields: fields}
+func NewKind(kinds Kinds, name string, path []string, fields []Field) *Kind {
+	fullpath := append([]string{name}, path...)
+	return &Kind{kinds: kinds, name: name, path: fullpath, fields: fields}
 }
 
 func NewAnonymousRecord(kinds Kinds, fields []Field) *Record {
-	return NewKind(kinds, "", fields).NewRecord()
-}
-
-// fix: temp till all kinds are moved to assembly
-func (k *Kind) IsStaleKind(kinds Kinds) bool {
-	return kinds != k.kinds
+	return NewKind(kinds, "", nil, fields).NewRecord()
 }
 
 func (k *Kind) NewRecord() *Record {
@@ -52,13 +46,6 @@ func (k *Kind) NewRecord() *Record {
 
 func (k *Kind) Path() (ret []string) {
 	ret = append(ret, k.path...) // copies the slice
-	return
-}
-
-func (k *Kind) Parent() (ret string) {
-	if len(k.path) > 0 {
-		ret = k.path[0]
-	}
 	return
 }
 
@@ -121,9 +108,10 @@ func (k *Kind) ensureTraits() {
 		for _, ft := range k.fields {
 			if cls, ok := ft.isAspectLike(); ok {
 				// if this fails, we are likely to return an error through GetIndexedField at some point so...
-				// FIX: "aspects" matches "KindsOfAspect" in ephKinds.go -- move somewhere shareable?
-				if aspect, e := k.kinds.GetKindByName(cls); e == nil && aspect.Parent() == "aspects" {
-					ts = makeTraits(aspect, ts)
+				if aspect, e := k.kinds.GetKindByName(cls); e == nil {
+					if aok := aspect.Implements(kindsOf.Aspect.String()); aok {
+						ts = makeTraits(aspect, ts)
+					}
 				}
 			}
 		}

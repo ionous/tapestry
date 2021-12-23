@@ -9,7 +9,6 @@ import (
 
 //
 func TestRecordAccess(t *testing.T) {
-	//
 	t.Run("numbers", func(t *testing.T) {
 		q := newRecordAccessTest()
 		// beep, number

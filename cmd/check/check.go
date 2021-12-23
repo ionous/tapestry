@@ -40,8 +40,6 @@ func checkFile(inFile, testName string) (ret int, err error) {
 		defer db.Close()
 		if e := tables.CreateRun(db); e != nil {
 			err = e
-		} else if e := tables.CreateRunViews(db); e != nil {
-			err = e
 		} else {
 			ret, err = qna.CheckAll(db, testName, iffy.AllSignatures)
 		}

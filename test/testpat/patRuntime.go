@@ -1,8 +1,6 @@
 package testpat
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -20,8 +18,7 @@ func (run *Runtime) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g
 	if pat, ok := run.Map[name]; !ok {
 		err = errutil.New("unknown pattern", name)
 	} else {
-		ls := strings.Join(pat.Labels, ",")
-		if rec, e := pattern.NewRecord(run, pat.Name, ls, args); e != nil {
+		if rec, e := pattern.NewRecord(run, pat.Name, pat.Labels, args); e != nil {
 			err = e
 		} else {
 			results := pattern.NewResults(rec, pat.Return, aff)
