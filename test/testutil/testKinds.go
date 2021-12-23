@@ -8,24 +8,31 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/test/tag"
 	"github.com/ionous/errutil"
 )
 
 type Kinds struct {
-	Kinds  KindMap
-	Fields FieldMap
+	Kinds   KindMap // stores completed kinds
+	Builder KindBuilder
 }
 
 type KindMap map[string]*g.Kind
-type FieldMap map[string][]g.Field
+type FieldMap map[string][]g.Field // kind name to fields
+type AspectMap map[string]bool
+
+type KindBuilder struct {
+	Aspects AspectMap
+	Fields  FieldMap
+}
 
 // register kinds from a struct using reflection
 // note: this doesnt actually create the kinds....
 // it preps them for use -- they are created on Get()
 func (ks *Kinds) AddKinds(is ...interface{}) {
 	for _, el := range is {
-		ks.Fields = kindsForType(ks, ks.Fields, r.TypeOf(el).Elem())
+		ks.Builder.addType(ks, r.TypeOf(el).Elem())
 	}
 }
 
@@ -53,18 +60,23 @@ func (ks *Kinds) Kind(name string) (ret *g.Kind) {
 func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	if k, ok := ks.Kinds[name]; ok {
 		ret = k // we created the kind already
-	} else if fs, ok := ks.Fields[name]; !ok {
+	} else if fs, ok := ks.Builder.Fields[name]; !ok {
 		err = errutil.New("unknown kind", name)
 	} else {
 		if ks.Kinds == nil {
 			ks.Kinds = make(KindMap)
 		}
+		var path []string
 		// magic parent field for fake objects
 		if len(fs) > 0 && len(fs[0].Affinity) == 0 {
-			name = name + "," + fs[0].Type
+			path = append(path, fs[0].Type)
+		}
+		// magic field for aspects
+		if ks.Builder.Aspects[name] {
+			path = append(path, kindsOf.Aspect.String())
 		}
 		// create the kind from the stored fields
-		k := g.NewKind(ks, name, fs)
+		k := g.NewKind(ks, name, path, fs)
 		ks.Kinds[name] = k
 		ret = k
 	}
@@ -72,11 +84,12 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 }
 
 // generate fields from type t using reflection
-func kindsForType(ks *Kinds, kinds FieldMap, t r.Type) FieldMap {
+func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 	type stringer interface{ String() string }
 	rstringer := r.TypeOf((*stringer)(nil)).Elem()
-	if kinds == nil {
-		kinds = make(FieldMap)
+	if ft.Fields == nil {
+		ft.Fields = make(FieldMap)
+		ft.Aspects = make(AspectMap)
 	}
 
 	var path string
@@ -84,7 +97,7 @@ func kindsForType(ks *Kinds, kinds FieldMap, t r.Type) FieldMap {
 	for i, cnt := 0, t.NumField(); i < cnt; i++ {
 		f := t.Field(i)
 		fieldType := f.Type
-		var pending struct {
+		var Builder struct {
 			Aff  affine.Affinity
 			Type string
 		}
@@ -94,56 +107,57 @@ func kindsForType(ks *Kinds, kinds FieldMap, t r.Type) FieldMap {
 		case r.Bool:
 			tags := tag.ReadTag(f.Tag)
 			if _, ok := tags.Find("bool"); ok {
-				pending.Aff, pending.Type = affine.Bool, k.String()
+				Builder.Aff, Builder.Type = affine.Bool, k.String()
 			} else {
 				// the name of the aspect is the name of the field and its class
-				n := lang.Underscore(f.Name)
-				pending.Aff, pending.Type = affine.Text, n
-				kinds[n] = []g.Field{
+				aspect := lang.Underscore(f.Name)
+				Builder.Aff, Builder.Type = affine.Text, aspect
+				ft.Fields[aspect] = []g.Field{
 					// false first.
-					{Name: "not_" + n, Affinity: affine.Bool /*, Type: "trait"*/},
-					{Name: "is_" + n, Affinity: affine.Bool /*, Type: "trait"*/},
+					{Name: "not_" + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
+					{Name: "is_" + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
 				}
+				ft.Aspects[aspect] = true
 			}
 
 		case r.String:
-			pending.Aff, pending.Type = affine.Text, k.String()
+			Builder.Aff, Builder.Type = affine.Text, k.String()
 
 		case r.Struct:
-			pending.Type = nameOfType(fieldType)
+			Builder.Type = nameOfType(fieldType)
 			if f.Anonymous {
 				if len(fields) > 0 {
 					panic("anonymous structs are used for hierarchy and should be the first member")
 				}
-				parent := ks.Kind(pending.Type)
-				pending.Type = strings.Join(parent.Path(), ",")
+				parent := ks.Kind(Builder.Type)
+				Builder.Type = strings.Join(parent.Path(), ",")
 
 			} else {
-				pending.Aff = affine.Record
-				kinds = kindsForType(ks, kinds, fieldType)
+				Builder.Aff = affine.Record
+				ft.addType(ks, fieldType)
 			}
 
 		case r.Slice:
 			elType := fieldType.Elem()
 			switch k := elType.Kind(); k {
 			case r.String:
-				pending.Aff, pending.Type = affine.TextList, k.String()
+				Builder.Aff, Builder.Type = affine.TextList, k.String()
 			case r.Float64:
-				pending.Aff, pending.Type = affine.NumList, k.String()
+				Builder.Aff, Builder.Type = affine.NumList, k.String()
 			case r.Struct:
-				pending.Aff, pending.Type = affine.RecordList, nameOfType(elType)
-				kinds = kindsForType(ks, kinds, elType)
+				Builder.Aff, Builder.Type = affine.RecordList, nameOfType(elType)
+				ft.addType(ks, elType)
 
 			default:
 				panic(errutil.Sprint("unknown slice", elType.String()))
 			}
 
 		case r.Float64:
-			pending.Aff, pending.Type = affine.Number, k.String()
+			Builder.Aff, Builder.Type = affine.Number, k.String()
 
 		case r.Int:
 			aspect := nameOfType(fieldType)
-			pending.Aff, pending.Type = affine.Text, aspect
+			Builder.Aff, Builder.Type = affine.Text, aspect
 			if !fieldType.Implements(rstringer) {
 				panic("unknown enum")
 			}
@@ -159,16 +173,16 @@ func kindsForType(ks *Kinds, kinds FieldMap, t r.Type) FieldMap {
 				name := lang.Underscore(trait)
 				traits = append(traits, g.Field{Name: name, Affinity: affine.Bool /*, Type: "trait"*/})
 			}
-			kinds[aspect] = traits
+			ft.Fields[aspect] = traits
+			ft.Aspects[aspect] = true
 		}
-		if len(pending.Aff) > 0 || len(path) > 0 {
+		if len(Builder.Aff) > 0 || len(path) > 0 {
 			name := lang.Underscore(f.Name)
-			fields = append(fields, g.Field{Name: name, Affinity: pending.Aff, Type: pending.Type})
+			fields = append(fields, g.Field{Name: name, Affinity: Builder.Aff, Type: Builder.Type})
 		}
 	}
 	name := nameOfType(t)
-	kinds[name] = fields
-	return kinds
+	ft.Fields[name] = fields
 }
 
 func nameOfType(t r.Type) string {
