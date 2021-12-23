@@ -5,9 +5,12 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// uses its own cache to preserve values across domain changes
 type qnaOptions map[string]g.Value
 
-func (m qnaOptions) SetOption(name string, v g.Value) (err error) {
+// change an existing option.
+func (m qnaOptions) setOption(name string, v g.Value) (err error) {
+	// see meta.Options: new options cannot be added dynamically at runtime
 	if was, ok := m[name]; !ok {
 		err = errutil.New("no such option", name)
 	} else if a, va := was.Affinity(), v.Affinity(); a != va {
@@ -18,7 +21,8 @@ func (m qnaOptions) SetOption(name string, v g.Value) (err error) {
 	return
 }
 
-func (m qnaOptions) Option(name string) (ret g.Value, err error) {
+// return an existing option.
+func (m qnaOptions) option(name string) (ret g.Value, err error) {
 	if was, ok := m[name]; !ok {
 		err = errutil.New("no such option", name)
 	} else {

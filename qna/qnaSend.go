@@ -16,16 +16,15 @@ import (
 // optionally, likely, the locals include a "cancel" bool.
 // returns whether true if the event handling didnt return false
 func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, err error) {
-	okay := true                // provisionally
-	name := lang.Breakcase(pat) // gets replaced with the actual name by query
-	var labels, result string   // fix? consider a cache for this info?
-	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
+	okay := true                 // provisionally
+	name := lang.Underscore(pat) // FIX: why are people calling this with untransformed names
+	if pl, e := run.qdb.PatternLabels(name); e != nil {
 		err = e
-	} else if rec, e := pattern.NewRecord(run, name, labels, args); e != nil {
+	} else if rec, e := pattern.NewRecord(run, name, pl.Labels, args); e != nil {
 		err = e
 	} else {
 		// we always expect a "bool" result.
-		rw := pattern.NewResults(rec, result, affine.Bool)
+		rw := pattern.NewResults(rec, pl.Result, affine.Bool)
 		if oldScope, e := run.ReplaceScope(rw, true); e != nil {
 			err = e
 		} else {

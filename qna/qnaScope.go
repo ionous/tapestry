@@ -14,6 +14,8 @@ func (run *Runner) ReplaceScope(s rt.Scope, init bool) (ret rt.Scope, err error)
 		// fix... yeah, possibly this needs work.
 		// Runner is the thing calling replace scope
 		// so it could initialize locals, but... also depends on what happens with "Send"
+		// cant really put locals into g. because rt depends on g --
+		// but could put an initializer function per field maybe.
 		if v, ok := s.(*pattern.Results).Scope.(g.Value); !ok || v.Affinity() != affine.Record {
 			err = errutil.New("can only initialize records")
 		} else {
@@ -28,14 +30,13 @@ func (run *Runner) ReplaceScope(s rt.Scope, init bool) (ret rt.Scope, err error)
 	return
 }
 
-// by now the initializers for the kind will have been cached....
+// get the initializer and ... init them.
 func (run *Runner) initializeLocals(rec *g.Record) (err error) {
 	k := rec.Kind()
-	if qk, ok := run.qnaKinds.kinds[k.Name()]; !ok {
-		err = errutil.New("unknown kind", k.Name())
+	if cached, e := run.getCachedKind(k.Name()); e != nil {
+		err = e
 	} else {
-		// run all the initializers
-		for i, init := range qk.init {
+		for i, init := range cached.init {
 			if init != nil { // not every field necessarily has an initializer
 				if v, e := init.GetAssignedValue(run); e != nil {
 					err = errutil.New("error determining local", k.Name(), k.Field(i).Name, e)

@@ -1,38 +1,19 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/object"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"hash/fnv"
+	"io"
 )
 
 type keyType struct {
-	target, field string
+	val  uint64
+	strs []string
 }
 
-func makeKey(target, field string) keyType {
-	// FIX?
-	// operations generating get field should be registering the field as a name
-	// and, as best as possible, relating obj to field for property verification
-	// name translation should be done there.
-	// we'd have to mark up things like text evaluations ( ex. HasTrait )
-	if len(field) > 0 && field[0] != '#' {
-		field = lang.Breakcase(field)
+func makeKey(strs ...string) uint64 {
+	w := fnv.New64a()
+	for _, str := range strs {
+		io.WriteString(w, str)
 	}
-	return keyType{target, field}
-}
-
-// return an error saying that the value of this key is unknown
-func (k *keyType) unknown() (err error) {
-	if k.target == object.Value {
-		err = g.UnknownObject(k.field)
-	} else {
-		err = g.UnknownField(k.target, k.field)
-	}
-	return
-}
-
-// subField should be one of the package object prefixes
-func (k *keyType) dot() string {
-	return k.target + "." + k.field
+	return w.Sum64()
 }

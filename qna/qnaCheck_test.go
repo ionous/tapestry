@@ -1,10 +1,11 @@
-package check
+package qna_test
 
 import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/literal"
+	"git.sr.ht/~ionous/iffy/qna"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/print"
 	"git.sr.ht/~ionous/iffy/rt/writer"
@@ -12,10 +13,10 @@ import (
 )
 
 func TestCheck(t *testing.T) {
-	prog := &CheckOutput{
-		Name:   "hello",
+	prog := &qna.CheckOutput{
+		Name:   t.Name(),
 		Expect: "hello",
-		Test: core.Activity{Exe: []rt.Execute{
+		Test: &core.Activity{Exe: []rt.Execute{
 			&core.ChooseAction{
 				If: &literal.BoolValue{true},
 				Do: core.MakeActivity(&core.Say{
@@ -32,7 +33,7 @@ func TestCheck(t *testing.T) {
 	}
 }
 
-func runTest(prog *CheckOutput) (err error) {
+func runTest(prog *qna.CheckOutput) (err error) {
 	var run checkTester
 	run.SetWriter(print.NewAutoWriter(writer.NewStdout()))
 	return prog.RunTest(&run)
@@ -46,4 +47,4 @@ type checkTester struct {
 	writer.Sink
 }
 
-func (c *checkTester) ActivateDomain(string, bool) {}
+func (c *checkTester) ActivateDomain(string) (prev string, err error) { return }

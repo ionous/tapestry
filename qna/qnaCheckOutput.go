@@ -1,4 +1,4 @@
-package check
+package qna
 
 import (
 	"bytes"
@@ -11,12 +11,19 @@ import (
 	"github.com/ionous/errutil"
 )
 
+type CheckOutput struct {
+	Name   string
+	Expect string // all tests generate text right now; fix: need to handle comparison of literal values
+	Test   rt.Execute
+}
+
 func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 	var buf bytes.Buffer
 	prev := run.SetWriter(print.NewAutoWriter(&buf))
-	run.ActivateDomain(t.Name, true)
-	{
-		if e := safe.Run(run, &t.Test); e != nil {
+	if prev, e := run.ActivateDomain(t.Name); e != nil {
+		err = e
+	} else {
+		if e := safe.Run(run, t.Test); e != nil {
 			err = errutil.Fmt("ng! %s test encountered error: %s", t.Name, e)
 		} else if res := buf.String(); res != t.Expect {
 			if eol := '\n'; strings.ContainsRune(res, eol) || strings.ContainsRune(t.Expect, eol) {
@@ -27,8 +34,12 @@ func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 		} else {
 			log.Printf("ok. test %s got %q", t.Name, res)
 		}
+
+		if _, e := run.ActivateDomain(prev); e != nil {
+			err = errutil.Append(err, errutil.New("couldnt restore domain", e))
+		}
+
 	}
-	run.ActivateDomain(t.Name, false)
 	run.SetWriter(prev)
 	return
 }

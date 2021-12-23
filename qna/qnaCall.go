@@ -1,8 +1,6 @@
 package qna
 
 import (
-	"database/sql"
-
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -13,21 +11,15 @@ import (
 
 // note: this is mirrored/mimicked in package testpat
 func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
-	name := lang.Breakcase(pat) // gets replaced with the actual name by query
-	var labels, result string   // fix? consider a cache for this info?
-	var rec *g.Record
-	if e := run.fields.patternOf.QueryRow(name).Scan(&name, &labels, &result); e != nil {
-		if e == sql.ErrNoRows {
-			err = errutil.Fmt("couldn't find the pattern named %q", name)
-		} else {
-			err = e
-		}
-	} else if rec, e = pattern.NewRecord(run, name, labels, args); e != nil {
+	name := lang.Underscore(pat) // FIX: why are people calling this with untransformed names
+	if pl, e := run.qdb.PatternLabels(name); e != nil {
+		err = e
+	} else if rec, e := pattern.NewRecord(run, name, pl.Labels, args); e != nil {
 		err = e
 	} else {
 		// locals can ( and often do ) read arguments ( which can invoke sub-patterns )
 		run.currentPatterns.startedPattern(name)
-		results := pattern.NewResults(rec, result, aff)
+		results := pattern.NewResults(rec, pl.Result, aff)
 		if oldScope, e := run.ReplaceScope(results, true); e != nil {
 			err = e
 		} else {
