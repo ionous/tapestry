@@ -30,6 +30,7 @@ func (m modelWriter) Write(q string, args ...interface{}) (err error) {
 }
 
 // create a virtual table consisting of the paths part names turned into comma separated ids:
+// NOTE: this winds up flipping the order of the paths: root is towards the end.
 func materialize(key string, arg int) string {
 	return fmt.Sprintf(`
 with recursive

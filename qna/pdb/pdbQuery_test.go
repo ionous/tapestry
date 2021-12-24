@@ -59,7 +59,8 @@ func TestQueries(t *testing.T) {
 					// ---------------------------
 					domain, kind, kindsOf.Kind.String(), at,
 					domain, aspect, kindsOf.Aspect.String(), at,
-					// root is to the right
+					// super confusing, in the db: root is towards end of the path; the row id is at the start.
+					// when read: root is hit first ( its in earlier *rows* ) so it becomes first.
 					subDomain, subKind, strings.Join([]string{kind, kindsOf.Kind.String()}, ","), at,
 					// patterns:
 					domain, pattern, kindsOf.Pattern.String(), at,
@@ -205,7 +206,7 @@ func TestQueries(t *testing.T) {
 		t.Fatal("KindOfAncestors", path, e)
 	} else if _, e := domainPoke.Exec(subDomain, true); e != nil {
 		t.Fatal(e)
-	} else if path, e := q.KindOfAncestors("j"); e != nil || strings.Join(path, ",") != "k,kinds" {
+	} else if path, e := q.KindOfAncestors("j"); e != nil || strings.Join(path, ",") != "kinds,k" {
 		t.Fatal("KindOfAncestors", path, e)
 	} else if _, e := domainPoke.Exec(subDomain, false); e != nil {
 		t.Fatal(e)

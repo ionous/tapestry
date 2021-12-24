@@ -1,8 +1,6 @@
 package testutil
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/meta"
@@ -58,7 +56,7 @@ func (x *Runtime) GetField(target, field string) (ret g.Value, err error) {
 		if a, ok := x.ObjectMap[field]; !ok {
 			err = g.UnknownObject(field)
 		} else {
-			ret = g.StringOf(strings.Join(a.Kind().Path(), ","))
+			ret = g.StringsOf(a.Kind().Path())
 		}
 
 	case meta.ObjectValue:

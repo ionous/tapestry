@@ -1,8 +1,6 @@
 package core
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -66,16 +64,10 @@ func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		err = cmdError(op, e)
 	} else if obj := obj.String(); len(obj) == 0 {
 		ret = g.False
+	} else if ok, e := safe.IsKindOf(run, obj, lang.Underscore(op.Kind)); e != nil {
+		err = cmdError(op, e)
 	} else {
-		kind := lang.Underscore(op.Kind)
-		if objectPath, e := run.GetField(meta.ObjectKinds, obj); e != nil {
-			err = cmdError(op, e)
-		} else {
-			// Contains reports whether second is within first.
-			cp, ck := objectPath.String()+",", kind+","
-			ok := strings.Contains(cp, ck)
-			ret = g.BoolOf(ok)
-		}
+		ret = g.BoolOf(ok)
 	}
 	return
 }
@@ -87,12 +79,10 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.False
 	} else {
 		kind := lang.Underscore(op.Kind)
-		if objectPath, e := run.GetField(meta.ObjectKinds, obj); e != nil {
+		if k, e := run.GetField(meta.ObjectKind, obj); e != nil {
 			err = cmdError(op, e)
 		} else {
-			// Contains reports whether second is within first.
-			cp, ck := objectPath.String()+",", kind+","
-			ok := strings.HasPrefix(cp, ck)
+			ok := kind == k.String()
 			ret = g.BoolOf(ok)
 		}
 	}

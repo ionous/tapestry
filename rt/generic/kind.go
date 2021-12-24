@@ -10,7 +10,7 @@ type Kind struct {
 	kinds   Kinds
 	name    string // keeping name *and* path makes debugging easier
 	path    []string
-	fields  []Field
+	fields  []Field // currently, stored flat. fix? save some space and search through the hierarchy?
 	traits  []trait
 	lastOne int // one-based index of last field
 }
@@ -29,9 +29,9 @@ func (ft *Field) isAspectLike() (ret string, okay bool) {
 	return
 }
 
-// aspects are a specific kind of record where every field is a boolean trait
+// path is a list of ancestors with the root at the start.
 func NewKind(kinds Kinds, name string, path []string, fields []Field) *Kind {
-	fullpath := append([]string{name}, path...)
+	fullpath := append(path, name)
 	return &Kind{kinds: kinds, name: name, path: fullpath, fields: fields}
 }
 
@@ -44,6 +44,7 @@ func (k *Kind) NewRecord() *Record {
 	return &Record{kind: k, values: make([]Value, len(k.fields))}
 }
 
+// Ancestor list, root towards the start; the name of this kind at the end.
 func (k *Kind) Path() (ret []string) {
 	ret = append(ret, k.path...) // copies the slice
 	return

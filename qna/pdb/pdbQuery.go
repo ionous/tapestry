@@ -268,12 +268,13 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 		// path is materialized ids so we return multiple values of resolved names
 		kindOfAncestors: ps.Prep(db,
 			`select mk.kind 
-			from  kind_scope ks
+			from kind_scope ks
 			join mdl_kind mk
 				-- is Y (is their name) a part of X (our path)
 				on instr(',' || ks.path, 
 								 ',' || mk.rowid || ',' )
-			where ks.name = ?1`,
+			where ks.name = ?1
+			order by mk.rowid`,
 		),
 		// FIX: what do i even need this for????
 		// find all of the kinds of the named kind that are currently in scope.
@@ -330,7 +331,7 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			from kind_scope ks
 			join noun_scope ns 
 				using(kind)
-			where ks.name=?1`,
+			where ks.name=?1`, // order?
 		),
 		// find the names of a given pattern ( kind's ) args and results
 		patternOf: ps.Prep(db,
@@ -362,7 +363,7 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			`select oneName 
 			from rp_names
 			where relName=?1
-			and otherName=?2`,
+			and otherName=?2`, // order?
 		),
 		relateChanges: ps.Prep(db,
 			newPairsFromChanges+relatePair,
@@ -399,7 +400,7 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			`select otherName 
 			from rp_names
 			where relName=?1
-			and oneName=?2`,
+			and oneName=?2`, // order?
 		),
 		// returns the executable rules for a given kind and target
 		rulesFor: ps.Prep(db,

@@ -27,8 +27,11 @@ func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	case meta.ObjectName:
 		err = errutil.New("records don't have names")
 
-	case meta.ObjectKind, meta.ObjectKinds:
+	case meta.ObjectKind:
 		ret = StringOf(d.kind.name)
+
+	case meta.ObjectKinds:
+		ret = StringsOf([]string{d.kind.name})
 
 	default:
 		// note: the field is a trait when the field that was found doesnt match the field requested
@@ -102,20 +105,25 @@ func (d *Record) SetIndexedField(i int, val Value) (err error) {
 	return
 }
 
-// fix: if type includes path then this Kinds isnt necessary, which sure would be nce
+// FIX? if type includes the full path then Kinds here wouldnt be necessary, which sure would be nice.
 // ( of course, for normal records Implements() doesnt matter anyway. records dont have hierarchy )
 func matchTypes(ks Kinds, fa affine.Affinity, ft string, va affine.Affinity, vt string) (okay bool) {
+	// most important: the affinities have to match:
 	if fa == va {
-		recordLike := fa == affine.Object || fa == affine.Record || fa == affine.RecordList
-		if !recordLike {
+		textLike := fa == affine.Text || fa == affine.TextList
+		recordLike := fa == affine.Record || fa == affine.RecordList
+		if !textLike || !recordLike {
 			okay = true
-		} else if vt == ft {
-			okay = true // direct match
-		} else if vk, e := ks.GetKindByName(vt); e == nil {
-			// a field takes: cats
-			// my value is things, animals, cats, tigers.
-			// so we should ask: does the value's path contains the field's kind.
-			okay = vk.Implements(ft)
+		} else if vt == ft || (textLike && len(ft) == 0) {
+			// if the types match, or if a target text field is untyped, we can put any text in there.
+			// ( note: if the value is untyped, the user would have to explicitly convert it to an object reference )
+			okay = true
+		} else {
+			// a field wants only "cats"; my value is "things, animals, cats, tigers".
+			// so we ask: does the value implement field:
+			if vk, e := ks.GetKindByName(vt); e == nil {
+				okay = vk.Implements(ft)
+			}
 		}
 	}
 	return

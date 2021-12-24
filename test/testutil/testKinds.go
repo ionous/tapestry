@@ -3,7 +3,6 @@ package testutil
 import (
 	"fmt"
 	r "reflect"
-	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
@@ -60,25 +59,28 @@ func (ks *Kinds) Kind(name string) (ret *g.Kind) {
 func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 	if k, ok := ks.Kinds[name]; ok {
 		ret = k // we created the kind already
-	} else if fs, ok := ks.Builder.Fields[name]; !ok {
-		err = errutil.New("unknown kind", name)
 	} else {
-		if ks.Kinds == nil {
-			ks.Kinds = make(KindMap)
+		b := ks.Builder
+		if fs, ok := b.Fields[name]; !ok {
+			err = errutil.New("unknown kind", name)
+		} else {
+			if ks.Kinds == nil {
+				ks.Kinds = make(KindMap)
+			}
+			var path []string
+			// magic parent field for fake objects
+			if len(fs) > 0 && len(fs[0].Affinity) == 0 {
+				path = append(path, fs[0].Type)
+			}
+			// magic field for aspects
+			if b.Aspects[name] {
+				path = append(path, kindsOf.Aspect.String())
+			}
+			// create the kind from the stored fields
+			k := g.NewKind(ks, name, path, fs)
+			ks.Kinds[name] = k
+			ret = k
 		}
-		var path []string
-		// magic parent field for fake objects
-		if len(fs) > 0 && len(fs[0].Affinity) == 0 {
-			path = append(path, fs[0].Type)
-		}
-		// magic field for aspects
-		if ks.Builder.Aspects[name] {
-			path = append(path, kindsOf.Aspect.String())
-		}
-		// create the kind from the stored fields
-		k := g.NewKind(ks, name, path, fs)
-		ks.Kinds[name] = k
-		ret = k
 	}
 	return
 }
@@ -97,9 +99,9 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 	for i, cnt := 0, t.NumField(); i < cnt; i++ {
 		f := t.Field(i)
 		fieldType := f.Type
-		var Builder struct {
+		var b struct {
 			Aff  affine.Affinity
-			Type string
+			Type string //  comma separated path
 		}
 		switch k := fieldType.Kind(); k {
 		default:
@@ -107,11 +109,11 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 		case r.Bool:
 			tags := tag.ReadTag(f.Tag)
 			if _, ok := tags.Find("bool"); ok {
-				Builder.Aff, Builder.Type = affine.Bool, k.String()
+				b.Aff, b.Type = affine.Bool, k.String()
 			} else {
 				// the name of the aspect is the name of the field and its class
 				aspect := lang.Underscore(f.Name)
-				Builder.Aff, Builder.Type = affine.Text, aspect
+				b.Aff, b.Type = affine.Text, aspect
 				ft.Fields[aspect] = []g.Field{
 					// false first.
 					{Name: "not_" + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
@@ -121,19 +123,19 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 			}
 
 		case r.String:
-			Builder.Aff, Builder.Type = affine.Text, k.String()
+			b.Aff, b.Type = affine.Text, k.String()
 
 		case r.Struct:
-			Builder.Type = nameOfType(fieldType)
+			b.Type = nameOfType(fieldType)
 			if f.Anonymous {
 				if len(fields) > 0 {
 					panic("anonymous structs are used for hierarchy and should be the first member")
 				}
-				parent := ks.Kind(Builder.Type)
-				Builder.Type = strings.Join(parent.Path(), ",")
+				parent := ks.Kind(b.Type)
+				b.Type = parent.Name()
 
 			} else {
-				Builder.Aff = affine.Record
+				b.Aff = affine.Record
 				ft.addType(ks, fieldType)
 			}
 
@@ -141,11 +143,11 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 			elType := fieldType.Elem()
 			switch k := elType.Kind(); k {
 			case r.String:
-				Builder.Aff, Builder.Type = affine.TextList, k.String()
+				b.Aff, b.Type = affine.TextList, k.String()
 			case r.Float64:
-				Builder.Aff, Builder.Type = affine.NumList, k.String()
+				b.Aff, b.Type = affine.NumList, k.String()
 			case r.Struct:
-				Builder.Aff, Builder.Type = affine.RecordList, nameOfType(elType)
+				b.Aff, b.Type = affine.RecordList, nameOfType(elType)
 				ft.addType(ks, elType)
 
 			default:
@@ -153,11 +155,11 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 			}
 
 		case r.Float64:
-			Builder.Aff, Builder.Type = affine.Number, k.String()
+			b.Aff, b.Type = affine.Number, k.String()
 
 		case r.Int:
 			aspect := nameOfType(fieldType)
-			Builder.Aff, Builder.Type = affine.Text, aspect
+			b.Aff, b.Type = affine.Text, aspect
 			if !fieldType.Implements(rstringer) {
 				panic("unknown enum")
 			}
@@ -176,9 +178,9 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 			ft.Fields[aspect] = traits
 			ft.Aspects[aspect] = true
 		}
-		if len(Builder.Aff) > 0 || len(path) > 0 {
+		if len(b.Aff) > 0 || len(path) > 0 {
 			name := lang.Underscore(f.Name)
-			fields = append(fields, g.Field{Name: name, Affinity: Builder.Aff, Type: Builder.Type})
+			fields = append(fields, g.Field{Name: name, Affinity: b.Aff, Type: b.Type})
 		}
 	}
 	name := nameOfType(t)

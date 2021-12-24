@@ -1,8 +1,6 @@
 package generic
 
 import (
-	r "reflect"
-
 	"git.sr.ht/~ionous/iffy/affine"
 )
 
@@ -47,12 +45,13 @@ func RecordFrom(v *Record, subtype string) Value {
 	return makeValue(affine.Record, subtype, v)
 }
 
+// changes a named object into just the name
+// the returned value has affinity text, with a class of the object's kind.
 func ObjectAsText(v Value) (ret Value) {
 	if v == nil {
 		ret = StringOf("") // fix: or "nothing"?
 	} else {
-		id := v.String()
-		typeName := "object=" + v.Type()
+		id, typeName := v.String(), v.Type()
 		ret = makeValue(affine.Text, typeName, id)
 	}
 	return
@@ -88,15 +87,19 @@ func RecordsFrom(vs []*Record, subtype string) (ret Value) {
 }
 
 func makeValue(a affine.Affinity, subtype string, i interface{}) (ret refValue) {
-	if len(subtype) == 0 {
-		t := r.TypeOf(i)
-		if t.Kind() == r.Ptr {
-			t = t.Elem()
-		}
-		if t.Kind() == r.Slice {
-			t = t.Elem()
-		}
-		subtype = t.String()
-	}
+	// fix? we arent writing these to values in the db
+	// so having them here feels a bit odd
+	// -- especially because the subtype of text here becomes "string" and that's not a kind....
+	// (ex. see matchTypes)
+	// if len(subtype) == 0 {
+	// 	t := r.TypeOf(i)
+	// 	if t.Kind() == r.Ptr {
+	// 		t = t.Elem()
+	// 	}
+	// 	if t.Kind() == r.Slice {
+	// 		t = t.Elem()
+	// 	}
+	// 	subtype = t.String()
+	// }
 	return refValue{a: a, i: i, t: subtype}
 }

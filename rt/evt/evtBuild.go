@@ -1,8 +1,6 @@
 package evt
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/meta"
 )
@@ -33,7 +31,7 @@ func BuildPath(run rt.Runtime, event string, up []string, allFlags *rt.Flags) (r
 	// loop over all targets
 	for _, target := range up {
 		tgt := target
-		if ks, e := AncestryOf(run, tgt); e != nil {
+		if ks, e := ancestryOf(run, tgt); e != nil {
 			err = e
 		} else {
 			// process the target, and its kinds
@@ -57,11 +55,11 @@ func BuildPath(run rt.Runtime, event string, up []string, allFlags *rt.Flags) (r
 						*allFlags |= tgtFlags
 					}
 				}
-				// now its class
-				if len(ks) == 0 {
+				// now ancestors: root last.
+				if cnt := len(ks); cnt == 0 {
 					break
 				} else {
-					tgt, ks = ks[0], ks[1:]
+					tgt, ks = ks[cnt-1], ks[:cnt-1]
 				}
 			}
 		}
@@ -70,13 +68,12 @@ func BuildPath(run rt.Runtime, event string, up []string, allFlags *rt.Flags) (r
 }
 
 // return the ancestors of the passed noun as a slice of strings
-// root is to the right: ex. props,things,objects,kinds
-func AncestryOf(run rt.Runtime, noun string) (ret []string, err error) {
+// root is at the start. ex. kinds,objects,things,props
+func ancestryOf(run rt.Runtime, noun string) (ret []string, err error) {
 	if kinds, e := run.GetField(meta.ObjectKinds, noun); e != nil {
 		err = e
 	} else {
-		// fix? maybe kinds itself should be returning text list
-		ret = strings.FieldsFunc(kinds.String(), func(b rune) bool { return b == ',' })
+		ret = kinds.Strings()
 	}
 	return
 }

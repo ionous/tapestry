@@ -46,7 +46,7 @@ func TestTableSort(t *testing.T) {
 	}
 }
 
-// single letter domains, root on the left, name on the right.
+// single letter domains, root at the start, name towards the end.
 // ie. "agc" means "a" domain with ancestors "g" and "c"
 func sorter(strs ...string) ([]string, []string) {
 	ds := make(DependencyTable, len(strs))

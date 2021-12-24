@@ -1,6 +1,7 @@
 package core
 
 import (
+	"strings"
 	"testing"
 
 	g "git.sr.ht/~ionous/iffy/rt/generic"
@@ -20,7 +21,7 @@ func TestObjects(t *testing.T) {
 		"that": derived.Text,
 		// hierarchy:
 		"base":    base.Text,
-		"derived": derived.Text + "," + base.Text,
+		"derived": base.Text + "," + derived.Text,
 	}}
 
 	t.Run("exists", func(t *testing.T) {
@@ -89,7 +90,7 @@ func (m *modelTest) GetField(target, field string) (ret g.Value, err error) {
 			if path, ok := m.objClass[cls]; !ok {
 				err = errutil.New("modelTest: unknown class", cls)
 			} else {
-				ret = g.StringOf(path)
+				ret = g.StringsOf(strings.Split(path, ","))
 			}
 
 		default:

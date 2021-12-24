@@ -41,17 +41,12 @@ func NewRecord(run rt.Runtime, name string, parts []string, args []rt.Arg) (rec 
 					fieldIndex, labelIndex = at, at+1
 				}
 			}
-			//
-			field := k.Field(fieldIndex)
+			// note: set indexed field assigns without copying
+			// so these two values can become shared. (ex. lists)
 			if val, e := safe.GetAssignedValue(run, a.From); e != nil {
 				err = errutil.New(e, "while reading arg", i, n)
 				break
-			} else if v, e := filterText(run, field, val); e != nil {
-				err = errutil.New(e, "while narrowing arg", i, n)
-				break
-			} else
-			// note: set indexed field assigns without copying
-			if e := rec.SetIndexedField(fieldIndex, v); e != nil {
+			} else if e := rec.SetIndexedField(fieldIndex, val); e != nil {
 				err = errutil.New(e, "while setting arg", i, n)
 				break
 			}

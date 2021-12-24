@@ -2,11 +2,11 @@ package internal
 
 import (
 	"log"
-	"strings"
 
 	"git.sr.ht/~ionous/iffy/ident"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt/meta"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 )
 
 type Noun struct {
@@ -35,13 +35,10 @@ func (n *Noun) HasName(s string) bool {
 }
 
 func (n *Noun) HasClass(s string) (ret bool) {
-	if objectPath, e := n.run.GetField(meta.ObjectKinds, n.String()); e != nil {
+	if ok, e := safe.IsKindOf(n.run, n.String(), lang.Underscore(s)); e != nil {
 		log.Println("parser error", e)
 	} else {
-		// Contains reports whether second is within first.
-		kind := lang.Underscore(s)
-		cp, ck := objectPath.String()+",", kind+","
-		ret = strings.Contains(cp, ck)
+		ret = ok
 	}
 	return
 }
