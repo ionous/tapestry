@@ -5,12 +5,43 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/rt"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"github.com/ionous/errutil"
 )
 
 func decodeAssignment(a affine.Affinity, prog []byte, signatures []map[uint64]interface{}) (ret rt.Assignment, err error) {
 	if e := cin.Decode(rt.Assignment_Slot{&ret}, prog, signatures); e != nil {
 		err = e
+	}
+	return
+}
+
+func zeroValue(ks g.Kinds, a affine.Affinity, t string) (ret g.Value, err error) {
+	switch a {
+	case affine.Bool:
+		ret = g.BoolFrom(false, t)
+	case affine.Number:
+		ret = g.FloatFrom(0, t)
+	case affine.Text:
+		ret = g.StringFrom("", t)
+	case affine.NumList:
+		ret = g.FloatsFrom(nil, t)
+	case affine.TextList:
+		ret = g.StringsFrom(nil, t)
+	case affine.Record:
+		if k, e := ks.GetKindByName(t); e != nil {
+			err = e
+		} else {
+			ret = g.RecordOf(k.NewRecord())
+		}
+	case affine.RecordList:
+		if k, e := ks.GetKindByName(t); e != nil {
+			err = e // verify that the kind exists
+		} else {
+			ret = g.RecordsFrom(nil, k.Name())
+		}
+	default:
+		err = errutil.New("unhandled affinity", a.String())
 	}
 	return
 }

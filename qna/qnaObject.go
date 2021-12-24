@@ -112,10 +112,20 @@ func getObjectField(run *Runner, domain, noun string, field g.Field) (ret g.Valu
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
 		if b, e := run.qdb.NounValue(noun, field.Name); e != nil {
 			err = e
-		} else if a, e := readValue(field.Affinity, b, run.signatures); e != nil {
-			err = e
 		} else {
-			ret = &objectValue{dynamic: a}
+			if len(b) == 0 {
+				if v, e := zeroValue(run, field.Affinity, field.Type); e != nil {
+					err = e
+				} else {
+					ret = &objectValue{shared: v}
+				}
+			} else {
+				if a, e := readValue(field.Affinity, b, run.signatures); e != nil {
+					err = e
+				} else {
+					ret = &objectValue{dynamic: a}
+				}
+			}
 		}
 		return
 	}, domain, noun, field.Name); e != nil {
