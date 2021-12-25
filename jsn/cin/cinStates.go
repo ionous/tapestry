@@ -14,15 +14,57 @@ type Signatures []map[uint64]interface{}
 
 type xDecoder struct {
 	chart.Machine
-	reg Signatures
+	reg        Signatures
+	customSlot SlotDecoder
+	customFlow FlowDecoder
+}
+
+type SlotDecoder func(jsn.SlotBlock, json.RawMessage) error
+type FlowDecoder func(jsn.FlowBlock, json.RawMessage) error
+
+// Customization of the decoding process
+type Decoder xDecoder
+
+func NewDecoder(reg Signatures) *Decoder {
+	d := &xDecoder{
+		reg:     reg,
+		Machine: chart.MakeDecoder(),
+		customSlot: func(jsn.SlotBlock, json.RawMessage) error {
+			return chart.Unhandled("no custom slot handler")
+		},
+		customFlow: func(jsn.FlowBlock, json.RawMessage) error {
+			return chart.Unhandled("no custom flow handler")
+		},
+	}
+	return (*Decoder)(d)
+}
+
+func (b *Decoder) SetSlotDecoder(handler SlotDecoder) *Decoder {
+	x := (*xDecoder)(b)
+	x.customSlot = handler
+	return b
+}
+func (b *Decoder) SetFlowDecoder(handler FlowDecoder) *Decoder {
+	x := (*xDecoder)(b)
+	x.customFlow = handler
+	return b
+}
+
+func (b *Decoder) Decode(dst jsn.Marshalee, msg json.RawMessage) error {
+	x := (*xDecoder)(b)
+	return x.decode(dst, msg)
 }
 
 func Decode(dst jsn.Marshalee, msg json.RawMessage, reg Signatures) error {
 	dec := xDecoder{reg: reg, Machine: chart.MakeDecoder()}
+	return dec.decode(dst, msg)
+}
+
+func (dec *xDecoder) decode(dst jsn.Marshalee, msg json.RawMessage) error {
 	next := dec.newBlock(msg, new(chart.StateMix))
 	next.OnCommit = func(interface{}) {}
 	dec.ChangeState(next)
-	dst.Marshal(&dec)
+	dst.Marshal(dec)
 	return dec.Errors()
 }
 
@@ -44,7 +86,9 @@ func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay boo
 }
 
 func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay bool) {
-	if e := dec.customSlot(slot, msg); e != nil {
+	if e := dec.customSlot(slot, msg); e == nil {
+		dec.Commit("customSlot")
+	} else {
 		var unhandled chart.Unhandled
 		if !errors.As(e, &unhandled) {
 			dec.Error(e)

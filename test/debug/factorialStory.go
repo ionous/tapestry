@@ -2,7 +2,6 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/rt"
 )
@@ -69,7 +68,7 @@ var FactorialCheck = &core.Activity{[]rt.Execute{
 						core.CallArg{
 							Name: "num",
 							From: &core.FromNum{
-								Val: &literal.NumValue{Num: 3}},
+								Val: F(3)},
 						}},
 				}},
 		}},
@@ -83,7 +82,7 @@ var FactorialMulMinusOne = &core.Activity{[]rt.Execute{
 			A: &core.GetVar{Name: numVar},
 			B: &core.DiffOf{
 				A: &core.GetVar{Name: numVar},
-				B: &literal.NumValue{Num: 1}},
+				B: F(1)},
 		}},
 	},
 }}
@@ -92,14 +91,14 @@ var FactorialMulMinusOne = &core.Activity{[]rt.Execute{
 var FactorialUseOne = &core.Activity{[]rt.Execute{
 	&core.Assign{
 		Var:  numVar,
-		From: &core.FromNum{&literal.NumValue{Num: 1}},
+		From: &core.FromNum{F(1)},
 	}},
 }
 
 var FactorialIsZero = &core.CompareNum{
 	A:  &core.GetVar{Name: numVar},
 	Is: &core.Equal{},
-	B:  &literal.NumValue{}}
+	B:  F(0)}
 
 var factorialName = core.PatternName{Str: "factorial"}
 var numVar = core.VariableName{Str: "num"}

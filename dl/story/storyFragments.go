@@ -2,7 +2,6 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/literal"
 	"github.com/ionous/errutil"
 )
 
@@ -31,7 +30,7 @@ func (op *Summary) ImportNouns(k *Importer) (err error) {
 			k.WriteOnce(&eph.EphKinds{Kinds: "things", Contain: []eph.EphParams{{Name: "description", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 		}
 		noun := LastNameOf(k.Env().Recent.Nouns.Subjects)
-		k.Write(&eph.EphValues{Noun: noun, Field: "description", Value: &literal.TextValue{text}})
+		k.Write(&eph.EphValues{Noun: noun, Field: "description", Value: T(text)})
 	}
 	return
 }

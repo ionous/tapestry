@@ -86,7 +86,7 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 					args.add(
 						&core.FromText{
 							&core.IdOf{
-								&literal.TextValue{"player"},
+								&literal.TextValue{Text: "player"},
 							}})
 					//
 					out.Nouns = make([]string, cnt)

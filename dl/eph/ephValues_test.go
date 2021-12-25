@@ -39,8 +39,8 @@ func TestInitialFieldAssignment(t *testing.T) {
 		if e := cat.WriteValues(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
-			`a:apple:t:some text:x`,
-			`a:boat:t:more text:x`,
+			`a:apple:t:"some text":x`,
+			`a:boat:t:"more text":x`,
 			`a:toy_boat:d:321:x`,
 			`a:pear:d:123:x`,
 		}); len(diff) > 0 {
@@ -104,10 +104,10 @@ func TestInitialTraitAssignment(t *testing.T) {
 		if e := cat.WriteValues(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
-			`a:apple:a:y:x`,
-			`a:boat:b:z:x`,
-			`a:toy_boat:a:w:x`,
-			`a:pear:a:x:x`,
+			`a:apple:a:"y":x`,
+			`a:boat:b:"z":x`,
+			`a:toy_boat:a:"w":x`,
+			`a:pear:a:"x":x`,
 		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)

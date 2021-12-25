@@ -9,7 +9,6 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/rel"
 	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/rt"
@@ -51,7 +50,7 @@ func TestCompactEncoder(t *testing.T) {
 func TestCompactDecode(t *testing.T) {
 	errutil.Panic = true
 	var dst story.Story
-	if e := cin.Decode(&dst, []byte(com), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&dst, []byte(com), iffy.AllSignatures); e != nil {
 		pretty.Println(dst)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
@@ -77,7 +76,7 @@ func TestAnonymousSwap(t *testing.T) {
 	}
 	//
 	var have story.EventBlock
-	if e := cin.Decode(&have, []byte(com), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(com), iffy.AllSignatures); e != nil {
 		pretty.Println(have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
@@ -103,7 +102,7 @@ func TestAnonymousOptional(t *testing.T) {
 	}}
 	for i, in := range inputs {
 		var have story.NounRelation
-		if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+		if e := story.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
 			pretty.Println("test", i, "got:", have)
 			t.Fatal(e)
 		} else if diff := pretty.Diff(&wants[i], &have); len(diff) != 0 {
@@ -143,7 +142,7 @@ func TestCompactNamedNouns(t *testing.T) {
 			t.Fatal("writing out", i, "want:", want, "made:", have)
 		} else {
 			var dst story.NamedNoun
-			if e := cin.Decode(&dst, []byte(want), iffy.AllSignatures); e != nil {
+			if e := story.Decode(&dst, []byte(want), iffy.AllSignatures); e != nil {
 				t.Fatal(e)
 			} else if diff := pretty.Diff(dst, n); len(diff) != 0 {
 				t.Fatal(diff)
@@ -167,7 +166,7 @@ func TestExpandedSwap(t *testing.T) {
 		Value:  &story.TextList{Str: story.TextList_List},
 	}
 	var have story.ExtType
-	if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
@@ -179,7 +178,7 @@ func TestExpandedSwap(t *testing.T) {
 // TestVarAsBool - unit test for broken parsing case
 // @requires light double committed
 func TestVarAsBool(t *testing.T) {
-	errutil.Panic = true
+	// errutil.Panic = true
 	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
 	want := core.AllTrue{[]rt.BoolEval{
 		&core.GetVar{
@@ -191,7 +190,7 @@ func TestVarAsBool(t *testing.T) {
 		},
 	}}
 	var have core.AllTrue
-	if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
@@ -206,7 +205,7 @@ func TestMissingSlot(t *testing.T) {
 		core.T("one"), core.T("two"), core.T("three"),
 	}}
 	var have core.Join
-	if e := cin.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {

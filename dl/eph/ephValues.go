@@ -12,7 +12,7 @@ func (c *Catalog) WriteValues(w Writer) error {
 		for _, v := range n.values {
 			// FIX: nouns should be able to store EVALS too
 			// example: an object with a counter in its description.
-			if value, e := encodeLiteral(v.value); e != nil {
+			if value, e := marshalout(v.value); e != nil {
 				err = errutil.Append(err, e)
 			} else if e := w.Write(mdl.Value, n.domain.name, n.name, v.field, value, v.at); e != nil {
 				err = e

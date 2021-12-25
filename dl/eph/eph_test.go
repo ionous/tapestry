@@ -127,10 +127,10 @@ func newRelation(r, k, c, o string) *EphRelations {
 	}
 }
 
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{s} }
+func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Bool: b} }
+func I(n int) *literal.NumValue     { return &literal.NumValue{Num: float64(n)} }
+func F(n float64) *literal.NumValue { return &literal.NumValue{Num: n} }
+func T(s string) *literal.TextValue { return &literal.TextValue{Text: s} }
 
 func buildAncestors(dt domainTest) (ret *Catalog, err error) {
 	var cat Catalog

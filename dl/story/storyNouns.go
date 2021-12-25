@@ -6,7 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/composer"
 	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/reader"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt/kindsOf"
@@ -71,10 +70,10 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 	for i := 0; i < cnt; i++ {
 		noun := k.newCounter(kind, reader.Position{})
 		k.Write(&eph.EphNouns{Noun: noun, Kind: kind})
-		k.Write(&eph.EphValues{Noun: noun, Field: "counted", Value: &literal.BoolValue{true}})
+		k.Write(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
 		// fix: we probably want the kind to be singular... can we make a "dependent" command like that?
 		// a program in ephemera space... or a eph.literal that we manually look for when processing values?
-		k.Write(&eph.EphValues{Noun: noun, Field: "printed_name", Value: &literal.TextValue{kind}})
+		k.Write(&eph.EphValues{Noun: noun, Field: "printed_name", Value: T(kind)})
 		// needed for relations, etc.
 		k.Env().Recent.Nouns.Add(noun)
 	}
@@ -92,13 +91,13 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 			k.WriteOnce(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 		}
 		// set the indefinite article field
-		k.Write(&eph.EphValues{Noun: noun, Field: "indefinite_article", Value: &literal.TextValue{detStr}})
+		k.Write(&eph.EphValues{Noun: noun, Field: "indefinite_article", Value: T(detStr)})
 	}
 	// pick common or proper based on noun capitalization.
 	// fix: implicitly generated facts should be considered preliminary so that authors can override them.
 	if detStr == "our" {
 		if first, _ := utf8.DecodeRuneInString(noun); unicode.ToUpper(first) == first {
-			k.Write(&eph.EphValues{Noun: noun, Field: "proper_named", Value: &literal.BoolValue{true}})
+			k.Write(&eph.EphValues{Noun: noun, Field: "proper_named", Value: B(true)})
 		}
 	}
 	return
@@ -111,7 +110,7 @@ func (op *KindOfNoun) ImportNouns(k *Importer) (err error) {
 	for _, noun := range k.Env().Recent.Nouns.Subjects {
 		k.Write(&eph.EphNouns{Noun: noun, Kind: kind})
 		for _, trait := range op.Trait {
-			k.Write(&eph.EphValues{Noun: noun, Field: trait.String(), Value: &literal.BoolValue{true}})
+			k.Write(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})
 		}
 	}
 	if op.NounRelation != nil {
@@ -142,7 +141,7 @@ func (op *NounRelation) ImportNouns(k *Importer) (err error) {
 func (op *NounTraits) ImportNouns(k *Importer) (err error) {
 	for _, trait := range op.Trait {
 		for _, noun := range k.Env().Recent.Nouns.Subjects {
-			k.Write(&eph.EphValues{Noun: noun, Field: trait.String(), Value: &literal.BoolValue{true}})
+			k.Write(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})
 		}
 	}
 	return

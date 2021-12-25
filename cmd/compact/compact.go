@@ -13,7 +13,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/jsn/dout"
@@ -106,7 +105,7 @@ func expand(inCompact, outDetails string) (err error) {
 	var dst story.Story
 	if b, e := readOne(inCompact); e != nil {
 		err = e
-	} else if e := cin.Decode(&dst, b, iffy.AllSignatures); e != nil {
+	} else if e := story.Decode(&dst, b, iffy.AllSignatures); e != nil {
 		err = e
 	} else if data, e := dout.Encode(&dst); e != nil {
 		err = e

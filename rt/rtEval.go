@@ -1,6 +1,9 @@
 package rt
 
-import g "git.sr.ht/~ionous/iffy/rt/generic"
+import (
+	"git.sr.ht/~ionous/iffy/affine"
+	g "git.sr.ht/~ionous/iffy/rt/generic"
+)
 
 // Execute runs a bit of code that has no return value.
 type Execute interface {
@@ -40,4 +43,24 @@ type TextListEval interface {
 // RecordListEval represents the computation of a series of a set of fields.
 type RecordListEval interface {
 	GetRecordList(Runtime) (g.Value, error)
+}
+
+func AffineOfEval(eval interface{}) (ret affine.Affinity) {
+	switch eval.(type) {
+	case BoolEval:
+		ret = affine.Bool
+	case NumberEval:
+		ret = affine.Number
+	case TextEval:
+		ret = affine.Text
+	case NumListEval:
+		ret = affine.NumList
+	case TextListEval:
+		ret = affine.TextList
+	case RecordEval:
+		ret = affine.Record
+	case RecordListEval:
+		ret = affine.RecordList
+	}
+	return
 }

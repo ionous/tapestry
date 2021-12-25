@@ -8,7 +8,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/jsn/cin"
+	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
 )
@@ -35,7 +35,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, signatures []map[uint64]in
 		func() (err error) {
 			if len(actuallyJustThisOne) == 0 || strings.Contains(actuallyJustThisOne, name+";") {
 				var act rt.Execute
-				if e := cin.Decode(rt.Execute_Slot{&act}, prog, signatures); e != nil {
+				if e := story.Decode(rt.Execute_Slot{&act}, prog, signatures); e != nil {
 					err = e
 				} else if str, ok := value.(string); !ok || aff != affine.Text {
 					err = errutil.New("tests only compare text right now")

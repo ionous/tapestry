@@ -46,6 +46,7 @@ func (f *cinFlow) getArg(key string) (ret json.RawMessage, err error) {
 	}
 	return
 }
+
 func (f *cinFlow) getPick(key string) (retMsg json.RawMessage, retChoice string, err error) {
 	// the signature parser can't distinguish b/t a leading first selector, and a leading anonymous choice:
 	//  ex. "Command choice:" -- so the param array has the choice in the label's spot

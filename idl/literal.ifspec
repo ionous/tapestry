@@ -25,33 +25,33 @@
             },
         	"bool_value": {
                 "uses": "flow",
-                "spec": "bool {_%bool}",
+                "spec": "bool {_%bool} {class?text}",
                 "slot": ["bool_eval", "literal_value"],
                 "desc": "Specify an explicit true or false."
             },
            "num_value": {
                 "uses": "flow",
-                "spec": "num {_%num:number}",
+                "spec": "num {_%num:number} {class?text}",
                 "slot": ["number_eval", "literal_value"],
                 "desc": "Specify a particular number."
             },
             "text_value": {
                 "uses": "flow",
-                "spec": "txt {_%text}",
+                "spec": "txt {_%text:text} {class?text}",
                 "slot": ["text_eval", "literal_value"],
                 "desc": "Specify a small bit of text."
             },
             "num_values": {
                 "uses": "flow",
-                "spec": "nums {_%values+number}",
+                "spec": "nums {_%values+number} {class?text}",
                 "slot": ["num_list_eval", "literal_value"],
                 "desc": "Number List: Specify a list of numbers."
             },
          	"text_values": {
                 "uses": "flow",
-                "spec": "txts {_%values+text}",
+                "spec": "txts {_%values+text} {class?text}",
                 "slot": ["text_list_eval", "literal_value"],
-                "desc": "Text List: Specifies a set of string values."
+                "desc": "Text List: Specifies a set of text values."
             },
             "record_value": {
                 "uses": "flow",

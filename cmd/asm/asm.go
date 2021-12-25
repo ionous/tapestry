@@ -18,7 +18,6 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/eph"
 	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/jsn/cout"
 	"git.sr.ht/~ionous/iffy/jsn/din"
 	"git.sr.ht/~ionous/iffy/rt/kindsOf"
@@ -189,7 +188,7 @@ func decodeStory(path string, b []byte) (ret *story.Story, err error) {
 	var curr story.Story
 	switch ext := filepath.Ext(path); ext {
 	case CompactExt:
-		if e := cin.Decode(&curr, b, iffy.AllSignatures); e != nil {
+		if e := story.Decode(&curr, b, iffy.AllSignatures); e != nil {
 			err = e
 		} else {
 			ret = &curr

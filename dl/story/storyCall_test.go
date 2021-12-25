@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 
@@ -34,7 +33,7 @@ func TestDetermineNum(t *testing.T) {
 			Args: []core.CallArg{{
 				Name: "num",
 				From: &core.FromNum{
-					&literal.NumValue{3},
+					F(3),
 				}}}}}); len(diff) > 0 {
 		t.Fatal(diff)
 	} else if diff := pretty.Diff(els, []eph.Ephemera{

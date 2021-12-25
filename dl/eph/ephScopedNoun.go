@@ -65,9 +65,7 @@ func (n *ScopedNoun) AddLiteralValue(field string, value literal.LiteralValue, a
 		// the field was a trait, the returned name was an aspect
 		if name != field {
 			// redo the value we are setting as the trait of the aspect
-			value = &literal.TextValue{
-				Text: field,
-			}
+			value = &literal.TextValue{Text: field}
 		}
 		err = n.addLiteral(name, value, at)
 	}

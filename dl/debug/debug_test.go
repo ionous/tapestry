@@ -17,7 +17,7 @@ func TestLog(t *testing.T) {
 	//
 	lo := DebugLog{
 		LogLevel: LoggingLevel{Str: LoggingLevel_Error},
-		Value:    &core.FromText{&literal.TextValue{"hello"}}}
+		Value:    &core.FromText{&literal.TextValue{Text: "hello"}}}
 	if e := lo.Execute(nil); e != nil {
 		t.Fatal(e)
 	} else if got := b.String(); !strings.HasSuffix(got, " ###### error hello\n") {

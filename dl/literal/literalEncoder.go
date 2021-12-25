@@ -1,40 +1,97 @@
 package literal
 
 import (
+	"encoding/json"
+
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/jsn"
 	"git.sr.ht/~ionous/iffy/jsn/chart"
+	"git.sr.ht/~ionous/iffy/rt"
+	"github.com/ionous/errutil"
 )
 
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
-	switch i, typeName := flow.GetFlow(), flow.GetType(); typeName {
+	typeName := flow.GetType()
+	switch out := flow.GetFlow().(type) {
 	default:
-		err = chart.Unhandled("CustomFlow")
+		err = chart.Unhandled(typeName)
 
-	case BoolValue_Type:
-		var out bool = i.(*BoolValue).Bool
-		err = m.MarshalValue(typeName, out)
+	case *BoolValue:
+		err = m.MarshalValue(typeName, out.Bool)
 
-	case NumValue_Type:
-		var out float64 = i.(*NumValue).Num
-		err = m.MarshalValue(typeName, out)
+	case *NumValue:
+		err = m.MarshalValue(typeName, out.Num)
 
-	case NumValues_Type:
-		var out []float64 = i.(*NumValues).Values
-		err = m.MarshalValue(typeName, out)
+	case *TextValue:
+		err = m.MarshalValue(typeName, out.Text)
 
-		// write text as a raw string
-	case TextValue_Type:
-		str := i.(*TextValue).Text
-		// if the text starts with an @, add another @
-		if len(str) > 0 && str[0] == '@' {
-			str = "@" + str
+	case *NumValues:
+		err = m.MarshalValue(typeName, out.Values)
+
+	case *TextValues:
+		err = m.MarshalValue(typeName, out.Values)
+	}
+	return
+}
+
+func CompactSlotDecoder(slot jsn.SlotBlock, msg json.RawMessage) (err error) {
+	if ptr, e := readLiteral(slot.GetType(), "", msg); e != nil {
+		err = e
+	} else if !slot.SetSlot(ptr) {
+		err = errutil.New("unexpected error setting slot")
+	}
+	return
+}
+
+func ReadLiteral(aff affine.Affinity, cls string, msg json.RawMessage) (ret LiteralValue, err error) {
+	return readLiteral(aff.String()+"_eval", cls, msg)
+}
+
+func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, err error) {
+	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
+	switch typeName {
+	default:
+		err = chart.Unhandled("CustomSlot")
+
+	case rt.BoolEval_Type:
+		var val bool
+		if e := json.Unmarshal(msg, &val); e != nil {
+			err = chart.Unhandled(typeName)
+		} else {
+			ret = &BoolValue{Bool: val, Class: cls}
 		}
-		err = m.MarshalValue(typeName, str)
 
-	case TextValues_Type:
-		var out []string = i.(*TextValues).Values
-		err = m.MarshalValue(typeName, out)
+	case rt.NumberEval_Type:
+		var val float64
+		if e := json.Unmarshal(msg, &val); e != nil {
+			err = chart.Unhandled(typeName)
+		} else {
+			ret = &NumValue{Num: val, Class: cls}
+		}
 
+	case rt.TextEval_Type:
+		var val string
+		if e := json.Unmarshal(msg, &val); e != nil {
+			err = chart.Unhandled(typeName)
+		} else {
+			ret = &TextValue{Text: val, Class: cls}
+		}
+
+	case rt.NumListEval_Type:
+		var val []float64
+		if e := json.Unmarshal(msg, &val); e != nil {
+			err = chart.Unhandled(typeName)
+		} else {
+			ret = &NumValues{Values: val, Class: cls}
+		}
+
+	case rt.TextListEval_Type:
+		var val []string
+		if e := json.Unmarshal(msg, &val); e != nil {
+			err = chart.Unhandled(typeName)
+		} else {
+			ret = &TextValues{Values: val, Class: cls}
+		}
 	}
 	return
 }

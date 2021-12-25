@@ -145,7 +145,8 @@ func Bool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Bool) (err error) {
 // BoolValue Specify an explicit true or false.
 // User implements: BoolEval, LiteralValue.
 type BoolValue struct {
-	Bool bool `if:"label=_,type=bool"`
+	Bool  bool   `if:"label=_,type=bool"`
+	Class string `if:"label=class,optional,type=text"`
 }
 
 func (*BoolValue) Compose() composer.Spec {
@@ -159,6 +160,7 @@ func (*BoolValue) Compose() composer.Spec {
 const BoolValue_Type = "bool_value"
 
 const BoolValue_Field_Bool = "$BOOL"
+const BoolValue_Field_Class = "$CLASS"
 
 func (op *BoolValue) Marshal(m jsn.Marshaler) error {
 	return BoolValue_Marshal(m, op)
@@ -236,6 +238,13 @@ func BoolValue_Marshal(m jsn.Marshaler, val *BoolValue) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", BoolValue_Field_Bool))
+		}
+		e1 := m.MarshalKey("class", BoolValue_Field_Class)
+		if e1 == nil {
+			e1 = Text_Unboxed_Optional_Marshal(m, &val.Class)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", BoolValue_Field_Class))
 		}
 		m.EndBlock()
 	}
@@ -521,7 +530,8 @@ func LiteralValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LiteralValue) 
 // NumValue Specify a particular number.
 // User implements: NumberEval, LiteralValue.
 type NumValue struct {
-	Num float64 `if:"label=_,type=number"`
+	Num   float64 `if:"label=_,type=number"`
+	Class string  `if:"label=class,optional,type=text"`
 }
 
 func (*NumValue) Compose() composer.Spec {
@@ -535,6 +545,7 @@ func (*NumValue) Compose() composer.Spec {
 const NumValue_Type = "num_value"
 
 const NumValue_Field_Num = "$NUM"
+const NumValue_Field_Class = "$CLASS"
 
 func (op *NumValue) Marshal(m jsn.Marshaler) error {
 	return NumValue_Marshal(m, op)
@@ -613,6 +624,13 @@ func NumValue_Marshal(m jsn.Marshaler, val *NumValue) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NumValue_Field_Num))
 		}
+		e1 := m.MarshalKey("class", NumValue_Field_Class)
+		if e1 == nil {
+			e1 = Text_Unboxed_Optional_Marshal(m, &val.Class)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", NumValue_Field_Class))
+		}
 		m.EndBlock()
 	}
 	return
@@ -622,6 +640,7 @@ func NumValue_Marshal(m jsn.Marshaler, val *NumValue) (err error) {
 // User implements: NumListEval, LiteralValue.
 type NumValues struct {
 	Values []float64 `if:"label=_,type=number"`
+	Class  string    `if:"label=class,optional,type=text"`
 }
 
 func (*NumValues) Compose() composer.Spec {
@@ -635,6 +654,7 @@ func (*NumValues) Compose() composer.Spec {
 const NumValues_Type = "num_values"
 
 const NumValues_Field_Values = "$VALUES"
+const NumValues_Field_Class = "$CLASS"
 
 func (op *NumValues) Marshal(m jsn.Marshaler) error {
 	return NumValues_Marshal(m, op)
@@ -712,6 +732,13 @@ func NumValues_Marshal(m jsn.Marshaler, val *NumValues) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NumValues_Field_Values))
+		}
+		e1 := m.MarshalKey("class", NumValues_Field_Class)
+		if e1 == nil {
+			e1 = Text_Unboxed_Optional_Marshal(m, &val.Class)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", NumValues_Field_Class))
 		}
 		m.EndBlock()
 	}
@@ -1188,7 +1215,8 @@ func Text_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Text) (err error) {
 // TextValue Specify a small bit of text.
 // User implements: TextEval, LiteralValue.
 type TextValue struct {
-	Text string `if:"label=_,type=text"`
+	Text  string `if:"label=_,type=text"`
+	Class string `if:"label=class,optional,type=text"`
 }
 
 func (*TextValue) Compose() composer.Spec {
@@ -1202,6 +1230,7 @@ func (*TextValue) Compose() composer.Spec {
 const TextValue_Type = "text_value"
 
 const TextValue_Field_Text = "$TEXT"
+const TextValue_Field_Class = "$CLASS"
 
 func (op *TextValue) Marshal(m jsn.Marshaler) error {
 	return TextValue_Marshal(m, op)
@@ -1280,15 +1309,23 @@ func TextValue_Marshal(m jsn.Marshaler, val *TextValue) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", TextValue_Field_Text))
 		}
+		e1 := m.MarshalKey("class", TextValue_Field_Class)
+		if e1 == nil {
+			e1 = Text_Unboxed_Optional_Marshal(m, &val.Class)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", TextValue_Field_Class))
+		}
 		m.EndBlock()
 	}
 	return
 }
 
-// TextValues Text List: Specifies a set of string values.
+// TextValues Text List: Specifies a set of text values.
 // User implements: TextListEval, LiteralValue.
 type TextValues struct {
 	Values []string `if:"label=_,type=text"`
+	Class  string   `if:"label=class,optional,type=text"`
 }
 
 func (*TextValues) Compose() composer.Spec {
@@ -1302,6 +1339,7 @@ func (*TextValues) Compose() composer.Spec {
 const TextValues_Type = "text_values"
 
 const TextValues_Field_Values = "$VALUES"
+const TextValues_Field_Class = "$CLASS"
 
 func (op *TextValues) Marshal(m jsn.Marshaler) error {
 	return TextValues_Marshal(m, op)
@@ -1380,6 +1418,13 @@ func TextValues_Marshal(m jsn.Marshaler, val *TextValues) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", TextValues_Field_Values))
 		}
+		e1 := m.MarshalKey("class", TextValues_Field_Class)
+		if e1 == nil {
+			e1 = Text_Unboxed_Optional_Marshal(m, &val.Class)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", TextValues_Field_Class))
+		}
 		m.EndBlock()
 	}
 	return
@@ -1406,13 +1451,18 @@ var Slats = []composer.Composer{
 
 var Signatures = map[uint64]interface{}{
 	1736897526516691909:  (*BoolValue)(nil),    /* Bool: */
+	13295888009686388479: (*BoolValue)(nil),    /* Bool:class: */
 	8393454129252355509:  (*FieldValue)(nil),   /* Field name:value: */
 	2198313742266461362:  (*FieldValues)(nil),  /* Fields: */
 	9668407916590545547:  (*NumValue)(nil),     /* Num: */
+	4515425522337752389:  (*NumValue)(nil),     /* Num:class: */
 	17428560025310008846: (*NumValues)(nil),    /* Nums: */
+	4305020048913823676:  (*NumValues)(nil),    /* Nums:class: */
 	8364493114742675433:  (*RecordValue)(nil),  /* Rec: */
 	7274569038616904990:  (*RecordValue)(nil),  /* Rec:fields: */
 	5776881376101857802:  (*RecordValues)(nil), /* Recs:containing: */
 	15892234395983060559: (*TextValue)(nil),    /* Txt: */
+	6616605474547371729:  (*TextValue)(nil),    /* Txt:class: */
 	10570907516103306122: (*TextValues)(nil),   /* Txts: */
+	15902771598815222752: (*TextValues)(nil),   /* Txts:class: */
 }

@@ -6,10 +6,10 @@ import (
 	"git.sr.ht/~ionous/iffy/rt"
 )
 
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{s} }
+func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Bool: b} }
+func I(n int) *literal.NumValue     { return &literal.NumValue{Num: float64(n)} }
+func F(n float64) *literal.NumValue { return &literal.NumValue{Num: n} }
+func T(s string) *literal.TextValue { return &literal.TextValue{Text: s} }
 
 func P(p string) core.PatternName  { return core.PatternName{Str: p} }
 func N(v string) core.VariableName { return core.VariableName{Str: v} }
@@ -18,9 +18,9 @@ func W(v string) string            { return v }
 
 func FromTs(vs []string) (ret rt.Assignment) {
 	if len(vs) == 1 {
-		ret = &core.FromText{&literal.TextValue{vs[0]}}
+		ret = &core.FromText{&literal.TextValue{Text: vs[0]}}
 	} else {
-		ret = &core.FromTexts{&literal.TextValues{vs}}
+		ret = &core.FromTexts{&literal.TextValues{Values: vs}}
 	}
 	return
 }

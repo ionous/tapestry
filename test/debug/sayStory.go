@@ -12,7 +12,7 @@ import (
 )
 
 func SayIt(s string) rt.Execute {
-  return &core.Say{&literal.TextValue{s}}
+  return &core.Say{T(s)}
 }
 
 type MatchNumber struct {
@@ -47,9 +47,7 @@ func DetermineSay(i int) *core.CallPattern {
   return &core.CallPattern{
     Pattern: core.PatternName{Str: "say_me"},
     Arguments: core.NamedArgs(
-      "num", &core.FromNum{
-        &literal.NumValue{float64(i)},
-      }),
+      "num", &core.FromNum{I(i)}),
   }
 }
 
@@ -86,15 +84,20 @@ var SayPattern = testpat.Pattern{
   },
 }
 
+func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Bool: b} }
+func I(n int) *literal.NumValue     { return &literal.NumValue{Num: float64(n)} }
+func F(n float64) *literal.NumValue { return &literal.NumValue{Num: n} }
+func T(s string) *literal.TextValue { return &literal.TextValue{Text: s} }
+
 var SayHelloGoodbye = core.NewActivity(
   &core.ChooseAction{
-    If: &literal.BoolValue{true},
+    If: B(true),
     Do: core.MakeActivity(&core.Say{
-      Text: &literal.TextValue{"hello"},
+      Text: T("hello"),
     }),
     Else: &core.ChooseNothingElse{
       core.MakeActivity(&core.Say{
-        Text: &literal.TextValue{"goodbye"},
+        Text: T("goodbye"),
       }),
     },
   })

@@ -119,8 +119,14 @@ func getObjectField(run *Runner, domain, noun string, field g.Field) (ret g.Valu
 				} else {
 					ret = &objectValue{shared: v}
 				}
+			} else if isEvalLike := b[0] == '{'; !isEvalLike {
+				if v, e := readLiteralValue(field.Affinity, field.Type, b); e != nil {
+					err = e
+				} else {
+					ret = &objectValue{shared: v}
+				}
 			} else {
-				if a, e := readValue(field.Affinity, b, run.signatures); e != nil {
+				if a, e := readEvalValue(field.Affinity, b, run.signatures); e != nil {
 					err = e
 				} else {
 					ret = &objectValue{dynamic: a}

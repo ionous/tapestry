@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/eph"
 	"git.sr.ht/~ionous/iffy/dl/grammar"
-	"git.sr.ht/~ionous/iffy/dl/literal"
 	"github.com/ionous/errutil"
 )
 
@@ -77,7 +76,7 @@ func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
 	} else {
 		prop := op.Property.String()
 		for _, noun := range k.Env().Recent.Nouns.Subjects {
-			k.Write(&eph.EphValues{Noun: noun, Field: prop, Value: &literal.TextValue{text}})
+			k.Write(&eph.EphValues{Noun: noun, Field: prop, Value: T(text)})
 		}
 	}
 	return

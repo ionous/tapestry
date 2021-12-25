@@ -2,7 +2,6 @@ package story
 
 import (
 	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/literal"
 	"github.com/ionous/errutil"
 )
 
@@ -39,7 +38,7 @@ type Testing interface {
 
 func (op *TestOutput) ImportTest(k *Importer, testName string) (err error) {
 	// note: we use the raw lines here, we don't expect the text output to be a template.
-	k.Write(&eph.EphChecks{Name: testName, Expect: &literal.TextValue{op.Lines.Str}})
+	k.Write(&eph.EphChecks{Name: testName, Expect: T(op.Lines.Str)})
 	return
 }
 

@@ -5,10 +5,10 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/literal"
 )
 
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{s} }
+func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Bool: b} }
+func I(n int) *literal.NumValue     { return &literal.NumValue{Num: float64(n)} }
+func F(n float64) *literal.NumValue { return &literal.NumValue{Num: n} }
+func T(s string) *literal.TextValue { return &literal.TextValue{Text: s} }
 
 func P(p string) core.PatternName  { return core.PatternName{Str: p} }
 func N(v string) core.VariableName { return core.VariableName{Str: v} }

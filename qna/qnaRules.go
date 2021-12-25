@@ -1,7 +1,7 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/iffy/jsn/cin"
+	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
@@ -52,12 +52,18 @@ func (run *Runner) buildRules(pat, tgt string) (retRules []rt.Rule, retFlags rt.
 		var flags rt.Flags
 		for _, el := range els {
 			var filter rt.BoolEval
-			if e := cin.Decode(rt.BoolEval_Slot{&filter}, el.Filter, run.signatures); e != nil {
+			// fix: we dont want to be bound to core here,
+			// even though we need its custom decoding handlers
+			// probably best is to pass a decoder object in -- not even just run.signatures
+			// ( then you could run it against detail encoding too if you wanted )
+			// might also stack the custom decoders just like with the signatures --
+			// then you just "loop" over them maybe
+			if e := core.Decode(rt.BoolEval_Slot{&filter}, el.Filter, run.signatures); e != nil {
 				e = errutil.New("error decoding filter for", pat, tgt, el.Id, e)
 				err = errutil.Append(err, e)
 			} else {
 				var prog rt.Execute
-				if e := cin.Decode(rt.Execute_Slot{&prog}, el.Prog, run.signatures); e != nil {
+				if e := core.Decode(rt.Execute_Slot{&prog}, el.Prog, run.signatures); e != nil {
 					e = errutil.New("error decoding prog for", pat, tgt, el.Id, e)
 					err = errutil.Append(err, e)
 				} else {
