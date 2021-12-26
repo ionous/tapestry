@@ -143,7 +143,7 @@ func (rw *Results) ApplyRule(run rt.Runtime, rule rt.Rule, flags rt.Flags) (ret 
 
 // return the flags of the rule if it ran; even if it didnt return anything.
 func ApplyRule(run rt.Runtime, rule rt.Rule, allow rt.Flags) (ret rt.Flags, err error) {
-	if flags := rule.Flags(); (allow&flags != 0) || (flags&rt.Filter != 0) {
+	if flags := rule.Flags(); (allow&flags != 0) || (flags&rt.Filter != 0) { // Filter means run always
 		if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
 			err = e
 		} else if ok.Bool() && allow&flags != 0 {

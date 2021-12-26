@@ -19,7 +19,7 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 	} else {
 		// locals can ( and often do ) read arguments ( which can invoke sub-patterns )
 		run.currentPatterns.startedPattern(name)
-		results := pattern.NewResults(rec, pl.Result, aff)
+		results := pattern.NewResults(rec, pl.Result, aff) // create a scope which accepts results
 		if oldScope, e := run.ReplaceScope(results, true); e != nil {
 			err = e
 		} else {

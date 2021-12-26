@@ -28,13 +28,8 @@ type cachedRules struct {
 
 // get the rules from the cache, or build them and add them to the cache
 func (run *Runner) getRules(pat, tgt string) (ret cachedRules, err error) {
-	if c, e := run.values.cache(func() (ret interface{}, err error) {
-		if rules, flags, e := run.buildRules(pat, tgt); e != nil {
-			err = run.Report(e)
-		} else {
-			ret = cachedRules{rules: rules, flags: flags}
-		}
-		return
+	if c, e := run.values.cache(func() (interface{}, error) {
+		return run.buildRules(pat, tgt)
 	}, "rules", pat, tgt); e != nil {
 		err = e
 	} else {
@@ -44,12 +39,12 @@ func (run *Runner) getRules(pat, tgt string) (ret cachedRules, err error) {
 }
 
 // build the rules for the passed pat,tgt pair
-func (run *Runner) buildRules(pat, tgt string) (retRules []rt.Rule, retFlags rt.Flags, err error) {
+func (run *Runner) buildRules(pat, tgt string) (ret cachedRules, err error) {
 	if els, e := run.qdb.RulesFor(pat, tgt); e != nil {
 		err = e
 	} else {
 		var rules []rt.Rule
-		var flags rt.Flags
+		var sum rt.Flags
 		for _, el := range els {
 			var filter rt.BoolEval
 			// fix: we dont want to be bound to core here,
@@ -74,12 +69,12 @@ func (run *Runner) buildRules(pat, tgt string) (retRules []rt.Rule, retFlags rt.
 						Execute:  prog,
 						RawFlags: float64(flags),
 					})
-					flags |= flags
+					sum |= flags
 				}
 			}
 		}
 		if err == nil {
-			retRules, retFlags = rules, flags
+			ret = cachedRules{rules: rules, flags: sum}
 		}
 	}
 	return
