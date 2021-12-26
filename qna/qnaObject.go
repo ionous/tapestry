@@ -90,7 +90,8 @@ func (obj *qnaObject) SetFieldByName(rawField string, val g.Value) (err error) {
 		if ft := obj.kind.Field(i); ft.Name == field {
 			setObjectField(obj.run, obj.domain, obj.name, ft, val)
 		} else {
-			// asking for a trait
+			// setting a trait.
+			// FIX: should we transform in some way the value so that it has type of the aspect?
 			// FIX: records dont have opposite day so this seems ... unfair.
 			// FIX: im also curious about aspects that only have one trait, and ... blank ( nothing ).
 			if aff := val.Affinity(); aff != affine.Bool {
@@ -110,11 +111,13 @@ func (obj *qnaObject) SetFieldByName(rawField string, val g.Value) (err error) {
 // calls to get the object field result in "dynamic values".
 func getObjectField(run *Runner, domain, noun string, field g.Field) (ret g.Value, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
+		// note: in the original version of this, we queried *all* fields
+		// ( unioning in those with traits, and those without defaults )
 		if b, e := run.qdb.NounValue(noun, field.Name); e != nil {
 			err = e
 		} else {
 			if len(b) == 0 {
-				if v, e := zeroValue(run, field.Affinity, field.Type); e != nil {
+				if v, e := zeroValue(run, field); e != nil {
 					err = e
 				} else {
 					ret = &objectValue{shared: v}

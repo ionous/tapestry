@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
@@ -19,14 +20,23 @@ func decodeAssignment(a affine.Affinity, prog []byte, signatures []map[uint64]in
 	return
 }
 
-func zeroValue(ks g.Kinds, a affine.Affinity, t string) (ret g.Value, err error) {
-	switch a {
+func zeroValue(ks g.Kinds, ft g.Field) (ret g.Value, err error) {
+	switch a, t := ft.Affinity, ft.Type; a {
 	case affine.Bool:
 		ret = g.BoolFrom(false, t)
 	case affine.Number:
 		ret = g.FloatFrom(0, t)
 	case affine.Text:
-		ret = g.StringFrom("", t)
+		var defaultValue string
+		if t == ft.Name { // if it looks like an aspect...
+			if ak, e := ks.GetKindByName(t); e == nil {
+				if ak.Implements(kindsOf.Aspect.String()) {
+					trait := ak.Field(0) // get the default trait.
+					defaultValue = trait.Name
+				}
+			}
+		}
+		ret = g.StringFrom(defaultValue, t)
 	case affine.NumList:
 		ret = g.FloatsFrom(nil, t)
 	case affine.TextList:
