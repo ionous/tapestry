@@ -40,9 +40,10 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		k.AddRequirement(kindsOf.Pattern.String())
 		// size of fields is usually > 0, so dont worry too much about the edge case
 		fields := make([]UniformField, 0, measurePattern(op))
-		if e := op.assembleRet(d, k, at, &fields); e != nil {
+		// args go first for position arguments in the runtime (pattern.NewRecord)
+		if e := op.assembleArgs(d, k, at, &fields); e != nil {
 			err = e
-		} else if e := op.assembleArgs(d, k, at, &fields); e != nil {
+		} else if e := op.assembleRet(d, k, at, &fields); e != nil {
 			err = e
 		} else if e := reduceLocals(op.Locals, &fields); e != nil {
 			err = e

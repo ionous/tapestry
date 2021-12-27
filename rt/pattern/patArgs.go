@@ -21,12 +21,13 @@ func NewRecord(run rt.Runtime, name string, parts []string, args []rt.Arg) (rec 
 		var labelIndex, fieldIndex int
 		//
 		for i, a := range args {
-			n := lang.SpecialUnderscore(a.Name) // because args can be $1, $2, etc.
+			n := lang.SpecialUnderscore(a.Name) // because args can be $1, $2, etc. [ fix: but why arent they correct format already?? ]
 			// search for a matching label.
 			if len(n) == 0 {
 				err = errutil.New("unnamed arg at", i)
 			} else if n[0] == '$' {
 				// validate positional arguments make sense
+				// ( see also: EphPatterns.Assemble )
 				if argIndex(labelIndex) != n {
 					break
 				}
@@ -38,7 +39,16 @@ func NewRecord(run rt.Runtime, name string, parts []string, args []rt.Arg) (rec 
 					err = errutil.New("no matching label for arg", i, n, "in", parts)
 					break
 				} else {
-					fieldIndex, labelIndex = at, at+1
+					var fn string
+					if at < k.NumField() {
+						fn = k.Field(at).Name
+					}
+					if fn == n {
+						fieldIndex, labelIndex = at, at+1
+					} else {
+						err = errutil.Fmt("mismatched field(%s) for arg(%s) in %q", fn, n, name)
+						break
+					}
 				}
 			}
 			// note: set indexed field assigns without copying
