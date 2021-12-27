@@ -8,17 +8,17 @@ func _() {
 	// An "invalid array index" compiler error signifies that the constant values have changed.
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
-	_ = x[PrintResponseNames-1]
+	_ = x[PrintResponseNames-0]
+	_ = x[NumOptions-1]
 }
 
-const _Options_name = "PrintResponseNames"
+const _Options_name = "PrintResponseNamesNumOptions"
 
-var _Options_index = [...]uint8{0, 18}
+var _Options_index = [...]uint8{0, 18, 28}
 
 func (i Options) String() string {
-	i -= 1
 	if i < 0 || i >= Options(len(_Options_index)-1) {
-		return "Options(" + strconv.FormatInt(int64(i+1), 10) + ")"
+		return "Options(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
 	return _Options_name[_Options_index[i]:_Options_index[i+1]]
 }

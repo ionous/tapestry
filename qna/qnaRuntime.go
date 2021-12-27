@@ -16,6 +16,10 @@ import (
 )
 
 func NewRuntime(db *sql.DB, signatures cin.Signatures) *Runner {
+	opt := NewOptions()
+	return NewRuntimeOptions(db, opt, signatures)
+}
+func NewRuntimeOptions(db *sql.DB, options Options, signatures cin.Signatures) *Runner {
 	var run *Runner
 	if qdb, e := pdb.NewQueries(db); e != nil {
 		panic(e) //fix: report
@@ -27,9 +31,7 @@ func NewRuntime(db *sql.DB, signatures cin.Signatures) *Runner {
 			nounValues: make(cache),
 			counters:   make(counters),
 			signatures: signatures,
-			qnaOptions: qnaOptions{
-				meta.PrintResponseNames.String(): g.BoolOf(false),
-			},
+			options:    options,
 		}
 		run.SetWriter(print.NewAutoWriter(writer.NewStdout()))
 	}
@@ -43,7 +45,7 @@ type Runner struct {
 	nounValues cache
 	counters
 	signatures cin.Signatures
-	qnaOptions
+	options    Options
 	//
 	scope.Stack
 	Randomizer
@@ -152,7 +154,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 			err = run.Stack.SetFieldByName(field, val)
 
 		case meta.Option:
-			err = run.setOption(field, val)
+			err = run.options.SetOptionByName(field, val)
 
 		case meta.Counter:
 			err = run.setCounter(field, val)
@@ -229,7 +231,8 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 
 		// custom options
 		case meta.Option:
-			if t, e := run.option(field); e != nil {
+			// note: uses raw field so that it matches the meta.Options go generated stringer strings.
+			if t, e := run.options.Option(rawField); e != nil {
 				err = run.Report(e)
 			} else {
 				ret = t
