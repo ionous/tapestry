@@ -3,6 +3,7 @@ package eph
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
@@ -38,23 +39,20 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else {
 		k := d.EnsureKind(name, at)
 		k.AddRequirement(kindsOf.Pattern.String())
-		// size of fields is usually > 0, so dont worry too much about the edge case
-		fields := make([]UniformField, 0, measurePattern(op))
-		// args go first for position arguments in the runtime (pattern.NewRecord)
-		if e := op.assembleArgs(d, k, at, &fields); e != nil {
+		var locals []UniformField
+		if e := op.assembleRes(d, k, at, &k.patternHeader); e != nil {
 			err = e
-		} else if e := op.assembleRet(d, k, at, &fields); e != nil {
+		} else if e := op.assembleArgs(d, k, at, &k.patternHeader); e != nil {
 			err = e
-		} else if e := reduceLocals(op.Locals, &fields); e != nil {
+		} else if e := reduceLocals(op.Locals, &locals); e != nil {
 			err = e
 		} else {
 			err = d.AddEphemera(EphAt{at, PhaseFunction{FieldPhase,
 				func(c *Catalog, d *Domain, at string) (err error) {
-					for _, p := range fields {
-						if e := p.assembleField(k, at); e != nil {
-							err = e
-							break
-						}
+					if e := assembleFields(k, k.patternHeader.flush(), at); e != nil {
+						err = e
+					} else if e := assembleFields(k, locals, at); e != nil {
+						err = e
 					}
 					return
 				}}})
@@ -63,22 +61,68 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	return
 }
 
+func assembleFields(k *ScopedKind, fields []UniformField, at string) (err error) {
+	for _, p := range fields {
+		if e := p.assembleField(k, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+// accumulate the various bits of pattern data
+// ensure they get written correctly, and in a good order.
+type patternHeader struct {
+	res, args []UniformField
+	written   bool
+}
+
+func (pd *patternHeader) flush() (ret []UniformField) {
+	if !pd.written {
+		// ensure there's always a result field; even if its blank.
+		var res []UniformField
+		if len(pd.res) > 0 {
+			res = pd.res
+		} else {
+			res = []UniformField{{affinity: affine.Bool.String()}}
+		}
+		ret = append(res, pd.args...)
+		pd.written = true
+	}
+	return ret
+}
+
 // writes a definition of patternName?res=name
-func (op *EphPatterns) assembleRet(d *Domain, k *ScopedKind, at string, outp *[]UniformField) (err error) {
-	if patres, e := reduceRes(op.Result, outp); e != nil {
+func (op *EphPatterns) assembleRes(d *Domain, k *ScopedKind, at string, outp *patternHeader) (err error) {
+	var res []UniformField
+	if op.Result != nil && k.domain != d {
+		err = errutil.New("can only declare results in the original domain")
+	} else if patres, e := reduceRes(op.Result, &res); e != nil {
 		err = e
 	} else if len(patres) > 0 {
-		err = addPatternDef(d, k, "res", at, patres)
+		if e := addPatternDef(d, k, "res", at, patres); e != nil {
+			err = e
+		} else {
+			outp.res = res
+		}
 	}
 	return
 }
 
 // writes a definition of patternName?args=arg1,arg2,arg3
-func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *[]UniformField) (err error) {
-	if patlabels, e := reduceArgs(op.Params, outp); e != nil {
+func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *patternHeader) (err error) {
+	var args []UniformField
+	if len(op.Params) > 0 && k.domain != d {
+		err = errutil.New("can only declare args in the original domain")
+	} else if patlabels, e := reduceArgs(op.Params, &args); e != nil {
 		err = e
 	} else if len(patlabels) > 0 {
-		err = addPatternDef(d, k, "args", at, patlabels)
+		if e := addPatternDef(d, k, "args", at, patlabels); e != nil {
+			err = e
+		} else {
+			outp.args = args
+		}
 	}
 	return
 }
@@ -139,14 +183,6 @@ func reduceLocals(params []EphParams, outp *[]UniformField) (err error) {
 		} else {
 			*outp = append(*outp, p)
 		}
-	}
-	return
-}
-
-func measurePattern(op *EphPatterns) (ret int) {
-	ret = len(op.Params) + len(op.Locals)
-	if op.Result != nil {
-		ret++
 	}
 	return
 }

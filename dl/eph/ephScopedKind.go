@@ -8,10 +8,11 @@ import (
 )
 
 type ScopedKind struct {
-	Requires // references to ancestors ( at most it can have one direct parent )
-	domain   *Domain
-	aspects  []traitDef // used for kinds of aspects *and* for fields which use those aspects.
-	fields   []fieldDef // otherwise, everything is a field
+	Requires      // references to ancestors ( at most it can have one direct parent )
+	domain        *Domain
+	aspects       []traitDef // used for kinds of aspects *and* for fields which use those aspects.
+	fields        []fieldDef // otherwise, everything is a field
+	patternHeader patternHeader
 }
 
 func (k *ScopedKind) HasParent(other kindsOf.Kinds) bool {

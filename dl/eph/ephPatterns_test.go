@@ -274,3 +274,53 @@ func TestPatternConflictingInit(t *testing.T) {
 		t.Log("ok", e)
 	}
 }
+
+// a simple pattern with no return
+func TestPatternNoResults(t *testing.T) {
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
+		&EphPatterns{Name: "p"},
+	)
+	if cat, e := buildAncestors(dt); e != nil {
+		t.Fatal(e)
+	} else {
+		outkind := testOut{mdl.Kind}
+		if e := cat.WriteKinds(&outkind); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(outkind[1:], testOut{
+			"a:patterns::x",
+			"a:p:patterns:x",
+		}); len(diff) > 0 {
+			t.Log("got:", pretty.Sprint(outkind))
+			t.Fatal(diff)
+		}
+		outfields := testOut{mdl.Field}
+		if e := cat.WriteFields(&outfields); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(outfields[1:], testOut{
+			"a:p::bool::x", // the pattern should still have a result, but the name should be empty
+		}); len(diff) > 0 {
+			t.Log("got:", pretty.Sprint(outfields))
+			t.Fatal(diff)
+		}
+		outpat := testOut{mdl.Pat}
+		if e := cat.WritePatterns(&outpat); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(outpat[1:], testOut{
+			"a:p::",
+		}); len(diff) > 0 {
+			t.Log("got:", pretty.Sprint(outpat))
+			t.Fatal(diff)
+		}
+		outlocals := testOut{mdl.Assign}
+		if e := cat.WriteLocals(&outlocals); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(outlocals[1:], testOut{
+			/**/
+		}); len(diff) > 0 {
+			t.Log("got:", pretty.Sprint(outlocals))
+			t.Fatal(diff)
+		}
+	}
+}
