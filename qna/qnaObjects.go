@@ -19,7 +19,7 @@ func (run *Runner) getObjectName(id string) (ret string, err error) {
 
 func (run *Runner) getObjectByName(name string) (ret *qnaObject, err error) {
 	// note: if were able to get the object kind, then the object is in scope.
-	if ok, e := run.getObjectKind(name); e != nil {
+	if ok, e := run.getObjectInfo(name); e != nil {
 		err = e
 	} else if c, e := run.values.cache(func() (ret interface{}, err error) {
 		if k, e := run.GetKindByName(ok.Kind); e != nil {
@@ -37,7 +37,7 @@ func (run *Runner) getObjectByName(name string) (ret *qnaObject, err error) {
 }
 
 // given an object name, return its id and kind.
-func (run *Runner) getObjectKind(name string) (ret pdb.NounInfo, err error) {
+func (run *Runner) getObjectInfo(name string) (ret pdb.NounInfo, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
 		if info, e := run.qdb.NounInfo(name); e != nil {
 			err = e
@@ -47,7 +47,7 @@ func (run *Runner) getObjectKind(name string) (ret pdb.NounInfo, err error) {
 			ret = info
 		}
 		return
-	}, "objectKind", name); e != nil {
+	}, "objectInfo", name); e != nil {
 		err = e
 	} else {
 		ret = c.(pdb.NounInfo)

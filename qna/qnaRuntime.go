@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/qna/pdb"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/print"
 	"git.sr.ht/~ionous/iffy/rt/scope"
@@ -119,15 +120,27 @@ func (run *Runner) Report(e error) error {
 }
 
 // doesnt reformat the names.
-func (run *Runner) RelateTo(a, b, relation string) error {
-	return run.qdb.Relate(relation, a, b)
+func (run *Runner) RelateTo(a, b, rel string) (err error) {
+	if _, e := run.getKindOf(rel, kindsOf.Relation); e != nil {
+		err = e
+	} else if _, e := run.getObjectInfo(a); e != nil {
+		err = e
+	} else if _, e := run.getObjectInfo(b); e != nil {
+		err = e
+	} else { // FIX: validate the kinds of a and b and rel?
+		err = run.qdb.Relate(rel, a, b)
+	}
+	return
 }
 
 // assumes a is a valid noun
-func (run *Runner) RelativesOf(rel, a string) (ret []string, err error) {
-	// doesnt cache because relateTo would have to clear the cache.
-	if vs, e := run.qdb.RelativesOf(rel, a); e != nil {
+func (run *Runner) RelativesOf(a, rel string) (ret []string, err error) {
+	if _, e := run.getObjectInfo(a); e != nil {
 		err = e
+	} else if _, e := run.getKindOf(rel, kindsOf.Relation); e != nil {
+		err = e
+	} else if vs, e := run.qdb.RelativesOf(rel, a); e != nil {
+		err = e // doesnt cache because relateTo would have to clear the cache.
 	} else {
 		ret = vs
 	}
@@ -135,8 +148,12 @@ func (run *Runner) RelativesOf(rel, a string) (ret []string, err error) {
 }
 
 // assumes b is a valid noun
-func (run *Runner) ReciprocalsOf(rel, b string) (ret []string, err error) {
-	if vs, e := run.qdb.ReciprocalsOf(rel, b); e != nil {
+func (run *Runner) ReciprocalsOf(b, rel string) (ret []string, err error) {
+	if _, e := run.getObjectInfo(b); e != nil {
+		err = e
+	} else if _, e := run.getKindOf(rel, kindsOf.Relation); e != nil {
+		err = e
+	} else if vs, e := run.qdb.ReciprocalsOf(rel, b); e != nil {
 		err = e
 	} else {
 		ret = vs
@@ -186,7 +203,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			}
 
 		case meta.ObjectId:
-			if ok, e := run.getObjectKind(field); e != nil {
+			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else {
 				ret = g.StringOf(ok.Name)
@@ -194,14 +211,14 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 
 		// type of a a game object
 		case meta.ObjectKind:
-			if ok, e := run.getObjectKind(field); e != nil {
+			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else {
 				ret = g.StringOf(ok.Kind)
 			}
 
 		case meta.ObjectKinds:
-			if ok, e := run.getObjectKind(field); e != nil {
+			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else if k, e := run.GetKindByName(ok.Kind); e != nil {
 				err = run.Report(e)

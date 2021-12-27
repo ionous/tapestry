@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/rt/pattern"
 	"github.com/ionous/errutil"
 )
@@ -33,7 +34,7 @@ func (run *Runner) ReplaceScope(s rt.Scope, init bool) (ret rt.Scope, err error)
 // get the initializer and ... init them.
 func (run *Runner) initializeLocals(rec *g.Record) (err error) {
 	k := rec.Kind()
-	if cached, e := run.getCachedKind(k.Name()); e != nil {
+	if cached, e := run.getKindOf(k.Name(), kindsOf.Pattern); e != nil {
 		err = e
 	} else {
 		for i, init := range cached.init {
