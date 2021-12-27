@@ -9,14 +9,16 @@ import (
 )
 
 func (run *Runner) GetKindByName(rawName string) (ret *g.Kind, err error) {
-	name := lang.Underscore(rawName)
-	if cached, e := run.getCachedKind(name); e != nil {
+	if name := lang.Underscore(rawName); len(name) == 0 {
+		err = errutil.New("no kind of empty name")
+	} else if cached, e := run.getCachedKind(name); e != nil {
 		err = e
 	} else {
 		ret = cached.kind
 	}
 	return
 }
+
 func (run *Runner) getCachedKind(k string) (ret cachedKind, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
 		ret, err = run.buildKind(k)
@@ -28,6 +30,7 @@ func (run *Runner) getCachedKind(k string) (ret cachedKind, err error) {
 	}
 	return
 }
+
 func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
 	if path, e := run.qdb.KindOfAncestors(k); e != nil {
 		err = errutil.Fmt("error while getting kind %q, %w", k, e)
