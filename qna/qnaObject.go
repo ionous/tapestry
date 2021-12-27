@@ -117,7 +117,7 @@ func getObjectField(run *Runner, domain, noun string, field g.Field) (ret g.Valu
 			err = e
 		} else {
 			if len(b) == 0 {
-				if v, e := zeroValue(run, field); e != nil {
+				if v, e := g.NewDefaultValue(run, field.Affinity, field.Type); e != nil {
 					err = e
 				} else {
 					ret = &objectValue{shared: v}

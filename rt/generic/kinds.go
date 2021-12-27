@@ -2,6 +2,7 @@ package generic
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
@@ -12,40 +13,49 @@ type Kinds interface {
 
 // NewDefaultValue generates a zero value for the specified affinity;
 // uses the passed Kinds to generate empty records when necessary.
-func NewDefaultValue(ks Kinds, a affine.Affinity, subtype string) (ret Value, err error) {
+func NewDefaultValue(ks Kinds, aff affine.Affinity, cls string) (ret Value, err error) {
 	// return the default value for the
-	switch a {
+	switch aff {
 	case affine.Bool:
-		ret = BoolFrom(false, subtype)
+		ret = BoolFrom(false, cls)
 
 	case affine.Number:
-		ret = FloatFrom(0, subtype)
+		ret = FloatFrom(0, cls)
 
 	case affine.NumList:
-		ret = FloatsFrom(nil, subtype)
+		ret = FloatsFrom(nil, cls)
 
 	case affine.Text:
-		ret = StringFrom("", subtype)
+		var defaultValue string
+		if len(cls) > 0 {
+			if ak, e := ks.GetKindByName(cls); e == nil {
+				if ak.Implements(kindsOf.Aspect.String()) {
+					trait := ak.Field(0) // get the default trait.
+					defaultValue = trait.Name
+				}
+			}
+		}
+		ret = StringFrom(defaultValue, cls)
 
 	case affine.TextList:
-		ret = StringsFrom(nil, subtype)
+		ret = StringsFrom(nil, cls)
 
 	case affine.Record:
-		if k, e := ks.GetKindByName(subtype); e != nil {
-			err = errutil.New("unknown kind", subtype, e)
+		if k, e := ks.GetKindByName(cls); e != nil {
+			err = errutil.New("unknown kind", cls, e)
 		} else {
-			ret = RecordFrom(k.NewRecord(), subtype)
+			ret = RecordFrom(k.NewRecord(), cls)
 		}
 
 	case affine.RecordList:
-		if _, e := ks.GetKindByName(subtype); e != nil {
-			err = errutil.New("unknown kind", subtype, e)
+		if _, e := ks.GetKindByName(cls); e != nil {
+			err = errutil.New("unknown kind", cls, e)
 		} else {
-			ret = RecordsFrom(nil, subtype)
+			ret = RecordsFrom(nil, cls)
 		}
 
 	default:
-		err = errutil.New("default value requested for unhandled affinity", a)
+		err = errutil.New("default value requested for unhandled affinity", aff)
 	}
 	return
 }
