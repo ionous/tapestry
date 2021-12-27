@@ -20,7 +20,7 @@ func (op *HasTrait) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		if p, e := obj.FieldByName(trait); e == nil {
 			ret = p
 		} else if errors.Is(e, g.UnknownField(obj.String(), trait)) {
-			ret = g.False
+			ret = g.False // fix? could be simpler.
 		} else {
 			err = cmdError(op, e)
 		}

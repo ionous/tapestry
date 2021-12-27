@@ -18,6 +18,8 @@ import (
 //
 // related issues:
 // 	  1. object references ( both in properties and local variables )
+//       - if you dont store a domain, your object might mutate;
+//       - but what happens to stored references to things outside of your domain that go out of scope?
 //    2. object local variables -- vs. object text variables storing ( #names )
 //    3. affine.Object
 //
@@ -46,7 +48,7 @@ func (obj *qnaObject) Affinity() affine.Affinity {
 }
 
 func (obj *qnaObject) String() (ret string) {
-	// hrmm...
+	// hrmm... and note: if this runs through under underscore() it breaks.
 	return "#" + obj.domain + "::" + obj.name
 }
 
@@ -62,7 +64,7 @@ func (obj *qnaObject) FieldByName(rawField string) (ret g.Value, err error) {
 	field := lang.Underscore(rawField) // fix: why here?
 	//
 	if i := obj.kind.FieldIndex(field); i < 0 {
-		err = g.UnknownField(obj.name, rawField)
+		err = g.UnknownField(obj.String(), rawField)
 	} else {
 		// just a regular field?
 		if ft := obj.kind.Field(i); ft.Name == field {
@@ -84,7 +86,7 @@ func (obj *qnaObject) FieldByName(rawField string) (ret g.Value, err error) {
 func (obj *qnaObject) SetFieldByName(rawField string, val g.Value) (err error) {
 	field := lang.Underscore(rawField)
 	if i := obj.kind.FieldIndex(field); i < 0 {
-		err = g.UnknownField(obj.name, rawField)
+		err = g.UnknownField(obj.String(), rawField)
 	} else {
 		// just a regular field?
 		if ft := obj.kind.Field(i); ft.Name == field {
