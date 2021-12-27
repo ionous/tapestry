@@ -8,6 +8,8 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/qna"
+	"git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -18,9 +20,10 @@ func main() {
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
 	flag.StringVar(&testName, "run", "", "optional specific test ( in camelcase )")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
+	responses := flag.Bool("responses", false, "print response names instead of values")
 	flag.Parse()
 	opt := qna.NewOptions()
-	// opt.SetOption(meta.PrintResponseNames, g.True)
+	opt.SetOption(meta.PrintResponseNames, generic.BoolOf(*responses))
 	if cnt, e := checkFile(inFile, testName, opt); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
