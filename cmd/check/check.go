@@ -19,7 +19,9 @@ func main() {
 	flag.StringVar(&testName, "run", "", "optional specific test ( in camelcase )")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
-	if cnt, e := checkFile(inFile, testName); e != nil {
+	opt := qna.NewOptions()
+	// opt.SetOption(meta.PrintResponseNames, g.True)
+	if cnt, e := checkFile(inFile, testName, opt); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
 			log.Panic("mismatched")
@@ -31,7 +33,7 @@ func main() {
 
 // open db, select tests, de-gob and run them each in turn.
 // print the results, only error on critical errors
-func checkFile(inFile, testName string) (ret int, err error) {
+func checkFile(inFile, testName string, opt qna.Options) (ret int, err error) {
 	if inFile, e := filepath.Abs(inFile); e != nil {
 		err = e
 	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
@@ -41,7 +43,7 @@ func checkFile(inFile, testName string) (ret int, err error) {
 		if e := tables.CreateRun(db); e != nil {
 			err = e
 		} else {
-			ret, err = qna.CheckAll(db, testName, iffy.AllSignatures)
+			ret, err = qna.CheckAll(db, testName, opt, iffy.AllSignatures)
 		}
 	}
 	return

@@ -15,7 +15,7 @@ import (
 
 // CheckAll tests stored in the passed db.
 // It logs the results of running the tests, and only returns error on critical errors.
-func CheckAll(db *sql.DB, actuallyJustThisOne string, signatures []map[uint64]interface{}) (ret int, err error) {
+func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signatures []map[uint64]interface{}) (ret int, err error) {
 	var name, domain string
 	var aff affine.Affinity
 	var prog []byte
@@ -24,7 +24,8 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, signatures []map[uint64]in
 	if len(actuallyJustThisOne) > 0 {
 		actuallyJustThisOne += ";"
 	}
-	//
+	// read all the matching tests from the db.
+	// ( cant dynamically query them b/c it interferes with db writes; ex. ActivateDomain )
 	var tests []CheckOutput
 	if e := tables.QueryAll(db,
 		`select mc.name, md.domain, mc.value, mc.affinity, mc.prog
@@ -53,9 +54,8 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, signatures []map[uint64]in
 	} else if len(tests) == 0 {
 		err = errutil.New("no matching tests found")
 	} else {
-		// FIX: we have to cache the statements b/c we cant use them during QueryAll
 		for _, t := range tests {
-			run := NewRuntime(db, iffy.AllSignatures)
+			run := NewRuntimeOptions(db, options, iffy.AllSignatures)
 			tables.Must(db, `delete from run_domain; delete from run_pair`)
 			//
 			if _, e := run.ActivateDomain(domain); e != nil {
