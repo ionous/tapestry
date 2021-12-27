@@ -210,7 +210,7 @@ func TestQueries(t *testing.T) {
 		t.Fatal("KindOfAncestors", path, e)
 	} else if _, e := domainPoke.Exec(subDomain, false); e != nil {
 		t.Fatal(e)
-	} else if ok, e := q.NounActive("apple"); e != nil || ok != true {
+	} else /*if ok, e := q.NounActive("apple"); e != nil || ok != true {
 		t.Fatal(e, ok)
 	} else if ok, e := q.NounActive("table"); e != nil || ok != false {
 		t.Fatal(e, ok)
@@ -218,7 +218,7 @@ func TestQueries(t *testing.T) {
 		t.Fatal(kindOfApple, e)
 	} else if kindOfTable, e := q.NounKind("table"); e != nil || kindOfTable != "" {
 		t.Fatal(kindOfTable, e) // should be blank because the table is out of scope
-	} else if val, e := q.NounValue("apple", aspect); e != nil || !reflect.DeepEqual(val, []byte("brief")) {
+	} else */if val, e := q.NounValue("apple", aspect); e != nil || !reflect.DeepEqual(val, []byte("brief")) {
 		t.Fatal(val, e)
 	} else if val, e := q.NounValue("table", aspect); e != nil || val != nil {
 		t.Fatal(e) // should be out of scope
@@ -228,6 +228,8 @@ func TestQueries(t *testing.T) {
 		t.Fatal(e, id)
 	} else if id, e := q.NounInfo("empire"); e != nil || id != (pdb.NounInfo{Domain: domain, Name: "empire_apple", Kind: kind}) {
 		t.Fatal(e, id)
+	} else if id, e := q.NounInfo("table"); e != nil || id != (pdb.NounInfo{}) {
+		t.Fatal(id, e) // should be blank because the table is out of scope
 	} else if got, e := q.PatternLabels(pattern); e != nil {
 		t.Fatal("patternLabels:", e)
 	} else if diff := pretty.Diff(got, pdb.PatternLabels{

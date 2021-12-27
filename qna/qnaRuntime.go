@@ -89,18 +89,6 @@ func (run *Runner) PluralOf(singular string) (ret string) {
 	return
 }
 
-// func (run *Runner) IsNounInScope(id string) (ret bool) {
-// 	if run.values.cache(func() (ret interface{}, err error) {
-// 		ret, err = run.qdb.NounActive(id)
-// 		return
-// 	}, "NounActive", id); e != nil {
-// 		run.Report(e)
-// 	} else {
-// 		ret = cached.(bool)
-// 	}
-// 	return
-// }
-
 func (run *Runner) PatternLabels(pat string) (ret pdb.PatternLabels, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
 		ret, err = run.qdb.PatternLabels(pat)

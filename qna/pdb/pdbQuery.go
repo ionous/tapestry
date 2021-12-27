@@ -19,9 +19,7 @@ type Query struct {
 	domainDelete,
 	fieldsOf,
 	kindOfAncestors,
-	nounActive,
 	nounInfo,
-	nounKind,
 	nounName,
 	nounValue,
 	nounsByKind,
@@ -108,13 +106,6 @@ func (q *Query) KindOfAncestors(kind string) ([]string, error) {
 	return scanStrings(q.kindOfAncestors, kind)
 }
 
-func (q *Query) NounActive(id string) (okay bool, err error) {
-	if e := q.nounActive.QueryRow(id).Scan(&okay); e != nil && e != sql.ErrNoRows {
-		err = e
-	}
-	return
-}
-
 // given a name, find a noun ( and some useful other context )
 func (q *Query) NounInfo(name string) (ret NounInfo, err error) {
 	if e := q.nounInfo.QueryRow(name).Scan(&ret.Domain, &ret.Name, &ret.Kind); e != nil && e != sql.ErrNoRows {
@@ -129,11 +120,6 @@ type NounInfo struct {
 
 func (n *NounInfo) IsValid() bool {
 	return len(n.Name) != 0
-}
-
-// return the noun's kind ( or blank if not known or not in scope )
-func (q *Query) NounKind(id string) (ret string, err error) {
-	return scanString(q.nounKind, id)
 }
 
 // return the best "short name" for a noun ( or blank if the noun isnt known or isnt in scope )
@@ -276,23 +262,6 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			where ks.name = ?1
 			order by mk.rowid`,
 		),
-		// FIX: what do i even need this for????
-		// find all of the kinds of the named kind that are currently in scope.
-		// ie. descendants
-		// kindOfChildren: ps.Prep(db,
-		// 	`select ks.name
-		// 		from kind_scope ks
-		// 		join kind_scope matching
-		// 		on matching.name = ?1
-		// 		where instr(',' ||ks.kind || ',' || ks.path, ','|| matching.kind)`,
-		// ),
-		// determine if the named noun is in scope
-		// see also the nounInScope struct
-		nounActive: ps.Prep(db,
-			`select 1
-			from noun_scope ns
-			where name = ?1`,
-		),
 		// given a short name, find the noun's fullname.
 		// we filter out parser understandings (which have ranks < 0)
 		nounInfo: ps.Prep(db,
@@ -304,15 +273,6 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 				on (mk.rowid = ns.kind)
 			where rank >= 0 and my.name = ?1
 			order by rank
-			limit 1`,
-		),
-		// select the kind of the given noun
-		nounKind: ps.Prep(db,
-			`select mk.kind
-			from noun_scope ns
-			join mdl_kind mk
-				on mk.rowid = ns.kind
-			where ns.name = ?1
 			limit 1`,
 		),
 		// given the fullname of a noun, find the best short name
