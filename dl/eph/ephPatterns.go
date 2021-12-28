@@ -3,7 +3,6 @@ package eph
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"github.com/ionous/errutil"
@@ -80,14 +79,7 @@ type patternHeader struct {
 
 func (pd *patternHeader) flush() (ret []UniformField) {
 	if !pd.written {
-		// ensure there's always a result field; even if its blank.
-		var res []UniformField
-		if len(pd.res) > 0 {
-			res = pd.res
-		} else {
-			res = []UniformField{{affinity: affine.Bool.String()}}
-		}
-		ret = append(res, pd.args...)
+		ret = append(pd.args, pd.res...)
 		pd.written = true
 	}
 	return ret

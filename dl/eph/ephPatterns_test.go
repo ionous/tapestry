@@ -91,17 +91,17 @@ func TestPatternSeparateDomains(t *testing.T) {
 		//
 		&EphPatterns{
 			Name: "p",
-			Result: &EphParams{
-				Name:     "success",
-				Affinity: Affinity{Affinity_Bool},
-			}},
-		&EphPatterns{
-			Name: "p",
 			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
 				Class:    "k",
 			}}},
+		&EphPatterns{
+			Name: "p",
+			Result: &EphParams{
+				Name:     "success",
+				Affinity: Affinity{Affinity_Bool},
+			}},
 		&EphPatterns{
 			Name: "p",
 			Locals: []EphParams{{
@@ -140,8 +140,8 @@ func expectFullResults(t *testing.T, dt domainTest) {
 		if e := cat.WriteFields(&outfields); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outfields[1:], testOut{
-			"a:p:success:bool::x",
 			"a:p:p_1:text:k:x",
+			"a:p:success:bool::x",
 			"a:p:l_1:num_list::x",
 			"a:p:l_2:number::x",
 		}); len(diff) > 0 {
@@ -299,7 +299,9 @@ func TestPatternNoResults(t *testing.T) {
 		if e := cat.WriteFields(&outfields); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outfields[1:], testOut{
-			"a:p::bool::x", // the pattern should still have a result, but the name should be empty
+			// this might be nice, but would requiring changing pattern calls
+			// *and* pattern tests ( which dont have first blank elements )
+			//"a:p::bool::x",
 		}); len(diff) > 0 {
 			t.Log("got:", pretty.Sprint(outfields))
 			t.Fatal(diff)
