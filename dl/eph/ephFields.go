@@ -140,7 +140,25 @@ func (uf *UniformField) assembleField(kind *ScopedKind, at string) (err error) {
 			class:     clsName,
 			initially: uf.initially,
 		}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
-			LogWarning(e) // warn if it was a duplicated definition
+			// handle conflicting inits...
+			// -- AddField needs refactoring to put this in there easily.
+			for i, was := range kind.fields {
+				if was.name == uf.name {
+					hadInit := was.initially != nil
+					wantsInit := uf.initially != nil
+					switch {
+					case wantsInit && !hadInit:
+						was.initially = uf.initially // use the init
+						kind.fields[i] = was         // update the list of structs
+					case wantsInit && hadInit:
+						conflict.Reason = Redefined
+						err = conflict // really should wrap this up, but really should fix AddFields
+					case !wantsInit && !hadInit:
+						LogWarning(e)
+					}
+					break // out of loop
+				}
+			}
 		} else if e != nil {
 			err = e // some other error
 		} else {
