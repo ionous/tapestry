@@ -2,7 +2,6 @@ package render
 
 import (
 	"strconv"
-	"strings"
 
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/dl/core"
@@ -10,6 +9,7 @@ import (
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
@@ -48,12 +48,17 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 				ret, err = op.getPrintedNamedOf(run, v.String())
 
 			case affine.Text:
-				if n := v.String(); strings.HasPrefix(n, "#") {
-					// if its an object id, get its printed name
-					ret, err = op.getPrintedNamedOf(run, n)
-				} else {
-					// if its not, just assume the author was asking for the variable's text
+				str := v.String()
+				// if there's no type, just assume the author was asking for the variable's text
+				// if the string is empty: allow it to print nothing... backwards compat for printing nil objects
+				if vt := v.Type(); len(vt) == 0 || len(str) == 0 {
 					ret = v
+				} else if k, e := run.GetKindByName(vt); e != nil {
+					err = e
+				} else if k.Path()[0] != kindsOf.Kind.String() {
+					ret = v
+				} else {
+					ret, err = op.getPrintedNamedOf(run, str)
 				}
 			}
 		}
