@@ -42,4 +42,4 @@ func Unpack(src g.Value, field string, aff affine.Affinity) (ret g.Value, err er
 
 // fix! ( at the very least should live in pattern
 // but we need to remove its few -- tests and Determine -- dependencies on core
-var HackTillTemplatesCanEvaluatePatternTypes string
+var HackTillTemplatesCanEvaluatePatternTypes g.Value
