@@ -108,22 +108,19 @@ func (d *Record) SetIndexedField(i int, val Value) (err error) {
 			} else if len(ft.Type) == 0 {
 				val = StringOf(str) // downgrades to blank
 				okay = true
-			} else {
-				// is the source untyped? then maybe we can upgrade it to a trait.
-				if len(cls) == 0 {
-					if ft.isAspectLike() {
-						if aspect := findAspect(str, d.kind.traits); aspect == ft.Type {
-							val = StringFrom(str, ft.Type) // upgrade the value to the aspect.
-							okay = true
-						}
-					}
-				} else {
-					// a field wants only "cats"; my value is "things, animals, cats, tigers".
-					// so we ask: does the value implement field:
-					if vk, e := d.kind.kinds.GetKindByName(cls); e == nil {
-						// ( downgrade the value's type to fit the field? for now, lets not. )
-						okay = vk.Implements(ft.Type)
-					}
+			} else if len(cls) > 0 { // is the valid typed?
+				// a field wants only "cats"; my value is "things, animals, cats, tigers".
+				// so we ask: does the value implement field.
+				if vk, e := d.kind.kinds.GetKindByName(cls); e == nil {
+					okay = vk.Implements(ft.Type) // ( downgrade the type to fit the field? for now, lets not. )
+				}
+			} else if len(str) == 0 {
+				val = StringFrom(str, ft.Type) // upgrade blank strings.
+				okay = true
+			} else if ft.isAspectLike() {
+				if aspect := findAspect(str, d.kind.traits); aspect == ft.Type {
+					val = StringFrom(str, ft.Type) // upgrade the value to a trait.
+					okay = true
 				}
 			}
 		}
