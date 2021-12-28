@@ -15,7 +15,6 @@ import (
 	"git.sr.ht/~ionous/iffy/test/debug"
 
 	"git.sr.ht/~ionous/iffy/jsn/dout"
-	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
@@ -48,7 +47,6 @@ func TestCompactEncoder(t *testing.T) {
 }
 
 func TestCompactDecode(t *testing.T) {
-	errutil.Panic = true
 	var dst story.Story
 	if e := story.Decode(&dst, []byte(com), iffy.AllSignatures); e != nil {
 		pretty.Println(dst)
@@ -178,7 +176,6 @@ func TestExpandedSwap(t *testing.T) {
 // TestVarAsBool - unit test for broken parsing case
 // @requires light double committed
 func TestVarAsBool(t *testing.T) {
-	// errutil.Panic = true
 	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
 	want := core.AllTrue{[]rt.BoolEval{
 		&core.GetVar{

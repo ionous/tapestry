@@ -5,12 +5,10 @@ import (
 
 	"git.sr.ht/~ionous/iffy/dl/core"
 	"git.sr.ht/~ionous/iffy/dl/list"
-	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
 func TestPopping(t *testing.T) {
-	errutil.Panic = true
 	// pop from the front of a list
 	// front := popTest(true, 5, "Orange", "Lemon", "Mango")
 	// if d := pretty.Diff(front, []string{"Orange", "Lemon", "Mango", "x", "x"}); len(d) > 0 {
