@@ -8,6 +8,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy"
 	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/iffy/dl/literal"
 	"git.sr.ht/~ionous/iffy/dl/story"
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/tables"
@@ -19,7 +20,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 	var name, domain string
 	var aff affine.Affinity
 	var prog []byte
-	var value interface{}
+	var value []byte
 	//
 	if len(actuallyJustThisOne) > 0 {
 		actuallyJustThisOne += ";"
@@ -38,12 +39,14 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 				var act rt.Execute
 				if e := story.Decode(rt.Execute_Slot{&act}, prog, signatures); e != nil {
 					err = e
-				} else if str, ok := value.(string); !ok || aff != affine.Text {
-					err = errutil.New("tests only compare text right now")
+				} else if v, e := literal.ReadLiteral(aff, "", value); e != nil {
+					err = e
+				} else if l, ok := v.(*literal.TextValue); !ok {
+					err = errutil.New("can only handle text values right now")
 				} else {
 					tests = append(tests, CheckOutput{
 						Name:   name,
-						Expect: str,
+						Expect: l.String(),
 						Test:   act,
 					})
 				}
