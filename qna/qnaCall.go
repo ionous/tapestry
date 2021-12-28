@@ -11,31 +11,30 @@ import (
 
 // note: this is mirrored/mimicked in package testpat
 func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
-	name := lang.Underscore(pat) // FIX: why are people calling this with untransformed names
+	name := lang.Underscore(pat) // fix: why are people calling this with untransformed names
+	// note: locals can ( and often do ) read arguments ( which can invoke sub-patterns )
 	if pl, e := run.qdb.PatternLabels(name); e != nil {
 		err = e
-	} else if rec, e := pattern.NewRecord(run, name, pl.Labels, args); e != nil {
+	} else if res, e := pattern.NewResults(run, pat, pl.Result, aff, pl.Labels, args); e != nil {
 		err = e
 	} else {
-		// locals can ( and often do ) read arguments ( which can invoke sub-patterns )
 		run.currentPatterns.startedPattern(name)
-		results := pattern.NewResults(rec, pl.Result, aff) // create a scope which accepts results
-		if oldScope, e := run.ReplaceScope(results, true); e != nil {
+		if oldScope, e := run.ReplaceScope(res, true); e != nil {
 			err = e
 		} else {
 			var flags rt.Flags
 			if rules, e := run.GetRules(name, "", &flags); e != nil {
 				err = e
-			} else if e := results.ApplyRules(run, rules, flags); e != nil {
+			} else if e := res.ApplyRules(run, rules, flags); e != nil {
 				err = e
-			} else if v, e := results.GetResult(); e != nil {
+			} else if v, e := res.GetResult(); e != nil {
 				err = e
 			} else {
 				// breaks precedence to return a value and an error
 				// in order to generate appropriate default returns ( ex. a record of the right type )
 				// while still informing the caller of lack of pattern decision in a concise manner.
 				ret = v
-				if !results.ComputedResult() {
+				if !res.ComputedResult() {
 					err = rt.NoResult{}
 				}
 			}

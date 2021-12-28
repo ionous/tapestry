@@ -3,16 +3,18 @@ package pattern
 import (
 	"strconv"
 
+	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
 
 // args run in the scope of their parent context
 // they write to the record that will become the new context
-func NewRecord(run rt.Runtime, name string, parts []string, args []rt.Arg) (rec *g.Record, err error) {
+func newPattern(run rt.Runtime, name string, parts []string, args []rt.Arg) (rec *g.Record, err error) {
 	// create a container to hold results of args, locals, and the pending return value
 	if k, e := run.GetKindByName(name); e != nil {
 		err = e
@@ -53,8 +55,11 @@ func NewRecord(run rt.Runtime, name string, parts []string, args []rt.Arg) (rec 
 			}
 			// note: set indexed field assigns without copying
 			// so these two values can become shared. (ex. lists)
-			if val, e := safe.GetAssignedValue(run, a.From); e != nil {
+			if src, e := safe.GetAssignedValue(run, a.From); e != nil {
 				err = errutil.New(e, "while reading arg", i, n)
+				break
+			} else if val, e := autoConvert(run, k.Field(fieldIndex), src); e != nil {
+				err = e
 				break
 			} else if e := rec.SetIndexedField(fieldIndex, val); e != nil {
 				err = errutil.New(e, "while setting arg", i, n)
@@ -81,6 +86,19 @@ func findLabel(labels []string, name string, startingAt int) (ret int) {
 			ret = i
 			break
 		}
+	}
+	return
+}
+
+// fix: handle differences b/t kinds, aspects, etc.?
+func autoConvert(run rt.Runtime, ft g.Field, val g.Value) (ret g.Value, err error) {
+	if needsConversion := ft.Affinity == affine.Text && len(ft.Type) > 0 &&
+		val.Affinity() == affine.Text && len(val.Type()) == 0; !needsConversion {
+		ret = val
+	} else {
+		// set indexed field validates the ft.Type and the val.Type match
+		// we just have to give it the proper value in the first place.
+		ret, err = run.GetField(meta.ObjectId, val.String())
 	}
 	return
 }
