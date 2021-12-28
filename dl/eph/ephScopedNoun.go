@@ -133,11 +133,8 @@ func (n *ScopedNoun) makeNames() []string {
 	// now generate additional names by splitting the lowercase uniform name on the underscores:
 	split := strings.FieldsFunc(n.name, lang.IsBreak)
 	if cnt := len(split); cnt > 1 {
-		spaces := strings.Join(split, " ")
-		// if there is more than one word...
-		// these should never match... but that's how the old code was so why not...
-		// ( ex. "toy_boat" )
-		if breaks := n.name; spaces != breaks {
+		// in case the name was reduced due to multiple separators
+		if breaks := strings.Join(split, "_"); breaks != n.name {
 			out = append(out, breaks)
 		}
 		// write individual words in increasing rank ( ex. "boat", then "toy" )
