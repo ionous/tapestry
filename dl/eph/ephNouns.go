@@ -81,18 +81,16 @@ func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = InvalidString(op.Kind)
 	} else if k, ok := d.GetPluralKind(kn); !ok {
 		err = errutil.New("unknown kind", op.Kind)
-	} else {
-		noun := d.EnsureNoun(name, at)
+	} else if noun := d.EnsureNoun(name, at); noun.domain == d {
 		// we can only add requirements to the noun in the same domain that it was declared
 		// if in a different domain: the nouns have to match up
-		if noun.domain == d {
-			noun.AddRequirement(k.name)
-		} else if !noun.HasAncestor(k.name) {
-			err = NounError{name, errutil.Fmt("can't redefine parent as %q", op.Kind)}
-		} else {
-			e := errutil.New("duplicate noun definition at", at)
-			LogWarning(NounError{name, e})
-		}
+		noun.UpdateFriendlyName(op.Noun)
+		noun.AddRequirement(k.name)
+	} else if !noun.HasAncestor(k.name) {
+		err = NounError{name, errutil.Fmt("can't redefine parent as %q", op.Kind)}
+	} else {
+		e := errutil.New("duplicate noun definition at", at)
+		LogWarning(NounError{name, e})
 	}
 	return
 }

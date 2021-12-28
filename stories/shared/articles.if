@@ -123,7 +123,7 @@
           "TestStatement:test:": [
             "articles",
             {
-              "TestOutput:": "You can only just make out a lamp post.\nYou can only just make out Trevor.\nYou can only just make out some soldiers.\nA lamp post can be made out in the mist.\nTrevor can be made out in the mist.\nSome soldiers can be made out in the mist.\nYou can only just make out the lamp post.\nYou can only just make out Trevor.\nYou can only just make out the soldiers.\nThe lamp post may be a trick of the mist.\nTrevor may be a trick of the mist.\nThe soldiers may be a trick of the mist.\nYou can only just make out Trevor.\n"
+              "TestOutput:": "You can only just make out a lamp-post.\nYou can only just make out Trevor.\nYou can only just make out some soldiers.\nA lamp-post can be made out in the mist.\nTrevor can be made out in the mist.\nSome soldiers can be made out in the mist.\nYou can only just make out the lamp-post.\nYou can only just make out Trevor.\nYou can only just make out the soldiers.\nThe lamp-post may be a trick of the mist.\nTrevor may be a trick of the mist.\nThe soldiers may be a trick of the mist.\nYou can only just make out Trevor.\n"
             }
           ]
         }

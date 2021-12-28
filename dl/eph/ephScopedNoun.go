@@ -9,12 +9,13 @@ import (
 )
 
 type ScopedNoun struct {
-	Requires // kinds ( when resolved, can have one direct parent )
-	domain   *Domain
-	names    UniqueNames
-	aliases  UniqueNames
-	aliasat  []string // origin of each alias
-	values   []NounValue
+	Requires     // kinds ( when resolved, can have one direct parent )
+	domain       *Domain
+	names        UniqueNames
+	friendlyName string
+	aliases      UniqueNames
+	aliasat      []string // origin of each alias
+	values       []NounValue
 }
 
 type NounValue struct {
@@ -108,20 +109,35 @@ func (n *ScopedNoun) Names() []string {
 	return n.names
 }
 
+func (n *ScopedNoun) UpdateFriendlyName(name string) {
+	if len(n.friendlyName) == 0 {
+		if clip := strings.TrimSpace(name); clip != n.name {
+			n.friendlyName = name
+		}
+	}
+}
+
 func (n *ScopedNoun) makeNames() []string {
 	var out []string
-	split := strings.FieldsFunc(n.name, lang.IsBreak)
-	spaces := strings.Join(split, " ")
-
 	// the ranked 0 name is used for default display when printing nouns
 	// (ex. "toy boat")
-	breaks := n.name
-	out = append(out, spaces)
+	defaultName := n.name
+	if alt := n.friendlyName; len(alt) > 0 {
+		defaultName = alt
+	}
+	out = append(out, defaultName)
+	// write the normalized name if it was different
+	if defaultName != n.name {
+		out = append(out, n.name)
+	}
+	// now generate additional names by splitting the lowercase uniform name on the underscores:
+	split := strings.FieldsFunc(n.name, lang.IsBreak)
 	if cnt := len(split); cnt > 1 {
+		spaces := strings.Join(split, " ")
 		// if there is more than one word...
 		// these should never match... but that's how the old code was so why not...
 		// ( ex. "toy_boat" )
-		if spaces != breaks {
+		if breaks := n.name; spaces != breaks {
 			out = append(out, breaks)
 		}
 		// write individual words in increasing rank ( ex. "boat", then "toy" )
