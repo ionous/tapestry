@@ -106,7 +106,8 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 		switch k := fieldType.Kind(); k {
 		default:
 			panic(errutil.Sprint("unknown kind", k))
-		case r.Bool:
+
+		case r.Bool: // trait for an aspect
 			tags := tag.ReadTag(f.Tag)
 			if _, ok := tags.Find("bool"); ok {
 				b.Aff, b.Type = affine.Bool, k.String()
@@ -123,7 +124,8 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 			}
 
 		case r.String:
-			b.Aff, b.Type = affine.Text, k.String()
+			// note: text type indicates kind, not golang type
+			b.Aff, b.Type = affine.Text, ""
 
 		case r.Struct:
 			b.Type = nameOfType(fieldType)
@@ -143,7 +145,8 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 			elType := fieldType.Elem()
 			switch k := elType.Kind(); k {
 			case r.String:
-				b.Aff, b.Type = affine.TextList, k.String()
+				// note: text type indicates kind, not golang type
+				b.Aff, b.Type = affine.TextList, ""
 			case r.Float64:
 				b.Aff, b.Type = affine.NumList, k.String()
 			case r.Struct:
@@ -157,7 +160,7 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 		case r.Float64:
 			b.Aff, b.Type = affine.Number, k.String()
 
-		case r.Int:
+		case r.Int: // enumeration
 			aspect := nameOfType(fieldType)
 			b.Aff, b.Type = affine.Text, aspect
 			if !fieldType.Implements(rstringer) {

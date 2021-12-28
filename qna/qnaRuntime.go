@@ -185,7 +185,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 
 func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 	if field := lang.Underscore(rawField); len(field) == 0 {
-		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
+		err = errutil.Fmt("requested empty field from %q", target)
 	} else {
 		switch target {
 		default:

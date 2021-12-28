@@ -103,9 +103,9 @@ func (n refValue) Len() (ret int) {
 func (n refValue) Index(i int) (ret Value) {
 	switch vp := n.i.(type) {
 	case *[]float64:
-		ret = FloatOf((*vp)[i])
+		ret = FloatFrom((*vp)[i], n.t)
 	case *[]string:
-		ret = StringOf((*vp)[i])
+		ret = StringFrom((*vp)[i], n.t)
 	case *[]*Record:
 		ret = RecordOf((*vp)[i])
 	default:
@@ -131,15 +131,19 @@ func (n refValue) SetFieldByName(f string, v Value) (err error) {
 	return rec.SetNamedField(name, newVal)
 }
 
-func (n refValue) SetIndex(i int, v Value) {
+func (n refValue) SetIndex(i int, v Value) (err error) {
 	switch vp := n.i.(type) {
 	case *[]float64:
 		(*vp)[i] = v.Float()
 	case *[]string:
-		(*vp)[i] = v.String()
+		if len(n.t) > 0 && n.t != v.Type() {
+			err = errutil.Fmt("SetIndex(%s) doesnt match value(%s)", n.t, v.Type())
+		} else {
+			(*vp)[i] = v.String()
+		}
 	case *[]*Record:
 		if n.t != v.Type() {
-			panic("record types dont match")
+			err = errutil.New("record types dont match")
 		} else {
 			n := copyRecord(v.Record())
 			(*vp)[i] = n
@@ -147,6 +151,7 @@ func (n refValue) SetIndex(i int, v Value) {
 	default:
 		panic(n.a.String() + " is not index writable")
 	}
+	return
 }
 
 // Slices copies a chunk out of a list
@@ -197,30 +202,35 @@ func (n refValue) Splice(i, j int, add Value) (ret Value, err error) {
 			ret = FloatsOf(cut)
 
 		case affine.TextList:
-			vp := n.i.(*[]string)
-			els := (*vp)
-			cut := copyStrings(els[i:j])
-			ins := normalizeStrings(add)
-			(*vp) = append(els[:i], append(ins, els[j:]...)...)
-			ret = StringsOf(cut)
+			if len(n.t) > 0 && n.t != add.Type() {
+				err = errutil.Fmt("Splice(%s) doesnt match value(%s)", n.t, add.Type())
+			} else {
+				vp := n.i.(*[]string)
+				els := (*vp)
+				cut := copyStrings(els[i:j])
+				ins := normalizeStrings(add)
+				(*vp) = append(els[:i], append(ins, els[j:]...)...)
+				ret = StringsOf(cut)
+			}
 
 		case affine.RecordList:
 			vp := n.i.(*[]*Record)
 			if n.t != add.Type() {
-				panic("record types dont match")
+				err = errutil.New("record types dont match")
+			} else {
+				els := (*vp)
+				// move the record pointers
+				// no need to copy the record values
+				// only one list will have the pointers at a time
+				cut := make([]*Record, j-i)
+				copy(cut, els[i:j])
+				// make a list out of one or more records from add
+				ins := copyRecords(normalizeRecords(add))
+				// read from els before adding to els to avoid stomping overlapping memory.
+				(*vp) = append(els[:i], append(ins, els[j:]...)...)
+				// return our cut pointers
+				ret = RecordsOf(n.t, cut)
 			}
-			els := (*vp)
-			// move the record pointers
-			// no need to copy the record values
-			// only one list will have the pointers at a time
-			cut := make([]*Record, j-i)
-			copy(cut, els[i:j])
-			// make a list out of one or more records from add
-			ins := copyRecords(normalizeRecords(add))
-			// read from els before adding to els to avoid stomping overlapping memory.
-			(*vp) = append(els[:i], append(ins, els[j:]...)...)
-			// return our cut pointers
-			ret = RecordsOf(n.t, cut)
 		default:
 			panic(n.a.String() + " is not spliceable")
 		}
@@ -228,7 +238,7 @@ func (n refValue) Splice(i, j int, add Value) (ret Value, err error) {
 	return
 }
 
-func (n refValue) Append(add Value) {
+func (n refValue) Appends(add Value) (err error) {
 	switch n.a {
 	case affine.NumList:
 		vp := n.i.(*[]float64)
@@ -236,14 +246,18 @@ func (n refValue) Append(add Value) {
 		(*vp) = append((*vp), ins...)
 
 	case affine.TextList:
-		vp := n.i.(*[]string)
-		ins := normalizeStrings(add)
-		(*vp) = append((*vp), ins...)
+		if len(n.t) > 0 && n.t != add.Type() {
+			err = errutil.Fmt("Appends(%s) doesnt match value(%s)", n.t, add.Type())
+		} else {
+			vp := n.i.(*[]string)
+			ins := normalizeStrings(add)
+			(*vp) = append((*vp), ins...)
+		}
 
 	case affine.RecordList:
 		vp := n.i.(*[]*Record)
 		if n.t != add.Type() {
-			panic("record types dont match")
+			err = errutil.New("record types dont match")
 		} else {
 			ins := copyRecords(normalizeRecords(add))
 			(*vp) = append((*vp), ins...)
@@ -252,4 +266,5 @@ func (n refValue) Append(add Value) {
 	default:
 		panic(n.a.String() + " is not appendable")
 	}
+	return
 }

@@ -23,7 +23,7 @@ func (op *PutEdge) push(run rt.Runtime) (err error) {
 		if atFront, e := safe.GetOptionalBool(run, op.AtEdge, false); e != nil {
 			err = e
 		} else if !atFront.Bool() {
-			els.Append(ins)
+			err = els.Appends(ins)
 		} else {
 			_, err = els.Splice(0, 0, ins)
 		}

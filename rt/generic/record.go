@@ -2,7 +2,6 @@ package generic
 
 import (
 	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/rt/meta"
 	"github.com/ionous/errutil"
 )
 
@@ -23,30 +22,19 @@ func (d *Record) Type() string {
 
 // GetNamedField picks out a value from this record.
 func (d *Record) GetNamedField(field string) (ret Value, err error) {
-	switch k := d.kind; field {
-	case meta.ObjectName:
-		err = errutil.New("records don't have names")
-
-	case meta.ObjectKind:
-		ret = StringOf(d.kind.name)
-
-	case meta.ObjectKinds:
-		ret = StringsOf([]string{d.kind.name})
-
-	default:
-		// note: the field is a trait when the field that was found doesnt match the field requested
-		if i := k.FieldIndex(field); i < 0 {
-			err = UnknownField(k.name, field)
-		} else if v, e := d.GetIndexedField(i); e != nil {
-			err = e
-		} else if ft := k.fields[i]; ft.Name == field {
-			ret = v
-		} else {
-			trait := v.String()
-			ret = BoolFrom(trait == field, "" /*"trait"*/)
-			// fix? the assembler doesnt flag these as class trait
-			// we could add that, or put the name of the aspect they came from ( so class stays a "kind" )
-		}
+	// note: the field is a trait when the field that was found doesnt match the field requested
+	k := d.kind
+	if i := k.FieldIndex(field); i < 0 {
+		err = UnknownField(k.name, field)
+	} else if v, e := d.GetIndexedField(i); e != nil {
+		err = e
+	} else if ft := k.fields[i]; ft.Name == field {
+		ret = v
+	} else {
+		trait := v.String()
+		ret = BoolFrom(trait == field, "" /*"trait"*/)
+		// fix? the assembler doesnt flag these as class trait
+		// we could add that, or put the name of the aspect they came from ( so class stays a "kind" )
 	}
 	return
 }
@@ -56,13 +44,13 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 	if fv, ft := d.values[i], d.kind.fields[i]; fv != nil {
 		ret = fv
 	} else {
-		if cls, ok := ft.isAspectLike(); ok {
+		if ft.isAspectLike() {
 			// if we're asking for an aspect, the default value will be the string of its first trait
-			if k, e := d.kind.kinds.GetKindByName(cls); e != nil {
+			if k, e := d.kind.kinds.GetKindByName(ft.Type); e != nil {
 				err = e
 			} else {
-				firstTrait := k.Field(0)                          // first trait is the default
-				nv := StringFrom(firstTrait.Name, "" /*"trait"*/) // fix? should the class be set to something intersting?
+				firstTrait := k.Field(0) // first trait is the default
+				nv := StringFrom(firstTrait.Name, k.Name())
 				ret, d.values[i] = nv, nv
 			}
 		} else {
@@ -79,16 +67,21 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 // SetNamedField - pokes the passed value into the record.
 // Unlike the Value interface, this doesnt panic and it doesnt copy values.
 func (d *Record) SetNamedField(field string, val Value) (err error) {
-	k := d.kind // note: the field is a trait when the field that was found doesnt match the field requested
+	k := d.kind
 	if i := k.FieldIndex(field); i < 0 {
 		err = UnknownField(k.name, field)
-	} else if ft := k.fields[i]; ft.Name == field {
-		err = d.SetIndexedField(i, val)
-	} else if yes := val.Affinity() == affine.Bool && val.Bool(); !yes {
-		err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s %v", field, val.Affinity(), val)
 	} else {
-		// set the aspect to the value of the requested trait
-		d.values[i] = StringFrom(field, "" /*"aspect"*/)
+		// set a normal field ( when the name doesn't match the request: the caller requested a trait )
+		if ft := k.fields[i]; ft.Name == field {
+			err = d.SetIndexedField(i, val)
+		} else {
+			// set the aspect to the value of the requested trait
+			if yes := val.Affinity() == affine.Bool && val.Bool(); !yes {
+				err = errutil.Fmt("error setting trait: couldn't determine the meaning of %q %s %v", field, val.Affinity(), val)
+			} else {
+				d.values[i] = StringFrom(field, ft.Type)
+			}
+		}
 	}
 	return
 }
@@ -96,35 +89,49 @@ func (d *Record) SetNamedField(field string, val Value) (err error) {
 // SetIndexedField - note this doesn't handle trait translation.
 // Unlike the Value interface, this doesnt panic and it doesnt copy values.
 func (d *Record) SetIndexedField(i int, val Value) (err error) {
-	ft := d.kind.fields[i]
-	if a, t := val.Affinity(), val.Type(); !matchTypes(d.kind.kinds, ft.Affinity, ft.Type, a, t) {
-		err = errutil.Fmt("couldnt set field %s ( %s of type %s ) because val %s of type %s doesnt match", ft.Name, ft.Affinity, ft.Type, a, t)
-	} else {
-		d.values[i] = val
-	}
-	return
-}
+	var okay bool
+	ft, aff, cls := d.kind.fields[i], val.Affinity(), val.Type()
+	if aff == ft.Affinity {
+		switch ft.Affinity {
+		// the most flexible: anything can fit into anything.
+		case affine.Bool, affine.Number, affine.NumList:
+			okay = true
 
-// FIX? if type includes the full path then Kinds here wouldnt be necessary, which sure would be nice.
-// ( of course, for normal records Implements() doesnt matter anyway. records dont have hierarchy )
-func matchTypes(ks Kinds, fa affine.Affinity, ft string, va affine.Affinity, vt string) (okay bool) {
-	// most important: the affinities have to match:
-	if fa == va {
-		textLike := fa == affine.Text || fa == affine.TextList
-		recordLike := fa == affine.Record || fa == affine.RecordList
-		if !textLike || !recordLike {
-			okay = true
-		} else if vt == ft || (textLike && len(ft) == 0) {
-			// if the types match, or if a target text field is untyped, we can put any text in there.
-			// ( note: if the value is untyped, the user would have to explicitly convert it to an object reference )
-			okay = true
-		} else {
-			// a field wants only "cats"; my value is "things, animals, cats, tigers".
-			// so we ask: does the value implement field:
-			if vk, e := ks.GetKindByName(vt); e == nil {
-				okay = vk.Implements(ft)
+		// the least flexible: exact matches are needed.
+		case affine.Record, affine.RecordList, affine.TextList:
+			okay = cls == ft.Type
+
+		// various compatible text references are allowed.
+		case affine.Text:
+			if str := val.String(); ft.Type == cls {
+				okay = true // accept as is.
+			} else if len(ft.Type) == 0 {
+				val = StringOf(str) // downgrades to blank
+				okay = true
+			} else {
+				// is the source untyped? then maybe we can upgrade it to a trait.
+				if len(cls) == 0 {
+					if ft.isAspectLike() {
+						if aspect := findAspect(str, d.kind.traits); aspect == ft.Type {
+							val = StringFrom(str, ft.Type) // upgrade the value to the aspect.
+							okay = true
+						}
+					}
+				} else {
+					// a field wants only "cats"; my value is "things, animals, cats, tigers".
+					// so we ask: does the value implement field:
+					if vk, e := d.kind.kinds.GetKindByName(cls); e == nil {
+						// ( downgrade the value's type to fit the field? for now, lets not. )
+						okay = vk.Implements(ft.Type)
+					}
+				}
 			}
 		}
+	}
+	if !okay {
+		err = errutil.Fmt("couldnt set field %s ( %s of type %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)
+	} else {
+		d.values[i] = val
 	}
 	return
 }

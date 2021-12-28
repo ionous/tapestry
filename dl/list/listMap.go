@@ -37,7 +37,10 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 					err = e
 					break
 				} else {
-					toList.Append(newVal)
+					if e := toList.Appends(newVal); e != nil {
+						err = e
+						break
+					}
 				}
 			}
 		}

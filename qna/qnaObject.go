@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/iffy/lang"
 	"git.sr.ht/~ionous/iffy/rt"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/iffy/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -49,7 +50,8 @@ func (obj *qnaObject) Affinity() affine.Affinity {
 
 func (obj *qnaObject) String() (ret string) {
 	// hrmm... and note: if this runs through under underscore() it breaks.
-	return "#" + obj.domain + "::" + obj.name
+	// return "#" + obj.domain + "::" + obj.name
+	return obj.name
 }
 
 func (obj *qnaObject) Kind() (ret *g.Kind) {
@@ -76,7 +78,7 @@ func (obj *qnaObject) FieldByName(rawField string) (ret g.Value, err error) {
 			} else {
 				// return true if the aspect field holds the particular requested field
 				trait := v.String()
-				ret = g.BoolFrom(trait == field, "" /*"trait"*/)
+				ret = g.BoolOf(trait == field)
 			}
 		}
 	}
@@ -102,7 +104,7 @@ func (obj *qnaObject) SetFieldByName(rawField string, val g.Value) (err error) {
 				err = e
 			} else {
 				// set the aspect to the value of the requested trait
-				setObjectField(obj.run, obj.domain, obj.name, ft, g.StringFrom(trait /*trait*/, ""))
+				setObjectField(obj.run, obj.domain, obj.name, ft, g.StringFrom(trait, ft.Type))
 			}
 		}
 	}
@@ -172,7 +174,7 @@ func (ov *objectValue) getValue(run rt.Runtime, ft g.Field) (ret g.Value, err er
 	} else if v, e := a.GetAssignedValue(run); e != nil {
 		err = e
 	} else {
-		ret, err = autoConvert(run, ft, v)
+		ret, err = safe.AutoConvert(run, ft, v)
 	}
 	return
 }

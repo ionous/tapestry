@@ -20,6 +20,8 @@ func (op *ListReverse) reverse(run rt.Runtime) (err error) {
 		for i := cnt/2 - 1; i >= 0; i-- {
 			j := cnt - 1 - i
 			eli, elj := els.Index(i), els.Index(j)
+			// while technically SetIndex returns error,
+			// because we are setting to ourself, it should be fine.
 			els.SetIndex(i, elj)
 			els.SetIndex(j, eli)
 		}

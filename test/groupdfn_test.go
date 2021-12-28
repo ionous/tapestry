@@ -26,14 +26,14 @@ func TestKindsForType(t *testing.T) {
                 {"objects_without_articles", "bool", "" /*"trait"*/},
             },
             "group_settings": {
-                {"name", "text", "string"},
-                {"label", "text", "string"},
+                {"name", "text", "" },
+                {"label", "text", "" },
                 {"innumerable", "text", "innumerable"},
                 {"group_options", "text", "group_options"},
             },
             "grouped_objects": {
                 {"settings", "record", "group_settings"},
-                {"objects", "text_list", "string"},
+                {"objects", "text_list", "" },
             },
             "group_collation": {
                 {"groups", "record_list", "grouped_objects"},

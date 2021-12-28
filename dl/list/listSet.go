@@ -24,7 +24,7 @@ func (op *ListSet) setAt(run rt.Runtime) (err error) {
 	} else if i, e := safe.Range(onedex.Int()-1, 0, els.Len()); e != nil {
 		err = e
 	} else {
-		els.SetIndex(i, el)
+		err = els.SetIndex(i, el)
 	}
 	return
 }

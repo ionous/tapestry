@@ -22,11 +22,8 @@ type Field struct {
 }
 
 // see also eph.AspectParm
-func (ft *Field) isAspectLike() (ret string, okay bool) {
-	if cls := ft.Type; ft.Affinity == affine.Text && ft.Name == cls {
-		ret, okay = cls, true
-	}
-	return
+func (ft *Field) isAspectLike() bool {
+	return ft.Affinity == affine.Text && ft.Name == ft.Type
 }
 
 // path is a list of ancestors with the root at the start.
@@ -107,9 +104,9 @@ func (k *Kind) ensureTraits() {
 	if k.traits == nil {
 		var ts []trait
 		for _, ft := range k.fields {
-			if cls, ok := ft.isAspectLike(); ok {
+			if ft.isAspectLike() {
 				// if this fails, we are likely to return an error through GetIndexedField at some point so...
-				if aspect, e := k.kinds.GetKindByName(cls); e == nil {
+				if aspect, e := k.kinds.GetKindByName(ft.Type); e == nil {
 					if aok := aspect.Implements(kindsOf.Aspect.String()); aok {
 						ts = makeTraits(aspect, ts)
 					}

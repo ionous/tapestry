@@ -49,11 +49,12 @@ type Value interface {
 	SetFieldByName(string, Value) error
 	// writes a *copy* of the passed value into a slice
 	// panics if this isn't a slice, if the index is out of range, or if the affinities are mismatched.
-	SetIndex(int, Value)
+	// errors if the types are mismatched
+	SetIndex(int, Value) error
 	// adds a *copy* of a value, or a copy of a slice of values, to the end of this slice.
 	// panics if this value isn't a slice.
 	// In golang, this is a package level function, presumably to mirror the built-in append()
-	Append(Value)
+	Appends(Value) error
 	// return a *copy* of this slice and its values containing the first index up to (and not including) the second index.
 	// panics if this value isn't a slice.
 	Slice(i, j int) (Value, error)

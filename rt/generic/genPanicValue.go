@@ -80,12 +80,12 @@ func (n PanicValue) SetFieldByName(string, Value) error {
 }
 
 // SetIndex panics
-func (n PanicValue) SetIndex(int, Value) {
+func (n PanicValue) SetIndex(int, Value) error {
 	panic("value is not index writable")
 }
 
 // Append panics
-func (n PanicValue) Append(Value) {
+func (n PanicValue) Appends(Value) error {
 	panic("value is not appendable")
 }
 
