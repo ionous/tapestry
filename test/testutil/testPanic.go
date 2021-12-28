@@ -30,10 +30,10 @@ func (PanicRuntime) Send(pat string, up []string, args []rt.Arg) (ret g.Value, e
 func (PanicRuntime) RelateTo(a, b, relation string) error {
 	panic("Runtime panic")
 }
-func (PanicRuntime) RelativesOf(a, relation string) ([]string, error) {
+func (PanicRuntime) RelativesOf(a, relation string) (g.Value, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) ReciprocalsOf(a, relation string) ([]string, error) {
+func (PanicRuntime) ReciprocalsOf(a, relation string) (g.Value, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) GetField(target, field string) (g.Value, error) {

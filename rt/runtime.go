@@ -43,9 +43,11 @@ type Runtime interface {
 	Call(name string, aff affine.Affinity, args []Arg) (g.Value, error)
 	// trigger the named event, passing the objects to visit: target first, root-most last.
 	Send(name string, up []string, arg []Arg) (g.Value, error)
-	//
-	RelativesOf(a, relation string) ([]string, error)
-	ReciprocalsOf(b, relation string) ([]string, error)
+	// returns a list, even for one-to-one relationships
+	RelativesOf(a, relation string) (g.Value, error)
+	// returns a list, even for one-to-one relationships
+	ReciprocalsOf(b, relation string) (g.Value, error)
+	// establish a new relation between nouns and and b
 	RelateTo(a, b, relation string) error
 	// modifies the behavior of Get/SetField meta.Variable
 	VariableStack

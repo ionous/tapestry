@@ -109,42 +109,53 @@ func (run *Runner) Report(e error) error {
 
 // doesnt reformat the names.
 func (run *Runner) RelateTo(a, b, rel string) (err error) {
-	if _, e := run.getKindOf(rel, kindsOf.Relation); e != nil {
+	if k, e := run.getKindOf(rel, kindsOf.Relation.String()); e != nil {
 		err = e
-	} else if _, e := run.getObjectInfo(a); e != nil {
+	} else if na, e := run.getObjectInfo(a); e != nil {
 		err = e
-	} else if _, e := run.getObjectInfo(b); e != nil {
+	} else if nb, e := run.getObjectInfo(b); e != nil {
 		err = e
-	} else { // FIX: validate the kinds of a and b and rel?
-		err = run.qdb.Relate(rel, a, b)
+	} else {
+		fa, fb := k.Field(0), k.Field(1)
+		if _, e := run.getKindOf(na.Kind, fa.Type); e != nil {
+			err = e
+		} else if _, e := run.getKindOf(nb.Kind, fb.Type); e != nil {
+			err = e
+		} else {
+			err = run.qdb.Relate(k.Name(), na.Id, nb.Id)
+		}
 	}
 	return
 }
 
-// assumes a is a valid noun
-func (run *Runner) RelativesOf(a, rel string) (ret []string, err error) {
-	if _, e := run.getObjectInfo(a); e != nil {
+func (run *Runner) RelativesOf(a, rel string) (ret g.Value, err error) {
+	// note: we dont have to validate the type of the noun....
+	// if its not valid, it wont appear in the relation.
+	if n, e := run.getObjectInfo(a); e != nil {
 		err = e
-	} else if _, e := run.getKindOf(rel, kindsOf.Relation); e != nil {
+	} else if k, e := run.getKindOf(rel, kindsOf.Relation.String()); e != nil {
 		err = e
-	} else if vs, e := run.qdb.RelativesOf(rel, a); e != nil {
+	} else if vs, e := run.qdb.RelativesOf(k.Name(), n.Id); e != nil {
 		err = e // doesnt cache because relateTo would have to clear the cache.
 	} else {
-		ret = vs
+		fb := k.Field(1)
+		ret = g.StringsFrom(vs, fb.Type)
 	}
 	return
 }
 
-// assumes b is a valid noun
-func (run *Runner) ReciprocalsOf(b, rel string) (ret []string, err error) {
-	if _, e := run.getObjectInfo(b); e != nil {
+func (run *Runner) ReciprocalsOf(b, rel string) (ret g.Value, err error) {
+	// note: we dont have to validate the type of the noun....
+	// if its not valid, it wont appear in the relation.
+	if n, e := run.getObjectInfo(b); e != nil {
 		err = e
-	} else if _, e := run.getKindOf(rel, kindsOf.Relation); e != nil {
+	} else if k, e := run.getKindOf(rel, kindsOf.Relation.String()); e != nil {
 		err = e
-	} else if vs, e := run.qdb.ReciprocalsOf(rel, b); e != nil {
+	} else if vs, e := run.qdb.ReciprocalsOf(k.Name(), n.Id); e != nil {
 		err = e
 	} else {
-		ret = vs
+		fa := k.Field(0)
+		ret = g.StringsFrom(vs, fa.Type)
 	}
 	return
 }
@@ -194,10 +205,10 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else {
-				ret = g.StringOf(ok.Name)
+				ret = g.StringFrom(ok.Id, ok.Kind)
 			}
 
-		// type of a a game object
+		// type of a game object
 		case meta.ObjectKind:
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e

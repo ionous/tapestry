@@ -16,15 +16,15 @@ func (op *RelativeOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 		noun, rel := a, op.Via
 		if vs, e := run.ReciprocalsOf(noun, rel.String()); e != nil {
 			err = cmdError(op, e)
-		} else if cnt := len(vs); cnt > 1 {
+		} else if cnt := vs.Len(); cnt > 1 {
 			e := errutil.New("expected at most one relative for", noun, "in", rel)
 			err = cmdError(op, e)
 		} else {
-			var rel string
-			if cnt != 0 {
-				rel = vs[0]
+			if cnt != 0 { // having no relatives is considered okay
+				ret = vs.Index(0)
+			} else {
+				ret = g.StringFrom("", vs.Type())
 			}
-			ret = g.StringOf(rel)
 		}
 	}
 	return
@@ -38,7 +38,7 @@ func (op *RelativesOf) GetTextList(run rt.Runtime) (ret g.Value, err error) {
 	} else if vs, e := run.RelativesOf(a, op.Via.String()); e != nil {
 		err = cmdError(op, e)
 	} else {
-		ret = g.StringsOf(vs)
+		ret = vs
 	}
 	return
 }
@@ -52,15 +52,15 @@ func (op *ReciprocalOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 		noun, rel := a, op.Via
 		if vs, e := run.ReciprocalsOf(noun, rel.String()); e != nil {
 			err = cmdError(op, e)
-		} else if cnt := len(vs); cnt > 1 {
-			e := errutil.New("expected at most one reciprocal for", noun, "in", rel)
+		} else if cnt := vs.Len(); cnt > 1 {
+			e := errutil.New("expected at most one relative for", noun, "in", rel)
 			err = cmdError(op, e)
 		} else {
-			var rel string
-			if cnt != 0 { // no relative is considered okay.
-				rel = vs[0]
+			if cnt != 0 { // having no relatives is considered okay
+				ret = vs.Index(0)
+			} else {
+				ret = g.StringFrom("", vs.Type())
 			}
-			ret = g.StringOf(rel)
 		}
 	}
 	return
@@ -74,7 +74,7 @@ func (op *ReciprocalsOf) GetTextList(run rt.Runtime) (ret g.Value, err error) {
 	} else if vs, e := run.ReciprocalsOf(a, op.Via.String()); e != nil {
 		err = cmdError(op, e)
 	} else {
-		ret = g.StringsOf(vs)
+		ret = vs
 	}
 	return
 }
