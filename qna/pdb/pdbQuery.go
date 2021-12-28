@@ -108,18 +108,18 @@ func (q *Query) KindOfAncestors(kind string) ([]string, error) {
 
 // given a name, find a noun ( and some useful other context )
 func (q *Query) NounInfo(name string) (ret NounInfo, err error) {
-	if e := q.nounInfo.QueryRow(name).Scan(&ret.Domain, &ret.Name, &ret.Kind); e != nil && e != sql.ErrNoRows {
+	if e := q.nounInfo.QueryRow(name).Scan(&ret.Domain, &ret.Id, &ret.Kind); e != nil && e != sql.ErrNoRows {
 		err = e
 	}
 	return
 }
 
 type NounInfo struct {
-	Domain, Name, Kind string
+	Domain, Id, Kind string // id is the string identifier for the noun, unique within the domain.
 }
 
 func (n *NounInfo) IsValid() bool {
-	return len(n.Name) != 0
+	return len(n.Id) != 0
 }
 
 // return the best "short name" for a noun ( or blank if the noun isnt known or isnt in scope )

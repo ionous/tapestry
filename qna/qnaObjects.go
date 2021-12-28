@@ -25,7 +25,7 @@ func (run *Runner) getObjectByName(name string) (ret *qnaObject, err error) {
 		if k, e := run.GetKindByName(ok.Kind); e != nil {
 			err = e
 		} else {
-			ret = &qnaObject{run: run, domain: ok.Domain, name: ok.Name, kind: k}
+			ret = &qnaObject{run: run, domain: ok.Domain, name: ok.Id, kind: k}
 		}
 		return
 	}, "objectByName", name); e != nil {

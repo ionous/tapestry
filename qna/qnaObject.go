@@ -112,7 +112,7 @@ func (obj *qnaObject) SetFieldByName(rawField string, val g.Value) (err error) {
 // to support text templates stored in object properties:
 // calls to get the object field result in "dynamic values".
 func getObjectField(run *Runner, domain, noun string, field g.Field) (ret g.Value, err error) {
-	if c, e := run.values.cache(func() (ret interface{}, err error) {
+	if c, e := run.nounValues.cache(func() (ret interface{}, err error) {
 		// note: in the original version of this, we queried *all* fields
 		// ( unioning in those with traits, and those without defaults )
 		if b, e := run.qdb.NounValue(noun, field.Name); e != nil {
@@ -143,7 +143,7 @@ func getObjectField(run *Runner, domain, noun string, field g.Field) (ret g.Valu
 		err = e
 	} else {
 		ov := c.(*objectValue)
-		ret, err = ov.getValue(run)
+		ret, err = ov.getValue(run, field)
 	}
 	return
 }
@@ -164,13 +164,15 @@ type objectValue struct {
 	shared  g.Value       // when runtime code sets fields, it can only set concrete values
 }
 
-func (ov *objectValue) getValue(run rt.Runtime) (ret g.Value, err error) {
+func (ov *objectValue) getValue(run rt.Runtime, ft g.Field) (ret g.Value, err error) {
 	if v := ov.shared; v != nil {
 		ret = v
-	} else if a := ov.dynamic; a != nil {
-		ret, err = a.GetAssignedValue(run)
-	} else {
+	} else if a := ov.dynamic; a == nil {
 		err = errutil.New("unexpectedly empty object value")
+	} else if v, e := a.GetAssignedValue(run); e != nil {
+		err = e
+	} else {
+		ret, err = autoConvert(run, ft, v)
 	}
 	return
 }

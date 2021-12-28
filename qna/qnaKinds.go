@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/iffy/rt"
 	"git.sr.ht/~ionous/iffy/rt/generic"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
@@ -15,15 +14,15 @@ func (run *Runner) GetKindByName(rawName string) (ret *g.Kind, err error) {
 	} else if cached, e := run.getKind(name); e != nil {
 		err = e
 	} else {
-		ret = cached.kind
+		ret = cached.Kind
 	}
 	return
 }
 
-func (run *Runner) getKindOf(kn string, kt kindsOf.Kinds) (ret cachedKind, err error) {
+func (run *Runner) getKindOf(kn, kt string) (ret cachedKind, err error) {
 	if ck, e := run.getKind(kn); e != nil {
 		err = e
-	} else if !ck.kind.Implements(kt.String()) {
+	} else if !ck.Implements(kt) {
 		err = errutil.New(kn, "not a kind of", kt)
 	} else {
 		ret = ck
@@ -60,7 +59,7 @@ func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
 }
 
 type cachedKind struct {
-	kind *g.Kind
+	*g.Kind
 	init []rt.Assignment
 }
 
