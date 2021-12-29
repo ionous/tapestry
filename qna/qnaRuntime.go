@@ -84,7 +84,7 @@ func (run *Runner) PluralOf(singular string) (ret string) {
 	} else if len(n) > 0 {
 		ret = n
 	} else {
-		ret = lang.Singularize(singular)
+		ret = lang.Pluralize(singular)
 	}
 	return
 }
