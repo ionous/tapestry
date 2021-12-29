@@ -23,7 +23,7 @@ func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 	if prev, e := run.ActivateDomain(t.Name); e != nil {
 		err = e
 	} else {
-		log.Println("-- Testing:", t.Name)
+		log.Println("-- Checking:", t.Name)
 		if e := safe.Run(run, t.Test); e != nil {
 			err = errutil.Fmt("ng! %s test encountered error: %s", t.Name, e)
 		} else if res := buf.String(); res != t.Expect {
