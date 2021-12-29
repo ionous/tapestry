@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/iffy/rt/meta"
 )
 
+// used when converting values to fields that might require objects.
 // if the target field (ex. a pattern local) requires text of a certain type
 // and the incoming value is untyped: convert it.
 func AutoConvert(run rt.Runtime, ft g.Field, val g.Value) (ret g.Value, err error) {

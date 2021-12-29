@@ -98,30 +98,23 @@ func (d *Record) SetIndexedField(i int, val Value) (err error) {
 			okay = true
 
 		// the least flexible: exact matches are needed.
-		case affine.Record, affine.RecordList, affine.TextList:
+		case affine.Record, affine.RecordList:
 			okay = cls == ft.Type
 
-		// various compatible text references are allowed.
 		case affine.Text:
-			if str := val.String(); ft.Type == cls {
-				okay = true // accept as is.
-			} else if len(ft.Type) == 0 {
-				val = StringOf(str) // downgrades to blank
+			if change := textConvert(d.kind.kinds, ft, val); change < 0 {
+				okay = true // accept as is
+			} else if change > 0 {
+				val = StringFrom(val.String(), ft.Type)
 				okay = true
-			} else if len(cls) > 0 { // is the valid typed?
-				// a field wants only "cats"; my value is "things, animals, cats, tigers".
-				// so we ask: does the value implement field.
-				if vk, e := d.kind.kinds.GetKindByName(cls); e == nil {
-					okay = vk.Implements(ft.Type) // ( downgrade the type to fit the field? for now, lets not. )
-				}
-			} else if len(str) == 0 {
-				val = StringFrom(str, ft.Type) // upgrade blank strings.
+			}
+
+		case affine.TextList:
+			if change := textConvert(d.kind.kinds, ft, val); change < 0 {
 				okay = true
-			} else if ft.isAspectLike() {
-				if aspect := findAspect(str, d.kind.traits); aspect == ft.Type {
-					val = StringFrom(str, ft.Type) // upgrade the value to a trait.
-					okay = true
-				}
+			} else if change > 0 {
+				val = StringsFrom(val.Strings(), ft.Type)
+				okay = true
 			}
 		}
 	}
@@ -129,6 +122,44 @@ func (d *Record) SetIndexedField(i int, val Value) (err error) {
 		err = errutil.Fmt("couldnt set field %s ( %s of type %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)
 	} else {
 		d.values[i] = val
+	}
+	return
+}
+
+// typed text can only fit in certain typed text fields
+// return: keep(<0); not convertible(0); converts(>0)
+func textConvert(ks Kinds, ft Field, val Value) (ret int) {
+	switch cls := val.Type(); {
+	// if the classes match exactly: accept as is.
+	case ft.Type == cls:
+		ret = -1
+
+	// untyped text can accept any src type.
+	case len(ft.Type) == 0:
+		ret = -1 // keep the value as is.
+
+	// typed text can only accept certain typed src values.
+	// ex. a field wants only "cats"; my value (cls) is "things, animals, cats, tigers".
+	case len(cls) > 0:
+		if vk, e := ks.GetKindByName(cls); e == nil {
+			if vk.Implements(ft.Type) {
+				ret = -1 // keep the value as is (vs. "downgrading" the value to fit the field.)
+			}
+		}
+
+	// untyped blank strings can fit into any type of text
+	// ( they become typed blank strings )
+	case val.Len() == 0:
+		ret = 1
+
+	// untyped traits can fit into aspects ( if the trait is valid )
+	// this doesnt apply to text lists ( they can never be true aspects )
+	case ft.isAspectLike():
+		if ak, e := ks.GetKindByName(ft.Type); e == nil {
+			if ak.FieldIndex(val.String()) >= 0 {
+				ret = 1
+			}
+		}
 	}
 	return
 }

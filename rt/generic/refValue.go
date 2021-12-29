@@ -88,6 +88,8 @@ func (n refValue) Records() (ret []*Record) {
 
 func (n refValue) Len() (ret int) {
 	switch vp := n.i.(type) {
+	case string:
+		ret = len(vp)
 	case *[]float64:
 		ret = len(*vp)
 	case *[]string:
