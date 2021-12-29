@@ -24,7 +24,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to retrieve from something closed:\u003cbr\u003e"
+                                  "Say:": "Fail to retrieve from something closed:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -73,7 +73,7 @@
                                   }
                                 },
                                 {
-                                  "Say:": "Okay, retrieve from supporter:\u003cbr\u003e"
+                                  "Say:": "Okay, retrieve from supporter:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -127,7 +127,7 @@
                                   }
                                 },
                                 {
-                                  "Say:": "Okay, retrieve from container:\u003cbr\u003e"
+                                  "Say:": "Okay, retrieve from container:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -176,7 +176,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to retrieve incorrectly:\u003cbr\u003e"
+                                  "Say:": "Fail to retrieve incorrectly:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -220,7 +220,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to steal:\u003cbr\u003e"
+                                  "Say:": "Fail to steal:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [

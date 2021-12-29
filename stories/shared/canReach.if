@@ -735,7 +735,7 @@
                         {
                           "Log:": {
                             "FromTxt:": {
-                              "RenderTemplate:": "reach up: from:{.fromObj} -\u003e into:{.intoObj}"
+                              "RenderTemplate:": "reach up: from:{.fromObj} -> into:{.intoObj}"
                             }
                           }
                         }
@@ -915,7 +915,7 @@
                         {
                           "Log:": {
                             "FromTxt:": {
-                              "RenderTemplate:": "reach down: from:{.fromObj} -\u003e into:{.intoObj}"
+                              "RenderTemplate:": "reach down: from:{.fromObj} -> into:{.intoObj}"
                             }
                           }
                         }

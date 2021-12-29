@@ -24,7 +24,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to take from something closed:\u003cbr\u003e"
+                                  "Say:": "Fail to take from something closed:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -65,7 +65,7 @@
                                   }
                                 },
                                 {
-                                  "Say:": "Fail to steal:\u003cbr\u003e"
+                                  "Say:": "Fail to steal:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -101,7 +101,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to take possessions:\u003cbr\u003e"
+                                  "Say:": "Fail to take possessions:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -137,7 +137,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to take your container:\u003cbr\u003e"
+                                  "Say:": "Fail to take your container:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -178,7 +178,7 @@
                                   }
                                 },
                                 {
-                                  "Say:": "Okay, take something:\u003cbr\u003e"
+                                  "Say:": "Okay, take something:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -219,7 +219,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to take your self:\u003cbr\u003e"
+                                  "Say:": "Fail to take your self:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -255,7 +255,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to take someone else:\u003cbr\u003e"
+                                  "Say:": "Fail to take someone else:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -291,7 +291,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to take scenery:\u003cbr\u003e"
+                                  "Say:": "Fail to take scenery:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -327,7 +327,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to take something fixed in place:\u003cbr\u003e"
+                                  "Say:": "Fail to take something fixed in place:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [

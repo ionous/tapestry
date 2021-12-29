@@ -24,7 +24,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to store something into an actor:\u003cbr\u003e"
+                                  "Say:": "Fail to store something into an actor:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -73,7 +73,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to store something into a closed container:\u003cbr\u003e"
+                                  "Say:": "Fail to store something into a closed container:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -122,7 +122,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to store something into something nested:\u003cbr\u003e"
+                                  "Say:": "Fail to store something into something nested:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -171,7 +171,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Okay, store something into an open container:\u003cbr\u003e"
+                                  "Say:": "Okay, store something into an open container:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -220,7 +220,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Okay, store something onto a supporter:\u003cbr\u003e"
+                                  "Say:": "Okay, store something onto a supporter:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -269,7 +269,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to store something worn:\u003cbr\u003e"
+                                  "Say:": "Fail to store something worn:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -318,7 +318,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to store something not held:\u003cbr\u003e"
+                                  "Say:": "Fail to store something not held:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -367,7 +367,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Okay, store something into something held:\u003cbr\u003e"
+                                  "Say:": "Okay, store something into something held:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
@@ -416,7 +416,7 @@
                             "Row:": {
                               "Act:": [
                                 {
-                                  "Say:": "Fail to store something to somewhere unreachable:\u003cbr\u003e"
+                                  "Say:": "Fail to store something to somewhere unreachable:<br>"
                                 },
                                 {
                                   "Determine:arguments:": [
