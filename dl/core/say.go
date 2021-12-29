@@ -53,7 +53,9 @@ type stringer interface{ String() string }
 // w - output target with any needed filters, etc.
 // returns the output of "s" as a value
 func writeSpan(run rt.Runtime, s stringer, op composer.Composer, act Activity, w writer.Output) (ret g.Value, err error) {
-	if !act.Empty() {
+	if act.Empty() {
+		ret = g.Empty
+	} else {
 		was := run.SetWriter(w)
 		ex := act.Execute(run)
 		run.SetWriter(was)
@@ -62,10 +64,12 @@ func writeSpan(run rt.Runtime, s stringer, op composer.Composer, act Activity, w
 		} else {
 			if res := s.String(); len(res) > 0 {
 				ret = g.StringOf(res)
+			} else if hack := safe.HackTillTemplatesCanEvaluatePatternTypes; hack != nil {
+				ret = hack
+				safe.HackTillTemplatesCanEvaluatePatternTypes = nil
 			} else {
-				ret = safe.HackTillTemplatesCanEvaluatePatternTypes
+				ret = g.Empty // if the res was empty, it might have intentionally been empty
 			}
-			safe.HackTillTemplatesCanEvaluatePatternTypes = nil
 		}
 	}
 	return
