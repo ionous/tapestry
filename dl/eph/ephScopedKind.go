@@ -13,6 +13,7 @@ type ScopedKind struct {
 	aspects       []traitDef // used for kinds of aspects *and* for fields which use those aspects.
 	fields        []fieldDef // otherwise, everything is a field
 	patternHeader patternHeader
+	pendingFields []UniformField
 }
 
 func (k *ScopedKind) HasParent(other kindsOf.Kinds) bool {

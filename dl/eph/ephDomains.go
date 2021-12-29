@@ -86,37 +86,23 @@ func (d *Domain) AddDefinition(key, at, value string) (err error) {
 }
 
 // the domain is resolved already.
-func (d *Domain) Assemble(phaseActions PhaseActions) (err error) {
+func (d *Domain) Assemble(w Phase, flags PhaseFlags) (err error) {
 	if ds, e := d.GetDependencies(); e != nil {
 		err = e
 	} else {
-		// don't "range" over the phases since the contents can change during traversal.
-		for w := 0; w < int(NumPhases); w++ {
-			// note: even if there are no ephemera... in a given phase..
-			// there can still be rivals and other results to process
-			currPhase := Phase(w)
-			d.currPhase = currPhase // hrmmm...
-			act := phaseActions[currPhase]
-			if e := d.checkRivals(currPhase, ds, !act.Flags.NoDuplicates); e != nil {
-				err = e
-				break
-			} else {
-				// don't "range" over the phase data since the contents can change during traversal.
-				// fix: if we were merging in the definitions we wouldnt have to walk upwards...
-				// what's best? see note in checkRivals()
-				for i := 0; i < len(d.phases[w].eph); i++ {
-					op := d.phases[w].eph[i]
-					if e := op.Eph.Assemble(d.catalog, d, op.At); e != nil {
-						err = errutil.Append(err, e)
-					}
-				}
-				if err != nil {
-					break
-				} else if do := act.Do; do != nil {
-					if e := do(d); e != nil {
-						err = e
-						break
-					}
+		// note: even if there are no ephemera... in a given phase..
+		// there can still be rivals and other results to process
+		d.currPhase = w // hrmmm...
+		if e := d.checkRivals(w, ds, !flags.NoDuplicates); e != nil {
+			err = e
+		} else {
+			// don't "range" over the phase data since the contents can change during traversal.
+			// fix: if we were merging in the definitions we wouldnt have to walk upwards...
+			// what's best? see note in checkRivals()
+			for i := 0; i < len(d.phases[w].eph); i++ {
+				op := d.phases[w].eph[i]
+				if e := op.Eph.Assemble(d.catalog, d, op.At); e != nil {
+					err = errutil.Append(err, e)
 				}
 			}
 		}

@@ -17,24 +17,31 @@ func (d *Domain) AddPlural(plural, singular string) (okay bool) {
 // the way plurals are defined, there can be more than one plural word for a given singular word.
 // in that case, attempts to pick one.
 func (d *Domain) Pluralize(singular string) (ret string, err error) {
-	if explict, e := d.FindPlural(singular); e != nil {
-		err = e
-	} else if len(explict) > 0 {
-		ret = explict
-	} else {
+	if e := VisitTree(d, func(dep Dependency) (err error) {
+		scope := dep.(*Domain)
+		if n, ok := scope.pairs.FindPlural(singular); ok {
+			ret, err = n, Visited
+		}
+		return
+	}); e == nil { // not found
 		ret = inflect.Pluralize(singular)
+	} else if e != Visited {
+		err = e
 	}
 	return
 }
 
-func (d *Domain) FindPlural(word string) (ret string, err error) {
+// see: Pluralize
+func (d *Domain) Singularize(plural string) (ret string, err error) {
 	if e := VisitTree(d, func(dep Dependency) (err error) {
 		scope := dep.(*Domain)
-		if n, ok := scope.pairs.FindPlural(word); ok {
+		if n, ok := scope.pairs.FindSingular(plural); ok {
 			ret, err = n, Visited
 		}
 		return
-	}); e != nil && e != Visited {
+	}); e == nil { // not found
+		ret = inflect.Singularize(plural)
+	} else if e != Visited {
 		err = e
 	}
 	return

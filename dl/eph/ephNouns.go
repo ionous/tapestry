@@ -5,6 +5,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// after assembling all the nouns, make sure they can be resolved.
 var NounPhaseActions = PhaseAction{
 	Do: func(d *Domain) error {
 		_, e := d.ResolveNouns()

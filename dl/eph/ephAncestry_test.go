@@ -122,7 +122,7 @@ func TestAncestryRedefined(t *testing.T) {
 		&EphKinds{Kinds: "q", From: "k"}, // should be okay.
 	)
 	dt.makeDomain(dd("c", "b"),
-		&EphKinds{Kinds: "m", From: "n"},
+		&EphKinds{Kinds: "m", From: "n"}, // should fail.
 	)
 	out := testOut{mdl.Domain}
 	if e := writeKinds(dt, &out); e == nil || e.Error() != `can't redefine parent as "n" for kind "m"` {

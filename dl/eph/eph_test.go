@@ -137,7 +137,8 @@ func buildAncestors(dt domainTest) (ret *Catalog, err error) {
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
 	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
+		AncestryPhase:  AncestryPhaseActions,
+		PostFieldPhase: PostFieldActions,
 	}); e != nil {
 		err = e
 	} else {
@@ -151,8 +152,9 @@ func buildNouns(dt domainTest) (ret *Catalog, err error) {
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
 	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase: AncestryPhaseActions,
-		NounPhase:     NounPhaseActions,
+		AncestryPhase:  AncestryPhaseActions,
+		PostFieldPhase: PostFieldActions,
+		NounPhase:      NounPhaseActions,
 	}); e != nil {
 		err = e
 	} else {

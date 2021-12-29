@@ -63,11 +63,21 @@ func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
-		for _, deps := range ds { // list of dependencies
-			d := deps.Leaf().(*Domain) // panics if it fails
-			if e := d.Assemble(phaseActions); e != nil {
-				err = e
-				break
+		// walks across all domains for each phase to support things like fields:
+		// which exist per kind but which can be added to by multiple domains.
+		for w := Phase(0); w < NumPhases; w++ {
+			act := phaseActions[w]
+			for _, deps := range ds {
+				d := deps.Leaf().(*Domain) // panics if it fails
+				if e := d.Assemble(w, act.Flags); e != nil {
+					err = e
+					break
+				} else if do := act.Do; do != nil {
+					if e := do(d); e != nil {
+						err = e
+						break
+					}
+				}
 			}
 		}
 	}

@@ -51,7 +51,7 @@ func (op *NamedNoun) ImportNouns(k *Importer) (err error) {
 	//
 	if cnt, ok := lang.WordsToNum(op.Determiner.Str); !ok {
 		err = op.ReadNamedNoun(k)
-	} else {
+	} else if cnt > 0 {
 		err = op.ReadCountedNoun(k, cnt)
 	}
 	return
@@ -64,19 +64,55 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 	if once := "printed_name"; k.Once(once) {
 		k.WriteOnce(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "printed_name", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 	}
-
-	kind := op.Name.String()
-	k.Write(&eph.EphKinds{Kinds: kind, From: "thing"})
+	// note: kind is phrased in the singular here when count is 1, plural otherwise.
+	// but, because of "Recent.Nouns" processing we have to generate some sort of noun name *immediately*
+	// ( itd be nice to have a more start and stop importer, where we could delay processing of branches of the tree. )
+	kindOrKinds := op.Name.String()
+	names := make([]string, cnt)
 	for i := 0; i < cnt; i++ {
-		noun := k.newCounter(kind, reader.Position{})
-		k.Write(&eph.EphNouns{Noun: noun, Kind: kind})
+		noun := k.newCounter(kindOrKinds, reader.Position{})
+		k.Env().Recent.Nouns.Add(noun) // for relations, etc.
 		k.Write(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
-		// fix: we probably want the kind to be singular... can we make a "dependent" command like that?
-		// a program in ephemera space... or a eph.literal that we manually look for when processing values?
-		k.Write(&eph.EphValues{Noun: noun, Field: "printed_name", Value: T(kind)})
-		// needed for relations, etc.
-		k.Env().Recent.Nouns.Add(noun)
+		names[i] = noun
 	}
+	k.Write(eph.PhaseFunction{eph.AncestryPhase,
+		func(c *eph.Catalog, d *eph.Domain, at string) (err error) {
+			// by now, plurals will be determined, so we can determine which is which.
+			var kind, kinds string
+			if cnt == 1 {
+				kind = kindOrKinds
+				kinds, err = d.Pluralize(kindOrKinds)
+			} else {
+				kinds = kindOrKinds
+				kind, err = d.Singularize(kindOrKinds)
+			}
+			if err == nil {
+				if e := d.AddEphemera(eph.EphAt{at, &eph.EphKinds{Kinds: kinds, From: "thing"}}); e != nil {
+					err = e
+				} else {
+					for _, n := range names {
+						if e := d.AddEphemera(eph.EphAt{at, &eph.EphNouns{Noun: n, Kind: kindOrKinds}}); e != nil {
+							err = e
+						} else if e := d.AddEphemera(eph.EphAt{at, &eph.EphAliases{
+							// so that typing "triangle" means "triangles_1"
+							ShortName: n, Aliases: []string{kind},
+						}}); e != nil {
+							err = e
+							break
+						} else if e := d.AddEphemera(eph.EphAt{at, &eph.EphValues{
+							// so that printing "triangles_1" yields "triangle"
+							// FIX: itd make a lot more sense to have a default value for the kind
+							Noun: n, Field: "printed_name", Value: T(kind),
+						}}); e != nil {
+							err = e
+							break
+						}
+					}
+				}
+			}
+			return
+		}},
+	)
 	return
 }
 

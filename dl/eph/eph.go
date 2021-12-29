@@ -26,9 +26,10 @@ const (
 	DomainPhase Phase = iota
 	PluralPhase
 	AncestryPhase
-	AspectPhase // traits of kinds
-	FieldPhase  // other properties of kinds
-	NounPhase   // instances ( of kinds )
+	AspectPhase    // traits of kinds
+	FieldPhase     // collect the properties of kinds
+	PostFieldPhase // actually assemble those fields
+	NounPhase      // instances ( of kinds )
 	ValuePhase
 	RelativePhase // initial relations between nouns
 	PatternPhase

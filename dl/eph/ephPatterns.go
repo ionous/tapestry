@@ -43,28 +43,15 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 			err = e
 		} else if e := op.assembleArgs(d, k, at, &k.patternHeader); e != nil {
 			err = e
-		} else if e := reduceLocals(op.Locals, &locals); e != nil {
+		} else if e := reduceLocals(op.Locals, at, &locals); e != nil {
 			err = e
 		} else {
 			err = d.AddEphemera(EphAt{at, PhaseFunction{FieldPhase,
 				func(c *Catalog, d *Domain, at string) (err error) {
-					if e := assembleFields(k, k.patternHeader.flush(), at); e != nil {
-						err = e
-					} else if e := assembleFields(k, locals, at); e != nil {
-						err = e
-					}
+					k.pendingFields = append(k.pendingFields, k.patternHeader.flush()...)
+					k.pendingFields = append(k.pendingFields, locals...)
 					return
 				}}})
-		}
-	}
-	return
-}
-
-func assembleFields(k *ScopedKind, fields []UniformField, at string) (err error) {
-	for _, p := range fields {
-		if e := p.assembleField(k, at); e != nil {
-			err = e
-			break
 		}
 	}
 	return
@@ -90,7 +77,7 @@ func (op *EphPatterns) assembleRes(d *Domain, k *ScopedKind, at string, outp *pa
 	var res []UniformField
 	if op.Result != nil && k.domain != d {
 		err = errutil.New("can only declare results in the original domain")
-	} else if patres, e := reduceRes(op.Result, &res); e != nil {
+	} else if patres, e := reduceRes(op.Result, at, &res); e != nil {
 		err = e
 	} else if len(patres) > 0 {
 		if e := addPatternDef(d, k, "res", at, patres); e != nil {
@@ -107,7 +94,7 @@ func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *p
 	var args []UniformField
 	if len(op.Params) > 0 && k.domain != d {
 		err = errutil.New("can only declare args in the original domain")
-	} else if patlabels, e := reduceArgs(op.Params, &args); e != nil {
+	} else if patlabels, e := reduceArgs(op.Params, at, &args); e != nil {
 		err = e
 	} else if len(patlabels) > 0 {
 		if e := addPatternDef(d, k, "args", at, patlabels); e != nil {
@@ -128,11 +115,11 @@ func addPatternDef(d *Domain, k *ScopedKind, key, at, v string) (err error) {
 	return
 }
 
-func reduceRes(param *EphParams, outp *[]UniformField) (ret string, err error) {
+func reduceRes(param *EphParams, at string, outp *[]UniformField) (ret string, err error) {
 	if param != nil {
 		if param.Initially != nil {
 			err = errutil.New("return values dont currently support initial values")
-		} else if p, e := MakeUniformField(param.Affinity, param.Name, param.Class); e != nil {
+		} else if p, e := MakeUniformField(param.Affinity, param.Name, param.Class, at); e != nil {
 			err = e
 		} else {
 			*outp = append(*outp, p)
@@ -142,12 +129,12 @@ func reduceRes(param *EphParams, outp *[]UniformField) (ret string, err error) {
 	return
 }
 
-func reduceArgs(params []EphParams, outp *[]UniformField) (ret string, err error) {
+func reduceArgs(params []EphParams, at string, outp *[]UniformField) (ret string, err error) {
 	var labels strings.Builder
 	for i, param := range params {
 		if param.Initially != nil {
 			err = errutil.New("args dont currently support initial values")
-		} else if p, e := MakeUniformField(param.Affinity, param.Name, param.Class); e != nil {
+		} else if p, e := MakeUniformField(param.Affinity, param.Name, param.Class, at); e != nil {
 			err = e
 			break
 		} else {
@@ -165,9 +152,9 @@ func reduceArgs(params []EphParams, outp *[]UniformField) (ret string, err error
 	return
 }
 
-func reduceLocals(params []EphParams, outp *[]UniformField) (err error) {
+func reduceLocals(params []EphParams, at string, outp *[]UniformField) (err error) {
 	for _, param := range params {
-		if p, e := MakeUniformField(param.Affinity, param.Name, param.Class); e != nil {
+		if p, e := MakeUniformField(param.Affinity, param.Name, param.Class, at); e != nil {
 			err = e
 			break
 		} else if e := p.setAssignment(param.Initially); e != nil {

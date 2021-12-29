@@ -17,7 +17,7 @@ type ephFields struct {
 	EphParams
 }
 
-//  traverse the domains and then kinds in a reasonable order
+// write the fields of each kind in kind order
 func (c *Catalog) WriteFields(w Writer) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
 		err = e
@@ -48,6 +48,7 @@ func (c *Catalog) WriteFields(w Writer) (err error) {
 	return
 }
 
+// write the field initializers in kind order
 func (c *Catalog) WriteLocals(w Writer) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
 		err = e
@@ -81,21 +82,42 @@ func (op *ephFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = InvalidString(op.Kinds)
 	} else if kind, ok := d.GetPluralKind(newKind); !ok {
 		err = errutil.New("unknown kind", newKind)
-	} else if param, e := MakeUniformField(op.Affinity, op.Name, op.Class); e != nil {
+	} else if param, e := MakeUniformField(op.Affinity, op.Name, op.Class, at); e != nil {
 		err = e
 	} else {
-		err = param.assembleField(kind, at)
+		kind.pendingFields = append(kind.pendingFields, param)
 	}
 	return
+}
+
+// after queuing up all the fields, assemble them; parent kinds first.
+var PostFieldActions = PhaseAction{
+	Do: func(d *Domain) (err error) {
+		if deps, e := d.ResolveKinds(); e != nil {
+			err = e
+		} else {
+			for _, dep := range deps {
+				k := dep.Leaf().(*ScopedKind)
+				for _, p := range k.pendingFields {
+					if e := p.assembleField(k); e != nil {
+						err = e
+						break
+					}
+				}
+			}
+		}
+		return
+	},
 }
 
 type UniformField struct {
 	name, affinity, class string
 	initially             rt.Assignment
+	at                    string
 }
 
 // normalize the values of the field
-func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass string) (ret UniformField, err error) {
+func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass, at string) (ret UniformField, err error) {
 	if name, ok := UniformString(fieldName); !ok {
 		err = InvalidString(fieldName)
 	} else if aff, ok := composer.FindChoice(&fieldAffinity, fieldAffinity.Str); !ok && len(fieldAffinity.Str) > 0 {
@@ -103,7 +125,7 @@ func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass string) (ret
 	} else if class, ok := UniformString(fieldClass); !ok && len(fieldClass) > 0 {
 		err = InvalidString(fieldClass)
 	} else {
-		ret = UniformField{name: name, affinity: aff, class: class}
+		ret = UniformField{name: name, affinity: aff, class: class, at: at}
 	}
 	return
 }
@@ -121,7 +143,7 @@ func (uf *UniformField) setAssignment(init rt.Assignment) (err error) {
 	return
 }
 
-func (uf *UniformField) assembleField(kind *ScopedKind, at string) (err error) {
+func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 	if cls, classOk := kind.domain.GetPluralKind(uf.class); !classOk && len(uf.class) > 0 {
 		err = KindError{kind.name, errutil.Fmt("unknown class %q for field %q", uf.class, uf.name)}
 	} else if aff := affine.Affinity(uf.affinity); classOk && !isClassAffinity(aff) {
@@ -134,7 +156,7 @@ func (uf *UniformField) assembleField(kind *ScopedKind, at string) (err error) {
 		// checks for conflicts, allows duplicates.
 		var conflict *Conflict
 		if e := kind.AddField(&fieldDef{
-			at:        at,
+			at:        uf.at,
 			name:      uf.name, // fieldName; already "uniform"
 			affinity:  aff.String(),
 			class:     clsName,
