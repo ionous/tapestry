@@ -1,6 +1,7 @@
 package story
 
 import (
+	"strings"
 	"unicode"
 	"unicode/utf8"
 
@@ -117,7 +118,9 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 }
 
 func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
-	noun := op.Name.String()
+	// strip extraneous spaces that exist for obscure mainline reasons;
+	// testing ToUpper against space ( below ) for capitals was making nouns starting with spaces proper named.
+	noun := strings.TrimSpace(op.Name.String())
 	k.Env().Recent.Nouns.Add(noun)
 	detStr, detFound := composer.FindChoice(&op.Determiner, op.Determiner.Str)
 	// setup the indefinite article
