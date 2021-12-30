@@ -15,10 +15,11 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 	// note: locals can ( and often do ) read arguments ( which can invoke sub-patterns )
 	if pl, e := run.qdb.PatternLabels(name); e != nil {
 		err = e
-	} else if res, e := pattern.NewResults(run, pat, pl.Result, aff, pl.Labels, args); e != nil {
+	} else if res, e := pattern.NewResults(run, name, pl.Result, aff, pl.Labels, args); e != nil {
 		err = e
 	} else {
 		run.currentPatterns.startedPattern(name)
+		// note: local Init happens inside of ReplaceScope :/
 		if oldScope, e := run.ReplaceScope(res, true); e != nil {
 			err = e
 		} else {
