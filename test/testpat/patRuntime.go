@@ -17,7 +17,7 @@ type Runtime struct {
 func (run *Runtime) Call(name string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
 	if pat, ok := run.Map[name]; !ok {
 		err = errutil.New("unknown pattern", name)
-	} else if res, e := pattern.NewResults(run, name, pat.Return, aff, pat.Labels, args); e != nil {
+	} else if res, e := pattern.NewResults(run, pat.Name, pat.Return, aff, pat.Labels, args); e != nil {
 		err = e
 	} else if oldScope, e := run.ReplaceScope(res, true); e != nil {
 		err = e
