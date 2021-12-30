@@ -1,10 +1,10 @@
-package pdb_test
+package qdb_test
 
 import (
 	"testing"
 
 	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/qna/pdb"
+	"git.sr.ht/~ionous/iffy/qna/qdb"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
 	"git.sr.ht/~ionous/iffy/test/testdb"
 	"github.com/ionous/errutil"
@@ -32,7 +32,7 @@ func TestActivate(t *testing.T) {
 			)
 		}); e != nil {
 		t.Fatal("failed to create table", e)
-	} else if q, e := pdb.NewQueryTest(db); e != nil {
+	} else if q, e := qdb.NewQueryTest(db); e != nil {
 		t.Fatal(e)
 	} else if e := isActive(q, false, "main", "sub", "boop", "beep"); e != nil {
 		t.Fatal(e)
@@ -69,7 +69,7 @@ func TestActivate(t *testing.T) {
 	}
 }
 
-func isActive(q *pdb.QueryTest, want bool, names ...string) (err error) {
+func isActive(q *qdb.QueryTest, want bool, names ...string) (err error) {
 	for _, n := range names {
 		if ok, e := q.IsDomainActive(n); e != nil || ok != want {
 			err = errutil.New("expected", n, "active", want, e)
@@ -79,7 +79,7 @@ func isActive(q *pdb.QueryTest, want bool, names ...string) (err error) {
 	return
 }
 
-func activate(q *pdb.QueryTest, name string, act int, expect ...string) (err error) {
+func activate(q *qdb.QueryTest, name string, act int, expect ...string) (err error) {
 	if els, e := q.InnerActivate(name, act); e != nil {
 		err = errutil.New("couldnt activate", name, e)
 	} else if diff := pretty.Diff(els, expect); len(diff) > 0 {

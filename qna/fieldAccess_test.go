@@ -1,8 +1,8 @@
 package qna
 
-// fix? since the low level queries are tested in pdb....
+// fix? since the low level queries are tested in qdb....
 // maybe something to test the runner interface --
-// maybe change pdb to an interface and make a mock?
+// maybe change qdb to an interface and make a mock?
 //
 // func TestFieldAccess(t *testing.T) {
 // 	db := newFieldAccessTest(t, testdb.Memory)

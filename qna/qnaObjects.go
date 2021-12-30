@@ -1,7 +1,7 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/iffy/qna/pdb"
+	"git.sr.ht/~ionous/iffy/qna/qdb"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 )
 
@@ -37,7 +37,7 @@ func (run *Runner) getObjectByName(name string) (ret *qnaObject, err error) {
 }
 
 // given an object name, return its id and kind.
-func (run *Runner) getObjectInfo(name string) (ret pdb.NounInfo, err error) {
+func (run *Runner) getObjectInfo(name string) (ret qdb.NounInfo, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
 		if info, e := run.qdb.NounInfo(name); e != nil {
 			err = e
@@ -50,7 +50,7 @@ func (run *Runner) getObjectInfo(name string) (ret pdb.NounInfo, err error) {
 	}, "objectInfo", name); e != nil {
 		err = e
 	} else {
-		ret = c.(pdb.NounInfo)
+		ret = c.(qdb.NounInfo)
 	}
 	return
 }

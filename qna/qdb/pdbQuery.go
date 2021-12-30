@@ -1,6 +1,6 @@
-// Package pdb asks specific questions of the play.db for the package qna runtime.
+// Package qdb asks specific questions of the play.db for the package qna runtime.
 // It relies on the model.sql and run.sql sqlite tables that are written to by package asm.
-package pdb
+package qdb
 
 import (
 	"database/sql"

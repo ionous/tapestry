@@ -14,7 +14,7 @@ import (
 	play "git.sr.ht/~ionous/iffy/cmd/play/internal"
 	"git.sr.ht/~ionous/iffy/dl/debug"
 	"git.sr.ht/~ionous/iffy/qna"
-	"git.sr.ht/~ionous/iffy/qna/pdb"
+	"git.sr.ht/~ionous/iffy/qna/qdb"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -48,7 +48,7 @@ func playGame(inFile, testString string) (ret int, err error) {
 	} else {
 		defer db.Close()
 		// fix: some sort of reset flag; but also: how to rejoin properly?
-		if qdb, e := pdb.NewQueries(db, true); e != nil {
+		if qdb, e := qdb.NewQueries(db, true); e != nil {
 			err = e
 		} else if grammar, e := play.MakeGrammar(db); e != nil {
 			err = e

@@ -1,4 +1,4 @@
-package pdb
+package qdb
 
 import (
 	"database/sql"

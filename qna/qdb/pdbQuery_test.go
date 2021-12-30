@@ -1,4 +1,4 @@
-package pdb_test
+package qdb_test
 
 import (
 	"database/sql"
@@ -9,7 +9,7 @@ import (
 	"git.sr.ht/~ionous/iffy/affine"
 	"git.sr.ht/~ionous/iffy/asm"
 	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/qna/pdb"
+	"git.sr.ht/~ionous/iffy/qna/qdb"
 	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/tables"
 	"git.sr.ht/~ionous/iffy/tables/mdl"
@@ -167,7 +167,7 @@ func TestQueries(t *testing.T) {
 	}
 
 	// start querying
-	if q, e := pdb.NewQueries(db, false); e != nil {
+	if q, e := qdb.NewQueries(db, false); e != nil {
 		t.Fatal(e)
 	} else if domainPoke, e := db.Prepare(
 		// turn on / off a domain regardless of hierarchy
@@ -190,13 +190,13 @@ func TestQueries(t *testing.T) {
 		t.Fatal("plural", many, e)
 	} else if fd, e := q.FieldsOf(kind); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(fd, []pdb.FieldData{
+	} else if diff := pretty.Diff(fd, []qdb.FieldData{
 		{Name: aspect, Affinity: affine.Text, Class: aspect},
 	}); len(diff) > 0 {
 		t.Fatal(fd, diff)
 	} else if fd, e := q.FieldsOf(aspect); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(fd, []pdb.FieldData{
+	} else if diff := pretty.Diff(fd, []qdb.FieldData{
 		{Name: "brief", Affinity: affine.Bool},
 		{Name: "verbose", Affinity: affine.Bool},
 		{Name: "superbrief", Affinity: affine.Bool},
@@ -224,28 +224,28 @@ func TestQueries(t *testing.T) {
 		t.Fatal(e) // should be out of scope
 	} else if name, e := q.NounName("empire_apple"); e != nil || name != "empire apple" {
 		t.Fatal(name, e)
-	} else if id, e := q.NounInfo("apple"); e != nil || id != (pdb.NounInfo{Domain: domain, Id: "apple", Kind: kind}) {
+	} else if id, e := q.NounInfo("apple"); e != nil || id != (qdb.NounInfo{Domain: domain, Id: "apple", Kind: kind}) {
 		t.Fatal(e, id)
-	} else if id, e := q.NounInfo("empire"); e != nil || id != (pdb.NounInfo{Domain: domain, Id: "empire_apple", Kind: kind}) {
+	} else if id, e := q.NounInfo("empire"); e != nil || id != (qdb.NounInfo{Domain: domain, Id: "empire_apple", Kind: kind}) {
 		t.Fatal(e, id)
-	} else if id, e := q.NounInfo("table"); e != nil || id != (pdb.NounInfo{}) {
+	} else if id, e := q.NounInfo("table"); e != nil || id != (qdb.NounInfo{}) {
 		t.Fatal(id, e) // should be blank because the table is out of scope
 	} else if got, e := q.PatternLabels(pattern); e != nil {
 		t.Fatal("patternLabels:", e)
-	} else if diff := pretty.Diff(got, pdb.PatternLabels{
+	} else if diff := pretty.Diff(got, qdb.PatternLabels{
 		"ancestor",
 		[]string{"object", "other_object"},
 	}); len(diff) > 0 {
 		t.Fatal(e, diff)
 	} else if got, e := q.RulesFor(pattern, ""); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []pdb.Rules{
+	} else if diff := pretty.Diff(got, []qdb.Rules{
 		{"1", 1, []byte("filter1"), []byte("prog1")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
 	} else if got, e := q.RulesFor(pattern, kind); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []pdb.Rules{
+	} else if diff := pretty.Diff(got, []qdb.Rules{
 		{"2", 2, []byte("filter2"), []byte("prog2")},
 		{"3", 3, []byte("filter3"), []byte("prog3")},
 	}); len(diff) > 0 {

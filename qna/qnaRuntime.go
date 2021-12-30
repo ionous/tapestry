@@ -6,7 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/iffy/jsn/cin"
 	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/qna/pdb"
+	"git.sr.ht/~ionous/iffy/qna/qdb"
 	g "git.sr.ht/~ionous/iffy/rt/generic"
 	"git.sr.ht/~ionous/iffy/rt/kindsOf"
 	"git.sr.ht/~ionous/iffy/rt/meta"
@@ -18,14 +18,14 @@ import (
 
 func NewRuntime(db *sql.DB, signatures cin.Signatures) *Runner {
 	opt := NewOptions()
-	qdb, e := pdb.NewQueries(db, true)
+	qdb, e := qdb.NewQueries(db, true)
 	if e != nil {
 		panic(e)
 	}
 	return NewRuntimeOptions(qdb, opt, signatures)
 }
 
-func NewRuntimeOptions(qdb *pdb.Query, options Options, signatures cin.Signatures) *Runner {
+func NewRuntimeOptions(qdb *qdb.Query, options Options, signatures cin.Signatures) *Runner {
 	run := &Runner{
 		qdb:        qdb,
 		values:     make(cache),
@@ -39,7 +39,7 @@ func NewRuntimeOptions(qdb *pdb.Query, options Options, signatures cin.Signature
 }
 
 type Runner struct {
-	qdb        *pdb.Query
+	qdb        *qdb.Query
 	values     cache
 	nounValues cache
 	counters
@@ -91,14 +91,14 @@ func (run *Runner) PluralOf(singular string) (ret string) {
 	return
 }
 
-func (run *Runner) PatternLabels(pat string) (ret pdb.PatternLabels, err error) {
+func (run *Runner) PatternLabels(pat string) (ret qdb.PatternLabels, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
 		ret, err = run.qdb.PatternLabels(pat)
 		return
 	}, "PatternLabels", pat); e != nil {
 		run.Report(e)
 	} else {
-		ret = c.(pdb.PatternLabels)
+		ret = c.(qdb.PatternLabels)
 	}
 	return
 }
