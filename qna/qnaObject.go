@@ -11,6 +11,8 @@ import (
 
 // qnaObject implements the generic Value interface
 // FIX? should it ( and meta.Value, affine.Object ) go away?
+// the reason that you need it is: how else do you Set(key, value) to assign an object property?
+// you need to give the caller an object that looks like a record [ or you need a new method in Runtime specically for objects ]
 //
 // currently, it feels like we have two ways to access object values
 // 		1. run.Get/SetField(object, field)

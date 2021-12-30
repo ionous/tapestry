@@ -46,11 +46,11 @@ func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 	} else {
 		if ft.isAspectLike() {
 			// if we're asking for an aspect, the default value will be the string of its first trait
-			if k, e := d.kind.kinds.GetKindByName(ft.Type); e != nil {
+			if ka, e := d.kind.kinds.GetKindByName(ft.Type); e != nil {
 				err = e
 			} else {
-				firstTrait := k.Field(0) // first trait is the default
-				nv := StringFrom(firstTrait.Name, k.Name())
+				aspect, firstTrait := ka.Name(), ka.Field(0) // first trait is the default
+				nv := StringFrom(firstTrait.Name, aspect)
 				ret, d.values[i] = nv, nv
 			}
 		} else {
@@ -91,75 +91,25 @@ func (d *Record) SetNamedField(field string, val Value) (err error) {
 func (d *Record) SetIndexedField(i int, val Value) (err error) {
 	var okay bool
 	ft, aff, cls := d.kind.fields[i], val.Affinity(), val.Type()
-	if aff == ft.Affinity {
-		switch ft.Affinity {
-		// the most flexible: anything can fit into anything.
-		case affine.Bool, affine.Number, affine.NumList:
+	switch aff {
+	// the most flexible: anything can fit into anything.
+	case affine.Bool, affine.Number, affine.Text, affine.TextList, affine.NumList:
+		okay = aff == ft.Affinity
+
+	// the least flexible: exact matches are needed.
+	case affine.Record, affine.RecordList:
+		okay = aff == ft.Affinity && cls == ft.Type
+
+	case affine.Object:
+		if ft.Affinity == affine.Text {
+			val = StringFrom(val.String(), val.Type())
 			okay = true
-
-		// the least flexible: exact matches are needed.
-		case affine.Record, affine.RecordList:
-			okay = cls == ft.Type
-
-		case affine.Text:
-			if change := textConvert(d.kind.kinds, ft, val); change < 0 {
-				okay = true // accept as is
-			} else if change > 0 {
-				val = StringFrom(val.String(), ft.Type)
-				okay = true
-			}
-
-		case affine.TextList:
-			if change := textConvert(d.kind.kinds, ft, val); change < 0 {
-				okay = true
-			} else if change > 0 {
-				val = StringsFrom(val.Strings(), ft.Type)
-				okay = true
-			}
 		}
 	}
 	if !okay {
 		err = errutil.Fmt("couldnt set field %s ( %s of type %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)
 	} else {
 		d.values[i] = val
-	}
-	return
-}
-
-// typed text can only fit in certain typed text fields
-// return: keep(<0); not convertible(0); converts(>0)
-func textConvert(ks Kinds, ft Field, val Value) (ret int) {
-	switch cls := val.Type(); {
-	// if the classes match exactly: accept as is.
-	case ft.Type == cls:
-		ret = -1
-
-	// untyped text can accept any src type.
-	case len(ft.Type) == 0:
-		ret = -1 // keep the value as is.
-
-	// typed text can only accept certain typed src values.
-	// ex. a field wants only "cats"; my value (cls) is "things, animals, cats, tigers".
-	case len(cls) > 0:
-		if vk, e := ks.GetKindByName(cls); e == nil {
-			if vk.Implements(ft.Type) {
-				ret = -1 // keep the value as is (vs. "downgrading" the value to fit the field.)
-			}
-		}
-
-	// untyped blank strings can fit into any type of text
-	// ( they become typed blank strings )
-	case val.Len() == 0:
-		ret = 1
-
-	// untyped traits can fit into aspects ( if the trait is valid )
-	// this doesnt apply to text lists ( they can never be true aspects )
-	case ft.isAspectLike():
-		if ak, e := ks.GetKindByName(ft.Type); e == nil {
-			if ak.FieldIndex(val.String()) >= 0 {
-				ret = 1
-			}
-		}
 	}
 	return
 }
