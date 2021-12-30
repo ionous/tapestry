@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strconv"
 
-	"git.sr.ht/~ionous/iffy/ident"
+	"git.sr.ht/~ionous/iffy/parser/ident"
 )
 
 // ResultList contains multiple results. Its methods help tease out its contents.

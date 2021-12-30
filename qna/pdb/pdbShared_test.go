@@ -12,7 +12,7 @@ type QueryTest struct {
 }
 
 func NewQueryTest(db *sql.DB) (ret *QueryTest, err error) {
-	if q, e := NewQueries(db); e != nil {
+	if q, e := NewQueries(db, false); e != nil {
 		err = e
 	} else if scan, e := db.Prepare(
 		`select md.domain || ':' || rd.active

@@ -18,29 +18,27 @@ import (
 
 func NewRuntime(db *sql.DB, signatures cin.Signatures) *Runner {
 	opt := NewOptions()
-	return NewRuntimeOptions(db, opt, signatures)
-}
-func NewRuntimeOptions(db *sql.DB, options Options, signatures cin.Signatures) *Runner {
-	var run *Runner
-	if qdb, e := pdb.NewQueries(db); e != nil {
-		panic(e) //fix: report
-	} else {
-		run = &Runner{
-			db:         db,
-			qdb:        qdb,
-			values:     make(cache),
-			nounValues: make(cache),
-			counters:   make(counters),
-			signatures: signatures,
-			options:    options,
-		}
-		run.SetWriter(print.NewAutoWriter(writer.NewStdout()))
+	qdb, e := pdb.NewQueries(db, true)
+	if e != nil {
+		panic(e)
 	}
+	return NewRuntimeOptions(qdb, opt, signatures)
+}
+
+func NewRuntimeOptions(qdb *pdb.Query, options Options, signatures cin.Signatures) *Runner {
+	run := &Runner{
+		qdb:        qdb,
+		values:     make(cache),
+		nounValues: make(cache),
+		counters:   make(counters),
+		signatures: signatures,
+		options:    options,
+	}
+	run.SetWriter(print.NewAutoWriter(writer.NewStdout()))
 	return run
 }
 
 type Runner struct {
-	db         *sql.DB
 	qdb        *pdb.Query
 	values     cache
 	nounValues cache
@@ -52,6 +50,10 @@ type Runner struct {
 	Randomizer
 	writer.Sink
 	currentPatterns
+}
+
+func (run *Runner) NounIsNamed(noun, name string) (bool, error) {
+	return run.qdb.NounIsNamed(noun, name)
 }
 
 func (run *Runner) ActivateDomain(domain string) (ret string, err error) {

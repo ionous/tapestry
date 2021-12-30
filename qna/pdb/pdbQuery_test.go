@@ -167,7 +167,7 @@ func TestQueries(t *testing.T) {
 	}
 
 	// start querying
-	if q, e := pdb.NewQueries(db); e != nil {
+	if q, e := pdb.NewQueries(db, false); e != nil {
 		t.Fatal(e)
 	} else if domainPoke, e := db.Prepare(
 		// turn on / off a domain regardless of hierarchy

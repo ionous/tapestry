@@ -1,6 +1,6 @@
 package parser_test
 
-import "git.sr.ht/~ionous/iffy/ident"
+import "git.sr.ht/~ionous/iffy/parser/ident"
 
 // Goal - tests the results of a parsed statement.
 type Goal interface {

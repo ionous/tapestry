@@ -3,8 +3,8 @@ package internal
 import (
 	"log"
 
-	"git.sr.ht/~ionous/iffy/ident"
 	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/iffy/parser/ident"
 	"git.sr.ht/~ionous/iffy/rt/meta"
 	"git.sr.ht/~ionous/iffy/rt/safe"
 )
@@ -22,6 +22,7 @@ func MakeNoun(run *Playtime, name string) *Noun {
 func (n *Noun) Id() ident.Id {
 	return n.id
 }
+
 func (n *Noun) String() string {
 	return n.id.String()
 }

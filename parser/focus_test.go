@@ -3,8 +3,8 @@ package parser_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/ident"
 	. "git.sr.ht/~ionous/iffy/parser"
+	"git.sr.ht/~ionous/iffy/parser/ident"
 	"github.com/ionous/errutil"
 	"github.com/ionous/sliceOf"
 )

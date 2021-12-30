@@ -1,7 +1,7 @@
 package parser_test
 
 import (
-	"git.sr.ht/~ionous/iffy/ident"
+	"git.sr.ht/~ionous/iffy/parser/ident"
 	"github.com/ionous/sliceOf"
 )
 

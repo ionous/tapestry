@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/ident"
 	. "git.sr.ht/~ionous/iffy/parser"
+	"git.sr.ht/~ionous/iffy/parser/ident"
 	"github.com/ionous/errutil"
 	"github.com/ionous/inflect"
 	"github.com/ionous/sliceOf"
@@ -20,7 +20,7 @@ type MyObject struct {
 }
 
 func (m *MyObject) String() string {
-	return m.Id.Name
+	return m.Id.String()
 }
 
 type MyBounds []*MyObject

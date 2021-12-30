@@ -1,14 +1,10 @@
 package internal
 
 import (
-	"database/sql"
-
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/ident"
 	"git.sr.ht/~ionous/iffy/parser"
+	"git.sr.ht/~ionous/iffy/parser/ident"
 	"git.sr.ht/~ionous/iffy/qna"
 	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
 
@@ -16,21 +12,15 @@ import (
 // this is VERY rudimentary.
 type Playtime struct {
 	*qna.Runner
-	hasName  *sql.Stmt
 	player   ident.Id
 	location string
 }
 
-func NewPlaytime(db *sql.DB, player, startWhere string) *Playtime {
-	var ps tables.Prep
+func NewPlaytime(run *qna.Runner, player, startWhere string) *Playtime {
 	return &Playtime{
-		Runner:   qna.NewRuntime(db, iffy.AllSignatures),
+		Runner:   run,
 		location: startWhere,
 		player:   ident.IdOf(player),
-		hasName: ps.Prep(db,
-			`select 1 
-				from mdl_name
-				where noun= ?1 and name = ?2`),
 	}
 }
 
@@ -70,11 +60,10 @@ func (pt *Playtime) GetObjectBounds(obj ident.Id) (ret parser.Bounds, err error)
 }
 
 func (pt *Playtime) HasName(noun, name string) (ret bool) {
-	switch e := pt.hasName.QueryRow(noun, name).Scan(&ret); e {
-	default:
+	if ok, e := pt.NounIsNamed(noun, name); e != nil {
 		panic(e)
-	case nil, sql.ErrNoRows:
-		// use scanned result
+	} else {
+		ret = ok
 	}
 	return
 }

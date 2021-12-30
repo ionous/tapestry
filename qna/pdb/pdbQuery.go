@@ -17,11 +17,13 @@ type Query struct {
 	domainActivation,
 	domainScope,
 	domainDelete,
+	checks,
 	fieldsOf,
 	kindOfAncestors,
 	nounInfo,
 	nounName,
 	nounValue,
+	nounIsNamed,
 	nounsByKind,
 	patternOf,
 	pluralToSingular,
@@ -81,6 +83,31 @@ func (q *Query) ActivateDomain(name string) (ret string, err error) {
 	return
 }
 
+type CheckData struct {
+	Name   string
+	Domain string
+	Aff    affine.Affinity
+	Prog   []byte
+	Value  []byte
+}
+
+// read all the matching tests from the db.
+func (q *Query) ReadChecks(actuallyJustThisOne string) (ret []CheckData, err error) {
+	if len(actuallyJustThisOne) > 0 {
+		actuallyJustThisOne += ";"
+	}
+	if rows, e := q.checks.Query(); e != nil {
+		err = e
+	} else {
+		var check CheckData
+		err = tables.ScanAll(rows, func() (err error) {
+			ret = append(ret, check)
+			return
+		}, &check.Name, &check.Domain, &check.Value, &check.Aff, &check.Prog)
+	}
+	return
+}
+
 type FieldData struct {
 	Name     string
 	Affinity affine.Affinity
@@ -120,6 +147,10 @@ type NounInfo struct {
 
 func (n *NounInfo) IsValid() bool {
 	return len(n.Id) != 0
+}
+
+func (q *Query) NounIsNamed(id, name string) (ret bool, err error) {
+	return scanOne(q.nounIsNamed, id, name)
 }
 
 // return the best "short name" for a noun ( or blank if the noun isnt known or isnt in scope )
@@ -203,11 +234,37 @@ func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
 	return
 }
 
-func NewQueries(db *sql.DB) (ret *Query, err error) {
+func (q *Query) ResetSavedData() error {
+	return resetSavedData(q.db)
+}
+func resetSavedData(db *sql.DB) (err error) {
+	_, err = db.Exec(`delete from run_domain; delete from run_pair`)
+	return
+}
+
+func NewQueries(db *sql.DB, reset bool) (ret *Query, err error) {
+	if e := tables.CreateRun(db); e != nil {
+		err = e
+	} else if e := resetSavedData(db); e != nil {
+		err = e
+	} else {
+		ret, err = newQueries(db)
+	}
+	return
+}
+
+func newQueries(db *sql.DB) (ret *Query, err error) {
 	var ps tables.Prep
 	q := &Query{
 		db:         db,
 		activation: 1,
+		checks: ps.Prep(db,
+			`select mc.name, md.domain, mc.value, mc.affinity, mc.prog
+			from mdl_check mc
+			join mdl_domain md
+				on (mc.domain=md.rowid) 
+			order by mc.domain, mc.name`,
+		),
 		domainActivation: ps.Prep(db,
 			// build a table of nxn domains indicating "wants" active and "was" active.
 			// if activating the first domain activates the second, "want" is set;
@@ -280,6 +337,15 @@ func NewQueries(db *sql.DB) (ret *Query, err error) {
 			where rank >= 0 and my.name = ?1
 			order by rank
 			limit 1`,
+		),
+		// does a noun have some specific name?
+		nounIsNamed: ps.Prep(db,
+			`select 1
+			from mdl_name my
+			join noun_scope ns
+				using (noun)
+			where ns.name=?1
+			and my.name=?2`,
 		),
 		// given the fullname of a noun, find the best short name
 		nounName: ps.Prep(db,

@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"git.sr.ht/~ionous/iffy/ident"
+	"git.sr.ht/~ionous/iffy/parser/ident"
 )
 
 type Context interface {

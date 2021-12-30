@@ -10,8 +10,11 @@ import (
 	"path/filepath"
 	"strings"
 
+	"git.sr.ht/~ionous/iffy"
 	play "git.sr.ht/~ionous/iffy/cmd/play/internal"
 	"git.sr.ht/~ionous/iffy/dl/debug"
+	"git.sr.ht/~ionous/iffy/qna"
+	"git.sr.ht/~ionous/iffy/qna/pdb"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -45,13 +48,14 @@ func playGame(inFile, testString string) (ret int, err error) {
 	} else {
 		defer db.Close()
 		// fix: some sort of reset flag; but also: how to rejoin properly?
-		tables.Must(db, `delete from run_domain; delete from run_pair`)
-		if e := tables.CreateRun(db); e != nil {
+		if qdb, e := pdb.NewQueries(db, true); e != nil {
 			err = e
 		} else if grammar, e := play.MakeGrammar(db); e != nil {
 			err = e
 		} else {
-			run := play.NewPlaytime(db, "player", "kitchen")
+			opt := qna.NewOptions()
+			rx := qna.NewRuntimeOptions(qdb, opt, iffy.AllSignatures)
+			run := play.NewPlaytime(rx, "player", "kitchen")
 			if _, e := run.ActivateDomain("entire_game"); e != nil {
 				err = e
 			} else {
