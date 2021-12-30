@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	play "git.sr.ht/~ionous/iffy/cmd/play/internal"
+	"git.sr.ht/~ionous/iffy/dl/debug"
 	"git.sr.ht/~ionous/iffy/tables"
 	"github.com/ionous/errutil"
 )
@@ -22,6 +23,8 @@ func main() {
 	flag.StringVar(&testString, "test", "", "input test string")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
+	debug.LogLevel = debug.LoggingLevel{debug.LoggingLevel_Warning}
+
 	if cnt, e := playGame(inFile, testString); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
@@ -41,12 +44,14 @@ func playGame(inFile, testString string) (ret int, err error) {
 		err = errutil.New("couldn't create output file", inFile, e)
 	} else {
 		defer db.Close()
+		// fix: some sort of reset flag; but also: how to rejoin properly?
+		tables.Must(db, `delete from run_domain; delete from run_pair`)
 		if e := tables.CreateRun(db); e != nil {
 			err = e
 		} else if grammar, e := play.MakeGrammar(db); e != nil {
 			err = e
 		} else {
-			run := play.NewPlaytime(db, "#entire_game::player", "#entire_game::kitchen")
+			run := play.NewPlaytime(db, "player", "kitchen")
 			if _, e := run.ActivateDomain("entire_game"); e != nil {
 				err = e
 			} else {

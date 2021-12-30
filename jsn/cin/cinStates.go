@@ -56,8 +56,8 @@ func (b *Decoder) Decode(dst jsn.Marshalee, msg json.RawMessage) error {
 }
 
 func Decode(dst jsn.Marshalee, msg json.RawMessage, reg Signatures) error {
-	dec := xDecoder{reg: reg, Machine: chart.MakeDecoder()}
-	return dec.decode(dst, msg)
+	dec := NewDecoder(reg)
+	return dec.Decode(dst, msg)
 }
 
 func (dec *xDecoder) decode(dst jsn.Marshalee, msg json.RawMessage) error {

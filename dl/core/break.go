@@ -11,6 +11,8 @@ func (e DoInterrupt) Error() string {
 	return "loop interrupted"
 }
 
+func (e DoInterrupt) NoPanic() {}
+
 func (*Break) Execute(rt.Runtime) error {
 	return DoInterrupt{KeepGoing: false}
 }
