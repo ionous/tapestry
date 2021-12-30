@@ -37,15 +37,16 @@ func (op *Join) GetText(run rt.Runtime) (ret g.Value, err error) {
 	} else {
 		var buf bytes.Buffer
 		sep := sep.String()
-		for _, txt := range op.Parts {
-			if str, e := safe.GetText(run, txt); e != nil {
+		for _, part := range op.Parts {
+			if txt, e := safe.GetText(run, part); e != nil {
 				err = cmdErrorCtx(op, "Part", e)
 				break
 			} else {
 				if buf.Len() > 0 {
 					buf.WriteString(sep)
 				}
-				buf.WriteString(str.String())
+				str := txt.String()
+				buf.WriteString(str)
 			}
 		}
 		if err == nil {
@@ -55,27 +56,3 @@ func (op *Join) GetText(run rt.Runtime) (ret g.Value, err error) {
 	}
 	return
 }
-
-// if sep, e := safe.GetOptionalText(run, op.Sep, ""); e != nil {
-// 	err = e
-// } else if it, e := safe.GetTextList(run, op.Parts); e != nil {
-// 	err = e
-// } else {
-// 	var buf bytes.Buffer
-// 	for it.HasNext() {
-// 		var txt string
-// 		if e := it.GetNext(&txt); e != nil {
-// 			err = e
-// 			break
-// 		} else {
-// 			if buf.Len() > 0 {
-// 				buf.WriteString(sep)
-// 			}
-// 			buf.WriteString(txt)
-// 		}
-// 	}
-// 	if err == nil {
-// 		ret = buf.String()
-// 	}
-// }
-// return
