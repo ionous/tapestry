@@ -109,6 +109,8 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 			// b) "trying" doesnt know the affinity of the value at the time of the call.
 			if len(aff) == 0 && v.Affinity() == affine.Text {
 				safe.HackTillTemplatesCanEvaluatePatternTypes = v
+			} else {
+				safe.HackTillTemplatesCanEvaluatePatternTypes = nil
 			}
 		}
 	}
