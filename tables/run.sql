@@ -36,7 +36,7 @@ join mdl_noun mn
 /* for finding relatives and reciprocals: returns relName, nounName, otherName */
 create view if not exists
 rp_names as
-select mk.kind as relName, one.noun as oneName, other.noun as otherName
+select rp.domain, mk.kind as relName, one.noun as oneName, other.noun as otherName
 from run_pair rp
 join mdl_kind mk
 	on (mk.rowid = rp.relKind)

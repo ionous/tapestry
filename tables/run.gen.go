@@ -47,7 +47,7 @@ func runTemplate() string {
 		"/* for finding relatives and reciprocals: returns relName, nounName, otherName */\n" +
 		"create view if not exists\n" +
 		"rp_names as\n" +
-		"select mk.kind as relName, one.noun as oneName, other.noun as otherName\n" +
+		"select rp.domain, mk.kind as relName, one.noun as oneName, other.noun as otherName\n" +
 		"from run_pair rp\n" +
 		"join mdl_kind mk\n" +
 		"\ton (mk.rowid = rp.relKind)\n" +
