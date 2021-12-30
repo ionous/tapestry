@@ -36,7 +36,7 @@ type Value interface {
 	// panics if this isn't a slice.
 	Index(int) Value
 	// the number of elements in the value.
-	// panics if this isn't a slice.
+	// panics if this cant have a length: isnt a slice or a string.
 	Len() int
 	// return a value representing a field inside this record.
 	// if the field holds a record or a slice, the returned value shares its memory with the named field.
