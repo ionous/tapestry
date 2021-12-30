@@ -56,21 +56,21 @@ func (q *Query) ActivateDomain(name string) (ret string, err error) {
 	} else {
 		// register the new scope(s)
 		act := q.activation + 1
-		if _, e := q.domainActivation.Exec(name, act); e != nil {
+		if res, e := q.domainActivation.Exec(name, act); e != nil {
 			err = e
-		} else {
+		} else if cnt, e := res.RowsAffected(); e != nil {
+			err = e
+		} else if cnt == 0 {
+			err = errutil.New("failed to activate domain", name)
+		} else if _, e := q.domainDelete.Exec(); e != nil {
 			// optional, delete pairs of nouns that fell out of scope
 			// alt: join run_pair requests with domain_activate
 			// ( would mean that "relate changes" is probably doing more work clearing old relations )
-			if _, e := q.domainDelete.Exec(); e != nil {
-				err = e
-			} else {
-				// add pairs that were just activated.
-				if _, e := q.relateChanges.Exec(name, act); e != nil {
-					err = e
-				}
-			}
+			err = e
+		} else if _, e := q.relateChanges.Exec(name, act); e != nil {
+			err = e // add pairs that were just activated.
 		}
+		// so we can rollback on any error.
 		if err == nil {
 			q.domain, q.activation, ret = name, act, q.domain
 			err = tx.Commit()
@@ -193,7 +193,13 @@ func (q *Query) RelativesOf(rel, id string) ([]string, error) {
 }
 
 func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
-	_, err = q.relateNames.Exec(q.domain, rel, noun, otherNoun)
+	if res, e := q.relateNames.Exec(q.domain, rel, noun, otherNoun); e != nil {
+		err = e
+	} else if rows, e := res.RowsAffected(); e != nil {
+		err = e
+	} else if rows == 0 {
+		err = errutil.New("nothing related for", q.domain, rel, noun, otherNoun)
+	}
 	return
 }
 
