@@ -17,6 +17,30 @@ import (
 // CheckAll tests stored in the passed db.
 // It logs the results of running the tests, and only returns error on critical errors.
 func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signatures []map[uint64]interface{}) (ret int, err error) {
+	if tests, e := readTests(db, actuallyJustThisOne, signatures); e != nil {
+		err = e
+	} else if len(tests) == 0 {
+		err = errutil.New("no matching checks found")
+	} else {
+		for _, t := range tests {
+			// fix? its currently necessary to activate a global domain, rather than jump straight into the check domain.
+			// something about pair activation goes a bit wonky: multiple pairs can become active at once.
+			tables.Must(db, `delete from run_domain; delete from run_pair`)
+			run := NewRuntimeOptions(db, options, iffy.AllSignatures)
+			if _, e := run.ActivateDomain("entire_game"); e != nil {
+				err = e
+			} else {
+				if e := t.RunTest(run); e != nil {
+					err = errutil.Append(err, e)
+				}
+				ret++
+			}
+		}
+	}
+	return
+}
+
+func readTests(db *sql.DB, actuallyJustThisOne string, signatures []map[uint64]interface{}) (ret []CheckOutput, err error) {
 	var name, domain string
 	var aff affine.Affinity
 	var prog []byte
@@ -27,8 +51,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 	}
 	// read all the matching tests from the db.
 	// ( cant dynamically query them b/c it interferes with db writes; ex. ActivateDomain )
-	var tests []CheckOutput
-	if e := tables.QueryAll(db,
+	err = tables.QueryAll(db,
 		`select mc.name, md.domain, mc.value, mc.affinity, mc.prog
 		from mdl_check mc
 		join mdl_domain md
@@ -44,30 +67,15 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 				} else if l, ok := v.(*literal.TextValue); !ok {
 					err = errutil.New("can only handle text values right now")
 				} else {
-					tests = append(tests, CheckOutput{
+					ret = append(ret, CheckOutput{
 						Name:   name,
+						Domain: domain,
 						Expect: l.String(),
 						Test:   act,
 					})
 				}
 			}
 			return
-		}, &name, &domain, &value, &aff, &prog); e != nil {
-		err = errutil.New("query error", e)
-	} else if len(tests) == 0 {
-		err = errutil.New("no matching tests found")
-	} else {
-		for _, t := range tests {
-			run := NewRuntimeOptions(db, options, iffy.AllSignatures)
-			tables.Must(db, `delete from run_domain; delete from run_pair`)
-			//
-			if _, e := run.ActivateDomain(domain); e != nil {
-				err = errutil.Append(err, e)
-			} else if e := t.RunTest(run); e != nil {
-				err = errutil.Append(err, e)
-			}
-			ret++
-		}
-	}
+		}, &name, &domain, &value, &aff, &prog)
 	return
 }

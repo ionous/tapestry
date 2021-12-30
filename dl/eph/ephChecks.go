@@ -35,23 +35,32 @@ func (c *Catalog) WriteChecks(w Writer) (err error) {
 	return
 }
 
-// uses directive phase just to be near the end somewhere...
-func (op *EphChecks) Phase() Phase { return DirectivePhase }
+// ensures that a domain exists for the named check
+func (op *EphChecks) Phase() Phase { return DomainPhase }
 
 func (op *EphChecks) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	// writes an expectation;
-	// not much to verify right now.
+	// fix. todo: this isnt very well thought out right now --
+	// what if a check is part of a story scene? shouldnt it have access to those objects?
+	// if checks always establish their own domain, why do they have a duplicate name?
+	// there are some checks that have their own scenes, some that have expressions to run, some that have things to check.
+	// and others that have just one of those things. ( are there expectations that can simply verify the existence of objects in a model? )
+	// etc.
 	if name, ok := UniformString(op.Name); !ok {
 		err = InvalidString(op.Name)
+	} else if d, e := c.EnsureDomain(name, at); e != nil {
+		err = e
 	} else {
-		check := d.EnsureCheck(name, at)
-		if check.domain != d {
-			err = errutil.New("can't extend check %q from another domain", name)
-		} else if e := check.setExpectation(op.Expect); e != nil {
-			err = e
-		} else if e := check.setProg(op.Exe); e != nil {
-			err = e
-		}
+		// uses directive phase just to be near the end somewhere...
+		err = d.AddEphemera(EphAt{at, PhaseFunction{DirectivePhase,
+			func(c *Catalog, d *Domain, at string) (err error) {
+				check := d.EnsureCheck(name, at)
+				if e := check.setExpectation(op.Expect); e != nil {
+					err = e
+				} else if e := check.setProg(op.Exe); e != nil {
+					err = e
+				}
+				return
+			}}})
 	}
 	return
 }
