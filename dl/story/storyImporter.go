@@ -6,15 +6,13 @@ import (
 	"git.sr.ht/~ionous/iffy/jsn/chart"
 	"git.sr.ht/~ionous/iffy/rt"
 	"github.com/ionous/errutil"
-
-	"git.sr.ht/~ionous/iffy/ident"
 )
 
 // Importer helps read story specific json.
 type Importer struct {
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime       map[string]bool
-	autoCounter   ident.Counters
+	autoCounter   Counters
 	entireGame    string
 	env           StoryEnv
 	activityDepth int
@@ -32,7 +30,7 @@ func NewImporter(writer WriterFun, marshal MarshalFun) *Importer {
 		writer:      writer,
 		Marshal:     marshal,
 		oneTime:     make(map[string]bool),
-		autoCounter: make(ident.Counters),
+		autoCounter: make(Counters),
 	}
 }
 
