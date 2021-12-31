@@ -10,16 +10,16 @@ import (
 	"path/filepath"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy"
-	play "git.sr.ht/~ionous/iffy/cmd/play/internal"
-	"git.sr.ht/~ionous/iffy/dl/debug"
-	"git.sr.ht/~ionous/iffy/qna"
-	"git.sr.ht/~ionous/iffy/qna/qdb"
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry"
+	play "git.sr.ht/~ionous/tapestry/cmd/play/internal"
+	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 
-// go run play.go -in  /Users/ionous/Documents/Iffy/scratch/shared/play.db
+// go run play.go -in  /Users/ionous/Documents/tapestry/scratch/shared/play.db
 func main() {
 	var inFile, testString string
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
@@ -54,7 +54,7 @@ func playGame(inFile, testString string) (ret int, err error) {
 			err = e
 		} else {
 			opt := qna.NewOptions()
-			rx := qna.NewRuntimeOptions(qdb, opt, iffy.AllSignatures)
+			rx := qna.NewRuntimeOptions(qdb, opt, tapestry.AllSignatures)
 			run := play.NewPlaytime(rx, "player", "kitchen")
 			if _, e := run.ActivateDomain("entire_game"); e != nil {
 				err = e

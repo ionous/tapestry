@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/web"
+	"git.sr.ht/~ionous/tapestry/web"
 )
 
 // Compose starts the composer server, this function doesnt return.

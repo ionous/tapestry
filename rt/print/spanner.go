@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"unicode"
 
-	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 // Spanner implements ChunkWriter, buffering output with spaces.

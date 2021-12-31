@@ -1,9 +1,9 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/safe"
-	"git.sr.ht/~ionous/iffy/rt/scope"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 )
 
 func (op *ChooseValue) Execute(run rt.Runtime) (err error) {

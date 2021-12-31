@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 )
 
 type ModelWriterFun func(q string, args ...interface{}) error

@@ -1,9 +1,9 @@
 package safe
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/meta"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 )
 
 // safety for built in options means a panic if the option doesnt exist

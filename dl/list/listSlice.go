@@ -1,10 +1,10 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *ListSlice) GetNumList(run rt.Runtime) (ret g.Value, err error) {

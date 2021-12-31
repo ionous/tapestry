@@ -3,7 +3,7 @@ package generic
 import (
 	"sort"
 
-	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/tapestry/affine"
 )
 
 // pairs of aspect and traits so we can move from one to the other.

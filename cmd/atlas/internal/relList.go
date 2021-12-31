@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"io"
 
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 func listOfRelations(w io.Writer, db *sql.DB) (err error) {

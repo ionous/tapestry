@@ -1,7 +1,7 @@
 // allTypes.js
 'use strict';
-const fs = require('fs'); // filesystem for loading iffy language file
-const vm = require('vm'); // virtual machine for parsing iffy language file
+const fs = require('fs'); // filesystem for loading if language file
+const vm = require('vm'); // virtual machine for parsing if language file
 const Make = require('./directives.js'); // composer directives
 const TagParser = require('./tags.js');
 

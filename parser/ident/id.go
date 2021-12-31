@@ -1,7 +1,7 @@
 package ident
 
 import (
-	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/tapestry/lang"
 )
 
 type Id string

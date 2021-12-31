@@ -3,12 +3,12 @@ package core
 import (
 	"bytes"
 
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/print"
-	"git.sr.ht/~ionous/iffy/rt/safe"
-	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/print"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
 	"github.com/ionous/errutil"
 )
 

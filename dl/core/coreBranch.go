@@ -1,7 +1,7 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // Brancher connects else and else-if clauses.

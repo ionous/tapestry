@@ -1,7 +1,7 @@
 package rel
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"github.com/ionous/errutil"
 )
 

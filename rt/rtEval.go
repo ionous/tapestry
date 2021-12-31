@@ -1,8 +1,8 @@
 package rt
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/tapestry/affine"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // Execute runs a bit of code that has no return value.

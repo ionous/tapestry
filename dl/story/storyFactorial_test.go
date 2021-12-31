@@ -3,10 +3,10 @@ package story_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/test/debug"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/test/debug"
 	"github.com/kr/pretty"
 )
 

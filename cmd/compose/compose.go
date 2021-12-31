@@ -4,18 +4,18 @@ import (
 	"flag"
 	"go/build"
 
-	"git.sr.ht/~ionous/iffy/composer"
-	"git.sr.ht/~ionous/iffy/web/support"
+	"git.sr.ht/~ionous/tapestry/composer"
+	"git.sr.ht/~ionous/tapestry/web/support"
 )
 
-// ex. go run compose.go -open -dir /Users/ionous/Documents/Iffy
+// ex. go run compose.go -open -dir /Users/ionous/Documents/tapestry
 // the specified directory needs two sub-directories:
 // 1. "stories" - containing .if files
 // 2. "ifspec"  - containing .ifspec files
 func main() {
 	var dir string
 	var open bool
-	flag.StringVar(&dir, "dir", "", "directory for processing iffy files.")
+	flag.StringVar(&dir, "dir", "", "directory for processing if files.")
 	flag.BoolVar(&open, "open", false, "open a new browser window.")
 	flag.Parse()
 	//

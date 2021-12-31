@@ -11,11 +11,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn/cout"
-	"git.sr.ht/~ionous/iffy/jsn/din"
-	"git.sr.ht/~ionous/iffy/jsn/dout"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/jsn/din"
+	"git.sr.ht/~ionous/tapestry/jsn/dout"
 	"github.com/ionous/errutil"
 )
 
@@ -91,7 +91,7 @@ func compact(inDetails, outCompact string) (err error) {
 	var dst story.Story
 	if b, e := readOne(inDetails); e != nil {
 		err = e
-	} else if e := din.Decode(&dst, iffy.Registry(), b); e != nil {
+	} else if e := din.Decode(&dst, tapestry.Registry(), b); e != nil {
 		err = e
 	} else if data, e := cout.Encode(&dst, story.CompactEncoder); e != nil {
 		err = e
@@ -105,7 +105,7 @@ func expand(inCompact, outDetails string) (err error) {
 	var dst story.Story
 	if b, e := readOne(inCompact); e != nil {
 		err = e
-	} else if e := story.Decode(&dst, b, iffy.AllSignatures); e != nil {
+	} else if e := story.Decode(&dst, b, tapestry.AllSignatures); e != nil {
 		err = e
 	} else if data, e := dout.Encode(&dst); e != nil {
 		err = e

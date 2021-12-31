@@ -1,17 +1,17 @@
-package iffy
+package tapestry
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/debug"
-	"git.sr.ht/~ionous/iffy/dl/grammar"
-	"git.sr.ht/~ionous/iffy/dl/list"
-	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/dl/reader"
-	"git.sr.ht/~ionous/iffy/dl/rel"
-	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/reader"
+	"git.sr.ht/~ionous/tapestry/dl/rel"
+	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 
 	r "reflect"

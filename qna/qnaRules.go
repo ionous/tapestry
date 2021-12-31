@@ -1,9 +1,9 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 

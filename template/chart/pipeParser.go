@@ -1,7 +1,7 @@
 package chart
 
 import (
-	"git.sr.ht/~ionous/iffy/template/postfix"
+	"git.sr.ht/~ionous/tapestry/template/postfix"
 	"github.com/ionous/errutil"
 )
 

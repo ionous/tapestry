@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 type Pairing struct {

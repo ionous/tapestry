@@ -1,10 +1,10 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
 // transforms "story.Determine" into the "core.CallPattern" command.

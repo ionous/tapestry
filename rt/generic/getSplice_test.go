@@ -3,8 +3,8 @@ package generic_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/affine"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/tapestry/affine"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 func TestSplices(t *testing.T) {

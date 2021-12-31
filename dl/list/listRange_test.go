@@ -3,8 +3,8 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/list"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/kr/pretty"
 )
 

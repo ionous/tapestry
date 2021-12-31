@@ -5,16 +5,16 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/rel"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn/cout"
-	"git.sr.ht/~ionous/iffy/jsn/din"
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/test/debug"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/rel"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/jsn/din"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/test/debug"
 
-	"git.sr.ht/~ionous/iffy/jsn/dout"
+	"git.sr.ht/~ionous/tapestry/jsn/dout"
 	"github.com/kr/pretty"
 )
 
@@ -30,7 +30,7 @@ func TestDetailsEncode(t *testing.T) {
 
 func TestDetailsDecode(t *testing.T) {
 	var dst story.Story
-	if e := din.Decode(&dst, iffy.Registry(), []byte(det)); e != nil {
+	if e := din.Decode(&dst, tapestry.Registry(), []byte(det)); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
 		pretty.Print(dst)
@@ -48,7 +48,7 @@ func TestCompactEncoder(t *testing.T) {
 
 func TestCompactDecode(t *testing.T) {
 	var dst story.Story
-	if e := story.Decode(&dst, []byte(com), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&dst, []byte(com), tapestry.AllSignatures); e != nil {
 		pretty.Println(dst)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
@@ -74,7 +74,7 @@ func TestAnonymousSwap(t *testing.T) {
 	}
 	//
 	var have story.EventBlock
-	if e := story.Decode(&have, []byte(com), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(com), tapestry.AllSignatures); e != nil {
 		pretty.Println(have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
@@ -100,7 +100,7 @@ func TestAnonymousOptional(t *testing.T) {
 	}}
 	for i, in := range inputs {
 		var have story.NounRelation
-		if e := story.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+		if e := story.Decode(&have, []byte(in), tapestry.AllSignatures); e != nil {
 			pretty.Println("test", i, "got:", have)
 			t.Fatal(e)
 		} else if diff := pretty.Diff(&wants[i], &have); len(diff) != 0 {
@@ -140,7 +140,7 @@ func TestCompactNamedNouns(t *testing.T) {
 			t.Fatal("writing out", i, "want:", want, "made:", have)
 		} else {
 			var dst story.NamedNoun
-			if e := story.Decode(&dst, []byte(want), iffy.AllSignatures); e != nil {
+			if e := story.Decode(&dst, []byte(want), tapestry.AllSignatures); e != nil {
 				t.Fatal(e)
 			} else if diff := pretty.Diff(dst, n); len(diff) != 0 {
 				t.Fatal(diff)
@@ -164,7 +164,7 @@ func TestExpandedSwap(t *testing.T) {
 		Value:  &story.TextList{Str: story.TextList_List},
 	}
 	var have story.ExtType
-	if e := story.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(in), tapestry.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
@@ -187,7 +187,7 @@ func TestVarAsBool(t *testing.T) {
 		},
 	}}
 	var have core.AllTrue
-	if e := story.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(in), tapestry.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
@@ -202,7 +202,7 @@ func TestMissingSlot(t *testing.T) {
 		core.T("one"), core.T("two"), core.T("three"),
 	}}
 	var have core.Join
-	if e := story.Decode(&have, []byte(in), iffy.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(in), tapestry.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {

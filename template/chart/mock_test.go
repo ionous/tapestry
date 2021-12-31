@@ -3,8 +3,8 @@ package chart
 import (
 	"unicode"
 
-	"git.sr.ht/~ionous/iffy/template/postfix"
-	"git.sr.ht/~ionous/iffy/template/types"
+	"git.sr.ht/~ionous/tapestry/template/postfix"
+	"git.sr.ht/~ionous/tapestry/template/types"
 )
 
 // EmptyFactory creates parsers which match empty test.

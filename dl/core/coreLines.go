@@ -3,7 +3,7 @@ package core
 import (
 	"io"
 
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 func (op *Blankline) Execute(run rt.Runtime) (_ error) {

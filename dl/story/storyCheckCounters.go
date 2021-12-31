@@ -1,9 +1,9 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn/chart"
 )
 
 func SearchForCounters(i jsn.Marshalee) (okay bool) {

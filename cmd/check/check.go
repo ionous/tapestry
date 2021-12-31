@@ -6,15 +6,15 @@ import (
 	"log"
 	"path/filepath"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/qna"
-	"git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/meta"
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 
-// ex. go run check.go -in /Users/ionous/Documents/Iffy/scratch/shared/play.db
+// ex. go run check.go -in /Users/ionous/Documents/tapestry/scratch/shared/play.db
 func main() {
 	var inFile, testName string
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
@@ -46,7 +46,7 @@ func checkFile(inFile, testName string, opt qna.Options) (ret int, err error) {
 		if e := tables.CreateRun(db); e != nil {
 			err = e
 		} else {
-			ret, err = qna.CheckAll(db, testName, opt, iffy.AllSignatures)
+			ret, err = qna.CheckAll(db, testName, opt, tapestry.AllSignatures)
 		}
 	}
 	return

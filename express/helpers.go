@@ -1,10 +1,10 @@
 package express
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Bool: b} }

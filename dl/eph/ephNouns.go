@@ -1,7 +1,7 @@
 package eph
 
 import (
-	"git.sr.ht/~ionous/iffy/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
 

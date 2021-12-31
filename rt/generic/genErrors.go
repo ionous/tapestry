@@ -1,7 +1,7 @@
 package generic
 
 import (
-	"git.sr.ht/~ionous/iffy/rt/meta"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"github.com/ionous/errutil"
 )
 

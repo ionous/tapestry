@@ -3,21 +3,21 @@ package story_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/test/debug"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/test/debug"
 
-	"git.sr.ht/~ionous/iffy/jsn/cout"
-	"git.sr.ht/~ionous/iffy/jsn/din"
+	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/jsn/din"
 )
 
 func TestImportStory(t *testing.T) {
 	var curr story.Story
-	if e := din.Decode(&curr, iffy.Registry(), []byte(debug.Blob)); e != nil {
+	if e := din.Decode(&curr, tapestry.Registry(), []byte(debug.Blob)); e != nil {
 		t.Fatal(e)
 	} else {
 		var els []eph.Ephemera

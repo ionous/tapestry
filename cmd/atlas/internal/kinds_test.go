@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"os"
 
-	"git.sr.ht/~ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/tapestry/test/testdb"
 )
 
 func ExampleKindData() {

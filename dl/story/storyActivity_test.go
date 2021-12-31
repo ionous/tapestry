@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/core"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/core"
 
-	"git.sr.ht/~ionous/iffy/jsn/din"
-	"git.sr.ht/~ionous/iffy/rt/print"
-	"git.sr.ht/~ionous/iffy/rt/safe"
-	"git.sr.ht/~ionous/iffy/rt/writer"
-	"git.sr.ht/~ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/tapestry/jsn/din"
+	"git.sr.ht/~ionous/tapestry/rt/print"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
+	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/kr/pretty"
 )
 
@@ -20,7 +20,7 @@ func TestStoryActivity(t *testing.T) {
 	var prog core.Activity
 	if b, e := json.Marshal(_pattern_activity); e != nil {
 		t.Fatal(e)
-	} else if e := din.Decode(&prog, iffy.Registry(), b); e != nil {
+	} else if e := din.Decode(&prog, tapestry.Registry(), b); e != nil {
 		t.Fatal(e)
 	} else {
 		var run testRuntime

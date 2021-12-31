@@ -1,4 +1,4 @@
-module git.sr.ht/~ionous/iffy
+module git.sr.ht/~ionous/tapestry
 
 go 1.16
 

@@ -1,8 +1,8 @@
 package chart
 
 import (
-	"git.sr.ht/~ionous/iffy/template/postfix"
-	"git.sr.ht/~ionous/iffy/template/types"
+	"git.sr.ht/~ionous/tapestry/template/postfix"
+	"git.sr.ht/~ionous/tapestry/template/types"
 )
 
 // CallParser reads a single function call and its arguments.

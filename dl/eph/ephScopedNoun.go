@@ -3,8 +3,8 @@ package eph
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"github.com/ionous/errutil"
 )
 

@@ -50,7 +50,7 @@ Vue.component('mk-composer', {
     onOpenedFile(file) {
       this.currentFile= file;
       const ext= ".if";
-      window.document.title= `${file.name.slice(0, -ext.length)} - Iffy Composer - ${file.path}`;
+      window.document.title= `${file.name.slice(0, -ext.length)} - Tapestry Composer - ${file.path}`;
     }
   },
   mounted() {

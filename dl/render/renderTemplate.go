@@ -1,9 +1,9 @@
 package render
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 // RunTest returns an error on failure.

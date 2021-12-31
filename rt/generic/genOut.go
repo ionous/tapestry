@@ -1,6 +1,6 @@
 package generic
 
-import "git.sr.ht/~ionous/iffy/affine"
+import "git.sr.ht/~ionous/tapestry/affine"
 
 // primarily for testing:
 // convert the contents of a bunch of records into a printable format.

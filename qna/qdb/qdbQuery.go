@@ -6,8 +6,8 @@ import (
 	"database/sql"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 

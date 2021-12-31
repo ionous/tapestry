@@ -1,7 +1,7 @@
 package generic
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/tapestry/affine"
 )
 
 // duplicate the passed slice of floats

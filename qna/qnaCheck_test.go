@@ -3,13 +3,13 @@ package qna_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/qna"
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/print"
-	"git.sr.ht/~ionous/iffy/rt/writer"
-	"git.sr.ht/~ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/print"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
+	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
 
 func TestCheck(t *testing.T) {

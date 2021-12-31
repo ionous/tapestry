@@ -3,7 +3,7 @@ package print
 import (
 	"bytes"
 
-	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 // Sep implements writer.Output, treating every Write as a new word.

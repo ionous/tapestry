@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/web"
+	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
 )
 

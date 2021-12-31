@@ -3,10 +3,10 @@ package core
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt"
 
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 type Parameterizer interface{ Pack() []rt.Arg }

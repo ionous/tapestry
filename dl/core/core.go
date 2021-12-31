@@ -1,8 +1,8 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"github.com/ionous/errutil"
 )
 

@@ -2,11 +2,11 @@
 package render
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 

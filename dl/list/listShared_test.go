@@ -3,10 +3,10 @@ package list_test
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/test/testpat"
-	"git.sr.ht/~ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/test/testpat"
+	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
 
 func newListTime(src []string, p testpat.Map) (ret rt.Runtime, vals *g.Record, err error) {

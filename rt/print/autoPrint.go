@@ -3,8 +3,8 @@ package print
 import (
 	"unicode"
 
-	"git.sr.ht/~ionous/iffy/rt/writer"
-	"git.sr.ht/~ionous/iffy/web/text"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
+	"git.sr.ht/~ionous/tapestry/web/text"
 )
 
 // NewAutoWriter accepts incoming text chunks and writes them to target writing newlines at the end of sentences.

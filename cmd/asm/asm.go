@@ -13,15 +13,15 @@ import (
 	"strconv"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/asm"
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/cout"
-	"git.sr.ht/~ionous/iffy/jsn/din"
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/asm"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/jsn/din"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 
@@ -30,7 +30,7 @@ const (
 	CompactExt  = ".if"
 )
 
-// ex. go run asm.go -in /Users/ionous/Documents/Iffy/stories/shared -out /Users/ionous/Documents/Iffy/scratch/shared/play.db
+// ex. go run asm.go -in /Users/ionous/Documents/tapestry/stories/shared -out /Users/ionous/Documents/tapestry/scratch/shared/play.db
 func main() {
 	var srcPath, outFile string
 	flag.StringVar(&srcPath, "in", "", "input file or directory name (json)")
@@ -188,13 +188,13 @@ func decodeStory(path string, b []byte) (ret *story.Story, err error) {
 	var curr story.Story
 	switch ext := filepath.Ext(path); ext {
 	case CompactExt:
-		if e := story.Decode(&curr, b, iffy.AllSignatures); e != nil {
+		if e := story.Decode(&curr, b, tapestry.AllSignatures); e != nil {
 			err = e
 		} else {
 			ret = &curr
 		}
 	case DetailedExt:
-		if e := din.Decode(&curr, iffy.Registry(), b); e != nil {
+		if e := din.Decode(&curr, tapestry.Registry(), b); e != nil {
 			err = e
 		} else {
 			ret = &curr

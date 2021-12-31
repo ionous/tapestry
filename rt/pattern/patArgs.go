@@ -3,10 +3,10 @@ package pattern
 import (
 	"strconv"
 
-	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 

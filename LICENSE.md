@@ -1,4 +1,4 @@
-Iffy ( aka. the ionous story engine ) 
+Tapestry ( aka. the ionous story engine ) 
 
 Copyright 2020 © Simon Travis ( the "Licensor" )
 

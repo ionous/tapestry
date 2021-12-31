@@ -5,8 +5,8 @@ import (
 )
 
 // Function element of an Expression.
-// Examples of function(s) are mathematical and boolean operators, if,else blocks, iffy commands, etc.
-// See package iffy/template/types for specific functions.
+// Examples of function(s) are mathematical and boolean operators, if-else blocks, commands, etc.
+// See package tapestry/template/types for specific functions.
 type Function interface {
 	// Arity the number of required function arguments;
 	// Should be a constant number for each function instance.

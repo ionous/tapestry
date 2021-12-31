@@ -1,9 +1,9 @@
 package eph
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
-	"git.sr.ht/~ionous/iffy/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
 

@@ -1,10 +1,10 @@
 package express
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // single dotted name supporting the printing of an object's name or

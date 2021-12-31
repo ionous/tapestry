@@ -3,9 +3,9 @@ package story_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"github.com/kr/pretty"
 )
 

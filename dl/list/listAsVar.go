@@ -1,7 +1,7 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/tapestry/affine"
 )
 
 // ListIterator defines a variable name

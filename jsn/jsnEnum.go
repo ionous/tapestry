@@ -1,6 +1,6 @@
 package jsn
 
-import "git.sr.ht/~ionous/iffy/dl/composer"
+import "git.sr.ht/~ionous/tapestry/dl/composer"
 
 // Enum wraps str-like values used by the ifspec code generator.
 // it alleviates some redundant code generation.

@@ -3,10 +3,10 @@ package internal
 import (
 	"database/sql"
 
-	"git.sr.ht/~ionous/iffy/dl/grammar"
-	"git.sr.ht/~ionous/iffy/jsn/cin"
-	"git.sr.ht/~ionous/iffy/parser"
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/parser"
+	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 // fix: domains: rebuild on domain changes, or:

@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn/din"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn/din"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/kr/pretty"
 )
 
@@ -85,7 +85,7 @@ func TestPatternRuleImport(t *testing.T) {
 	var prog story.PatternActions
 	if b, e := json.Marshal(_pattern_actions); e != nil {
 		t.Fatal(e)
-	} else if e := din.Decode(&prog, iffy.Registry(), b); e != nil {
+	} else if e := din.Decode(&prog, tapestry.Registry(), b); e != nil {
 		t.Fatal(e)
 	} else if e := prog.ImportPhrase(k); e != nil {
 		t.Fatal(e)

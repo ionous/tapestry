@@ -3,8 +3,8 @@ package core
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 // MaxLoopError provides both an error and a counter

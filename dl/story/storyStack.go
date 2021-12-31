@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn"
 )
 
 type BlockStack []jsn.Block

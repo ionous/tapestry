@@ -1,7 +1,7 @@
 package chart
 
 import (
-	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"github.com/ionous/errutil"
 )
 

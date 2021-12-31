@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	. "git.sr.ht/~ionous/iffy/parser"
-	"git.sr.ht/~ionous/iffy/parser/ident"
+	. "git.sr.ht/~ionous/tapestry/parser"
+	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"github.com/ionous/errutil"
 	"github.com/ionous/inflect"
 	"github.com/ionous/sliceOf"

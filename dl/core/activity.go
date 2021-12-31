@@ -1,8 +1,8 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *Activity) Empty() bool {

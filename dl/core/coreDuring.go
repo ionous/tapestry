@@ -1,11 +1,11 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/meta"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // GetBool returns the first matching bool evaluation.

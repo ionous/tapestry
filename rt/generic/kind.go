@@ -1,8 +1,8 @@
 package generic
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
 // we bake it down for faster, easier indexed access.

@@ -1,6 +1,6 @@
 package print
 
-import "git.sr.ht/~ionous/iffy/rt/writer"
+import "git.sr.ht/~ionous/tapestry/rt/writer"
 
 // Filter - sends incoming chunks to one of three functions: first, rest, or last.
 // a user of filter can alter those chunks before sending them onward somewhere else.

@@ -3,8 +3,8 @@ package chart
 import (
 	"strconv"
 
-	"git.sr.ht/~ionous/iffy/template/postfix"
-	"git.sr.ht/~ionous/iffy/template/types"
+	"git.sr.ht/~ionous/tapestry/template/postfix"
+	"git.sr.ht/~ionous/tapestry/template/types"
 	"github.com/ionous/errutil"
 )
 
@@ -75,11 +75,11 @@ func (p *NumParser) GetValue() (ret float64, err error) {
 }
 
 // initial state of digit parsing.
-// note: iffy doesn't support leading with just a "."
+// note: this doesn't support leading with just a "."
 func (p *NumParser) NewRune(r rune) (ret State) {
 	switch {
 	// in golang, leading +/- are unary operators;
-	// in iffy, they are considered optional parts decimal numbers.
+	// here, they are considered optional parts decimal numbers.
 	// note: strconv's base 10 parser doesnt handle leading signs.
 	// we therefore leave them out of our result, and just flag the negative ones.
 	case r == '-':
@@ -125,7 +125,7 @@ func (p *NumParser) NewRune(r rune) (ret State) {
 }
 
 // a string of numbers, possibly followed by a decimal or exponent separator.
-// note: golang numbers can end in a pure ".", iffy chooses not to allow that.
+// note: golang numbers can end in a pure ".", this does not allow that.
 func (p *NumParser) leadingDigit(r rune) (ret State) {
 	switch {
 	case isNumber(r):

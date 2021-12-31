@@ -3,7 +3,7 @@ package qdb
 import (
 	"database/sql"
 
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry/tables"
 )
 
 func scanOne(q *sql.Stmt, args ...interface{}) (ret bool, err error) {

@@ -2,8 +2,8 @@
 package literal
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"github.com/ionous/errutil"
 )
 

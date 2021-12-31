@@ -13,7 +13,7 @@ Modern engines provide great tools for the "continuous" parts of games, especial
 
 # Status
 
-Tapestry is a work in progress. Nothing is probably usable by other people yet. In the meantime, I'm committed to tracking tasks on [trello](https://trello.com/b/EEPnJ6ew/iffy), writing updates on the [tapestry wiki](https://man.sr.ht/~ionous/iffy/), and occasionally posting on twitter [@theionous](https://twitter.com/theionous).
+Tapestry is a work in progress. Nothing is probably usable by other people yet. In the meantime, I'm committed to tracking tasks on [trello](https://trello.com/b/EEPnJ6ew/tapestry), writing updates on the [tapestry wiki](https://man.sr.ht/~ionous/tapestry/), and occasionally posting on twitter [@theionous](https://twitter.com/theionous).
 
 The flow of story creation is:
 

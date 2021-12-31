@@ -1,11 +1,11 @@
 package testutil
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/meta"
-	"git.sr.ht/~ionous/iffy/rt/scope"
-	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
+	"git.sr.ht/~ionous/tapestry/rt/scope"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 type panicTime struct {

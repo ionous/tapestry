@@ -1,6 +1,6 @@
 package scope
 
-import g "git.sr.ht/~ionous/iffy/rt/generic"
+import g "git.sr.ht/~ionous/tapestry/rt/generic"
 
 type SingleValue struct {
 	name string

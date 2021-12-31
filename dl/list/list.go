@@ -1,9 +1,9 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/dl/composer"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
 )
 

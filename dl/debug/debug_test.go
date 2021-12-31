@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 )
 
 func TestLog(t *testing.T) {

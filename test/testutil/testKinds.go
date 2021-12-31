@@ -4,11 +4,11 @@ import (
 	"fmt"
 	r "reflect"
 
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/lang"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
-	"git.sr.ht/~ionous/iffy/test/tag"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/lang"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/test/tag"
 	"github.com/ionous/errutil"
 )
 

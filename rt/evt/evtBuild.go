@@ -1,8 +1,8 @@
 package evt
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/meta"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 )
 
 // 4 phases: capture, target, bubble, after

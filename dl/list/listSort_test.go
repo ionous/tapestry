@@ -3,11 +3,11 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/list"
-	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/safe"
-	"git.sr.ht/~ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/ionous/sliceOf"
 	"github.com/kr/pretty"
 )

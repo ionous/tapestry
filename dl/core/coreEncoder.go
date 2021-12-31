@@ -3,11 +3,11 @@ package core
 import (
 	"encoding/json"
 
-	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/chart"
-	"git.sr.ht/~ionous/iffy/jsn/cin"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 

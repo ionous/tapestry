@@ -1,8 +1,8 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/reader"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/reader"
 )
 
 // ensure that a valid counter exists

@@ -1,7 +1,7 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // A normal reduce would return a value, instead we accumulate into a variable

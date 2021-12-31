@@ -5,11 +5,11 @@ import (
 
 	"github.com/ionous/errutil"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/literal"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/qna/qdb"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // CheckAll tests stored in the passed db.
@@ -34,7 +34,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 				// fix? its currently necessary to activate a global domain, rather than jump straight into the check domain.
 				// something about pair activation goes a bit wonky: multiple pairs can become active at once.
 				qdb.ResetSavedData()
-				run := NewRuntimeOptions(qdb, options, iffy.AllSignatures)
+				run := NewRuntimeOptions(qdb, options, tapestry.AllSignatures)
 				if _, e := run.ActivateDomain("entire_game"); e != nil {
 					err = e
 				} else {

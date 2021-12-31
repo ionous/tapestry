@@ -1,9 +1,9 @@
 package rt
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/tapestry/affine"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 // Scope - establishes local variables.

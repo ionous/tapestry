@@ -3,8 +3,8 @@ package core
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )

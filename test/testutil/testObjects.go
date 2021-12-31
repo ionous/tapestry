@@ -3,7 +3,7 @@ package testutil
 import (
 	"sort"
 
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 type Objects map[string]*g.Record

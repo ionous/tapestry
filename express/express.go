@@ -4,16 +4,16 @@ import (
 	r "reflect"
 	"strconv"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/template"
-	"git.sr.ht/~ionous/iffy/template/postfix"
-	"git.sr.ht/~ionous/iffy/template/types"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/template"
+	"git.sr.ht/~ionous/tapestry/template/postfix"
+	"git.sr.ht/~ionous/tapestry/template/types"
 	"github.com/ionous/errutil"
 )
 
-// Express converts a postfix expression into iffy commands.
+// Express converts a postfix expression into commands.
 func Convert(xs template.Expression) (ret interface{}, err error) {
 	c := Converter{}
 	return c.Convert(xs)
@@ -241,7 +241,7 @@ func (c *Converter) buildSpan(arity int) (err error) {
 	return
 }
 
-// convert the passed postfix template function into iffy commands.
+// convert the passed postfix template function into commands.
 func (c *Converter) addFunction(fn postfix.Function) (err error) {
 	switch fn := fn.(type) {
 	case types.Quote:

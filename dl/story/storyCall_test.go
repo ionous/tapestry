@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 
-	"git.sr.ht/~ionous/iffy/jsn/din"
+	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"github.com/kr/pretty"
 )
 
@@ -23,7 +23,7 @@ func TestDetermineNum(t *testing.T) {
 	var rule story.Determine
 	if b, e := json.Marshal(factorialDetermine); e != nil {
 		t.Fatal(e)
-	} else if e := din.Decode(&rule, iffy.Registry(), b); e != nil {
+	} else if e := din.Decode(&rule, tapestry.Registry(), b); e != nil {
 		t.Fatal(e)
 	} else if ptr, e := rule.ImportStub(k); e != nil {
 		t.Fatal(e)

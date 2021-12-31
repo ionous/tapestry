@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn"
 )
 
 func Marshal(cmd jsn.Marshalee, customFlow CustomFlow) (ret string, err error) {

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	. "git.sr.ht/~ionous/iffy/parser"
+	. "git.sr.ht/~ionous/tapestry/parser"
 )
 
 func TestWord(t *testing.T) {

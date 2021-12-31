@@ -3,8 +3,8 @@
 'use strict';
 
 const Handlebars = require('handlebars'); // for templates
-const allTypes = require('./model.js'); // iffy language file
-const fs = require('fs'); // filesystem for loading iffy language file
+const allTypes = require('./model.js'); // if language file
+const fs = require('fs'); // filesystem for loading if language file
 const child_process = require('child_process');
 const path = require('path');
 const fnv1a = require('./fnv1a.js');
@@ -299,10 +299,10 @@ const locationOf = function(x) {
   } else {
     switch (x) {
       case "rt":
-        where = `git.sr.ht/~ionous/iffy/rt`;
+        where = `git.sr.ht/~ionous/tapestry/rt`;
         break;
       default:
-        where = `git.sr.ht/~ionous/iffy/dl/${x}`;
+        where = `git.sr.ht/~ionous/tapestry/dl/${x}`;
         break;
     }
   }
@@ -435,7 +435,7 @@ for (currentGroup in groups) {
     inc.add("composer");
   }
   if (marshal) {
-    inc.add("git.sr.ht/~ionous/iffy/jsn");
+    inc.add("git.sr.ht/~ionous/tapestry/jsn");
     inc.add("github.com/ionous/errutil");
   }
 

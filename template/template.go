@@ -1,8 +1,8 @@
 package template
 
 import (
-	"git.sr.ht/~ionous/iffy/template/chart"
-	"git.sr.ht/~ionous/iffy/template/postfix"
+	"git.sr.ht/~ionous/tapestry/template/chart"
+	"git.sr.ht/~ionous/tapestry/template/postfix"
 	"github.com/ionous/errutil"
 )
 

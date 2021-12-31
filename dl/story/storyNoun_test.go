@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/kr/pretty"
 )
 

@@ -1,7 +1,7 @@
 package grammar
 
 import (
-	"git.sr.ht/~ionous/iffy/parser"
+	"git.sr.ht/~ionous/tapestry/parser"
 )
 
 // GrammarMaker -

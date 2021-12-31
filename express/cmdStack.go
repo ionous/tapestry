@@ -6,7 +6,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// contains the results of converting postfix template functions to iffy commands.
+// contains the results of converting postfix template functions to commands.
 // the fields of the commands are filled by the time they get into this stack.
 type cmdStack struct {
 	els []r.Value

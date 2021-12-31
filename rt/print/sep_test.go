@@ -4,7 +4,7 @@ import (
 	"io"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 func TestPrintSep(t *testing.T) {

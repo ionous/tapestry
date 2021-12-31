@@ -1,8 +1,8 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 // these commands are transformed into other commands at import time.

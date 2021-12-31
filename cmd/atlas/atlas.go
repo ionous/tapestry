@@ -8,14 +8,14 @@ import (
 	"log"
 	"net/http"
 
-	. "git.sr.ht/~ionous/iffy/cmd/atlas/internal"
-	"git.sr.ht/~ionous/iffy/tables"
-	"git.sr.ht/~ionous/iffy/web"
-	"git.sr.ht/~ionous/iffy/web/support"
+	. "git.sr.ht/~ionous/tapestry/cmd/atlas/internal"
+	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/web"
+	"git.sr.ht/~ionous/tapestry/web/support"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// go run atlas.go -in /Users/ionous/Documents/Iffy/scratch/shared/play.db
+// go run atlas.go -in /Users/ionous/Documents/tapestry/scratch/shared/play.db
 func main() {
 	var fileName string
 	flag.StringVar(&fileName, "in", "", "input file name (sqlite3)")

@@ -3,8 +3,8 @@ package generic_test
 import (
 	"testing"
 
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/meta"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 )
 
 //

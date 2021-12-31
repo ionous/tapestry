@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/kr/pretty"
 )
 

@@ -3,7 +3,7 @@ package internal
 import (
 	"database/sql"
 
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 

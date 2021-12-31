@@ -2,7 +2,7 @@
 package rt
 
 import (
-	"git.sr.ht/~ionous/iffy/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn"
 )
 
 const Assignment_Type = "assignment"

@@ -1,14 +1,14 @@
 package debug
 
 import (
-  "git.sr.ht/~ionous/iffy/affine"
-  "git.sr.ht/~ionous/iffy/dl/core"
-  "git.sr.ht/~ionous/iffy/dl/literal"
-  "git.sr.ht/~ionous/iffy/jsn"
-  "git.sr.ht/~ionous/iffy/rt"
-  g "git.sr.ht/~ionous/iffy/rt/generic"
-  "git.sr.ht/~ionous/iffy/rt/safe"
-  "git.sr.ht/~ionous/iffy/test/testpat"
+  "git.sr.ht/~ionous/tapestry/affine"
+  "git.sr.ht/~ionous/tapestry/dl/core"
+  "git.sr.ht/~ionous/tapestry/dl/literal"
+  "git.sr.ht/~ionous/tapestry/jsn"
+  "git.sr.ht/~ionous/tapestry/rt"
+  g "git.sr.ht/~ionous/tapestry/rt/generic"
+  "git.sr.ht/~ionous/tapestry/rt/safe"
+  "git.sr.ht/~ionous/tapestry/test/testpat"
 )
 
 func SayIt(s string) rt.Execute {

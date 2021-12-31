@@ -9,11 +9,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn/cout"
-	"git.sr.ht/~ionous/iffy/jsn/din"
-	"git.sr.ht/~ionous/iffy/web"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/jsn/din"
+	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
 )
 
@@ -51,7 +51,7 @@ func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 				err = errutil.Append(err, e)
 			} else {
 				var dst story.Story
-				if e := din.Decode(&dst, iffy.Registry(), el.Story); e != nil {
+				if e := din.Decode(&dst, tapestry.Registry(), el.Story); e != nil {
 					err = e
 				} else if data, e := cout.Encode(&dst, story.CompactEncoder); e != nil {
 					err = errutil.Append(err, e)

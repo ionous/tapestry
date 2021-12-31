@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 // Parens buffers writer.Output, grouping a stream of writes.

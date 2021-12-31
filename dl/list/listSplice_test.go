@@ -3,7 +3,7 @@ package list_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/list"
 )
 
 func TestSplices(t *testing.T) {

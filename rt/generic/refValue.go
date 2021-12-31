@@ -1,8 +1,8 @@
 package generic
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
-	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"github.com/ionous/errutil"
 )
 

@@ -3,7 +3,7 @@ package scope
 import (
 	"testing"
 
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 func TestStack(t *testing.T) {

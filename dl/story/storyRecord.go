@@ -1,8 +1,8 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 

@@ -3,10 +3,10 @@ package internal
 import (
 	"log"
 
-	"git.sr.ht/~ionous/iffy/lang"
-	"git.sr.ht/~ionous/iffy/parser/ident"
-	"git.sr.ht/~ionous/iffy/rt/meta"
-	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/parser/ident"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 type Noun struct {

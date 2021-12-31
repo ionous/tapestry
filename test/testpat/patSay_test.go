@@ -3,9 +3,9 @@ package testpat_test
 import (
 	"fmt"
 
-	"git.sr.ht/~ionous/iffy/test/debug"
-	"git.sr.ht/~ionous/iffy/test/testpat"
-	"git.sr.ht/~ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/tapestry/test/debug"
+	"git.sr.ht/~ionous/tapestry/test/testpat"
+	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
 
 // ExampleSayMe converts numbers to text.

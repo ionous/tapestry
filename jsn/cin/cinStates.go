@@ -5,8 +5,8 @@ import (
 	"errors"
 	"unicode"
 
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"github.com/ionous/errutil"
 )
 

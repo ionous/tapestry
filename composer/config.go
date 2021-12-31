@@ -7,7 +7,7 @@ import (
 )
 
 // Config contains paths to the standalone console utils.
-// Rather than creating one big app, for now, iffy is split into a bunch of separate commands.
+// Rather than creating one big app, for now, tapestry is split into a bunch of separate commands.
 type Config struct {
 	Import   string
 	Assemble string
@@ -29,7 +29,7 @@ func (c *Config) PathTo(parts ...string) string {
 func DevConfig(base string) *Config {
 	bin := "bin"
 	var dir string // echo $TMPDIR
-	if temp, e := os.MkdirTemp("", "iffy"); e != nil {
+	if temp, e := os.MkdirTemp("", "tap"); e != nil {
 		log.Fatal(e)
 	} else {
 		dir = temp

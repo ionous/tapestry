@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"os"
 
-	"git.sr.ht/~ionous/iffy"
-	"git.sr.ht/~ionous/iffy/dl/story"
-	"git.sr.ht/~ionous/iffy/jsn/dout"
-	"git.sr.ht/~ionous/iffy/web"
+	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn/dout"
+	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
 )
 
@@ -45,7 +45,7 @@ func (d storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
 	var dst story.Story
 	if b, e := readOne(string(d)); e != nil {
 		err = e
-	} else if e := story.Decode(&dst, b, iffy.AllSignatures); e != nil {
+	} else if e := story.Decode(&dst, b, tapestry.AllSignatures); e != nil {
 		err = e
 	} else if data, e := dout.Encode(&dst); e != nil {
 		err = e

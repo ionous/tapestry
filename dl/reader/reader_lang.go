@@ -2,7 +2,7 @@
 package reader
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/composer"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
 )
 
 // Position Identifies the location of a specific command ( ex. from an .if file ).

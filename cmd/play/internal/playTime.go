@@ -1,10 +1,10 @@
 package internal
 
 import (
-	"git.sr.ht/~ionous/iffy/parser"
-	"git.sr.ht/~ionous/iffy/parser/ident"
-	"git.sr.ht/~ionous/iffy/qna"
-	"git.sr.ht/~ionous/iffy/rt"
+	"git.sr.ht/~ionous/tapestry/parser"
+	"git.sr.ht/~ionous/tapestry/parser/ident"
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 

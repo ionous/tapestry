@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/jsn"
-	"git.sr.ht/~ionous/iffy/jsn/chart"
-	"git.sr.ht/~ionous/iffy/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn/chart"
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"github.com/ionous/errutil"
 )
 

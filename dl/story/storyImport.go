@@ -3,8 +3,8 @@ package story
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"github.com/ionous/errutil"
 )
 

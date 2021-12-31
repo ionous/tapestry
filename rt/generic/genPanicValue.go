@@ -1,7 +1,7 @@
 package generic
 
 import (
-	"git.sr.ht/~ionous/iffy/affine"
+	"git.sr.ht/~ionous/tapestry/affine"
 )
 
 // PanicValue is a PanicValue where every method panics except type and affinity.

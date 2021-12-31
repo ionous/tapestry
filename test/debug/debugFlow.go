@@ -3,7 +3,7 @@ package debug
 import (
 	r "reflect"
 
-	"git.sr.ht/~ionous/iffy/lang"
+	"git.sr.ht/~ionous/tapestry/lang"
 )
 
 // Flow creates a debug flow to simulate ifspec generation

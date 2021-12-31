@@ -1,12 +1,12 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/iffy/dl/core"
-	"git.sr.ht/~ionous/iffy/dl/render"
-	"git.sr.ht/~ionous/iffy/express"
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/template"
-	"git.sr.ht/~ionous/iffy/template/types"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/render"
+	"git.sr.ht/~ionous/tapestry/express"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/template"
+	"git.sr.ht/~ionous/tapestry/template/types"
 	"github.com/ionous/errutil"
 )
 

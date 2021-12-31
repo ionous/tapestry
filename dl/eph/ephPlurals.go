@@ -3,7 +3,7 @@ package eph
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/iffy/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 	"github.com/ionous/inflect"
 )

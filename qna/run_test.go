@@ -20,7 +20,7 @@ package qna
 // 			t.Fatal("couldnt assemble story", e, ds.Err())
 // 		} else if len(ds) > 0 {
 // 			t.Fatal("issues assembling", ds.Err())
-// 		} else if cnt, e := CheckAll(db, "", iffy.AllSignatures); e != nil {
+// 		} else if cnt, e := CheckAll(db, "", tapestry.AllSignatures); e != nil {
 // 			t.Fatal(e)
 // 		} else if cnt != 1 {
 // 			t.Fatal("expected one test", cnt)

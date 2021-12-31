@@ -1,8 +1,8 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/iffy/qna/qdb"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
 func (run *Runner) getObjectName(id string) (ret string, err error) {

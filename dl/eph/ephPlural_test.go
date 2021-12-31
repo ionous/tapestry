@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )

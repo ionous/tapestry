@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"git.sr.ht/~ionous/iffy/rt/writer"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
 	"github.com/ionous/errutil"
 )
 

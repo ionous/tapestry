@@ -1,4 +1,4 @@
-// Package composer runs a local web server to host the iffy story editor.
+// Package composer runs a local web server to host the tapestry story editor.
 //
 // Http endpoints:
 //  - /compose: the composer web app

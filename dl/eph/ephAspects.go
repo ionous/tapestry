@@ -3,7 +3,7 @@ package eph
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/iffy/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
 // ensure fields which reference aspects use the necessary formatting

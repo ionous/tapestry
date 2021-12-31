@@ -1,7 +1,7 @@
 package mdl
 
 import (
-  "git.sr.ht/~ionous/iffy/tables"
+  "git.sr.ht/~ionous/tapestry/tables"
 )
 
 // see sql table definitions and additional notes in "model.sql"

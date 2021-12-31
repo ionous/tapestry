@@ -1,8 +1,8 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/iffy/rt"
-	"git.sr.ht/~ionous/iffy/rt/scope"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 )
 
 func (op *Erasing) Execute(run rt.Runtime) (err error) {

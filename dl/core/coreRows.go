@@ -3,9 +3,9 @@ package core
 import (
 	"bytes"
 
-	"git.sr.ht/~ionous/iffy/rt"
-	g "git.sr.ht/~ionous/iffy/rt/generic"
-	"git.sr.ht/~ionous/iffy/rt/print"
+	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/print"
 )
 
 func (op *Row) GetText(run rt.Runtime) (ret g.Value, err error) {

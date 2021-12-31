@@ -1,7 +1,7 @@
 package testutil
 
 import (
-	g "git.sr.ht/~ionous/iffy/rt/generic"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
 )
 

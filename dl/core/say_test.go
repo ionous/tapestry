@@ -1,9 +1,9 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/iffy/rt/safe"
-	"git.sr.ht/~ionous/iffy/rt/writer"
-	"git.sr.ht/~ionous/iffy/test/testutil"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/rt/writer"
+	"git.sr.ht/~ionous/tapestry/test/testutil"
 )
 
 var helloThereWorld = MakeActivity(

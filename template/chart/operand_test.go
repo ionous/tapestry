@@ -3,7 +3,7 @@ package chart
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/template/types"
+	"git.sr.ht/~ionous/tapestry/template/types"
 	"github.com/ionous/sliceOf"
 )
 

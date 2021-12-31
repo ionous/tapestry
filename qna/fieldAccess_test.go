@@ -7,7 +7,7 @@ package qna
 // func TestFieldAccess(t *testing.T) {
 // 	db := newFieldAccessTest(t, testdb.Memory)
 // 	defer db.Close()
-// 	q := NewRuntime(db, iffy.AllSignatures)
+// 	q := NewRuntime(db, tapestry.AllSignatures)
 
 // 	// ensure we can ask for object existence
 // 	t.Run("object_exists", func(t *testing.T) {

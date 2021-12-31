@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/list"
-	"git.sr.ht/~ionous/iffy/rt/safe"
+	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func TestPush(t *testing.T) {

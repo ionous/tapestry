@@ -3,10 +3,10 @@ package qdb_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/iffy/dl/eph"
-	"git.sr.ht/~ionous/iffy/qna/qdb"
-	"git.sr.ht/~ionous/iffy/tables/mdl"
-	"git.sr.ht/~ionous/iffy/test/testdb"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )

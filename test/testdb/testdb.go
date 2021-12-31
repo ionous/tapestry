@@ -7,7 +7,7 @@ import (
 	"path"
 	"strings"
 
-	"git.sr.ht/~ionous/iffy/tables"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 	"github.com/ionous/sliceOf"
 )
