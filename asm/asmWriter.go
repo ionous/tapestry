@@ -204,7 +204,7 @@ var idswriter = map[string]string{
 	// the domain is dropped: its the same as the kind's scope.
 	mdl.Pat: insert("mdl_pat",
 		"kind", simpleScope("kind", 1, 2),
-		"labels", arg(3), // fix? this is a materialized field, should it be field ids?
+		"labels", arg(3), // fix? this are comma-separated field names, should it be field ids?
 		"result", arg(4), // fix? this is a field, should it be a field id?
 	),
 	mdl.Plural: insert("mdl_plural",
