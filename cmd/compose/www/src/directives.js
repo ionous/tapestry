@@ -14,11 +14,12 @@ class Make {
 
   // this.... needs some work.
   readSpec(spec, group= null) {
-    if (group) {
+    const addGroup= group && !group.includes(group);
+    if (addGroup) {
       this.currGroups.unshift(group);
     }
     this._readSpec(spec);
-    if (group) {
+    if (addGroup) {
       this.currGroups.shift();
     }
   }
@@ -56,10 +57,13 @@ class Make {
           this.swap(k, data.spec, data.desc);
           break;
         }
+        case undefined:
         case "flow": {
-          const plainEnglish = t.group.includes("story") && !t.group.includes("modeling");
+          // use the english phrase parser ( as opposed to the programmery fluent parser )
+          const plainEnglish = this.currGroups.includes("story") && !this.currGroups.includes("modeling");
           if (plainEnglish) {
-            this.flow(k, data.slot || [], data.spec, data.desc || "");
+            const newFlow= this.flow(k, data.slot || [], data.spec, data.desc || "");
+            newFlow.lede= data.lede;
             break;
           }
           // note: doesnt use the "maker" for now

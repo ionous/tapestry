@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/support"
 )
 
-// ex. go run compose.go -open -dir /Users/ionous/Documents/tapestry
+// ex. go run compose.go -open -dir /Users/ionous/Documents/Tapestry
 // the specified directory needs two sub-directories:
 // 1. "stories" - containing .if files
 // 2. "ifspec"  - containing .ifspec files

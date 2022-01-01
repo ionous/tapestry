@@ -34,7 +34,9 @@ class TypeSet {
     if (name in this.all) {
       throw new Error(`redefining type ${name}`);
     }
-    this.all[ name ]= type;
+    if (type.uses !== "group") {
+      this.all[ name ]= type;
+    }
     return type;
   }
   newItem(typeName, value) {
