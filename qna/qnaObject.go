@@ -155,7 +155,7 @@ func getObjectField(run *Runner, domain, noun string, field g.Field) (ret g.Valu
 // both obj and field are normalized, and field is not a trait
 func setObjectField(run *Runner, domain, noun string, field g.Field, val g.Value) (err error) {
 	if aff := val.Affinity(); aff != field.Affinity {
-		err = errutil.New(`mismatched affinity "#%s::%s.%s(%s)" writing %s`, domain, noun, field.Name, field.Affinity, aff)
+		err = errutil.Fmt(`mismatched affinity "#%s::%s.%s(%s)" writing %s`, domain, noun, field.Name, field.Affinity, aff)
 	} else {
 		key := makeKey(domain, noun, field.Name)
 		run.nounValues[key] = cachedValue{v: &objectValue{shared: g.CopyValue(val)}}

@@ -26,7 +26,7 @@ func (c *asmCheck) isValidCheck() bool {
 func (c *asmCheck) setExpectation(v literal.LiteralValue) (err error) {
 	if v != nil {
 		if len(c.expectAff) > 0 {
-			err = errutil.New("check %q cant have multiple expectations", c.name)
+			err = errutil.Fmt("check %q cant have multiple expectations", c.name)
 		} else if res, e := marshalout(v); e != nil {
 			err = e
 		} else {
@@ -38,7 +38,7 @@ func (c *asmCheck) setExpectation(v literal.LiteralValue) (err error) {
 
 func (c *asmCheck) setProg(cmd interface{}) (err error) {
 	if cmd != nil && len(c.prog) > 0 {
-		err = errutil.New("check %q cant have multiple programs to check", c.name)
+		err = errutil.Fmt("check %q cant have multiple programs to check", c.name)
 	} else if prog, e := marshalout(cmd); e != nil {
 		err = e
 	} else if len(prog) > 0 {
