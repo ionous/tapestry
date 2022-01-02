@@ -420,9 +420,9 @@
                         {
                             "kinds_of_kind":
                             {
-                                "uses": "flow",
-                                "slot": "story_statement",
                                 "spec": "{plural_kinds} are a kind of {singular_kind}.",
+                                "sign": ["Make", "kinds", "of"],
+                                "slot": "story_statement",
                                 "desc": "Declare a kind"
                             },
                             "kinds_possess_properties":

@@ -3,7 +3,7 @@
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " objects",
             "kind"
           ]
@@ -41,7 +41,7 @@
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " things",
             "object"
           ]
@@ -237,13 +237,13 @@
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
-            " actors",
+          "Make kinds:of:": [
+            "Actors",
             "thing"
           ]
         },
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " animals",
             "actor"
           ]
@@ -253,7 +253,7 @@
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " props",
             "thing"
           ]
@@ -263,7 +263,7 @@
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " openers",
             "prop"
           ]
@@ -376,7 +376,7 @@
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " containers",
             "opener"
           ]
@@ -498,7 +498,7 @@
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " supporters",
             "prop"
           ]
@@ -508,7 +508,7 @@
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " rooms",
             "object"
           ]
@@ -532,7 +532,7 @@
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " regions",
             "object"
           ]

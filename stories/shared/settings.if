@@ -1,12 +1,7 @@
 {
-  "Story:": [
-    {
-      "Paragraph:": [
-        {
-          "KindsOfKind:singularKind:": [
-            " settings",
-            "object"
-          ]
+  "Story:": [{
+      "Paragraph:": [{
+          "Make kinds:of:": ["Settings","object"]
         },
         {
           "NounStatement:tail:": [

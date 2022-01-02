@@ -10991,7 +10991,7 @@ var Signatures = map[uint64]interface{}{
 	10771046767095423028: (*KindOfRelation)(nil),           /* KindOfRelation:cardinality manyToOne: */
 	5852635308349599025:  (*KindOfRelation)(nil),           /* KindOfRelation:cardinality manyToMany: */
 	16689641787061327381: (*KindsOfAspect)(nil),            /* KindsOfAspect: */
-	18152778218757267226: (*KindsOfKind)(nil),              /* KindsOfKind:singularKind: */
+	5919854034648203527:  (*KindsOfKind)(nil),              /* Make kinds:of: */
 	12878641740711100222: (*KindsOfRecord)(nil),            /* KindsOfRecord: */
 	7748657468599352730:  (*KindsPossessProperties)(nil),   /* KindsPossessProperties:propertyDecl: */
 	2335979695347311111:  (*Lede)(nil),                     /* Lede:nounPhrase kindOfNoun: */

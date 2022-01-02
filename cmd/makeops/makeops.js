@@ -237,9 +237,27 @@ const sigParts = function(t, commandName) {
 }
 
 // generate a signature hash for the passed type.
+// t: the type info.
+// out: dictionary of signatures for the current package.
+// all: dictionary of all signatures to search for collisions.
 const signType = function(t, out, all) {
   const lede= ledeName(t);
-  const commandName= pascal(lede || t.name);
+  let commandName= pascal(lede || t.name);
+  // provide a simple override for signature generation
+  if (t.sign) {
+    commandName= t.sign[0];
+    for (let i=0; i< t.params.length; i++) {
+      const p= t.params[i];
+      const el= t.sign[i+1];
+      if (el.length==0) {
+        p.tag= "_";
+        p.sel= "";
+      } else {
+        p.tag= p.sel= el;
+      }
+    }
+  }
+
   const sigs= [];
   if (t.uses === 'swap') {
     for (const p of t.params) {

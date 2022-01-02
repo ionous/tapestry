@@ -68,6 +68,7 @@ class Make {
           if (plainEnglish) {
             const newFlow= this.flow(k, data.slot || [], data.spec, data.desc || "");
             newFlow.lede= data.lede;
+            newFlow.sign= data.sign;
             break;
           }
           // note: doesnt use the "maker" for now

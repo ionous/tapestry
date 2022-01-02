@@ -49,16 +49,13 @@
             ],
             "Kitchen"
           ]
-        },
-        {
-          "Comment:": "fix: capitalization is still an issue."
         }
       ]
     },
     {
       "Paragraph:": [
         {
-          "KindsOfKind:singularKind:": [
+          "Make kinds:of:": [
             " cats",
             "animal"
           ]
