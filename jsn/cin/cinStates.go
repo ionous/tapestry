@@ -69,7 +69,9 @@ func (dec *xDecoder) decode(dst jsn.Marshalee, msg json.RawMessage) error {
 }
 
 func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay bool) {
-	if e := dec.customFlow(flow, msg); e != nil {
+	if e := dec.customFlow(flow, msg); e == nil {
+		dec.Commit("customFlow")
+	} else {
 		var unhandled chart.Unhandled
 		if !errors.As(e, &unhandled) {
 			dec.Error(e)
