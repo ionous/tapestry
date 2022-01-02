@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -18,13 +19,13 @@ import (
 func main() {
 	var inFile, testName string
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
-	flag.StringVar(&testName, "run", "", "optional specific test ( in camelcase )")
+	flag.StringVar(&testName, "run", "", "optional specific test")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	responses := flag.Bool("responses", false, "print response names instead of values")
 	flag.Parse()
 	opt := qna.NewOptions()
 	opt.SetOption(meta.PrintResponseNames, generic.BoolOf(*responses))
-	if cnt, e := checkFile(inFile, testName, opt); e != nil {
+	if cnt, e := checkFile(inFile, lang.Underscore(testName), opt); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
 			log.Panic("mismatched")

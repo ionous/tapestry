@@ -93,10 +93,7 @@ type CheckData struct {
 
 // read all the matching tests from the db.
 func (q *Query) ReadChecks(actuallyJustThisOne string) (ret []CheckData, err error) {
-	if len(actuallyJustThisOne) > 0 {
-		actuallyJustThisOne += ";"
-	}
-	if rows, e := q.checks.Query(); e != nil {
+	if rows, e := q.checks.Query(actuallyJustThisOne); e != nil {
 		err = e
 	} else {
 		var check CheckData
@@ -263,6 +260,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			from mdl_check mc
 			join mdl_domain md
 				on (mc.domain=md.rowid) 
+			where mc.name = ?1 or length(?1) == 0
 			order by mc.domain, mc.name`,
 		),
 		domainActivation: ps.Prep(db,
