@@ -13,7 +13,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
 	"github.com/ionous/errutil"
@@ -93,7 +92,7 @@ func compact(inDetails, outCompact string) (err error) {
 		err = e
 	} else if e := din.Decode(&dst, tapestry.Registry(), b); e != nil {
 		err = e
-	} else if data, e := cout.Encode(&dst, story.CompactEncoder); e != nil {
+	} else if data, e := story.Encode(&dst); e != nil {
 		err = e
 	} else {
 		err = writeOut(outCompact, data)

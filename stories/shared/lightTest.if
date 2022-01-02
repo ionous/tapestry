@@ -1,101 +1,95 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "TestScene:story:": [
+        "vision test",
         {
-          "TestScene:story:": [
-            "vision test",
-            {
-              "Story:": []
-            }
-          ]
+          "Story:": []
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "TestStatement:test:": [
+        "testing vision",
+        {
+          "TestOutput:": "ok: The cabinet is dark.\nok: The cabinet has light.\nok: The cabinet is dark.\nok: The cabinet has light.\n"
         }
       ]
     },
     {
-      "Paragraph:": [
+      "TestRule:hook activity:": [
+        "testing vision",
         {
-          "TestStatement:test:": [
-            "testing vision",
+          "Act:": [
             {
-              "TestOutput:": "ok: The cabinet is dark.\nok: The cabinet has light.\nok: The cabinet is dark.\nok: The cabinet has light.\n"
-            }
-          ]
-        },
-        {
-          "TestRule:hook activity:": [
-            "testing vision",
-            {
-              "Act:": [
+              "Put:from:at:": [
                 {
-                  "Put:from:at:": [
-                    {
-                      "ObjField:": "Kitchen"
-                    },
-                    {
-                      "FromBool:": true
-                    },
-                    "unlit"
-                  ]
+                  "ObjField:": "Kitchen"
                 },
                 {
-                  "Say:": {
-                    "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-                  }
+                  "FromBool:": true
                 },
-                {
-                  "Put:from:at:": [
-                    {
-                      "ObjField:": "Kitchen"
-                    },
-                    {
-                      "FromBool:": true
-                    },
-                    "lit"
-                  ]
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-                  }
-                },
-                {
-                  "Put:from:at:": [
-                    {
-                      "ObjField:": "cabinet"
-                    },
-                    {
-                      "FromBool:": true
-                    },
-                    "closed"
-                  ]
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-                  }
-                },
-                {
-                  "Put:from:at:": [
-                    {
-                      "ObjField:": "matches"
-                    },
-                    {
-                      "FromBool:": true
-                    },
-                    "lit"
-                  ]
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-                  }
-                }
+                "unlit"
               ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
+              }
+            },
+            {
+              "Put:from:at:": [
+                {
+                  "ObjField:": "Kitchen"
+                },
+                {
+                  "FromBool:": true
+                },
+                "lit"
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
+              }
+            },
+            {
+              "Put:from:at:": [
+                {
+                  "ObjField:": "cabinet"
+                },
+                {
+                  "FromBool:": true
+                },
+                "closed"
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
+              }
+            },
+            {
+              "Put:from:at:": [
+                {
+                  "ObjField:": "matches"
+                },
+                {
+                  "FromBool:": true
+                },
+                "lit"
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
+              }
             }
           ]
         }
       ]
     }
   ]
-}
+]

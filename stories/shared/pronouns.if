@@ -1,44 +1,67 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "We",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "We",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type ext:": [
+                "a",
+                "names",
                 {
-                  "VariableDecl:name:type ext:": [
-                    "a",
-                    "names",
+                  "ExtType textList:": "list"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Comment:": "We refers to the player. As with all the customizable grammar, we use the plural for the name of pattern."
+    },
+    {
+      "PatternActions:patternRules:": [
+        "We",
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                "Always",
+                {
+                  "Act:": [
                     {
-                      "ExtType textList:": "list"
+                      "Say:": "you"
                     }
                   ]
                 }
               ]
             }
           ]
-        },
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "Comment:": "they, [we], [ey], it. "
+    },
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "They",
         {
-          "Comment:": "We refers to the player. As with all the customizable grammar, we use the plural for the name of pattern."
-        },
-        {
-          "PatternActions:patternRules:": [
-            "We",
+          "PatternVariablesTail:": [
             {
-              "PatternRules:": [
+              "VariableDecl:name:type object:": [
+                "a",
+                "noun",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Say:": "you"
-                        }
-                      ]
-                    }
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
                   ]
                 }
               ]
@@ -48,64 +71,59 @@
       ]
     },
     {
-      "Paragraph:": [
+      "PatternActions:patternRules:": [
+        "They",
         {
-          "Comment:": "they, [we], [ey], it. "
-        },
-        {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "They",
+          "PatternRules:": [
             {
-              "PatternVariablesTail:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "VariableDecl:name:type object:": [
-                    "a",
-                    "noun",
+                  "Act:": [
                     {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
+                      "Say:": "it"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Get obj:trait:": [
+                    "@noun",
+                    "plural named"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": "they"
                     }
                   ]
                 }
               ]
             }
           ]
-        },
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "Those",
         {
-          "PatternActions:patternRules:": [
-            "They",
+          "PatternVariablesTail:": [
             {
-              "PatternRules:": [
+              "VariableDecl:name:type object:": [
+                "a",
+                "noun",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Say:": "it"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Get obj:trait:": [
-                        "@noun",
-                        "plural named"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": "they"
-                        }
-                      ]
-                    }
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
                   ]
                 }
               ]
@@ -115,60 +133,34 @@
       ]
     },
     {
-      "Paragraph:": [
+      "PatternActions:patternRules:": [
+        "Those",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "Those",
+          "PatternRules:": [
             {
-              "PatternVariablesTail:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "VariableDecl:name:type object:": [
-                    "a",
-                    "noun",
+                  "Act:": [
                     {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
+                      "Say:": "that"
                     }
                   ]
                 }
               ]
-            }
-          ]
-        },
-        {
-          "PatternActions:patternRules:": [
-            "Those",
+            },
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Say:": "that"
-                        }
-                      ]
-                    }
+                  "Get obj:trait:": [
+                    "@noun",
+                    "plural named"
                   ]
                 },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "Get obj:trait:": [
-                        "@noun",
-                        "plural named"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": "these"
-                        }
-                      ]
+                      "Say:": "these"
                     }
                   ]
                 }
@@ -179,4 +171,4 @@
       ]
     }
   ]
-}
+]

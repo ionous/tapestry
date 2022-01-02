@@ -1,21 +1,60 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "provides storage",
         {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "provides storage",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
                 {
-                  "VariableDecl:name:type object:": [
+                  "ObjectType:kind:": [
                     "an",
-                    "obj",
+                    "object"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "a",
+              "success",
+              "bool"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Comment:": "Does the object allow items to be stored inside or on top of it? "
+    },
+    {
+      "PatternActions:patternRules:": [
+        "provides storage",
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "KindOf:is:": [
+                    "@obj",
+                    "containers"
+                  ]
+                },
+                {
+                  "Act:": [
                     {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": true
+                        }
                       ]
                     }
                   ]
@@ -23,40 +62,83 @@
               ]
             },
             {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "success",
-                  "bool"
-                ]
-              }
+              "PatternRule:hook activity:": [
+                {
+                  "KindOf:is:": [
+                    "@obj",
+                    "supporters"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "shows storage",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
             }
           ]
         },
         {
-          "Comment:": "Does the object allow items to be stored inside or on top of it? "
-        },
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "a",
+              "success",
+              "bool"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Comment:": "Does the object provide storage, and can that storage be seen from outside? "
+    },
+    {
+      "PatternActions:patternRules:": [
+        "shows storage",
         {
-          "PatternActions:patternRules:": [
-            "provides storage",
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
+                  "Determine:arguments:": [
+                    "provides storage",
                     {
-                      "KindOf:is:": [
-                        "@obj",
-                        "containers"
-                      ]
-                    },
-                    {
-                      "Act:": [
+                      "Args:": [
                         {
-                          "Let:be:": [
-                            "success",
-                            {
-                              "FromBool:": true
-                            }
+                          "Arg:from:": [
+                            "obj",
+                            "@obj"
                           ]
                         }
                       ]
@@ -64,116 +146,28 @@
                   ]
                 },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "KindOf:is:": [
-                        "@obj",
-                        "supporters"
-                      ]
-                    },
-                    {
-                      "Act:": [
+                      "Let:be:": [
+                        "success",
                         {
-                          "Let:be:": [
-                            "success",
-                            {
-                              "FromBool:": true
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "shows storage",
-            {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "success",
-                  "bool"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "Comment:": "Does the object provide storage, and can that storage be seen from outside? "
-        },
-        {
-          "PatternActions:patternRules:": [
-            "shows storage",
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Determine:arguments:": [
-                        "provides storage",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Let:be:": [
-                            "success",
-                            {
-                              "FromBool:": {
-                                "Not:": {
-                                  "Determine:arguments:": [
-                                    "fully opaque",
+                          "FromBool:": {
+                            "Not:": {
+                              "Determine:arguments:": [
+                                "fully opaque",
+                                {
+                                  "Args:": [
                                     {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "obj",
-                                            "@obj"
-                                          ]
-                                        }
+                                      "Arg:from:": [
+                                        "obj",
+                                        "@obj"
                                       ]
                                     }
                                   ]
                                 }
-                              }
+                              ]
                             }
-                          ]
+                          }
                         }
                       ]
                     }
@@ -184,246 +178,134 @@
           ]
         }
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "visible storage",
         {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "visible storage",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "a",
-                        "thing"
-                      ]
-                    }
+                  "ObjectType:kind:": [
+                    "a",
+                    "thing"
                   ]
                 }
               ]
-            },
-            {
-              "PatternReturn:": {
-                "VariableDecl:name:type ext:": [
-                  "the",
-                  "out",
-                  {
-                    "ExtType textList:": "list"
-                  }
-                ]
-              }
             }
           ]
         },
         {
-          "Comment:": "Return a list containing any visible contents."
-        },
+          "PatternReturn:": {
+            "VariableDecl:name:type ext:": [
+              "the",
+              "out",
+              {
+                "ExtType textList:": "list"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Comment:": "Return a list containing any visible contents."
+    },
+    {
+      "PatternActions:patternRules:": [
+        "visible storage",
         {
-          "PatternActions:patternRules:": [
-            "visible storage",
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
+                  "Determine:arguments:": [
+                    "shows storage",
                     {
-                      "Determine:arguments:": [
-                        "shows storage",
+                      "Args:": [
                         {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
+                          "Arg:from:": [
+                            "obj",
+                            "@obj"
                           ]
                         }
                       ]
-                    },
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
                     {
-                      "Act:": [
+                      "Repeating across:as:do:": [
                         {
-                          "Repeating across:as:do:": [
-                            {
-                              "FromTxts:": {
-                                "Determine:arguments:": [
-                                  "childrenOf",
+                          "FromTxts:": {
+                            "Determine:arguments:": [
+                              "childrenOf",
+                              {
+                                "Args:": [
                                   {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "obj",
-                                          "@obj"
-                                        ]
-                                      }
+                                    "Arg:from:": [
+                                      "obj",
+                                      "@obj"
                                     ]
                                   }
                                 ]
                               }
-                            },
+                            ]
+                          }
+                        },
+                        {
+                          "AsTxt:": "it"
+                        },
+                        {
+                          "Act:": [
                             {
-                              "AsTxt:": "it"
-                            },
-                            {
-                              "Act:": [
+                              "If:do:": [
                                 {
-                                  "If:do:": [
-                                    {
-                                      "Not:": {
-                                        "AnyTrue:": [
+                                  "Not:": {
+                                    "AnyTrue:": [
+                                      {
+                                        "Cmp:is:txt:": [
+                                          "@it",
+                                          "Equals",
                                           {
-                                            "Cmp:is:txt:": [
-                                              "@it",
-                                              "Equals",
+                                            "Get:from:": [
+                                              "pawn",
                                               {
-                                                "Get:from:": [
-                                                  "pawn",
-                                                  {
-                                                    "ObjFields:": "player"
-                                                  }
-                                                ]
+                                                "ObjFields:": "player"
                                               }
-                                            ]
-                                          },
-                                          {
-                                            "Get obj:trait:": [
-                                              "@it",
-                                              "scenery"
                                             ]
                                           }
                                         ]
+                                      },
+                                      {
+                                        "Get obj:trait:": [
+                                          "@it",
+                                          "scenery"
+                                        ]
                                       }
-                                    },
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Act:": [
                                     {
-                                      "Act:": [
+                                      "Put:into:": [
+                                        "@it",
                                         {
-                                          "Put:into:": [
-                                            "@it",
-                                            {
-                                              "IntoTxts:": "out"
-                                            }
-                                          ]
+                                          "IntoTxts:": "out"
                                         }
                                       ]
                                     }
                                   ]
                                 }
                               ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "allows storage",
-            {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "success",
-                  "bool"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "Comment:": "Returns true when the storage can be accessed."
-        },
-        {
-          "PatternActions:patternRules:": [
-            "allows storage",
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Determine:arguments:": [
-                        "provides storage",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Let:be:": [
-                            "success",
-                            {
-                              "FromBool:": true
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "AllTrue:": [
-                        {
-                          "KindOf:is:": [
-                            "@obj",
-                            "containers"
-                          ]
-                        },
-                        {
-                          "Get obj:trait:": [
-                            "@obj",
-                            "closed"
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Let:be:": [
-                            "success",
-                            {
-                              "FromBool:": false
                             }
                           ]
                         }
@@ -437,5 +319,113 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "allows storage",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "a",
+              "success",
+              "bool"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Comment:": "Returns true when the storage can be accessed."
+    },
+    {
+      "PatternActions:patternRules:": [
+        "allows storage",
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Determine:arguments:": [
+                    "provides storage",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "obj",
+                            "@obj"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "AllTrue:": [
+                    {
+                      "KindOf:is:": [
+                        "@obj",
+                        "containers"
+                      ]
+                    },
+                    {
+                      "Get obj:trait:": [
+                        "@obj",
+                        "closed"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
-}
+]

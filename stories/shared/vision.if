@@ -1,155 +1,151 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:": [
+        "patterns",
+        "adjust light"
+      ]
+    },
+    {
+      "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "adjust light",
         {
-          "PatternDecl:name:": [
-            "patterns",
-            "adjust light"
-          ]
-        },
-        {
-          "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
-        },
-        {
-          "PatternActions:patternLocals:patternRules:": [
-            "adjust light",
+          "PatternLocals:": [
             {
-              "PatternLocals:": [
+              "LocalDecl:value:": [
                 {
-                  "LocalDecl:value:": [
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
                     {
-                      "VariableDecl:name:type object:": [
+                      "ObjectType:kind:": [
                         "an",
-                        "actor",
+                        "actor"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "Get:from:": [
+                      "pawn",
+                      {
+                        "ObjFields:": "player"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "LocalDecl:value:": [
+                {
+                  "VariableDecl:name:type primitive:": [
+                    "our",
+                    "was lit",
+                    "bool"
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "FromBool:": {
+                      "Get obj:trait:": [
+                        "@actor",
+                        "not in darkness"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "LocalDecl:value:": [
+                {
+                  "VariableDecl:name:type primitive:": [
+                    "our",
+                    "now lit",
+                    "bool"
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "FromBool:": {
+                      "Determine:arguments:": [
+                        "contains light",
                         {
-                          "ObjectType:kind:": [
-                            "an",
-                            "actor"
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "Get:from:": [
-                          "pawn",
-                          {
-                            "ObjFields:": "player"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type primitive:": [
-                        "our",
-                        "was lit",
-                        "bool"
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromBool:": {
-                          "Get obj:trait:": [
-                            "@actor",
-                            "not in darkness"
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type primitive:": [
-                        "our",
-                        "now lit",
-                        "bool"
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromBool:": {
-                          "Determine:arguments:": [
-                            "contains light",
+                          "Args:": [
                             {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "spot",
-                                    "@actor"
-                                  ]
-                                }
+                              "Arg:from:": [
+                                "spot",
+                                "@actor"
                               ]
                             }
                           ]
                         }
-                      }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "AllTrue:": [
+                    "@was lit",
+                    {
+                      "Not:": "@now lit"
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Determine:": "Print news of darkness"
                     }
                   ]
                 }
               ]
             },
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
+                  "AllTrue:": [
+                    "@now lit",
                     {
-                      "AllTrue:": [
-                        "@was lit",
-                        {
-                          "Not:": "@now lit"
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Determine:": "Print news of darkness"
-                        }
-                      ]
+                      "Not:": "@was lit"
                     }
                   ]
                 },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "AllTrue:": [
+                      "Determine:": "print news of light"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:flags:hook activity:": [
+                "Always",
+                "before",
+                {
+                  "Act:": [
+                    {
+                      "Put:from:at:": [
+                        {
+                          "VarField:": "actor"
+                        },
                         "@now lit",
-                        {
-                          "Not:": "@was lit"
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Determine:": "print news of light"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:flags:hook activity:": [
-                    "Always",
-                    "before",
-                    {
-                      "Act:": [
-                        {
-                          "Put:from:at:": [
-                            {
-                              "VarField:": "actor"
-                            },
-                            "@now lit",
-                            "not in darkness"
-                          ]
-                        }
+                        "not in darkness"
                       ]
                     }
                   ]
@@ -159,34 +155,32 @@
           ]
         }
       ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:": [
+        "patterns",
+        "Print news of darkness"
+      ]
     },
     {
-      "Paragraph:": [
+      "PatternActions:patternRules:": [
+        "Print news of darkness",
         {
-          "PatternDecl:name:": [
-            "patterns",
-            "Print news of darkness"
-          ]
-        },
-        {
-          "PatternActions:patternRules:": [
-            "Print news of darkness",
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
+                  "Act:": [
                     {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "darkness has fallen",
-                              "It is now pitch dark in here!"
-                            ]
-                          }
-                        }
-                      ]
+                      "Say:": {
+                        "Response:text:": [
+                          "darkness has fallen",
+                          "It is now pitch dark in here!"
+                        ]
+                      }
                     }
                   ]
                 }
@@ -195,40 +189,38 @@
           ]
         }
       ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:": [
+        "patterns",
+        "Print news of light"
+      ]
     },
     {
-      "Paragraph:": [
+      "PatternActions:patternRules:": [
+        "Print news of light",
         {
-          "PatternDecl:name:": [
-            "patterns",
-            "Print news of light"
-          ]
-        },
-        {
-          "PatternActions:patternRules:": [
-            "Print news of light",
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
+                  "Act:": [
                     {
-                      "Act:": [
+                      "Determine:arguments:": [
+                        "Print vantage",
                         {
-                          "Determine:arguments:": [
-                            "Print vantage",
+                          "Args:": [
                             {
-                              "Args:": [
+                              "Arg:from:": [
+                                "where",
                                 {
-                                  "Arg:from:": [
-                                    "where",
+                                  "Get:from:": [
+                                    "pawn",
                                     {
-                                      "Get:from:": [
-                                        "pawn",
-                                        {
-                                          "ObjFields:": "player"
-                                        }
-                                      ]
+                                      "ObjFields:": "player"
                                     }
                                   ]
                                 }
@@ -247,4 +239,4 @@
       ]
     }
   ]
-}
+]

@@ -1,22 +1,36 @@
 package story
 
 import (
-	"encoding/json"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
-	"git.sr.ht/~ionous/tapestry/jsn/cin"
-	"github.com/ionous/errutil"
+	"git.sr.ht/~ionous/tapestry/jsn/cout"
 )
+
+// story encode writes story data without the surrounding Paragraph markers.
+// ie. instead of: `{"Story:":[{"Paragraph:":["Example"]},{"Paragraph:":["Example","Example"]}]}`
+// it writes: `[["Example"],["Example","Example"]]`
+// an outer array of paragraphs, where each direct child is a array of story statements.
+func Encode(src *Story) (ret interface{}, err error) {
+	x := Paragraph_Slice(src.Paragraph)
+	if a, e := cout.Encode(&x, CompactEncoder); e != nil {
+		err = e
+	} else {
+		var out []interface{}
+		for _, x := range a.([]interface{}) {
+			for _, v := range x.(map[string]interface{}) {
+				out = append(out, v)
+			}
+		}
+		ret = out
+	}
+	return
+}
 
 // customized writer of compact data
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
-	// typeName := flow.GetType()
-	// switch ptr := flow.GetFlow().(type) {
-	// case *NamedNoun:
-
 	switch i, typeName := flow.GetFlow(), flow.GetType(); typeName {
 	case NamedNoun_Type:
 		ptr := i.(*NamedNoun)
@@ -41,62 +55,6 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 		}
 	default:
 		err = core.CompactEncoder(m, flow)
-	}
-	return
-}
-
-func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
-	return cin.NewDecoder(sig).
-		SetFlowDecoder(CompactFlowDecoder).
-		SetSlotDecoder(CompactSlotDecoder).
-		Decode(dst, msg)
-}
-
-var CompactSlotDecoder = core.CompactSlotDecoder
-
-// customized reader of compact data
-func CompactFlowDecoder(flow jsn.FlowBlock, msg json.RawMessage) (err error) {
-	// switch typeName, ptr := flow.GetType(), flow.GetFlow(); ptr.(type) {
-	// default:
-	// 	err = chart.Unhandled(typeName)
-
-	// case *NamedNoun:
-	// 	var str string
-	// 	if e := json.Unmarshal(msg, &str); e != nil {
-	// 		err = chart.Unhandled(typeName)
-	// 	} else {
-	// 		var out NamedNoun
-	// 		if space := strings.Index(str, " "); space < 0 {
-	// 			out.Name.Str = str
-	// 		} else {
-	// 			jsn.MakeEnum(&out.Determiner, &out.Determiner.Str).SetValue(str[:space])
-	// 			out.Name.Str = str[space+1:]
-	// 		}
-	// 		if !flow.SetFlow(&out) {
-	// 			err = errutil.New("could set result to flow", typeName, flow)
-	// 		}
-	// 	}
-	// }
-	switch typeName := flow.GetType(); typeName {
-	default:
-		err = chart.Unhandled("CustomFlow")
-
-	case NamedNoun_Type:
-		var str string
-		if e := json.Unmarshal(msg, &str); e != nil {
-			err = chart.Unhandled(typeName)
-		} else {
-			var out NamedNoun
-			if space := strings.Index(str, " "); space < 0 {
-				out.Name.Str = str
-			} else {
-				jsn.MakeEnum(&out.Determiner, &out.Determiner.Str).SetValue(str[:space])
-				out.Name.Str = str[space+1:]
-			}
-			if !flow.SetFlow(&out) {
-				err = errutil.New("could set result to flow", typeName, flow)
-			}
-		}
 	}
 	return
 }

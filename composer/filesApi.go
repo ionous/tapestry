@@ -11,7 +11,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
@@ -53,7 +52,7 @@ func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 				var dst story.Story
 				if e := din.Decode(&dst, tapestry.Registry(), el.Story); e != nil {
 					err = e
-				} else if data, e := cout.Encode(&dst, story.CompactEncoder); e != nil {
+				} else if data, e := story.Encode(&dst); e != nil {
 					err = errutil.Append(err, e)
 				} else {
 					err = writeOut(at, data)

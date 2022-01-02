@@ -1,84 +1,80 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "can use",
         {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "can use",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type object:": [
+                "an",
+                "actor",
                 {
-                  "VariableDecl:name:type object:": [
+                  "ObjectType:kind:": [
                     "an",
-                    "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:": [
-                    "an",
-                    "action",
-                    "text"
-                  ]
-                },
-                {
-                  "VariableDecl:name:type object:": [
-                    "a",
-                    "noun",
-                    {
-                      "ObjectType:kind:": [
-                        "a",
-                        "thing"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "VariableDecl:name:type object:comment:": [
-                    "an",
-                    "other noun",
-                    {
-                      "ObjectType:kind:": [
-                        "a",
-                        "thing"
-                      ]
-                    },
-                    ", not all actions have a second noun and that's okay"
+                    "actor"
                   ]
                 }
               ]
             },
             {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "response",
-                  "text"
-                ]
-              }
+              "VariableDecl:name:type primitive:": [
+                "an",
+                "action",
+                "text"
+              ]
+            },
+            {
+              "VariableDecl:name:type object:": [
+                "a",
+                "noun",
+                {
+                  "ObjectType:kind:": [
+                    "a",
+                    "thing"
+                  ]
+                }
+              ]
+            },
+            {
+              "VariableDecl:name:type object:comment:": [
+                "an",
+                "other noun",
+                {
+                  "ObjectType:kind:": [
+                    "a",
+                    "thing"
+                  ]
+                },
+                ", not all actions have a second noun and that's okay"
+              ]
             }
           ]
         },
         {
-          "PatternActions:patternRules:": [
-            "can use",
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "a",
+              "response",
+              "text"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "PatternActions:patternRules:": [
+        "can use",
+        {
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
+                  "Act:": [
                     {
-                      "Act:": [
-                        {
-                          "Comment:": "By default, \"can use\" allows most actions."
-                        }
-                      ]
+                      "Comment:": "By default, \"can use\" allows most actions."
                     }
                   ]
                 }
@@ -89,4 +85,4 @@
       ]
     }
   ]
-}
+]

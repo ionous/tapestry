@@ -1,363 +1,322 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "TestStatement:test:": [
+        "retrieving test",
         {
-          "TestStatement:test:": [
-            "retrieving test",
-            {
-              "TestOutput:": "  - Fail to retrieve from something closed:\n  The espresso machine isn't open.\n  - The soup's parent was: the shelf. Okay, retrieve from supporter:\n  Taken.The soup's parent is: you.\n  - The hook's parent was: the cabinet. Okay, retrieve from container:\n  Taken.The hook's parent is: you.\n  - Fail to retrieve incorrectly:\n  But it isn't there now.\n  - Fail to steal:\n  That seems to belong to Mildred.\n"
-            }
-          ]
-        },
-        {
-          "TestRule:hook activity:": [
-            "retrieving test",
-            {
-              "Act:": [
-                {
-                  "Say:": {
-                    "Rows:": {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Fail to retrieve from something closed:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "Retrieving from",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "coffee"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "machine"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "The soup's parent was: {the: {parentOf: .soup}}."
-                                  }
-                                },
-                                {
-                                  "Say:": "Okay, retrieve from supporter:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "Retrieving from",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "soup"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "shelf"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "The soup's parent is: {the: {parentOf: .soup}}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "The hook's parent was: {the: {parentOf: .hook}}."
-                                  }
-                                },
-                                {
-                                  "Say:": "Okay, retrieve from container:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "Retrieving from",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "hook"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "cabinet"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "The hook's parent is: {the: {parentOf: .hook}}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Fail to retrieve incorrectly:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "Retrieving from",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "hat"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "cabinet"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Fail to steal:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "Retrieving from",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "apple"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "Mildred"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
-            }
-          ]
+          "TestOutput:": "  - Fail to retrieve from something closed:\n  The espresso machine isn't open.\n  - The soup's parent was: the shelf. Okay, retrieve from supporter:\n  Taken.The soup's parent is: you.\n  - The hook's parent was: the cabinet. Okay, retrieve from container:\n  Taken.The hook's parent is: you.\n  - Fail to retrieve incorrectly:\n  But it isn't there now.\n  - Fail to steal:\n  That seems to belong to Mildred.\n"
         }
       ]
     },
     {
-      "Paragraph:": [
+      "TestRule:hook activity:": [
+        "retrieving test",
         {
-          "TestScene:story:": [
-            "retrieving test",
+          "Act:": [
             {
-              "Story:": [
-                {
-                  "Paragraph:": [
+              "Say:": {
+                "Rows:": {
+                  "Act:": [
                     {
-                      "RelativeToNoun:nouns:areBeing:nouns1:": [
-                        "whereabouts",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "our",
-                              "self"
-                            ]
-                          },
-                          {
-                            "NamedNoun:name:": [
-                              "our",
-                              "Mildred"
-                            ]
-                          }
-                        ],
-                        "is",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "kitchen"
-                            ]
-                          }
-                        ]
-                      ]
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Fail to retrieve from something closed:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "Retrieving from",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "coffee"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "machine"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "The soup's parent was: {the: {parentOf: .soup}}."
+                              }
+                            },
+                            {
+                              "Say:": "Okay, retrieve from supporter:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "Retrieving from",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "soup"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "shelf"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "The soup's parent is: {the: {parentOf: .soup}}."
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "The hook's parent was: {the: {parentOf: .hook}}."
+                              }
+                            },
+                            {
+                              "Say:": "Okay, retrieve from container:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "Retrieving from",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "hook"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "cabinet"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "The hook's parent is: {the: {parentOf: .hook}}."
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Fail to retrieve incorrectly:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "Retrieving from",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "hat"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "cabinet"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Fail to steal:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "Retrieving from",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "apple"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "Mildred"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
                     }
                   ]
-                },
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "TestScene:story:": [
+        "retrieving test",
+        {
+          "Story:": [
+            {
+              "Paragraph:": [
                 {
-                  "Paragraph:": [
-                    {
-                      "RelativeToNoun:nouns:areBeing:nouns1:": [
-                        "whereabouts",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "coffee"
-                            ]
-                          }
-                        ],
-                        "is",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "machine"
-                            ]
-                          }
-                        ]
-                      ]
-                    }
+                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                    "whereabouts",
+                    [
+                      "our self",
+                      "our Mildred"
+                    ],
+                    "is",
+                    [
+                      "the kitchen"
+                    ]
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "Paragraph:": [
                 {
-                  "Paragraph:": [
-                    {
-                      "RelativeToNoun:nouns:areBeing:nouns1:": [
-                        "whereabouts",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "empire apple"
-                            ]
-                          }
-                        ],
-                        "is",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "our",
-                              "Mildred"
-                            ]
-                          }
-                        ]
-                      ]
-                    }
+                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                    "whereabouts",
+                    [
+                      "the coffee"
+                    ],
+                    "is",
+                    [
+                      "the machine"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Paragraph:": [
+                {
+                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                    "whereabouts",
+                    [
+                      "the empire apple"
+                    ],
+                    "is",
+                    [
+                      "our Mildred"
+                    ]
                   ]
                 }
               ]
@@ -367,4 +326,4 @@
       ]
     }
   ]
-}
+]

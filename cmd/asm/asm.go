@@ -88,6 +88,7 @@ func Assemble(cat *eph.Catalog, outFile string) (err error) {
 	return
 }
 
+// fix: this is probably only core marshal here.
 func storyMarshaller(m jsn.Marshalee) (string, error) {
 	return cout.Marshal(m, story.CompactEncoder)
 }

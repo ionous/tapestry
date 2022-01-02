@@ -1,172 +1,166 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:patternReturn:": [
+        "events",
+        "state change",
         {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "events",
-            "state change",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type object:": [
+                "an",
+                "actor",
                 {
-                  "VariableDecl:name:type object:": [
+                  "ObjectType:kind:": [
                     "an",
-                    "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "VariableDecl:name:type object:": [
-                    "a",
-                    "noun",
-                    {
-                      "ObjectType:kind:": [
-                        "a",
-                        "thing"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:": [
-                    "a",
-                    "trait",
-                    "text"
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:": [
-                    "a",
-                    "guard",
-                    "text"
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:": [
-                    "a",
-                    "change",
-                    "text"
+                    "actor"
                   ]
                 }
               ]
             },
             {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "the",
-                  "success",
-                  "bool"
-                ]
-              }
+              "VariableDecl:name:type object:": [
+                "a",
+                "noun",
+                {
+                  "ObjectType:kind:": [
+                    "a",
+                    "thing"
+                  ]
+                }
+              ]
+            },
+            {
+              "VariableDecl:name:type primitive:": [
+                "a",
+                "trait",
+                "text"
+              ]
+            },
+            {
+              "VariableDecl:name:type primitive:": [
+                "a",
+                "guard",
+                "text"
+              ]
+            },
+            {
+              "VariableDecl:name:type primitive:": [
+                "a",
+                "change",
+                "text"
+              ]
             }
           ]
+        },
+        {
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "the",
+              "success",
+              "bool"
+            ]
+          }
         }
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
-        {
-          "EventBlock kinds:handlers:": [
-            "things",
-            [
+      "EventBlock kinds:handlers:": [
+        "things",
+        [
+          {
+            "EventHandler:event:patternRules:": [
+              "while",
+              "state change",
               {
-                "EventHandler:event:patternRules:": [
-                  "while",
-                  "state change",
+                "PatternRules:": [
                   {
-                    "PatternRules:": [
+                    "PatternRule:hook activity:": [
+                      "Always",
                       {
-                        "PatternRule:hook activity:": [
-                          "Always",
+                        "Act:": [
                           {
-                            "Act:": [
+                            "If:from:and:do:else:": [
+                              "resp",
                               {
-                                "If:from:and:do:else:": [
-                                  "resp",
-                                  {
-                                    "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "state changing",
+                                "FromTxt:": {
+                                  "Determine:arguments:": [
+                                    "state changing",
+                                    {
+                                      "Args:": [
                                         {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "trait",
-                                                "@trait"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "guard",
-                                                "@guard"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "change",
-                                                "@change"
-                                              ]
-                                            }
+                                          "Arg:from:": [
+                                            "noun",
+                                            "@noun"
                                           ]
-                                        }
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Not:": {
-                                      "Is empty:": "@resp"
-                                    }
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": "@resp"
-                                      },
-                                      {
-                                        "Let:be:": [
-                                          "success",
-                                          {
-                                            "FromBool:": false
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "ElseDo:": {
-                                      "Act:": [
-                                        {
-                                          "Comment:": "nothing has stopped us, so lets change the state now."
                                         },
                                         {
-                                          "Put obj:trait:": [
-                                            "@noun",
+                                          "Arg:from:": [
+                                            "trait",
                                             "@trait"
                                           ]
                                         },
                                         {
-                                          "Let:be:": [
-                                            "success",
-                                            {
-                                              "FromBool:": true
-                                            }
+                                          "Arg:from:": [
+                                            "guard",
+                                            "@guard"
+                                          ]
+                                        },
+                                        {
+                                          "Arg:from:": [
+                                            "change",
+                                            "@change"
                                           ]
                                         }
                                       ]
                                     }
+                                  ]
+                                }
+                              },
+                              {
+                                "Not:": {
+                                  "Is empty:": "@resp"
+                                }
+                              },
+                              {
+                                "Act:": [
+                                  {
+                                    "Say:": "@resp"
+                                  },
+                                  {
+                                    "Let:be:": [
+                                      "success",
+                                      {
+                                        "FromBool:": false
+                                      }
+                                    ]
                                   }
                                 ]
+                              },
+                              {
+                                "ElseDo:": {
+                                  "Act:": [
+                                    {
+                                      "Comment:": "nothing has stopped us, so lets change the state now."
+                                    },
+                                    {
+                                      "Put obj:trait:": [
+                                        "@noun",
+                                        "@trait"
+                                      ]
+                                    },
+                                    {
+                                      "Let:be:": [
+                                        "success",
+                                        {
+                                          "FromBool:": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
                               }
                             ]
                           }
@@ -177,42 +171,61 @@
                 ]
               }
             ]
-          ]
-        }
+          }
+        ]
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
-        {
-          "EventBlock kinds:handlers:": [
-            "things",
-            [
+      "EventBlock kinds:handlers:": [
+        "things",
+        [
+          {
+            "EventHandler:event:patternRules:": [
+              "after",
+              "state change",
               {
-                "EventHandler:event:patternRules:": [
-                  "after",
-                  "state change",
+                "PatternRules:": [
                   {
-                    "PatternRules:": [
+                    "PatternRule:hook activity:": [
+                      "Always",
                       {
-                        "PatternRule:hook activity:": [
-                          "Always",
+                        "Act:": [
                           {
-                            "Act:": [
-                              {
-                                "Say:": {
-                                  "Response:text:": [
-                                    "something changed iteself",
-                                    {
-                                      "RenderTemplate:": "{The: .noun|capitalize!} {are!} {.trait}."
-                                    }
-                                  ]
+                            "Say:": {
+                              "Response:text:": [
+                                "something changed iteself",
+                                {
+                                  "RenderTemplate:": "{The: .noun|capitalize!} {are!} {.trait}."
                                 }
-                              },
+                              ]
+                            }
+                          },
+                          {
+                            "Let:be:": [
+                              "success",
                               {
-                                "Let:be:": [
-                                  "success",
+                                "FromBool:": true
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "PatternRule:hook activity:": [
+                      {
+                        "Determine:arguments:": [
+                          "isPlayer",
+                          {
+                            "Args:": [
+                              {
+                                "Arg:from:": [
+                                  "obj",
                                   {
-                                    "FromBool:": true
+                                    "FromTxt:": "@actor"
                                   }
                                 ]
                               }
@@ -221,43 +234,22 @@
                         ]
                       },
                       {
-                        "PatternRule:hook activity:": [
+                        "Act:": [
                           {
-                            "Determine:arguments:": [
-                              "isPlayer",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      {
-                                        "FromTxt:": "@actor"
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "Say:": {
+                              "Response:text:": [
+                                "the player changed something",
+                                {
+                                  "RenderTemplate:": "{We!|capitalize!} {.change} {the: .noun}."
+                                }
+                              ]
+                            }
                           },
                           {
-                            "Act:": [
+                            "Let:be:": [
+                              "success",
                               {
-                                "Say:": {
-                                  "Response:text:": [
-                                    "the player changed something",
-                                    {
-                                      "RenderTemplate:": "{We!|capitalize!} {.change} {the: .noun}."
-                                    }
-                                  ]
-                                }
-                              },
-                              {
-                                "Let:be:": [
-                                  "success",
-                                  {
-                                    "FromBool:": true
-                                  }
-                                ]
+                                "FromBool:": true
                               }
                             ]
                           }
@@ -268,145 +260,143 @@
                 ]
               }
             ]
-          ]
-        }
+          }
+        ]
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "state changing",
         {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "state changing",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type object:": [
+                "a",
+                "noun",
                 {
-                  "VariableDecl:name:type object:": [
-                    "a",
-                    "noun",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:comment:": [
-                    "the",
-                    "trait",
-                    "text",
-                    "the trait we're changing to"
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:comment:": [
-                    "a",
-                    "guard",
-                    "text",
-                    ", a trait which blocks the noun from changing"
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:comment:": [
-                    "a",
-                    "change",
-                    "text",
-                    "which describes the action"
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
                   ]
                 }
               ]
             },
             {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "our",
-                  "result",
-                  "text"
-                ]
-              }
+              "VariableDecl:name:type primitive:comment:": [
+                "the",
+                "trait",
+                "text",
+                "the trait we're changing to"
+              ]
+            },
+            {
+              "VariableDecl:name:type primitive:comment:": [
+                "a",
+                "guard",
+                "text",
+                ", a trait which blocks the noun from changing"
+              ]
+            },
+            {
+              "VariableDecl:name:type primitive:comment:": [
+                "a",
+                "change",
+                "text",
+                "which describes the action"
+              ]
             }
           ]
         },
         {
-          "Comment:": "Called from the state change event to attempt to change the state. "
-        },
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "our",
+              "result",
+              "text"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Comment:": "Called from the state change event to attempt to change the state. "
+    },
+    {
+      "PatternActions:patternRules:": [
+        "state changing",
         {
-          "PatternActions:patternRules:": [
-            "state changing",
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Get obj:trait:": [
-                        "@noun",
-                        "@trait"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Comment:": "can't change what is."
-                        },
-                        {
-                          "Let:be:": [
-                            "result",
-                            {
-                              "FromTxt:": {
-                                "Response:text:": [
-                                  "can't change what is",
-                                  {
-                                    "RenderTemplate:": "{They: .noun|capitalize!} {are!} already {.trait}."
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                  "Get obj:trait:": [
+                    "@noun",
+                    "@trait"
                   ]
                 },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "AllTrue:": [
+                      "Comment:": "can't change what is."
+                    },
+                    {
+                      "Let:be:": [
+                        "result",
                         {
-                          "Not:": {
-                            "Is empty:": "@guard"
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Get obj:trait:": [
-                              "@noun",
-                              "@guard"
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't change what is",
+                              {
+                                "RenderTemplate:": "{They: .noun|capitalize!} {are!} already {.trait}."
+                              }
                             ]
                           }
                         }
                       ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "AllTrue:": [
+                    {
+                      "Not:": {
+                        "Is empty:": "@guard"
+                      }
                     },
                     {
-                      "Act:": [
+                      "Not:": {
+                        "Get obj:trait:": [
+                          "@noun",
+                          "@guard"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Comment:": "can't change the unchangeable."
+                    },
+                    {
+                      "Let:be:": [
+                        "result",
                         {
-                          "Comment:": "can't change the unchangeable."
-                        },
-                        {
-                          "Let:be:": [
-                            "result",
-                            {
-                              "FromTxt:": {
-                                "Response:text:": [
-                                  "can't change the unchangeable",
-                                  {
-                                    "RenderTemplate:": "{They: .noun|capitalize!} {arent!} something {we!} can {.change}."
-                                  }
-                                ]
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't change the unchangeable",
+                              {
+                                "RenderTemplate:": "{They: .noun|capitalize!} {arent!} something {we!} can {.change}."
                               }
-                            }
-                          ]
+                            ]
+                          }
                         }
                       ]
                     }
@@ -419,4 +409,4 @@
       ]
     }
   ]
-}
+]

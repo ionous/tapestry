@@ -1,115 +1,65 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
-        {
-          "Make kinds:of:": [
-            " things",
-            "kind"
-          ]
-        },
-        {
-          "KindsPossessProperties:propertyDecl:": [
-            " things",
-            [
-              {
-                "PropertyDecl:property:propertyType primitive:": [
-                  "a",
-                  "printed name",
-                  "text"
-                ]
-              }
+      "Make kinds:of:": [
+        " things",
+        "kind"
+      ]
+    },
+    {
+      "KindsPossessProperties:propertyDecl:": [
+        " things",
+        [
+          {
+            "PropertyDecl:property:propertyType primitive:": [
+              "a",
+              "printed name",
+              "text"
             ]
-          ]
-        }
+          }
+        ]
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
+      "TestScene:story:": [
+        "name of a kind",
         {
-          "TestScene:story:": [
-            "name of a kind",
+          "Story:": [
             {
-              "Story:": [
+              "Paragraph:": [
                 {
-                  "Paragraph:": [
-                    {
-                      "NounStatement:": {
-                        "Lede:nounPhrase kindOfNoun:": [
-                          [
-                            {
-                              "NamedNoun:name:": [
-                                "the",
-                                "named object"
-                              ]
-                            },
-                            {
-                              "NamedNoun:name:": [
-                                "the",
-                                "unnamed object"
-                              ]
-                            }
-                          ],
-                          {
-                            "KindOfNoun:kind:": [
-                              "are",
-                              "thing"
-                            ]
-                          }
+                  "NounStatement:": {
+                    "Lede:nounPhrase kindOfNoun:": [
+                      [
+                        "the named object",
+                        "the unnamed object"
+                      ],
+                      {
+                        "KindOfNoun:kind:": [
+                          "are",
+                          "thing"
                         ]
                       }
-                    },
-                    {
-                      "NounStatement:": {
-                        "Lede:nounPhrase nounTraits:": [
+                    ]
+                  }
+                },
+                {
+                  "NounStatement:": {
+                    "Lede:nounPhrase nounTraits:": [
+                      [
+                        "the unnamed object"
+                      ],
+                      {
+                        "NounTraits:trait:": [
+                          "is",
                           [
-                            {
-                              "NamedNoun:name:": [
-                                "the",
-                                "unnamed object"
-                              ]
-                            }
-                          ],
-                          {
-                            "NounTraits:trait:": [
-                              "is",
-                              [
-                                "privately named"
-                              ]
-                            ]
-                          }
+                            "privately named"
+                          ]
                         ]
                       }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestStatement:test:": [
-            "name of a kind",
-            {
-              "TestOutput:": "named object, thing"
-            }
-          ]
-        },
-        {
-          "Comment:": "The story engine automagically calls \"print name\" when the name of an object is used in a template.  ex. { .someObject }"
-        },
-        {
-          "TestRule:hook activity:": [
-            "name of a kind",
-            {
-              "Act:": [
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{.named}, {.unnamed}"
+                    ]
                   }
                 }
               ]
@@ -117,146 +67,50 @@
           ]
         }
       ]
+    }
+  ],
+  [
+    {
+      "TestStatement:test:": [
+        "name of a kind",
+        {
+          "TestOutput:": "named object, thing"
+        }
+      ]
     },
     {
-      "Paragraph:": [
+      "Comment:": "The story engine automagically calls \"print name\" when the name of an object is used in a template.  ex. { .someObject }"
+    },
+    {
+      "TestRule:hook activity:": [
+        "name of a kind",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "print name",
+          "Act:": [
             {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "Say:": {
+                "RenderTemplate:": "{.named}, {.unnamed}"
+              }
             }
           ]
-        },
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "print name",
         {
-          "PatternActions:patternRules:": [
-            "print name",
+          "PatternVariablesTail:": [
             {
-              "PatternRules:": [
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Singular of:": {
-                              "KindOf:": "@obj"
-                            }
-                          }
-                        },
-                        {
-                          "Determine:arguments:": [
-                            "Mention",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "publicly named"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "NameOf:": "@obj"
-                          }
-                        },
-                        {
-                          "Determine:arguments:": [
-                            "Mention",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Cmp:is:txt:": [
-                        {
-                          "Get:from:": [
-                            "printed name",
-                            {
-                              "VarFields:": "obj"
-                            }
-                          ]
-                        },
-                        "OtherThan",
-                        ""
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Get:from:": [
-                              "printed name",
-                              {
-                                "VarFields:": "obj"
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "Determine:arguments:": [
-                            "Mention",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
                   ]
                 }
               ]
@@ -266,76 +120,114 @@
       ]
     },
     {
-      "Paragraph:": [
+      "PatternActions:patternRules:": [
+        "print name",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "mention",
+          "PatternRules:": [
             {
-              "PatternVariablesTail:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
+                  "Act:": [
                     {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
+                      "Say:": {
+                        "Singular of:": {
+                          "KindOf:": "@obj"
+                        }
+                      }
+                    },
+                    {
+                      "Determine:arguments:": [
+                        "Mention",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
+                              ]
+                            }
+                          ]
+                        }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        },
-        {
-          "PatternActions:patternRules:": [
-            "mention",
+            },
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
+                  "Get obj:trait:": [
+                    "@obj",
+                    "publicly named"
+                  ]
+                },
+                {
+                  "Act:": [
                     {
-                      "KindOf:is:": [
-                        "@obj",
-                        "things"
-                      ]
+                      "Say:": {
+                        "NameOf:": "@obj"
+                      }
                     },
                     {
-                      "Act:": [
+                      "Determine:arguments:": [
+                        "Mention",
                         {
-                          "Put:from:at:": [
+                          "Args:": [
                             {
-                              "ObjField:": "@obj"
-                            },
-                            {
-                              "FromBool:": true
-                            },
-                            "mentioned"
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
+                              ]
+                            }
                           ]
-                        },
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Cmp:is:txt:": [
+                    {
+                      "Get:from:": [
+                        "printed name",
                         {
-                          "Put:from:at:": [
+                          "VarFields:": "obj"
+                        }
+                      ]
+                    },
+                    "OtherThan",
+                    ""
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Get:from:": [
+                          "printed name",
+                          {
+                            "VarFields:": "obj"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "Determine:arguments:": [
+                        "Mention",
+                        {
+                          "Args:": [
                             {
-                              "ObjField:": "settings"
-                            },
-                            {
-                              "FromNum:": {
-                                "Inc:by:": [
-                                  1,
-                                  {
-                                    "Get:from:": [
-                                      "mentions",
-                                      {
-                                        "ObjFields:": "settings"
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            },
-                            "mentions"
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
+                              ]
+                            }
                           ]
                         }
                       ]
@@ -348,5 +240,86 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "mention",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PatternActions:patternRules:": [
+        "mention",
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "KindOf:is:": [
+                    "@obj",
+                    "things"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Put:from:at:": [
+                        {
+                          "ObjField:": "@obj"
+                        },
+                        {
+                          "FromBool:": true
+                        },
+                        "mentioned"
+                      ]
+                    },
+                    {
+                      "Put:from:at:": [
+                        {
+                          "ObjField:": "settings"
+                        },
+                        {
+                          "FromNum:": {
+                            "Inc:by:": [
+                              1,
+                              {
+                                "Get:from:": [
+                                  "mentions",
+                                  {
+                                    "ObjFields:": "settings"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "mentions"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
-}
+]

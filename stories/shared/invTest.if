@@ -1,410 +1,310 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "NounStatement:tail:": [
         {
-          "NounStatement:tail:": [
+          "Lede:nounPhrase kindOfNoun:": [
+            [
+              "the flower"
+            ],
             {
-              "Lede:nounPhrase kindOfNoun:": [
+              "KindOfNoun:trait:kind:": [
+                "isa",
                 [
-                  {
-                    "NamedNoun:name:": [
-                      "the",
-                      "flower"
-                    ]
-                  }
+                  "wearable",
+                  "worn"
                 ],
-                {
-                  "KindOfNoun:trait:kind:": [
-                    "isa",
-                    [
-                      "wearable",
-                      "worn"
-                    ],
-                    "thing"
-                  ]
-                }
+                "thing"
               ]
-            },
-            []
+            }
           ]
         },
+        []
+      ]
+    },
+    {
+      "NounStatement:tail:": [
         {
-          "NounStatement:tail:": [
+          "Lede:nounPhrase kindOfNoun:": [
+            [
+              "the headlamp"
+            ],
             {
-              "Lede:nounPhrase kindOfNoun:": [
+              "KindOfNoun:trait:kind:": [
+                "isa",
                 [
-                  {
-                    "NamedNoun:name:": [
-                      "the",
-                      "headlamp"
-                    ]
-                  }
+                  "lit",
+                  "wearable",
+                  "worn"
                 ],
-                {
-                  "KindOfNoun:trait:kind:": [
-                    "isa",
-                    [
-                      "lit",
-                      "wearable",
-                      "worn"
-                    ],
-                    "thing"
-                  ]
-                }
+                "thing"
               ]
-            },
-            []
+            }
           ]
         },
+        []
+      ]
+    },
+    {
+      "NounStatement:tail:": [
         {
-          "NounStatement:tail:": [
+          "Lede:nounPhrase kindOfNoun:": [
+            [
+              "the book of secrets"
+            ],
             {
-              "Lede:nounPhrase kindOfNoun:": [
+              "KindOfNoun:trait:kind:": [
+                "isan",
                 [
-                  {
-                    "NamedNoun:name:": [
-                      "the",
-                      "book of secrets"
-                    ]
-                  }
+                  "openable",
+                  "closed",
+                  "locked"
                 ],
-                {
-                  "KindOfNoun:trait:kind:": [
-                    "isan",
-                    [
-                      "openable",
-                      "closed",
-                      "locked"
-                    ],
-                    "container"
-                  ]
-                }
+                "container"
               ]
-            },
-            []
+            }
           ]
         },
+        []
+      ]
+    },
+    {
+      "NounStatement:tail:": [
         {
-          "NounStatement:tail:": [
+          "Lede:nounPhrase kindOfNoun:": [
+            [
+              "the book of wisdom"
+            ],
             {
-              "Lede:nounPhrase kindOfNoun:": [
+              "KindOfNoun:trait:kind:": [
+                "isan",
                 [
-                  {
-                    "NamedNoun:name:": [
-                      "the",
-                      "book of wisdom"
-                    ]
-                  }
+                  "openable",
+                  "open"
                 ],
-                {
-                  "KindOfNoun:trait:kind:": [
-                    "isan",
-                    [
-                      "openable",
-                      "open"
-                    ],
-                    "container"
-                  ]
-                }
+                "container"
               ]
-            },
-            []
+            }
           ]
         },
+        []
+      ]
+    },
+    {
+      "NounStatement:tail:": [
         {
-          "NounStatement:tail:": [
+          "Lede:nounPhrase kindOfNoun:": [
+            [
+              "the clutch"
+            ],
             {
-              "Lede:nounPhrase kindOfNoun:": [
+              "KindOfNoun:trait:kind:": [
+                "isan",
                 [
-                  {
-                    "NamedNoun:name:": [
-                      "the",
-                      "clutch"
-                    ]
-                  }
+                  "openable",
+                  "open"
                 ],
-                {
-                  "KindOfNoun:trait:kind:": [
-                    "isan",
-                    [
-                      "openable",
-                      "open"
-                    ],
-                    "container"
-                  ]
-                }
+                "container"
               ]
-            },
-            []
+            }
           ]
         },
+        []
+      ]
+    },
+    {
+      "NounStatement:tail:": [
         {
-          "NounStatement:tail:": [
+          "Lede:nounPhrase kindOfNoun:": [
+            [
+              "the purse"
+            ],
             {
-              "Lede:nounPhrase kindOfNoun:": [
+              "KindOfNoun:trait:kind:": [
+                "isan",
                 [
-                  {
-                    "NamedNoun:name:": [
-                      "the",
-                      "purse"
-                    ]
-                  }
+                  "wearable",
+                  "openable",
+                  "open"
                 ],
-                {
-                  "KindOfNoun:trait:kind:": [
-                    "isan",
-                    [
-                      "wearable",
-                      "openable",
-                      "open"
-                    ],
-                    "container"
-                  ]
-                }
+                "container"
               ]
-            },
-            []
+            }
           ]
         },
+        []
+      ]
+    },
+    {
+      "NounStatement:tail:": [
         {
-          "NounStatement:tail:": [
+          "Lede:nounPhrase kindOfNoun:": [
+            [
+              "the flashlight"
+            ],
             {
-              "Lede:nounPhrase kindOfNoun:": [
+              "KindOfNoun:trait:kind:": [
+                "isa",
                 [
-                  {
-                    "NamedNoun:name:": [
-                      "the",
-                      "flashlight"
-                    ]
-                  }
+                  "lit"
                 ],
-                {
-                  "KindOfNoun:trait:kind:": [
-                    "isa",
-                    [
-                      "lit"
-                    ],
-                    "thing"
-                  ]
-                }
+                "thing"
               ]
-            },
-            []
+            }
           ]
         },
+        []
+      ]
+    },
+    {
+      "NounStatement:tail:": [
         {
-          "NounStatement:tail:": [
+          "Lede:nounPhrase kindOfNoun:": [
+            [
+              "the coin"
+            ],
             {
-              "Lede:nounPhrase kindOfNoun:": [
-                [
-                  {
-                    "NamedNoun:name:": [
-                      "the",
-                      "coin"
-                    ]
-                  }
-                ],
-                {
-                  "KindOfNoun:kind:": [
-                    "isa",
-                    "thing"
-                  ]
-                }
+              "KindOfNoun:kind:": [
+                "isa",
+                "thing"
               ]
-            },
-            []
+            }
           ]
+        },
+        []
+      ]
+    }
+  ],
+  [
+    {
+      "RelativeToNoun:nouns:areBeing:nouns1:": [
+        "whereabouts",
+        [
+          "the flower",
+          "the headlamp",
+          "the secrets",
+          "the wisdom",
+          "the clutch"
+        ],
+        "is",
+        [
+          "our Mildred"
+        ]
+      ]
+    },
+    {
+      "RelativeToNoun:nouns:areBeing:nouns1:": [
+        "whereabouts",
+        [
+          "the coin"
+        ],
+        "is",
+        [
+          "the purse"
+        ]
+      ]
+    },
+    {
+      "RelativeToNoun:nouns:areBeing:nouns1:": [
+        "whereabouts",
+        [
+          "the purse"
+        ],
+        "is",
+        [
+          "the clutch"
+        ]
+      ]
+    }
+  ],
+  [
+    {
+      "TestStatement:test:": [
+        "status printing test",
+        {
+          "TestOutput:": "the flower: (being worn).\nthe headlamp: (providing light and being worn).\nthe book of secrets: (closed and locked).\nthe book of wisdom: (open but empty).\nthe clutch: (open).\nthe purse: (open).\nthe flashlight: (providing light).\nthe coin: .\n"
         }
       ]
     },
     {
-      "Paragraph:": [
+      "TestRule:hook activity:": [
+        "status printing test",
         {
-          "RelativeToNoun:nouns:areBeing:nouns1:": [
-            "whereabouts",
-            [
-              {
-                "NamedNoun:name:": [
-                  "the",
-                  "flower"
-                ]
-              },
-              {
-                "NamedNoun:name:": [
-                  "the",
-                  "headlamp"
-                ]
-              },
-              {
-                "NamedNoun:name:": [
-                  "the",
-                  "secrets"
-                ]
-              },
-              {
-                "NamedNoun:name:": [
-                  "the",
-                  "wisdom"
-                ]
-              },
-              {
-                "NamedNoun:name:": [
-                  "the",
-                  "clutch"
-                ]
-              }
-            ],
-            "is",
-            [
-              {
-                "NamedNoun:name:": [
-                  "our",
-                  "Mildred"
-                ]
-              }
-            ]
-          ]
-        },
-        {
-          "RelativeToNoun:nouns:areBeing:nouns1:": [
-            "whereabouts",
-            [
-              {
-                "NamedNoun:name:": [
-                  "the",
-                  "coin"
-                ]
-              }
-            ],
-            "is",
-            [
-              {
-                "NamedNoun:name:": [
-                  "the",
-                  "purse"
-                ]
-              }
-            ]
-          ]
-        },
-        {
-          "RelativeToNoun:nouns:areBeing:nouns1:": [
-            "whereabouts",
-            [
-              {
-                "NamedNoun:name:": [
-                  "the",
-                  "purse"
-                ]
-              }
-            ],
-            "is",
-            [
-              {
-                "NamedNoun:name:": [
-                  "the",
-                  "clutch"
-                ]
-              }
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestStatement:test:": [
-            "status printing test",
+          "Act:": [
             {
-              "TestOutput:": "the flower: (being worn).\nthe headlamp: (providing light and being worn).\nthe book of secrets: (closed and locked).\nthe book of wisdom: (open but empty).\nthe clutch: (open).\nthe purse: (open).\nthe flashlight: (providing light).\nthe coin: .\n"
-            }
-          ]
-        },
-        {
-          "TestRule:hook activity:": [
-            "status printing test",
+              "Say:": {
+                "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
+              }
+            },
             {
-              "Act:": [
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
-                  }
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
-                  }
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
-                  }
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
-                  }
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
-                  }
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
-                  }
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
-                  }
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
-                  }
-                }
-              ]
+              "Say:": {
+                "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
+              }
             }
           ]
         }
       ]
+    }
+  ],
+  [
+    {
+      "TestStatement:test:": [
+        "default inventory",
+        {
+          "TestOutput:": "You are carrying:\n  - a book of secrets (closed and locked)\n  - a book of wisdom (open but empty)\n  - a clutch (open) \n    - a purse (open) \n      - a coin\n  - a flower (being worn)\n  - a headlamp (providing light and being worn)\n"
+        }
+      ]
     },
     {
-      "Paragraph:": [
+      "Comment:": "Print inventory as a list."
+    },
+    {
+      "TestRule:hook activity:": [
+        "default inventory",
         {
-          "TestStatement:test:": [
-            "default inventory",
+          "Act:": [
             {
-              "TestOutput:": "You are carrying:\n  - a book of secrets (closed and locked)\n  - a book of wisdom (open but empty)\n  - a clutch (open) \n    - a purse (open) \n      - a coin\n  - a flower (being worn)\n  - a headlamp (providing light and being worn)\n"
-            }
-          ]
-        },
-        {
-          "Comment:": "Print inventory as a list."
-        },
-        {
-          "TestRule:hook activity:": [
-            "default inventory",
-            {
-              "Act:": [
+              "Determine:arguments:": [
+                "Print inventory",
                 {
-                  "Determine:arguments:": [
-                    "Print inventory",
+                  "Args:": [
                     {
-                      "Args:": [
+                      "Arg:from:": [
+                        "actor",
                         {
-                          "Arg:from:": [
-                            "actor",
-                            {
-                              "FromTxt:": {
-                                "IdOf:": "Mildred"
-                              }
-                            }
-                          ]
+                          "FromTxt:": {
+                            "IdOf:": "Mildred"
+                          }
                         }
                       ]
                     }
@@ -417,4 +317,4 @@
       ]
     }
   ]
-}
+]

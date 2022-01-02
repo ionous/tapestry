@@ -1,552 +1,506 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "TestStatement:test:": [
+        "storing test",
         {
-          "TestStatement:test:": [
-            "storing test",
-            {
-              "TestOutput:": "  - Fail to store something into an actor:\n  That seems to belong to Mildred.clutch parent: clutch.\n  - Fail to store something into a closed container:\n  The counter is closed.coffee parent: self.\n  - Fail to store something into something nested:\n  You can't put  that in itself.clutch parent: self.\n  - Okay, store something into an open container:\n  You put the coffee beans in the purse.coffee parent: purse.\n  - Okay, store something onto a supporter:\n  You put the coin on the shelf.coin parent: shelf.\n  - Fail to store something worn:\n  You would have to take that off first.flower parent: self.\n  - Fail to store something not held:\n  You haven't got that!broom parent: kitchen.\n  - Okay, store something into something held:\n  You put the rusty knife in the purse.knife parent: purse.\n  - Fail to store something to somewhere unreachable:\n  You haven't got that!purse parent: clutch.\n"
-            }
-          ]
-        },
-        {
-          "TestRule:hook activity:": [
-            "storing test",
-            {
-              "Act:": [
-                {
-                  "Say:": {
-                    "Rows:": {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Fail to store something into an actor:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "storing into",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "clutch"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "mildred"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "clutch parent: {parentOf:.purse}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Fail to store something into a closed container:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "storing into",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "coffee"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "machine"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "coffee parent: {parentOf:.coffee}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Fail to store something into something nested:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "storing into",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "clutch"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "purse"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "clutch parent: {parentOf:.clutch}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Okay, store something into an open container:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "storing into",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "coffee"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "purse"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "coffee parent: {parentOf:.coffee}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Okay, store something onto a supporter:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "storing into",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "coin"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "shelf"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "coin parent: {parentOf:.coin}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Fail to store something worn:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "storing into",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "flower"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "shelf"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "flower parent: {parentOf:.flower}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Fail to store something not held:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "storing into",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "broom"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "cabinet"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "broom parent: {parentOf:.broom}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Okay, store something into something held:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "storing into",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "knife"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "purse"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "knife parent: {parentOf:.knife}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "Say:": {
-                            "Row:": {
-                              "Act:": [
-                                {
-                                  "Say:": "Fail to store something to somewhere unreachable:<br>"
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "storing into",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "agent",
-                                            {
-                                              "FromTxt:": "player"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            {
-                                              "FromTxt:": "purse"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "other noun",
-                                            {
-                                              "FromTxt:": "wisdom"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "purse parent: {parentOf:.purse}."
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
-            }
-          ]
+          "TestOutput:": "  - Fail to store something into an actor:\n  That seems to belong to Mildred.clutch parent: clutch.\n  - Fail to store something into a closed container:\n  The counter is closed.coffee parent: self.\n  - Fail to store something into something nested:\n  You can't put  that in itself.clutch parent: self.\n  - Okay, store something into an open container:\n  You put the coffee beans in the purse.coffee parent: purse.\n  - Okay, store something onto a supporter:\n  You put the coin on the shelf.coin parent: shelf.\n  - Fail to store something worn:\n  You would have to take that off first.flower parent: self.\n  - Fail to store something not held:\n  You haven't got that!broom parent: kitchen.\n  - Okay, store something into something held:\n  You put the rusty knife in the purse.knife parent: purse.\n  - Fail to store something to somewhere unreachable:\n  You haven't got that!purse parent: clutch.\n"
         }
       ]
     },
     {
-      "Paragraph:": [
+      "TestRule:hook activity:": [
+        "storing test",
         {
-          "TestScene:story:": [
-            "storing test",
+          "Act:": [
             {
-              "Story:": [
-                {
-                  "Paragraph:": [
+              "Say:": {
+                "Rows:": {
+                  "Act:": [
                     {
-                      "RelativeToNoun:nouns:areBeing:nouns1:": [
-                        "whereabouts",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "coffee"
-                            ]
-                          },
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "coin"
-                            ]
-                          },
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "clutch"
-                            ]
-                          },
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "knife"
-                            ]
-                          },
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "flower"
-                            ]
-                          }
-                        ],
-                        "are",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "our",
-                              "self"
-                            ]
-                          }
-                        ]
-                      ]
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Fail to store something into an actor:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "storing into",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "clutch"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "mildred"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "clutch parent: {parentOf:.purse}."
+                              }
+                            }
+                          ]
+                        }
+                      }
                     },
                     {
-                      "RelativeToNoun:nouns:areBeing:nouns1:": [
-                        "whereabouts",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "our",
-                              " Mildred"
-                            ]
-                          }
-                        ],
-                        "is",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "kitchen"
-                            ]
-                          }
-                        ]
-                      ]
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Fail to store something into a closed container:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "storing into",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "coffee"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "machine"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "coffee parent: {parentOf:.coffee}."
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Fail to store something into something nested:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "storing into",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "clutch"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "purse"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "clutch parent: {parentOf:.clutch}."
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Okay, store something into an open container:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "storing into",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "coffee"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "purse"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "coffee parent: {parentOf:.coffee}."
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Okay, store something onto a supporter:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "storing into",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "coin"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "shelf"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "coin parent: {parentOf:.coin}."
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Fail to store something worn:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "storing into",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "flower"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "shelf"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "flower parent: {parentOf:.flower}."
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Fail to store something not held:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "storing into",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "broom"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "cabinet"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "broom parent: {parentOf:.broom}."
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Okay, store something into something held:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "storing into",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "knife"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "purse"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "knife parent: {parentOf:.knife}."
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "Say:": {
+                        "Row:": {
+                          "Act:": [
+                            {
+                              "Say:": "Fail to store something to somewhere unreachable:<br>"
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "storing into",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "agent",
+                                        {
+                                          "FromTxt:": "player"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        {
+                                          "FromTxt:": "purse"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "other noun",
+                                        {
+                                          "FromTxt:": "wisdom"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "purse parent: {parentOf:.purse}."
+                              }
+                            }
+                          ]
+                        }
+                      }
                     }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "TestScene:story:": [
+        "storing test",
+        {
+          "Story:": [
+            {
+              "Paragraph:": [
+                {
+                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                    "whereabouts",
+                    [
+                      "the coffee",
+                      "the coin",
+                      "the clutch",
+                      "the knife",
+                      "the flower"
+                    ],
+                    "are",
+                    [
+                      "our self"
+                    ]
+                  ]
+                },
+                {
+                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                    "whereabouts",
+                    [
+                      "our Mildred"
+                    ],
+                    "is",
+                    [
+                      "the kitchen"
+                    ]
                   ]
                 }
               ]
@@ -556,4 +510,4 @@
       ]
     }
   ]
-}
+]

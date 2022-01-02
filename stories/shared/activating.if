@@ -1,126 +1,184 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "ActionDecl:action:actionParams common:": [
+        "activate",
+        "activating",
         {
-          "ActionDecl:action:actionParams common:": [
-            "activate",
-            "activating",
+          "CommonAction:": "object"
+        }
+      ]
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "activating",
+        {
+          "PatternLocals:": [
             {
-              "CommonAction:": "object"
+              "LocalDecl:value:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "actor"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "Get:from:": [
+                      "pawn",
+                      {
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
+                }
+              ]
             }
           ]
         },
         {
-          "PatternActions:patternLocals:patternRules:": [
-            "activating",
+          "PatternRules:": [
             {
-              "PatternLocals:": [
+              "PatternRule:hook activity:": [
                 {
-                  "LocalDecl:value:": [
+                  "Determine:arguments:": [
+                    "isPlayer",
                     {
-                      "VariableDecl:name:type object:": [
-                        "an",
-                        "actor",
+                      "Args:": [
                         {
-                          "ObjectType:kind:": [
-                            "an",
-                            "actor"
+                          "Arg:from:": [
+                            "obj",
+                            "@actor"
                           ]
                         }
                       ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "Get:from:": [
-                          "pawn",
-                          {
-                            "VarFields:": "agent"
-                          }
-                        ]
-                      }
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "PatternRules:": [
+                },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "isPlayer",
+                      "If:from:and:do:else:": [
+                        "resp",
                         {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "If:from:and:do:else:": [
-                            "resp",
-                            {
-                              "FromTxt:": {
-                                "Determine:arguments:": [
-                                  "can reach",
+                          "FromTxt:": {
+                            "Determine:arguments:": [
+                              "can reach",
+                              {
+                                "Args:": [
                                   {
-                                    "Args:": [
+                                    "Arg:from:": [
+                                      "actor",
+                                      "@actor"
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "action",
                                       {
-                                        "Arg:from:": [
-                                          "actor",
-                                          "@actor"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "action",
-                                          {
-                                            "FromTxt:": "activating"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "noun",
-                                          "@noun"
-                                        ]
+                                        "FromTxt:": "activating"
                                       }
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "noun",
+                                      "@noun"
                                     ]
                                   }
                                 ]
                               }
-                            },
+                            ]
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@resp"
+                          }
+                        },
+                        {
+                          "Act:": [
                             {
-                              "Not:": {
-                                "Is empty:": "@resp"
-                              }
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "@resp"
-                                }
-                              ]
-                            },
-                            {
-                              "ElseDo:": {
-                                "Act:": [
+                              "Say:": "@resp"
+                            }
+                          ]
+                        },
+                        {
+                          "ElseDo:": {
+                            "Act:": [
+                              {
+                                "If:from:and:do:else:": [
+                                  "resp",
                                   {
-                                    "If:from:and:do:else:": [
-                                      "resp",
+                                    "FromTxt:": {
+                                      "Determine:arguments:": [
+                                        "can use",
+                                        {
+                                          "Args:": [
+                                            {
+                                              "Arg:from:": [
+                                                "actor",
+                                                "@actor"
+                                              ]
+                                            },
+                                            {
+                                              "Arg:from:": [
+                                                "action",
+                                                {
+                                                  "FromTxt:": "activating"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "Arg:from:": [
+                                                "noun",
+                                                "@noun"
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "Not:": {
+                                      "Is empty:": "@resp"
+                                    }
+                                  },
+                                  {
+                                    "Act:": [
                                       {
-                                        "FromTxt:": {
-                                          "Determine:arguments:": [
-                                            "can use",
+                                        "Say:": "@resp"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "ElseDo:": {
+                                      "Act:": [
+                                        {
+                                          "Send:path:arguments:": [
+                                            "state change",
+                                            {
+                                              "Determine:arguments:": [
+                                                "parentsOf",
+                                                {
+                                                  "Args:": [
+                                                    {
+                                                      "Arg:from:": [
+                                                        "obj",
+                                                        "@noun"
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
                                             {
                                               "Args:": [
                                                 {
@@ -131,93 +189,31 @@
                                                 },
                                                 {
                                                   "Arg:from:": [
-                                                    "action",
+                                                    "noun",
+                                                    "@noun"
+                                                  ]
+                                                },
+                                                {
+                                                  "Arg:from:": [
+                                                    "trait",
                                                     {
-                                                      "FromTxt:": "activating"
+                                                      "FromTxt:": "activated"
                                                     }
                                                   ]
                                                 },
                                                 {
                                                   "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        "Not:": {
-                                          "Is empty:": "@resp"
-                                        }
-                                      },
-                                      {
-                                        "Act:": [
-                                          {
-                                            "Say:": "@resp"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "ElseDo:": {
-                                          "Act:": [
-                                            {
-                                              "Send:path:arguments:": [
-                                                "state change",
-                                                {
-                                                  "Determine:arguments:": [
-                                                    "parentsOf",
+                                                    "guard",
                                                     {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "obj",
-                                                            "@noun"
-                                                          ]
-                                                        }
-                                                      ]
+                                                      "FromTxt:": "activatable"
                                                     }
                                                   ]
                                                 },
                                                 {
-                                                  "Args:": [
+                                                  "Arg:from:": [
+                                                    "change",
                                                     {
-                                                      "Arg:from:": [
-                                                        "actor",
-                                                        "@actor"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "noun",
-                                                        "@noun"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "trait",
-                                                        {
-                                                          "FromTxt:": "activated"
-                                                        }
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "guard",
-                                                        {
-                                                          "FromTxt:": "activatable"
-                                                        }
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "change",
-                                                        {
-                                                          "FromTxt:": "switch on"
-                                                        }
-                                                      ]
+                                                      "FromTxt:": "switch on"
                                                     }
                                                   ]
                                                 }
@@ -225,335 +221,329 @@
                                             }
                                           ]
                                         }
-                                      }
-                                    ]
+                                      ]
+                                    }
                                   }
                                 ]
                               }
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "ActionDecl:action:actionParams common:": [
-            "deactivate",
-            "deactivating",
-            {
-              "CommonAction:": "object"
-            }
-          ]
-        },
-        {
-          "PatternActions:patternLocals:patternRules:": [
-            "deactivating",
-            {
-              "PatternLocals:": [
-                {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type object:": [
-                        "an",
-                        "actor",
-                        {
-                          "ObjectType:kind:": [
-                            "an",
-                            "actor"
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "Get:from:": [
-                          "pawn",
-                          {
-                            "VarFields:": "agent"
+                            ]
                           }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Determine:arguments:": [
-                        "isPlayer",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "If:from:and:do:else:": [
-                            "resp",
-                            {
-                              "FromTxt:": {
-                                "Determine:arguments:": [
-                                  "can reach",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "actor",
-                                          "@actor"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "action",
-                                          {
-                                            "FromTxt:": "deactivating"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "noun",
-                                          "@noun"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "Not:": {
-                                "Is empty:": "@resp"
-                              }
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "@resp"
-                                }
-                              ]
-                            },
-                            {
-                              "ElseDo:": {
-                                "Act:": [
-                                  {
-                                    "If:from:and:do:else:": [
-                                      "resp",
-                                      {
-                                        "FromTxt:": {
-                                          "Determine:arguments:": [
-                                            "can use",
-                                            {
-                                              "Args:": [
-                                                {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "action",
-                                                    {
-                                                      "FromTxt:": "deactivating"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        "Not:": {
-                                          "Is empty:": "@resp"
-                                        }
-                                      },
-                                      {
-                                        "Act:": [
-                                          {
-                                            "Say:": "@resp"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "ElseDo:": {
-                                          "Act:": [
-                                            {
-                                              "Send:path:arguments:": [
-                                                "state change",
-                                                {
-                                                  "Determine:arguments:": [
-                                                    "parentsOf",
-                                                    {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "obj",
-                                                            "@noun"
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "actor",
-                                                        "@actor"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "noun",
-                                                        "@noun"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "trait",
-                                                        {
-                                                          "FromTxt:": "deactivated"
-                                                        }
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "guard",
-                                                        {
-                                                          "FromTxt:": "activatable"
-                                                        }
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "change",
-                                                        {
-                                                          "FromTxt:": "switch off"
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            }
-                          ]
                         }
                       ]
                     }
                   ]
                 }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "Make kinds:of:": [
-            " devices",
-            "prop"
-          ]
-        },
-        {
-          "KindsPossessProperties:propertyDecl:": [
-            " devices",
-            [
-              {
-                "PropertyDecl:property:propertyType propertyAspect:": [
-                  "an",
-                  "activatability",
-                  "aspect"
-                ]
-              },
-              {
-                "PropertyDecl:property:propertyType propertyAspect:": [
-                  "an",
-                  "activation",
-                  "aspect"
-                ]
-              }
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "KindsOfAspect:": " activatability"
-        },
-        {
-          "AspectTraits:traitPhrase:": [
-            " activatability",
-            {
-              "TraitPhrase:trait:": [
-                "canbe",
-                [
-                  "activatable",
-                  "not activatable"
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "KindsOfAspect:": " activation"
-        },
-        {
-          "AspectTraits:traitPhrase:": [
-            " activation",
-            {
-              "TraitPhrase:trait:": [
-                "canbe",
-                [
-                  "deactivated",
-                  "activated"
-                ]
               ]
             }
           ]
         }
       ]
     }
+  ],
+  [
+    {
+      "ActionDecl:action:actionParams common:": [
+        "deactivate",
+        "deactivating",
+        {
+          "CommonAction:": "object"
+        }
+      ]
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "deactivating",
+        {
+          "PatternLocals:": [
+            {
+              "LocalDecl:value:": [
+                {
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "actor"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "Get:from:": [
+                      "pawn",
+                      {
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Determine:arguments:": [
+                    "isPlayer",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "obj",
+                            "@actor"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "If:from:and:do:else:": [
+                        "resp",
+                        {
+                          "FromTxt:": {
+                            "Determine:arguments:": [
+                              "can reach",
+                              {
+                                "Args:": [
+                                  {
+                                    "Arg:from:": [
+                                      "actor",
+                                      "@actor"
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "action",
+                                      {
+                                        "FromTxt:": "deactivating"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "noun",
+                                      "@noun"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@resp"
+                          }
+                        },
+                        {
+                          "Act:": [
+                            {
+                              "Say:": "@resp"
+                            }
+                          ]
+                        },
+                        {
+                          "ElseDo:": {
+                            "Act:": [
+                              {
+                                "If:from:and:do:else:": [
+                                  "resp",
+                                  {
+                                    "FromTxt:": {
+                                      "Determine:arguments:": [
+                                        "can use",
+                                        {
+                                          "Args:": [
+                                            {
+                                              "Arg:from:": [
+                                                "actor",
+                                                "@actor"
+                                              ]
+                                            },
+                                            {
+                                              "Arg:from:": [
+                                                "action",
+                                                {
+                                                  "FromTxt:": "deactivating"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "Arg:from:": [
+                                                "noun",
+                                                "@noun"
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "Not:": {
+                                      "Is empty:": "@resp"
+                                    }
+                                  },
+                                  {
+                                    "Act:": [
+                                      {
+                                        "Say:": "@resp"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "ElseDo:": {
+                                      "Act:": [
+                                        {
+                                          "Send:path:arguments:": [
+                                            "state change",
+                                            {
+                                              "Determine:arguments:": [
+                                                "parentsOf",
+                                                {
+                                                  "Args:": [
+                                                    {
+                                                      "Arg:from:": [
+                                                        "obj",
+                                                        "@noun"
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "Args:": [
+                                                {
+                                                  "Arg:from:": [
+                                                    "actor",
+                                                    "@actor"
+                                                  ]
+                                                },
+                                                {
+                                                  "Arg:from:": [
+                                                    "noun",
+                                                    "@noun"
+                                                  ]
+                                                },
+                                                {
+                                                  "Arg:from:": [
+                                                    "trait",
+                                                    {
+                                                      "FromTxt:": "deactivated"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "Arg:from:": [
+                                                    "guard",
+                                                    {
+                                                      "FromTxt:": "activatable"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "Arg:from:": [
+                                                    "change",
+                                                    {
+                                                      "FromTxt:": "switch off"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "Make kinds:of:": [
+        " devices",
+        "prop"
+      ]
+    },
+    {
+      "KindsPossessProperties:propertyDecl:": [
+        " devices",
+        [
+          {
+            "PropertyDecl:property:propertyType propertyAspect:": [
+              "an",
+              "activatability",
+              "aspect"
+            ]
+          },
+          {
+            "PropertyDecl:property:propertyType propertyAspect:": [
+              "an",
+              "activation",
+              "aspect"
+            ]
+          }
+        ]
+      ]
+    }
+  ],
+  [
+    {
+      "KindsOfAspect:": " activatability"
+    },
+    {
+      "AspectTraits:traitPhrase:": [
+        " activatability",
+        {
+          "TraitPhrase:trait:": [
+            "canbe",
+            [
+              "activatable",
+              "not activatable"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "KindsOfAspect:": " activation"
+    },
+    {
+      "AspectTraits:traitPhrase:": [
+        " activation",
+        {
+          "TraitPhrase:trait:": [
+            "canbe",
+            [
+              "deactivated",
+              "activated"
+            ]
+          ]
+        }
+      ]
+    }
   ]
-}
+]

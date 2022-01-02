@@ -1,32 +1,48 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "parser bounds",
         {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "parser bounds",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
                 {
-                  "VariableDecl:name:type object:": [
+                  "ObjectType:kind:": [
                     "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "PatternReturn:": {
+            "VariableDecl:name:type ext:": [
+              "our",
+              "bounds",
+              {
+                "ExtType textList:": "list"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "parser bounds",
+        {
+          "PatternLocals:": [
             {
-              "PatternReturn:": {
+              "LocalDecl:": {
                 "VariableDecl:name:type ext:": [
-                  "our",
-                  "bounds",
+                  "a",
+                  "queue",
                   {
                     "ExtType textList:": "list"
                   }
@@ -36,132 +52,112 @@
           ]
         },
         {
-          "PatternActions:patternLocals:patternRules:": [
-            "parser bounds",
+          "PatternRules:": [
             {
-              "PatternLocals:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "LocalDecl:": {
-                    "VariableDecl:name:type ext:": [
-                      "a",
-                      "queue",
-                      {
-                        "ExtType textList:": "list"
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    "Always",
+                  "Act:": [
                     {
-                      "Act:": [
+                      "Put:into:atFront:": [
+                        "@obj",
                         {
-                          "Put:into:atFront:": [
-                            "@obj",
+                          "IntoTxts:": "bounds"
+                        },
+                        "Always"
+                      ]
+                    },
+                    {
+                      "Put:into:": [
+                        "@obj",
+                        {
+                          "IntoTxts:": "queue"
+                        }
+                      ]
+                    },
+                    {
+                      "Repeating:do:": [
+                        {
+                          "Cmp:is:num:": [
                             {
-                              "IntoTxts:": "bounds"
+                              "Len:": "@queue"
                             },
-                            "Always"
+                            "GreaterThan",
+                            0
                           ]
                         },
                         {
-                          "Put:into:": [
-                            "@obj",
+                          "Act:": [
                             {
-                              "IntoTxts:": "queue"
-                            }
-                          ]
-                        },
-                        {
-                          "Repeating:do:": [
-                            {
-                              "Cmp:is:num:": [
+                              "Erasing:atFront:as:do:": [
                                 {
-                                  "Len:": "@queue"
+                                  "VarOfTxts:": "queue"
                                 },
-                                "GreaterThan",
-                                0
-                              ]
-                            },
-                            {
-                              "Act:": [
+                                "Always",
+                                "enc",
                                 {
-                                  "Erasing:atFront:as:do:": [
+                                  "Act:": [
                                     {
-                                      "VarOfTxts:": "queue"
-                                    },
-                                    "Always",
-                                    "enc",
-                                    {
-                                      "Act:": [
+                                      "Repeating across:as:do:": [
                                         {
-                                          "Repeating across:as:do:": [
-                                            {
-                                              "FromTxts:": {
-                                                "Determine:arguments:": [
-                                                  "childrenOf",
+                                          "FromTxts:": {
+                                            "Determine:arguments:": [
+                                              "childrenOf",
+                                              {
+                                                "Args:": [
                                                   {
-                                                    "Args:": [
-                                                      {
-                                                        "Arg:from:": [
-                                                          "obj",
-                                                          "@enc"
-                                                        ]
-                                                      }
+                                                    "Arg:from:": [
+                                                      "obj",
+                                                      "@enc"
                                                     ]
                                                   }
                                                 ]
                                               }
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          "AsTxt:": "kid"
+                                        },
+                                        {
+                                          "Act:": [
+                                            {
+                                              "Put:into:": [
+                                                "@kid",
+                                                {
+                                                  "IntoTxts:": "bounds"
+                                                }
+                                              ]
                                             },
                                             {
-                                              "AsTxt:": "kid"
-                                            },
-                                            {
-                                              "Act:": [
+                                              "If:do:": [
                                                 {
-                                                  "Put:into:": [
-                                                    "@kid",
-                                                    {
-                                                      "IntoTxts:": "bounds"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "If:do:": [
-                                                    {
-                                                      "Not:": {
-                                                        "Determine:arguments:": [
-                                                          "fully opaque",
+                                                  "Not:": {
+                                                    "Determine:arguments:": [
+                                                      "fully opaque",
+                                                      {
+                                                        "Args:": [
                                                           {
-                                                            "Args:": [
-                                                              {
-                                                                "Arg:from:": [
-                                                                  "obj",
-                                                                  "@kid"
-                                                                ]
-                                                              }
+                                                            "Arg:from:": [
+                                                              "obj",
+                                                              "@kid"
                                                             ]
                                                           }
                                                         ]
                                                       }
+                                                    ]
+                                                  }
+                                                },
+                                                {
+                                                  "Act:": [
+                                                    {
+                                                      "Comment:": "add this kid for additional processing"
                                                     },
                                                     {
-                                                      "Act:": [
+                                                      "Put:into:": [
+                                                        "@kid",
                                                         {
-                                                          "Comment:": "add this kid for additional processing"
-                                                        },
-                                                        {
-                                                          "Put:into:": [
-                                                            "@kid",
-                                                            {
-                                                              "IntoTxts:": "queue"
-                                                            }
-                                                          ]
+                                                          "IntoTxts:": "queue"
                                                         }
                                                       ]
                                                     }
@@ -190,4 +186,4 @@
       ]
     }
   ]
-}
+]

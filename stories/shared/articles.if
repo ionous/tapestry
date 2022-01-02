@@ -1,195 +1,72 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "KindsPossessProperties:propertyDecl:": [
+        "objects",
+        [
+          {
+            "PropertyDecl:property:propertyType primitive:comment:": [
+              "an",
+              "indefinite article",
+              "text",
+              ", which if not set will be the article from the declaration of the noun; example: \"some\" soldiers."
+            ]
+          },
+          {
+            "PropertyDecl:property:propertyType propertyAspect:": [
+              "a",
+              "pluralization",
+              "aspect"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "AspectTraits:traitPhrase:": [
+        " pluralization",
         {
-          "KindsPossessProperties:propertyDecl:": [
-            "objects",
+          "TraitPhrase:trait:": [
+            "canbe",
             [
-              {
-                "PropertyDecl:property:propertyType primitive:comment:": [
-                  "an",
-                  "indefinite article",
-                  "text",
-                  ", which if not set will be the article from the declaration of the noun; example: \"some\" soldiers."
-                ]
-              },
-              {
-                "PropertyDecl:property:propertyType propertyAspect:": [
-                  "a",
-                  "pluralization",
-                  "aspect"
-                ]
-              }
+              "singular named",
+              "plural named"
             ]
           ]
-        },
-        {
-          "AspectTraits:traitPhrase:": [
-            " pluralization",
-            {
-              "TraitPhrase:trait:": [
-                "canbe",
-                [
-                  "singular named",
-                  "plural named"
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "KindsOfAspect:": " pluralization"
         }
       ]
     },
     {
-      "Paragraph:": [
+      "KindsOfAspect:": " pluralization"
+    }
+  ],
+  [
+    {
+      "TestScene:story:": [
+        "articles",
         {
-          "TestScene:story:": [
-            "articles",
+          "Story:": [
             {
-              "Story:": [
+              "Paragraph:": [
                 {
-                  "Paragraph:": [
+                  "NounStatement:tail:": [
                     {
-                      "NounStatement:tail:": [
+                      "Lede:nounPhrase kindOfNoun:": [
+                        [
+                          "the lamp-post",
+                          "some soldiers",
+                          "our Trevor"
+                        ],
                         {
-                          "Lede:nounPhrase kindOfNoun:": [
-                            [
-                              {
-                                "NamedNoun:name:": [
-                                  "the",
-                                  "lamp-post"
-                                ]
-                              },
-                              {
-                                "NamedNoun:name:": [
-                                  "some",
-                                  "soldiers"
-                                ]
-                              },
-                              {
-                                "NamedNoun:name:": [
-                                  "our",
-                                  "Trevor"
-                                ]
-                              }
-                            ],
-                            {
-                              "KindOfNoun:trait:kind:": [
-                                "area",
-                                [],
-                                "thing"
-                              ]
-                            }
-                          ]
-                        },
-                        []
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestRule:hook activity:": [
-            "articles",
-            {
-              "Act:": [
-                {
-                  "Say:": {
-                    "RenderTemplate:": "You can only just make out {a: .lamp_post}.\nYou can only just make out {a: .Trevor}.\nYou can only just make out {a: .soldiers}.\n{a: .lamp_post|capitalize!} can be made out in the mist.\n{a: .Trevor|capitalize!} can be made out in the mist.\n{a: .soldiers|capitalize!} can be made out in the mist.\nYou can only just make out {the: .lamp_post}.\nYou can only just make out {the: .trevor}.\nYou can only just make out {the: .soldiers}.\n{the: .lamp_post|capitalize!} may be a trick of the mist.\n{the: .trevor|capitalize!} may be a trick of the mist.\n{the: .soldiers|capitalize!} may be a trick of the mist.\nYou can only just make out {a: .Trevor}."
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": []
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestStatement:test:": [
-            "articles",
-            {
-              "TestOutput:": "You can only just make out a lamp-post.\nYou can only just make out Trevor.\nYou can only just make out some soldiers.\nA lamp-post can be made out in the mist.\nTrevor can be made out in the mist.\nSome soldiers can be made out in the mist.\nYou can only just make out the lamp-post.\nYou can only just make out Trevor.\nYou can only just make out the soldiers.\nThe lamp-post may be a trick of the mist.\nTrevor may be a trick of the mist.\nThe soldiers may be a trick of the mist.\nYou can only just make out Trevor.\n"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "A",
-            {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type object:": [
-                    "a",
-                    "noun",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternActions:patternRules:": [
-            "A",
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Determine:arguments:": [
-                            "print_article",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@noun"
-                                  ]
-                                },
-                                {
-                                  "Arg:from:": [
-                                    "name",
-                                    {
-                                      "FromTxt:": {
-                                        "RenderTemplate:": "{.noun}"
-                                      }
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
+                          "KindOfNoun:trait:kind:": [
+                            "area",
+                            [],
+                            "thing"
                           ]
                         }
                       ]
-                    }
+                    },
+                    []
                   ]
                 }
               ]
@@ -197,252 +74,90 @@
           ]
         }
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
+      "TestRule:hook activity:": [
+        "articles",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "The",
+          "Act:": [
             {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type object:": [
-                    "a",
-                    "noun",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternActions:patternRules:": [
-            "The",
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Determine:arguments:": [
-                            "print_article",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "article",
-                                    {
-                                      "FromTxt:": "the"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@noun"
-                                  ]
-                                },
-                                {
-                                  "Arg:from:": [
-                                    "name",
-                                    {
-                                      "FromTxt:": {
-                                        "RenderTemplate:": "{.noun}"
-                                      }
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "Say:": {
+                "RenderTemplate:": "You can only just make out {a: .lamp_post}.\nYou can only just make out {a: .Trevor}.\nYou can only just make out {a: .soldiers}.\n{a: .lamp_post|capitalize!} can be made out in the mist.\n{a: .Trevor|capitalize!} can be made out in the mist.\n{a: .soldiers|capitalize!} can be made out in the mist.\nYou can only just make out {the: .lamp_post}.\nYou can only just make out {the: .trevor}.\nYou can only just make out {the: .soldiers}.\n{the: .lamp_post|capitalize!} may be a trick of the mist.\n{the: .trevor|capitalize!} may be a trick of the mist.\n{the: .soldiers|capitalize!} may be a trick of the mist.\nYou can only just make out {a: .Trevor}."
+              }
             }
           ]
         }
       ]
-    },
+    }
+  ],
+  [],
+  [
     {
-      "Paragraph:": [
+      "TestStatement:test:": [
+        "articles",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "Print article",
+          "TestOutput:": "You can only just make out a lamp-post.\nYou can only just make out Trevor.\nYou can only just make out some soldiers.\nA lamp-post can be made out in the mist.\nTrevor can be made out in the mist.\nSome soldiers can be made out in the mist.\nYou can only just make out the lamp-post.\nYou can only just make out Trevor.\nYou can only just make out the soldiers.\nThe lamp-post may be a trick of the mist.\nTrevor may be a trick of the mist.\nThe soldiers may be a trick of the mist.\nYou can only just make out Trevor.\n"
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "A",
+        {
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type object:": [
+                "a",
+                "noun",
                 {
-                  "VariableDecl:name:type primitive:": [
+                  "ObjectType:kind:": [
                     "an",
-                    "article",
-                    "text"
-                  ]
-                },
-                {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:": [
-                    "the",
-                    "name",
-                    "text"
+                    "object"
                   ]
                 }
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "PatternActions:patternRules:": [
+        "A",
         {
-          "PatternActions:patternRules:": [
-            "Print article",
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "RenderTemplate:": "a {.name}"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
                       "Determine:arguments:": [
-                        "starts with vowel",
+                        "print_article",
                         {
                           "Args:": [
                             {
                               "Arg:from:": [
-                                "text",
-                                "@name"
+                                "obj",
+                                "@noun"
+                              ]
+                            },
+                            {
+                              "Arg:from:": [
+                                "name",
+                                {
+                                  "FromTxt:": {
+                                    "RenderTemplate:": "{.noun}"
+                                  }
+                                }
                               ]
                             }
                           ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "RenderTemplate:": "an {.name}"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "plural named"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "RenderTemplate:": "some {.name}"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Cmp:is:txt:": [
-                        {
-                          "Get:from:": [
-                            "indefinite article",
-                            {
-                              "VarFields:": "obj"
-                            }
-                          ]
-                        },
-                        "OtherThan",
-                        ""
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "RenderTemplate:": "{.obj.indefinite_article} {.name}"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Cmp:is:txt:": [
-                        "@article",
-                        "OtherThan",
-                        ""
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "RenderTemplate:": "{.article} {.name}"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "proper named"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Comment:": "by definition proper named objects have no article."
-                        },
-                        {
-                          "Say:": {
-                            "RenderTemplate:": "{.name}"
-                          }
                         }
                       ]
                     }
@@ -454,5 +169,257 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "The",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "a",
+                "noun",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PatternActions:patternRules:": [
+        "The",
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                "Always",
+                {
+                  "Act:": [
+                    {
+                      "Determine:arguments:": [
+                        "print_article",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "article",
+                                {
+                                  "FromTxt:": "the"
+                                }
+                              ]
+                            },
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@noun"
+                              ]
+                            },
+                            {
+                              "Arg:from:": [
+                                "name",
+                                {
+                                  "FromTxt:": {
+                                    "RenderTemplate:": "{.noun}"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "Print article",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type primitive:": [
+                "an",
+                "article",
+                "text"
+              ]
+            },
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            },
+            {
+              "VariableDecl:name:type primitive:": [
+                "the",
+                "name",
+                "text"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PatternActions:patternRules:": [
+        "Print article",
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                "Always",
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "a {.name}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Determine:arguments:": [
+                    "starts with vowel",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "text",
+                            "@name"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "an {.name}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Get obj:trait:": [
+                    "@obj",
+                    "plural named"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "some {.name}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Cmp:is:txt:": [
+                    {
+                      "Get:from:": [
+                        "indefinite article",
+                        {
+                          "VarFields:": "obj"
+                        }
+                      ]
+                    },
+                    "OtherThan",
+                    ""
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "{.obj.indefinite_article} {.name}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Cmp:is:txt:": [
+                    "@article",
+                    "OtherThan",
+                    ""
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "{.article} {.name}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Get obj:trait:": [
+                    "@obj",
+                    "proper named"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Comment:": "by definition proper named objects have no article."
+                    },
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "{.name}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
-}
+]

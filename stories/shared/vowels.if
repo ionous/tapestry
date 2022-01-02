@@ -1,238 +1,104 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "starts with vowel",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "starts with vowel",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type primitive:": [
-                    "a",
-                    "text",
-                    "text"
-                  ]
-                }
+              "VariableDecl:name:type primitive:": [
+                "a",
+                "text",
+                "text"
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "Comment:": "Determine if text starts with a vowel or vowel sound. This method is from mudconnect.com"
+    }
+  ],
+  [
+    {
+      "PatternActions:patternReturn:patternRules:": [
+        "starts with vowel",
+        {
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "a",
+              "matching",
+              "bool"
+            ]
+          }
         },
         {
-          "Comment:": "Determine if text starts with a vowel or vowel sound. This method is from mudconnect.com"
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "PatternActions:patternReturn:patternRules:": [
-            "starts with vowel",
+          "PatternRules:": [
             {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "matching",
-                  "bool"
-                ]
-              }
-            },
-            {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Matches:to:": [
-                        "@text",
-                        "^(?i:A|E|I|O|U)"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Let:be:": [
-                            "matching",
-                            {
-                              "FromBool:": true
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                  "Matches:to:": [
+                    "@text",
+                    "^(?i:A|E|I|O|U)"
                   ]
                 },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "Matches:to:": [
-                        "@text",
-                        "^(?i:EU|EW|ONCE|ONE|OUI|UBI|UGAND|UKRAIN|UKULELE|ULYSS|UNA|UNESCO|UNI|UNUM|URA|URE|URI|URO|URU|USA|USE|USI|USU|UTA|UTE|UTI|UTO)"
-                      ]
-                    },
-                    {
-                      "Act:": [
+                      "Let:be:": [
+                        "matching",
                         {
-                          "Let:be:": [
-                            "matching",
-                            {
-                              "FromBool:": false
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Matches:to:": [
-                        "@text",
-                        "^(?i:HEIR|HERB|HOMAGE|HONEST|HONOR|HONOUR|HORS|HOUR)"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Let:be:": [
-                            "matching",
-                            {
-                              "FromBool:": true
-                            }
-                          ]
+                          "FromBool:": true
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestStatement:test:": [
-            "vowels",
+            },
             {
-              "TestOutput:": "ok"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestRule:hook activity:": [
-            "vowels",
+              "PatternRule:hook activity:": [
+                {
+                  "Matches:to:": [
+                    "@text",
+                    "^(?i:EU|EW|ONCE|ONE|OUI|UBI|UGAND|UKRAIN|UKULELE|ULYSS|UNA|UNESCO|UNI|UNUM|URA|URE|URI|URO|URU|USA|USE|USI|USU|UTA|UTE|UTI|UTO)"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Let:be:": [
+                        "matching",
+                        {
+                          "FromBool:": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
             {
-              "Act:": [
+              "PatternRule:hook activity:": [
                 {
-                  "Say:": {
-                    "Txt if:then:else:": [
-                      {
-                        "Determine:arguments:": [
-                          "starts with vowel",
-                          {
-                            "Args:": [
-                              {
-                                "Arg:from:": [
-                                  "text",
-                                  {
-                                    "FromTxt:": "house"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      "error: house doesn't start with a vowel",
-                      ""
-                    ]
-                  }
+                  "Matches:to:": [
+                    "@text",
+                    "^(?i:HEIR|HERB|HOMAGE|HONEST|HONOR|HONOUR|HORS|HOUR)"
+                  ]
                 },
                 {
-                  "Say:": {
-                    "Txt if:then:else:": [
-                      {
-                        "Determine:arguments:": [
-                          "starts with vowel",
-                          {
-                            "Args:": [
-                              {
-                                "Arg:from:": [
-                                  "text",
-                                  {
-                                    "FromTxt:": "hour"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      "",
-                      "error: hour starts with a vowel sound"
-                    ]
-                  }
-                },
-                {
-                  "Say:": {
-                    "Txt if:then:else:": [
-                      {
-                        "Determine:arguments:": [
-                          "starts with vowel",
-                          {
-                            "Args:": [
-                              {
-                                "Arg:from:": [
-                                  "text",
-                                  {
-                                    "FromTxt:": "beta"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      "error: beta doesn't start with a vowel",
-                      ""
-                    ]
-                  }
-                },
-                {
-                  "Say:": {
-                    "Txt if:then:else:": [
-                      {
-                        "Determine:arguments:": [
-                          "starts with vowel",
-                          {
-                            "Args:": [
-                              {
-                                "Arg:from:": [
-                                  "text",
-                                  {
-                                    "FromTxt:": "alpha"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      "",
-                      "alpha starts with a vowel"
-                    ]
-                  }
-                },
-                {
-                  "Say:": "ok"
+                  "Act:": [
+                    {
+                      "Let:be:": [
+                        "matching",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             }
@@ -240,5 +106,129 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "TestStatement:test:": [
+        "vowels",
+        {
+          "TestOutput:": "ok"
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "TestRule:hook activity:": [
+        "vowels",
+        {
+          "Act:": [
+            {
+              "Say:": {
+                "Txt if:then:else:": [
+                  {
+                    "Determine:arguments:": [
+                      "starts with vowel",
+                      {
+                        "Args:": [
+                          {
+                            "Arg:from:": [
+                              "text",
+                              {
+                                "FromTxt:": "house"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "error: house doesn't start with a vowel",
+                  ""
+                ]
+              }
+            },
+            {
+              "Say:": {
+                "Txt if:then:else:": [
+                  {
+                    "Determine:arguments:": [
+                      "starts with vowel",
+                      {
+                        "Args:": [
+                          {
+                            "Arg:from:": [
+                              "text",
+                              {
+                                "FromTxt:": "hour"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "",
+                  "error: hour starts with a vowel sound"
+                ]
+              }
+            },
+            {
+              "Say:": {
+                "Txt if:then:else:": [
+                  {
+                    "Determine:arguments:": [
+                      "starts with vowel",
+                      {
+                        "Args:": [
+                          {
+                            "Arg:from:": [
+                              "text",
+                              {
+                                "FromTxt:": "beta"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "error: beta doesn't start with a vowel",
+                  ""
+                ]
+              }
+            },
+            {
+              "Say:": {
+                "Txt if:then:else:": [
+                  {
+                    "Determine:arguments:": [
+                      "starts with vowel",
+                      {
+                        "Args:": [
+                          {
+                            "Arg:from:": [
+                              "text",
+                              {
+                                "FromTxt:": "alpha"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "",
+                  "alpha starts with a vowel"
+                ]
+              }
+            },
+            {
+              "Say:": "ok"
+            }
+          ]
+        }
+      ]
+    }
   ]
-}
+]

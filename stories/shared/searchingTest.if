@@ -1,187 +1,112 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "TestStatement:test:": [
+        "searching test",
         {
-          "TestStatement:test:": [
-            "searching test",
-            {
-              "TestOutput:": "You find nothing of interest.\nYou can't see inside, it is closed.\nOn the counter are the blender, the espresso machine, and the mortar.\nIn the purse is the coin.\n"
-            }
-          ]
-        },
+          "TestOutput:": "You find nothing of interest.\nYou can't see inside, it is closed.\nOn the counter are the blender, the espresso machine, and the mortar.\nIn the purse is the coin.\n"
+        }
+      ]
+    },
+    {
+      "TestRule:hook activity:": [
+        "searching test",
         {
-          "TestRule:hook activity:": [
-            "searching test",
+          "Act:": [
             {
-              "Act:": [
+              "Determine:arguments:": [
+                "Searching",
                 {
-                  "Determine:arguments:": [
-                    "Searching",
+                  "Args:": [
                     {
-                      "Args:": [
+                      "Arg:from:": [
+                        "agent",
                         {
-                          "Arg:from:": [
-                            "agent",
-                            {
-                              "FromTxt:": "player"
-                            }
-                          ]
-                        },
-                        {
-                          "Arg:from:": [
-                            "noun",
-                            {
-                              "FromTxt:": "knife"
-                            }
-                          ]
+                          "FromTxt:": "player"
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "Determine:arguments:": [
-                    "Searching",
+                    },
                     {
-                      "Args:": [
+                      "Arg:from:": [
+                        "noun",
                         {
-                          "Arg:from:": [
-                            "agent",
-                            {
-                              "FromTxt:": "player"
-                            }
-                          ]
-                        },
-                        {
-                          "Arg:from:": [
-                            "noun",
-                            {
-                              "FromTxt:": "machine"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Determine:arguments:": [
-                    "Searching",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "agent",
-                            {
-                              "FromTxt:": "player"
-                            }
-                          ]
-                        },
-                        {
-                          "Arg:from:": [
-                            "noun",
-                            {
-                              "FromTxt:": "counter"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Determine:arguments:": [
-                    "Searching",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "agent",
-                            {
-                              "FromTxt:": "player"
-                            }
-                          ]
-                        },
-                        {
-                          "Arg:from:": [
-                            "noun",
-                            {
-                              "FromTxt:": "purse"
-                            }
-                          ]
+                          "FromTxt:": "knife"
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestScene:story:": [
-            "searching test",
+            },
             {
-              "Story:": [
+              "Determine:arguments:": [
+                "Searching",
                 {
-                  "Paragraph:": [
+                  "Args:": [
                     {
-                      "RelativeToNoun:nouns:areBeing:nouns1:": [
-                        " whereabouts",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "flower"
-                            ]
-                          },
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "knife"
-                            ]
-                          }
-                        ],
-                        "is",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "our",
-                              "self"
-                            ]
-                          }
-                        ]
+                      "Arg:from:": [
+                        "agent",
+                        {
+                          "FromTxt:": "player"
+                        }
+                      ]
+                    },
+                    {
+                      "Arg:from:": [
+                        "noun",
+                        {
+                          "FromTxt:": "machine"
+                        }
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "Determine:arguments:": [
+                "Searching",
                 {
-                  "Paragraph:": [
+                  "Args:": [
                     {
-                      "RelativeToNoun:nouns:areBeing:nouns1:": [
-                        " whereabouts",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "purse"
-                            ]
-                          }
-                        ],
-                        "is",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "kitchen"
-                            ]
-                          }
-                        ]
+                      "Arg:from:": [
+                        "agent",
+                        {
+                          "FromTxt:": "player"
+                        }
+                      ]
+                    },
+                    {
+                      "Arg:from:": [
+                        "noun",
+                        {
+                          "FromTxt:": "counter"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Determine:arguments:": [
+                "Searching",
+                {
+                  "Args:": [
+                    {
+                      "Arg:from:": [
+                        "agent",
+                        {
+                          "FromTxt:": "player"
+                        }
+                      ]
+                    },
+                    {
+                      "Arg:from:": [
+                        "noun",
+                        {
+                          "FromTxt:": "purse"
+                        }
                       ]
                     }
                   ]
@@ -192,5 +117,49 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "TestScene:story:": [
+        "searching test",
+        {
+          "Story:": [
+            {
+              "Paragraph:": [
+                {
+                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                    " whereabouts",
+                    [
+                      "the flower",
+                      "the knife"
+                    ],
+                    "is",
+                    [
+                      "our self"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Paragraph:": [
+                {
+                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                    " whereabouts",
+                    [
+                      "the purse"
+                    ],
+                    "is",
+                    [
+                      "the kitchen"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
-}
+]

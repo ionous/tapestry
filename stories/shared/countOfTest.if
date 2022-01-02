@@ -1,28 +1,24 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "TestRule:hook activity:": [
+        "countOf",
         {
-          "TestRule:hook activity:": [
-            "countOf",
+          "Act:": [
             {
-              "Act:": [
+              "Repeating across:as:do:": [
                 {
-                  "Repeating across:as:do:": [
+                  "FromNums:": {
+                    "Range:": 6
+                  }
+                },
+                {
+                  "AsNum:": "i"
+                },
+                {
+                  "Act:": [
                     {
-                      "FromNums:": {
-                        "Range:": 6
-                      }
-                    },
-                    {
-                      "AsNum:": "i"
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Determine:": "magic symbols"
-                        }
-                      ]
+                      "Determine:": "magic symbols"
                     }
                   ]
                 }
@@ -31,99 +27,95 @@
           ]
         }
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
+      "TestStatement:test:": [
+        "countOf",
         {
-          "TestStatement:test:": [
-            "countOf",
-            {
-              "TestOutput:": "o*-*x*x"
-            }
-          ]
+          "TestOutput:": "o*-*x*x"
         }
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
+      "TestScene:story:": [
+        "countOf",
         {
-          "TestScene:story:": [
-            "countOf",
+          "Story:": [
             {
-              "Story:": [
+              "Paragraph:": [
                 {
-                  "Paragraph:": [
+                  "PatternDecl:name:": [
+                    "patterns",
+                    "magic symbols"
+                  ]
+                },
+                {
+                  "PatternActions:patternRules:": [
+                    "magic symbols",
                     {
-                      "PatternDecl:name:": [
-                        "patterns",
-                        "magic symbols"
-                      ]
-                    },
-                    {
-                      "PatternActions:patternRules:": [
-                        "magic symbols",
+                      "PatternRules:": [
                         {
-                          "PatternRules:": [
+                          "PatternRule:hook activity:": [
+                            "Always",
                             {
-                              "PatternRule:hook activity:": [
-                                "Always",
+                              "Act:": [
                                 {
-                                  "Act:": [
-                                    {
-                                      "Say:": "o"
-                                    }
-                                  ]
+                                  "Say:": "o"
                                 }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "PatternRule:hook activity:": [
+                            {
+                              "CountOf:num:": [
+                                "After",
+                                5
                               ]
                             },
                             {
-                              "PatternRule:hook activity:": [
+                              "Act:": [
                                 {
-                                  "CountOf:num:": [
-                                    "After",
-                                    5
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Say:": "x"
-                                    }
-                                  ]
+                                  "Say:": "x"
                                 }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "PatternRule:hook activity:": [
+                            {
+                              "CountOf:num:": [
+                                "At",
+                                3
                               ]
                             },
                             {
-                              "PatternRule:hook activity:": [
+                              "Act:": [
                                 {
-                                  "CountOf:num:": [
-                                    "At",
-                                    3
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Say:": "-"
-                                    }
-                                  ]
+                                  "Say:": "-"
                                 }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "PatternRule:hook activity:": [
+                            {
+                              "CountOf:num:": [
+                                "Every",
+                                2
                               ]
                             },
                             {
-                              "PatternRule:hook activity:": [
+                              "Act:": [
                                 {
-                                  "CountOf:num:": [
-                                    "Every",
-                                    2
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Say:": "*"
-                                    }
-                                  ]
+                                  "Say:": "*"
                                 }
                               ]
                             }
@@ -140,4 +132,4 @@
       ]
     }
   ]
-}
+]

@@ -1,190 +1,91 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
-        {
-          "KindsPossessProperties:propertyDecl:": [
-            " things",
-            [
-              {
-                "PropertyDecl:property:propertyType primitive:": [
-                  "a",
-                  "printed plural name",
-                  "text"
-                ]
-              }
+      "KindsPossessProperties:propertyDecl:": [
+        " things",
+        [
+          {
+            "PropertyDecl:property:propertyType primitive:": [
+              "a",
+              "printed plural name",
+              "text"
             ]
-          ]
-        }
+          }
+        ]
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "print plural name",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "print plural name",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type object:": [
+                "a",
+                "obj",
                 {
-                  "VariableDecl:name:type object:": [
+                  "ObjectType:kind:": [
                     "a",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "a",
-                        "thing"
-                      ]
-                    }
+                    "thing"
                   ]
                 }
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "Comment:": "It says the plural of the target's name. "
+    },
+    {
+      "PatternActions:patternRules:": [
+        "print plural name",
         {
-          "Comment:": "It says the plural of the target's name. "
-        },
-        {
-          "PatternActions:patternRules:": [
-            "print plural name",
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
+                  "Act:": [
                     {
-                      "Act:": [
+                      "Say:": {
+                        "Plural of:": {
+                          "RenderTemplate:": "{.obj}"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Cmp:is:txt:": [
+                    {
+                      "Get:from:": [
+                        "printed plural name",
                         {
-                          "Say:": {
-                            "Plural of:": {
-                              "RenderTemplate:": "{.obj}"
-                            }
-                          }
+                          "VarFields:": "obj"
                         }
                       ]
-                    }
+                    },
+                    "OtherThan",
+                    ""
                   ]
                 },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "Cmp:is:txt:": [
-                        {
-                          "Get:from:": [
-                            "printed plural name",
-                            {
-                              "VarFields:": "obj"
-                            }
-                          ]
-                        },
-                        "OtherThan",
-                        ""
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "RenderTemplate:": "{.obj.printed_plural_name}"
-                          }
-                        }
-                      ]
+                      "Say:": {
+                        "RenderTemplate:": "{.obj.printed_plural_name}"
+                      }
                     }
                   ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestScene:story:": [
-            "plural name printing",
-            {
-              "Story:": [
-                {
-                  "Paragraph:": [
-                    {
-                      "NounStatement:tail:": [
-                        {
-                          "Lede:nounPhrase kindOfNoun:": [
-                            [
-                              {
-                                "NamedNoun:name:": [
-                                  "the",
-                                  "flowerpot"
-                                ]
-                              },
-                              {
-                                "NamedNoun:name:": [
-                                  "the",
-                                  "dishes"
-                                ]
-                              },
-                              {
-                                "NamedNoun:name:": [
-                                  "the",
-                                  "spoon"
-                                ]
-                              }
-                            ],
-                            {
-                              "KindOfNoun:trait:kind:": [
-                                "are",
-                                [],
-                                "thing"
-                              ]
-                            }
-                          ]
-                        },
-                        []
-                      ]
-                    },
-                    {
-                      "NounAssignment:nouns:lines:": [
-                        "printed plural name",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "flowerpot"
-                            ]
-                          }
-                        ],
-                        "broken flower pots"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestStatement:test:": [
-            "plural name printing",
-            {
-              "TestOutput:": "broken flower pots, dishes, spoons"
-            }
-          ]
-        },
-        {
-          "TestRule:hook activity:": [
-            "current_test",
-            {
-              "Act:": [
-                {
-                  "Say:": {
-                    "RenderTemplate:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}"
-                  }
                 }
               ]
             }
@@ -192,5 +93,74 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "TestScene:story:": [
+        "plural name printing",
+        {
+          "Story:": [
+            {
+              "Paragraph:": [
+                {
+                  "NounStatement:tail:": [
+                    {
+                      "Lede:nounPhrase kindOfNoun:": [
+                        [
+                          "the flowerpot",
+                          "the dishes",
+                          "the spoon"
+                        ],
+                        {
+                          "KindOfNoun:trait:kind:": [
+                            "are",
+                            [],
+                            "thing"
+                          ]
+                        }
+                      ]
+                    },
+                    []
+                  ]
+                },
+                {
+                  "NounAssignment:nouns:lines:": [
+                    "printed plural name",
+                    [
+                      "the flowerpot"
+                    ],
+                    "broken flower pots"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "TestStatement:test:": [
+        "plural name printing",
+        {
+          "TestOutput:": "broken flower pots, dishes, spoons"
+        }
+      ]
+    },
+    {
+      "TestRule:hook activity:": [
+        "current_test",
+        {
+          "Act:": [
+            {
+              "Say:": {
+                "RenderTemplate:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}"
+              }
+            }
+          ]
+        }
+      ]
+    }
   ]
-}
+]

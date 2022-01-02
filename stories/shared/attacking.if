@@ -1,204 +1,60 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
-        {
-          "GrammarDecl:": {
-            "Directive:scans:": [
-              [
-                "attack",
-                "break",
-                "crack",
-                "destroy",
-                "fight",
-                "hit",
-                "kill",
-                "murder",
-                "punch",
-                "smash",
-                "thump",
-                "torture",
-                "wreck"
-              ],
-              [
-                {
-                  "AnyOf:": [
-                    {
-                      "AllOf:": [
-                        {
-                          "Noun:": "things"
-                        },
-                        {
-                          "As:": "attacking"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "ActionDecl:action:actionParams common:": [
+      "GrammarDecl:": {
+        "Directive:scans:": [
+          [
             "attack",
-            "attacking",
+            "break",
+            "crack",
+            "destroy",
+            "fight",
+            "hit",
+            "kill",
+            "murder",
+            "punch",
+            "smash",
+            "thump",
+            "torture",
+            "wreck"
+          ],
+          [
             {
-              "CommonAction:": "object"
+              "AnyOf:": [
+                {
+                  "AllOf:": [
+                    {
+                      "Noun:": "things"
+                    },
+                    {
+                      "As:": "attacking"
+                    }
+                  ]
+                }
+              ]
             }
           ]
-        },
+        ]
+      }
+    }
+  ],
+  [
+    {
+      "ActionDecl:action:actionParams common:": [
+        "attack",
+        "attacking",
         {
-          "PatternActions:patternLocals:patternRules:": [
-            "attacking",
-            {
-              "PatternLocals:": [
-                {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type object:": [
-                        "an",
-                        "actor",
-                        {
-                          "ObjectType:kind:": [
-                            "an",
-                            "actor"
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "Get:from:": [
-                          "pawn",
-                          {
-                            "VarFields:": "agent"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Determine:arguments:": [
-                        "isPlayer",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "If:from:and:do:else:": [
-                            "resp",
-                            {
-                              "FromTxt:": {
-                                "Determine:arguments:": [
-                                  "can reach",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "actor",
-                                          "@actor"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "action",
-                                          {
-                                            "FromTxt:": "attacking"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "noun",
-                                          "@noun"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "Not:": {
-                                "Is empty:": "@resp"
-                              }
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "@resp"
-                                }
-                              ]
-                            },
-                            {
-                              "ElseDo:": {
-                                "Act:": [
-                                  {
-                                    "Determine:arguments:": [
-                                      "report attacking",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "actor",
-                                              "@actor"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "noun",
-                                              "@noun"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+          "CommonAction:": "object"
         }
       ]
     },
     {
-      "Paragraph:": [
+      "PatternActions:patternLocals:patternRules:": [
+        "attacking",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "report attacking",
+          "PatternLocals:": [
             {
-              "PatternVariablesTail:": [
+              "LocalDecl:value:": [
                 {
                   "VariableDecl:name:type object:": [
                     "an",
@@ -212,70 +68,109 @@
                   ]
                 },
                 {
-                  "VariableDecl:name:type object:": [
-                    "a",
-                    "noun",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
+                  "LocalInit:": {
+                    "Get:from:": [
+                      "pawn",
+                      {
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
                 }
               ]
             }
           ]
         },
         {
-          "PatternActions:patternRules:": [
-            "report attacking",
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
+                  "Determine:arguments:": [
+                    "isPlayer",
                     {
-                      "Act:": [
+                      "Args:": [
                         {
-                          "Say:": {
-                            "Response:text:": [
-                              "actor attacking",
-                              {
-                                "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
-                              }
-                            ]
-                          }
+                          "Arg:from:": [
+                            "obj",
+                            "@actor"
+                          ]
                         }
                       ]
                     }
                   ]
                 },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "isPlayer",
+                      "If:from:and:do:else:": [
+                        "resp",
                         {
-                          "Args:": [
+                          "FromTxt:": {
+                            "Determine:arguments:": [
+                              "can reach",
+                              {
+                                "Args:": [
+                                  {
+                                    "Arg:from:": [
+                                      "actor",
+                                      "@actor"
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "action",
+                                      {
+                                        "FromTxt:": "attacking"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "noun",
+                                      "@noun"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@resp"
+                          }
+                        },
+                        {
+                          "Act:": [
                             {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
+                              "Say:": "@resp"
                             }
                           ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
+                        },
                         {
-                          "Say:": {
-                            "Response:text:": [
-                              "player attacking",
+                          "ElseDo:": {
+                            "Act:": [
                               {
-                                "RenderTemplate:": "Violence isn't the answer."
+                                "Determine:arguments:": [
+                                  "report attacking",
+                                  {
+                                    "Args:": [
+                                      {
+                                        "Arg:from:": [
+                                          "actor",
+                                          "@actor"
+                                        ]
+                                      },
+                                      {
+                                        "Arg:from:": [
+                                          "noun",
+                                          "@noun"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
                               }
                             ]
                           }
@@ -290,5 +185,102 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "report attacking",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "actor",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "actor"
+                  ]
+                }
+              ]
+            },
+            {
+              "VariableDecl:name:type object:": [
+                "a",
+                "noun",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PatternActions:patternRules:": [
+        "report attacking",
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                "Always",
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "actor attacking",
+                          {
+                            "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Determine:arguments:": [
+                    "isPlayer",
+                    {
+                      "Args:": [
+                        {
+                          "Arg:from:": [
+                            "obj",
+                            "@actor"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player attacking",
+                          {
+                            "RenderTemplate:": "Violence isn't the answer."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
-}
+]

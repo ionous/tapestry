@@ -1,165 +1,215 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
-        {
-          "GrammarDecl:": {
-            "Directive:scans:": [
-              [
-                "show",
-                "present",
-                "display"
-              ],
-              [
+      "GrammarDecl:": {
+        "Directive:scans:": [
+          [
+            "show",
+            "present",
+            "display"
+          ],
+          [
+            {
+              "AnyOf:": [
                 {
-                  "AnyOf:": [
+                  "AllOf:": [
                     {
-                      "AllOf:": [
-                        {
-                          "Self:": "player"
-                        },
-                        {
-                          "Noun:": "things"
-                        },
-                        {
-                          "As:": "examining"
-                        }
+                      "Self:": "player"
+                    },
+                    {
+                      "Noun:": "things"
+                    },
+                    {
+                      "As:": "examining"
+                    }
+                  ]
+                },
+                {
+                  "AllOf:": [
+                    {
+                      "Noun:": "things"
+                    },
+                    {
+                      "Words:": [
+                        "to"
                       ]
                     },
                     {
-                      "AllOf:": [
-                        {
-                          "Noun:": "things"
-                        },
-                        {
-                          "Words:": [
-                            "to"
-                          ]
-                        },
-                        {
-                          "Self:": "player"
-                        },
-                        {
-                          "As:": "examining"
-                        }
-                      ]
+                      "Self:": "player"
                     },
                     {
-                      "AllOf:": [
-                        {
-                          "Reverse:": [
-                            {
-                              "Noun:": "actors"
-                            },
-                            {
-                              "Noun:": "things"
-                            }
-                          ]
-                        },
-                        {
-                          "As:": "showing it to"
-                        }
-                      ]
-                    },
+                      "As:": "examining"
+                    }
+                  ]
+                },
+                {
+                  "AllOf:": [
                     {
-                      "AllOf:": [
-                        {
-                          "Noun:": "things"
-                        },
-                        {
-                          "Words:": [
-                            "to"
-                          ]
-                        },
+                      "Reverse:": [
                         {
                           "Noun:": "actors"
                         },
                         {
-                          "As:": "showing it to"
+                          "Noun:": "things"
                         }
                       ]
+                    },
+                    {
+                      "As:": "showing it to"
+                    }
+                  ]
+                },
+                {
+                  "AllOf:": [
+                    {
+                      "Noun:": "things"
+                    },
+                    {
+                      "Words:": [
+                        "to"
+                      ]
+                    },
+                    {
+                      "Noun:": "actors"
+                    },
+                    {
+                      "As:": "showing it to"
                     }
                   ]
                 }
               ]
-            ]
-          }
-        },
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "ActionDecl:action:actionParams common:": [
+        "show it to",
+        "showing it to",
         {
-          "ActionDecl:action:actionParams common:": [
-            "show it to",
-            "showing it to",
+          "CommonAction:actionContext:": [
+            "thing",
             {
-              "CommonAction:actionContext:": [
-                "thing",
+              "ActionContext:": "actor"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "showing",
+        {
+          "PatternLocals:": [
+            {
+              "LocalDecl:value:": [
                 {
-                  "ActionContext:": "actor"
+                  "VariableDecl:name:type object:": [
+                    "an",
+                    "actor",
+                    {
+                      "ObjectType:kind:": [
+                        "an",
+                        "actor"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "Get:from:": [
+                      "pawn",
+                      {
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
                 }
               ]
             }
           ]
         },
         {
-          "PatternActions:patternLocals:patternRules:": [
-            "showing",
+          "PatternRules:": [
             {
-              "PatternLocals:": [
+              "PatternRule:hook activity:": [
                 {
-                  "LocalDecl:value:": [
+                  "Determine:arguments:": [
+                    "isPlayer",
                     {
-                      "VariableDecl:name:type object:": [
-                        "an",
-                        "actor",
+                      "Args:": [
                         {
-                          "ObjectType:kind:": [
-                            "an",
-                            "actor"
+                          "Arg:from:": [
+                            "obj",
+                            "@actor"
                           ]
                         }
                       ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "Get:from:": [
-                          "pawn",
-                          {
-                            "VarFields:": "agent"
-                          }
-                        ]
-                      }
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "PatternRules:": [
+                },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "isPlayer",
+                      "If:from:and:do:else:": [
+                        "response",
                         {
-                          "Args:": [
+                          "FromTxt:": {
+                            "Determine:arguments:": [
+                              "can handle",
+                              {
+                                "Args:": [
+                                  {
+                                    "Arg:from:": [
+                                      "actor",
+                                      "@actor"
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "action",
+                                      {
+                                        "FromTxt:": "showing"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "noun",
+                                      "@noun"
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "other noun",
+                                      "@other noun"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@response"
+                          }
+                        },
+                        {
+                          "Act:": [
                             {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
+                              "Say:": "@response"
                             }
                           ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
+                        },
                         {
-                          "If:from:and:do:else:": [
-                            "response",
+                          "ElseIf:from:and:do:else:": [
+                            "result",
                             {
                               "FromTxt:": {
                                 "Determine:arguments:": [
-                                  "can handle",
+                                  "can reach",
                                   {
                                     "Args:": [
                                       {
@@ -179,12 +229,6 @@
                                       {
                                         "Arg:from:": [
                                           "noun",
-                                          "@noun"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "other noun",
                                           "@other noun"
                                         ]
                                       }
@@ -206,12 +250,11 @@
                               ]
                             },
                             {
-                              "ElseIf:from:and:do:else:": [
-                                "result",
-                                {
-                                  "FromTxt:": {
+                              "ElseDo:": {
+                                "Act:": [
+                                  {
                                     "Determine:arguments:": [
-                                      "can reach",
+                                      "report showing",
                                       {
                                         "Args:": [
                                           {
@@ -222,15 +265,13 @@
                                           },
                                           {
                                             "Arg:from:": [
-                                              "action",
-                                              {
-                                                "FromTxt:": "showing"
-                                              }
+                                              "noun",
+                                              "@noun"
                                             ]
                                           },
                                           {
                                             "Arg:from:": [
-                                              "noun",
+                                              "other noun",
                                               "@other noun"
                                             ]
                                           }
@@ -238,53 +279,8 @@
                                       }
                                     ]
                                   }
-                                },
-                                {
-                                  "Not:": {
-                                    "Is empty:": "@response"
-                                  }
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Say:": "@response"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "ElseDo:": {
-                                    "Act:": [
-                                      {
-                                        "Determine:arguments:": [
-                                          "report showing",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "actor",
-                                                  "@actor"
-                                                ]
-                                              },
-                                              {
-                                                "Arg:from:": [
-                                                  "noun",
-                                                  "@noun"
-                                                ]
-                                              },
-                                              {
-                                                "Arg:from:": [
-                                                  "other noun",
-                                                  "@other noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
+                                ]
+                              }
                             }
                           ]
                         }
@@ -297,111 +293,109 @@
           ]
         }
       ]
-    },
+    }
+  ],
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "report showing",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "report showing",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type object:": [
+                "an",
+                "actor",
                 {
-                  "VariableDecl:name:type object:": [
+                  "ObjectType:kind:": [
                     "an",
-                    "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "VariableDecl:name:type object:": [
+                "a",
+                "noun",
                 {
-                  "VariableDecl:name:type object:": [
+                  "ObjectType:kind:": [
                     "a",
-                    "noun",
-                    {
-                      "ObjectType:kind:": [
-                        "a",
-                        "thing"
-                      ]
-                    }
+                    "thing"
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "other noun",
                 {
-                  "VariableDecl:name:type object:": [
+                  "ObjectType:kind:": [
                     "an",
-                    "other noun",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 }
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "PatternActions:patternRules:": [
+        "report showing",
         {
-          "PatternActions:patternRules:": [
-            "report showing",
+          "PatternRules:": [
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
+                  "Act:": [
                     {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "player shows",
-                              {
-                                "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
-                              }
-                            ]
+                      "Say:": {
+                        "Response:text:": [
+                          "player shows",
+                          {
+                            "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
                           }
-                        }
-                      ]
+                        ]
+                      }
                     }
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Not:": {
-                        "Determine:arguments:": [
-                          "isPlayer",
+                  "Not:": {
+                    "Determine:arguments:": [
+                      "isPlayer",
+                      {
+                        "Args:": [
                           {
-                            "Args:": [
-                              {
-                                "Arg:from:": [
-                                  "obj",
-                                  "@actor"
-                                ]
-                              }
+                            "Arg:from:": [
+                              "obj",
+                              "@actor"
                             ]
                           }
                         ]
                       }
-                    },
+                    ]
+                  }
+                },
+                {
+                  "Act:": [
                     {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "someone else shows",
-                              {
-                                "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
-                              }
-                            ]
+                      "Say:": {
+                        "Response:text:": [
+                          "someone else shows",
+                          {
+                            "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
                           }
-                        }
-                      ]
+                        ]
+                      }
                     }
                   ]
                 }
@@ -412,4 +406,4 @@
       ]
     }
   ]
-}
+]

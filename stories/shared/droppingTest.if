@@ -1,115 +1,72 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "TestStatement:test:": [
+        "dropping test",
         {
-          "TestStatement:test:": [
-            "dropping test",
-            {
-              "TestOutput:": "The knife's ogp: you.\nDropped.\nThe knife's newg: the Kitchen.\nYou haven't got that!\n"
-            }
-          ]
-        },
+          "TestOutput:": "The knife's ogp: you.\nDropped.\nThe knife's newg: the Kitchen.\nYou haven't got that!\n"
+        }
+      ]
+    },
+    {
+      "TestRule:hook activity:": [
+        "dropping test",
         {
-          "TestRule:hook activity:": [
-            "dropping test",
+          "Act:": [
             {
-              "Act:": [
+              "Say:": {
+                "RenderTemplate:": "The knife's ogp: {the: {parentOf: .knife}}."
+              }
+            },
+            {
+              "Determine:arguments:": [
+                "dropping",
                 {
-                  "Say:": {
-                    "RenderTemplate:": "The knife's ogp: {the: {parentOf: .knife}}."
-                  }
-                },
-                {
-                  "Determine:arguments:": [
-                    "dropping",
+                  "Args:": [
                     {
-                      "Args:": [
+                      "Arg:from:": [
+                        "agent",
                         {
-                          "Arg:from:": [
-                            "agent",
-                            {
-                              "FromTxt:": "player"
-                            }
-                          ]
-                        },
-                        {
-                          "Arg:from:": [
-                            "noun",
-                            {
-                              "FromTxt:": "knife"
-                            }
-                          ]
+                          "FromTxt:": "player"
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "Say:": {
-                    "RenderTemplate:": "The knife's newg: {the: {parentOf: .knife}}."
-                  }
-                },
-                {
-                  "Determine:arguments:": [
-                    "dropping",
+                    },
                     {
-                      "Args:": [
+                      "Arg:from:": [
+                        "noun",
                         {
-                          "Arg:from:": [
-                            "agent",
-                            {
-                              "FromTxt:": "player"
-                            }
-                          ]
-                        },
-                        {
-                          "Arg:from:": [
-                            "noun",
-                            {
-                              "FromTxt:": "knife"
-                            }
-                          ]
+                          "FromTxt:": "knife"
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "TestScene:story:": [
-            "dropping test",
+            },
             {
-              "Story:": [
+              "Say:": {
+                "RenderTemplate:": "The knife's newg: {the: {parentOf: .knife}}."
+              }
+            },
+            {
+              "Determine:arguments:": [
+                "dropping",
                 {
-                  "Paragraph:": [
+                  "Args:": [
                     {
-                      "RelativeToNoun:nouns:areBeing:nouns1:": [
-                        " whereabouts",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "the",
-                              "knife"
-                            ]
-                          }
-                        ],
-                        "is",
-                        [
-                          {
-                            "NamedNoun:name:": [
-                              "our",
-                              "self"
-                            ]
-                          }
-                        ]
+                      "Arg:from:": [
+                        "agent",
+                        {
+                          "FromTxt:": "player"
+                        }
+                      ]
+                    },
+                    {
+                      "Arg:from:": [
+                        "noun",
+                        {
+                          "FromTxt:": "knife"
+                        }
                       ]
                     }
                   ]
@@ -120,5 +77,32 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "TestScene:story:": [
+        "dropping test",
+        {
+          "Story:": [
+            {
+              "Paragraph:": [
+                {
+                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                    " whereabouts",
+                    [
+                      "the knife"
+                    ],
+                    "is",
+                    [
+                      "our self"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
-}
+]

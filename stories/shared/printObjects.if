@@ -1,177 +1,107 @@
-{
-  "Story:": [
+[
+  [
     {
-      "Paragraph:": [
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "print inline objects",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "print inline objects",
+          "PatternVariablesTail:": [
             {
-              "PatternVariablesTail:": [
+              "VariableDecl:name:type ext:": [
+                "some",
+                "objs",
+                {
+                  "ExtType textList:": "list"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "print inline objects",
+        {
+          "PatternLocals:": [
+            {
+              "LocalDecl:value:": [
                 {
                   "VariableDecl:name:type ext:": [
-                    "some",
-                    "objs",
+                    "our",
+                    "groups",
                     {
-                      "ExtType textList:": "list"
+                      "ExtType records:": {
+                        "RecordList:": "object group"
+                      }
                     }
                   ]
+                },
+                {
+                  "LocalInit:": {
+                    "FromRecs:": {
+                      "Determine:arguments:": [
+                        "make groups",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "objs",
+                                "@objs"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
                 }
               ]
             }
           ]
         },
         {
-          "PatternActions:patternLocals:patternRules:": [
-            "print inline objects",
+          "PatternRules:": [
             {
-              "PatternLocals:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "LocalDecl:value:": [
+                  "Act:": [
                     {
-                      "VariableDecl:name:type ext:": [
-                        "our",
-                        "groups",
-                        {
-                          "ExtType records:": {
-                            "RecordList:": "object group"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromRecs:": {
-                          "Determine:arguments:": [
-                            "make groups",
+                      "Say:": {
+                        "Commas:": {
+                          "Act:": [
                             {
-                              "Args:": [
+                              "Repeating across:as:do:": [
+                                "@groups",
                                 {
-                                  "Arg:from:": [
-                                    "objs",
-                                    "@objs"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Commas:": {
-                              "Act:": [
+                                  "AsRec:": "group"
+                                },
                                 {
-                                  "Repeating across:as:do:": [
-                                    "@groups",
+                                  "Act:": [
                                     {
-                                      "AsRec:": "group"
-                                    },
-                                    {
-                                      "Act:": [
-                                        {
-                                          "Say:": {
-                                            "Spaces:": {
-                                              "Act:": [
+                                      "Say:": {
+                                        "Spaces:": {
+                                          "Act:": [
+                                            {
+                                              "Determine:arguments:": [
+                                                "print group",
                                                 {
-                                                  "Determine:arguments:": [
-                                                    "print group",
+                                                  "Args:": [
                                                     {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "group",
-                                                            "@group"
-                                                          ]
-                                                        }
+                                                      "Arg:from:": [
+                                                        "group",
+                                                        "@group"
                                                       ]
                                                     }
                                                   ]
                                                 }
                                               ]
                                             }
-                                          }
+                                          ]
                                         }
-                                      ]
+                                      }
                                     }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "print blocks",
-            {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type ext:": [
-                    "some",
-                    "objs",
-                    {
-                      "ExtType textList:": "list"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternActions:patternLocals:patternRules:": [
-            "print blocks",
-            {
-              "PatternLocals:": [
-                {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type ext:": [
-                        "our",
-                        "groups",
-                        {
-                          "ExtType records:": {
-                            "RecordList:": "object group"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromRecs:": {
-                          "Determine:arguments:": [
-                            "make groups",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "objs",
-                                    "@objs"
                                   ]
                                 }
                               ]
@@ -183,59 +113,147 @@
                   ]
                 }
               ]
-            },
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "print blocks",
+        {
+          "PatternVariablesTail:": [
             {
-              "PatternRules:": [
+              "VariableDecl:name:type ext:": [
+                "some",
+                "objs",
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
+                  "ExtType textList:": "list"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "print blocks",
+        {
+          "PatternLocals:": [
+            {
+              "LocalDecl:value:": [
+                {
+                  "VariableDecl:name:type ext:": [
+                    "our",
+                    "groups",
                     {
-                      "Act:": [
+                      "ExtType records:": {
+                        "RecordList:": "object group"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "FromRecs:": {
+                      "Determine:arguments:": [
+                        "make groups",
                         {
-                          "Say:": {
-                            "Rows:": {
-                              "Act:": [
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "objs",
+                                "@objs"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                "Always",
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Rows:": {
+                          "Act:": [
+                            {
+                              "Repeating across:as:do:": [
+                                "@groups",
                                 {
-                                  "Repeating across:as:do:": [
-                                    "@groups",
+                                  "AsRec:": "group"
+                                },
+                                {
+                                  "Act:": [
                                     {
-                                      "AsRec:": "group"
-                                    },
-                                    {
-                                      "Act:": [
-                                        {
-                                          "Say:": {
-                                            "Row:": {
-                                              "Act:": [
+                                      "Say:": {
+                                        "Row:": {
+                                          "Act:": [
+                                            {
+                                              "Determine:arguments:": [
+                                                "print group",
                                                 {
-                                                  "Determine:arguments:": [
-                                                    "print group",
+                                                  "Args:": [
                                                     {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "group",
-                                                            "@group"
-                                                          ]
-                                                        }
+                                                      "Arg:from:": [
+                                                        "group",
+                                                        "@group"
                                                       ]
                                                     }
                                                   ]
                                                 }
                                               ]
                                             }
-                                          }
+                                          ]
                                         }
-                                      ]
+                                      }
                                     }
                                   ]
                                 }
                               ]
                             }
-                          }
+                          ]
                         }
-                      ]
+                      }
                     }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "print object",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
                   ]
                 }
               ]
@@ -245,452 +263,61 @@
       ]
     },
     {
-      "Paragraph:": [
-        {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "print object",
-            {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Comment:": "Say the object's name ( and some object details. ) "
-        },
-        {
-          "PatternActions:patternLocals:patternRules:": [
-            "print object",
-            {
-              "PatternLocals:": [
-                {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type primitive:": [
-                        "our",
-                        "inline depth",
-                        "number"
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromNum:": {
-                          "During:": "print inline objects"
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type primitive:": [
-                        "our",
-                        "block depth",
-                        "number"
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromNum:": {
-                          "During:": "print blocks"
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "RenderTemplate:": "{.obj}"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "AllTrue:": [
-                        {
-                          "Cmp:is:num:": [
-                            "@inline depth",
-                            "GreaterThan",
-                            0
-                          ]
-                        },
-                        {
-                          "Cmp:is:num:": [
-                            "@inline depth",
-                            "GreaterThan",
-                            "@block depth"
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Spaces:": {
-                              "Act:": [
-                                {
-                                  "Determine:arguments:": [
-                                    "a",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            "@obj"
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Say:": {
-                                    "Brackets:": {
-                                      "Act:": [
-                                        {
-                                          "Determine:arguments:": [
-                                            "print details",
-                                            {
-                                              "Args:": [
-                                                {
-                                                  "Arg:from:": [
-                                                    "obj",
-                                                    "@obj"
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "AllTrue:": [
-                        {
-                          "Cmp:is:num:": [
-                            "@block depth",
-                            "GreaterThan",
-                            0
-                          ]
-                        },
-                        {
-                          "Cmp:is:num:": [
-                            "@block depth",
-                            "GreaterThan",
-                            "@inline depth"
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Determine:arguments:": [
-                            "print block",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      "Comment:": "Say the object's name ( and some object details. ) "
     },
     {
-      "Paragraph:": [
+      "PatternActions:patternLocals:patternRules:": [
+        "print object",
         {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "print block",
+          "PatternLocals:": [
             {
-              "PatternVariablesTail:": [
+              "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternActions:patternLocals:patternRules:": [
-            "print block",
-            {
-              "PatternLocals:": [
-                {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type ext:": [
-                        "some",
-                        "kids",
-                        {
-                          "ExtType textList:": "list"
-                        }
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromTxts:": {
-                          "Determine:arguments:": [
-                            "visible storage",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    }
+                  "VariableDecl:name:type primitive:": [
+                    "our",
+                    "inline depth",
+                    "number"
                   ]
                 },
                 {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type primitive:": [
-                        "the",
-                        "hasKids",
-                        "bool"
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromBool:": {
-                          "Cmp:is:num:": [
-                            {
-                              "Len:": "@kids"
-                            },
-                            "GreaterThan",
-                            0
-                          ]
-                        }
-                      }
+                  "LocalInit:": {
+                    "FromNum:": {
+                      "During:": "print inline objects"
                     }
-                  ]
+                  }
                 }
               ]
             },
             {
-              "PatternRules:": [
+              "LocalDecl:value:": [
                 {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Spaces:": {
-                              "Act:": [
-                                {
-                                  "Determine:arguments:": [
-                                    "a",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            "@obj"
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Determine:arguments:": [
-                                    "print status",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "obj",
-                                            "@obj"
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "isEmpty",
-                                            {
-                                              "FromBool:": {
-                                                "Not:": "@hasKids"
-                                              }
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        {
-                          "If:do:": [
-                            "@hasKids",
-                            {
-                              "Act:": [
-                                {
-                                  "Determine:arguments:": [
-                                    "print blocks",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "objs",
-                                            "@kids"
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                  "VariableDecl:name:type primitive:": [
+                    "our",
+                    "block depth",
+                    "number"
                   ]
+                },
+                {
+                  "LocalInit:": {
+                    "FromNum:": {
+                      "During:": "print blocks"
+                    }
+                  }
                 }
               ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "print inline storage",
-            {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "success",
-                  "bool"
-                ]
-              }
             }
           ]
         },
         {
-          "PatternActions:patternLocals:patternRules:": [
-            "print inline storage",
+          "PatternRules:": [
             {
-              "PatternLocals:": [
+              "PatternRule:hook activity:": [
+                "Always",
                 {
-                  "LocalDecl:value:": [
+                  "Act:": [
                     {
-                      "VariableDecl:name:type ext:": [
-                        "our",
-                        "kids",
-                        {
-                          "ExtType textList:": "list"
-                        }
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromTxts:": {
-                          "Determine:arguments:": [
-                            "visible storage",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                      "Say:": {
+                        "RenderTemplate:": "{.obj}"
                       }
                     }
                   ]
@@ -698,105 +325,68 @@
               ]
             },
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
+                  "AllTrue:": [
                     {
                       "Cmp:is:num:": [
-                        {
-                          "Len:": "@kids"
-                        },
+                        "@inline depth",
                         "GreaterThan",
                         0
                       ]
                     },
                     {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "inline storage",
-                              {
-                                "RenderTemplate:": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "Let:be:": [
-                            "success",
-                            {
-                              "FromBool:": true
-                            }
-                          ]
-                        }
+                      "Cmp:is:num:": [
+                        "@inline depth",
+                        "GreaterThan",
+                        "@block depth"
                       ]
                     }
                   ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "PatternDecl:name:optvars:": [
-            "patterns",
-            "print details",
-            {
-              "PatternVariablesTail:": [
+                },
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
+                  "Act:": [
                     {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Comment:": "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
-        },
-        {
-          "PatternActions:patternLocals:patternRules:": [
-            "print details",
-            {
-              "PatternLocals:": [
-                {
-                  "LocalDecl:value:": [
-                    {
-                      "VariableDecl:name:type ext:": [
-                        "the",
-                        "kids",
-                        {
-                          "ExtType textList:": "list"
-                        }
-                      ]
-                    },
-                    {
-                      "LocalInit:": {
-                        "FromTxts:": {
-                          "Determine:arguments:": [
-                            "visible storage",
+                      "Say:": {
+                        "Spaces:": {
+                          "Act:": [
                             {
-                              "Args:": [
+                              "Determine:arguments:": [
+                                "a",
                                 {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        "@obj"
+                                      ]
+                                    }
                                   ]
                                 }
                               ]
+                            },
+                            {
+                              "Say:": {
+                                "Brackets:": {
+                                  "Act:": [
+                                    {
+                                      "Determine:arguments:": [
+                                        "print details",
+                                        {
+                                          "Args:": [
+                                            {
+                                              "Arg:from:": [
+                                                "obj",
+                                                "@obj"
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              }
                             }
                           ]
                         }
@@ -807,385 +397,39 @@
               ]
             },
             {
-              "PatternRules:": [
+              "PatternRule:hook activity:": [
                 {
-                  "PatternRule:hook activity:": [
+                  "AllTrue:": [
                     {
-                      "AllTrue:": [
-                        {
-                          "KindOf:is:": [
-                            "@obj",
-                            "containers"
-                          ]
-                        }
+                      "Cmp:is:num:": [
+                        "@block depth",
+                        "GreaterThan",
+                        0
                       ]
                     },
                     {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "empty container",
-                              {
-                                "RenderTemplate:": "empty"
-                              }
-                            ]
-                          }
-                        }
+                      "Cmp:is:num:": [
+                        "@block depth",
+                        "GreaterThan",
+                        "@inline depth"
                       ]
                     }
                   ]
                 },
                 {
-                  "PatternRule:hook activity:": [
+                  "Act:": [
                     {
-                      "AllTrue:": [
+                      "Determine:arguments:": [
+                        "print block",
                         {
-                          "KindOf:is:": [
-                            "@obj",
-                            "containers"
-                          ]
-                        },
-                        {
-                          "Get obj:trait:": [
-                            "@obj",
-                            "closed"
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "closed container",
-                              "closed"
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "AllTrue:": [
-                        {
-                          "Cmp:is:num:": [
+                          "Args:": [
                             {
-                              "Len:": "@kids"
-                            },
-                            "GreaterThan",
-                            0
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "on which are",
-                              {
-                                "RenderTemplate:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "print status",
-            {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:": [
-                    "an",
-                    "isEmpty",
-                    "bool"
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "our",
-                  "skip",
-                  "bool"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "Comment:": "extra information about an object useful for inventorying ( usually appearing inside brackets )"
-        },
-        {
-          "PatternActions:patternRules:": [
-            "print status",
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    "Always",
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Spaces:": {
-                              "Act:": [
-                                {
-                                  "Say:": {
-                                    "Brackets:": {
-                                      "Act:": [
-                                        {
-                                          "Say:": {
-                                            "Commas:": {
-                                              "Act:": [
-                                                {
-                                                  "Determine:arguments:": [
-                                                    " print inner status",
-                                                    {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "obj",
-                                                            "@obj"
-                                                          ]
-                                                        },
-                                                        {
-                                                          "Arg:from:": [
-                                                            "isEmpty",
-                                                            "@isEmpty"
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          }
-                                        }
-                                      ]
-                                    }
-                                  }
-                                }
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
                               ]
                             }
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Paragraph:": [
-        {
-          "PatternDecl:name:optvars:patternReturn:": [
-            "patterns",
-            "print inner status",
-            {
-              "PatternVariablesTail:": [
-                {
-                  "VariableDecl:name:type object:": [
-                    "an",
-                    "obj",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "VariableDecl:name:type primitive:": [
-                    "an",
-                    "isEmpty",
-                    "bool"
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternReturn:": {
-                "VariableDecl:name:type primitive:": [
-                  "our",
-                  "skip",
-                  "bool"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "Comment:": "usually called via \"print status\" to add spacing and comma-and separators "
-        },
-        {
-          "PatternActions:patternRules:": [
-            "print inner status",
-            {
-              "PatternRules:": [
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "locked"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "locked status",
-                              {
-                                "RenderTemplate:": "{if .obj.closed and .obj.locked}locked{end}"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "AllTrue:": [
-                        {
-                          "Get obj:trait:": [
-                            "@obj",
-                            "transparent"
                           ]
-                        },
-                        {
-                          "Get obj:trait:": [
-                            "@obj",
-                            "unopenable"
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "transparent status",
-                              {
-                                "RenderTemplate:": "{if .isEmpty}empty{end}"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "openable"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "openable status",
-                              {
-                                "RenderTemplate:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "worn"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "worn status",
-                              {
-                                "RenderTemplate:": "being worn"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "PatternRule:hook activity:": [
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "lit"
-                      ]
-                    },
-                    {
-                      "Act:": [
-                        {
-                          "Say:": {
-                            "Response:text:": [
-                              "lit status",
-                              {
-                                "RenderTemplate:": "providing light"
-                              }
-                            ]
-                          }
                         }
                       ]
                     }
@@ -1197,5 +441,743 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "print block",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "print block",
+        {
+          "PatternLocals:": [
+            {
+              "LocalDecl:value:": [
+                {
+                  "VariableDecl:name:type ext:": [
+                    "some",
+                    "kids",
+                    {
+                      "ExtType textList:": "list"
+                    }
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "FromTxts:": {
+                      "Determine:arguments:": [
+                        "visible storage",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "LocalDecl:value:": [
+                {
+                  "VariableDecl:name:type primitive:": [
+                    "the",
+                    "hasKids",
+                    "bool"
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "FromBool:": {
+                      "Cmp:is:num:": [
+                        {
+                          "Len:": "@kids"
+                        },
+                        "GreaterThan",
+                        0
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                "Always",
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Spaces:": {
+                          "Act:": [
+                            {
+                              "Determine:arguments:": [
+                                "a",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "noun",
+                                        "@obj"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Determine:arguments:": [
+                                "print status",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "obj",
+                                        "@obj"
+                                      ]
+                                    },
+                                    {
+                                      "Arg:from:": [
+                                        "isEmpty",
+                                        {
+                                          "FromBool:": {
+                                            "Not:": "@hasKids"
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "If:do:": [
+                        "@hasKids",
+                        {
+                          "Act:": [
+                            {
+                              "Determine:arguments:": [
+                                "print blocks",
+                                {
+                                  "Args:": [
+                                    {
+                                      "Arg:from:": [
+                                        "objs",
+                                        "@kids"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "print inline storage",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "a",
+              "success",
+              "bool"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "print inline storage",
+        {
+          "PatternLocals:": [
+            {
+              "LocalDecl:value:": [
+                {
+                  "VariableDecl:name:type ext:": [
+                    "our",
+                    "kids",
+                    {
+                      "ExtType textList:": "list"
+                    }
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "FromTxts:": {
+                      "Determine:arguments:": [
+                        "visible storage",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Cmp:is:num:": [
+                    {
+                      "Len:": "@kids"
+                    },
+                    "GreaterThan",
+                    0
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "inline storage",
+                          {
+                            "RenderTemplate:": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:": [
+        "patterns",
+        "print details",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Comment:": "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
+    },
+    {
+      "PatternActions:patternLocals:patternRules:": [
+        "print details",
+        {
+          "PatternLocals:": [
+            {
+              "LocalDecl:value:": [
+                {
+                  "VariableDecl:name:type ext:": [
+                    "the",
+                    "kids",
+                    {
+                      "ExtType textList:": "list"
+                    }
+                  ]
+                },
+                {
+                  "LocalInit:": {
+                    "FromTxts:": {
+                      "Determine:arguments:": [
+                        "visible storage",
+                        {
+                          "Args:": [
+                            {
+                              "Arg:from:": [
+                                "obj",
+                                "@obj"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "AllTrue:": [
+                    {
+                      "KindOf:is:": [
+                        "@obj",
+                        "containers"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "empty container",
+                          {
+                            "RenderTemplate:": "empty"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "AllTrue:": [
+                    {
+                      "KindOf:is:": [
+                        "@obj",
+                        "containers"
+                      ]
+                    },
+                    {
+                      "Get obj:trait:": [
+                        "@obj",
+                        "closed"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "closed container",
+                          "closed"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "AllTrue:": [
+                    {
+                      "Cmp:is:num:": [
+                        {
+                          "Len:": "@kids"
+                        },
+                        "GreaterThan",
+                        0
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "on which are",
+                          {
+                            "RenderTemplate:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "print status",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            },
+            {
+              "VariableDecl:name:type primitive:": [
+                "an",
+                "isEmpty",
+                "bool"
+              ]
+            }
+          ]
+        },
+        {
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "our",
+              "skip",
+              "bool"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Comment:": "extra information about an object useful for inventorying ( usually appearing inside brackets )"
+    },
+    {
+      "PatternActions:patternRules:": [
+        "print status",
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                "Always",
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Spaces:": {
+                          "Act:": [
+                            {
+                              "Say:": {
+                                "Brackets:": {
+                                  "Act:": [
+                                    {
+                                      "Say:": {
+                                        "Commas:": {
+                                          "Act:": [
+                                            {
+                                              "Determine:arguments:": [
+                                                " print inner status",
+                                                {
+                                                  "Args:": [
+                                                    {
+                                                      "Arg:from:": [
+                                                        "obj",
+                                                        "@obj"
+                                                      ]
+                                                    },
+                                                    {
+                                                      "Arg:from:": [
+                                                        "isEmpty",
+                                                        "@isEmpty"
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "PatternDecl:name:optvars:patternReturn:": [
+        "patterns",
+        "print inner status",
+        {
+          "PatternVariablesTail:": [
+            {
+              "VariableDecl:name:type object:": [
+                "an",
+                "obj",
+                {
+                  "ObjectType:kind:": [
+                    "an",
+                    "object"
+                  ]
+                }
+              ]
+            },
+            {
+              "VariableDecl:name:type primitive:": [
+                "an",
+                "isEmpty",
+                "bool"
+              ]
+            }
+          ]
+        },
+        {
+          "PatternReturn:": {
+            "VariableDecl:name:type primitive:": [
+              "our",
+              "skip",
+              "bool"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Comment:": "usually called via \"print status\" to add spacing and comma-and separators "
+    },
+    {
+      "PatternActions:patternRules:": [
+        "print inner status",
+        {
+          "PatternRules:": [
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Get obj:trait:": [
+                    "@obj",
+                    "locked"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "locked status",
+                          {
+                            "RenderTemplate:": "{if .obj.closed and .obj.locked}locked{end}"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "AllTrue:": [
+                    {
+                      "Get obj:trait:": [
+                        "@obj",
+                        "transparent"
+                      ]
+                    },
+                    {
+                      "Get obj:trait:": [
+                        "@obj",
+                        "unopenable"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "transparent status",
+                          {
+                            "RenderTemplate:": "{if .isEmpty}empty{end}"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Get obj:trait:": [
+                    "@obj",
+                    "openable"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "openable status",
+                          {
+                            "RenderTemplate:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Get obj:trait:": [
+                    "@obj",
+                    "worn"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "worn status",
+                          {
+                            "RenderTemplate:": "being worn"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "PatternRule:hook activity:": [
+                {
+                  "Get obj:trait:": [
+                    "@obj",
+                    "lit"
+                  ]
+                },
+                {
+                  "Act:": [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "lit status",
+                          {
+                            "RenderTemplate:": "providing light"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
-}
+]
