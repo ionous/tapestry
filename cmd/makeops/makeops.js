@@ -242,21 +242,7 @@ const sigParts = function(t, commandName) {
 // all: dictionary of all signatures to search for collisions.
 const signType = function(t, out, all) {
   const lede= ledeName(t);
-  let commandName= pascal(lede || t.name);
-  // provide a simple override for signature generation
-  if (t.sign) {
-    commandName= t.sign[0];
-    for (let i=0; i< t.params.length; i++) {
-      const p= t.params[i];
-      const el= t.sign[i+1];
-      if (el.length==0) {
-        p.tag= "_";
-        p.sel= "";
-      } else {
-        p.tag= p.sel= el;
-      }
-    }
-  }
+  const  commandName= pascal(lede || t.name);
 
   const sigs= [];
   if (t.uses === 'swap') {
@@ -387,6 +373,20 @@ for (const typeName in allTypes) {
       pi++;
     }
   });
+  // provide a simple override for signature generation
+  if (type.sign) {
+    type.lede= type.sign[0];
+    for (let i=0; i< ps.length; i++) {
+      const p= ps[i];
+      const el= type.sign[i+1];
+      if (el.length==0) {
+        p.tag= "_";
+        p.sel= "";
+      } else {
+        p.tag= p.sel= el;
+      }
+    }
+  }
   type.params= ps;
 
   //

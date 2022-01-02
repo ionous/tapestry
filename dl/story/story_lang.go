@@ -3300,14 +3300,15 @@ func KindsOfAspect_Marshal(m jsn.Marshaler, val *KindsOfAspect) (err error) {
 // KindsOfKind
 // User implements: StoryStatement.
 type KindsOfKind struct {
-	PluralKinds  PluralKinds  `if:"label=_"`
-	SingularKind SingularKind `if:"label=singular_kind"`
+	PluralKinds  PluralKinds  `if:"label=kinds"`
+	SingularKind SingularKind `if:"label=of"`
 }
 
 func (*KindsOfKind) Compose() composer.Spec {
 	return composer.Spec{
 		Name: KindsOfKind_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Make",
 	}
 }
 
@@ -3363,7 +3364,7 @@ func KindsOfKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsOfKind) (e
 type KindsOfKind_Flow struct{ ptr *KindsOfKind }
 
 func (n KindsOfKind_Flow) GetType() string      { return KindsOfKind_Type }
-func (n KindsOfKind_Flow) GetLede() string      { return KindsOfKind_Type }
+func (n KindsOfKind_Flow) GetLede() string      { return "Make" }
 func (n KindsOfKind_Flow) GetFlow() interface{} { return n.ptr }
 func (n KindsOfKind_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*KindsOfKind); ok {
@@ -3386,14 +3387,14 @@ func KindsOfKind_Optional_Marshal(m jsn.Marshaler, pv **KindsOfKind) (err error)
 
 func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
 	if err = m.MarshalBlock(KindsOfKind_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", KindsOfKind_Field_PluralKinds)
+		e0 := m.MarshalKey("kinds", KindsOfKind_Field_PluralKinds)
 		if e0 == nil {
 			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindsOfKind_Field_PluralKinds))
 		}
-		e1 := m.MarshalKey("singular_kind", KindsOfKind_Field_SingularKind)
+		e1 := m.MarshalKey("of", KindsOfKind_Field_SingularKind)
 		if e1 == nil {
 			e1 = SingularKind_Marshal(m, &val.SingularKind)
 		}
