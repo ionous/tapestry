@@ -55,6 +55,10 @@ func (q *Query) ActivateDomain(name string) (ret string, err error) {
 		ret = q.domain
 	} else if tx, e := q.db.Begin(); e != nil {
 		err = e
+	} else if len(name) == 0 {
+		q.domain = ""
+		q.activation = q.activation + 1
+		err = resetDomain(q.db)
 	} else {
 		// register the new scope(s)
 		act := q.activation + 1
@@ -231,10 +235,7 @@ func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
 	return
 }
 
-func (q *Query) ResetSavedData() error {
-	return resetSavedData(q.db)
-}
-func resetSavedData(db *sql.DB) (err error) {
+func resetDomain(db *sql.DB) (err error) {
 	_, err = db.Exec(`delete from run_domain; delete from run_pair`)
 	return
 }
@@ -242,7 +243,7 @@ func resetSavedData(db *sql.DB) (err error) {
 func NewQueries(db *sql.DB, reset bool) (ret *Query, err error) {
 	if e := tables.CreateRun(db); e != nil {
 		err = e
-	} else if e := resetSavedData(db); e != nil {
+	} else if e := resetDomain(db); e != nil {
 		err = e
 	} else {
 		ret, err = newQueries(db)

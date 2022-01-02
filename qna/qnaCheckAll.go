@@ -25,29 +25,36 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 		for _, el := range checks {
 			var act rt.Execute
 			if e := story.Decode(rt.Execute_Slot{&act}, el.Prog, signatures); e != nil {
-				err = e
+				err = errutil.Append(err, e)
 			} else if v, e := literal.ReadLiteral(el.Aff, "", el.Value); e != nil {
-				err = e
+				err = errutil.Append(err, e)
 			} else if expect, ok := v.(*literal.TextValue); !ok {
-				err = errutil.New("can only handle text values right now")
+				e := errutil.New("can only handle text values right now")
+				err = errutil.Append(err, e)
 			} else {
-				// fix? its currently necessary to activate a global domain, rather than jump straight into the check domain.
-				// something about pair activation goes a bit wonky: multiple pairs can become active at once.
-				qdb.ResetSavedData()
-				run := NewRuntimeOptions(qdb, options, tapestry.AllSignatures)
-				if _, e := run.ActivateDomain("entire_game"); e != nil {
-					err = e
+				// fix? its necessary to reset the domain right now.
+				// not entirely clear why to me.
+				if _, e := qdb.ActivateDomain(""); e != nil {
+					err = errutil.Append(err, e)
 				} else {
-					t := CheckOutput{
-						Name:   el.Name,
-						Domain: el.Domain,
-						Expect: expect.String(),
-						Test:   act,
-					}
-					if e := t.RunTest(run); e != nil {
+					run := NewRuntimeOptions(qdb, options, tapestry.AllSignatures)
+					// fix! if we dont activate "entire_game" first, we wind up with multiple pairs active
+					// this is something to do with the way the pair query works
+					// when there is a relation in the entire_game that is supposed to be changed by a sub-domain.
+					if _, e := run.ActivateDomain("entire_game"); e != nil {
 						err = errutil.Append(err, e)
+					} else {
+						t := CheckOutput{
+							Name:   el.Name,
+							Domain: el.Domain,
+							Expect: expect.String(),
+							Test:   act,
+						}
+						if e := t.RunTest(run); e != nil {
+							err = errutil.Append(err, e)
+						}
+						ret++
 					}
-					ret++
 				}
 			}
 		}
