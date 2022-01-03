@@ -62,7 +62,7 @@
             "record_values": {
                 "uses": "flow",
                 "spec": "recs {_%kind:text} {containing+field_values}",
-                "slot": ["record_eval", "literal_value"],
+                "slot": ["record_list_eval", "literal_value"],
                 "desc": "Specify a series of records, all of the same kind."
             },
             "field_value": {

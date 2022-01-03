@@ -977,7 +977,7 @@ func RecordValue_Marshal(m jsn.Marshaler, val *RecordValue) (err error) {
 }
 
 // RecordValues Specify a series of records, all of the same kind.
-// User implements: RecordEval, LiteralValue.
+// User implements: RecordListEval, LiteralValue.
 type RecordValues struct {
 	Kind       string        `if:"label=_,type=text"`
 	Containing []FieldValues `if:"label=containing"`
