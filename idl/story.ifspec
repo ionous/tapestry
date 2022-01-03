@@ -454,39 +454,6 @@
                             }
                         }
                     },
-                    "records":
-                    {
-                        "uses": "group",
-                        "specs":
-                        {
-                            "kinds_of_record":
-                            {
-                                "uses": "flow",
-                                "slot": "story_statement",
-                                "spec": "{records%record_plural} are a kind of record.",
-                                "desc": "Declare a record"
-                            },
-                            "records_possess_properties":
-                            {
-                                "uses": "flow",
-                                "slot": "story_statement",
-                                "spec": "{records%record_plural} have {+property_decl|comma-and}.",
-                                "desc": "Add properties to a record"
-                            },
-                            "record_singular":
-                            {
-                                "uses": "str",
-                                "desc": "Record: Describes a common set of properties.",
-                                "group": "positioned"
-                            },
-                            "record_plural":
-                            {
-                                "uses": "str",
-                                "desc": "Records: The plural name for a record.",
-                                "group": "positioned"
-                            }
-                        }
-                    },
                     "traits":
                     {
                         "uses": "group",
@@ -588,6 +555,12 @@
                         "uses": "group",
                         "specs":
                         {
+                            "record_singular":
+                            {
+                                "uses": "str",
+                                "desc": "Record: Describes a common set of properties.",
+                                "group": "positioned"
+                            },
                             "record_type":
                             {
                                 "uses": "flow",

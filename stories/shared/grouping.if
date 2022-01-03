@@ -260,7 +260,10 @@
   ],
   [
     {
-      "KindsOfRecord:": " groupings"
+      "Make kinds:of:": [
+        "Groupings",
+        "record"
+      ]
     },
     {
       "KindsPossessProperties:propertyDecl:": [
@@ -308,11 +311,14 @@
   ],
   [
     {
-      "KindsOfRecord:": " object groups"
+      "Make kinds:of:": [
+        "Object groups",
+        "records"
+      ]
     },
     {
-      "RecordsPossessProperties:propertyDecl:": [
-        " object groups",
+      "KindsPossessProperties:propertyDecl:": [
+        "Object groups",
         [
           {
             "PropertyDecl:property:propertyType ext:": [

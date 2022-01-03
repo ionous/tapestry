@@ -3406,105 +3406,6 @@ func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
 	return
 }
 
-// KindsOfRecord
-// User implements: StoryStatement.
-type KindsOfRecord struct {
-	RecordPlural RecordPlural `if:"label=_"`
-}
-
-func (*KindsOfRecord) Compose() composer.Spec {
-	return composer.Spec{
-		Name: KindsOfRecord_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const KindsOfRecord_Type = "kinds_of_record"
-
-const KindsOfRecord_Field_RecordPlural = "$RECORD_PLURAL"
-
-func (op *KindsOfRecord) Marshal(m jsn.Marshaler) error {
-	return KindsOfRecord_Marshal(m, op)
-}
-
-type KindsOfRecord_Slice []KindsOfRecord
-
-func (op *KindsOfRecord_Slice) GetType() string { return KindsOfRecord_Type }
-
-func (op *KindsOfRecord_Slice) Marshal(m jsn.Marshaler) error {
-	return KindsOfRecord_Repeats_Marshal(m, (*[]KindsOfRecord)(op))
-}
-
-func (op *KindsOfRecord_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *KindsOfRecord_Slice) SetSize(cnt int) {
-	var els []KindsOfRecord
-	if cnt >= 0 {
-		els = make(KindsOfRecord_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *KindsOfRecord_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return KindsOfRecord_Marshal(m, &(*op)[i])
-}
-
-func KindsOfRecord_Repeats_Marshal(m jsn.Marshaler, vals *[]KindsOfRecord) error {
-	return jsn.RepeatBlock(m, (*KindsOfRecord_Slice)(vals))
-}
-
-func KindsOfRecord_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsOfRecord) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = KindsOfRecord_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type KindsOfRecord_Flow struct{ ptr *KindsOfRecord }
-
-func (n KindsOfRecord_Flow) GetType() string      { return KindsOfRecord_Type }
-func (n KindsOfRecord_Flow) GetLede() string      { return KindsOfRecord_Type }
-func (n KindsOfRecord_Flow) GetFlow() interface{} { return n.ptr }
-func (n KindsOfRecord_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*KindsOfRecord); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func KindsOfRecord_Optional_Marshal(m jsn.Marshaler, pv **KindsOfRecord) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = KindsOfRecord_Marshal(m, *pv)
-	} else if !enc {
-		var v KindsOfRecord
-		if err = KindsOfRecord_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func KindsOfRecord_Marshal(m jsn.Marshaler, val *KindsOfRecord) (err error) {
-	if err = m.MarshalBlock(KindsOfRecord_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", KindsOfRecord_Field_RecordPlural)
-		if e0 == nil {
-			e0 = RecordPlural_Marshal(m, &val.RecordPlural)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", KindsOfRecord_Field_RecordPlural))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // KindsPossessProperties
 // User implements: StoryStatement.
 type KindsPossessProperties struct {
@@ -8287,83 +8188,6 @@ func RecordList_Marshal(m jsn.Marshaler, val *RecordList) (err error) {
 	return
 }
 
-// RecordPlural requires a user-specified string.
-type RecordPlural struct {
-	At  reader.Position `if:"internal"`
-	Str string
-}
-
-func (op *RecordPlural) String() string {
-	return op.Str
-}
-
-func (*RecordPlural) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        RecordPlural_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-	}
-}
-
-const RecordPlural_Type = "record_plural"
-
-func (op *RecordPlural) Marshal(m jsn.Marshaler) error {
-	return RecordPlural_Marshal(m, op)
-}
-
-func RecordPlural_Optional_Marshal(m jsn.Marshaler, val *RecordPlural) (err error) {
-	var zero RecordPlural
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = RecordPlural_Marshal(m, val)
-	}
-	return
-}
-
-func RecordPlural_Marshal(m jsn.Marshaler, val *RecordPlural) (err error) {
-	m.SetCursor(val.At.Offset)
-	return m.MarshalValue(RecordPlural_Type, &val.Str)
-}
-
-type RecordPlural_Slice []RecordPlural
-
-func (op *RecordPlural_Slice) GetType() string { return RecordPlural_Type }
-
-func (op *RecordPlural_Slice) Marshal(m jsn.Marshaler) error {
-	return RecordPlural_Repeats_Marshal(m, (*[]RecordPlural)(op))
-}
-
-func (op *RecordPlural_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *RecordPlural_Slice) SetSize(cnt int) {
-	var els []RecordPlural
-	if cnt >= 0 {
-		els = make(RecordPlural_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *RecordPlural_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RecordPlural_Marshal(m, &(*op)[i])
-}
-
-func RecordPlural_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordPlural) error {
-	return jsn.RepeatBlock(m, (*RecordPlural_Slice)(vals))
-}
-
-func RecordPlural_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordPlural) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = RecordPlural_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // RecordSingular requires a user-specified string.
 type RecordSingular struct {
 	At  reader.Position `if:"internal"`
@@ -8533,114 +8357,6 @@ func RecordType_Marshal(m jsn.Marshaler, val *RecordType) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RecordType_Field_Kind))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// RecordsPossessProperties
-// User implements: StoryStatement.
-type RecordsPossessProperties struct {
-	RecordPlural RecordPlural   `if:"label=_"`
-	PropertyDecl []PropertyDecl `if:"label=property_decl"`
-}
-
-func (*RecordsPossessProperties) Compose() composer.Spec {
-	return composer.Spec{
-		Name: RecordsPossessProperties_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const RecordsPossessProperties_Type = "records_possess_properties"
-
-const RecordsPossessProperties_Field_RecordPlural = "$RECORD_PLURAL"
-const RecordsPossessProperties_Field_PropertyDecl = "$PROPERTY_DECL"
-
-func (op *RecordsPossessProperties) Marshal(m jsn.Marshaler) error {
-	return RecordsPossessProperties_Marshal(m, op)
-}
-
-type RecordsPossessProperties_Slice []RecordsPossessProperties
-
-func (op *RecordsPossessProperties_Slice) GetType() string { return RecordsPossessProperties_Type }
-
-func (op *RecordsPossessProperties_Slice) Marshal(m jsn.Marshaler) error {
-	return RecordsPossessProperties_Repeats_Marshal(m, (*[]RecordsPossessProperties)(op))
-}
-
-func (op *RecordsPossessProperties_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *RecordsPossessProperties_Slice) SetSize(cnt int) {
-	var els []RecordsPossessProperties
-	if cnt >= 0 {
-		els = make(RecordsPossessProperties_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *RecordsPossessProperties_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RecordsPossessProperties_Marshal(m, &(*op)[i])
-}
-
-func RecordsPossessProperties_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordsPossessProperties) error {
-	return jsn.RepeatBlock(m, (*RecordsPossessProperties_Slice)(vals))
-}
-
-func RecordsPossessProperties_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordsPossessProperties) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = RecordsPossessProperties_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type RecordsPossessProperties_Flow struct{ ptr *RecordsPossessProperties }
-
-func (n RecordsPossessProperties_Flow) GetType() string      { return RecordsPossessProperties_Type }
-func (n RecordsPossessProperties_Flow) GetLede() string      { return RecordsPossessProperties_Type }
-func (n RecordsPossessProperties_Flow) GetFlow() interface{} { return n.ptr }
-func (n RecordsPossessProperties_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RecordsPossessProperties); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func RecordsPossessProperties_Optional_Marshal(m jsn.Marshaler, pv **RecordsPossessProperties) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RecordsPossessProperties_Marshal(m, *pv)
-	} else if !enc {
-		var v RecordsPossessProperties
-		if err = RecordsPossessProperties_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func RecordsPossessProperties_Marshal(m jsn.Marshaler, val *RecordsPossessProperties) (err error) {
-	if err = m.MarshalBlock(RecordsPossessProperties_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RecordsPossessProperties_Field_RecordPlural)
-		if e0 == nil {
-			e0 = RecordPlural_Marshal(m, &val.RecordPlural)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RecordsPossessProperties_Field_RecordPlural))
-		}
-		e1 := m.MarshalKey("property_decl", RecordsPossessProperties_Field_PropertyDecl)
-		if e1 == nil {
-			e1 = PropertyDecl_Repeats_Marshal(m, &val.PropertyDecl)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RecordsPossessProperties_Field_PropertyDecl))
 		}
 		m.EndBlock()
 	}
@@ -10877,7 +10593,6 @@ var Slats = []composer.Composer{
 	(*KindOfRelation)(nil),
 	(*KindsOfAspect)(nil),
 	(*KindsOfKind)(nil),
-	(*KindsOfRecord)(nil),
 	(*KindsPossessProperties)(nil),
 	(*Lede)(nil),
 	(*Lines)(nil),
@@ -10925,10 +10640,8 @@ var Slats = []composer.Composer{
 	(*PropertyDecl)(nil),
 	(*PropertyType)(nil),
 	(*RecordList)(nil),
-	(*RecordPlural)(nil),
 	(*RecordSingular)(nil),
 	(*RecordType)(nil),
-	(*RecordsPossessProperties)(nil),
 	(*RelationCardinality)(nil),
 	(*RelativeToNoun)(nil),
 	(*RenderTemplate)(nil),
@@ -10952,150 +10665,148 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	7872120455849093108:  (*ActionContext)(nil),            /* ActionContext: */
-	2237475528376444648:  (*ActionDecl)(nil),               /* ActionDecl:action:actionParams common: */
-	18212021549969329253: (*ActionDecl)(nil),               /* ActionDecl:action:actionParams dual: */
-	10825614489046735389: (*ActionDecl)(nil),               /* ActionDecl:action:actionParams none: */
-	14902711848163440508: (*ActionParams)(nil),             /* ActionParams common: */
-	11902859627634050329: (*ActionParams)(nil),             /* ActionParams dual: */
-	5868886119925925865:  (*ActionParams)(nil),             /* ActionParams none: */
-	6291103735245333139:  (*Argument)(nil),                 /* Arg:from: */
-	2275326896920679506:  (*Arguments)(nil),                /* Args: */
-	17855209504331534011: (*AspectTraits)(nil),             /* AspectTraits:traitPhrase: */
-	13349866918792328232: (*BoxedNumber)(nil),              /* BoxedNumber: */
-	3226924893680341786:  (*BoxedText)(nil),                /* BoxedText: */
-	170374163879469822:   (*Certainties)(nil),              /* Certainties:areBeing:certainty:trait: */
-	15857890977690710700: (*Comment)(nil),                  /* Comment: */
-	13295757043766156580: (*CommonAction)(nil),             /* CommonAction: */
-	11796688776587655409: (*CommonAction)(nil),             /* CommonAction:actionContext: */
-	10211567489959209123: (*CountOf)(nil),                  /* CountOf:num: */
-	475310308664194536:   (*CycleText)(nil),                /* CycleText: */
-	14117144937213193556: (*Determine)(nil),                /* Determine: */
-	18058198214790918510: (*Determine)(nil),                /* Determine:arguments: */
-	11093854973825287408: (*EventBlock)(nil),               /* EventBlock kinds:handlers: */
-	11855563103941044442: (*EventBlock)(nil),               /* EventBlock namedNoun:handlers: */
-	8929470137779261632:  (*EventHandler)(nil),             /* EventHandler:event:patternRules: */
-	4061872818055525560:  (*EventHandler)(nil),             /* EventHandler:event:locals:patternRules: */
-	18010503397334720257: (*EventTarget)(nil),              /* EventTarget kinds: */
-	17197340468883043891: (*EventTarget)(nil),              /* EventTarget namedNoun: */
-	2682533272643563400:  (*ExtType)(nil),                  /* ExtType numbers: */
-	7466087638889466083:  (*ExtType)(nil),                  /* ExtType textList: */
-	686004221669540097:   (*ExtType)(nil),                  /* ExtType record: */
-	3770798410706626212:  (*ExtType)(nil),                  /* ExtType records: */
-	351838510430560892:   (*GrammarDecl)(nil),              /* GrammarDecl: */
-	8395536647843606072:  (*KindOfNoun)(nil),               /* KindOfNoun:kind: */
-	2174943222093748082:  (*KindOfNoun)(nil),               /* KindOfNoun:trait:kind: */
-	7004049933953251122:  (*KindOfNoun)(nil),               /* KindOfNoun:kind:nounRelation: */
-	9031009285767794428:  (*KindOfNoun)(nil),               /* KindOfNoun:trait:kind:nounRelation: */
-	650960042632654891:   (*KindOfRelation)(nil),           /* KindOfRelation:cardinality oneToOne: */
-	1081167552428580836:  (*KindOfRelation)(nil),           /* KindOfRelation:cardinality oneToMany: */
-	10771046767095423028: (*KindOfRelation)(nil),           /* KindOfRelation:cardinality manyToOne: */
-	5852635308349599025:  (*KindOfRelation)(nil),           /* KindOfRelation:cardinality manyToMany: */
-	16689641787061327381: (*KindsOfAspect)(nil),            /* KindsOfAspect: */
-	5919854034648203527:  (*KindsOfKind)(nil),              /* Make kinds:of: */
-	12878641740711100222: (*KindsOfRecord)(nil),            /* KindsOfRecord: */
-	7748657468599352730:  (*KindsPossessProperties)(nil),   /* KindsPossessProperties:propertyDecl: */
-	2335979695347311111:  (*Lede)(nil),                     /* Lede:nounPhrase kindOfNoun: */
-	14199050960332677505: (*Lede)(nil),                     /* Lede:nounPhrase nounTraits: */
-	10694393583567459526: (*Lede)(nil),                     /* Lede:nounPhrase nounRelation: */
-	10446315654994385322: (*LocalDecl)(nil),                /* LocalDecl: */
-	6009252662016869003:  (*LocalDecl)(nil),                /* LocalDecl:value: */
-	11789909816860756800: (*LocalInit)(nil),                /* LocalInit: */
-	9981010364372027439:  (*Make)(nil),                     /* Make: */
-	12609627593403083413: (*Make)(nil),                     /* Make:arguments: */
-	3572160234867157749:  (*MakePlural)(nil),               /* Make:plural: */
-	17563761532337350103: (*ManyToMany)(nil),               /* ManyToMany:otherKinds: */
-	4129025779762507875:  (*ManyToOne)(nil),                /* ManyToOne:kind: */
-	4746882967578843264:  (*MapConnection)(nil),            /* MapConnection arrivingAt: */
-	165100527430166082:   (*MapConnection)(nil),            /* MapConnection connectingTo: */
-	12664747872301222635: (*MapDeparting)(nil),             /* Departing via:and arrivingAt: */
-	10592711885881153145: (*MapDeparting)(nil),             /* Departing via:and connectingTo: */
-	13573264837262063235: (*MapDestination)(nil),           /* MapDestination: */
-	16504428073969307483: (*MapDestination)(nil),           /* MapDestination:door: */
-	14572254943646304587: (*MapHeading)(nil),               /* Heading:and arrivingAt: */
-	1270222318052581361:  (*MapHeading)(nil),               /* Heading:via:and arrivingAt: */
-	3571539926920082009:  (*MapHeading)(nil),               /* Heading:and connectingTo: */
-	6820364618168717163:  (*MapHeading)(nil),               /* Heading:via:and connectingTo: */
-	16572015744003324651: (*NamedNoun)(nil),                /* NamedNoun:name: */
-	10597814521259612392: (*NounAssignment)(nil),           /* NounAssignment:nouns:lines: */
-	11271220813702679015: (*NounPhrase)(nil),               /* NounPhrase kindOfNoun: */
-	6923309721749493537:  (*NounPhrase)(nil),               /* NounPhrase nounTraits: */
-	15909676719983789414: (*NounPhrase)(nil),               /* NounPhrase nounRelation: */
-	8358327072078132634:  (*NounRelation)(nil),             /* NounRelation relation:nouns: */
-	7157825634536191111:  (*NounRelation)(nil),             /* NounRelation areBeing:relation:nouns: */
-	16756778993528596640: (*NounStatement)(nil),            /* NounStatement: */
-	13104026651265504280: (*NounStatement)(nil),            /* NounStatement:tail: */
-	5039251519992036198:  (*NounStatement)(nil),            /* NounStatement:summary: */
-	4978269156154497630:  (*NounStatement)(nil),            /* NounStatement:tail:summary: */
-	18242559699550270796: (*NounTraits)(nil),               /* NounTraits:trait: */
-	17470035189832390536: (*ObjectType)(nil),               /* ObjectType:kind: */
-	17075866407822548206: (*OneToMany)(nil),                /* OneToMany:kinds: */
-	13766274136867271026: (*OneToOne)(nil),                 /* OneToOne:otherKind: */
-	18143853777230560632: (*PairedAction)(nil),             /* PairedAction: */
-	6457542997147343897:  (*Paragraph)(nil),                /* Paragraph */
-	1044755875845214073:  (*Paragraph)(nil),                /* Paragraph: */
-	10735038169260724899: (*PatternActions)(nil),           /* PatternActions:patternRules: */
-	626108847940444615:   (*PatternActions)(nil),           /* PatternActions:patternLocals:patternRules: */
-	8043268755698861333:  (*PatternActions)(nil),           /* PatternActions:patternReturn:patternRules: */
-	14295113253706291193: (*PatternActions)(nil),           /* PatternActions:patternLocals:patternReturn:patternRules: */
-	12269627840097064600: (*PatternDecl)(nil),              /* PatternDecl:name: */
-	14226432888280203235: (*PatternDecl)(nil),              /* PatternDecl:name:optvars: */
-	16699606798420796914: (*PatternDecl)(nil),              /* PatternDecl:name:patternReturn: */
-	12239987563966389881: (*PatternDecl)(nil),              /* PatternDecl:name:optvars:patternReturn: */
-	15390970540499719701: (*PatternDecl)(nil),              /* PatternDecl:name:about: */
-	2773647507718310398:  (*PatternDecl)(nil),              /* PatternDecl:name:optvars:about: */
-	15396002863266428067: (*PatternDecl)(nil),              /* PatternDecl:name:patternReturn:about: */
-	18176072221785763176: (*PatternDecl)(nil),              /* PatternDecl:name:optvars:patternReturn:about: */
-	16940656754612309445: (*PatternLocals)(nil),            /* PatternLocals: */
-	9272141818556957835:  (*PatternReturn)(nil),            /* PatternReturn: */
-	15914753357447503965: (*PatternRule)(nil),              /* PatternRule:hook activity: */
-	14391699440407036198: (*PatternRule)(nil),              /* PatternRule:flags:hook activity: */
-	15881043500959019380: (*PatternRules)(nil),             /* PatternRules */
-	12644281899387438986: (*PatternRules)(nil),             /* PatternRules: */
-	2711635406027692142:  (*PatternVariablesDecl)(nil),     /* PatternVariablesDecl:variableDecl: */
-	2318440529621094838:  (*PatternVariablesTail)(nil),     /* PatternVariablesTail: */
-	15560538006230063914: (*PrimitiveValue)(nil),           /* PrimitiveValue boxedText: */
-	3901649770223814360:  (*PrimitiveValue)(nil),           /* PrimitiveValue boxedNumber: */
-	13417511286363622337: (*ProgramHook)(nil),              /* ProgramHook activity: */
-	9994614537641138979:  (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType propertyAspect: */
-	9417869270879260791:  (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType primitive: */
-	18289966116990726001: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType ext: */
-	11912820986652752602: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType propertyAspect:comment: */
-	11674503435152513662: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType primitive:comment: */
-	10271231677614855256: (*PropertyDecl)(nil),             /* PropertyDecl:property:propertyType ext:comment: */
-	1570075991319589581:  (*PropertyType)(nil),             /* PropertyType propertyAspect: */
-	8224056348026199873:  (*PropertyType)(nil),             /* PropertyType primitive: */
-	6144711520752328411:  (*PropertyType)(nil),             /* PropertyType ext: */
-	1370374852585817674:  (*RecordList)(nil),               /* RecordList: */
-	9391386016837677242:  (*RecordType)(nil),               /* RecordType: */
-	10207737577741406477: (*RecordsPossessProperties)(nil), /* RecordsPossessProperties:propertyDecl: */
-	5587008972147064084:  (*RelationCardinality)(nil),      /* RelationCardinality oneToOne: */
-	18092929693239672593: (*RelationCardinality)(nil),      /* RelationCardinality oneToMany: */
-	10453256446593418889: (*RelationCardinality)(nil),      /* RelationCardinality manyToOne: */
-	14287924768394488954: (*RelationCardinality)(nil),      /* RelationCardinality manyToMany: */
-	7151092568991800158:  (*RelativeToNoun)(nil),           /* RelativeToNoun:nouns:areBeing:nouns1: */
-	15988073058027477451: (*RenderTemplate)(nil),           /* RenderTemplate: */
-	2420057392455761494:  (*Send)(nil),                     /* Send:path: */
-	10010483713146895284: (*Send)(nil),                     /* Send:path:arguments: */
-	7279273919312137397:  (*ShuffleText)(nil),              /* ShuffleText: */
-	10085329253831819088: (*StoppingText)(nil),             /* StoppingText: */
-	13392546219852761816: (*Story)(nil),                    /* Story: */
-	7688593191439831819:  (*Summary)(nil),                  /* Summary: */
-	5318973557611273585:  (*Tail)(nil),                     /* Tail:nounPhrase kindOfNoun: */
-	5583135325088318667:  (*Tail)(nil),                     /* Tail:nounPhrase nounTraits: */
-	7950604148908680916:  (*Tail)(nil),                     /* Tail:nounPhrase nounRelation: */
-	15090827023293362138: (*TestOutput)(nil),               /* TestOutput: */
-	11231723833188820353: (*TestRule)(nil),                 /* TestRule:hook activity: */
-	15304439741055926590: (*TestScene)(nil),                /* TestScene:story: */
-	1385539489971009934:  (*TestStatement)(nil),            /* TestStatement:test: */
-	14061432096605043790: (*TraitPhrase)(nil),              /* TraitPhrase:trait: */
-	5275567442482955525:  (*VariableDecl)(nil),             /* VariableDecl:name:type primitive: */
-	1626262850875652971:  (*VariableDecl)(nil),             /* VariableDecl:name:type object: */
-	18304402114793467999: (*VariableDecl)(nil),             /* VariableDecl:name:type ext: */
-	1433602155249308844:  (*VariableDecl)(nil),             /* VariableDecl:name:type primitive:comment: */
-	14918607060645225458: (*VariableDecl)(nil),             /* VariableDecl:name:type object:comment: */
-	158426266364219478:   (*VariableDecl)(nil),             /* VariableDecl:name:type ext:comment: */
-	13175290884637950866: (*VariableType)(nil),             /* VariableType primitive: */
-	1781325330459017962:  (*VariableType)(nil),             /* VariableType object: */
-	12166747474280799296: (*VariableType)(nil),             /* VariableType ext: */
+	7872120455849093108:  (*ActionContext)(nil),          /* ActionContext: */
+	2237475528376444648:  (*ActionDecl)(nil),             /* ActionDecl:action:actionParams common: */
+	18212021549969329253: (*ActionDecl)(nil),             /* ActionDecl:action:actionParams dual: */
+	10825614489046735389: (*ActionDecl)(nil),             /* ActionDecl:action:actionParams none: */
+	14902711848163440508: (*ActionParams)(nil),           /* ActionParams common: */
+	11902859627634050329: (*ActionParams)(nil),           /* ActionParams dual: */
+	5868886119925925865:  (*ActionParams)(nil),           /* ActionParams none: */
+	6291103735245333139:  (*Argument)(nil),               /* Arg:from: */
+	2275326896920679506:  (*Arguments)(nil),              /* Args: */
+	17855209504331534011: (*AspectTraits)(nil),           /* AspectTraits:traitPhrase: */
+	13349866918792328232: (*BoxedNumber)(nil),            /* BoxedNumber: */
+	3226924893680341786:  (*BoxedText)(nil),              /* BoxedText: */
+	170374163879469822:   (*Certainties)(nil),            /* Certainties:areBeing:certainty:trait: */
+	15857890977690710700: (*Comment)(nil),                /* Comment: */
+	13295757043766156580: (*CommonAction)(nil),           /* CommonAction: */
+	11796688776587655409: (*CommonAction)(nil),           /* CommonAction:actionContext: */
+	10211567489959209123: (*CountOf)(nil),                /* CountOf:num: */
+	475310308664194536:   (*CycleText)(nil),              /* CycleText: */
+	14117144937213193556: (*Determine)(nil),              /* Determine: */
+	18058198214790918510: (*Determine)(nil),              /* Determine:arguments: */
+	11093854973825287408: (*EventBlock)(nil),             /* EventBlock kinds:handlers: */
+	11855563103941044442: (*EventBlock)(nil),             /* EventBlock namedNoun:handlers: */
+	8929470137779261632:  (*EventHandler)(nil),           /* EventHandler:event:patternRules: */
+	4061872818055525560:  (*EventHandler)(nil),           /* EventHandler:event:locals:patternRules: */
+	18010503397334720257: (*EventTarget)(nil),            /* EventTarget kinds: */
+	17197340468883043891: (*EventTarget)(nil),            /* EventTarget namedNoun: */
+	2682533272643563400:  (*ExtType)(nil),                /* ExtType numbers: */
+	7466087638889466083:  (*ExtType)(nil),                /* ExtType textList: */
+	686004221669540097:   (*ExtType)(nil),                /* ExtType record: */
+	3770798410706626212:  (*ExtType)(nil),                /* ExtType records: */
+	351838510430560892:   (*GrammarDecl)(nil),            /* GrammarDecl: */
+	8395536647843606072:  (*KindOfNoun)(nil),             /* KindOfNoun:kind: */
+	2174943222093748082:  (*KindOfNoun)(nil),             /* KindOfNoun:trait:kind: */
+	7004049933953251122:  (*KindOfNoun)(nil),             /* KindOfNoun:kind:nounRelation: */
+	9031009285767794428:  (*KindOfNoun)(nil),             /* KindOfNoun:trait:kind:nounRelation: */
+	650960042632654891:   (*KindOfRelation)(nil),         /* KindOfRelation:cardinality oneToOne: */
+	1081167552428580836:  (*KindOfRelation)(nil),         /* KindOfRelation:cardinality oneToMany: */
+	10771046767095423028: (*KindOfRelation)(nil),         /* KindOfRelation:cardinality manyToOne: */
+	5852635308349599025:  (*KindOfRelation)(nil),         /* KindOfRelation:cardinality manyToMany: */
+	16689641787061327381: (*KindsOfAspect)(nil),          /* KindsOfAspect: */
+	5919854034648203527:  (*KindsOfKind)(nil),            /* Make kinds:of: */
+	7748657468599352730:  (*KindsPossessProperties)(nil), /* KindsPossessProperties:propertyDecl: */
+	2335979695347311111:  (*Lede)(nil),                   /* Lede:nounPhrase kindOfNoun: */
+	14199050960332677505: (*Lede)(nil),                   /* Lede:nounPhrase nounTraits: */
+	10694393583567459526: (*Lede)(nil),                   /* Lede:nounPhrase nounRelation: */
+	10446315654994385322: (*LocalDecl)(nil),              /* LocalDecl: */
+	6009252662016869003:  (*LocalDecl)(nil),              /* LocalDecl:value: */
+	11789909816860756800: (*LocalInit)(nil),              /* LocalInit: */
+	9981010364372027439:  (*Make)(nil),                   /* Make: */
+	12609627593403083413: (*Make)(nil),                   /* Make:arguments: */
+	3572160234867157749:  (*MakePlural)(nil),             /* Make:plural: */
+	17563761532337350103: (*ManyToMany)(nil),             /* ManyToMany:otherKinds: */
+	4129025779762507875:  (*ManyToOne)(nil),              /* ManyToOne:kind: */
+	4746882967578843264:  (*MapConnection)(nil),          /* MapConnection arrivingAt: */
+	165100527430166082:   (*MapConnection)(nil),          /* MapConnection connectingTo: */
+	12664747872301222635: (*MapDeparting)(nil),           /* Departing via:and arrivingAt: */
+	10592711885881153145: (*MapDeparting)(nil),           /* Departing via:and connectingTo: */
+	13573264837262063235: (*MapDestination)(nil),         /* MapDestination: */
+	16504428073969307483: (*MapDestination)(nil),         /* MapDestination:door: */
+	14572254943646304587: (*MapHeading)(nil),             /* Heading:and arrivingAt: */
+	1270222318052581361:  (*MapHeading)(nil),             /* Heading:via:and arrivingAt: */
+	3571539926920082009:  (*MapHeading)(nil),             /* Heading:and connectingTo: */
+	6820364618168717163:  (*MapHeading)(nil),             /* Heading:via:and connectingTo: */
+	16572015744003324651: (*NamedNoun)(nil),              /* NamedNoun:name: */
+	10597814521259612392: (*NounAssignment)(nil),         /* NounAssignment:nouns:lines: */
+	11271220813702679015: (*NounPhrase)(nil),             /* NounPhrase kindOfNoun: */
+	6923309721749493537:  (*NounPhrase)(nil),             /* NounPhrase nounTraits: */
+	15909676719983789414: (*NounPhrase)(nil),             /* NounPhrase nounRelation: */
+	8358327072078132634:  (*NounRelation)(nil),           /* NounRelation relation:nouns: */
+	7157825634536191111:  (*NounRelation)(nil),           /* NounRelation areBeing:relation:nouns: */
+	16756778993528596640: (*NounStatement)(nil),          /* NounStatement: */
+	13104026651265504280: (*NounStatement)(nil),          /* NounStatement:tail: */
+	5039251519992036198:  (*NounStatement)(nil),          /* NounStatement:summary: */
+	4978269156154497630:  (*NounStatement)(nil),          /* NounStatement:tail:summary: */
+	18242559699550270796: (*NounTraits)(nil),             /* NounTraits:trait: */
+	17470035189832390536: (*ObjectType)(nil),             /* ObjectType:kind: */
+	17075866407822548206: (*OneToMany)(nil),              /* OneToMany:kinds: */
+	13766274136867271026: (*OneToOne)(nil),               /* OneToOne:otherKind: */
+	18143853777230560632: (*PairedAction)(nil),           /* PairedAction: */
+	6457542997147343897:  (*Paragraph)(nil),              /* Paragraph */
+	1044755875845214073:  (*Paragraph)(nil),              /* Paragraph: */
+	10735038169260724899: (*PatternActions)(nil),         /* PatternActions:patternRules: */
+	626108847940444615:   (*PatternActions)(nil),         /* PatternActions:patternLocals:patternRules: */
+	8043268755698861333:  (*PatternActions)(nil),         /* PatternActions:patternReturn:patternRules: */
+	14295113253706291193: (*PatternActions)(nil),         /* PatternActions:patternLocals:patternReturn:patternRules: */
+	12269627840097064600: (*PatternDecl)(nil),            /* PatternDecl:name: */
+	14226432888280203235: (*PatternDecl)(nil),            /* PatternDecl:name:optvars: */
+	16699606798420796914: (*PatternDecl)(nil),            /* PatternDecl:name:patternReturn: */
+	12239987563966389881: (*PatternDecl)(nil),            /* PatternDecl:name:optvars:patternReturn: */
+	15390970540499719701: (*PatternDecl)(nil),            /* PatternDecl:name:about: */
+	2773647507718310398:  (*PatternDecl)(nil),            /* PatternDecl:name:optvars:about: */
+	15396002863266428067: (*PatternDecl)(nil),            /* PatternDecl:name:patternReturn:about: */
+	18176072221785763176: (*PatternDecl)(nil),            /* PatternDecl:name:optvars:patternReturn:about: */
+	16940656754612309445: (*PatternLocals)(nil),          /* PatternLocals: */
+	9272141818556957835:  (*PatternReturn)(nil),          /* PatternReturn: */
+	15914753357447503965: (*PatternRule)(nil),            /* PatternRule:hook activity: */
+	14391699440407036198: (*PatternRule)(nil),            /* PatternRule:flags:hook activity: */
+	15881043500959019380: (*PatternRules)(nil),           /* PatternRules */
+	12644281899387438986: (*PatternRules)(nil),           /* PatternRules: */
+	2711635406027692142:  (*PatternVariablesDecl)(nil),   /* PatternVariablesDecl:variableDecl: */
+	2318440529621094838:  (*PatternVariablesTail)(nil),   /* PatternVariablesTail: */
+	15560538006230063914: (*PrimitiveValue)(nil),         /* PrimitiveValue boxedText: */
+	3901649770223814360:  (*PrimitiveValue)(nil),         /* PrimitiveValue boxedNumber: */
+	13417511286363622337: (*ProgramHook)(nil),            /* ProgramHook activity: */
+	9994614537641138979:  (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType propertyAspect: */
+	9417869270879260791:  (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType primitive: */
+	18289966116990726001: (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType ext: */
+	11912820986652752602: (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType propertyAspect:comment: */
+	11674503435152513662: (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType primitive:comment: */
+	10271231677614855256: (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType ext:comment: */
+	1570075991319589581:  (*PropertyType)(nil),           /* PropertyType propertyAspect: */
+	8224056348026199873:  (*PropertyType)(nil),           /* PropertyType primitive: */
+	6144711520752328411:  (*PropertyType)(nil),           /* PropertyType ext: */
+	1370374852585817674:  (*RecordList)(nil),             /* RecordList: */
+	9391386016837677242:  (*RecordType)(nil),             /* RecordType: */
+	5587008972147064084:  (*RelationCardinality)(nil),    /* RelationCardinality oneToOne: */
+	18092929693239672593: (*RelationCardinality)(nil),    /* RelationCardinality oneToMany: */
+	10453256446593418889: (*RelationCardinality)(nil),    /* RelationCardinality manyToOne: */
+	14287924768394488954: (*RelationCardinality)(nil),    /* RelationCardinality manyToMany: */
+	7151092568991800158:  (*RelativeToNoun)(nil),         /* RelativeToNoun:nouns:areBeing:nouns1: */
+	15988073058027477451: (*RenderTemplate)(nil),         /* RenderTemplate: */
+	2420057392455761494:  (*Send)(nil),                   /* Send:path: */
+	10010483713146895284: (*Send)(nil),                   /* Send:path:arguments: */
+	7279273919312137397:  (*ShuffleText)(nil),            /* ShuffleText: */
+	10085329253831819088: (*StoppingText)(nil),           /* StoppingText: */
+	13392546219852761816: (*Story)(nil),                  /* Story: */
+	7688593191439831819:  (*Summary)(nil),                /* Summary: */
+	5318973557611273585:  (*Tail)(nil),                   /* Tail:nounPhrase kindOfNoun: */
+	5583135325088318667:  (*Tail)(nil),                   /* Tail:nounPhrase nounTraits: */
+	7950604148908680916:  (*Tail)(nil),                   /* Tail:nounPhrase nounRelation: */
+	15090827023293362138: (*TestOutput)(nil),             /* TestOutput: */
+	11231723833188820353: (*TestRule)(nil),               /* TestRule:hook activity: */
+	15304439741055926590: (*TestScene)(nil),              /* TestScene:story: */
+	1385539489971009934:  (*TestStatement)(nil),          /* TestStatement:test: */
+	14061432096605043790: (*TraitPhrase)(nil),            /* TraitPhrase:trait: */
+	5275567442482955525:  (*VariableDecl)(nil),           /* VariableDecl:name:type primitive: */
+	1626262850875652971:  (*VariableDecl)(nil),           /* VariableDecl:name:type object: */
+	18304402114793467999: (*VariableDecl)(nil),           /* VariableDecl:name:type ext: */
+	1433602155249308844:  (*VariableDecl)(nil),           /* VariableDecl:name:type primitive:comment: */
+	14918607060645225458: (*VariableDecl)(nil),           /* VariableDecl:name:type object:comment: */
+	158426266364219478:   (*VariableDecl)(nil),           /* VariableDecl:name:type ext:comment: */
+	13175290884637950866: (*VariableType)(nil),           /* VariableType primitive: */
+	1781325330459017962:  (*VariableType)(nil),           /* VariableType object: */
+	12166747474280799296: (*VariableType)(nil),           /* VariableType ext: */
 }

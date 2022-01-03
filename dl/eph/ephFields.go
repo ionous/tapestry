@@ -187,7 +187,7 @@ func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 			// if the field is a kind of aspect
 			isAspect := cls != nil && cls.HasParent(kindsOf.Aspect) && len(cls.aspects) > 0
 			// when the name of the field is the same as the name of the aspect
-			// that is our special "acts as trait" field, so add the set of traits.
+			// that is our special "acts as trait" field, so add the set of traits ( to check for conflicts )
 			if isAspect && uf.name == clsName && aff == affine.Text {
 				err = kind.AddField(&cls.aspects[0])
 			}
