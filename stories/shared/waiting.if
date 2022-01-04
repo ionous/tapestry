@@ -15,15 +15,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 },
                 {
@@ -137,15 +131,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "actor",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "actor"
-                  ]
-                }
+                "actor"
               ]
             }
           ]

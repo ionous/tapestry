@@ -7,28 +7,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type ext:": [
-              "our",
-              "bounds",
-              {
-                "ExtType textList:": "list"
-              }
-            ]
+            "TextList named:": "bounds"
           }
         }
       ]
@@ -40,13 +28,7 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type ext:": [
-                  "a",
-                  "queue",
-                  {
-                    "ExtType textList:": "list"
-                  }
-                ]
+                "TextList named:": "queue"
               }
             }
           ]

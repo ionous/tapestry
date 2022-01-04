@@ -337,7 +337,7 @@ func (dec *xDecoder) readCmd(msg json.RawMessage) (retType interface{}, retKey s
 				err = errutil.New("expected only a single key", d)
 				break
 			} else if t, ok := findType(Hash(k), dec.reg); !ok {
-				err = errutil.New("couldnt find type for field", k)
+				err = errutil.New("couldnt find type for signature", k)
 				break
 			} else {
 				retType, retKey, retVal = t, k, args

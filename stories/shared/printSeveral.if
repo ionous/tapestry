@@ -7,30 +7,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "thing"
-                  ]
-                }
+                "thing"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "a",
-                "group size",
-                "number"
-              ]
+              "Number named:": "group size"
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "a",
-                "label",
-                "text"
-              ]
+              "Text named:": "label"
             }
           ]
         }

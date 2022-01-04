@@ -7,21 +7,13 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type primitive:": [
-                "a",
-                "verb",
-                "text"
-              ]
+              "Text named:": "verb"
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "result",
-              "text"
-            ]
+            "Text named:": "result"
           }
         }
       ]
@@ -62,15 +54,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -130,15 +116,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -198,15 +178,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -266,25 +240,13 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type ext:": [
-                "a",
-                "names",
-                {
-                  "ExtType textList:": "list"
-                }
-              ]
+              "TextList named:": "names"
             }
           ]
         }
@@ -388,15 +350,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -479,15 +435,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]

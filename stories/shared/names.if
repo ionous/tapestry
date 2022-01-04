@@ -7,15 +7,11 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " things",
+      "Kinds:have:": [
+        "Things",
         [
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "printed name",
-              "text"
-            ]
+            "Text named:": "printed name"
           }
         ]
       ]
@@ -104,15 +100,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -249,15 +239,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]

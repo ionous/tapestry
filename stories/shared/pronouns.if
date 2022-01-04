@@ -7,13 +7,7 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type ext:": [
-                "a",
-                "names",
-                {
-                  "ExtType textList:": "list"
-                }
-              ]
+              "TextList named:": "names"
             }
           ]
         }
@@ -55,15 +49,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -117,15 +105,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]

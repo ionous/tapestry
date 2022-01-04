@@ -17,15 +17,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 },
                 {
@@ -258,15 +252,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 },
                 {
@@ -489,22 +477,14 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " devices",
+      "Kinds:have:": [
+        "Devices",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "an",
-              "activatability",
-              "aspect"
-            ]
+            "Aspect of:": "activatability"
           },
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "an",
-              "activation",
-              "aspect"
-            ]
+            "Aspect of:": "activation"
           }
         ]
       ]

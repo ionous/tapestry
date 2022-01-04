@@ -288,17 +288,18 @@
                             },
                             "pattern_variables_decl":
                             {
-                                "uses": "flow",
+                                "sign": "pattern:requires:",
                                 "slot": "story_statement",
-                                "spec": "The pattern {pattern_name|quote} requires {+variable_decl|comma-and}.",
+                                "spec": "The pattern {pattern_name|quote} requires {props+property_slot|comma-and}.",
                                 "desc": "Add parameters to a pattern: Values provided when calling a pattern."
                             },
                             "pattern_variables_tail":
                             {
                                 "uses": "flow",
-                                "spec": "It requires {+variable_decl|comma-and}",
+                                "spec": "It requires {props+property_slot|comma-and}",
                                 "desc": "Pattern variables: Storage for values used during the execution of a pattern."
                             },
+
                             "pattern_type":
                             {
                                 "uses": "str",
@@ -336,7 +337,7 @@
                             "local_decl":
                             {
                                 "uses": "flow",
-                                "spec": "using {variable_decl} {starting as%value?local_init}",
+                                "spec": "using {local:property_slot} {starting as%value?local_init}",
                                 "desc": "Local variables can use the parameters of a pattern to compute temporary values."
                             },
                             "local_init":
@@ -358,7 +359,7 @@
                             "pattern_return":
                             {
                                 "uses": "flow",
-                                "spec": "returning {result:variable_decl}"
+                                "spec": "returning {result:property_slot}"
                             }
                         }
                     },
@@ -421,15 +422,15 @@
                             "kinds_of_kind":
                             {
                                 "spec": "{plural_kinds} are a kind of {singular_kind}.",
-                                "sign": ["Make", "kinds", "of"],
+                                "sign": "Make kinds:of:",
                                 "slot": "story_statement",
                                 "desc": "Declare a kind"
                             },
-                            "kinds_possess_properties":
+                            "kinds_have_properties":
                             {
-                                "uses": "flow",
+                                "spec": "{plural_kinds} have {props+property_slot|comma-and}.",
+                                "sign": "Kinds:have:",
                                 "slot": "story_statement",
-                                "spec": "{plural_kinds} have {+property_decl|comma-and}.",
                                 "desc": "Add properties to a kind"
                             },
                             "singular_kind":
@@ -507,23 +508,55 @@
                                 "spec": "The {property} of {nouns+named_noun} is {the text%lines|quote}",
                                 "desc": "Assign text to a noun: Assign text. Gives a noun one or more lines of text."
                             },
-                            "property_decl":
-                            {
-                                "uses": "flow",
-                                "spec": "{an:determiner} {property} ( {property_type} {comment?lines} )"
+                            "named_property": {
+                                "spec": "named {name:text} ( {of%type?text} ) {comment?lines}",
+                                "embed": true
+                            },    
+                            "property_slot": {
+                                "uses": "slot",
+                                "desc": ["future: each slot should support an appropriate 'starting as' initial value"]
                             },
-                            "property_type":
-                            {
-                                "uses": "swap",
-                                "spec": "an {aspect%property_aspect}, {simple value%primitive:primitive_type}, or {other value%ext:ext_type}",
-                                "group": "positioned"
+                            "aspect_property": {
+                                "slot": "property_slot",
+                                "spec": "an aspect {aspect:text} {comment?lines}",
+                                "sign": "aspect of:desc:"
                             },
-                            "property_aspect":
-                            {
-                                "uses": "str",
-                                "spec": "{an aspect%aspect}",
-                                "group": "positioned"
+                            "bool_property": {
+                                "slot": "property_slot",
+                                "spec": "a true/false value {named_property}",
+                                "sign": "bool named:of:desc:"
                             },
+                            "number_property": {
+                                "slot": "property_slot",
+                                "spec": "a number {named_property}",
+                                "sign": "number named:of:desc:"
+                            },
+                            "text_property": {
+                                "slot": "property_slot",
+                                "spec": "some text {named_property}",
+                                "sign": "text named:of:desc:"
+                            },
+                            "num_list_property": {
+                                "slot": "property_slot",
+                                "spec": "a list of nums {named_property}",
+                                "sign": "num_list named:of:desc:"
+                            },
+                            "text_list_property": {
+                                "slot": "property_slot",
+                                "spec": "a list of text {named_property}",
+                                "sign": "text_list named:of:desc:"
+                            },
+                            "record_property": {
+                                "slot": "property_slot",
+                                "spec": "a record {named_property}",
+                                "sign": "record named:of:desc:"
+                            },
+                            "record_list_property": {
+                                "slot": "property_slot",
+                                "spec": "a list of records {named_property}",
+                                "sign": "record_list named:of:desc:"
+                            },
+
                             "certainties":
                             {
                                 "uses": "flow",
@@ -555,32 +588,6 @@
                         "uses": "group",
                         "specs":
                         {
-                            "record_singular":
-                            {
-                                "uses": "str",
-                                "desc": "Record: Describes a common set of properties.",
-                                "group": "positioned"
-                            },
-                            "record_type":
-                            {
-                                "uses": "flow",
-                                "spec": "a record of {kind%kind:record_singular}"
-                            },
-                            "record_list":
-                            {
-                                "uses": "flow",
-                                "spec": "a list of {kind%kind:record_singular} records"
-                            },
-                            "boxed_text":
-                            {
-                                "uses": "flow",
-                                "spec": "{text}"
-                            },
-                            "boxed_number":
-                            {
-                                "uses": "flow",
-                                "spec": "{number}"
-                            },
                             "ana":
                             {
                                 "uses": "str",
@@ -595,51 +602,6 @@
                             {
                                 "uses": "str",
                                 "spec": "{are}, {are a%area}, {are an%arean}, {is}, {is a%isa}, {is an%isan}"
-                            },
-                            "variable_decl":
-                            {
-                                "uses": "flow",
-                                "spec": "{an:determiner} {name:variable_name} ( {type:variable_type}  {comment?lines} )"
-                            },
-                            "variable_type":
-                            {
-                                "uses": "swap",
-                                "spec": "a {simple value%primitive:primitive_type}, an {object:object_type}, or {other value%ext:ext_type}",
-                                "group": "positioned"
-                            },
-                            "object_type":
-                            {
-                                "uses": "flow",
-                                "spec": "{an:ana} {kind of%kind:singular_kind}"
-                            },
-                            "primitive_type":
-                            {
-                                "uses": "str",
-                                "spec": "{a number%number}, {some text%text}, or {a true/false value%bool}",
-                                "group": "positioned"
-                            },
-                            "primitive_value":
-                            {
-                                "uses": "swap",
-                                "spec": "{text%boxed_text} or {number%boxed_number}"
-                            },
-                            "text_list":
-                            {
-                                "uses": "str",
-                                "spec": "{a list of text%list}",
-                                "desc": "List of Text: Specifies the existence of a list of text values."
-                            },
-                            "number_list":
-                            {
-                                "uses": "str",
-                                "spec": "{a list of numbers%list}",
-                                "desc": "List of Numbers: Specifies the existence of a list of numbers."
-                            },
-                            "ext_type":
-                            {
-                                "uses": "swap",
-                                "spec": "a list of {numbers:number_list}, a list of {text%text_list}, a {record:record_type} or a list of {records:record_list}.",
-                                "group": "positioned"
                             }
                         }
                     },

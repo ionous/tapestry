@@ -49,15 +49,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 },
                 {
@@ -145,15 +139,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 },
                 {
@@ -337,27 +325,15 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "actor",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "actor"
-                  ]
-                }
+                "actor"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]

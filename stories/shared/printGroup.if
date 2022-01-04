@@ -7,25 +7,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type ext:": [
-                "a",
+              "Record named:of:": [
                 "group",
-                {
-                  "ExtType record:": {
-                    "RecordType:": "object groups"
-                  }
-                }
+                "object groups"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "our",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         },
         {
@@ -41,14 +32,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "the",
+                  "Record named:of:": [
                     "grouping",
-                    {
-                      "ExtType record:": {
-                        "RecordType:": "grouping"
-                      }
-                    }
+                    "grouping"
                   ]
                 },
                 {
@@ -66,13 +52,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "some",
-                    "objs",
-                    {
-                      "ExtType textList:": "list"
-                    }
-                  ]
+                  "TextList named:": "objs"
                 },
                 {
                   "LocalInit:": {
@@ -431,26 +411,15 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type ext:": [
-                "a",
+              "Record named:of:": [
                 "grouping",
-                {
-                  "ExtType record:": {
-                    "RecordType:": "grouping"
-                  }
-                }
+                "grouping"
               ]
             }
           ]

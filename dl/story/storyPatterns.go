@@ -7,47 +7,37 @@ import (
 )
 
 func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
-	if res, e := convertRes(op.PatternReturn); e != nil {
-		err = e
-	} else {
-		patternName := op.Name.String()
-		var locals []eph.EphParams
-		if els := op.PatternLocals; els != nil {
-			locals, err = els.ImportLocals(k, patternName)
-		}
-		if err == nil {
-			k.Write(&eph.EphPatterns{Name: patternName, Locals: locals, Result: res})
-			// write the rules last ( order doesnt matter except for tests )
-			err = op.PatternRules.ImportRules(k, patternName, "", eph.EphTiming{})
-		}
+
+	res := convertRes(op.PatternReturn)
+	patternName := op.Name.String()
+	var locals []eph.EphParams
+	if els := op.PatternLocals; els != nil {
+		locals = els.ImportLocals(k, patternName)
 	}
+
+	k.Write(&eph.EphPatterns{Name: patternName, Locals: locals, Result: res})
+	// write the rules last ( order doesnt matter except for tests )
+	err = op.PatternRules.ImportRules(k, patternName, "", eph.EphTiming{})
+
 	return
 }
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
-	if res, e := convertRes(op.PatternReturn); e != nil {
+	patternName := op.Name.String()
+	if e := op.writeSubType(k, patternName); e != nil {
 		err = e
 	} else {
-		patternName := op.Name.String()
-		if e := op.writeSubType(k, patternName); e != nil {
-			err = e
-		} else if ps, e := op.reduceParams(); e != nil {
-			err = e
-		} else {
-			k.Write(&eph.EphPatterns{Name: patternName, Result: res, Params: ps})
-		}
+		ps := op.reduceProps()
+		res := convertRes(op.PatternReturn)
+		k.Write(&eph.EphPatterns{Name: patternName, Result: res, Params: ps})
 	}
 	return
 }
 
-func (op *PatternDecl) reduceParams() (ret []eph.EphParams, err error) {
+func (op *PatternDecl) reduceProps() (ret []eph.EphParams) {
 	if els := op.Optvars; els != nil {
-		if ps, e := reduceParams(els.VariableDecl); e != nil {
-			err = e
-		} else {
-			ret = ps
-		}
+		ret = reduceProps(els.Props)
 	}
 	return
 }
@@ -69,11 +59,8 @@ func (op *PatternDecl) writeSubType(k *Importer, patternName string) (err error)
 }
 
 func (op *PatternVariablesDecl) ImportPhrase(k *Importer) (err error) {
-	if ps, e := reduceParams(op.VariableDecl); e != nil {
-		err = e
-	} else {
-		k.Write(&eph.EphPatterns{Name: op.PatternName.String(), Params: ps})
-	}
+	ps := reduceProps(op.Props)
+	k.Write(&eph.EphPatterns{Name: op.PatternName.String(), Params: ps})
 	return
 }
 
@@ -151,56 +138,30 @@ func (op *PatternFlags) ReadFlags() (ret eph.EphTiming, err error) {
 	return
 }
 
-func (op *PatternLocals) ImportLocals(k *Importer, patternName string) (ret []eph.EphParams, err error) {
-	var locals []eph.EphParams
+func (op *PatternLocals) ImportLocals(k *Importer, patternName string) []eph.EphParams {
+	var out []eph.EphParams
 	for _, el := range op.LocalDecl {
-		if p, e := el.VariableDecl.GetParam(); e != nil {
-			err = e
-			break
-		} else {
-			if init := el.Value; init != nil {
-				p.Initially = init.Value
-			}
-			locals = append(locals, p)
+		p := el.Local.GetParam()
+		if init := el.Value; init != nil {
+			p.Initially = init.Value
 		}
+		out = append(out, p)
 	}
-	if err == nil {
-		ret = locals
-	}
-	return
+	return out
 }
 
-// func (op *PatternType) ImportType(k *Importer) (ret string, err error) {
-// 	if t, found := composer.FindChoice(op, op.Str); !found {
-// 		err = errutil.Fmt("choice %s not found in %T", op.Str, op)
-// 	} else {
-// 		ret = t
-// 	}
-// 	return
-// }
-
-func convertRes(res *PatternReturn) (ret *eph.EphParams, err error) {
+func convertRes(res *PatternReturn) (ret *eph.EphParams) {
 	if res != nil {
-		if p, e := res.Result.GetParam(); e != nil {
-			err = e
-		} else {
-			ret = &p
-		}
+		p := res.Result.GetParam()
+		ret = &p
 	}
 	return
 }
 
-func reduceParams(els []VariableDecl) (ret []eph.EphParams, err error) {
-	var ps []eph.EphParams
+func reduceProps(els []PropertySlot) []eph.EphParams {
+	var out []eph.EphParams
 	for _, el := range els {
-		if p, e := el.GetParam(); e != nil {
-			err = errutil.Append(err, e)
-		} else {
-			ps = append(ps, p)
-		}
+		out = append(out, el.GetParam())
 	}
-	if err == nil {
-		ret = ps
-	}
-	return
+	return out
 }

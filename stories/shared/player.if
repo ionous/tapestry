@@ -32,29 +32,21 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " agents",
+      "Kinds:have:": [
+        "Agents",
         [
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "pawn",
-              "text"
-            ]
+            "Text named:": "pawn"
           }
         ]
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        "actors",
+      "Kinds:have:": [
+        "Actors",
         [
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "an",
-              "in darkness",
-              "bool"
-            ]
+            "Bool named:": "in darkness"
           }
         ]
       ]
@@ -144,15 +136,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -164,11 +150,7 @@
         "isPlayer",
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "our",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         },
         {

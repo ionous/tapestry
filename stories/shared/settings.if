@@ -26,15 +26,11 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " settings",
+      "Kinds:have:": [
+        "Settings",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "some",
-              "abbreviated room descriptions",
-              "aspect"
-            ]
+            "Aspect of:": "abbreviated room descriptions"
           }
         ]
       ]
@@ -58,28 +54,22 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " settings",
+      "Kinds:have:": [
+        "Settings",
         [
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "darkness witnessed",
-              "bool"
-            ]
+            "Bool named:": "darkness witnessed"
           }
         ]
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " settings",
+      "Kinds:have:": [
+        "Settings",
         [
           {
-            "PropertyDecl:property:propertyType primitive:comment:": [
-              "a",
+            "Number named:desc:": [
               "mentions",
-              "number",
               ", incremented whenever an object name gets printed. see \"mention object\" and \"print name\". "
             ]
           }

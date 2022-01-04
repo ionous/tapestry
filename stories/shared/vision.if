@@ -17,15 +17,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 },
                 {
@@ -43,11 +37,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type primitive:": [
-                    "our",
-                    "was lit",
-                    "bool"
-                  ]
+                  "Bool named:": "was lit"
                 },
                 {
                   "LocalInit:": {
@@ -64,11 +54,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type primitive:": [
-                    "our",
-                    "now lit",
-                    "bool"
-                  ]
+                  "Bool named:": "now lit"
                 },
                 {
                   "LocalInit:": {

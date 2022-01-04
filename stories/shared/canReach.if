@@ -7,53 +7,29 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "actor",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "actor"
-                  ]
-                }
+                "actor"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "an",
-                "action",
-                "text"
-              ]
+              "Text named:": "action"
             },
             {
-              "VariableDecl:name:type object:comment:": [
-                "an",
+              "Text named:of:desc:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "thing"
-                  ]
-                },
+                "thing",
                 ", the target the agent is trying to reach"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "a",
-                "requires light",
-                "bool"
-              ]
+              "Bool named:": "requires light"
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "response",
-              "text"
-            ]
+            "Text named:": "response"
           }
         }
       ]
@@ -65,77 +41,43 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type object:": [
-                  "an",
+                "Text named:of:": [
                   "i",
-                  {
-                    "ObjectType:kind:": [
-                      "an",
-                      "object"
-                    ]
-                  }
+                  "object"
                 ]
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type object:": [
-                  "a",
+                "Text named:of:": [
                   "next",
-                  {
-                    "ObjectType:kind:": [
-                      "an",
-                      "object"
-                    ]
-                  }
+                  "object"
                 ]
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "dig error",
-                  "text"
-                ]
+                "Text named:": "dig error"
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type primitive:": [
-                  "an",
-                  "lca",
-                  "number"
-                ]
+                "Number named:": "lca"
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "reach response",
-                  "text"
-                ]
+                "Text named:": "reach response"
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "reach error",
-                  "number"
-                ]
+                "Number named:": "reach error"
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type ext:": [
-                  "a",
-                  "path",
-                  {
-                    "ExtType textList:": "list"
-                  }
-                ]
+                "TextList named:": "path"
               }
             }
           ]
@@ -583,69 +525,37 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "fromObj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "intoObj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "actor",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "an",
-                "action",
-                "text"
-              ]
+              "Text named:": "action"
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "response",
-              "text"
-            ]
+            "Text named:": "response"
           }
         }
       ]
@@ -752,69 +662,37 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "fromObj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "intoObj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "actor",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "an",
-                "action",
-                "text"
-              ]
+              "Text named:": "action"
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "response",
-              "text"
-            ]
+            "Text named:": "response"
           }
         }
       ]

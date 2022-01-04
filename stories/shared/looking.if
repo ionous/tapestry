@@ -15,15 +15,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -114,15 +108,9 @@
                   {
                     "LocalDecl:value:": [
                       {
-                        "VariableDecl:name:type object:": [
-                          "a",
+                        "Text named:of:": [
                           "location",
-                          {
-                            "ObjectType:kind:": [
-                              "an",
-                              "object"
-                            ]
-                          }
+                          "object"
                         ]
                       },
                       {
@@ -211,22 +199,14 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "where",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type primitive:comment:": [
-                "our",
+              "Bool named:desc:": [
                 "inDarkness",
-                "bool",
                 "for testing, darkness gets passed in as a flag."
               ]
             }
@@ -242,13 +222,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "our",
-                    "enclosures",
-                    {
-                      "ExtType textList:": "list"
-                    }
-                  ]
+                  "TextList named:": "enclosures"
                 },
                 {
                   "LocalInit:": {
@@ -274,15 +248,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "our",
+                  "Text named:of:": [
                     "room",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -557,15 +525,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "room",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "room"
-                  ]
-                }
+                "room"
               ]
             }
           ]
@@ -607,15 +569,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "room",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "room"
-                  ]
-                }
+                "room"
               ]
             }
           ]
@@ -657,25 +613,13 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "room",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "room"
-                  ]
-                }
+                "room"
               ]
             },
             {
-              "VariableDecl:name:type ext:": [
-                "some",
-                "enclosures",
-                {
-                  "ExtType textList:": "list"
-                }
-              ]
+              "TextList named:": "enclosures"
             }
           ]
         }
@@ -689,15 +633,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "a",
+                  "Text named:of:": [
                     "ceiling",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -771,13 +709,7 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type ext:": [
-                "some",
-                "enclosures",
-                {
-                  "ExtType textList:": "list"
-                }
-              ]
+              "TextList named:": "enclosures"
             }
           ]
         }
@@ -791,15 +723,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "a",
+                  "Text named:of:": [
                     "ceiling",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -875,39 +801,21 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "where",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "viewpoint",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "our",
+              "Text named:of:": [
                 "room",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "room"
-                  ]
-                }
+                "room"
               ]
             }
           ]
@@ -922,13 +830,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "our",
-                    "kids",
-                    {
-                      "ExtType textList:": "list"
-                    }
-                  ]
+                  "TextList named:": "kids"
                 },
                 {
                   "LocalInit:": {
@@ -954,11 +856,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type primitive:": [
-                    "our",
-                    "previousMentions",
-                    "number"
-                  ]
+                  "Number named:": "previousMentions"
                 },
                 {
                   "LocalInit:": {
@@ -974,13 +872,7 @@
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type ext:": [
-                  "some",
-                  "remainingKids",
-                  {
-                    "ExtType textList:": "list"
-                  }
-                ]
+                "TextList named:": "remainingKids"
               }
             }
           ]
@@ -1210,27 +1102,15 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "locale",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -1242,11 +1122,7 @@
         "print object description",
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "our",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         },
         {
@@ -1411,27 +1287,15 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "locale",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -1446,11 +1310,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type primitive:": [
-                    "our",
-                    "first look",
-                    "bool"
-                  ]
+                  "Bool named:": "first look"
                 },
                 {
                   "LocalInit:": {
@@ -1490,11 +1350,7 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "our",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         },
         {
@@ -1644,39 +1500,19 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "where",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "our",
-                "here",
-                "bool"
-              ]
+              "Bool named:": "here"
             },
             {
-              "VariableDecl:name:type ext:": [
-                "the",
-                "children",
-                {
-                  "ExtType textList:": "list"
-                }
-              ]
+              "TextList named:": "children"
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "our",
-                "firstMention",
-                "bool"
-              ]
+              "Bool named:": "firstMention"
             }
           ]
         }

@@ -7,13 +7,7 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type ext:": [
-                "some",
-                "objs",
-                {
-                  "ExtType textList:": "list"
-                }
-              ]
+              "TextList named:": "objs"
             }
           ]
         }
@@ -27,14 +21,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "our",
+                  "RecordList named:of:": [
                     "groups",
-                    {
-                      "ExtType records:": {
-                        "RecordList:": "object group"
-                      }
-                    }
+                    "object group"
                   ]
                 },
                 {
@@ -127,13 +116,7 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type ext:": [
-                "some",
-                "objs",
-                {
-                  "ExtType textList:": "list"
-                }
-              ]
+              "TextList named:": "objs"
             }
           ]
         }
@@ -147,14 +130,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "our",
+                  "RecordList named:of:": [
                     "groups",
-                    {
-                      "ExtType records:": {
-                        "RecordList:": "object group"
-                      }
-                    }
+                    "object group"
                   ]
                 },
                 {
@@ -247,15 +225,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -273,11 +245,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type primitive:": [
-                    "our",
-                    "inline depth",
-                    "number"
-                  ]
+                  "Number named:": "inline depth"
                 },
                 {
                   "LocalInit:": {
@@ -291,11 +259,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type primitive:": [
-                    "our",
-                    "block depth",
-                    "number"
-                  ]
+                  "Number named:": "block depth"
                 },
                 {
                   "LocalInit:": {
@@ -450,15 +414,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -473,13 +431,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "some",
-                    "kids",
-                    {
-                      "ExtType textList:": "list"
-                    }
-                  ]
+                  "TextList named:": "kids"
                 },
                 {
                   "LocalInit:": {
@@ -505,11 +457,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type primitive:": [
-                    "the",
-                    "hasKids",
-                    "bool"
-                  ]
+                  "Bool named:": "hasKids"
                 },
                 {
                   "LocalInit:": {
@@ -624,26 +572,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         }
       ]
@@ -656,13 +594,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "our",
-                    "kids",
-                    {
-                      "ExtType textList:": "list"
-                    }
-                  ]
+                  "TextList named:": "kids"
                 },
                 {
                   "LocalInit:": {
@@ -737,15 +669,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -763,13 +689,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "the",
-                    "kids",
-                    {
-                      "ExtType textList:": "list"
-                    }
-                  ]
+                  "TextList named:": "kids"
                 },
                 {
                   "LocalInit:": {
@@ -900,33 +820,19 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "an",
-                "isEmpty",
-                "bool"
-              ]
+              "Bool named:": "isEmpty"
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "our",
-              "skip",
-              "bool"
-            ]
+            "Bool named:": "skip"
           }
         }
       ]
@@ -1006,33 +912,19 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "an",
-                "isEmpty",
-                "bool"
-              ]
+              "Bool named:": "isEmpty"
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "our",
-              "skip",
-              "bool"
-            ]
+            "Bool named:": "skip"
           }
         }
       ]

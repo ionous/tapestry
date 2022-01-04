@@ -23,15 +23,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -46,15 +40,9 @@
         "parentOf",
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "the",
+            "Text named:of:": [
               "parent",
-              {
-                "ObjectType:kind:": [
-                  "an",
-                  "object"
-                ]
-              }
+              "object"
             ]
           }
         },
@@ -129,15 +117,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -152,15 +134,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "it",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -172,13 +148,7 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type ext:": [
-              "a",
-              "list",
-              {
-                "ExtType textList:": "list"
-              }
-            ]
+            "TextList named:": "list"
           }
         },
         {
@@ -250,15 +220,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -270,13 +234,7 @@
         "childrenOf",
         {
           "PatternReturn:": {
-            "VariableDecl:name:type ext:": [
-              "our",
-              "kids",
-              {
-                "ExtType textList:": "list"
-              }
-            ]
+            "TextList named:": "kids"
           }
         },
         {
@@ -316,15 +274,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -342,15 +294,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "our",
+                  "Text named:of:": [
                     "search",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -364,15 +310,9 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "the",
+            "Text named:of:": [
               "room",
-              {
-                "ObjectType:kind:": [
-                  "a",
-                  "room"
-                ]
-              }
+              "room"
             ]
           }
         },
@@ -477,27 +417,15 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "object",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "other object",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -514,29 +442,17 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type object:": [
-                  "an",
+                "Text named:of:": [
                   "o1",
-                  {
-                    "ObjectType:kind:": [
-                      "an",
-                      "object"
-                    ]
-                  }
+                  "object"
                 ]
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type object:": [
-                  "an",
+                "Text named:of:": [
                   "o2",
-                  {
-                    "ObjectType:kind:": [
-                      "an",
-                      "object"
-                    ]
-                  }
+                  "object"
                 ]
               }
             }
@@ -544,15 +460,9 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "the",
+            "Text named:of:": [
               "ancestor",
-              {
-                "ObjectType:kind:": [
-                  "an",
-                  "object"
-                ]
-              }
+              "object"
             ]
           }
         },
@@ -754,31 +664,19 @@
       ]
     },
     {
-      "PatternVariablesDecl:variableDecl:": [
+      "Pattern:requires:": [
         "ancestorOf",
         [
           {
-            "VariableDecl:name:type object:": [
-              "an",
+            "Text named:of:": [
               "obj",
-              {
-                "ObjectType:kind:": [
-                  "an",
-                  "object"
-                ]
-              }
+              "object"
             ]
           },
           {
-            "VariableDecl:name:type object:": [
-              "a",
+            "Text named:of:": [
               "root",
-              {
-                "ObjectType:kind:": [
-                  "an",
-                  "object"
-                ]
-              }
+              "object"
             ]
           }
         ]
@@ -794,15 +692,9 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type object:": [
-                  "our",
+                "Text named:of:": [
                   "up",
-                  {
-                    "ObjectType:kind:": [
-                      "an",
-                      "object"
-                    ]
-                  }
+                  "object"
                 ]
               }
             }
@@ -810,10 +702,8 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:comment:": [
-              "our",
+            "Bool named:desc:": [
               "isAncestor",
-              "bool",
               "- true if one object acts as the ancestor of another."
             ]
           }
@@ -949,15 +839,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -975,15 +859,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "a",
+                  "Text named:of:": [
                     "parent",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -1011,15 +889,9 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "the",
+            "Text named:of:": [
               "location",
-              {
-                "ObjectType:kind:": [
-                  "an",
-                  "object"
-                ]
-              }
+              "object"
             ]
           }
         },
@@ -1083,15 +955,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -1109,15 +975,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "a",
+                  "Text named:of:": [
                     "parent",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -1145,15 +1005,9 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "the",
+            "Text named:of:": [
               "supporter",
-              {
-                "ObjectType:kind:": [
-                  "a",
-                  "supporter"
-                ]
-              }
+              "supporter"
             ]
           }
         },
@@ -1201,15 +1055,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -1227,15 +1075,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "a",
+                  "Text named:of:": [
                     "parent",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -1263,15 +1105,9 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "the",
+            "Text named:of:": [
               "container",
-              {
-                "ObjectType:kind:": [
-                  "a",
-                  "container"
-                ]
-              }
+              "container"
             ]
           }
         },
@@ -1319,15 +1155,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -1344,15 +1174,9 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type object:": [
-                  "a",
+                "Text named:of:": [
                   "parent",
-                  {
-                    "ObjectType:kind:": [
-                      "an",
-                      "object"
-                    ]
-                  }
+                  "object"
                 ]
               }
             }
@@ -1360,15 +1184,9 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "the",
+            "Text named:of:": [
               "owner",
-              {
-                "ObjectType:kind:": [
-                  "an",
-                  "actor"
-                ]
-              }
+              "actor"
             ]
           }
         },
@@ -1438,15 +1256,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -1463,15 +1275,9 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type object:": [
-                  "a",
+                "Text named:of:": [
                   "parent",
-                  {
-                    "ObjectType:kind:": [
-                      "an",
-                      "object"
-                    ]
-                  }
+                  "object"
                 ]
               }
             }
@@ -1479,15 +1285,9 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "the",
+            "Text named:of:": [
               "carrier",
-              {
-                "ObjectType:kind:": [
-                  "an",
-                  "object"
-                ]
-              }
+              "object"
             ]
           }
         },
@@ -1569,15 +1369,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -1594,15 +1388,9 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type object:": [
-                  "a",
+                "Text named:of:": [
                   "parent",
-                  {
-                    "ObjectType:kind:": [
-                      "an",
-                      "object"
-                    ]
-                  }
+                  "object"
                 ]
               }
             }
@@ -1610,15 +1398,9 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "the",
+            "Text named:of:": [
               "wearer",
-              {
-                "ObjectType:kind:": [
-                  "an",
-                  "object"
-                ]
-              }
+              "object"
             ]
           }
         },

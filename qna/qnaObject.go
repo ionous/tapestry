@@ -75,6 +75,8 @@ func (obj *qnaObject) FieldByName(rawField string) (ret g.Value, err error) {
 			ret, err = getObjectField(obj.run, obj.domain, obj.name, ft)
 		} else {
 			// asking for a trait; so ft.Name is now the aspect field
+			// note: kind also does this -- but since the data here isnt stored in a record
+			// ( it's stored in the noun value cache ) we have to duplicate the aspect/field check.
 			if v, e := getObjectField(obj.run, obj.domain, obj.name, ft); e != nil {
 				err = e
 			} else {

@@ -1,15 +1,11 @@
 [
   [
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " things",
+      "Kinds:have:": [
+        "Things",
         [
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "printed plural name",
-              "text"
-            ]
+            "Text named:": "printed plural name"
           }
         ]
       ]
@@ -23,15 +19,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "thing"
-                  ]
-                }
+                "thing"
               ]
             }
           ]

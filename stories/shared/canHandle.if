@@ -7,46 +7,24 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "actor",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "actor"
-                  ]
-                }
+                "actor"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "an",
-                "action",
-                "text"
-              ]
+              "Text named:": "action"
             },
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "thing"
-                  ]
-                }
+                "thing"
               ]
             },
             {
-              "VariableDecl:name:type object:comment:": [
-                "an",
+              "Text named:of:desc:": [
                 "other noun",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "thing"
-                  ]
-                },
+                "thing",
                 ", not all actions have a second noun and that's okay"
               ]
             }
@@ -54,11 +32,7 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "response",
-              "text"
-            ]
+            "Text named:": "response"
           }
         }
       ]

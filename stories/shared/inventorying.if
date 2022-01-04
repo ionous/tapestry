@@ -15,15 +15,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -159,15 +153,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "actor",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "actor"
-                  ]
-                }
+                "actor"
               ]
             }
           ]
@@ -182,13 +170,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "our",
-                    "kids",
-                    {
-                      "ExtType textList:": "list"
-                    }
-                  ]
+                  "TextList named:": "kids"
                 },
                 {
                   "LocalInit:": {
@@ -280,6 +262,5 @@
         }
       ]
     }
-  ],
-  []
+  ]
 ]

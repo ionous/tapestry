@@ -31,7 +31,7 @@ var FactorialStory = &story.Story{
 				Type: story.PatternType{
 					Str: story.PatternType_Patterns},
 				Optvars: &story.PatternVariablesTail{
-					VariableDecl: []story.VariableDecl{numberDecl}},
+					Props: []story.PropertySlot{numberDecl}},
 			},
 			&story.PatternActions{
 				Name:          factorialName,
@@ -103,14 +103,6 @@ var FactorialIsZero = &core.CompareNum{
 var factorialName = core.PatternName{Str: "factorial"}
 var numVar = core.VariableName{Str: "num"}
 
-var numberDecl = story.VariableDecl{
-	An: story.Determiner{
-		Str: story.Determiner_A,
-	},
-	Name: numVar,
-	Type: story.VariableType{
-		Choice: story.VariableType_Primitive_Opt,
-		Value: &story.PrimitiveType{
-			Str: story.PrimitiveType_Number,
-		}},
-}
+var numberDecl = &story.NumberProperty{story.NamedProperty{
+	Name: numVar.Str,
+}}

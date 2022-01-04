@@ -7,26 +7,15 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type ext:": [
-                "some",
-                "objs",
-                {
-                  "ExtType textList:": "list"
-                }
-              ]
+              "TextList named:": "objs"
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type ext:": [
-              "our",
+            "RecordList named:of:": [
               "groups",
-              {
-                "ExtType records:": {
-                  "RecordList:": "object group"
-                }
-              }
+              "object group"
             ]
           }
         },
@@ -42,14 +31,9 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type ext:": [
-                  "some",
+                "RecordList named:of:": [
                   "groupings",
-                  {
-                    "ExtType records:": {
-                      "RecordList:": "grouping"
-                    }
-                  }
+                  "grouping"
                 ]
               }
             }
@@ -99,29 +83,18 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type ext:": [
-              "a",
+            "Record named:of:": [
               "grouping",
-              {
-                "ExtType record:": {
-                  "RecordType:": "grouping"
-                }
-              }
+              "grouping"
             ]
           }
         }
@@ -135,14 +108,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type ext:": [
-                    "some",
+                  "Record named:of:": [
                     "grouping",
-                    {
-                      "ExtType record:": {
-                        "RecordType:": "grouping"
-                      }
-                    }
+                    "grouping"
                   ]
                 },
                 {
@@ -266,44 +234,26 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " groupings",
+      "Kinds:have:": [
+        "Groupings",
         [
           {
-            "PropertyDecl:property:propertyType primitive:comment:": [
-              "a",
+            "Text named:desc:": [
               "name",
-              "text",
               ", containing the name of an object the grouping describes"
             ]
           },
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "label",
-              "text"
-            ]
+            "Text named:": "label"
           },
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "hide label",
-              "bool"
-            ]
+            "Bool named:": "hide label"
           },
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "hide size",
-              "bool"
-            ]
+            "Bool named:": "hide size"
           },
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "hide objects",
-              "bool"
-            ]
+            "Bool named:": "hide objects"
           }
         ]
       ]
@@ -317,28 +267,17 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
+      "Kinds:have:": [
         "Object groups",
         [
           {
-            "PropertyDecl:property:propertyType ext:": [
-              "a",
+            "Record named:of:": [
               "grouping",
-              {
-                "ExtType record:": {
-                  "RecordType:": "groupings"
-                }
-              }
+              "groupings"
             ]
           },
           {
-            "PropertyDecl:property:propertyType ext:": [
-              "some",
-              "objects",
-              {
-                "ExtType textList:": "list"
-              }
-            ]
+            "TextList named:": "objects"
           }
         ]
       ]
@@ -352,29 +291,19 @@
       ]
     },
     {
-      "PatternVariablesDecl:variableDecl:": [
+      "Pattern:requires:": [
         "match groups",
         [
           {
-            "VariableDecl:name:type ext:": [
-              "a",
+            "Record named:of:": [
               "first",
-              {
-                "ExtType record:": {
-                  "RecordType:": "grouping"
-                }
-              }
+              "grouping"
             ]
           },
           {
-            "VariableDecl:name:type ext:": [
-              "a",
+            "Record named:of:": [
               "second",
-              {
-                "ExtType record:": {
-                  "RecordType:": "grouping"
-                }
-              }
+              "grouping"
             ]
           }
         ]
@@ -385,11 +314,7 @@
         "match groups",
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "matching",
-              "bool"
-            ]
+            "Bool named:": "matching"
           }
         },
         {
@@ -551,39 +476,24 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type ext:": [
-                "a",
+              "Record named:of:": [
                 "grouping",
-                {
-                  "ExtType record:": {
-                    "RecordType:": "grouping"
-                  }
-                }
+                "grouping"
               ]
             },
             {
-              "VariableDecl:name:type ext:": [
-                "some",
+              "RecordList named:of:": [
                 "groups",
-                {
-                  "ExtType records:": {
-                    "RecordList:": "object group"
-                  }
-                }
+                "object group"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type ext:": [
-              "our",
+            "RecordList named:of:": [
               "groups",
-              {
-                "ExtType records:": {
-                  "RecordList:": "object group"
-                }
-              }
+              "object group"
             ]
           }
         },
@@ -599,35 +509,20 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type primitive:": [
-                  "an",
-                  "idx",
-                  "number"
-                ]
+                "Number named:": "idx"
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type ext:": [
-                  "one",
+                "Record named:of:": [
                   "group",
-                  {
-                    "ExtType record:": {
-                      "RecordType:": "object group"
-                    }
-                  }
+                  "object group"
                 ]
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type ext:": [
-                  "some",
-                  "names",
-                  {
-                    "ExtType textList:": "list"
-                  }
-                ]
+                "TextList named:": "names"
               }
             }
           ]

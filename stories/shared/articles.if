@@ -1,23 +1,17 @@
 [
   [
     {
-      "KindsPossessProperties:propertyDecl:": [
-        "objects",
+      "Kinds:have:": [
+        "Objects",
         [
           {
-            "PropertyDecl:property:propertyType primitive:comment:": [
-              "an",
+            "Text named:desc:": [
               "indefinite article",
-              "text",
               ", which if not set will be the article from the declaration of the noun; example: \"some\" soldiers."
             ]
           },
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "a",
-              "pluralization",
-              "aspect"
-            ]
+            "Aspect of:": "pluralization"
           }
         ]
       ]
@@ -92,7 +86,6 @@
       ]
     }
   ],
-  [],
   [
     {
       "TestStatement:test:": [
@@ -111,15 +104,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -178,15 +165,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -253,30 +234,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type primitive:": [
-                "an",
-                "article",
-                "text"
-              ]
+              "Text named:": "article"
             },
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "the",
-                "name",
-                "text"
-              ]
+              "Text named:": "name"
             }
           ]
         }

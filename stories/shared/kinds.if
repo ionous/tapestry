@@ -7,29 +7,21 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " objects",
+      "Kinds:have:": [
+        "Objects",
         [
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "description",
-              "text"
-            ]
+            "Text named:": "description"
           }
         ]
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        "objects",
+      "Kinds:have:": [
+        "Objects",
         [
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "grouping label",
-              "text"
-            ]
+            "Text named:": "grouping label"
           }
         ]
       ]
@@ -77,29 +69,17 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " things",
+      "Kinds:have:": [
+        "Things",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "a",
-              "portability",
-              "aspect"
-            ]
+            "Aspect of:": "portability"
           },
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "a",
-              "possessiveness",
-              "aspect"
-            ]
+            "Aspect of:": "possessiveness"
           },
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "a",
-              "wearability",
-              "aspect"
-            ]
+            "Aspect of:": "wearability"
           }
         ]
       ]
@@ -122,43 +102,31 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " things",
+      "Kinds:have:": [
+        "Things",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "a",
-              "scenery status",
-              "aspect"
-            ]
+            "Aspect of:": "scenery status"
           }
         ]
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " things",
+      "Kinds:have:": [
+        "Things",
         [
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "an",
-              "initial appearance",
-              "text"
-            ]
+            "Text named:": "initial appearance"
           }
         ]
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " things",
+      "Kinds:have:": [
+        "Things",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "our",
-              "mentionable",
-              "aspect"
-            ]
+            "Aspect of:": "mentionable"
           }
         ]
       ]
@@ -181,15 +149,11 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " things",
+      "Kinds:have:": [
+        "Things",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "our",
-              "handleable",
-              "aspect"
-            ]
+            "Aspect of:": "handleable"
           }
         ]
       ]
@@ -327,36 +291,20 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " openers",
+      "Kinds:have:": [
+        "Openers",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "an",
-              "open status",
-              "aspect"
-            ]
+            "Aspect of:": "open status"
           },
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "an",
-              "openability",
-              "aspect"
-            ]
+            "Aspect of:": "openability"
           },
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "a",
-              "locked status",
-              "aspect"
-            ]
+            "Aspect of:": "locked status"
           },
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "a",
-              "lockable status",
-              "aspect"
-            ]
+            "Aspect of:": "lockable status"
           }
         ]
       ]
@@ -404,22 +352,14 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " containers",
+      "Kinds:have:": [
+        "Containers",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "an",
-              "enterability",
-              "aspect"
-            ]
+            "Aspect of:": "enterability"
           },
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "an",
-              "opacity",
-              "aspect"
-            ]
+            "Aspect of:": "opacity"
           }
         ]
       ]
@@ -444,29 +384,21 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " things",
+      "Kinds:have:": [
+        "Things",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "an",
-              "illumination",
-              "aspect"
-            ]
+            "Aspect of:": "illumination"
           }
         ]
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        " rooms",
+      "Kinds:have:": [
+        "Rooms",
         [
           {
-            "PropertyDecl:property:propertyType propertyAspect:": [
-              "an",
-              "illumination",
-              "aspect"
-            ]
+            "Aspect of:": "illumination"
           }
         ]
       ]
@@ -496,15 +428,11 @@
       ]
     },
     {
-      "KindsPossessProperties:propertyDecl:": [
-        "rooms",
+      "Kinds:have:": [
+        "Rooms",
         [
           {
-            "PropertyDecl:property:propertyType primitive:": [
-              "a",
-              "visited",
-              "bool"
-            ]
+            "Bool named:": "visited"
           }
         ]
       ]

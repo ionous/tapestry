@@ -17,15 +17,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 },
                 {
@@ -255,15 +249,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -278,11 +266,7 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type primitive:": [
-                    "a",
-                    "description",
-                    "text"
-                  ]
+                  "Text named:": "description"
                 },
                 {
                   "LocalInit:": {
@@ -388,26 +372,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "our",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         }
       ]

@@ -33,9 +33,8 @@ func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 			} else {
 				// and these are locals used by those rules
 				if h.Locals != nil {
-					if locals, e := h.Locals.ImportLocals(k, evt); e != nil {
-						err = errutil.Append(e)
-					} else if len(locals) > 0 {
+					locals := h.Locals.ImportLocals(k, evt)
+					if len(locals) > 0 {
 						k.Write(&eph.EphPatterns{Name: evt, Locals: locals})
 					}
 				}

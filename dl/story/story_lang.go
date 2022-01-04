@@ -1123,6 +1123,115 @@ func Aspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Aspect) (err error) 
 	return
 }
 
+// AspectProperty
+// User implements: PropertySlot.
+type AspectProperty struct {
+	Aspect  string `if:"label=of,type=text"`
+	Comment Lines  `if:"label=desc,optional"`
+}
+
+func (*AspectProperty) Compose() composer.Spec {
+	return composer.Spec{
+		Name: AspectProperty_Type,
+		Uses: composer.Type_Flow,
+		Lede: "aspect",
+	}
+}
+
+const AspectProperty_Type = "aspect_property"
+
+const AspectProperty_Field_Aspect = "$ASPECT"
+const AspectProperty_Field_Comment = "$COMMENT"
+
+func (op *AspectProperty) Marshal(m jsn.Marshaler) error {
+	return AspectProperty_Marshal(m, op)
+}
+
+type AspectProperty_Slice []AspectProperty
+
+func (op *AspectProperty_Slice) GetType() string { return AspectProperty_Type }
+
+func (op *AspectProperty_Slice) Marshal(m jsn.Marshaler) error {
+	return AspectProperty_Repeats_Marshal(m, (*[]AspectProperty)(op))
+}
+
+func (op *AspectProperty_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *AspectProperty_Slice) SetSize(cnt int) {
+	var els []AspectProperty
+	if cnt >= 0 {
+		els = make(AspectProperty_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *AspectProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return AspectProperty_Marshal(m, &(*op)[i])
+}
+
+func AspectProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]AspectProperty) error {
+	return jsn.RepeatBlock(m, (*AspectProperty_Slice)(vals))
+}
+
+func AspectProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AspectProperty) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = AspectProperty_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type AspectProperty_Flow struct{ ptr *AspectProperty }
+
+func (n AspectProperty_Flow) GetType() string      { return AspectProperty_Type }
+func (n AspectProperty_Flow) GetLede() string      { return "aspect" }
+func (n AspectProperty_Flow) GetFlow() interface{} { return n.ptr }
+func (n AspectProperty_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*AspectProperty); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func AspectProperty_Optional_Marshal(m jsn.Marshaler, pv **AspectProperty) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = AspectProperty_Marshal(m, *pv)
+	} else if !enc {
+		var v AspectProperty
+		if err = AspectProperty_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func AspectProperty_Marshal(m jsn.Marshaler, val *AspectProperty) (err error) {
+	if err = m.MarshalBlock(AspectProperty_Flow{val}); err == nil {
+		e0 := m.MarshalKey("of", AspectProperty_Field_Aspect)
+		if e0 == nil {
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Aspect)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", AspectProperty_Field_Aspect))
+		}
+		e1 := m.MarshalKey("desc", AspectProperty_Field_Comment)
+		if e1 == nil {
+			e1 = Lines_Optional_Marshal(m, &val.Comment)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", AspectProperty_Field_Comment))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // AspectTraits
 // User implements: StoryStatement.
 type AspectTraits struct {
@@ -1231,35 +1340,40 @@ func AspectTraits_Marshal(m jsn.Marshaler, val *AspectTraits) (err error) {
 	return
 }
 
-// BoxedNumber
-type BoxedNumber struct {
-	Number float64 `if:"label=_,type=number"`
+// BoolProperty
+// User implements: PropertySlot.
+type BoolProperty struct {
+	NamedProperty `if:"label=_"`
 }
 
-func (*BoxedNumber) Compose() composer.Spec {
+func (*BoolProperty) Compose() composer.Spec {
 	return composer.Spec{
-		Name: BoxedNumber_Type,
+		Name: BoolProperty_Type,
 		Uses: composer.Type_Flow,
+		Lede: "bool",
 	}
 }
 
-const BoxedNumber_Type = "boxed_number"
+const BoolProperty_Type = "bool_property"
 
-const BoxedNumber_Field_Number = "$NUMBER"
+const BoolProperty_Field_NamedProperty = "$NAMED_PROPERTY"
+const BoolProperty_Field_Name = "$NAME"
+const BoolProperty_Field_Type = "$TYPE"
+const BoolProperty_Field_Comment = "$COMMENT"
 
-func (op *BoxedNumber) Marshal(m jsn.Marshaler) error {
-	return BoxedNumber_Marshal(m, op)
+func (op *BoolProperty) Marshal(m jsn.Marshaler) error {
+	return BoolProperty_Marshal(m, op)
 }
 
-type BoxedNumber_Slice []BoxedNumber
+type BoolProperty_Slice []BoolProperty
 
-func (op *BoxedNumber_Slice) GetType() string { return BoxedNumber_Type }
+func (op *BoolProperty_Slice) GetType() string { return BoolProperty_Type }
 
-func (op *BoxedNumber_Slice) Marshal(m jsn.Marshaler) error {
-	return BoxedNumber_Repeats_Marshal(m, (*[]BoxedNumber)(op))
+func (op *BoolProperty_Slice) Marshal(m jsn.Marshaler) error {
+	return BoolProperty_Repeats_Marshal(m, (*[]BoolProperty)(op))
 }
 
-func (op *BoxedNumber_Slice) GetSize() (ret int) {
+func (op *BoolProperty_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -1268,159 +1382,75 @@ func (op *BoxedNumber_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *BoxedNumber_Slice) SetSize(cnt int) {
-	var els []BoxedNumber
+func (op *BoolProperty_Slice) SetSize(cnt int) {
+	var els []BoolProperty
 	if cnt >= 0 {
-		els = make(BoxedNumber_Slice, cnt)
+		els = make(BoolProperty_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *BoxedNumber_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return BoxedNumber_Marshal(m, &(*op)[i])
+func (op *BoolProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return BoolProperty_Marshal(m, &(*op)[i])
 }
 
-func BoxedNumber_Repeats_Marshal(m jsn.Marshaler, vals *[]BoxedNumber) error {
-	return jsn.RepeatBlock(m, (*BoxedNumber_Slice)(vals))
+func BoolProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]BoolProperty) error {
+	return jsn.RepeatBlock(m, (*BoolProperty_Slice)(vals))
 }
 
-func BoxedNumber_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]BoxedNumber) (err error) {
+func BoolProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]BoolProperty) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = BoxedNumber_Repeats_Marshal(m, pv)
+		err = BoolProperty_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type BoxedNumber_Flow struct{ ptr *BoxedNumber }
+type BoolProperty_Flow struct{ ptr *BoolProperty }
 
-func (n BoxedNumber_Flow) GetType() string      { return BoxedNumber_Type }
-func (n BoxedNumber_Flow) GetLede() string      { return BoxedNumber_Type }
-func (n BoxedNumber_Flow) GetFlow() interface{} { return n.ptr }
-func (n BoxedNumber_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*BoxedNumber); ok {
+func (n BoolProperty_Flow) GetType() string      { return BoolProperty_Type }
+func (n BoolProperty_Flow) GetLede() string      { return "bool" }
+func (n BoolProperty_Flow) GetFlow() interface{} { return n.ptr }
+func (n BoolProperty_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*BoolProperty); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func BoxedNumber_Optional_Marshal(m jsn.Marshaler, pv **BoxedNumber) (err error) {
+func BoolProperty_Optional_Marshal(m jsn.Marshaler, pv **BoolProperty) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = BoxedNumber_Marshal(m, *pv)
+		err = BoolProperty_Marshal(m, *pv)
 	} else if !enc {
-		var v BoxedNumber
-		if err = BoxedNumber_Marshal(m, &v); err == nil {
+		var v BoolProperty
+		if err = BoolProperty_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func BoxedNumber_Marshal(m jsn.Marshaler, val *BoxedNumber) (err error) {
-	if err = m.MarshalBlock(BoxedNumber_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", BoxedNumber_Field_Number)
-		if e0 == nil {
-			e0 = literal.Number_Unboxed_Marshal(m, &val.Number)
+func BoolProperty_Marshal(m jsn.Marshaler, val *BoolProperty) (err error) {
+	if err = m.MarshalBlock(BoolProperty_Flow{val}); err == nil {
+		e1 := m.MarshalKey("named", BoolProperty_Field_Name)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", BoxedNumber_Field_Number))
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", BoolProperty_Field_Name))
 		}
-		m.EndBlock()
-	}
-	return
-}
-
-// BoxedText
-type BoxedText struct {
-	Text string `if:"label=_,type=text"`
-}
-
-func (*BoxedText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: BoxedText_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const BoxedText_Type = "boxed_text"
-
-const BoxedText_Field_Text = "$TEXT"
-
-func (op *BoxedText) Marshal(m jsn.Marshaler) error {
-	return BoxedText_Marshal(m, op)
-}
-
-type BoxedText_Slice []BoxedText
-
-func (op *BoxedText_Slice) GetType() string { return BoxedText_Type }
-
-func (op *BoxedText_Slice) Marshal(m jsn.Marshaler) error {
-	return BoxedText_Repeats_Marshal(m, (*[]BoxedText)(op))
-}
-
-func (op *BoxedText_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *BoxedText_Slice) SetSize(cnt int) {
-	var els []BoxedText
-	if cnt >= 0 {
-		els = make(BoxedText_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *BoxedText_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return BoxedText_Marshal(m, &(*op)[i])
-}
-
-func BoxedText_Repeats_Marshal(m jsn.Marshaler, vals *[]BoxedText) error {
-	return jsn.RepeatBlock(m, (*BoxedText_Slice)(vals))
-}
-
-func BoxedText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]BoxedText) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = BoxedText_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type BoxedText_Flow struct{ ptr *BoxedText }
-
-func (n BoxedText_Flow) GetType() string      { return BoxedText_Type }
-func (n BoxedText_Flow) GetLede() string      { return BoxedText_Type }
-func (n BoxedText_Flow) GetFlow() interface{} { return n.ptr }
-func (n BoxedText_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*BoxedText); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func BoxedText_Optional_Marshal(m jsn.Marshaler, pv **BoxedText) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = BoxedText_Marshal(m, *pv)
-	} else if !enc {
-		var v BoxedText
-		if err = BoxedText_Marshal(m, &v); err == nil {
-			*pv = &v
+		e2 := m.MarshalKey("of", BoolProperty_Field_Type)
+		if e2 == nil {
+			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
-	}
-	return
-}
-
-func BoxedText_Marshal(m jsn.Marshaler, val *BoxedText) (err error) {
-	if err = m.MarshalBlock(BoxedText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", BoxedText_Field_Text)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Text)
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", BoolProperty_Field_Type))
 		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", BoxedText_Field_Text))
+		e3 := m.MarshalKey("desc", BoolProperty_Field_Comment)
+		if e3 == nil {
+			e3 = Lines_Optional_Marshal(m, &val.Comment)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", BoolProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -2752,121 +2782,6 @@ func EventTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventTarget) (e
 	return
 }
 
-// ExtType swaps between various options
-type ExtType struct {
-	At     reader.Position `if:"internal"`
-	Choice string
-	Value  interface{}
-}
-
-var ExtType_Optional_Marshal = ExtType_Marshal
-
-const ExtType_Numbers_Opt = "$NUMBERS"
-const ExtType_TextList_Opt = "$TEXT_LIST"
-const ExtType_Record_Opt = "$RECORD"
-const ExtType_Records_Opt = "$RECORDS"
-
-func (*ExtType) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ExtType_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			ExtType_Numbers_Opt, ExtType_TextList_Opt, ExtType_Record_Opt, ExtType_Records_Opt,
-		},
-		Swaps: []interface{}{
-			(*NumberList)(nil),
-			(*TextList)(nil),
-			(*RecordType)(nil),
-			(*RecordList)(nil),
-		},
-	}
-}
-
-const ExtType_Type = "ext_type"
-
-func (op *ExtType) GetType() string { return ExtType_Type }
-
-func (op *ExtType) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *ExtType) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case ExtType_Numbers_Opt:
-		op.Choice, op.Value = c, new(NumberList)
-		okay = true
-	case ExtType_TextList_Opt:
-		op.Choice, op.Value = c, new(TextList)
-		okay = true
-	case ExtType_Record_Opt:
-		op.Choice, op.Value = c, new(RecordType)
-		okay = true
-	case ExtType_Records_Opt:
-		op.Choice, op.Value = c, new(RecordList)
-		okay = true
-	}
-	return
-}
-
-func (op *ExtType) Marshal(m jsn.Marshaler) error {
-	return ExtType_Marshal(m, op)
-}
-func ExtType_Marshal(m jsn.Marshaler, val *ExtType) (err error) {
-	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-type ExtType_Slice []ExtType
-
-func (op *ExtType_Slice) GetType() string { return ExtType_Type }
-
-func (op *ExtType_Slice) Marshal(m jsn.Marshaler) error {
-	return ExtType_Repeats_Marshal(m, (*[]ExtType)(op))
-}
-
-func (op *ExtType_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ExtType_Slice) SetSize(cnt int) {
-	var els []ExtType
-	if cnt >= 0 {
-		els = make(ExtType_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ExtType_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ExtType_Marshal(m, &(*op)[i])
-}
-
-func ExtType_Repeats_Marshal(m jsn.Marshaler, vals *[]ExtType) error {
-	return jsn.RepeatBlock(m, (*ExtType_Slice)(vals))
-}
-
-func ExtType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ExtType) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = ExtType_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // GrammarDecl
 type GrammarDecl struct {
 	Grammar grammar.GrammarMaker `if:"label=_"`
@@ -3198,6 +3113,115 @@ func KindOfRelation_Marshal(m jsn.Marshaler, val *KindOfRelation) (err error) {
 	return
 }
 
+// KindsHaveProperties
+// User implements: StoryStatement.
+type KindsHaveProperties struct {
+	PluralKinds PluralKinds    `if:"label=_"`
+	Props       []PropertySlot `if:"label=have"`
+}
+
+func (*KindsHaveProperties) Compose() composer.Spec {
+	return composer.Spec{
+		Name: KindsHaveProperties_Type,
+		Uses: composer.Type_Flow,
+		Lede: "Kinds",
+	}
+}
+
+const KindsHaveProperties_Type = "kinds_have_properties"
+
+const KindsHaveProperties_Field_PluralKinds = "$PLURAL_KINDS"
+const KindsHaveProperties_Field_Props = "$PROPS"
+
+func (op *KindsHaveProperties) Marshal(m jsn.Marshaler) error {
+	return KindsHaveProperties_Marshal(m, op)
+}
+
+type KindsHaveProperties_Slice []KindsHaveProperties
+
+func (op *KindsHaveProperties_Slice) GetType() string { return KindsHaveProperties_Type }
+
+func (op *KindsHaveProperties_Slice) Marshal(m jsn.Marshaler) error {
+	return KindsHaveProperties_Repeats_Marshal(m, (*[]KindsHaveProperties)(op))
+}
+
+func (op *KindsHaveProperties_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *KindsHaveProperties_Slice) SetSize(cnt int) {
+	var els []KindsHaveProperties
+	if cnt >= 0 {
+		els = make(KindsHaveProperties_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *KindsHaveProperties_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return KindsHaveProperties_Marshal(m, &(*op)[i])
+}
+
+func KindsHaveProperties_Repeats_Marshal(m jsn.Marshaler, vals *[]KindsHaveProperties) error {
+	return jsn.RepeatBlock(m, (*KindsHaveProperties_Slice)(vals))
+}
+
+func KindsHaveProperties_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsHaveProperties) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = KindsHaveProperties_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type KindsHaveProperties_Flow struct{ ptr *KindsHaveProperties }
+
+func (n KindsHaveProperties_Flow) GetType() string      { return KindsHaveProperties_Type }
+func (n KindsHaveProperties_Flow) GetLede() string      { return "Kinds" }
+func (n KindsHaveProperties_Flow) GetFlow() interface{} { return n.ptr }
+func (n KindsHaveProperties_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*KindsHaveProperties); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func KindsHaveProperties_Optional_Marshal(m jsn.Marshaler, pv **KindsHaveProperties) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = KindsHaveProperties_Marshal(m, *pv)
+	} else if !enc {
+		var v KindsHaveProperties
+		if err = KindsHaveProperties_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func KindsHaveProperties_Marshal(m jsn.Marshaler, val *KindsHaveProperties) (err error) {
+	if err = m.MarshalBlock(KindsHaveProperties_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", KindsHaveProperties_Field_PluralKinds)
+		if e0 == nil {
+			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", KindsHaveProperties_Field_PluralKinds))
+		}
+		e1 := m.MarshalKey("have", KindsHaveProperties_Field_Props)
+		if e1 == nil {
+			e1 = PropertySlot_Repeats_Marshal(m, &val.Props)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", KindsHaveProperties_Field_Props))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // KindsOfAspect
 // User implements: StoryStatement.
 type KindsOfAspect struct {
@@ -3406,114 +3430,6 @@ func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
 	return
 }
 
-// KindsPossessProperties
-// User implements: StoryStatement.
-type KindsPossessProperties struct {
-	PluralKinds  PluralKinds    `if:"label=_"`
-	PropertyDecl []PropertyDecl `if:"label=property_decl"`
-}
-
-func (*KindsPossessProperties) Compose() composer.Spec {
-	return composer.Spec{
-		Name: KindsPossessProperties_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const KindsPossessProperties_Type = "kinds_possess_properties"
-
-const KindsPossessProperties_Field_PluralKinds = "$PLURAL_KINDS"
-const KindsPossessProperties_Field_PropertyDecl = "$PROPERTY_DECL"
-
-func (op *KindsPossessProperties) Marshal(m jsn.Marshaler) error {
-	return KindsPossessProperties_Marshal(m, op)
-}
-
-type KindsPossessProperties_Slice []KindsPossessProperties
-
-func (op *KindsPossessProperties_Slice) GetType() string { return KindsPossessProperties_Type }
-
-func (op *KindsPossessProperties_Slice) Marshal(m jsn.Marshaler) error {
-	return KindsPossessProperties_Repeats_Marshal(m, (*[]KindsPossessProperties)(op))
-}
-
-func (op *KindsPossessProperties_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *KindsPossessProperties_Slice) SetSize(cnt int) {
-	var els []KindsPossessProperties
-	if cnt >= 0 {
-		els = make(KindsPossessProperties_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *KindsPossessProperties_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return KindsPossessProperties_Marshal(m, &(*op)[i])
-}
-
-func KindsPossessProperties_Repeats_Marshal(m jsn.Marshaler, vals *[]KindsPossessProperties) error {
-	return jsn.RepeatBlock(m, (*KindsPossessProperties_Slice)(vals))
-}
-
-func KindsPossessProperties_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsPossessProperties) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = KindsPossessProperties_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type KindsPossessProperties_Flow struct{ ptr *KindsPossessProperties }
-
-func (n KindsPossessProperties_Flow) GetType() string      { return KindsPossessProperties_Type }
-func (n KindsPossessProperties_Flow) GetLede() string      { return KindsPossessProperties_Type }
-func (n KindsPossessProperties_Flow) GetFlow() interface{} { return n.ptr }
-func (n KindsPossessProperties_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*KindsPossessProperties); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func KindsPossessProperties_Optional_Marshal(m jsn.Marshaler, pv **KindsPossessProperties) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = KindsPossessProperties_Marshal(m, *pv)
-	} else if !enc {
-		var v KindsPossessProperties
-		if err = KindsPossessProperties_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func KindsPossessProperties_Marshal(m jsn.Marshaler, val *KindsPossessProperties) (err error) {
-	if err = m.MarshalBlock(KindsPossessProperties_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", KindsPossessProperties_Field_PluralKinds)
-		if e0 == nil {
-			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", KindsPossessProperties_Field_PluralKinds))
-		}
-		e1 := m.MarshalKey("property_decl", KindsPossessProperties_Field_PropertyDecl)
-		if e1 == nil {
-			e1 = PropertyDecl_Repeats_Marshal(m, &val.PropertyDecl)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", KindsPossessProperties_Field_PropertyDecl))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // Lede Describes one or more nouns.
 type Lede struct {
 	Nouns      []NamedNoun `if:"label=_"`
@@ -3698,8 +3614,8 @@ func Lines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lines) (err error) {
 
 // LocalDecl
 type LocalDecl struct {
-	VariableDecl VariableDecl `if:"label=_"`
-	Value        *LocalInit   `if:"label=value,optional"`
+	Local PropertySlot `if:"label=_"`
+	Value *LocalInit   `if:"label=value,optional"`
 }
 
 func (*LocalDecl) Compose() composer.Spec {
@@ -3711,7 +3627,7 @@ func (*LocalDecl) Compose() composer.Spec {
 
 const LocalDecl_Type = "local_decl"
 
-const LocalDecl_Field_VariableDecl = "$VARIABLE_DECL"
+const LocalDecl_Field_Local = "$LOCAL"
 const LocalDecl_Field_Value = "$VALUE"
 
 func (op *LocalDecl) Marshal(m jsn.Marshaler) error {
@@ -3784,12 +3700,12 @@ func LocalDecl_Optional_Marshal(m jsn.Marshaler, pv **LocalDecl) (err error) {
 
 func LocalDecl_Marshal(m jsn.Marshaler, val *LocalDecl) (err error) {
 	if err = m.MarshalBlock(LocalDecl_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", LocalDecl_Field_VariableDecl)
+		e0 := m.MarshalKey("", LocalDecl_Field_Local)
 		if e0 == nil {
-			e0 = VariableDecl_Marshal(m, &val.VariableDecl)
+			e0 = PropertySlot_Marshal(m, &val.Local)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", LocalDecl_Field_VariableDecl))
+			m.Error(errutil.New(e0, "in flow at", LocalDecl_Field_Local))
 		}
 		e1 := m.MarshalKey("value", LocalDecl_Field_Value)
 		if e1 == nil {
@@ -4951,6 +4867,122 @@ func NamedNoun_Marshal(m jsn.Marshaler, val *NamedNoun) (err error) {
 	return
 }
 
+// NamedProperty
+type NamedProperty struct {
+	Name    string `if:"label=_,type=text"`
+	Type    string `if:"label=type,optional,type=text"`
+	Comment Lines  `if:"label=comment,optional"`
+}
+
+func (*NamedProperty) Compose() composer.Spec {
+	return composer.Spec{
+		Name: NamedProperty_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const NamedProperty_Type = "named_property"
+
+const NamedProperty_Field_Name = "$NAME"
+const NamedProperty_Field_Type = "$TYPE"
+const NamedProperty_Field_Comment = "$COMMENT"
+
+func (op *NamedProperty) Marshal(m jsn.Marshaler) error {
+	return NamedProperty_Marshal(m, op)
+}
+
+type NamedProperty_Slice []NamedProperty
+
+func (op *NamedProperty_Slice) GetType() string { return NamedProperty_Type }
+
+func (op *NamedProperty_Slice) Marshal(m jsn.Marshaler) error {
+	return NamedProperty_Repeats_Marshal(m, (*[]NamedProperty)(op))
+}
+
+func (op *NamedProperty_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NamedProperty_Slice) SetSize(cnt int) {
+	var els []NamedProperty
+	if cnt >= 0 {
+		els = make(NamedProperty_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NamedProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NamedProperty_Marshal(m, &(*op)[i])
+}
+
+func NamedProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]NamedProperty) error {
+	return jsn.RepeatBlock(m, (*NamedProperty_Slice)(vals))
+}
+
+func NamedProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedProperty) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = NamedProperty_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type NamedProperty_Flow struct{ ptr *NamedProperty }
+
+func (n NamedProperty_Flow) GetType() string      { return NamedProperty_Type }
+func (n NamedProperty_Flow) GetLede() string      { return NamedProperty_Type }
+func (n NamedProperty_Flow) GetFlow() interface{} { return n.ptr }
+func (n NamedProperty_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NamedProperty); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func NamedProperty_Optional_Marshal(m jsn.Marshaler, pv **NamedProperty) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = NamedProperty_Marshal(m, *pv)
+	} else if !enc {
+		var v NamedProperty
+		if err = NamedProperty_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func NamedProperty_Marshal(m jsn.Marshaler, val *NamedProperty) (err error) {
+	if err = m.MarshalBlock(NamedProperty_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NamedProperty_Field_Name)
+		if e0 == nil {
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", NamedProperty_Field_Name))
+		}
+		e1 := m.MarshalKey("type", NamedProperty_Field_Type)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", NamedProperty_Field_Type))
+		}
+		e2 := m.MarshalKey("comment", NamedProperty_Field_Comment)
+		if e2 == nil {
+			e2 = Lines_Optional_Marshal(m, &val.Comment)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", NamedProperty_Field_Comment))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // NounAssignment Assign text.
 // User implements: StoryStatement.
 type NounAssignment struct {
@@ -5595,119 +5627,40 @@ func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
 	return
 }
 
-// NumberList requires a predefined string.
-type NumberList struct {
-	Str string
+// NumListProperty
+// User implements: PropertySlot.
+type NumListProperty struct {
+	NamedProperty `if:"label=_"`
 }
 
-func (op *NumberList) String() string {
-	return op.Str
-}
-
-const NumberList_List = "$LIST"
-
-func (*NumberList) Compose() composer.Spec {
+func (*NumListProperty) Compose() composer.Spec {
 	return composer.Spec{
-		Name: NumberList_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			NumberList_List,
-		},
-		Strings: []string{
-			"list",
-		},
-	}
-}
-
-const NumberList_Type = "number_list"
-
-func (op *NumberList) Marshal(m jsn.Marshaler) error {
-	return NumberList_Marshal(m, op)
-}
-
-func NumberList_Optional_Marshal(m jsn.Marshaler, val *NumberList) (err error) {
-	var zero NumberList
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = NumberList_Marshal(m, val)
-	}
-	return
-}
-
-func NumberList_Marshal(m jsn.Marshaler, val *NumberList) (err error) {
-	return m.MarshalValue(NumberList_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type NumberList_Slice []NumberList
-
-func (op *NumberList_Slice) GetType() string { return NumberList_Type }
-
-func (op *NumberList_Slice) Marshal(m jsn.Marshaler) error {
-	return NumberList_Repeats_Marshal(m, (*[]NumberList)(op))
-}
-
-func (op *NumberList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NumberList_Slice) SetSize(cnt int) {
-	var els []NumberList
-	if cnt >= 0 {
-		els = make(NumberList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NumberList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NumberList_Marshal(m, &(*op)[i])
-}
-
-func NumberList_Repeats_Marshal(m jsn.Marshaler, vals *[]NumberList) error {
-	return jsn.RepeatBlock(m, (*NumberList_Slice)(vals))
-}
-
-func NumberList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumberList) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = NumberList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// ObjectType
-type ObjectType struct {
-	An   Ana          `if:"label=_"`
-	Kind SingularKind `if:"label=kind"`
-}
-
-func (*ObjectType) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ObjectType_Type,
+		Name: NumListProperty_Type,
 		Uses: composer.Type_Flow,
+		Lede: "num_list",
 	}
 }
 
-const ObjectType_Type = "object_type"
+const NumListProperty_Type = "num_list_property"
 
-const ObjectType_Field_An = "$AN"
-const ObjectType_Field_Kind = "$KIND"
+const NumListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
+const NumListProperty_Field_Name = "$NAME"
+const NumListProperty_Field_Type = "$TYPE"
+const NumListProperty_Field_Comment = "$COMMENT"
 
-func (op *ObjectType) Marshal(m jsn.Marshaler) error {
-	return ObjectType_Marshal(m, op)
+func (op *NumListProperty) Marshal(m jsn.Marshaler) error {
+	return NumListProperty_Marshal(m, op)
 }
 
-type ObjectType_Slice []ObjectType
+type NumListProperty_Slice []NumListProperty
 
-func (op *ObjectType_Slice) GetType() string { return ObjectType_Type }
+func (op *NumListProperty_Slice) GetType() string { return NumListProperty_Type }
 
-func (op *ObjectType_Slice) Marshal(m jsn.Marshaler) error {
-	return ObjectType_Repeats_Marshal(m, (*[]ObjectType)(op))
+func (op *NumListProperty_Slice) Marshal(m jsn.Marshaler) error {
+	return NumListProperty_Repeats_Marshal(m, (*[]NumListProperty)(op))
 }
 
-func (op *ObjectType_Slice) GetSize() (ret int) {
+func (op *NumListProperty_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -5716,68 +5669,192 @@ func (op *ObjectType_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *ObjectType_Slice) SetSize(cnt int) {
-	var els []ObjectType
+func (op *NumListProperty_Slice) SetSize(cnt int) {
+	var els []NumListProperty
 	if cnt >= 0 {
-		els = make(ObjectType_Slice, cnt)
+		els = make(NumListProperty_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *ObjectType_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ObjectType_Marshal(m, &(*op)[i])
+func (op *NumListProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NumListProperty_Marshal(m, &(*op)[i])
 }
 
-func ObjectType_Repeats_Marshal(m jsn.Marshaler, vals *[]ObjectType) error {
-	return jsn.RepeatBlock(m, (*ObjectType_Slice)(vals))
+func NumListProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]NumListProperty) error {
+	return jsn.RepeatBlock(m, (*NumListProperty_Slice)(vals))
 }
 
-func ObjectType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ObjectType) (err error) {
+func NumListProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumListProperty) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = ObjectType_Repeats_Marshal(m, pv)
+		err = NumListProperty_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type ObjectType_Flow struct{ ptr *ObjectType }
+type NumListProperty_Flow struct{ ptr *NumListProperty }
 
-func (n ObjectType_Flow) GetType() string      { return ObjectType_Type }
-func (n ObjectType_Flow) GetLede() string      { return ObjectType_Type }
-func (n ObjectType_Flow) GetFlow() interface{} { return n.ptr }
-func (n ObjectType_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ObjectType); ok {
+func (n NumListProperty_Flow) GetType() string      { return NumListProperty_Type }
+func (n NumListProperty_Flow) GetLede() string      { return "num_list" }
+func (n NumListProperty_Flow) GetFlow() interface{} { return n.ptr }
+func (n NumListProperty_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NumListProperty); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func ObjectType_Optional_Marshal(m jsn.Marshaler, pv **ObjectType) (err error) {
+func NumListProperty_Optional_Marshal(m jsn.Marshaler, pv **NumListProperty) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ObjectType_Marshal(m, *pv)
+		err = NumListProperty_Marshal(m, *pv)
 	} else if !enc {
-		var v ObjectType
-		if err = ObjectType_Marshal(m, &v); err == nil {
+		var v NumListProperty
+		if err = NumListProperty_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func ObjectType_Marshal(m jsn.Marshaler, val *ObjectType) (err error) {
-	if err = m.MarshalBlock(ObjectType_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ObjectType_Field_An)
-		if e0 == nil {
-			e0 = Ana_Marshal(m, &val.An)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ObjectType_Field_An))
-		}
-		e1 := m.MarshalKey("kind", ObjectType_Field_Kind)
+func NumListProperty_Marshal(m jsn.Marshaler, val *NumListProperty) (err error) {
+	if err = m.MarshalBlock(NumListProperty_Flow{val}); err == nil {
+		e1 := m.MarshalKey("named", NumListProperty_Field_Name)
 		if e1 == nil {
-			e1 = SingularKind_Marshal(m, &val.Kind)
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ObjectType_Field_Kind))
+			m.Error(errutil.New(e1, "in flow at", NumListProperty_Field_Name))
+		}
+		e2 := m.MarshalKey("of", NumListProperty_Field_Type)
+		if e2 == nil {
+			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", NumListProperty_Field_Type))
+		}
+		e3 := m.MarshalKey("desc", NumListProperty_Field_Comment)
+		if e3 == nil {
+			e3 = Lines_Optional_Marshal(m, &val.Comment)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", NumListProperty_Field_Comment))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// NumberProperty
+// User implements: PropertySlot.
+type NumberProperty struct {
+	NamedProperty `if:"label=_"`
+}
+
+func (*NumberProperty) Compose() composer.Spec {
+	return composer.Spec{
+		Name: NumberProperty_Type,
+		Uses: composer.Type_Flow,
+		Lede: "number",
+	}
+}
+
+const NumberProperty_Type = "number_property"
+
+const NumberProperty_Field_NamedProperty = "$NAMED_PROPERTY"
+const NumberProperty_Field_Name = "$NAME"
+const NumberProperty_Field_Type = "$TYPE"
+const NumberProperty_Field_Comment = "$COMMENT"
+
+func (op *NumberProperty) Marshal(m jsn.Marshaler) error {
+	return NumberProperty_Marshal(m, op)
+}
+
+type NumberProperty_Slice []NumberProperty
+
+func (op *NumberProperty_Slice) GetType() string { return NumberProperty_Type }
+
+func (op *NumberProperty_Slice) Marshal(m jsn.Marshaler) error {
+	return NumberProperty_Repeats_Marshal(m, (*[]NumberProperty)(op))
+}
+
+func (op *NumberProperty_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NumberProperty_Slice) SetSize(cnt int) {
+	var els []NumberProperty
+	if cnt >= 0 {
+		els = make(NumberProperty_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NumberProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NumberProperty_Marshal(m, &(*op)[i])
+}
+
+func NumberProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]NumberProperty) error {
+	return jsn.RepeatBlock(m, (*NumberProperty_Slice)(vals))
+}
+
+func NumberProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumberProperty) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = NumberProperty_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type NumberProperty_Flow struct{ ptr *NumberProperty }
+
+func (n NumberProperty_Flow) GetType() string      { return NumberProperty_Type }
+func (n NumberProperty_Flow) GetLede() string      { return "number" }
+func (n NumberProperty_Flow) GetFlow() interface{} { return n.ptr }
+func (n NumberProperty_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NumberProperty); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func NumberProperty_Optional_Marshal(m jsn.Marshaler, pv **NumberProperty) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = NumberProperty_Marshal(m, *pv)
+	} else if !enc {
+		var v NumberProperty
+		if err = NumberProperty_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func NumberProperty_Marshal(m jsn.Marshaler, val *NumberProperty) (err error) {
+	if err = m.MarshalBlock(NumberProperty_Flow{val}); err == nil {
+		e1 := m.MarshalKey("named", NumberProperty_Field_Name)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", NumberProperty_Field_Name))
+		}
+		e2 := m.MarshalKey("of", NumberProperty_Field_Type)
+		if e2 == nil {
+			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", NumberProperty_Field_Type))
+		}
+		e3 := m.MarshalKey("desc", NumberProperty_Field_Comment)
+		if e3 == nil {
+			e3 = Lines_Optional_Marshal(m, &val.Comment)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", NumberProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -6641,7 +6718,7 @@ func PatternLocals_Marshal(m jsn.Marshaler, val *PatternLocals) (err error) {
 
 // PatternReturn
 type PatternReturn struct {
-	Result VariableDecl `if:"label=_"`
+	Result PropertySlot `if:"label=_"`
 }
 
 func (*PatternReturn) Compose() composer.Spec {
@@ -6727,7 +6804,7 @@ func PatternReturn_Marshal(m jsn.Marshaler, val *PatternReturn) (err error) {
 	if err = m.MarshalBlock(PatternReturn_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PatternReturn_Field_Result)
 		if e0 == nil {
-			e0 = VariableDecl_Marshal(m, &val.Result)
+			e0 = PropertySlot_Marshal(m, &val.Result)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", PatternReturn_Field_Result))
@@ -7041,21 +7118,22 @@ func PatternType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternType) (e
 // PatternVariablesDecl Values provided when calling a pattern.
 // User implements: StoryStatement.
 type PatternVariablesDecl struct {
-	PatternName  core.PatternName `if:"label=_"`
-	VariableDecl []VariableDecl   `if:"label=variable_decl"`
+	PatternName core.PatternName `if:"label=_"`
+	Props       []PropertySlot   `if:"label=requires"`
 }
 
 func (*PatternVariablesDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PatternVariablesDecl_Type,
 		Uses: composer.Type_Flow,
+		Lede: "pattern",
 	}
 }
 
 const PatternVariablesDecl_Type = "pattern_variables_decl"
 
 const PatternVariablesDecl_Field_PatternName = "$PATTERN_NAME"
-const PatternVariablesDecl_Field_VariableDecl = "$VARIABLE_DECL"
+const PatternVariablesDecl_Field_Props = "$PROPS"
 
 func (op *PatternVariablesDecl) Marshal(m jsn.Marshaler) error {
 	return PatternVariablesDecl_Marshal(m, op)
@@ -7104,7 +7182,7 @@ func PatternVariablesDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Patter
 type PatternVariablesDecl_Flow struct{ ptr *PatternVariablesDecl }
 
 func (n PatternVariablesDecl_Flow) GetType() string      { return PatternVariablesDecl_Type }
-func (n PatternVariablesDecl_Flow) GetLede() string      { return PatternVariablesDecl_Type }
+func (n PatternVariablesDecl_Flow) GetLede() string      { return "pattern" }
 func (n PatternVariablesDecl_Flow) GetFlow() interface{} { return n.ptr }
 func (n PatternVariablesDecl_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*PatternVariablesDecl); ok {
@@ -7134,12 +7212,12 @@ func PatternVariablesDecl_Marshal(m jsn.Marshaler, val *PatternVariablesDecl) (e
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", PatternVariablesDecl_Field_PatternName))
 		}
-		e1 := m.MarshalKey("variable_decl", PatternVariablesDecl_Field_VariableDecl)
+		e1 := m.MarshalKey("requires", PatternVariablesDecl_Field_Props)
 		if e1 == nil {
-			e1 = VariableDecl_Repeats_Marshal(m, &val.VariableDecl)
+			e1 = PropertySlot_Repeats_Marshal(m, &val.Props)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PatternVariablesDecl_Field_VariableDecl))
+			m.Error(errutil.New(e1, "in flow at", PatternVariablesDecl_Field_Props))
 		}
 		m.EndBlock()
 	}
@@ -7148,7 +7226,7 @@ func PatternVariablesDecl_Marshal(m jsn.Marshaler, val *PatternVariablesDecl) (e
 
 // PatternVariablesTail Storage for values used during the execution of a pattern.
 type PatternVariablesTail struct {
-	VariableDecl []VariableDecl `if:"label=_"`
+	Props []PropertySlot `if:"label=_"`
 }
 
 func (*PatternVariablesTail) Compose() composer.Spec {
@@ -7160,7 +7238,7 @@ func (*PatternVariablesTail) Compose() composer.Spec {
 
 const PatternVariablesTail_Type = "pattern_variables_tail"
 
-const PatternVariablesTail_Field_VariableDecl = "$VARIABLE_DECL"
+const PatternVariablesTail_Field_Props = "$PROPS"
 
 func (op *PatternVariablesTail) Marshal(m jsn.Marshaler) error {
 	return PatternVariablesTail_Marshal(m, op)
@@ -7232,12 +7310,12 @@ func PatternVariablesTail_Optional_Marshal(m jsn.Marshaler, pv **PatternVariable
 
 func PatternVariablesTail_Marshal(m jsn.Marshaler, val *PatternVariablesTail) (err error) {
 	if err = m.MarshalBlock(PatternVariablesTail_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternVariablesTail_Field_VariableDecl)
+		e0 := m.MarshalKey("", PatternVariablesTail_Field_Props)
 		if e0 == nil {
-			e0 = VariableDecl_Repeats_Marshal(m, &val.VariableDecl)
+			e0 = PropertySlot_Repeats_Marshal(m, &val.Props)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternVariablesTail_Field_VariableDecl))
+			m.Error(errutil.New(e0, "in flow at", PatternVariablesTail_Field_Props))
 		}
 		m.EndBlock()
 	}
@@ -7317,195 +7395,6 @@ func PluralKinds_Repeats_Marshal(m jsn.Marshaler, vals *[]PluralKinds) error {
 func PluralKinds_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PluralKinds) (err error) {
 	if *pv != nil || !m.IsEncoding() {
 		err = PluralKinds_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// PrimitiveType requires a predefined string.
-type PrimitiveType struct {
-	At  reader.Position `if:"internal"`
-	Str string
-}
-
-func (op *PrimitiveType) String() string {
-	return op.Str
-}
-
-const PrimitiveType_Number = "$NUMBER"
-const PrimitiveType_Text = "$TEXT"
-const PrimitiveType_Bool = "$BOOL"
-
-func (*PrimitiveType) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PrimitiveType_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			PrimitiveType_Number, PrimitiveType_Text, PrimitiveType_Bool,
-		},
-		Strings: []string{
-			"number", "text", "bool",
-		},
-	}
-}
-
-const PrimitiveType_Type = "primitive_type"
-
-func (op *PrimitiveType) Marshal(m jsn.Marshaler) error {
-	return PrimitiveType_Marshal(m, op)
-}
-
-func PrimitiveType_Optional_Marshal(m jsn.Marshaler, val *PrimitiveType) (err error) {
-	var zero PrimitiveType
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = PrimitiveType_Marshal(m, val)
-	}
-	return
-}
-
-func PrimitiveType_Marshal(m jsn.Marshaler, val *PrimitiveType) (err error) {
-	m.SetCursor(val.At.Offset)
-	return m.MarshalValue(PrimitiveType_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type PrimitiveType_Slice []PrimitiveType
-
-func (op *PrimitiveType_Slice) GetType() string { return PrimitiveType_Type }
-
-func (op *PrimitiveType_Slice) Marshal(m jsn.Marshaler) error {
-	return PrimitiveType_Repeats_Marshal(m, (*[]PrimitiveType)(op))
-}
-
-func (op *PrimitiveType_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PrimitiveType_Slice) SetSize(cnt int) {
-	var els []PrimitiveType
-	if cnt >= 0 {
-		els = make(PrimitiveType_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PrimitiveType_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PrimitiveType_Marshal(m, &(*op)[i])
-}
-
-func PrimitiveType_Repeats_Marshal(m jsn.Marshaler, vals *[]PrimitiveType) error {
-	return jsn.RepeatBlock(m, (*PrimitiveType_Slice)(vals))
-}
-
-func PrimitiveType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PrimitiveType) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = PrimitiveType_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// PrimitiveValue swaps between various options
-type PrimitiveValue struct {
-	Choice string
-	Value  interface{}
-}
-
-var PrimitiveValue_Optional_Marshal = PrimitiveValue_Marshal
-
-const PrimitiveValue_BoxedText_Opt = "$BOXED_TEXT"
-const PrimitiveValue_BoxedNumber_Opt = "$BOXED_NUMBER"
-
-func (*PrimitiveValue) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PrimitiveValue_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			PrimitiveValue_BoxedText_Opt, PrimitiveValue_BoxedNumber_Opt,
-		},
-		Swaps: []interface{}{
-			(*BoxedText)(nil),
-			(*BoxedNumber)(nil),
-		},
-	}
-}
-
-const PrimitiveValue_Type = "primitive_value"
-
-func (op *PrimitiveValue) GetType() string { return PrimitiveValue_Type }
-
-func (op *PrimitiveValue) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *PrimitiveValue) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case PrimitiveValue_BoxedText_Opt:
-		op.Choice, op.Value = c, new(BoxedText)
-		okay = true
-	case PrimitiveValue_BoxedNumber_Opt:
-		op.Choice, op.Value = c, new(BoxedNumber)
-		okay = true
-	}
-	return
-}
-
-func (op *PrimitiveValue) Marshal(m jsn.Marshaler) error {
-	return PrimitiveValue_Marshal(m, op)
-}
-func PrimitiveValue_Marshal(m jsn.Marshaler, val *PrimitiveValue) (err error) {
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-type PrimitiveValue_Slice []PrimitiveValue
-
-func (op *PrimitiveValue_Slice) GetType() string { return PrimitiveValue_Type }
-
-func (op *PrimitiveValue_Slice) Marshal(m jsn.Marshaler) error {
-	return PrimitiveValue_Repeats_Marshal(m, (*[]PrimitiveValue)(op))
-}
-
-func (op *PrimitiveValue_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PrimitiveValue_Slice) SetSize(cnt int) {
-	var els []PrimitiveValue
-	if cnt >= 0 {
-		els = make(PrimitiveValue_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PrimitiveValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PrimitiveValue_Marshal(m, &(*op)[i])
-}
-
-func PrimitiveValue_Repeats_Marshal(m jsn.Marshaler, vals *[]PrimitiveValue) error {
-	return jsn.RepeatBlock(m, (*PrimitiveValue_Slice)(vals))
-}
-
-func PrimitiveValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PrimitiveValue) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = PrimitiveValue_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -7771,277 +7660,16 @@ func Property_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Property) (err err
 	return
 }
 
-// PropertyAspect requires a predefined string.
-type PropertyAspect struct {
-	At  reader.Position `if:"internal"`
-	Str string
-}
+const PropertySlot_Type = "property_slot"
 
-func (op *PropertyAspect) String() string {
-	return op.Str
-}
+var PropertySlot_Optional_Marshal = PropertySlot_Marshal
 
-const PropertyAspect_Aspect = "$ASPECT"
+type PropertySlot_Slot struct{ Value *PropertySlot }
 
-func (*PropertyAspect) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PropertyAspect_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			PropertyAspect_Aspect,
-		},
-		Strings: []string{
-			"aspect",
-		},
-	}
-}
-
-const PropertyAspect_Type = "property_aspect"
-
-func (op *PropertyAspect) Marshal(m jsn.Marshaler) error {
-	return PropertyAspect_Marshal(m, op)
-}
-
-func PropertyAspect_Optional_Marshal(m jsn.Marshaler, val *PropertyAspect) (err error) {
-	var zero PropertyAspect
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = PropertyAspect_Marshal(m, val)
-	}
-	return
-}
-
-func PropertyAspect_Marshal(m jsn.Marshaler, val *PropertyAspect) (err error) {
-	m.SetCursor(val.At.Offset)
-	return m.MarshalValue(PropertyAspect_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type PropertyAspect_Slice []PropertyAspect
-
-func (op *PropertyAspect_Slice) GetType() string { return PropertyAspect_Type }
-
-func (op *PropertyAspect_Slice) Marshal(m jsn.Marshaler) error {
-	return PropertyAspect_Repeats_Marshal(m, (*[]PropertyAspect)(op))
-}
-
-func (op *PropertyAspect_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PropertyAspect_Slice) SetSize(cnt int) {
-	var els []PropertyAspect
-	if cnt >= 0 {
-		els = make(PropertyAspect_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PropertyAspect_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PropertyAspect_Marshal(m, &(*op)[i])
-}
-
-func PropertyAspect_Repeats_Marshal(m jsn.Marshaler, vals *[]PropertyAspect) error {
-	return jsn.RepeatBlock(m, (*PropertyAspect_Slice)(vals))
-}
-
-func PropertyAspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PropertyAspect) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = PropertyAspect_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// PropertyDecl
-type PropertyDecl struct {
-	An           Determiner   `if:"label=_"`
-	Property     Property     `if:"label=property"`
-	PropertyType PropertyType `if:"label=property_type"`
-	Comment      Lines        `if:"label=comment,optional"`
-}
-
-func (*PropertyDecl) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PropertyDecl_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const PropertyDecl_Type = "property_decl"
-
-const PropertyDecl_Field_An = "$AN"
-const PropertyDecl_Field_Property = "$PROPERTY"
-const PropertyDecl_Field_PropertyType = "$PROPERTY_TYPE"
-const PropertyDecl_Field_Comment = "$COMMENT"
-
-func (op *PropertyDecl) Marshal(m jsn.Marshaler) error {
-	return PropertyDecl_Marshal(m, op)
-}
-
-type PropertyDecl_Slice []PropertyDecl
-
-func (op *PropertyDecl_Slice) GetType() string { return PropertyDecl_Type }
-
-func (op *PropertyDecl_Slice) Marshal(m jsn.Marshaler) error {
-	return PropertyDecl_Repeats_Marshal(m, (*[]PropertyDecl)(op))
-}
-
-func (op *PropertyDecl_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PropertyDecl_Slice) SetSize(cnt int) {
-	var els []PropertyDecl
-	if cnt >= 0 {
-		els = make(PropertyDecl_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PropertyDecl_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PropertyDecl_Marshal(m, &(*op)[i])
-}
-
-func PropertyDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]PropertyDecl) error {
-	return jsn.RepeatBlock(m, (*PropertyDecl_Slice)(vals))
-}
-
-func PropertyDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PropertyDecl) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = PropertyDecl_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PropertyDecl_Flow struct{ ptr *PropertyDecl }
-
-func (n PropertyDecl_Flow) GetType() string      { return PropertyDecl_Type }
-func (n PropertyDecl_Flow) GetLede() string      { return PropertyDecl_Type }
-func (n PropertyDecl_Flow) GetFlow() interface{} { return n.ptr }
-func (n PropertyDecl_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PropertyDecl); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PropertyDecl_Optional_Marshal(m jsn.Marshaler, pv **PropertyDecl) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PropertyDecl_Marshal(m, *pv)
-	} else if !enc {
-		var v PropertyDecl
-		if err = PropertyDecl_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PropertyDecl_Marshal(m jsn.Marshaler, val *PropertyDecl) (err error) {
-	if err = m.MarshalBlock(PropertyDecl_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PropertyDecl_Field_An)
-		if e0 == nil {
-			e0 = Determiner_Marshal(m, &val.An)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PropertyDecl_Field_An))
-		}
-		e1 := m.MarshalKey("property", PropertyDecl_Field_Property)
-		if e1 == nil {
-			e1 = Property_Marshal(m, &val.Property)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PropertyDecl_Field_Property))
-		}
-		e2 := m.MarshalKey("property_type", PropertyDecl_Field_PropertyType)
-		if e2 == nil {
-			e2 = PropertyType_Marshal(m, &val.PropertyType)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PropertyDecl_Field_PropertyType))
-		}
-		e3 := m.MarshalKey("comment", PropertyDecl_Field_Comment)
-		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", PropertyDecl_Field_Comment))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// PropertyType swaps between various options
-type PropertyType struct {
-	At     reader.Position `if:"internal"`
-	Choice string
-	Value  interface{}
-}
-
-var PropertyType_Optional_Marshal = PropertyType_Marshal
-
-const PropertyType_PropertyAspect_Opt = "$PROPERTY_ASPECT"
-const PropertyType_Primitive_Opt = "$PRIMITIVE"
-const PropertyType_Ext_Opt = "$EXT"
-
-func (*PropertyType) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PropertyType_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			PropertyType_PropertyAspect_Opt, PropertyType_Primitive_Opt, PropertyType_Ext_Opt,
-		},
-		Swaps: []interface{}{
-			(*PropertyAspect)(nil),
-			(*PrimitiveType)(nil),
-			(*ExtType)(nil),
-		},
-	}
-}
-
-const PropertyType_Type = "property_type"
-
-func (op *PropertyType) GetType() string { return PropertyType_Type }
-
-func (op *PropertyType) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *PropertyType) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case PropertyType_PropertyAspect_Opt:
-		op.Choice, op.Value = c, new(PropertyAspect)
-		okay = true
-	case PropertyType_Primitive_Opt:
-		op.Choice, op.Value = c, new(PrimitiveType)
-		okay = true
-	case PropertyType_Ext_Opt:
-		op.Choice, op.Value = c, new(ExtType)
-		okay = true
-	}
-	return
-}
-
-func (op *PropertyType) Marshal(m jsn.Marshaler) error {
-	return PropertyType_Marshal(m, op)
-}
-func PropertyType_Marshal(m jsn.Marshaler, val *PropertyType) (err error) {
-	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+func (at PropertySlot_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
 				m.Error(e)
 			}
 		}
@@ -8049,16 +7677,27 @@ func PropertyType_Marshal(m jsn.Marshaler, val *PropertyType) (err error) {
 	}
 	return
 }
-
-type PropertyType_Slice []PropertyType
-
-func (op *PropertyType_Slice) GetType() string { return PropertyType_Type }
-
-func (op *PropertyType_Slice) Marshal(m jsn.Marshaler) error {
-	return PropertyType_Repeats_Marshal(m, (*[]PropertyType)(op))
+func (at PropertySlot_Slot) GetType() string              { return PropertySlot_Type }
+func (at PropertySlot_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at PropertySlot_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(PropertySlot)
+	return
 }
 
-func (op *PropertyType_Slice) GetSize() (ret int) {
+func PropertySlot_Marshal(m jsn.Marshaler, ptr *PropertySlot) (err error) {
+	slot := PropertySlot_Slot{ptr}
+	return slot.Marshal(m)
+}
+
+type PropertySlot_Slice []PropertySlot
+
+func (op *PropertySlot_Slice) GetType() string { return PropertySlot_Type }
+
+func (op *PropertySlot_Slice) Marshal(m jsn.Marshaler) error {
+	return PropertySlot_Repeats_Marshal(m, (*[]PropertySlot)(op))
+}
+
+func (op *PropertySlot_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -8067,58 +7706,63 @@ func (op *PropertyType_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *PropertyType_Slice) SetSize(cnt int) {
-	var els []PropertyType
+func (op *PropertySlot_Slice) SetSize(cnt int) {
+	var els []PropertySlot
 	if cnt >= 0 {
-		els = make(PropertyType_Slice, cnt)
+		els = make(PropertySlot_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *PropertyType_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PropertyType_Marshal(m, &(*op)[i])
+func (op *PropertySlot_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return PropertySlot_Marshal(m, &(*op)[i])
 }
 
-func PropertyType_Repeats_Marshal(m jsn.Marshaler, vals *[]PropertyType) error {
-	return jsn.RepeatBlock(m, (*PropertyType_Slice)(vals))
+func PropertySlot_Repeats_Marshal(m jsn.Marshaler, vals *[]PropertySlot) error {
+	return jsn.RepeatBlock(m, (*PropertySlot_Slice)(vals))
 }
 
-func PropertyType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PropertyType) (err error) {
+func PropertySlot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PropertySlot) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = PropertyType_Repeats_Marshal(m, pv)
+		err = PropertySlot_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-// RecordList
-type RecordList struct {
-	Kind RecordSingular `if:"label=_"`
+// RecordListProperty
+// User implements: PropertySlot.
+type RecordListProperty struct {
+	NamedProperty `if:"label=_"`
 }
 
-func (*RecordList) Compose() composer.Spec {
+func (*RecordListProperty) Compose() composer.Spec {
 	return composer.Spec{
-		Name: RecordList_Type,
+		Name: RecordListProperty_Type,
 		Uses: composer.Type_Flow,
+		Lede: "record_list",
 	}
 }
 
-const RecordList_Type = "record_list"
+const RecordListProperty_Type = "record_list_property"
 
-const RecordList_Field_Kind = "$KIND"
+const RecordListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
+const RecordListProperty_Field_Name = "$NAME"
+const RecordListProperty_Field_Type = "$TYPE"
+const RecordListProperty_Field_Comment = "$COMMENT"
 
-func (op *RecordList) Marshal(m jsn.Marshaler) error {
-	return RecordList_Marshal(m, op)
+func (op *RecordListProperty) Marshal(m jsn.Marshaler) error {
+	return RecordListProperty_Marshal(m, op)
 }
 
-type RecordList_Slice []RecordList
+type RecordListProperty_Slice []RecordListProperty
 
-func (op *RecordList_Slice) GetType() string { return RecordList_Type }
+func (op *RecordListProperty_Slice) GetType() string { return RecordListProperty_Type }
 
-func (op *RecordList_Slice) Marshal(m jsn.Marshaler) error {
-	return RecordList_Repeats_Marshal(m, (*[]RecordList)(op))
+func (op *RecordListProperty_Slice) Marshal(m jsn.Marshaler) error {
+	return RecordListProperty_Repeats_Marshal(m, (*[]RecordListProperty)(op))
 }
 
-func (op *RecordList_Slice) GetSize() (ret int) {
+func (op *RecordListProperty_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -8127,173 +7771,115 @@ func (op *RecordList_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *RecordList_Slice) SetSize(cnt int) {
-	var els []RecordList
+func (op *RecordListProperty_Slice) SetSize(cnt int) {
+	var els []RecordListProperty
 	if cnt >= 0 {
-		els = make(RecordList_Slice, cnt)
+		els = make(RecordListProperty_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *RecordList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RecordList_Marshal(m, &(*op)[i])
+func (op *RecordListProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RecordListProperty_Marshal(m, &(*op)[i])
 }
 
-func RecordList_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordList) error {
-	return jsn.RepeatBlock(m, (*RecordList_Slice)(vals))
+func RecordListProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordListProperty) error {
+	return jsn.RepeatBlock(m, (*RecordListProperty_Slice)(vals))
 }
 
-func RecordList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordList) (err error) {
+func RecordListProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordListProperty) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = RecordList_Repeats_Marshal(m, pv)
+		err = RecordListProperty_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type RecordList_Flow struct{ ptr *RecordList }
+type RecordListProperty_Flow struct{ ptr *RecordListProperty }
 
-func (n RecordList_Flow) GetType() string      { return RecordList_Type }
-func (n RecordList_Flow) GetLede() string      { return RecordList_Type }
-func (n RecordList_Flow) GetFlow() interface{} { return n.ptr }
-func (n RecordList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RecordList); ok {
+func (n RecordListProperty_Flow) GetType() string      { return RecordListProperty_Type }
+func (n RecordListProperty_Flow) GetLede() string      { return "record_list" }
+func (n RecordListProperty_Flow) GetFlow() interface{} { return n.ptr }
+func (n RecordListProperty_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RecordListProperty); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func RecordList_Optional_Marshal(m jsn.Marshaler, pv **RecordList) (err error) {
+func RecordListProperty_Optional_Marshal(m jsn.Marshaler, pv **RecordListProperty) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RecordList_Marshal(m, *pv)
+		err = RecordListProperty_Marshal(m, *pv)
 	} else if !enc {
-		var v RecordList
-		if err = RecordList_Marshal(m, &v); err == nil {
+		var v RecordListProperty
+		if err = RecordListProperty_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func RecordList_Marshal(m jsn.Marshaler, val *RecordList) (err error) {
-	if err = m.MarshalBlock(RecordList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RecordList_Field_Kind)
-		if e0 == nil {
-			e0 = RecordSingular_Marshal(m, &val.Kind)
+func RecordListProperty_Marshal(m jsn.Marshaler, val *RecordListProperty) (err error) {
+	if err = m.MarshalBlock(RecordListProperty_Flow{val}); err == nil {
+		e1 := m.MarshalKey("named", RecordListProperty_Field_Name)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RecordList_Field_Kind))
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RecordListProperty_Field_Name))
+		}
+		e2 := m.MarshalKey("of", RecordListProperty_Field_Type)
+		if e2 == nil {
+			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", RecordListProperty_Field_Type))
+		}
+		e3 := m.MarshalKey("desc", RecordListProperty_Field_Comment)
+		if e3 == nil {
+			e3 = Lines_Optional_Marshal(m, &val.Comment)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", RecordListProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// RecordSingular requires a user-specified string.
-type RecordSingular struct {
-	At  reader.Position `if:"internal"`
-	Str string
+// RecordProperty
+// User implements: PropertySlot.
+type RecordProperty struct {
+	NamedProperty `if:"label=_"`
 }
 
-func (op *RecordSingular) String() string {
-	return op.Str
-}
-
-func (*RecordSingular) Compose() composer.Spec {
+func (*RecordProperty) Compose() composer.Spec {
 	return composer.Spec{
-		Name:        RecordSingular_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-	}
-}
-
-const RecordSingular_Type = "record_singular"
-
-func (op *RecordSingular) Marshal(m jsn.Marshaler) error {
-	return RecordSingular_Marshal(m, op)
-}
-
-func RecordSingular_Optional_Marshal(m jsn.Marshaler, val *RecordSingular) (err error) {
-	var zero RecordSingular
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = RecordSingular_Marshal(m, val)
-	}
-	return
-}
-
-func RecordSingular_Marshal(m jsn.Marshaler, val *RecordSingular) (err error) {
-	m.SetCursor(val.At.Offset)
-	return m.MarshalValue(RecordSingular_Type, &val.Str)
-}
-
-type RecordSingular_Slice []RecordSingular
-
-func (op *RecordSingular_Slice) GetType() string { return RecordSingular_Type }
-
-func (op *RecordSingular_Slice) Marshal(m jsn.Marshaler) error {
-	return RecordSingular_Repeats_Marshal(m, (*[]RecordSingular)(op))
-}
-
-func (op *RecordSingular_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *RecordSingular_Slice) SetSize(cnt int) {
-	var els []RecordSingular
-	if cnt >= 0 {
-		els = make(RecordSingular_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *RecordSingular_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RecordSingular_Marshal(m, &(*op)[i])
-}
-
-func RecordSingular_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordSingular) error {
-	return jsn.RepeatBlock(m, (*RecordSingular_Slice)(vals))
-}
-
-func RecordSingular_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordSingular) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = RecordSingular_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// RecordType
-type RecordType struct {
-	Kind RecordSingular `if:"label=_"`
-}
-
-func (*RecordType) Compose() composer.Spec {
-	return composer.Spec{
-		Name: RecordType_Type,
+		Name: RecordProperty_Type,
 		Uses: composer.Type_Flow,
+		Lede: "record",
 	}
 }
 
-const RecordType_Type = "record_type"
+const RecordProperty_Type = "record_property"
 
-const RecordType_Field_Kind = "$KIND"
+const RecordProperty_Field_NamedProperty = "$NAMED_PROPERTY"
+const RecordProperty_Field_Name = "$NAME"
+const RecordProperty_Field_Type = "$TYPE"
+const RecordProperty_Field_Comment = "$COMMENT"
 
-func (op *RecordType) Marshal(m jsn.Marshaler) error {
-	return RecordType_Marshal(m, op)
+func (op *RecordProperty) Marshal(m jsn.Marshaler) error {
+	return RecordProperty_Marshal(m, op)
 }
 
-type RecordType_Slice []RecordType
+type RecordProperty_Slice []RecordProperty
 
-func (op *RecordType_Slice) GetType() string { return RecordType_Type }
+func (op *RecordProperty_Slice) GetType() string { return RecordProperty_Type }
 
-func (op *RecordType_Slice) Marshal(m jsn.Marshaler) error {
-	return RecordType_Repeats_Marshal(m, (*[]RecordType)(op))
+func (op *RecordProperty_Slice) Marshal(m jsn.Marshaler) error {
+	return RecordProperty_Repeats_Marshal(m, (*[]RecordProperty)(op))
 }
 
-func (op *RecordType_Slice) GetSize() (ret int) {
+func (op *RecordProperty_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -8302,61 +7888,75 @@ func (op *RecordType_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *RecordType_Slice) SetSize(cnt int) {
-	var els []RecordType
+func (op *RecordProperty_Slice) SetSize(cnt int) {
+	var els []RecordProperty
 	if cnt >= 0 {
-		els = make(RecordType_Slice, cnt)
+		els = make(RecordProperty_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *RecordType_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RecordType_Marshal(m, &(*op)[i])
+func (op *RecordProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RecordProperty_Marshal(m, &(*op)[i])
 }
 
-func RecordType_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordType) error {
-	return jsn.RepeatBlock(m, (*RecordType_Slice)(vals))
+func RecordProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordProperty) error {
+	return jsn.RepeatBlock(m, (*RecordProperty_Slice)(vals))
 }
 
-func RecordType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordType) (err error) {
+func RecordProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordProperty) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = RecordType_Repeats_Marshal(m, pv)
+		err = RecordProperty_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type RecordType_Flow struct{ ptr *RecordType }
+type RecordProperty_Flow struct{ ptr *RecordProperty }
 
-func (n RecordType_Flow) GetType() string      { return RecordType_Type }
-func (n RecordType_Flow) GetLede() string      { return RecordType_Type }
-func (n RecordType_Flow) GetFlow() interface{} { return n.ptr }
-func (n RecordType_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RecordType); ok {
+func (n RecordProperty_Flow) GetType() string      { return RecordProperty_Type }
+func (n RecordProperty_Flow) GetLede() string      { return "record" }
+func (n RecordProperty_Flow) GetFlow() interface{} { return n.ptr }
+func (n RecordProperty_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RecordProperty); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func RecordType_Optional_Marshal(m jsn.Marshaler, pv **RecordType) (err error) {
+func RecordProperty_Optional_Marshal(m jsn.Marshaler, pv **RecordProperty) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RecordType_Marshal(m, *pv)
+		err = RecordProperty_Marshal(m, *pv)
 	} else if !enc {
-		var v RecordType
-		if err = RecordType_Marshal(m, &v); err == nil {
+		var v RecordProperty
+		if err = RecordProperty_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func RecordType_Marshal(m jsn.Marshaler, val *RecordType) (err error) {
-	if err = m.MarshalBlock(RecordType_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RecordType_Field_Kind)
-		if e0 == nil {
-			e0 = RecordSingular_Marshal(m, &val.Kind)
+func RecordProperty_Marshal(m jsn.Marshaler, val *RecordProperty) (err error) {
+	if err = m.MarshalBlock(RecordProperty_Flow{val}); err == nil {
+		e1 := m.MarshalKey("named", RecordProperty_Field_Name)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
 		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RecordType_Field_Kind))
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RecordProperty_Field_Name))
+		}
+		e2 := m.MarshalKey("of", RecordProperty_Field_Type)
+		if e2 == nil {
+			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", RecordProperty_Field_Type))
+		}
+		e3 := m.MarshalKey("desc", RecordProperty_Field_Comment)
+		if e3 == nil {
+			e3 = Lines_Optional_Marshal(m, &val.Comment)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", RecordProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -10052,57 +9652,40 @@ func Testing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Testing) (err error
 	return
 }
 
-// TextList requires a predefined string.
-type TextList struct {
-	Str string
+// TextListProperty
+// User implements: PropertySlot.
+type TextListProperty struct {
+	NamedProperty `if:"label=_"`
 }
 
-func (op *TextList) String() string {
-	return op.Str
-}
-
-const TextList_List = "$LIST"
-
-func (*TextList) Compose() composer.Spec {
+func (*TextListProperty) Compose() composer.Spec {
 	return composer.Spec{
-		Name: TextList_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			TextList_List,
-		},
-		Strings: []string{
-			"list",
-		},
+		Name: TextListProperty_Type,
+		Uses: composer.Type_Flow,
+		Lede: "text_list",
 	}
 }
 
-const TextList_Type = "text_list"
+const TextListProperty_Type = "text_list_property"
 
-func (op *TextList) Marshal(m jsn.Marshaler) error {
-	return TextList_Marshal(m, op)
+const TextListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
+const TextListProperty_Field_Name = "$NAME"
+const TextListProperty_Field_Type = "$TYPE"
+const TextListProperty_Field_Comment = "$COMMENT"
+
+func (op *TextListProperty) Marshal(m jsn.Marshaler) error {
+	return TextListProperty_Marshal(m, op)
 }
 
-func TextList_Optional_Marshal(m jsn.Marshaler, val *TextList) (err error) {
-	var zero TextList
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = TextList_Marshal(m, val)
-	}
-	return
+type TextListProperty_Slice []TextListProperty
+
+func (op *TextListProperty_Slice) GetType() string { return TextListProperty_Type }
+
+func (op *TextListProperty_Slice) Marshal(m jsn.Marshaler) error {
+	return TextListProperty_Repeats_Marshal(m, (*[]TextListProperty)(op))
 }
 
-func TextList_Marshal(m jsn.Marshaler, val *TextList) (err error) {
-	return m.MarshalValue(TextList_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type TextList_Slice []TextList
-
-func (op *TextList_Slice) GetType() string { return TextList_Type }
-
-func (op *TextList_Slice) Marshal(m jsn.Marshaler) error {
-	return TextList_Repeats_Marshal(m, (*[]TextList)(op))
-}
-
-func (op *TextList_Slice) GetSize() (ret int) {
+func (op *TextListProperty_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -10111,25 +9694,194 @@ func (op *TextList_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *TextList_Slice) SetSize(cnt int) {
-	var els []TextList
+func (op *TextListProperty_Slice) SetSize(cnt int) {
+	var els []TextListProperty
 	if cnt >= 0 {
-		els = make(TextList_Slice, cnt)
+		els = make(TextListProperty_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *TextList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return TextList_Marshal(m, &(*op)[i])
+func (op *TextListProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TextListProperty_Marshal(m, &(*op)[i])
 }
 
-func TextList_Repeats_Marshal(m jsn.Marshaler, vals *[]TextList) error {
-	return jsn.RepeatBlock(m, (*TextList_Slice)(vals))
+func TextListProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]TextListProperty) error {
+	return jsn.RepeatBlock(m, (*TextListProperty_Slice)(vals))
 }
 
-func TextList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextList) (err error) {
+func TextListProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextListProperty) (err error) {
 	if *pv != nil || !m.IsEncoding() {
-		err = TextList_Repeats_Marshal(m, pv)
+		err = TextListProperty_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type TextListProperty_Flow struct{ ptr *TextListProperty }
+
+func (n TextListProperty_Flow) GetType() string      { return TextListProperty_Type }
+func (n TextListProperty_Flow) GetLede() string      { return "text_list" }
+func (n TextListProperty_Flow) GetFlow() interface{} { return n.ptr }
+func (n TextListProperty_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*TextListProperty); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func TextListProperty_Optional_Marshal(m jsn.Marshaler, pv **TextListProperty) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = TextListProperty_Marshal(m, *pv)
+	} else if !enc {
+		var v TextListProperty
+		if err = TextListProperty_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func TextListProperty_Marshal(m jsn.Marshaler, val *TextListProperty) (err error) {
+	if err = m.MarshalBlock(TextListProperty_Flow{val}); err == nil {
+		e1 := m.MarshalKey("named", TextListProperty_Field_Name)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", TextListProperty_Field_Name))
+		}
+		e2 := m.MarshalKey("of", TextListProperty_Field_Type)
+		if e2 == nil {
+			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", TextListProperty_Field_Type))
+		}
+		e3 := m.MarshalKey("desc", TextListProperty_Field_Comment)
+		if e3 == nil {
+			e3 = Lines_Optional_Marshal(m, &val.Comment)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", TextListProperty_Field_Comment))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// TextProperty
+// User implements: PropertySlot.
+type TextProperty struct {
+	NamedProperty `if:"label=_"`
+}
+
+func (*TextProperty) Compose() composer.Spec {
+	return composer.Spec{
+		Name: TextProperty_Type,
+		Uses: composer.Type_Flow,
+		Lede: "text",
+	}
+}
+
+const TextProperty_Type = "text_property"
+
+const TextProperty_Field_NamedProperty = "$NAMED_PROPERTY"
+const TextProperty_Field_Name = "$NAME"
+const TextProperty_Field_Type = "$TYPE"
+const TextProperty_Field_Comment = "$COMMENT"
+
+func (op *TextProperty) Marshal(m jsn.Marshaler) error {
+	return TextProperty_Marshal(m, op)
+}
+
+type TextProperty_Slice []TextProperty
+
+func (op *TextProperty_Slice) GetType() string { return TextProperty_Type }
+
+func (op *TextProperty_Slice) Marshal(m jsn.Marshaler) error {
+	return TextProperty_Repeats_Marshal(m, (*[]TextProperty)(op))
+}
+
+func (op *TextProperty_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *TextProperty_Slice) SetSize(cnt int) {
+	var els []TextProperty
+	if cnt >= 0 {
+		els = make(TextProperty_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *TextProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TextProperty_Marshal(m, &(*op)[i])
+}
+
+func TextProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]TextProperty) error {
+	return jsn.RepeatBlock(m, (*TextProperty_Slice)(vals))
+}
+
+func TextProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextProperty) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = TextProperty_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type TextProperty_Flow struct{ ptr *TextProperty }
+
+func (n TextProperty_Flow) GetType() string      { return TextProperty_Type }
+func (n TextProperty_Flow) GetLede() string      { return "text" }
+func (n TextProperty_Flow) GetFlow() interface{} { return n.ptr }
+func (n TextProperty_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*TextProperty); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func TextProperty_Optional_Marshal(m jsn.Marshaler, pv **TextProperty) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = TextProperty_Marshal(m, *pv)
+	} else if !enc {
+		var v TextProperty
+		if err = TextProperty_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func TextProperty_Marshal(m jsn.Marshaler, val *TextProperty) (err error) {
+	if err = m.MarshalBlock(TextProperty_Flow{val}); err == nil {
+		e1 := m.MarshalKey("named", TextProperty_Field_Name)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", TextProperty_Field_Name))
+		}
+		e2 := m.MarshalKey("of", TextProperty_Field_Type)
+		if e2 == nil {
+			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", TextProperty_Field_Type))
+		}
+		e3 := m.MarshalKey("desc", TextProperty_Field_Comment)
+		if e3 == nil {
+			e3 = Lines_Optional_Marshal(m, &val.Comment)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", TextProperty_Field_Comment))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -10318,242 +10070,8 @@ func TraitPhrase_Marshal(m jsn.Marshaler, val *TraitPhrase) (err error) {
 	return
 }
 
-// VariableDecl
-type VariableDecl struct {
-	An      Determiner        `if:"label=_"`
-	Name    core.VariableName `if:"label=name"`
-	Type    VariableType      `if:"label=type"`
-	Comment Lines             `if:"label=comment,optional"`
-}
-
-func (*VariableDecl) Compose() composer.Spec {
-	return composer.Spec{
-		Name: VariableDecl_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const VariableDecl_Type = "variable_decl"
-
-const VariableDecl_Field_An = "$AN"
-const VariableDecl_Field_Name = "$NAME"
-const VariableDecl_Field_Type = "$TYPE"
-const VariableDecl_Field_Comment = "$COMMENT"
-
-func (op *VariableDecl) Marshal(m jsn.Marshaler) error {
-	return VariableDecl_Marshal(m, op)
-}
-
-type VariableDecl_Slice []VariableDecl
-
-func (op *VariableDecl_Slice) GetType() string { return VariableDecl_Type }
-
-func (op *VariableDecl_Slice) Marshal(m jsn.Marshaler) error {
-	return VariableDecl_Repeats_Marshal(m, (*[]VariableDecl)(op))
-}
-
-func (op *VariableDecl_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *VariableDecl_Slice) SetSize(cnt int) {
-	var els []VariableDecl
-	if cnt >= 0 {
-		els = make(VariableDecl_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *VariableDecl_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return VariableDecl_Marshal(m, &(*op)[i])
-}
-
-func VariableDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]VariableDecl) error {
-	return jsn.RepeatBlock(m, (*VariableDecl_Slice)(vals))
-}
-
-func VariableDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]VariableDecl) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = VariableDecl_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type VariableDecl_Flow struct{ ptr *VariableDecl }
-
-func (n VariableDecl_Flow) GetType() string      { return VariableDecl_Type }
-func (n VariableDecl_Flow) GetLede() string      { return VariableDecl_Type }
-func (n VariableDecl_Flow) GetFlow() interface{} { return n.ptr }
-func (n VariableDecl_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*VariableDecl); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func VariableDecl_Optional_Marshal(m jsn.Marshaler, pv **VariableDecl) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = VariableDecl_Marshal(m, *pv)
-	} else if !enc {
-		var v VariableDecl
-		if err = VariableDecl_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func VariableDecl_Marshal(m jsn.Marshaler, val *VariableDecl) (err error) {
-	if err = m.MarshalBlock(VariableDecl_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", VariableDecl_Field_An)
-		if e0 == nil {
-			e0 = Determiner_Marshal(m, &val.An)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", VariableDecl_Field_An))
-		}
-		e1 := m.MarshalKey("name", VariableDecl_Field_Name)
-		if e1 == nil {
-			e1 = core.VariableName_Marshal(m, &val.Name)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", VariableDecl_Field_Name))
-		}
-		e2 := m.MarshalKey("type", VariableDecl_Field_Type)
-		if e2 == nil {
-			e2 = VariableType_Marshal(m, &val.Type)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", VariableDecl_Field_Type))
-		}
-		e3 := m.MarshalKey("comment", VariableDecl_Field_Comment)
-		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", VariableDecl_Field_Comment))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// VariableType swaps between various options
-type VariableType struct {
-	At     reader.Position `if:"internal"`
-	Choice string
-	Value  interface{}
-}
-
-var VariableType_Optional_Marshal = VariableType_Marshal
-
-const VariableType_Primitive_Opt = "$PRIMITIVE"
-const VariableType_Object_Opt = "$OBJECT"
-const VariableType_Ext_Opt = "$EXT"
-
-func (*VariableType) Compose() composer.Spec {
-	return composer.Spec{
-		Name: VariableType_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			VariableType_Primitive_Opt, VariableType_Object_Opt, VariableType_Ext_Opt,
-		},
-		Swaps: []interface{}{
-			(*PrimitiveType)(nil),
-			(*ObjectType)(nil),
-			(*ExtType)(nil),
-		},
-	}
-}
-
-const VariableType_Type = "variable_type"
-
-func (op *VariableType) GetType() string { return VariableType_Type }
-
-func (op *VariableType) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *VariableType) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case VariableType_Primitive_Opt:
-		op.Choice, op.Value = c, new(PrimitiveType)
-		okay = true
-	case VariableType_Object_Opt:
-		op.Choice, op.Value = c, new(ObjectType)
-		okay = true
-	case VariableType_Ext_Opt:
-		op.Choice, op.Value = c, new(ExtType)
-		okay = true
-	}
-	return
-}
-
-func (op *VariableType) Marshal(m jsn.Marshaler) error {
-	return VariableType_Marshal(m, op)
-}
-func VariableType_Marshal(m jsn.Marshaler, val *VariableType) (err error) {
-	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-type VariableType_Slice []VariableType
-
-func (op *VariableType_Slice) GetType() string { return VariableType_Type }
-
-func (op *VariableType_Slice) Marshal(m jsn.Marshaler) error {
-	return VariableType_Repeats_Marshal(m, (*[]VariableType)(op))
-}
-
-func (op *VariableType_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *VariableType_Slice) SetSize(cnt int) {
-	var els []VariableType
-	if cnt >= 0 {
-		els = make(VariableType_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *VariableType_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return VariableType_Marshal(m, &(*op)[i])
-}
-
-func VariableType_Repeats_Marshal(m jsn.Marshaler, vals *[]VariableType) error {
-	return jsn.RepeatBlock(m, (*VariableType_Slice)(vals))
-}
-
-func VariableType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]VariableType) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = VariableType_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 var Slots = []interface{}{
+	(*PropertySlot)(nil),
 	(*StoryStatement)(nil),
 	(*Testing)(nil),
 }
@@ -10571,9 +10089,9 @@ var Slats = []composer.Composer{
 	(*Argument)(nil),
 	(*Arguments)(nil),
 	(*Aspect)(nil),
+	(*AspectProperty)(nil),
 	(*AspectTraits)(nil),
-	(*BoxedNumber)(nil),
-	(*BoxedText)(nil),
+	(*BoolProperty)(nil),
 	(*Certainties)(nil),
 	(*Certainty)(nil),
 	(*Comment)(nil),
@@ -10587,13 +10105,12 @@ var Slats = []composer.Composer{
 	(*EventName)(nil),
 	(*EventPhase)(nil),
 	(*EventTarget)(nil),
-	(*ExtType)(nil),
 	(*GrammarDecl)(nil),
 	(*KindOfNoun)(nil),
 	(*KindOfRelation)(nil),
+	(*KindsHaveProperties)(nil),
 	(*KindsOfAspect)(nil),
 	(*KindsOfKind)(nil),
-	(*KindsPossessProperties)(nil),
 	(*Lede)(nil),
 	(*Lines)(nil),
 	(*LocalDecl)(nil),
@@ -10608,14 +10125,15 @@ var Slats = []composer.Composer{
 	(*MapDirection)(nil),
 	(*MapHeading)(nil),
 	(*NamedNoun)(nil),
+	(*NamedProperty)(nil),
 	(*NounAssignment)(nil),
 	(*NounName)(nil),
 	(*NounPhrase)(nil),
 	(*NounRelation)(nil),
 	(*NounStatement)(nil),
 	(*NounTraits)(nil),
-	(*NumberList)(nil),
-	(*ObjectType)(nil),
+	(*NumListProperty)(nil),
+	(*NumberProperty)(nil),
 	(*OneToMany)(nil),
 	(*OneToOne)(nil),
 	(*PairedAction)(nil),
@@ -10631,17 +10149,11 @@ var Slats = []composer.Composer{
 	(*PatternVariablesDecl)(nil),
 	(*PatternVariablesTail)(nil),
 	(*PluralKinds)(nil),
-	(*PrimitiveType)(nil),
-	(*PrimitiveValue)(nil),
 	(*ProgramHook)(nil),
 	(*Pronoun)(nil),
 	(*Property)(nil),
-	(*PropertyAspect)(nil),
-	(*PropertyDecl)(nil),
-	(*PropertyType)(nil),
-	(*RecordList)(nil),
-	(*RecordSingular)(nil),
-	(*RecordType)(nil),
+	(*RecordListProperty)(nil),
+	(*RecordProperty)(nil),
 	(*RelationCardinality)(nil),
 	(*RelativeToNoun)(nil),
 	(*RenderTemplate)(nil),
@@ -10657,156 +10169,160 @@ var Slats = []composer.Composer{
 	(*TestRule)(nil),
 	(*TestScene)(nil),
 	(*TestStatement)(nil),
-	(*TextList)(nil),
+	(*TextListProperty)(nil),
+	(*TextProperty)(nil),
 	(*Trait)(nil),
 	(*TraitPhrase)(nil),
-	(*VariableDecl)(nil),
-	(*VariableType)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
-	7872120455849093108:  (*ActionContext)(nil),          /* ActionContext: */
-	2237475528376444648:  (*ActionDecl)(nil),             /* ActionDecl:action:actionParams common: */
-	18212021549969329253: (*ActionDecl)(nil),             /* ActionDecl:action:actionParams dual: */
-	10825614489046735389: (*ActionDecl)(nil),             /* ActionDecl:action:actionParams none: */
-	14902711848163440508: (*ActionParams)(nil),           /* ActionParams common: */
-	11902859627634050329: (*ActionParams)(nil),           /* ActionParams dual: */
-	5868886119925925865:  (*ActionParams)(nil),           /* ActionParams none: */
-	6291103735245333139:  (*Argument)(nil),               /* Arg:from: */
-	2275326896920679506:  (*Arguments)(nil),              /* Args: */
-	17855209504331534011: (*AspectTraits)(nil),           /* AspectTraits:traitPhrase: */
-	13349866918792328232: (*BoxedNumber)(nil),            /* BoxedNumber: */
-	3226924893680341786:  (*BoxedText)(nil),              /* BoxedText: */
-	170374163879469822:   (*Certainties)(nil),            /* Certainties:areBeing:certainty:trait: */
-	15857890977690710700: (*Comment)(nil),                /* Comment: */
-	13295757043766156580: (*CommonAction)(nil),           /* CommonAction: */
-	11796688776587655409: (*CommonAction)(nil),           /* CommonAction:actionContext: */
-	10211567489959209123: (*CountOf)(nil),                /* CountOf:num: */
-	475310308664194536:   (*CycleText)(nil),              /* CycleText: */
-	14117144937213193556: (*Determine)(nil),              /* Determine: */
-	18058198214790918510: (*Determine)(nil),              /* Determine:arguments: */
-	11093854973825287408: (*EventBlock)(nil),             /* EventBlock kinds:handlers: */
-	11855563103941044442: (*EventBlock)(nil),             /* EventBlock namedNoun:handlers: */
-	8929470137779261632:  (*EventHandler)(nil),           /* EventHandler:event:patternRules: */
-	4061872818055525560:  (*EventHandler)(nil),           /* EventHandler:event:locals:patternRules: */
-	18010503397334720257: (*EventTarget)(nil),            /* EventTarget kinds: */
-	17197340468883043891: (*EventTarget)(nil),            /* EventTarget namedNoun: */
-	2682533272643563400:  (*ExtType)(nil),                /* ExtType numbers: */
-	7466087638889466083:  (*ExtType)(nil),                /* ExtType textList: */
-	686004221669540097:   (*ExtType)(nil),                /* ExtType record: */
-	3770798410706626212:  (*ExtType)(nil),                /* ExtType records: */
-	351838510430560892:   (*GrammarDecl)(nil),            /* GrammarDecl: */
-	8395536647843606072:  (*KindOfNoun)(nil),             /* KindOfNoun:kind: */
-	2174943222093748082:  (*KindOfNoun)(nil),             /* KindOfNoun:trait:kind: */
-	7004049933953251122:  (*KindOfNoun)(nil),             /* KindOfNoun:kind:nounRelation: */
-	9031009285767794428:  (*KindOfNoun)(nil),             /* KindOfNoun:trait:kind:nounRelation: */
-	650960042632654891:   (*KindOfRelation)(nil),         /* KindOfRelation:cardinality oneToOne: */
-	1081167552428580836:  (*KindOfRelation)(nil),         /* KindOfRelation:cardinality oneToMany: */
-	10771046767095423028: (*KindOfRelation)(nil),         /* KindOfRelation:cardinality manyToOne: */
-	5852635308349599025:  (*KindOfRelation)(nil),         /* KindOfRelation:cardinality manyToMany: */
-	16689641787061327381: (*KindsOfAspect)(nil),          /* KindsOfAspect: */
-	5919854034648203527:  (*KindsOfKind)(nil),            /* Make kinds:of: */
-	7748657468599352730:  (*KindsPossessProperties)(nil), /* KindsPossessProperties:propertyDecl: */
-	2335979695347311111:  (*Lede)(nil),                   /* Lede:nounPhrase kindOfNoun: */
-	14199050960332677505: (*Lede)(nil),                   /* Lede:nounPhrase nounTraits: */
-	10694393583567459526: (*Lede)(nil),                   /* Lede:nounPhrase nounRelation: */
-	10446315654994385322: (*LocalDecl)(nil),              /* LocalDecl: */
-	6009252662016869003:  (*LocalDecl)(nil),              /* LocalDecl:value: */
-	11789909816860756800: (*LocalInit)(nil),              /* LocalInit: */
-	9981010364372027439:  (*Make)(nil),                   /* Make: */
-	12609627593403083413: (*Make)(nil),                   /* Make:arguments: */
-	3572160234867157749:  (*MakePlural)(nil),             /* Make:plural: */
-	17563761532337350103: (*ManyToMany)(nil),             /* ManyToMany:otherKinds: */
-	4129025779762507875:  (*ManyToOne)(nil),              /* ManyToOne:kind: */
-	4746882967578843264:  (*MapConnection)(nil),          /* MapConnection arrivingAt: */
-	165100527430166082:   (*MapConnection)(nil),          /* MapConnection connectingTo: */
-	12664747872301222635: (*MapDeparting)(nil),           /* Departing via:and arrivingAt: */
-	10592711885881153145: (*MapDeparting)(nil),           /* Departing via:and connectingTo: */
-	13573264837262063235: (*MapDestination)(nil),         /* MapDestination: */
-	16504428073969307483: (*MapDestination)(nil),         /* MapDestination:door: */
-	14572254943646304587: (*MapHeading)(nil),             /* Heading:and arrivingAt: */
-	1270222318052581361:  (*MapHeading)(nil),             /* Heading:via:and arrivingAt: */
-	3571539926920082009:  (*MapHeading)(nil),             /* Heading:and connectingTo: */
-	6820364618168717163:  (*MapHeading)(nil),             /* Heading:via:and connectingTo: */
-	16572015744003324651: (*NamedNoun)(nil),              /* NamedNoun:name: */
-	10597814521259612392: (*NounAssignment)(nil),         /* NounAssignment:nouns:lines: */
-	11271220813702679015: (*NounPhrase)(nil),             /* NounPhrase kindOfNoun: */
-	6923309721749493537:  (*NounPhrase)(nil),             /* NounPhrase nounTraits: */
-	15909676719983789414: (*NounPhrase)(nil),             /* NounPhrase nounRelation: */
-	8358327072078132634:  (*NounRelation)(nil),           /* NounRelation relation:nouns: */
-	7157825634536191111:  (*NounRelation)(nil),           /* NounRelation areBeing:relation:nouns: */
-	16756778993528596640: (*NounStatement)(nil),          /* NounStatement: */
-	13104026651265504280: (*NounStatement)(nil),          /* NounStatement:tail: */
-	5039251519992036198:  (*NounStatement)(nil),          /* NounStatement:summary: */
-	4978269156154497630:  (*NounStatement)(nil),          /* NounStatement:tail:summary: */
-	18242559699550270796: (*NounTraits)(nil),             /* NounTraits:trait: */
-	17470035189832390536: (*ObjectType)(nil),             /* ObjectType:kind: */
-	17075866407822548206: (*OneToMany)(nil),              /* OneToMany:kinds: */
-	13766274136867271026: (*OneToOne)(nil),               /* OneToOne:otherKind: */
-	18143853777230560632: (*PairedAction)(nil),           /* PairedAction: */
-	6457542997147343897:  (*Paragraph)(nil),              /* Paragraph */
-	1044755875845214073:  (*Paragraph)(nil),              /* Paragraph: */
-	10735038169260724899: (*PatternActions)(nil),         /* PatternActions:patternRules: */
-	626108847940444615:   (*PatternActions)(nil),         /* PatternActions:patternLocals:patternRules: */
-	8043268755698861333:  (*PatternActions)(nil),         /* PatternActions:patternReturn:patternRules: */
-	14295113253706291193: (*PatternActions)(nil),         /* PatternActions:patternLocals:patternReturn:patternRules: */
-	12269627840097064600: (*PatternDecl)(nil),            /* PatternDecl:name: */
-	14226432888280203235: (*PatternDecl)(nil),            /* PatternDecl:name:optvars: */
-	16699606798420796914: (*PatternDecl)(nil),            /* PatternDecl:name:patternReturn: */
-	12239987563966389881: (*PatternDecl)(nil),            /* PatternDecl:name:optvars:patternReturn: */
-	15390970540499719701: (*PatternDecl)(nil),            /* PatternDecl:name:about: */
-	2773647507718310398:  (*PatternDecl)(nil),            /* PatternDecl:name:optvars:about: */
-	15396002863266428067: (*PatternDecl)(nil),            /* PatternDecl:name:patternReturn:about: */
-	18176072221785763176: (*PatternDecl)(nil),            /* PatternDecl:name:optvars:patternReturn:about: */
-	16940656754612309445: (*PatternLocals)(nil),          /* PatternLocals: */
-	9272141818556957835:  (*PatternReturn)(nil),          /* PatternReturn: */
-	15914753357447503965: (*PatternRule)(nil),            /* PatternRule:hook activity: */
-	14391699440407036198: (*PatternRule)(nil),            /* PatternRule:flags:hook activity: */
-	15881043500959019380: (*PatternRules)(nil),           /* PatternRules */
-	12644281899387438986: (*PatternRules)(nil),           /* PatternRules: */
-	2711635406027692142:  (*PatternVariablesDecl)(nil),   /* PatternVariablesDecl:variableDecl: */
-	2318440529621094838:  (*PatternVariablesTail)(nil),   /* PatternVariablesTail: */
-	15560538006230063914: (*PrimitiveValue)(nil),         /* PrimitiveValue boxedText: */
-	3901649770223814360:  (*PrimitiveValue)(nil),         /* PrimitiveValue boxedNumber: */
-	13417511286363622337: (*ProgramHook)(nil),            /* ProgramHook activity: */
-	9994614537641138979:  (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType propertyAspect: */
-	9417869270879260791:  (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType primitive: */
-	18289966116990726001: (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType ext: */
-	11912820986652752602: (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType propertyAspect:comment: */
-	11674503435152513662: (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType primitive:comment: */
-	10271231677614855256: (*PropertyDecl)(nil),           /* PropertyDecl:property:propertyType ext:comment: */
-	1570075991319589581:  (*PropertyType)(nil),           /* PropertyType propertyAspect: */
-	8224056348026199873:  (*PropertyType)(nil),           /* PropertyType primitive: */
-	6144711520752328411:  (*PropertyType)(nil),           /* PropertyType ext: */
-	1370374852585817674:  (*RecordList)(nil),             /* RecordList: */
-	9391386016837677242:  (*RecordType)(nil),             /* RecordType: */
-	5587008972147064084:  (*RelationCardinality)(nil),    /* RelationCardinality oneToOne: */
-	18092929693239672593: (*RelationCardinality)(nil),    /* RelationCardinality oneToMany: */
-	10453256446593418889: (*RelationCardinality)(nil),    /* RelationCardinality manyToOne: */
-	14287924768394488954: (*RelationCardinality)(nil),    /* RelationCardinality manyToMany: */
-	7151092568991800158:  (*RelativeToNoun)(nil),         /* RelativeToNoun:nouns:areBeing:nouns1: */
-	15988073058027477451: (*RenderTemplate)(nil),         /* RenderTemplate: */
-	2420057392455761494:  (*Send)(nil),                   /* Send:path: */
-	10010483713146895284: (*Send)(nil),                   /* Send:path:arguments: */
-	7279273919312137397:  (*ShuffleText)(nil),            /* ShuffleText: */
-	10085329253831819088: (*StoppingText)(nil),           /* StoppingText: */
-	13392546219852761816: (*Story)(nil),                  /* Story: */
-	7688593191439831819:  (*Summary)(nil),                /* Summary: */
-	5318973557611273585:  (*Tail)(nil),                   /* Tail:nounPhrase kindOfNoun: */
-	5583135325088318667:  (*Tail)(nil),                   /* Tail:nounPhrase nounTraits: */
-	7950604148908680916:  (*Tail)(nil),                   /* Tail:nounPhrase nounRelation: */
-	15090827023293362138: (*TestOutput)(nil),             /* TestOutput: */
-	11231723833188820353: (*TestRule)(nil),               /* TestRule:hook activity: */
-	15304439741055926590: (*TestScene)(nil),              /* TestScene:story: */
-	1385539489971009934:  (*TestStatement)(nil),          /* TestStatement:test: */
-	14061432096605043790: (*TraitPhrase)(nil),            /* TraitPhrase:trait: */
-	5275567442482955525:  (*VariableDecl)(nil),           /* VariableDecl:name:type primitive: */
-	1626262850875652971:  (*VariableDecl)(nil),           /* VariableDecl:name:type object: */
-	18304402114793467999: (*VariableDecl)(nil),           /* VariableDecl:name:type ext: */
-	1433602155249308844:  (*VariableDecl)(nil),           /* VariableDecl:name:type primitive:comment: */
-	14918607060645225458: (*VariableDecl)(nil),           /* VariableDecl:name:type object:comment: */
-	158426266364219478:   (*VariableDecl)(nil),           /* VariableDecl:name:type ext:comment: */
-	13175290884637950866: (*VariableType)(nil),           /* VariableType primitive: */
-	1781325330459017962:  (*VariableType)(nil),           /* VariableType object: */
-	12166747474280799296: (*VariableType)(nil),           /* VariableType ext: */
+	7872120455849093108:  (*ActionContext)(nil),        /* ActionContext: */
+	2237475528376444648:  (*ActionDecl)(nil),           /* ActionDecl:action:actionParams common: */
+	18212021549969329253: (*ActionDecl)(nil),           /* ActionDecl:action:actionParams dual: */
+	10825614489046735389: (*ActionDecl)(nil),           /* ActionDecl:action:actionParams none: */
+	14902711848163440508: (*ActionParams)(nil),         /* ActionParams common: */
+	11902859627634050329: (*ActionParams)(nil),         /* ActionParams dual: */
+	5868886119925925865:  (*ActionParams)(nil),         /* ActionParams none: */
+	6291103735245333139:  (*Argument)(nil),             /* Arg:from: */
+	2275326896920679506:  (*Arguments)(nil),            /* Args: */
+	4946346507935163764:  (*AspectProperty)(nil),       /* Aspect of: */
+	2627975827633552637:  (*AspectProperty)(nil),       /* Aspect of:desc: */
+	17855209504331534011: (*AspectTraits)(nil),         /* AspectTraits:traitPhrase: */
+	10466815184164589710: (*BoolProperty)(nil),         /* Bool named: */
+	7864268224293611023:  (*BoolProperty)(nil),         /* Bool named:of: */
+	15292113293401271919: (*BoolProperty)(nil),         /* Bool named:desc: */
+	12288912254770942240: (*BoolProperty)(nil),         /* Bool named:of:desc: */
+	170374163879469822:   (*Certainties)(nil),          /* Certainties:areBeing:certainty:trait: */
+	15857890977690710700: (*Comment)(nil),              /* Comment: */
+	13295757043766156580: (*CommonAction)(nil),         /* CommonAction: */
+	11796688776587655409: (*CommonAction)(nil),         /* CommonAction:actionContext: */
+	10211567489959209123: (*CountOf)(nil),              /* CountOf:num: */
+	475310308664194536:   (*CycleText)(nil),            /* CycleText: */
+	14117144937213193556: (*Determine)(nil),            /* Determine: */
+	18058198214790918510: (*Determine)(nil),            /* Determine:arguments: */
+	11093854973825287408: (*EventBlock)(nil),           /* EventBlock kinds:handlers: */
+	11855563103941044442: (*EventBlock)(nil),           /* EventBlock namedNoun:handlers: */
+	8929470137779261632:  (*EventHandler)(nil),         /* EventHandler:event:patternRules: */
+	4061872818055525560:  (*EventHandler)(nil),         /* EventHandler:event:locals:patternRules: */
+	18010503397334720257: (*EventTarget)(nil),          /* EventTarget kinds: */
+	17197340468883043891: (*EventTarget)(nil),          /* EventTarget namedNoun: */
+	351838510430560892:   (*GrammarDecl)(nil),          /* GrammarDecl: */
+	8395536647843606072:  (*KindOfNoun)(nil),           /* KindOfNoun:kind: */
+	2174943222093748082:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind: */
+	7004049933953251122:  (*KindOfNoun)(nil),           /* KindOfNoun:kind:nounRelation: */
+	9031009285767794428:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind:nounRelation: */
+	650960042632654891:   (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToOne: */
+	1081167552428580836:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToMany: */
+	10771046767095423028: (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToOne: */
+	5852635308349599025:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToMany: */
+	11241512832861714070: (*KindsHaveProperties)(nil),  /* Kinds:have: */
+	16689641787061327381: (*KindsOfAspect)(nil),        /* KindsOfAspect: */
+	5919854034648203527:  (*KindsOfKind)(nil),          /* Make kinds:of: */
+	2335979695347311111:  (*Lede)(nil),                 /* Lede:nounPhrase kindOfNoun: */
+	14199050960332677505: (*Lede)(nil),                 /* Lede:nounPhrase nounTraits: */
+	10694393583567459526: (*Lede)(nil),                 /* Lede:nounPhrase nounRelation: */
+	10446315654994385322: (*LocalDecl)(nil),            /* LocalDecl: */
+	6009252662016869003:  (*LocalDecl)(nil),            /* LocalDecl:value: */
+	11789909816860756800: (*LocalInit)(nil),            /* LocalInit: */
+	9981010364372027439:  (*Make)(nil),                 /* Make: */
+	12609627593403083413: (*Make)(nil),                 /* Make:arguments: */
+	3572160234867157749:  (*MakePlural)(nil),           /* Make:plural: */
+	17563761532337350103: (*ManyToMany)(nil),           /* ManyToMany:otherKinds: */
+	4129025779762507875:  (*ManyToOne)(nil),            /* ManyToOne:kind: */
+	4746882967578843264:  (*MapConnection)(nil),        /* MapConnection arrivingAt: */
+	165100527430166082:   (*MapConnection)(nil),        /* MapConnection connectingTo: */
+	12664747872301222635: (*MapDeparting)(nil),         /* Departing via:and arrivingAt: */
+	10592711885881153145: (*MapDeparting)(nil),         /* Departing via:and connectingTo: */
+	13573264837262063235: (*MapDestination)(nil),       /* MapDestination: */
+	16504428073969307483: (*MapDestination)(nil),       /* MapDestination:door: */
+	14572254943646304587: (*MapHeading)(nil),           /* Heading:and arrivingAt: */
+	1270222318052581361:  (*MapHeading)(nil),           /* Heading:via:and arrivingAt: */
+	3571539926920082009:  (*MapHeading)(nil),           /* Heading:and connectingTo: */
+	6820364618168717163:  (*MapHeading)(nil),           /* Heading:via:and connectingTo: */
+	16572015744003324651: (*NamedNoun)(nil),            /* NamedNoun:name: */
+	7600243833025335851:  (*NamedProperty)(nil),        /* NamedProperty: */
+	11281497065498302283: (*NamedProperty)(nil),        /* NamedProperty:type: */
+	8883280437292140850:  (*NamedProperty)(nil),        /* NamedProperty:comment: */
+	847370382734809298:   (*NamedProperty)(nil),        /* NamedProperty:type:comment: */
+	10597814521259612392: (*NounAssignment)(nil),       /* NounAssignment:nouns:lines: */
+	11271220813702679015: (*NounPhrase)(nil),           /* NounPhrase kindOfNoun: */
+	6923309721749493537:  (*NounPhrase)(nil),           /* NounPhrase nounTraits: */
+	15909676719983789414: (*NounPhrase)(nil),           /* NounPhrase nounRelation: */
+	8358327072078132634:  (*NounRelation)(nil),         /* NounRelation relation:nouns: */
+	7157825634536191111:  (*NounRelation)(nil),         /* NounRelation areBeing:relation:nouns: */
+	16756778993528596640: (*NounStatement)(nil),        /* NounStatement: */
+	13104026651265504280: (*NounStatement)(nil),        /* NounStatement:tail: */
+	5039251519992036198:  (*NounStatement)(nil),        /* NounStatement:summary: */
+	4978269156154497630:  (*NounStatement)(nil),        /* NounStatement:tail:summary: */
+	18242559699550270796: (*NounTraits)(nil),           /* NounTraits:trait: */
+	10570788478167904864: (*NumListProperty)(nil),      /* NumList named: */
+	1134638206967616033:  (*NumListProperty)(nil),      /* NumList named:of: */
+	12067969820633710801: (*NumListProperty)(nil),      /* NumList named:desc: */
+	4350453418069638626:  (*NumListProperty)(nil),      /* NumList named:of:desc: */
+	1229800714295622509:  (*NumberProperty)(nil),       /* Number named: */
+	11728451174312232590: (*NumberProperty)(nil),       /* Number named:of: */
+	8220001352821667446:  (*NumberProperty)(nil),       /* Number named:desc: */
+	8225044541532672111:  (*NumberProperty)(nil),       /* Number named:of:desc: */
+	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
+	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
+	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
+	6457542997147343897:  (*Paragraph)(nil),            /* Paragraph */
+	1044755875845214073:  (*Paragraph)(nil),            /* Paragraph: */
+	10735038169260724899: (*PatternActions)(nil),       /* PatternActions:patternRules: */
+	626108847940444615:   (*PatternActions)(nil),       /* PatternActions:patternLocals:patternRules: */
+	8043268755698861333:  (*PatternActions)(nil),       /* PatternActions:patternReturn:patternRules: */
+	14295113253706291193: (*PatternActions)(nil),       /* PatternActions:patternLocals:patternReturn:patternRules: */
+	12269627840097064600: (*PatternDecl)(nil),          /* PatternDecl:name: */
+	14226432888280203235: (*PatternDecl)(nil),          /* PatternDecl:name:optvars: */
+	16699606798420796914: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn: */
+	12239987563966389881: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn: */
+	15390970540499719701: (*PatternDecl)(nil),          /* PatternDecl:name:about: */
+	2773647507718310398:  (*PatternDecl)(nil),          /* PatternDecl:name:optvars:about: */
+	15396002863266428067: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn:about: */
+	18176072221785763176: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn:about: */
+	16940656754612309445: (*PatternLocals)(nil),        /* PatternLocals: */
+	9272141818556957835:  (*PatternReturn)(nil),        /* PatternReturn: */
+	15914753357447503965: (*PatternRule)(nil),          /* PatternRule:hook activity: */
+	14391699440407036198: (*PatternRule)(nil),          /* PatternRule:flags:hook activity: */
+	15881043500959019380: (*PatternRules)(nil),         /* PatternRules */
+	12644281899387438986: (*PatternRules)(nil),         /* PatternRules: */
+	9595265807710753233:  (*PatternVariablesDecl)(nil), /* Pattern:requires: */
+	2318440529621094838:  (*PatternVariablesTail)(nil), /* PatternVariablesTail: */
+	13417511286363622337: (*ProgramHook)(nil),          /* ProgramHook activity: */
+	8380731787009175721:  (*RecordListProperty)(nil),   /* RecordList named: */
+	16326018873841140594: (*RecordListProperty)(nil),   /* RecordList named:of: */
+	13065085319992699434: (*RecordListProperty)(nil),   /* RecordList named:desc: */
+	8809350479853098315:  (*RecordListProperty)(nil),   /* RecordList named:of:desc: */
+	9421894963555981921:  (*RecordProperty)(nil),       /* Record named: */
+	15273128656504901402: (*RecordProperty)(nil),       /* Record named:of: */
+	1627613176937258658:  (*RecordProperty)(nil),       /* Record named:desc: */
+	8491419645379028179:  (*RecordProperty)(nil),       /* Record named:of:desc: */
+	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
+	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
+	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
+	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
+	7151092568991800158:  (*RelativeToNoun)(nil),       /* RelativeToNoun:nouns:areBeing:nouns1: */
+	15988073058027477451: (*RenderTemplate)(nil),       /* RenderTemplate: */
+	2420057392455761494:  (*Send)(nil),                 /* Send:path: */
+	10010483713146895284: (*Send)(nil),                 /* Send:path:arguments: */
+	7279273919312137397:  (*ShuffleText)(nil),          /* ShuffleText: */
+	10085329253831819088: (*StoppingText)(nil),         /* StoppingText: */
+	13392546219852761816: (*Story)(nil),                /* Story: */
+	7688593191439831819:  (*Summary)(nil),              /* Summary: */
+	5318973557611273585:  (*Tail)(nil),                 /* Tail:nounPhrase kindOfNoun: */
+	5583135325088318667:  (*Tail)(nil),                 /* Tail:nounPhrase nounTraits: */
+	7950604148908680916:  (*Tail)(nil),                 /* Tail:nounPhrase nounRelation: */
+	15090827023293362138: (*TestOutput)(nil),           /* TestOutput: */
+	11231723833188820353: (*TestRule)(nil),             /* TestRule:hook activity: */
+	15304439741055926590: (*TestScene)(nil),            /* TestScene:story: */
+	1385539489971009934:  (*TestStatement)(nil),        /* TestStatement:test: */
+	12060628209423567251: (*TextListProperty)(nil),     /* TextList named: */
+	17501273845802809220: (*TextListProperty)(nil),     /* TextList named:of: */
+	8790232589946234908:  (*TextListProperty)(nil),     /* TextList named:desc: */
+	10102728286923952045: (*TextListProperty)(nil),     /* TextList named:of:desc: */
+	34813485952713023:    (*TextProperty)(nil),         /* Text named: */
+	15716906332929430280: (*TextProperty)(nil),         /* Text named:of: */
+	8821446596613108912:  (*TextProperty)(nil),         /* Text named:desc: */
+	10950529590260468345: (*TextProperty)(nil),         /* Text named:of:desc: */
+	14061432096605043790: (*TraitPhrase)(nil),          /* TraitPhrase:trait: */
 }

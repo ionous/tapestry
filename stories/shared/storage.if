@@ -7,26 +7,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         }
       ]
@@ -96,26 +86,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         }
       ]
@@ -188,28 +168,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "thing"
-                  ]
-                }
+                "thing"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type ext:": [
-              "the",
-              "out",
-              {
-                "ExtType textList:": "list"
-              }
-            ]
+            "TextList named:": "out"
           }
         }
       ]
@@ -328,26 +296,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         }
       ]

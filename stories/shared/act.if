@@ -7,59 +7,31 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "actor",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "actor"
-                  ]
-                }
+                "actor"
               ]
             },
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "a",
-                    "thing"
-                  ]
-                }
+                "thing"
               ]
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "a",
-                "trait",
-                "text"
-              ]
+              "Text named:": "trait"
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "a",
-                "guard",
-                "text"
-              ]
+              "Text named:": "guard"
             },
             {
-              "VariableDecl:name:type primitive:": [
-                "a",
-                "change",
-                "text"
-              ]
+              "Text named:": "change"
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "the",
-              "success",
-              "bool"
-            ]
+            "Bool named:": "success"
           }
         }
       ]
@@ -273,38 +245,26 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "noun",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             },
             {
-              "VariableDecl:name:type primitive:comment:": [
-                "the",
+              "Text named:desc:": [
                 "trait",
-                "text",
                 "the trait we're changing to"
               ]
             },
             {
-              "VariableDecl:name:type primitive:comment:": [
-                "a",
+              "Text named:desc:": [
                 "guard",
-                "text",
                 ", a trait which blocks the noun from changing"
               ]
             },
             {
-              "VariableDecl:name:type primitive:comment:": [
-                "a",
+              "Text named:desc:": [
                 "change",
-                "text",
                 "which describes the action"
               ]
             }
@@ -312,11 +272,7 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "our",
-              "result",
-              "text"
-            ]
+            "Text named:": "result"
           }
         }
       ]

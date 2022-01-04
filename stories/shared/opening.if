@@ -17,15 +17,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 },
                 {
@@ -258,15 +252,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "an",
+                  "Text named:of:": [
                     "actor",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "actor"
-                      ]
-                    }
+                    "actor"
                   ]
                 },
                 {
@@ -554,12 +542,8 @@
                 "PatternLocals:": [
                   {
                     "LocalDecl:": {
-                      "VariableDecl:name:type ext:comment:": [
-                        "our",
+                      "TextList named:desc:": [
                         "concealed items",
-                        {
-                          "ExtType textList:": "list"
-                        },
                         "initialized only when needed, for containers revealing their contents."
                       ]
                     }

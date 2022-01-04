@@ -7,26 +7,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "result",
-              "bool"
-            ]
+            "Bool named:": "result"
           }
         }
       ]
@@ -132,15 +122,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "an",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -155,15 +139,9 @@
             {
               "LocalDecl:value:": [
                 {
-                  "VariableDecl:name:type object:": [
-                    "our",
+                  "Text named:of:": [
                     "parent",
-                    {
-                      "ObjectType:kind:": [
-                        "an",
-                        "object"
-                      ]
-                    }
+                    "object"
                   ]
                 },
                 {
@@ -193,15 +171,9 @@
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type object:": [
-              "a",
+            "Text named:of:": [
               "result",
-              {
-                "ObjectType:kind:": [
-                  "an",
-                  "object"
-                ]
-              }
+              "object"
             ]
           }
         },
@@ -274,15 +246,9 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "obj",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
@@ -297,13 +263,7 @@
         "transparentList",
         {
           "PatternReturn:": {
-            "VariableDecl:name:type ext:": [
-              "a",
-              "list",
-              {
-                "ExtType textList:": "list"
-              }
-            ]
+            "TextList named:": "list"
           }
         },
         {
@@ -375,26 +335,16 @@
         {
           "PatternVariablesTail:": [
             {
-              "VariableDecl:name:type object:": [
-                "a",
+              "Text named:of:": [
                 "spot",
-                {
-                  "ObjectType:kind:": [
-                    "an",
-                    "object"
-                  ]
-                }
+                "object"
               ]
             }
           ]
         },
         {
           "PatternReturn:": {
-            "VariableDecl:name:type primitive:": [
-              "a",
-              "result",
-              "bool"
-            ]
+            "Bool named:": "result"
           }
         }
       ]
@@ -409,22 +359,12 @@
           "PatternLocals:": [
             {
               "LocalDecl:": {
-                "VariableDecl:name:type ext:": [
-                  "a",
-                  "queue",
-                  {
-                    "ExtType textList:": "list"
-                  }
-                ]
+                "TextList named:": "queue"
               }
             },
             {
               "LocalDecl:": {
-                "VariableDecl:name:type primitive:": [
-                  "a",
-                  "ceiling",
-                  "text"
-                ]
+                "Text named:": "ceiling"
               }
             }
           ]
