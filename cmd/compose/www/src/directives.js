@@ -64,6 +64,8 @@ class Make {
           if (plainEnglish) {
             const newFlow= this.flow(k, data.slot || [], data.spec, data.desc || "");
             newFlow.lede= data.lede;
+            newFlow.sign= data.sign;
+            newFlow.embed= data.embed;
             break;
           }
           // note: doesnt use the "maker" for now
@@ -98,14 +100,14 @@ class Make {
               }
             });
           }
+          const w=  this._makeWithFlow(k, tokens, tags.args);
           const d= {
             name: k,
             uses: "flow",
             group: this.currGroups.slice(),
-            with: {
-              params: tags.args,
-              tokens,
-            }
+            sign: data.sign,
+            embed: data.embed,
+            with: w,
             // todo: roles
           };
           if (data.slot) {
@@ -134,6 +136,38 @@ class Make {
     }
   }
 
+  _makeWithFlow(name, ts, ps) {
+    const xt= [];
+    const xp= {};
+    for (const n of ts) {
+      if (!n.startsWith("$")) {
+        xt.push(n);
+      } else {
+        const p= ps[n];
+        xp[n]= p;
+        const pt= this.types.all[p.type];
+        const embed= (pt && pt.embed && pt.uses === 'flow' && !p.optional);
+        if (!embed) {
+          xt.push(n);
+        } else {
+          p.expanded= true; // we can embed this parameter.
+          for (const en of pt.with.tokens) {
+            xt.push(en); // embed the expanded tokens, not the original one tho.
+            if (en.startsWith("$")) {
+              const from= pt.with.params[en];
+              const pp= {...from}; // copy the paramter info
+              pp.embedded= true; // flag it as having been embedded.
+              xp[en]= pp; // add the cloned/flagged parameter
+            }
+          }
+        }
+      }
+    }
+    return {
+      tokens: xt,
+      params: xp,
+    }
+  }
   // introduce the passed group name to types
   // created during the passed function.
   group(name, ...descFn) {
@@ -181,12 +215,10 @@ class Make {
         desc= d;
       }
     }
+    const w=  this._makeWithFlow(name, tags.keys, tags.args);
     return this.newType(name, "flow", desc,
       // using object assign in case slots dont exist.
-      Object.assign({
-        tokens: tags.keys,
-        params: tags.args
-      }, slots && {slots}));
+      Object.assign(w, slots && {slots}));
   }
 
   slot( name, desc= null ) {

@@ -210,7 +210,7 @@ const camelize= function(sel) {
 // loop over a subset of parameters generating signatures for them recursively
 // out is an array of signatures, each signature an array of parts.
 const sigParts = function(t, commandName) {
-  const ps= t.params.filter(p => !p.internal);
+  const ps= t.params.filter(p => !p.internal && !p.expanded);
   let sets= [[commandName]];
   ps.forEach((p) => {
     const sel= camelize(p.sel);
@@ -223,7 +223,7 @@ const sigParts = function(t, commandName) {
       } else {
         sets = sets.concat(rest);
       }
-    }else {
+    } else {
       // every choice in a swap gets its own selector for each existing set
       let mul= [];
       pt.params.filter(c => !c.internal).forEach((c)=> {
@@ -373,18 +373,35 @@ for (const typeName in allTypes) {
       pi++;
     }
   });
-  // provide a simple override for signature generation
-  if (type.sign) {
-    type.lede= type.sign[0];
+  // override existing sel/tags if they are explicitly specified
+  if (type.sign && type.sign.length > 0) {
+    const sign= type.sign.replace(" ", ":").split(":").map(x=> x.trim());
+    const last= sign.pop();
+    if (last.length) {
+      throw new Error(`${typeName} has an invalid signature ${type.sign}`);
+    }
+    type.lede= sign.shift();
+    if (type.sign[type.lede.length]!==' ') {
+      sign.unshift("");
+    }
+
     for (let i=0; i< ps.length; i++) {
       const p= ps[i];
-      const el= type.sign[i+1];
-      if (el.length==0) {
-        p.tag= "_";
-        p.sel= "";
-      } else {
-        p.tag= p.sel= el;
+      if (!p.expanded) {
+        const el= sign.shift();
+        if (el === undefined) {
+          throw new Error(`${typeName} a too short signature`);
+        }
+        if (el.length==0) {
+          p.tag= "_";
+          p.sel= "";
+        } else {
+          p.tag= p.sel= el;
+        }
       }
+    }
+    if (sign.length) {
+      throw new Error(`${typeName} a too long signature`);
     }
   }
   type.params= ps;

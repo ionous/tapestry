@@ -15,12 +15,12 @@ module.exports = `
 // User implements:{{#each with.slots}} {{Pascal this}}{{#unless @last}},{{/unless}}{{/each}}.
 {{/if}}
 type {{Pascal name}} struct {
-{{#each params}}
-  {{Pascal key}} {{TypeOf this}} \`if:"
+{{#each params}}{{#unless embedded}}
+  {{~#unless expanded}}{{Pascal key}}{{/unless}} {{TypeOf this}} \`if:"
   {{~#if internal}}internal{{else}}label={{tag}}{{/if}}
   {{~#if optional}},optional{{/if}}\
   {{~#if (Unboxed type)}},type={{type}}{{/if}}"\`
-{{/each}}
+{{/unless}}{{/each}}
 }
 {{>spec~}}
 {{~#each params}}{{#unless internal}}
@@ -61,7 +61,7 @@ func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) 
   m.SetCursor(val.At.Offset)
 {{/if}}
   if err = m.MarshalBlock({{Pascal name}}_Flow{val}); err == nil {
-{{~#each params}}{{#unless (IsInternal label)}}
+{{~#each params}}{{#unless internal}}{{#unless expanded}}
     e{{@index}} := m.MarshalKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}})
     if e{{@index}} == nil {
       e{{@index}} = {{ScopeOf type}}{{Pascal type~}}
@@ -73,7 +73,7 @@ func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) 
     if e{{@index}} != nil && e{{@index}} != jsn.Missing {
       m.Error(errutil.New(e{{@index}}, "in flow at", {{Pascal ../name}}_Field_{{Pascal key}}))
     }
-{{~/unless}}{{/each}}
+{{~/unless}}{{/unless}}{{/each}}
     m.EndBlock()
   }
   return
