@@ -6,7 +6,7 @@ import (
 )
 
 // after assembling all the nouns, make sure they can be resolved.
-var NounPhaseActions = PhaseAction{
+var NounActions = PhaseAction{
 	Do: func(d *Domain) error {
 		_, e := d.ResolveNouns()
 		return e

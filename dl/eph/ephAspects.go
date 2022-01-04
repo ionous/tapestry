@@ -28,7 +28,7 @@ func (op *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		kid := d.EnsureKind(aspect, at)
 		kid.AddRequirement(kindsOf.Aspect.String())
 		if len(traits) > 0 {
-			err = d.AddEphemera(EphAt{at, PhaseFunction{AspectPhase,
+			err = d.AddEphemera(at, PhaseFunction{AspectPhase,
 				func(c *Catalog, d *Domain, at string) (err error) {
 					var conflict *Conflict // checks for conflicts, allows duplicates.
 					if e := kid.AddField(&traitDef{at, aspect, traits}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
@@ -37,7 +37,7 @@ func (op *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
 						err = e // some other error ( or nil )
 					}
 					return
-				}}})
+				}})
 		}
 	}
 	return

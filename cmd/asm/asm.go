@@ -96,24 +96,22 @@ func storyMarshaller(m jsn.Marshalee) (string, error) {
 func collectEphemera(cat *eph.Catalog, out *error) story.WriterFun {
 	// fix: needs to be more clever eventually...
 	if e := cat.AddEphemera(
-		eph.EphAt{
-			At:  "asm",
-			Eph: &eph.EphBeginDomain{Name: "entire_game"}}); e != nil {
+		"asm",
+		&eph.EphBeginDomain{Name: "entire_game"}); e != nil {
 		panic(e)
 	}
 	// built in kinds -- see ephKinds.go
 	for _, k := range kindsOf.DefaultKinds {
 		pk := k.Parent()
 		if e := cat.AddEphemera(
-			eph.EphAt{
-				At:  "built in kinds",
-				Eph: &eph.EphKinds{Kinds: k.String(), From: pk.String()}}); e != nil {
+			"built in kinds",
+			&eph.EphKinds{Kinds: k.String(), From: pk.String()}); e != nil {
 			panic(e)
 		}
 	}
 	var i int
 	return func(el eph.Ephemera) {
-		if e := cat.AddEphemera(eph.EphAt{At: strconv.Itoa(i), Eph: el}); e != nil {
+		if e := cat.AddEphemera(strconv.Itoa(i), el); e != nil {
 			*out = errutil.Append(*out, e)
 		}
 		i++ // temp

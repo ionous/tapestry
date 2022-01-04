@@ -98,7 +98,7 @@ func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 
 func (dt *domainTest) addToCat(cat *Catalog) (err error) {
 	for _, el := range dt.out {
-		if e := cat.AddEphemera(EphAt{At: "x", Eph: el}); e != nil {
+		if e := cat.AddEphemera("x", el); e != nil {
 			err = e
 			break
 		}
@@ -137,8 +137,8 @@ func buildAncestors(dt domainTest) (ret *Catalog, err error) {
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
 	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase:  AncestryPhaseActions,
-		PostFieldPhase: PostFieldActions,
+		AncestryPhase: AncestryActions,
+		FieldPhase:    FieldActions,
 	}); e != nil {
 		err = e
 	} else {
@@ -152,9 +152,9 @@ func buildNouns(dt domainTest) (ret *Catalog, err error) {
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
 	} else if e := cat.AssembleCatalog(PhaseActions{
-		AncestryPhase:  AncestryPhaseActions,
-		PostFieldPhase: PostFieldActions,
-		NounPhase:      NounPhaseActions,
+		AncestryPhase: AncestryActions,
+		FieldPhase:    FieldActions,
+		NounPhase:     NounActions,
 	}); e != nil {
 		err = e
 	} else {

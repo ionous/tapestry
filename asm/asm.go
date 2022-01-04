@@ -47,9 +47,9 @@ func Assemble(cat *eph.Catalog, db *sql.DB) (err error) {
 func BuildCatalog(cat *eph.Catalog, w eph.Writer) (err error) {
 	// go process all of the ephemera
 	if e := cat.AssembleCatalog(eph.PhaseActions{
-		eph.AncestryPhase:  eph.AncestryPhaseActions,
-		eph.PostFieldPhase: eph.PostFieldActions,
-		eph.NounPhase:      eph.NounPhaseActions,
+		eph.AncestryPhase: eph.AncestryActions,
+		eph.FieldPhase:    eph.FieldActions,
+		eph.NounPhase:     eph.NounActions,
 	}); e != nil {
 		err = e
 	} else if e := cat.WritePlurals(w); e != nil {

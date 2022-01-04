@@ -11,12 +11,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// eph fields handles the parameter declarations that exist as part of the kinds
-type ephFields struct {
-	Kinds string
-	EphParams
-}
-
 // write the fields of each kind in kind order
 func (c *Catalog) WriteFields(w Writer) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
@@ -72,26 +66,8 @@ func (c *Catalog) WriteLocals(w Writer) (err error) {
 	return
 }
 
-func (op *ephFields) Phase() Phase { return FieldPhase }
-
-// add some fields to a kind.
-// see also: EphAspects which generates traits and adds them to a custom aspect kind.
-func (op *ephFields) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	// note: the kinds must exist ( and are resolved if they do ) already ( re: phased processing )
-	if newKind, ok := UniformString(op.Kinds); !ok {
-		err = InvalidString(op.Kinds)
-	} else if kind, ok := d.GetPluralKind(newKind); !ok {
-		err = errutil.New("unknown kind", newKind)
-	} else if param, e := MakeUniformField(op.Affinity, op.Name, op.Class, at); e != nil {
-		err = e
-	} else {
-		kind.pendingFields = append(kind.pendingFields, param)
-	}
-	return
-}
-
 // after queuing up all the fields, assemble them; parent kinds first.
-var PostFieldActions = PhaseAction{
+var FieldActions = PhaseAction{
 	Do: func(d *Domain) (err error) {
 		if deps, e := d.ResolveKinds(); e != nil {
 			err = e
@@ -114,6 +90,10 @@ type UniformField struct {
 	name, affinity, class string
 	initially             rt.Assignment
 	at                    string
+}
+
+func (ep *EphParams) unify(at string) (UniformField, error) {
+	return MakeUniformField(ep.Affinity, ep.Name, ep.Class, at)
 }
 
 // normalize the values of the field

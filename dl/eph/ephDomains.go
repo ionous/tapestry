@@ -52,14 +52,14 @@ func (d *Domain) Resolve() (ret Dependencies, err error) {
 	return
 }
 
-func (d *Domain) AddEphemera(ephAt EphAt) (err error) {
-	if currPhase, phase := d.currPhase, ephAt.Eph.Phase(); currPhase > phase {
+func (d *Domain) AddEphemera(at string, ep Ephemera) (err error) {
+	if currPhase, phase := d.currPhase, ep.Phase(); currPhase > phase {
 		err = errutil.New("unexpected phase")
 	} else {
 		// fix? consider all ephemera in a flat slice ( again ) scanning by phase instead of partitioning.
 		// that way we dont need all the separate lists and we can append....
 		els := d.phases[phase]
-		els.eph = append(els.eph, ephAt)
+		els.eph = append(els.eph, EphAt{at, ep})
 		d.phases[phase] = els
 	}
 	return

@@ -46,12 +46,12 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		} else if e := reduceLocals(op.Locals, at, &locals); e != nil {
 			err = e
 		} else {
-			err = d.AddEphemera(EphAt{at, PhaseFunction{FieldPhase,
+			err = d.AddEphemera(at, PhaseFunction{PropertyPhase,
 				func(c *Catalog, d *Domain, at string) (err error) {
 					k.pendingFields = append(k.pendingFields, k.patternHeader.flush()...)
 					k.pendingFields = append(k.pendingFields, locals...)
 					return
-				}}})
+				}})
 		}
 	}
 	return
@@ -119,7 +119,7 @@ func reduceRes(param *EphParams, at string, outp *[]UniformField) (ret string, e
 	if param != nil {
 		if param.Initially != nil {
 			err = errutil.New("return values dont currently support initial values")
-		} else if p, e := MakeUniformField(param.Affinity, param.Name, param.Class, at); e != nil {
+		} else if p, e := param.unify(at); e != nil {
 			err = e
 		} else {
 			*outp = append(*outp, p)
@@ -134,7 +134,7 @@ func reduceArgs(params []EphParams, at string, outp *[]UniformField) (ret string
 	for i, param := range params {
 		if param.Initially != nil {
 			err = errutil.New("args dont currently support initial values")
-		} else if p, e := MakeUniformField(param.Affinity, param.Name, param.Class, at); e != nil {
+		} else if p, e := param.unify(at); e != nil {
 			err = e
 			break
 		} else {
@@ -154,7 +154,7 @@ func reduceArgs(params []EphParams, at string, outp *[]UniformField) (ret string
 
 func reduceLocals(params []EphParams, at string, outp *[]UniformField) (err error) {
 	for _, param := range params {
-		if p, e := MakeUniformField(param.Affinity, param.Name, param.Class, at); e != nil {
+		if p, e := param.unify(at); e != nil {
 			err = e
 			break
 		} else if e := p.setAssignment(param.Initially); e != nil {

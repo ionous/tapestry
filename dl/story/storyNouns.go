@@ -88,23 +88,23 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 				kind, err = d.Singularize(kindOrKinds)
 			}
 			if err == nil {
-				if e := d.AddEphemera(eph.EphAt{at, &eph.EphKinds{Kinds: kinds, From: "thing"}}); e != nil {
+				if e := d.AddEphemera(at, &eph.EphKinds{Kinds: kinds, From: "thing"}); e != nil {
 					err = e
 				} else {
 					for _, n := range names {
-						if e := d.AddEphemera(eph.EphAt{at, &eph.EphNouns{Noun: n, Kind: kindOrKinds}}); e != nil {
+						if e := d.AddEphemera(at, &eph.EphNouns{Noun: n, Kind: kindOrKinds}); e != nil {
 							err = e
-						} else if e := d.AddEphemera(eph.EphAt{at, &eph.EphAliases{
+						} else if e := d.AddEphemera(at, &eph.EphAliases{
 							// so that typing "triangle" means "triangles_1"
 							ShortName: n, Aliases: []string{kind},
-						}}); e != nil {
+						}); e != nil {
 							err = e
 							break
-						} else if e := d.AddEphemera(eph.EphAt{at, &eph.EphValues{
+						} else if e := d.AddEphemera(at, &eph.EphValues{
 							// so that printing "triangles_1" yields "triangle"
 							// FIX: itd make a lot more sense to have a default value for the kind
 							Noun: n, Field: "printed_name", Value: T(kind),
-						}}); e != nil {
+						}); e != nil {
 							err = e
 							break
 						}

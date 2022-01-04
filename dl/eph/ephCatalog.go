@@ -11,15 +11,15 @@ type Catalog struct {
 	resolvedDomains cachedTable
 }
 
-func (c *Catalog) AddEphemera(ephAt EphAt) (err error) {
+func (c *Catalog) AddEphemera(at string, ep Ephemera) (err error) {
 	// fix: queue first, and then run?
-	if phase := ephAt.Eph.Phase(); phase == DomainPhase {
-		err = ephAt.Eph.Assemble(c, nil, ephAt.At)
+	if phase := ep.Phase(); phase == DomainPhase {
+		err = ep.Assemble(c, nil, at)
 	} else {
 		if d, ok := c.processing.Top(); !ok {
 			err = errutil.New("no top domain")
 		} else {
-			err = d.AddEphemera(ephAt)
+			err = d.AddEphemera(at, ep)
 		}
 	}
 	return

@@ -1,6 +1,6 @@
 package eph
 
-func (op *EphRefs) Phase() Phase { return FieldPhase }
+func (op *EphRefs) Phase() Phase { return PropertyPhase }
 
 func (op *EphRefs) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	refsNotImplemented.PrintOnce()
