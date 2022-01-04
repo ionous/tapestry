@@ -11,10 +11,12 @@ import (
 )
 
 // AsNum Define the name of a number variable.
-// User implements: ListIterator.
 type AsNum struct {
 	Var core.VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ListIterator = (*AsNum)(nil)
 
 func (*AsNum) Compose() composer.Spec {
 	return composer.Spec{
@@ -24,7 +26,6 @@ func (*AsNum) Compose() composer.Spec {
 }
 
 const AsNum_Type = "as_num"
-
 const AsNum_Field_Var = "$VAR"
 
 func (op *AsNum) Marshal(m jsn.Marshaler) error {
@@ -110,10 +111,12 @@ func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
 }
 
 // AsRec Define the name of a record variable.
-// User implements: ListIterator.
 type AsRec struct {
 	Var core.VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ListIterator = (*AsRec)(nil)
 
 func (*AsRec) Compose() composer.Spec {
 	return composer.Spec{
@@ -123,7 +126,6 @@ func (*AsRec) Compose() composer.Spec {
 }
 
 const AsRec_Type = "as_rec"
-
 const AsRec_Field_Var = "$VAR"
 
 func (op *AsRec) Marshal(m jsn.Marshaler) error {
@@ -209,10 +211,12 @@ func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
 }
 
 // AsTxt Define the name of a text variable.
-// User implements: ListIterator.
 type AsTxt struct {
 	Var core.VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ListIterator = (*AsTxt)(nil)
 
 func (*AsTxt) Compose() composer.Spec {
 	return composer.Spec{
@@ -222,7 +226,6 @@ func (*AsTxt) Compose() composer.Spec {
 }
 
 const AsTxt_Type = "as_txt"
-
 const AsTxt_Field_Var = "$VAR"
 
 func (op *AsTxt) Marshal(m jsn.Marshaler) error {
@@ -308,11 +311,13 @@ func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
 }
 
 // EraseEdge Erase at edge: Remove one or more values from a list
-// User implements: Execute.
 type EraseEdge struct {
 	From   ListSource  `if:"label=_"`
 	AtEdge rt.BoolEval `if:"label=at_front,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*EraseEdge)(nil)
 
 func (*EraseEdge) Compose() composer.Spec {
 	return composer.Spec{
@@ -323,7 +328,6 @@ func (*EraseEdge) Compose() composer.Spec {
 }
 
 const EraseEdge_Type = "erase_edge"
-
 const EraseEdge_Field_From = "$FROM"
 const EraseEdge_Field_AtEdge = "$AT_EDGE"
 
@@ -417,12 +421,14 @@ func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 }
 
 // EraseIndex Erase at index: Remove one or more values from a list
-// User implements: Execute.
 type EraseIndex struct {
 	Count   rt.NumberEval `if:"label=_"`
 	From    ListSource    `if:"label=from"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*EraseIndex)(nil)
 
 func (*EraseIndex) Compose() composer.Spec {
 	return composer.Spec{
@@ -433,7 +439,6 @@ func (*EraseIndex) Compose() composer.Spec {
 }
 
 const EraseIndex_Type = "erase_index"
-
 const EraseIndex_Field_Count = "$COUNT"
 const EraseIndex_Field_From = "$FROM"
 const EraseIndex_Field_AtIndex = "$AT_INDEX"
@@ -535,7 +540,6 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 }
 
 // Erasing Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
-// User implements: Execute.
 type Erasing struct {
 	Count   rt.NumberEval `if:"label=_"`
 	From    ListSource    `if:"label=from"`
@@ -543,6 +547,9 @@ type Erasing struct {
 	As      string        `if:"label=as,type=text"`
 	Do      core.Activity `if:"label=do"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Erasing)(nil)
 
 func (*Erasing) Compose() composer.Spec {
 	return composer.Spec{
@@ -552,7 +559,6 @@ func (*Erasing) Compose() composer.Spec {
 }
 
 const Erasing_Type = "erasing"
-
 const Erasing_Field_Count = "$COUNT"
 const Erasing_Field_From = "$FROM"
 const Erasing_Field_AtIndex = "$AT_INDEX"
@@ -670,7 +676,6 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 }
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
-// User implements: Execute.
 type ErasingEdge struct {
 	From   ListSource    `if:"label=_"`
 	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
@@ -678,6 +683,9 @@ type ErasingEdge struct {
 	Do     core.Activity `if:"label=do"`
 	Else   core.Brancher `if:"label=else,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ErasingEdge)(nil)
 
 func (*ErasingEdge) Compose() composer.Spec {
 	return composer.Spec{
@@ -688,7 +696,6 @@ func (*ErasingEdge) Compose() composer.Spec {
 }
 
 const ErasingEdge_Type = "erasing_edge"
-
 const ErasingEdge_Field_From = "$FROM"
 const ErasingEdge_Field_AtEdge = "$AT_EDGE"
 const ErasingEdge_Field_As = "$AS"
@@ -806,10 +813,12 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 }
 
 // FromNumList Uses a list of numbers
-// User implements: ListSource.
 type FromNumList struct {
 	Var core.VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ListSource = (*FromNumList)(nil)
 
 func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
@@ -820,7 +829,6 @@ func (*FromNumList) Compose() composer.Spec {
 }
 
 const FromNumList_Type = "from_num_list"
-
 const FromNumList_Field_Var = "$VAR"
 
 func (op *FromNumList) Marshal(m jsn.Marshaler) error {
@@ -906,10 +914,12 @@ func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
 }
 
 // FromRecList Uses a list of records
-// User implements: ListSource.
 type FromRecList struct {
 	Var core.VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ListSource = (*FromRecList)(nil)
 
 func (*FromRecList) Compose() composer.Spec {
 	return composer.Spec{
@@ -920,7 +930,6 @@ func (*FromRecList) Compose() composer.Spec {
 }
 
 const FromRecList_Type = "from_rec_list"
-
 const FromRecList_Field_Var = "$VAR"
 
 func (op *FromRecList) Marshal(m jsn.Marshaler) error {
@@ -1006,10 +1015,12 @@ func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
 }
 
 // FromTxtList Uses a list of text
-// User implements: ListSource.
 type FromTxtList struct {
 	Var core.VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ListSource = (*FromTxtList)(nil)
 
 func (*FromTxtList) Compose() composer.Spec {
 	return composer.Spec{
@@ -1020,7 +1031,6 @@ func (*FromTxtList) Compose() composer.Spec {
 }
 
 const FromTxtList_Type = "from_txt_list"
-
 const FromTxtList_Field_Var = "$VAR"
 
 func (op *FromTxtList) Marshal(m jsn.Marshaler) error {
@@ -1106,10 +1116,12 @@ func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
 }
 
 // IntoNumList Targets a list of numbers
-// User implements: ListTarget.
 type IntoNumList struct {
 	Var core.VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ListTarget = (*IntoNumList)(nil)
 
 func (*IntoNumList) Compose() composer.Spec {
 	return composer.Spec{
@@ -1120,7 +1132,6 @@ func (*IntoNumList) Compose() composer.Spec {
 }
 
 const IntoNumList_Type = "into_num_list"
-
 const IntoNumList_Field_Var = "$VAR"
 
 func (op *IntoNumList) Marshal(m jsn.Marshaler) error {
@@ -1206,10 +1217,12 @@ func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
 }
 
 // IntoRecList Targets a list of records
-// User implements: ListTarget.
 type IntoRecList struct {
 	Var core.VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ListTarget = (*IntoRecList)(nil)
 
 func (*IntoRecList) Compose() composer.Spec {
 	return composer.Spec{
@@ -1220,7 +1233,6 @@ func (*IntoRecList) Compose() composer.Spec {
 }
 
 const IntoRecList_Type = "into_rec_list"
-
 const IntoRecList_Field_Var = "$VAR"
 
 func (op *IntoRecList) Marshal(m jsn.Marshaler) error {
@@ -1306,10 +1318,12 @@ func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
 }
 
 // IntoTxtList Targets a list of text
-// User implements: ListTarget.
 type IntoTxtList struct {
 	Var core.VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ListTarget = (*IntoTxtList)(nil)
 
 func (*IntoTxtList) Compose() composer.Spec {
 	return composer.Spec{
@@ -1320,7 +1334,6 @@ func (*IntoTxtList) Compose() composer.Spec {
 }
 
 const IntoTxtList_Type = "into_txt_list"
-
 const IntoTxtList_Field_Var = "$VAR"
 
 func (op *IntoTxtList) Marshal(m jsn.Marshaler) error {
@@ -1406,11 +1419,15 @@ func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
 }
 
 // ListAt Get a value from a list. The first element is is index 1.
-// User implements: NumberEval, TextEval, RecordEval.
 type ListAt struct {
 	List  rt.Assignment `if:"label=_"`
 	Index rt.NumberEval `if:"label=index"`
 }
+
+// User implemented slots:
+var _ rt.NumberEval = (*ListAt)(nil)
+var _ rt.TextEval = (*ListAt)(nil)
+var _ rt.RecordEval = (*ListAt)(nil)
 
 func (*ListAt) Compose() composer.Spec {
 	return composer.Spec{
@@ -1421,7 +1438,6 @@ func (*ListAt) Compose() composer.Spec {
 }
 
 const ListAt_Type = "list_at"
-
 const ListAt_Field_List = "$LIST"
 const ListAt_Field_Index = "$INDEX"
 
@@ -1515,13 +1531,15 @@ func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
 }
 
 // ListEach Loops over the elements in the passed list, or runs the 'else' activity if empty.
-// User implements: Execute.
 type ListEach struct {
 	List rt.Assignment `if:"label=across"`
 	As   ListIterator  `if:"label=as"`
 	Do   core.Activity `if:"label=do"`
 	Else core.Brancher `if:"label=else,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ListEach)(nil)
 
 func (*ListEach) Compose() composer.Spec {
 	return composer.Spec{
@@ -1532,7 +1550,6 @@ func (*ListEach) Compose() composer.Spec {
 }
 
 const ListEach_Type = "list_each"
-
 const ListEach_Field_List = "$LIST"
 const ListEach_Field_As = "$AS"
 const ListEach_Field_Do = "$DO"
@@ -1642,11 +1659,14 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 }
 
 // ListFind Search a list for a specific value.
-// User implements: BoolEval, NumberEval.
 type ListFind struct {
 	Value rt.Assignment `if:"label=_"`
 	List  rt.Assignment `if:"label=list"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*ListFind)(nil)
+var _ rt.NumberEval = (*ListFind)(nil)
 
 func (*ListFind) Compose() composer.Spec {
 	return composer.Spec{
@@ -1657,7 +1677,6 @@ func (*ListFind) Compose() composer.Spec {
 }
 
 const ListFind_Type = "list_find"
-
 const ListFind_Field_Value = "$VALUE"
 const ListFind_Field_List = "$LIST"
 
@@ -1766,7 +1785,6 @@ func (*ListGather) Compose() composer.Spec {
 }
 
 const ListGather_Type = "list_gather"
-
 const ListGather_Field_Var = "$VAR"
 const ListGather_Field_From = "$FROM"
 const ListGather_Field_Using = "$USING"
@@ -1937,10 +1955,12 @@ func ListIterator_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListIterator) 
 }
 
 // ListLen Determines the number of values in a list.
-// User implements: NumberEval.
 type ListLen struct {
 	List rt.Assignment `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.NumberEval = (*ListLen)(nil)
 
 func (*ListLen) Compose() composer.Spec {
 	return composer.Spec{
@@ -1951,7 +1971,6 @@ func (*ListLen) Compose() composer.Spec {
 }
 
 const ListLen_Type = "list_len"
-
 const ListLen_Field_List = "$LIST"
 
 func (op *ListLen) Marshal(m jsn.Marshaler) error {
@@ -2037,12 +2056,14 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 }
 
 // ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time.
-// User implements: Execute.
 type ListMap struct {
 	ToList       string        `if:"label=_,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
 	UsingPattern string        `if:"label=using,type=text"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ListMap)(nil)
 
 func (*ListMap) Compose() composer.Spec {
 	return composer.Spec{
@@ -2053,7 +2074,6 @@ func (*ListMap) Compose() composer.Spec {
 }
 
 const ListMap_Type = "list_map"
-
 const ListMap_Field_ToList = "$TO_LIST"
 const ListMap_Field_FromList = "$FROM_LIST"
 const ListMap_Field_UsingPattern = "$USING_PATTERN"
@@ -2155,12 +2175,14 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 }
 
 // ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).
-// User implements: Execute.
 type ListReduce struct {
 	IntoValue    string        `if:"label=into,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
 	UsingPattern string        `if:"label=using,type=text"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ListReduce)(nil)
 
 func (*ListReduce) Compose() composer.Spec {
 	return composer.Spec{
@@ -2171,7 +2193,6 @@ func (*ListReduce) Compose() composer.Spec {
 }
 
 const ListReduce_Type = "list_reduce"
-
 const ListReduce_Field_IntoValue = "$INTO_VALUE"
 const ListReduce_Field_FromList = "$FROM_LIST"
 const ListReduce_Field_UsingPattern = "$USING_PATTERN"
@@ -2273,10 +2294,12 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 }
 
 // ListReverse Reverse a list.
-// User implements: Execute.
 type ListReverse struct {
 	List ListSource `if:"label=list"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ListReverse)(nil)
 
 func (*ListReverse) Compose() composer.Spec {
 	return composer.Spec{
@@ -2287,7 +2310,6 @@ func (*ListReverse) Compose() composer.Spec {
 }
 
 const ListReverse_Type = "list_reverse"
-
 const ListReverse_Field_List = "$LIST"
 
 func (op *ListReverse) Marshal(m jsn.Marshaler) error {
@@ -2373,12 +2395,14 @@ func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
 }
 
 // ListSet Overwrite an existing value in a list.
-// User implements: Execute.
 type ListSet struct {
 	List  string        `if:"label=_,type=text"`
 	Index rt.NumberEval `if:"label=index"`
 	From  rt.Assignment `if:"label=from"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ListSet)(nil)
 
 func (*ListSet) Compose() composer.Spec {
 	return composer.Spec{
@@ -2389,7 +2413,6 @@ func (*ListSet) Compose() composer.Spec {
 }
 
 const ListSet_Type = "list_set"
-
 const ListSet_Field_List = "$LIST"
 const ListSet_Field_Index = "$INDEX"
 const ListSet_Field_From = "$FROM"
@@ -2497,12 +2520,16 @@ func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
 // Negatives indices indicates an offset from the end.
 // When end is omitted, copy up to and including the last element;
 // and do the same if the end is greater than the length
-// User implements: NumListEval, TextListEval, RecordListEval.
 type ListSlice struct {
 	List  rt.Assignment `if:"label=_"`
 	Start rt.NumberEval `if:"label=start,optional"`
 	End   rt.NumberEval `if:"label=end,optional"`
 }
+
+// User implemented slots:
+var _ rt.NumListEval = (*ListSlice)(nil)
+var _ rt.TextListEval = (*ListSlice)(nil)
+var _ rt.RecordListEval = (*ListSlice)(nil)
 
 func (*ListSlice) Compose() composer.Spec {
 	return composer.Spec{
@@ -2513,7 +2540,6 @@ func (*ListSlice) Compose() composer.Spec {
 }
 
 const ListSlice_Type = "list_slice"
-
 const ListSlice_Field_List = "$LIST"
 const ListSlice_Field_Start = "$START"
 const ListSlice_Field_End = "$END"
@@ -2615,12 +2641,14 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 }
 
 // ListSortNumbers
-// User implements: Execute.
 type ListSortNumbers struct {
 	Var        core.VariableName `if:"label=_"`
 	ByField    string            `if:"label=by_field,type=text"`
 	Descending rt.BoolEval       `if:"label=descending,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ListSortNumbers)(nil)
 
 func (*ListSortNumbers) Compose() composer.Spec {
 	return composer.Spec{
@@ -2631,7 +2659,6 @@ func (*ListSortNumbers) Compose() composer.Spec {
 }
 
 const ListSortNumbers_Type = "list_sort_numbers"
-
 const ListSortNumbers_Field_Var = "$VAR"
 const ListSortNumbers_Field_ByField = "$BY_FIELD"
 const ListSortNumbers_Field_Descending = "$DESCENDING"
@@ -2733,13 +2760,15 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 }
 
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
-// User implements: Execute.
 type ListSortText struct {
 	Var        core.VariableName `if:"label=_"`
 	ByField    string            `if:"label=by_field,type=text"`
 	Descending rt.BoolEval       `if:"label=descending,optional"`
 	UsingCase  rt.BoolEval       `if:"label=using_case,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ListSortText)(nil)
 
 func (*ListSortText) Compose() composer.Spec {
 	return composer.Spec{
@@ -2750,7 +2779,6 @@ func (*ListSortText) Compose() composer.Spec {
 }
 
 const ListSortText_Type = "list_sort_text"
-
 const ListSortText_Field_Var = "$VAR"
 const ListSortText_Field_ByField = "$BY_FIELD"
 const ListSortText_Field_Descending = "$DESCENDING"
@@ -2860,11 +2888,13 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 }
 
 // ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
-// User implements: Execute.
 type ListSortUsing struct {
 	Var   core.VariableName `if:"label=_"`
 	Using string            `if:"label=using,type=text"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ListSortUsing)(nil)
 
 func (*ListSortUsing) Compose() composer.Spec {
 	return composer.Spec{
@@ -2875,7 +2905,6 @@ func (*ListSortUsing) Compose() composer.Spec {
 }
 
 const ListSortUsing_Type = "list_sort_using"
-
 const ListSortUsing_Field_Var = "$VAR"
 const ListSortUsing_Field_Using = "$USING"
 
@@ -3038,13 +3067,18 @@ func ListSource_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSource) (err
 }
 
 // ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
-// User implements: Execute, NumListEval, TextListEval, RecordListEval.
 type ListSplice struct {
 	List   string        `if:"label=_,type=text"`
 	Start  rt.NumberEval `if:"label=start"`
 	Remove rt.NumberEval `if:"label=remove"`
 	Insert rt.Assignment `if:"label=insert"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ListSplice)(nil)
+var _ rt.NumListEval = (*ListSplice)(nil)
+var _ rt.TextListEval = (*ListSplice)(nil)
+var _ rt.RecordListEval = (*ListSplice)(nil)
 
 func (*ListSplice) Compose() composer.Spec {
 	return composer.Spec{
@@ -3055,7 +3089,6 @@ func (*ListSplice) Compose() composer.Spec {
 }
 
 const ListSplice_Type = "list_splice"
-
 const ListSplice_Field_List = "$LIST"
 const ListSplice_Field_Start = "$START"
 const ListSplice_Field_Remove = "$REMOVE"
@@ -3234,12 +3267,14 @@ func ListTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListTarget) (err
 }
 
 // PutEdge Add a value to a list
-// User implements: Execute.
 type PutEdge struct {
 	From   rt.Assignment `if:"label=_"`
 	Into   ListTarget    `if:"label=into"`
 	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*PutEdge)(nil)
 
 func (*PutEdge) Compose() composer.Spec {
 	return composer.Spec{
@@ -3250,7 +3285,6 @@ func (*PutEdge) Compose() composer.Spec {
 }
 
 const PutEdge_Type = "put_edge"
-
 const PutEdge_Field_From = "$FROM"
 const PutEdge_Field_Into = "$INTO"
 const PutEdge_Field_AtEdge = "$AT_EDGE"
@@ -3352,12 +3386,14 @@ func PutEdge_Marshal(m jsn.Marshaler, val *PutEdge) (err error) {
 }
 
 // PutIndex Replace one value in a list with another
-// User implements: Execute.
 type PutIndex struct {
 	From    rt.Assignment `if:"label=_"`
 	Into    ListTarget    `if:"label=into"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*PutIndex)(nil)
 
 func (*PutIndex) Compose() composer.Spec {
 	return composer.Spec{
@@ -3368,7 +3404,6 @@ func (*PutIndex) Compose() composer.Spec {
 }
 
 const PutIndex_Type = "put_index"
-
 const PutIndex_Field_From = "$FROM"
 const PutIndex_Field_Into = "$INTO"
 const PutIndex_Field_AtIndex = "$AT_INDEX"
@@ -3475,12 +3510,14 @@ func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
 // a zero step returns an error.
 // A positive step ends the series when the returned value would exceed stop
 // while a negative step ends before generating a value less than stop.
-// User implements: NumListEval.
 type Range struct {
 	To     rt.NumberEval `if:"label=_"`
 	From   rt.NumberEval `if:"label=from,optional"`
 	ByStep rt.NumberEval `if:"label=by_step,optional"`
 }
+
+// User implemented slots:
+var _ rt.NumListEval = (*Range)(nil)
 
 func (*Range) Compose() composer.Spec {
 	return composer.Spec{
@@ -3490,7 +3527,6 @@ func (*Range) Compose() composer.Spec {
 }
 
 const Range_Type = "range"
-
 const Range_Field_To = "$TO"
 const Range_Field_From = "$FROM"
 const Range_Field_ByStep = "$BY_STEP"

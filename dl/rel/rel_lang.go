@@ -10,11 +10,13 @@ import (
 )
 
 // ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.)
-// User implements: TextEval.
 type ReciprocalOf struct {
 	Via    RelationName `if:"label=_"`
 	Object rt.TextEval  `if:"label=object"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*ReciprocalOf)(nil)
 
 func (*ReciprocalOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -25,7 +27,6 @@ func (*ReciprocalOf) Compose() composer.Spec {
 }
 
 const ReciprocalOf_Type = "reciprocal_of"
-
 const ReciprocalOf_Field_Via = "$VIA"
 const ReciprocalOf_Field_Object = "$OBJECT"
 
@@ -119,11 +120,13 @@ func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
 }
 
 // ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)
-// User implements: TextListEval.
 type ReciprocalsOf struct {
 	Via    RelationName `if:"label=_"`
 	Object rt.TextEval  `if:"label=object"`
 }
+
+// User implemented slots:
+var _ rt.TextListEval = (*ReciprocalsOf)(nil)
 
 func (*ReciprocalsOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -134,7 +137,6 @@ func (*ReciprocalsOf) Compose() composer.Spec {
 }
 
 const ReciprocalsOf_Type = "reciprocals_of"
-
 const ReciprocalsOf_Field_Via = "$VIA"
 const ReciprocalsOf_Field_Object = "$OBJECT"
 
@@ -228,12 +230,14 @@ func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
 }
 
 // Relate Relate two nouns.
-// User implements: Execute.
 type Relate struct {
 	Object   rt.TextEval  `if:"label=_"`
 	ToObject rt.TextEval  `if:"label=to"`
 	Via      RelationName `if:"label=via"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Relate)(nil)
 
 func (*Relate) Compose() composer.Spec {
 	return composer.Spec{
@@ -243,7 +247,6 @@ func (*Relate) Compose() composer.Spec {
 }
 
 const Relate_Type = "relate"
-
 const Relate_Field_Object = "$OBJECT"
 const Relate_Field_ToObject = "$TO_OBJECT"
 const Relate_Field_Via = "$VIA"
@@ -422,11 +425,13 @@ func RelationName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelationName) 
 }
 
 // RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.)
-// User implements: TextEval.
 type RelativeOf struct {
 	Via    RelationName `if:"label=_"`
 	Object rt.TextEval  `if:"label=object"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*RelativeOf)(nil)
 
 func (*RelativeOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -437,7 +442,6 @@ func (*RelativeOf) Compose() composer.Spec {
 }
 
 const RelativeOf_Type = "relative_of"
-
 const RelativeOf_Field_Via = "$VIA"
 const RelativeOf_Field_Object = "$OBJECT"
 
@@ -531,11 +535,13 @@ func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
 }
 
 // RelativesOf Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
-// User implements: TextListEval.
 type RelativesOf struct {
 	Via    RelationName `if:"label=_"`
 	Object rt.TextEval  `if:"label=object"`
 }
+
+// User implemented slots:
+var _ rt.TextListEval = (*RelativesOf)(nil)
 
 func (*RelativesOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -546,7 +552,6 @@ func (*RelativesOf) Compose() composer.Spec {
 }
 
 const RelativesOf_Type = "relatives_of"
-
 const RelativesOf_Field_Via = "$VIA"
 const RelativesOf_Field_Object = "$OBJECT"
 

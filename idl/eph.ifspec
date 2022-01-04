@@ -71,7 +71,6 @@
             },
             "eph_params": {
                 "spec": "eph {have%affinity:affinity} {called%name:text} {of%class?text} {initially?assignment}",
-                "slot": "ephemera",
                 "desc": [
                     "'Affinity' designates the storage type of a given parameter",
                     "while 'class' is used to indicate an interpretation of that parameter, for example a reference to a kind.",

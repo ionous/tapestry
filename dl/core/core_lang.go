@@ -11,10 +11,12 @@ import (
 )
 
 // Activity
-// User implements: Execute.
 type Activity struct {
 	Exe []rt.Execute `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Activity)(nil)
 
 func (*Activity) Compose() composer.Spec {
 	return composer.Spec{
@@ -25,7 +27,6 @@ func (*Activity) Compose() composer.Spec {
 }
 
 const Activity_Type = "activity"
-
 const Activity_Field_Exe = "$EXE"
 
 func (op *Activity) Marshal(m jsn.Marshaler) error {
@@ -111,10 +112,12 @@ func Activity_Marshal(m jsn.Marshaler, val *Activity) (err error) {
 }
 
 // AllTrue Returns true if all of the evaluations are true.
-// User implements: BoolEval.
 type AllTrue struct {
 	Test []rt.BoolEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*AllTrue)(nil)
 
 func (*AllTrue) Compose() composer.Spec {
 	return composer.Spec{
@@ -124,7 +127,6 @@ func (*AllTrue) Compose() composer.Spec {
 }
 
 const AllTrue_Type = "all_true"
-
 const AllTrue_Field_Test = "$TEST"
 
 func (op *AllTrue) Marshal(m jsn.Marshaler) error {
@@ -210,9 +212,11 @@ func AllTrue_Marshal(m jsn.Marshaler, val *AllTrue) (err error) {
 }
 
 // Always Returns true.
-// User implements: BoolEval.
 type Always struct {
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*Always)(nil)
 
 func (*Always) Compose() composer.Spec {
 	return composer.Spec{
@@ -299,10 +303,12 @@ func Always_Marshal(m jsn.Marshaler, val *Always) (err error) {
 }
 
 // AnyTrue Returns true if any of the evaluations are true.
-// User implements: BoolEval.
 type AnyTrue struct {
 	Test []rt.BoolEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*AnyTrue)(nil)
 
 func (*AnyTrue) Compose() composer.Spec {
 	return composer.Spec{
@@ -312,7 +318,6 @@ func (*AnyTrue) Compose() composer.Spec {
 }
 
 const AnyTrue_Type = "any_true"
-
 const AnyTrue_Field_Test = "$TEST"
 
 func (op *AnyTrue) Marshal(m jsn.Marshaler) error {
@@ -398,11 +403,13 @@ func AnyTrue_Marshal(m jsn.Marshaler, val *AnyTrue) (err error) {
 }
 
 // Assign Assigns a variable to a value.
-// User implements: Execute.
 type Assign struct {
 	Var  VariableName  `if:"label=_"`
 	From rt.Assignment `if:"label=be"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Assign)(nil)
 
 func (*Assign) Compose() composer.Spec {
 	return composer.Spec{
@@ -413,7 +420,6 @@ func (*Assign) Compose() composer.Spec {
 }
 
 const Assign_Type = "assign"
-
 const Assign_Field_Var = "$VAR"
 const Assign_Field_From = "$FROM"
 
@@ -507,9 +513,11 @@ func Assign_Marshal(m jsn.Marshaler, val *Assign) (err error) {
 }
 
 // AtLeast The first value is greater than or equal to the second value.
-// User implements: Comparator.
 type AtLeast struct {
 }
+
+// User implemented slots:
+var _ Comparator = (*AtLeast)(nil)
 
 func (*AtLeast) Compose() composer.Spec {
 	return composer.Spec{
@@ -596,9 +604,11 @@ func AtLeast_Marshal(m jsn.Marshaler, val *AtLeast) (err error) {
 }
 
 // AtMost The first value is less than or equal to the second value.
-// User implements: Comparator.
 type AtMost struct {
 }
+
+// User implemented slots:
+var _ Comparator = (*AtMost)(nil)
 
 func (*AtMost) Compose() composer.Spec {
 	return composer.Spec{
@@ -685,9 +695,11 @@ func AtMost_Marshal(m jsn.Marshaler, val *AtMost) (err error) {
 }
 
 // Blankline Add a single blank line following some text.
-// User implements: Execute.
 type Blankline struct {
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Blankline)(nil)
 
 func (*Blankline) Compose() composer.Spec {
 	return composer.Spec{
@@ -775,10 +787,12 @@ func Blankline_Marshal(m jsn.Marshaler, val *Blankline) (err error) {
 }
 
 // BracketText Sandwiches text printed during a block and puts them inside parenthesis '()'.
-// User implements: TextEval.
 type BracketText struct {
 	Do Activity `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*BracketText)(nil)
 
 func (*BracketText) Compose() composer.Spec {
 	return composer.Spec{
@@ -789,7 +803,6 @@ func (*BracketText) Compose() composer.Spec {
 }
 
 const BracketText_Type = "bracket_text"
-
 const BracketText_Field_Do = "$DO"
 
 func (op *BracketText) Marshal(m jsn.Marshaler) error {
@@ -944,9 +957,11 @@ func Brancher_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Brancher) (err err
 }
 
 // Break In a repeating loop, exit the loop.
-// User implements: Execute.
 type Break struct {
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Break)(nil)
 
 func (*Break) Compose() composer.Spec {
 	return composer.Spec{
@@ -1033,10 +1048,12 @@ func Break_Marshal(m jsn.Marshaler, val *Break) (err error) {
 }
 
 // BufferText
-// User implements: TextEval.
 type BufferText struct {
 	Do Activity `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*BufferText)(nil)
 
 func (*BufferText) Compose() composer.Spec {
 	return composer.Spec{
@@ -1047,7 +1064,6 @@ func (*BufferText) Compose() composer.Spec {
 }
 
 const BufferText_Type = "buffer_text"
-
 const BufferText_Field_Do = "$DO"
 
 func (op *BufferText) Marshal(m jsn.Marshaler) error {
@@ -1147,7 +1163,6 @@ func (*CallArg) Compose() composer.Spec {
 }
 
 const CallArg_Type = "call_arg"
-
 const CallArg_Field_Name = "$NAME"
 const CallArg_Field_From = "$FROM"
 
@@ -1254,7 +1269,6 @@ func (*CallArgs) Compose() composer.Spec {
 }
 
 const CallArgs_Type = "call_args"
-
 const CallArgs_Field_Args = "$ARGS"
 
 func (op *CallArgs) Marshal(m jsn.Marshaler) error {
@@ -1340,11 +1354,13 @@ func CallArgs_Marshal(m jsn.Marshaler, val *CallArgs) (err error) {
 }
 
 // CallCycle Runtime version of cycle_text
-// User implements: TextEval.
 type CallCycle struct {
 	Name  string        `if:"label=_,type=text"`
 	Parts []rt.TextEval `if:"label=over"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*CallCycle)(nil)
 
 func (*CallCycle) Compose() composer.Spec {
 	return composer.Spec{
@@ -1355,7 +1371,6 @@ func (*CallCycle) Compose() composer.Spec {
 }
 
 const CallCycle_Type = "call_cycle"
-
 const CallCycle_Field_Name = "$NAME"
 const CallCycle_Field_Parts = "$PARTS"
 
@@ -1449,11 +1464,13 @@ func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
 }
 
 // CallMake Runtime version of make
-// User implements: RecordEval.
 type CallMake struct {
 	Kind      string   `if:"label=_,type=text"`
 	Arguments CallArgs `if:"label=args"`
 }
+
+// User implemented slots:
+var _ rt.RecordEval = (*CallMake)(nil)
 
 func (*CallMake) Compose() composer.Spec {
 	return composer.Spec{
@@ -1463,7 +1480,6 @@ func (*CallMake) Compose() composer.Spec {
 }
 
 const CallMake_Type = "call_make"
-
 const CallMake_Field_Kind = "$KIND"
 const CallMake_Field_Arguments = "$ARGUMENTS"
 
@@ -1557,11 +1573,20 @@ func CallMake_Marshal(m jsn.Marshaler, val *CallMake) (err error) {
 }
 
 // CallPattern Runtime version of determine
-// User implements: Execute, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type CallPattern struct {
 	Pattern   PatternName `if:"label=_"`
 	Arguments CallArgs    `if:"label=args"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*CallPattern)(nil)
+var _ rt.BoolEval = (*CallPattern)(nil)
+var _ rt.NumberEval = (*CallPattern)(nil)
+var _ rt.TextEval = (*CallPattern)(nil)
+var _ rt.RecordEval = (*CallPattern)(nil)
+var _ rt.NumListEval = (*CallPattern)(nil)
+var _ rt.TextListEval = (*CallPattern)(nil)
+var _ rt.RecordListEval = (*CallPattern)(nil)
 
 func (*CallPattern) Compose() composer.Spec {
 	return composer.Spec{
@@ -1571,7 +1596,6 @@ func (*CallPattern) Compose() composer.Spec {
 }
 
 const CallPattern_Type = "call_pattern"
-
 const CallPattern_Field_Pattern = "$PATTERN"
 const CallPattern_Field_Arguments = "$ARGUMENTS"
 
@@ -1665,12 +1689,15 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 }
 
 // CallSend Runtime version of send
-// User implements: Execute, BoolEval.
 type CallSend struct {
 	Event     string          `if:"label=_,type=text"`
 	Path      rt.TextListEval `if:"label=to"`
 	Arguments CallArgs        `if:"label=args"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*CallSend)(nil)
+var _ rt.BoolEval = (*CallSend)(nil)
 
 func (*CallSend) Compose() composer.Spec {
 	return composer.Spec{
@@ -1680,7 +1707,6 @@ func (*CallSend) Compose() composer.Spec {
 }
 
 const CallSend_Type = "call_send"
-
 const CallSend_Field_Event = "$EVENT"
 const CallSend_Field_Path = "$PATH"
 const CallSend_Field_Arguments = "$ARGUMENTS"
@@ -1782,12 +1808,14 @@ func CallSend_Marshal(m jsn.Marshaler, val *CallSend) (err error) {
 }
 
 // CallShuffle Runtime version of shuffle_text
-// User implements: TextEval.
 type CallShuffle struct {
 	Name    string        `if:"label=_,type=text"`
 	Parts   []rt.TextEval `if:"label=over"`
 	Indices Shuffler      `if:"internal"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*CallShuffle)(nil)
 
 func (*CallShuffle) Compose() composer.Spec {
 	return composer.Spec{
@@ -1798,7 +1826,6 @@ func (*CallShuffle) Compose() composer.Spec {
 }
 
 const CallShuffle_Type = "call_shuffle"
-
 const CallShuffle_Field_Name = "$NAME"
 const CallShuffle_Field_Parts = "$PARTS"
 
@@ -1892,11 +1919,13 @@ func CallShuffle_Marshal(m jsn.Marshaler, val *CallShuffle) (err error) {
 }
 
 // CallTerminal Runtime version of stopping_text
-// User implements: TextEval.
 type CallTerminal struct {
 	Name  string        `if:"label=_,type=text"`
 	Parts []rt.TextEval `if:"label=over"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*CallTerminal)(nil)
 
 func (*CallTerminal) Compose() composer.Spec {
 	return composer.Spec{
@@ -1907,7 +1936,6 @@ func (*CallTerminal) Compose() composer.Spec {
 }
 
 const CallTerminal_Type = "call_terminal"
-
 const CallTerminal_Field_Name = "$NAME"
 const CallTerminal_Field_Parts = "$PARTS"
 
@@ -2001,12 +2029,14 @@ func CallTerminal_Marshal(m jsn.Marshaler, val *CallTerminal) (err error) {
 }
 
 // CallTrigger Runtime version of count_of
-// User implements: BoolEval.
 type CallTrigger struct {
 	Name    string        `if:"label=_,type=text"`
 	Trigger Trigger       `if:"label=on"`
 	Num     rt.NumberEval `if:"label=num"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*CallTrigger)(nil)
 
 func (*CallTrigger) Compose() composer.Spec {
 	return composer.Spec{
@@ -2017,7 +2047,6 @@ func (*CallTrigger) Compose() composer.Spec {
 }
 
 const CallTrigger_Type = "call_trigger"
-
 const CallTrigger_Field_Name = "$NAME"
 const CallTrigger_Field_Trigger = "$TRIGGER"
 const CallTrigger_Field_Num = "$NUM"
@@ -2119,10 +2148,12 @@ func CallTrigger_Marshal(m jsn.Marshaler, val *CallTrigger) (err error) {
 }
 
 // Capitalize Returns new text, with the first letter turned into uppercase.
-// User implements: TextEval.
 type Capitalize struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*Capitalize)(nil)
 
 func (*Capitalize) Compose() composer.Spec {
 	return composer.Spec{
@@ -2132,7 +2163,6 @@ func (*Capitalize) Compose() composer.Spec {
 }
 
 const Capitalize_Type = "capitalize"
-
 const Capitalize_Field_Text = "$TEXT"
 
 func (op *Capitalize) Marshal(m jsn.Marshaler) error {
@@ -2218,12 +2248,15 @@ func Capitalize_Marshal(m jsn.Marshaler, val *Capitalize) (err error) {
 }
 
 // ChooseAction An if statement.
-// User implements: Execute, Brancher.
 type ChooseAction struct {
 	If   rt.BoolEval `if:"label=_"`
 	Do   Activity    `if:"label=do"`
 	Else Brancher    `if:"label=else,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ChooseAction)(nil)
+var _ Brancher = (*ChooseAction)(nil)
 
 func (*ChooseAction) Compose() composer.Spec {
 	return composer.Spec{
@@ -2234,7 +2267,6 @@ func (*ChooseAction) Compose() composer.Spec {
 }
 
 const ChooseAction_Type = "choose_action"
-
 const ChooseAction_Field_If = "$IF"
 const ChooseAction_Field_Do = "$DO"
 const ChooseAction_Field_Else = "$ELSE"
@@ -2336,12 +2368,14 @@ func ChooseAction_Marshal(m jsn.Marshaler, val *ChooseAction) (err error) {
 }
 
 // ChooseMore
-// User implements: Brancher.
 type ChooseMore struct {
 	If   rt.BoolEval `if:"label=_"`
 	Do   Activity    `if:"label=do"`
 	Else Brancher    `if:"label=else,optional"`
 }
+
+// User implemented slots:
+var _ Brancher = (*ChooseMore)(nil)
 
 func (*ChooseMore) Compose() composer.Spec {
 	return composer.Spec{
@@ -2352,7 +2386,6 @@ func (*ChooseMore) Compose() composer.Spec {
 }
 
 const ChooseMore_Type = "choose_more"
-
 const ChooseMore_Field_If = "$IF"
 const ChooseMore_Field_Do = "$DO"
 const ChooseMore_Field_Else = "$ELSE"
@@ -2454,7 +2487,6 @@ func ChooseMore_Marshal(m jsn.Marshaler, val *ChooseMore) (err error) {
 }
 
 // ChooseMoreValue
-// User implements: Brancher.
 type ChooseMoreValue struct {
 	Assign string        `if:"label=_,type=text"`
 	From   rt.Assignment `if:"label=from"`
@@ -2462,6 +2494,9 @@ type ChooseMoreValue struct {
 	Do     Activity      `if:"label=do"`
 	Else   Brancher      `if:"label=else,optional"`
 }
+
+// User implemented slots:
+var _ Brancher = (*ChooseMoreValue)(nil)
 
 func (*ChooseMoreValue) Compose() composer.Spec {
 	return composer.Spec{
@@ -2472,7 +2507,6 @@ func (*ChooseMoreValue) Compose() composer.Spec {
 }
 
 const ChooseMoreValue_Type = "choose_more_value"
-
 const ChooseMoreValue_Field_Assign = "$ASSIGN"
 const ChooseMoreValue_Field_From = "$FROM"
 const ChooseMoreValue_Field_Filter = "$FILTER"
@@ -2590,10 +2624,12 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 }
 
 // ChooseNothingElse
-// User implements: Brancher.
 type ChooseNothingElse struct {
 	Do Activity `if:"label=_"`
 }
+
+// User implemented slots:
+var _ Brancher = (*ChooseNothingElse)(nil)
 
 func (*ChooseNothingElse) Compose() composer.Spec {
 	return composer.Spec{
@@ -2604,7 +2640,6 @@ func (*ChooseNothingElse) Compose() composer.Spec {
 }
 
 const ChooseNothingElse_Type = "choose_nothing_else"
-
 const ChooseNothingElse_Field_Do = "$DO"
 
 func (op *ChooseNothingElse) Marshal(m jsn.Marshaler) error {
@@ -2690,12 +2725,14 @@ func ChooseNothingElse_Marshal(m jsn.Marshaler, val *ChooseNothingElse) (err err
 }
 
 // ChooseNum Pick one of two numbers based on a boolean test.
-// User implements: NumberEval.
 type ChooseNum struct {
 	If    rt.BoolEval   `if:"label=if"`
 	True  rt.NumberEval `if:"label=then"`
 	False rt.NumberEval `if:"label=else,optional"`
 }
+
+// User implemented slots:
+var _ rt.NumberEval = (*ChooseNum)(nil)
 
 func (*ChooseNum) Compose() composer.Spec {
 	return composer.Spec{
@@ -2706,7 +2743,6 @@ func (*ChooseNum) Compose() composer.Spec {
 }
 
 const ChooseNum_Type = "choose_num"
-
 const ChooseNum_Field_If = "$IF"
 const ChooseNum_Field_True = "$TRUE"
 const ChooseNum_Field_False = "$FALSE"
@@ -2808,12 +2844,14 @@ func ChooseNum_Marshal(m jsn.Marshaler, val *ChooseNum) (err error) {
 }
 
 // ChooseText Pick one of two strings based on a boolean test.
-// User implements: TextEval.
 type ChooseText struct {
 	If    rt.BoolEval `if:"label=if"`
 	True  rt.TextEval `if:"label=then"`
 	False rt.TextEval `if:"label=else,optional"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*ChooseText)(nil)
 
 func (*ChooseText) Compose() composer.Spec {
 	return composer.Spec{
@@ -2824,7 +2862,6 @@ func (*ChooseText) Compose() composer.Spec {
 }
 
 const ChooseText_Type = "choose_text"
-
 const ChooseText_Field_If = "$IF"
 const ChooseText_Field_True = "$TRUE"
 const ChooseText_Field_False = "$FALSE"
@@ -2926,7 +2963,6 @@ func ChooseText_Marshal(m jsn.Marshaler, val *ChooseText) (err error) {
 }
 
 // ChooseValue An if statement with local assignment.
-// User implements: Execute, Brancher.
 type ChooseValue struct {
 	Assign string        `if:"label=_,type=text"`
 	From   rt.Assignment `if:"label=from"`
@@ -2934,6 +2970,10 @@ type ChooseValue struct {
 	Do     Activity      `if:"label=do"`
 	Else   Brancher      `if:"label=else,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*ChooseValue)(nil)
+var _ Brancher = (*ChooseValue)(nil)
 
 func (*ChooseValue) Compose() composer.Spec {
 	return composer.Spec{
@@ -2944,7 +2984,6 @@ func (*ChooseValue) Compose() composer.Spec {
 }
 
 const ChooseValue_Type = "choose_value"
-
 const ChooseValue_Field_Assign = "$ASSIGN"
 const ChooseValue_Field_From = "$FROM"
 const ChooseValue_Field_Filter = "$FILTER"
@@ -3062,10 +3101,12 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 }
 
 // CommaText Separates words with commas, and 'and'.
-// User implements: TextEval.
 type CommaText struct {
 	Do Activity `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*CommaText)(nil)
 
 func (*CommaText) Compose() composer.Spec {
 	return composer.Spec{
@@ -3076,7 +3117,6 @@ func (*CommaText) Compose() composer.Spec {
 }
 
 const CommaText_Type = "comma_text"
-
 const CommaText_Field_Do = "$DO"
 
 func (op *CommaText) Marshal(m jsn.Marshaler) error {
@@ -3231,12 +3271,14 @@ func Comparator_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Comparator) (err
 }
 
 // CompareNum True if eq,ne,gt,lt,ge,le two numbers.
-// User implements: BoolEval.
 type CompareNum struct {
 	A  rt.NumberEval `if:"label=_"`
 	Is Comparator    `if:"label=is"`
 	B  rt.NumberEval `if:"label=num"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*CompareNum)(nil)
 
 func (*CompareNum) Compose() composer.Spec {
 	return composer.Spec{
@@ -3247,7 +3289,6 @@ func (*CompareNum) Compose() composer.Spec {
 }
 
 const CompareNum_Type = "compare_num"
-
 const CompareNum_Field_A = "$A"
 const CompareNum_Field_Is = "$IS"
 const CompareNum_Field_B = "$B"
@@ -3349,12 +3390,14 @@ func CompareNum_Marshal(m jsn.Marshaler, val *CompareNum) (err error) {
 }
 
 // CompareText True if eq,ne,gt,lt,ge,le two strings ( lexical. )
-// User implements: BoolEval.
 type CompareText struct {
 	A  rt.TextEval `if:"label=_"`
 	Is Comparator  `if:"label=is"`
 	B  rt.TextEval `if:"label=txt"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*CompareText)(nil)
 
 func (*CompareText) Compose() composer.Spec {
 	return composer.Spec{
@@ -3365,7 +3408,6 @@ func (*CompareText) Compose() composer.Spec {
 }
 
 const CompareText_Type = "compare_text"
-
 const CompareText_Field_A = "$A"
 const CompareText_Field_Is = "$IS"
 const CompareText_Field_B = "$B"
@@ -3467,11 +3509,13 @@ func CompareText_Marshal(m jsn.Marshaler, val *CompareText) (err error) {
 }
 
 // DiffOf Subtract two numbers.
-// User implements: NumberEval.
 type DiffOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by,optional"`
 }
+
+// User implemented slots:
+var _ rt.NumberEval = (*DiffOf)(nil)
 
 func (*DiffOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -3482,7 +3526,6 @@ func (*DiffOf) Compose() composer.Spec {
 }
 
 const DiffOf_Type = "diff_of"
-
 const DiffOf_Field_A = "$A"
 const DiffOf_Field_B = "$B"
 
@@ -3576,10 +3619,13 @@ func DiffOf_Marshal(m jsn.Marshaler, val *DiffOf) (err error) {
 }
 
 // During Decide whether a pattern is running.
-// User implements: BoolEval, NumberEval.
 type During struct {
 	Pattern PatternName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*During)(nil)
+var _ rt.NumberEval = (*During)(nil)
 
 func (*During) Compose() composer.Spec {
 	return composer.Spec{
@@ -3589,7 +3635,6 @@ func (*During) Compose() composer.Spec {
 }
 
 const During_Type = "during"
-
 const During_Field_Pattern = "$PATTERN"
 
 func (op *During) Marshal(m jsn.Marshaler) error {
@@ -3675,9 +3720,11 @@ func During_Marshal(m jsn.Marshaler, val *During) (err error) {
 }
 
 // Equal Two values exactly match.
-// User implements: Comparator.
 type Equal struct {
 }
+
+// User implemented slots:
+var _ Comparator = (*Equal)(nil)
 
 func (*Equal) Compose() composer.Spec {
 	return composer.Spec{
@@ -3765,10 +3812,12 @@ func Equal_Marshal(m jsn.Marshaler, val *Equal) (err error) {
 }
 
 // FromBool Assigns the calculated boolean value.
-// User implements: Assignment.
 type FromBool struct {
 	Val rt.BoolEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*FromBool)(nil)
 
 func (*FromBool) Compose() composer.Spec {
 	return composer.Spec{
@@ -3778,7 +3827,6 @@ func (*FromBool) Compose() composer.Spec {
 }
 
 const FromBool_Type = "from_bool"
-
 const FromBool_Field_Val = "$VAL"
 
 func (op *FromBool) Marshal(m jsn.Marshaler) error {
@@ -3864,10 +3912,12 @@ func FromBool_Marshal(m jsn.Marshaler, val *FromBool) (err error) {
 }
 
 // FromNum Assigns the calculated number.
-// User implements: Assignment.
 type FromNum struct {
 	Val rt.NumberEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*FromNum)(nil)
 
 func (*FromNum) Compose() composer.Spec {
 	return composer.Spec{
@@ -3877,7 +3927,6 @@ func (*FromNum) Compose() composer.Spec {
 }
 
 const FromNum_Type = "from_num"
-
 const FromNum_Field_Val = "$VAL"
 
 func (op *FromNum) Marshal(m jsn.Marshaler) error {
@@ -3963,10 +4012,12 @@ func FromNum_Marshal(m jsn.Marshaler, val *FromNum) (err error) {
 }
 
 // FromNumbers Assigns the calculated numbers.
-// User implements: Assignment.
 type FromNumbers struct {
 	Vals rt.NumListEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*FromNumbers)(nil)
 
 func (*FromNumbers) Compose() composer.Spec {
 	return composer.Spec{
@@ -3977,7 +4028,6 @@ func (*FromNumbers) Compose() composer.Spec {
 }
 
 const FromNumbers_Type = "from_numbers"
-
 const FromNumbers_Field_Vals = "$VALS"
 
 func (op *FromNumbers) Marshal(m jsn.Marshaler) error {
@@ -4063,10 +4113,12 @@ func FromNumbers_Marshal(m jsn.Marshaler, val *FromNumbers) (err error) {
 }
 
 // FromObj Targets an object with a computed name.
-// User implements: FromSourceFields.
 type FromObj struct {
 	Object rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ FromSourceFields = (*FromObj)(nil)
 
 func (*FromObj) Compose() composer.Spec {
 	return composer.Spec{
@@ -4077,7 +4129,6 @@ func (*FromObj) Compose() composer.Spec {
 }
 
 const FromObj_Type = "from_obj"
-
 const FromObj_Field_Object = "$OBJECT"
 
 func (op *FromObj) Marshal(m jsn.Marshaler) error {
@@ -4163,10 +4214,12 @@ func FromObj_Marshal(m jsn.Marshaler, val *FromObj) (err error) {
 }
 
 // FromRec Targets a record stored in a record.
-// User implements: FromSourceFields.
 type FromRec struct {
 	Rec rt.RecordEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ FromSourceFields = (*FromRec)(nil)
 
 func (*FromRec) Compose() composer.Spec {
 	return composer.Spec{
@@ -4177,7 +4230,6 @@ func (*FromRec) Compose() composer.Spec {
 }
 
 const FromRec_Type = "from_rec"
-
 const FromRec_Field_Rec = "$REC"
 
 func (op *FromRec) Marshal(m jsn.Marshaler) error {
@@ -4263,10 +4315,12 @@ func FromRec_Marshal(m jsn.Marshaler, val *FromRec) (err error) {
 }
 
 // FromRecord Assigns the calculated record.
-// User implements: Assignment.
 type FromRecord struct {
 	Val rt.RecordEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*FromRecord)(nil)
 
 func (*FromRecord) Compose() composer.Spec {
 	return composer.Spec{
@@ -4277,7 +4331,6 @@ func (*FromRecord) Compose() composer.Spec {
 }
 
 const FromRecord_Type = "from_record"
-
 const FromRecord_Field_Val = "$VAL"
 
 func (op *FromRecord) Marshal(m jsn.Marshaler) error {
@@ -4363,10 +4416,12 @@ func FromRecord_Marshal(m jsn.Marshaler, val *FromRecord) (err error) {
 }
 
 // FromRecords Assigns the calculated records.
-// User implements: Assignment.
 type FromRecords struct {
 	Vals rt.RecordListEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*FromRecords)(nil)
 
 func (*FromRecords) Compose() composer.Spec {
 	return composer.Spec{
@@ -4377,7 +4432,6 @@ func (*FromRecords) Compose() composer.Spec {
 }
 
 const FromRecords_Type = "from_records"
-
 const FromRecords_Field_Vals = "$VALS"
 
 func (op *FromRecords) Marshal(m jsn.Marshaler) error {
@@ -4532,10 +4586,12 @@ func FromSourceFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromSource
 }
 
 // FromText Assigns the calculated piece of text.
-// User implements: Assignment.
 type FromText struct {
 	Val rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*FromText)(nil)
 
 func (*FromText) Compose() composer.Spec {
 	return composer.Spec{
@@ -4546,7 +4602,6 @@ func (*FromText) Compose() composer.Spec {
 }
 
 const FromText_Type = "from_text"
-
 const FromText_Field_Val = "$VAL"
 
 func (op *FromText) Marshal(m jsn.Marshaler) error {
@@ -4632,10 +4687,12 @@ func FromText_Marshal(m jsn.Marshaler, val *FromText) (err error) {
 }
 
 // FromTexts Assigns the calculated texts.
-// User implements: Assignment.
 type FromTexts struct {
 	Vals rt.TextListEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*FromTexts)(nil)
 
 func (*FromTexts) Compose() composer.Spec {
 	return composer.Spec{
@@ -4646,7 +4703,6 @@ func (*FromTexts) Compose() composer.Spec {
 }
 
 const FromTexts_Type = "from_texts"
-
 const FromTexts_Field_Vals = "$VALS"
 
 func (op *FromTexts) Marshal(m jsn.Marshaler) error {
@@ -4732,10 +4788,12 @@ func FromTexts_Marshal(m jsn.Marshaler, val *FromTexts) (err error) {
 }
 
 // FromVar Targets a record stored in a variable.
-// User implements: FromSourceFields.
 type FromVar struct {
 	Var VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ FromSourceFields = (*FromVar)(nil)
 
 func (*FromVar) Compose() composer.Spec {
 	return composer.Spec{
@@ -4746,7 +4804,6 @@ func (*FromVar) Compose() composer.Spec {
 }
 
 const FromVar_Type = "from_var"
-
 const FromVar_Field_Var = "$VAR"
 
 func (op *FromVar) Marshal(m jsn.Marshaler) error {
@@ -4832,11 +4889,20 @@ func FromVar_Marshal(m jsn.Marshaler, val *FromVar) (err error) {
 }
 
 // GetAtField Get a value from a record.
-// User implements: Assignment, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type GetAtField struct {
 	Field string           `if:"label=_,type=text"`
 	From  FromSourceFields `if:"label=from"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*GetAtField)(nil)
+var _ rt.BoolEval = (*GetAtField)(nil)
+var _ rt.NumberEval = (*GetAtField)(nil)
+var _ rt.TextEval = (*GetAtField)(nil)
+var _ rt.RecordEval = (*GetAtField)(nil)
+var _ rt.NumListEval = (*GetAtField)(nil)
+var _ rt.TextListEval = (*GetAtField)(nil)
+var _ rt.RecordListEval = (*GetAtField)(nil)
 
 func (*GetAtField) Compose() composer.Spec {
 	return composer.Spec{
@@ -4847,7 +4913,6 @@ func (*GetAtField) Compose() composer.Spec {
 }
 
 const GetAtField_Type = "get_at_field"
-
 const GetAtField_Field_Field = "$FIELD"
 const GetAtField_Field_From = "$FROM"
 
@@ -4941,10 +5006,19 @@ func GetAtField_Marshal(m jsn.Marshaler, val *GetAtField) (err error) {
 }
 
 // GetVar Get Variable: Return the value of the named variable.
-// User implements: Assignment, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type GetVar struct {
 	Name VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*GetVar)(nil)
+var _ rt.BoolEval = (*GetVar)(nil)
+var _ rt.NumberEval = (*GetVar)(nil)
+var _ rt.TextEval = (*GetVar)(nil)
+var _ rt.RecordEval = (*GetVar)(nil)
+var _ rt.NumListEval = (*GetVar)(nil)
+var _ rt.TextListEval = (*GetVar)(nil)
+var _ rt.RecordListEval = (*GetVar)(nil)
 
 func (*GetVar) Compose() composer.Spec {
 	return composer.Spec{
@@ -4955,7 +5029,6 @@ func (*GetVar) Compose() composer.Spec {
 }
 
 const GetVar_Type = "get_var"
-
 const GetVar_Field_Name = "$NAME"
 
 func (op *GetVar) Marshal(m jsn.Marshaler) error {
@@ -5041,9 +5114,11 @@ func GetVar_Marshal(m jsn.Marshaler, val *GetVar) (err error) {
 }
 
 // GreaterThan The first value is larger than the second value.
-// User implements: Comparator.
 type GreaterThan struct {
 }
+
+// User implemented slots:
+var _ Comparator = (*GreaterThan)(nil)
 
 func (*GreaterThan) Compose() composer.Spec {
 	return composer.Spec{
@@ -5130,10 +5205,12 @@ func GreaterThan_Marshal(m jsn.Marshaler, val *GreaterThan) (err error) {
 }
 
 // HasDominion
-// User implements: BoolEval.
 type HasDominion struct {
 	Name string `if:"label=_,type=text"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*HasDominion)(nil)
 
 func (*HasDominion) Compose() composer.Spec {
 	return composer.Spec{
@@ -5143,7 +5220,6 @@ func (*HasDominion) Compose() composer.Spec {
 }
 
 const HasDominion_Type = "has_dominion"
-
 const HasDominion_Field_Name = "$NAME"
 
 func (op *HasDominion) Marshal(m jsn.Marshaler) error {
@@ -5229,11 +5305,13 @@ func HasDominion_Marshal(m jsn.Marshaler, val *HasDominion) (err error) {
 }
 
 // HasTrait Return true if the object is currently in the requested state.
-// User implements: BoolEval.
 type HasTrait struct {
 	Object rt.TextEval `if:"label=obj"`
 	Trait  rt.TextEval `if:"label=trait"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*HasTrait)(nil)
 
 func (*HasTrait) Compose() composer.Spec {
 	return composer.Spec{
@@ -5244,7 +5322,6 @@ func (*HasTrait) Compose() composer.Spec {
 }
 
 const HasTrait_Type = "has_trait"
-
 const HasTrait_Field_Object = "$OBJECT"
 const HasTrait_Field_Trait = "$TRAIT"
 
@@ -5338,10 +5415,12 @@ func HasTrait_Marshal(m jsn.Marshaler, val *HasTrait) (err error) {
 }
 
 // IdOf A unique object identifier.
-// User implements: TextEval.
 type IdOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*IdOf)(nil)
 
 func (*IdOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -5351,7 +5430,6 @@ func (*IdOf) Compose() composer.Spec {
 }
 
 const IdOf_Type = "id_of"
-
 const IdOf_Field_Object = "$OBJECT"
 
 func (op *IdOf) Marshal(m jsn.Marshaler) error {
@@ -5437,11 +5515,13 @@ func IdOf_Marshal(m jsn.Marshaler, val *IdOf) (err error) {
 }
 
 // Includes True if text contains text.
-// User implements: BoolEval.
 type Includes struct {
 	Text rt.TextEval `if:"label=_"`
 	Part rt.TextEval `if:"label=part"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*Includes)(nil)
 
 func (*Includes) Compose() composer.Spec {
 	return composer.Spec{
@@ -5452,7 +5532,6 @@ func (*Includes) Compose() composer.Spec {
 }
 
 const Includes_Type = "includes"
-
 const Includes_Field_Text = "$TEXT"
 const Includes_Field_Part = "$PART"
 
@@ -5546,10 +5625,12 @@ func Includes_Marshal(m jsn.Marshaler, val *Includes) (err error) {
 }
 
 // IntoObj Targets an object with a computed name.
-// User implements: IntoTargetFields.
 type IntoObj struct {
 	Object rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ IntoTargetFields = (*IntoObj)(nil)
 
 func (*IntoObj) Compose() composer.Spec {
 	return composer.Spec{
@@ -5560,7 +5641,6 @@ func (*IntoObj) Compose() composer.Spec {
 }
 
 const IntoObj_Type = "into_obj"
-
 const IntoObj_Field_Object = "$OBJECT"
 
 func (op *IntoObj) Marshal(m jsn.Marshaler) error {
@@ -5715,10 +5795,12 @@ func IntoTargetFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoTarget
 }
 
 // IntoVar Targets an object or record stored in a variable
-// User implements: IntoTargetFields.
 type IntoVar struct {
 	Var VariableName `if:"label=_"`
 }
+
+// User implemented slots:
+var _ IntoTargetFields = (*IntoVar)(nil)
 
 func (*IntoVar) Compose() composer.Spec {
 	return composer.Spec{
@@ -5729,7 +5811,6 @@ func (*IntoVar) Compose() composer.Spec {
 }
 
 const IntoVar_Type = "into_var"
-
 const IntoVar_Field_Var = "$VAR"
 
 func (op *IntoVar) Marshal(m jsn.Marshaler) error {
@@ -5815,10 +5896,12 @@ func IntoVar_Marshal(m jsn.Marshaler, val *IntoVar) (err error) {
 }
 
 // IsEmpty True if the text is empty.
-// User implements: BoolEval.
 type IsEmpty struct {
 	Text rt.TextEval `if:"label=empty"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*IsEmpty)(nil)
 
 func (*IsEmpty) Compose() composer.Spec {
 	return composer.Spec{
@@ -5829,7 +5912,6 @@ func (*IsEmpty) Compose() composer.Spec {
 }
 
 const IsEmpty_Type = "is_empty"
-
 const IsEmpty_Field_Text = "$TEXT"
 
 func (op *IsEmpty) Marshal(m jsn.Marshaler) error {
@@ -5915,11 +5997,13 @@ func IsEmpty_Marshal(m jsn.Marshaler, val *IsEmpty) (err error) {
 }
 
 // IsExactKindOf True if the object is exactly the named kind.
-// User implements: BoolEval.
 type IsExactKindOf struct {
 	Object rt.TextEval `if:"label=_"`
 	Kind   string      `if:"label=is_exactly,type=text"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*IsExactKindOf)(nil)
 
 func (*IsExactKindOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -5930,7 +6014,6 @@ func (*IsExactKindOf) Compose() composer.Spec {
 }
 
 const IsExactKindOf_Type = "is_exact_kind_of"
-
 const IsExactKindOf_Field_Object = "$OBJECT"
 const IsExactKindOf_Field_Kind = "$KIND"
 
@@ -6024,11 +6107,13 @@ func IsExactKindOf_Marshal(m jsn.Marshaler, val *IsExactKindOf) (err error) {
 }
 
 // IsKindOf True if the object is compatible with the named kind.
-// User implements: BoolEval.
 type IsKindOf struct {
 	Object rt.TextEval `if:"label=_"`
 	Kind   string      `if:"label=is,type=text"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*IsKindOf)(nil)
 
 func (*IsKindOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -6039,7 +6124,6 @@ func (*IsKindOf) Compose() composer.Spec {
 }
 
 const IsKindOf_Type = "is_kind_of"
-
 const IsKindOf_Field_Object = "$OBJECT"
 const IsKindOf_Field_Kind = "$KIND"
 
@@ -6133,11 +6217,13 @@ func IsKindOf_Marshal(m jsn.Marshaler, val *IsKindOf) (err error) {
 }
 
 // Join Returns multiple pieces of text as a single new piece of text.
-// User implements: TextEval.
 type Join struct {
 	Sep   rt.TextEval   `if:"label=_,optional"`
 	Parts []rt.TextEval `if:"label=parts"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*Join)(nil)
 
 func (*Join) Compose() composer.Spec {
 	return composer.Spec{
@@ -6147,7 +6233,6 @@ func (*Join) Compose() composer.Spec {
 }
 
 const Join_Type = "join"
-
 const Join_Field_Sep = "$SEP"
 const Join_Field_Parts = "$PARTS"
 
@@ -6241,10 +6326,12 @@ func Join_Marshal(m jsn.Marshaler, val *Join) (err error) {
 }
 
 // KindOf Friendly name of the object's kind.
-// User implements: TextEval.
 type KindOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*KindOf)(nil)
 
 func (*KindOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -6254,7 +6341,6 @@ func (*KindOf) Compose() composer.Spec {
 }
 
 const KindOf_Type = "kind_of"
-
 const KindOf_Field_Object = "$OBJECT"
 
 func (op *KindOf) Marshal(m jsn.Marshaler) error {
@@ -6340,10 +6426,12 @@ func KindOf_Marshal(m jsn.Marshaler, val *KindOf) (err error) {
 }
 
 // KindsOf A list of compatible kinds.
-// User implements: TextListEval.
 type KindsOf struct {
 	Kind string `if:"label=_,type=text"`
 }
+
+// User implemented slots:
+var _ rt.TextListEval = (*KindsOf)(nil)
 
 func (*KindsOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -6353,7 +6441,6 @@ func (*KindsOf) Compose() composer.Spec {
 }
 
 const KindsOf_Type = "kinds_of"
-
 const KindsOf_Field_Kind = "$KIND"
 
 func (op *KindsOf) Marshal(m jsn.Marshaler) error {
@@ -6439,9 +6526,11 @@ func KindsOf_Marshal(m jsn.Marshaler, val *KindsOf) (err error) {
 }
 
 // LessThan The first value is less than the second value.
-// User implements: Comparator.
 type LessThan struct {
 }
+
+// User implemented slots:
+var _ Comparator = (*LessThan)(nil)
 
 func (*LessThan) Compose() composer.Spec {
 	return composer.Spec{
@@ -6528,10 +6617,12 @@ func LessThan_Marshal(m jsn.Marshaler, val *LessThan) (err error) {
 }
 
 // MakeLowercase Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.
-// User implements: TextEval.
 type MakeLowercase struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*MakeLowercase)(nil)
 
 func (*MakeLowercase) Compose() composer.Spec {
 	return composer.Spec{
@@ -6542,7 +6633,6 @@ func (*MakeLowercase) Compose() composer.Spec {
 }
 
 const MakeLowercase_Type = "make_lowercase"
-
 const MakeLowercase_Field_Text = "$TEXT"
 
 func (op *MakeLowercase) Marshal(m jsn.Marshaler) error {
@@ -6628,10 +6718,12 @@ func MakeLowercase_Marshal(m jsn.Marshaler, val *MakeLowercase) (err error) {
 }
 
 // MakeReversed Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.
-// User implements: TextEval.
 type MakeReversed struct {
 	Text rt.TextEval `if:"label=text"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*MakeReversed)(nil)
 
 func (*MakeReversed) Compose() composer.Spec {
 	return composer.Spec{
@@ -6642,7 +6734,6 @@ func (*MakeReversed) Compose() composer.Spec {
 }
 
 const MakeReversed_Type = "make_reversed"
-
 const MakeReversed_Field_Text = "$TEXT"
 
 func (op *MakeReversed) Marshal(m jsn.Marshaler) error {
@@ -6728,10 +6819,12 @@ func MakeReversed_Marshal(m jsn.Marshaler, val *MakeReversed) (err error) {
 }
 
 // MakeSentenceCase Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.
-// User implements: TextEval.
 type MakeSentenceCase struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*MakeSentenceCase)(nil)
 
 func (*MakeSentenceCase) Compose() composer.Spec {
 	return composer.Spec{
@@ -6742,7 +6835,6 @@ func (*MakeSentenceCase) Compose() composer.Spec {
 }
 
 const MakeSentenceCase_Type = "make_sentence_case"
-
 const MakeSentenceCase_Field_Text = "$TEXT"
 
 func (op *MakeSentenceCase) Marshal(m jsn.Marshaler) error {
@@ -6828,10 +6920,12 @@ func MakeSentenceCase_Marshal(m jsn.Marshaler, val *MakeSentenceCase) (err error
 }
 
 // MakeTitleCase Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.
-// User implements: TextEval.
 type MakeTitleCase struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*MakeTitleCase)(nil)
 
 func (*MakeTitleCase) Compose() composer.Spec {
 	return composer.Spec{
@@ -6842,7 +6936,6 @@ func (*MakeTitleCase) Compose() composer.Spec {
 }
 
 const MakeTitleCase_Type = "make_title_case"
-
 const MakeTitleCase_Field_Text = "$TEXT"
 
 func (op *MakeTitleCase) Marshal(m jsn.Marshaler) error {
@@ -6928,10 +7021,12 @@ func MakeTitleCase_Marshal(m jsn.Marshaler, val *MakeTitleCase) (err error) {
 }
 
 // MakeUppercase Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.
-// User implements: TextEval.
 type MakeUppercase struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*MakeUppercase)(nil)
 
 func (*MakeUppercase) Compose() composer.Spec {
 	return composer.Spec{
@@ -6942,7 +7037,6 @@ func (*MakeUppercase) Compose() composer.Spec {
 }
 
 const MakeUppercase_Type = "make_uppercase"
-
 const MakeUppercase_Field_Text = "$TEXT"
 
 func (op *MakeUppercase) Marshal(m jsn.Marshaler) error {
@@ -7028,12 +7122,14 @@ func MakeUppercase_Marshal(m jsn.Marshaler, val *MakeUppercase) (err error) {
 }
 
 // Matches Determine whether the specified text is similar to the specified regular expression.
-// User implements: BoolEval.
 type Matches struct {
 	Text    rt.TextEval `if:"label=_"`
 	Pattern string      `if:"label=to,type=text"`
 	Cache   MatchCache  `if:"internal"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*Matches)(nil)
 
 func (*Matches) Compose() composer.Spec {
 	return composer.Spec{
@@ -7043,7 +7139,6 @@ func (*Matches) Compose() composer.Spec {
 }
 
 const Matches_Type = "matches"
-
 const Matches_Field_Text = "$TEXT"
 const Matches_Field_Pattern = "$PATTERN"
 
@@ -7137,10 +7232,12 @@ func Matches_Marshal(m jsn.Marshaler, val *Matches) (err error) {
 }
 
 // NameOf Full name of the object.
-// User implements: TextEval.
 type NameOf struct {
 	Object rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*NameOf)(nil)
 
 func (*NameOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -7150,7 +7247,6 @@ func (*NameOf) Compose() composer.Spec {
 }
 
 const NameOf_Type = "name_of"
-
 const NameOf_Field_Object = "$OBJECT"
 
 func (op *NameOf) Marshal(m jsn.Marshaler) error {
@@ -7236,9 +7332,11 @@ func NameOf_Marshal(m jsn.Marshaler, val *NameOf) (err error) {
 }
 
 // Never Returns false.
-// User implements: BoolEval.
 type Never struct {
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*Never)(nil)
 
 func (*Never) Compose() composer.Spec {
 	return composer.Spec{
@@ -7325,9 +7423,11 @@ func Never_Marshal(m jsn.Marshaler, val *Never) (err error) {
 }
 
 // Newline Start a new line.
-// User implements: Execute.
 type Newline struct {
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Newline)(nil)
 
 func (*Newline) Compose() composer.Spec {
 	return composer.Spec{
@@ -7415,9 +7515,11 @@ func Newline_Marshal(m jsn.Marshaler, val *Newline) (err error) {
 }
 
 // Next In a repeating loop, try the next iteration of the loop.
-// User implements: Execute.
 type Next struct {
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Next)(nil)
 
 func (*Next) Compose() composer.Spec {
 	return composer.Spec{
@@ -7504,10 +7606,12 @@ func Next_Marshal(m jsn.Marshaler, val *Next) (err error) {
 }
 
 // Not Returns the opposite value.
-// User implements: BoolEval.
 type Not struct {
 	Test rt.BoolEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*Not)(nil)
 
 func (*Not) Compose() composer.Spec {
 	return composer.Spec{
@@ -7517,7 +7621,6 @@ func (*Not) Compose() composer.Spec {
 }
 
 const Not_Type = "not"
-
 const Not_Field_Test = "$TEST"
 
 func (op *Not) Marshal(m jsn.Marshaler) error {
@@ -7603,10 +7706,12 @@ func Not_Marshal(m jsn.Marshaler, val *Not) (err error) {
 }
 
 // ObjectExists Returns whether there is a object of the specified name.
-// User implements: BoolEval.
 type ObjectExists struct {
 	Object rt.TextEval `if:"label=valid"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*ObjectExists)(nil)
 
 func (*ObjectExists) Compose() composer.Spec {
 	return composer.Spec{
@@ -7617,7 +7722,6 @@ func (*ObjectExists) Compose() composer.Spec {
 }
 
 const ObjectExists_Type = "object_exists"
-
 const ObjectExists_Field_Object = "$OBJECT"
 
 func (op *ObjectExists) Marshal(m jsn.Marshaler) error {
@@ -7780,10 +7884,12 @@ func PatternName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternName) (e
 }
 
 // Pluralize Returns the plural form of a singular word. (ex. apples for apple. )
-// User implements: TextEval.
 type Pluralize struct {
 	Text rt.TextEval `if:"label=of"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*Pluralize)(nil)
 
 func (*Pluralize) Compose() composer.Spec {
 	return composer.Spec{
@@ -7794,7 +7900,6 @@ func (*Pluralize) Compose() composer.Spec {
 }
 
 const Pluralize_Type = "pluralize"
-
 const Pluralize_Field_Text = "$TEXT"
 
 func (op *Pluralize) Marshal(m jsn.Marshaler) error {
@@ -7880,10 +7985,12 @@ func Pluralize_Marshal(m jsn.Marshaler, val *Pluralize) (err error) {
 }
 
 // PrintNum Writes a number using numerals, eg. '1'.
-// User implements: TextEval.
 type PrintNum struct {
 	Num rt.NumberEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*PrintNum)(nil)
 
 func (*PrintNum) Compose() composer.Spec {
 	return composer.Spec{
@@ -7894,7 +8001,6 @@ func (*PrintNum) Compose() composer.Spec {
 }
 
 const PrintNum_Type = "print_num"
-
 const PrintNum_Field_Num = "$NUM"
 
 func (op *PrintNum) Marshal(m jsn.Marshaler) error {
@@ -7980,10 +8086,12 @@ func PrintNum_Marshal(m jsn.Marshaler, val *PrintNum) (err error) {
 }
 
 // PrintNumWord Writes a number in plain english: eg. 'one'
-// User implements: TextEval.
 type PrintNumWord struct {
 	Num rt.NumberEval `if:"label=words"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*PrintNumWord)(nil)
 
 func (*PrintNumWord) Compose() composer.Spec {
 	return composer.Spec{
@@ -7994,7 +8102,6 @@ func (*PrintNumWord) Compose() composer.Spec {
 }
 
 const PrintNumWord_Type = "print_num_word"
-
 const PrintNumWord_Field_Num = "$NUM"
 
 func (op *PrintNumWord) Marshal(m jsn.Marshaler) error {
@@ -8080,11 +8187,13 @@ func PrintNumWord_Marshal(m jsn.Marshaler, val *PrintNumWord) (err error) {
 }
 
 // ProductOf Multiply two numbers.
-// User implements: NumberEval.
 type ProductOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
 }
+
+// User implemented slots:
+var _ rt.NumberEval = (*ProductOf)(nil)
 
 func (*ProductOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -8095,7 +8204,6 @@ func (*ProductOf) Compose() composer.Spec {
 }
 
 const ProductOf_Type = "product_of"
-
 const ProductOf_Field_A = "$A"
 const ProductOf_Field_B = "$B"
 
@@ -8189,12 +8297,14 @@ func ProductOf_Marshal(m jsn.Marshaler, val *ProductOf) (err error) {
 }
 
 // PutAtField Put a value into the field of an record or object
-// User implements: Execute.
 type PutAtField struct {
 	Into    IntoTargetFields `if:"label=_"`
 	From    rt.Assignment    `if:"label=from"`
 	AtField string           `if:"label=at,type=text"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*PutAtField)(nil)
 
 func (*PutAtField) Compose() composer.Spec {
 	return composer.Spec{
@@ -8205,7 +8315,6 @@ func (*PutAtField) Compose() composer.Spec {
 }
 
 const PutAtField_Type = "put_at_field"
-
 const PutAtField_Field_Into = "$INTO"
 const PutAtField_Field_From = "$FROM"
 const PutAtField_Field_AtField = "$AT_FIELD"
@@ -8307,11 +8416,13 @@ func PutAtField_Marshal(m jsn.Marshaler, val *PutAtField) (err error) {
 }
 
 // QuotientOf Divide one number by another.
-// User implements: NumberEval.
 type QuotientOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
 }
+
+// User implemented slots:
+var _ rt.NumberEval = (*QuotientOf)(nil)
 
 func (*QuotientOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -8322,7 +8433,6 @@ func (*QuotientOf) Compose() composer.Spec {
 }
 
 const QuotientOf_Type = "quotient_of"
-
 const QuotientOf_Field_A = "$A"
 const QuotientOf_Field_B = "$B"
 
@@ -8416,11 +8526,13 @@ func QuotientOf_Marshal(m jsn.Marshaler, val *QuotientOf) (err error) {
 }
 
 // RemainderOf Divide one number by another, and return the remainder.
-// User implements: NumberEval.
 type RemainderOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by"`
 }
+
+// User implemented slots:
+var _ rt.NumberEval = (*RemainderOf)(nil)
 
 func (*RemainderOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -8431,7 +8543,6 @@ func (*RemainderOf) Compose() composer.Spec {
 }
 
 const RemainderOf_Type = "remainder_of"
-
 const RemainderOf_Field_A = "$A"
 const RemainderOf_Field_B = "$B"
 
@@ -8525,11 +8636,13 @@ func RemainderOf_Marshal(m jsn.Marshaler, val *RemainderOf) (err error) {
 }
 
 // Response Generate text in a replaceable manner.
-// User implements: TextEval.
 type Response struct {
 	Name string      `if:"label=_,type=text"`
 	Text rt.TextEval `if:"label=text,optional"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*Response)(nil)
 
 func (*Response) Compose() composer.Spec {
 	return composer.Spec{
@@ -8539,7 +8652,6 @@ func (*Response) Compose() composer.Spec {
 }
 
 const Response_Type = "response"
-
 const Response_Field_Name = "$NAME"
 const Response_Field_Text = "$TEXT"
 
@@ -8633,10 +8745,12 @@ func Response_Marshal(m jsn.Marshaler, val *Response) (err error) {
 }
 
 // Row A single line as part of a group of lines.
-// User implements: TextEval.
 type Row struct {
 	Do Activity `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*Row)(nil)
 
 func (*Row) Compose() composer.Spec {
 	return composer.Spec{
@@ -8646,7 +8760,6 @@ func (*Row) Compose() composer.Spec {
 }
 
 const Row_Type = "row"
-
 const Row_Field_Do = "$DO"
 
 func (op *Row) Marshal(m jsn.Marshaler) error {
@@ -8732,10 +8845,12 @@ func Row_Marshal(m jsn.Marshaler, val *Row) (err error) {
 }
 
 // Rows Group text into successive lines.
-// User implements: TextEval.
 type Rows struct {
 	Do Activity `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*Rows)(nil)
 
 func (*Rows) Compose() composer.Spec {
 	return composer.Spec{
@@ -8745,7 +8860,6 @@ func (*Rows) Compose() composer.Spec {
 }
 
 const Rows_Type = "rows"
-
 const Rows_Field_Do = "$DO"
 
 func (op *Rows) Marshal(m jsn.Marshaler) error {
@@ -8831,10 +8945,12 @@ func Rows_Marshal(m jsn.Marshaler, val *Rows) (err error) {
 }
 
 // SayText Print some bit of text to the player.
-// User implements: Execute.
 type SayText struct {
 	Text rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*SayText)(nil)
 
 func (*SayText) Compose() composer.Spec {
 	return composer.Spec{
@@ -8845,7 +8961,6 @@ func (*SayText) Compose() composer.Spec {
 }
 
 const SayText_Type = "say_text"
-
 const SayText_Field_Text = "$TEXT"
 
 func (op *SayText) Marshal(m jsn.Marshaler) error {
@@ -8931,11 +9046,13 @@ func SayText_Marshal(m jsn.Marshaler, val *SayText) (err error) {
 }
 
 // SetTrait Put an object into a particular state.
-// User implements: Execute.
 type SetTrait struct {
 	Object rt.TextEval `if:"label=obj"`
 	Trait  rt.TextEval `if:"label=trait"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*SetTrait)(nil)
 
 func (*SetTrait) Compose() composer.Spec {
 	return composer.Spec{
@@ -8946,7 +9063,6 @@ func (*SetTrait) Compose() composer.Spec {
 }
 
 const SetTrait_Type = "set_trait"
-
 const SetTrait_Field_Object = "$OBJECT"
 const SetTrait_Field_Trait = "$TRAIT"
 
@@ -9040,10 +9156,12 @@ func SetTrait_Marshal(m jsn.Marshaler, val *SetTrait) (err error) {
 }
 
 // Singularize Returns the singular form of a plural word. (ex. apple for apples )
-// User implements: TextEval.
 type Singularize struct {
 	Text rt.TextEval `if:"label=of"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*Singularize)(nil)
 
 func (*Singularize) Compose() composer.Spec {
 	return composer.Spec{
@@ -9054,7 +9172,6 @@ func (*Singularize) Compose() composer.Spec {
 }
 
 const Singularize_Type = "singularize"
-
 const Singularize_Field_Text = "$TEXT"
 
 func (op *Singularize) Marshal(m jsn.Marshaler) error {
@@ -9140,10 +9257,12 @@ func Singularize_Marshal(m jsn.Marshaler, val *Singularize) (err error) {
 }
 
 // SlashText Separates words with left-leaning slashes '/'.
-// User implements: TextEval.
 type SlashText struct {
 	Do Activity `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*SlashText)(nil)
 
 func (*SlashText) Compose() composer.Spec {
 	return composer.Spec{
@@ -9154,7 +9273,6 @@ func (*SlashText) Compose() composer.Spec {
 }
 
 const SlashText_Type = "slash_text"
-
 const SlashText_Field_Do = "$DO"
 
 func (op *SlashText) Marshal(m jsn.Marshaler) error {
@@ -9240,9 +9358,11 @@ func SlashText_Marshal(m jsn.Marshaler, val *SlashText) (err error) {
 }
 
 // Softline Start a new line ( if not already at a new line. )
-// User implements: Execute.
 type Softline struct {
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Softline)(nil)
 
 func (*Softline) Compose() composer.Spec {
 	return composer.Spec{
@@ -9330,10 +9450,12 @@ func Softline_Marshal(m jsn.Marshaler, val *Softline) (err error) {
 }
 
 // SpanText Writes text with spaces between words.
-// User implements: TextEval.
 type SpanText struct {
 	Do Activity `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*SpanText)(nil)
 
 func (*SpanText) Compose() composer.Spec {
 	return composer.Spec{
@@ -9344,7 +9466,6 @@ func (*SpanText) Compose() composer.Spec {
 }
 
 const SpanText_Type = "span_text"
-
 const SpanText_Field_Do = "$DO"
 
 func (op *SpanText) Marshal(m jsn.Marshaler) error {
@@ -9430,11 +9551,13 @@ func SpanText_Marshal(m jsn.Marshaler, val *SpanText) (err error) {
 }
 
 // SumOf Add two numbers.
-// User implements: NumberEval.
 type SumOf struct {
 	A rt.NumberEval `if:"label=_"`
 	B rt.NumberEval `if:"label=by,optional"`
 }
+
+// User implemented slots:
+var _ rt.NumberEval = (*SumOf)(nil)
 
 func (*SumOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -9445,7 +9568,6 @@ func (*SumOf) Compose() composer.Spec {
 }
 
 const SumOf_Type = "sum_of"
-
 const SumOf_Field_A = "$A"
 const SumOf_Field_B = "$B"
 
@@ -9608,9 +9730,11 @@ func Trigger_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Trigger) (err error
 }
 
 // TriggerCycle
-// User implements: Trigger.
 type TriggerCycle struct {
 }
+
+// User implemented slots:
+var _ Trigger = (*TriggerCycle)(nil)
 
 func (*TriggerCycle) Compose() composer.Spec {
 	return composer.Spec{
@@ -9698,9 +9822,11 @@ func TriggerCycle_Marshal(m jsn.Marshaler, val *TriggerCycle) (err error) {
 }
 
 // TriggerOnce
-// User implements: Trigger.
 type TriggerOnce struct {
 }
+
+// User implemented slots:
+var _ Trigger = (*TriggerOnce)(nil)
 
 func (*TriggerOnce) Compose() composer.Spec {
 	return composer.Spec{
@@ -9788,9 +9914,11 @@ func TriggerOnce_Marshal(m jsn.Marshaler, val *TriggerOnce) (err error) {
 }
 
 // TriggerSwitch
-// User implements: Trigger.
 type TriggerSwitch struct {
 }
+
+// User implemented slots:
+var _ Trigger = (*TriggerSwitch)(nil)
 
 func (*TriggerSwitch) Compose() composer.Spec {
 	return composer.Spec{
@@ -9878,9 +10006,11 @@ func TriggerSwitch_Marshal(m jsn.Marshaler, val *TriggerSwitch) (err error) {
 }
 
 // Unequal The first value doesn't equal the second value.
-// User implements: Comparator.
 type Unequal struct {
 }
+
+// User implemented slots:
+var _ Comparator = (*Unequal)(nil)
 
 func (*Unequal) Compose() composer.Spec {
 	return composer.Spec{
@@ -10045,11 +10175,13 @@ func VariableName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]VariableName) 
 }
 
 // While Keep running a series of actions while a condition is true.
-// User implements: Execute.
 type While struct {
 	True rt.BoolEval `if:"label=_"`
 	Do   Activity    `if:"label=do"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*While)(nil)
 
 func (*While) Compose() composer.Spec {
 	return composer.Spec{
@@ -10060,7 +10192,6 @@ func (*While) Compose() composer.Spec {
 }
 
 const While_Type = "while"
-
 const While_Field_True = "$TRUE"
 const While_Field_Do = "$DO"
 

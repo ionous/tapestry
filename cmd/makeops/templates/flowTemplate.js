@@ -11,9 +11,6 @@ module.exports = `
 
 {{/each}}
 {{/if}}
-{{#if with.slots}}
-// User implements:{{#each with.slots}} {{Pascal this}}{{#unless @last}},{{/unless}}{{/each}}.
-{{/if}}
 type {{Pascal name}} struct {
 {{#each params}}{{#unless embedded}}
   {{~#unless expanded}}{{Pascal key}}{{/unless}} {{TypeOf this}} \`if:"
@@ -22,6 +19,12 @@ type {{Pascal name}} struct {
   {{~#if (Unboxed type)}},type={{type}}{{/if}}"\`
 {{/unless}}{{/each}}
 }
+{{#if with.slots}}
+// User implemented slots:
+{{#each with.slots}}
+var _ {{ScopeOf this}}{{Pascal this}} = (*{{Pascal ../name}})(nil)
+{{/each}}
+{{/if}}
 {{>spec~}}
 {{~#each params}}{{#unless internal}}
 const {{Pascal ../name}}_Field_{{Pascal key}} = "{{key}}";

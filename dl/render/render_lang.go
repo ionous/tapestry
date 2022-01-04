@@ -11,10 +11,12 @@ import (
 )
 
 // RenderExp
-// User implements: TextEval.
 type RenderExp struct {
 	Expression rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*RenderExp)(nil)
 
 func (*RenderExp) Compose() composer.Spec {
 	return composer.Spec{
@@ -24,7 +26,6 @@ func (*RenderExp) Compose() composer.Spec {
 }
 
 const RenderExp_Type = "render_exp"
-
 const RenderExp_Field_Expression = "$EXPRESSION"
 
 func (op *RenderExp) Marshal(m jsn.Marshaler) error {
@@ -111,10 +112,12 @@ func RenderExp_Marshal(m jsn.Marshaler, val *RenderExp) (err error) {
 
 // RenderField in template phrases, picks between record variables, object variables, and named global objects.
 // ex. could be "ringBearer", "SamWise", or "frodo"
-// User implements: FromSourceFields.
 type RenderField struct {
 	Name rt.TextEval `if:"label=_"`
 }
+
+// User implemented slots:
+var _ core.FromSourceFields = (*RenderField)(nil)
 
 func (*RenderField) Compose() composer.Spec {
 	return composer.Spec{
@@ -124,7 +127,6 @@ func (*RenderField) Compose() composer.Spec {
 }
 
 const RenderField_Type = "render_field"
-
 const RenderField_Field_Name = "$NAME"
 
 func (op *RenderField) Marshal(m jsn.Marshaler) error {
@@ -298,10 +300,12 @@ func RenderFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderFlags) (e
 // if the name is a variable with some other text: return that text.
 // if the name isn't a variable but refers to some object: return that object's printed object name.
 // otherwise, its an error.
-// User implements: TextEval.
 type RenderName struct {
 	Name string `if:"label=_,type=text"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*RenderName)(nil)
 
 func (*RenderName) Compose() composer.Spec {
 	return composer.Spec{
@@ -311,7 +315,6 @@ func (*RenderName) Compose() composer.Spec {
 }
 
 const RenderName_Type = "render_name"
-
 const RenderName_Field_Name = "$NAME"
 
 func (op *RenderName) Marshal(m jsn.Marshaler) error {
@@ -398,11 +401,14 @@ func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
 
 // RenderPattern printing is generally an activity b/c say is an activity
 // and we want the ability to say several things in series.
-// User implements: Assignment, TextEval.
 type RenderPattern struct {
 	Pattern   core.PatternName `if:"label=_"`
 	Arguments core.CallArgs    `if:"label=args"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*RenderPattern)(nil)
+var _ rt.TextEval = (*RenderPattern)(nil)
 
 func (*RenderPattern) Compose() composer.Spec {
 	return composer.Spec{
@@ -413,7 +419,6 @@ func (*RenderPattern) Compose() composer.Spec {
 }
 
 const RenderPattern_Type = "render_pattern"
-
 const RenderPattern_Field_Pattern = "$PATTERN"
 const RenderPattern_Field_Arguments = "$ARGUMENTS"
 
@@ -507,11 +512,15 @@ func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
 }
 
 // RenderRef returns the value of a variable or the id of an object.
-// User implements: Assignment, NumberEval, TextEval.
 type RenderRef struct {
 	Name  core.VariableName `if:"label=_"`
 	Flags RenderFlags       `if:"label=flags"`
 }
+
+// User implemented slots:
+var _ rt.Assignment = (*RenderRef)(nil)
+var _ rt.NumberEval = (*RenderRef)(nil)
+var _ rt.TextEval = (*RenderRef)(nil)
 
 func (*RenderRef) Compose() composer.Spec {
 	return composer.Spec{
@@ -521,7 +530,6 @@ func (*RenderRef) Compose() composer.Spec {
 }
 
 const RenderRef_Type = "render_ref"
-
 const RenderRef_Field_Name = "$NAME"
 const RenderRef_Field_Flags = "$FLAGS"
 

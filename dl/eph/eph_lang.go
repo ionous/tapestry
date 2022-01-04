@@ -99,11 +99,13 @@ func Affinity_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Affinity) (err err
 }
 
 // EphAliases
-// User implements: Ephemera.
 type EphAliases struct {
 	ShortName string   `if:"label=understand,type=text"`
 	Aliases   []string `if:"label=as,type=text"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphAliases)(nil)
 
 func (*EphAliases) Compose() composer.Spec {
 	return composer.Spec{
@@ -114,7 +116,6 @@ func (*EphAliases) Compose() composer.Spec {
 }
 
 const EphAliases_Type = "eph_aliases"
-
 const EphAliases_Field_ShortName = "$SHORT_NAME"
 const EphAliases_Field_Aliases = "$ALIASES"
 
@@ -291,11 +292,13 @@ func EphAlways_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphAlways) (err e
 
 // EphAspects A set of related object states such that exactly one member of the set is true for a given object at a single time.
 // Generates an implicit kind of 'aspect' where every field of the kind is a boolean property.
-// User implements: Ephemera.
 type EphAspects struct {
 	Aspects string   `if:"label=aspects,type=text"`
 	Traits  []string `if:"label=traits,type=text"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphAspects)(nil)
 
 func (*EphAspects) Compose() composer.Spec {
 	return composer.Spec{
@@ -306,7 +309,6 @@ func (*EphAspects) Compose() composer.Spec {
 }
 
 const EphAspects_Type = "eph_aspects"
-
 const EphAspects_Field_Aspects = "$ASPECTS"
 const EphAspects_Field_Traits = "$TRAITS"
 
@@ -414,7 +416,6 @@ func (*EphAt) Compose() composer.Spec {
 }
 
 const EphAt_Type = "eph_at"
-
 const EphAt_Field_At = "$AT"
 const EphAt_Field_Eph = "$EPH"
 
@@ -508,11 +509,13 @@ func EphAt_Marshal(m jsn.Marshaler, val *EphAt) (err error) {
 }
 
 // EphBeginDomain
-// User implements: Ephemera.
 type EphBeginDomain struct {
 	Name     string   `if:"label=domain,type=text"`
 	Requires []string `if:"label=requires,type=text"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphBeginDomain)(nil)
 
 func (*EphBeginDomain) Compose() composer.Spec {
 	return composer.Spec{
@@ -523,7 +526,6 @@ func (*EphBeginDomain) Compose() composer.Spec {
 }
 
 const EphBeginDomain_Type = "eph_begin_domain"
-
 const EphBeginDomain_Field_Name = "$NAME"
 const EphBeginDomain_Field_Requires = "$REQUIRES"
 
@@ -730,12 +732,14 @@ func EphCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphCardinali
 }
 
 // EphChecks
-// User implements: Ephemera.
 type EphChecks struct {
 	Name   string               `if:"label=check,type=text"`
 	Expect literal.LiteralValue `if:"label=expect,optional"`
 	Exe    rt.Execute           `if:"label=do"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphChecks)(nil)
 
 func (*EphChecks) Compose() composer.Spec {
 	return composer.Spec{
@@ -746,7 +750,6 @@ func (*EphChecks) Compose() composer.Spec {
 }
 
 const EphChecks_Type = "eph_checks"
-
 const EphChecks_Field_Name = "$NAME"
 const EphChecks_Field_Expect = "$EXPECT"
 const EphChecks_Field_Exe = "$EXE"
@@ -848,11 +851,13 @@ func EphChecks_Marshal(m jsn.Marshaler, val *EphChecks) (err error) {
 }
 
 // EphDirectives
-// User implements: Ephemera.
 type EphDirectives struct {
 	Name      string            `if:"label=go,type=text"`
 	Directive grammar.Directive `if:"label=parse"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphDirectives)(nil)
 
 func (*EphDirectives) Compose() composer.Spec {
 	return composer.Spec{
@@ -863,7 +868,6 @@ func (*EphDirectives) Compose() composer.Spec {
 }
 
 const EphDirectives_Type = "eph_directives"
-
 const EphDirectives_Field_Name = "$NAME"
 const EphDirectives_Field_Directive = "$DIRECTIVE"
 
@@ -957,10 +961,12 @@ func EphDirectives_Marshal(m jsn.Marshaler, val *EphDirectives) (err error) {
 }
 
 // EphEndDomain
-// User implements: Ephemera.
 type EphEndDomain struct {
 	Name string `if:"label=domain,type=text"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphEndDomain)(nil)
 
 func (*EphEndDomain) Compose() composer.Spec {
 	return composer.Spec{
@@ -971,7 +977,6 @@ func (*EphEndDomain) Compose() composer.Spec {
 }
 
 const EphEndDomain_Type = "eph_end_domain"
-
 const EphEndDomain_Field_Name = "$NAME"
 
 func (op *EphEndDomain) Marshal(m jsn.Marshaler) error {
@@ -1060,12 +1065,14 @@ func EphEndDomain_Marshal(m jsn.Marshaler, val *EphEndDomain) (err error) {
 // The new kind has all of the properties of all of its ancestor kinds
 // and it can be used wherever one of its ancestor kinds is needed.
 // ( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )
-// User implements: Ephemera.
 type EphKinds struct {
 	Kinds   string      `if:"label=kinds,type=text"`
 	From    string      `if:"label=from,type=text"`
 	Contain []EphParams `if:"label=contain"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphKinds)(nil)
 
 func (*EphKinds) Compose() composer.Spec {
 	return composer.Spec{
@@ -1076,7 +1083,6 @@ func (*EphKinds) Compose() composer.Spec {
 }
 
 const EphKinds_Type = "eph_kinds"
-
 const EphKinds_Field_Kinds = "$KINDS"
 const EphKinds_Field_From = "$FROM"
 const EphKinds_Field_Contain = "$CONTAIN"
@@ -1191,7 +1197,6 @@ func (*EphList) Compose() composer.Spec {
 }
 
 const EphList_Type = "eph_list"
-
 const EphList_Field_All = "$ALL"
 
 func (op *EphList) Marshal(m jsn.Marshaler) error {
@@ -1277,11 +1282,13 @@ func EphList_Marshal(m jsn.Marshaler, val *EphList) (err error) {
 }
 
 // EphNouns
-// User implements: Ephemera.
 type EphNouns struct {
 	Noun string `if:"label=noun,type=text"`
 	Kind string `if:"label=kind,type=text"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphNouns)(nil)
 
 func (*EphNouns) Compose() composer.Spec {
 	return composer.Spec{
@@ -1292,7 +1299,6 @@ func (*EphNouns) Compose() composer.Spec {
 }
 
 const EphNouns_Type = "eph_nouns"
-
 const EphNouns_Field_Noun = "$NOUN"
 const EphNouns_Field_Kind = "$KIND"
 
@@ -1388,7 +1394,6 @@ func EphNouns_Marshal(m jsn.Marshaler, val *EphNouns) (err error) {
 // EphParams 'Affinity' designates the storage type of a given parameter
 // while 'class' is used to indicate an interpretation of that parameter, for example a reference to a kind.
 // Pattern locals can have an initial value, other uses of parameter cannot.
-// User implements: Ephemera.
 type EphParams struct {
 	Affinity  Affinity      `if:"label=have"`
 	Name      string        `if:"label=called,type=text"`
@@ -1405,7 +1410,6 @@ func (*EphParams) Compose() composer.Spec {
 }
 
 const EphParams_Type = "eph_params"
-
 const EphParams_Field_Affinity = "$AFFINITY"
 const EphParams_Field_Name = "$NAME"
 const EphParams_Field_Class = "$CLASS"
@@ -1520,13 +1524,15 @@ func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
 // The result allows the pattern to return a value to the caller of pattern.
 // While multiple pattern commands can be used to define a pattern,
 // the set of arguments and the return can only be specified once.
-// User implements: Ephemera.
 type EphPatterns struct {
 	Name   string      `if:"label=pattern,type=text"`
 	Params []EphParams `if:"label=with,optional"`
 	Locals []EphParams `if:"label=locals,optional"`
 	Result *EphParams  `if:"label=result,optional"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphPatterns)(nil)
 
 func (*EphPatterns) Compose() composer.Spec {
 	return composer.Spec{
@@ -1537,7 +1543,6 @@ func (*EphPatterns) Compose() composer.Spec {
 }
 
 const EphPatterns_Type = "eph_patterns"
-
 const EphPatterns_Field_Name = "$NAME"
 const EphPatterns_Field_Params = "$PARAMS"
 const EphPatterns_Field_Locals = "$LOCALS"
@@ -1649,11 +1654,13 @@ func EphPatterns_Marshal(m jsn.Marshaler, val *EphPatterns) (err error) {
 // EphPlurals Rules for transforming plural text to singular text and back again.
 // Used by the assembler to help interpret author definitions,
 // and at runtime to help the parser interpret user input.
-// User implements: Ephemera.
 type EphPlurals struct {
 	Plural   string `if:"label=plural,type=text"`
 	Singular string `if:"label=singular,type=text"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphPlurals)(nil)
 
 func (*EphPlurals) Compose() composer.Spec {
 	return composer.Spec{
@@ -1664,7 +1671,6 @@ func (*EphPlurals) Compose() composer.Spec {
 }
 
 const EphPlurals_Type = "eph_plurals"
-
 const EphPlurals_Field_Plural = "$PLURAL"
 const EphPlurals_Field_Singular = "$SINGULAR"
 
@@ -1759,12 +1765,14 @@ func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
 
 // EphRefs Validates references to members of an existing kind.
 // If no parameters are specified, it simply ensures existence of the kind.
-// User implements: Ephemera.
 type EphRefs struct {
 	Kinds   string      `if:"label=kinds,type=text"`
 	From    string      `if:"label=from,optional,type=text"`
 	ReferTo []EphParams `if:"label=refer_to"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphRefs)(nil)
 
 func (*EphRefs) Compose() composer.Spec {
 	return composer.Spec{
@@ -1775,7 +1783,6 @@ func (*EphRefs) Compose() composer.Spec {
 }
 
 const EphRefs_Type = "eph_refs"
-
 const EphRefs_Field_Kinds = "$KINDS"
 const EphRefs_Field_From = "$FROM"
 const EphRefs_Field_ReferTo = "$REFER_TO"
@@ -1877,11 +1884,13 @@ func EphRefs_Marshal(m jsn.Marshaler, val *EphRefs) (err error) {
 }
 
 // EphRelations
-// User implements: Ephemera.
 type EphRelations struct {
 	Rel         string         `if:"label=_,type=text"`
 	Cardinality EphCardinality `if:"label=relate"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphRelations)(nil)
 
 func (*EphRelations) Compose() composer.Spec {
 	return composer.Spec{
@@ -1892,7 +1901,6 @@ func (*EphRelations) Compose() composer.Spec {
 }
 
 const EphRelations_Type = "eph_relations"
-
 const EphRelations_Field_Rel = "$REL"
 const EphRelations_Field_Cardinality = "$CARDINALITY"
 
@@ -1986,12 +1994,14 @@ func EphRelations_Marshal(m jsn.Marshaler, val *EphRelations) (err error) {
 }
 
 // EphRelatives
-// User implements: Ephemera.
 type EphRelatives struct {
 	Rel       string `if:"label=_,type=text"`
 	Noun      string `if:"label=relates,type=text"`
 	OtherNoun string `if:"label=to,type=text"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphRelatives)(nil)
 
 func (*EphRelatives) Compose() composer.Spec {
 	return composer.Spec{
@@ -2002,7 +2012,6 @@ func (*EphRelatives) Compose() composer.Spec {
 }
 
 const EphRelatives_Type = "eph_relatives"
-
 const EphRelatives_Field_Rel = "$REL"
 const EphRelatives_Field_Noun = "$NOUN"
 const EphRelatives_Field_OtherNoun = "$OTHER_NOUN"
@@ -2104,7 +2113,6 @@ func EphRelatives_Marshal(m jsn.Marshaler, val *EphRelatives) (err error) {
 }
 
 // EphRules
-// User implements: Ephemera.
 type EphRules struct {
 	Name   string      `if:"label=pattern,type=text"`
 	Target string      `if:"label=target,optional,type=text"`
@@ -2113,6 +2121,9 @@ type EphRules struct {
 	Exe    rt.Execute  `if:"label=do"`
 	Touch  EphAlways   `if:"label=touch,optional"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphRules)(nil)
 
 func (*EphRules) Compose() composer.Spec {
 	return composer.Spec{
@@ -2123,7 +2134,6 @@ func (*EphRules) Compose() composer.Spec {
 }
 
 const EphRules_Type = "eph_rules"
-
 const EphRules_Field_Name = "$NAME"
 const EphRules_Field_Target = "$TARGET"
 const EphRules_Field_Filter = "$FILTER"
@@ -2334,12 +2344,14 @@ func EphTiming_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphTiming) (err e
 }
 
 // EphValues
-// User implements: Ephemera.
 type EphValues struct {
 	Noun  string               `if:"label=noun,type=text"`
 	Field string               `if:"label=has,type=text"`
 	Value literal.LiteralValue `if:"label=value"`
 }
+
+// User implemented slots:
+var _ Ephemera = (*EphValues)(nil)
 
 func (*EphValues) Compose() composer.Spec {
 	return composer.Spec{
@@ -2350,7 +2362,6 @@ func (*EphValues) Compose() composer.Spec {
 }
 
 const EphValues_Type = "eph_values"
-
 const EphValues_Field_Noun = "$NOUN"
 const EphValues_Field_Field = "$FIELD"
 const EphValues_Field_Value = "$VALUE"
@@ -2535,7 +2546,6 @@ func (*ManyMany) Compose() composer.Spec {
 }
 
 const ManyMany_Type = "many_many"
-
 const ManyMany_Field_Kinds = "$KINDS"
 const ManyMany_Field_OtherKinds = "$OTHER_KINDS"
 
@@ -2643,7 +2653,6 @@ func (*ManyOne) Compose() composer.Spec {
 }
 
 const ManyOne_Type = "many_one"
-
 const ManyOne_Field_Kinds = "$KINDS"
 const ManyOne_Field_OtherKind = "$OTHER_KIND"
 
@@ -2751,7 +2760,6 @@ func (*OneMany) Compose() composer.Spec {
 }
 
 const OneMany_Type = "one_many"
-
 const OneMany_Field_Kind = "$KIND"
 const OneMany_Field_OtherKinds = "$OTHER_KINDS"
 
@@ -2859,7 +2867,6 @@ func (*OneOne) Compose() composer.Spec {
 }
 
 const OneOne_Type = "one_one"
-
 const OneOne_Field_Kind = "$KIND"
 const OneOne_Field_OtherKind = "$OTHER_KIND"
 

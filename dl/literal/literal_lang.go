@@ -4,6 +4,7 @@ package literal
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
@@ -143,11 +144,14 @@ func Bool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Bool) (err error) {
 }
 
 // BoolValue Specify an explicit true or false.
-// User implements: BoolEval, LiteralValue.
 type BoolValue struct {
 	Bool  bool   `if:"label=_,type=bool"`
 	Class string `if:"label=class,optional,type=text"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*BoolValue)(nil)
+var _ LiteralValue = (*BoolValue)(nil)
 
 func (*BoolValue) Compose() composer.Spec {
 	return composer.Spec{
@@ -158,7 +162,6 @@ func (*BoolValue) Compose() composer.Spec {
 }
 
 const BoolValue_Type = "bool_value"
-
 const BoolValue_Field_Bool = "$BOOL"
 const BoolValue_Field_Class = "$CLASS"
 
@@ -266,7 +269,6 @@ func (*FieldValue) Compose() composer.Spec {
 }
 
 const FieldValue_Type = "field_value"
-
 const FieldValue_Field_Name = "$NAME"
 const FieldValue_Field_Value = "$VALUE"
 
@@ -373,7 +375,6 @@ func (*FieldValues) Compose() composer.Spec {
 }
 
 const FieldValues_Type = "field_values"
-
 const FieldValues_Field_Values = "$VALUES"
 
 func (op *FieldValues) Marshal(m jsn.Marshaler) error {
@@ -528,11 +529,14 @@ func LiteralValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LiteralValue) 
 }
 
 // NumValue Specify a particular number.
-// User implements: NumberEval, LiteralValue.
 type NumValue struct {
 	Num   float64 `if:"label=_,type=number"`
 	Class string  `if:"label=class,optional,type=text"`
 }
+
+// User implemented slots:
+var _ rt.NumberEval = (*NumValue)(nil)
+var _ LiteralValue = (*NumValue)(nil)
 
 func (*NumValue) Compose() composer.Spec {
 	return composer.Spec{
@@ -543,7 +547,6 @@ func (*NumValue) Compose() composer.Spec {
 }
 
 const NumValue_Type = "num_value"
-
 const NumValue_Field_Num = "$NUM"
 const NumValue_Field_Class = "$CLASS"
 
@@ -637,11 +640,14 @@ func NumValue_Marshal(m jsn.Marshaler, val *NumValue) (err error) {
 }
 
 // NumValues Number List: Specify a list of numbers.
-// User implements: NumListEval, LiteralValue.
 type NumValues struct {
 	Values []float64 `if:"label=_,type=number"`
 	Class  string    `if:"label=class,optional,type=text"`
 }
+
+// User implemented slots:
+var _ rt.NumListEval = (*NumValues)(nil)
+var _ LiteralValue = (*NumValues)(nil)
 
 func (*NumValues) Compose() composer.Spec {
 	return composer.Spec{
@@ -652,7 +658,6 @@ func (*NumValues) Compose() composer.Spec {
 }
 
 const NumValues_Type = "num_values"
-
 const NumValues_Field_Values = "$VALUES"
 const NumValues_Field_Class = "$CLASS"
 
@@ -868,11 +873,14 @@ func Number_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Number) (err error) 
 }
 
 // RecordValue Specify a record composed of literal values.
-// User implements: RecordEval, LiteralValue.
 type RecordValue struct {
 	Kind   string      `if:"label=_,type=text"`
 	Fields *FieldValue `if:"label=fields,optional"`
 }
+
+// User implemented slots:
+var _ rt.RecordEval = (*RecordValue)(nil)
+var _ LiteralValue = (*RecordValue)(nil)
 
 func (*RecordValue) Compose() composer.Spec {
 	return composer.Spec{
@@ -883,7 +891,6 @@ func (*RecordValue) Compose() composer.Spec {
 }
 
 const RecordValue_Type = "record_value"
-
 const RecordValue_Field_Kind = "$KIND"
 const RecordValue_Field_Fields = "$FIELDS"
 
@@ -977,11 +984,14 @@ func RecordValue_Marshal(m jsn.Marshaler, val *RecordValue) (err error) {
 }
 
 // RecordValues Specify a series of records, all of the same kind.
-// User implements: RecordListEval, LiteralValue.
 type RecordValues struct {
 	Kind       string        `if:"label=_,type=text"`
 	Containing []FieldValues `if:"label=containing"`
 }
+
+// User implemented slots:
+var _ rt.RecordListEval = (*RecordValues)(nil)
+var _ LiteralValue = (*RecordValues)(nil)
 
 func (*RecordValues) Compose() composer.Spec {
 	return composer.Spec{
@@ -992,7 +1002,6 @@ func (*RecordValues) Compose() composer.Spec {
 }
 
 const RecordValues_Type = "record_values"
-
 const RecordValues_Field_Kind = "$KIND"
 const RecordValues_Field_Containing = "$CONTAINING"
 
@@ -1213,11 +1222,14 @@ func Text_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Text) (err error) {
 }
 
 // TextValue Specify a small bit of text.
-// User implements: TextEval, LiteralValue.
 type TextValue struct {
 	Text  string `if:"label=_,type=text"`
 	Class string `if:"label=class,optional,type=text"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*TextValue)(nil)
+var _ LiteralValue = (*TextValue)(nil)
 
 func (*TextValue) Compose() composer.Spec {
 	return composer.Spec{
@@ -1228,7 +1240,6 @@ func (*TextValue) Compose() composer.Spec {
 }
 
 const TextValue_Type = "text_value"
-
 const TextValue_Field_Text = "$TEXT"
 const TextValue_Field_Class = "$CLASS"
 
@@ -1322,11 +1333,14 @@ func TextValue_Marshal(m jsn.Marshaler, val *TextValue) (err error) {
 }
 
 // TextValues Text List: Specifies a set of text values.
-// User implements: TextListEval, LiteralValue.
 type TextValues struct {
 	Values []string `if:"label=_,type=text"`
 	Class  string   `if:"label=class,optional,type=text"`
 }
+
+// User implemented slots:
+var _ rt.TextListEval = (*TextValues)(nil)
+var _ LiteralValue = (*TextValues)(nil)
 
 func (*TextValues) Compose() composer.Spec {
 	return composer.Spec{
@@ -1337,7 +1351,6 @@ func (*TextValues) Compose() composer.Spec {
 }
 
 const TextValues_Type = "text_values"
-
 const TextValues_Field_Values = "$VALUES"
 const TextValues_Field_Class = "$CLASS"
 

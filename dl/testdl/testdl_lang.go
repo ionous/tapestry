@@ -91,7 +91,6 @@ func TestBool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestBool) (err err
 }
 
 // TestFlow
-// User implements: TestSlot.
 type TestFlow struct {
 	Slot  TestSlot   `if:"label=slot,optional"`
 	Txt   TestTxt    `if:"label=txt,optional"`
@@ -100,6 +99,9 @@ type TestFlow struct {
 	Swap  TestSwap   `if:"label=swap,optional"`
 	Slots []TestSlot `if:"label=slots,optional"`
 }
+
+// User implemented slots:
+var _ TestSlot = (*TestFlow)(nil)
 
 func (*TestFlow) Compose() composer.Spec {
 	return composer.Spec{
@@ -110,7 +112,6 @@ func (*TestFlow) Compose() composer.Spec {
 }
 
 const TestFlow_Type = "test_flow"
-
 const TestFlow_Field_Slot = "$SLOT"
 const TestFlow_Field_Txt = "$TXT"
 const TestFlow_Field_Num = "$NUM"

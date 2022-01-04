@@ -20,7 +20,6 @@ func (*Position) Compose() composer.Spec {
 }
 
 const Position_Type = "position"
-
 const Position_Field_Offset = "$OFFSET"
 const Position_Field_Source = "$SOURCE"
 

@@ -9,10 +9,12 @@ import (
 )
 
 // Action makes a parser scanner producing a script defined action.
-// User implements: ScannerMaker.
 type Action struct {
 	Action string `if:"label=_,type=text"`
 }
+
+// User implemented slots:
+var _ ScannerMaker = (*Action)(nil)
 
 func (*Action) Compose() composer.Spec {
 	return composer.Spec{
@@ -23,7 +25,6 @@ func (*Action) Compose() composer.Spec {
 }
 
 const Action_Type = "action"
-
 const Action_Field_Action = "$ACTION"
 
 func (op *Action) Marshal(m jsn.Marshaler) error {
@@ -109,11 +110,13 @@ func Action_Marshal(m jsn.Marshaler, val *Action) (err error) {
 }
 
 // Alias allows the user to refer to a noun by one or more other terms.
-// User implements: GrammarMaker.
 type Alias struct {
 	Names  []string `if:"label=_,type=text"`
 	AsNoun string   `if:"label=as_noun,type=text"`
 }
+
+// User implemented slots:
+var _ GrammarMaker = (*Alias)(nil)
 
 func (*Alias) Compose() composer.Spec {
 	return composer.Spec{
@@ -123,7 +126,6 @@ func (*Alias) Compose() composer.Spec {
 }
 
 const Alias_Type = "alias"
-
 const Alias_Field_Names = "$NAMES"
 const Alias_Field_AsNoun = "$AS_NOUN"
 
@@ -217,10 +219,12 @@ func Alias_Marshal(m jsn.Marshaler, val *Alias) (err error) {
 }
 
 // AllOf makes a parser scanner
-// User implements: ScannerMaker.
 type AllOf struct {
 	Series []ScannerMaker `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ScannerMaker = (*AllOf)(nil)
 
 func (*AllOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -230,7 +234,6 @@ func (*AllOf) Compose() composer.Spec {
 }
 
 const AllOf_Type = "all_of"
-
 const AllOf_Field_Series = "$SERIES"
 
 func (op *AllOf) Marshal(m jsn.Marshaler) error {
@@ -316,10 +319,12 @@ func AllOf_Marshal(m jsn.Marshaler, val *AllOf) (err error) {
 }
 
 // AnyOf makes a parser scanner
-// User implements: ScannerMaker.
 type AnyOf struct {
 	Options []ScannerMaker `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ScannerMaker = (*AnyOf)(nil)
 
 func (*AnyOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -329,7 +334,6 @@ func (*AnyOf) Compose() composer.Spec {
 }
 
 const AnyOf_Type = "any_of"
-
 const AnyOf_Field_Options = "$OPTIONS"
 
 func (op *AnyOf) Marshal(m jsn.Marshaler) error {
@@ -415,11 +419,13 @@ func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
 }
 
 // Directive starts a parser scanner
-// User implements: GrammarMaker.
 type Directive struct {
 	Lede  []string       `if:"label=_,type=text"`
 	Scans []ScannerMaker `if:"label=scans"`
 }
+
+// User implemented slots:
+var _ GrammarMaker = (*Directive)(nil)
 
 func (*Directive) Compose() composer.Spec {
 	return composer.Spec{
@@ -429,7 +435,6 @@ func (*Directive) Compose() composer.Spec {
 }
 
 const Directive_Type = "directive"
-
 const Directive_Field_Lede = "$LEDE"
 const Directive_Field_Scans = "$SCANS"
 
@@ -535,7 +540,6 @@ func (*Grammar) Compose() composer.Spec {
 }
 
 const Grammar_Type = "grammar"
-
 const Grammar_Field_Grammar = "$GRAMMAR"
 
 func (op *Grammar) Marshal(m jsn.Marshaler) error {
@@ -690,10 +694,12 @@ func GrammarMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GrammarMaker) 
 }
 
 // Noun makes a parser scanner
-// User implements: ScannerMaker.
 type Noun struct {
 	Kind string `if:"label=_,type=text"`
 }
+
+// User implemented slots:
+var _ ScannerMaker = (*Noun)(nil)
 
 func (*Noun) Compose() composer.Spec {
 	return composer.Spec{
@@ -703,7 +709,6 @@ func (*Noun) Compose() composer.Spec {
 }
 
 const Noun_Type = "noun"
-
 const Noun_Field_Kind = "$KIND"
 
 func (op *Noun) Marshal(m jsn.Marshaler) error {
@@ -789,10 +794,12 @@ func Noun_Marshal(m jsn.Marshaler, val *Noun) (err error) {
 }
 
 // Retarget makes a parser scanner
-// User implements: ScannerMaker.
 type Retarget struct {
 	Span []ScannerMaker `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ScannerMaker = (*Retarget)(nil)
 
 func (*Retarget) Compose() composer.Spec {
 	return composer.Spec{
@@ -802,7 +809,6 @@ func (*Retarget) Compose() composer.Spec {
 }
 
 const Retarget_Type = "retarget"
-
 const Retarget_Field_Span = "$SPAN"
 
 func (op *Retarget) Marshal(m jsn.Marshaler) error {
@@ -888,10 +894,12 @@ func Retarget_Marshal(m jsn.Marshaler, val *Retarget) (err error) {
 }
 
 // Reverse makes a parser scanner
-// User implements: ScannerMaker.
 type Reverse struct {
 	Reverses []ScannerMaker `if:"label=_"`
 }
+
+// User implemented slots:
+var _ ScannerMaker = (*Reverse)(nil)
 
 func (*Reverse) Compose() composer.Spec {
 	return composer.Spec{
@@ -901,7 +909,6 @@ func (*Reverse) Compose() composer.Spec {
 }
 
 const Reverse_Type = "reverse"
-
 const Reverse_Field_Reverses = "$REVERSES"
 
 func (op *Reverse) Marshal(m jsn.Marshaler) error {
@@ -1056,10 +1063,12 @@ func ScannerMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ScannerMaker) 
 }
 
 // Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
-// User implements: ScannerMaker.
 type Self struct {
 	Player string `if:"label=_,type=text"`
 }
+
+// User implemented slots:
+var _ ScannerMaker = (*Self)(nil)
 
 func (*Self) Compose() composer.Spec {
 	return composer.Spec{
@@ -1069,7 +1078,6 @@ func (*Self) Compose() composer.Spec {
 }
 
 const Self_Type = "self"
-
 const Self_Field_Player = "$PLAYER"
 
 func (op *Self) Marshal(m jsn.Marshaler) error {
@@ -1155,10 +1163,12 @@ func Self_Marshal(m jsn.Marshaler, val *Self) (err error) {
 }
 
 // Words makes a parser scanner
-// User implements: ScannerMaker.
 type Words struct {
 	Words []string `if:"label=_,type=text"`
 }
+
+// User implemented slots:
+var _ ScannerMaker = (*Words)(nil)
 
 func (*Words) Compose() composer.Spec {
 	return composer.Spec{
@@ -1168,7 +1178,6 @@ func (*Words) Compose() composer.Spec {
 }
 
 const Words_Type = "words"
-
 const Words_Field_Words = "$WORDS"
 
 func (op *Words) Marshal(m jsn.Marshaler) error {

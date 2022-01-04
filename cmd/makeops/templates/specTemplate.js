@@ -34,5 +34,4 @@ func (*{{Pascal name}}) Compose() composer.Spec {
   }
 }
 
-const {{Pascal name}}_Type = "{{name}}"
-`;
+const {{Pascal name}}_Type = "{{name}}"`;

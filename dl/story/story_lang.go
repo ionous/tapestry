@@ -109,7 +109,6 @@ func (*ActionContext) Compose() composer.Spec {
 }
 
 const ActionContext_Type = "action_context"
-
 const ActionContext_Field_Kind = "$KIND"
 
 func (op *ActionContext) Marshal(m jsn.Marshaler) error {
@@ -196,13 +195,15 @@ func ActionContext_Marshal(m jsn.Marshaler, val *ActionContext) (err error) {
 }
 
 // ActionDecl
-// User implements: StoryStatement.
 type ActionDecl struct {
 	At           reader.Position `if:"internal"`
 	Event        EventName       `if:"label=_"`
 	Action       ActionName      `if:"label=action"`
 	ActionParams ActionParams    `if:"label=action_params"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*ActionDecl)(nil)
 
 func (*ActionDecl) Compose() composer.Spec {
 	return composer.Spec{
@@ -212,7 +213,6 @@ func (*ActionDecl) Compose() composer.Spec {
 }
 
 const ActionDecl_Type = "action_decl"
-
 const ActionDecl_Field_Event = "$EVENT"
 const ActionDecl_Field_Action = "$ACTION"
 const ActionDecl_Field_ActionParams = "$ACTION_PARAMS"
@@ -851,7 +851,6 @@ func (*Argument) Compose() composer.Spec {
 }
 
 const Argument_Type = "argument"
-
 const Argument_Field_Name = "$NAME"
 const Argument_Field_From = "$FROM"
 
@@ -960,7 +959,6 @@ func (*Arguments) Compose() composer.Spec {
 }
 
 const Arguments_Type = "arguments"
-
 const Arguments_Field_Args = "$ARGS"
 
 func (op *Arguments) Marshal(m jsn.Marshaler) error {
@@ -1124,11 +1122,13 @@ func Aspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Aspect) (err error) 
 }
 
 // AspectProperty
-// User implements: PropertySlot.
 type AspectProperty struct {
 	Aspect  string `if:"label=of,type=text"`
 	Comment Lines  `if:"label=desc,optional"`
 }
+
+// User implemented slots:
+var _ PropertySlot = (*AspectProperty)(nil)
 
 func (*AspectProperty) Compose() composer.Spec {
 	return composer.Spec{
@@ -1139,7 +1139,6 @@ func (*AspectProperty) Compose() composer.Spec {
 }
 
 const AspectProperty_Type = "aspect_property"
-
 const AspectProperty_Field_Aspect = "$ASPECT"
 const AspectProperty_Field_Comment = "$COMMENT"
 
@@ -1233,11 +1232,13 @@ func AspectProperty_Marshal(m jsn.Marshaler, val *AspectProperty) (err error) {
 }
 
 // AspectTraits
-// User implements: StoryStatement.
 type AspectTraits struct {
 	Aspect      Aspect      `if:"label=_"`
 	TraitPhrase TraitPhrase `if:"label=trait_phrase"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*AspectTraits)(nil)
 
 func (*AspectTraits) Compose() composer.Spec {
 	return composer.Spec{
@@ -1247,7 +1248,6 @@ func (*AspectTraits) Compose() composer.Spec {
 }
 
 const AspectTraits_Type = "aspect_traits"
-
 const AspectTraits_Field_Aspect = "$ASPECT"
 const AspectTraits_Field_TraitPhrase = "$TRAIT_PHRASE"
 
@@ -1341,10 +1341,12 @@ func AspectTraits_Marshal(m jsn.Marshaler, val *AspectTraits) (err error) {
 }
 
 // BoolProperty
-// User implements: PropertySlot.
 type BoolProperty struct {
 	NamedProperty `if:"label=_"`
 }
+
+// User implemented slots:
+var _ PropertySlot = (*BoolProperty)(nil)
 
 func (*BoolProperty) Compose() composer.Spec {
 	return composer.Spec{
@@ -1355,7 +1357,6 @@ func (*BoolProperty) Compose() composer.Spec {
 }
 
 const BoolProperty_Type = "bool_property"
-
 const BoolProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const BoolProperty_Field_Name = "$NAME"
 const BoolProperty_Field_Type = "$TYPE"
@@ -1458,13 +1459,15 @@ func BoolProperty_Marshal(m jsn.Marshaler, val *BoolProperty) (err error) {
 }
 
 // Certainties
-// User implements: StoryStatement.
 type Certainties struct {
 	PluralKinds PluralKinds `if:"label=_"`
 	AreBeing    AreBeing    `if:"label=are_being"`
 	Certainty   Certainty   `if:"label=certainty"`
 	Trait       Trait       `if:"label=trait"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*Certainties)(nil)
 
 func (*Certainties) Compose() composer.Spec {
 	return composer.Spec{
@@ -1474,7 +1477,6 @@ func (*Certainties) Compose() composer.Spec {
 }
 
 const Certainties_Type = "certainties"
-
 const Certainties_Field_PluralKinds = "$PLURAL_KINDS"
 const Certainties_Field_AreBeing = "$ARE_BEING"
 const Certainties_Field_Certainty = "$CERTAINTY"
@@ -1671,10 +1673,13 @@ func Certainty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Certainty) (err e
 }
 
 // Comment Information about the story for you and other authors.
-// User implements: StoryStatement, Execute.
 type Comment struct {
 	Lines Lines `if:"label=_"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*Comment)(nil)
+var _ rt.Execute = (*Comment)(nil)
 
 func (*Comment) Compose() composer.Spec {
 	return composer.Spec{
@@ -1684,7 +1689,6 @@ func (*Comment) Compose() composer.Spec {
 }
 
 const Comment_Type = "comment"
-
 const Comment_Field_Lines = "$LINES"
 
 func (op *Comment) Marshal(m jsn.Marshaler) error {
@@ -1784,7 +1788,6 @@ func (*CommonAction) Compose() composer.Spec {
 }
 
 const CommonAction_Type = "common_action"
-
 const CommonAction_Field_Kind = "$KIND"
 const CommonAction_Field_ActionContext = "$ACTION_CONTEXT"
 
@@ -1879,12 +1882,14 @@ func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
 }
 
 // CountOf A guard which returns true based on a counter.
-// User implements: BoolEval.
 type CountOf struct {
 	At      reader.Position `if:"internal"`
 	Trigger core.Trigger    `if:"label=_"`
 	Num     rt.NumberEval   `if:"label=num"`
 }
+
+// User implemented slots:
+var _ rt.BoolEval = (*CountOf)(nil)
 
 func (*CountOf) Compose() composer.Spec {
 	return composer.Spec{
@@ -1894,7 +1899,6 @@ func (*CountOf) Compose() composer.Spec {
 }
 
 const CountOf_Type = "count_of"
-
 const CountOf_Field_Trigger = "$TRIGGER"
 const CountOf_Field_Num = "$NUM"
 
@@ -1989,11 +1993,13 @@ func CountOf_Marshal(m jsn.Marshaler, val *CountOf) (err error) {
 }
 
 // CycleText
-// User implements: TextEval.
 type CycleText struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*CycleText)(nil)
 
 func (*CycleText) Compose() composer.Spec {
 	return composer.Spec{
@@ -2003,7 +2009,6 @@ func (*CycleText) Compose() composer.Spec {
 }
 
 const CycleText_Type = "cycle_text"
-
 const CycleText_Field_Parts = "$PARTS"
 
 func (op *CycleText) Marshal(m jsn.Marshaler) error {
@@ -2090,11 +2095,20 @@ func CycleText_Marshal(m jsn.Marshaler, val *CycleText) (err error) {
 }
 
 // Determine
-// User implements: Execute, BoolEval, NumberEval, TextEval, RecordEval, NumListEval, TextListEval, RecordListEval.
 type Determine struct {
 	Name      core.PatternName `if:"label=_"`
 	Arguments *Arguments       `if:"label=arguments,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Determine)(nil)
+var _ rt.BoolEval = (*Determine)(nil)
+var _ rt.NumberEval = (*Determine)(nil)
+var _ rt.TextEval = (*Determine)(nil)
+var _ rt.RecordEval = (*Determine)(nil)
+var _ rt.NumListEval = (*Determine)(nil)
+var _ rt.TextListEval = (*Determine)(nil)
+var _ rt.RecordListEval = (*Determine)(nil)
 
 func (*Determine) Compose() composer.Spec {
 	return composer.Spec{
@@ -2104,7 +2118,6 @@ func (*Determine) Compose() composer.Spec {
 }
 
 const Determine_Type = "determine"
-
 const Determine_Field_Name = "$NAME"
 const Determine_Field_Arguments = "$ARGUMENTS"
 
@@ -2284,12 +2297,14 @@ func Determiner_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Determiner) (err
 }
 
 // EventBlock Listeners let objects in the game world react to changes before, during, or after they happen.
-// User implements: StoryStatement.
 type EventBlock struct {
 	At       reader.Position `if:"internal"`
 	Target   EventTarget     `if:"label=_"`
 	Handlers []EventHandler  `if:"label=handlers"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*EventBlock)(nil)
 
 func (*EventBlock) Compose() composer.Spec {
 	return composer.Spec{
@@ -2299,7 +2314,6 @@ func (*EventBlock) Compose() composer.Spec {
 }
 
 const EventBlock_Type = "event_block"
-
 const EventBlock_Field_Target = "$TARGET"
 const EventBlock_Field_Handlers = "$HANDLERS"
 
@@ -2409,7 +2423,6 @@ func (*EventHandler) Compose() composer.Spec {
 }
 
 const EventHandler_Type = "event_handler"
-
 const EventHandler_Field_EventPhase = "$EVENT_PHASE"
 const EventHandler_Field_Event = "$EVENT"
 const EventHandler_Field_Locals = "$LOCALS"
@@ -2795,7 +2808,6 @@ func (*GrammarDecl) Compose() composer.Spec {
 }
 
 const GrammarDecl_Type = "grammar_decl"
-
 const GrammarDecl_Field_Grammar = "$GRAMMAR"
 
 func (op *GrammarDecl) Marshal(m jsn.Marshaler) error {
@@ -2896,7 +2908,6 @@ func (*KindOfNoun) Compose() composer.Spec {
 }
 
 const KindOfNoun_Type = "kind_of_noun"
-
 const KindOfNoun_Field_AreAn = "$ARE_AN"
 const KindOfNoun_Field_Trait = "$TRAIT"
 const KindOfNoun_Field_Kind = "$KIND"
@@ -3006,11 +3017,13 @@ func KindOfNoun_Marshal(m jsn.Marshaler, val *KindOfNoun) (err error) {
 }
 
 // KindOfRelation
-// User implements: StoryStatement.
 type KindOfRelation struct {
 	Relation    rel.RelationName    `if:"label=_"`
 	Cardinality RelationCardinality `if:"label=cardinality"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*KindOfRelation)(nil)
 
 func (*KindOfRelation) Compose() composer.Spec {
 	return composer.Spec{
@@ -3020,7 +3033,6 @@ func (*KindOfRelation) Compose() composer.Spec {
 }
 
 const KindOfRelation_Type = "kind_of_relation"
-
 const KindOfRelation_Field_Relation = "$RELATION"
 const KindOfRelation_Field_Cardinality = "$CARDINALITY"
 
@@ -3114,11 +3126,13 @@ func KindOfRelation_Marshal(m jsn.Marshaler, val *KindOfRelation) (err error) {
 }
 
 // KindsHaveProperties
-// User implements: StoryStatement.
 type KindsHaveProperties struct {
 	PluralKinds PluralKinds    `if:"label=_"`
 	Props       []PropertySlot `if:"label=have"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*KindsHaveProperties)(nil)
 
 func (*KindsHaveProperties) Compose() composer.Spec {
 	return composer.Spec{
@@ -3129,7 +3143,6 @@ func (*KindsHaveProperties) Compose() composer.Spec {
 }
 
 const KindsHaveProperties_Type = "kinds_have_properties"
-
 const KindsHaveProperties_Field_PluralKinds = "$PLURAL_KINDS"
 const KindsHaveProperties_Field_Props = "$PROPS"
 
@@ -3223,10 +3236,12 @@ func KindsHaveProperties_Marshal(m jsn.Marshaler, val *KindsHaveProperties) (err
 }
 
 // KindsOfAspect
-// User implements: StoryStatement.
 type KindsOfAspect struct {
 	Aspect Aspect `if:"label=_"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*KindsOfAspect)(nil)
 
 func (*KindsOfAspect) Compose() composer.Spec {
 	return composer.Spec{
@@ -3236,7 +3251,6 @@ func (*KindsOfAspect) Compose() composer.Spec {
 }
 
 const KindsOfAspect_Type = "kinds_of_aspect"
-
 const KindsOfAspect_Field_Aspect = "$ASPECT"
 
 func (op *KindsOfAspect) Marshal(m jsn.Marshaler) error {
@@ -3322,11 +3336,13 @@ func KindsOfAspect_Marshal(m jsn.Marshaler, val *KindsOfAspect) (err error) {
 }
 
 // KindsOfKind
-// User implements: StoryStatement.
 type KindsOfKind struct {
 	PluralKinds  PluralKinds  `if:"label=kinds"`
 	SingularKind SingularKind `if:"label=of"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*KindsOfKind)(nil)
 
 func (*KindsOfKind) Compose() composer.Spec {
 	return composer.Spec{
@@ -3337,7 +3353,6 @@ func (*KindsOfKind) Compose() composer.Spec {
 }
 
 const KindsOfKind_Type = "kinds_of_kind"
-
 const KindsOfKind_Field_PluralKinds = "$PLURAL_KINDS"
 const KindsOfKind_Field_SingularKind = "$SINGULAR_KIND"
 
@@ -3444,7 +3459,6 @@ func (*Lede) Compose() composer.Spec {
 }
 
 const Lede_Type = "lede"
-
 const Lede_Field_Nouns = "$NOUNS"
 const Lede_Field_NounPhrase = "$NOUN_PHRASE"
 
@@ -3626,7 +3640,6 @@ func (*LocalDecl) Compose() composer.Spec {
 }
 
 const LocalDecl_Type = "local_decl"
-
 const LocalDecl_Field_Local = "$LOCAL"
 const LocalDecl_Field_Value = "$VALUE"
 
@@ -3732,7 +3745,6 @@ func (*LocalInit) Compose() composer.Spec {
 }
 
 const LocalInit_Type = "local_init"
-
 const LocalInit_Field_Value = "$VALUE"
 
 func (op *LocalInit) Marshal(m jsn.Marshaler) error {
@@ -3818,11 +3830,13 @@ func LocalInit_Marshal(m jsn.Marshaler, val *LocalInit) (err error) {
 }
 
 // Make
-// User implements: RecordEval.
 type Make struct {
 	Name      string     `if:"label=_,type=text"`
 	Arguments *Arguments `if:"label=arguments,optional"`
 }
+
+// User implemented slots:
+var _ rt.RecordEval = (*Make)(nil)
 
 func (*Make) Compose() composer.Spec {
 	return composer.Spec{
@@ -3832,7 +3846,6 @@ func (*Make) Compose() composer.Spec {
 }
 
 const Make_Type = "make"
-
 const Make_Field_Name = "$NAME"
 const Make_Field_Arguments = "$ARGUMENTS"
 
@@ -3926,11 +3939,13 @@ func Make_Marshal(m jsn.Marshaler, val *Make) (err error) {
 }
 
 // MakePlural The plural of person is people.
-// User implements: StoryStatement.
 type MakePlural struct {
 	Singular string `if:"label=_,type=text"`
 	Plural   string `if:"label=plural,type=text"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*MakePlural)(nil)
 
 func (*MakePlural) Compose() composer.Spec {
 	return composer.Spec{
@@ -3941,7 +3956,6 @@ func (*MakePlural) Compose() composer.Spec {
 }
 
 const MakePlural_Type = "make_plural"
-
 const MakePlural_Field_Singular = "$SINGULAR"
 const MakePlural_Field_Plural = "$PLURAL"
 
@@ -4048,7 +4062,6 @@ func (*ManyToMany) Compose() composer.Spec {
 }
 
 const ManyToMany_Type = "many_to_many"
-
 const ManyToMany_Field_Kinds = "$KINDS"
 const ManyToMany_Field_OtherKinds = "$OTHER_KINDS"
 
@@ -4155,7 +4168,6 @@ func (*ManyToOne) Compose() composer.Spec {
 }
 
 const ManyToOne_Type = "many_to_one"
-
 const ManyToOne_Field_Kinds = "$KINDS"
 const ManyToOne_Field_Kind = "$KIND"
 
@@ -4352,11 +4364,13 @@ func MapConnection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapConnection
 }
 
 // MapDeparting
-// User implements: StoryStatement.
 type MapDeparting struct {
 	Door          NamedNoun     `if:"label=via"`
 	MapConnection MapConnection `if:"label=and"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*MapDeparting)(nil)
 
 func (*MapDeparting) Compose() composer.Spec {
 	return composer.Spec{
@@ -4367,7 +4381,6 @@ func (*MapDeparting) Compose() composer.Spec {
 }
 
 const MapDeparting_Type = "map_departing"
-
 const MapDeparting_Field_Door = "$DOOR"
 const MapDeparting_Field_MapConnection = "$MAP_CONNECTION"
 
@@ -4474,7 +4487,6 @@ func (*MapDestination) Compose() composer.Spec {
 }
 
 const MapDestination_Type = "map_destination"
-
 const MapDestination_Field_Room = "$ROOM"
 const MapDestination_Field_Door = "$DOOR"
 
@@ -4643,12 +4655,14 @@ func MapDirection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDirection) 
 }
 
 // MapHeading
-// User implements: StoryStatement.
 type MapHeading struct {
 	MapDirection  MapDirection  `if:"label=_"`
 	Door          *NamedNoun    `if:"label=via,optional"`
 	MapConnection MapConnection `if:"label=and"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*MapHeading)(nil)
 
 func (*MapHeading) Compose() composer.Spec {
 	return composer.Spec{
@@ -4659,7 +4673,6 @@ func (*MapHeading) Compose() composer.Spec {
 }
 
 const MapHeading_Type = "map_heading"
-
 const MapHeading_Field_MapDirection = "$MAP_DIRECTION"
 const MapHeading_Field_Door = "$DOOR"
 const MapHeading_Field_MapConnection = "$MAP_CONNECTION"
@@ -4774,7 +4787,6 @@ func (*NamedNoun) Compose() composer.Spec {
 }
 
 const NamedNoun_Type = "named_noun"
-
 const NamedNoun_Field_Determiner = "$DETERMINER"
 const NamedNoun_Field_Name = "$NAME"
 
@@ -4882,7 +4894,6 @@ func (*NamedProperty) Compose() composer.Spec {
 }
 
 const NamedProperty_Type = "named_property"
-
 const NamedProperty_Field_Name = "$NAME"
 const NamedProperty_Field_Type = "$TYPE"
 const NamedProperty_Field_Comment = "$COMMENT"
@@ -4984,12 +4995,14 @@ func NamedProperty_Marshal(m jsn.Marshaler, val *NamedProperty) (err error) {
 }
 
 // NounAssignment Assign text.
-// User implements: StoryStatement.
 type NounAssignment struct {
 	Property Property    `if:"label=_"`
 	Nouns    []NamedNoun `if:"label=nouns"`
 	Lines    Lines       `if:"label=lines"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*NounAssignment)(nil)
 
 func (*NounAssignment) Compose() composer.Spec {
 	return composer.Spec{
@@ -4999,7 +5012,6 @@ func (*NounAssignment) Compose() composer.Spec {
 }
 
 const NounAssignment_Type = "noun_assignment"
-
 const NounAssignment_Field_Property = "$PROPERTY"
 const NounAssignment_Field_Nouns = "$NOUNS"
 const NounAssignment_Field_Lines = "$LINES"
@@ -5302,7 +5314,6 @@ func (*NounRelation) Compose() composer.Spec {
 }
 
 const NounRelation_Type = "noun_relation"
-
 const NounRelation_Field_AreBeing = "$ARE_BEING"
 const NounRelation_Field_Relation = "$RELATION"
 const NounRelation_Field_Nouns = "$NOUNS"
@@ -5404,12 +5415,14 @@ func NounRelation_Marshal(m jsn.Marshaler, val *NounRelation) (err error) {
 }
 
 // NounStatement Describes people, places, or things.
-// User implements: StoryStatement.
 type NounStatement struct {
 	Lede    Lede     `if:"label=_"`
 	Tail    []Tail   `if:"label=tail,optional"`
 	Summary *Summary `if:"label=summary,optional"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*NounStatement)(nil)
 
 func (*NounStatement) Compose() composer.Spec {
 	return composer.Spec{
@@ -5419,7 +5432,6 @@ func (*NounStatement) Compose() composer.Spec {
 }
 
 const NounStatement_Type = "noun_statement"
-
 const NounStatement_Field_Lede = "$LEDE"
 const NounStatement_Field_Tail = "$TAIL"
 const NounStatement_Field_Summary = "$SUMMARY"
@@ -5534,7 +5546,6 @@ func (*NounTraits) Compose() composer.Spec {
 }
 
 const NounTraits_Type = "noun_traits"
-
 const NounTraits_Field_AreBeing = "$ARE_BEING"
 const NounTraits_Field_Trait = "$TRAIT"
 
@@ -5628,10 +5639,12 @@ func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
 }
 
 // NumListProperty
-// User implements: PropertySlot.
 type NumListProperty struct {
 	NamedProperty `if:"label=_"`
 }
+
+// User implemented slots:
+var _ PropertySlot = (*NumListProperty)(nil)
 
 func (*NumListProperty) Compose() composer.Spec {
 	return composer.Spec{
@@ -5642,7 +5655,6 @@ func (*NumListProperty) Compose() composer.Spec {
 }
 
 const NumListProperty_Type = "num_list_property"
-
 const NumListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const NumListProperty_Field_Name = "$NAME"
 const NumListProperty_Field_Type = "$TYPE"
@@ -5745,10 +5757,12 @@ func NumListProperty_Marshal(m jsn.Marshaler, val *NumListProperty) (err error) 
 }
 
 // NumberProperty
-// User implements: PropertySlot.
 type NumberProperty struct {
 	NamedProperty `if:"label=_"`
 }
+
+// User implemented slots:
+var _ PropertySlot = (*NumberProperty)(nil)
 
 func (*NumberProperty) Compose() composer.Spec {
 	return composer.Spec{
@@ -5759,7 +5773,6 @@ func (*NumberProperty) Compose() composer.Spec {
 }
 
 const NumberProperty_Type = "number_property"
-
 const NumberProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const NumberProperty_Field_Name = "$NAME"
 const NumberProperty_Field_Type = "$TYPE"
@@ -5875,7 +5888,6 @@ func (*OneToMany) Compose() composer.Spec {
 }
 
 const OneToMany_Type = "one_to_many"
-
 const OneToMany_Field_Kind = "$KIND"
 const OneToMany_Field_Kinds = "$KINDS"
 
@@ -5982,7 +5994,6 @@ func (*OneToOne) Compose() composer.Spec {
 }
 
 const OneToOne_Type = "one_to_one"
-
 const OneToOne_Field_Kind = "$KIND"
 const OneToOne_Field_OtherKind = "$OTHER_KIND"
 
@@ -6089,7 +6100,6 @@ func (*PairedAction) Compose() composer.Spec {
 }
 
 const PairedAction_Type = "paired_action"
-
 const PairedAction_Field_Kinds = "$KINDS"
 
 func (op *PairedAction) Marshal(m jsn.Marshaler) error {
@@ -6188,7 +6198,6 @@ func (*Paragraph) Compose() composer.Spec {
 }
 
 const Paragraph_Type = "paragraph"
-
 const Paragraph_Field_StoryStatement = "$STORY_STATEMENT"
 
 func (op *Paragraph) Marshal(m jsn.Marshaler) error {
@@ -6274,13 +6283,15 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 }
 
 // PatternActions Actions to take when using a pattern.
-// User implements: StoryStatement.
 type PatternActions struct {
 	Name          core.PatternName `if:"label=_"`
 	PatternLocals *PatternLocals   `if:"label=pattern_locals,optional"`
 	PatternReturn *PatternReturn   `if:"label=pattern_return,optional"`
 	PatternRules  PatternRules     `if:"label=pattern_rules"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*PatternActions)(nil)
 
 func (*PatternActions) Compose() composer.Spec {
 	return composer.Spec{
@@ -6290,7 +6301,6 @@ func (*PatternActions) Compose() composer.Spec {
 }
 
 const PatternActions_Type = "pattern_actions"
-
 const PatternActions_Field_Name = "$NAME"
 const PatternActions_Field_PatternLocals = "$PATTERN_LOCALS"
 const PatternActions_Field_PatternReturn = "$PATTERN_RETURN"
@@ -6400,7 +6410,6 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 }
 
 // PatternDecl
-// User implements: StoryStatement.
 type PatternDecl struct {
 	Type          PatternType           `if:"label=_"`
 	Name          core.PatternName      `if:"label=name"`
@@ -6408,6 +6417,9 @@ type PatternDecl struct {
 	PatternReturn *PatternReturn        `if:"label=pattern_return,optional"`
 	About         *Comment              `if:"label=about,optional"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*PatternDecl)(nil)
 
 func (*PatternDecl) Compose() composer.Spec {
 	return composer.Spec{
@@ -6417,7 +6429,6 @@ func (*PatternDecl) Compose() composer.Spec {
 }
 
 const PatternDecl_Type = "pattern_decl"
-
 const PatternDecl_Field_Type = "$TYPE"
 const PatternDecl_Field_Name = "$NAME"
 const PatternDecl_Field_Optvars = "$OPTVARS"
@@ -6631,7 +6642,6 @@ func (*PatternLocals) Compose() composer.Spec {
 }
 
 const PatternLocals_Type = "pattern_locals"
-
 const PatternLocals_Field_LocalDecl = "$LOCAL_DECL"
 
 func (op *PatternLocals) Marshal(m jsn.Marshaler) error {
@@ -6729,7 +6739,6 @@ func (*PatternReturn) Compose() composer.Spec {
 }
 
 const PatternReturn_Type = "pattern_return"
-
 const PatternReturn_Field_Result = "$RESULT"
 
 func (op *PatternReturn) Marshal(m jsn.Marshaler) error {
@@ -6829,7 +6838,6 @@ func (*PatternRule) Compose() composer.Spec {
 }
 
 const PatternRule_Type = "pattern_rule"
-
 const PatternRule_Field_Guard = "$GUARD"
 const PatternRule_Field_Flags = "$FLAGS"
 const PatternRule_Field_Hook = "$HOOK"
@@ -6943,7 +6951,6 @@ func (*PatternRules) Compose() composer.Spec {
 }
 
 const PatternRules_Type = "pattern_rules"
-
 const PatternRules_Field_PatternRule = "$PATTERN_RULE"
 
 func (op *PatternRules) Marshal(m jsn.Marshaler) error {
@@ -7116,11 +7123,13 @@ func PatternType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternType) (e
 }
 
 // PatternVariablesDecl Values provided when calling a pattern.
-// User implements: StoryStatement.
 type PatternVariablesDecl struct {
 	PatternName core.PatternName `if:"label=_"`
 	Props       []PropertySlot   `if:"label=requires"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*PatternVariablesDecl)(nil)
 
 func (*PatternVariablesDecl) Compose() composer.Spec {
 	return composer.Spec{
@@ -7131,7 +7140,6 @@ func (*PatternVariablesDecl) Compose() composer.Spec {
 }
 
 const PatternVariablesDecl_Type = "pattern_variables_decl"
-
 const PatternVariablesDecl_Field_PatternName = "$PATTERN_NAME"
 const PatternVariablesDecl_Field_Props = "$PROPS"
 
@@ -7237,7 +7245,6 @@ func (*PatternVariablesTail) Compose() composer.Spec {
 }
 
 const PatternVariablesTail_Type = "pattern_variables_tail"
-
 const PatternVariablesTail_Field_Props = "$PROPS"
 
 func (op *PatternVariablesTail) Marshal(m jsn.Marshaler) error {
@@ -7730,10 +7737,12 @@ func PropertySlot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PropertySlot) 
 }
 
 // RecordListProperty
-// User implements: PropertySlot.
 type RecordListProperty struct {
 	NamedProperty `if:"label=_"`
 }
+
+// User implemented slots:
+var _ PropertySlot = (*RecordListProperty)(nil)
 
 func (*RecordListProperty) Compose() composer.Spec {
 	return composer.Spec{
@@ -7744,7 +7753,6 @@ func (*RecordListProperty) Compose() composer.Spec {
 }
 
 const RecordListProperty_Type = "record_list_property"
-
 const RecordListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const RecordListProperty_Field_Name = "$NAME"
 const RecordListProperty_Field_Type = "$TYPE"
@@ -7847,10 +7855,12 @@ func RecordListProperty_Marshal(m jsn.Marshaler, val *RecordListProperty) (err e
 }
 
 // RecordProperty
-// User implements: PropertySlot.
 type RecordProperty struct {
 	NamedProperty `if:"label=_"`
 }
+
+// User implemented slots:
+var _ PropertySlot = (*RecordProperty)(nil)
 
 func (*RecordProperty) Compose() composer.Spec {
 	return composer.Spec{
@@ -7861,7 +7871,6 @@ func (*RecordProperty) Compose() composer.Spec {
 }
 
 const RecordProperty_Type = "record_property"
-
 const RecordProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const RecordProperty_Field_Name = "$NAME"
 const RecordProperty_Field_Type = "$TYPE"
@@ -8079,13 +8088,15 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 }
 
 // RelativeToNoun
-// User implements: StoryStatement.
 type RelativeToNoun struct {
 	Relation rel.RelationName `if:"label=_"`
 	Nouns    []NamedNoun      `if:"label=nouns"`
 	AreBeing AreBeing         `if:"label=are_being"`
 	Nouns1   []NamedNoun      `if:"label=nouns1"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*RelativeToNoun)(nil)
 
 func (*RelativeToNoun) Compose() composer.Spec {
 	return composer.Spec{
@@ -8095,7 +8106,6 @@ func (*RelativeToNoun) Compose() composer.Spec {
 }
 
 const RelativeToNoun_Type = "relative_to_noun"
-
 const RelativeToNoun_Field_Relation = "$RELATION"
 const RelativeToNoun_Field_Nouns = "$NOUNS"
 const RelativeToNoun_Field_AreBeing = "$ARE_BEING"
@@ -8205,10 +8215,12 @@ func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
 }
 
 // RenderTemplate Parse text using templates.
-// User implements: TextEval.
 type RenderTemplate struct {
 	Template Lines `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*RenderTemplate)(nil)
 
 func (*RenderTemplate) Compose() composer.Spec {
 	return composer.Spec{
@@ -8218,7 +8230,6 @@ func (*RenderTemplate) Compose() composer.Spec {
 }
 
 const RenderTemplate_Type = "render_template"
-
 const RenderTemplate_Field_Template = "$TEMPLATE"
 
 func (op *RenderTemplate) Marshal(m jsn.Marshaler) error {
@@ -8304,12 +8315,15 @@ func RenderTemplate_Marshal(m jsn.Marshaler, val *RenderTemplate) (err error) {
 }
 
 // Send
-// User implements: Execute, BoolEval.
 type Send struct {
 	Event     string          `if:"label=_,type=text"`
 	Path      rt.TextListEval `if:"label=path"`
 	Arguments *Arguments      `if:"label=arguments,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*Send)(nil)
+var _ rt.BoolEval = (*Send)(nil)
 
 func (*Send) Compose() composer.Spec {
 	return composer.Spec{
@@ -8319,7 +8333,6 @@ func (*Send) Compose() composer.Spec {
 }
 
 const Send_Type = "send"
-
 const Send_Field_Event = "$EVENT"
 const Send_Field_Path = "$PATH"
 const Send_Field_Arguments = "$ARGUMENTS"
@@ -8421,11 +8434,13 @@ func Send_Marshal(m jsn.Marshaler, val *Send) (err error) {
 }
 
 // ShuffleText
-// User implements: TextEval.
 type ShuffleText struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*ShuffleText)(nil)
 
 func (*ShuffleText) Compose() composer.Spec {
 	return composer.Spec{
@@ -8435,7 +8450,6 @@ func (*ShuffleText) Compose() composer.Spec {
 }
 
 const ShuffleText_Type = "shuffle_text"
-
 const ShuffleText_Field_Parts = "$PARTS"
 
 func (op *ShuffleText) Marshal(m jsn.Marshaler) error {
@@ -8599,11 +8613,13 @@ func SingularKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SingularKind) 
 }
 
 // StoppingText
-// User implements: TextEval.
 type StoppingText struct {
 	At    reader.Position `if:"internal"`
 	Parts []rt.TextEval   `if:"label=_"`
 }
+
+// User implemented slots:
+var _ rt.TextEval = (*StoppingText)(nil)
 
 func (*StoppingText) Compose() composer.Spec {
 	return composer.Spec{
@@ -8613,7 +8629,6 @@ func (*StoppingText) Compose() composer.Spec {
 }
 
 const StoppingText_Type = "stopping_text"
-
 const StoppingText_Field_Parts = "$PARTS"
 
 func (op *StoppingText) Marshal(m jsn.Marshaler) error {
@@ -8712,7 +8727,6 @@ func (*Story) Compose() composer.Spec {
 }
 
 const Story_Type = "story"
-
 const Story_Field_Paragraph = "$PARAGRAPH"
 
 func (op *Story) Marshal(m jsn.Marshaler) error {
@@ -8880,7 +8894,6 @@ func (*Summary) Compose() composer.Spec {
 }
 
 const Summary_Type = "summary"
-
 const Summary_Field_Lines = "$LINES"
 
 func (op *Summary) Marshal(m jsn.Marshaler) error {
@@ -8980,7 +8993,6 @@ func (*Tail) Compose() composer.Spec {
 }
 
 const Tail_Type = "tail"
-
 const Tail_Field_Pronoun = "$PRONOUN"
 const Tail_Field_NounPhrase = "$NOUN_PHRASE"
 
@@ -9159,10 +9171,12 @@ func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err err
 }
 
 // TestOutput Expect that a test uses 'Say' to print some specific text.
-// User implements: Testing.
 type TestOutput struct {
 	Lines Lines `if:"label=_"`
 }
+
+// User implemented slots:
+var _ Testing = (*TestOutput)(nil)
 
 func (*TestOutput) Compose() composer.Spec {
 	return composer.Spec{
@@ -9172,7 +9186,6 @@ func (*TestOutput) Compose() composer.Spec {
 }
 
 const TestOutput_Type = "test_output"
-
 const TestOutput_Field_Lines = "$LINES"
 
 func (op *TestOutput) Marshal(m jsn.Marshaler) error {
@@ -9258,11 +9271,13 @@ func TestOutput_Marshal(m jsn.Marshaler, val *TestOutput) (err error) {
 }
 
 // TestRule
-// User implements: StoryStatement.
 type TestRule struct {
 	TestName TestName    `if:"label=_"`
 	Hook     ProgramHook `if:"label=hook"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*TestRule)(nil)
 
 func (*TestRule) Compose() composer.Spec {
 	return composer.Spec{
@@ -9272,7 +9287,6 @@ func (*TestRule) Compose() composer.Spec {
 }
 
 const TestRule_Type = "test_rule"
-
 const TestRule_Field_TestName = "$TEST_NAME"
 const TestRule_Field_Hook = "$HOOK"
 
@@ -9366,11 +9380,13 @@ func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
 }
 
 // TestScene
-// User implements: StoryStatement.
 type TestScene struct {
 	TestName TestName `if:"label=_"`
 	Story    Story    `if:"label=story"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*TestScene)(nil)
 
 func (*TestScene) Compose() composer.Spec {
 	return composer.Spec{
@@ -9380,7 +9396,6 @@ func (*TestScene) Compose() composer.Spec {
 }
 
 const TestScene_Type = "test_scene"
-
 const TestScene_Field_TestName = "$TEST_NAME"
 const TestScene_Field_Story = "$STORY"
 
@@ -9474,12 +9489,14 @@ func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
 }
 
 // TestStatement
-// User implements: StoryStatement.
 type TestStatement struct {
 	At       reader.Position `if:"internal"`
 	TestName TestName        `if:"label=_"`
 	Test     Testing         `if:"label=test"`
 }
+
+// User implemented slots:
+var _ StoryStatement = (*TestStatement)(nil)
 
 func (*TestStatement) Compose() composer.Spec {
 	return composer.Spec{
@@ -9489,7 +9506,6 @@ func (*TestStatement) Compose() composer.Spec {
 }
 
 const TestStatement_Type = "test_statement"
-
 const TestStatement_Field_TestName = "$TEST_NAME"
 const TestStatement_Field_Test = "$TEST"
 
@@ -9653,10 +9669,12 @@ func Testing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Testing) (err error
 }
 
 // TextListProperty
-// User implements: PropertySlot.
 type TextListProperty struct {
 	NamedProperty `if:"label=_"`
 }
+
+// User implemented slots:
+var _ PropertySlot = (*TextListProperty)(nil)
 
 func (*TextListProperty) Compose() composer.Spec {
 	return composer.Spec{
@@ -9667,7 +9685,6 @@ func (*TextListProperty) Compose() composer.Spec {
 }
 
 const TextListProperty_Type = "text_list_property"
-
 const TextListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const TextListProperty_Field_Name = "$NAME"
 const TextListProperty_Field_Type = "$TYPE"
@@ -9770,10 +9787,12 @@ func TextListProperty_Marshal(m jsn.Marshaler, val *TextListProperty) (err error
 }
 
 // TextProperty
-// User implements: PropertySlot.
 type TextProperty struct {
 	NamedProperty `if:"label=_"`
 }
+
+// User implemented slots:
+var _ PropertySlot = (*TextProperty)(nil)
 
 func (*TextProperty) Compose() composer.Spec {
 	return composer.Spec{
@@ -9784,7 +9803,6 @@ func (*TextProperty) Compose() composer.Spec {
 }
 
 const TextProperty_Type = "text_property"
-
 const TextProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const TextProperty_Field_Name = "$NAME"
 const TextProperty_Field_Type = "$TYPE"
@@ -9977,7 +9995,6 @@ func (*TraitPhrase) Compose() composer.Spec {
 }
 
 const TraitPhrase_Type = "trait_phrase"
-
 const TraitPhrase_Field_AreEither = "$ARE_EITHER"
 const TraitPhrase_Field_Trait = "$TRAIT"
 

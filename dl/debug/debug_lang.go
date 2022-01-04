@@ -10,11 +10,13 @@ import (
 )
 
 // DebugLog Debug log
-// User implements: Execute.
 type DebugLog struct {
 	Value    rt.Assignment `if:"label=_"`
 	LogLevel LoggingLevel  `if:"label=as,optional"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*DebugLog)(nil)
 
 func (*DebugLog) Compose() composer.Spec {
 	return composer.Spec{
@@ -25,7 +27,6 @@ func (*DebugLog) Compose() composer.Spec {
 }
 
 const DebugLog_Type = "debug_log"
-
 const DebugLog_Field_Value = "$VALUE"
 const DebugLog_Field_LogLevel = "$LOG_LEVEL"
 
@@ -119,10 +120,12 @@ func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
 }
 
 // DoNothing Statement which does nothing.
-// User implements: Execute.
 type DoNothing struct {
 	Reason string `if:"label=why,optional,type=text"`
 }
+
+// User implemented slots:
+var _ rt.Execute = (*DoNothing)(nil)
 
 func (*DoNothing) Compose() composer.Spec {
 	return composer.Spec{
@@ -132,7 +135,6 @@ func (*DoNothing) Compose() composer.Spec {
 }
 
 const DoNothing_Type = "do_nothing"
-
 const DoNothing_Field_Reason = "$REASON"
 
 func (op *DoNothing) Marshal(m jsn.Marshaler) error {
