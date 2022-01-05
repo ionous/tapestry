@@ -313,8 +313,8 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	5700043876155103121:  (*DebugLog)(nil),  /* Log: */
-	17593113710683116377: (*DebugLog)(nil),  /* Log:as: */
 	5234640093503358177:  (*DoNothing)(nil), /* DoNothing */
 	15838679201884235887: (*DoNothing)(nil), /* DoNothing why: */
+	5700043876155103121:  (*DebugLog)(nil),  /* Log: */
+	17593113710683116377: (*DebugLog)(nil),  /* Log:as: */
 }

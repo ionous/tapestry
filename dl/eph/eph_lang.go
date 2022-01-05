@@ -3088,48 +3088,48 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	15711422147190391894: (*EphAliases)(nil),     /* Eph understand:as: */
 	18295658173337269930: (*EphAspects)(nil),     /* Eph aspects:traits: */
 	9182060341586636438:  (*EphAt)(nil),          /* Eph at:eph: */
-	12209727080993772760: (*EphBeginDomain)(nil), /* Eph domain:requires: */
-	12717235098097470366: (*EphCardinality)(nil), /* EphCardinality oneOne: */
-	13014334328963404635: (*EphCardinality)(nil), /* EphCardinality oneMany: */
-	874627862825420357:   (*EphCardinality)(nil), /* EphCardinality manyOne: */
-	18342259850011553446: (*EphCardinality)(nil), /* EphCardinality manyMany: */
 	7963757310721049403:  (*EphChecks)(nil),      /* Eph check:do: */
 	1948835363584093228:  (*EphChecks)(nil),      /* Eph check:expect:do: */
-	1520695377871896491:  (*EphDirectives)(nil),  /* Eph go:parse: */
 	4379746949646135194:  (*EphEndDomain)(nil),   /* Eph domain: */
+	12209727080993772760: (*EphBeginDomain)(nil), /* Eph domain:requires: */
+	1520695377871896491:  (*EphDirectives)(nil),  /* Eph go:parse: */
+	12259359132675429189: (*EphParams)(nil),      /* Eph have:called: */
+	16868970960604249858: (*EphParams)(nil),      /* Eph have:called:initially: */
+	277028977564474262:   (*EphParams)(nil),      /* Eph have:called:of: */
+	16991751007965772137: (*EphParams)(nil),      /* Eph have:called:of:initially: */
 	16835204245478660337: (*EphKinds)(nil),       /* Eph kinds:from:contain: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
+	17160611285654896437: (*EphValues)(nil),      /* Eph noun:has:value: */
 	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
 	6279464935630150301:  (*EphOpposites)(nil),   /* Eph opposite:word: */
-	12259359132675429189: (*EphParams)(nil),      /* Eph have:called: */
-	277028977564474262:   (*EphParams)(nil),      /* Eph have:called:of: */
-	16868970960604249858: (*EphParams)(nil),      /* Eph have:called:initially: */
-	16991751007965772137: (*EphParams)(nil),      /* Eph have:called:of:initially: */
 	1611161010098549912:  (*EphPatterns)(nil),    /* Eph pattern: */
-	13289385533668993470: (*EphPatterns)(nil),    /* Eph pattern:with: */
+	17570881590226414756: (*EphRules)(nil),       /* Eph pattern:if:when:do: */
+	10757199676611909587: (*EphRules)(nil),       /* Eph pattern:if:when:do:touch: */
 	7324201728182884878:  (*EphPatterns)(nil),    /* Eph pattern:locals: */
-	3398548629283569576:  (*EphPatterns)(nil),    /* Eph pattern:with:locals: */
-	14244437562331442113: (*EphPatterns)(nil),    /* Eph pattern:result: */
-	8353842745201753207:  (*EphPatterns)(nil),    /* Eph pattern:with:result: */
 	16745375238637686855: (*EphPatterns)(nil),    /* Eph pattern:locals:result: */
+	14244437562331442113: (*EphPatterns)(nil),    /* Eph pattern:result: */
+	7214067641252607715:  (*EphRules)(nil),       /* Eph pattern:target:if:when:do: */
+	10406184722562866480: (*EphRules)(nil),       /* Eph pattern:target:if:when:do:touch: */
+	13289385533668993470: (*EphPatterns)(nil),    /* Eph pattern:with: */
+	3398548629283569576:  (*EphPatterns)(nil),    /* Eph pattern:with:locals: */
 	1340667739035001681:  (*EphPatterns)(nil),    /* Eph pattern:with:locals:result: */
+	8353842745201753207:  (*EphPatterns)(nil),    /* Eph pattern:with:result: */
 	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
 	13438111535762645192: (*EphRefs)(nil),        /* Eph refs: */
-	9811567312656774933:  (*EphRelations)(nil),   /* Eph:relate oneOne: */
-	2078507782755484470:  (*EphRelations)(nil),   /* Eph:relate oneMany: */
-	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */
+	15711422147190391894: (*EphAliases)(nil),     /* Eph understand:as: */
 	15063335060652852941: (*EphRelations)(nil),   /* Eph:relate manyMany: */
+	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */
+	2078507782755484470:  (*EphRelations)(nil),   /* Eph:relate oneMany: */
+	9811567312656774933:  (*EphRelations)(nil),   /* Eph:relate oneOne: */
 	17218035188999844343: (*EphRelatives)(nil),   /* Eph:relates:to: */
-	17570881590226414756: (*EphRules)(nil),       /* Eph pattern:if:when:do: */
-	7214067641252607715:  (*EphRules)(nil),       /* Eph pattern:target:if:when:do: */
-	10757199676611909587: (*EphRules)(nil),       /* Eph pattern:if:when:do:touch: */
-	10406184722562866480: (*EphRules)(nil),       /* Eph pattern:target:if:when:do:touch: */
-	17160611285654896437: (*EphValues)(nil),      /* Eph noun:has:value: */
-	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */
-	15407091527463396937: (*ManyOne)(nil),        /* Kinds:toKind: */
-	8349208709908405809:  (*OneMany)(nil),        /* Kind:toKinds: */
+	18342259850011553446: (*EphCardinality)(nil), /* EphCardinality manyMany: */
+	874627862825420357:   (*EphCardinality)(nil), /* EphCardinality manyOne: */
+	13014334328963404635: (*EphCardinality)(nil), /* EphCardinality oneMany: */
+	12717235098097470366: (*EphCardinality)(nil), /* EphCardinality oneOne: */
 	11329972991603205158: (*OneOne)(nil),         /* Kind:toKind: */
+	8349208709908405809:  (*OneMany)(nil),        /* Kind:toKinds: */
+	15407091527463396937: (*ManyOne)(nil),        /* Kinds:toKind: */
+	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */
 }

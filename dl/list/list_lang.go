@@ -3673,44 +3673,44 @@ var Signatures = map[uint64]interface{}{
 	602674204343183133:   (*EraseEdge)(nil),       /* Erase: */
 	2379140516691405863:  (*EraseEdge)(nil),       /* Erase:atFront: */
 	18068640065349035914: (*EraseIndex)(nil),      /* Erase:from:atIndex: */
-	15022408731321198722: (*Erasing)(nil),         /* Erasing:from:atIndex:as:do: */
 	10199179765059749783: (*ErasingEdge)(nil),     /* Erasing:as:do: */
-	4059879572017637653:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do: */
 	2253244220008480180:  (*ErasingEdge)(nil),     /* Erasing:as:do:else: */
+	4059879572017637653:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do: */
 	4832054959845425038:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do:else: */
-	11643102106272323440: (*FromNumList)(nil),     /* VarOfNums: */
-	11748429228606086474: (*FromRecList)(nil),     /* VarOfRecs: */
-	9860873969452403008:  (*FromTxtList)(nil),     /* VarOfTxts: */
+	15022408731321198722: (*Erasing)(nil),         /* Erasing:from:atIndex:as:do: */
+	10285751875873889942: (*ListFind)(nil),        /* Find:list: */
+	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
+	486700160484864869:   (*ListAt)(nil),          /* Get:index: */
 	15891010564373014004: (*IntoNumList)(nil),     /* IntoNums: */
 	12459647556401208318: (*IntoRecList)(nil),     /* IntoRecs: */
 	8659259889251239468:  (*IntoTxtList)(nil),     /* IntoTxts: */
-	486700160484864869:   (*ListAt)(nil),          /* Get:index: */
-	5893619730181277740:  (*ListEach)(nil),        /* Repeating across:as:do: */
-	4018832586238090637:  (*ListEach)(nil),        /* Repeating across:as:do:else: */
-	10285751875873889942: (*ListFind)(nil),        /* Find:list: */
-	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
 	11936860857815714018: (*ListLen)(nil),         /* Len: */
 	5185210125302469743:  (*ListMap)(nil),         /* Map:fromList:using: */
-	14826188473242626433: (*ListReduce)(nil),      /* Reduce into:fromList:using: */
-	13627278328240309351: (*ListReverse)(nil),     /* Reverse list: */
-	15586923045386932713: (*ListSet)(nil),         /* Set:index:from: */
-	16656583749567367441: (*ListSlice)(nil),       /* Slice: */
-	8205818265699527963:  (*ListSlice)(nil),       /* Slice:start: */
-	11293812622311872004: (*ListSlice)(nil),       /* Slice:end: */
-	1592674698280817110:  (*ListSlice)(nil),       /* Slice:start:end: */
-	5767454846835881814:  (*ListSortNumbers)(nil), /* SortNumbers:byField: */
-	11765588999597320458: (*ListSortNumbers)(nil), /* SortNumbers:byField:descending: */
-	16820765327929145512: (*ListSortText)(nil),    /* SortTexts:byField: */
-	7928660393625494104:  (*ListSortText)(nil),    /* SortTexts:byField:descending: */
-	14523039554491862046: (*ListSortText)(nil),    /* SortTexts:byField:usingCase: */
-	13718565834155724622: (*ListSortText)(nil),    /* SortTexts:byField:descending:usingCase: */
-	17242083762994141003: (*ListSortUsing)(nil),   /* Sort:using: */
-	10934695318884901016: (*ListSplice)(nil),      /* Splice:start:remove:insert: */
 	17042054112571797420: (*PutEdge)(nil),         /* Put:into: */
 	14857107863114820154: (*PutEdge)(nil),         /* Put:into:atFront: */
 	8899481094314089999:  (*PutIndex)(nil),        /* Put:into:atIndex: */
 	9793113837890674936:  (*Range)(nil),           /* Range: */
-	12654734042076112886: (*Range)(nil),           /* Range:from: */
 	4890710300640402911:  (*Range)(nil),           /* Range:byStep: */
+	12654734042076112886: (*Range)(nil),           /* Range:from: */
 	17061865887297909749: (*Range)(nil),           /* Range:from:byStep: */
+	14826188473242626433: (*ListReduce)(nil),      /* Reduce into:fromList:using: */
+	5893619730181277740:  (*ListEach)(nil),        /* Repeating across:as:do: */
+	4018832586238090637:  (*ListEach)(nil),        /* Repeating across:as:do:else: */
+	13627278328240309351: (*ListReverse)(nil),     /* Reverse list: */
+	15586923045386932713: (*ListSet)(nil),         /* Set:index:from: */
+	16656583749567367441: (*ListSlice)(nil),       /* Slice: */
+	11293812622311872004: (*ListSlice)(nil),       /* Slice:end: */
+	8205818265699527963:  (*ListSlice)(nil),       /* Slice:start: */
+	1592674698280817110:  (*ListSlice)(nil),       /* Slice:start:end: */
+	17242083762994141003: (*ListSortUsing)(nil),   /* Sort:using: */
+	5767454846835881814:  (*ListSortNumbers)(nil), /* SortNumbers:byField: */
+	11765588999597320458: (*ListSortNumbers)(nil), /* SortNumbers:byField:descending: */
+	16820765327929145512: (*ListSortText)(nil),    /* SortTexts:byField: */
+	7928660393625494104:  (*ListSortText)(nil),    /* SortTexts:byField:descending: */
+	13718565834155724622: (*ListSortText)(nil),    /* SortTexts:byField:descending:usingCase: */
+	14523039554491862046: (*ListSortText)(nil),    /* SortTexts:byField:usingCase: */
+	10934695318884901016: (*ListSplice)(nil),      /* Splice:start:remove:insert: */
+	11643102106272323440: (*FromNumList)(nil),     /* VarOfNums: */
+	11748429228606086474: (*FromRecList)(nil),     /* VarOfRecs: */
+	9860873969452403008:  (*FromTxtList)(nil),     /* VarOfTxts: */
 }
