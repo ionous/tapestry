@@ -1,0 +1,62 @@
+package eph
+
+import (
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
+	"github.com/ionous/errutil"
+)
+
+// returns true if newly added
+func (d *Domain) AddOpposite(oneWord, otherWord string) (err error) {
+	return d.opposites.AddPair(oneWord, otherWord)
+}
+
+// use the domain rules ( and hierarchy ) to find the opposite of the passed word
+// the way opposites are defined, there can be more than one opposite word for a given singular word.
+// in that case, attempts to pick one.
+func (d *Domain) FindOpposite(word string) (ret string, err error) {
+	if e := VisitTree(d, func(dep Dependency) (err error) {
+		scope := dep.(*Domain)
+		if other, ok := scope.opposites.FindOpposite(word); ok {
+			ret, err = other, Visited
+		}
+		return
+	}); e != nil && e != Visited {
+		err = e
+	}
+	return
+}
+
+// while it'd probably be faster to do this while we assemble,
+// keep this assembly separate from the writing produces nicer code and tests.
+func (c *Catalog) WriteOpposites(w Writer) (err error) {
+	if deps, e := c.ResolveDomains(); e != nil {
+		err = e
+	} else {
+		for _, dep := range deps {
+			d := dep.Leaf().(*Domain)
+			for _, p := range d.opposites {
+				defs := d.phases[PluralPhase].defs
+				at := defs[p.one].at
+				if e := w.Write(mdl.Opposite, d.name, "rev:"+p.one, p.other, at); e != nil {
+					err = errutil.Append(err, DomainError{d.name, e})
+				}
+			}
+		}
+	}
+	return
+}
+
+func (op *EphOpposites) Phase() Phase { return PluralPhase }
+
+func (op *EphOpposites) Assemble(c *Catalog, d *Domain, at string) (err error) {
+	if oneWord, ok := UniformString(op.Opposite); !ok {
+		err = InvalidString(op.Opposite)
+	} else if otherWord, ok := UniformString(op.Word); !ok {
+		err = InvalidString(op.Word)
+	} else if ok, e := refine(d, "rev:"+oneWord, at, otherWord); e != nil {
+		err = e
+	} else if ok {
+		err = d.AddOpposite(oneWord, otherWord)
+	}
+	return
+}

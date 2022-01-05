@@ -10,7 +10,7 @@ import (
 
 // returns true if newly added
 func (d *Domain) AddPlural(plural, singular string) (okay bool) {
-	return d.pairs.AddPair(plural, singular)
+	return d.plural.AddPair(plural, singular)
 }
 
 // use the domain rules ( and hierarchy ) to turn the passed plural into its singular form
@@ -19,7 +19,7 @@ func (d *Domain) AddPlural(plural, singular string) (okay bool) {
 func (d *Domain) Pluralize(singular string) (ret string, err error) {
 	if e := VisitTree(d, func(dep Dependency) (err error) {
 		scope := dep.(*Domain)
-		if n, ok := scope.pairs.FindPlural(singular); ok {
+		if n, ok := scope.plural.FindPlural(singular); ok {
 			ret, err = n, Visited
 		}
 		return
@@ -35,7 +35,7 @@ func (d *Domain) Pluralize(singular string) (ret string, err error) {
 func (d *Domain) Singularize(plural string) (ret string, err error) {
 	if e := VisitTree(d, func(dep Dependency) (err error) {
 		scope := dep.(*Domain)
-		if n, ok := scope.pairs.FindSingular(plural); ok {
+		if n, ok := scope.plural.FindSingular(plural); ok {
 			ret, err = n, Visited
 		}
 		return
@@ -55,8 +55,8 @@ func (c *Catalog) WritePlurals(w Writer) (err error) {
 	} else {
 		for _, dep := range deps {
 			d := dep.Leaf().(*Domain)
-			for i, p := range d.pairs.plural {
-				s := d.pairs.singular[i]
+			for i, p := range d.plural.plural {
+				s := d.plural.singular[i]
 				defs := d.phases[PluralPhase].defs
 				at := defs[p].at
 				if e := w.Write(mdl.Plural, d.name, p, s, at); e != nil {
@@ -80,7 +80,9 @@ func (op *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else if ok, e := refine(d, many, at, one); e != nil {
 		err = e
 	} else if ok {
-		d.AddPlural(many, one)
+		if !d.AddPlural(many, one) {
+			err = errutil.New("couldnt add plurals", many, one)
+		}
 	}
 	return
 }

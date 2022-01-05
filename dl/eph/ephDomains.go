@@ -19,7 +19,8 @@ type Domain struct {
 	checks        asmChecks
 	resolvedKinds cachedTable
 	resolvedNouns cachedTable
-	pairs         PluralPairs
+	plural        PluralPairs
+	opposites     OppositePairs
 	rules         map[string]Rulesets  // pattern name to rules for that pattern
 	relatives     map[string]Relatives // relation name to pairs of nouns
 }

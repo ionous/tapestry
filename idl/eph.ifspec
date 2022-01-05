@@ -34,7 +34,6 @@
                 "slot": "ephemera"
             },
 
-
             "eph_aliases": {
                 "spec": "eph {understand%short_name:text} {as%aliases+text}",
                 "slot": "ephemera"
@@ -98,12 +97,21 @@
                     "and at runtime to help the parser interpret user input."
                 ]
             },
-            "eph_refs": {
-                "spec": "eph {kinds:text} {from?text} {refer_to+eph_params}",
+            "eph_opposites": {
+                "spec": "eph {opposite:text} {word:text}",
                 "slot": "ephemera",
                 "desc": [
-                    "Validates references to members of an existing kind.",
-                    "If no parameters are specified, it simply ensures existence of the kind."
+                    "Rules for transforming plural text to singular text and back again.",
+                    "Used by the assembler to help interpret author definitions,", 
+                    "and at runtime to help the parser interpret user input."
+                ]
+            },
+            "eph_refs": {
+                "spec": "eph {refs+ephemera}",
+                "slot": "ephemera",
+                "desc": [
+                    "Implies some fact about the world that will be defined elsewhere.",
+                    "Reuses the set of ephemera to limit redefinition. Not all are valid."
                 ]
             },
             "eph_relations": {

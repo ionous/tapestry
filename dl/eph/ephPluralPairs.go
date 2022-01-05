@@ -1,5 +1,6 @@
 package eph
 
+// one plural word can map to multiple single words
 type PluralPairs struct {
 	// we dont expect there will be huge numbers of plurals,
 	// so unsorted arrays should be fine.
@@ -8,7 +9,7 @@ type PluralPairs struct {
 
 func (ps PluralPairs) FindPlural(singular string) (ret string, okay bool) {
 	if i, ok := find(singular, ps.singular); ok {
-		ret, okay = ps.singular[i], true
+		ret, okay = ps.plural[i], true
 	}
 	return
 }
@@ -22,8 +23,8 @@ func (ps *PluralPairs) AddPair(plural, singular string) (okay bool) {
 	if len(plural) > 0 && len(singular) > 0 {
 		// is the pairing unique?
 		_, havep := find(plural, ps.plural)
-		_, haves := find(singular, ps.singular)
-		if !havep || !haves {
+		i, haves := find(singular, ps.singular)
+		if !havep && (!haves || plural != ps.plural[i]) {
 			ps.plural = append(ps.plural, plural)
 			ps.singular = append(ps.singular, singular)
 			okay = true

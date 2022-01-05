@@ -1391,6 +1391,118 @@ func EphNouns_Marshal(m jsn.Marshaler, val *EphNouns) (err error) {
 	return
 }
 
+// EphOpposites Rules for transforming plural text to singular text and back again.
+// Used by the assembler to help interpret author definitions,
+// and at runtime to help the parser interpret user input.
+type EphOpposites struct {
+	Opposite string `if:"label=opposite,type=text"`
+	Word     string `if:"label=word,type=text"`
+}
+
+// User implemented slots:
+var _ Ephemera = (*EphOpposites)(nil)
+
+func (*EphOpposites) Compose() composer.Spec {
+	return composer.Spec{
+		Name: EphOpposites_Type,
+		Uses: composer.Type_Flow,
+		Lede: "eph",
+	}
+}
+
+const EphOpposites_Type = "eph_opposites"
+const EphOpposites_Field_Opposite = "$OPPOSITE"
+const EphOpposites_Field_Word = "$WORD"
+
+func (op *EphOpposites) Marshal(m jsn.Marshaler) error {
+	return EphOpposites_Marshal(m, op)
+}
+
+type EphOpposites_Slice []EphOpposites
+
+func (op *EphOpposites_Slice) GetType() string { return EphOpposites_Type }
+
+func (op *EphOpposites_Slice) Marshal(m jsn.Marshaler) error {
+	return EphOpposites_Repeats_Marshal(m, (*[]EphOpposites)(op))
+}
+
+func (op *EphOpposites_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *EphOpposites_Slice) SetSize(cnt int) {
+	var els []EphOpposites
+	if cnt >= 0 {
+		els = make(EphOpposites_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *EphOpposites_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return EphOpposites_Marshal(m, &(*op)[i])
+}
+
+func EphOpposites_Repeats_Marshal(m jsn.Marshaler, vals *[]EphOpposites) error {
+	return jsn.RepeatBlock(m, (*EphOpposites_Slice)(vals))
+}
+
+func EphOpposites_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphOpposites) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = EphOpposites_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type EphOpposites_Flow struct{ ptr *EphOpposites }
+
+func (n EphOpposites_Flow) GetType() string      { return EphOpposites_Type }
+func (n EphOpposites_Flow) GetLede() string      { return "eph" }
+func (n EphOpposites_Flow) GetFlow() interface{} { return n.ptr }
+func (n EphOpposites_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*EphOpposites); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func EphOpposites_Optional_Marshal(m jsn.Marshaler, pv **EphOpposites) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = EphOpposites_Marshal(m, *pv)
+	} else if !enc {
+		var v EphOpposites
+		if err = EphOpposites_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func EphOpposites_Marshal(m jsn.Marshaler, val *EphOpposites) (err error) {
+	if err = m.MarshalBlock(EphOpposites_Flow{val}); err == nil {
+		e0 := m.MarshalKey("opposite", EphOpposites_Field_Opposite)
+		if e0 == nil {
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Opposite)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", EphOpposites_Field_Opposite))
+		}
+		e1 := m.MarshalKey("word", EphOpposites_Field_Word)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Word)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphOpposites_Field_Word))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // EphParams 'Affinity' designates the storage type of a given parameter
 // while 'class' is used to indicate an interpretation of that parameter, for example a reference to a kind.
 // Pattern locals can have an initial value, other uses of parameter cannot.
@@ -1763,12 +1875,10 @@ func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
 	return
 }
 
-// EphRefs Validates references to members of an existing kind.
-// If no parameters are specified, it simply ensures existence of the kind.
+// EphRefs Implies some fact about the world that will be defined elsewhere.
+// Reuses the set of ephemera to limit redefinition. Not all are valid.
 type EphRefs struct {
-	Kinds   string      `if:"label=kinds,type=text"`
-	From    string      `if:"label=from,optional,type=text"`
-	ReferTo []EphParams `if:"label=refer_to"`
+	Refs []Ephemera `if:"label=refs"`
 }
 
 // User implemented slots:
@@ -1783,9 +1893,7 @@ func (*EphRefs) Compose() composer.Spec {
 }
 
 const EphRefs_Type = "eph_refs"
-const EphRefs_Field_Kinds = "$KINDS"
-const EphRefs_Field_From = "$FROM"
-const EphRefs_Field_ReferTo = "$REFER_TO"
+const EphRefs_Field_Refs = "$REFS"
 
 func (op *EphRefs) Marshal(m jsn.Marshaler) error {
 	return EphRefs_Marshal(m, op)
@@ -1857,26 +1965,12 @@ func EphRefs_Optional_Marshal(m jsn.Marshaler, pv **EphRefs) (err error) {
 
 func EphRefs_Marshal(m jsn.Marshaler, val *EphRefs) (err error) {
 	if err = m.MarshalBlock(EphRefs_Flow{val}); err == nil {
-		e0 := m.MarshalKey("kinds", EphRefs_Field_Kinds)
+		e0 := m.MarshalKey("refs", EphRefs_Field_Refs)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Kinds)
+			e0 = Ephemera_Repeats_Marshal(m, &val.Refs)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphRefs_Field_Kinds))
-		}
-		e1 := m.MarshalKey("from", EphRefs_Field_From)
-		if e1 == nil {
-			e1 = literal.Text_Unboxed_Optional_Marshal(m, &val.From)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphRefs_Field_From))
-		}
-		e2 := m.MarshalKey("refer_to", EphRefs_Field_ReferTo)
-		if e2 == nil {
-			e2 = EphParams_Repeats_Marshal(m, &val.ReferTo)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", EphRefs_Field_ReferTo))
+			m.Error(errutil.New(e0, "in flow at", EphRefs_Field_Refs))
 		}
 		m.EndBlock()
 	}
@@ -2977,6 +3071,7 @@ var Slats = []composer.Composer{
 	(*EphKinds)(nil),
 	(*EphList)(nil),
 	(*EphNouns)(nil),
+	(*EphOpposites)(nil),
 	(*EphParams)(nil),
 	(*EphPatterns)(nil),
 	(*EphPlurals)(nil),
@@ -3008,6 +3103,7 @@ var Signatures = map[uint64]interface{}{
 	16835204245478660337: (*EphKinds)(nil),       /* Eph kinds:from:contain: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
 	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
+	6279464935630150301:  (*EphOpposites)(nil),   /* Eph opposite:word: */
 	12259359132675429189: (*EphParams)(nil),      /* Eph have:called: */
 	277028977564474262:   (*EphParams)(nil),      /* Eph have:called:of: */
 	16868970960604249858: (*EphParams)(nil),      /* Eph have:called:initially: */
@@ -3021,8 +3117,7 @@ var Signatures = map[uint64]interface{}{
 	16745375238637686855: (*EphPatterns)(nil),    /* Eph pattern:locals:result: */
 	1340667739035001681:  (*EphPatterns)(nil),    /* Eph pattern:with:locals:result: */
 	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
-	9545501520147782308:  (*EphRefs)(nil),        /* Eph kinds:referTo: */
-	6260245743972736232:  (*EphRefs)(nil),        /* Eph kinds:from:referTo: */
+	13438111535762645192: (*EphRefs)(nil),        /* Eph refs: */
 	9811567312656774933:  (*EphRelations)(nil),   /* Eph:relate oneOne: */
 	2078507782755484470:  (*EphRelations)(nil),   /* Eph:relate oneMany: */
 	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */
