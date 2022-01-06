@@ -45,7 +45,10 @@ type PhaseAction struct {
 	Do    func(d *Domain) (err error)
 }
 
-// wrapper for implementing Ephemera with free functions
+// wrapper for implementing Ephemera with free functions.
+// its a shortcut to defining new ephemera structs for every last processing statement;
+// which works because its all the same process space.
+// could separate these out into commands for inter-process communication, logging, etc. if ever needed.
 type PhaseFunction struct {
 	OnPhase Phase
 	Do      func(*Catalog, *Domain, string) error

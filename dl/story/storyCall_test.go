@@ -37,15 +37,15 @@ func TestDetermineNum(t *testing.T) {
 				}}}}}); len(diff) > 0 {
 		t.Fatal(diff)
 	} else if diff := pretty.Diff(els, []eph.Ephemera{
-		&eph.EphRefs{
-			Kinds: "factorial",
-			From:  kindsOf.Pattern.String(),
-			ReferTo: []eph.EphParams{{
-				Affinity: eph.Affinity{eph.Affinity_Number},
-				Name:     "num",
-			},
-			},
-		},
+		&eph.EphRefs{[]eph.Ephemera{
+			&eph.EphKinds{
+				Kinds: "factorial",
+				From:  kindsOf.Pattern.String(),
+				Contain: []eph.EphParams{{
+					Affinity: eph.Affinity{eph.Affinity_Number},
+					Name:     "num",
+				}},
+			}}},
 	}); len(diff) > 0 {
 		t.Fatal(diff)
 	}

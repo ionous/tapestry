@@ -18,7 +18,7 @@ func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
 
 func (op *ActionDecl) makePattern(k *Importer, name, tgt string, sub kindsOf.Kinds, extra []eph.EphParams, res *eph.EphParams) {
 	// pattern subtype -- maybe if we really need this an optional parameter of patterns?
-	k.Write(&eph.EphKinds{
+	k.WriteEphemera(&eph.EphKinds{
 		Kinds: name,
 		From:  sub.String(),
 	})
@@ -28,7 +28,7 @@ func (op *ActionDecl) makePattern(k *Importer, name, tgt string, sub kindsOf.Kin
 		Affinity: eph.Affinity{eph.Affinity_Text},
 		Class:    tgt,
 	}}
-	k.Write(&eph.EphPatterns{
+	k.WriteEphemera(&eph.EphPatterns{
 		Name:   name,
 		Params: append(ps, extra...),
 		Result: res,

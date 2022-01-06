@@ -15,7 +15,7 @@ func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
 		locals = els.ImportLocals(k, patternName)
 	}
 
-	k.Write(&eph.EphPatterns{Name: patternName, Locals: locals, Result: res})
+	k.WriteEphemera(&eph.EphPatterns{Name: patternName, Locals: locals, Result: res})
 	// write the rules last ( order doesnt matter except for tests )
 	err = op.PatternRules.ImportRules(k, patternName, "", eph.EphTiming{})
 
@@ -30,7 +30,7 @@ func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
 	} else {
 		ps := op.reduceProps()
 		res := convertRes(op.PatternReturn)
-		k.Write(&eph.EphPatterns{Name: patternName, Result: res, Params: ps})
+		k.WriteEphemera(&eph.EphPatterns{Name: patternName, Result: res, Params: ps})
 	}
 	return
 }
@@ -49,9 +49,9 @@ func (op *PatternDecl) writeSubType(k *Importer, patternName string) (err error)
 	case "", PatternType_Patterns:
 		// dont need to write
 	case PatternType_Actions:
-		k.Write(&eph.EphKinds{Kinds: patternName, From: patternType})
+		k.WriteEphemera(&eph.EphKinds{Kinds: patternName, From: patternType})
 	case PatternType_Events:
-		k.Write(&eph.EphKinds{Kinds: patternName, From: patternType})
+		k.WriteEphemera(&eph.EphKinds{Kinds: patternName, From: patternType})
 	default:
 		err = errutil.New("unknown pattern type", str)
 	}
@@ -60,7 +60,7 @@ func (op *PatternDecl) writeSubType(k *Importer, patternName string) (err error)
 
 func (op *PatternVariablesDecl) ImportPhrase(k *Importer) (err error) {
 	ps := reduceProps(op.Props)
-	k.Write(&eph.EphPatterns{Name: op.PatternName.String(), Params: ps})
+	k.WriteEphemera(&eph.EphPatterns{Name: op.PatternName.String(), Params: ps})
 	return
 }
 
@@ -108,7 +108,7 @@ func (op *PatternRule) importRule(k *Importer, pattern, target string, tgtFlags 
 			// 		&core.HasDominion{domain.String()},
 			// 		guard,
 			// 	}}
-			k.Write(&eph.EphRules{
+			k.WriteEphemera(&eph.EphRules{
 				Name:   pattern,
 				Target: target, // fix: this should become part of the guards i think, even if its less slightly less efficient
 				Filter: op.Guard,

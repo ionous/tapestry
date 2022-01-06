@@ -131,7 +131,7 @@
                 "spec": "{before}, {during}, {after}, or {later}"
             },
             "eph_values": {
-                "spec": "eph {noun:text} {has%field:text} {value:literal_value}",
+                "spec": "eph {noun:text} {has%field:text} {path*text} {value:literal_value}",
                 "slot": "ephemera"
             },
             

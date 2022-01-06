@@ -32,6 +32,8 @@ var Name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
 // ( the same as - or a child of - the domain of the kind )
 var Noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 
+var Opposite = tables.Insert("mdl_rev", "domain", "oneWord", "otherWord", "at")
+
 // domain captures the scope in which the pairing was defined.
 // within that scope: the noun, relation, and otherNoun are all unique names --
 // even if they are not unique globally, and even if they a broader/different scope than the pair's domain.

@@ -12,19 +12,19 @@ import (
 // the caller's arguments and the pattern's parameters match up.
 func (op *Determine) ImportStub(k *Importer) (interface{}, error) {
 	refs, args := op.Arguments.xform(op.Name.String(), kindsOf.Pattern)
-	k.Write(&refs)
+	k.WriteEphemera(&refs)
 	return &core.CallPattern{Pattern: op.Name, Arguments: args}, nil
 }
 
 func (op *Make) ImportStub(k *Importer) (interface{}, error) {
 	refs, args := op.Arguments.xform(op.Name, kindsOf.Record)
-	k.Write(&refs)
+	k.WriteEphemera(&refs)
 	return &core.CallMake{Kind: op.Name, Arguments: args}, nil
 }
 
 func (op *Send) ImportStub(k *Importer) (interface{}, error) {
 	refs, args := op.Arguments.xform(op.Event, kindsOf.Event)
-	k.Write(&refs)
+	k.WriteEphemera(&refs)
 	return &core.CallSend{Event: op.Event, Path: op.Path, Arguments: args}, nil
 }
 
@@ -44,7 +44,14 @@ func (stubs *Arguments) xform(k string, t kindsOf.Kinds) (refRef eph.EphRefs, re
 			})
 		}
 	}
-	return eph.EphRefs{Kinds: k, From: t.String(), ReferTo: refs}, core.CallArgs{args}
+	return eph.EphRefs{[]eph.Ephemera{
+			&eph.EphKinds{
+				Kinds:   k,
+				From:    t.String(),
+				Contain: refs,
+			},
+		}},
+		core.CallArgs{args}
 }
 
 func infinityToAffinity(a interface{ Affinity() affine.Affinity }) (ret eph.Affinity) {

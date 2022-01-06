@@ -23,7 +23,7 @@ func (op *AspectTraits) ImportPhrase(k *Importer) (err error) {
 	for _, t := range op.TraitPhrase.Trait {
 		ts = append(ts, t.String())
 	}
-	k.Write(&eph.EphAspects{Aspects: op.Aspect.String(), Traits: ts})
+	k.WriteEphemera(&eph.EphAspects{Aspects: op.Aspect.String(), Traits: ts})
 	return
 }
 
@@ -52,10 +52,10 @@ func (op *Comment) ImportPhrase(k *Importer) (err error) {
 func (op *GrammarDecl) ImportPhrase(k *Importer) (err error) {
 	switch el := op.Grammar.(type) {
 	case *grammar.Alias:
-		k.Write(&eph.EphAliases{ShortName: el.AsNoun, Aliases: el.Names})
+		k.WriteEphemera(&eph.EphAliases{ShortName: el.AsNoun, Aliases: el.Names})
 	case *grammar.Directive:
 		name := strings.Join(el.Lede, "/")
-		k.Write(&eph.EphDirectives{Name: name, Directive: *el})
+		k.WriteEphemera(&eph.EphDirectives{Name: name, Directive: *el})
 	}
 	return
 }
@@ -76,7 +76,7 @@ func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
 	} else {
 		prop := op.Property.String()
 		for _, noun := range k.Env().Recent.Nouns.Subjects {
-			k.Write(&eph.EphValues{Noun: noun, Field: prop, Value: T(text)})
+			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: prop, Value: T(text)})
 		}
 	}
 	return
@@ -114,7 +114,7 @@ func (op *RelativeToNoun) ImportPhrase(k *Importer) (err error) {
 		relation := op.Relation.String()
 		for _, object := range k.Env().Recent.Nouns.Objects {
 			for _, subject := range k.Env().Recent.Nouns.Subjects {
-				k.Write(&eph.EphRelatives{Rel: relation, Noun: subject, OtherNoun: object})
+				k.WriteEphemera(&eph.EphRelatives{Rel: relation, Noun: subject, OtherNoun: object})
 			}
 		}
 	}

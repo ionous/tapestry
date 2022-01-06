@@ -11,6 +11,19 @@ type Catalog struct {
 	resolvedDomains cachedTable
 }
 
+// fix? consider moving domain error to catalog processing internals ( and removing explicit external use )
+type DomainError struct {
+	Domain string
+	Err    error
+}
+
+func (n DomainError) Error() string {
+	return errutil.Sprintf("%v in domain %q", n.Err, n.Domain)
+}
+func (n DomainError) Unwrap() error {
+	return n.Err
+}
+
 func (c *Catalog) AddEphemera(at string, ep Ephemera) (err error) {
 	// fix: queue first, and then run?
 	if phase := ep.Phase(); phase == DomainPhase {

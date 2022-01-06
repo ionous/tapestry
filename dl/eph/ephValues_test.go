@@ -27,10 +27,10 @@ func TestInitialFieldAssignment(t *testing.T) {
 		&EphNouns{"toy boat", "m"},
 		&EphNouns{"boat", "m"},
 		// values using those fields
-		&EphValues{"apple", "t", T("some text")},
-		&EphValues{"pear", "d", I(123)},
-		&EphValues{"toy", "d", I(321)},
-		&EphValues{"boat", "t", T("more text")},
+		&EphValues{Noun: "apple", Field: "t", Value: T("some text")},
+		&EphValues{Noun: "pear", Field: "d", Value: I(123)},
+		&EphValues{Noun: "toy", Field: "d", Value: I(321)},
+		&EphValues{Noun: "boat", Field: "t", Value: T("more text")},
 	)
 	if cat, e := buildNouns(dt); e != nil {
 		t.Fatal(e)
@@ -60,7 +60,7 @@ func TestMissingField(t *testing.T) {
 		// a noun
 		&EphNouns{"n", "k"},
 		// and not that field
-		&EphValues{"n", "t", T("no such field")},
+		&EphValues{Noun: "n", Field: "t", Value: T("no such field")},
 	)
 	if _, e := buildNouns(dt); e == nil || e.Error() != `field not found 'k.t'` {
 		t.Fatal("expected error", e)
@@ -92,10 +92,10 @@ func TestInitialTraitAssignment(t *testing.T) {
 		&EphNouns{"toy boat", "m"},
 		&EphNouns{"boat", "m"},
 		// values using those aspects or traits from those aspects:
-		&EphValues{"apple", "a", T("y")}, // assign to the aspect directly
-		&EphValues{"pear", "x", B(true)}, // assign to some traits indirectly
-		&EphValues{"toy", "w", B(true)},
-		&EphValues{"boat", "z", B(true)},
+		&EphValues{Noun: "apple", Field: "a", Value: T("y")}, // assign to the aspect directly
+		&EphValues{Noun: "pear", Field: "x", Value: B(true)}, // assign to some traits indirectly
+		&EphValues{Noun: "toy", Field: "w", Value: B(true)},
+		&EphValues{Noun: "boat", Field: "z", Value: B(true)},
 	)
 	if cat, e := buildNouns(dt); e != nil {
 		t.Fatal(e)

@@ -9,7 +9,7 @@ func (op *KindOfRelation) ImportPhrase(k *Importer) (err error) {
 	if card, e := op.Cardinality.GetCardinality(); e != nil {
 		err = e
 	} else {
-		k.Write(&eph.EphRelations{op.Relation.String(), card})
+		k.WriteEphemera(&eph.EphRelations{op.Relation.String(), card})
 	}
 	return
 }

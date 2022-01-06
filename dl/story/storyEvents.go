@@ -35,7 +35,7 @@ func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 				if h.Locals != nil {
 					locals := h.Locals.ImportLocals(k, evt)
 					if len(locals) > 0 {
-						k.Write(&eph.EphPatterns{Name: evt, Locals: locals})
+						k.WriteEphemera(&eph.EphPatterns{Name: evt, Locals: locals})
 					}
 				}
 			}

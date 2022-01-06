@@ -2441,6 +2441,7 @@ func EphTiming_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphTiming) (err e
 type EphValues struct {
 	Noun  string               `if:"label=noun,type=text"`
 	Field string               `if:"label=has,type=text"`
+	Path  []string             `if:"label=path,optional,type=text"`
 	Value literal.LiteralValue `if:"label=value"`
 }
 
@@ -2458,6 +2459,7 @@ func (*EphValues) Compose() composer.Spec {
 const EphValues_Type = "eph_values"
 const EphValues_Field_Noun = "$NOUN"
 const EphValues_Field_Field = "$FIELD"
+const EphValues_Field_Path = "$PATH"
 const EphValues_Field_Value = "$VALUE"
 
 func (op *EphValues) Marshal(m jsn.Marshaler) error {
@@ -2544,12 +2546,19 @@ func EphValues_Marshal(m jsn.Marshaler, val *EphValues) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphValues_Field_Field))
 		}
-		e2 := m.MarshalKey("value", EphValues_Field_Value)
+		e2 := m.MarshalKey("path", EphValues_Field_Path)
 		if e2 == nil {
-			e2 = literal.LiteralValue_Marshal(m, &val.Value)
+			e2 = literal.Text_Unboxed_Optional_Repeats_Marshal(m, &val.Path)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", EphValues_Field_Value))
+			m.Error(errutil.New(e2, "in flow at", EphValues_Field_Path))
+		}
+		e3 := m.MarshalKey("value", EphValues_Field_Value)
+		if e3 == nil {
+			e3 = literal.LiteralValue_Marshal(m, &val.Value)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", EphValues_Field_Value))
 		}
 		m.EndBlock()
 	}
@@ -3101,6 +3110,7 @@ var Signatures = map[uint64]interface{}{
 	16991751007965772137: (*EphParams)(nil),      /* Eph have:called:of:initially: */
 	16835204245478660337: (*EphKinds)(nil),       /* Eph kinds:from:contain: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
+	1149357943536453414:  (*EphValues)(nil),      /* Eph noun:has:path:value: */
 	17160611285654896437: (*EphValues)(nil),      /* Eph noun:has:value: */
 	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
 	6279464935630150301:  (*EphOpposites)(nil),   /* Eph opposite:word: */

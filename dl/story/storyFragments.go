@@ -30,7 +30,7 @@ func (op *Summary) ImportNouns(k *Importer) (err error) {
 			k.WriteOnce(&eph.EphKinds{Kinds: "things", Contain: []eph.EphParams{{Name: "description", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 		}
 		noun := LastNameOf(k.Env().Recent.Nouns.Subjects)
-		k.Write(&eph.EphValues{Noun: noun, Field: "description", Value: T(text)})
+		k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "description", Value: T(text)})
 	}
 	return
 }

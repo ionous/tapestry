@@ -68,7 +68,7 @@ func (d *Domain) AddEphemera(at string, ep Ephemera) (err error) {
 
 // used by ephemera during assembly to record some piece of information
 // that would cause problems it were specified differently elsewhere.
-// ex. some in game password specified as the word "secret" in one place, but "mongoose" somewhere else.
+// ex. an in-game password specified as the word "secret" in one place, but "mongoose" somewhere else.
 func (d *Domain) AddDefinition(key, at, value string) (err error) {
 	if e := VisitTree(d, func(dep Dependency) (err error) {
 		scope := dep.(*Domain)

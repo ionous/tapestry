@@ -73,10 +73,10 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 	for i := 0; i < cnt; i++ {
 		noun := k.newCounter(kindOrKinds, reader.Position{})
 		k.Env().Recent.Nouns.Add(noun) // for relations, etc.
-		k.Write(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
+		k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
 		names[i] = noun
 	}
-	k.Write(eph.PhaseFunction{eph.AncestryPhase,
+	k.WriteEphemera(eph.PhaseFunction{eph.AncestryPhase,
 		func(c *eph.Catalog, d *eph.Domain, at string) (err error) {
 			// by now, plurals will be determined, so we can determine which is which.
 			var kind, kinds string
@@ -130,13 +130,13 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 			k.WriteOnce(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 		}
 		// set the indefinite article field
-		k.Write(&eph.EphValues{Noun: noun, Field: "indefinite_article", Value: T(detStr)})
+		k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "indefinite_article", Value: T(detStr)})
 	}
 	// pick common or proper based on noun capitalization.
 	// fix: implicitly generated facts should be considered preliminary so that authors can override them.
 	if detStr == "our" {
 		if first, _ := utf8.DecodeRuneInString(noun); unicode.ToUpper(first) == first {
-			k.Write(&eph.EphValues{Noun: noun, Field: "proper_named", Value: B(true)})
+			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "proper_named", Value: B(true)})
 		}
 	}
 	return
@@ -147,9 +147,9 @@ func (op *KindOfNoun) ImportNouns(k *Importer) (err error) {
 	// we collected the nouns and delayed processing them till now.
 	kind := op.Kind.String()
 	for _, noun := range k.Env().Recent.Nouns.Subjects {
-		k.Write(&eph.EphNouns{Noun: noun, Kind: kind})
+		k.WriteEphemera(&eph.EphNouns{Noun: noun, Kind: kind})
 		for _, trait := range op.Trait {
-			k.Write(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})
+			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})
 		}
 	}
 	if op.NounRelation != nil {
@@ -169,7 +169,7 @@ func (op *NounRelation) ImportNouns(k *Importer) (err error) {
 		rel := op.Relation.String()
 		for _, subject := range k.Env().Recent.Nouns.Subjects {
 			for _, object := range k.Env().Recent.Nouns.Objects {
-				k.Write(&eph.EphRelatives{Rel: rel, Noun: object, OtherNoun: subject})
+				k.WriteEphemera(&eph.EphRelatives{Rel: rel, Noun: object, OtherNoun: subject})
 			}
 		}
 	}
@@ -180,7 +180,7 @@ func (op *NounRelation) ImportNouns(k *Importer) (err error) {
 func (op *NounTraits) ImportNouns(k *Importer) (err error) {
 	for _, trait := range op.Trait {
 		for _, noun := range k.Env().Recent.Nouns.Subjects {
-			k.Write(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})
+			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})
 		}
 	}
 	return

@@ -11,7 +11,7 @@ func (op *TestRule) ImportPhrase(k *Importer) (err error) {
 	} else if exe, e := op.Hook.ImportProgram(k); e != nil {
 		err = e
 	} else {
-		k.Write(&eph.EphChecks{Name: n, Exe: exe})
+		k.WriteEphemera(&eph.EphChecks{Name: n, Exe: exe})
 	}
 	return
 }
@@ -38,7 +38,7 @@ type Testing interface {
 
 func (op *TestOutput) ImportTest(k *Importer, testName string) (err error) {
 	// note: we use the raw lines here, we don't expect the text output to be a template.
-	k.Write(&eph.EphChecks{Name: testName, Expect: T(op.Lines.Str)})
+	k.WriteEphemera(&eph.EphChecks{Name: testName, Expect: T(op.Lines.Str)})
 	return
 }
 

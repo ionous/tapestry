@@ -47,8 +47,12 @@ func (k *Importer) Env() *StoryEnv {
 	return &k.env
 }
 
-func (k *Importer) Write(op eph.Ephemera) {
+func (k *Importer) WriteEphemera(op eph.Ephemera) {
 	k.writer(op)
+}
+
+func (k *Importer) WriteRef(refs ...eph.Ephemera) {
+	k.WriteEphemera(&eph.EphRefs{refs})
 }
 
 // put the passed ephemera into the global scope
@@ -124,12 +128,12 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 					} else {
 						k.env.Recent.Test = n
 					}
-					k.Write(&eph.EphBeginDomain{Name: n})
+					k.WriteEphemera(&eph.EphBeginDomain{Name: n})
 				}
 				return
 			},
 			BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
-				k.Write(&eph.EphEndDomain{})
+				k.WriteEphemera(&eph.EphEndDomain{})
 				return
 			},
 		},
