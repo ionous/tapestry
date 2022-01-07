@@ -44,7 +44,7 @@ func NewDefaultValue(ks Kinds, aff affine.Affinity, cls string) (ret Value, err 
 		if k, e := ks.GetKindByName(cls); e != nil {
 			err = errutil.New("unknown kind", cls, e)
 		} else {
-			ret = RecordFrom(k.NewRecord(), cls)
+			ret = RecordOf(k.NewRecord())
 		}
 
 	case affine.RecordList:

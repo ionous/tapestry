@@ -39,7 +39,8 @@ func (d *Record) GetNamedField(field string) (ret Value, err error) {
 	return
 }
 
-// GetIndexedField can't ask for traits, only their aspects.
+// GetIndexedField generates nil values for fields if needed;
+// can't ask for traits, only their aspects.
 func (d *Record) GetIndexedField(i int) (ret Value, err error) {
 	if fv, ft := d.values[i], d.kind.fields[i]; fv != nil {
 		ret = fv

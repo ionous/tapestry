@@ -38,7 +38,7 @@ func TestReduce(t *testing.T) {
 			}
 			fruits = append(fruits, one)
 		}
-		if e := values.SetNamedField("fruits", g.RecordsOf(k.Name(), fruits)); e != nil {
+		if e := values.SetNamedField("fruits", g.RecordsFrom(fruits, k.Name())); e != nil {
 			t.Fatal(e)
 		}
 	}

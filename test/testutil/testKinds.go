@@ -18,7 +18,7 @@ type Kinds struct {
 }
 
 type KindMap map[string]*g.Kind
-type FieldMap map[string][]g.Field // kind name to fields
+type FieldMap map[string]*[]g.Field // kind name to fields
 type AspectMap map[string]bool
 
 type KindBuilder struct {
@@ -64,6 +64,7 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 		if fs, ok := b.Fields[name]; !ok {
 			err = errutil.New("unknown kind", name)
 		} else {
+			fs := *fs
 			if ks.Kinds == nil {
 				ks.Kinds = make(KindMap)
 			}
@@ -86,16 +87,21 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 }
 
 // generate fields from type t using reflection
-func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
+func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 	type stringer interface{ String() string }
 	rstringer := r.TypeOf((*stringer)(nil)).Elem()
-	if ft.Fields == nil {
-		ft.Fields = make(FieldMap)
-		ft.Aspects = make(AspectMap)
+	if kb.Fields == nil {
+		kb.Fields = make(FieldMap)
+		kb.Aspects = make(AspectMap)
 	}
 
-	var path string
-	var fields []g.Field
+	name := nameOfType(t)
+	if kb.Fields[name] != nil {
+		return
+	}
+	pfields := new([]g.Field)
+	kb.Fields[name] = pfields
+
 	for i, cnt := 0, t.NumField(); i < cnt; i++ {
 		f := t.Field(i)
 		fieldType := f.Type
@@ -115,30 +121,37 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 				// the name of the aspect is the name of the field and its class
 				aspect := lang.Underscore(f.Name)
 				b.Aff, b.Type = affine.Text, aspect
-				ft.Fields[aspect] = []g.Field{
+				kb.Fields[aspect] = &([]g.Field{
 					// false first.
 					{Name: "not_" + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
 					{Name: "is_" + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
-				}
-				ft.Aspects[aspect] = true
+				})
+				kb.Aspects[aspect] = true
 			}
 
 		case r.String:
 			// note: text type indicates kind, not golang type
 			b.Aff, b.Type = affine.Text, ""
 
-		case r.Struct:
+		case r.Ptr:
+			fieldType = fieldType.Elem()
 			b.Type = nameOfType(fieldType)
+			b.Aff = affine.Record
+			kb.addType(ks, fieldType)
+
+		case r.Struct:
+			name := nameOfType(fieldType)
+			b.Type = name
 			if f.Anonymous {
-				if len(fields) > 0 {
+				if len((*pfields)) > 0 {
 					panic("anonymous structs are used for hierarchy and should be the first member")
 				}
-				parent := ks.Kind(b.Type)
+				parent := ks.Kind(name)
 				b.Type = parent.Name()
 
 			} else {
 				b.Aff = affine.Record
-				ft.addType(ks, fieldType)
+				kb.addType(ks, fieldType)
 			}
 
 		case r.Slice:
@@ -151,7 +164,7 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 				b.Aff, b.Type = affine.NumList, k.String()
 			case r.Struct:
 				b.Aff, b.Type = affine.RecordList, nameOfType(elType)
-				ft.addType(ks, elType)
+				kb.addType(ks, elType)
 
 			default:
 				panic(errutil.Sprint("unknown slice", elType.String()))
@@ -178,16 +191,14 @@ func (ft *KindBuilder) addType(ks *Kinds, t r.Type) {
 				name := lang.Underscore(trait)
 				traits = append(traits, g.Field{Name: name, Affinity: affine.Bool /*, Type: "trait"*/})
 			}
-			ft.Fields[aspect] = traits
-			ft.Aspects[aspect] = true
+			kb.Fields[aspect] = &traits
+			kb.Aspects[aspect] = true
 		}
-		if len(b.Aff) > 0 || len(path) > 0 {
+		if len(b.Aff) > 0 {
 			name := lang.Underscore(f.Name)
-			fields = append(fields, g.Field{Name: name, Affinity: b.Aff, Type: b.Type})
+			(*pfields) = append((*pfields), g.Field{Name: name, Affinity: b.Aff, Type: b.Type})
 		}
 	}
-	name := nameOfType(t)
-	ft.Fields[name] = fields
 }
 
 func nameOfType(t r.Type) string {

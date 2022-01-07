@@ -176,7 +176,7 @@ func (n refValue) Slice(i, j int) (ret Value, err error) {
 
 		case affine.RecordList:
 			vp := n.i.(*[]*Record)
-			ret = RecordsOf(n.Type(), copyRecords((*vp)[i:j]))
+			ret = RecordsFrom(copyRecords((*vp)[i:j]), n.Type())
 
 		default:
 			panic(n.a.String() + " is not sliceable")
@@ -231,7 +231,7 @@ func (n refValue) Splice(i, j int, add Value) (ret Value, err error) {
 				// read from els before adding to els to avoid stomping overlapping memory.
 				(*vp) = append(els[:i], append(ins, els[j:]...)...)
 				// return our cut pointers
-				ret = RecordsOf(n.t, cut)
+				ret = RecordsFrom(cut, n.t)
 			}
 		default:
 			panic(n.a.String() + " is not spliceable")

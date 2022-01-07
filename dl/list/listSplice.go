@@ -40,7 +40,7 @@ func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 	if v, t, e := op.spliceList(run, affine.RecordList); e != nil {
 		err = cmdError(op, e)
 	} else if v == nil {
-		ret = g.RecordsOf(t, nil)
+		ret = g.RecordsFrom(nil, t)
 	} else {
 		ret = v
 	}

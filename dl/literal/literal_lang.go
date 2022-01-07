@@ -256,7 +256,7 @@ func BoolValue_Marshal(m jsn.Marshaler, val *BoolValue) (err error) {
 
 // FieldValue A fixed value of a record.
 type FieldValue struct {
-	Name  string       `if:"label=name,type=text"`
+	Field string       `if:"label=field,type=text"`
 	Value LiteralValue `if:"label=value"`
 }
 
@@ -269,7 +269,7 @@ func (*FieldValue) Compose() composer.Spec {
 }
 
 const FieldValue_Type = "field_value"
-const FieldValue_Field_Name = "$NAME"
+const FieldValue_Field_Field = "$FIELD"
 const FieldValue_Field_Value = "$VALUE"
 
 func (op *FieldValue) Marshal(m jsn.Marshaler) error {
@@ -342,12 +342,12 @@ func FieldValue_Optional_Marshal(m jsn.Marshaler, pv **FieldValue) (err error) {
 
 func FieldValue_Marshal(m jsn.Marshaler, val *FieldValue) (err error) {
 	if err = m.MarshalBlock(FieldValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("name", FieldValue_Field_Name)
+		e0 := m.MarshalKey("field", FieldValue_Field_Field)
 		if e0 == nil {
-			e0 = Text_Unboxed_Marshal(m, &val.Name)
+			e0 = Text_Unboxed_Marshal(m, &val.Field)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FieldValue_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", FieldValue_Field_Field))
 		}
 		e1 := m.MarshalKey("value", FieldValue_Field_Value)
 		if e1 == nil {
@@ -874,8 +874,9 @@ func Number_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Number) (err error) 
 
 // RecordValue Specify a record composed of literal values.
 type RecordValue struct {
-	Kind   string      `if:"label=_,type=text"`
-	Fields *FieldValue `if:"label=fields,optional"`
+	Kind   string       `if:"label=_,type=text"`
+	Fields []FieldValue `if:"label=fields"`
+	Cache  RecordCache  `if:"internal"`
 }
 
 // User implemented slots:
@@ -973,7 +974,7 @@ func RecordValue_Marshal(m jsn.Marshaler, val *RecordValue) (err error) {
 		}
 		e1 := m.MarshalKey("fields", RecordValue_Field_Fields)
 		if e1 == nil {
-			e1 = FieldValue_Optional_Marshal(m, &val.Fields)
+			e1 = FieldValue_Repeats_Marshal(m, &val.Fields)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RecordValue_Field_Fields))
@@ -985,8 +986,9 @@ func RecordValue_Marshal(m jsn.Marshaler, val *RecordValue) (err error) {
 
 // RecordValues Specify a series of records, all of the same kind.
 type RecordValues struct {
-	Kind       string        `if:"label=_,type=text"`
-	Containing []FieldValues `if:"label=containing"`
+	Kind  string        `if:"label=_,type=text"`
+	Els   []FieldValues `if:"label=containing"`
+	Cache RecordsCache  `if:"internal"`
 }
 
 // User implemented slots:
@@ -1003,7 +1005,7 @@ func (*RecordValues) Compose() composer.Spec {
 
 const RecordValues_Type = "record_values"
 const RecordValues_Field_Kind = "$KIND"
-const RecordValues_Field_Containing = "$CONTAINING"
+const RecordValues_Field_Els = "$ELS"
 
 func (op *RecordValues) Marshal(m jsn.Marshaler) error {
 	return RecordValues_Marshal(m, op)
@@ -1082,12 +1084,12 @@ func RecordValues_Marshal(m jsn.Marshaler, val *RecordValues) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RecordValues_Field_Kind))
 		}
-		e1 := m.MarshalKey("containing", RecordValues_Field_Containing)
+		e1 := m.MarshalKey("containing", RecordValues_Field_Els)
 		if e1 == nil {
-			e1 = FieldValues_Repeats_Marshal(m, &val.Containing)
+			e1 = FieldValues_Repeats_Marshal(m, &val.Els)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RecordValues_Field_Containing))
+			m.Error(errutil.New(e1, "in flow at", RecordValues_Field_Els))
 		}
 		m.EndBlock()
 	}
@@ -1465,13 +1467,12 @@ var Slats = []composer.Composer{
 var Signatures = map[uint64]interface{}{
 	1736897526516691909:  (*BoolValue)(nil),    /* Bool: */
 	13295888009686388479: (*BoolValue)(nil),    /* Bool:class: */
-	8393454129252355509:  (*FieldValue)(nil),   /* Field name:value: */
+	7765391890108728434:  (*FieldValue)(nil),   /* Field field:value: */
 	2198313742266461362:  (*FieldValues)(nil),  /* Fields: */
 	9668407916590545547:  (*NumValue)(nil),     /* Num: */
 	4515425522337752389:  (*NumValue)(nil),     /* Num:class: */
 	17428560025310008846: (*NumValues)(nil),    /* Nums: */
 	4305020048913823676:  (*NumValues)(nil),    /* Nums:class: */
-	8364493114742675433:  (*RecordValue)(nil),  /* Rec: */
 	7274569038616904990:  (*RecordValue)(nil),  /* Rec:fields: */
 	5776881376101857802:  (*RecordValues)(nil), /* Recs:containing: */
 	15892234395983060559: (*TextValue)(nil),    /* Txt: */

@@ -27,24 +27,7 @@ func readLiteralValue(a affine.Affinity, t string, msg []byte) (ret g.Value, err
 	if x, e := literal.ReadLiteral(a, t, msg); e != nil {
 		err = e
 	} else {
-		switch eval := x.(type) {
-		case rt.BoolEval:
-			ret, err = eval.GetBool(nil)
-		case rt.NumberEval:
-			ret, err = eval.GetNumber(nil)
-		case rt.TextEval:
-			ret, err = eval.GetText(nil)
-		case rt.NumListEval:
-			ret, err = eval.GetNumList(nil)
-		case rt.TextListEval:
-			ret, err = eval.GetTextList(nil)
-		case rt.RecordEval:
-			ret, err = eval.GetRecord(nil)
-		case rt.RecordListEval:
-			ret, err = eval.GetRecordList(nil)
-		default:
-			err = errutil.Fmt("unknown literal %T", x)
-		}
+		ret, err = x.GetAssignedValue(nil)
 	}
 	return
 }

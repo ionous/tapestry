@@ -12,6 +12,7 @@ import (
 // ( same interface as rt.Assignment currently )
 type LiteralValue interface {
 	Affinity() affine.Affinity // alt: use a switch on the eval type to generate affinity.
+	GetAssignedValue(rt.Runtime) (g.Value, error)
 }
 
 // Affinity returns affine.Bool
@@ -22,6 +23,10 @@ func (op *BoolValue) Affinity() affine.Affinity {
 // String uses strconv.FormatBool.
 func (op *BoolValue) String() string {
 	return strconv.FormatBool(op.Bool)
+}
+
+func (op *BoolValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+	return op.GetBool(run)
 }
 
 // GetBool implements rt.BoolEval; providing the dl with a boolean literal.
@@ -50,6 +55,10 @@ func (op *NumValue) String() string {
 	return strconv.FormatFloat(op.Num, 'g', -1, 64)
 }
 
+func (op *NumValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+	return op.GetNumber(run)
+}
+
 // GetNumber implements rt.NumberEval providing the dl with a number literal.
 func (op *NumValue) GetNumber(rt.Runtime) (ret g.Value, _ error) {
 	ret = g.FloatOf(op.Num)
@@ -66,6 +75,10 @@ func (op *TextValue) String() string {
 	return op.Text
 }
 
+func (op *TextValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+	return op.GetText(run)
+}
+
 // GetText implements interface rt.TextEval providing the dl with a text literal.
 func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
 	ret = g.StringOf(op.Text)
@@ -77,12 +90,14 @@ func (op *NumValues) Affinity() affine.Affinity {
 	return affine.NumList
 }
 
+func (op *NumValues) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+	return op.GetNumList(run)
+}
+
 // GetNumList implements rt.NumListEval providing the dl with a literal list of numbers.
 func (op *NumValues) GetNumList(rt.Runtime) (ret g.Value, _ error) {
-	// fix: would aliasing be better?
-	dst := make([]float64, len(op.Values))
-	copy(dst, op.Values)
-	ret = g.FloatsOf(dst)
+	// fix? would copying be better?
+	ret = g.FloatsOf(op.Values)
 	return
 }
 
@@ -91,12 +106,14 @@ func (op *TextValues) Affinity() affine.Affinity {
 	return affine.TextList
 }
 
+func (op *TextValues) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+	return op.GetTextList(run)
+}
+
 // GetTextList implements rt.TextListEval providing the dl with a literal list of text.
 func (op *TextValues) GetTextList(rt.Runtime) (ret g.Value, _ error) {
-	// fix: would aliasing be better?
-	dst := make([]string, len(op.Values))
-	copy(dst, op.Values)
-	ret = g.StringsOf(dst)
+	// fix? would copying be better?
+	ret = g.StringsOf(op.Values)
 	return
 }
 
@@ -105,10 +122,13 @@ func (op *RecordValue) Affinity() affine.Affinity {
 	return affine.Record
 }
 
-// GetRecord implements interface rt.RecordEval providing the dl with a text literal.
-func (op *RecordValue) GetRecord(run rt.Runtime) (ret g.Value, _ error) {
-	panic("not implemented")
-	return
+func (op *RecordValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+	return op.GetRecord(run)
+}
+
+// GetRecord implements interface rt.RecordEval providing the dl with a structured literal.
+func (op *RecordValue) GetRecord(run rt.Runtime) (g.Value, error) {
+	return op.Cache.GetRecord(run, op.Kind, op.Fields)
 }
 
 // Affinity returns affine.RecordList
@@ -116,8 +136,11 @@ func (op *RecordValues) Affinity() affine.Affinity {
 	return affine.RecordList
 }
 
+func (op *RecordValues) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+	return op.GetRecordList(run)
+}
+
 // GetNumList implements rt.RecordListEval providing the dl with a literal list of records.
-func (op *RecordValues) GetRecordList(rt.Runtime) (ret g.Value, _ error) {
-	panic("not implemented")
-	return
+func (op *RecordValues) GetRecordList(run rt.Runtime) (ret g.Value, _ error) {
+	return op.Cache.GetRecords(run, op.Kind, op.Els)
 }
