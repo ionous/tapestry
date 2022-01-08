@@ -363,8 +363,11 @@ func FieldValue_Marshal(m jsn.Marshaler, val *FieldValue) (err error) {
 
 // FieldValues A series of values all for the same record.
 type FieldValues struct {
-	Values []FieldValue `if:"label=_"`
+	Contains []FieldValue `if:"label=_"`
 }
+
+// User implemented slots:
+var _ LiteralValue = (*FieldValues)(nil)
 
 func (*FieldValues) Compose() composer.Spec {
 	return composer.Spec{
@@ -375,7 +378,7 @@ func (*FieldValues) Compose() composer.Spec {
 }
 
 const FieldValues_Type = "field_values"
-const FieldValues_Field_Values = "$VALUES"
+const FieldValues_Field_Contains = "$CONTAINS"
 
 func (op *FieldValues) Marshal(m jsn.Marshaler) error {
 	return FieldValues_Marshal(m, op)
@@ -447,12 +450,12 @@ func FieldValues_Optional_Marshal(m jsn.Marshaler, pv **FieldValues) (err error)
 
 func FieldValues_Marshal(m jsn.Marshaler, val *FieldValues) (err error) {
 	if err = m.MarshalBlock(FieldValues_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FieldValues_Field_Values)
+		e0 := m.MarshalKey("", FieldValues_Field_Contains)
 		if e0 == nil {
-			e0 = FieldValue_Repeats_Marshal(m, &val.Values)
+			e0 = FieldValue_Repeats_Marshal(m, &val.Contains)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FieldValues_Field_Values))
+			m.Error(errutil.New(e0, "in flow at", FieldValues_Field_Contains))
 		}
 		m.EndBlock()
 	}

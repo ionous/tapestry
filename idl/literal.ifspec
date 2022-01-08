@@ -55,25 +55,30 @@
             },
             "record_value": {
                 "uses": "flow",
-                "spec": "rec {_%kind:text} {fields?field_value}",
+                "spec": "rec {_%kind:text} {fields+field_value} {-%cache:record_cache}",
                 "slot": ["record_eval", "literal_value"],
                 "desc": "Specify a record composed of literal values."
             },
             "record_values": {
                 "uses": "flow",
-                "spec": "recs {_%kind:text} {containing+field_values}",
+                "spec": "recs {_%kind:text} {containing%els+field_values} {-%cache:records_cache}",
                 "slot": ["record_list_eval", "literal_value"],
                 "desc": "Specify a series of records, all of the same kind."
             },
             "field_value": {
                 "uses": "flow",
-                "spec": "field {name:text} {value:literal_value}",
+                "spec": "field {field:text} {value:literal_value}",
                 "desc": "A fixed value of a record."
             },
             "field_values": {
                 "uses": "flow",
-                "spec": "fields {_%values+field_value}",
-                "desc": "A series of values all for the same record."
+                "spec": "fields {_%contains+field_value}",
+                "group": "internal",
+                "slot": ["literal_value"],
+                "desc": [
+                    "A series of values all for the same record.",
+                    "While it can be specified wherever a literal value can, it only has meaning when the record type is known."
+                ]
             }
         }
     }

@@ -97,6 +97,40 @@ func TestRecordRecursion(t *testing.T) {
 	}
 }
 
+func TestInnerRecord(t *testing.T) {
+	var kinds testutil.Kinds
+	type Fruit struct {
+		Name string
+		*Fruit
+	}
+	kinds.AddKinds((*Fruit)(nil))
+	l1 := literal.RecordValue{
+		Kind: "fruit",
+		Fields: []literal.FieldValue{{
+			Field: "name",
+			Value: &literal.TextValue{Text: "pomegranate"},
+		}, {
+			Field: "fruit",
+			Value: &literal.FieldValues{
+				Contains: []literal.FieldValue{{
+					Field: "name",
+					Value: &literal.TextValue{Text: "aril"},
+				}},
+			},
+		}},
+	}
+	run := &testutil.Runtime{Kinds: &kinds}
+	if rec, e := l1.GetRecord(run); e != nil {
+		t.Fatal(e)
+	} else if v, e := rec.FieldByName("fruit"); e != nil {
+		t.Fatal(e)
+	} else if n, e := v.FieldByName("name"); e != nil {
+		t.Fatal(e)
+	} else if s := n.String(); s != "aril" {
+		t.Fatal(s)
+	}
+}
+
 func textFields(els ...string) (ret []literal.FieldValue) {
 	for i, cnt := 0, len(els); i < cnt; i += 2 {
 		a, b := els[i], els[i+1]

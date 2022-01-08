@@ -2,7 +2,6 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
@@ -10,8 +9,8 @@ import (
 type ScopedKind struct {
 	Requires      // references to ancestors ( at most it can have one direct parent )
 	domain        *Domain
-	aspects       []traitDef // used for kinds of aspects *and* for fields which use those aspects.
-	fields        []fieldDef // otherwise, everything is a field
+	aspects       []traitDef  // used for kinds of aspects *and* for fields which use those aspects.
+	fields        []*fieldDef // otherwise, everything is a field
 	patternHeader patternHeader
 	pendingFields []UniformField
 }
@@ -64,19 +63,19 @@ func (k *ScopedKind) FindTrait(name string) (ret traitDef, okay bool) {
 
 // check that the kind can store the requested value at the passed field
 // returns the name of the field ( in case the originally specified field was a trait )
-func (k *ScopedKind) findCompatibleValue(field string, value literal.LiteralValue) (ret string, err error) {
-	if value.Affinity() != affine.Bool {
-		if ok, e := k.findCompatibleField(field, value); e != nil {
+func (k *ScopedKind) findCompatibleField(field string, aff affine.Affinity) (ret *fieldDef, err error) {
+	if aff != affine.Bool {
+		if which, e := k.findScopedField(field, aff); e != nil {
 			err = e
-		} else if !ok {
+		} else if which == nil {
 			err = errutil.Fmt("field not found '%s.%s'", k.name, field)
 		} else {
-			ret = field
+			ret = which
 		}
 	} else {
-		if aspect, e := k.findCompatibleTrait(field); e != nil {
+		if aspect, e := k.findScopedTrait(field); e != nil {
 			err = e
-		} else if len(aspect) == 0 {
+		} else if aspect == nil {
 			err = errutil.Fmt("field not found '%s.%s'", k.name, field)
 		} else {
 			ret = aspect
@@ -87,16 +86,16 @@ func (k *ScopedKind) findCompatibleValue(field string, value literal.LiteralValu
 
 // returns true if the named field was found in this kind
 // returns an error if it encountered a critical error along the way.
-func (k *ScopedKind) findCompatibleField(field string, value literal.LiteralValue) (okay bool, err error) {
+func (k *ScopedKind) findScopedField(field string, aff affine.Affinity) (ret *fieldDef, err error) {
 	if e := VisitTree(k, func(dep Dependency) (err error) {
 		// search through hierarchy's fields
 		search := dep.(*ScopedKind)
 		for _, def := range search.fields {
 			if def.name == field {
-				if aff := value.Affinity(); def.affinity == aff.String() {
-					okay, err = true, Visited
+				if def.affinity == aff.String() {
+					ret, err = def, Visited
 				} else {
-					err = errutil.Fmt("value of affinity %s incompatible with '%s.%s:%s'",
+					err = errutil.Fmt("affinity %s incompatible with '%s.%s:%s'",
 						aff, search.name, field, def.affinity)
 				}
 				break
@@ -111,7 +110,7 @@ func (k *ScopedKind) findCompatibleField(field string, value literal.LiteralValu
 
 // returns the name of the aspect if the trait was found in this kind, or the empty string if not found.
 // returns an error if it encountered a critical error along the way.
-func (k *ScopedKind) findCompatibleTrait(field string) (ret string, err error) {
+func (k *ScopedKind) findScopedTrait(field string) (ret *fieldDef, err error) {
 	if e := VisitTree(k, func(dep Dependency) (err error) {
 		// search through hierarchy's fields
 		search := dep.(*ScopedKind)
@@ -125,7 +124,7 @@ func (k *ScopedKind) findCompatibleTrait(field string) (ret string, err error) {
 					if a.name == def.name && def.affinity == affine.Text.String() {
 						// and search through its traits
 						if _, ok := a.FindTrait(field); ok {
-							ret, err = cls, Visited // to exit hierarchy search
+							ret, err = def, Visited // to exit hierarchy search
 							break                   // to exit the field search
 						}
 					}

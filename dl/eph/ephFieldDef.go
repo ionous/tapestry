@@ -23,7 +23,7 @@ func (fd *fieldDef) Write(w Writer) error {
 }
 
 func (fd *fieldDef) AddToKind(k *ScopedKind) {
-	k.fields = append(k.fields, *fd)
+	k.fields = append(k.fields, fd)
 }
 
 func (fd *fieldDef) CheckConflict(k *ScopedKind) (err error) {

@@ -144,3 +144,13 @@ func (op *RecordValues) GetAssignedValue(run rt.Runtime) (g.Value, error) {
 func (op *RecordValues) GetRecordList(run rt.Runtime) (ret g.Value, _ error) {
 	return op.Cache.GetRecords(run, op.Kind, op.Els)
 }
+
+// unimplemented
+func (op *FieldValues) Affinity() affine.Affinity {
+	return ""
+}
+
+// unimplemented: panics.
+func (op *FieldValues) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+	panic("field values should only be used in record literals")
+}

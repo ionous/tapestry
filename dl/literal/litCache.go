@@ -56,7 +56,7 @@ func (rc *RecordsCache) GetRecords(run rt.Runtime, kind string, els []FieldValue
 func buildRecords(run rt.Runtime, k *g.Kind, els []FieldValues) (ret []*g.Record, err error) {
 	var out []*g.Record
 	for _, el := range els {
-		if v, e := buildRecord(run, k, el.Values); e != nil {
+		if v, e := buildRecord(run, k, el.Contains); e != nil {
 			err = e
 			break
 		} else {
@@ -80,24 +80,37 @@ func buildRecord(run rt.Runtime, k *g.Kind, fields []FieldValue) (ret *g.Record,
 	// 2. pass some sort of an iterator nextField() (string, g.Value) (
 	set := make([]bool, k.NumField())
 	// fields of name, literal value
-	for _, f := range fields {
-		if idx := k.FieldIndex(f.Field); idx < 0 {
-			err = errutil.Fmt("unknown field %q in kind %q", f.Field, k.Name())
+	for _, fv := range fields {
+		if idx := k.FieldIndex(fv.Field); idx < 0 {
+			err = errutil.Fmt("unknown field %q in kind %q", fv.Field, k.Name())
 			break
 		} else if set[idx] {
-			err = errutil.New("duplicate fields set by literal", f.Field)
-		} else if v, e := f.Value.GetAssignedValue(run); e != nil {
+			err = errutil.New("duplicate fields set by literal", fv.Field)
+			break
+		} else if v, e := makeValue(run, k.Field(idx), fv.Value); e != nil {
 			err = e
 			break
 		} else if e := out.SetIndexedField(idx, v); e != nil {
 			err = e
-			break
 		} else {
 			set[idx] = true
 		}
 	}
 	if err == nil {
 		ret = out
+	}
+	return
+}
+
+func makeValue(run rt.Runtime, ft g.Field, val LiteralValue) (ret g.Value, err error) {
+	if fvs, ok := val.(*FieldValues); !ok {
+		ret, err = val.GetAssignedValue(run)
+	} else if fvk, e := run.GetKindByName(ft.Type); e != nil {
+		err = e
+	} else if c, e := buildRecord(run, fvk, fvs.Contains); e != nil {
+		err = e
+	} else {
+		ret = g.RecordOf(c)
 	}
 	return
 }

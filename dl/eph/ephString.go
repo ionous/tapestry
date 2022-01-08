@@ -15,16 +15,18 @@ func UniformString(s string) (ret string, okay bool) {
 }
 
 func UniformStrings(strs []string) (ret []string, err error) {
-	out := make([]string, len(strs))
-	for i, src := range strs {
-		if s, ok := UniformString(src); !ok {
-			err = errutil.Append(err, InvalidString(src))
-		} else {
-			out[i] = s
+	if cnt := len(strs); cnt > 0 {
+		out := make([]string, cnt)
+		for i, src := range strs {
+			if s, ok := UniformString(src); !ok {
+				err = errutil.Append(err, InvalidString(src))
+			} else {
+				out[i] = s
+			}
 		}
-	}
-	if err == nil {
-		ret = out
+		if err == nil {
+			ret = out
+		}
 	}
 	return
 }

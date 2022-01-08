@@ -8,7 +8,7 @@ import (
 	"github.com/kr/pretty"
 )
 
-func TestInitialFieldAssignment(t *testing.T) {
+func TestValueFieldAssignment(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
@@ -69,7 +69,7 @@ func TestMissingField(t *testing.T) {
 	}
 }
 
-func TestInitialTraitAssignment(t *testing.T) {
+func TestValueTraitAssignment(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
@@ -108,6 +108,48 @@ func TestInitialTraitAssignment(t *testing.T) {
 			`a:boat:b:"z":x`,
 			`a:toy_boat:a:"w":x`,
 			`a:pear:a:"x":x`,
+		}); len(diff) > 0 {
+			t.Log(pretty.Sprint(out))
+			t.Fatal(diff)
+		}
+	}
+}
+
+func TestValuePaths(t *testing.T) {
+	var dt domainTest
+	dt.makeDomain(dd("a"),
+		// declare the existence of records
+		&EphKinds{Kinds: kindsOf.Record.String()},
+		// a record with some fields
+		&EphKinds{Kinds: "inner", From: kindsOf.Record.String(), Contain: []EphParams{
+			{Name: "num", Affinity: Affinity{Affinity_Number}},
+			{Name: "text", Affinity: Affinity{Affinity_Text}},
+		}},
+		// a record holding that record
+		&EphKinds{Kinds: "outer", From: kindsOf.Record.String(), Contain: []EphParams{
+			// we use the shortcut: a field named _ of type record will (attempt) to be a kind of that record.
+			{Name: "inner", Affinity: Affinity{Affinity_Record}},
+		}},
+		//  a proper kind holding the record of records
+		&EphKinds{Kinds: "k", Contain: []EphParams{
+			{Name: "outer", Affinity: Affinity{Affinity_Record}},
+		}},
+		// a noun of that kind, with the record of records.
+		&EphNouns{"test", "k"},
+		// values targeting a field inside the record
+		&EphValues{Noun: "test", Field: "text", Value: T("some text"), Path: []string{
+			"outer", "inner",
+		}},
+	)
+	if cat, e := buildNouns(dt); e != nil {
+		t.Fatal(e)
+	} else {
+		out := testOut{mdl.Value}
+		if e := cat.WriteValues(&out); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(out[1:], testOut{
+			// fix? consider custom serialization for fields to turn it into a map
+			`a:test:outer:{"Fields:":[{"Field field:value:":["inner",{"Fields:":[{"Field field:value:":["text","some text"]}]}]}]}:x`,
 		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)

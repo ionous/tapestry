@@ -2437,7 +2437,10 @@ func EphTiming_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphTiming) (err e
 	return
 }
 
-// EphValues
+// EphValues give a noun a specific value at startup.
+// initialization is somewhat simplistic (on purpose).
+// initial values are not scoped to domains, triggers must be used to change values when domains begin and end.
+// the values inside of records can be set using a 'path' to find them, however individual values within lists cannot be set.
 type EphValues struct {
 	Noun  string               `if:"label=noun,type=text"`
 	Field string               `if:"label=has,type=text"`

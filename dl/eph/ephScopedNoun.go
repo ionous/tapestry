@@ -14,14 +14,8 @@ type ScopedNoun struct {
 	names        UniqueNames
 	friendlyName string
 	aliases      UniqueNames
-	aliasat      []string // origin of each alias
-	values       []NounValue
-}
-
-type NounValue struct {
-	field string
-	value literal.LiteralValue
-	at    string
+	aliasat      []string    // origin of each alias
+	localRecord  localRecord // store the values of the noun as a record.
 }
 
 func (n *ScopedNoun) Resolve() (ret Dependencies, err error) {
@@ -57,47 +51,16 @@ func (n *ScopedNoun) AddAlias(a, at string) (okay bool) {
 	return
 }
 
-func (n *ScopedNoun) AddLiteralValue(field string, value literal.LiteralValue, at string) (err error) {
-	if k, e := n.Kind(); e != nil {
-		err = e
-	} else if name, e := k.findCompatibleValue(field, value); e != nil {
+// stores literal values because they are serializable
+// ( as opposed to generic values which aren't. )
+func (n *ScopedNoun) recordValues() (ret localRecord, err error) {
+	if n.localRecord.isValid() {
+		ret = n.localRecord
+	} else if k, e := n.Kind(); e != nil {
 		err = e
 	} else {
-		// the field was a trait, the returned name was an aspect
-		if name != field {
-			// redo the value we are setting as the trait of the aspect
-			value = &literal.TextValue{Text: field}
-		}
-		err = n.addLiteral(name, value, at)
-	}
-	return
-}
-
-// assumes the value is known to be compatible, and the field is a field... not a trait.
-func (n *ScopedNoun) addLiteral(field string, value literal.LiteralValue, at string) (err error) {
-	// verify we havent already stored a field of this value
-	for _, q := range n.values {
-		if q.field == field {
-			why, was, wants := Redefined, q.field, field
-			type stringer interface{ String() string }
-			if try, ok := value.(stringer); ok {
-				if curr, ok := q.value.(stringer); ok {
-					if try, curr := try.String(), curr.String(); try == curr {
-						was, wants, why = curr, try, Duplicated
-					}
-				}
-			}
-			err = newConflict(
-				n.name,
-				why,
-				Definition{q.at, was},
-				wants,
-			)
-			break
-		}
-	}
-	if err == nil {
-		n.values = append(n.values, NounValue{field, value, at})
+		rv := localRecord{k, new(literal.FieldValues)}
+		ret, n.localRecord = rv, rv
 	}
 	return
 }
