@@ -87,9 +87,10 @@ var FieldActions = PhaseAction{
 }
 
 type UniformField struct {
-	name, affinity, class string
-	initially             rt.Assignment
-	at                    string
+	name, class string
+	affinity    affine.Affinity
+	initially   rt.Assignment
+	at          string
 }
 
 func (ep *EphParams) unify(at string) (UniformField, error) {
@@ -105,6 +106,11 @@ func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass, at string) 
 	} else if class, ok := UniformString(fieldClass); !ok && len(fieldClass) > 0 {
 		err = InvalidString(fieldClass)
 	} else {
+		// shortcut: if we specify a field name for a record and no class, we'll expect the class to be the name.
+		aff := affine.Affinity(aff)
+		if len(class) == 0 && isRecordAffinity(aff) {
+			class = name
+		}
 		ret = UniformField{name: name, affinity: aff, class: class, at: at}
 	}
 	return
@@ -114,7 +120,7 @@ func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass, at string) 
 func (uf *UniformField) setAssignment(init rt.Assignment) (err error) {
 	if init != nil {
 		// fix? some statements have unknown affinity ( statements that pivot )
-		if initAff := init.Affinity(); len(initAff) > 0 && initAff.String() != uf.affinity {
+		if initAff := init.Affinity(); len(initAff) > 0 && initAff != uf.affinity {
 			err = errutil.Fmt("mismatched affinity of initial value (a %s) for field %q (a %s)", initAff, uf.name, uf.affinity)
 		} else {
 			uf.initially = init
@@ -126,7 +132,7 @@ func (uf *UniformField) setAssignment(init rt.Assignment) (err error) {
 func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 	if cls, classOk := kind.domain.GetPluralKind(uf.class); !classOk && len(uf.class) > 0 {
 		err = KindError{kind.name, errutil.Fmt("unknown class %q for field %q", uf.class, uf.name)}
-	} else if aff := affine.Affinity(uf.affinity); classOk && !isClassAffinity(aff) {
+	} else if aff := uf.affinity; classOk && !isClassAffinity(aff) {
 		err = KindError{kind.name, errutil.Fmt("unexpected for field %q of class %q", uf.name, uf.class)}
 	} else {
 		var clsName string
@@ -172,6 +178,15 @@ func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 				err = kind.AddField(&cls.aspects[0])
 			}
 		}
+	}
+	return
+}
+
+// if there is a class specified, only certain affinities are allowed.
+func isRecordAffinity(a affine.Affinity) (okay bool) {
+	switch a {
+	case affine.Record, affine.RecordList:
+		okay = true
 	}
 	return
 }
