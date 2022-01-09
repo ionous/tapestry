@@ -98,7 +98,7 @@ func CompactFlowDecoder(flow jsn.FlowBlock, msg json.RawMessage) (err error) {
 				out.Name.Str = str[space+1:]
 			}
 			if !flow.SetFlow(&out) {
-				err = errutil.New("could set result to flow", typeName, flow)
+				err = errutil.New("couldnt set result to flow", typeName, flow)
 			}
 		}
 	}
