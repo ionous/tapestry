@@ -48,6 +48,15 @@ func (obj *qnaObject) Affinity() affine.Affinity {
 	// the only reason that's bad at all is "speed"
 	// ( but picking db values one by one is not necessarily fast anyway )
 	// and save ( but we could keep a list of all values )
+	// OR -- .Record() and .Records() arent used much
+	// 1. debug printing [ but RecordToValue could become ValueToMap and use the field interface ]
+	// 2. copy and copyRecords (-- but it is traveliing by field already )
+	// 3. sorting record lists
+	//- -- this is a little more difficult, buy could add a Swap(i,j) to the Value interface
+	// BASICALLY, record and []record could back a value -- but so could object.
+	// you could make records of "animals" but the they wouldnt be named
+	// and conversion would happen through the interface that allows both.
+	// possibly removing Floats and Strings as methods too --s
 }
 
 func (obj *qnaObject) String() (ret string) {

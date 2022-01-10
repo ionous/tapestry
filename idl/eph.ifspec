@@ -134,10 +134,11 @@
                 "spec": "eph {noun:text} {has%field:text} {path*text} {value:literal_value}",
                 "slot": "ephemera",
                 "desc": [
-                    "give a noun a specific value at startup.",
-                    "initialization is somewhat simplistic (on purpose).",
-                    "initial values are not scoped to domains, triggers must be used to change values when domains begin and end.",
-                    "the values inside of records can be set using a 'path' to find them, however individual values within lists cannot be set."
+                    "Give a noun a specific value at startup.",
+                    "Initialization is somewhat simplistic:",
+                    "1. Initial values are not scoped to domains, triggers must be used to change values when domains begin and end.",
+                    "2. The values inside of records can be set using a 'path' to find them, however individual values within lists cannot be set."
+                    "Note: when using a path, the path addresses the noun first, the named field - referring to the inner most record - last."
                 ]
             },
             

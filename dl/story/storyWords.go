@@ -10,10 +10,10 @@ func (op *MakePlural) ImportPhrase(k *Importer) (noerr error) {
 	return
 }
 
-// func (op *MakeOpposite) ImportPhrase(k *Importer) (noerr error) {
-// 	k.WriteEphemera(&eph.EphOpposites{
-// 		Opposite: op.Opposite,
-// 		Word:     op.Word,
-// 	})
-// 	return
-// }
+func (op *MakeOpposite) ImportPhrase(k *Importer) (noerr error) {
+	k.WriteEphemera(&eph.EphOpposites{
+		Opposite: op.Opposite,
+		Word:     op.Word,
+	})
+	return
+}

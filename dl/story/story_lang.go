@@ -3938,6 +3938,116 @@ func Make_Marshal(m jsn.Marshaler, val *Make) (err error) {
 	return
 }
 
+// MakeOpposite
+type MakeOpposite struct {
+	Word     string `if:"label=_,type=text"`
+	Opposite string `if:"label=opposite,type=text"`
+}
+
+// User implemented slots:
+var _ StoryStatement = (*MakeOpposite)(nil)
+
+func (*MakeOpposite) Compose() composer.Spec {
+	return composer.Spec{
+		Name: MakeOpposite_Type,
+		Uses: composer.Type_Flow,
+		Lede: "make",
+	}
+}
+
+const MakeOpposite_Type = "make_opposite"
+const MakeOpposite_Field_Word = "$WORD"
+const MakeOpposite_Field_Opposite = "$OPPOSITE"
+
+func (op *MakeOpposite) Marshal(m jsn.Marshaler) error {
+	return MakeOpposite_Marshal(m, op)
+}
+
+type MakeOpposite_Slice []MakeOpposite
+
+func (op *MakeOpposite_Slice) GetType() string { return MakeOpposite_Type }
+
+func (op *MakeOpposite_Slice) Marshal(m jsn.Marshaler) error {
+	return MakeOpposite_Repeats_Marshal(m, (*[]MakeOpposite)(op))
+}
+
+func (op *MakeOpposite_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *MakeOpposite_Slice) SetSize(cnt int) {
+	var els []MakeOpposite
+	if cnt >= 0 {
+		els = make(MakeOpposite_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *MakeOpposite_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return MakeOpposite_Marshal(m, &(*op)[i])
+}
+
+func MakeOpposite_Repeats_Marshal(m jsn.Marshaler, vals *[]MakeOpposite) error {
+	return jsn.RepeatBlock(m, (*MakeOpposite_Slice)(vals))
+}
+
+func MakeOpposite_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MakeOpposite) (err error) {
+	if *pv != nil || !m.IsEncoding() {
+		err = MakeOpposite_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type MakeOpposite_Flow struct{ ptr *MakeOpposite }
+
+func (n MakeOpposite_Flow) GetType() string      { return MakeOpposite_Type }
+func (n MakeOpposite_Flow) GetLede() string      { return "make" }
+func (n MakeOpposite_Flow) GetFlow() interface{} { return n.ptr }
+func (n MakeOpposite_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*MakeOpposite); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func MakeOpposite_Optional_Marshal(m jsn.Marshaler, pv **MakeOpposite) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = MakeOpposite_Marshal(m, *pv)
+	} else if !enc {
+		var v MakeOpposite
+		if err = MakeOpposite_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func MakeOpposite_Marshal(m jsn.Marshaler, val *MakeOpposite) (err error) {
+	if err = m.MarshalBlock(MakeOpposite_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", MakeOpposite_Field_Word)
+		if e0 == nil {
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Word)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", MakeOpposite_Field_Word))
+		}
+		e1 := m.MarshalKey("opposite", MakeOpposite_Field_Opposite)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Marshal(m, &val.Opposite)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", MakeOpposite_Field_Opposite))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // MakePlural The plural of person is people.
 type MakePlural struct {
 	Singular string `if:"label=_,type=text"`
@@ -4260,67 +4370,47 @@ func ManyToOne_Marshal(m jsn.Marshaler, val *ManyToOne) (err error) {
 	return
 }
 
-// MapConnection swaps between various options
+// MapConnection requires a predefined string.
 type MapConnection struct {
-	Choice string
-	Value  interface{}
+	Str string
 }
 
-var MapConnection_Optional_Marshal = MapConnection_Marshal
+func (op *MapConnection) String() string {
+	return op.Str
+}
 
-const MapConnection_ArrivingAt_Opt = "$ARRIVING_AT"
-const MapConnection_ConnectingTo_Opt = "$CONNECTING_TO"
+const MapConnection_ArrivingAt = "$ARRIVING_AT"
+const MapConnection_ConnectingTo = "$CONNECTING_TO"
 
 func (*MapConnection) Compose() composer.Spec {
 	return composer.Spec{
 		Name: MapConnection_Type,
-		Uses: composer.Type_Swap,
+		Uses: composer.Type_Str,
 		Choices: []string{
-			MapConnection_ArrivingAt_Opt, MapConnection_ConnectingTo_Opt,
+			MapConnection_ArrivingAt, MapConnection_ConnectingTo,
 		},
-		Swaps: []interface{}{
-			(*MapDestination)(nil),
-			(*MapDestination)(nil),
+		Strings: []string{
+			"arriving_at", "connecting_to",
 		},
 	}
 }
 
 const MapConnection_Type = "map_connection"
 
-func (op *MapConnection) GetType() string { return MapConnection_Type }
-
-func (op *MapConnection) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *MapConnection) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case MapConnection_ArrivingAt_Opt:
-		op.Choice, op.Value = c, new(MapDestination)
-		okay = true
-	case MapConnection_ConnectingTo_Opt:
-		op.Choice, op.Value = c, new(MapDestination)
-		okay = true
-	}
-	return
-}
-
 func (op *MapConnection) Marshal(m jsn.Marshaler) error {
 	return MapConnection_Marshal(m, op)
 }
-func MapConnection_Marshal(m jsn.Marshaler, val *MapConnection) (err error) {
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
+
+func MapConnection_Optional_Marshal(m jsn.Marshaler, val *MapConnection) (err error) {
+	var zero MapConnection
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = MapConnection_Marshal(m, val)
 	}
 	return
+}
+
+func MapConnection_Marshal(m jsn.Marshaler, val *MapConnection) (err error) {
+	return m.MarshalValue(MapConnection_Type, jsn.MakeEnum(val, &val.Str))
 }
 
 type MapConnection_Slice []MapConnection
@@ -4363,10 +4453,12 @@ func MapConnection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapConnection
 	return
 }
 
-// MapDeparting
+// MapDeparting Leaving a room by by going through a door ( ex. departing the house via the front door... )
 type MapDeparting struct {
+	Room          NamedNoun     `if:"label=from"`
 	Door          NamedNoun     `if:"label=via"`
 	MapConnection MapConnection `if:"label=and"`
+	OtherRoom     NamedNoun     `if:"label=other_room"`
 }
 
 // User implemented slots:
@@ -4381,8 +4473,10 @@ func (*MapDeparting) Compose() composer.Spec {
 }
 
 const MapDeparting_Type = "map_departing"
+const MapDeparting_Field_Room = "$ROOM"
 const MapDeparting_Field_Door = "$DOOR"
 const MapDeparting_Field_MapConnection = "$MAP_CONNECTION"
+const MapDeparting_Field_OtherRoom = "$OTHER_ROOM"
 
 func (op *MapDeparting) Marshal(m jsn.Marshaler) error {
 	return MapDeparting_Marshal(m, op)
@@ -4454,125 +4548,33 @@ func MapDeparting_Optional_Marshal(m jsn.Marshaler, pv **MapDeparting) (err erro
 
 func MapDeparting_Marshal(m jsn.Marshaler, val *MapDeparting) (err error) {
 	if err = m.MarshalBlock(MapDeparting_Flow{val}); err == nil {
-		e0 := m.MarshalKey("via", MapDeparting_Field_Door)
-		if e0 == nil {
-			e0 = NamedNoun_Marshal(m, &val.Door)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", MapDeparting_Field_Door))
-		}
-		e1 := m.MarshalKey("and", MapDeparting_Field_MapConnection)
-		if e1 == nil {
-			e1 = MapConnection_Marshal(m, &val.MapConnection)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", MapDeparting_Field_MapConnection))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// MapDestination
-type MapDestination struct {
-	Room NamedNoun  `if:"label=_"`
-	Door *NamedNoun `if:"label=door,optional"`
-}
-
-func (*MapDestination) Compose() composer.Spec {
-	return composer.Spec{
-		Name: MapDestination_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const MapDestination_Type = "map_destination"
-const MapDestination_Field_Room = "$ROOM"
-const MapDestination_Field_Door = "$DOOR"
-
-func (op *MapDestination) Marshal(m jsn.Marshaler) error {
-	return MapDestination_Marshal(m, op)
-}
-
-type MapDestination_Slice []MapDestination
-
-func (op *MapDestination_Slice) GetType() string { return MapDestination_Type }
-
-func (op *MapDestination_Slice) Marshal(m jsn.Marshaler) error {
-	return MapDestination_Repeats_Marshal(m, (*[]MapDestination)(op))
-}
-
-func (op *MapDestination_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *MapDestination_Slice) SetSize(cnt int) {
-	var els []MapDestination
-	if cnt >= 0 {
-		els = make(MapDestination_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *MapDestination_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return MapDestination_Marshal(m, &(*op)[i])
-}
-
-func MapDestination_Repeats_Marshal(m jsn.Marshaler, vals *[]MapDestination) error {
-	return jsn.RepeatBlock(m, (*MapDestination_Slice)(vals))
-}
-
-func MapDestination_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDestination) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = MapDestination_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type MapDestination_Flow struct{ ptr *MapDestination }
-
-func (n MapDestination_Flow) GetType() string      { return MapDestination_Type }
-func (n MapDestination_Flow) GetLede() string      { return MapDestination_Type }
-func (n MapDestination_Flow) GetFlow() interface{} { return n.ptr }
-func (n MapDestination_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*MapDestination); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func MapDestination_Optional_Marshal(m jsn.Marshaler, pv **MapDestination) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = MapDestination_Marshal(m, *pv)
-	} else if !enc {
-		var v MapDestination
-		if err = MapDestination_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func MapDestination_Marshal(m jsn.Marshaler, val *MapDestination) (err error) {
-	if err = m.MarshalBlock(MapDestination_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", MapDestination_Field_Room)
+		e0 := m.MarshalKey("from", MapDeparting_Field_Room)
 		if e0 == nil {
 			e0 = NamedNoun_Marshal(m, &val.Room)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", MapDestination_Field_Room))
+			m.Error(errutil.New(e0, "in flow at", MapDeparting_Field_Room))
 		}
-		e1 := m.MarshalKey("door", MapDestination_Field_Door)
+		e1 := m.MarshalKey("via", MapDeparting_Field_Door)
 		if e1 == nil {
-			e1 = NamedNoun_Optional_Marshal(m, &val.Door)
+			e1 = NamedNoun_Marshal(m, &val.Door)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", MapDestination_Field_Door))
+			m.Error(errutil.New(e1, "in flow at", MapDeparting_Field_Door))
+		}
+		e2 := m.MarshalKey("and", MapDeparting_Field_MapConnection)
+		if e2 == nil {
+			e2 = MapConnection_Marshal(m, &val.MapConnection)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", MapDeparting_Field_MapConnection))
+		}
+		e3 := m.MarshalKey("other_room", MapDeparting_Field_OtherRoom)
+		if e3 == nil {
+			e3 = NamedNoun_Marshal(m, &val.OtherRoom)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", MapDeparting_Field_OtherRoom))
 		}
 		m.EndBlock()
 	}
@@ -4654,11 +4656,13 @@ func MapDirection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDirection) 
 	return
 }
 
-// MapHeading
+// MapHeading Leaving a room by moving in a compass direction ( ex. heading east... )
 type MapHeading struct {
-	MapDirection  MapDirection  `if:"label=_"`
+	Dir           MapDirection  `if:"label=_"`
+	Room          NamedNoun     `if:"label=from"`
 	Door          *NamedNoun    `if:"label=via,optional"`
 	MapConnection MapConnection `if:"label=and"`
+	OtherRoom     NamedNoun     `if:"label=other_room"`
 }
 
 // User implemented slots:
@@ -4673,9 +4677,11 @@ func (*MapHeading) Compose() composer.Spec {
 }
 
 const MapHeading_Type = "map_heading"
-const MapHeading_Field_MapDirection = "$MAP_DIRECTION"
+const MapHeading_Field_Dir = "$DIR"
+const MapHeading_Field_Room = "$ROOM"
 const MapHeading_Field_Door = "$DOOR"
 const MapHeading_Field_MapConnection = "$MAP_CONNECTION"
+const MapHeading_Field_OtherRoom = "$OTHER_ROOM"
 
 func (op *MapHeading) Marshal(m jsn.Marshaler) error {
 	return MapHeading_Marshal(m, op)
@@ -4747,26 +4753,40 @@ func MapHeading_Optional_Marshal(m jsn.Marshaler, pv **MapHeading) (err error) {
 
 func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 	if err = m.MarshalBlock(MapHeading_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", MapHeading_Field_MapDirection)
+		e0 := m.MarshalKey("", MapHeading_Field_Dir)
 		if e0 == nil {
-			e0 = MapDirection_Marshal(m, &val.MapDirection)
+			e0 = MapDirection_Marshal(m, &val.Dir)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", MapHeading_Field_MapDirection))
+			m.Error(errutil.New(e0, "in flow at", MapHeading_Field_Dir))
 		}
-		e1 := m.MarshalKey("via", MapHeading_Field_Door)
+		e1 := m.MarshalKey("from", MapHeading_Field_Room)
 		if e1 == nil {
-			e1 = NamedNoun_Optional_Marshal(m, &val.Door)
+			e1 = NamedNoun_Marshal(m, &val.Room)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", MapHeading_Field_Door))
+			m.Error(errutil.New(e1, "in flow at", MapHeading_Field_Room))
 		}
-		e2 := m.MarshalKey("and", MapHeading_Field_MapConnection)
+		e2 := m.MarshalKey("via", MapHeading_Field_Door)
 		if e2 == nil {
-			e2 = MapConnection_Marshal(m, &val.MapConnection)
+			e2 = NamedNoun_Optional_Marshal(m, &val.Door)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", MapHeading_Field_MapConnection))
+			m.Error(errutil.New(e2, "in flow at", MapHeading_Field_Door))
+		}
+		e3 := m.MarshalKey("and", MapHeading_Field_MapConnection)
+		if e3 == nil {
+			e3 = MapConnection_Marshal(m, &val.MapConnection)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", MapHeading_Field_MapConnection))
+		}
+		e4 := m.MarshalKey("other_room", MapHeading_Field_OtherRoom)
+		if e4 == nil {
+			e4 = NamedNoun_Marshal(m, &val.OtherRoom)
+		}
+		if e4 != nil && e4 != jsn.Missing {
+			m.Error(errutil.New(e4, "in flow at", MapHeading_Field_OtherRoom))
 		}
 		m.EndBlock()
 	}
@@ -10133,12 +10153,12 @@ var Slats = []composer.Composer{
 	(*LocalDecl)(nil),
 	(*LocalInit)(nil),
 	(*Make)(nil),
+	(*MakeOpposite)(nil),
 	(*MakePlural)(nil),
 	(*ManyToMany)(nil),
 	(*ManyToOne)(nil),
 	(*MapConnection)(nil),
 	(*MapDeparting)(nil),
-	(*MapDestination)(nil),
 	(*MapDirection)(nil),
 	(*MapHeading)(nil),
 	(*NamedNoun)(nil),
@@ -10206,8 +10226,8 @@ var Signatures = map[uint64]interface{}{
 	2627975827633552637:  (*AspectProperty)(nil),       /* Aspect of:desc: */
 	17855209504331534011: (*AspectTraits)(nil),         /* AspectTraits:traitPhrase: */
 	10466815184164589710: (*BoolProperty)(nil),         /* Bool named: */
-	7864268224293611023:  (*BoolProperty)(nil),         /* Bool named:of: */
 	15292113293401271919: (*BoolProperty)(nil),         /* Bool named:desc: */
+	7864268224293611023:  (*BoolProperty)(nil),         /* Bool named:of: */
 	12288912254770942240: (*BoolProperty)(nil),         /* Bool named:of:desc: */
 	170374163879469822:   (*Certainties)(nil),          /* Certainties:areBeing:certainty:trait: */
 	15857890977690710700: (*Comment)(nil),              /* Comment: */
@@ -10215,109 +10235,103 @@ var Signatures = map[uint64]interface{}{
 	11796688776587655409: (*CommonAction)(nil),         /* CommonAction:actionContext: */
 	10211567489959209123: (*CountOf)(nil),              /* CountOf:num: */
 	475310308664194536:   (*CycleText)(nil),            /* CycleText: */
+	16533349913402003729: (*MapDeparting)(nil),         /* Departing from:via:and:otherRoom: */
 	14117144937213193556: (*Determine)(nil),            /* Determine: */
 	18058198214790918510: (*Determine)(nil),            /* Determine:arguments: */
 	11093854973825287408: (*EventBlock)(nil),           /* EventBlock kinds:handlers: */
 	11855563103941044442: (*EventBlock)(nil),           /* EventBlock namedNoun:handlers: */
-	8929470137779261632:  (*EventHandler)(nil),         /* EventHandler:event:patternRules: */
 	4061872818055525560:  (*EventHandler)(nil),         /* EventHandler:event:locals:patternRules: */
+	8929470137779261632:  (*EventHandler)(nil),         /* EventHandler:event:patternRules: */
 	18010503397334720257: (*EventTarget)(nil),          /* EventTarget kinds: */
 	17197340468883043891: (*EventTarget)(nil),          /* EventTarget namedNoun: */
 	351838510430560892:   (*GrammarDecl)(nil),          /* GrammarDecl: */
+	17915827500086617237: (*MapHeading)(nil),           /* Heading:from:and:otherRoom: */
+	18071749382896120219: (*MapHeading)(nil),           /* Heading:from:via:and:otherRoom: */
 	8395536647843606072:  (*KindOfNoun)(nil),           /* KindOfNoun:kind: */
-	2174943222093748082:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind: */
 	7004049933953251122:  (*KindOfNoun)(nil),           /* KindOfNoun:kind:nounRelation: */
+	2174943222093748082:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind: */
 	9031009285767794428:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind:nounRelation: */
-	650960042632654891:   (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToOne: */
-	1081167552428580836:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToMany: */
-	10771046767095423028: (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToOne: */
 	5852635308349599025:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToMany: */
+	10771046767095423028: (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToOne: */
+	1081167552428580836:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToMany: */
+	650960042632654891:   (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToOne: */
 	11241512832861714070: (*KindsHaveProperties)(nil),  /* Kinds:have: */
 	16689641787061327381: (*KindsOfAspect)(nil),        /* KindsOfAspect: */
-	5919854034648203527:  (*KindsOfKind)(nil),          /* Make kinds:of: */
 	2335979695347311111:  (*Lede)(nil),                 /* Lede:nounPhrase kindOfNoun: */
-	14199050960332677505: (*Lede)(nil),                 /* Lede:nounPhrase nounTraits: */
 	10694393583567459526: (*Lede)(nil),                 /* Lede:nounPhrase nounRelation: */
+	14199050960332677505: (*Lede)(nil),                 /* Lede:nounPhrase nounTraits: */
 	10446315654994385322: (*LocalDecl)(nil),            /* LocalDecl: */
 	6009252662016869003:  (*LocalDecl)(nil),            /* LocalDecl:value: */
 	11789909816860756800: (*LocalInit)(nil),            /* LocalInit: */
+	5919854034648203527:  (*KindsOfKind)(nil),          /* Make kinds:of: */
 	9981010364372027439:  (*Make)(nil),                 /* Make: */
 	12609627593403083413: (*Make)(nil),                 /* Make:arguments: */
+	17216176745763384228: (*MakeOpposite)(nil),         /* Make:opposite: */
 	3572160234867157749:  (*MakePlural)(nil),           /* Make:plural: */
 	17563761532337350103: (*ManyToMany)(nil),           /* ManyToMany:otherKinds: */
 	4129025779762507875:  (*ManyToOne)(nil),            /* ManyToOne:kind: */
-	4746882967578843264:  (*MapConnection)(nil),        /* MapConnection arrivingAt: */
-	165100527430166082:   (*MapConnection)(nil),        /* MapConnection connectingTo: */
-	12664747872301222635: (*MapDeparting)(nil),         /* Departing via:and arrivingAt: */
-	10592711885881153145: (*MapDeparting)(nil),         /* Departing via:and connectingTo: */
-	13573264837262063235: (*MapDestination)(nil),       /* MapDestination: */
-	16504428073969307483: (*MapDestination)(nil),       /* MapDestination:door: */
-	14572254943646304587: (*MapHeading)(nil),           /* Heading:and arrivingAt: */
-	1270222318052581361:  (*MapHeading)(nil),           /* Heading:via:and arrivingAt: */
-	3571539926920082009:  (*MapHeading)(nil),           /* Heading:and connectingTo: */
-	6820364618168717163:  (*MapHeading)(nil),           /* Heading:via:and connectingTo: */
 	16572015744003324651: (*NamedNoun)(nil),            /* NamedNoun:name: */
 	7600243833025335851:  (*NamedProperty)(nil),        /* NamedProperty: */
-	11281497065498302283: (*NamedProperty)(nil),        /* NamedProperty:type: */
 	8883280437292140850:  (*NamedProperty)(nil),        /* NamedProperty:comment: */
+	11281497065498302283: (*NamedProperty)(nil),        /* NamedProperty:type: */
 	847370382734809298:   (*NamedProperty)(nil),        /* NamedProperty:type:comment: */
 	10597814521259612392: (*NounAssignment)(nil),       /* NounAssignment:nouns:lines: */
 	11271220813702679015: (*NounPhrase)(nil),           /* NounPhrase kindOfNoun: */
-	6923309721749493537:  (*NounPhrase)(nil),           /* NounPhrase nounTraits: */
 	15909676719983789414: (*NounPhrase)(nil),           /* NounPhrase nounRelation: */
-	8358327072078132634:  (*NounRelation)(nil),         /* NounRelation relation:nouns: */
+	6923309721749493537:  (*NounPhrase)(nil),           /* NounPhrase nounTraits: */
 	7157825634536191111:  (*NounRelation)(nil),         /* NounRelation areBeing:relation:nouns: */
+	8358327072078132634:  (*NounRelation)(nil),         /* NounRelation relation:nouns: */
 	16756778993528596640: (*NounStatement)(nil),        /* NounStatement: */
-	13104026651265504280: (*NounStatement)(nil),        /* NounStatement:tail: */
 	5039251519992036198:  (*NounStatement)(nil),        /* NounStatement:summary: */
+	13104026651265504280: (*NounStatement)(nil),        /* NounStatement:tail: */
 	4978269156154497630:  (*NounStatement)(nil),        /* NounStatement:tail:summary: */
 	18242559699550270796: (*NounTraits)(nil),           /* NounTraits:trait: */
-	10570788478167904864: (*NumListProperty)(nil),      /* NumList named: */
-	1134638206967616033:  (*NumListProperty)(nil),      /* NumList named:of: */
-	12067969820633710801: (*NumListProperty)(nil),      /* NumList named:desc: */
-	4350453418069638626:  (*NumListProperty)(nil),      /* NumList named:of:desc: */
 	1229800714295622509:  (*NumberProperty)(nil),       /* Number named: */
-	11728451174312232590: (*NumberProperty)(nil),       /* Number named:of: */
 	8220001352821667446:  (*NumberProperty)(nil),       /* Number named:desc: */
+	11728451174312232590: (*NumberProperty)(nil),       /* Number named:of: */
 	8225044541532672111:  (*NumberProperty)(nil),       /* Number named:of:desc: */
+	10570788478167904864: (*NumListProperty)(nil),      /* NumList named: */
+	12067969820633710801: (*NumListProperty)(nil),      /* NumList named:desc: */
+	1134638206967616033:  (*NumListProperty)(nil),      /* NumList named:of: */
+	4350453418069638626:  (*NumListProperty)(nil),      /* NumList named:of:desc: */
 	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
 	6457542997147343897:  (*Paragraph)(nil),            /* Paragraph */
 	1044755875845214073:  (*Paragraph)(nil),            /* Paragraph: */
-	10735038169260724899: (*PatternActions)(nil),       /* PatternActions:patternRules: */
+	9595265807710753233:  (*PatternVariablesDecl)(nil), /* Pattern:requires: */
+	14295113253706291193: (*PatternActions)(nil),       /* PatternActions:patternLocals:patternReturn:patternRules: */
 	626108847940444615:   (*PatternActions)(nil),       /* PatternActions:patternLocals:patternRules: */
 	8043268755698861333:  (*PatternActions)(nil),       /* PatternActions:patternReturn:patternRules: */
-	14295113253706291193: (*PatternActions)(nil),       /* PatternActions:patternLocals:patternReturn:patternRules: */
+	10735038169260724899: (*PatternActions)(nil),       /* PatternActions:patternRules: */
 	12269627840097064600: (*PatternDecl)(nil),          /* PatternDecl:name: */
-	14226432888280203235: (*PatternDecl)(nil),          /* PatternDecl:name:optvars: */
-	16699606798420796914: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn: */
-	12239987563966389881: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn: */
 	15390970540499719701: (*PatternDecl)(nil),          /* PatternDecl:name:about: */
+	14226432888280203235: (*PatternDecl)(nil),          /* PatternDecl:name:optvars: */
 	2773647507718310398:  (*PatternDecl)(nil),          /* PatternDecl:name:optvars:about: */
-	15396002863266428067: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn:about: */
+	12239987563966389881: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn: */
 	18176072221785763176: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn:about: */
+	16699606798420796914: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn: */
+	15396002863266428067: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn:about: */
 	16940656754612309445: (*PatternLocals)(nil),        /* PatternLocals: */
 	9272141818556957835:  (*PatternReturn)(nil),        /* PatternReturn: */
-	15914753357447503965: (*PatternRule)(nil),          /* PatternRule:hook activity: */
 	14391699440407036198: (*PatternRule)(nil),          /* PatternRule:flags:hook activity: */
+	15914753357447503965: (*PatternRule)(nil),          /* PatternRule:hook activity: */
 	15881043500959019380: (*PatternRules)(nil),         /* PatternRules */
 	12644281899387438986: (*PatternRules)(nil),         /* PatternRules: */
-	9595265807710753233:  (*PatternVariablesDecl)(nil), /* Pattern:requires: */
 	2318440529621094838:  (*PatternVariablesTail)(nil), /* PatternVariablesTail: */
 	13417511286363622337: (*ProgramHook)(nil),          /* ProgramHook activity: */
-	8380731787009175721:  (*RecordListProperty)(nil),   /* RecordList named: */
-	16326018873841140594: (*RecordListProperty)(nil),   /* RecordList named:of: */
-	13065085319992699434: (*RecordListProperty)(nil),   /* RecordList named:desc: */
-	8809350479853098315:  (*RecordListProperty)(nil),   /* RecordList named:of:desc: */
 	9421894963555981921:  (*RecordProperty)(nil),       /* Record named: */
-	15273128656504901402: (*RecordProperty)(nil),       /* Record named:of: */
 	1627613176937258658:  (*RecordProperty)(nil),       /* Record named:desc: */
+	15273128656504901402: (*RecordProperty)(nil),       /* Record named:of: */
 	8491419645379028179:  (*RecordProperty)(nil),       /* Record named:of:desc: */
-	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
-	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
-	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
+	8380731787009175721:  (*RecordListProperty)(nil),   /* RecordList named: */
+	13065085319992699434: (*RecordListProperty)(nil),   /* RecordList named:desc: */
+	16326018873841140594: (*RecordListProperty)(nil),   /* RecordList named:of: */
+	8809350479853098315:  (*RecordListProperty)(nil),   /* RecordList named:of:desc: */
 	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
+	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
+	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
+	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
 	7151092568991800158:  (*RelativeToNoun)(nil),       /* RelativeToNoun:nouns:areBeing:nouns1: */
 	15988073058027477451: (*RenderTemplate)(nil),       /* RenderTemplate: */
 	2420057392455761494:  (*Send)(nil),                 /* Send:path: */
@@ -10327,19 +10341,19 @@ var Signatures = map[uint64]interface{}{
 	13392546219852761816: (*Story)(nil),                /* Story: */
 	7688593191439831819:  (*Summary)(nil),              /* Summary: */
 	5318973557611273585:  (*Tail)(nil),                 /* Tail:nounPhrase kindOfNoun: */
-	5583135325088318667:  (*Tail)(nil),                 /* Tail:nounPhrase nounTraits: */
 	7950604148908680916:  (*Tail)(nil),                 /* Tail:nounPhrase nounRelation: */
+	5583135325088318667:  (*Tail)(nil),                 /* Tail:nounPhrase nounTraits: */
 	15090827023293362138: (*TestOutput)(nil),           /* TestOutput: */
 	11231723833188820353: (*TestRule)(nil),             /* TestRule:hook activity: */
 	15304439741055926590: (*TestScene)(nil),            /* TestScene:story: */
 	1385539489971009934:  (*TestStatement)(nil),        /* TestStatement:test: */
-	12060628209423567251: (*TextListProperty)(nil),     /* TextList named: */
-	17501273845802809220: (*TextListProperty)(nil),     /* TextList named:of: */
-	8790232589946234908:  (*TextListProperty)(nil),     /* TextList named:desc: */
-	10102728286923952045: (*TextListProperty)(nil),     /* TextList named:of:desc: */
 	34813485952713023:    (*TextProperty)(nil),         /* Text named: */
-	15716906332929430280: (*TextProperty)(nil),         /* Text named:of: */
 	8821446596613108912:  (*TextProperty)(nil),         /* Text named:desc: */
+	15716906332929430280: (*TextProperty)(nil),         /* Text named:of: */
 	10950529590260468345: (*TextProperty)(nil),         /* Text named:of:desc: */
+	12060628209423567251: (*TextListProperty)(nil),     /* TextList named: */
+	8790232589946234908:  (*TextListProperty)(nil),     /* TextList named:desc: */
+	17501273845802809220: (*TextListProperty)(nil),     /* TextList named:of: */
+	10102728286923952045: (*TextListProperty)(nil),     /* TextList named:of:desc: */
 	14061432096605043790: (*TraitPhrase)(nil),          /* TraitPhrase:trait: */
 }

@@ -362,6 +362,7 @@ func FieldValue_Marshal(m jsn.Marshaler, val *FieldValue) (err error) {
 }
 
 // FieldValues A series of values all for the same record.
+// While it can be specified wherever a literal value can, it only has meaning when the record type is known.
 type FieldValues struct {
 	Contains []FieldValue `if:"label=_"`
 }

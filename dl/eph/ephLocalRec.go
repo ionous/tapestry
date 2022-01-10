@@ -29,6 +29,7 @@ type literalAt struct {
 type literalMarshal interface {
 	literal.LiteralValue
 	jsn.Marshalee
+	String() string
 }
 
 func (rp *localRecord) isValid() bool {

@@ -51,8 +51,8 @@ func (k *Importer) WriteEphemera(op eph.Ephemera) {
 	k.writer(op)
 }
 
-func (k *Importer) WriteRef(refs ...eph.Ephemera) {
-	k.WriteEphemera(&eph.EphRefs{refs})
+func Refs(refs ...eph.Ephemera) *eph.EphRefs {
+	return &eph.EphRefs{refs}
 }
 
 // put the passed ephemera into the global scope

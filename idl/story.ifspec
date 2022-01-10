@@ -241,11 +241,17 @@
                         {
                             "make_plural":
                             {
-                                "uses": "flow",
                                 "slot": "story_statement",
                                 "spec": "The plural of {singular:text} is {plural:text}.",
                                 "lede": "make",
                                 "desc": "The plural of person is people. The plural of person is persons."
+                            },
+                            "make_opposite":
+                            {
+                                "slot": "story_statement",
+                                "spec": "The opposite of {word:text} is the {opposite:text}.",
+                                "lede": "make",
+                                "desc": "The opposite of east is west."
                             },
                             "comment":
                             {
@@ -605,44 +611,39 @@
                             }
                         }
                     },
-                    "map_making":
-                    {
+                    "map_making": {
                         "uses": "group",
-                        "specs":
-                        {
-                            "map_direction":
-                            {
+                        "specs": {
+                            "map_heading": {
+                                "spec": "heading {_%dir:map_direction} {from%room:named_noun} {via%door?named_noun} {and%map_connection} {other_room:named_noun}",
+                                "slot": "story_statement",
+                                "group": "modeling",
+                                "desc": "Leaving a room by moving in a compass direction ( ex. heading east... )"
+                            },
+                            "map_departing": {
+                                "spec": "departing {from%room:named_noun} {via%door:named_noun} {and%map_connection} {other_room:named_noun}",
+                                "slot": "story_statement",
+                                "group": "modeling",
+                                "desc": "Leaving a room by by going through a door ( ex. departing the house via the front door... )"
+                            },
+                            "map_direction": {
                                 "uses": "str",
                                 "group": "modeling",
-                                "desc":
-                                [
+                                "desc": [
                                     "A heading for movement within the game, often connecting one room within the game to another.",
                                     "The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'."
                                 ]
                             },
-                            "map_heading":
-                            {
-                                "uses": "flow",
-                                "spec": "heading {_%map_direction} {via%door?named_noun} {and%map_connection}",
-                                "slot": "story_statement",
-                                "group": "modeling"
-                            },
-                            "map_departing":
-                            {
-                                "uses": "flow",
-                                "spec": "departing {via%door:named_noun} {and%map_connection}",
-                                "slot": "story_statement",
-                                "group": "modeling"
-                            },
-                            "map_connection":
-                            {
-                                "uses": "swap",
-                                "spec": "{arriving_at:map_destination} {connecting_to:map_destination}"
-                            },
-                            "map_destination":
-                            {
-                                "uses": "flow",
-                                "spec": "{_%room:named_noun} {door?named_noun}"
+                            "map_connection": {
+                                "uses": "str",
+                                "spec": "{arriving_at} or {connecting_to}",
+                                "desc": [
+                                    "Chooses between a one-way and a two-way connection between rooms.",
+                                    "Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.",
+                                    "Note: moving from one room leads you into another somewhat generically.",
+                                    "Sometimes its useful to position the player on entry to a new room based on where they came from.",
+                                    "Using, a previous room or last used door can do the trick."
+                                ]      
                             }
                         }
                     },
