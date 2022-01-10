@@ -10206,8 +10206,8 @@ var Signatures = map[uint64]interface{}{
 	2627975827633552637:  (*AspectProperty)(nil),       /* Aspect of:desc: */
 	17855209504331534011: (*AspectTraits)(nil),         /* AspectTraits:traitPhrase: */
 	10466815184164589710: (*BoolProperty)(nil),         /* Bool named: */
-	7864268224293611023:  (*BoolProperty)(nil),         /* Bool named:of: */
 	15292113293401271919: (*BoolProperty)(nil),         /* Bool named:desc: */
+	7864268224293611023:  (*BoolProperty)(nil),         /* Bool named:of: */
 	12288912254770942240: (*BoolProperty)(nil),         /* Bool named:of:desc: */
 	170374163879469822:   (*Certainties)(nil),          /* Certainties:areBeing:certainty:trait: */
 	15857890977690710700: (*Comment)(nil),              /* Comment: */
@@ -10215,32 +10215,38 @@ var Signatures = map[uint64]interface{}{
 	11796688776587655409: (*CommonAction)(nil),         /* CommonAction:actionContext: */
 	10211567489959209123: (*CountOf)(nil),              /* CountOf:num: */
 	475310308664194536:   (*CycleText)(nil),            /* CycleText: */
+	12664747872301222635: (*MapDeparting)(nil),         /* Departing via:and arrivingAt: */
+	10592711885881153145: (*MapDeparting)(nil),         /* Departing via:and connectingTo: */
 	14117144937213193556: (*Determine)(nil),            /* Determine: */
 	18058198214790918510: (*Determine)(nil),            /* Determine:arguments: */
 	11093854973825287408: (*EventBlock)(nil),           /* EventBlock kinds:handlers: */
 	11855563103941044442: (*EventBlock)(nil),           /* EventBlock namedNoun:handlers: */
-	8929470137779261632:  (*EventHandler)(nil),         /* EventHandler:event:patternRules: */
 	4061872818055525560:  (*EventHandler)(nil),         /* EventHandler:event:locals:patternRules: */
+	8929470137779261632:  (*EventHandler)(nil),         /* EventHandler:event:patternRules: */
 	18010503397334720257: (*EventTarget)(nil),          /* EventTarget kinds: */
 	17197340468883043891: (*EventTarget)(nil),          /* EventTarget namedNoun: */
 	351838510430560892:   (*GrammarDecl)(nil),          /* GrammarDecl: */
+	14572254943646304587: (*MapHeading)(nil),           /* Heading:and arrivingAt: */
+	3571539926920082009:  (*MapHeading)(nil),           /* Heading:and connectingTo: */
+	1270222318052581361:  (*MapHeading)(nil),           /* Heading:via:and arrivingAt: */
+	6820364618168717163:  (*MapHeading)(nil),           /* Heading:via:and connectingTo: */
 	8395536647843606072:  (*KindOfNoun)(nil),           /* KindOfNoun:kind: */
-	2174943222093748082:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind: */
 	7004049933953251122:  (*KindOfNoun)(nil),           /* KindOfNoun:kind:nounRelation: */
+	2174943222093748082:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind: */
 	9031009285767794428:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind:nounRelation: */
-	650960042632654891:   (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToOne: */
-	1081167552428580836:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToMany: */
-	10771046767095423028: (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToOne: */
 	5852635308349599025:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToMany: */
+	10771046767095423028: (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToOne: */
+	1081167552428580836:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToMany: */
+	650960042632654891:   (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToOne: */
 	11241512832861714070: (*KindsHaveProperties)(nil),  /* Kinds:have: */
 	16689641787061327381: (*KindsOfAspect)(nil),        /* KindsOfAspect: */
-	5919854034648203527:  (*KindsOfKind)(nil),          /* Make kinds:of: */
 	2335979695347311111:  (*Lede)(nil),                 /* Lede:nounPhrase kindOfNoun: */
-	14199050960332677505: (*Lede)(nil),                 /* Lede:nounPhrase nounTraits: */
 	10694393583567459526: (*Lede)(nil),                 /* Lede:nounPhrase nounRelation: */
+	14199050960332677505: (*Lede)(nil),                 /* Lede:nounPhrase nounTraits: */
 	10446315654994385322: (*LocalDecl)(nil),            /* LocalDecl: */
 	6009252662016869003:  (*LocalDecl)(nil),            /* LocalDecl:value: */
 	11789909816860756800: (*LocalInit)(nil),            /* LocalInit: */
+	5919854034648203527:  (*KindsOfKind)(nil),          /* Make kinds:of: */
 	9981010364372027439:  (*Make)(nil),                 /* Make: */
 	12609627593403083413: (*Make)(nil),                 /* Make:arguments: */
 	3572160234867157749:  (*MakePlural)(nil),           /* Make:plural: */
@@ -10248,76 +10254,70 @@ var Signatures = map[uint64]interface{}{
 	4129025779762507875:  (*ManyToOne)(nil),            /* ManyToOne:kind: */
 	4746882967578843264:  (*MapConnection)(nil),        /* MapConnection arrivingAt: */
 	165100527430166082:   (*MapConnection)(nil),        /* MapConnection connectingTo: */
-	12664747872301222635: (*MapDeparting)(nil),         /* Departing via:and arrivingAt: */
-	10592711885881153145: (*MapDeparting)(nil),         /* Departing via:and connectingTo: */
 	13573264837262063235: (*MapDestination)(nil),       /* MapDestination: */
 	16504428073969307483: (*MapDestination)(nil),       /* MapDestination:door: */
-	14572254943646304587: (*MapHeading)(nil),           /* Heading:and arrivingAt: */
-	1270222318052581361:  (*MapHeading)(nil),           /* Heading:via:and arrivingAt: */
-	3571539926920082009:  (*MapHeading)(nil),           /* Heading:and connectingTo: */
-	6820364618168717163:  (*MapHeading)(nil),           /* Heading:via:and connectingTo: */
 	16572015744003324651: (*NamedNoun)(nil),            /* NamedNoun:name: */
 	7600243833025335851:  (*NamedProperty)(nil),        /* NamedProperty: */
-	11281497065498302283: (*NamedProperty)(nil),        /* NamedProperty:type: */
 	8883280437292140850:  (*NamedProperty)(nil),        /* NamedProperty:comment: */
+	11281497065498302283: (*NamedProperty)(nil),        /* NamedProperty:type: */
 	847370382734809298:   (*NamedProperty)(nil),        /* NamedProperty:type:comment: */
 	10597814521259612392: (*NounAssignment)(nil),       /* NounAssignment:nouns:lines: */
 	11271220813702679015: (*NounPhrase)(nil),           /* NounPhrase kindOfNoun: */
-	6923309721749493537:  (*NounPhrase)(nil),           /* NounPhrase nounTraits: */
 	15909676719983789414: (*NounPhrase)(nil),           /* NounPhrase nounRelation: */
-	8358327072078132634:  (*NounRelation)(nil),         /* NounRelation relation:nouns: */
+	6923309721749493537:  (*NounPhrase)(nil),           /* NounPhrase nounTraits: */
 	7157825634536191111:  (*NounRelation)(nil),         /* NounRelation areBeing:relation:nouns: */
+	8358327072078132634:  (*NounRelation)(nil),         /* NounRelation relation:nouns: */
 	16756778993528596640: (*NounStatement)(nil),        /* NounStatement: */
-	13104026651265504280: (*NounStatement)(nil),        /* NounStatement:tail: */
 	5039251519992036198:  (*NounStatement)(nil),        /* NounStatement:summary: */
+	13104026651265504280: (*NounStatement)(nil),        /* NounStatement:tail: */
 	4978269156154497630:  (*NounStatement)(nil),        /* NounStatement:tail:summary: */
 	18242559699550270796: (*NounTraits)(nil),           /* NounTraits:trait: */
-	10570788478167904864: (*NumListProperty)(nil),      /* NumList named: */
-	1134638206967616033:  (*NumListProperty)(nil),      /* NumList named:of: */
-	12067969820633710801: (*NumListProperty)(nil),      /* NumList named:desc: */
-	4350453418069638626:  (*NumListProperty)(nil),      /* NumList named:of:desc: */
 	1229800714295622509:  (*NumberProperty)(nil),       /* Number named: */
-	11728451174312232590: (*NumberProperty)(nil),       /* Number named:of: */
 	8220001352821667446:  (*NumberProperty)(nil),       /* Number named:desc: */
+	11728451174312232590: (*NumberProperty)(nil),       /* Number named:of: */
 	8225044541532672111:  (*NumberProperty)(nil),       /* Number named:of:desc: */
+	10570788478167904864: (*NumListProperty)(nil),      /* NumList named: */
+	12067969820633710801: (*NumListProperty)(nil),      /* NumList named:desc: */
+	1134638206967616033:  (*NumListProperty)(nil),      /* NumList named:of: */
+	4350453418069638626:  (*NumListProperty)(nil),      /* NumList named:of:desc: */
 	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
 	6457542997147343897:  (*Paragraph)(nil),            /* Paragraph */
 	1044755875845214073:  (*Paragraph)(nil),            /* Paragraph: */
-	10735038169260724899: (*PatternActions)(nil),       /* PatternActions:patternRules: */
+	9595265807710753233:  (*PatternVariablesDecl)(nil), /* Pattern:requires: */
+	14295113253706291193: (*PatternActions)(nil),       /* PatternActions:patternLocals:patternReturn:patternRules: */
 	626108847940444615:   (*PatternActions)(nil),       /* PatternActions:patternLocals:patternRules: */
 	8043268755698861333:  (*PatternActions)(nil),       /* PatternActions:patternReturn:patternRules: */
-	14295113253706291193: (*PatternActions)(nil),       /* PatternActions:patternLocals:patternReturn:patternRules: */
+	10735038169260724899: (*PatternActions)(nil),       /* PatternActions:patternRules: */
 	12269627840097064600: (*PatternDecl)(nil),          /* PatternDecl:name: */
-	14226432888280203235: (*PatternDecl)(nil),          /* PatternDecl:name:optvars: */
-	16699606798420796914: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn: */
-	12239987563966389881: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn: */
 	15390970540499719701: (*PatternDecl)(nil),          /* PatternDecl:name:about: */
+	14226432888280203235: (*PatternDecl)(nil),          /* PatternDecl:name:optvars: */
 	2773647507718310398:  (*PatternDecl)(nil),          /* PatternDecl:name:optvars:about: */
-	15396002863266428067: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn:about: */
+	12239987563966389881: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn: */
 	18176072221785763176: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn:about: */
+	16699606798420796914: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn: */
+	15396002863266428067: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn:about: */
 	16940656754612309445: (*PatternLocals)(nil),        /* PatternLocals: */
 	9272141818556957835:  (*PatternReturn)(nil),        /* PatternReturn: */
-	15914753357447503965: (*PatternRule)(nil),          /* PatternRule:hook activity: */
 	14391699440407036198: (*PatternRule)(nil),          /* PatternRule:flags:hook activity: */
+	15914753357447503965: (*PatternRule)(nil),          /* PatternRule:hook activity: */
 	15881043500959019380: (*PatternRules)(nil),         /* PatternRules */
 	12644281899387438986: (*PatternRules)(nil),         /* PatternRules: */
-	9595265807710753233:  (*PatternVariablesDecl)(nil), /* Pattern:requires: */
 	2318440529621094838:  (*PatternVariablesTail)(nil), /* PatternVariablesTail: */
 	13417511286363622337: (*ProgramHook)(nil),          /* ProgramHook activity: */
-	8380731787009175721:  (*RecordListProperty)(nil),   /* RecordList named: */
-	16326018873841140594: (*RecordListProperty)(nil),   /* RecordList named:of: */
-	13065085319992699434: (*RecordListProperty)(nil),   /* RecordList named:desc: */
-	8809350479853098315:  (*RecordListProperty)(nil),   /* RecordList named:of:desc: */
 	9421894963555981921:  (*RecordProperty)(nil),       /* Record named: */
-	15273128656504901402: (*RecordProperty)(nil),       /* Record named:of: */
 	1627613176937258658:  (*RecordProperty)(nil),       /* Record named:desc: */
+	15273128656504901402: (*RecordProperty)(nil),       /* Record named:of: */
 	8491419645379028179:  (*RecordProperty)(nil),       /* Record named:of:desc: */
-	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
-	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
-	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
+	8380731787009175721:  (*RecordListProperty)(nil),   /* RecordList named: */
+	13065085319992699434: (*RecordListProperty)(nil),   /* RecordList named:desc: */
+	16326018873841140594: (*RecordListProperty)(nil),   /* RecordList named:of: */
+	8809350479853098315:  (*RecordListProperty)(nil),   /* RecordList named:of:desc: */
 	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
+	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
+	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
+	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
 	7151092568991800158:  (*RelativeToNoun)(nil),       /* RelativeToNoun:nouns:areBeing:nouns1: */
 	15988073058027477451: (*RenderTemplate)(nil),       /* RenderTemplate: */
 	2420057392455761494:  (*Send)(nil),                 /* Send:path: */
@@ -10327,19 +10327,19 @@ var Signatures = map[uint64]interface{}{
 	13392546219852761816: (*Story)(nil),                /* Story: */
 	7688593191439831819:  (*Summary)(nil),              /* Summary: */
 	5318973557611273585:  (*Tail)(nil),                 /* Tail:nounPhrase kindOfNoun: */
-	5583135325088318667:  (*Tail)(nil),                 /* Tail:nounPhrase nounTraits: */
 	7950604148908680916:  (*Tail)(nil),                 /* Tail:nounPhrase nounRelation: */
+	5583135325088318667:  (*Tail)(nil),                 /* Tail:nounPhrase nounTraits: */
 	15090827023293362138: (*TestOutput)(nil),           /* TestOutput: */
 	11231723833188820353: (*TestRule)(nil),             /* TestRule:hook activity: */
 	15304439741055926590: (*TestScene)(nil),            /* TestScene:story: */
 	1385539489971009934:  (*TestStatement)(nil),        /* TestStatement:test: */
-	12060628209423567251: (*TextListProperty)(nil),     /* TextList named: */
-	17501273845802809220: (*TextListProperty)(nil),     /* TextList named:of: */
-	8790232589946234908:  (*TextListProperty)(nil),     /* TextList named:desc: */
-	10102728286923952045: (*TextListProperty)(nil),     /* TextList named:of:desc: */
 	34813485952713023:    (*TextProperty)(nil),         /* Text named: */
-	15716906332929430280: (*TextProperty)(nil),         /* Text named:of: */
 	8821446596613108912:  (*TextProperty)(nil),         /* Text named:desc: */
+	15716906332929430280: (*TextProperty)(nil),         /* Text named:of: */
 	10950529590260468345: (*TextProperty)(nil),         /* Text named:of:desc: */
+	12060628209423567251: (*TextListProperty)(nil),     /* TextList named: */
+	8790232589946234908:  (*TextListProperty)(nil),     /* TextList named:desc: */
+	17501273845802809220: (*TextListProperty)(nil),     /* TextList named:of: */
+	10102728286923952045: (*TextListProperty)(nil),     /* TextList named:of:desc: */
 	14061432096605043790: (*TraitPhrase)(nil),          /* TraitPhrase:trait: */
 }

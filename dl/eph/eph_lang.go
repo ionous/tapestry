@@ -1875,10 +1875,12 @@ func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
 	return
 }
 
-// EphRefs Implies some fact about the world that will be defined elsewhere.
-// Reuses the set of ephemera to limit redefinition. Not all are valid.
+// EphRefs Validates references to members of an existing kind.
+// If no parameters are specified, it simply ensures existence of the kind.
 type EphRefs struct {
-	Refs []Ephemera `if:"label=refs"`
+	Kinds   string      `if:"label=kinds,type=text"`
+	From    string      `if:"label=from,optional,type=text"`
+	ReferTo []EphParams `if:"label=refer_to"`
 }
 
 // User implemented slots:
@@ -1893,7 +1895,9 @@ func (*EphRefs) Compose() composer.Spec {
 }
 
 const EphRefs_Type = "eph_refs"
-const EphRefs_Field_Refs = "$REFS"
+const EphRefs_Field_Kinds = "$KINDS"
+const EphRefs_Field_From = "$FROM"
+const EphRefs_Field_ReferTo = "$REFER_TO"
 
 func (op *EphRefs) Marshal(m jsn.Marshaler) error {
 	return EphRefs_Marshal(m, op)
@@ -1965,12 +1969,26 @@ func EphRefs_Optional_Marshal(m jsn.Marshaler, pv **EphRefs) (err error) {
 
 func EphRefs_Marshal(m jsn.Marshaler, val *EphRefs) (err error) {
 	if err = m.MarshalBlock(EphRefs_Flow{val}); err == nil {
-		e0 := m.MarshalKey("refs", EphRefs_Field_Refs)
+		e0 := m.MarshalKey("kinds", EphRefs_Field_Kinds)
 		if e0 == nil {
-			e0 = Ephemera_Repeats_Marshal(m, &val.Refs)
+			e0 = literal.Text_Unboxed_Marshal(m, &val.Kinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphRefs_Field_Refs))
+			m.Error(errutil.New(e0, "in flow at", EphRefs_Field_Kinds))
+		}
+		e1 := m.MarshalKey("from", EphRefs_Field_From)
+		if e1 == nil {
+			e1 = literal.Text_Unboxed_Optional_Marshal(m, &val.From)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", EphRefs_Field_From))
+		}
+		e2 := m.MarshalKey("refer_to", EphRefs_Field_ReferTo)
+		if e2 == nil {
+			e2 = EphParams_Repeats_Marshal(m, &val.ReferTo)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", EphRefs_Field_ReferTo))
 		}
 		m.EndBlock()
 	}
@@ -3100,6 +3118,8 @@ var Signatures = map[uint64]interface{}{
 	277028977564474262:   (*EphParams)(nil),      /* Eph have:called:of: */
 	16991751007965772137: (*EphParams)(nil),      /* Eph have:called:of:initially: */
 	16835204245478660337: (*EphKinds)(nil),       /* Eph kinds:from:contain: */
+	6260245743972736232:  (*EphRefs)(nil),        /* Eph kinds:from:referTo: */
+	9545501520147782308:  (*EphRefs)(nil),        /* Eph kinds:referTo: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
 	17160611285654896437: (*EphValues)(nil),      /* Eph noun:has:value: */
 	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
@@ -3117,7 +3137,6 @@ var Signatures = map[uint64]interface{}{
 	1340667739035001681:  (*EphPatterns)(nil),    /* Eph pattern:with:locals:result: */
 	8353842745201753207:  (*EphPatterns)(nil),    /* Eph pattern:with:result: */
 	890409142408471553:   (*EphPlurals)(nil),     /* Eph plural:singular: */
-	13438111535762645192: (*EphRefs)(nil),        /* Eph refs: */
 	15711422147190391894: (*EphAliases)(nil),     /* Eph understand:as: */
 	15063335060652852941: (*EphRelations)(nil),   /* Eph:relate manyMany: */
 	1697062231687722288:  (*EphRelations)(nil),   /* Eph:relate manyOne: */

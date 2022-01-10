@@ -107,13 +107,14 @@
                 ]
             },
             "eph_refs": {
-                "spec": "eph {refs+ephemera}",
-                "slot": "ephemera",
-                "desc": [
-                    "Implies some fact about the world that will be defined elsewhere.",
-                    "Reuses the set of ephemera to limit redefinition. Not all are valid."
-                ]
-            },
+                "spec": "eph {kinds:text} {from?text} {refer_to+eph_params}",
+                 "slot": "ephemera",
+                 "desc": [
+                    "Validates references to members of an existing kind.",
+                    "If no parameters are specified, it simply ensures existence of the kind."
+                 ]
+             },
+
             "eph_relations": {
                 "spec": "eph {_%rel:text} {relate%cardinality:eph_cardinality}",
                 "slot": "ephemera"
