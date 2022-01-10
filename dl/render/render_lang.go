@@ -66,7 +66,7 @@ func RenderExp_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderExp) error {
 }
 
 func RenderExp_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderExp) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RenderExp_Repeats_Marshal(m, pv)
 	}
 	return
@@ -167,7 +167,7 @@ func RenderField_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderField) error {
 }
 
 func RenderField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderField) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RenderField_Repeats_Marshal(m, pv)
 	}
 	return
@@ -289,7 +289,7 @@ func RenderFlags_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderFlags) error {
 }
 
 func RenderFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderFlags) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RenderFlags_Repeats_Marshal(m, pv)
 	}
 	return
@@ -355,7 +355,7 @@ func RenderName_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderName) error {
 }
 
 func RenderName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderName) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RenderName_Repeats_Marshal(m, pv)
 	}
 	return
@@ -460,7 +460,7 @@ func RenderPattern_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderPattern) error
 }
 
 func RenderPattern_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderPattern) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RenderPattern_Repeats_Marshal(m, pv)
 	}
 	return
@@ -571,7 +571,7 @@ func RenderRef_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderRef) error {
 }
 
 func RenderRef_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderRef) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RenderRef_Repeats_Marshal(m, pv)
 	}
 	return

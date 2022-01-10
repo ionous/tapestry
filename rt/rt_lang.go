@@ -68,7 +68,7 @@ func Assignment_Repeats_Marshal(m jsn.Marshaler, vals *[]Assignment) error {
 }
 
 func Assignment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Assignment) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Assignment_Repeats_Marshal(m, pv)
 	}
 	return
@@ -137,7 +137,7 @@ func BoolEval_Repeats_Marshal(m jsn.Marshaler, vals *[]BoolEval) error {
 }
 
 func BoolEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]BoolEval) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = BoolEval_Repeats_Marshal(m, pv)
 	}
 	return
@@ -206,7 +206,7 @@ func Execute_Repeats_Marshal(m jsn.Marshaler, vals *[]Execute) error {
 }
 
 func Execute_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Execute) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Execute_Repeats_Marshal(m, pv)
 	}
 	return
@@ -275,7 +275,7 @@ func NumListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]NumListEval) error {
 }
 
 func NumListEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumListEval) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NumListEval_Repeats_Marshal(m, pv)
 	}
 	return
@@ -344,7 +344,7 @@ func NumberEval_Repeats_Marshal(m jsn.Marshaler, vals *[]NumberEval) error {
 }
 
 func NumberEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumberEval) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NumberEval_Repeats_Marshal(m, pv)
 	}
 	return
@@ -413,7 +413,7 @@ func RecordEval_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordEval) error {
 }
 
 func RecordEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordEval) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RecordEval_Repeats_Marshal(m, pv)
 	}
 	return
@@ -482,7 +482,7 @@ func RecordListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordListEval) err
 }
 
 func RecordListEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordListEval) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RecordListEval_Repeats_Marshal(m, pv)
 	}
 	return
@@ -551,7 +551,7 @@ func TextEval_Repeats_Marshal(m jsn.Marshaler, vals *[]TextEval) error {
 }
 
 func TextEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextEval) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TextEval_Repeats_Marshal(m, pv)
 	}
 	return
@@ -620,7 +620,7 @@ func TextListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]TextListEval) error {
 }
 
 func TextListEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextListEval) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TextListEval_Repeats_Marshal(m, pv)
 	}
 	return

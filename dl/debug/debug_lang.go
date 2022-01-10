@@ -68,7 +68,7 @@ func DebugLog_Repeats_Marshal(m jsn.Marshaler, vals *[]DebugLog) error {
 }
 
 func DebugLog_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DebugLog) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = DebugLog_Repeats_Marshal(m, pv)
 	}
 	return
@@ -175,7 +175,7 @@ func DoNothing_Repeats_Marshal(m jsn.Marshaler, vals *[]DoNothing) error {
 }
 
 func DoNothing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DoNothing) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = DoNothing_Repeats_Marshal(m, pv)
 	}
 	return
@@ -300,7 +300,7 @@ func LoggingLevel_Repeats_Marshal(m jsn.Marshaler, vals *[]LoggingLevel) error {
 }
 
 func LoggingLevel_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LoggingLevel) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = LoggingLevel_Repeats_Marshal(m, pv)
 	}
 	return
