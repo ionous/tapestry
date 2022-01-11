@@ -29,13 +29,6 @@
                             {
                                 "uses": "slot",
                                 "desc": "Phrase"
-                            },
-                            "noun_statement":
-                            {
-                                "uses": "flow",
-                                "slot": "story_statement",
-                                "spec": "{:lede} {*tail} {?summary}",
-                                "desc": "Declare a noun: Describes people, places, or things."
                             }
                         }
                     },
@@ -91,39 +84,45 @@
                         "uses": "group",
                         "specs":
                         {
-                            "lede":
-                            {
-                                "uses": "flow",
-                                "spec": "{nouns+named_noun|comma-and} {noun_phrase}.",
-                                "desc": "Leading statement: Describes one or more nouns."
+                            "noun_continuation": {
+                                "uses": "slot"
                             },
-                            "tail":
-                            {
-                                "uses": "flow",
-                                "spec": "{pronoun} {noun_phrase}.",
-                                "desc": "Trailing statement: Adds details about the preceding noun or nouns."
+                            "noun_kind_statement": {
+                                "spec": "{nouns+named_noun|comma-and} {is a kind%kind_of_noun} {and%more*noun_continuation}.",
+                                "slot": "story_statement"
                             },
-                            "summary":
-                            {
-                                "uses": "flow",
-                                "spec": "The summary is: {summary%lines|quote}",
-                                "group": "positioned"
+                            "noun_trait_statement": {
+                                "spec": "{nouns+named_noun|comma-and} {noun_traits} {and%more*noun_continuation}.",
+                                "slot": "story_statement"
                             },
-                            "noun_phrase":
-                            {
-                                "uses": "swap",
-                                "spec": "{is a kind%kind_of_noun}, {noun_traits}, or {noun_relation}",
-                                "group": "positioned"
+                            "noun_relation_statement": {
+                                "spec": "{nouns+named_noun|comma-and} {noun_relation} {and%more*noun_continuation}.",
+                                "slot": "story_statement"
+                            },
+                            "relative_to_noun": {
+                                "slot": "story_statement",
+                                "spec": "The {relation:relation_name} of {nouns+named_noun|comma-and} {are_being} {nouns+named_noun|comma-and}.",
+                                "desc": "Relate nouns to each other"
                             },
                             "kind_of_noun":
                             {
-                                "uses": "flow",
-                                "spec": "{are_an} {*trait|comma-and} {kind:singular_kind} {?noun_relation}"
+                                "spec": "{are_an} {kind:singular_kind}",
+                                "slot": "noun_continuation"
+                            },
+                            "noun_traits":
+                            {
+                                "spec": "{are_being} {+trait|comma-and}",
+                                "slot": "noun_continuation"
+                            },
+                            "noun_relation":
+                            {
+                                "spec": "{?are_being} {relation:relation_name} {nouns+named_noun|comma-and}",
+                                "slot": "noun_continuation"
                             },
                             "named_noun":
                             {
-                                "uses": "flow",
-                                "spec": "{determiner} {name:noun_name}"
+                               "spec": "{determiner} {name:noun_name}",
+                               "sign": "Noun:named:"
                             },
                             "determiner":
                             {
@@ -146,11 +145,6 @@
                                     "A set of duplicate object uses their kind. For instance: twelve 'cats'.`"
                                 ],
                                 "group": "positioned"
-                            },
-                            "pronoun":
-                            {
-                                "uses": "str",
-                                "spec": "{it}, {they}, or {pronoun}"
                             }
                         }
                     },
@@ -399,18 +393,6 @@
                             {
                                 "uses": "flow",
                                 "spec": "many {kinds:plural_kinds} to many {other_kinds:plural_kinds}"
-                            },
-                            "noun_relation":
-                            {
-                                "uses": "flow",
-                                "spec": "{?are_being} {relation:relation_name} {nouns+named_noun|comma-and}"
-                            },
-                            "relative_to_noun":
-                            {
-                                "uses": "flow",
-                                "slot": "story_statement",
-                                "spec": "The {relation:relation_name} of {nouns+named_noun|comma-and} {are_being} {nouns+named_noun|comma-and}.",
-                                "desc": "Relate nouns to each other"
                             }
                         }
                     },
@@ -478,11 +460,6 @@
                             {
                                 "uses": "flow",
                                 "spec": "{are_either} {+trait|comma-or}."
-                            },
-                            "noun_traits":
-                            {
-                                "uses": "flow",
-                                "spec": "{are_being} {+trait|comma-and}"
                             },
                             "aspect":
                             {

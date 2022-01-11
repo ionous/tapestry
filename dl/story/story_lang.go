@@ -2894,11 +2894,12 @@ func GrammarDecl_Marshal(m jsn.Marshaler, val *GrammarDecl) (err error) {
 
 // KindOfNoun
 type KindOfNoun struct {
-	AreAn        AreAn         `if:"label=_"`
-	Trait        []Trait       `if:"label=trait,optional"`
-	Kind         SingularKind  `if:"label=kind"`
-	NounRelation *NounRelation `if:"label=noun_relation,optional"`
+	AreAn AreAn        `if:"label=_"`
+	Kind  SingularKind `if:"label=kind"`
 }
+
+// User implemented slots:
+var _ NounContinuation = (*KindOfNoun)(nil)
 
 func (*KindOfNoun) Compose() composer.Spec {
 	return composer.Spec{
@@ -2909,9 +2910,7 @@ func (*KindOfNoun) Compose() composer.Spec {
 
 const KindOfNoun_Type = "kind_of_noun"
 const KindOfNoun_Field_AreAn = "$ARE_AN"
-const KindOfNoun_Field_Trait = "$TRAIT"
 const KindOfNoun_Field_Kind = "$KIND"
-const KindOfNoun_Field_NounRelation = "$NOUN_RELATION"
 
 func (op *KindOfNoun) Marshal(m jsn.Marshaler) error {
 	return KindOfNoun_Marshal(m, op)
@@ -2990,26 +2989,12 @@ func KindOfNoun_Marshal(m jsn.Marshaler, val *KindOfNoun) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindOfNoun_Field_AreAn))
 		}
-		e1 := m.MarshalKey("trait", KindOfNoun_Field_Trait)
+		e1 := m.MarshalKey("kind", KindOfNoun_Field_Kind)
 		if e1 == nil {
-			e1 = Trait_Optional_Repeats_Marshal(m, &val.Trait)
+			e1 = SingularKind_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", KindOfNoun_Field_Trait))
-		}
-		e2 := m.MarshalKey("kind", KindOfNoun_Field_Kind)
-		if e2 == nil {
-			e2 = SingularKind_Marshal(m, &val.Kind)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", KindOfNoun_Field_Kind))
-		}
-		e3 := m.MarshalKey("noun_relation", KindOfNoun_Field_NounRelation)
-		if e3 == nil {
-			e3 = NounRelation_Optional_Marshal(m, &val.NounRelation)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", KindOfNoun_Field_NounRelation))
+			m.Error(errutil.New(e1, "in flow at", KindOfNoun_Field_Kind))
 		}
 		m.EndBlock()
 	}
@@ -3439,112 +3424,6 @@ func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", KindsOfKind_Field_SingularKind))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Lede Describes one or more nouns.
-type Lede struct {
-	Nouns      []NamedNoun `if:"label=_"`
-	NounPhrase NounPhrase  `if:"label=noun_phrase"`
-}
-
-func (*Lede) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Lede_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Lede_Type = "lede"
-const Lede_Field_Nouns = "$NOUNS"
-const Lede_Field_NounPhrase = "$NOUN_PHRASE"
-
-func (op *Lede) Marshal(m jsn.Marshaler) error {
-	return Lede_Marshal(m, op)
-}
-
-type Lede_Slice []Lede
-
-func (op *Lede_Slice) GetType() string { return Lede_Type }
-
-func (op *Lede_Slice) Marshal(m jsn.Marshaler) error {
-	return Lede_Repeats_Marshal(m, (*[]Lede)(op))
-}
-
-func (op *Lede_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Lede_Slice) SetSize(cnt int) {
-	var els []Lede
-	if cnt >= 0 {
-		els = make(Lede_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Lede_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Lede_Marshal(m, &(*op)[i])
-}
-
-func Lede_Repeats_Marshal(m jsn.Marshaler, vals *[]Lede) error {
-	return jsn.RepeatBlock(m, (*Lede_Slice)(vals))
-}
-
-func Lede_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lede) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Lede_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Lede_Flow struct{ ptr *Lede }
-
-func (n Lede_Flow) GetType() string      { return Lede_Type }
-func (n Lede_Flow) GetLede() string      { return Lede_Type }
-func (n Lede_Flow) GetFlow() interface{} { return n.ptr }
-func (n Lede_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Lede); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Lede_Optional_Marshal(m jsn.Marshaler, pv **Lede) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Lede_Marshal(m, *pv)
-	} else if !enc {
-		var v Lede
-		if err = Lede_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Lede_Marshal(m jsn.Marshaler, val *Lede) (err error) {
-	if err = m.MarshalBlock(Lede_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Lede_Field_Nouns)
-		if e0 == nil {
-			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Lede_Field_Nouns))
-		}
-		e1 := m.MarshalKey("noun_phrase", Lede_Field_NounPhrase)
-		if e1 == nil {
-			e1 = NounPhrase_Marshal(m, &val.NounPhrase)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Lede_Field_NounPhrase))
 		}
 		m.EndBlock()
 	}
@@ -4776,13 +4655,14 @@ func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 // NamedNoun
 type NamedNoun struct {
 	Determiner Determiner `if:"label=_"`
-	Name       NounName   `if:"label=name"`
+	Name       NounName   `if:"label=named"`
 }
 
 func (*NamedNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NamedNoun_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Noun",
 	}
 }
 
@@ -4837,7 +4717,7 @@ func NamedNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedNoun) (err e
 type NamedNoun_Flow struct{ ptr *NamedNoun }
 
 func (n NamedNoun_Flow) GetType() string      { return NamedNoun_Type }
-func (n NamedNoun_Flow) GetLede() string      { return NamedNoun_Type }
+func (n NamedNoun_Flow) GetLede() string      { return "Noun" }
 func (n NamedNoun_Flow) GetFlow() interface{} { return n.ptr }
 func (n NamedNoun_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*NamedNoun); ok {
@@ -4867,7 +4747,7 @@ func NamedNoun_Marshal(m jsn.Marshaler, val *NamedNoun) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NamedNoun_Field_Determiner))
 		}
-		e1 := m.MarshalKey("name", NamedNoun_Field_Name)
+		e1 := m.MarshalKey("named", NamedNoun_Field_Name)
 		if e1 == nil {
 			e1 = NounName_Marshal(m, &val.Name)
 		}
@@ -5112,6 +4992,193 @@ func NounAssignment_Marshal(m jsn.Marshaler, val *NounAssignment) (err error) {
 	return
 }
 
+const NounContinuation_Type = "noun_continuation"
+
+var NounContinuation_Optional_Marshal = NounContinuation_Marshal
+
+type NounContinuation_Slot struct{ Value *NounContinuation }
+
+func (at NounContinuation_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+func (at NounContinuation_Slot) GetType() string              { return NounContinuation_Type }
+func (at NounContinuation_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at NounContinuation_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(NounContinuation)
+	return
+}
+
+func NounContinuation_Marshal(m jsn.Marshaler, ptr *NounContinuation) (err error) {
+	slot := NounContinuation_Slot{ptr}
+	return slot.Marshal(m)
+}
+
+type NounContinuation_Slice []NounContinuation
+
+func (op *NounContinuation_Slice) GetType() string { return NounContinuation_Type }
+
+func (op *NounContinuation_Slice) Marshal(m jsn.Marshaler) error {
+	return NounContinuation_Repeats_Marshal(m, (*[]NounContinuation)(op))
+}
+
+func (op *NounContinuation_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NounContinuation_Slice) SetSize(cnt int) {
+	var els []NounContinuation
+	if cnt >= 0 {
+		els = make(NounContinuation_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NounContinuation_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NounContinuation_Marshal(m, &(*op)[i])
+}
+
+func NounContinuation_Repeats_Marshal(m jsn.Marshaler, vals *[]NounContinuation) error {
+	return jsn.RepeatBlock(m, (*NounContinuation_Slice)(vals))
+}
+
+func NounContinuation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounContinuation) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = NounContinuation_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+// NounKindStatement
+type NounKindStatement struct {
+	Nouns      []NamedNoun        `if:"label=_"`
+	KindOfNoun KindOfNoun         `if:"label=kind_of_noun"`
+	More       []NounContinuation `if:"label=more,optional"`
+}
+
+// User implemented slots:
+var _ StoryStatement = (*NounKindStatement)(nil)
+
+func (*NounKindStatement) Compose() composer.Spec {
+	return composer.Spec{
+		Name: NounKindStatement_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const NounKindStatement_Type = "noun_kind_statement"
+const NounKindStatement_Field_Nouns = "$NOUNS"
+const NounKindStatement_Field_KindOfNoun = "$KIND_OF_NOUN"
+const NounKindStatement_Field_More = "$MORE"
+
+func (op *NounKindStatement) Marshal(m jsn.Marshaler) error {
+	return NounKindStatement_Marshal(m, op)
+}
+
+type NounKindStatement_Slice []NounKindStatement
+
+func (op *NounKindStatement_Slice) GetType() string { return NounKindStatement_Type }
+
+func (op *NounKindStatement_Slice) Marshal(m jsn.Marshaler) error {
+	return NounKindStatement_Repeats_Marshal(m, (*[]NounKindStatement)(op))
+}
+
+func (op *NounKindStatement_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NounKindStatement_Slice) SetSize(cnt int) {
+	var els []NounKindStatement
+	if cnt >= 0 {
+		els = make(NounKindStatement_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NounKindStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NounKindStatement_Marshal(m, &(*op)[i])
+}
+
+func NounKindStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounKindStatement) error {
+	return jsn.RepeatBlock(m, (*NounKindStatement_Slice)(vals))
+}
+
+func NounKindStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounKindStatement) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = NounKindStatement_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type NounKindStatement_Flow struct{ ptr *NounKindStatement }
+
+func (n NounKindStatement_Flow) GetType() string      { return NounKindStatement_Type }
+func (n NounKindStatement_Flow) GetLede() string      { return NounKindStatement_Type }
+func (n NounKindStatement_Flow) GetFlow() interface{} { return n.ptr }
+func (n NounKindStatement_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NounKindStatement); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func NounKindStatement_Optional_Marshal(m jsn.Marshaler, pv **NounKindStatement) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = NounKindStatement_Marshal(m, *pv)
+	} else if !enc {
+		var v NounKindStatement
+		if err = NounKindStatement_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func NounKindStatement_Marshal(m jsn.Marshaler, val *NounKindStatement) (err error) {
+	if err = m.MarshalBlock(NounKindStatement_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NounKindStatement_Field_Nouns)
+		if e0 == nil {
+			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", NounKindStatement_Field_Nouns))
+		}
+		e1 := m.MarshalKey("kind_of_noun", NounKindStatement_Field_KindOfNoun)
+		if e1 == nil {
+			e1 = KindOfNoun_Marshal(m, &val.KindOfNoun)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", NounKindStatement_Field_KindOfNoun))
+		}
+		e2 := m.MarshalKey("more", NounKindStatement_Field_More)
+		if e2 == nil {
+			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", NounKindStatement_Field_More))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // NounName requires a user-specified string.
 type NounName struct {
 	At  reader.Position `if:"internal"`
@@ -5189,122 +5256,15 @@ func NounName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounName) (err err
 	return
 }
 
-// NounPhrase swaps between various options
-type NounPhrase struct {
-	At     reader.Position `if:"internal"`
-	Choice string
-	Value  interface{}
-}
-
-var NounPhrase_Optional_Marshal = NounPhrase_Marshal
-
-const NounPhrase_KindOfNoun_Opt = "$KIND_OF_NOUN"
-const NounPhrase_NounTraits_Opt = "$NOUN_TRAITS"
-const NounPhrase_NounRelation_Opt = "$NOUN_RELATION"
-
-func (*NounPhrase) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NounPhrase_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			NounPhrase_KindOfNoun_Opt, NounPhrase_NounTraits_Opt, NounPhrase_NounRelation_Opt,
-		},
-		Swaps: []interface{}{
-			(*KindOfNoun)(nil),
-			(*NounTraits)(nil),
-			(*NounRelation)(nil),
-		},
-	}
-}
-
-const NounPhrase_Type = "noun_phrase"
-
-func (op *NounPhrase) GetType() string { return NounPhrase_Type }
-
-func (op *NounPhrase) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *NounPhrase) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case NounPhrase_KindOfNoun_Opt:
-		op.Choice, op.Value = c, new(KindOfNoun)
-		okay = true
-	case NounPhrase_NounTraits_Opt:
-		op.Choice, op.Value = c, new(NounTraits)
-		okay = true
-	case NounPhrase_NounRelation_Opt:
-		op.Choice, op.Value = c, new(NounRelation)
-		okay = true
-	}
-	return
-}
-
-func (op *NounPhrase) Marshal(m jsn.Marshaler) error {
-	return NounPhrase_Marshal(m, op)
-}
-func NounPhrase_Marshal(m jsn.Marshaler, val *NounPhrase) (err error) {
-	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-type NounPhrase_Slice []NounPhrase
-
-func (op *NounPhrase_Slice) GetType() string { return NounPhrase_Type }
-
-func (op *NounPhrase_Slice) Marshal(m jsn.Marshaler) error {
-	return NounPhrase_Repeats_Marshal(m, (*[]NounPhrase)(op))
-}
-
-func (op *NounPhrase_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounPhrase_Slice) SetSize(cnt int) {
-	var els []NounPhrase
-	if cnt >= 0 {
-		els = make(NounPhrase_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounPhrase_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounPhrase_Marshal(m, &(*op)[i])
-}
-
-func NounPhrase_Repeats_Marshal(m jsn.Marshaler, vals *[]NounPhrase) error {
-	return jsn.RepeatBlock(m, (*NounPhrase_Slice)(vals))
-}
-
-func NounPhrase_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounPhrase) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounPhrase_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // NounRelation
 type NounRelation struct {
 	AreBeing AreBeing         `if:"label=are_being,optional"`
 	Relation rel.RelationName `if:"label=relation"`
 	Nouns    []NamedNoun      `if:"label=nouns"`
 }
+
+// User implemented slots:
+var _ NounContinuation = (*NounRelation)(nil)
 
 func (*NounRelation) Compose() composer.Spec {
 	return composer.Spec{
@@ -5414,41 +5374,41 @@ func NounRelation_Marshal(m jsn.Marshaler, val *NounRelation) (err error) {
 	return
 }
 
-// NounStatement Describes people, places, or things.
-type NounStatement struct {
-	Lede    Lede     `if:"label=_"`
-	Tail    []Tail   `if:"label=tail,optional"`
-	Summary *Summary `if:"label=summary,optional"`
+// NounRelationStatement
+type NounRelationStatement struct {
+	Nouns        []NamedNoun        `if:"label=_"`
+	NounRelation NounRelation       `if:"label=noun_relation"`
+	More         []NounContinuation `if:"label=more,optional"`
 }
 
 // User implemented slots:
-var _ StoryStatement = (*NounStatement)(nil)
+var _ StoryStatement = (*NounRelationStatement)(nil)
 
-func (*NounStatement) Compose() composer.Spec {
+func (*NounRelationStatement) Compose() composer.Spec {
 	return composer.Spec{
-		Name: NounStatement_Type,
+		Name: NounRelationStatement_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const NounStatement_Type = "noun_statement"
-const NounStatement_Field_Lede = "$LEDE"
-const NounStatement_Field_Tail = "$TAIL"
-const NounStatement_Field_Summary = "$SUMMARY"
+const NounRelationStatement_Type = "noun_relation_statement"
+const NounRelationStatement_Field_Nouns = "$NOUNS"
+const NounRelationStatement_Field_NounRelation = "$NOUN_RELATION"
+const NounRelationStatement_Field_More = "$MORE"
 
-func (op *NounStatement) Marshal(m jsn.Marshaler) error {
-	return NounStatement_Marshal(m, op)
+func (op *NounRelationStatement) Marshal(m jsn.Marshaler) error {
+	return NounRelationStatement_Marshal(m, op)
 }
 
-type NounStatement_Slice []NounStatement
+type NounRelationStatement_Slice []NounRelationStatement
 
-func (op *NounStatement_Slice) GetType() string { return NounStatement_Type }
+func (op *NounRelationStatement_Slice) GetType() string { return NounRelationStatement_Type }
 
-func (op *NounStatement_Slice) Marshal(m jsn.Marshaler) error {
-	return NounStatement_Repeats_Marshal(m, (*[]NounStatement)(op))
+func (op *NounRelationStatement_Slice) Marshal(m jsn.Marshaler) error {
+	return NounRelationStatement_Repeats_Marshal(m, (*[]NounRelationStatement)(op))
 }
 
-func (op *NounStatement_Slice) GetSize() (ret int) {
+func (op *NounRelationStatement_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -5457,75 +5417,193 @@ func (op *NounStatement_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *NounStatement_Slice) SetSize(cnt int) {
-	var els []NounStatement
+func (op *NounRelationStatement_Slice) SetSize(cnt int) {
+	var els []NounRelationStatement
 	if cnt >= 0 {
-		els = make(NounStatement_Slice, cnt)
+		els = make(NounRelationStatement_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *NounStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounStatement_Marshal(m, &(*op)[i])
+func (op *NounRelationStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NounRelationStatement_Marshal(m, &(*op)[i])
 }
 
-func NounStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounStatement) error {
-	return jsn.RepeatBlock(m, (*NounStatement_Slice)(vals))
+func NounRelationStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounRelationStatement) error {
+	return jsn.RepeatBlock(m, (*NounRelationStatement_Slice)(vals))
 }
 
-func NounStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounStatement) (err error) {
+func NounRelationStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounRelationStatement) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounStatement_Repeats_Marshal(m, pv)
+		err = NounRelationStatement_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type NounStatement_Flow struct{ ptr *NounStatement }
+type NounRelationStatement_Flow struct{ ptr *NounRelationStatement }
 
-func (n NounStatement_Flow) GetType() string      { return NounStatement_Type }
-func (n NounStatement_Flow) GetLede() string      { return NounStatement_Type }
-func (n NounStatement_Flow) GetFlow() interface{} { return n.ptr }
-func (n NounStatement_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NounStatement); ok {
+func (n NounRelationStatement_Flow) GetType() string      { return NounRelationStatement_Type }
+func (n NounRelationStatement_Flow) GetLede() string      { return NounRelationStatement_Type }
+func (n NounRelationStatement_Flow) GetFlow() interface{} { return n.ptr }
+func (n NounRelationStatement_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NounRelationStatement); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func NounStatement_Optional_Marshal(m jsn.Marshaler, pv **NounStatement) (err error) {
+func NounRelationStatement_Optional_Marshal(m jsn.Marshaler, pv **NounRelationStatement) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NounStatement_Marshal(m, *pv)
+		err = NounRelationStatement_Marshal(m, *pv)
 	} else if !enc {
-		var v NounStatement
-		if err = NounStatement_Marshal(m, &v); err == nil {
+		var v NounRelationStatement
+		if err = NounRelationStatement_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func NounStatement_Marshal(m jsn.Marshaler, val *NounStatement) (err error) {
-	if err = m.MarshalBlock(NounStatement_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NounStatement_Field_Lede)
+func NounRelationStatement_Marshal(m jsn.Marshaler, val *NounRelationStatement) (err error) {
+	if err = m.MarshalBlock(NounRelationStatement_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NounRelationStatement_Field_Nouns)
 		if e0 == nil {
-			e0 = Lede_Marshal(m, &val.Lede)
+			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NounStatement_Field_Lede))
+			m.Error(errutil.New(e0, "in flow at", NounRelationStatement_Field_Nouns))
 		}
-		e1 := m.MarshalKey("tail", NounStatement_Field_Tail)
+		e1 := m.MarshalKey("noun_relation", NounRelationStatement_Field_NounRelation)
 		if e1 == nil {
-			e1 = Tail_Optional_Repeats_Marshal(m, &val.Tail)
+			e1 = NounRelation_Marshal(m, &val.NounRelation)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NounStatement_Field_Tail))
+			m.Error(errutil.New(e1, "in flow at", NounRelationStatement_Field_NounRelation))
 		}
-		e2 := m.MarshalKey("summary", NounStatement_Field_Summary)
+		e2 := m.MarshalKey("more", NounRelationStatement_Field_More)
 		if e2 == nil {
-			e2 = Summary_Optional_Marshal(m, &val.Summary)
+			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NounStatement_Field_Summary))
+			m.Error(errutil.New(e2, "in flow at", NounRelationStatement_Field_More))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// NounTraitStatement
+type NounTraitStatement struct {
+	Nouns      []NamedNoun        `if:"label=_"`
+	NounTraits NounTraits         `if:"label=noun_traits"`
+	More       []NounContinuation `if:"label=more,optional"`
+}
+
+// User implemented slots:
+var _ StoryStatement = (*NounTraitStatement)(nil)
+
+func (*NounTraitStatement) Compose() composer.Spec {
+	return composer.Spec{
+		Name: NounTraitStatement_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const NounTraitStatement_Type = "noun_trait_statement"
+const NounTraitStatement_Field_Nouns = "$NOUNS"
+const NounTraitStatement_Field_NounTraits = "$NOUN_TRAITS"
+const NounTraitStatement_Field_More = "$MORE"
+
+func (op *NounTraitStatement) Marshal(m jsn.Marshaler) error {
+	return NounTraitStatement_Marshal(m, op)
+}
+
+type NounTraitStatement_Slice []NounTraitStatement
+
+func (op *NounTraitStatement_Slice) GetType() string { return NounTraitStatement_Type }
+
+func (op *NounTraitStatement_Slice) Marshal(m jsn.Marshaler) error {
+	return NounTraitStatement_Repeats_Marshal(m, (*[]NounTraitStatement)(op))
+}
+
+func (op *NounTraitStatement_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NounTraitStatement_Slice) SetSize(cnt int) {
+	var els []NounTraitStatement
+	if cnt >= 0 {
+		els = make(NounTraitStatement_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NounTraitStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NounTraitStatement_Marshal(m, &(*op)[i])
+}
+
+func NounTraitStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounTraitStatement) error {
+	return jsn.RepeatBlock(m, (*NounTraitStatement_Slice)(vals))
+}
+
+func NounTraitStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounTraitStatement) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = NounTraitStatement_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type NounTraitStatement_Flow struct{ ptr *NounTraitStatement }
+
+func (n NounTraitStatement_Flow) GetType() string      { return NounTraitStatement_Type }
+func (n NounTraitStatement_Flow) GetLede() string      { return NounTraitStatement_Type }
+func (n NounTraitStatement_Flow) GetFlow() interface{} { return n.ptr }
+func (n NounTraitStatement_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NounTraitStatement); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func NounTraitStatement_Optional_Marshal(m jsn.Marshaler, pv **NounTraitStatement) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = NounTraitStatement_Marshal(m, *pv)
+	} else if !enc {
+		var v NounTraitStatement
+		if err = NounTraitStatement_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func NounTraitStatement_Marshal(m jsn.Marshaler, val *NounTraitStatement) (err error) {
+	if err = m.MarshalBlock(NounTraitStatement_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NounTraitStatement_Field_Nouns)
+		if e0 == nil {
+			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", NounTraitStatement_Field_Nouns))
+		}
+		e1 := m.MarshalKey("noun_traits", NounTraitStatement_Field_NounTraits)
+		if e1 == nil {
+			e1 = NounTraits_Marshal(m, &val.NounTraits)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", NounTraitStatement_Field_NounTraits))
+		}
+		e2 := m.MarshalKey("more", NounTraitStatement_Field_More)
+		if e2 == nil {
+			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", NounTraitStatement_Field_More))
 		}
 		m.EndBlock()
 	}
@@ -5537,6 +5615,9 @@ type NounTraits struct {
 	AreBeing AreBeing `if:"label=_"`
 	Trait    []Trait  `if:"label=trait"`
 }
+
+// User implemented slots:
+var _ NounContinuation = (*NounTraits)(nil)
 
 func (*NounTraits) Compose() composer.Spec {
 	return composer.Spec{
@@ -7506,90 +7587,6 @@ func ProgramHook_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ProgramHook) (e
 	return
 }
 
-// Pronoun requires a predefined or user-specified string.
-type Pronoun struct {
-	Str string
-}
-
-func (op *Pronoun) String() string {
-	return op.Str
-}
-
-const Pronoun_It = "$IT"
-const Pronoun_They = "$THEY"
-
-func (*Pronoun) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        Pronoun_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-		Choices: []string{
-			Pronoun_It, Pronoun_They,
-		},
-		Strings: []string{
-			"it", "they",
-		},
-	}
-}
-
-const Pronoun_Type = "pronoun"
-
-func (op *Pronoun) Marshal(m jsn.Marshaler) error {
-	return Pronoun_Marshal(m, op)
-}
-
-func Pronoun_Optional_Marshal(m jsn.Marshaler, val *Pronoun) (err error) {
-	var zero Pronoun
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = Pronoun_Marshal(m, val)
-	}
-	return
-}
-
-func Pronoun_Marshal(m jsn.Marshaler, val *Pronoun) (err error) {
-	return m.MarshalValue(Pronoun_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type Pronoun_Slice []Pronoun
-
-func (op *Pronoun_Slice) GetType() string { return Pronoun_Type }
-
-func (op *Pronoun_Slice) Marshal(m jsn.Marshaler) error {
-	return Pronoun_Repeats_Marshal(m, (*[]Pronoun)(op))
-}
-
-func (op *Pronoun_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Pronoun_Slice) SetSize(cnt int) {
-	var els []Pronoun
-	if cnt >= 0 {
-		els = make(Pronoun_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Pronoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Pronoun_Marshal(m, &(*op)[i])
-}
-
-func Pronoun_Repeats_Marshal(m jsn.Marshaler, vals *[]Pronoun) error {
-	return jsn.RepeatBlock(m, (*Pronoun_Slice)(vals))
-}
-
-func Pronoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Pronoun) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Pronoun_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // Property requires a user-specified string.
 type Property struct {
 	At  reader.Position `if:"internal"`
@@ -8880,211 +8877,6 @@ func StoryStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryStateme
 	return
 }
 
-// Summary
-type Summary struct {
-	At    reader.Position `if:"internal"`
-	Lines Lines           `if:"label=_"`
-}
-
-func (*Summary) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Summary_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Summary_Type = "summary"
-const Summary_Field_Lines = "$LINES"
-
-func (op *Summary) Marshal(m jsn.Marshaler) error {
-	return Summary_Marshal(m, op)
-}
-
-type Summary_Slice []Summary
-
-func (op *Summary_Slice) GetType() string { return Summary_Type }
-
-func (op *Summary_Slice) Marshal(m jsn.Marshaler) error {
-	return Summary_Repeats_Marshal(m, (*[]Summary)(op))
-}
-
-func (op *Summary_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Summary_Slice) SetSize(cnt int) {
-	var els []Summary
-	if cnt >= 0 {
-		els = make(Summary_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Summary_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Summary_Marshal(m, &(*op)[i])
-}
-
-func Summary_Repeats_Marshal(m jsn.Marshaler, vals *[]Summary) error {
-	return jsn.RepeatBlock(m, (*Summary_Slice)(vals))
-}
-
-func Summary_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Summary) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Summary_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Summary_Flow struct{ ptr *Summary }
-
-func (n Summary_Flow) GetType() string      { return Summary_Type }
-func (n Summary_Flow) GetLede() string      { return Summary_Type }
-func (n Summary_Flow) GetFlow() interface{} { return n.ptr }
-func (n Summary_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Summary); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Summary_Optional_Marshal(m jsn.Marshaler, pv **Summary) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Summary_Marshal(m, *pv)
-	} else if !enc {
-		var v Summary
-		if err = Summary_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Summary_Marshal(m jsn.Marshaler, val *Summary) (err error) {
-	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(Summary_Flow{val}); err == nil {
-		e1 := m.MarshalKey("", Summary_Field_Lines)
-		if e1 == nil {
-			e1 = Lines_Marshal(m, &val.Lines)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Summary_Field_Lines))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Tail Adds details about the preceding noun or nouns.
-type Tail struct {
-	Pronoun    Pronoun    `if:"label=_"`
-	NounPhrase NounPhrase `if:"label=noun_phrase"`
-}
-
-func (*Tail) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Tail_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Tail_Type = "tail"
-const Tail_Field_Pronoun = "$PRONOUN"
-const Tail_Field_NounPhrase = "$NOUN_PHRASE"
-
-func (op *Tail) Marshal(m jsn.Marshaler) error {
-	return Tail_Marshal(m, op)
-}
-
-type Tail_Slice []Tail
-
-func (op *Tail_Slice) GetType() string { return Tail_Type }
-
-func (op *Tail_Slice) Marshal(m jsn.Marshaler) error {
-	return Tail_Repeats_Marshal(m, (*[]Tail)(op))
-}
-
-func (op *Tail_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Tail_Slice) SetSize(cnt int) {
-	var els []Tail
-	if cnt >= 0 {
-		els = make(Tail_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Tail_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Tail_Marshal(m, &(*op)[i])
-}
-
-func Tail_Repeats_Marshal(m jsn.Marshaler, vals *[]Tail) error {
-	return jsn.RepeatBlock(m, (*Tail_Slice)(vals))
-}
-
-func Tail_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Tail) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Tail_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Tail_Flow struct{ ptr *Tail }
-
-func (n Tail_Flow) GetType() string      { return Tail_Type }
-func (n Tail_Flow) GetLede() string      { return Tail_Type }
-func (n Tail_Flow) GetFlow() interface{} { return n.ptr }
-func (n Tail_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Tail); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Tail_Optional_Marshal(m jsn.Marshaler, pv **Tail) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Tail_Marshal(m, *pv)
-	} else if !enc {
-		var v Tail
-		if err = Tail_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Tail_Marshal(m jsn.Marshaler, val *Tail) (err error) {
-	if err = m.MarshalBlock(Tail_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Tail_Field_Pronoun)
-		if e0 == nil {
-			e0 = Pronoun_Marshal(m, &val.Pronoun)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Tail_Field_Pronoun))
-		}
-		e1 := m.MarshalKey("noun_phrase", Tail_Field_NounPhrase)
-		if e1 == nil {
-			e1 = NounPhrase_Marshal(m, &val.NounPhrase)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Tail_Field_NounPhrase))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // TestName requires a predefined or user-specified string.
 type TestName struct {
 	At  reader.Position `if:"internal"`
@@ -10088,6 +9880,7 @@ func TraitPhrase_Marshal(m jsn.Marshaler, val *TraitPhrase) (err error) {
 }
 
 var Slots = []interface{}{
+	(*NounContinuation)(nil),
 	(*PropertySlot)(nil),
 	(*StoryStatement)(nil),
 	(*Testing)(nil),
@@ -10128,7 +9921,6 @@ var Slats = []composer.Composer{
 	(*KindsHaveProperties)(nil),
 	(*KindsOfAspect)(nil),
 	(*KindsOfKind)(nil),
-	(*Lede)(nil),
 	(*Lines)(nil),
 	(*LocalDecl)(nil),
 	(*LocalInit)(nil),
@@ -10144,10 +9936,11 @@ var Slats = []composer.Composer{
 	(*NamedNoun)(nil),
 	(*NamedProperty)(nil),
 	(*NounAssignment)(nil),
+	(*NounKindStatement)(nil),
 	(*NounName)(nil),
-	(*NounPhrase)(nil),
 	(*NounRelation)(nil),
-	(*NounStatement)(nil),
+	(*NounRelationStatement)(nil),
+	(*NounTraitStatement)(nil),
 	(*NounTraits)(nil),
 	(*NumListProperty)(nil),
 	(*NumberProperty)(nil),
@@ -10167,7 +9960,6 @@ var Slats = []composer.Composer{
 	(*PatternVariablesTail)(nil),
 	(*PluralKinds)(nil),
 	(*ProgramHook)(nil),
-	(*Pronoun)(nil),
 	(*Property)(nil),
 	(*RecordListProperty)(nil),
 	(*RecordProperty)(nil),
@@ -10179,8 +9971,6 @@ var Slats = []composer.Composer{
 	(*SingularKind)(nil),
 	(*StoppingText)(nil),
 	(*Story)(nil),
-	(*Summary)(nil),
-	(*Tail)(nil),
 	(*TestName)(nil),
 	(*TestOutput)(nil),
 	(*TestRule)(nil),
@@ -10193,153 +9983,142 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	7872120455849093108:  (*ActionContext)(nil),        /* ActionContext: */
-	2237475528376444648:  (*ActionDecl)(nil),           /* ActionDecl:action:actionParams common: */
-	18212021549969329253: (*ActionDecl)(nil),           /* ActionDecl:action:actionParams dual: */
-	10825614489046735389: (*ActionDecl)(nil),           /* ActionDecl:action:actionParams none: */
-	14902711848163440508: (*ActionParams)(nil),         /* ActionParams common: */
-	11902859627634050329: (*ActionParams)(nil),         /* ActionParams dual: */
-	5868886119925925865:  (*ActionParams)(nil),         /* ActionParams none: */
-	6291103735245333139:  (*Argument)(nil),             /* Arg:from: */
-	2275326896920679506:  (*Arguments)(nil),            /* Args: */
-	4946346507935163764:  (*AspectProperty)(nil),       /* Aspect of: */
-	2627975827633552637:  (*AspectProperty)(nil),       /* Aspect of:desc: */
-	17855209504331534011: (*AspectTraits)(nil),         /* AspectTraits:traitPhrase: */
-	10466815184164589710: (*BoolProperty)(nil),         /* Bool named: */
-	15292113293401271919: (*BoolProperty)(nil),         /* Bool named:desc: */
-	7864268224293611023:  (*BoolProperty)(nil),         /* Bool named:of: */
-	12288912254770942240: (*BoolProperty)(nil),         /* Bool named:of:desc: */
-	170374163879469822:   (*Certainties)(nil),          /* Certainties:areBeing:certainty:trait: */
-	15857890977690710700: (*Comment)(nil),              /* Comment: */
-	13295757043766156580: (*CommonAction)(nil),         /* CommonAction: */
-	11796688776587655409: (*CommonAction)(nil),         /* CommonAction:actionContext: */
-	10211567489959209123: (*CountOf)(nil),              /* CountOf:num: */
-	475310308664194536:   (*CycleText)(nil),            /* CycleText: */
-	12664747872301222635: (*MapDeparting)(nil),         /* Departing via:and arrivingAt: */
-	10592711885881153145: (*MapDeparting)(nil),         /* Departing via:and connectingTo: */
-	14117144937213193556: (*Determine)(nil),            /* Determine: */
-	18058198214790918510: (*Determine)(nil),            /* Determine:arguments: */
-	11093854973825287408: (*EventBlock)(nil),           /* EventBlock kinds:handlers: */
-	11855563103941044442: (*EventBlock)(nil),           /* EventBlock namedNoun:handlers: */
-	4061872818055525560:  (*EventHandler)(nil),         /* EventHandler:event:locals:patternRules: */
-	8929470137779261632:  (*EventHandler)(nil),         /* EventHandler:event:patternRules: */
-	18010503397334720257: (*EventTarget)(nil),          /* EventTarget kinds: */
-	17197340468883043891: (*EventTarget)(nil),          /* EventTarget namedNoun: */
-	351838510430560892:   (*GrammarDecl)(nil),          /* GrammarDecl: */
-	14572254943646304587: (*MapHeading)(nil),           /* Heading:and arrivingAt: */
-	3571539926920082009:  (*MapHeading)(nil),           /* Heading:and connectingTo: */
-	1270222318052581361:  (*MapHeading)(nil),           /* Heading:via:and arrivingAt: */
-	6820364618168717163:  (*MapHeading)(nil),           /* Heading:via:and connectingTo: */
-	8395536647843606072:  (*KindOfNoun)(nil),           /* KindOfNoun:kind: */
-	7004049933953251122:  (*KindOfNoun)(nil),           /* KindOfNoun:kind:nounRelation: */
-	2174943222093748082:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind: */
-	9031009285767794428:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind:nounRelation: */
-	5852635308349599025:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToMany: */
-	10771046767095423028: (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToOne: */
-	1081167552428580836:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToMany: */
-	650960042632654891:   (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToOne: */
-	11241512832861714070: (*KindsHaveProperties)(nil),  /* Kinds:have: */
-	16689641787061327381: (*KindsOfAspect)(nil),        /* KindsOfAspect: */
-	2335979695347311111:  (*Lede)(nil),                 /* Lede:nounPhrase kindOfNoun: */
-	10694393583567459526: (*Lede)(nil),                 /* Lede:nounPhrase nounRelation: */
-	14199050960332677505: (*Lede)(nil),                 /* Lede:nounPhrase nounTraits: */
-	10446315654994385322: (*LocalDecl)(nil),            /* LocalDecl: */
-	6009252662016869003:  (*LocalDecl)(nil),            /* LocalDecl:value: */
-	11789909816860756800: (*LocalInit)(nil),            /* LocalInit: */
-	5919854034648203527:  (*KindsOfKind)(nil),          /* Make kinds:of: */
-	9981010364372027439:  (*Make)(nil),                 /* Make: */
-	12609627593403083413: (*Make)(nil),                 /* Make:arguments: */
-	3572160234867157749:  (*MakePlural)(nil),           /* Make:plural: */
-	17563761532337350103: (*ManyToMany)(nil),           /* ManyToMany:otherKinds: */
-	4129025779762507875:  (*ManyToOne)(nil),            /* ManyToOne:kind: */
-	4746882967578843264:  (*MapConnection)(nil),        /* MapConnection arrivingAt: */
-	165100527430166082:   (*MapConnection)(nil),        /* MapConnection connectingTo: */
-	13573264837262063235: (*MapDestination)(nil),       /* MapDestination: */
-	16504428073969307483: (*MapDestination)(nil),       /* MapDestination:door: */
-	16572015744003324651: (*NamedNoun)(nil),            /* NamedNoun:name: */
-	7600243833025335851:  (*NamedProperty)(nil),        /* NamedProperty: */
-	8883280437292140850:  (*NamedProperty)(nil),        /* NamedProperty:comment: */
-	11281497065498302283: (*NamedProperty)(nil),        /* NamedProperty:type: */
-	847370382734809298:   (*NamedProperty)(nil),        /* NamedProperty:type:comment: */
-	10597814521259612392: (*NounAssignment)(nil),       /* NounAssignment:nouns:lines: */
-	11271220813702679015: (*NounPhrase)(nil),           /* NounPhrase kindOfNoun: */
-	15909676719983789414: (*NounPhrase)(nil),           /* NounPhrase nounRelation: */
-	6923309721749493537:  (*NounPhrase)(nil),           /* NounPhrase nounTraits: */
-	7157825634536191111:  (*NounRelation)(nil),         /* NounRelation areBeing:relation:nouns: */
-	8358327072078132634:  (*NounRelation)(nil),         /* NounRelation relation:nouns: */
-	16756778993528596640: (*NounStatement)(nil),        /* NounStatement: */
-	5039251519992036198:  (*NounStatement)(nil),        /* NounStatement:summary: */
-	13104026651265504280: (*NounStatement)(nil),        /* NounStatement:tail: */
-	4978269156154497630:  (*NounStatement)(nil),        /* NounStatement:tail:summary: */
-	18242559699550270796: (*NounTraits)(nil),           /* NounTraits:trait: */
-	1229800714295622509:  (*NumberProperty)(nil),       /* Number named: */
-	8220001352821667446:  (*NumberProperty)(nil),       /* Number named:desc: */
-	11728451174312232590: (*NumberProperty)(nil),       /* Number named:of: */
-	8225044541532672111:  (*NumberProperty)(nil),       /* Number named:of:desc: */
-	10570788478167904864: (*NumListProperty)(nil),      /* NumList named: */
-	12067969820633710801: (*NumListProperty)(nil),      /* NumList named:desc: */
-	1134638206967616033:  (*NumListProperty)(nil),      /* NumList named:of: */
-	4350453418069638626:  (*NumListProperty)(nil),      /* NumList named:of:desc: */
-	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
-	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
-	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
-	6457542997147343897:  (*Paragraph)(nil),            /* Paragraph */
-	1044755875845214073:  (*Paragraph)(nil),            /* Paragraph: */
-	9595265807710753233:  (*PatternVariablesDecl)(nil), /* Pattern:requires: */
-	14295113253706291193: (*PatternActions)(nil),       /* PatternActions:patternLocals:patternReturn:patternRules: */
-	626108847940444615:   (*PatternActions)(nil),       /* PatternActions:patternLocals:patternRules: */
-	8043268755698861333:  (*PatternActions)(nil),       /* PatternActions:patternReturn:patternRules: */
-	10735038169260724899: (*PatternActions)(nil),       /* PatternActions:patternRules: */
-	12269627840097064600: (*PatternDecl)(nil),          /* PatternDecl:name: */
-	15390970540499719701: (*PatternDecl)(nil),          /* PatternDecl:name:about: */
-	14226432888280203235: (*PatternDecl)(nil),          /* PatternDecl:name:optvars: */
-	2773647507718310398:  (*PatternDecl)(nil),          /* PatternDecl:name:optvars:about: */
-	12239987563966389881: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn: */
-	18176072221785763176: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn:about: */
-	16699606798420796914: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn: */
-	15396002863266428067: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn:about: */
-	16940656754612309445: (*PatternLocals)(nil),        /* PatternLocals: */
-	9272141818556957835:  (*PatternReturn)(nil),        /* PatternReturn: */
-	14391699440407036198: (*PatternRule)(nil),          /* PatternRule:flags:hook activity: */
-	15914753357447503965: (*PatternRule)(nil),          /* PatternRule:hook activity: */
-	15881043500959019380: (*PatternRules)(nil),         /* PatternRules */
-	12644281899387438986: (*PatternRules)(nil),         /* PatternRules: */
-	2318440529621094838:  (*PatternVariablesTail)(nil), /* PatternVariablesTail: */
-	13417511286363622337: (*ProgramHook)(nil),          /* ProgramHook activity: */
-	9421894963555981921:  (*RecordProperty)(nil),       /* Record named: */
-	1627613176937258658:  (*RecordProperty)(nil),       /* Record named:desc: */
-	15273128656504901402: (*RecordProperty)(nil),       /* Record named:of: */
-	8491419645379028179:  (*RecordProperty)(nil),       /* Record named:of:desc: */
-	8380731787009175721:  (*RecordListProperty)(nil),   /* RecordList named: */
-	13065085319992699434: (*RecordListProperty)(nil),   /* RecordList named:desc: */
-	16326018873841140594: (*RecordListProperty)(nil),   /* RecordList named:of: */
-	8809350479853098315:  (*RecordListProperty)(nil),   /* RecordList named:of:desc: */
-	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
-	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
-	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
-	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
-	7151092568991800158:  (*RelativeToNoun)(nil),       /* RelativeToNoun:nouns:areBeing:nouns1: */
-	15988073058027477451: (*RenderTemplate)(nil),       /* RenderTemplate: */
-	2420057392455761494:  (*Send)(nil),                 /* Send:path: */
-	10010483713146895284: (*Send)(nil),                 /* Send:path:arguments: */
-	7279273919312137397:  (*ShuffleText)(nil),          /* ShuffleText: */
-	10085329253831819088: (*StoppingText)(nil),         /* StoppingText: */
-	13392546219852761816: (*Story)(nil),                /* Story: */
-	7688593191439831819:  (*Summary)(nil),              /* Summary: */
-	5318973557611273585:  (*Tail)(nil),                 /* Tail:nounPhrase kindOfNoun: */
-	7950604148908680916:  (*Tail)(nil),                 /* Tail:nounPhrase nounRelation: */
-	5583135325088318667:  (*Tail)(nil),                 /* Tail:nounPhrase nounTraits: */
-	15090827023293362138: (*TestOutput)(nil),           /* TestOutput: */
-	11231723833188820353: (*TestRule)(nil),             /* TestRule:hook activity: */
-	15304439741055926590: (*TestScene)(nil),            /* TestScene:story: */
-	1385539489971009934:  (*TestStatement)(nil),        /* TestStatement:test: */
-	34813485952713023:    (*TextProperty)(nil),         /* Text named: */
-	8821446596613108912:  (*TextProperty)(nil),         /* Text named:desc: */
-	15716906332929430280: (*TextProperty)(nil),         /* Text named:of: */
-	10950529590260468345: (*TextProperty)(nil),         /* Text named:of:desc: */
-	12060628209423567251: (*TextListProperty)(nil),     /* TextList named: */
-	8790232589946234908:  (*TextListProperty)(nil),     /* TextList named:desc: */
-	17501273845802809220: (*TextListProperty)(nil),     /* TextList named:of: */
-	10102728286923952045: (*TextListProperty)(nil),     /* TextList named:of:desc: */
-	14061432096605043790: (*TraitPhrase)(nil),          /* TraitPhrase:trait: */
+	7872120455849093108:  (*ActionContext)(nil),         /* ActionContext: */
+	2237475528376444648:  (*ActionDecl)(nil),            /* ActionDecl:action:actionParams common: */
+	18212021549969329253: (*ActionDecl)(nil),            /* ActionDecl:action:actionParams dual: */
+	10825614489046735389: (*ActionDecl)(nil),            /* ActionDecl:action:actionParams none: */
+	14902711848163440508: (*ActionParams)(nil),          /* ActionParams common: */
+	11902859627634050329: (*ActionParams)(nil),          /* ActionParams dual: */
+	5868886119925925865:  (*ActionParams)(nil),          /* ActionParams none: */
+	6291103735245333139:  (*Argument)(nil),              /* Arg:from: */
+	2275326896920679506:  (*Arguments)(nil),             /* Args: */
+	4946346507935163764:  (*AspectProperty)(nil),        /* Aspect of: */
+	2627975827633552637:  (*AspectProperty)(nil),        /* Aspect of:desc: */
+	17855209504331534011: (*AspectTraits)(nil),          /* AspectTraits:traitPhrase: */
+	10466815184164589710: (*BoolProperty)(nil),          /* Bool named: */
+	15292113293401271919: (*BoolProperty)(nil),          /* Bool named:desc: */
+	7864268224293611023:  (*BoolProperty)(nil),          /* Bool named:of: */
+	12288912254770942240: (*BoolProperty)(nil),          /* Bool named:of:desc: */
+	170374163879469822:   (*Certainties)(nil),           /* Certainties:areBeing:certainty:trait: */
+	15857890977690710700: (*Comment)(nil),               /* Comment: */
+	13295757043766156580: (*CommonAction)(nil),          /* CommonAction: */
+	11796688776587655409: (*CommonAction)(nil),          /* CommonAction:actionContext: */
+	10211567489959209123: (*CountOf)(nil),               /* CountOf:num: */
+	475310308664194536:   (*CycleText)(nil),             /* CycleText: */
+	12664747872301222635: (*MapDeparting)(nil),          /* Departing via:and arrivingAt: */
+	10592711885881153145: (*MapDeparting)(nil),          /* Departing via:and connectingTo: */
+	14117144937213193556: (*Determine)(nil),             /* Determine: */
+	18058198214790918510: (*Determine)(nil),             /* Determine:arguments: */
+	11093854973825287408: (*EventBlock)(nil),            /* EventBlock kinds:handlers: */
+	11855563103941044442: (*EventBlock)(nil),            /* EventBlock namedNoun:handlers: */
+	4061872818055525560:  (*EventHandler)(nil),          /* EventHandler:event:locals:patternRules: */
+	8929470137779261632:  (*EventHandler)(nil),          /* EventHandler:event:patternRules: */
+	18010503397334720257: (*EventTarget)(nil),           /* EventTarget kinds: */
+	17197340468883043891: (*EventTarget)(nil),           /* EventTarget namedNoun: */
+	351838510430560892:   (*GrammarDecl)(nil),           /* GrammarDecl: */
+	14572254943646304587: (*MapHeading)(nil),            /* Heading:and arrivingAt: */
+	3571539926920082009:  (*MapHeading)(nil),            /* Heading:and connectingTo: */
+	1270222318052581361:  (*MapHeading)(nil),            /* Heading:via:and arrivingAt: */
+	6820364618168717163:  (*MapHeading)(nil),            /* Heading:via:and connectingTo: */
+	8395536647843606072:  (*KindOfNoun)(nil),            /* KindOfNoun:kind: */
+	5852635308349599025:  (*KindOfRelation)(nil),        /* KindOfRelation:cardinality manyToMany: */
+	10771046767095423028: (*KindOfRelation)(nil),        /* KindOfRelation:cardinality manyToOne: */
+	1081167552428580836:  (*KindOfRelation)(nil),        /* KindOfRelation:cardinality oneToMany: */
+	650960042632654891:   (*KindOfRelation)(nil),        /* KindOfRelation:cardinality oneToOne: */
+	11241512832861714070: (*KindsHaveProperties)(nil),   /* Kinds:have: */
+	16689641787061327381: (*KindsOfAspect)(nil),         /* KindsOfAspect: */
+	10446315654994385322: (*LocalDecl)(nil),             /* LocalDecl: */
+	6009252662016869003:  (*LocalDecl)(nil),             /* LocalDecl:value: */
+	11789909816860756800: (*LocalInit)(nil),             /* LocalInit: */
+	5919854034648203527:  (*KindsOfKind)(nil),           /* Make kinds:of: */
+	9981010364372027439:  (*Make)(nil),                  /* Make: */
+	12609627593403083413: (*Make)(nil),                  /* Make:arguments: */
+	3572160234867157749:  (*MakePlural)(nil),            /* Make:plural: */
+	17563761532337350103: (*ManyToMany)(nil),            /* ManyToMany:otherKinds: */
+	4129025779762507875:  (*ManyToOne)(nil),             /* ManyToOne:kind: */
+	4746882967578843264:  (*MapConnection)(nil),         /* MapConnection arrivingAt: */
+	165100527430166082:   (*MapConnection)(nil),         /* MapConnection connectingTo: */
+	13573264837262063235: (*MapDestination)(nil),        /* MapDestination: */
+	16504428073969307483: (*MapDestination)(nil),        /* MapDestination:door: */
+	7600243833025335851:  (*NamedProperty)(nil),         /* NamedProperty: */
+	8883280437292140850:  (*NamedProperty)(nil),         /* NamedProperty:comment: */
+	11281497065498302283: (*NamedProperty)(nil),         /* NamedProperty:type: */
+	847370382734809298:   (*NamedProperty)(nil),         /* NamedProperty:type:comment: */
+	9520200366645637656:  (*NamedNoun)(nil),             /* Noun:named: */
+	10597814521259612392: (*NounAssignment)(nil),        /* NounAssignment:nouns:lines: */
+	5293958116981625385:  (*NounKindStatement)(nil),     /* NounKindStatement:kindOfNoun: */
+	906525360603403250:   (*NounKindStatement)(nil),     /* NounKindStatement:kindOfNoun:more: */
+	7157825634536191111:  (*NounRelation)(nil),          /* NounRelation areBeing:relation:nouns: */
+	8358327072078132634:  (*NounRelation)(nil),          /* NounRelation relation:nouns: */
+	16495701564148855446: (*NounRelationStatement)(nil), /* NounRelationStatement:nounRelation: */
+	11660201854883569495: (*NounRelationStatement)(nil), /* NounRelationStatement:nounRelation:more: */
+	18242559699550270796: (*NounTraits)(nil),            /* NounTraits:trait: */
+	18168170986952999827: (*NounTraitStatement)(nil),    /* NounTraitStatement:nounTraits: */
+	12773657031679114004: (*NounTraitStatement)(nil),    /* NounTraitStatement:nounTraits:more: */
+	1229800714295622509:  (*NumberProperty)(nil),        /* Number named: */
+	8220001352821667446:  (*NumberProperty)(nil),        /* Number named:desc: */
+	11728451174312232590: (*NumberProperty)(nil),        /* Number named:of: */
+	8225044541532672111:  (*NumberProperty)(nil),        /* Number named:of:desc: */
+	10570788478167904864: (*NumListProperty)(nil),       /* NumList named: */
+	12067969820633710801: (*NumListProperty)(nil),       /* NumList named:desc: */
+	1134638206967616033:  (*NumListProperty)(nil),       /* NumList named:of: */
+	4350453418069638626:  (*NumListProperty)(nil),       /* NumList named:of:desc: */
+	17075866407822548206: (*OneToMany)(nil),             /* OneToMany:kinds: */
+	13766274136867271026: (*OneToOne)(nil),              /* OneToOne:otherKind: */
+	18143853777230560632: (*PairedAction)(nil),          /* PairedAction: */
+	6457542997147343897:  (*Paragraph)(nil),             /* Paragraph */
+	1044755875845214073:  (*Paragraph)(nil),             /* Paragraph: */
+	9595265807710753233:  (*PatternVariablesDecl)(nil),  /* Pattern:requires: */
+	14295113253706291193: (*PatternActions)(nil),        /* PatternActions:patternLocals:patternReturn:patternRules: */
+	626108847940444615:   (*PatternActions)(nil),        /* PatternActions:patternLocals:patternRules: */
+	8043268755698861333:  (*PatternActions)(nil),        /* PatternActions:patternReturn:patternRules: */
+	10735038169260724899: (*PatternActions)(nil),        /* PatternActions:patternRules: */
+	12269627840097064600: (*PatternDecl)(nil),           /* PatternDecl:name: */
+	15390970540499719701: (*PatternDecl)(nil),           /* PatternDecl:name:about: */
+	14226432888280203235: (*PatternDecl)(nil),           /* PatternDecl:name:optvars: */
+	2773647507718310398:  (*PatternDecl)(nil),           /* PatternDecl:name:optvars:about: */
+	12239987563966389881: (*PatternDecl)(nil),           /* PatternDecl:name:optvars:patternReturn: */
+	18176072221785763176: (*PatternDecl)(nil),           /* PatternDecl:name:optvars:patternReturn:about: */
+	16699606798420796914: (*PatternDecl)(nil),           /* PatternDecl:name:patternReturn: */
+	15396002863266428067: (*PatternDecl)(nil),           /* PatternDecl:name:patternReturn:about: */
+	16940656754612309445: (*PatternLocals)(nil),         /* PatternLocals: */
+	9272141818556957835:  (*PatternReturn)(nil),         /* PatternReturn: */
+	14391699440407036198: (*PatternRule)(nil),           /* PatternRule:flags:hook activity: */
+	15914753357447503965: (*PatternRule)(nil),           /* PatternRule:hook activity: */
+	15881043500959019380: (*PatternRules)(nil),          /* PatternRules */
+	12644281899387438986: (*PatternRules)(nil),          /* PatternRules: */
+	2318440529621094838:  (*PatternVariablesTail)(nil),  /* PatternVariablesTail: */
+	13417511286363622337: (*ProgramHook)(nil),           /* ProgramHook activity: */
+	9421894963555981921:  (*RecordProperty)(nil),        /* Record named: */
+	1627613176937258658:  (*RecordProperty)(nil),        /* Record named:desc: */
+	15273128656504901402: (*RecordProperty)(nil),        /* Record named:of: */
+	8491419645379028179:  (*RecordProperty)(nil),        /* Record named:of:desc: */
+	8380731787009175721:  (*RecordListProperty)(nil),    /* RecordList named: */
+	13065085319992699434: (*RecordListProperty)(nil),    /* RecordList named:desc: */
+	16326018873841140594: (*RecordListProperty)(nil),    /* RecordList named:of: */
+	8809350479853098315:  (*RecordListProperty)(nil),    /* RecordList named:of:desc: */
+	14287924768394488954: (*RelationCardinality)(nil),   /* RelationCardinality manyToMany: */
+	10453256446593418889: (*RelationCardinality)(nil),   /* RelationCardinality manyToOne: */
+	18092929693239672593: (*RelationCardinality)(nil),   /* RelationCardinality oneToMany: */
+	5587008972147064084:  (*RelationCardinality)(nil),   /* RelationCardinality oneToOne: */
+	7151092568991800158:  (*RelativeToNoun)(nil),        /* RelativeToNoun:nouns:areBeing:nouns1: */
+	15988073058027477451: (*RenderTemplate)(nil),        /* RenderTemplate: */
+	2420057392455761494:  (*Send)(nil),                  /* Send:path: */
+	10010483713146895284: (*Send)(nil),                  /* Send:path:arguments: */
+	7279273919312137397:  (*ShuffleText)(nil),           /* ShuffleText: */
+	10085329253831819088: (*StoppingText)(nil),          /* StoppingText: */
+	13392546219852761816: (*Story)(nil),                 /* Story: */
+	15090827023293362138: (*TestOutput)(nil),            /* TestOutput: */
+	11231723833188820353: (*TestRule)(nil),              /* TestRule:hook activity: */
+	15304439741055926590: (*TestScene)(nil),             /* TestScene:story: */
+	1385539489971009934:  (*TestStatement)(nil),         /* TestStatement:test: */
+	34813485952713023:    (*TextProperty)(nil),          /* Text named: */
+	8821446596613108912:  (*TextProperty)(nil),          /* Text named:desc: */
+	15716906332929430280: (*TextProperty)(nil),          /* Text named:of: */
+	10950529590260468345: (*TextProperty)(nil),          /* Text named:of:desc: */
+	12060628209423567251: (*TextListProperty)(nil),      /* TextList named: */
+	8790232589946234908:  (*TextListProperty)(nil),      /* TextList named:desc: */
+	17501273845802809220: (*TextListProperty)(nil),      /* TextList named:of: */
+	10102728286923952045: (*TextListProperty)(nil),      /* TextList named:of:desc: */
+	14061432096605043790: (*TraitPhrase)(nil),           /* TraitPhrase:trait: */
 }

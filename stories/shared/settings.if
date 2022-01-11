@@ -7,22 +7,21 @@
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "settings"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "our settings"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [],
-                "settings"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "settings"
           ]
-        },
-        []
+        }
       ]
     },
     {

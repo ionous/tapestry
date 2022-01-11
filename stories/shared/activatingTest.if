@@ -128,11 +128,21 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     " whereabouts",
                     [
-                      "the knife"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "knife"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "our self"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -141,30 +151,36 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "NounKindStatement:kindOfNoun:more:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "espresso controls"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase kindOfNoun:": [
-                        [
-                          "the espresso controls"
-                        ],
-                        {
-                          "KindOfNoun:trait:kind:nounRelation:": [
-                            "area",
-                            [],
-                            "device",
+                      "KindOfNoun:kind:": [
+                        "area",
+                        "device"
+                      ]
+                    },
+                    [
+                      {
+                        "NounRelation relation:nouns:": [
+                          "whereabouts",
+                          [
                             {
-                              "NounRelation relation:nouns:": [
-                                "whereabouts",
-                                [
-                                  "the kitchen"
-                                ]
+                              "Noun:named:": [
+                                "the",
+                                "kitchen"
                               ]
                             }
                           ]
-                        }
-                      ]
-                    },
-                    []
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]

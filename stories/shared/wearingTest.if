@@ -289,12 +289,27 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     " whereabouts",
                     [
-                      "the flower",
-                      "the knife"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "flower"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "knife"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "our self"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -306,11 +321,21 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     " whereabouts",
                     [
-                      "the purse"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "purse"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "the kitchen"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "kitchen"
+                        ]
+                      }
                     ]
                   ]
                 }

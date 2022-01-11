@@ -2,7 +2,6 @@ package jsn_test
 
 import (
 	"encoding/json"
-	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry"
@@ -107,52 +106,6 @@ func TestAnonymousOptional(t *testing.T) {
 			pretty.Println("test", i, "got:", have)
 			t.Fatal(diff)
 		}
-	}
-}
-
-func TestCompactNamedNouns(t *testing.T) {
-	nouns := []story.NamedNoun{
-		{
-			story.Determiner{Str: story.Determiner_Our},
-			story.NounName{Str: "beach house"},
-		}, {
-			story.Determiner{Str: "them"},
-			story.NounName{Str: "apples"},
-		}, {
-			Name: story.NounName{Str: "apples"},
-		}, {
-			Name: story.NounName{Str: "red apples"},
-		}, {
-			Determiner: story.Determiner{Str: story.Determiner_The},
-		},
-	}
-	want := []string{
-		`"our beach house"`,
-		`"them apples"`,
-		`"apples"`,
-		`{"NamedNoun:name:":["","red apples"]}`,
-		`{"NamedNoun:name:":["the",""]}`,
-	}
-	for i, n := range nouns {
-		if have, e := cout.Marshal(&n, story.CompactEncoder); e != nil {
-			t.Fatal(e)
-		} else if want := want[i]; want != have {
-			t.Fatal("writing out", i, "want:", want, "made:", have)
-		} else {
-			var dst story.NamedNoun
-			if e := story.Decode(&dst, []byte(want), tapestry.AllSignatures); e != nil {
-				t.Fatal(e)
-			} else if diff := pretty.Diff(dst, n); len(diff) != 0 {
-				t.Fatal(diff)
-			}
-		}
-	}
-	// test a slce of things
-	slice := story.NamedNoun_Slice(nouns)
-	if have, e := cout.Marshal(&slice, story.CompactEncoder); e != nil {
-		t.Fatal(e)
-	} else if want := "[" + strings.Join(want, ",") + "]"; have != want {
-		t.Fatal("want:", want, "have:", have)
 	}
 }
 

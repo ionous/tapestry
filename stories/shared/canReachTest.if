@@ -324,22 +324,21 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "NounKindStatement:kindOfNoun:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "an",
+                          "other worldly cloak"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase kindOfNoun:": [
-                        [
-                          "an other worldly cloak"
-                        ],
-                        {
-                          "KindOfNoun:trait:kind:": [
-                            "isa",
-                            [],
-                            "thing"
-                          ]
-                        }
+                      "KindOfNoun:kind:": [
+                        "isa",
+                        "thing"
                       ]
-                    },
-                    []
+                    }
                   ]
                 },
                 {
@@ -353,11 +352,21 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     " whereabouts",
                     [
-                      "our self"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "the cabinet"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "cabinet"
+                        ]
+                      }
                     ]
                   ]
                 }

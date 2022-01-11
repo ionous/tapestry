@@ -13,22 +13,21 @@
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "player"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the player"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [],
-                "players"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "players"
           ]
-        },
-        []
+        }
       ]
     },
     {
@@ -54,46 +53,53 @@
   ],
   [
     {
-      "Comment:": "this should be injected rather than be part of the library."
-    },
-    {
-      "NounStatement:tail:": [
-        {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "our self"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isan",
-                [],
-                "actor"
-              ]
-            }
-          ]
-        },
+      "NounKindStatement:kindOfNoun:": [
         [
           {
-            "Tail:nounPhrase nounTraits:": [
-              "it",
-              {
-                "NounTraits:trait:": [
-                  "is",
-                  [
-                    "privately named"
-                  ]
-                ]
-              }
+            "Noun:named:": [
+              "our",
+              "self"
             ]
           }
-        ]
+        ],
+        {
+          "KindOfNoun:kind:": [
+            "isan",
+            "actor"
+          ]
+        }
+      ]
+    },
+    {
+      "NounTraitStatement:nounTraits:": [
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "self"
+            ]
+          }
+        ],
+        {
+          "NounTraits:trait:": [
+            "is",
+            [
+              "privately named"
+            ]
+          ]
+        }
       ]
     },
     {
       "NounAssignment:nouns:lines:": [
         "pawn",
         [
-          "the player"
+          {
+            "Noun:named:": [
+              "the",
+              "player"
+            ]
+          }
         ],
         "self"
       ]
@@ -102,29 +108,34 @@
       "NounAssignment:nouns:lines:": [
         "printed name",
         [
-          "our self"
+          {
+            "Noun:named:": [
+              "our",
+              "self"
+            ]
+          }
         ],
         "you"
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounTraitStatement:nounTraits:": [
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "self"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase nounTraits:": [
+          "NounTraits:trait:": [
+            "is",
             [
-              "our self"
-            ],
-            {
-              "NounTraits:trait:": [
-                "is",
-                [
-                  "proper named"
-                ]
-              ]
-            }
+              "proper named"
+            ]
           ]
-        },
-        []
+        }
       ]
     }
   ],
@@ -230,11 +241,21 @@
       "RelativeToNoun:nouns:areBeing:nouns1:": [
         " whereabouts",
         [
-          "our self"
+          {
+            "Noun:named:": [
+              "our",
+              "self"
+            ]
+          }
         ],
         "is",
         [
-          "our kitchen"
+          {
+            "Noun:named:": [
+              "our",
+              "kitchen"
+            ]
+          }
         ]
       ]
     }

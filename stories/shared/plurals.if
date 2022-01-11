@@ -93,31 +93,45 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "NounKindStatement:kindOfNoun:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "flowerpot"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "dishes"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "spoon"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase kindOfNoun:": [
-                        [
-                          "the flowerpot",
-                          "the dishes",
-                          "the spoon"
-                        ],
-                        {
-                          "KindOfNoun:trait:kind:": [
-                            "are",
-                            [],
-                            "thing"
-                          ]
-                        }
+                      "KindOfNoun:kind:": [
+                        "are",
+                        "thing"
                       ]
-                    },
-                    []
+                    }
                   ]
                 },
                 {
                   "NounAssignment:nouns:lines:": [
                     "printed plural name",
                     [
-                      "the flowerpot"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "flowerpot"
+                        ]
+                      }
                     ],
                     "broken flower pots"
                   ]

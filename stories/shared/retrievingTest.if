@@ -278,12 +278,27 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     "whereabouts",
                     [
-                      "our self",
-                      "our Mildred"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "Mildred"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "the kitchen"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "kitchen"
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -295,11 +310,21 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     "whereabouts",
                     [
-                      "the coffee"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "coffee"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "the machine"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "machine"
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -311,11 +336,21 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     "whereabouts",
                     [
-                      "the empire apple"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "empire apple"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "our Mildred"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "Mildred"
+                        ]
+                      }
                     ]
                   ]
                 }

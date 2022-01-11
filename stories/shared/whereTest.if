@@ -1,81 +1,85 @@
 [
   [
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "table"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the table"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [],
-                "supporter"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "supporter"
           ]
-        },
-        []
+        }
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "lab"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the lab"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [],
-                "room"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "room"
           ]
-        },
-        []
+        }
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "basket"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the basket"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [],
-                "container"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "container"
           ]
-        },
-        []
+        }
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "scalpel"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the scalpel"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [
-                  "not worn"
-                ],
-                "prop"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "prop"
           ]
         },
-        []
+        [
+          {
+            "NounTraits:trait:": [
+              "",
+              [
+                "not worn"
+              ]
+            ]
+          }
+        ]
       ]
     }
   ],
@@ -93,25 +97,35 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "NounRelationStatement:nounRelation:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "table"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "Mildred"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase nounRelation:": [
+                      "NounRelation areBeing:relation:nouns:": [
+                        "are",
+                        "whereabouts",
                         [
-                          "the table",
-                          "our Mildred"
-                        ],
-                        {
-                          "NounRelation areBeing:relation:nouns:": [
-                            "are",
-                            "whereabouts",
-                            [
-                              "the lab"
+                          {
+                            "Noun:named:": [
+                              "the",
+                              "lab"
                             ]
-                          ]
-                        }
+                          }
+                        ]
                       ]
-                    },
-                    []
+                    }
                   ]
                 }
               ]
@@ -119,24 +133,29 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "NounRelationStatement:nounRelation:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "basket"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase nounRelation:": [
+                      "NounRelation areBeing:relation:nouns:": [
+                        "is",
+                        "whereabouts",
                         [
-                          "the basket"
-                        ],
-                        {
-                          "NounRelation areBeing:relation:nouns:": [
-                            "is",
-                            "whereabouts",
-                            [
-                              "the table"
+                          {
+                            "Noun:named:": [
+                              "the",
+                              "table"
                             ]
-                          ]
-                        }
+                          }
+                        ]
                       ]
-                    },
-                    []
+                    }
                   ]
                 }
               ]
@@ -144,25 +163,35 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "NounRelationStatement:nounRelation:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "scalpel"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "pen"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase nounRelation:": [
+                      "NounRelation areBeing:relation:nouns:": [
+                        "are",
+                        "whereabouts",
                         [
-                          "the scalpel",
-                          "the pen"
-                        ],
-                        {
-                          "NounRelation areBeing:relation:nouns:": [
-                            "are",
-                            "whereabouts",
-                            [
-                              "our Mildred"
+                          {
+                            "Noun:named:": [
+                              "our",
+                              "Mildred"
                             ]
-                          ]
-                        }
+                          }
+                        ]
                       ]
-                    },
-                    []
+                    }
                   ]
                 }
               ]
@@ -170,23 +199,23 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "NounTraitStatement:nounTraits:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "pen"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase nounTraits:": [
+                      "NounTraits:trait:": [
+                        "is",
                         [
-                          "the pen"
-                        ],
-                        {
-                          "NounTraits:trait:": [
-                            "is",
-                            [
-                              "worn"
-                            ]
-                          ]
-                        }
+                          "worn"
+                        ]
                       ]
-                    },
-                    []
+                    }
                   ]
                 }
               ]
@@ -194,24 +223,29 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "NounRelationStatement:nounRelation:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "apple"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase nounRelation:": [
+                      "NounRelation areBeing:relation:nouns:": [
+                        "is",
+                        "whereabouts",
                         [
-                          "the apple"
-                        ],
-                        {
-                          "NounRelation areBeing:relation:nouns:": [
-                            "is",
-                            "whereabouts",
-                            [
-                              "the basket"
+                          {
+                            "Noun:named:": [
+                              "the",
+                              "basket"
                             ]
-                          ]
-                        }
+                          }
+                        ]
                       ]
-                    },
-                    []
+                    }
                   ]
                 }
               ]

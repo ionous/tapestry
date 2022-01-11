@@ -4,43 +4,51 @@
       "Comment:": "FIX: right now we dont support having the same named objects in multiple domains. we should, especially for testing, something something consider domain hierarchy too.  "
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "Mildred"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "our Mildred"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [],
-                "actor"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "actor"
           ]
-        },
-        []
+        }
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "an",
+              "empire apple"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "pen"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "two",
+              "triangles"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "an empire apple",
-              "a pen",
-              "two triangles"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "area",
-                [],
-                "prop"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "area",
+            "prop"
           ]
-        },
-        []
+        }
       ]
     },
     {
@@ -56,26 +64,45 @@
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "an",
+              "X"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "W"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "an",
+              "F"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "Y"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "Z"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "an X",
-              "a W",
-              "an F",
-              "a Y",
-              "a Z"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "are",
-                [],
-                "scrabble tile"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "are",
+            "scrabble tile"
           ]
-        },
-        []
+        }
       ]
     }
   ],

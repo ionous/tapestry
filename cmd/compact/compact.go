@@ -41,7 +41,6 @@ func oppositeExt(ext string) (ret string) {
 //
 // or, load and rewrite the .if files
 // go build compact.go; for f in ../../stories/shared/*.if; do ./compact -in $f -out .if; done;
-
 //
 func main() {
 	var inFile, outFile string

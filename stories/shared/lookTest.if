@@ -6,32 +6,47 @@
   ],
   [
     {
-      "NounStatement:tail:summary:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "kitchen"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the kitchen"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [],
-                "room"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "room"
           ]
-        },
-        [],
-        {
-          "Summary:": "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake."
         }
+      ]
+    },
+    {
+      "NounAssignment:nouns:lines:": [
+        "description",
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "kitchen"
+            ]
+          }
+        ],
+        "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake."
       ]
     },
     {
       "NounAssignment:nouns:lines:": [
         "printed name",
         [
-          "the kitchen"
+          {
+            "Noun:named:": [
+              "the",
+              "kitchen"
+            ]
+          }
         ],
         "Kitchen"
       ]
@@ -45,50 +60,77 @@
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounRelationStatement:nounRelation:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "broom"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "hat"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "two",
+              "cats"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase nounRelation:": [
+          "NounRelation areBeing:relation:nouns:": [
+            "are",
+            "whereabouts",
             [
-              "the broom",
-              "a hat",
-              "two cats"
-            ],
-            {
-              "NounRelation areBeing:relation:nouns:": [
-                "are",
-                "whereabouts",
-                [
-                  "the kitchen"
+              {
+                "Noun:named:": [
+                  "the",
+                  "kitchen"
                 ]
-              ]
-            }
+              }
+            ]
           ]
-        },
-        []
+        }
       ]
     },
     {
-      "NounStatement:": {
-        "Lede:nounPhrase kindOfNoun:": [
-          [
-            "the broom",
-            "a hat"
-          ],
+      "NounKindStatement:kindOfNoun:": [
+        [
           {
-            "KindOfNoun:trait:kind:": [
-              "are",
-              [],
-              "things"
+            "Noun:named:": [
+              "the",
+              "broom"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "hat"
             ]
           }
-        ]
-      }
+        ],
+        {
+          "KindOfNoun:kind:": [
+            "are",
+            "things"
+          ]
+        }
+      ]
     },
     {
       "NounAssignment:nouns:lines:": [
         "initial appearance",
         [
-          "the hat"
+          {
+            "Noun:named:": [
+              "the",
+              "hat"
+            ]
+          }
         ],
         "A pointed black hat lies discarded on the floor under a dusty shelf."
       ]
@@ -97,7 +139,12 @@
       "NounAssignment:nouns:lines:": [
         "description",
         [
-          "the hat"
+          {
+            "Noun:named:": [
+              "the",
+              "hat"
+            ]
+          }
         ],
         "Your aunt's very own witches hat, a Halloween favorite."
       ]
@@ -105,89 +152,132 @@
   ],
   [
     {
-      "NounStatement:tail:": [
+      "NounTraitStatement:nounTraits:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "cabinet"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase nounTraits:": [
+          "NounTraits:trait:": [
+            "is",
             [
-              "the cabinet"
-            ],
-            {
-              "NounTraits:trait:": [
-                "is",
-                [
-                  "openable",
-                  "enterable",
-                  "scenery"
+              "openable",
+              "enterable",
+              "scenery"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "cabinet"
+            ]
+          }
+        ],
+        {
+          "KindOfNoun:kind:": [
+            "isa",
+            "container"
+          ]
+        }
+      ]
+    },
+    {
+      "NounRelationStatement:nounRelation:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "cabinet"
+            ]
+          }
+        ],
+        {
+          "NounRelation areBeing:relation:nouns:": [
+            "is",
+            "whereabouts",
+            [
+              {
+                "Noun:named:": [
+                  "the",
+                  "kitchen"
                 ]
-              ]
-            }
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "book of matches"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "bottle of descaling solution"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "fish hook"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "rusty knife"
+            ]
+          }
+        ],
+        {
+          "KindOfNoun:kind:": [
+            "are",
+            "things"
           ]
         },
         [
           {
-            "Tail:nounPhrase kindOfNoun:": [
-              "it",
-              {
-                "KindOfNoun:trait:kind:": [
-                  "isa",
-                  [],
-                  "container"
-                ]
-              }
-            ]
-          },
-          {
-            "Tail:nounPhrase nounRelation:": [
-              "it",
-              {
-                "NounRelation areBeing:relation:nouns:": [
-                  "is",
-                  "whereabouts",
-                  [
-                    "the kitchen"
+            "NounRelation relation:nouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "cabinet"
                   ]
-                ]
-              }
+                }
+              ]
             ]
           }
         ]
       ]
     },
     {
-      "NounStatement:tail:": [
-        {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the book of matches",
-              "a bottle of descaling solution",
-              "a fish hook",
-              "a rusty knife"
-            ],
-            {
-              "KindOfNoun:trait:kind:nounRelation:": [
-                "are",
-                [],
-                "things",
-                {
-                  "NounRelation relation:nouns:": [
-                    "whereabouts",
-                    [
-                      "the cabinet"
-                    ]
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        []
-      ]
-    },
-    {
       "NounAssignment:nouns:lines:": [
         "initial appearance",
         [
-          "the hook"
+          {
+            "Noun:named:": [
+              "the",
+              "hook"
+            ]
+          }
         ],
         "Beneath your feet is a bright and shiny hook."
       ]
@@ -196,7 +286,12 @@
       "NounAssignment:nouns:lines:": [
         "description",
         [
-          "the cabinet"
+          {
+            "Noun:named:": [
+              "the",
+              "cabinet"
+            ]
+          }
         ],
         "An ancient teak wardrobe repurposed as a kitchen cupboard."
       ]
@@ -214,241 +309,315 @@
   ],
   [
     {
-      "NounStatement:tail:": [
+      "NounTraitStatement:nounTraits:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "shelf"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase nounTraits:": [
+          "NounTraits:trait:": [
+            "is",
             [
-              "the shelf"
-            ],
-            {
-              "NounTraits:trait:": [
-                "is",
-                [
-                  "scenery"
-                ]
-              ]
-            }
+              "scenery"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "shelf"
+            ]
+          }
+        ],
+        {
+          "KindOfNoun:kind:": [
+            "isa",
+            "supporter"
           ]
         },
         [
           {
-            "Tail:nounPhrase kindOfNoun:": [
-              "it",
-              {
-                "KindOfNoun:trait:kind:nounRelation:": [
-                  "isa",
-                  [],
-                  "supporter",
-                  {
-                    "NounRelation relation:nouns:": [
-                      "whereabouts",
-                      [
-                        "the kitchen"
-                      ]
-                    ]
-                  }
-                ]
-              }
+            "NounRelation relation:nouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "kitchen"
+                  ]
+                }
+              ]
             ]
           }
         ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "can of tomatoes"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "can of potato leek soup"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "tin of deflating powder"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the can of tomatoes",
-              "a can of potato leek soup",
-              "a tin of deflating powder"
-            ],
-            {
-              "KindOfNoun:trait:kind:nounRelation:": [
-                "are",
-                [],
-                "things",
+          "KindOfNoun:kind:": [
+            "are",
+            "things"
+          ]
+        },
+        [
+          {
+            "NounRelation relation:nouns:": [
+              "whereabouts",
+              [
                 {
-                  "NounRelation relation:nouns:": [
-                    "whereabouts",
-                    [
-                      "the shelf"
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "shelf"
                   ]
                 }
               ]
-            }
-          ]
-        },
-        []
+            ]
+          }
+        ]
       ]
     }
   ],
   [
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "counter"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the counter"
-            ],
-            {
-              "KindOfNoun:trait:kind:nounRelation:": [
-                "isa",
-                [],
-                "supporter",
+          "KindOfNoun:kind:": [
+            "isa",
+            "supporter"
+          ]
+        },
+        [
+          {
+            "NounRelation relation:nouns:": [
+              "whereabouts",
+              [
                 {
-                  "NounRelation relation:nouns:": [
-                    "whereabouts",
-                    [
-                      "the kitchen"
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "kitchen"
                   ]
                 }
               ]
-            }
-          ]
-        },
-        []
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "espresso machine"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the espresso machine"
-            ],
-            {
-              "KindOfNoun:trait:kind:nounRelation:": [
-                "isa",
-                [
-                  "fixed in place",
-                  "closed"
-                ],
-                "container",
+          "KindOfNoun:kind:": [
+            "isa",
+            "container"
+          ]
+        },
+        [
+          {
+            "NounTraits:trait:": [
+              "",
+              [
+                "fixed in place",
+                "closed"
+              ]
+            ]
+          },
+          {
+            "NounRelation relation:nouns:": [
+              "whereabouts",
+              [
                 {
-                  "NounRelation relation:nouns:": [
-                    "whereabouts",
-                    [
-                      "the counter"
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "counter"
                   ]
                 }
               ]
-            }
-          ]
-        },
-        []
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "some",
+              "coffee beans"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "some coffee beans"
-            ],
-            {
-              "KindOfNoun:trait:kind:nounRelation:": [
-                "area",
-                [],
-                "thing",
+          "KindOfNoun:kind:": [
+            "area",
+            "thing"
+          ]
+        },
+        [
+          {
+            "NounRelation relation:nouns:": [
+              "whereabouts",
+              [
                 {
-                  "NounRelation relation:nouns:": [
-                    "whereabouts",
-                    [
-                      "the espresso machine"
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "espresso machine"
                   ]
                 }
               ]
-            }
-          ]
-        },
-        []
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounTraitStatement:nounTraits:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "beans"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase nounTraits:": [
+          "NounTraits:trait:": [
+            "are",
             [
-              "the beans"
-            ],
-            {
-              "NounTraits:trait:": [
-                "are",
-                [
-                  "plural named"
-                ]
-              ]
-            }
+              "plural named"
+            ]
           ]
-        },
-        []
+        }
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "a",
+              "blender"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "mortar"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "a blender",
-              "a mortar"
-            ],
-            {
-              "KindOfNoun:trait:kind:nounRelation:": [
-                "are",
-                [],
-                "containers",
+          "KindOfNoun:kind:": [
+            "are",
+            "containers"
+          ]
+        },
+        [
+          {
+            "NounRelation relation:nouns:": [
+              "whereabouts",
+              [
                 {
-                  "NounRelation relation:nouns:": [
-                    "whereabouts",
-                    [
-                      "the counter"
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "counter"
                   ]
                 }
               ]
-            }
-          ]
-        },
-        []
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "pestle"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the pestle"
-            ],
-            {
-              "KindOfNoun:trait:kind:nounRelation:": [
-                "isa",
-                [],
-                "thing",
+          "KindOfNoun:kind:": [
+            "isa",
+            "thing"
+          ]
+        },
+        [
+          {
+            "NounRelation relation:nouns:": [
+              "whereabouts",
+              [
                 {
-                  "NounRelation relation:nouns:": [
-                    "whereabouts",
-                    [
-                      "the mortar"
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "mortar"
                   ]
                 }
               ]
-            }
-          ]
-        },
-        []
+            ]
+          }
+        ]
       ]
     },
     {
       "NounAssignment:nouns:lines:": [
         "initial appearance",
         [
-          "the espresso machine"
+          {
+            "Noun:named:": [
+              "the",
+              "espresso machine"
+            ]
+          }
         ],
         "Steam leaks from the top of a recently used espresso machine."
       ]

@@ -90,11 +90,21 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     " whereabouts",
                     [
-                      "the knife"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "knife"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "our self"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      }
                     ]
                   ]
                 }

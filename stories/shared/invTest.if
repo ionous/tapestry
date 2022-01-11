@@ -1,177 +1,226 @@
 [
   [
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "flower"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the flower"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [
-                  "wearable",
-                  "worn"
-                ],
-                "thing"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "thing"
           ]
         },
-        []
+        [
+          {
+            "NounTraits:trait:": [
+              "",
+              [
+                "wearable",
+                "worn"
+              ]
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "headlamp"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the headlamp"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [
-                  "lit",
-                  "wearable",
-                  "worn"
-                ],
-                "thing"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "thing"
           ]
         },
-        []
+        [
+          {
+            "NounTraits:trait:": [
+              "",
+              [
+                "lit",
+                "wearable",
+                "worn"
+              ]
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "book of secrets"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the book of secrets"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isan",
-                [
-                  "openable",
-                  "closed",
-                  "locked"
-                ],
-                "container"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isan",
+            "container"
           ]
         },
-        []
+        [
+          {
+            "NounTraits:trait:": [
+              "",
+              [
+                "openable",
+                "closed",
+                "locked"
+              ]
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "book of wisdom"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the book of wisdom"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isan",
-                [
-                  "openable",
-                  "open"
-                ],
-                "container"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isan",
+            "container"
           ]
         },
-        []
+        [
+          {
+            "NounTraits:trait:": [
+              "",
+              [
+                "openable",
+                "open"
+              ]
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "clutch"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the clutch"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isan",
-                [
-                  "openable",
-                  "open"
-                ],
-                "container"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isan",
+            "container"
           ]
         },
-        []
+        [
+          {
+            "NounTraits:trait:": [
+              "",
+              [
+                "openable",
+                "open"
+              ]
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "purse"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the purse"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isan",
-                [
-                  "wearable",
-                  "openable",
-                  "open"
-                ],
-                "container"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isan",
+            "container"
           ]
         },
-        []
+        [
+          {
+            "NounTraits:trait:": [
+              "",
+              [
+                "wearable",
+                "openable",
+                "open"
+              ]
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:more:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "flashlight"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the flashlight"
-            ],
-            {
-              "KindOfNoun:trait:kind:": [
-                "isa",
-                [
-                  "lit"
-                ],
-                "thing"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "thing"
           ]
         },
-        []
+        [
+          {
+            "NounTraits:trait:": [
+              "",
+              [
+                "lit"
+              ]
+            ]
+          }
+        ]
       ]
     },
     {
-      "NounStatement:tail:": [
+      "NounKindStatement:kindOfNoun:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "coin"
+            ]
+          }
+        ],
         {
-          "Lede:nounPhrase kindOfNoun:": [
-            [
-              "the coin"
-            ],
-            {
-              "KindOfNoun:kind:": [
-                "isa",
-                "thing"
-              ]
-            }
+          "KindOfNoun:kind:": [
+            "isa",
+            "thing"
           ]
-        },
-        []
+        }
       ]
     }
   ],
@@ -180,15 +229,45 @@
       "RelativeToNoun:nouns:areBeing:nouns1:": [
         "whereabouts",
         [
-          "the flower",
-          "the headlamp",
-          "the secrets",
-          "the wisdom",
-          "the clutch"
+          {
+            "Noun:named:": [
+              "the",
+              "flower"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "the",
+              "headlamp"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "the",
+              "secrets"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "the",
+              "wisdom"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "the",
+              "clutch"
+            ]
+          }
         ],
         "is",
         [
-          "our Mildred"
+          {
+            "Noun:named:": [
+              "our",
+              "Mildred"
+            ]
+          }
         ]
       ]
     },
@@ -196,11 +275,21 @@
       "RelativeToNoun:nouns:areBeing:nouns1:": [
         "whereabouts",
         [
-          "the coin"
+          {
+            "Noun:named:": [
+              "the",
+              "coin"
+            ]
+          }
         ],
         "is",
         [
-          "the purse"
+          {
+            "Noun:named:": [
+              "the",
+              "purse"
+            ]
+          }
         ]
       ]
     },
@@ -208,11 +297,21 @@
       "RelativeToNoun:nouns:areBeing:nouns1:": [
         "whereabouts",
         [
-          "the purse"
+          {
+            "Noun:named:": [
+              "the",
+              "purse"
+            ]
+          }
         ],
         "is",
         [
-          "the clutch"
+          {
+            "Noun:named:": [
+              "the",
+              "clutch"
+            ]
+          }
         ]
       ]
     }

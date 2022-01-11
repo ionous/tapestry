@@ -479,15 +479,45 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     "whereabouts",
                     [
-                      "the coffee",
-                      "the coin",
-                      "the clutch",
-                      "the knife",
-                      "the flower"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "coffee"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "coin"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "clutch"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "knife"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "flower"
+                        ]
+                      }
                     ],
                     "are",
                     [
-                      "our self"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      }
                     ]
                   ]
                 },
@@ -495,11 +525,21 @@
                   "RelativeToNoun:nouns:areBeing:nouns1:": [
                     "whereabouts",
                     [
-                      "our Mildred"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "Mildred"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "the kitchen"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "kitchen"
+                        ]
+                      }
                     ]
                   ]
                 }

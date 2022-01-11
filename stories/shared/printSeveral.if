@@ -93,22 +93,21 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "NounKindStatement:kindOfNoun:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "books"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase kindOfNoun:": [
-                        [
-                          "the books"
-                        ],
-                        {
-                          "KindOfNoun:trait:kind:": [
-                            "area",
-                            [],
-                            "thing"
-                          ]
-                        }
+                      "KindOfNoun:kind:": [
+                        "area",
+                        "thing"
                       ]
-                    },
-                    []
+                    }
                   ]
                 }
               ]
