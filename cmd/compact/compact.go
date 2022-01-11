@@ -58,10 +58,10 @@ func main() {
 			// determine the output extension
 			// ( if nothing was specified, it will be the opposite of in )
 			outExt := filepath.Ext(outFile)
-			if outExt == outFile {
-				outFile = ""
-			} else if len(outExt) == 0 {
+			if len(outExt) == 0 {
 				outExt = oppositeExt(inExt)
+			} else if outExt == outFile {
+				outFile = ""
 			}
 			// create outfile name if needed
 			if len(outFile) == 0 {
