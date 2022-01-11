@@ -26,37 +26,48 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:": {
-                    "Lede:nounPhrase kindOfNoun:": [
-                      [
-                        "the named object",
-                        "the unnamed object"
-                      ],
+                  "Nouns:depict:": [
+                    [
                       {
-                        "KindOfNoun:kind:": [
-                          "are",
-                          "thing"
+                        "Noun:named:": [
+                          "the",
+                          "named object"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "unnamed object"
                         ]
                       }
-                    ]
-                  }
+                    ],
+                    {
+                      "Kind:named:": [
+                        "are",
+                        "thing"
+                      ]
+                    }
+                  ]
                 },
                 {
-                  "NounStatement:": {
-                    "Lede:nounPhrase nounTraits:": [
-                      [
-                        "the unnamed object"
-                      ],
+                  "Nouns:startAs:": [
+                    [
                       {
-                        "NounTraits:trait:": [
-                          "is",
-                          [
-                            "privately named"
-                          ]
+                        "Noun:named:": [
+                          "the",
+                          "unnamed object"
                         ]
                       }
-                    ]
-                  }
+                    ],
+                    {
+                      "NounTraits:trait:": [
+                        "is",
+                        [
+                          "privately named"
+                        ]
+                      ]
+                    }
+                  ]
                 }
               ]
             }

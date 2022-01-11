@@ -1,10 +1,5 @@
 package eph
 
-import (
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
-	"github.com/ionous/errutil"
-)
-
 // returns true if newly added
 func (d *Domain) AddOpposite(oneWord, otherWord string) (err error) {
 	return d.opposites.AddPair(oneWord, otherWord)
@@ -26,25 +21,25 @@ func (d *Domain) FindOpposite(word string) (ret string, err error) {
 	return
 }
 
-// while it'd probably be faster to do this while we assemble,
-// keep this assembly separate from the writing produces nicer code and tests.
-func (c *Catalog) WriteOpposites(w Writer) (err error) {
-	if deps, e := c.ResolveDomains(); e != nil {
-		err = e
-	} else {
-		for _, dep := range deps {
-			d := dep.Leaf().(*Domain)
-			for _, p := range d.opposites {
-				defs := d.phases[PluralPhase].defs
-				at := defs[p.one].at
-				if e := w.Write(mdl.Opposite, d.name, "rev:"+p.one, p.other, at); e != nil {
-					err = errutil.Append(err, DomainError{d.name, e})
-				}
-			}
-		}
-	}
-	return
-}
+// // while it'd probably be faster to do this while we assemble,
+// // keep this assembly separate from the writing produces nicer code and tests.
+// func (c *Catalog) WriteOpposites(w Writer) (err error) {
+// 	if deps, e := c.ResolveDomains(); e != nil {
+// 		err = e
+// 	} else {
+// 		for _, dep := range deps {
+// 			d := dep.Leaf().(*Domain)
+// 			for _, p := range d.opposites {
+// 				defs := d.phases[PluralPhase].defs
+// 				at := defs[p.one].at
+// 				if e := w.Write(mdl.Opposite, d.name, "rev:"+p.one, p.other, at); e != nil {
+// 					err = errutil.Append(err, DomainError{d.name, e})
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return
+// }
 
 func (op *EphOpposites) Phase() Phase { return PluralPhase }
 

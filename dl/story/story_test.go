@@ -12,12 +12,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/test/debug"
 
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
-	"git.sr.ht/~ionous/tapestry/jsn/din"
 )
 
 func TestImportStory(t *testing.T) {
 	var curr story.Story
-	if e := din.Decode(&curr, tapestry.Registry(), []byte(debug.Blob)); e != nil {
+	if e := story.Decode(&curr, debug.Blob, tapestry.AllSignatures); e != nil {
 		t.Fatal(e)
 	} else {
 		var els []eph.Ephemera

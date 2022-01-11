@@ -87,14 +87,24 @@
             {
               "Paragraph:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
                     " whereabouts",
                     [
-                      "the knife"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "knife"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "our self"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      }
                     ]
                   ]
                 }

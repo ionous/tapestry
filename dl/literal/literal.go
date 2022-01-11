@@ -145,9 +145,14 @@ func (op *RecordValues) GetRecordList(run rt.Runtime) (ret g.Value, _ error) {
 	return op.Cache.GetRecords(run, op.Kind, op.Els)
 }
 
-// unimplemented
+// unimplemented: returns empty string.
 func (op *FieldValues) Affinity() affine.Affinity {
 	return ""
+}
+
+// unimplemented: panics.
+func (op *FieldValues) String() (ret string) {
+	panic("field values are not intended to be comparable")
 }
 
 // unimplemented: panics.

@@ -35,16 +35,12 @@ func oppositeExt(ext string) (ret string) {
 // ex. go run compact.go -in ../../stories/blank.ifx [-out ../../stories/]
 //
 // bulk conversion:
-// go build compact.go
 //
-// generate all .if files from the .ifx files:
-// for f in ../../stories/shared/*.ifx; do ./compact -in $f -out ../../stories/temp; done;
+// from the generated .if files, generate the .ifx files:
+// go build compact.go; for f in ../../stories/*.if; do ./compact -in $f; done;
 //
-// from the generated .if files, regenerate the .ifx files:
-// for f in ../../stories/temp/*.if; do ./compact -in $f; done;
-//
-// from the generated .ifx files, regenerate the .if files to ensure stability:
-// for f in ../../stories/temp/*.ifx; do ./compact -in $f -out ../../stories/shared; done;
+// or, load and rewrite the .if files
+// go build compact.go; for f in ../../stories/shared/*.if; do ./compact -in $f -out .if; done;
 //
 func main() {
 	var inFile, outFile string
@@ -55,30 +51,41 @@ func main() {
 	if len(inFile) == 0 {
 		println("requires an input file")
 	} else {
-		inext := filepath.Ext(inFile)
-		if inext != CompactExt && inext != DetailedExt {
+		inExt := filepath.Ext(inFile)
+		if inExt != CompactExt && inExt != DetailedExt {
 			println("requires an .if or .ifx file")
 		} else {
+			// determine the output extension
+			// ( if nothing was specified, it will be the opposite of in )
+			outExt := filepath.Ext(outFile)
+			if outExt == outFile {
+				outFile = ""
+			} else if len(outExt) == 0 {
+				outExt = oppositeExt(inExt)
+			}
 			// create outfile name if needed
 			if len(outFile) == 0 {
-				outFile = inFile[:len(inFile)-len(inext)] + oppositeExt(inext)
+				outFile = inFile[:len(inFile)-len(inExt)] + outExt
 			} else if len(filepath.Ext(outFile)) == 0 {
 				// convert directory
 				base := filepath.Base(inFile)
-				outFile = filepath.Join(outFile, base[:len(base)-len(inext)]+oppositeExt(inext))
+				outFile = filepath.Join(outFile, base[:len(base)-len(inExt)]+outExt)
 			}
 			// transform the files:
-			var err error
-			if outext := filepath.Ext(outFile); outext == inext {
-				err = errutil.New("requires one file to be compact and the other detailed")
-			} else if outext == CompactExt {
-				err = compact(inFile, outFile)
+			var x xform
+			if inExt == CompactExt {
+				x.decode = compact.decode
 			} else {
-				err = expand(inFile, outFile)
+				x.decode = detailed.decode
+			}
+			if outExt == CompactExt {
+				x.encode = compact.encode
+			} else {
+				x.encode = detailed.encode
 			}
 			// report on results:
-			if err != nil {
-				println(err.Error())
+			if e := x.decodeEncode(inFile, outFile); e != nil {
+				println(e.Error())
 			} else {
 				println("done.")
 			}
@@ -86,32 +93,40 @@ func main() {
 	}
 }
 
-func compact(inDetails, outCompact string) (err error) {
+type xform struct {
+	decode func(*story.Story, []byte) error
+	encode func(*story.Story) (interface{}, error)
+}
+
+func (p *xform) decodeEncode(in, out string) (err error) {
 	var dst story.Story
-	if b, e := readOne(inDetails); e != nil {
+	if b, e := readOne(in); e != nil {
 		err = e
-	} else if e := din.Decode(&dst, tapestry.Registry(), b); e != nil {
+	} else if e := p.decode(&dst, b); e != nil {
 		err = e
-	} else if data, e := story.Encode(&dst); e != nil {
+	} else if data, e := p.encode(&dst); e != nil {
 		err = e
 	} else {
-		err = writeOut(outCompact, data)
+		err = writeOut(out, data)
 	}
 	return
 }
 
-func expand(inCompact, outDetails string) (err error) {
-	var dst story.Story
-	if b, e := readOne(inCompact); e != nil {
-		err = e
-	} else if e := story.Decode(&dst, b, tapestry.AllSignatures); e != nil {
-		err = e
-	} else if data, e := dout.Encode(&dst); e != nil {
-		err = e
-	} else {
-		err = writeOut(outDetails, data)
-	}
-	return
+var compact = xform{
+	func(dst *story.Story, b []byte) error {
+		return story.Decode(dst, b, tapestry.AllSignatures)
+	},
+	func(src *story.Story) (interface{}, error) {
+		return story.Encode(src)
+	},
+}
+var detailed = xform{
+	func(dst *story.Story, b []byte) error {
+		return din.Decode(dst, tapestry.Registry(), b)
+	},
+	func(src *story.Story) (interface{}, error) {
+		return dout.Encode(src)
+	},
 }
 
 func writeOut(outPath string, data interface{}) (err error) {

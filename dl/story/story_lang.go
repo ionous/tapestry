@@ -89,7 +89,7 @@ func AbstractAction_Repeats_Marshal(m jsn.Marshaler, vals *[]AbstractAction) err
 }
 
 func AbstractAction_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AbstractAction) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AbstractAction_Repeats_Marshal(m, pv)
 	}
 	return
@@ -149,7 +149,7 @@ func ActionContext_Repeats_Marshal(m jsn.Marshaler, vals *[]ActionContext) error
 }
 
 func ActionContext_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionContext) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ActionContext_Repeats_Marshal(m, pv)
 	}
 	return
@@ -255,7 +255,7 @@ func ActionDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]ActionDecl) error {
 }
 
 func ActionDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionDecl) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ActionDecl_Repeats_Marshal(m, pv)
 	}
 	return
@@ -385,7 +385,7 @@ func ActionName_Repeats_Marshal(m jsn.Marshaler, vals *[]ActionName) error {
 }
 
 func ActionName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionName) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ActionName_Repeats_Marshal(m, pv)
 	}
 	return
@@ -493,7 +493,7 @@ func ActionParams_Repeats_Marshal(m jsn.Marshaler, vals *[]ActionParams) error {
 }
 
 func ActionParams_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionParams) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ActionParams_Repeats_Marshal(m, pv)
 	}
 	return
@@ -576,7 +576,7 @@ func Ana_Repeats_Marshal(m jsn.Marshaler, vals *[]Ana) error {
 }
 
 func Ana_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Ana) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Ana_Repeats_Marshal(m, pv)
 	}
 	return
@@ -663,7 +663,7 @@ func AreAn_Repeats_Marshal(m jsn.Marshaler, vals *[]AreAn) error {
 }
 
 func AreAn_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreAn) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AreAn_Repeats_Marshal(m, pv)
 	}
 	return
@@ -746,7 +746,7 @@ func AreBeing_Repeats_Marshal(m jsn.Marshaler, vals *[]AreBeing) error {
 }
 
 func AreBeing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreBeing) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AreBeing_Repeats_Marshal(m, pv)
 	}
 	return
@@ -829,7 +829,7 @@ func AreEither_Repeats_Marshal(m jsn.Marshaler, vals *[]AreEither) error {
 }
 
 func AreEither_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreEither) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AreEither_Repeats_Marshal(m, pv)
 	}
 	return
@@ -892,7 +892,7 @@ func Argument_Repeats_Marshal(m jsn.Marshaler, vals *[]Argument) error {
 }
 
 func Argument_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Argument) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Argument_Repeats_Marshal(m, pv)
 	}
 	return
@@ -999,7 +999,7 @@ func Arguments_Repeats_Marshal(m jsn.Marshaler, vals *[]Arguments) error {
 }
 
 func Arguments_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Arguments) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Arguments_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1115,7 +1115,7 @@ func Aspect_Repeats_Marshal(m jsn.Marshaler, vals *[]Aspect) error {
 }
 
 func Aspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Aspect) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Aspect_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1180,7 +1180,7 @@ func AspectProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]AspectProperty) err
 }
 
 func AspectProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AspectProperty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AspectProperty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1289,7 +1289,7 @@ func AspectTraits_Repeats_Marshal(m jsn.Marshaler, vals *[]AspectTraits) error {
 }
 
 func AspectTraits_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AspectTraits) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AspectTraits_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1400,7 +1400,7 @@ func BoolProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]BoolProperty) error {
 }
 
 func BoolProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]BoolProperty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = BoolProperty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1520,7 +1520,7 @@ func Certainties_Repeats_Marshal(m jsn.Marshaler, vals *[]Certainties) error {
 }
 
 func Certainties_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Certainties) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Certainties_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1666,7 +1666,7 @@ func Certainty_Repeats_Marshal(m jsn.Marshaler, vals *[]Certainty) error {
 }
 
 func Certainty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Certainty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Certainty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1729,7 +1729,7 @@ func Comment_Repeats_Marshal(m jsn.Marshaler, vals *[]Comment) error {
 }
 
 func Comment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Comment) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Comment_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1829,7 +1829,7 @@ func CommonAction_Repeats_Marshal(m jsn.Marshaler, vals *[]CommonAction) error {
 }
 
 func CommonAction_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CommonAction) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = CommonAction_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1940,7 +1940,7 @@ func CountOf_Repeats_Marshal(m jsn.Marshaler, vals *[]CountOf) error {
 }
 
 func CountOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CountOf) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = CountOf_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2049,7 +2049,7 @@ func CycleText_Repeats_Marshal(m jsn.Marshaler, vals *[]CycleText) error {
 }
 
 func CycleText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CycleText) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = CycleText_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2159,7 +2159,7 @@ func Determine_Repeats_Marshal(m jsn.Marshaler, vals *[]Determine) error {
 }
 
 func Determine_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Determine) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Determine_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2290,7 +2290,7 @@ func Determiner_Repeats_Marshal(m jsn.Marshaler, vals *[]Determiner) error {
 }
 
 func Determiner_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Determiner) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Determiner_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2355,7 +2355,7 @@ func EventBlock_Repeats_Marshal(m jsn.Marshaler, vals *[]EventBlock) error {
 }
 
 func EventBlock_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventBlock) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = EventBlock_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2466,7 +2466,7 @@ func EventHandler_Repeats_Marshal(m jsn.Marshaler, vals *[]EventHandler) error {
 }
 
 func EventHandler_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventHandler) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = EventHandler_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2602,7 +2602,7 @@ func EventName_Repeats_Marshal(m jsn.Marshaler, vals *[]EventName) error {
 }
 
 func EventName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventName) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = EventName_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2686,7 +2686,7 @@ func EventPhase_Repeats_Marshal(m jsn.Marshaler, vals *[]EventPhase) error {
 }
 
 func EventPhase_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventPhase) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = EventPhase_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2789,7 +2789,7 @@ func EventTarget_Repeats_Marshal(m jsn.Marshaler, vals *[]EventTarget) error {
 }
 
 func EventTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventTarget) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = EventTarget_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2848,7 +2848,7 @@ func GrammarDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]GrammarDecl) error {
 }
 
 func GrammarDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GrammarDecl) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = GrammarDecl_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2894,24 +2894,24 @@ func GrammarDecl_Marshal(m jsn.Marshaler, val *GrammarDecl) (err error) {
 
 // KindOfNoun
 type KindOfNoun struct {
-	AreAn        AreAn         `if:"label=_"`
-	Trait        []Trait       `if:"label=trait,optional"`
-	Kind         SingularKind  `if:"label=kind"`
-	NounRelation *NounRelation `if:"label=noun_relation,optional"`
+	AreAn AreAn        `if:"label=_"`
+	Kind  SingularKind `if:"label=named"`
 }
+
+// User implemented slots:
+var _ NounContinuation = (*KindOfNoun)(nil)
 
 func (*KindOfNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: KindOfNoun_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Kind",
 	}
 }
 
 const KindOfNoun_Type = "kind_of_noun"
 const KindOfNoun_Field_AreAn = "$ARE_AN"
-const KindOfNoun_Field_Trait = "$TRAIT"
 const KindOfNoun_Field_Kind = "$KIND"
-const KindOfNoun_Field_NounRelation = "$NOUN_RELATION"
 
 func (op *KindOfNoun) Marshal(m jsn.Marshaler) error {
 	return KindOfNoun_Marshal(m, op)
@@ -2951,7 +2951,7 @@ func KindOfNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]KindOfNoun) error {
 }
 
 func KindOfNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindOfNoun) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = KindOfNoun_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2960,7 +2960,7 @@ func KindOfNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindOfNoun) (err
 type KindOfNoun_Flow struct{ ptr *KindOfNoun }
 
 func (n KindOfNoun_Flow) GetType() string      { return KindOfNoun_Type }
-func (n KindOfNoun_Flow) GetLede() string      { return KindOfNoun_Type }
+func (n KindOfNoun_Flow) GetLede() string      { return "Kind" }
 func (n KindOfNoun_Flow) GetFlow() interface{} { return n.ptr }
 func (n KindOfNoun_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*KindOfNoun); ok {
@@ -2990,26 +2990,12 @@ func KindOfNoun_Marshal(m jsn.Marshaler, val *KindOfNoun) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindOfNoun_Field_AreAn))
 		}
-		e1 := m.MarshalKey("trait", KindOfNoun_Field_Trait)
+		e1 := m.MarshalKey("named", KindOfNoun_Field_Kind)
 		if e1 == nil {
-			e1 = Trait_Optional_Repeats_Marshal(m, &val.Trait)
+			e1 = SingularKind_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", KindOfNoun_Field_Trait))
-		}
-		e2 := m.MarshalKey("kind", KindOfNoun_Field_Kind)
-		if e2 == nil {
-			e2 = SingularKind_Marshal(m, &val.Kind)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", KindOfNoun_Field_Kind))
-		}
-		e3 := m.MarshalKey("noun_relation", KindOfNoun_Field_NounRelation)
-		if e3 == nil {
-			e3 = NounRelation_Optional_Marshal(m, &val.NounRelation)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", KindOfNoun_Field_NounRelation))
+			m.Error(errutil.New(e1, "in flow at", KindOfNoun_Field_Kind))
 		}
 		m.EndBlock()
 	}
@@ -3074,7 +3060,7 @@ func KindOfRelation_Repeats_Marshal(m jsn.Marshaler, vals *[]KindOfRelation) err
 }
 
 func KindOfRelation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindOfRelation) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = KindOfRelation_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3184,7 +3170,7 @@ func KindsHaveProperties_Repeats_Marshal(m jsn.Marshaler, vals *[]KindsHavePrope
 }
 
 func KindsHaveProperties_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsHaveProperties) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = KindsHaveProperties_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3291,7 +3277,7 @@ func KindsOfAspect_Repeats_Marshal(m jsn.Marshaler, vals *[]KindsOfAspect) error
 }
 
 func KindsOfAspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsOfAspect) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = KindsOfAspect_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3394,7 +3380,7 @@ func KindsOfKind_Repeats_Marshal(m jsn.Marshaler, vals *[]KindsOfKind) error {
 }
 
 func KindsOfKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsOfKind) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = KindsOfKind_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3439,112 +3425,6 @@ func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", KindsOfKind_Field_SingularKind))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Lede Describes one or more nouns.
-type Lede struct {
-	Nouns      []NamedNoun `if:"label=_"`
-	NounPhrase NounPhrase  `if:"label=noun_phrase"`
-}
-
-func (*Lede) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Lede_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Lede_Type = "lede"
-const Lede_Field_Nouns = "$NOUNS"
-const Lede_Field_NounPhrase = "$NOUN_PHRASE"
-
-func (op *Lede) Marshal(m jsn.Marshaler) error {
-	return Lede_Marshal(m, op)
-}
-
-type Lede_Slice []Lede
-
-func (op *Lede_Slice) GetType() string { return Lede_Type }
-
-func (op *Lede_Slice) Marshal(m jsn.Marshaler) error {
-	return Lede_Repeats_Marshal(m, (*[]Lede)(op))
-}
-
-func (op *Lede_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Lede_Slice) SetSize(cnt int) {
-	var els []Lede
-	if cnt >= 0 {
-		els = make(Lede_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Lede_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Lede_Marshal(m, &(*op)[i])
-}
-
-func Lede_Repeats_Marshal(m jsn.Marshaler, vals *[]Lede) error {
-	return jsn.RepeatBlock(m, (*Lede_Slice)(vals))
-}
-
-func Lede_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lede) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = Lede_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Lede_Flow struct{ ptr *Lede }
-
-func (n Lede_Flow) GetType() string      { return Lede_Type }
-func (n Lede_Flow) GetLede() string      { return Lede_Type }
-func (n Lede_Flow) GetFlow() interface{} { return n.ptr }
-func (n Lede_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Lede); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Lede_Optional_Marshal(m jsn.Marshaler, pv **Lede) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Lede_Marshal(m, *pv)
-	} else if !enc {
-		var v Lede
-		if err = Lede_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Lede_Marshal(m jsn.Marshaler, val *Lede) (err error) {
-	if err = m.MarshalBlock(Lede_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Lede_Field_Nouns)
-		if e0 == nil {
-			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Lede_Field_Nouns))
-		}
-		e1 := m.MarshalKey("noun_phrase", Lede_Field_NounPhrase)
-		if e1 == nil {
-			e1 = NounPhrase_Marshal(m, &val.NounPhrase)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Lede_Field_NounPhrase))
 		}
 		m.EndBlock()
 	}
@@ -3620,7 +3500,7 @@ func Lines_Repeats_Marshal(m jsn.Marshaler, vals *[]Lines) error {
 }
 
 func Lines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lines) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Lines_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3681,7 +3561,7 @@ func LocalDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]LocalDecl) error {
 }
 
 func LocalDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LocalDecl) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = LocalDecl_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3785,7 +3665,7 @@ func LocalInit_Repeats_Marshal(m jsn.Marshaler, vals *[]LocalInit) error {
 }
 
 func LocalInit_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LocalInit) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = LocalInit_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3887,7 +3767,7 @@ func Make_Repeats_Marshal(m jsn.Marshaler, vals *[]Make) error {
 }
 
 func Make_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Make) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Make_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3997,7 +3877,7 @@ func MakeOpposite_Repeats_Marshal(m jsn.Marshaler, vals *[]MakeOpposite) error {
 }
 
 func MakeOpposite_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MakeOpposite) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = MakeOpposite_Repeats_Marshal(m, pv)
 	}
 	return
@@ -4107,7 +3987,7 @@ func MakePlural_Repeats_Marshal(m jsn.Marshaler, vals *[]MakePlural) error {
 }
 
 func MakePlural_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MakePlural) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = MakePlural_Repeats_Marshal(m, pv)
 	}
 	return
@@ -4213,7 +4093,7 @@ func ManyToMany_Repeats_Marshal(m jsn.Marshaler, vals *[]ManyToMany) error {
 }
 
 func ManyToMany_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ManyToMany) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ManyToMany_Repeats_Marshal(m, pv)
 	}
 	return
@@ -4319,7 +4199,7 @@ func ManyToOne_Repeats_Marshal(m jsn.Marshaler, vals *[]ManyToOne) error {
 }
 
 func ManyToOne_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ManyToOne) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ManyToOne_Repeats_Marshal(m, pv)
 	}
 	return
@@ -4447,7 +4327,7 @@ func MapConnection_Repeats_Marshal(m jsn.Marshaler, vals *[]MapConnection) error
 }
 
 func MapConnection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapConnection) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = MapConnection_Repeats_Marshal(m, pv)
 	}
 	return
@@ -4516,7 +4396,7 @@ func MapDeparting_Repeats_Marshal(m jsn.Marshaler, vals *[]MapDeparting) error {
 }
 
 func MapDeparting_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDeparting) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = MapDeparting_Repeats_Marshal(m, pv)
 	}
 	return
@@ -4650,7 +4530,7 @@ func MapDirection_Repeats_Marshal(m jsn.Marshaler, vals *[]MapDirection) error {
 }
 
 func MapDirection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDirection) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = MapDirection_Repeats_Marshal(m, pv)
 	}
 	return
@@ -4721,7 +4601,7 @@ func MapHeading_Repeats_Marshal(m jsn.Marshaler, vals *[]MapHeading) error {
 }
 
 func MapHeading_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapHeading) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = MapHeading_Repeats_Marshal(m, pv)
 	}
 	return
@@ -4796,13 +4676,14 @@ func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 // NamedNoun
 type NamedNoun struct {
 	Determiner Determiner `if:"label=_"`
-	Name       NounName   `if:"label=name"`
+	Name       NounName   `if:"label=named"`
 }
 
 func (*NamedNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NamedNoun_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Noun",
 	}
 }
 
@@ -4848,7 +4729,7 @@ func NamedNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]NamedNoun) error {
 }
 
 func NamedNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedNoun) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NamedNoun_Repeats_Marshal(m, pv)
 	}
 	return
@@ -4857,7 +4738,7 @@ func NamedNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedNoun) (err e
 type NamedNoun_Flow struct{ ptr *NamedNoun }
 
 func (n NamedNoun_Flow) GetType() string      { return NamedNoun_Type }
-func (n NamedNoun_Flow) GetLede() string      { return NamedNoun_Type }
+func (n NamedNoun_Flow) GetLede() string      { return "Noun" }
 func (n NamedNoun_Flow) GetFlow() interface{} { return n.ptr }
 func (n NamedNoun_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*NamedNoun); ok {
@@ -4887,7 +4768,7 @@ func NamedNoun_Marshal(m jsn.Marshaler, val *NamedNoun) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NamedNoun_Field_Determiner))
 		}
-		e1 := m.MarshalKey("name", NamedNoun_Field_Name)
+		e1 := m.MarshalKey("named", NamedNoun_Field_Name)
 		if e1 == nil {
 			e1 = NounName_Marshal(m, &val.Name)
 		}
@@ -4956,7 +4837,7 @@ func NamedProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]NamedProperty) error
 }
 
 func NamedProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedProperty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NamedProperty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -5074,7 +4955,7 @@ func NounAssignment_Repeats_Marshal(m jsn.Marshaler, vals *[]NounAssignment) err
 }
 
 func NounAssignment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounAssignment) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NounAssignment_Repeats_Marshal(m, pv)
 	}
 	return
@@ -5126,6 +5007,194 @@ func NounAssignment_Marshal(m jsn.Marshaler, val *NounAssignment) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", NounAssignment_Field_Lines))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+const NounContinuation_Type = "noun_continuation"
+
+var NounContinuation_Optional_Marshal = NounContinuation_Marshal
+
+type NounContinuation_Slot struct{ Value *NounContinuation }
+
+func (at NounContinuation_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+func (at NounContinuation_Slot) GetType() string              { return NounContinuation_Type }
+func (at NounContinuation_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at NounContinuation_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(NounContinuation)
+	return
+}
+
+func NounContinuation_Marshal(m jsn.Marshaler, ptr *NounContinuation) (err error) {
+	slot := NounContinuation_Slot{ptr}
+	return slot.Marshal(m)
+}
+
+type NounContinuation_Slice []NounContinuation
+
+func (op *NounContinuation_Slice) GetType() string { return NounContinuation_Type }
+
+func (op *NounContinuation_Slice) Marshal(m jsn.Marshaler) error {
+	return NounContinuation_Repeats_Marshal(m, (*[]NounContinuation)(op))
+}
+
+func (op *NounContinuation_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NounContinuation_Slice) SetSize(cnt int) {
+	var els []NounContinuation
+	if cnt >= 0 {
+		els = make(NounContinuation_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NounContinuation_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NounContinuation_Marshal(m, &(*op)[i])
+}
+
+func NounContinuation_Repeats_Marshal(m jsn.Marshaler, vals *[]NounContinuation) error {
+	return jsn.RepeatBlock(m, (*NounContinuation_Slice)(vals))
+}
+
+func NounContinuation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounContinuation) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = NounContinuation_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+// NounKindStatement
+type NounKindStatement struct {
+	Nouns      []NamedNoun        `if:"label=_"`
+	KindOfNoun KindOfNoun         `if:"label=depict"`
+	More       []NounContinuation `if:"label=and,optional"`
+}
+
+// User implemented slots:
+var _ StoryStatement = (*NounKindStatement)(nil)
+
+func (*NounKindStatement) Compose() composer.Spec {
+	return composer.Spec{
+		Name: NounKindStatement_Type,
+		Uses: composer.Type_Flow,
+		Lede: "Nouns",
+	}
+}
+
+const NounKindStatement_Type = "noun_kind_statement"
+const NounKindStatement_Field_Nouns = "$NOUNS"
+const NounKindStatement_Field_KindOfNoun = "$KIND_OF_NOUN"
+const NounKindStatement_Field_More = "$MORE"
+
+func (op *NounKindStatement) Marshal(m jsn.Marshaler) error {
+	return NounKindStatement_Marshal(m, op)
+}
+
+type NounKindStatement_Slice []NounKindStatement
+
+func (op *NounKindStatement_Slice) GetType() string { return NounKindStatement_Type }
+
+func (op *NounKindStatement_Slice) Marshal(m jsn.Marshaler) error {
+	return NounKindStatement_Repeats_Marshal(m, (*[]NounKindStatement)(op))
+}
+
+func (op *NounKindStatement_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NounKindStatement_Slice) SetSize(cnt int) {
+	var els []NounKindStatement
+	if cnt >= 0 {
+		els = make(NounKindStatement_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NounKindStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NounKindStatement_Marshal(m, &(*op)[i])
+}
+
+func NounKindStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounKindStatement) error {
+	return jsn.RepeatBlock(m, (*NounKindStatement_Slice)(vals))
+}
+
+func NounKindStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounKindStatement) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = NounKindStatement_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type NounKindStatement_Flow struct{ ptr *NounKindStatement }
+
+func (n NounKindStatement_Flow) GetType() string      { return NounKindStatement_Type }
+func (n NounKindStatement_Flow) GetLede() string      { return "Nouns" }
+func (n NounKindStatement_Flow) GetFlow() interface{} { return n.ptr }
+func (n NounKindStatement_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NounKindStatement); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func NounKindStatement_Optional_Marshal(m jsn.Marshaler, pv **NounKindStatement) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = NounKindStatement_Marshal(m, *pv)
+	} else if !enc {
+		var v NounKindStatement
+		if err = NounKindStatement_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func NounKindStatement_Marshal(m jsn.Marshaler, val *NounKindStatement) (err error) {
+	if err = m.MarshalBlock(NounKindStatement_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NounKindStatement_Field_Nouns)
+		if e0 == nil {
+			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", NounKindStatement_Field_Nouns))
+		}
+		e1 := m.MarshalKey("depict", NounKindStatement_Field_KindOfNoun)
+		if e1 == nil {
+			e1 = KindOfNoun_Marshal(m, &val.KindOfNoun)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", NounKindStatement_Field_KindOfNoun))
+		}
+		e2 := m.MarshalKey("and", NounKindStatement_Field_More)
+		if e2 == nil {
+			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", NounKindStatement_Field_More))
 		}
 		m.EndBlock()
 	}
@@ -5203,128 +5272,21 @@ func NounName_Repeats_Marshal(m jsn.Marshaler, vals *[]NounName) error {
 }
 
 func NounName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounName) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NounName_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// NounPhrase swaps between various options
-type NounPhrase struct {
-	At     reader.Position `if:"internal"`
-	Choice string
-	Value  interface{}
-}
-
-var NounPhrase_Optional_Marshal = NounPhrase_Marshal
-
-const NounPhrase_KindOfNoun_Opt = "$KIND_OF_NOUN"
-const NounPhrase_NounTraits_Opt = "$NOUN_TRAITS"
-const NounPhrase_NounRelation_Opt = "$NOUN_RELATION"
-
-func (*NounPhrase) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NounPhrase_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			NounPhrase_KindOfNoun_Opt, NounPhrase_NounTraits_Opt, NounPhrase_NounRelation_Opt,
-		},
-		Swaps: []interface{}{
-			(*KindOfNoun)(nil),
-			(*NounTraits)(nil),
-			(*NounRelation)(nil),
-		},
-	}
-}
-
-const NounPhrase_Type = "noun_phrase"
-
-func (op *NounPhrase) GetType() string { return NounPhrase_Type }
-
-func (op *NounPhrase) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *NounPhrase) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case NounPhrase_KindOfNoun_Opt:
-		op.Choice, op.Value = c, new(KindOfNoun)
-		okay = true
-	case NounPhrase_NounTraits_Opt:
-		op.Choice, op.Value = c, new(NounTraits)
-		okay = true
-	case NounPhrase_NounRelation_Opt:
-		op.Choice, op.Value = c, new(NounRelation)
-		okay = true
-	}
-	return
-}
-
-func (op *NounPhrase) Marshal(m jsn.Marshaler) error {
-	return NounPhrase_Marshal(m, op)
-}
-func NounPhrase_Marshal(m jsn.Marshaler, val *NounPhrase) (err error) {
-	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-type NounPhrase_Slice []NounPhrase
-
-func (op *NounPhrase_Slice) GetType() string { return NounPhrase_Type }
-
-func (op *NounPhrase_Slice) Marshal(m jsn.Marshaler) error {
-	return NounPhrase_Repeats_Marshal(m, (*[]NounPhrase)(op))
-}
-
-func (op *NounPhrase_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounPhrase_Slice) SetSize(cnt int) {
-	var els []NounPhrase
-	if cnt >= 0 {
-		els = make(NounPhrase_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounPhrase_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounPhrase_Marshal(m, &(*op)[i])
-}
-
-func NounPhrase_Repeats_Marshal(m jsn.Marshaler, vals *[]NounPhrase) error {
-	return jsn.RepeatBlock(m, (*NounPhrase_Slice)(vals))
-}
-
-func NounPhrase_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounPhrase) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = NounPhrase_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
 // NounRelation
 type NounRelation struct {
-	AreBeing AreBeing         `if:"label=are_being,optional"`
-	Relation rel.RelationName `if:"label=relation"`
-	Nouns    []NamedNoun      `if:"label=nouns"`
+	AreBeing   AreBeing         `if:"label=are_being,optional"`
+	Relation   rel.RelationName `if:"label=relation"`
+	OtherNouns []NamedNoun      `if:"label=other_nouns"`
 }
+
+// User implemented slots:
+var _ NounContinuation = (*NounRelation)(nil)
 
 func (*NounRelation) Compose() composer.Spec {
 	return composer.Spec{
@@ -5336,7 +5298,7 @@ func (*NounRelation) Compose() composer.Spec {
 const NounRelation_Type = "noun_relation"
 const NounRelation_Field_AreBeing = "$ARE_BEING"
 const NounRelation_Field_Relation = "$RELATION"
-const NounRelation_Field_Nouns = "$NOUNS"
+const NounRelation_Field_OtherNouns = "$OTHER_NOUNS"
 
 func (op *NounRelation) Marshal(m jsn.Marshaler) error {
 	return NounRelation_Marshal(m, op)
@@ -5376,7 +5338,7 @@ func NounRelation_Repeats_Marshal(m jsn.Marshaler, vals *[]NounRelation) error {
 }
 
 func NounRelation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounRelation) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NounRelation_Repeats_Marshal(m, pv)
 	}
 	return
@@ -5422,53 +5384,54 @@ func NounRelation_Marshal(m jsn.Marshaler, val *NounRelation) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NounRelation_Field_Relation))
 		}
-		e2 := m.MarshalKey("nouns", NounRelation_Field_Nouns)
+		e2 := m.MarshalKey("other_nouns", NounRelation_Field_OtherNouns)
 		if e2 == nil {
-			e2 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
+			e2 = NamedNoun_Repeats_Marshal(m, &val.OtherNouns)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NounRelation_Field_Nouns))
+			m.Error(errutil.New(e2, "in flow at", NounRelation_Field_OtherNouns))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// NounStatement Describes people, places, or things.
-type NounStatement struct {
-	Lede    Lede     `if:"label=_"`
-	Tail    []Tail   `if:"label=tail,optional"`
-	Summary *Summary `if:"label=summary,optional"`
+// NounRelationStatement
+type NounRelationStatement struct {
+	Nouns        []NamedNoun        `if:"label=_"`
+	NounRelation NounRelation       `if:"label=relate_to"`
+	More         []NounContinuation `if:"label=and,optional"`
 }
 
 // User implemented slots:
-var _ StoryStatement = (*NounStatement)(nil)
+var _ StoryStatement = (*NounRelationStatement)(nil)
 
-func (*NounStatement) Compose() composer.Spec {
+func (*NounRelationStatement) Compose() composer.Spec {
 	return composer.Spec{
-		Name: NounStatement_Type,
+		Name: NounRelationStatement_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Nouns",
 	}
 }
 
-const NounStatement_Type = "noun_statement"
-const NounStatement_Field_Lede = "$LEDE"
-const NounStatement_Field_Tail = "$TAIL"
-const NounStatement_Field_Summary = "$SUMMARY"
+const NounRelationStatement_Type = "noun_relation_statement"
+const NounRelationStatement_Field_Nouns = "$NOUNS"
+const NounRelationStatement_Field_NounRelation = "$NOUN_RELATION"
+const NounRelationStatement_Field_More = "$MORE"
 
-func (op *NounStatement) Marshal(m jsn.Marshaler) error {
-	return NounStatement_Marshal(m, op)
+func (op *NounRelationStatement) Marshal(m jsn.Marshaler) error {
+	return NounRelationStatement_Marshal(m, op)
 }
 
-type NounStatement_Slice []NounStatement
+type NounRelationStatement_Slice []NounRelationStatement
 
-func (op *NounStatement_Slice) GetType() string { return NounStatement_Type }
+func (op *NounRelationStatement_Slice) GetType() string { return NounRelationStatement_Type }
 
-func (op *NounStatement_Slice) Marshal(m jsn.Marshaler) error {
-	return NounStatement_Repeats_Marshal(m, (*[]NounStatement)(op))
+func (op *NounRelationStatement_Slice) Marshal(m jsn.Marshaler) error {
+	return NounRelationStatement_Repeats_Marshal(m, (*[]NounRelationStatement)(op))
 }
 
-func (op *NounStatement_Slice) GetSize() (ret int) {
+func (op *NounRelationStatement_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -5477,75 +5440,194 @@ func (op *NounStatement_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *NounStatement_Slice) SetSize(cnt int) {
-	var els []NounStatement
+func (op *NounRelationStatement_Slice) SetSize(cnt int) {
+	var els []NounRelationStatement
 	if cnt >= 0 {
-		els = make(NounStatement_Slice, cnt)
+		els = make(NounRelationStatement_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *NounStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounStatement_Marshal(m, &(*op)[i])
+func (op *NounRelationStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NounRelationStatement_Marshal(m, &(*op)[i])
 }
 
-func NounStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounStatement) error {
-	return jsn.RepeatBlock(m, (*NounStatement_Slice)(vals))
+func NounRelationStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounRelationStatement) error {
+	return jsn.RepeatBlock(m, (*NounRelationStatement_Slice)(vals))
 }
 
-func NounStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounStatement) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = NounStatement_Repeats_Marshal(m, pv)
+func NounRelationStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounRelationStatement) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = NounRelationStatement_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type NounStatement_Flow struct{ ptr *NounStatement }
+type NounRelationStatement_Flow struct{ ptr *NounRelationStatement }
 
-func (n NounStatement_Flow) GetType() string      { return NounStatement_Type }
-func (n NounStatement_Flow) GetLede() string      { return NounStatement_Type }
-func (n NounStatement_Flow) GetFlow() interface{} { return n.ptr }
-func (n NounStatement_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NounStatement); ok {
+func (n NounRelationStatement_Flow) GetType() string      { return NounRelationStatement_Type }
+func (n NounRelationStatement_Flow) GetLede() string      { return "Nouns" }
+func (n NounRelationStatement_Flow) GetFlow() interface{} { return n.ptr }
+func (n NounRelationStatement_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NounRelationStatement); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func NounStatement_Optional_Marshal(m jsn.Marshaler, pv **NounStatement) (err error) {
+func NounRelationStatement_Optional_Marshal(m jsn.Marshaler, pv **NounRelationStatement) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NounStatement_Marshal(m, *pv)
+		err = NounRelationStatement_Marshal(m, *pv)
 	} else if !enc {
-		var v NounStatement
-		if err = NounStatement_Marshal(m, &v); err == nil {
+		var v NounRelationStatement
+		if err = NounRelationStatement_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func NounStatement_Marshal(m jsn.Marshaler, val *NounStatement) (err error) {
-	if err = m.MarshalBlock(NounStatement_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NounStatement_Field_Lede)
+func NounRelationStatement_Marshal(m jsn.Marshaler, val *NounRelationStatement) (err error) {
+	if err = m.MarshalBlock(NounRelationStatement_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NounRelationStatement_Field_Nouns)
 		if e0 == nil {
-			e0 = Lede_Marshal(m, &val.Lede)
+			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NounStatement_Field_Lede))
+			m.Error(errutil.New(e0, "in flow at", NounRelationStatement_Field_Nouns))
 		}
-		e1 := m.MarshalKey("tail", NounStatement_Field_Tail)
+		e1 := m.MarshalKey("relate_to", NounRelationStatement_Field_NounRelation)
 		if e1 == nil {
-			e1 = Tail_Optional_Repeats_Marshal(m, &val.Tail)
+			e1 = NounRelation_Marshal(m, &val.NounRelation)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NounStatement_Field_Tail))
+			m.Error(errutil.New(e1, "in flow at", NounRelationStatement_Field_NounRelation))
 		}
-		e2 := m.MarshalKey("summary", NounStatement_Field_Summary)
+		e2 := m.MarshalKey("and", NounRelationStatement_Field_More)
 		if e2 == nil {
-			e2 = Summary_Optional_Marshal(m, &val.Summary)
+			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NounStatement_Field_Summary))
+			m.Error(errutil.New(e2, "in flow at", NounRelationStatement_Field_More))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// NounTraitStatement
+type NounTraitStatement struct {
+	Nouns      []NamedNoun        `if:"label=_"`
+	NounTraits NounTraits         `if:"label=start_as"`
+	More       []NounContinuation `if:"label=and,optional"`
+}
+
+// User implemented slots:
+var _ StoryStatement = (*NounTraitStatement)(nil)
+
+func (*NounTraitStatement) Compose() composer.Spec {
+	return composer.Spec{
+		Name: NounTraitStatement_Type,
+		Uses: composer.Type_Flow,
+		Lede: "Nouns",
+	}
+}
+
+const NounTraitStatement_Type = "noun_trait_statement"
+const NounTraitStatement_Field_Nouns = "$NOUNS"
+const NounTraitStatement_Field_NounTraits = "$NOUN_TRAITS"
+const NounTraitStatement_Field_More = "$MORE"
+
+func (op *NounTraitStatement) Marshal(m jsn.Marshaler) error {
+	return NounTraitStatement_Marshal(m, op)
+}
+
+type NounTraitStatement_Slice []NounTraitStatement
+
+func (op *NounTraitStatement_Slice) GetType() string { return NounTraitStatement_Type }
+
+func (op *NounTraitStatement_Slice) Marshal(m jsn.Marshaler) error {
+	return NounTraitStatement_Repeats_Marshal(m, (*[]NounTraitStatement)(op))
+}
+
+func (op *NounTraitStatement_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NounTraitStatement_Slice) SetSize(cnt int) {
+	var els []NounTraitStatement
+	if cnt >= 0 {
+		els = make(NounTraitStatement_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NounTraitStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NounTraitStatement_Marshal(m, &(*op)[i])
+}
+
+func NounTraitStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounTraitStatement) error {
+	return jsn.RepeatBlock(m, (*NounTraitStatement_Slice)(vals))
+}
+
+func NounTraitStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounTraitStatement) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = NounTraitStatement_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type NounTraitStatement_Flow struct{ ptr *NounTraitStatement }
+
+func (n NounTraitStatement_Flow) GetType() string      { return NounTraitStatement_Type }
+func (n NounTraitStatement_Flow) GetLede() string      { return "Nouns" }
+func (n NounTraitStatement_Flow) GetFlow() interface{} { return n.ptr }
+func (n NounTraitStatement_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NounTraitStatement); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func NounTraitStatement_Optional_Marshal(m jsn.Marshaler, pv **NounTraitStatement) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = NounTraitStatement_Marshal(m, *pv)
+	} else if !enc {
+		var v NounTraitStatement
+		if err = NounTraitStatement_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func NounTraitStatement_Marshal(m jsn.Marshaler, val *NounTraitStatement) (err error) {
+	if err = m.MarshalBlock(NounTraitStatement_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NounTraitStatement_Field_Nouns)
+		if e0 == nil {
+			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", NounTraitStatement_Field_Nouns))
+		}
+		e1 := m.MarshalKey("start_as", NounTraitStatement_Field_NounTraits)
+		if e1 == nil {
+			e1 = NounTraits_Marshal(m, &val.NounTraits)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", NounTraitStatement_Field_NounTraits))
+		}
+		e2 := m.MarshalKey("and", NounTraitStatement_Field_More)
+		if e2 == nil {
+			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", NounTraitStatement_Field_More))
 		}
 		m.EndBlock()
 	}
@@ -5557,6 +5639,9 @@ type NounTraits struct {
 	AreBeing AreBeing `if:"label=_"`
 	Trait    []Trait  `if:"label=trait"`
 }
+
+// User implemented slots:
+var _ NounContinuation = (*NounTraits)(nil)
 
 func (*NounTraits) Compose() composer.Spec {
 	return composer.Spec{
@@ -5607,7 +5692,7 @@ func NounTraits_Repeats_Marshal(m jsn.Marshaler, vals *[]NounTraits) error {
 }
 
 func NounTraits_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounTraits) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NounTraits_Repeats_Marshal(m, pv)
 	}
 	return
@@ -5718,7 +5803,7 @@ func NumListProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]NumListProperty) e
 }
 
 func NumListProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumListProperty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NumListProperty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -5836,7 +5921,7 @@ func NumberProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]NumberProperty) err
 }
 
 func NumberProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumberProperty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = NumberProperty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -5949,7 +6034,7 @@ func OneToMany_Repeats_Marshal(m jsn.Marshaler, vals *[]OneToMany) error {
 }
 
 func OneToMany_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]OneToMany) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = OneToMany_Repeats_Marshal(m, pv)
 	}
 	return
@@ -6055,7 +6140,7 @@ func OneToOne_Repeats_Marshal(m jsn.Marshaler, vals *[]OneToOne) error {
 }
 
 func OneToOne_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]OneToOne) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = OneToOne_Repeats_Marshal(m, pv)
 	}
 	return
@@ -6160,7 +6245,7 @@ func PairedAction_Repeats_Marshal(m jsn.Marshaler, vals *[]PairedAction) error {
 }
 
 func PairedAction_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PairedAction) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PairedAction_Repeats_Marshal(m, pv)
 	}
 	return
@@ -6258,7 +6343,7 @@ func Paragraph_Repeats_Marshal(m jsn.Marshaler, vals *[]Paragraph) error {
 }
 
 func Paragraph_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Paragraph) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Paragraph_Repeats_Marshal(m, pv)
 	}
 	return
@@ -6364,7 +6449,7 @@ func PatternActions_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternActions) err
 }
 
 func PatternActions_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternActions) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternActions_Repeats_Marshal(m, pv)
 	}
 	return
@@ -6493,7 +6578,7 @@ func PatternDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternDecl) error {
 }
 
 func PatternDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternDecl) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternDecl_Repeats_Marshal(m, pv)
 	}
 	return
@@ -6643,7 +6728,7 @@ func PatternFlags_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternFlags) error {
 }
 
 func PatternFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternFlags) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternFlags_Repeats_Marshal(m, pv)
 	}
 	return
@@ -6702,7 +6787,7 @@ func PatternLocals_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternLocals) error
 }
 
 func PatternLocals_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternLocals) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternLocals_Repeats_Marshal(m, pv)
 	}
 	return
@@ -6799,7 +6884,7 @@ func PatternReturn_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternReturn) error
 }
 
 func PatternReturn_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternReturn) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternReturn_Repeats_Marshal(m, pv)
 	}
 	return
@@ -6900,7 +6985,7 @@ func PatternRule_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternRule) error {
 }
 
 func PatternRule_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternRule) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternRule_Repeats_Marshal(m, pv)
 	}
 	return
@@ -7011,7 +7096,7 @@ func PatternRules_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternRules) error {
 }
 
 func PatternRules_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternRules) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternRules_Repeats_Marshal(m, pv)
 	}
 	return
@@ -7136,7 +7221,7 @@ func PatternType_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternType) error {
 }
 
 func PatternType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternType) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternType_Repeats_Marshal(m, pv)
 	}
 	return
@@ -7201,7 +7286,7 @@ func PatternVariablesDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternVariab
 }
 
 func PatternVariablesDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternVariablesDecl) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternVariablesDecl_Repeats_Marshal(m, pv)
 	}
 	return
@@ -7305,7 +7390,7 @@ func PatternVariablesTail_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternVariab
 }
 
 func PatternVariablesTail_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternVariablesTail) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternVariablesTail_Repeats_Marshal(m, pv)
 	}
 	return
@@ -7420,7 +7505,7 @@ func PluralKinds_Repeats_Marshal(m jsn.Marshaler, vals *[]PluralKinds) error {
 }
 
 func PluralKinds_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PluralKinds) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PluralKinds_Repeats_Marshal(m, pv)
 	}
 	return
@@ -7520,92 +7605,8 @@ func ProgramHook_Repeats_Marshal(m jsn.Marshaler, vals *[]ProgramHook) error {
 }
 
 func ProgramHook_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ProgramHook) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ProgramHook_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// Pronoun requires a predefined or user-specified string.
-type Pronoun struct {
-	Str string
-}
-
-func (op *Pronoun) String() string {
-	return op.Str
-}
-
-const Pronoun_It = "$IT"
-const Pronoun_They = "$THEY"
-
-func (*Pronoun) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        Pronoun_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-		Choices: []string{
-			Pronoun_It, Pronoun_They,
-		},
-		Strings: []string{
-			"it", "they",
-		},
-	}
-}
-
-const Pronoun_Type = "pronoun"
-
-func (op *Pronoun) Marshal(m jsn.Marshaler) error {
-	return Pronoun_Marshal(m, op)
-}
-
-func Pronoun_Optional_Marshal(m jsn.Marshaler, val *Pronoun) (err error) {
-	var zero Pronoun
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = Pronoun_Marshal(m, val)
-	}
-	return
-}
-
-func Pronoun_Marshal(m jsn.Marshaler, val *Pronoun) (err error) {
-	return m.MarshalValue(Pronoun_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type Pronoun_Slice []Pronoun
-
-func (op *Pronoun_Slice) GetType() string { return Pronoun_Type }
-
-func (op *Pronoun_Slice) Marshal(m jsn.Marshaler) error {
-	return Pronoun_Repeats_Marshal(m, (*[]Pronoun)(op))
-}
-
-func (op *Pronoun_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Pronoun_Slice) SetSize(cnt int) {
-	var els []Pronoun
-	if cnt >= 0 {
-		els = make(Pronoun_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Pronoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Pronoun_Marshal(m, &(*op)[i])
-}
-
-func Pronoun_Repeats_Marshal(m jsn.Marshaler, vals *[]Pronoun) error {
-	return jsn.RepeatBlock(m, (*Pronoun_Slice)(vals))
-}
-
-func Pronoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Pronoun) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = Pronoun_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -7681,7 +7682,7 @@ func Property_Repeats_Marshal(m jsn.Marshaler, vals *[]Property) error {
 }
 
 func Property_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Property) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Property_Repeats_Marshal(m, pv)
 	}
 	return
@@ -7750,7 +7751,7 @@ func PropertySlot_Repeats_Marshal(m jsn.Marshaler, vals *[]PropertySlot) error {
 }
 
 func PropertySlot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PropertySlot) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PropertySlot_Repeats_Marshal(m, pv)
 	}
 	return
@@ -7816,7 +7817,7 @@ func RecordListProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordListPrope
 }
 
 func RecordListProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordListProperty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RecordListProperty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -7934,7 +7935,7 @@ func RecordProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordProperty) err
 }
 
 func RecordProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordProperty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RecordProperty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -8101,7 +8102,7 @@ func RelationCardinality_Repeats_Marshal(m jsn.Marshaler, vals *[]RelationCardin
 }
 
 func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelationCardinality) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RelationCardinality_Repeats_Marshal(m, pv)
 	}
 	return
@@ -8109,10 +8110,10 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 
 // RelativeToNoun
 type RelativeToNoun struct {
-	Relation rel.RelationName `if:"label=_"`
-	Nouns    []NamedNoun      `if:"label=nouns"`
-	AreBeing AreBeing         `if:"label=are_being"`
-	Nouns1   []NamedNoun      `if:"label=nouns1"`
+	Relation   rel.RelationName `if:"label=_"`
+	Nouns      []NamedNoun      `if:"label=nouns"`
+	AreBeing   AreBeing         `if:"label=are_being"`
+	OtherNouns []NamedNoun      `if:"label=other_nouns"`
 }
 
 // User implemented slots:
@@ -8129,7 +8130,7 @@ const RelativeToNoun_Type = "relative_to_noun"
 const RelativeToNoun_Field_Relation = "$RELATION"
 const RelativeToNoun_Field_Nouns = "$NOUNS"
 const RelativeToNoun_Field_AreBeing = "$ARE_BEING"
-const RelativeToNoun_Field_Nouns1 = "$NOUNS1"
+const RelativeToNoun_Field_OtherNouns = "$OTHER_NOUNS"
 
 func (op *RelativeToNoun) Marshal(m jsn.Marshaler) error {
 	return RelativeToNoun_Marshal(m, op)
@@ -8169,7 +8170,7 @@ func RelativeToNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativeToNoun) err
 }
 
 func RelativeToNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelativeToNoun) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RelativeToNoun_Repeats_Marshal(m, pv)
 	}
 	return
@@ -8222,12 +8223,12 @@ func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", RelativeToNoun_Field_AreBeing))
 		}
-		e3 := m.MarshalKey("nouns1", RelativeToNoun_Field_Nouns1)
+		e3 := m.MarshalKey("other_nouns", RelativeToNoun_Field_OtherNouns)
 		if e3 == nil {
-			e3 = NamedNoun_Repeats_Marshal(m, &val.Nouns1)
+			e3 = NamedNoun_Repeats_Marshal(m, &val.OtherNouns)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RelativeToNoun_Field_Nouns1))
+			m.Error(errutil.New(e3, "in flow at", RelativeToNoun_Field_OtherNouns))
 		}
 		m.EndBlock()
 	}
@@ -8290,7 +8291,7 @@ func RenderTemplate_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderTemplate) err
 }
 
 func RenderTemplate_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderTemplate) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RenderTemplate_Repeats_Marshal(m, pv)
 	}
 	return
@@ -8395,7 +8396,7 @@ func Send_Repeats_Marshal(m jsn.Marshaler, vals *[]Send) error {
 }
 
 func Send_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Send) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Send_Repeats_Marshal(m, pv)
 	}
 	return
@@ -8510,7 +8511,7 @@ func ShuffleText_Repeats_Marshal(m jsn.Marshaler, vals *[]ShuffleText) error {
 }
 
 func ShuffleText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ShuffleText) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ShuffleText_Repeats_Marshal(m, pv)
 	}
 	return
@@ -8626,7 +8627,7 @@ func SingularKind_Repeats_Marshal(m jsn.Marshaler, vals *[]SingularKind) error {
 }
 
 func SingularKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SingularKind) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = SingularKind_Repeats_Marshal(m, pv)
 	}
 	return
@@ -8689,7 +8690,7 @@ func StoppingText_Repeats_Marshal(m jsn.Marshaler, vals *[]StoppingText) error {
 }
 
 func StoppingText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoppingText) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = StoppingText_Repeats_Marshal(m, pv)
 	}
 	return
@@ -8787,7 +8788,7 @@ func Story_Repeats_Marshal(m jsn.Marshaler, vals *[]Story) error {
 }
 
 func Story_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Story) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Story_Repeats_Marshal(m, pv)
 	}
 	return
@@ -8894,213 +8895,8 @@ func StoryStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryStatement) err
 }
 
 func StoryStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryStatement) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = StoryStatement_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// Summary
-type Summary struct {
-	At    reader.Position `if:"internal"`
-	Lines Lines           `if:"label=_"`
-}
-
-func (*Summary) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Summary_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Summary_Type = "summary"
-const Summary_Field_Lines = "$LINES"
-
-func (op *Summary) Marshal(m jsn.Marshaler) error {
-	return Summary_Marshal(m, op)
-}
-
-type Summary_Slice []Summary
-
-func (op *Summary_Slice) GetType() string { return Summary_Type }
-
-func (op *Summary_Slice) Marshal(m jsn.Marshaler) error {
-	return Summary_Repeats_Marshal(m, (*[]Summary)(op))
-}
-
-func (op *Summary_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Summary_Slice) SetSize(cnt int) {
-	var els []Summary
-	if cnt >= 0 {
-		els = make(Summary_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Summary_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Summary_Marshal(m, &(*op)[i])
-}
-
-func Summary_Repeats_Marshal(m jsn.Marshaler, vals *[]Summary) error {
-	return jsn.RepeatBlock(m, (*Summary_Slice)(vals))
-}
-
-func Summary_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Summary) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = Summary_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Summary_Flow struct{ ptr *Summary }
-
-func (n Summary_Flow) GetType() string      { return Summary_Type }
-func (n Summary_Flow) GetLede() string      { return Summary_Type }
-func (n Summary_Flow) GetFlow() interface{} { return n.ptr }
-func (n Summary_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Summary); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Summary_Optional_Marshal(m jsn.Marshaler, pv **Summary) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Summary_Marshal(m, *pv)
-	} else if !enc {
-		var v Summary
-		if err = Summary_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Summary_Marshal(m jsn.Marshaler, val *Summary) (err error) {
-	m.SetCursor(val.At.Offset)
-	if err = m.MarshalBlock(Summary_Flow{val}); err == nil {
-		e1 := m.MarshalKey("", Summary_Field_Lines)
-		if e1 == nil {
-			e1 = Lines_Marshal(m, &val.Lines)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Summary_Field_Lines))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Tail Adds details about the preceding noun or nouns.
-type Tail struct {
-	Pronoun    Pronoun    `if:"label=_"`
-	NounPhrase NounPhrase `if:"label=noun_phrase"`
-}
-
-func (*Tail) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Tail_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Tail_Type = "tail"
-const Tail_Field_Pronoun = "$PRONOUN"
-const Tail_Field_NounPhrase = "$NOUN_PHRASE"
-
-func (op *Tail) Marshal(m jsn.Marshaler) error {
-	return Tail_Marshal(m, op)
-}
-
-type Tail_Slice []Tail
-
-func (op *Tail_Slice) GetType() string { return Tail_Type }
-
-func (op *Tail_Slice) Marshal(m jsn.Marshaler) error {
-	return Tail_Repeats_Marshal(m, (*[]Tail)(op))
-}
-
-func (op *Tail_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Tail_Slice) SetSize(cnt int) {
-	var els []Tail
-	if cnt >= 0 {
-		els = make(Tail_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Tail_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Tail_Marshal(m, &(*op)[i])
-}
-
-func Tail_Repeats_Marshal(m jsn.Marshaler, vals *[]Tail) error {
-	return jsn.RepeatBlock(m, (*Tail_Slice)(vals))
-}
-
-func Tail_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Tail) (err error) {
-	if *pv != nil || !m.IsEncoding() {
-		err = Tail_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Tail_Flow struct{ ptr *Tail }
-
-func (n Tail_Flow) GetType() string      { return Tail_Type }
-func (n Tail_Flow) GetLede() string      { return Tail_Type }
-func (n Tail_Flow) GetFlow() interface{} { return n.ptr }
-func (n Tail_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Tail); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Tail_Optional_Marshal(m jsn.Marshaler, pv **Tail) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Tail_Marshal(m, *pv)
-	} else if !enc {
-		var v Tail
-		if err = Tail_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Tail_Marshal(m jsn.Marshaler, val *Tail) (err error) {
-	if err = m.MarshalBlock(Tail_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Tail_Field_Pronoun)
-		if e0 == nil {
-			e0 = Pronoun_Marshal(m, &val.Pronoun)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Tail_Field_Pronoun))
-		}
-		e1 := m.MarshalKey("noun_phrase", Tail_Field_NounPhrase)
-		if e1 == nil {
-			e1 = NounPhrase_Marshal(m, &val.NounPhrase)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Tail_Field_NounPhrase))
-		}
-		m.EndBlock()
 	}
 	return
 }
@@ -9184,7 +8980,7 @@ func TestName_Repeats_Marshal(m jsn.Marshaler, vals *[]TestName) error {
 }
 
 func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestName_Repeats_Marshal(m, pv)
 	}
 	return
@@ -9246,7 +9042,7 @@ func TestOutput_Repeats_Marshal(m jsn.Marshaler, vals *[]TestOutput) error {
 }
 
 func TestOutput_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestOutput) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestOutput_Repeats_Marshal(m, pv)
 	}
 	return
@@ -9348,7 +9144,7 @@ func TestRule_Repeats_Marshal(m jsn.Marshaler, vals *[]TestRule) error {
 }
 
 func TestRule_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestRule) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestRule_Repeats_Marshal(m, pv)
 	}
 	return
@@ -9457,7 +9253,7 @@ func TestScene_Repeats_Marshal(m jsn.Marshaler, vals *[]TestScene) error {
 }
 
 func TestScene_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestScene) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestScene_Repeats_Marshal(m, pv)
 	}
 	return
@@ -9567,7 +9363,7 @@ func TestStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]TestStatement) error
 }
 
 func TestStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestStatement) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestStatement_Repeats_Marshal(m, pv)
 	}
 	return
@@ -9682,7 +9478,7 @@ func Testing_Repeats_Marshal(m jsn.Marshaler, vals *[]Testing) error {
 }
 
 func Testing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Testing) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Testing_Repeats_Marshal(m, pv)
 	}
 	return
@@ -9748,7 +9544,7 @@ func TextListProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]TextListProperty)
 }
 
 func TextListProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextListProperty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TextListProperty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -9866,7 +9662,7 @@ func TextProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]TextProperty) error {
 }
 
 func TextProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextProperty) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TextProperty_Repeats_Marshal(m, pv)
 	}
 	return
@@ -9995,7 +9791,7 @@ func Trait_Repeats_Marshal(m jsn.Marshaler, vals *[]Trait) error {
 }
 
 func Trait_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Trait) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Trait_Repeats_Marshal(m, pv)
 	}
 	return
@@ -10056,7 +9852,7 @@ func TraitPhrase_Repeats_Marshal(m jsn.Marshaler, vals *[]TraitPhrase) error {
 }
 
 func TraitPhrase_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TraitPhrase) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TraitPhrase_Repeats_Marshal(m, pv)
 	}
 	return
@@ -10108,6 +9904,7 @@ func TraitPhrase_Marshal(m jsn.Marshaler, val *TraitPhrase) (err error) {
 }
 
 var Slots = []interface{}{
+	(*NounContinuation)(nil),
 	(*PropertySlot)(nil),
 	(*StoryStatement)(nil),
 	(*Testing)(nil),
@@ -10148,7 +9945,6 @@ var Slats = []composer.Composer{
 	(*KindsHaveProperties)(nil),
 	(*KindsOfAspect)(nil),
 	(*KindsOfKind)(nil),
-	(*Lede)(nil),
 	(*Lines)(nil),
 	(*LocalDecl)(nil),
 	(*LocalInit)(nil),
@@ -10164,10 +9960,11 @@ var Slats = []composer.Composer{
 	(*NamedNoun)(nil),
 	(*NamedProperty)(nil),
 	(*NounAssignment)(nil),
+	(*NounKindStatement)(nil),
 	(*NounName)(nil),
-	(*NounPhrase)(nil),
 	(*NounRelation)(nil),
-	(*NounStatement)(nil),
+	(*NounRelationStatement)(nil),
+	(*NounTraitStatement)(nil),
 	(*NounTraits)(nil),
 	(*NumListProperty)(nil),
 	(*NumberProperty)(nil),
@@ -10187,7 +9984,6 @@ var Slats = []composer.Composer{
 	(*PatternVariablesTail)(nil),
 	(*PluralKinds)(nil),
 	(*ProgramHook)(nil),
-	(*Pronoun)(nil),
 	(*Property)(nil),
 	(*RecordListProperty)(nil),
 	(*RecordProperty)(nil),
@@ -10199,8 +9995,6 @@ var Slats = []composer.Composer{
 	(*SingularKind)(nil),
 	(*StoppingText)(nil),
 	(*Story)(nil),
-	(*Summary)(nil),
-	(*Tail)(nil),
 	(*TestName)(nil),
 	(*TestOutput)(nil),
 	(*TestRule)(nil),
@@ -10213,147 +10007,136 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	7872120455849093108:  (*ActionContext)(nil),        /* ActionContext: */
-	2237475528376444648:  (*ActionDecl)(nil),           /* ActionDecl:action:actionParams common: */
-	18212021549969329253: (*ActionDecl)(nil),           /* ActionDecl:action:actionParams dual: */
-	10825614489046735389: (*ActionDecl)(nil),           /* ActionDecl:action:actionParams none: */
-	14902711848163440508: (*ActionParams)(nil),         /* ActionParams common: */
-	11902859627634050329: (*ActionParams)(nil),         /* ActionParams dual: */
-	5868886119925925865:  (*ActionParams)(nil),         /* ActionParams none: */
-	6291103735245333139:  (*Argument)(nil),             /* Arg:from: */
-	2275326896920679506:  (*Arguments)(nil),            /* Args: */
-	4946346507935163764:  (*AspectProperty)(nil),       /* Aspect of: */
-	2627975827633552637:  (*AspectProperty)(nil),       /* Aspect of:desc: */
-	17855209504331534011: (*AspectTraits)(nil),         /* AspectTraits:traitPhrase: */
-	10466815184164589710: (*BoolProperty)(nil),         /* Bool named: */
-	15292113293401271919: (*BoolProperty)(nil),         /* Bool named:desc: */
-	7864268224293611023:  (*BoolProperty)(nil),         /* Bool named:of: */
-	12288912254770942240: (*BoolProperty)(nil),         /* Bool named:of:desc: */
-	170374163879469822:   (*Certainties)(nil),          /* Certainties:areBeing:certainty:trait: */
-	15857890977690710700: (*Comment)(nil),              /* Comment: */
-	13295757043766156580: (*CommonAction)(nil),         /* CommonAction: */
-	11796688776587655409: (*CommonAction)(nil),         /* CommonAction:actionContext: */
-	10211567489959209123: (*CountOf)(nil),              /* CountOf:num: */
-	475310308664194536:   (*CycleText)(nil),            /* CycleText: */
-	16533349913402003729: (*MapDeparting)(nil),         /* Departing from:via:and:otherRoom: */
-	14117144937213193556: (*Determine)(nil),            /* Determine: */
-	18058198214790918510: (*Determine)(nil),            /* Determine:arguments: */
-	11093854973825287408: (*EventBlock)(nil),           /* EventBlock kinds:handlers: */
-	11855563103941044442: (*EventBlock)(nil),           /* EventBlock namedNoun:handlers: */
-	4061872818055525560:  (*EventHandler)(nil),         /* EventHandler:event:locals:patternRules: */
-	8929470137779261632:  (*EventHandler)(nil),         /* EventHandler:event:patternRules: */
-	18010503397334720257: (*EventTarget)(nil),          /* EventTarget kinds: */
-	17197340468883043891: (*EventTarget)(nil),          /* EventTarget namedNoun: */
-	351838510430560892:   (*GrammarDecl)(nil),          /* GrammarDecl: */
-	17915827500086617237: (*MapHeading)(nil),           /* Heading:from:and:otherRoom: */
-	18071749382896120219: (*MapHeading)(nil),           /* Heading:from:via:and:otherRoom: */
-	8395536647843606072:  (*KindOfNoun)(nil),           /* KindOfNoun:kind: */
-	7004049933953251122:  (*KindOfNoun)(nil),           /* KindOfNoun:kind:nounRelation: */
-	2174943222093748082:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind: */
-	9031009285767794428:  (*KindOfNoun)(nil),           /* KindOfNoun:trait:kind:nounRelation: */
-	5852635308349599025:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToMany: */
-	10771046767095423028: (*KindOfRelation)(nil),       /* KindOfRelation:cardinality manyToOne: */
-	1081167552428580836:  (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToMany: */
-	650960042632654891:   (*KindOfRelation)(nil),       /* KindOfRelation:cardinality oneToOne: */
-	11241512832861714070: (*KindsHaveProperties)(nil),  /* Kinds:have: */
-	16689641787061327381: (*KindsOfAspect)(nil),        /* KindsOfAspect: */
-	2335979695347311111:  (*Lede)(nil),                 /* Lede:nounPhrase kindOfNoun: */
-	10694393583567459526: (*Lede)(nil),                 /* Lede:nounPhrase nounRelation: */
-	14199050960332677505: (*Lede)(nil),                 /* Lede:nounPhrase nounTraits: */
-	10446315654994385322: (*LocalDecl)(nil),            /* LocalDecl: */
-	6009252662016869003:  (*LocalDecl)(nil),            /* LocalDecl:value: */
-	11789909816860756800: (*LocalInit)(nil),            /* LocalInit: */
-	5919854034648203527:  (*KindsOfKind)(nil),          /* Make kinds:of: */
-	9981010364372027439:  (*Make)(nil),                 /* Make: */
-	12609627593403083413: (*Make)(nil),                 /* Make:arguments: */
-	17216176745763384228: (*MakeOpposite)(nil),         /* Make:opposite: */
-	3572160234867157749:  (*MakePlural)(nil),           /* Make:plural: */
-	17563761532337350103: (*ManyToMany)(nil),           /* ManyToMany:otherKinds: */
-	4129025779762507875:  (*ManyToOne)(nil),            /* ManyToOne:kind: */
-	16572015744003324651: (*NamedNoun)(nil),            /* NamedNoun:name: */
-	7600243833025335851:  (*NamedProperty)(nil),        /* NamedProperty: */
-	8883280437292140850:  (*NamedProperty)(nil),        /* NamedProperty:comment: */
-	11281497065498302283: (*NamedProperty)(nil),        /* NamedProperty:type: */
-	847370382734809298:   (*NamedProperty)(nil),        /* NamedProperty:type:comment: */
-	10597814521259612392: (*NounAssignment)(nil),       /* NounAssignment:nouns:lines: */
-	11271220813702679015: (*NounPhrase)(nil),           /* NounPhrase kindOfNoun: */
-	15909676719983789414: (*NounPhrase)(nil),           /* NounPhrase nounRelation: */
-	6923309721749493537:  (*NounPhrase)(nil),           /* NounPhrase nounTraits: */
-	7157825634536191111:  (*NounRelation)(nil),         /* NounRelation areBeing:relation:nouns: */
-	8358327072078132634:  (*NounRelation)(nil),         /* NounRelation relation:nouns: */
-	16756778993528596640: (*NounStatement)(nil),        /* NounStatement: */
-	5039251519992036198:  (*NounStatement)(nil),        /* NounStatement:summary: */
-	13104026651265504280: (*NounStatement)(nil),        /* NounStatement:tail: */
-	4978269156154497630:  (*NounStatement)(nil),        /* NounStatement:tail:summary: */
-	18242559699550270796: (*NounTraits)(nil),           /* NounTraits:trait: */
-	1229800714295622509:  (*NumberProperty)(nil),       /* Number named: */
-	8220001352821667446:  (*NumberProperty)(nil),       /* Number named:desc: */
-	11728451174312232590: (*NumberProperty)(nil),       /* Number named:of: */
-	8225044541532672111:  (*NumberProperty)(nil),       /* Number named:of:desc: */
-	10570788478167904864: (*NumListProperty)(nil),      /* NumList named: */
-	12067969820633710801: (*NumListProperty)(nil),      /* NumList named:desc: */
-	1134638206967616033:  (*NumListProperty)(nil),      /* NumList named:of: */
-	4350453418069638626:  (*NumListProperty)(nil),      /* NumList named:of:desc: */
-	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
-	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
-	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
-	6457542997147343897:  (*Paragraph)(nil),            /* Paragraph */
-	1044755875845214073:  (*Paragraph)(nil),            /* Paragraph: */
-	9595265807710753233:  (*PatternVariablesDecl)(nil), /* Pattern:requires: */
-	14295113253706291193: (*PatternActions)(nil),       /* PatternActions:patternLocals:patternReturn:patternRules: */
-	626108847940444615:   (*PatternActions)(nil),       /* PatternActions:patternLocals:patternRules: */
-	8043268755698861333:  (*PatternActions)(nil),       /* PatternActions:patternReturn:patternRules: */
-	10735038169260724899: (*PatternActions)(nil),       /* PatternActions:patternRules: */
-	12269627840097064600: (*PatternDecl)(nil),          /* PatternDecl:name: */
-	15390970540499719701: (*PatternDecl)(nil),          /* PatternDecl:name:about: */
-	14226432888280203235: (*PatternDecl)(nil),          /* PatternDecl:name:optvars: */
-	2773647507718310398:  (*PatternDecl)(nil),          /* PatternDecl:name:optvars:about: */
-	12239987563966389881: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn: */
-	18176072221785763176: (*PatternDecl)(nil),          /* PatternDecl:name:optvars:patternReturn:about: */
-	16699606798420796914: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn: */
-	15396002863266428067: (*PatternDecl)(nil),          /* PatternDecl:name:patternReturn:about: */
-	16940656754612309445: (*PatternLocals)(nil),        /* PatternLocals: */
-	9272141818556957835:  (*PatternReturn)(nil),        /* PatternReturn: */
-	14391699440407036198: (*PatternRule)(nil),          /* PatternRule:flags:hook activity: */
-	15914753357447503965: (*PatternRule)(nil),          /* PatternRule:hook activity: */
-	15881043500959019380: (*PatternRules)(nil),         /* PatternRules */
-	12644281899387438986: (*PatternRules)(nil),         /* PatternRules: */
-	2318440529621094838:  (*PatternVariablesTail)(nil), /* PatternVariablesTail: */
-	13417511286363622337: (*ProgramHook)(nil),          /* ProgramHook activity: */
-	9421894963555981921:  (*RecordProperty)(nil),       /* Record named: */
-	1627613176937258658:  (*RecordProperty)(nil),       /* Record named:desc: */
-	15273128656504901402: (*RecordProperty)(nil),       /* Record named:of: */
-	8491419645379028179:  (*RecordProperty)(nil),       /* Record named:of:desc: */
-	8380731787009175721:  (*RecordListProperty)(nil),   /* RecordList named: */
-	13065085319992699434: (*RecordListProperty)(nil),   /* RecordList named:desc: */
-	16326018873841140594: (*RecordListProperty)(nil),   /* RecordList named:of: */
-	8809350479853098315:  (*RecordListProperty)(nil),   /* RecordList named:of:desc: */
-	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
-	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
-	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
-	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
-	7151092568991800158:  (*RelativeToNoun)(nil),       /* RelativeToNoun:nouns:areBeing:nouns1: */
-	15988073058027477451: (*RenderTemplate)(nil),       /* RenderTemplate: */
-	2420057392455761494:  (*Send)(nil),                 /* Send:path: */
-	10010483713146895284: (*Send)(nil),                 /* Send:path:arguments: */
-	7279273919312137397:  (*ShuffleText)(nil),          /* ShuffleText: */
-	10085329253831819088: (*StoppingText)(nil),         /* StoppingText: */
-	13392546219852761816: (*Story)(nil),                /* Story: */
-	7688593191439831819:  (*Summary)(nil),              /* Summary: */
-	5318973557611273585:  (*Tail)(nil),                 /* Tail:nounPhrase kindOfNoun: */
-	7950604148908680916:  (*Tail)(nil),                 /* Tail:nounPhrase nounRelation: */
-	5583135325088318667:  (*Tail)(nil),                 /* Tail:nounPhrase nounTraits: */
-	15090827023293362138: (*TestOutput)(nil),           /* TestOutput: */
-	11231723833188820353: (*TestRule)(nil),             /* TestRule:hook activity: */
-	15304439741055926590: (*TestScene)(nil),            /* TestScene:story: */
-	1385539489971009934:  (*TestStatement)(nil),        /* TestStatement:test: */
-	34813485952713023:    (*TextProperty)(nil),         /* Text named: */
-	8821446596613108912:  (*TextProperty)(nil),         /* Text named:desc: */
-	15716906332929430280: (*TextProperty)(nil),         /* Text named:of: */
-	10950529590260468345: (*TextProperty)(nil),         /* Text named:of:desc: */
-	12060628209423567251: (*TextListProperty)(nil),     /* TextList named: */
-	8790232589946234908:  (*TextListProperty)(nil),     /* TextList named:desc: */
-	17501273845802809220: (*TextListProperty)(nil),     /* TextList named:of: */
-	10102728286923952045: (*TextListProperty)(nil),     /* TextList named:of:desc: */
-	14061432096605043790: (*TraitPhrase)(nil),          /* TraitPhrase:trait: */
+	7872120455849093108:  (*ActionContext)(nil),         /* ActionContext: */
+	2237475528376444648:  (*ActionDecl)(nil),            /* ActionDecl:action:actionParams common: */
+	18212021549969329253: (*ActionDecl)(nil),            /* ActionDecl:action:actionParams dual: */
+	10825614489046735389: (*ActionDecl)(nil),            /* ActionDecl:action:actionParams none: */
+	14902711848163440508: (*ActionParams)(nil),          /* ActionParams common: */
+	11902859627634050329: (*ActionParams)(nil),          /* ActionParams dual: */
+	5868886119925925865:  (*ActionParams)(nil),          /* ActionParams none: */
+	6291103735245333139:  (*Argument)(nil),              /* Arg:from: */
+	2275326896920679506:  (*Arguments)(nil),             /* Args: */
+	4946346507935163764:  (*AspectProperty)(nil),        /* Aspect of: */
+	2627975827633552637:  (*AspectProperty)(nil),        /* Aspect of:desc: */
+	17855209504331534011: (*AspectTraits)(nil),          /* AspectTraits:traitPhrase: */
+	10466815184164589710: (*BoolProperty)(nil),          /* Bool named: */
+	15292113293401271919: (*BoolProperty)(nil),          /* Bool named:desc: */
+	7864268224293611023:  (*BoolProperty)(nil),          /* Bool named:of: */
+	12288912254770942240: (*BoolProperty)(nil),          /* Bool named:of:desc: */
+	170374163879469822:   (*Certainties)(nil),           /* Certainties:areBeing:certainty:trait: */
+	15857890977690710700: (*Comment)(nil),               /* Comment: */
+	13295757043766156580: (*CommonAction)(nil),          /* CommonAction: */
+	11796688776587655409: (*CommonAction)(nil),          /* CommonAction:actionContext: */
+	10211567489959209123: (*CountOf)(nil),               /* CountOf:num: */
+	475310308664194536:   (*CycleText)(nil),             /* CycleText: */
+	16533349913402003729: (*MapDeparting)(nil),          /* Departing from:via:and:otherRoom: */
+	14117144937213193556: (*Determine)(nil),             /* Determine: */
+	18058198214790918510: (*Determine)(nil),             /* Determine:arguments: */
+	11093854973825287408: (*EventBlock)(nil),            /* EventBlock kinds:handlers: */
+	11855563103941044442: (*EventBlock)(nil),            /* EventBlock namedNoun:handlers: */
+	4061872818055525560:  (*EventHandler)(nil),          /* EventHandler:event:locals:patternRules: */
+	8929470137779261632:  (*EventHandler)(nil),          /* EventHandler:event:patternRules: */
+	18010503397334720257: (*EventTarget)(nil),           /* EventTarget kinds: */
+	17197340468883043891: (*EventTarget)(nil),           /* EventTarget namedNoun: */
+	351838510430560892:   (*GrammarDecl)(nil),           /* GrammarDecl: */
+	17915827500086617237: (*MapHeading)(nil),            /* Heading:from:and:otherRoom: */
+	18071749382896120219: (*MapHeading)(nil),            /* Heading:from:via:and:otherRoom: */
+	7655571851126667330:  (*KindOfNoun)(nil),            /* Kind:named: */
+	5852635308349599025:  (*KindOfRelation)(nil),        /* KindOfRelation:cardinality manyToMany: */
+	10771046767095423028: (*KindOfRelation)(nil),        /* KindOfRelation:cardinality manyToOne: */
+	1081167552428580836:  (*KindOfRelation)(nil),        /* KindOfRelation:cardinality oneToMany: */
+	650960042632654891:   (*KindOfRelation)(nil),        /* KindOfRelation:cardinality oneToOne: */
+	11241512832861714070: (*KindsHaveProperties)(nil),   /* Kinds:have: */
+	16689641787061327381: (*KindsOfAspect)(nil),         /* KindsOfAspect: */
+	10446315654994385322: (*LocalDecl)(nil),             /* LocalDecl: */
+	6009252662016869003:  (*LocalDecl)(nil),             /* LocalDecl:value: */
+	11789909816860756800: (*LocalInit)(nil),             /* LocalInit: */
+	5919854034648203527:  (*KindsOfKind)(nil),           /* Make kinds:of: */
+	9981010364372027439:  (*Make)(nil),                  /* Make: */
+	12609627593403083413: (*Make)(nil),                  /* Make:arguments: */
+	17216176745763384228: (*MakeOpposite)(nil),          /* Make:opposite: */
+	3572160234867157749:  (*MakePlural)(nil),            /* Make:plural: */
+	17563761532337350103: (*ManyToMany)(nil),            /* ManyToMany:otherKinds: */
+	4129025779762507875:  (*ManyToOne)(nil),             /* ManyToOne:kind: */
+	7600243833025335851:  (*NamedProperty)(nil),         /* NamedProperty: */
+	8883280437292140850:  (*NamedProperty)(nil),         /* NamedProperty:comment: */
+	11281497065498302283: (*NamedProperty)(nil),         /* NamedProperty:type: */
+	847370382734809298:   (*NamedProperty)(nil),         /* NamedProperty:type:comment: */
+	9520200366645637656:  (*NamedNoun)(nil),             /* Noun:named: */
+	10597814521259612392: (*NounAssignment)(nil),        /* NounAssignment:nouns:lines: */
+	8083590999220488417:  (*NounRelation)(nil),          /* NounRelation areBeing:relation:otherNouns: */
+	13866328623609632054: (*NounRelation)(nil),          /* NounRelation relation:otherNouns: */
+	8247237765145046011:  (*NounKindStatement)(nil),     /* Nouns:depict: */
+	1536901872737498210:  (*NounKindStatement)(nil),     /* Nouns:depict:and: */
+	4857113966700454246:  (*NounRelationStatement)(nil), /* Nouns:relateTo: */
+	13786092048070202991: (*NounRelationStatement)(nil), /* Nouns:relateTo:and: */
+	8260825061526765438:  (*NounTraitStatement)(nil),    /* Nouns:startAs: */
+	6477696692861713863:  (*NounTraitStatement)(nil),    /* Nouns:startAs:and: */
+	18242559699550270796: (*NounTraits)(nil),            /* NounTraits:trait: */
+	1229800714295622509:  (*NumberProperty)(nil),        /* Number named: */
+	8220001352821667446:  (*NumberProperty)(nil),        /* Number named:desc: */
+	11728451174312232590: (*NumberProperty)(nil),        /* Number named:of: */
+	8225044541532672111:  (*NumberProperty)(nil),        /* Number named:of:desc: */
+	10570788478167904864: (*NumListProperty)(nil),       /* NumList named: */
+	12067969820633710801: (*NumListProperty)(nil),       /* NumList named:desc: */
+	1134638206967616033:  (*NumListProperty)(nil),       /* NumList named:of: */
+	4350453418069638626:  (*NumListProperty)(nil),       /* NumList named:of:desc: */
+	17075866407822548206: (*OneToMany)(nil),             /* OneToMany:kinds: */
+	13766274136867271026: (*OneToOne)(nil),              /* OneToOne:otherKind: */
+	18143853777230560632: (*PairedAction)(nil),          /* PairedAction: */
+	6457542997147343897:  (*Paragraph)(nil),             /* Paragraph */
+	1044755875845214073:  (*Paragraph)(nil),             /* Paragraph: */
+	9595265807710753233:  (*PatternVariablesDecl)(nil),  /* Pattern:requires: */
+	14295113253706291193: (*PatternActions)(nil),        /* PatternActions:patternLocals:patternReturn:patternRules: */
+	626108847940444615:   (*PatternActions)(nil),        /* PatternActions:patternLocals:patternRules: */
+	8043268755698861333:  (*PatternActions)(nil),        /* PatternActions:patternReturn:patternRules: */
+	10735038169260724899: (*PatternActions)(nil),        /* PatternActions:patternRules: */
+	12269627840097064600: (*PatternDecl)(nil),           /* PatternDecl:name: */
+	15390970540499719701: (*PatternDecl)(nil),           /* PatternDecl:name:about: */
+	14226432888280203235: (*PatternDecl)(nil),           /* PatternDecl:name:optvars: */
+	2773647507718310398:  (*PatternDecl)(nil),           /* PatternDecl:name:optvars:about: */
+	12239987563966389881: (*PatternDecl)(nil),           /* PatternDecl:name:optvars:patternReturn: */
+	18176072221785763176: (*PatternDecl)(nil),           /* PatternDecl:name:optvars:patternReturn:about: */
+	16699606798420796914: (*PatternDecl)(nil),           /* PatternDecl:name:patternReturn: */
+	15396002863266428067: (*PatternDecl)(nil),           /* PatternDecl:name:patternReturn:about: */
+	16940656754612309445: (*PatternLocals)(nil),         /* PatternLocals: */
+	9272141818556957835:  (*PatternReturn)(nil),         /* PatternReturn: */
+	14391699440407036198: (*PatternRule)(nil),           /* PatternRule:flags:hook activity: */
+	15914753357447503965: (*PatternRule)(nil),           /* PatternRule:hook activity: */
+	15881043500959019380: (*PatternRules)(nil),          /* PatternRules */
+	12644281899387438986: (*PatternRules)(nil),          /* PatternRules: */
+	2318440529621094838:  (*PatternVariablesTail)(nil),  /* PatternVariablesTail: */
+	13417511286363622337: (*ProgramHook)(nil),           /* ProgramHook activity: */
+	9421894963555981921:  (*RecordProperty)(nil),        /* Record named: */
+	1627613176937258658:  (*RecordProperty)(nil),        /* Record named:desc: */
+	15273128656504901402: (*RecordProperty)(nil),        /* Record named:of: */
+	8491419645379028179:  (*RecordProperty)(nil),        /* Record named:of:desc: */
+	8380731787009175721:  (*RecordListProperty)(nil),    /* RecordList named: */
+	13065085319992699434: (*RecordListProperty)(nil),    /* RecordList named:desc: */
+	16326018873841140594: (*RecordListProperty)(nil),    /* RecordList named:of: */
+	8809350479853098315:  (*RecordListProperty)(nil),    /* RecordList named:of:desc: */
+	14287924768394488954: (*RelationCardinality)(nil),   /* RelationCardinality manyToMany: */
+	10453256446593418889: (*RelationCardinality)(nil),   /* RelationCardinality manyToOne: */
+	18092929693239672593: (*RelationCardinality)(nil),   /* RelationCardinality oneToMany: */
+	5587008972147064084:  (*RelationCardinality)(nil),   /* RelationCardinality oneToOne: */
+	6898132702043823031:  (*RelativeToNoun)(nil),        /* RelativeToNoun:nouns:areBeing:otherNouns: */
+	15988073058027477451: (*RenderTemplate)(nil),        /* RenderTemplate: */
+	2420057392455761494:  (*Send)(nil),                  /* Send:path: */
+	10010483713146895284: (*Send)(nil),                  /* Send:path:arguments: */
+	7279273919312137397:  (*ShuffleText)(nil),           /* ShuffleText: */
+	10085329253831819088: (*StoppingText)(nil),          /* StoppingText: */
+	13392546219852761816: (*Story)(nil),                 /* Story: */
+	15090827023293362138: (*TestOutput)(nil),            /* TestOutput: */
+	11231723833188820353: (*TestRule)(nil),              /* TestRule:hook activity: */
+	15304439741055926590: (*TestScene)(nil),             /* TestScene:story: */
+	1385539489971009934:  (*TestStatement)(nil),         /* TestStatement:test: */
+	34813485952713023:    (*TextProperty)(nil),          /* Text named: */
+	8821446596613108912:  (*TextProperty)(nil),          /* Text named:desc: */
+	15716906332929430280: (*TextProperty)(nil),          /* Text named:of: */
+	10950529590260468345: (*TextProperty)(nil),          /* Text named:of:desc: */
+	12060628209423567251: (*TextListProperty)(nil),      /* TextList named: */
+	8790232589946234908:  (*TextListProperty)(nil),      /* TextList named:desc: */
+	17501273845802809220: (*TextListProperty)(nil),      /* TextList named:of: */
+	10102728286923952045: (*TextListProperty)(nil),      /* TextList named:of:desc: */
+	14061432096605043790: (*TraitPhrase)(nil),           /* TraitPhrase:trait: */
 }

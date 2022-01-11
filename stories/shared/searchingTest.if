@@ -127,15 +127,30 @@
             {
               "Paragraph:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
                     " whereabouts",
                     [
-                      "the flower",
-                      "the knife"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "flower"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "knife"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "our self"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -144,14 +159,24 @@
             {
               "Paragraph:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
                     " whereabouts",
                     [
-                      "the purse"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "purse"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "the kitchen"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "kitchen"
+                        ]
+                      }
                     ]
                   ]
                 }

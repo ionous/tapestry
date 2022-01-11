@@ -68,7 +68,7 @@ func ReciprocalOf_Repeats_Marshal(m jsn.Marshaler, vals *[]ReciprocalOf) error {
 }
 
 func ReciprocalOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ReciprocalOf) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ReciprocalOf_Repeats_Marshal(m, pv)
 	}
 	return
@@ -178,7 +178,7 @@ func ReciprocalsOf_Repeats_Marshal(m jsn.Marshaler, vals *[]ReciprocalsOf) error
 }
 
 func ReciprocalsOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ReciprocalsOf) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ReciprocalsOf_Repeats_Marshal(m, pv)
 	}
 	return
@@ -289,7 +289,7 @@ func Relate_Repeats_Marshal(m jsn.Marshaler, vals *[]Relate) error {
 }
 
 func Relate_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relate) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Relate_Repeats_Marshal(m, pv)
 	}
 	return
@@ -418,7 +418,7 @@ func RelationName_Repeats_Marshal(m jsn.Marshaler, vals *[]RelationName) error {
 }
 
 func RelationName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelationName) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RelationName_Repeats_Marshal(m, pv)
 	}
 	return
@@ -483,7 +483,7 @@ func RelativeOf_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativeOf) error {
 }
 
 func RelativeOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelativeOf) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RelativeOf_Repeats_Marshal(m, pv)
 	}
 	return
@@ -593,7 +593,7 @@ func RelativesOf_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativesOf) error {
 }
 
 func RelativesOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelativesOf) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = RelativesOf_Repeats_Marshal(m, pv)
 	}
 	return

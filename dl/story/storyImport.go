@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
-	"github.com/ionous/errutil"
 )
 
 // top level imports
@@ -60,18 +59,43 @@ func (op *GrammarDecl) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
+type NounContinuation interface {
+	importNounPhrase(*Importer) error
+}
+
+func (op *NounKindStatement) ImportPhrase(k *Importer) error {
+	return importNounPhrase(k, op.Nouns, &op.KindOfNoun, op.More)
+}
+
+func (op *NounTraitStatement) ImportPhrase(k *Importer) error {
+	return importNounPhrase(k, op.Nouns, &op.NounTraits, op.More)
+}
+
+func (op *NounRelationStatement) ImportPhrase(k *Importer) error {
+	return importNounPhrase(k, op.Nouns, &op.NounRelation, op.More)
+}
+
+func importNounPhrase(k *Importer, nouns []NamedNoun, first NounContinuation, rest []NounContinuation) (err error) {
+	if e := CollectSubjectNouns(k, nouns); e != nil {
+		err = e
+	} else if e := first.importNounPhrase(k); e != nil {
+		err = e
+	} else {
+		for _, el := range rest {
+			if e := el.importNounPhrase(k); e != nil {
+				err = e
+				break
+			}
+		}
+	}
+	return
+}
+
 // ex. The description of the nets is xxx
 func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
 	if text, e := ConvertText(k, op.Lines.String()); e != nil {
 		err = e
-	} else if e := k.Env().Recent.Nouns.CollectSubjects(func() (err error) {
-		for _, n := range op.Nouns {
-			if e := n.ImportNouns(k); e != nil {
-				err = errutil.Append(err, e)
-			}
-		}
-		return
-	}); e != nil {
+	} else if e := CollectSubjectNouns(k, op.Nouns); e != nil {
 		err = e
 	} else {
 		prop := op.Property.String()
@@ -82,33 +106,11 @@ func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *NounStatement) ImportPhrase(k *Importer) (err error) {
-	if e := op.Lede.ImportNouns(k); e != nil {
-		err = e
-	} else {
-		if els := op.Tail; els != nil {
-			for _, el := range els {
-				if e := el.ImportNouns(k); e != nil {
-					err = errutil.Append(err, e)
-				}
-			}
-		}
-		if err == nil && op.Summary != nil {
-			err = op.Summary.ImportNouns(k)
-		}
-	}
-	return
-}
-
 // ex. On the beach are shells.
 func (op *RelativeToNoun) ImportPhrase(k *Importer) (err error) {
-	if e := k.Env().Recent.Nouns.CollectObjects(func() error {
-		return ImportNamedNouns(k, op.Nouns)
-	}); e != nil {
+	if e := CollectObjectNouns(k, op.Nouns); e != nil {
 		err = e
-	} else if e := k.Env().Recent.Nouns.CollectSubjects(func() error {
-		return ImportNamedNouns(k, op.Nouns1)
-	}); e != nil {
+	} else if e := CollectSubjectNouns(k, op.OtherNouns); e != nil {
 		err = e
 	} else {
 		relation := op.Relation.String()

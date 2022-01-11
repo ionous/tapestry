@@ -114,6 +114,8 @@ func (rp *localRecord) findField(field string) (ret literal.LiteralValue, okay b
 }
 
 // uses stringer ( of all things :/ ) to compare potentially conflicting values.
+// FIX: if you have to do it this way... why not serialize it to compact format?
+// you could even store the whole literal that way -- saving some duplication of effort during write.
 func compareValue(noun, field, at string, oldValue, newValue literal.LiteralValue) error {
 	why, was, wants := Redefined, field, field
 	type stringer interface{ String() string }

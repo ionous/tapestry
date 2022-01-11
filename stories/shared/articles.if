@@ -43,24 +43,33 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "Nouns:depict:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "lamp-post"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "some",
+                          "soldiers"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "Trevor"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase kindOfNoun:": [
-                        [
-                          "the lamp-post",
-                          "some soldiers",
-                          "our Trevor"
-                        ],
-                        {
-                          "KindOfNoun:trait:kind:": [
-                            "area",
-                            [],
-                            "thing"
-                          ]
-                        }
+                      "Kind:named:": [
+                        "area",
+                        "thing"
                       ]
-                    },
-                    []
+                    }
                   ]
                 }
               ]

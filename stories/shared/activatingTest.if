@@ -125,14 +125,24 @@
             {
               "Paragraph:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
                     " whereabouts",
                     [
-                      "the knife"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "knife"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "our self"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -141,30 +151,36 @@
             {
               "Paragraph:": [
                 {
-                  "NounStatement:tail:": [
+                  "Nouns:depict:and:": [
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "espresso controls"
+                        ]
+                      }
+                    ],
                     {
-                      "Lede:nounPhrase kindOfNoun:": [
-                        [
-                          "the espresso controls"
-                        ],
-                        {
-                          "KindOfNoun:trait:kind:nounRelation:": [
-                            "area",
-                            [],
-                            "device",
+                      "Kind:named:": [
+                        "area",
+                        "device"
+                      ]
+                    },
+                    [
+                      {
+                        "NounRelation relation:otherNouns:": [
+                          "whereabouts",
+                          [
                             {
-                              "NounRelation relation:nouns:": [
-                                "whereabouts",
-                                [
-                                  "the kitchen"
-                                ]
+                              "Noun:named:": [
+                                "the",
+                                "kitchen"
                               ]
                             }
                           ]
-                        }
-                      ]
-                    },
-                    []
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]

@@ -7,6 +7,7 @@ import (
 )
 
 func TestSigReader(t *testing.T) {
+	// read the string on the left, do we get the parts on the right?
 	for _, el := range [][]string{
 		{"Story:", "story", ""},
 		{"TestRule:hook:", "test_rule", "", "hook"},

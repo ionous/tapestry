@@ -65,7 +65,7 @@ func Action_Repeats_Marshal(m jsn.Marshaler, vals *[]Action) error {
 }
 
 func Action_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Action) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Action_Repeats_Marshal(m, pv)
 	}
 	return
@@ -167,7 +167,7 @@ func Alias_Repeats_Marshal(m jsn.Marshaler, vals *[]Alias) error {
 }
 
 func Alias_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Alias) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Alias_Repeats_Marshal(m, pv)
 	}
 	return
@@ -274,7 +274,7 @@ func AllOf_Repeats_Marshal(m jsn.Marshaler, vals *[]AllOf) error {
 }
 
 func AllOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AllOf) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AllOf_Repeats_Marshal(m, pv)
 	}
 	return
@@ -374,7 +374,7 @@ func AnyOf_Repeats_Marshal(m jsn.Marshaler, vals *[]AnyOf) error {
 }
 
 func AnyOf_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AnyOf) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AnyOf_Repeats_Marshal(m, pv)
 	}
 	return
@@ -476,7 +476,7 @@ func Directive_Repeats_Marshal(m jsn.Marshaler, vals *[]Directive) error {
 }
 
 func Directive_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Directive) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Directive_Repeats_Marshal(m, pv)
 	}
 	return
@@ -580,7 +580,7 @@ func Grammar_Repeats_Marshal(m jsn.Marshaler, vals *[]Grammar) error {
 }
 
 func Grammar_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Grammar) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Grammar_Repeats_Marshal(m, pv)
 	}
 	return
@@ -687,7 +687,7 @@ func GrammarMaker_Repeats_Marshal(m jsn.Marshaler, vals *[]GrammarMaker) error {
 }
 
 func GrammarMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GrammarMaker) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = GrammarMaker_Repeats_Marshal(m, pv)
 	}
 	return
@@ -749,7 +749,7 @@ func Noun_Repeats_Marshal(m jsn.Marshaler, vals *[]Noun) error {
 }
 
 func Noun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Noun) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Noun_Repeats_Marshal(m, pv)
 	}
 	return
@@ -849,7 +849,7 @@ func Retarget_Repeats_Marshal(m jsn.Marshaler, vals *[]Retarget) error {
 }
 
 func Retarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Retarget) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Retarget_Repeats_Marshal(m, pv)
 	}
 	return
@@ -949,7 +949,7 @@ func Reverse_Repeats_Marshal(m jsn.Marshaler, vals *[]Reverse) error {
 }
 
 func Reverse_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Reverse) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Reverse_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1056,7 +1056,7 @@ func ScannerMaker_Repeats_Marshal(m jsn.Marshaler, vals *[]ScannerMaker) error {
 }
 
 func ScannerMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ScannerMaker) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ScannerMaker_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1118,7 +1118,7 @@ func Self_Repeats_Marshal(m jsn.Marshaler, vals *[]Self) error {
 }
 
 func Self_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Self) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Self_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1218,7 +1218,7 @@ func Words_Repeats_Marshal(m jsn.Marshaler, vals *[]Words) error {
 }
 
 func Words_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Words) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Words_Repeats_Marshal(m, pv)
 	}
 	return

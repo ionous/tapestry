@@ -13,22 +13,16 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type NounImporter interface {
-	ImportNouns(k *Importer) (err error)
+func CollectSubjectNouns(k *Importer, els []NamedNoun) error {
+	return k.Env().Recent.Nouns.CollectSubjects(func() error {
+		return ImportNamedNouns(k, els)
+	})
 }
 
-func (*Pronoun) ImportNouns(*Importer) (err error) {
-	// FIX: pronoun(s) can indicate plurality
-	return
-}
-
-func (op *NounPhrase) ImportNouns(k *Importer) (err error) {
-	if imp, ok := op.Value.(NounImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
-	} else {
-		err = imp.ImportNouns(k)
-	}
-	return
+func CollectObjectNouns(k *Importer, els []NamedNoun) error {
+	return k.Env().Recent.Nouns.CollectObjects(func() error {
+		return ImportNamedNouns(k, els)
+	})
 }
 
 func ImportNamedNouns(k *Importer, els []NamedNoun) (err error) {
@@ -143,27 +137,19 @@ func (op *NamedNoun) ReadNamedNoun(k *Importer) (err error) {
 }
 
 // ex. "[the box] (is a) (closed) (container) ((on) (the beach))"
-func (op *KindOfNoun) ImportNouns(k *Importer) (err error) {
+func (op *KindOfNoun) importNounPhrase(k *Importer) (err error) {
 	// we collected the nouns and delayed processing them till now.
 	kind := op.Kind.String()
 	for _, noun := range k.Env().Recent.Nouns.Subjects {
 		k.WriteEphemera(&eph.EphNouns{Noun: noun, Kind: kind})
-		for _, trait := range op.Trait {
-			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})
-		}
-	}
-	if op.NounRelation != nil {
-		err = op.NounRelation.ImportNouns(k)
 	}
 	return
 }
 
 // ex. [the cat and the hat] (are) (in) (the book)
 // ex. [Hector and Maria] (are) (suspicious of) (Santa and Santana).
-func (op *NounRelation) ImportNouns(k *Importer) (err error) {
-	if e := k.Env().Recent.Nouns.CollectObjects(func() (err error) {
-		return ImportNamedNouns(k, op.Nouns)
-	}); e != nil {
+func (op *NounRelation) importNounPhrase(k *Importer) (err error) {
+	if e := CollectObjectNouns(k, op.OtherNouns); e != nil {
 		err = e
 	} else {
 		rel := op.Relation.String()
@@ -177,7 +163,7 @@ func (op *NounRelation) ImportNouns(k *Importer) (err error) {
 }
 
 //
-func (op *NounTraits) ImportNouns(k *Importer) (err error) {
+func (op *NounTraits) importNounPhrase(k *Importer) (err error) {
 	for _, trait := range op.Trait {
 		for _, noun := range k.Env().Recent.Nouns.Subjects {
 			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})

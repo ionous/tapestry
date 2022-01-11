@@ -275,15 +275,30 @@
             {
               "Paragraph:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
                     "whereabouts",
                     [
-                      "our self",
-                      "our Mildred"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "self"
+                        ]
+                      },
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "Mildred"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "the kitchen"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "kitchen"
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -292,14 +307,24 @@
             {
               "Paragraph:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
                     "whereabouts",
                     [
-                      "the coffee"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "coffee"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "the machine"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "machine"
+                        ]
+                      }
                     ]
                   ]
                 }
@@ -308,14 +333,24 @@
             {
               "Paragraph:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
                     "whereabouts",
                     [
-                      "the empire apple"
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "empire apple"
+                        ]
+                      }
                     ],
                     "is",
                     [
-                      "our Mildred"
+                      {
+                        "Noun:named:": [
+                          "our",
+                          "Mildred"
+                        ]
+                      }
                     ]
                   ]
                 }

@@ -108,12 +108,12 @@
             },
             "eph_refs": {
                 "spec": "eph {refs+ephemera}",
-                "slot": "ephemera",
-                "desc": [
+                 "slot": "ephemera",
+                 "desc": [
                     "Implies some fact about the world that will be defined elsewhere.",
                     "Reuses the set of ephemera to limit redefinition. Not all are valid."
-                ]
-            },
+                 ]
+             },
             "eph_relations": {
                 "spec": "eph {_%rel:text} {relate%cardinality:eph_cardinality}",
                 "slot": "ephemera"
@@ -137,7 +137,7 @@
                     "Give a noun a specific value at startup.",
                     "Initialization is somewhat simplistic:",
                     "1. Initial values are not scoped to domains, triggers must be used to change values when domains begin and end.",
-                    "2. The values inside of records can be set using a 'path' to find them, however individual values within lists cannot be set."
+                    "2. The values inside of records can be set using a 'path' to find them, however individual values within lists cannot be set.",
                     "Note: when using a path, the path addresses the noun first, the named field - referring to the inner most record - last."
                 ]
             },

@@ -66,7 +66,7 @@ func AsNum_Repeats_Marshal(m jsn.Marshaler, vals *[]AsNum) error {
 }
 
 func AsNum_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsNum) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AsNum_Repeats_Marshal(m, pv)
 	}
 	return
@@ -166,7 +166,7 @@ func AsRec_Repeats_Marshal(m jsn.Marshaler, vals *[]AsRec) error {
 }
 
 func AsRec_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsRec) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AsRec_Repeats_Marshal(m, pv)
 	}
 	return
@@ -266,7 +266,7 @@ func AsTxt_Repeats_Marshal(m jsn.Marshaler, vals *[]AsTxt) error {
 }
 
 func AsTxt_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsTxt) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = AsTxt_Repeats_Marshal(m, pv)
 	}
 	return
@@ -369,7 +369,7 @@ func EraseEdge_Repeats_Marshal(m jsn.Marshaler, vals *[]EraseEdge) error {
 }
 
 func EraseEdge_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EraseEdge) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = EraseEdge_Repeats_Marshal(m, pv)
 	}
 	return
@@ -481,7 +481,7 @@ func EraseIndex_Repeats_Marshal(m jsn.Marshaler, vals *[]EraseIndex) error {
 }
 
 func EraseIndex_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EraseIndex) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = EraseIndex_Repeats_Marshal(m, pv)
 	}
 	return
@@ -603,7 +603,7 @@ func Erasing_Repeats_Marshal(m jsn.Marshaler, vals *[]Erasing) error {
 }
 
 func Erasing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Erasing) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Erasing_Repeats_Marshal(m, pv)
 	}
 	return
@@ -740,7 +740,7 @@ func ErasingEdge_Repeats_Marshal(m jsn.Marshaler, vals *[]ErasingEdge) error {
 }
 
 func ErasingEdge_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ErasingEdge) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ErasingEdge_Repeats_Marshal(m, pv)
 	}
 	return
@@ -869,7 +869,7 @@ func FromNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromNumList) error {
 }
 
 func FromNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromNumList) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = FromNumList_Repeats_Marshal(m, pv)
 	}
 	return
@@ -970,7 +970,7 @@ func FromRecList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromRecList) error {
 }
 
 func FromRecList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRecList) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = FromRecList_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1071,7 +1071,7 @@ func FromTxtList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromTxtList) error {
 }
 
 func FromTxtList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromTxtList) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = FromTxtList_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1172,7 +1172,7 @@ func IntoNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoNumList) error {
 }
 
 func IntoNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoNumList) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = IntoNumList_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1273,7 +1273,7 @@ func IntoRecList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoRecList) error {
 }
 
 func IntoRecList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoRecList) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = IntoRecList_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1374,7 +1374,7 @@ func IntoTxtList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoTxtList) error {
 }
 
 func IntoTxtList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoTxtList) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = IntoTxtList_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1479,7 +1479,7 @@ func ListAt_Repeats_Marshal(m jsn.Marshaler, vals *[]ListAt) error {
 }
 
 func ListAt_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListAt) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListAt_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1593,7 +1593,7 @@ func ListEach_Repeats_Marshal(m jsn.Marshaler, vals *[]ListEach) error {
 }
 
 func ListEach_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListEach) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListEach_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1718,7 +1718,7 @@ func ListFind_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFind) error {
 }
 
 func ListFind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFind) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListFind_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1827,7 +1827,7 @@ func ListGather_Repeats_Marshal(m jsn.Marshaler, vals *[]ListGather) error {
 }
 
 func ListGather_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListGather) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListGather_Repeats_Marshal(m, pv)
 	}
 	return
@@ -1948,7 +1948,7 @@ func ListIterator_Repeats_Marshal(m jsn.Marshaler, vals *[]ListIterator) error {
 }
 
 func ListIterator_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListIterator) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListIterator_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2011,7 +2011,7 @@ func ListLen_Repeats_Marshal(m jsn.Marshaler, vals *[]ListLen) error {
 }
 
 func ListLen_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListLen) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListLen_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2116,7 +2116,7 @@ func ListMap_Repeats_Marshal(m jsn.Marshaler, vals *[]ListMap) error {
 }
 
 func ListMap_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListMap) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListMap_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2235,7 +2235,7 @@ func ListReduce_Repeats_Marshal(m jsn.Marshaler, vals *[]ListReduce) error {
 }
 
 func ListReduce_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListReduce) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListReduce_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2350,7 +2350,7 @@ func ListReverse_Repeats_Marshal(m jsn.Marshaler, vals *[]ListReverse) error {
 }
 
 func ListReverse_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListReverse) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListReverse_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2455,7 +2455,7 @@ func ListSet_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSet) error {
 }
 
 func ListSet_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSet) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListSet_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2582,7 +2582,7 @@ func ListSlice_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSlice) error {
 }
 
 func ListSlice_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSlice) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListSlice_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2701,7 +2701,7 @@ func ListSortNumbers_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSortNumbers) e
 }
 
 func ListSortNumbers_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSortNumbers) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListSortNumbers_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2822,7 +2822,7 @@ func ListSortText_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSortText) error {
 }
 
 func ListSortText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSortText) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListSortText_Repeats_Marshal(m, pv)
 	}
 	return
@@ -2946,7 +2946,7 @@ func ListSortUsing_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSortUsing) error
 }
 
 func ListSortUsing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSortUsing) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListSortUsing_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3060,7 +3060,7 @@ func ListSource_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSource) error {
 }
 
 func ListSource_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSource) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListSource_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3132,7 +3132,7 @@ func ListSplice_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSplice) error {
 }
 
 func ListSplice_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSplice) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListSplice_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3260,7 +3260,7 @@ func ListTarget_Repeats_Marshal(m jsn.Marshaler, vals *[]ListTarget) error {
 }
 
 func ListTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListTarget) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = ListTarget_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3327,7 +3327,7 @@ func PutEdge_Repeats_Marshal(m jsn.Marshaler, vals *[]PutEdge) error {
 }
 
 func PutEdge_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PutEdge) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PutEdge_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3446,7 +3446,7 @@ func PutIndex_Repeats_Marshal(m jsn.Marshaler, vals *[]PutIndex) error {
 }
 
 func PutIndex_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PutIndex) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PutIndex_Repeats_Marshal(m, pv)
 	}
 	return
@@ -3569,7 +3569,7 @@ func Range_Repeats_Marshal(m jsn.Marshaler, vals *[]Range) error {
 }
 
 func Range_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Range) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = Range_Repeats_Marshal(m, pv)
 	}
 	return

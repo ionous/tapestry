@@ -37,7 +37,7 @@ func {{name}}{{mod}}_Repeats_Marshal(m jsn.Marshaler, vals *[]{{el}}) error {
 }
 
 func {{name}}{{mod}}_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]{{el}}) (err error) {
-  if *pv != nil || !m.IsEncoding() {
+  if len(*pv) > 0 || !m.IsEncoding() {
     err = {{name}}{{mod}}_Repeats_Marshal(m, pv)
   }
   return

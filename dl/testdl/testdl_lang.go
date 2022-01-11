@@ -84,7 +84,7 @@ func TestBool_Repeats_Marshal(m jsn.Marshaler, vals *[]TestBool) error {
 }
 
 func TestBool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestBool) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestBool_Repeats_Marshal(m, pv)
 	}
 	return
@@ -157,7 +157,7 @@ func TestFlow_Repeats_Marshal(m jsn.Marshaler, vals *[]TestFlow) error {
 }
 
 func TestFlow_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestFlow) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestFlow_Repeats_Marshal(m, pv)
 	}
 	return
@@ -288,7 +288,7 @@ func TestNum_Unboxed_Repeats_Marshal(m jsn.Marshaler, vals *[]float64) error {
 }
 
 func TestNum_Unboxed_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]float64) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestNum_Unboxed_Repeats_Marshal(m, pv)
 	}
 	return
@@ -352,7 +352,7 @@ func TestNum_Repeats_Marshal(m jsn.Marshaler, vals *[]TestNum) error {
 }
 
 func TestNum_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestNum) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestNum_Repeats_Marshal(m, pv)
 	}
 	return
@@ -421,7 +421,7 @@ func TestSlot_Repeats_Marshal(m jsn.Marshaler, vals *[]TestSlot) error {
 }
 
 func TestSlot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestSlot) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestSlot_Repeats_Marshal(m, pv)
 	}
 	return
@@ -529,7 +529,7 @@ func TestSwap_Repeats_Marshal(m jsn.Marshaler, vals *[]TestSwap) error {
 }
 
 func TestSwap_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestSwap) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestSwap_Repeats_Marshal(m, pv)
 	}
 	return
@@ -604,7 +604,7 @@ func TestTxt_Repeats_Marshal(m jsn.Marshaler, vals *[]TestTxt) error {
 }
 
 func TestTxt_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestTxt) (err error) {
-	if *pv != nil || !m.IsEncoding() {
+	if len(*pv) > 0 || !m.IsEncoding() {
 		err = TestTxt_Repeats_Marshal(m, pv)
 	}
 	return
