@@ -93,7 +93,7 @@
             {
               "Paragraph:": [
                 {
-                  "NounKindStatement:kindOfNoun:": [
+                  "Nouns:depict:": [
                     [
                       {
                         "Noun:named:": [
@@ -115,7 +115,7 @@
                       }
                     ],
                     {
-                      "KindOfNoun:kind:": [
+                      "Kind:named:": [
                         "are",
                         "thing"
                       ]

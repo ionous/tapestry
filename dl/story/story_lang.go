@@ -2895,7 +2895,7 @@ func GrammarDecl_Marshal(m jsn.Marshaler, val *GrammarDecl) (err error) {
 // KindOfNoun
 type KindOfNoun struct {
 	AreAn AreAn        `if:"label=_"`
-	Kind  SingularKind `if:"label=kind"`
+	Kind  SingularKind `if:"label=named"`
 }
 
 // User implemented slots:
@@ -2905,6 +2905,7 @@ func (*KindOfNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: KindOfNoun_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Kind",
 	}
 }
 
@@ -2959,7 +2960,7 @@ func KindOfNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindOfNoun) (err
 type KindOfNoun_Flow struct{ ptr *KindOfNoun }
 
 func (n KindOfNoun_Flow) GetType() string      { return KindOfNoun_Type }
-func (n KindOfNoun_Flow) GetLede() string      { return KindOfNoun_Type }
+func (n KindOfNoun_Flow) GetLede() string      { return "Kind" }
 func (n KindOfNoun_Flow) GetFlow() interface{} { return n.ptr }
 func (n KindOfNoun_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*KindOfNoun); ok {
@@ -2989,7 +2990,7 @@ func KindOfNoun_Marshal(m jsn.Marshaler, val *KindOfNoun) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindOfNoun_Field_AreAn))
 		}
-		e1 := m.MarshalKey("kind", KindOfNoun_Field_Kind)
+		e1 := m.MarshalKey("named", KindOfNoun_Field_Kind)
 		if e1 == nil {
 			e1 = SingularKind_Marshal(m, &val.Kind)
 		}
@@ -5064,8 +5065,8 @@ func NounContinuation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounContin
 // NounKindStatement
 type NounKindStatement struct {
 	Nouns      []NamedNoun        `if:"label=_"`
-	KindOfNoun KindOfNoun         `if:"label=kind_of_noun"`
-	More       []NounContinuation `if:"label=more,optional"`
+	KindOfNoun KindOfNoun         `if:"label=depict"`
+	More       []NounContinuation `if:"label=and,optional"`
 }
 
 // User implemented slots:
@@ -5075,6 +5076,7 @@ func (*NounKindStatement) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NounKindStatement_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Nouns",
 	}
 }
 
@@ -5130,7 +5132,7 @@ func NounKindStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounKindS
 type NounKindStatement_Flow struct{ ptr *NounKindStatement }
 
 func (n NounKindStatement_Flow) GetType() string      { return NounKindStatement_Type }
-func (n NounKindStatement_Flow) GetLede() string      { return NounKindStatement_Type }
+func (n NounKindStatement_Flow) GetLede() string      { return "Nouns" }
 func (n NounKindStatement_Flow) GetFlow() interface{} { return n.ptr }
 func (n NounKindStatement_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*NounKindStatement); ok {
@@ -5160,14 +5162,14 @@ func NounKindStatement_Marshal(m jsn.Marshaler, val *NounKindStatement) (err err
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NounKindStatement_Field_Nouns))
 		}
-		e1 := m.MarshalKey("kind_of_noun", NounKindStatement_Field_KindOfNoun)
+		e1 := m.MarshalKey("depict", NounKindStatement_Field_KindOfNoun)
 		if e1 == nil {
 			e1 = KindOfNoun_Marshal(m, &val.KindOfNoun)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NounKindStatement_Field_KindOfNoun))
 		}
-		e2 := m.MarshalKey("more", NounKindStatement_Field_More)
+		e2 := m.MarshalKey("and", NounKindStatement_Field_More)
 		if e2 == nil {
 			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
 		}
@@ -5258,9 +5260,9 @@ func NounName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounName) (err err
 
 // NounRelation
 type NounRelation struct {
-	AreBeing AreBeing         `if:"label=are_being,optional"`
-	Relation rel.RelationName `if:"label=relation"`
-	Nouns    []NamedNoun      `if:"label=nouns"`
+	AreBeing   AreBeing         `if:"label=are_being,optional"`
+	Relation   rel.RelationName `if:"label=relation"`
+	OtherNouns []NamedNoun      `if:"label=other_nouns"`
 }
 
 // User implemented slots:
@@ -5276,7 +5278,7 @@ func (*NounRelation) Compose() composer.Spec {
 const NounRelation_Type = "noun_relation"
 const NounRelation_Field_AreBeing = "$ARE_BEING"
 const NounRelation_Field_Relation = "$RELATION"
-const NounRelation_Field_Nouns = "$NOUNS"
+const NounRelation_Field_OtherNouns = "$OTHER_NOUNS"
 
 func (op *NounRelation) Marshal(m jsn.Marshaler) error {
 	return NounRelation_Marshal(m, op)
@@ -5362,12 +5364,12 @@ func NounRelation_Marshal(m jsn.Marshaler, val *NounRelation) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NounRelation_Field_Relation))
 		}
-		e2 := m.MarshalKey("nouns", NounRelation_Field_Nouns)
+		e2 := m.MarshalKey("other_nouns", NounRelation_Field_OtherNouns)
 		if e2 == nil {
-			e2 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
+			e2 = NamedNoun_Repeats_Marshal(m, &val.OtherNouns)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NounRelation_Field_Nouns))
+			m.Error(errutil.New(e2, "in flow at", NounRelation_Field_OtherNouns))
 		}
 		m.EndBlock()
 	}
@@ -5377,8 +5379,8 @@ func NounRelation_Marshal(m jsn.Marshaler, val *NounRelation) (err error) {
 // NounRelationStatement
 type NounRelationStatement struct {
 	Nouns        []NamedNoun        `if:"label=_"`
-	NounRelation NounRelation       `if:"label=noun_relation"`
-	More         []NounContinuation `if:"label=more,optional"`
+	NounRelation NounRelation       `if:"label=relate_to"`
+	More         []NounContinuation `if:"label=and,optional"`
 }
 
 // User implemented slots:
@@ -5388,6 +5390,7 @@ func (*NounRelationStatement) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NounRelationStatement_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Nouns",
 	}
 }
 
@@ -5443,7 +5446,7 @@ func NounRelationStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounR
 type NounRelationStatement_Flow struct{ ptr *NounRelationStatement }
 
 func (n NounRelationStatement_Flow) GetType() string      { return NounRelationStatement_Type }
-func (n NounRelationStatement_Flow) GetLede() string      { return NounRelationStatement_Type }
+func (n NounRelationStatement_Flow) GetLede() string      { return "Nouns" }
 func (n NounRelationStatement_Flow) GetFlow() interface{} { return n.ptr }
 func (n NounRelationStatement_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*NounRelationStatement); ok {
@@ -5473,14 +5476,14 @@ func NounRelationStatement_Marshal(m jsn.Marshaler, val *NounRelationStatement) 
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NounRelationStatement_Field_Nouns))
 		}
-		e1 := m.MarshalKey("noun_relation", NounRelationStatement_Field_NounRelation)
+		e1 := m.MarshalKey("relate_to", NounRelationStatement_Field_NounRelation)
 		if e1 == nil {
 			e1 = NounRelation_Marshal(m, &val.NounRelation)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NounRelationStatement_Field_NounRelation))
 		}
-		e2 := m.MarshalKey("more", NounRelationStatement_Field_More)
+		e2 := m.MarshalKey("and", NounRelationStatement_Field_More)
 		if e2 == nil {
 			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
 		}
@@ -5495,8 +5498,8 @@ func NounRelationStatement_Marshal(m jsn.Marshaler, val *NounRelationStatement) 
 // NounTraitStatement
 type NounTraitStatement struct {
 	Nouns      []NamedNoun        `if:"label=_"`
-	NounTraits NounTraits         `if:"label=noun_traits"`
-	More       []NounContinuation `if:"label=more,optional"`
+	NounTraits NounTraits         `if:"label=start_as"`
+	More       []NounContinuation `if:"label=and,optional"`
 }
 
 // User implemented slots:
@@ -5506,6 +5509,7 @@ func (*NounTraitStatement) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NounTraitStatement_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Nouns",
 	}
 }
 
@@ -5561,7 +5565,7 @@ func NounTraitStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounTrai
 type NounTraitStatement_Flow struct{ ptr *NounTraitStatement }
 
 func (n NounTraitStatement_Flow) GetType() string      { return NounTraitStatement_Type }
-func (n NounTraitStatement_Flow) GetLede() string      { return NounTraitStatement_Type }
+func (n NounTraitStatement_Flow) GetLede() string      { return "Nouns" }
 func (n NounTraitStatement_Flow) GetFlow() interface{} { return n.ptr }
 func (n NounTraitStatement_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*NounTraitStatement); ok {
@@ -5591,14 +5595,14 @@ func NounTraitStatement_Marshal(m jsn.Marshaler, val *NounTraitStatement) (err e
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NounTraitStatement_Field_Nouns))
 		}
-		e1 := m.MarshalKey("noun_traits", NounTraitStatement_Field_NounTraits)
+		e1 := m.MarshalKey("start_as", NounTraitStatement_Field_NounTraits)
 		if e1 == nil {
 			e1 = NounTraits_Marshal(m, &val.NounTraits)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NounTraitStatement_Field_NounTraits))
 		}
-		e2 := m.MarshalKey("more", NounTraitStatement_Field_More)
+		e2 := m.MarshalKey("and", NounTraitStatement_Field_More)
 		if e2 == nil {
 			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
 		}
@@ -8086,10 +8090,10 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 
 // RelativeToNoun
 type RelativeToNoun struct {
-	Relation rel.RelationName `if:"label=_"`
-	Nouns    []NamedNoun      `if:"label=nouns"`
-	AreBeing AreBeing         `if:"label=are_being"`
-	Nouns1   []NamedNoun      `if:"label=nouns1"`
+	Relation   rel.RelationName `if:"label=_"`
+	Nouns      []NamedNoun      `if:"label=nouns"`
+	AreBeing   AreBeing         `if:"label=are_being"`
+	OtherNouns []NamedNoun      `if:"label=other_nouns"`
 }
 
 // User implemented slots:
@@ -8106,7 +8110,7 @@ const RelativeToNoun_Type = "relative_to_noun"
 const RelativeToNoun_Field_Relation = "$RELATION"
 const RelativeToNoun_Field_Nouns = "$NOUNS"
 const RelativeToNoun_Field_AreBeing = "$ARE_BEING"
-const RelativeToNoun_Field_Nouns1 = "$NOUNS1"
+const RelativeToNoun_Field_OtherNouns = "$OTHER_NOUNS"
 
 func (op *RelativeToNoun) Marshal(m jsn.Marshaler) error {
 	return RelativeToNoun_Marshal(m, op)
@@ -8199,12 +8203,12 @@ func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", RelativeToNoun_Field_AreBeing))
 		}
-		e3 := m.MarshalKey("nouns1", RelativeToNoun_Field_Nouns1)
+		e3 := m.MarshalKey("other_nouns", RelativeToNoun_Field_OtherNouns)
 		if e3 == nil {
-			e3 = NamedNoun_Repeats_Marshal(m, &val.Nouns1)
+			e3 = NamedNoun_Repeats_Marshal(m, &val.OtherNouns)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RelativeToNoun_Field_Nouns1))
+			m.Error(errutil.New(e3, "in flow at", RelativeToNoun_Field_OtherNouns))
 		}
 		m.EndBlock()
 	}
@@ -10020,7 +10024,7 @@ var Signatures = map[uint64]interface{}{
 	3571539926920082009:  (*MapHeading)(nil),            /* Heading:and connectingTo: */
 	1270222318052581361:  (*MapHeading)(nil),            /* Heading:via:and arrivingAt: */
 	6820364618168717163:  (*MapHeading)(nil),            /* Heading:via:and connectingTo: */
-	8395536647843606072:  (*KindOfNoun)(nil),            /* KindOfNoun:kind: */
+	7655571851126667330:  (*KindOfNoun)(nil),            /* Kind:named: */
 	5852635308349599025:  (*KindOfRelation)(nil),        /* KindOfRelation:cardinality manyToMany: */
 	10771046767095423028: (*KindOfRelation)(nil),        /* KindOfRelation:cardinality manyToOne: */
 	1081167552428580836:  (*KindOfRelation)(nil),        /* KindOfRelation:cardinality oneToMany: */
@@ -10046,15 +10050,15 @@ var Signatures = map[uint64]interface{}{
 	847370382734809298:   (*NamedProperty)(nil),         /* NamedProperty:type:comment: */
 	9520200366645637656:  (*NamedNoun)(nil),             /* Noun:named: */
 	10597814521259612392: (*NounAssignment)(nil),        /* NounAssignment:nouns:lines: */
-	5293958116981625385:  (*NounKindStatement)(nil),     /* NounKindStatement:kindOfNoun: */
-	906525360603403250:   (*NounKindStatement)(nil),     /* NounKindStatement:kindOfNoun:more: */
-	7157825634536191111:  (*NounRelation)(nil),          /* NounRelation areBeing:relation:nouns: */
-	8358327072078132634:  (*NounRelation)(nil),          /* NounRelation relation:nouns: */
-	16495701564148855446: (*NounRelationStatement)(nil), /* NounRelationStatement:nounRelation: */
-	11660201854883569495: (*NounRelationStatement)(nil), /* NounRelationStatement:nounRelation:more: */
+	8083590999220488417:  (*NounRelation)(nil),          /* NounRelation areBeing:relation:otherNouns: */
+	13866328623609632054: (*NounRelation)(nil),          /* NounRelation relation:otherNouns: */
+	8247237765145046011:  (*NounKindStatement)(nil),     /* Nouns:depict: */
+	1536901872737498210:  (*NounKindStatement)(nil),     /* Nouns:depict:and: */
+	4857113966700454246:  (*NounRelationStatement)(nil), /* Nouns:relateTo: */
+	13786092048070202991: (*NounRelationStatement)(nil), /* Nouns:relateTo:and: */
+	8260825061526765438:  (*NounTraitStatement)(nil),    /* Nouns:startAs: */
+	6477696692861713863:  (*NounTraitStatement)(nil),    /* Nouns:startAs:and: */
 	18242559699550270796: (*NounTraits)(nil),            /* NounTraits:trait: */
-	18168170986952999827: (*NounTraitStatement)(nil),    /* NounTraitStatement:nounTraits: */
-	12773657031679114004: (*NounTraitStatement)(nil),    /* NounTraitStatement:nounTraits:more: */
 	1229800714295622509:  (*NumberProperty)(nil),        /* Number named: */
 	8220001352821667446:  (*NumberProperty)(nil),        /* Number named:desc: */
 	11728451174312232590: (*NumberProperty)(nil),        /* Number named:of: */
@@ -10101,7 +10105,7 @@ var Signatures = map[uint64]interface{}{
 	10453256446593418889: (*RelationCardinality)(nil),   /* RelationCardinality manyToOne: */
 	18092929693239672593: (*RelationCardinality)(nil),   /* RelationCardinality oneToMany: */
 	5587008972147064084:  (*RelationCardinality)(nil),   /* RelationCardinality oneToOne: */
-	7151092568991800158:  (*RelativeToNoun)(nil),        /* RelativeToNoun:nouns:areBeing:nouns1: */
+	6898132702043823031:  (*RelativeToNoun)(nil),        /* RelativeToNoun:nouns:areBeing:otherNouns: */
 	15988073058027477451: (*RenderTemplate)(nil),        /* RenderTemplate: */
 	2420057392455761494:  (*Send)(nil),                  /* Send:path: */
 	10010483713146895284: (*Send)(nil),                  /* Send:path:arguments: */

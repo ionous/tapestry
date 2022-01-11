@@ -6,7 +6,7 @@
   ],
   [
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
@@ -16,7 +16,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "room"
           ]
@@ -60,7 +60,7 @@
       ]
     },
     {
-      "NounRelationStatement:nounRelation:": [
+      "Nouns:relateTo:": [
         [
           {
             "Noun:named:": [
@@ -82,7 +82,7 @@
           }
         ],
         {
-          "NounRelation areBeing:relation:nouns:": [
+          "NounRelation areBeing:relation:otherNouns:": [
             "are",
             "whereabouts",
             [
@@ -98,7 +98,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
@@ -114,7 +114,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "are",
             "things"
           ]
@@ -152,7 +152,7 @@
   ],
   [
     {
-      "NounTraitStatement:nounTraits:": [
+      "Nouns:startAs:": [
         [
           {
             "Noun:named:": [
@@ -174,7 +174,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
@@ -184,7 +184,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "container"
           ]
@@ -192,7 +192,7 @@
       ]
     },
     {
-      "NounRelationStatement:nounRelation:": [
+      "Nouns:relateTo:": [
         [
           {
             "Noun:named:": [
@@ -202,7 +202,7 @@
           }
         ],
         {
-          "NounRelation areBeing:relation:nouns:": [
+          "NounRelation areBeing:relation:otherNouns:": [
             "is",
             "whereabouts",
             [
@@ -218,7 +218,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -246,14 +246,14 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "are",
             "things"
           ]
         },
         [
           {
-            "NounRelation relation:nouns:": [
+            "NounRelation relation:otherNouns:": [
               "whereabouts",
               [
                 {
@@ -309,7 +309,7 @@
   ],
   [
     {
-      "NounTraitStatement:nounTraits:": [
+      "Nouns:startAs:": [
         [
           {
             "Noun:named:": [
@@ -329,7 +329,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -339,14 +339,14 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "supporter"
           ]
         },
         [
           {
-            "NounRelation relation:nouns:": [
+            "NounRelation relation:otherNouns:": [
               "whereabouts",
               [
                 {
@@ -362,7 +362,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -384,14 +384,14 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "are",
             "things"
           ]
         },
         [
           {
-            "NounRelation relation:nouns:": [
+            "NounRelation relation:otherNouns:": [
               "whereabouts",
               [
                 {
@@ -409,7 +409,7 @@
   ],
   [
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -419,14 +419,14 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "supporter"
           ]
         },
         [
           {
-            "NounRelation relation:nouns:": [
+            "NounRelation relation:otherNouns:": [
               "whereabouts",
               [
                 {
@@ -442,7 +442,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -452,7 +452,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "container"
           ]
@@ -468,7 +468,7 @@
             ]
           },
           {
-            "NounRelation relation:nouns:": [
+            "NounRelation relation:otherNouns:": [
               "whereabouts",
               [
                 {
@@ -484,7 +484,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -494,14 +494,14 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "area",
             "thing"
           ]
         },
         [
           {
-            "NounRelation relation:nouns:": [
+            "NounRelation relation:otherNouns:": [
               "whereabouts",
               [
                 {
@@ -517,7 +517,7 @@
       ]
     },
     {
-      "NounTraitStatement:nounTraits:": [
+      "Nouns:startAs:": [
         [
           {
             "Noun:named:": [
@@ -537,7 +537,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -553,14 +553,14 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "are",
             "containers"
           ]
         },
         [
           {
-            "NounRelation relation:nouns:": [
+            "NounRelation relation:otherNouns:": [
               "whereabouts",
               [
                 {
@@ -576,7 +576,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -586,14 +586,14 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "thing"
           ]
         },
         [
           {
-            "NounRelation relation:nouns:": [
+            "NounRelation relation:otherNouns:": [
               "whereabouts",
               [
                 {

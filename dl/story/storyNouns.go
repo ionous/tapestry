@@ -149,7 +149,7 @@ func (op *KindOfNoun) importNounPhrase(k *Importer) (err error) {
 // ex. [the cat and the hat] (are) (in) (the book)
 // ex. [Hector and Maria] (are) (suspicious of) (Santa and Santana).
 func (op *NounRelation) importNounPhrase(k *Importer) (err error) {
-	if e := CollectObjectNouns(k, op.Nouns); e != nil {
+	if e := CollectObjectNouns(k, op.OtherNouns); e != nil {
 		err = e
 	} else {
 		rel := op.Relation.String()

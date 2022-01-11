@@ -89,25 +89,29 @@
                             },
                             "noun_kind_statement": {
                                 "spec": "{nouns+named_noun|comma-and} {is a kind%kind_of_noun} {and%more*noun_continuation}.",
-                                "slot": "story_statement"
+                                "slot": "story_statement",
+                                "sign": "Nouns:depict:and:"
                             },
                             "noun_trait_statement": {
                                 "spec": "{nouns+named_noun|comma-and} {noun_traits} {and%more*noun_continuation}.",
-                                "slot": "story_statement"
+                                "slot": "story_statement",
+                                "sign": "Nouns:start_as:and:"
                             },
                             "noun_relation_statement": {
                                 "spec": "{nouns+named_noun|comma-and} {noun_relation} {and%more*noun_continuation}.",
-                                "slot": "story_statement"
+                                "slot": "story_statement",
+                                "sign": "Nouns:relate_to:and:"
                             },
                             "relative_to_noun": {
                                 "slot": "story_statement",
-                                "spec": "The {relation:relation_name} of {nouns+named_noun|comma-and} {are_being} {nouns+named_noun|comma-and}.",
+                                "spec": "The {relation:relation_name} of {nouns+named_noun|comma-and} {are_being} {other_nouns+named_noun|comma-and}.",
                                 "desc": "Relate nouns to each other"
                             },
                             "kind_of_noun":
                             {
                                 "spec": "{are_an} {kind:singular_kind}",
-                                "slot": "noun_continuation"
+                                "slot": "noun_continuation",
+                                "sign": "Kind:named:"
                             },
                             "noun_traits":
                             {
@@ -116,7 +120,7 @@
                             },
                             "noun_relation":
                             {
-                                "spec": "{?are_being} {relation:relation_name} {nouns+named_noun|comma-and}",
+                                "spec": "{?are_being} {relation:relation_name} {other_nouns+named_noun|comma-and}",
                                 "slot": "noun_continuation"
                             },
                             "named_noun":

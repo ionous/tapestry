@@ -125,7 +125,7 @@
             {
               "Paragraph:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
                     " whereabouts",
                     [
                       {
@@ -151,7 +151,7 @@
             {
               "Paragraph:": [
                 {
-                  "NounKindStatement:kindOfNoun:more:": [
+                  "Nouns:depict:and:": [
                     [
                       {
                         "Noun:named:": [
@@ -161,14 +161,14 @@
                       }
                     ],
                     {
-                      "KindOfNoun:kind:": [
+                      "Kind:named:": [
                         "area",
                         "device"
                       ]
                     },
                     [
                       {
-                        "NounRelation relation:nouns:": [
+                        "NounRelation relation:otherNouns:": [
                           "whereabouts",
                           [
                             {

@@ -4,7 +4,7 @@
       "Comment:": "FIX: right now we dont support having the same named objects in multiple domains. we should, especially for testing, something something consider domain hierarchy too.  "
     },
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
@@ -14,7 +14,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "actor"
           ]
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
@@ -44,7 +44,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "area",
             "prop"
           ]
@@ -64,7 +64,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
@@ -98,7 +98,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "are",
             "scrabble tile"
           ]

@@ -1,7 +1,7 @@
 [
   [
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -11,7 +11,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "thing"
           ]
@@ -30,7 +30,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -40,7 +40,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "thing"
           ]
@@ -60,7 +60,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -70,7 +70,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isan",
             "container"
           ]
@@ -90,7 +90,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -100,7 +100,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isan",
             "container"
           ]
@@ -119,7 +119,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -129,7 +129,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isan",
             "container"
           ]
@@ -148,7 +148,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -158,7 +158,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isan",
             "container"
           ]
@@ -178,7 +178,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -188,7 +188,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "thing"
           ]
@@ -206,7 +206,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
@@ -216,7 +216,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "thing"
           ]
@@ -226,7 +226,7 @@
   ],
   [
     {
-      "RelativeToNoun:nouns:areBeing:nouns1:": [
+      "RelativeToNoun:nouns:areBeing:otherNouns:": [
         "whereabouts",
         [
           {
@@ -272,7 +272,7 @@
       ]
     },
     {
-      "RelativeToNoun:nouns:areBeing:nouns1:": [
+      "RelativeToNoun:nouns:areBeing:otherNouns:": [
         "whereabouts",
         [
           {
@@ -294,7 +294,7 @@
       ]
     },
     {
-      "RelativeToNoun:nouns:areBeing:nouns1:": [
+      "RelativeToNoun:nouns:areBeing:otherNouns:": [
         "whereabouts",
         [
           {

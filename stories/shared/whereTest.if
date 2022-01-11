@@ -1,7 +1,7 @@
 [
   [
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
@@ -11,7 +11,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "supporter"
           ]
@@ -19,17 +19,16 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
               "the",
               "lab"
             ]
-          }
-        ],
+          }        ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "room"
           ]
@@ -37,7 +36,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:": [
+      "Nouns:depict:": [
         [
           {
             "Noun:named:": [
@@ -47,7 +46,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "container"
           ]
@@ -55,7 +54,7 @@
       ]
     },
     {
-      "NounKindStatement:kindOfNoun:more:": [
+      "Nouns:depict:and:": [
         [
           {
             "Noun:named:": [
@@ -65,7 +64,7 @@
           }
         ],
         {
-          "KindOfNoun:kind:": [
+          "Kind:named:": [
             "isa",
             "prop"
           ]
@@ -97,7 +96,7 @@
             {
               "Paragraph:": [
                 {
-                  "NounRelationStatement:nounRelation:": [
+                  "Nouns:relateTo:": [
                     [
                       {
                         "Noun:named:": [
@@ -113,7 +112,7 @@
                       }
                     ],
                     {
-                      "NounRelation areBeing:relation:nouns:": [
+                      "NounRelation areBeing:relation:otherNouns:": [
                         "are",
                         "whereabouts",
                         [
@@ -133,7 +132,7 @@
             {
               "Paragraph:": [
                 {
-                  "NounRelationStatement:nounRelation:": [
+                  "Nouns:relateTo:": [
                     [
                       {
                         "Noun:named:": [
@@ -143,7 +142,7 @@
                       }
                     ],
                     {
-                      "NounRelation areBeing:relation:nouns:": [
+                      "NounRelation areBeing:relation:otherNouns:": [
                         "is",
                         "whereabouts",
                         [
@@ -163,7 +162,7 @@
             {
               "Paragraph:": [
                 {
-                  "NounRelationStatement:nounRelation:": [
+                  "Nouns:relateTo:": [
                     [
                       {
                         "Noun:named:": [
@@ -179,7 +178,7 @@
                       }
                     ],
                     {
-                      "NounRelation areBeing:relation:nouns:": [
+                      "NounRelation areBeing:relation:otherNouns:": [
                         "are",
                         "whereabouts",
                         [
@@ -199,7 +198,7 @@
             {
               "Paragraph:": [
                 {
-                  "NounTraitStatement:nounTraits:": [
+                  "Nouns:startAs:": [
                     [
                       {
                         "Noun:named:": [
@@ -223,7 +222,7 @@
             {
               "Paragraph:": [
                 {
-                  "NounRelationStatement:nounRelation:": [
+                  "Nouns:relateTo:": [
                     [
                       {
                         "Noun:named:": [
@@ -233,7 +232,7 @@
                       }
                     ],
                     {
-                      "NounRelation areBeing:relation:nouns:": [
+                      "NounRelation areBeing:relation:otherNouns:": [
                         "is",
                         "whereabouts",
                         [

@@ -110,7 +110,7 @@ func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
 func (op *RelativeToNoun) ImportPhrase(k *Importer) (err error) {
 	if e := CollectObjectNouns(k, op.Nouns); e != nil {
 		err = e
-	} else if e := CollectSubjectNouns(k, op.Nouns1); e != nil {
+	} else if e := CollectSubjectNouns(k, op.OtherNouns); e != nil {
 		err = e
 	} else {
 		relation := op.Relation.String()

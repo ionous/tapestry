@@ -1,0 +1,228 @@
+[
+  [
+    {
+      "Nouns:depict:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "cabin"
+            ]
+          }
+        ],
+        {
+          "Kind:named:": [
+            "isa",
+            "room"
+          ]
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "Nouns:relateTo:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "cabin"
+            ]
+          }
+        ],
+        {
+          "NounRelation relation:otherNouns:": [
+            "contains",
+            [
+              {
+                "Noun:named:": [
+                  "a",
+                  "glass case"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "RelativeToNoun:nouns:areBeing:otherNouns:": [
+        "In",
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "glass case"
+            ]
+          }
+        ],
+        "is",
+        [
+          {
+            "Noun:named:": [
+              "a",
+              "collection of fishing rods"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Nouns:startAs:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "case"
+            ]
+          }
+        ],
+        {
+          "NounTraits:trait:": [
+            "is",
+            [
+              "closed",
+              "transparent",
+              "lockable",
+              "locked"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Nouns:startAs:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "case"
+            ]
+          }
+        ],
+        {
+          "NounTraits:trait:": [
+            "is",
+            [
+              "scenery"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Nouns:relateTo:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "small silver key"
+            ]
+          }
+        ],
+        {
+          "NounRelation relation:otherNouns:": [
+            "unlocks",
+            [
+              {
+                "Noun:named:": [
+                  "the",
+                  "case"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Nouns:relateTo:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "bench"
+            ]
+          }
+        ],
+        {
+          "NounRelation areBeing:relation:otherNouns:": [
+            "is",
+            "in",
+            [
+              {
+                "Noun:named:": [
+                  "the",
+                  "cabin"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "RelativeToNoun:nouns:areBeing:otherNouns:": [
+        "On",
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "bench"
+            ]
+          }
+        ],
+        "are",
+        [
+          {
+            "Noun:named:": [
+              "some",
+              "blue vinyl cushions"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Nouns:startAs:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "bench"
+            ]
+          }
+        ],
+        {
+          "NounTraits:trait:": [
+            "is",
+            [
+              "enterable",
+              "scenery"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "Nouns:startAs:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "cushions"
+            ]
+          }
+        ],
+        {
+          "NounTraits:trait:": [
+            "are",
+            [
+              "scenery"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+]

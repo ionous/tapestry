@@ -85,17 +85,17 @@ func TestAnonymousSwap(t *testing.T) {
 // TestAnonymousOptional - unit test for broken parsing case
 func TestAnonymousOptional(t *testing.T) {
 	inputs := []string{
-		`{ "NounRelation relation:nouns:":["whereabouts",[]]}`,
-		`{ "NounRelation areBeing:relation:nouns:":["is", "whereabouts",[]]}`,
+		`{ "NounRelation relation:otherNouns:":["whereabouts",[]]}`,
+		`{ "NounRelation areBeing:relation:otherNouns:":["is", "whereabouts",[]]}`,
 	}
 	wants := []story.NounRelation{{
-		AreBeing: story.AreBeing{},
-		Relation: rel.RelationName{Str: "whereabouts"},
-		Nouns:    []story.NamedNoun{},
+		AreBeing:   story.AreBeing{},
+		Relation:   rel.RelationName{Str: "whereabouts"},
+		OtherNouns: []story.NamedNoun{},
 	}, {
-		AreBeing: story.AreBeing{Str: story.AreBeing_Is},
-		Relation: rel.RelationName{Str: "whereabouts"},
-		Nouns:    []story.NamedNoun{},
+		AreBeing:   story.AreBeing{Str: story.AreBeing_Is},
+		Relation:   rel.RelationName{Str: "whereabouts"},
+		OtherNouns: []story.NamedNoun{},
 	}}
 	for i, in := range inputs {
 		var have story.NounRelation

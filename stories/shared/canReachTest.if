@@ -324,7 +324,7 @@
             {
               "Paragraph:": [
                 {
-                  "NounKindStatement:kindOfNoun:": [
+                  "Nouns:depict:": [
                     [
                       {
                         "Noun:named:": [
@@ -334,7 +334,7 @@
                       }
                     ],
                     {
-                      "KindOfNoun:kind:": [
+                      "Kind:named:": [
                         "isa",
                         "thing"
                       ]
@@ -349,7 +349,7 @@
             {
               "Paragraph:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:nouns1:": [
+                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
                     " whereabouts",
                     [
                       {
