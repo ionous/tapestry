@@ -54,6 +54,8 @@ func BuildCatalog(cat *eph.Catalog, w eph.Writer) (err error) {
 		err = e
 	} else if e := cat.WritePlurals(w); e != nil {
 		err = e
+	} else if e := cat.WriteOpposites(w); e != nil {
+		err = e
 	} else if e := cat.WriteDomains(w); e != nil {
 		err = e
 	} else if e := cat.WriteKinds(w); e != nil {

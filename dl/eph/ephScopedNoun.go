@@ -53,13 +53,13 @@ func (n *ScopedNoun) AddAlias(a, at string) (okay bool) {
 
 // stores literal values because they are serializable
 // ( as opposed to generic values which aren't. )
-func (n *ScopedNoun) recordValues() (ret localRecord, err error) {
+func (n *ScopedNoun) recordValues(at string) (ret localRecord, err error) {
 	if n.localRecord.isValid() {
 		ret = n.localRecord
 	} else if k, e := n.Kind(); e != nil {
 		err = e
 	} else {
-		rv := localRecord{k, new(literal.FieldValues)}
+		rv := localRecord{k, new(literal.FieldValues), at}
 		ret, n.localRecord = rv, rv
 	}
 	return

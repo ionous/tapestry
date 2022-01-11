@@ -35,6 +35,7 @@ const (
 	PatternPhase
 	AliasPhase
 	DirectivePhase // more grammar
+	RefPhase
 	NumPhases
 )
 

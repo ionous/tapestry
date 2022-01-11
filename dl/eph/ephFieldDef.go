@@ -49,10 +49,11 @@ func (fd *fieldDef) checkProps(k *ScopedKind) (err error) {
 			} else {
 				reason = Redefined
 			}
+			key := MakeKey(k.name, kf.name)
 			err = newConflict(
-				k.name,
+				key,
 				reason,
-				Definition{kf.at, kf.name},
+				Definition{key, kf.at, kf.name},
 				fd.name,
 			)
 			break
@@ -64,10 +65,11 @@ func (fd *fieldDef) checkProps(k *ScopedKind) (err error) {
 // does this field conflict with any existing traits?
 func (fd *fieldDef) checkTraits(k *ScopedKind) (err error) {
 	if a, ok := k.FindTrait(fd.name); ok {
+		key := MakeKey(k.name, fd.name)
 		err = newConflict(
-			k.name,
+			key,
 			Redefined,
-			Definition{a.at, a.aspect},
+			Definition{key, a.at, a.aspect},
 			fd.name,
 		)
 	}

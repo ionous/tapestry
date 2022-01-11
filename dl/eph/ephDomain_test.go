@@ -200,7 +200,7 @@ type rivalFact string
 func (el rivalFact) Phase() Phase { return ValuePhase }
 
 func (el rivalFact) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	return d.AddDefinition("rivalFact", at, string(el))
+	return d.AddDefinition(MakeKey("rivalFact"), at, string(el))
 }
 
 func (c *Catalog) resolveDomain(n string) (ret Dependencies, err error) {

@@ -8,18 +8,14 @@ import (
 )
 
 func (c *Catalog) WriteValues(w Writer) error {
+	// FIX: nouns should be able to store EVALS too
+	// example: an object with a counter in its description.
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
 		if rv := n.localRecord; rv.isValid() {
 			for _, fv := range rv.rec.Contains {
-				// FIX: nouns should be able to store EVALS too
-				// example: an object with a counter in its description.
-				var at string
-				if lat, ok := fv.Value.(literalAt); ok {
-					at = lat.at
-				}
 				if value, e := marshalout(fv.Value); e != nil {
 					err = errutil.Append(err, e)
-				} else if e := w.Write(mdl.Value, n.domain.name, n.name, fv.Field, value, at); e != nil {
+				} else if e := w.Write(mdl.Value, n.domain.name, n.name, fv.Field, value, rv.at); e != nil {
 					err = e
 					break
 				}
@@ -36,7 +32,7 @@ func (op *EphValues) Phase() Phase { return ValuePhase }
 func (op *EphValues) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if noun, e := getClosestNoun(d, op.Noun); e != nil {
 		err = e
-	} else if rv, e := noun.recordValues(); e != nil {
+	} else if rv, e := noun.recordValues(at); e != nil {
 		err = e
 	} else if field, ok := UniformString(op.Field); !ok {
 		err = InvalidString(op.Field)

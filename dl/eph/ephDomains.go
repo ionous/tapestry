@@ -1,6 +1,8 @@
 package eph
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -13,6 +15,7 @@ type Domain struct {
 	Requires      // other domains this needs ( can have multiple direct parents )
 	catalog       *Catalog
 	currPhase     Phase // lift into some "ProcessingDomain" structure?
+	defs          Artifacts
 	phases        [NumPhases]PhaseData
 	kinds         ScopedKinds
 	nouns         ScopedNouns
@@ -26,20 +29,7 @@ type Domain struct {
 }
 
 type PhaseData struct {
-	eph  []EphAt
-	defs Artifacts
-}
-
-func (dp *PhaseData) AddDefinition(k string, v Definition) {
-	if dp.defs == nil {
-		dp.defs = make(Artifacts)
-	}
-	dp.defs[k] = v
-}
-
-func (d *Domain) GetDefinition(phase Phase, key string) (ret string) {
-	defs := d.phases[phase].defs
-	return defs[key].value
+	eph []EphAt
 }
 
 func (d *Domain) Resolve() (ret Dependencies, err error) {
@@ -66,22 +56,67 @@ func (d *Domain) AddEphemera(at string, ep Ephemera) (err error) {
 	return
 }
 
+func (d *Domain) GetDefinition(key keyType) Definition {
+	return d.defs[key.hash]
+}
+
 // used by ephemera during assembly to record some piece of information
 // that would cause problems it were specified differently elsewhere.
 // ex. an in-game password specified as the word "secret" in one place, but "mongoose" somewhere else.
-func (d *Domain) AddDefinition(key, at, value string) (err error) {
+func (d *Domain) AddDefinition(key keyType, at, value string) (err error) {
 	if e := VisitTree(d, func(dep Dependency) (err error) {
 		scope := dep.(*Domain)
-		if e := scope.phases[d.currPhase].defs.CheckConflict(key, value); e != nil {
+		if e := scope.defs.CheckConflict(key, value); e != nil {
 			err = DomainError{scope.name, e}
 		}
 		return
 	}); e != nil {
 		err = e
 	} else {
-		defs := d.phases[d.currPhase]
-		defs.AddDefinition(key, Definition{at: at, value: value})
-		d.phases[d.currPhase] = defs
+		if d.defs == nil {
+			d.defs = make(Artifacts)
+		}
+		d.defs[key.hash] = Definition{key: key, at: at, value: value}
+	}
+	return
+}
+
+// add a definition that can be overridden in subsequent domains.
+// returns "okay" if the refinement was added ( ex. not duplicated )
+func (d *Domain) RefineDefinition(key keyType, at, value string) (okay bool, err error) {
+	var de DomainError
+	var conflict *Conflict
+	if e := d.AddDefinition(key, at, value); e == nil {
+		okay = true
+	} else if !errors.As(e, &de) || !errors.As(de.Err, &conflict) {
+		err = e // some unknown error?
+	} else {
+		switch conflict.Reason {
+		case Redefined:
+			// redefined definitions are only a problem in the same domain.
+			// ( ie. we allow subdomains to reset / override the plurals )
+			if d.name == de.Domain {
+				err = e
+			} else {
+				okay = true
+				// FIX! see Domain.AddDefinition
+				// the earlier "AddDefinition" doesnt actually add it because this is a redefinition
+				// *but* we actually do want that information....
+				if d.defs == nil {
+					d.defs = make(Artifacts)
+				}
+				d.defs[key.hash] = Definition{key: key, at: at, value: value}
+				LogWarning(e) // even though its okay, let the user know.
+			}
+		case Duplicated:
+			// duplicated definitions are all okay;
+			// but if its in a derived domain: let the user know.
+			if de.Domain != d.name {
+				LogWarning(e)
+			}
+		default:
+			err = e // some unknown conflict?
+		}
 	}
 	return
 }
@@ -121,10 +156,10 @@ func (d *Domain) checkRivals(phase Phase, ds Dependencies, allowDupes bool) (err
 	if deps := ds.Parents(); len(deps) > 1 {
 		a := make(Artifacts)
 		for _, dep := range deps {
-			p := dep.(*Domain) // allow this to panic
-			if defs := p.phases[phase].defs; len(defs) > 0 {
+			scope := dep.(*Domain) // allow this to panic
+			if defs := scope.defs; len(defs) > 0 {
 				if e := a.Merge(defs, allowDupes); e != nil {
-					err = DomainError{p.name, e}
+					err = DomainError{scope.name, e}
 					break
 				}
 			}

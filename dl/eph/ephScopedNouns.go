@@ -83,7 +83,7 @@ func (d *Domain) ResolveNouns() (ret DependencyTable, err error) {
 			m := TableMaker(len(d.nouns))
 			for _, n := range d.nouns {
 				if parentName, ok := m.ResolveParent(n); ok {
-					if e := d.AddDefinition(n.name, n.at, parentName); e != nil {
+					if e := d.AddDefinition(MakeKey("nouns", n.name), n.at, parentName); e != nil {
 						err = errutil.Append(err, e)
 					}
 				}

@@ -23,10 +23,12 @@ func (c *Catalog) WriteDirectives(w Writer) (err error) {
 }
 
 func (d *Domain) WriteDirectives(w Writer) (err error) {
-	defs := d.phases[DirectivePhase].defs
-	for k, def := range defs {
-		if e := w.Write(mdl.Grammar, d.name, k, def.value, def.at); e != nil {
-			err = errutil.Append(err, e)
+	for _, def := range d.defs {
+		if vs := def.key.vals; vs[0] == "prog" {
+			name := vs[1]
+			if e := w.Write(mdl.Grammar, d.name, name, def.value, def.at); e != nil {
+				err = errutil.Append(err, e)
+			}
 		}
 	}
 	return
@@ -41,7 +43,7 @@ func (op *EphDirectives) Assemble(c *Catalog, d *Domain, at string) (err error) 
 	if str, e := marshalout(&op.Directive); e != nil {
 		err = e
 	} else {
-		err = d.AddDefinition(op.Name, at, str)
+		err = d.AddDefinition(MakeKey("prog", op.Name), at, str)
 	}
 	return
 }

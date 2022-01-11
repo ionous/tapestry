@@ -86,7 +86,7 @@ func (op *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = InvalidString(op.Rel)
 	} else if rel, ok := d.GetPluralKind(name); !ok || !rel.HasAncestor(kindsOf.Relation) {
 		err = errutil.Fmt("unknown or invalid relation %q", op.Rel)
-	} else if card := rel.domain.GetDefinition(AncestryPhase, rel.name+"?card"); len(card) == 0 {
+	} else if card := rel.domain.GetDefinition(MakeKey("rel", rel.name, "card")); len(card.value) == 0 {
 		err = errutil.Fmt("unknown or invalid cardinality for %q", op.Rel)
 	} else if first, e := getClosestNoun(d, op.Noun); e != nil {
 		err = e
@@ -94,7 +94,7 @@ func (op *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = e
 	} else {
 		var addPair bool
-		switch card {
+		switch card.value {
 		case tables.ONE_TO_ONE:
 			// when one-to-one, the meaning of the two columns is the same
 			// and sorting the names so that first is less than second simplifies testing for uniqueness
@@ -115,7 +115,7 @@ func (op *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 			uniquePair := first.name + second.name
 			addPair, err = relate(d, rel, uniquePair, at, uniquePair)
 		default:
-			err = errutil.Fmt("unknown or invalid cardinality %q for %q", card, op.Rel)
+			err = errutil.Fmt("unknown or invalid cardinality %q for %q", card.value, op.Rel)
 		}
 		//
 		if err == nil && addPair {
@@ -131,5 +131,5 @@ func (op *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 }
 
 func relate(d *Domain, rel *ScopedKind, key, at, other string) (okay bool, err error) {
-	return refine(d, rel.name+":"+key, at, other)
+	return d.RefineDefinition(MakeKey("rel", rel.name, key), at, other)
 }

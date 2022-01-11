@@ -16,10 +16,10 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 		for _, dep := range deps {
 			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(kindsOf.Pattern) {
 				pat := k.name
-				result := k.domain.GetDefinition(AncestryPhase, pat+"?res")
-				labels := k.domain.GetDefinition(AncestryPhase, pat+"?args")
+				result := k.domain.GetDefinition(MakeKey("pat", pat, "res"))
+				labels := k.domain.GetDefinition(MakeKey("pat", pat, "args"))
 				//
-				if e := w.Write(mdl.Pat, k.domain.name, k.name, labels, result); e != nil {
+				if e := w.Write(mdl.Pat, k.domain.name, k.name, labels.value, result.value); e != nil {
 					err = e
 					break
 				}
@@ -109,7 +109,7 @@ func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *p
 func addPatternDef(d *Domain, k *ScopedKind, key, at, v string) (err error) {
 	if k.domain != d {
 		err = DomainError{d.name, errutil.Fmt("expected the pattern %q and its %s to be defined in the same domain (%q)", k.name, key, k.domain.name)}
-	} else if e := d.AddDefinition(k.name+"?"+key, at, v); e != nil {
+	} else if e := d.AddDefinition(MakeKey("pat", k.name, key), at, v); e != nil {
 		err = e // use definition to block the pattern from defining different args
 	}
 	return

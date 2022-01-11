@@ -57,10 +57,11 @@ func (td *traitDef) checkProps(k *ScopedKind) (err error) {
 	for _, kf := range k.fields {
 		// see if this set of traits contains the a field from the kind
 		if td.HasTrait(kf.name) {
+			key := MakeKey(k.name, kf.name)
 			err = newConflict(
-				k.name,
+				key,
 				Redefined,
-				Definition{kf.at, kf.name},
+				Definition{key, kf.at, kf.name},
 				td.aspect,
 			)
 			break
@@ -73,10 +74,11 @@ func (td *traitDef) checkProps(k *ScopedKind) (err error) {
 func (td *traitDef) checkTraits(k *ScopedKind) (err error) {
 	for _, t := range td.traits {
 		if a, ok := k.FindTrait(t); ok {
+			key := MakeKey(k.name, a.aspect)
 			err = newConflict(
-				k.name,
+				key,
 				Redefined,
-				Definition{a.at, a.aspect},
+				Definition{key, a.at, a.aspect},
 				td.aspect,
 			)
 			break

@@ -68,7 +68,7 @@ func (op *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		// add the cardinality as a definition
 		// ( used by EphRelatives to determine the cardinality )
 		var conflict *Conflict
-		if e := d.AddDefinition(rel+"?card", at, card); e != nil && !errors.As(e, &conflict) && conflict.Reason != Duplicated {
+		if e := d.AddDefinition(MakeKey("rel", rel, "card"), at, card); e != nil && !errors.As(e, &conflict) && conflict.Reason != Duplicated {
 			err = e
 		} else {
 			kid := d.EnsureKind(rel, at)

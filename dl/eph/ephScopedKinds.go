@@ -50,7 +50,7 @@ func (d *Domain) ResolveKinds() (DependencyTable, error) {
 		m := TableMaker(len(d.kinds))
 		for _, k := range d.kinds {
 			if parentName, ok := m.ResolveParent(k); ok {
-				if e := d.AddDefinition(k.name, k.at, parentName); e != nil {
+				if e := d.AddDefinition(MakeKey("kinds", k.name), k.at, parentName); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}
