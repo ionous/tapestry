@@ -33,7 +33,7 @@ func (op *MapHeading) ImportPhrase(k *Importer) (noerr error) {
 		// fix? maybe one way to sort out the ephemera phases would be to give/let
 		// the the StoryStatements have a Phase() implementation directly?
 		// (also maybe the functions should be allowed to be after or before a named phase?)
-		k.WriteEphemera(eph.PhaseFunction{eph.ValuePhase,
+		k.WriteEphemera(eph.PhaseFunction{eph.FieldPhase,
 			func(c *eph.Catalog, d *eph.Domain, at string) (err error) {
 				if dir, e := op.Dir.UniformString(); e != nil {
 					err = e
@@ -77,15 +77,19 @@ func (n MapDirection) UniformString() (ret string, err error) {
 
 func addDirection(d *eph.Domain, fromRoom, inDir, toRoom, at string) error {
 	// fix: a "fact" ephemera that runs immediately whenever its added? ( phase 0 or something maybe )
-	return d.AddDefinition(fromRoom+"+"+inDir, at, toRoom)
+	return d.AddDefinition(eph.MakeKey("dir", fromRoom, inDir), at, toRoom)
 }
 
 // departing from the current room via a door
-func (op *MapDeparting) ImportPhrase(k *Importer) (noerr error) {
-	k.WriteEphemera(Refs(op.Room.nounOf("rooms")))               // verify the current room
-	k.WriteEphemera(op.Door.nounOf("doors"))                     // ensure the exit
-	k.WriteEphemera(op.Room.relateTo("whereabouts", op.Door))    // put the exit in the current room
-	op.Door.valForField(Tx(op.Door.Name.Str, "rooms"), "target") // set the door's target to the other room
+func (op *MapDeparting) ImportPhrase(k *Importer) (err error) {
+	if exitName, e := op.Door.UniformString(); e != nil {
+		err = e // ^ manually transform the names since we are using them as values
+	} else {
+		k.WriteEphemera(Refs(op.Room.nounOf("rooms")))            // verify the current room
+		k.WriteEphemera(op.Door.nounOf("doors"))                  // ensure the exit
+		k.WriteEphemera(op.Room.relateTo("whereabouts", op.Door)) // put the exit in the current room
+		op.Door.valForField(Tx(exitName, "rooms"), "target")      // set the door's target to the other room
+	}
 	return
 }
 
@@ -111,25 +115,33 @@ func (sa *storyAdapter) WriteEphemera(op eph.Ephemera) (noerr error) {
 }
 
 // set the room's compass, creating an exit if needed to normalize directional travel to always involve a door.
-func mapDirect(k ephemeraWriter, room, otherRoom NamedNoun, optionalExit *NamedNoun, dir MapDirection) (err error) {
-	var exitDoor NamedNoun
-	if optionalExit != nil {
-		exitDoor = *optionalExit
+func mapDirect(k ephemeraWriter, room, otherRoom NamedNoun, optionalExit *NamedNoun, mapDir MapDirection) (err error) {
+	if dir, ok := eph.UniformString(mapDir.Str); !ok {
+		err = eph.InvalidString(mapDir.Str)
 	} else {
-		exitDoor = room.dependentNoun(dir.Str + "-door")
-	}
-	if e := k.WriteEphemera(Refs(room.nounOf("rooms"))); e != nil {
-		err = e // ^ verify the current room
-	} else if e := k.WriteEphemera(Refs(otherRoom.nounOf("rooms"))); e != nil {
-		err = e // ^ verify the target room
-	} else if e := k.WriteEphemera(exitDoor.nounOf("doors")); e != nil {
-		err = e // ^ ensure the existence of the door
-	} else if k.WriteEphemera(room.relateTo("whereabouts", exitDoor)); e != nil {
-		err = e // ^ put the exit in the current room
-	} else if e := k.WriteEphemera(room.valForField(Tx(exitDoor.Name.Str, "door"), "compass", dir.Str)); e != nil {
-		err = e // ^ set the room's compass to the exit
-	} else if e := k.WriteEphemera(exitDoor.valForField(Tx(otherRoom.Name.Str, "rooms"), "target")); e != nil {
-		err = e // ^ set the door's target to the other room
+		var exitDoor NamedNoun
+		if optionalExit != nil {
+			exitDoor = *optionalExit
+		} else {
+			exitDoor = room.dependentNoun(dir + "-door")
+		}
+		if exitName, e := exitDoor.UniformString(); e != nil {
+			err = e // ^ manually transform the names since we are using them as values
+		} else if otherName, e := otherRoom.UniformString(); e != nil {
+			err = e // ^ manually transform the names since we are using them as values
+		} else if e := k.WriteEphemera(Refs(room.nounOf("rooms"))); e != nil {
+			err = e // ^ verify the current room
+		} else if e := k.WriteEphemera(Refs(otherRoom.nounOf("rooms"))); e != nil {
+			err = e // ^ verify the target room
+		} else if e := k.WriteEphemera(exitDoor.nounOf("doors")); e != nil {
+			err = e // ^ ensure the existence of the door
+		} else if k.WriteEphemera(room.relateTo("whereabouts", exitDoor)); e != nil {
+			err = e // ^ put the exit in the current room
+		} else if e := k.WriteEphemera(room.valForField(Tx(exitName, "door"), "compass", dir)); e != nil {
+			err = e // ^ set the room's compass to the exit
+		} else if e := k.WriteEphemera(exitDoor.valForField(Tx(otherName, "rooms"), "target")); e != nil {
+			err = e // ^ set the door's target to the other room
+		}
 	}
 	return
 }
@@ -170,11 +182,13 @@ func (n NamedNoun) relateTo(rel string, otherNoun NamedNoun) *eph.EphRelatives {
 }
 
 // give this noun the passed value at the named field and path
-func (n NamedNoun) valForField(v literal.LiteralValue, field string, path ...string) *eph.EphValues {
+func (n NamedNoun) valForField(v literal.LiteralValue, path ...string) *eph.EphValues {
+	last := len(path) - 1
+	field, parts := path[last], path[:last]
 	return &eph.EphValues{
 		Noun:  n.Name.Str,
 		Field: field,
-		Path:  path,
+		Path:  parts,
 		Value: v,
 	}
 }

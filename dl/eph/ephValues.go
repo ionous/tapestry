@@ -12,7 +12,7 @@ func (c *Catalog) WriteValues(w Writer) error {
 	// example: an object with a counter in its description.
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
 		if rv := n.localRecord; rv.isValid() {
-			for _, fv := range rv.rec.Contains {
+			for _, fv := range rv.rec.Fields {
 				if value, e := marshalout(fv.Value); e != nil {
 					err = errutil.Append(err, e)
 				} else if e := w.Write(mdl.Value, n.domain.name, n.name, fv.Field, value, rv.at); e != nil {

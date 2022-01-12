@@ -30,6 +30,14 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 
 	case *TextValues:
 		err = m.MarshalValue(typeName, out.Values)
+
+	case *RecordValue:
+		obj := make(map[string]interface{})
+		if e := marshalFields(obj, out.Fields); e != nil {
+			err = e
+		} else {
+			err = m.MarshalValue(typeName, obj)
+		}
 	}
 	return
 }
@@ -44,7 +52,21 @@ func CompactSlotDecoder(slot jsn.SlotBlock, msg json.RawMessage) (err error) {
 }
 
 func ReadLiteral(aff affine.Affinity, cls string, msg json.RawMessage) (ret LiteralValue, err error) {
-	return readLiteral(aff.String()+"_eval", cls, msg)
+	// most literals write themselves in the same way as the eval shortcuts
+	// record doesnt yet? have a way to distinguish b/t the literal json and the eval json, so context matters.
+	if aff != affine.Record {
+		ret, err = readLiteral(aff.String()+"_eval", cls, msg)
+	} else {
+		var obj map[string]interface{}
+		if e := json.Unmarshal(msg, &obj); e != nil {
+			err = e
+		} else if fields, e := unmarshalFields(obj); e != nil {
+			err = e
+		} else {
+			ret = &RecordValue{Kind: cls, Fields: fields}
+		}
+	}
+	return
 }
 
 func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, err error) {

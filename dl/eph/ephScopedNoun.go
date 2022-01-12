@@ -59,7 +59,7 @@ func (n *ScopedNoun) recordValues(at string) (ret localRecord, err error) {
 	} else if k, e := n.Kind(); e != nil {
 		err = e
 	} else {
-		rv := localRecord{k, new(literal.FieldValues), at}
+		rv := localRecord{k, new(literal.RecordValue), at}
 		ret, n.localRecord = rv, rv
 	}
 	return

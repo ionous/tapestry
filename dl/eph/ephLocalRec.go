@@ -9,10 +9,16 @@ import (
 // a record literal is defined by a kind, and a sparse set of named values
 type localRecord struct {
 	k   *ScopedKind          // our kind, containing all the field definitions
-	rec *literal.FieldValues // our record, containing a sparse list of values
+	rec *literal.RecordValue // our record, containing a sparse list of values
 	at  string               // fix? the at here is not very useful b/c it doesnt tell us where the individual values came from
 	// but where would we store that in the db, unless we either allowed a table of multiple at values ( maybe with path )
 	// or, we recorded individual values for records and assembled them at runtime.
+}
+
+// inside the record we store slightly narrower info
+type innerRecord struct {
+	k      *ScopedKind           // our kind, containing all the field definitions
+	fields *[]literal.FieldValue // a sparse list of values
 }
 
 func (rp *localRecord) isValid() bool {
@@ -32,8 +38,8 @@ func (rp *localRecord) writeValue(noun, at, field string, path []string, val lit
 	return
 }
 
-func (rp *localRecord) nestedWrite(noun, field, at string, val literal.LiteralValue) (err error) {
-	if fd, e := rp.k.findCompatibleField(field, val.Affinity()); e != nil {
+func (in *innerRecord) nestedWrite(noun, field, at string, val literal.LiteralValue) (err error) {
+	if fd, e := in.k.findCompatibleField(field, val.Affinity()); e != nil {
 		err = e
 	} else {
 		// redo the field and value if setting a trait
@@ -41,19 +47,19 @@ func (rp *localRecord) nestedWrite(noun, field, at string, val literal.LiteralVa
 			field, val = aspect, &literal.TextValue{Text: field}
 		}
 		// if an old field exists, compare.
-		if oldVal, ok := rp.findField(fd.name); ok {
+		if oldVal, ok := in.findField(fd.name); ok {
 			err = compareValue(noun, field, at, oldVal, val)
 		} else {
 			// otherwise add the new field
-			rp.appendField(fd.name, val)
+			in.appendField(fd.name, val)
 		}
 	}
 	return
 }
 
 // find or create each record, and return the innermost one.
-func (rp *localRecord) ensureRecords(at string, path []string) (ret localRecord, err error) {
-	it := *rp
+func (rp *localRecord) ensureRecords(at string, path []string) (ret innerRecord, err error) {
+	it := innerRecord{rp.k, &rp.rec.Fields}
 	for _, field := range path {
 		if fd, e := it.k.findCompatibleField(field, affine.Record); e != nil {
 			err = e
@@ -64,12 +70,12 @@ func (rp *localRecord) ensureRecords(at string, path []string) (ret localRecord,
 		} else if oldVal, ok := it.findField(fd.name); !ok {
 			nextRec := new(literal.FieldValues)
 			it.appendField(fd.name, nextRec)
-			it = localRecord{nextKind, nextRec, at}
+			it = innerRecord{nextKind, &nextRec.Contains}
 		} else if nextRec, ok := oldVal.(*literal.FieldValues); !ok {
 			err = errutil.New("field value isnt a record")
 			break
 		} else {
-			it = localRecord{nextKind, nextRec, at}
+			it = innerRecord{nextKind, &nextRec.Contains}
 		}
 	}
 	if err == nil {
@@ -78,16 +84,16 @@ func (rp *localRecord) ensureRecords(at string, path []string) (ret localRecord,
 	return
 }
 
-func (rp *localRecord) appendField(name string, newVal literal.LiteralValue) {
-	rp.rec.Contains = append(rp.rec.Contains, literal.FieldValue{
+func (in *innerRecord) appendField(name string, newVal literal.LiteralValue) {
+	*in.fields = append(*in.fields, literal.FieldValue{
 		Field: name,
 		Value: newVal,
 	})
 }
 
 // find the value of the named field within the passed (sparse) record.
-func (rp *localRecord) findField(field string) (ret literal.LiteralValue, okay bool) {
-	for _, ft := range rp.rec.Contains {
+func (in *innerRecord) findField(field string) (ret literal.LiteralValue, okay bool) {
+	for _, ft := range *in.fields {
 		if ft.Field == field {
 			ret, okay = ft.Value, true
 			break
