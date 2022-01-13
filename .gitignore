@@ -12,6 +12,7 @@ cmd/import/import
 cmd/play/play
 cmd/spec/spec
 cmd/stem/stem
+cmd/chart/chart
 *.zip
 jsn.old.txt
 stories/temp

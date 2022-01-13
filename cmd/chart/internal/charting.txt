@@ -1,0 +1,17 @@
+digraph G {
+    node [ fontcolor=blue fontsize=32 width=0.5 shape=rect style=filled ]
+    concentrate = true  # merges bi-directional links
+
+# labels
+{{- range . }}
+    {{.Noun}} [ label= "{{nameOf .Noun|title}}" ] 
+{{- end }}
+
+# links
+{{- range . }}
+    {{.Noun}} -> { {{- 
+        range $dir, $door := .Compass 
+            -}} {{roomOfDoor $door}} {{ end
+        -}} }
+{{- end }}
+}
