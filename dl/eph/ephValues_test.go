@@ -148,8 +148,8 @@ func TestValuePaths(t *testing.T) {
 		if e := cat.WriteValues(&out); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
-			// fix? consider custom serialization for fields to turn it into a map
-			`a:test:outer:{"Fields:":[{"Field field:value:":["inner",{"Fields:":[{"Field field:value:":["text","some text"]}]}]}]}:x`,
+			// `a:test:outer:{"Fields:":[{"Field field:value:":["inner",{"Fields:":[{"Field field:value:":["text","some text"]}]}]}]}:x`,
+			`a:test:outer:{"inner":{"text":"some text"}}:x`,
 		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)

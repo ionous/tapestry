@@ -31,9 +31,13 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	case *TextValues:
 		err = m.MarshalValue(typeName, out.Values)
 
-	case *RecordValue:
+	// records dont want to contain the names of their records
+	// since that's generally recoverable from knowing the names of the fields
+	// it might be better to allow that though, and only remove that info on the special compact encoding
+	// otherwise writing are reading arent exactly idempotent ( writes from fields but generates a record )
+	case *FieldValues:
 		obj := make(map[string]interface{})
-		if e := marshalFields(obj, out.Fields); e != nil {
+		if e := marshalFields(obj, out.Contains); e != nil {
 			err = e
 		} else {
 			err = m.MarshalValue(typeName, obj)
