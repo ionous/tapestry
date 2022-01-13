@@ -30,7 +30,7 @@ const (
 	CompactExt  = ".if"
 )
 
-// ex. go run asm.go -in /Users/ionous/Documents/tapestry/stories/shared -out /Users/ionous/Documents/tapestry/scratch/shared/play.db
+// ex. go run asm.go -in /Users/ionous/Documents/Tapestry/stories/shared -out /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
 	var srcPath, outFile string
 	flag.StringVar(&srcPath, "in", "", "input file or directory name (json)")

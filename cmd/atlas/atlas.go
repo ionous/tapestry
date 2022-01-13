@@ -15,7 +15,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// go run atlas.go -in /Users/ionous/Documents/tapestry/scratch/shared/play.db
+// go run atlas.go -in /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
 	var fileName string
 	flag.StringVar(&fileName, "in", "", "input file name (sqlite3)")

@@ -15,10 +15,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// ex. go run check.go -in /Users/ionous/Documents/tapestry/scratch/shared/play.db
+// ex. go run check.go -in /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
 	var inFile, testName string
-	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
+	flag.StringVar(&inFile, "in", "", "input file name (.db)")
 	flag.StringVar(&testName, "run", "", "optional specific test")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	responses := flag.Bool("responses", false, "print response names instead of values")
@@ -41,7 +41,7 @@ func checkFile(inFile, testName string, opt qna.Options) (ret int, err error) {
 	if inFile, e := filepath.Abs(inFile); e != nil {
 		err = e
 	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
-		err = errutil.New("couldn't create output file", inFile, e)
+		err = errutil.New("couldn't open db", inFile, e)
 	} else {
 		defer db.Close()
 		if e := tables.CreateRun(db); e != nil {

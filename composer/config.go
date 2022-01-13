@@ -18,7 +18,7 @@ type Config struct {
 }
 
 func (c *Config) Scratch(parts ...string) string {
-	return path.Join(append([]string{c.Root, "scratch"}, parts...)...)
+	return path.Join(append([]string{c.Root, "build"}, parts...)...)
 }
 
 func (c *Config) PathTo(parts ...string) string {

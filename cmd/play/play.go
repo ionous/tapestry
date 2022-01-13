@@ -19,7 +19,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// go run play.go -in  /Users/ionous/Documents/tapestry/scratch/shared/play.db
+// go run play.go -in /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
 	var inFile, testString string
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
