@@ -126,10 +126,6 @@
                 "spec": "eph {pattern%name:text} {target?text} {if%filter:bool_eval} {when:eph_timing} {do%exe:execute} {touch?eph_always}",
                 "slot": "ephemera"
             },
-            "eph_timing": {
-                "uses": "str",
-                "spec": "{before}, {during}, {after}, or {later}"
-            },
             "eph_values": {
                 "spec": "eph {noun:text} {has%field:text} {path*text} {value:literal_value}",
                 "slot": "ephemera",
@@ -141,31 +137,47 @@
                     "Note: when using a path, the path addresses the noun first, the named field - referring to the inner most record - last."
                 ]
             },
-            
-            "eph_always": {
-                "uses": "str",
-                "spec": "{always}"
+
+
+            "eph_pattern_helpers": {
+                "uses": "group",
+                "specs": {
+                    "eph_always": {
+                        "uses": "str",
+                        "spec": "{always}"
+                    },
+                    "eph_timing": {
+                        "uses": "str",
+                        "spec": "{before}, {during}, {after}, or {later}"
+                    }
+                }
             },
-            "eph_cardinality": {
-                "uses": "swap",
-                "spec": "{one_one}, {one_many}, {many_one}, or {many_many}"
-            },
-            "one_one": {
-                "uses": "flow",
-                "spec": "kind {_%kind:text} {to_kind%other_kind:text}"
-            },
-            "one_many": {
-                "uses": "flow",
-                "spec": "kind {_%kind:text} {to_kinds%other_kinds:text}"
-            },
-            "many_one": {
-                "uses": "flow",
-                "spec": "kinds {_%kinds:text} {to_kind%other_kind:text}"
-            },
-            "many_many": {
-                "uses": "flow",
-                "spec": "kinds {_%kinds:text} {to_kinds%other_kinds:text}"
-            }
+
+            "eph_relation_helpers": {
+                "uses": "group",
+                "specs": {
+                    "eph_cardinality": {
+                        "uses": "swap",
+                        "spec": "{one_one}, {one_many}, {many_one}, or {many_many}"
+                    },
+                    "one_one": {
+                        "uses": "flow",
+                        "spec": "kind {_%kind:text} {to_kind%other_kind:text}"
+                    },
+                    "one_many": {
+                        "uses": "flow",
+                        "spec": "kind {_%kind:text} {to_kinds%other_kinds:text}"
+                    },
+                    "many_one": {
+                        "uses": "flow",
+                        "spec": "kinds {_%kinds:text} {to_kind%other_kind:text}"
+                    },
+                    "many_many": {
+                        "uses": "flow",
+                        "spec": "kinds {_%kinds:text} {to_kinds%other_kinds:text}"
+                    }
+                }
+           }
         }
     }
 }
