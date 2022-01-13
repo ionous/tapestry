@@ -1,10 +1,12 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
@@ -98,9 +100,10 @@ func (k *Importer) AddImplicitAspect(aspect, kind string, traits ...string) {
 	}
 }
 
+// pre-processing hooks
+// presumably, this will have to be fixed eventually
+// so that states can be composited not specified in one big monolith.
 func importStory(k *Importer, tgt jsn.Marshalee) error {
-	// presumably, this will have to be fixed eventually
-	// so that states can be composited not monolithic.
 	ts := chart.MakeEncoder()
 	return ts.Marshal(tgt, Map(&ts, BlockMap{
 		rt.Execute_Type: KeyMap{
@@ -137,6 +140,41 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 				return
 			},
 		},
+		StoryStatement_Type: KeyMap{
+			BlockEnd: func(b jsn.Block, v interface{}) (err error) {
+				// sometimes we also get slice blocks...
+				if slot, ok := b.(jsn.SlotBlock); ok {
+					// sometimes we get empty slots...
+					if val, ok := slot.GetSlot(); ok {
+						if stmt, ok := val.(StoryStatement); !ok {
+							err = errutil.Fmt("trying to post import something other than a statement")
+						} else {
+							err = stmt.ImportPhrase(k)
+						}
+					}
+				}
+				return
+			},
+		},
+		core.Response_Type: KeyMap{
+			BlockStart: func(b jsn.Block, v interface{}) (err error) {
+				if flow, ok := b.(jsn.FlowBlock); !ok {
+					err = errutil.Fmt("trying to import something other than a flow")
+				} else if resp, ok := flow.GetFlow().(*core.Response); !ok {
+					err = errutil.Fmt("trying to import something other than a response")
+				} else {
+					k.WriteEphemera(&eph.EphKinds{
+						Kinds: kindsOf.Response.String(),
+						Contain: []eph.EphParams{{
+							Affinity:  eph.Affinity{eph.Affinity_Text},
+							Name:      resp.Name,
+							Initially: &core.FromText{resp.Text},
+						}},
+					})
+				}
+				return
+			},
+		},
 		OtherBlocks: KeyMap{
 			BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				switch newBlock := b.(type) {
@@ -145,6 +183,8 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 						err = jsn.Missing
 					} else {
 						switch tgt := slat.(type) {
+						// fix? is import stub really needed anymore?
+						// perhaps we can remove the custom story types and just parse things like response type above
 						case ImportStub:
 							if rep, e := tgt.ImportStub(k); e != nil {
 								err = errutil.New(e, "failed to create replacement")
@@ -152,16 +192,6 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 								err = errutil.New("failed to set replacement")
 							}
 						}
-					}
-				}
-				return
-			},
-			BlockEnd: func(b jsn.Block, slot interface{}) (err error) {
-				switch oldBlock := b.(type) {
-				case jsn.FlowBlock:
-					switch tgt := oldBlock.GetFlow().(type) {
-					case StoryStatement:
-						err = tgt.ImportPhrase(k)
 					}
 				}
 				return

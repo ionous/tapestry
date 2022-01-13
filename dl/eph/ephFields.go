@@ -48,16 +48,15 @@ func (c *Catalog) WriteLocals(w Writer) (err error) {
 		err = e
 	} else {
 		for _, dep := range deps {
-			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(kindsOf.Pattern) {
-				for _, fd := range k.fields {
-					if init := fd.initially; init != nil {
-						if value, e := marshalout(init); e != nil {
-							err = e
-							break
-						} else if e := w.Write(mdl.Assign, k.domain.name, k.name, fd.name, value); e != nil {
-							err = e
-							break
-						}
+			k := dep.Leaf().(*ScopedKind)
+			for _, fd := range k.fields {
+				if init := fd.initially; init != nil {
+					if value, e := marshalout(init); e != nil {
+						err = e
+						break
+					} else if e := w.Write(mdl.Assign, k.domain.name, k.name, fd.name, value); e != nil {
+						err = e
+						break
 					}
 				}
 			}

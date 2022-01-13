@@ -13,13 +13,14 @@ const (
 	Pattern                    // patterns
 	Record                     // records
 	Relation                   // relations
+	Response                   // responses
 	// subtypes of pattern:
 	Action Kinds = Pattern | 1<<iota //actions
 	Event                            //events
 )
 
 var DefaultKinds = []Kinds{
-	Aspect, Kind, Pattern, Record, Relation, Action, Event,
+	Aspect, Kind, Pattern, Record, Relation, Response, Action, Event,
 }
 
 func (k Kinds) Parent() (ret Kinds) {
