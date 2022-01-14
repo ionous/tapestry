@@ -79,7 +79,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "Print news of light",
                     {
                       "PatternRules:": [

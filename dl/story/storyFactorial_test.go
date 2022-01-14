@@ -41,15 +41,15 @@ func TestFactorialImport(t *testing.T) {
 					Affinity: eph.Affinity{eph.Affinity_Number},
 					Name:     "num",
 				}},
-			},
-			// a pattern return ( which happens to use the same input var )
-			&eph.EphPatterns{
-				Name: "factorial",
 				Result: &eph.EphParams{
 					Affinity: eph.Affinity{eph.Affinity_Number},
 					Name:     "num",
 				},
 			},
+			// a pattern return ( which happens to use the same input var )
+			// &eph.EphPatterns{
+			// 	Name: "factorial",
+			// },
 			// our lowest priority rule
 			&eph.EphRules{
 				Name:   "factorial",
@@ -59,13 +59,13 @@ func TestFactorialImport(t *testing.T) {
 			},
 			// the story happens to declare the return value twice
 			// once before each rule.... that's fine it will be logged but it wont fail.
-			&eph.EphPatterns{
-				Name: "factorial",
-				Result: &eph.EphParams{
-					Affinity: eph.Affinity{eph.Affinity_Number},
-					Name:     "num",
-				},
-			},
+			// &eph.EphPatterns{
+			// 	Name: "factorial",
+			// 	Result: &eph.EphParams{
+			// 		Affinity: eph.Affinity{eph.Affinity_Number},
+			// 		Name:     "num",
+			// 	},
+			// },
 			// our highest priority rule ( that tests for zero )
 			&eph.EphRules{
 				Name:   "factorial",

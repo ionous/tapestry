@@ -1,16 +1,13 @@
 [
   [
     {
-      "PatternDecl:name:": [
-        "patterns",
-        "adjust light"
-      ]
+      "Pattern:": "adjust light"
     },
     {
       "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "adjust light",
         {
           "PatternLocals:": [
@@ -145,13 +142,10 @@
   ],
   [
     {
-      "PatternDecl:name:": [
-        "patterns",
-        "Print news of darkness"
-      ]
+      "Pattern:": "Print news of darkness"
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "Print news of darkness",
         {
           "PatternRules:": [
@@ -179,13 +173,10 @@
   ],
   [
     {
-      "PatternDecl:name:": [
-        "patterns",
-        "Print news of light"
-      ]
+      "Pattern:": "Print news of light"
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "Print news of light",
         {
           "PatternRules:": [

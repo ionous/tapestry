@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "fully opaque",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -15,7 +14,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "result"
           }
         }
@@ -25,7 +24,7 @@
       "Comment:": "Returns true if light gets stopped when passing from inside an object to outside an object. Note that \"lit\" objects emit light from all of their surfaces, so while a closed box might not reveal a flashlight locked inside, a glowing haunted treasure chest would illuminate its contents and the room it's in. "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "fully opaque",
         {
           "PatternRules:": [
@@ -116,11 +115,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "transparentOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -128,11 +126,19 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Text named:of:": [
+              "result",
+              "object"
+            ]
+          }
         }
       ]
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "transparentOf",
         {
           "PatternLocals:": [
@@ -168,14 +174,6 @@
               ]
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Text named:of:": [
-              "result",
-              "object"
-            ]
-          }
         },
         {
           "PatternRules:": [
@@ -240,11 +238,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "transparentList",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -252,6 +249,11 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "TextList named:": "list"
+          }
         }
       ]
     },
@@ -259,13 +261,8 @@
       "Comment:": "Return a list containing the object and all of its transparent parents. "
     },
     {
-      "PatternActions:patternReturn:patternRules:": [
+      "Pattern:rules:": [
         "transparentList",
-        {
-          "PatternReturn:": {
-            "TextList named:": "list"
-          }
-        },
         {
           "PatternRules:": [
             {
@@ -329,11 +326,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "contains light",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "spot",
@@ -343,7 +339,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "result"
           }
         }
@@ -353,7 +349,7 @@
       "Comment:": "Returns true if the passed spot is illuminated ( because of its own light, or because of the light of some nearby objet. ) This roughly correlates to Inform's \"offers light\" routine."
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "contains light",
         {
           "PatternLocals:": [

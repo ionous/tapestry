@@ -1,14 +1,14 @@
 [
   [
     {
-      "ActionDecl:action:actionParams none:": [
+      "Event:action:args none:": [
         "wait",
         "waiting",
         "nothing"
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "waiting",
         {
           "PatternLocals:": [
@@ -125,11 +125,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "report waiting",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -141,7 +140,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "report waiting",
         {
           "PatternRules:": [

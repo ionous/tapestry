@@ -1,7 +1,7 @@
 [
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "wear",
         "wearing",
         {
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "wearing",
         {
           "PatternLocals:": [
@@ -182,7 +182,7 @@
   ],
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "remove",
         "removing",
         {
@@ -191,7 +191,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "removing",
         {
           "PatternLocals:": [
@@ -366,7 +366,7 @@
       "Comment:": "Can only remove what's worn. ( This isn't perfectly symmetrical with can only wear possessions, and that's okay. ) "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "state changing",
         {
           "PatternRules:": [

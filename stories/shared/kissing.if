@@ -22,7 +22,7 @@
   ],
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "kiss",
         "kissing",
         {
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "kissing",
         {
           "PatternLocals:": [
@@ -233,7 +233,7 @@
   ],
   [
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "can use",
         {
           "PatternRules:": [
@@ -349,11 +349,11 @@
   ],
   [
     {
-      "EventBlock kinds:handlers:": [
+      "Listen kinds:handlers:": [
         "actors",
         [
           {
-            "EventHandler:event:patternRules:": [
+            "With:event:rules:": [
               "while",
               "kiss",
               {
@@ -400,11 +400,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "report kissing",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -416,7 +415,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "report kissing",
         {
           "PatternRules:": [

@@ -107,11 +107,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "A",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -123,7 +122,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "A",
         {
           "PatternRules:": [
@@ -168,11 +167,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "The",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -184,7 +182,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "The",
         {
           "PatternRules:": [
@@ -237,11 +235,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "Print article",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:": "article"
             },
@@ -259,7 +256,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "Print article",
         {
           "PatternRules:": [

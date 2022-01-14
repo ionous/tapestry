@@ -1,7 +1,7 @@
 [
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "take",
         "taking",
         {
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "taking",
         {
           "PatternLocals:": [
@@ -195,11 +195,11 @@
   ],
   [
     {
-      "EventBlock kinds:handlers:": [
+      "Listen kinds:handlers:": [
         "things",
         [
           {
-            "EventHandler:event:patternRules:": [
+            "With:event:rules:": [
               "while",
               "take",
               {
@@ -292,11 +292,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "report taking",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -314,7 +313,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "report taking",
         {
           "PatternRules:": [
@@ -379,7 +378,7 @@
   ],
   [
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "can reach",
         {
           "PatternRules:": [
@@ -593,7 +592,7 @@
   ],
   [
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "reach up",
         {
           "PatternRules:": [
@@ -648,7 +647,7 @@
   ],
   [
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "reach down",
         {
           "PatternRules:": [

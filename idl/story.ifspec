@@ -159,15 +159,13 @@
                         {
                             "action_decl":
                             {
-                                "uses": "flow",
                                 "slot": "story_statement",
                                 "spec": "Agents can {act%event:event_name} and {acting%action:action_name} requires {action_params}.",
-                                "desc":
-                                [
+                                "sign": "Event:action:args:",
+                                "desc": [
                                     "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.",
                                     "Activities involve either the player or an npc and possibly one or two other objects."
-                                ],
-                                "group": "positioned"
+                                ]
                             },
                             "action_params":
                             {
@@ -208,12 +206,14 @@
                                 "slot": "story_statement",
                                 "spec": "For {the target%target:event_target} {handlers+event_handler}",
                                 "desc": "Declare event listeners: Listeners let objects in the game world react to changes before, during, or after they happen.",
-                                "group": "positioned"
+                                "group": "positioned",
+                                "lede": "listen"
                             },
                             "event_handler":
                             {
                                 "uses": "flow",
-                                "spec": "{event_phase} {the event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}"
+                                "spec": "{event_phase} {the event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}",
+                                "sign": "with:event:with:rules:"
                             },
                             "event_phase":
                             {
@@ -228,7 +228,7 @@
                             "event_target":
                             {
                                 "uses": "swap",
-                                "spec": "the {kinds:plural_kinds} or {named_noun}"
+                                "spec": "the {kinds:plural_kinds} or {noun:named_noun}"
                             }
                         }
                     },
@@ -281,29 +281,20 @@
                         {
                             "pattern_decl":
                             {
-                                "uses": "flow",
                                 "slot": "story_statement",
-                                "spec": "{type:pattern_type} determine {name:pattern_name|quote} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
-                                "desc":
-                                [
+                                "spec": "Tp determine {name:pattern_name|quote} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
+                                "sign": "Pattern:requires:returns:about:",
+                                "desc": [
                                     "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.",
                                     "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."
                                 ]
                             },
-                            "pattern_variables_decl":
-                            {
-                                "sign": "pattern:requires:",
-                                "slot": "story_statement",
-                                "spec": "The pattern {pattern_name|quote} requires {props+property_slot|comma-and}.",
-                                "desc": "Add parameters to a pattern: Values provided when calling a pattern."
-                            },
                             "pattern_variables_tail":
                             {
-                                "uses": "flow",
                                 "spec": "It requires {props+property_slot|comma-and}",
-                                "desc": "Pattern variables: Storage for values used during the execution of a pattern."
+                                "desc": "Pattern variables: Storage for values used during the execution of a pattern.",
+                                "sign": "pattern_requires:"
                             },
-
                             "pattern_type":
                             {
                                 "uses": "str",
@@ -312,10 +303,10 @@
                             },
                             "pattern_actions":
                             {
-                                "uses": "flow",
                                 "slot": "story_statement",
-                                "spec": "To determine {pattern name%name:pattern_name} {?pattern_locals} {?pattern_return} do:{pattern_rules}",
-                                "desc": "Add actions to a pattern: Actions to take when using a pattern."
+                                "spec": "To determine {pattern name%name:pattern_name} {?pattern_locals} do:{pattern_rules}",
+                                "desc": "Add actions to a pattern: Actions to take when using a pattern.",
+                                "sign": "pattern:with:rules:"
                             },
                             "pattern_rules":
                             {
@@ -363,7 +354,8 @@
                             "pattern_return":
                             {
                                 "uses": "flow",
-                                "spec": "returning {result:property_slot}"
+                                "spec": "returning {result:property_slot}",
+                                "sign": "pattern_result:"
                             }
                         }
                     },

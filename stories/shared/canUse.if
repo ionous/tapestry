@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "can use",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -31,14 +30,14 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Text named:": "response"
           }
         }
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "can use",
         {
           "PatternRules:": [

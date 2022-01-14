@@ -196,10 +196,9 @@ func ActionContext_Marshal(m jsn.Marshaler, val *ActionContext) (err error) {
 
 // ActionDecl
 type ActionDecl struct {
-	At           reader.Position `if:"internal"`
-	Event        EventName       `if:"label=_"`
-	Action       ActionName      `if:"label=action"`
-	ActionParams ActionParams    `if:"label=action_params"`
+	Event        EventName    `if:"label=_"`
+	Action       ActionName   `if:"label=action"`
+	ActionParams ActionParams `if:"label=args"`
 }
 
 // User implemented slots:
@@ -209,6 +208,7 @@ func (*ActionDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: ActionDecl_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Event",
 	}
 }
 
@@ -264,7 +264,7 @@ func ActionDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionDecl) (err
 type ActionDecl_Flow struct{ ptr *ActionDecl }
 
 func (n ActionDecl_Flow) GetType() string      { return ActionDecl_Type }
-func (n ActionDecl_Flow) GetLede() string      { return ActionDecl_Type }
+func (n ActionDecl_Flow) GetLede() string      { return "Event" }
 func (n ActionDecl_Flow) GetFlow() interface{} { return n.ptr }
 func (n ActionDecl_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*ActionDecl); ok {
@@ -286,28 +286,27 @@ func ActionDecl_Optional_Marshal(m jsn.Marshaler, pv **ActionDecl) (err error) {
 }
 
 func ActionDecl_Marshal(m jsn.Marshaler, val *ActionDecl) (err error) {
-	m.SetCursor(val.At.Offset)
 	if err = m.MarshalBlock(ActionDecl_Flow{val}); err == nil {
-		e1 := m.MarshalKey("", ActionDecl_Field_Event)
+		e0 := m.MarshalKey("", ActionDecl_Field_Event)
+		if e0 == nil {
+			e0 = EventName_Marshal(m, &val.Event)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ActionDecl_Field_Event))
+		}
+		e1 := m.MarshalKey("action", ActionDecl_Field_Action)
 		if e1 == nil {
-			e1 = EventName_Marshal(m, &val.Event)
+			e1 = ActionName_Marshal(m, &val.Action)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ActionDecl_Field_Event))
+			m.Error(errutil.New(e1, "in flow at", ActionDecl_Field_Action))
 		}
-		e2 := m.MarshalKey("action", ActionDecl_Field_Action)
+		e2 := m.MarshalKey("args", ActionDecl_Field_ActionParams)
 		if e2 == nil {
-			e2 = ActionName_Marshal(m, &val.Action)
+			e2 = ActionParams_Marshal(m, &val.ActionParams)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ActionDecl_Field_Action))
-		}
-		e3 := m.MarshalKey("action_params", ActionDecl_Field_ActionParams)
-		if e3 == nil {
-			e3 = ActionParams_Marshal(m, &val.ActionParams)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ActionDecl_Field_ActionParams))
+			m.Error(errutil.New(e2, "in flow at", ActionDecl_Field_ActionParams))
 		}
 		m.EndBlock()
 	}
@@ -2310,6 +2309,7 @@ func (*EventBlock) Compose() composer.Spec {
 	return composer.Spec{
 		Name: EventBlock_Type,
 		Uses: composer.Type_Flow,
+		Lede: "listen",
 	}
 }
 
@@ -2364,7 +2364,7 @@ func EventBlock_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventBlock) (err
 type EventBlock_Flow struct{ ptr *EventBlock }
 
 func (n EventBlock_Flow) GetType() string      { return EventBlock_Type }
-func (n EventBlock_Flow) GetLede() string      { return EventBlock_Type }
+func (n EventBlock_Flow) GetLede() string      { return "listen" }
 func (n EventBlock_Flow) GetFlow() interface{} { return n.ptr }
 func (n EventBlock_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*EventBlock); ok {
@@ -2411,14 +2411,15 @@ func EventBlock_Marshal(m jsn.Marshaler, val *EventBlock) (err error) {
 type EventHandler struct {
 	EventPhase   EventPhase     `if:"label=_"`
 	Event        EventName      `if:"label=event"`
-	Locals       *PatternLocals `if:"label=locals,optional"`
-	PatternRules PatternRules   `if:"label=pattern_rules"`
+	Locals       *PatternLocals `if:"label=with,optional"`
+	PatternRules PatternRules   `if:"label=rules"`
 }
 
 func (*EventHandler) Compose() composer.Spec {
 	return composer.Spec{
 		Name: EventHandler_Type,
 		Uses: composer.Type_Flow,
+		Lede: "with",
 	}
 }
 
@@ -2475,7 +2476,7 @@ func EventHandler_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventHandler) 
 type EventHandler_Flow struct{ ptr *EventHandler }
 
 func (n EventHandler_Flow) GetType() string      { return EventHandler_Type }
-func (n EventHandler_Flow) GetLede() string      { return EventHandler_Type }
+func (n EventHandler_Flow) GetLede() string      { return "with" }
 func (n EventHandler_Flow) GetFlow() interface{} { return n.ptr }
 func (n EventHandler_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*EventHandler); ok {
@@ -2512,14 +2513,14 @@ func EventHandler_Marshal(m jsn.Marshaler, val *EventHandler) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EventHandler_Field_Event))
 		}
-		e2 := m.MarshalKey("locals", EventHandler_Field_Locals)
+		e2 := m.MarshalKey("with", EventHandler_Field_Locals)
 		if e2 == nil {
 			e2 = PatternLocals_Optional_Marshal(m, &val.Locals)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EventHandler_Field_Locals))
 		}
-		e3 := m.MarshalKey("pattern_rules", EventHandler_Field_PatternRules)
+		e3 := m.MarshalKey("rules", EventHandler_Field_PatternRules)
 		if e3 == nil {
 			e3 = PatternRules_Marshal(m, &val.PatternRules)
 		}
@@ -2701,14 +2702,14 @@ type EventTarget struct {
 var EventTarget_Optional_Marshal = EventTarget_Marshal
 
 const EventTarget_Kinds_Opt = "$KINDS"
-const EventTarget_NamedNoun_Opt = "$NAMED_NOUN"
+const EventTarget_Noun_Opt = "$NOUN"
 
 func (*EventTarget) Compose() composer.Spec {
 	return composer.Spec{
 		Name: EventTarget_Type,
 		Uses: composer.Type_Swap,
 		Choices: []string{
-			EventTarget_Kinds_Opt, EventTarget_NamedNoun_Opt,
+			EventTarget_Kinds_Opt, EventTarget_Noun_Opt,
 		},
 		Swaps: []interface{}{
 			(*PluralKinds)(nil),
@@ -2733,7 +2734,7 @@ func (op *EventTarget) SetSwap(c string) (okay bool) {
 	case EventTarget_Kinds_Opt:
 		op.Choice, op.Value = c, new(PluralKinds)
 		okay = true
-	case EventTarget_NamedNoun_Opt:
+	case EventTarget_Noun_Opt:
 		op.Choice, op.Value = c, new(NamedNoun)
 		okay = true
 	}
@@ -6390,9 +6391,8 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 // PatternActions Actions to take when using a pattern.
 type PatternActions struct {
 	Name          core.PatternName `if:"label=_"`
-	PatternLocals *PatternLocals   `if:"label=pattern_locals,optional"`
-	PatternReturn *PatternReturn   `if:"label=pattern_return,optional"`
-	PatternRules  PatternRules     `if:"label=pattern_rules"`
+	PatternLocals *PatternLocals   `if:"label=with,optional"`
+	PatternRules  PatternRules     `if:"label=rules"`
 }
 
 // User implemented slots:
@@ -6402,13 +6402,13 @@ func (*PatternActions) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PatternActions_Type,
 		Uses: composer.Type_Flow,
+		Lede: "pattern",
 	}
 }
 
 const PatternActions_Type = "pattern_actions"
 const PatternActions_Field_Name = "$NAME"
 const PatternActions_Field_PatternLocals = "$PATTERN_LOCALS"
-const PatternActions_Field_PatternReturn = "$PATTERN_RETURN"
 const PatternActions_Field_PatternRules = "$PATTERN_RULES"
 
 func (op *PatternActions) Marshal(m jsn.Marshaler) error {
@@ -6458,7 +6458,7 @@ func PatternActions_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternActio
 type PatternActions_Flow struct{ ptr *PatternActions }
 
 func (n PatternActions_Flow) GetType() string      { return PatternActions_Type }
-func (n PatternActions_Flow) GetLede() string      { return PatternActions_Type }
+func (n PatternActions_Flow) GetLede() string      { return "pattern" }
 func (n PatternActions_Flow) GetFlow() interface{} { return n.ptr }
 func (n PatternActions_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*PatternActions); ok {
@@ -6488,26 +6488,19 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", PatternActions_Field_Name))
 		}
-		e1 := m.MarshalKey("pattern_locals", PatternActions_Field_PatternLocals)
+		e1 := m.MarshalKey("with", PatternActions_Field_PatternLocals)
 		if e1 == nil {
 			e1 = PatternLocals_Optional_Marshal(m, &val.PatternLocals)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", PatternActions_Field_PatternLocals))
 		}
-		e2 := m.MarshalKey("pattern_return", PatternActions_Field_PatternReturn)
+		e2 := m.MarshalKey("rules", PatternActions_Field_PatternRules)
 		if e2 == nil {
-			e2 = PatternReturn_Optional_Marshal(m, &val.PatternReturn)
+			e2 = PatternRules_Marshal(m, &val.PatternRules)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PatternActions_Field_PatternReturn))
-		}
-		e3 := m.MarshalKey("pattern_rules", PatternActions_Field_PatternRules)
-		if e3 == nil {
-			e3 = PatternRules_Marshal(m, &val.PatternRules)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", PatternActions_Field_PatternRules))
+			m.Error(errutil.New(e2, "in flow at", PatternActions_Field_PatternRules))
 		}
 		m.EndBlock()
 	}
@@ -6516,10 +6509,9 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 
 // PatternDecl
 type PatternDecl struct {
-	Type          PatternType           `if:"label=_"`
-	Name          core.PatternName      `if:"label=name"`
-	Optvars       *PatternVariablesTail `if:"label=optvars,optional"`
-	PatternReturn *PatternReturn        `if:"label=pattern_return,optional"`
+	Name          core.PatternName      `if:"label=_"`
+	Optvars       *PatternVariablesTail `if:"label=requires,optional"`
+	PatternReturn *PatternReturn        `if:"label=returns,optional"`
 	About         *Comment              `if:"label=about,optional"`
 }
 
@@ -6530,11 +6522,11 @@ func (*PatternDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PatternDecl_Type,
 		Uses: composer.Type_Flow,
+		Lede: "Pattern",
 	}
 }
 
 const PatternDecl_Type = "pattern_decl"
-const PatternDecl_Field_Type = "$TYPE"
 const PatternDecl_Field_Name = "$NAME"
 const PatternDecl_Field_Optvars = "$OPTVARS"
 const PatternDecl_Field_PatternReturn = "$PATTERN_RETURN"
@@ -6587,7 +6579,7 @@ func PatternDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternDecl) (e
 type PatternDecl_Flow struct{ ptr *PatternDecl }
 
 func (n PatternDecl_Flow) GetType() string      { return PatternDecl_Type }
-func (n PatternDecl_Flow) GetLede() string      { return PatternDecl_Type }
+func (n PatternDecl_Flow) GetLede() string      { return "Pattern" }
 func (n PatternDecl_Flow) GetFlow() interface{} { return n.ptr }
 func (n PatternDecl_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*PatternDecl); ok {
@@ -6610,40 +6602,33 @@ func PatternDecl_Optional_Marshal(m jsn.Marshaler, pv **PatternDecl) (err error)
 
 func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
 	if err = m.MarshalBlock(PatternDecl_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternDecl_Field_Type)
+		e0 := m.MarshalKey("", PatternDecl_Field_Name)
 		if e0 == nil {
-			e0 = PatternType_Marshal(m, &val.Type)
+			e0 = core.PatternName_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternDecl_Field_Type))
+			m.Error(errutil.New(e0, "in flow at", PatternDecl_Field_Name))
 		}
-		e1 := m.MarshalKey("name", PatternDecl_Field_Name)
+		e1 := m.MarshalKey("requires", PatternDecl_Field_Optvars)
 		if e1 == nil {
-			e1 = core.PatternName_Marshal(m, &val.Name)
+			e1 = PatternVariablesTail_Optional_Marshal(m, &val.Optvars)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PatternDecl_Field_Name))
+			m.Error(errutil.New(e1, "in flow at", PatternDecl_Field_Optvars))
 		}
-		e2 := m.MarshalKey("optvars", PatternDecl_Field_Optvars)
+		e2 := m.MarshalKey("returns", PatternDecl_Field_PatternReturn)
 		if e2 == nil {
-			e2 = PatternVariablesTail_Optional_Marshal(m, &val.Optvars)
+			e2 = PatternReturn_Optional_Marshal(m, &val.PatternReturn)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PatternDecl_Field_Optvars))
+			m.Error(errutil.New(e2, "in flow at", PatternDecl_Field_PatternReturn))
 		}
-		e3 := m.MarshalKey("pattern_return", PatternDecl_Field_PatternReturn)
+		e3 := m.MarshalKey("about", PatternDecl_Field_About)
 		if e3 == nil {
-			e3 = PatternReturn_Optional_Marshal(m, &val.PatternReturn)
+			e3 = Comment_Optional_Marshal(m, &val.About)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", PatternDecl_Field_PatternReturn))
-		}
-		e4 := m.MarshalKey("about", PatternDecl_Field_About)
-		if e4 == nil {
-			e4 = Comment_Optional_Marshal(m, &val.About)
-		}
-		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", PatternDecl_Field_About))
+			m.Error(errutil.New(e3, "in flow at", PatternDecl_Field_About))
 		}
 		m.EndBlock()
 	}
@@ -6840,6 +6825,7 @@ func (*PatternReturn) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PatternReturn_Type,
 		Uses: composer.Type_Flow,
+		Lede: "pattern_result",
 	}
 }
 
@@ -6893,7 +6879,7 @@ func PatternReturn_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternReturn
 type PatternReturn_Flow struct{ ptr *PatternReturn }
 
 func (n PatternReturn_Flow) GetType() string      { return PatternReturn_Type }
-func (n PatternReturn_Flow) GetLede() string      { return PatternReturn_Type }
+func (n PatternReturn_Flow) GetLede() string      { return "pattern_result" }
 func (n PatternReturn_Flow) GetFlow() interface{} { return n.ptr }
 func (n PatternReturn_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*PatternReturn); ok {
@@ -7227,116 +7213,6 @@ func PatternType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternType) (e
 	return
 }
 
-// PatternVariablesDecl Values provided when calling a pattern.
-type PatternVariablesDecl struct {
-	PatternName core.PatternName `if:"label=_"`
-	Props       []PropertySlot   `if:"label=requires"`
-}
-
-// User implemented slots:
-var _ StoryStatement = (*PatternVariablesDecl)(nil)
-
-func (*PatternVariablesDecl) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternVariablesDecl_Type,
-		Uses: composer.Type_Flow,
-		Lede: "pattern",
-	}
-}
-
-const PatternVariablesDecl_Type = "pattern_variables_decl"
-const PatternVariablesDecl_Field_PatternName = "$PATTERN_NAME"
-const PatternVariablesDecl_Field_Props = "$PROPS"
-
-func (op *PatternVariablesDecl) Marshal(m jsn.Marshaler) error {
-	return PatternVariablesDecl_Marshal(m, op)
-}
-
-type PatternVariablesDecl_Slice []PatternVariablesDecl
-
-func (op *PatternVariablesDecl_Slice) GetType() string { return PatternVariablesDecl_Type }
-
-func (op *PatternVariablesDecl_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternVariablesDecl_Repeats_Marshal(m, (*[]PatternVariablesDecl)(op))
-}
-
-func (op *PatternVariablesDecl_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternVariablesDecl_Slice) SetSize(cnt int) {
-	var els []PatternVariablesDecl
-	if cnt >= 0 {
-		els = make(PatternVariablesDecl_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternVariablesDecl_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternVariablesDecl_Marshal(m, &(*op)[i])
-}
-
-func PatternVariablesDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternVariablesDecl) error {
-	return jsn.RepeatBlock(m, (*PatternVariablesDecl_Slice)(vals))
-}
-
-func PatternVariablesDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternVariablesDecl) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternVariablesDecl_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PatternVariablesDecl_Flow struct{ ptr *PatternVariablesDecl }
-
-func (n PatternVariablesDecl_Flow) GetType() string      { return PatternVariablesDecl_Type }
-func (n PatternVariablesDecl_Flow) GetLede() string      { return "pattern" }
-func (n PatternVariablesDecl_Flow) GetFlow() interface{} { return n.ptr }
-func (n PatternVariablesDecl_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PatternVariablesDecl); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PatternVariablesDecl_Optional_Marshal(m jsn.Marshaler, pv **PatternVariablesDecl) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PatternVariablesDecl_Marshal(m, *pv)
-	} else if !enc {
-		var v PatternVariablesDecl
-		if err = PatternVariablesDecl_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PatternVariablesDecl_Marshal(m jsn.Marshaler, val *PatternVariablesDecl) (err error) {
-	if err = m.MarshalBlock(PatternVariablesDecl_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternVariablesDecl_Field_PatternName)
-		if e0 == nil {
-			e0 = core.PatternName_Marshal(m, &val.PatternName)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternVariablesDecl_Field_PatternName))
-		}
-		e1 := m.MarshalKey("requires", PatternVariablesDecl_Field_Props)
-		if e1 == nil {
-			e1 = PropertySlot_Repeats_Marshal(m, &val.Props)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PatternVariablesDecl_Field_Props))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // PatternVariablesTail Storage for values used during the execution of a pattern.
 type PatternVariablesTail struct {
 	Props []PropertySlot `if:"label=_"`
@@ -7346,6 +7222,7 @@ func (*PatternVariablesTail) Compose() composer.Spec {
 	return composer.Spec{
 		Name: PatternVariablesTail_Type,
 		Uses: composer.Type_Flow,
+		Lede: "pattern_requires",
 	}
 }
 
@@ -7399,7 +7276,7 @@ func PatternVariablesTail_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Patter
 type PatternVariablesTail_Flow struct{ ptr *PatternVariablesTail }
 
 func (n PatternVariablesTail_Flow) GetType() string      { return PatternVariablesTail_Type }
-func (n PatternVariablesTail_Flow) GetLede() string      { return PatternVariablesTail_Type }
+func (n PatternVariablesTail_Flow) GetLede() string      { return "pattern_requires" }
 func (n PatternVariablesTail_Flow) GetFlow() interface{} { return n.ptr }
 func (n PatternVariablesTail_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*PatternVariablesTail); ok {
@@ -9980,7 +9857,6 @@ var Slats = []composer.Composer{
 	(*PatternRule)(nil),
 	(*PatternRules)(nil),
 	(*PatternType)(nil),
-	(*PatternVariablesDecl)(nil),
 	(*PatternVariablesTail)(nil),
 	(*PluralKinds)(nil),
 	(*ProgramHook)(nil),
@@ -10008,9 +9884,6 @@ var Slats = []composer.Composer{
 
 var Signatures = map[uint64]interface{}{
 	7872120455849093108:  (*ActionContext)(nil),         /* ActionContext: */
-	2237475528376444648:  (*ActionDecl)(nil),            /* ActionDecl:action:actionParams common: */
-	18212021549969329253: (*ActionDecl)(nil),            /* ActionDecl:action:actionParams dual: */
-	10825614489046735389: (*ActionDecl)(nil),            /* ActionDecl:action:actionParams none: */
 	14902711848163440508: (*ActionParams)(nil),          /* ActionParams common: */
 	11902859627634050329: (*ActionParams)(nil),          /* ActionParams dual: */
 	5868886119925925865:  (*ActionParams)(nil),          /* ActionParams none: */
@@ -10032,12 +9905,11 @@ var Signatures = map[uint64]interface{}{
 	16533349913402003729: (*MapDeparting)(nil),          /* Departing from:via:and:otherRoom: */
 	14117144937213193556: (*Determine)(nil),             /* Determine: */
 	18058198214790918510: (*Determine)(nil),             /* Determine:arguments: */
-	11093854973825287408: (*EventBlock)(nil),            /* EventBlock kinds:handlers: */
-	11855563103941044442: (*EventBlock)(nil),            /* EventBlock namedNoun:handlers: */
-	4061872818055525560:  (*EventHandler)(nil),          /* EventHandler:event:locals:patternRules: */
-	8929470137779261632:  (*EventHandler)(nil),          /* EventHandler:event:patternRules: */
+	10917972213914269109: (*ActionDecl)(nil),            /* Event:action:args common: */
+	16786955135834098000: (*ActionDecl)(nil),            /* Event:action:args dual: */
+	12780627848155287324: (*ActionDecl)(nil),            /* Event:action:args none: */
 	18010503397334720257: (*EventTarget)(nil),           /* EventTarget kinds: */
-	17197340468883043891: (*EventTarget)(nil),           /* EventTarget namedNoun: */
+	14691585264072030736: (*EventTarget)(nil),           /* EventTarget noun: */
 	351838510430560892:   (*GrammarDecl)(nil),           /* GrammarDecl: */
 	17915827500086617237: (*MapHeading)(nil),            /* Heading:from:and:otherRoom: */
 	18071749382896120219: (*MapHeading)(nil),            /* Heading:from:via:and:otherRoom: */
@@ -10048,6 +9920,8 @@ var Signatures = map[uint64]interface{}{
 	650960042632654891:   (*KindOfRelation)(nil),        /* KindOfRelation:cardinality oneToOne: */
 	11241512832861714070: (*KindsHaveProperties)(nil),   /* Kinds:have: */
 	16689641787061327381: (*KindsOfAspect)(nil),         /* KindsOfAspect: */
+	4120161504711896118:  (*EventBlock)(nil),            /* Listen kinds:handlers: */
+	16514490895609575777: (*EventBlock)(nil),            /* Listen noun:handlers: */
 	10446315654994385322: (*LocalDecl)(nil),             /* LocalDecl: */
 	6009252662016869003:  (*LocalDecl)(nil),             /* LocalDecl:value: */
 	11789909816860756800: (*LocalInit)(nil),             /* LocalInit: */
@@ -10086,26 +9960,23 @@ var Signatures = map[uint64]interface{}{
 	18143853777230560632: (*PairedAction)(nil),          /* PairedAction: */
 	6457542997147343897:  (*Paragraph)(nil),             /* Paragraph */
 	1044755875845214073:  (*Paragraph)(nil),             /* Paragraph: */
-	9595265807710753233:  (*PatternVariablesDecl)(nil),  /* Pattern:requires: */
-	14295113253706291193: (*PatternActions)(nil),        /* PatternActions:patternLocals:patternReturn:patternRules: */
-	626108847940444615:   (*PatternActions)(nil),        /* PatternActions:patternLocals:patternRules: */
-	8043268755698861333:  (*PatternActions)(nil),        /* PatternActions:patternReturn:patternRules: */
-	10735038169260724899: (*PatternActions)(nil),        /* PatternActions:patternRules: */
-	12269627840097064600: (*PatternDecl)(nil),           /* PatternDecl:name: */
-	15390970540499719701: (*PatternDecl)(nil),           /* PatternDecl:name:about: */
-	14226432888280203235: (*PatternDecl)(nil),           /* PatternDecl:name:optvars: */
-	2773647507718310398:  (*PatternDecl)(nil),           /* PatternDecl:name:optvars:about: */
-	12239987563966389881: (*PatternDecl)(nil),           /* PatternDecl:name:optvars:patternReturn: */
-	18176072221785763176: (*PatternDecl)(nil),           /* PatternDecl:name:optvars:patternReturn:about: */
-	16699606798420796914: (*PatternDecl)(nil),           /* PatternDecl:name:patternReturn: */
-	15396002863266428067: (*PatternDecl)(nil),           /* PatternDecl:name:patternReturn:about: */
+	11028694429729745801: (*PatternDecl)(nil),           /* Pattern: */
+	9822902173127317528:  (*PatternDecl)(nil),           /* Pattern:about: */
+	9595265807710753233:  (*PatternDecl)(nil),           /* Pattern:requires: */
+	12912062952203186528: (*PatternDecl)(nil),           /* Pattern:requires:about: */
+	13010900631615283446: (*PatternDecl)(nil),           /* Pattern:requires:returns: */
+	17024654433952487599: (*PatternDecl)(nil),           /* Pattern:requires:returns:about: */
+	10545169234908038990: (*PatternDecl)(nil),           /* Pattern:returns: */
+	6157469696159691367:  (*PatternDecl)(nil),           /* Pattern:returns:about: */
+	18102878396089561802: (*PatternActions)(nil),        /* Pattern:rules: */
+	14327863709522811694: (*PatternActions)(nil),        /* Pattern:with:rules: */
 	16940656754612309445: (*PatternLocals)(nil),         /* PatternLocals: */
-	9272141818556957835:  (*PatternReturn)(nil),         /* PatternReturn: */
+	3777342850694276241:  (*PatternVariablesTail)(nil),  /* PatternRequires: */
+	3203894909373400694:  (*PatternReturn)(nil),         /* PatternResult: */
 	14391699440407036198: (*PatternRule)(nil),           /* PatternRule:flags:hook activity: */
 	15914753357447503965: (*PatternRule)(nil),           /* PatternRule:hook activity: */
 	15881043500959019380: (*PatternRules)(nil),          /* PatternRules */
 	12644281899387438986: (*PatternRules)(nil),          /* PatternRules: */
-	2318440529621094838:  (*PatternVariablesTail)(nil),  /* PatternVariablesTail: */
 	13417511286363622337: (*ProgramHook)(nil),           /* ProgramHook activity: */
 	9421894963555981921:  (*RecordProperty)(nil),        /* Record named: */
 	1627613176937258658:  (*RecordProperty)(nil),        /* Record named:desc: */
@@ -10139,4 +10010,6 @@ var Signatures = map[uint64]interface{}{
 	17501273845802809220: (*TextListProperty)(nil),      /* TextList named:of: */
 	10102728286923952045: (*TextListProperty)(nil),      /* TextList named:of:desc: */
 	14061432096605043790: (*TraitPhrase)(nil),           /* TraitPhrase:trait: */
+	3588173502446728488:  (*EventHandler)(nil),          /* With:event:rules: */
+	6066282364453737768:  (*EventHandler)(nil),          /* With:event:with:rules: */
 }

@@ -23,7 +23,8 @@ func (op *Make) ImportStub(k *Importer) (interface{}, error) {
 }
 
 func (op *Send) ImportStub(k *Importer) (interface{}, error) {
-	refs, args := op.Arguments.xform(op.Event, kindsOf.Event)
+	// note: this used to pass "kindOf.Event" but we dont need to be so strict.
+	refs, args := op.Arguments.xform(op.Event, kindsOf.Pattern)
 	k.WriteEphemera(refs)
 	return &core.CallSend{Event: op.Event, Path: op.Path, Arguments: args}, nil
 }

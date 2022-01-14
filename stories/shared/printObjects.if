@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "print inline objects",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "TextList named:": "objs"
             }
@@ -14,7 +13,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "print inline objects",
         {
           "PatternLocals:": [
@@ -110,11 +109,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "print blocks",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "TextList named:": "objs"
             }
@@ -123,7 +121,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "print blocks",
         {
           "PatternLocals:": [
@@ -219,11 +217,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "print object",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -238,7 +235,7 @@
       "Comment:": "Say the object's name ( and some object details. ) "
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "print object",
         {
           "PatternLocals:": [
@@ -408,11 +405,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "print block",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -424,7 +420,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "print block",
         {
           "PatternLocals:": [
@@ -566,11 +562,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "print inline storage",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -580,14 +575,14 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "success"
           }
         }
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "print inline storage",
         {
           "PatternLocals:": [
@@ -663,11 +658,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "print details",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -682,7 +676,7 @@
       "Comment:": "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "print details",
         {
           "PatternLocals:": [
@@ -814,11 +808,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "print status",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -831,7 +824,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "skip"
           }
         }
@@ -841,7 +834,7 @@
       "Comment:": "extra information about an object useful for inventorying ( usually appearing inside brackets )"
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "print status",
         {
           "PatternRules:": [
@@ -906,11 +899,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "print inner status",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -923,7 +915,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "skip"
           }
         }
@@ -933,7 +925,7 @@
       "Comment:": "usually called via \"print status\" to add spacing and comma-and separators "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "print inner status",
         {
           "PatternRules:": [

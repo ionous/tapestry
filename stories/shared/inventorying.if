@@ -1,14 +1,14 @@
 [
   [
     {
-      "ActionDecl:action:actionParams none:": [
+      "Event:action:args none:": [
         "inventory",
         "inventorying",
         "nothing"
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "inventorying",
         {
           "PatternLocals:": [
@@ -96,11 +96,11 @@
   ],
   [
     {
-      "EventBlock kinds:handlers:": [
+      "Listen kinds:handlers:": [
         "actors",
         [
           {
-            "EventHandler:event:patternRules:": [
+            "With:event:rules:": [
               "while",
               "inventory",
               {
@@ -147,11 +147,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "print inventory",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -163,7 +162,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "print inventory",
         {
           "PatternLocals:": [

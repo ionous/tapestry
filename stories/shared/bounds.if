@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "parser bounds",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -15,14 +14,14 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "TextList named:": "bounds"
           }
         }
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "parser bounds",
         {
           "PatternLocals:": [

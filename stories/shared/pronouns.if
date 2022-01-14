@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "We",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "TextList named:": "names"
             }
@@ -17,7 +16,7 @@
       "Comment:": "We refers to the player. As with all the customizable grammar, we use the plural for the name of pattern."
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "We",
         {
           "PatternRules:": [
@@ -43,11 +42,10 @@
       "Comment:": "they, [we], [ey], it. "
     },
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "They",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -59,7 +57,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "They",
         {
           "PatternRules:": [
@@ -99,11 +97,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "Those",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -115,7 +112,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "Those",
         {
           "PatternRules:": [

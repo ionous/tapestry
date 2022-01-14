@@ -48,13 +48,10 @@
             {
               "Paragraph:": [
                 {
-                  "PatternDecl:name:": [
-                    "patterns",
-                    "magic symbols"
-                  ]
+                  "Pattern:": "magic symbols"
                 },
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "magic symbols",
                     {
                       "PatternRules:": [

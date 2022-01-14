@@ -17,9 +17,6 @@ import (
 func TestPatternImport(t *testing.T) {
 	patternDecl := &story.PatternDecl{
 		Name: P("corral"),
-		Type: story.PatternType{
-			Str: story.PatternType_Patterns,
-		},
 	}
 	var els []eph.Ephemera
 	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
@@ -40,12 +37,13 @@ func TestPatternImport(t *testing.T) {
 
 // verify pattern parameter declarations generate pattern parameter ephemera
 func TestPatternParameterImport(t *testing.T) {
-	patternVariables := &story.PatternVariablesDecl{
-		PatternName: core.PatternName{Str: "corral"},
-		Props: []story.PropertySlot{&story.TextProperty{story.NamedProperty{
-			Name: "pet",
-			Type: "animal",
-		}}},
+	patternVariables := &story.PatternDecl{
+		Name: core.PatternName{Str: "corral"},
+		Optvars: &story.PatternVariablesTail{
+			Props: []story.PropertySlot{&story.TextProperty{story.NamedProperty{
+				Name: "pet",
+				Type: "animal",
+			}}}},
 	}
 	var els []eph.Ephemera
 	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
@@ -84,10 +82,8 @@ func TestPatternRuleImport(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		expect := []eph.Ephemera{
-			// one pattern, no parameters, no locals, no return value.
-			&eph.EphPatterns{
-				Name: "example",
-			},
+			// doesnt generate the pattern anymore, just the rules:
+			// &eph.EphPatterns{	Name: "example" },
 			&eph.EphRules{
 				// the rules are for the named pattern.
 				Name: "example",

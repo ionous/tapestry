@@ -1,7 +1,7 @@
 [
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "activate",
         "activating",
         {
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "activating",
         {
           "PatternLocals:": [
@@ -236,7 +236,7 @@
   ],
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "deactivate",
         "deactivating",
         {
@@ -245,7 +245,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "deactivating",
         {
           "PatternLocals:": [

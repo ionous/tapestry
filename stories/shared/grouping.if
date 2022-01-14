@@ -1,18 +1,17 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:about:": [
-        "patterns",
+      "Pattern:requires:returns:about:": [
         "make groups",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "TextList named:": "objs"
             }
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "RecordList named:of:": [
               "groups",
               "object group"
@@ -25,7 +24,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "make groups",
         {
           "PatternLocals:": [
@@ -77,11 +76,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "assign grouping",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -91,7 +89,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Record named:of:": [
               "grouping",
               "grouping"
@@ -101,7 +99,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "assign grouping",
         {
           "PatternLocals:": [
@@ -285,38 +283,35 @@
   ],
   [
     {
-      "PatternDecl:name:": [
-        "patterns",
-        "match groups"
-      ]
-    },
-    {
-      "Pattern:requires:": [
-        "match groups",
-        [
-          {
-            "Record named:of:": [
-              "first",
-              "grouping"
-            ]
-          },
-          {
-            "Record named:of:": [
-              "second",
-              "grouping"
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "PatternActions:patternReturn:patternRules:": [
+      "Pattern:requires:returns:": [
         "match groups",
         {
-          "PatternReturn:": {
+          "PatternRequires:": [      
+            {
+              "Record named:of:": [
+                "first",
+                "grouping"
+              ]
+            },
+            {
+              "Record named:of:": [
+                "second",
+                "grouping"
+              ]
+            }
+          ]
+        },
+        {
+          "PatternResult:": {
             "Bool named:": "matching"
           }
-        },
+        }
+       
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "match groups",
         {
           "PatternRules:": [
             {
@@ -470,11 +465,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:about:": [
-        "patterns",
+      "Pattern:requires:returns:about:": [
         "collate groups",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Record named:of:": [
                 "grouping",
@@ -490,7 +484,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "RecordList named:of:": [
               "groups",
               "object group"
@@ -503,7 +497,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "collate groups",
         {
           "PatternLocals:": [

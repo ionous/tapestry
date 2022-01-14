@@ -17,11 +17,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:about:": [
-        "patterns",
+      "Pattern:requires:returns:about:": [
         "parentOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -31,21 +30,21 @@
           ]
         },
         {
-          "Comment:": "An object indicating the position or ownership of another: a kitchen with a cook, a cook holding a sack, a sack containing some flour. "
-        }
-      ]
-    },
-    {
-      "PatternActions:patternReturn:patternRules:": [
-        "parentOf",
-        {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Text named:of:": [
               "parent",
               "object"
             ]
           }
         },
+        {
+          "Comment:": "An object indicating the position or ownership of another: a kitchen with a cook, a cook holding a sack, a sack containing some flour. "
+        }
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "parentOf",
         {
           "PatternRules:": [
             {
@@ -111,11 +110,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "parentsOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -123,11 +121,16 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "TextList named:": "list"
+          }
         }
       ]
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "parentsOf",
         {
           "PatternLocals:": [
@@ -145,11 +148,6 @@
               ]
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "TextList named:": "list"
-          }
         },
         {
           "PatternRules:": [
@@ -214,11 +212,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "childrenOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -226,17 +223,17 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "TextList named:": "kids"
+          }
         }
       ]
     },
     {
-      "PatternActions:patternReturn:patternRules:": [
+      "Pattern:rules:": [
         "childrenOf",
-        {
-          "PatternReturn:": {
-            "TextList named:": "kids"
-          }
-        },
         {
           "PatternRules:": [
             {
@@ -268,11 +265,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:about:": [
-        "patterns",
+      "Pattern:requires:returns:about:": [
         "CurrentRoom",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -282,12 +278,20 @@
           ]
         },
         {
+          "PatternResult:": {
+            "Text named:of:": [
+              "room",
+              "room"
+            ]
+          }
+        },
+        {
           "Comment:": "The room in which an object can be found. "
         }
       ]
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "CurrentRoom",
         {
           "PatternLocals:": [
@@ -307,14 +311,6 @@
               ]
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Text named:of:": [
-              "room",
-              "room"
-            ]
-          }
         },
         {
           "PatternRules:": [
@@ -411,11 +407,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:about:": [
-        "patterns",
+      "Pattern:requires:returns:about:": [
         "Common Ancestor",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "object",
@@ -431,12 +426,20 @@
           ]
         },
         {
+          "PatternResult:": {
+            "Text named:of:": [
+              "ancestor",
+              "object"
+            ]
+          }
+        },
+        {
           "Comment:": "Finds the innermost object housing two objects. However, if one object directly encloses the other, it will return that object."
         }
       ]
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "Common Ancestor",
         {
           "PatternLocals:": [
@@ -457,14 +460,6 @@
               }
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Text named:of:": [
-              "ancestor",
-              "object"
-            ]
-          }
         },
         {
           "PatternRules:": [
@@ -658,35 +653,40 @@
   ],
   [
     {
-      "PatternDecl:name:": [
-        "patterns",
-        "ancestorOf"
-      ]
-    },
-    {
-      "Pattern:requires:": [
+      "Pattern:requires:returns:": [
         "ancestorOf",
-        [
-          {
-            "Text named:of:": [
-              "obj",
-              "object"
-            ]
-          },
-          {
-            "Text named:of:": [
-              "root",
-              "object"
+        { 
+          "PatternRequires:":
+          [
+            {
+              "Text named:of:": [
+                "obj",
+                "object"
+              ]
+            },
+            {
+              "Text named:of:": [
+                "root",
+                "object"
+              ]
+            }
+          ]
+        },
+        {
+          "PatternResult:": {
+            "Bool named:desc:": [
+              "isAncestor",
+              "- true if one object acts as the ancestor of another."
             ]
           }
-        ]
+        }
       ]
     },
     {
       "Comment:": "Returns true if the root is a parent of the object. "
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "ancestorOf",
         {
           "PatternLocals:": [
@@ -699,14 +699,6 @@
               }
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Bool named:desc:": [
-              "isAncestor",
-              "- true if one object acts as the ancestor of another."
-            ]
-          }
         },
         {
           "PatternRules:": [
@@ -833,11 +825,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "locationOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -845,6 +836,14 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Text named:of:": [
+              "location",
+              "object"
+            ]
+          }
         }
       ]
     },
@@ -852,7 +851,7 @@
       "Comment:": "Return the parent of an object if the parent is a valid enclosure. By default this means a room, a supporter, or a container. "
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "locationOf",
         {
           "PatternLocals:": [
@@ -886,14 +885,6 @@
               ]
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Text named:of:": [
-              "location",
-              "object"
-            ]
-          }
         },
         {
           "PatternRules:": [
@@ -949,11 +940,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "SupporterOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -961,6 +951,14 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Text named:of:": [
+              "supporter",
+              "supporter"
+            ]
+          }
         }
       ]
     },
@@ -968,7 +966,7 @@
       "Comment:": "Return the parent of an object if the parent is a kind of supporter. "
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "SupporterOf",
         {
           "PatternLocals:": [
@@ -1002,14 +1000,6 @@
               ]
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Text named:of:": [
-              "supporter",
-              "supporter"
-            ]
-          }
         },
         {
           "PatternRules:": [
@@ -1049,11 +1039,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "ContainerOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -1061,6 +1050,14 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Text named:of:": [
+              "container",
+              "container"
+            ]
+          }
         }
       ]
     },
@@ -1068,7 +1065,7 @@
       "Comment:": "Return the parent of an object if the parent is a kind of container. "
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "ContainerOf",
         {
           "PatternLocals:": [
@@ -1102,14 +1099,6 @@
               ]
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Text named:of:": [
-              "container",
-              "container"
-            ]
-          }
         },
         {
           "PatternRules:": [
@@ -1149,11 +1138,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "holderOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -1161,6 +1149,14 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Text named:of:": [
+              "owner",
+              "actor"
+            ]
+          }
         }
       ]
     },
@@ -1168,7 +1164,7 @@
       "Comment:": "Return the parent of an object if the parent is wearing or carrying the object. "
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "holderOf",
         {
           "PatternLocals:": [
@@ -1181,14 +1177,6 @@
               }
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Text named:of:": [
-              "owner",
-              "actor"
-            ]
-          }
         },
         {
           "PatternRules:": [
@@ -1250,11 +1238,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "CarrierOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -1262,6 +1249,14 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Text named:of:": [
+              "carrier",
+              "object"
+            ]
+          }
         }
       ]
     },
@@ -1269,7 +1264,7 @@
       "Comment:": "Return the parent of an object if the parent is carrying the object. Only actors can carry other objects. "
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "CarrierOf",
         {
           "PatternLocals:": [
@@ -1282,14 +1277,6 @@
               }
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Text named:of:": [
-              "carrier",
-              "object"
-            ]
-          }
         },
         {
           "PatternRules:": [
@@ -1363,11 +1350,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "WearerOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -1375,6 +1361,14 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Text named:of:": [
+              "wearer",
+              "object"
+            ]
+          }
         }
       ]
     },
@@ -1382,7 +1376,7 @@
       "Comment:": "Return the parent of an object if the parent is wearing the object.  Only actors can wear other objects. "
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "WearerOf",
         {
           "PatternLocals:": [
@@ -1395,14 +1389,6 @@
               }
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Text named:of:": [
-              "wearer",
-              "object"
-            ]
-          }
         },
         {
           "PatternRules:": [

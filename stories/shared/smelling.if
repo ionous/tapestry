@@ -32,7 +32,7 @@
   ],
   [
     {
-      "ActionDecl:action:actionParams none:": [
+      "Event:action:args none:": [
         "sniff",
         "sniffing",
         "nothing"
@@ -42,7 +42,7 @@
       "Comment:": "Sniffing implies smelling the current location. "
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "sniffing",
         {
           "PatternLocals:": [
@@ -123,7 +123,7 @@
   ],
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "smell",
         "smelling",
         {
@@ -132,7 +132,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "smelling",
         {
           "PatternLocals:": [
@@ -319,11 +319,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "report smelling",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -341,7 +340,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "report smelling",
         {
           "PatternRules:": [

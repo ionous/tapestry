@@ -88,7 +88,7 @@ func (op *MapDeparting) ImportPhrase(k *Importer) (err error) {
 		k.WriteEphemera(Refs(op.Room.nounOf("rooms")))            // verify the current room
 		k.WriteEphemera(op.Door.nounOf("doors"))                  // ensure the exit
 		k.WriteEphemera(op.Room.relateTo("whereabouts", op.Door)) // put the exit in the current room
-		op.Door.valForField(Tx(exitName, "rooms"), "target")      // set the door's target to the other room
+		op.Door.valForField(Tx(exitName, "rooms"), "destination") // set the door's target to the other room
 	}
 	return
 }
@@ -139,7 +139,7 @@ func mapDirect(k ephemeraWriter, room, otherRoom NamedNoun, optionalExit *NamedN
 			err = e // ^ put the exit in the current room
 		} else if e := k.WriteEphemera(room.valForField(Tx(exitName, "door"), "compass", dir)); e != nil {
 			err = e // ^ set the room's compass to the exit
-		} else if e := k.WriteEphemera(exitDoor.valForField(Tx(otherName, "rooms"), "target")); e != nil {
+		} else if e := k.WriteEphemera(exitDoor.valForField(Tx(otherName, "rooms"), "destination")); e != nil {
 			err = e // ^ set the door's target to the other room
 		}
 	}

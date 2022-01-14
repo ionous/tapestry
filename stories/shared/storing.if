@@ -1,7 +1,7 @@
 [
   [
     {
-      "ActionDecl:action:actionParams dual:": [
+      "Event:action:args dual:": [
         "store into",
         "storing into",
         {
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "storing into",
         {
           "PatternLocals:": [
@@ -332,11 +332,11 @@
   ],
   [
     {
-      "EventBlock kinds:handlers:": [
+      "Listen kinds:handlers:": [
         "things",
         [
           {
-            "EventHandler:event:patternRules:": [
+            "With:event:rules:": [
               "while",
               "store into",
               {
@@ -422,11 +422,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "report storing into",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -450,7 +449,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "report storing into",
         {
           "PatternRules:": [
@@ -515,7 +514,7 @@
   ],
   [
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "can handle",
         {
           "PatternRules:": [
@@ -639,7 +638,7 @@
   ],
   [
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "reach down",
         {
           "PatternRules:": [

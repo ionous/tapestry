@@ -27,15 +27,13 @@ var FactorialStory = &story.Story{
 					Value:  FactorialCheck,
 				}},
 			&story.PatternDecl{
-				Name: factorialName,
-				Type: story.PatternType{
-					Str: story.PatternType_Patterns},
+				Name:          factorialName,
+				PatternReturn: &story.PatternReturn{Result: numberDecl},
 				Optvars: &story.PatternVariablesTail{
 					Props: []story.PropertySlot{numberDecl}},
 			},
 			&story.PatternActions{
-				Name:          factorialName,
-				PatternReturn: &story.PatternReturn{Result: numberDecl},
+				Name: factorialName,
 				PatternRules: story.PatternRules{
 					PatternRule: []story.PatternRule{{
 						Guard: &core.Always{},
@@ -44,8 +42,7 @@ var FactorialStory = &story.Story{
 							Value:  FactorialMulMinusOne,
 						}}}}},
 			&story.PatternActions{
-				Name:          factorialName,
-				PatternReturn: &story.PatternReturn{Result: numberDecl},
+				Name: factorialName,
 				PatternRules: story.PatternRules{
 					PatternRule: []story.PatternRule{{
 						Guard: FactorialIsZero,

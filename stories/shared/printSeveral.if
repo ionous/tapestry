@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "print several",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -26,7 +25,7 @@
       "Comment:": "Provides a way to describe a generic group of objects. By default, it prints the group size in words, then prints the plural name of the target. It's similar to Inform's \"Printing a number of something.\""
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "print several",
         {
           "PatternRules:": [

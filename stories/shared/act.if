@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "events",
+      "Pattern:requires:returns:": [
         "state change",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -30,7 +29,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "success"
           }
         }
@@ -39,11 +38,11 @@
   ],
   [
     {
-      "EventBlock kinds:handlers:": [
+      "Listen kinds:handlers:": [
         "things",
         [
           {
-            "EventHandler:event:patternRules:": [
+            "With:event:rules:": [
               "while",
               "state change",
               {
@@ -150,11 +149,11 @@
   ],
   [
     {
-      "EventBlock kinds:handlers:": [
+      "Listen kinds:handlers:": [
         "things",
         [
           {
-            "EventHandler:event:patternRules:": [
+            "With:event:rules:": [
               "after",
               "state change",
               {
@@ -239,11 +238,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "state changing",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -271,7 +269,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Text named:": "result"
           }
         }
@@ -281,7 +279,7 @@
       "Comment:": "Called from the state change event to attempt to change the state. "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "state changing",
         {
           "PatternRules:": [

@@ -141,11 +141,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "isPlayer",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -153,17 +152,17 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Bool named:": "success"
+          }
         }
       ]
     },
     {
-      "PatternActions:patternReturn:patternRules:": [
+      "Pattern:rules:": [
         "isPlayer",
-        {
-          "PatternReturn:": {
-            "Bool named:": "success"
-          }
-        },
         {
           "PatternRules:": [
             {

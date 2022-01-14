@@ -8,6 +8,7 @@ import (
 // ImportPhrase - action generates pattern ephemera for now.
 func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
 	extra := op.ActionParams.Value.(actionImporter).GetExtraParams()
+	// the extra "pattern kind" is informational only; the different pattern types dont/shouldnt affect anything.
 	op.makePattern(k, op.Action.Str, "agent", kindsOf.Action, extra, nil)
 	op.makePattern(k, op.Event.Str, "actor", kindsOf.Event, extra, &eph.EphParams{
 		Name:     "success",

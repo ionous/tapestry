@@ -84,7 +84,7 @@
       }
     },
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "show it to",
         "showing it to",
         {
@@ -98,7 +98,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "showing",
         {
           "PatternLocals:": [
@@ -291,11 +291,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "report showing",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -319,7 +318,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "report showing",
         {
           "PatternRules:": [

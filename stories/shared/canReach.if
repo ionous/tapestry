@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "can reach",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -28,14 +27,14 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Text named:": "response"
           }
         }
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "can reach",
         {
           "PatternLocals:": [
@@ -519,11 +518,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "reach up",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "fromObj",
@@ -554,14 +552,14 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Text named:": "response"
           }
         }
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "reach up",
         {
           "PatternRules:": [
@@ -656,11 +654,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "reach down",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "fromObj",
@@ -691,14 +688,14 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Text named:": "response"
           }
         }
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "reach down",
         {
           "PatternRules:": [

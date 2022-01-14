@@ -1,18 +1,17 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "verbing",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:": "verb"
             }
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Text named:": "result"
           }
         }
@@ -22,7 +21,7 @@
       "Comment:": "verb adapts a verb from its specified (usually present) tense, to the story's tense. [ this is just a placeholder for future work. ] "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "verbing",
         {
           "PatternRules:": [
@@ -48,11 +47,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "contain",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -64,7 +62,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "contain",
         {
           "PatternRules:": [
@@ -110,11 +108,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "On",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -126,7 +123,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "On",
         {
           "PatternRules:": [
@@ -172,11 +169,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "Off",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -188,7 +184,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "Off",
         {
           "PatternRules:": [
@@ -234,11 +230,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "Are",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -256,7 +251,7 @@
       "Comment:": "print \"is\" or \"are\" depending on the plurality of the noun, and (optionally) the length of the passed list of names. "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "Are",
         {
           "PatternRules:": [
@@ -344,11 +339,10 @@
       "Comment:": "say the phrase of are not or is not ( depending on the plural of the noun )"
     },
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "Are not",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -360,7 +354,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "Are not",
         {
           "PatternRules:": [
@@ -429,11 +423,10 @@
       "Comment:": "say the contraction aren't or isn't ( depending on the plural of the noun )"
     },
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "Arent",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "noun",
@@ -445,7 +438,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "Arent",
         {
           "PatternRules:": [

@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:about:": [
-        "patterns",
+      "Pattern:requires:returns:about:": [
         "print group",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Record named:of:": [
                 "group",
@@ -15,7 +14,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "success"
           }
         },
@@ -25,7 +24,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "print group",
         {
           "PatternLocals:": [
@@ -405,11 +404,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "print grouped object",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -430,7 +428,7 @@
       "Comment:": "By default, just calls \"print object\" but can be overridden based on the grouping. "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "print grouped object",
         {
           "PatternRules:": [

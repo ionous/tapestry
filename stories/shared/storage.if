@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "provides storage",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -15,7 +14,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "success"
           }
         }
@@ -25,7 +24,7 @@
       "Comment:": "Does the object allow items to be stored inside or on top of it? "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "provides storage",
         {
           "PatternRules:": [
@@ -80,11 +79,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "shows storage",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -94,7 +92,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "success"
           }
         }
@@ -104,7 +102,7 @@
       "Comment:": "Does the object provide storage, and can that storage be seen from outside? "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "shows storage",
         {
           "PatternRules:": [
@@ -162,11 +160,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "visible storage",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -176,7 +173,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "TextList named:": "out"
           }
         }
@@ -186,7 +183,7 @@
       "Comment:": "Return a list containing any visible contents."
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "visible storage",
         {
           "PatternRules:": [
@@ -290,11 +287,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "allows storage",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -304,7 +300,7 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Bool named:": "success"
           }
         }
@@ -314,7 +310,7 @@
       "Comment:": "Returns true when the storage can be accessed."
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "allows storage",
         {
           "PatternRules:": [

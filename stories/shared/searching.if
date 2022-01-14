@@ -1,7 +1,7 @@
 [
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "search",
         "searching",
         {
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "searching",
         {
           "PatternLocals:": [
@@ -195,11 +195,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "report searching",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -217,7 +216,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "report searching",
         {
           "PatternLocals:": [
@@ -434,7 +433,7 @@
   ],
   [
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "can reach",
         {
           "PatternRules:": [

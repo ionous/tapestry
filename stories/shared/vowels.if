@@ -1,15 +1,19 @@
 [
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "starts with vowel",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:": "text"
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Bool named:": "matching"
+          }
         }
       ]
     },
@@ -19,13 +23,8 @@
   ],
   [
     {
-      "PatternActions:patternReturn:patternRules:": [
+      "Pattern:rules:": [
         "starts with vowel",
-        {
-          "PatternReturn:": {
-            "Bool named:": "matching"
-          }
-        },
         {
           "PatternRules:": [
             {

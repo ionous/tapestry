@@ -1,7 +1,7 @@
 [
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "drop",
         "dropping",
         {
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "dropping",
         {
           "PatternLocals:": [
@@ -187,11 +187,11 @@
   ],
   [
     {
-      "EventBlock kinds:handlers:": [
+      "Listen kinds:handlers:": [
         "things",
         [
           {
-            "EventHandler:event:patternRules:": [
+            "With:event:rules:": [
               "while",
               "drop",
               {
@@ -300,11 +300,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "report dropping",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -322,7 +321,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "report dropping",
         {
           "PatternRules:": [
@@ -387,7 +386,7 @@
   ],
   [
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "can reach",
         {
           "PatternRules:": [

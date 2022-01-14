@@ -1,14 +1,14 @@
 [
   [
     {
-      "ActionDecl:action:actionParams none:": [
+      "Event:action:args none:": [
         "look",
         "looking",
         "nothing"
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "looking",
         {
           "PatternLocals:": [
@@ -96,11 +96,11 @@
   ],
   [
     {
-      "EventBlock kinds:handlers:": [
+      "Listen kinds:handlers:": [
         "actors",
         [
           {
-            "EventHandler:event:locals:patternRules:": [
+            "With:event:with:rules:": [
               "while",
               "look",
               {
@@ -193,11 +193,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "Print vantage",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "where",
@@ -215,7 +214,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "Print vantage",
         {
           "PatternLocals:": [
@@ -519,11 +518,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "PrintDarkHeader",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "room",
@@ -535,7 +533,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "PrintDarkHeader",
         {
           "PatternRules:": [
@@ -563,11 +561,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "PrintDarkDescription",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "room",
@@ -579,7 +576,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "PrintDarkDescription",
         {
           "PatternRules:": [
@@ -607,11 +604,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "PrintLocaleTitle",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "room",
@@ -626,7 +622,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "PrintLocaleTitle",
         {
           "PatternLocals:": [
@@ -703,11 +699,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "PrintLocaleSubtitle",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "TextList named:": "enclosures"
             }
@@ -716,7 +711,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "PrintLocaleSubtitle",
         {
           "PatternLocals:": [
@@ -795,11 +790,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "PrintLocaleDescription",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "where",
@@ -823,7 +817,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "PrintLocaleDescription",
         {
           "PatternLocals:": [
@@ -1096,11 +1090,10 @@
       "Comment:": "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
     },
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "print object description",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -1114,17 +1107,16 @@
               ]
             }
           ]
+        },{
+          "PatternResult:": {
+            "Bool named:": "success"
+          }
         }
       ]
     },
     {
-      "PatternActions:patternReturn:patternRules:": [
+      "Pattern:rules:": [
         "print object description",
-        {
-          "PatternReturn:": {
-            "Bool named:": "success"
-          }
-        },
         {
           "PatternRules:": [
             {
@@ -1281,11 +1273,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "PrintImpressionOf",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -1299,11 +1290,16 @@
               ]
             }
           ]
+        },
+        {
+          "PatternResult:": {
+            "Bool named:": "success"
+          }
         }
       ]
     },
     {
-      "PatternActions:patternLocals:patternReturn:patternRules:": [
+      "Pattern:with:rules:": [
         "PrintImpressionOf",
         {
           "PatternLocals:": [
@@ -1347,11 +1343,6 @@
               ]
             }
           ]
-        },
-        {
-          "PatternReturn:": {
-            "Bool named:": "success"
-          }
         },
         {
           "PatternRules:": [
@@ -1494,11 +1485,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "CanAlsoSee",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "where",
@@ -1519,7 +1509,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "CanAlsoSee",
         {
           "PatternRules:": [
@@ -1549,13 +1539,10 @@
   ],
   [
     {
-      "PatternDecl:name:": [
-        "patterns",
-        "set everything unmentioned"
-      ]
+      "Pattern:": "set everything unmentioned"
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "set everything unmentioned",
         {
           "PatternRules:": [

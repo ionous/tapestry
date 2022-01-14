@@ -13,11 +13,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "print plural name",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -32,7 +31,7 @@
       "Comment:": "It says the plural of the target's name. "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "print plural name",
         {
           "PatternRules:": [

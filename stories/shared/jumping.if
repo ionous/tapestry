@@ -19,14 +19,14 @@
   ],
   [
     {
-      "ActionDecl:action:actionParams none:": [
+      "Event:action:args none:": [
         "jump",
         "jumping",
         "nothing"
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "jumping",
         {
           "PatternLocals:": [
@@ -99,11 +99,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "report jumping",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "actor",
@@ -115,7 +114,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "report jumping",
         {
           "PatternRules:": [

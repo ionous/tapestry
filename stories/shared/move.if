@@ -1,11 +1,10 @@
 [
   [
     {
-      "PatternDecl:name:optvars:patternReturn:": [
-        "patterns",
+      "Pattern:requires:returns:": [
         "Move Object",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -21,14 +20,14 @@
           ]
         },
         {
-          "PatternReturn:": {
+          "PatternResult:": {
             "Text named:": "response"
           }
         }
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "Move Object",
         {
           "PatternRules:": [
@@ -183,11 +182,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "RemoveFromPlay",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -199,7 +197,7 @@
       ]
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "RemoveFromPlay",
         {
           "PatternRules:": [
@@ -253,11 +251,10 @@
   ],
   [
     {
-      "PatternDecl:name:optvars:": [
-        "patterns",
+      "Pattern:requires:": [
         "WearObject",
         {
-          "PatternVariablesTail:": [
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -278,7 +275,7 @@
       "Comment:": "This is pretty low level. For instance, it doesnt check wearable."
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "WearObject",
         {
           "PatternRules:": [

@@ -1,7 +1,7 @@
 [
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "open",
         "opening",
         {
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "opening",
         {
           "PatternLocals:": [
@@ -236,7 +236,7 @@
   ],
   [
     {
-      "ActionDecl:action:actionParams common:": [
+      "Event:action:args common:": [
         "close",
         "closing",
         {
@@ -245,7 +245,7 @@
       ]
     },
     {
-      "PatternActions:patternLocals:patternRules:": [
+      "Pattern:with:rules:": [
         "closing",
         {
           "PatternLocals:": [
@@ -474,7 +474,7 @@
       "Comment:": "Can't open when locked. "
     },
     {
-      "PatternActions:patternRules:": [
+      "Pattern:rules:": [
         "state changing",
         {
           "PatternRules:": [
@@ -531,11 +531,11 @@
   ],
   [
     {
-      "EventBlock kinds:handlers:": [
+      "Listen kinds:handlers:": [
         "things",
         [
           {
-            "EventHandler:event:locals:patternRules:": [
+            "With:event:with:rules:": [
               "after",
               "state change",
               {

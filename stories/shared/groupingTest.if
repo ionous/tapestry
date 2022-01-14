@@ -115,7 +115,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "assign grouping",
                     {
                       "PatternRules:": [
@@ -262,7 +262,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "assign grouping",
                     {
                       "PatternRules:": [
@@ -322,7 +322,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "print several",
                     {
                       "PatternRules:": [
@@ -449,7 +449,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "assign grouping",
                     {
                       "PatternRules:": [
@@ -596,7 +596,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "assign grouping",
                     {
                       "PatternRules:": [
@@ -645,7 +645,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "print group",
                     {
                       "PatternRules:": [
@@ -691,7 +691,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "print grouped object",
                     {
                       "PatternRules:": [
@@ -811,7 +811,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "assign grouping",
                     {
                       "PatternRules:": [
@@ -849,7 +849,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "print grouped object",
                     {
                       "PatternRules:": [
@@ -935,7 +935,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "assign grouping",
                     {
                       "PatternRules:": [
@@ -1027,7 +1027,7 @@
             {
               "Paragraph:": [
                 {
-                  "PatternActions:patternRules:": [
+                  "Pattern:rules:": [
                     "assign grouping",
                     {
                       "PatternRules:": [

@@ -8,30 +8,24 @@ import (
 
 func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
 
-	res := convertRes(op.PatternReturn)
 	patternName := op.Name.String()
 	var locals []eph.EphParams
 	if els := op.PatternLocals; els != nil {
 		locals = els.ImportLocals(k, patternName)
 	}
-
-	k.WriteEphemera(&eph.EphPatterns{Name: patternName, Locals: locals, Result: res})
+	if len(locals) > 0 {
+		k.WriteEphemera(&eph.EphPatterns{Name: patternName, Locals: locals})
+	}
 	// write the rules last ( order doesnt matter except for tests )
-	err = op.PatternRules.ImportRules(k, patternName, "", eph.EphTiming{})
-
-	return
+	return op.PatternRules.ImportRules(k, patternName, "", eph.EphTiming{})
 }
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
 	patternName := op.Name.String()
-	if e := op.writeSubType(k, patternName); e != nil {
-		err = e
-	} else {
-		ps := op.reduceProps()
-		res := convertRes(op.PatternReturn)
-		k.WriteEphemera(&eph.EphPatterns{Name: patternName, Result: res, Params: ps})
-	}
+	ps := op.reduceProps()
+	res := convertRes(op.PatternReturn)
+	k.WriteEphemera(&eph.EphPatterns{Name: patternName, Result: res, Params: ps})
 	return
 }
 
@@ -39,28 +33,6 @@ func (op *PatternDecl) reduceProps() (ret []eph.EphParams) {
 	if els := op.Optvars; els != nil {
 		ret = reduceProps(els.Props)
 	}
-	return
-}
-
-// tell the system about the pattern subtype ( if any )
-func (op *PatternDecl) writeSubType(k *Importer, patternName string) (err error) {
-	var patternType string
-	switch str := op.Type.Str; str {
-	case "", PatternType_Patterns:
-		// dont need to write
-	case PatternType_Actions:
-		k.WriteEphemera(&eph.EphKinds{Kinds: patternName, From: patternType})
-	case PatternType_Events:
-		k.WriteEphemera(&eph.EphKinds{Kinds: patternName, From: patternType})
-	default:
-		err = errutil.New("unknown pattern type", str)
-	}
-	return
-}
-
-func (op *PatternVariablesDecl) ImportPhrase(k *Importer) (err error) {
-	ps := reduceProps(op.Props)
-	k.WriteEphemera(&eph.EphPatterns{Name: op.PatternName.String(), Params: ps})
 	return
 }
 
