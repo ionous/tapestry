@@ -3,7 +3,6 @@ package rel
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/reader"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -11,8 +10,9 @@ import (
 
 // ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.)
 type ReciprocalOf struct {
-	Via    RelationName `if:"label=_"`
-	Object rt.TextEval  `if:"label=object"`
+	Via         RelationName `if:"label=_"`
+	Object      rt.TextEval  `if:"label=object"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -99,6 +99,7 @@ func ReciprocalOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalOf) (err erro
 }
 
 func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(ReciprocalOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ReciprocalOf_Field_Via)
 		if e0 == nil {
@@ -121,8 +122,9 @@ func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
 
 // ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)
 type ReciprocalsOf struct {
-	Via    RelationName `if:"label=_"`
-	Object rt.TextEval  `if:"label=object"`
+	Via         RelationName `if:"label=_"`
+	Object      rt.TextEval  `if:"label=object"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -209,6 +211,7 @@ func ReciprocalsOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalsOf) (err er
 }
 
 func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(ReciprocalsOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ReciprocalsOf_Field_Via)
 		if e0 == nil {
@@ -231,9 +234,10 @@ func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
 
 // Relate Relate two nouns.
 type Relate struct {
-	Object   rt.TextEval  `if:"label=_"`
-	ToObject rt.TextEval  `if:"label=to"`
-	Via      RelationName `if:"label=via"`
+	Object      rt.TextEval  `if:"label=_"`
+	ToObject    rt.TextEval  `if:"label=to"`
+	Via         RelationName `if:"label=via"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -320,6 +324,7 @@ func Relate_Optional_Marshal(m jsn.Marshaler, pv **Relate) (err error) {
 }
 
 func Relate_Marshal(m jsn.Marshaler, val *Relate) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(Relate_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Relate_Field_Object)
 		if e0 == nil {
@@ -349,7 +354,6 @@ func Relate_Marshal(m jsn.Marshaler, val *Relate) (err error) {
 
 // RelationName requires a user-specified string.
 type RelationName struct {
-	At  reader.Position `if:"internal"`
 	Str string
 }
 
@@ -380,7 +384,6 @@ func RelationName_Optional_Marshal(m jsn.Marshaler, val *RelationName) (err erro
 }
 
 func RelationName_Marshal(m jsn.Marshaler, val *RelationName) (err error) {
-	m.SetCursor(val.At.Offset)
 	return m.MarshalValue(RelationName_Type, &val.Str)
 }
 
@@ -426,8 +429,9 @@ func RelationName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelationName) 
 
 // RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.)
 type RelativeOf struct {
-	Via    RelationName `if:"label=_"`
-	Object rt.TextEval  `if:"label=object"`
+	Via         RelationName `if:"label=_"`
+	Object      rt.TextEval  `if:"label=object"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -514,6 +518,7 @@ func RelativeOf_Optional_Marshal(m jsn.Marshaler, pv **RelativeOf) (err error) {
 }
 
 func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(RelativeOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RelativeOf_Field_Via)
 		if e0 == nil {
@@ -536,8 +541,9 @@ func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
 
 // RelativesOf Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
 type RelativesOf struct {
-	Via    RelationName `if:"label=_"`
-	Object rt.TextEval  `if:"label=object"`
+	Via         RelationName `if:"label=_"`
+	Object      rt.TextEval  `if:"label=object"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -624,6 +630,7 @@ func RelativesOf_Optional_Marshal(m jsn.Marshaler, pv **RelativesOf) (err error)
 }
 
 func RelativesOf_Marshal(m jsn.Marshaler, val *RelativesOf) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(RelativesOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RelativesOf_Field_Via)
 		if e0 == nil {

@@ -145,8 +145,9 @@ func Bool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Bool) (err error) {
 
 // BoolValue Specify an explicit true or false.
 type BoolValue struct {
-	Bool  bool   `if:"label=_,type=bool"`
-	Class string `if:"label=class,optional,type=text"`
+	Bool        bool   `if:"label=_,type=bool"`
+	Class       string `if:"label=class,optional,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -234,6 +235,7 @@ func BoolValue_Optional_Marshal(m jsn.Marshaler, pv **BoolValue) (err error) {
 }
 
 func BoolValue_Marshal(m jsn.Marshaler, val *BoolValue) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(BoolValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", BoolValue_Field_Bool)
 		if e0 == nil {
@@ -256,8 +258,9 @@ func BoolValue_Marshal(m jsn.Marshaler, val *BoolValue) (err error) {
 
 // FieldValue A fixed value of a record.
 type FieldValue struct {
-	Field string       `if:"label=field,type=text"`
-	Value LiteralValue `if:"label=value"`
+	Field       string       `if:"label=field,type=text"`
+	Value       LiteralValue `if:"label=value"`
+	UserComment string
 }
 
 func (*FieldValue) Compose() composer.Spec {
@@ -341,6 +344,7 @@ func FieldValue_Optional_Marshal(m jsn.Marshaler, pv **FieldValue) (err error) {
 }
 
 func FieldValue_Marshal(m jsn.Marshaler, val *FieldValue) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(FieldValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("field", FieldValue_Field_Field)
 		if e0 == nil {
@@ -364,7 +368,8 @@ func FieldValue_Marshal(m jsn.Marshaler, val *FieldValue) (err error) {
 // FieldValues A series of values all for the same record.
 // While it can be specified wherever a literal value can, it only has meaning when the record type is known.
 type FieldValues struct {
-	Contains []FieldValue `if:"label=_"`
+	Contains    []FieldValue `if:"label=_"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -450,6 +455,7 @@ func FieldValues_Optional_Marshal(m jsn.Marshaler, pv **FieldValues) (err error)
 }
 
 func FieldValues_Marshal(m jsn.Marshaler, val *FieldValues) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(FieldValues_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FieldValues_Field_Contains)
 		if e0 == nil {
@@ -534,8 +540,9 @@ func LiteralValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LiteralValue) 
 
 // NumValue Specify a particular number.
 type NumValue struct {
-	Num   float64 `if:"label=_,type=number"`
-	Class string  `if:"label=class,optional,type=text"`
+	Num         float64 `if:"label=_,type=number"`
+	Class       string  `if:"label=class,optional,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -623,6 +630,7 @@ func NumValue_Optional_Marshal(m jsn.Marshaler, pv **NumValue) (err error) {
 }
 
 func NumValue_Marshal(m jsn.Marshaler, val *NumValue) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(NumValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NumValue_Field_Num)
 		if e0 == nil {
@@ -645,8 +653,9 @@ func NumValue_Marshal(m jsn.Marshaler, val *NumValue) (err error) {
 
 // NumValues Number List: Specify a list of numbers.
 type NumValues struct {
-	Values []float64 `if:"label=_,type=number"`
-	Class  string    `if:"label=class,optional,type=text"`
+	Values      []float64 `if:"label=_,type=number"`
+	Class       string    `if:"label=class,optional,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -734,6 +743,7 @@ func NumValues_Optional_Marshal(m jsn.Marshaler, pv **NumValues) (err error) {
 }
 
 func NumValues_Marshal(m jsn.Marshaler, val *NumValues) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(NumValues_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NumValues_Field_Values)
 		if e0 == nil {
@@ -878,9 +888,10 @@ func Number_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Number) (err error) 
 
 // RecordValue Specify a record composed of literal values.
 type RecordValue struct {
-	Kind   string       `if:"label=_,type=text"`
-	Fields []FieldValue `if:"label=fields"`
-	Cache  RecordCache  `if:"internal"`
+	Kind        string       `if:"label=_,type=text"`
+	Fields      []FieldValue `if:"label=fields"`
+	Cache       RecordCache  `if:"internal"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -968,6 +979,7 @@ func RecordValue_Optional_Marshal(m jsn.Marshaler, pv **RecordValue) (err error)
 }
 
 func RecordValue_Marshal(m jsn.Marshaler, val *RecordValue) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(RecordValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RecordValue_Field_Kind)
 		if e0 == nil {
@@ -990,9 +1002,10 @@ func RecordValue_Marshal(m jsn.Marshaler, val *RecordValue) (err error) {
 
 // RecordValues Specify a series of records, all of the same kind.
 type RecordValues struct {
-	Kind  string        `if:"label=_,type=text"`
-	Els   []FieldValues `if:"label=containing"`
-	Cache RecordsCache  `if:"internal"`
+	Kind        string        `if:"label=_,type=text"`
+	Els         []FieldValues `if:"label=containing"`
+	Cache       RecordsCache  `if:"internal"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1080,6 +1093,7 @@ func RecordValues_Optional_Marshal(m jsn.Marshaler, pv **RecordValues) (err erro
 }
 
 func RecordValues_Marshal(m jsn.Marshaler, val *RecordValues) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(RecordValues_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RecordValues_Field_Kind)
 		if e0 == nil {
@@ -1229,8 +1243,9 @@ func Text_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Text) (err error) {
 
 // TextValue Specify a small bit of text.
 type TextValue struct {
-	Text  string `if:"label=_,type=text"`
-	Class string `if:"label=class,optional,type=text"`
+	Text        string `if:"label=_,type=text"`
+	Class       string `if:"label=class,optional,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1318,6 +1333,7 @@ func TextValue_Optional_Marshal(m jsn.Marshaler, pv **TextValue) (err error) {
 }
 
 func TextValue_Marshal(m jsn.Marshaler, val *TextValue) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(TextValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TextValue_Field_Text)
 		if e0 == nil {
@@ -1340,8 +1356,9 @@ func TextValue_Marshal(m jsn.Marshaler, val *TextValue) (err error) {
 
 // TextValues Text List: Specifies a set of text values.
 type TextValues struct {
-	Values []string `if:"label=_,type=text"`
-	Class  string   `if:"label=class,optional,type=text"`
+	Values      []string `if:"label=_,type=text"`
+	Class       string   `if:"label=class,optional,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1429,6 +1446,7 @@ func TextValues_Optional_Marshal(m jsn.Marshaler, pv **TextValues) (err error) {
 }
 
 func TextValues_Marshal(m jsn.Marshaler, val *TextValues) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(TextValues_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TextValues_Field_Values)
 		if e0 == nil {

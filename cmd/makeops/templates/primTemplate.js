@@ -8,8 +8,6 @@ module.exports = `
   {{~#if (Choices this)}} or{{/if}} user-specified
 {{~/unless}} string.
 type {{Pascal name}} struct {
-{{~#if (IsPositioned this)}}
-  At  reader.Position \`if:"internal"\`{{/if}}
   {{Pascal uses}} {{#if (Uses name 'num')}}float64{{else}}string{{/if}}
 }
 
@@ -51,9 +49,6 @@ func {{Pascal name}}_Optional_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (er
 }
 
 func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
-{{#if (IsPositioned this)}}
-  m.SetCursor(val.At.Offset)
-{{/if}}
   return m.MarshalValue({{Pascal name}}_Type, {{#if (IsEnumerated this)~}}
     jsn.MakeEnum(val, &val.Str){{else~}}
     &val.{{Pascal uses}}{{/if~}}

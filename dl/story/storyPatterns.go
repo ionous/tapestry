@@ -65,7 +65,7 @@ func (op *PatternRule) importRule(k *Importer, pattern, target string, tgtFlags 
 		var always eph.EphAlways
 		// check if this rule is declared inside a specific domain
 		if guard, ok := op.Guard.(jsn.Marshalee); !ok {
-			err = errutil.New("missing guard in", pattern, "at", op.Hook.At.String())
+			err = errutil.New("missing guard in", pattern)
 		} else {
 			// fix? could we instead just strstr for countOf
 			// also might be cool to augment or replace the serialized type

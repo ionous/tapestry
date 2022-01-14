@@ -12,24 +12,26 @@ type cinFlow struct {
 	bestIndex int
 }
 
-func newFlowData(k string, msg json.RawMessage) (ret *cinFlow, err error) {
-	var sig sigReader
+func newFlowData(cmd cmdData) (ret *cinFlow, err error) {
 	var args []json.RawMessage
-	sig.readSig(k)
-	// we allow ( require really ) single arguments to be stored directly
-	// rather than embedded in an array
-	// to make it optional, we'd really need a parallel parser to attempt to interpret the argument bytes in multiple ways.
-	pn := len(sig.params)
-	if pn == 1 {
-		args = []json.RawMessage{msg}
-	} else if pn > 1 {
-		err = json.Unmarshal(msg, &args)
-	}
-	if err == nil {
-		if an := len(args); pn != an {
-			err = errutil.New("mismatched params and args", pn, an)
-		} else {
-			ret = &cinFlow{params: sig.params, args: args}
+	if sig, e := cmd.getSignature(); e != nil {
+		err = e
+	} else {
+		// we allow ( require really ) single arguments to be stored directly
+		// rather than embedded in an array
+		// to make it optional, we'd really need a parallel parser to attempt to interpret the argument bytes in multiple ways.
+		pn := len(sig.params)
+		if pn == 1 {
+			args = []json.RawMessage{cmd.args}
+		} else if pn > 1 {
+			err = json.Unmarshal(cmd.args, &args)
+		}
+		if err == nil {
+			if an := len(args); pn != an {
+				err = errutil.New("mismatched params and args", pn, an)
+			} else {
+				ret = &cinFlow{params: sig.params, args: args}
+			}
 		}
 	}
 	return

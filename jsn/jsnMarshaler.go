@@ -15,7 +15,7 @@ type Marshaler interface {
 	// is the implementation writing json or reading it.
 	IsEncoding() bool
 	// sets a unique id for the next block or primitive value.
-	SetCursor(id string)
+	SetComment(*string)
 	// report an error
 	// errors for values inside of blocks are generally reported here
 	// otherwise they are returned on the stack.

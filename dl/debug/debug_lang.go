@@ -11,8 +11,9 @@ import (
 
 // DebugLog Debug log
 type DebugLog struct {
-	Value    rt.Assignment `if:"label=_"`
-	LogLevel LoggingLevel  `if:"label=as,optional"`
+	Value       rt.Assignment `if:"label=_"`
+	LogLevel    LoggingLevel  `if:"label=as,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -99,6 +100,7 @@ func DebugLog_Optional_Marshal(m jsn.Marshaler, pv **DebugLog) (err error) {
 }
 
 func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(DebugLog_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", DebugLog_Field_Value)
 		if e0 == nil {
@@ -121,7 +123,8 @@ func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
 
 // DoNothing Statement which does nothing.
 type DoNothing struct {
-	Reason string `if:"label=why,optional,type=text"`
+	Reason      string `if:"label=why,optional,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -206,6 +209,7 @@ func DoNothing_Optional_Marshal(m jsn.Marshaler, pv **DoNothing) (err error) {
 }
 
 func DoNothing_Marshal(m jsn.Marshaler, val *DoNothing) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(DoNothing_Flow{val}); err == nil {
 		e0 := m.MarshalKey("why", DoNothing_Field_Reason)
 		if e0 == nil {

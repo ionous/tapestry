@@ -75,13 +75,19 @@ func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay boo
 		var unhandled chart.Unhandled
 		if !errors.As(e, &unhandled) {
 			dec.Error(e)
-		} else if _, k, args, e := dec.readCmd(msg); e != nil {
-			dec.Error(e)
-		} else if flow, e := newFlowData(k, args); e != nil {
+		} else if cmd, e := dec.readCmd(msg); e != nil {
 			dec.Error(e)
 		} else {
-			dec.PushState(dec.newFlow(flow))
-			okay = true
+			if dec.Machine.Comment != nil {
+				*dec.Machine.Comment = cmd.comment
+				dec.Machine.Comment = nil
+			}
+			if flow, e := newFlowData(cmd); e != nil {
+				dec.Error(e)
+			} else {
+				dec.PushState(dec.newFlow(flow))
+				okay = true
+			}
 		}
 	}
 	return
@@ -94,12 +100,12 @@ func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay boo
 		var unhandled chart.Unhandled
 		if !errors.As(e, &unhandled) {
 			dec.Error(e)
-		} else if t, k, args, e := dec.readCmd(msg); e != nil {
+		} else if cmd, e := dec.readCmd(msg); e != nil {
 			dec.Error(e)
-		} else if v := newFromType(t); !slot.SetSlot(v) {
+		} else if v := newFromType(cmd.reg); !slot.SetSlot(v) {
 			dec.Error(errutil.Fmt("couldn't put %T into slot %T", v, slot))
 		} else {
-			dec.PushState(dec.newSlot(k, args))
+			dec.PushState(dec.newSlot(cmd))
 			okay = true
 		}
 	}
@@ -108,23 +114,19 @@ func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay boo
 
 func (dec *xDecoder) readFullSwap(p jsn.SwapBlock, msg json.RawMessage) (okay bool) {
 	// expanded swaps { "swapName choice:": <value> }
-	if _, k, args, e := dec.readCmd(msg); e != nil {
+	if cmd, e := dec.readCmd(msg); e != nil {
 		dec.Error(e)
+	} else if sig, e := cmd.getSignature(); e != nil {
+		dec.Error(e)
+	} else if len(sig.params) != 1 || len(sig.params[0].choice) > 0 {
+		dec.Error(errutil.New("expected exactly one choice in", cmd.key))
 	} else {
-		// fix? if we cast the type to composer we could compare to typeName
-		var sig sigReader
-		if e := sig.readSig(k); e != nil {
-			dec.Error(e)
-		} else if len(sig.params) != 1 || len(sig.params[0].choice) > 0 {
-			dec.Error(errutil.New("expected exactly one choice in", k))
+		pick := newStringKey(sig.params[0].label)
+		if ok := p.SetSwap(pick); !ok {
+			dec.Error(errutil.Fmt("swap has unexpected choice %q", pick))
 		} else {
-			pick := newStringKey(sig.params[0].label)
-			if ok := p.SetSwap(pick); !ok {
-				dec.Error(errutil.Fmt("swap has unexpected choice %q", pick))
-			} else {
-				dec.PushState(dec.newSwap(args))
-				okay = true
-			}
+			dec.PushState(dec.newSwap(cmd.args))
+			okay = true
 		}
 	}
 	return
@@ -289,12 +291,16 @@ func (dec *xDecoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 }
 
 // in compact format, the msg holds the slat which fills the slot
-func (dec *xDecoder) newSlot(k string, args json.RawMessage) *chart.StateMix {
+func (dec *xDecoder) newSlot(cmd cmdData) *chart.StateMix {
 	var next chart.StateMix
 	next.OnMap = func(string, jsn.FlowBlock) (okay bool) {
-		if flow, e := newFlowData(k, args); e != nil {
+		if flow, e := newFlowData(cmd); e != nil {
 			dec.Error(e)
 		} else {
+			if dec.Machine.Comment != nil {
+				*dec.Machine.Comment = cmd.comment
+				dec.Machine.Comment = nil
+			}
 			dec.PushState(dec.newFlow(flow))
 			okay = true
 		}
@@ -321,10 +327,22 @@ func (dec *xDecoder) newSwap(msg json.RawMessage) *chart.StateMix {
 	return next
 }
 
+type cmdData struct {
+	reg     interface{}
+	key     string
+	args    json.RawMessage
+	comment string
+}
+
+func (c cmdData) getSignature() (ret sigReader, err error) {
+	err = ret.readSig(c.key)
+	return
+}
+
 // retType: type registry nil pointer
 // retKey: raw signature in the json. ex. "Story:", "Always", or "Command some thing:else:"
 // retVal: json msg data to the right of the key
-func (dec *xDecoder) readCmd(msg json.RawMessage) (retType interface{}, retKey string, retVal json.RawMessage, err error) {
+func (dec *xDecoder) readCmd(msg json.RawMessage) (ret cmdData, err error) {
 	// ex. {"Story:":  [...]}
 	// except note that literals are stored as their value,
 	// functions with one parameter dont use the array, and
@@ -333,14 +351,19 @@ func (dec *xDecoder) readCmd(msg json.RawMessage) (retType interface{}, retKey s
 	if e := json.Unmarshal(msg, &d); e == nil {
 		var found bool
 		for k, args := range d {
-			if found {
+			if k == "--" {
+				if e := json.Unmarshal(args, &ret.comment); e != nil {
+					err = errutil.New("couldnt read comment", e)
+					break
+				}
+			} else if found {
 				err = errutil.New("expected only a single key", d)
 				break
 			} else if t, ok := findType(Hash(k), dec.reg); !ok {
 				err = errutil.New("couldnt find type for signature", k)
 				break
 			} else {
-				retType, retKey, retVal = t, k, args
+				ret.reg, ret.key, ret.args = t, k, args
 				found = true
 				continue // keep going to catch errors
 			}
@@ -355,7 +378,7 @@ func (dec *xDecoder) readCmd(msg json.RawMessage) (retType interface{}, retKey s
 		} else if t, ok := findType(Hash(k), dec.reg); !ok {
 			err = errutil.New("couldnt find type for string", k)
 		} else {
-			retType, retKey, retVal = t, k, nil // no args
+			ret.reg, ret.key = t, k // no args, its parameterless
 		}
 	}
 	return

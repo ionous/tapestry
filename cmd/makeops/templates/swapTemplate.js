@@ -4,8 +4,6 @@ module.exports = `
 {{~#with type~}}
 // {{Pascal name}} swaps between various options
 type {{Pascal name}} struct {
-{{~#if (IsPositioned this)}}
-  At     reader.Position \`if:"internal"\`{{/if}}
   Choice string
   Value  interface{}
 }
@@ -41,9 +39,6 @@ func (op* {{Pascal name}}) SetSwap(c string) (okay bool) {
 {{#if ../marshal}}
 {{>sig}}
 func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
-{{~#if (IsPositioned this)}}
-  m.SetCursor(val.At.Offset)
-{{/if}}
   if err = m.MarshalBlock(val); err == nil {
     if _, ptr := val.GetSwap(); ptr != nil {
       if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {

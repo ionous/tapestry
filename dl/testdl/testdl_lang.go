@@ -92,12 +92,13 @@ func TestBool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestBool) (err err
 
 // TestFlow
 type TestFlow struct {
-	Slot  TestSlot   `if:"label=slot,optional"`
-	Txt   TestTxt    `if:"label=txt,optional"`
-	Num   float64    `if:"label=num,optional,type=test_num"`
-	Bool  TestBool   `if:"label=bool,optional"`
-	Swap  TestSwap   `if:"label=swap,optional"`
-	Slots []TestSlot `if:"label=slots,optional"`
+	Slot        TestSlot   `if:"label=slot,optional"`
+	Txt         TestTxt    `if:"label=txt,optional"`
+	Num         float64    `if:"label=num,optional,type=test_num"`
+	Bool        TestBool   `if:"label=bool,optional"`
+	Swap        TestSwap   `if:"label=swap,optional"`
+	Slots       []TestSlot `if:"label=slots,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -188,6 +189,7 @@ func TestFlow_Optional_Marshal(m jsn.Marshaler, pv **TestFlow) (err error) {
 }
 
 func TestFlow_Marshal(m jsn.Marshaler, val *TestFlow) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(TestFlow_Flow{val}); err == nil {
 		e0 := m.MarshalKey("slot", TestFlow_Field_Slot)
 		if e0 == nil {

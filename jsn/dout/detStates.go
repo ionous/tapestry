@@ -32,7 +32,6 @@ func newValue(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 		}
 		// detailed data represents even primitive values as a map of {id,type,value}.
 		m.Commit(detValue{
-			Id:    m.FlushCursor(),
 			Type:  typeName,
 			Value: pv,
 		})
@@ -51,8 +50,13 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 
 func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	next.OnMap = func(typeName string, _ jsn.FlowBlock) bool {
+		var id string
+		if m.Comment != nil {
+			id = *m.Comment
+			m.Comment = nil
+		}
 		m.PushState(newFlow(m, detMap{
-			Id:     m.FlushCursor(),
+			Id:     id,
 			Type:   typeName,
 			Fields: make(map[string]interface{}),
 		}))
@@ -61,7 +65,6 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	next.OnSlot = func(typeName string, slot jsn.SlotBlock) (okay bool) {
 		if _, ok := slot.GetSlot(); ok {
 			m.PushState(newSlot(m, detValue{
-				Id:   m.FlushCursor(),
 				Type: typeName,
 			}))
 			okay = true
@@ -72,7 +75,6 @@ func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	next.OnSwap = func(typeName string, p jsn.SwapBlock) (okay bool) {
 		if choice, _ := p.GetSwap(); len(choice) > 0 {
 			m.PushState(newSwap(m, choice, detMap{
-				Id:   m.FlushCursor(),
 				Type: typeName,
 			}))
 			okay = true

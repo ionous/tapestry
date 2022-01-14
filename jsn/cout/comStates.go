@@ -64,12 +64,18 @@ func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 	// starts a series of key-values pairs
 	// the flow is closed ( written ) with a call to EndValues()
 	next.OnMap = func(typeName string, block jsn.FlowBlock) (okay bool) {
+		// maybe there was no key, so this is the first comment call we've gotten for the block.
+		var c string
+		if m.Machine.Comment != nil {
+			c = *m.Machine.Comment
+			m.Machine.Comment = nil
+		}
 		if e := m.customFlow(m, block); e != nil {
 			var unhandled chart.Unhandled
 			if !errors.As(e, &unhandled) {
 				m.Error(e)
 			} else {
-				m.PushState(m.newFlow(newComFlow(block.GetLede())))
+				m.PushState(m.newFlow(newComFlow(block.GetLede(), c)))
 				okay = true // return true to indicate caller should descend into the flow
 			}
 		}

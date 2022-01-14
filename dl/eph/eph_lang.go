@@ -100,8 +100,9 @@ func Affinity_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Affinity) (err err
 
 // EphAliases
 type EphAliases struct {
-	ShortName string   `if:"label=understand,type=text"`
-	Aliases   []string `if:"label=as,type=text"`
+	ShortName   string   `if:"label=understand,type=text"`
+	Aliases     []string `if:"label=as,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -188,6 +189,7 @@ func EphAliases_Optional_Marshal(m jsn.Marshaler, pv **EphAliases) (err error) {
 }
 
 func EphAliases_Marshal(m jsn.Marshaler, val *EphAliases) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphAliases_Flow{val}); err == nil {
 		e0 := m.MarshalKey("understand", EphAliases_Field_ShortName)
 		if e0 == nil {
@@ -293,8 +295,9 @@ func EphAlways_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphAlways) (err e
 // EphAspects A set of related object states such that exactly one member of the set is true for a given object at a single time.
 // Generates an implicit kind of 'aspect' where every field of the kind is a boolean property.
 type EphAspects struct {
-	Aspects string   `if:"label=aspects,type=text"`
-	Traits  []string `if:"label=traits,type=text"`
+	Aspects     string   `if:"label=aspects,type=text"`
+	Traits      []string `if:"label=traits,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -381,6 +384,7 @@ func EphAspects_Optional_Marshal(m jsn.Marshaler, pv **EphAspects) (err error) {
 }
 
 func EphAspects_Marshal(m jsn.Marshaler, val *EphAspects) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphAspects_Flow{val}); err == nil {
 		e0 := m.MarshalKey("aspects", EphAspects_Field_Aspects)
 		if e0 == nil {
@@ -403,8 +407,9 @@ func EphAspects_Marshal(m jsn.Marshaler, val *EphAspects) (err error) {
 
 // EphAt
 type EphAt struct {
-	At  string   `if:"label=at,type=text"`
-	Eph Ephemera `if:"label=eph"`
+	At          string   `if:"label=at,type=text"`
+	Eph         Ephemera `if:"label=eph"`
+	UserComment string
 }
 
 func (*EphAt) Compose() composer.Spec {
@@ -488,6 +493,7 @@ func EphAt_Optional_Marshal(m jsn.Marshaler, pv **EphAt) (err error) {
 }
 
 func EphAt_Marshal(m jsn.Marshaler, val *EphAt) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphAt_Flow{val}); err == nil {
 		e0 := m.MarshalKey("at", EphAt_Field_At)
 		if e0 == nil {
@@ -510,8 +516,9 @@ func EphAt_Marshal(m jsn.Marshaler, val *EphAt) (err error) {
 
 // EphBeginDomain
 type EphBeginDomain struct {
-	Name     string   `if:"label=domain,type=text"`
-	Requires []string `if:"label=requires,type=text"`
+	Name        string   `if:"label=domain,type=text"`
+	Requires    []string `if:"label=requires,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -598,6 +605,7 @@ func EphBeginDomain_Optional_Marshal(m jsn.Marshaler, pv **EphBeginDomain) (err 
 }
 
 func EphBeginDomain_Marshal(m jsn.Marshaler, val *EphBeginDomain) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphBeginDomain_Flow{val}); err == nil {
 		e0 := m.MarshalKey("domain", EphBeginDomain_Field_Name)
 		if e0 == nil {
@@ -733,9 +741,10 @@ func EphCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphCardinali
 
 // EphChecks
 type EphChecks struct {
-	Name   string               `if:"label=check,type=text"`
-	Expect literal.LiteralValue `if:"label=expect,optional"`
-	Exe    rt.Execute           `if:"label=do"`
+	Name        string               `if:"label=check,type=text"`
+	Expect      literal.LiteralValue `if:"label=expect,optional"`
+	Exe         rt.Execute           `if:"label=do"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -823,6 +832,7 @@ func EphChecks_Optional_Marshal(m jsn.Marshaler, pv **EphChecks) (err error) {
 }
 
 func EphChecks_Marshal(m jsn.Marshaler, val *EphChecks) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphChecks_Flow{val}); err == nil {
 		e0 := m.MarshalKey("check", EphChecks_Field_Name)
 		if e0 == nil {
@@ -852,8 +862,9 @@ func EphChecks_Marshal(m jsn.Marshaler, val *EphChecks) (err error) {
 
 // EphDirectives
 type EphDirectives struct {
-	Name      string            `if:"label=go,type=text"`
-	Directive grammar.Directive `if:"label=parse"`
+	Name        string            `if:"label=go,type=text"`
+	Directive   grammar.Directive `if:"label=parse"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -940,6 +951,7 @@ func EphDirectives_Optional_Marshal(m jsn.Marshaler, pv **EphDirectives) (err er
 }
 
 func EphDirectives_Marshal(m jsn.Marshaler, val *EphDirectives) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphDirectives_Flow{val}); err == nil {
 		e0 := m.MarshalKey("go", EphDirectives_Field_Name)
 		if e0 == nil {
@@ -962,7 +974,8 @@ func EphDirectives_Marshal(m jsn.Marshaler, val *EphDirectives) (err error) {
 
 // EphEndDomain
 type EphEndDomain struct {
-	Name string `if:"label=domain,type=text"`
+	Name        string `if:"label=domain,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1048,6 +1061,7 @@ func EphEndDomain_Optional_Marshal(m jsn.Marshaler, pv **EphEndDomain) (err erro
 }
 
 func EphEndDomain_Marshal(m jsn.Marshaler, val *EphEndDomain) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphEndDomain_Flow{val}); err == nil {
 		e0 := m.MarshalKey("domain", EphEndDomain_Field_Name)
 		if e0 == nil {
@@ -1066,9 +1080,10 @@ func EphEndDomain_Marshal(m jsn.Marshaler, val *EphEndDomain) (err error) {
 // and it can be used wherever one of its ancestor kinds is needed.
 // ( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )
 type EphKinds struct {
-	Kinds   string      `if:"label=kinds,type=text"`
-	From    string      `if:"label=from,type=text"`
-	Contain []EphParams `if:"label=contain"`
+	Kinds       string      `if:"label=kinds,type=text"`
+	From        string      `if:"label=from,type=text"`
+	Contain     []EphParams `if:"label=contain"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1156,6 +1171,7 @@ func EphKinds_Optional_Marshal(m jsn.Marshaler, pv **EphKinds) (err error) {
 }
 
 func EphKinds_Marshal(m jsn.Marshaler, val *EphKinds) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphKinds_Flow{val}); err == nil {
 		e0 := m.MarshalKey("kinds", EphKinds_Field_Kinds)
 		if e0 == nil {
@@ -1185,7 +1201,8 @@ func EphKinds_Marshal(m jsn.Marshaler, val *EphKinds) (err error) {
 
 // EphList
 type EphList struct {
-	All []EphAt `if:"label=list"`
+	All         []EphAt `if:"label=list"`
+	UserComment string
 }
 
 func (*EphList) Compose() composer.Spec {
@@ -1268,6 +1285,7 @@ func EphList_Optional_Marshal(m jsn.Marshaler, pv **EphList) (err error) {
 }
 
 func EphList_Marshal(m jsn.Marshaler, val *EphList) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("list", EphList_Field_All)
 		if e0 == nil {
@@ -1283,8 +1301,9 @@ func EphList_Marshal(m jsn.Marshaler, val *EphList) (err error) {
 
 // EphNouns
 type EphNouns struct {
-	Noun string `if:"label=noun,type=text"`
-	Kind string `if:"label=kind,type=text"`
+	Noun        string `if:"label=noun,type=text"`
+	Kind        string `if:"label=kind,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1371,6 +1390,7 @@ func EphNouns_Optional_Marshal(m jsn.Marshaler, pv **EphNouns) (err error) {
 }
 
 func EphNouns_Marshal(m jsn.Marshaler, val *EphNouns) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphNouns_Flow{val}); err == nil {
 		e0 := m.MarshalKey("noun", EphNouns_Field_Noun)
 		if e0 == nil {
@@ -1395,8 +1415,9 @@ func EphNouns_Marshal(m jsn.Marshaler, val *EphNouns) (err error) {
 // Used by the assembler to help interpret author definitions,
 // and at runtime to help the parser interpret user input.
 type EphOpposites struct {
-	Opposite string `if:"label=opposite,type=text"`
-	Word     string `if:"label=word,type=text"`
+	Opposite    string `if:"label=opposite,type=text"`
+	Word        string `if:"label=word,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1483,6 +1504,7 @@ func EphOpposites_Optional_Marshal(m jsn.Marshaler, pv **EphOpposites) (err erro
 }
 
 func EphOpposites_Marshal(m jsn.Marshaler, val *EphOpposites) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphOpposites_Flow{val}); err == nil {
 		e0 := m.MarshalKey("opposite", EphOpposites_Field_Opposite)
 		if e0 == nil {
@@ -1507,10 +1529,11 @@ func EphOpposites_Marshal(m jsn.Marshaler, val *EphOpposites) (err error) {
 // while 'class' is used to indicate an interpretation of that parameter, for example a reference to a kind.
 // Pattern locals can have an initial value, other uses of parameter cannot.
 type EphParams struct {
-	Affinity  Affinity      `if:"label=have"`
-	Name      string        `if:"label=called,type=text"`
-	Class     string        `if:"label=of,optional,type=text"`
-	Initially rt.Assignment `if:"label=initially,optional"`
+	Affinity    Affinity      `if:"label=have"`
+	Name        string        `if:"label=called,type=text"`
+	Class       string        `if:"label=of,optional,type=text"`
+	Initially   rt.Assignment `if:"label=initially,optional"`
+	UserComment string
 }
 
 func (*EphParams) Compose() composer.Spec {
@@ -1596,6 +1619,7 @@ func EphParams_Optional_Marshal(m jsn.Marshaler, pv **EphParams) (err error) {
 }
 
 func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphParams_Flow{val}); err == nil {
 		e0 := m.MarshalKey("have", EphParams_Field_Affinity)
 		if e0 == nil {
@@ -1637,10 +1661,11 @@ func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
 // While multiple pattern commands can be used to define a pattern,
 // the set of arguments and the return can only be specified once.
 type EphPatterns struct {
-	Name   string      `if:"label=pattern,type=text"`
-	Params []EphParams `if:"label=with,optional"`
-	Locals []EphParams `if:"label=locals,optional"`
-	Result *EphParams  `if:"label=result,optional"`
+	Name        string      `if:"label=pattern,type=text"`
+	Params      []EphParams `if:"label=with,optional"`
+	Locals      []EphParams `if:"label=locals,optional"`
+	Result      *EphParams  `if:"label=result,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1729,6 +1754,7 @@ func EphPatterns_Optional_Marshal(m jsn.Marshaler, pv **EphPatterns) (err error)
 }
 
 func EphPatterns_Marshal(m jsn.Marshaler, val *EphPatterns) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphPatterns_Flow{val}); err == nil {
 		e0 := m.MarshalKey("pattern", EphPatterns_Field_Name)
 		if e0 == nil {
@@ -1767,8 +1793,9 @@ func EphPatterns_Marshal(m jsn.Marshaler, val *EphPatterns) (err error) {
 // Used by the assembler to help interpret author definitions,
 // and at runtime to help the parser interpret user input.
 type EphPlurals struct {
-	Plural   string `if:"label=plural,type=text"`
-	Singular string `if:"label=singular,type=text"`
+	Plural      string `if:"label=plural,type=text"`
+	Singular    string `if:"label=singular,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1855,6 +1882,7 @@ func EphPlurals_Optional_Marshal(m jsn.Marshaler, pv **EphPlurals) (err error) {
 }
 
 func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphPlurals_Flow{val}); err == nil {
 		e0 := m.MarshalKey("plural", EphPlurals_Field_Plural)
 		if e0 == nil {
@@ -1878,7 +1906,8 @@ func EphPlurals_Marshal(m jsn.Marshaler, val *EphPlurals) (err error) {
 // EphRefs Implies some fact about the world that will be defined elsewhere.
 // Reuses the set of ephemera to limit redefinition. Not all are valid.
 type EphRefs struct {
-	Refs []Ephemera `if:"label=refs"`
+	Refs        []Ephemera `if:"label=refs"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1964,6 +1993,7 @@ func EphRefs_Optional_Marshal(m jsn.Marshaler, pv **EphRefs) (err error) {
 }
 
 func EphRefs_Marshal(m jsn.Marshaler, val *EphRefs) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphRefs_Flow{val}); err == nil {
 		e0 := m.MarshalKey("refs", EphRefs_Field_Refs)
 		if e0 == nil {
@@ -1981,6 +2011,7 @@ func EphRefs_Marshal(m jsn.Marshaler, val *EphRefs) (err error) {
 type EphRelations struct {
 	Rel         string         `if:"label=_,type=text"`
 	Cardinality EphCardinality `if:"label=relate"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -2067,6 +2098,7 @@ func EphRelations_Optional_Marshal(m jsn.Marshaler, pv **EphRelations) (err erro
 }
 
 func EphRelations_Marshal(m jsn.Marshaler, val *EphRelations) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphRelations_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EphRelations_Field_Rel)
 		if e0 == nil {
@@ -2089,9 +2121,10 @@ func EphRelations_Marshal(m jsn.Marshaler, val *EphRelations) (err error) {
 
 // EphRelatives
 type EphRelatives struct {
-	Rel       string `if:"label=_,type=text"`
-	Noun      string `if:"label=relates,type=text"`
-	OtherNoun string `if:"label=to,type=text"`
+	Rel         string `if:"label=_,type=text"`
+	Noun        string `if:"label=relates,type=text"`
+	OtherNoun   string `if:"label=to,type=text"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -2179,6 +2212,7 @@ func EphRelatives_Optional_Marshal(m jsn.Marshaler, pv **EphRelatives) (err erro
 }
 
 func EphRelatives_Marshal(m jsn.Marshaler, val *EphRelatives) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphRelatives_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EphRelatives_Field_Rel)
 		if e0 == nil {
@@ -2208,12 +2242,13 @@ func EphRelatives_Marshal(m jsn.Marshaler, val *EphRelatives) (err error) {
 
 // EphRules
 type EphRules struct {
-	Name   string      `if:"label=pattern,type=text"`
-	Target string      `if:"label=target,optional,type=text"`
-	Filter rt.BoolEval `if:"label=if"`
-	When   EphTiming   `if:"label=when"`
-	Exe    rt.Execute  `if:"label=do"`
-	Touch  EphAlways   `if:"label=touch,optional"`
+	Name        string      `if:"label=pattern,type=text"`
+	Target      string      `if:"label=target,optional,type=text"`
+	Filter      rt.BoolEval `if:"label=if"`
+	When        EphTiming   `if:"label=when"`
+	Exe         rt.Execute  `if:"label=do"`
+	Touch       EphAlways   `if:"label=touch,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -2304,6 +2339,7 @@ func EphRules_Optional_Marshal(m jsn.Marshaler, pv **EphRules) (err error) {
 }
 
 func EphRules_Marshal(m jsn.Marshaler, val *EphRules) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphRules_Flow{val}); err == nil {
 		e0 := m.MarshalKey("pattern", EphRules_Field_Name)
 		if e0 == nil {
@@ -2443,10 +2479,11 @@ func EphTiming_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphTiming) (err e
 // 2. The values inside of records can be set using a 'path' to find them, however individual values within lists cannot be set.
 // Note: when using a path, the path addresses the noun first, the named field - referring to the inner most record - last.
 type EphValues struct {
-	Noun  string               `if:"label=noun,type=text"`
-	Field string               `if:"label=has,type=text"`
-	Path  []string             `if:"label=path,optional,type=text"`
-	Value literal.LiteralValue `if:"label=value"`
+	Noun        string               `if:"label=noun,type=text"`
+	Field       string               `if:"label=has,type=text"`
+	Path        []string             `if:"label=path,optional,type=text"`
+	Value       literal.LiteralValue `if:"label=value"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -2535,6 +2572,7 @@ func EphValues_Optional_Marshal(m jsn.Marshaler, pv **EphValues) (err error) {
 }
 
 func EphValues_Marshal(m jsn.Marshaler, val *EphValues) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(EphValues_Flow{val}); err == nil {
 		e0 := m.MarshalKey("noun", EphValues_Field_Noun)
 		if e0 == nil {
@@ -2640,8 +2678,9 @@ func Ephemera_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Ephemera) (err err
 
 // ManyMany
 type ManyMany struct {
-	Kinds      string `if:"label=_,type=text"`
-	OtherKinds string `if:"label=to_kinds,type=text"`
+	Kinds       string `if:"label=_,type=text"`
+	OtherKinds  string `if:"label=to_kinds,type=text"`
+	UserComment string
 }
 
 func (*ManyMany) Compose() composer.Spec {
@@ -2725,6 +2764,7 @@ func ManyMany_Optional_Marshal(m jsn.Marshaler, pv **ManyMany) (err error) {
 }
 
 func ManyMany_Marshal(m jsn.Marshaler, val *ManyMany) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(ManyMany_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ManyMany_Field_Kinds)
 		if e0 == nil {
@@ -2747,8 +2787,9 @@ func ManyMany_Marshal(m jsn.Marshaler, val *ManyMany) (err error) {
 
 // ManyOne
 type ManyOne struct {
-	Kinds     string `if:"label=_,type=text"`
-	OtherKind string `if:"label=to_kind,type=text"`
+	Kinds       string `if:"label=_,type=text"`
+	OtherKind   string `if:"label=to_kind,type=text"`
+	UserComment string
 }
 
 func (*ManyOne) Compose() composer.Spec {
@@ -2832,6 +2873,7 @@ func ManyOne_Optional_Marshal(m jsn.Marshaler, pv **ManyOne) (err error) {
 }
 
 func ManyOne_Marshal(m jsn.Marshaler, val *ManyOne) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(ManyOne_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ManyOne_Field_Kinds)
 		if e0 == nil {
@@ -2854,8 +2896,9 @@ func ManyOne_Marshal(m jsn.Marshaler, val *ManyOne) (err error) {
 
 // OneMany
 type OneMany struct {
-	Kind       string `if:"label=_,type=text"`
-	OtherKinds string `if:"label=to_kinds,type=text"`
+	Kind        string `if:"label=_,type=text"`
+	OtherKinds  string `if:"label=to_kinds,type=text"`
+	UserComment string
 }
 
 func (*OneMany) Compose() composer.Spec {
@@ -2939,6 +2982,7 @@ func OneMany_Optional_Marshal(m jsn.Marshaler, pv **OneMany) (err error) {
 }
 
 func OneMany_Marshal(m jsn.Marshaler, val *OneMany) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(OneMany_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", OneMany_Field_Kind)
 		if e0 == nil {
@@ -2961,8 +3005,9 @@ func OneMany_Marshal(m jsn.Marshaler, val *OneMany) (err error) {
 
 // OneOne
 type OneOne struct {
-	Kind      string `if:"label=_,type=text"`
-	OtherKind string `if:"label=to_kind,type=text"`
+	Kind        string `if:"label=_,type=text"`
+	OtherKind   string `if:"label=to_kind,type=text"`
+	UserComment string
 }
 
 func (*OneOne) Compose() composer.Spec {
@@ -3046,6 +3091,7 @@ func OneOne_Optional_Marshal(m jsn.Marshaler, pv **OneOne) (err error) {
 }
 
 func OneOne_Marshal(m jsn.Marshaler, val *OneOne) (err error) {
+	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(OneOne_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", OneOne_Field_Kind)
 		if e0 == nil {

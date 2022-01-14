@@ -13,9 +13,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/debug"
+	"github.com/kr/pretty"
 
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
-	"github.com/kr/pretty"
 )
 
 func TestDetailsEncode(t *testing.T) {
@@ -23,14 +23,14 @@ func TestDetailsEncode(t *testing.T) {
 		t.Fatal(e)
 	} else if b, e := json.Marshal(d); e != nil {
 		t.Fatal(e)
-	} else if str := string(b); str != det {
+	} else if str := string(b); str != jsnTestIfx {
 		t.Fatal(str)
 	}
 }
 
 func TestDetailsDecode(t *testing.T) {
 	var dst story.Story
-	if e := din.Decode(&dst, tapestry.Registry(), []byte(det)); e != nil {
+	if e := din.Decode(&dst, tapestry.Registry(), []byte(jsnTestIfx)); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
 		pretty.Print(dst)
@@ -41,14 +41,14 @@ func TestDetailsDecode(t *testing.T) {
 func TestCompactEncoder(t *testing.T) {
 	if str, e := cout.Marshal(debug.FactorialStory, story.CompactEncoder); e != nil {
 		t.Fatal(e)
-	} else if str != com {
+	} else if str != jsnTestIf {
 		t.Fatal(str)
 	}
 }
 
 func TestCompactDecode(t *testing.T) {
 	var dst story.Story
-	if e := story.Decode(&dst, []byte(com), tapestry.AllSignatures); e != nil {
+	if e := story.Decode(&dst, []byte(jsnTestIf), tapestry.AllSignatures); e != nil {
 		pretty.Println(dst)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
@@ -58,14 +58,14 @@ func TestCompactDecode(t *testing.T) {
 }
 
 //go:embed jsnTest.ifx
-var det string
+var jsnTestIfx string
 
 //go:embed jsnTest.if
-var com string
+var jsnTestIf string
 
 // TestAnonymousSwap - unit test for broken parsing case
 func TestAnonymousSwap(t *testing.T) {
-	var com = `{"Listen kinds:handlers:": ["things",[]]}`
+	var jsnTestIf = `{"Listen kinds:handlers:": ["things",[]]}`
 	want := story.EventBlock{
 		Target: story.EventTarget{
 			Value: &story.PluralKinds{
@@ -77,7 +77,7 @@ func TestAnonymousSwap(t *testing.T) {
 	}
 	//
 	var have story.EventBlock
-	if e := story.Decode(&have, []byte(com), tapestry.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(jsnTestIf), tapestry.AllSignatures); e != nil {
 		pretty.Println(have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {

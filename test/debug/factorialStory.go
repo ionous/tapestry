@@ -15,6 +15,7 @@ var FactorialStory = &story.Story{
 					Str: "factorial",
 				},
 				Test: &story.TestOutput{
+					UserComment: "3! should equal 6",
 					Lines: story.Lines{
 						Str: "6",
 					}}},
@@ -27,10 +28,17 @@ var FactorialStory = &story.Story{
 					Value:  FactorialCheck,
 				}},
 			&story.PatternDecl{
-				Name:          factorialName,
-				PatternReturn: &story.PatternReturn{Result: numberDecl},
+				Name: factorialName,
+				PatternReturn: &story.PatternReturn{Result: &story.NumberProperty{
+					UserComment:   "the result uses the same variable as the pattern input does",
+					NamedProperty: numberDecl,
+				}},
 				Optvars: &story.PatternVariablesTail{
-					Props: []story.PropertySlot{numberDecl}},
+					Props: []story.PropertySlot{
+						&story.NumberProperty{
+							UserComment:   "just one argument, a number called 'num'",
+							NamedProperty: numberDecl,
+						}}},
 			},
 			&story.PatternActions{
 				Name: factorialName,
@@ -45,7 +53,8 @@ var FactorialStory = &story.Story{
 				Name: factorialName,
 				PatternRules: story.PatternRules{
 					PatternRule: []story.PatternRule{{
-						Guard: FactorialIsZero,
+						UserComment: "the rule considered first is the rule that was written last:",
+						Guard:       FactorialIsZero,
 						Hook: story.ProgramHook{
 							Choice: story.ProgramHook_Activity_Opt,
 							Value:  FactorialUseOne,
@@ -65,7 +74,8 @@ var FactorialCheck = &core.Activity{Exe: []rt.Execute{
 						core.CallArg{
 							Name: "num",
 							From: &core.FromNum{
-								Val: F(3)},
+								UserComment: "start the factorial with '3'",
+								Val:         F(3)},
 						}},
 				}},
 		}},
@@ -87,19 +97,21 @@ var FactorialMulMinusOne = &core.Activity{Exe: []rt.Execute{
 // at 0, use the number 1
 var FactorialUseOne = &core.Activity{Exe: []rt.Execute{
 	&core.Assign{
-		Var:  numVar,
-		From: &core.FromNum{Val: F(1)},
+		Var: numVar,
+		From: &core.FromNum{
+			Val:         F(1),
+			UserComment: "...return 1.",
+		},
 	}},
 }
 
 var FactorialIsZero = &core.CompareNum{
-	A:  &core.GetVar{Name: numVar},
-	Is: &core.Equal{},
-	B:  F(0)}
+	UserComment: "so, when we've reached 0...",
+	A:           &core.GetVar{Name: numVar},
+	Is:          &core.Equal{},
+	B:           F(0)}
 
 var factorialName = core.PatternName{Str: "factorial"}
 var numVar = core.VariableName{Str: "num"}
 
-var numberDecl = &story.NumberProperty{NamedProperty: story.NamedProperty{
-	Name: numVar.Str,
-}}
+var numberDecl = story.NamedProperty{Name: numVar.Str}

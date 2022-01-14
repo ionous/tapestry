@@ -48,15 +48,8 @@ const isClosed = function(strType) {
   return tokens.indexOf(token) < 0;
 };
 
-const isPositioned = function(t) {
-  return Array.isArray(t.group) ? t.group.includes("positioned") : t.group === "positioned";
-};
-
 const paramsOf = function(t) {
   let { with: { params = {} } = {} } = t; //safely extract params
-  if (isPositioned(t)) {
-    params = Object.assign({ "$AT": { "type": "position", "label": "-" } }, params);
-  }
   return params;
 };
 
@@ -65,7 +58,6 @@ const nameToGroup = {};
 let currentGroup;
 
 Handlebars.registerHelper('Pascal', pascal);
-Handlebars.registerHelper('IsPositioned', isPositioned);
 // does the passed string start with a $
 Handlebars.registerHelper('IsToken', function(str) {
   return (str && str[0] === '$');
@@ -441,13 +433,6 @@ for (currentGroup in groups) {
   const inc = new Set();
   for (const typeName of g.slats.filter(n=> !unbox[n])) {
     const type = allTypes[typeName];
-    if (isPositioned(type)) {
-      const o = "reader"; // for forced str and swap position field
-      if (o && o !== currentGroup) {
-        inc.add(o);
-      }
-    }
-
     for (const param of type.params) {
       // when we are marshaling we need to include all types
       // otherwise we only need to include the types we dont unbox out of existence

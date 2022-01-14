@@ -1,13 +1,15 @@
 package cout
 
 type comFlow struct {
-	sig    Sig
-	values []interface{}
+	sig     Sig
+	values  []interface{}
+	comment string
 }
 
-func newComFlow(lede string) *comFlow {
+func newComFlow(lede, comment string) *comFlow {
 	var cf comFlow
 	cf.sig.WriteLede(lede)
+	cf.comment = comment
 	return &cf
 }
 
@@ -32,9 +34,13 @@ func (cf *comFlow) finalize() (ret interface{}) {
 		} else {
 			v = cf.values
 		}
-		ret = map[string]interface{}{
+		m := map[string]interface{}{
 			sig: v,
 		}
+		if len(cf.comment) > 0 {
+			m["--"] = cf.comment
+		}
+		ret = m
 	}
 	return
 }

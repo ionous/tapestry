@@ -10,7 +10,7 @@ import (
 // note: there's only one kind of hook now: the activity
 func (op *ProgramHook) ImportProgram(k *Importer) (ret rt.Execute, err error) {
 	if opt, ok := op.Value.(*core.Activity); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
+		err = ImportError(op, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
 		switch len(opt.Exe) {
 		case 0:

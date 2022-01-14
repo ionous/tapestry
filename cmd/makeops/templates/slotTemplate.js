@@ -27,9 +27,6 @@ func (at {{Pascal name}}_Slot) SetSlot(v interface{}) (okay bool) {
 }
 
 func {{Pascal name}}_Marshal(m jsn.Marshaler, ptr *{{Pascal name}}) (err error) {
-{{~#if (IsPositioned this)}}
-  m.SetCursor(ptr.At.Offset)
-{{/if}}
   slot := {{Pascal name}}_Slot{ptr}
   return slot.Marshal(m)
 }

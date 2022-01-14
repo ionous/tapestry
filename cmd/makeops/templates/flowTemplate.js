@@ -1,4 +1,4 @@
-// runTemplate.js
+// flowTemplate.js
 'use strict';
 module.exports = `
 {{#with type~}}
@@ -17,7 +17,8 @@ type {{Pascal name}} struct {
   {{~#if internal}}internal{{else}}label={{tag}}{{/if}}
   {{~#if optional}},optional{{/if}}\
   {{~#if (Unboxed type)}},type={{type}}{{/if}}"\`
-{{/unless}}{{/each}}
+{{/unless}}{{/each~}}
+  UserComment string
 }
 {{#if with.slots}}
 // User implemented slots:
@@ -60,9 +61,7 @@ func {{Pascal name}}_Optional_Marshal(m jsn.Marshaler, pv **{{Pascal name}}) (er
 }
 
 func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
-{{#if (IsPositioned this)}}
-  m.SetCursor(val.At.Offset)
-{{/if}}
+  m.SetComment(&val.UserComment)
   if err = m.MarshalBlock({{Pascal name}}_Flow{val}); err == nil {
 {{~#each params}}{{#unless internal}}{{#unless expanded}}
     e{{@index}} := m.MarshalKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}})

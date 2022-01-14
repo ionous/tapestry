@@ -16,7 +16,7 @@ func (op *KindOfRelation) ImportPhrase(k *Importer) (err error) {
 
 func (op *RelationCardinality) GetCardinality() (ret eph.EphCardinality, err error) {
 	if c, ok := op.Value.(cardinalityImporter); !ok {
-		err = ImportError(op, op.At, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
+		err = ImportError(op, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
 		ret = c.GetCardinality()
 	}

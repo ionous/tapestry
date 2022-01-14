@@ -19,7 +19,7 @@ func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 	if opt, ok := op.Target.Value.(interface {
 		GetName(*Importer) (string, error)
 	}); !ok {
-		err = errutil.Fmt("unknown event block target %T at %s", opt, op.At)
+		err = errutil.Fmt("unknown event block target %T", opt)
 	} else if tgt, e := opt.GetName(k); e != nil {
 		err = e
 	} else {

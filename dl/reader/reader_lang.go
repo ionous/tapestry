@@ -7,8 +7,9 @@ import (
 
 // Position Identifies the location of a specific command ( ex. from an .if file ).
 type Position struct {
-	Offset string `if:"label=_,type=text"`
-	Source string `if:"label=in,type=text"`
+	Offset      string `if:"label=_,type=text"`
+	Source      string `if:"label=in,type=text"`
+	UserComment string
 }
 
 func (*Position) Compose() composer.Spec {

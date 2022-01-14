@@ -7,7 +7,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
-	"git.sr.ht/~ionous/tapestry/dl/reader"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
@@ -65,7 +64,7 @@ func (op *NamedNoun) ReadCountedNoun(k *Importer, cnt int) (err error) {
 	kindOrKinds := op.Name.String()
 	names := make([]string, cnt)
 	for i := 0; i < cnt; i++ {
-		noun := k.newCounter(kindOrKinds, reader.Position{})
+		noun := k.newCounter(kindOrKinds, "")
 		k.Env().Recent.Nouns.Add(noun) // for relations, etc.
 		k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
 		names[i] = noun

@@ -68,11 +68,17 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 		var d dinMap
 		if e := json.Unmarshal(*pm, &d); e != nil {
 			dec.Error(e)
-		} else if d.Type != typeName {
-			dec.Error(errutil.New("expected", typeName, "found", d.Type))
 		} else {
-			dec.PushState(dec.newFlow(d.Fields))
-			okay = true
+			if dec.Machine.Comment != nil {
+				*dec.Machine.Comment = d.Id
+				dec.Machine.Comment = nil
+			}
+			if d.Type != typeName {
+				dec.Error(errutil.New("expected", typeName, "found", d.Type))
+			} else {
+				dec.PushState(dec.newFlow(d.Fields))
+				okay = true
+			}
 		}
 		return
 	}

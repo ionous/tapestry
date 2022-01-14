@@ -23,7 +23,7 @@ func (op *TestScene) ImportPhrase(k *Importer) (err error) {
 
 func (op *TestStatement) ImportPhrase(k *Importer) (err error) {
 	if t := op.Test; t == nil {
-		err = ImportError(op, op.At, errutil.Fmt("%w Test", MissingSlot))
+		err = ImportError(op, errutil.Fmt("%w Test", MissingSlot))
 	} else if n, e := makeTestName(k, op.TestName); e != nil {
 		err = e
 	} else {

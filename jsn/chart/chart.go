@@ -9,7 +9,7 @@ type Machine struct {
 	State
 	encoding bool
 	stack    chartStack
-	cursor   string
+	Comment  *string
 	err      error
 }
 
@@ -40,19 +40,13 @@ func (m *Machine) IsEncoding() bool {
 	return m.encoding
 }
 
-func (m *Machine) SetCursor(id string) {
-	m.cursor = id
+func (m *Machine) SetComment(pid *string) {
+	m.Comment = pid
 }
 
 // Data returns the accumulated script tree ready for serialization
 func (m *Machine) Errors() error {
 	return m.err
-}
-
-// FlushCursor - return and reset the most recently recorded cursor position
-func (m *Machine) FlushCursor() (ret string) {
-	ret, m.cursor = m.cursor, ""
-	return
 }
 
 func (m *Machine) Error(e error) {
