@@ -22,10 +22,10 @@ func TestValueFieldAssignment(t *testing.T) {
 			{Name: "d", Affinity: Affinity{Affinity_Number}},
 		}},
 		// nouns with those fields
-		&EphNouns{"apple", "k"},
-		&EphNouns{"pear", "l"},
-		&EphNouns{"toy boat", "m"},
-		&EphNouns{"boat", "m"},
+		&EphNouns{Noun: "apple", Kind: "k"},
+		&EphNouns{Noun: "pear", Kind: "l"},
+		&EphNouns{Noun: "toy boat", Kind: "m"},
+		&EphNouns{Noun: "boat", Kind: "m"},
 		// values using those fields
 		&EphValues{Noun: "apple", Field: "t", Value: T("some text")},
 		&EphValues{Noun: "pear", Field: "d", Value: I(123)},
@@ -58,7 +58,7 @@ func TestMissingField(t *testing.T) {
 		// a field
 		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "d", Affinity: Affinity{Affinity_Number}}}},
 		// a noun
-		&EphNouns{"n", "k"},
+		&EphNouns{Noun: "n", Kind: "k"},
 		// and not that field
 		&EphValues{Noun: "n", Field: "t", Value: T("no such field")},
 	)
@@ -78,8 +78,8 @@ func TestValueTraitAssignment(t *testing.T) {
 		&EphKinds{Kinds: "m", From: "l"},
 		// aspects
 		&EphKinds{Kinds: kindsOf.Aspect.String()},
-		&EphAspects{"a", dd("w", "x", "y")},
-		&EphAspects{"b", dd("z")},
+		&EphAspects{Aspects: "a", Traits: dd("w", "x", "y")},
+		&EphAspects{Aspects: "b", Traits: dd("z")},
 		// fields using those aspects:
 		// the name of the field has to match the name of the aspect
 		&EphKinds{Kinds: "k", Contain: []EphParams{
@@ -87,10 +87,10 @@ func TestValueTraitAssignment(t *testing.T) {
 			AspectParam("b"),
 		}},
 		// nouns with those aspects
-		&EphNouns{"apple", "k"},
-		&EphNouns{"pear", "l"},
-		&EphNouns{"toy boat", "m"},
-		&EphNouns{"boat", "m"},
+		&EphNouns{Noun: "apple", Kind: "k"},
+		&EphNouns{Noun: "pear", Kind: "l"},
+		&EphNouns{Noun: "toy boat", Kind: "m"},
+		&EphNouns{Noun: "boat", Kind: "m"},
 		// values using those aspects or traits from those aspects:
 		&EphValues{Noun: "apple", Field: "a", Value: T("y")}, // assign to the aspect directly
 		&EphValues{Noun: "pear", Field: "x", Value: B(true)}, // assign to some traits indirectly
@@ -135,7 +135,7 @@ func TestValuePaths(t *testing.T) {
 			{Name: "outer", Affinity: Affinity{Affinity_Record}},
 		}},
 		// a noun of that kind, with the record of records.
-		&EphNouns{"test", "k"},
+		&EphNouns{Noun: "test", Kind: "k"},
 		// values targeting a field inside the record
 		&EphValues{Noun: "test", Field: "text", Value: T("some text"), Path: []string{
 			"outer", "inner",

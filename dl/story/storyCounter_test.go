@@ -14,15 +14,15 @@ func Test_SearchForCounters(t *testing.T) {
 	if !story.SearchForCounters(c) {
 		t.Fatal("core")
 	} else {
-		allTrue := &core.AllTrue{[]rt.BoolEval{c}}
+		allTrue := &core.AllTrue{Test: []rt.BoolEval{c}}
 		if !story.SearchForCounters(allTrue) {
 			t.Fatal("all true")
 		} else {
-			not := &core.Not{allTrue}
+			not := &core.Not{Test: allTrue}
 			if !story.SearchForCounters(not) {
 				t.Fatal("not")
 			} else {
-				empty := &core.Not{&core.AllTrue{}}
+				empty := &core.Not{Test: &core.AllTrue{}}
 				if story.SearchForCounters(empty) {
 					t.Fatal("should have no counters")
 				}

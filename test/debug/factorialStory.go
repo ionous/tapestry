@@ -55,7 +55,7 @@ var FactorialStory = &story.Story{
 }
 
 // run 3! factorial
-var FactorialCheck = &core.Activity{[]rt.Execute{
+var FactorialCheck = &core.Activity{Exe: []rt.Execute{
 	&core.SayText{
 		Text: &core.PrintNum{
 			Num: &core.CallPattern{
@@ -72,10 +72,10 @@ var FactorialCheck = &core.Activity{[]rt.Execute{
 }}
 
 // subtracts 1 from the num and multiples by one
-var FactorialMulMinusOne = &core.Activity{[]rt.Execute{
+var FactorialMulMinusOne = &core.Activity{Exe: []rt.Execute{
 	&core.Assign{
 		Var: numVar,
-		From: &core.FromNum{&core.ProductOf{
+		From: &core.FromNum{Val: &core.ProductOf{
 			A: &core.GetVar{Name: numVar},
 			B: &core.DiffOf{
 				A: &core.GetVar{Name: numVar},
@@ -85,10 +85,10 @@ var FactorialMulMinusOne = &core.Activity{[]rt.Execute{
 }}
 
 // at 0, use the number 1
-var FactorialUseOne = &core.Activity{[]rt.Execute{
+var FactorialUseOne = &core.Activity{Exe: []rt.Execute{
 	&core.Assign{
 		Var:  numVar,
-		From: &core.FromNum{F(1)},
+		From: &core.FromNum{Val: F(1)},
 	}},
 }
 
@@ -100,6 +100,6 @@ var FactorialIsZero = &core.CompareNum{
 var factorialName = core.PatternName{Str: "factorial"}
 var numVar = core.VariableName{Str: "num"}
 
-var numberDecl = &story.NumberProperty{story.NamedProperty{
+var numberDecl = &story.NumberProperty{NamedProperty: story.NamedProperty{
 	Name: numVar.Str,
 }}

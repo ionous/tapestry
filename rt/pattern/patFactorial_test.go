@@ -36,28 +36,28 @@ func TestFactorial(t *testing.T) {
 					Execute: core.NewActivity(
 						&core.Assign{Var: N("num"),
 							From: &core.FromNum{
-								&core.ProductOf{
+								Val: &core.ProductOf{
 									A: V("num"),
 									B: &core.CallPattern{
 										Pattern: P("factorial"),
 										Arguments: core.NamedArgs(
 											"num", &core.FromNum{
-												&core.DiffOf{
-													V("num"),
-													I(1),
+												Val: &core.DiffOf{
+													A: V("num"),
+													B: I(1),
 												},
 											},
 										)}}}}),
 				}, {
 					Filter: &core.CompareNum{
-						V("num"),
-						&core.Equal{},
-						I(0),
+						A:  V("num"),
+						Is: &core.Equal{},
+						B:  I(0),
 					},
 					Execute: core.NewActivity(
 						&core.Assign{Var: N("num"),
 							From: &core.FromNum{
-								I(1),
+								Val: I(1),
 							}},
 					),
 				}}},
@@ -67,7 +67,7 @@ func TestFactorial(t *testing.T) {
 		Pattern: P("factorial"),
 		Arguments: core.NamedArgs(
 			"num", &core.FromNum{
-				I(3),
+				Val: I(3),
 			}),
 	}
 	if v, e := safe.GetNumber(&run, &det); e != nil {

@@ -40,7 +40,7 @@ func TestPatternParameterImport(t *testing.T) {
 	patternVariables := &story.PatternDecl{
 		Name: core.PatternName{Str: "corral"},
 		Optvars: &story.PatternVariablesTail{
-			Props: []story.PropertySlot{&story.TextProperty{story.NamedProperty{
+			Props: []story.PropertySlot{&story.TextProperty{NamedProperty: story.NamedProperty{
 				Name: "pet",
 				Type: "animal",
 			}}}},
@@ -92,9 +92,9 @@ func TestPatternRuleImport(t *testing.T) {
 				// this is the default timing:
 				When: eph.EphTiming{eph.EphTiming_During},
 				// exe is exactly what was specified:
-				Exe: &core.Activity{[]rt.Execute{
-					&core.SayText{T("hello")},
-					&core.SayText{T("hello")},
+				Exe: &core.Activity{Exe: []rt.Execute{
+					&core.SayText{Text: T("hello")},
+					&core.SayText{Text: T("hello")},
 				}},
 			},
 		}

@@ -162,8 +162,8 @@ func (n NamedNoun) UniformString() (ret string, err error) {
 // return the name of a noun based on the name of the current noun
 func (n NamedNoun) dependentNoun(name string) NamedNoun {
 	return NamedNoun{
-		Determiner{Str: Determiner_Our},
-		NounName{Str: n.Name.Str + "-" + name},
+		Determiner: Determiner{Str: Determiner_Our},
+		Name:       NounName{Str: n.Name.Str + "-" + name},
 	}
 }
 

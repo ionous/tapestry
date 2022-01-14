@@ -9,7 +9,7 @@ func (op *KindOfRelation) ImportPhrase(k *Importer) (err error) {
 	if card, e := op.Cardinality.GetCardinality(); e != nil {
 		err = e
 	} else {
-		k.WriteEphemera(&eph.EphRelations{op.Relation.String(), card})
+		k.WriteEphemera(&eph.EphRelations{Rel: op.Relation.String(), Cardinality: card})
 	}
 	return
 }
@@ -26,25 +26,25 @@ func (op *RelationCardinality) GetCardinality() (ret eph.EphCardinality, err err
 func (op *OneToOne) GetCardinality() eph.EphCardinality {
 	return eph.EphCardinality{
 		eph.EphCardinality_OneOne_Opt,
-		&eph.OneOne{op.Kind.String(), op.OtherKind.String()},
+		&eph.OneOne{Kind: op.Kind.String(), OtherKind: op.OtherKind.String()},
 	}
 }
 func (op *OneToMany) GetCardinality() eph.EphCardinality {
 	return eph.EphCardinality{
 		eph.EphCardinality_OneMany_Opt,
-		&eph.OneMany{op.Kind.String(), op.Kinds.String()},
+		&eph.OneMany{Kind: op.Kind.String(), OtherKinds: op.Kinds.String()},
 	}
 }
 func (op *ManyToOne) GetCardinality() eph.EphCardinality {
 	return eph.EphCardinality{
 		eph.EphCardinality_ManyOne_Opt,
-		&eph.ManyOne{op.Kinds.String(), op.Kind.String()},
+		&eph.ManyOne{Kinds: op.Kinds.String(), OtherKind: op.Kind.String()},
 	}
 }
 func (op *ManyToMany) GetCardinality() eph.EphCardinality {
 	return eph.EphCardinality{
 		eph.EphCardinality_ManyMany_Opt,
-		&eph.ManyMany{op.Kinds.String(), op.OtherKinds.String()},
+		&eph.ManyMany{Kinds: op.Kinds.String(), OtherKinds: op.OtherKinds.String()},
 	}
 }
 

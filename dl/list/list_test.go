@@ -13,14 +13,14 @@ func T(s string) *literal.TextValue { return &literal.TextValue{Text: s} }
 
 func P(p string) core.PatternName  { return core.PatternName{Str: p} }
 func N(v string) core.VariableName { return core.VariableName{Str: v} }
-func V(i string) *core.GetVar      { return &core.GetVar{N(i)} }
+func V(i string) *core.GetVar      { return &core.GetVar{Name: N(i)} }
 func W(v string) string            { return v }
 
 func FromTs(vs []string) (ret rt.Assignment) {
 	if len(vs) == 1 {
-		ret = &core.FromText{&literal.TextValue{Text: vs[0]}}
+		ret = &core.FromText{Val: &literal.TextValue{Text: vs[0]}}
 	} else {
-		ret = &core.FromTexts{&literal.TextValues{Values: vs}}
+		ret = &core.FromTexts{Vals: &literal.TextValues{Values: vs}}
 	}
 	return
 }

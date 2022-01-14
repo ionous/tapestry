@@ -111,13 +111,13 @@ func newRelation(r, k, c, o string) *EphRelations {
 	var card EphCardinality
 	switch c {
 	case tables.ONE_TO_ONE:
-		card = EphCardinality{EphCardinality_OneOne_Opt, &OneOne{k, o}}
+		card = EphCardinality{EphCardinality_OneOne_Opt, &OneOne{Kind: k, OtherKind: o}}
 	case tables.ONE_TO_MANY:
-		card = EphCardinality{EphCardinality_OneMany_Opt, &OneMany{k, o}}
+		card = EphCardinality{EphCardinality_OneMany_Opt, &OneMany{Kind: k, OtherKinds: o}}
 	case tables.MANY_TO_ONE:
-		card = EphCardinality{EphCardinality_ManyOne_Opt, &ManyOne{k, o}}
+		card = EphCardinality{EphCardinality_ManyOne_Opt, &ManyOne{Kinds: k, OtherKind: o}}
 	case tables.MANY_TO_MANY:
-		card = EphCardinality{EphCardinality_ManyMany_Opt, &ManyMany{k, o}}
+		card = EphCardinality{EphCardinality_ManyMany_Opt, &ManyMany{Kinds: k, OtherKinds: o}}
 	default:
 		panic("unknown cardinality")
 	}

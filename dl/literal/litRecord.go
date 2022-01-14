@@ -57,7 +57,7 @@ Loop:
 			err = errutil.Fmt("unmarshalFields unhandled literal %T", v)
 			break Loop
 		}
-		ret = append(ret, FieldValue{key, i})
+		ret = append(ret, FieldValue{Field: key, Value: i})
 	}
 	return
 }

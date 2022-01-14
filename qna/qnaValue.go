@@ -41,49 +41,49 @@ func readEvalValue(a affine.Affinity, rawValue []byte, signatures []map[uint64]i
 		if e := core.Decode(rt.BoolEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromBool{v}
+			ret = &core.FromBool{Val: v}
 		}
 	case affine.Number:
 		var v rt.NumberEval
 		if e := core.Decode(rt.NumberEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromNum{v}
+			ret = &core.FromNum{Val: v}
 		}
 	case affine.Text:
 		var v rt.TextEval
 		if e := core.Decode(rt.TextEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromText{v}
+			ret = &core.FromText{Val: v}
 		}
 	case affine.NumList:
 		var v rt.NumListEval
 		if e := core.Decode(rt.NumListEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromNumbers{v}
+			ret = &core.FromNumbers{Vals: v}
 		}
 	case affine.TextList:
 		var v rt.TextListEval
 		if e := core.Decode(rt.TextListEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromTexts{v}
+			ret = &core.FromTexts{Vals: v}
 		}
 	case affine.Record:
 		var v rt.RecordEval
 		if e := core.Decode(rt.RecordEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromRecord{v}
+			ret = &core.FromRecord{Val: v}
 		}
 	case affine.RecordList:
 		var v rt.RecordListEval
 		if e := core.Decode(rt.RecordListEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromRecords{v}
+			ret = &core.FromRecords{Vals: v}
 		}
 	default:
 		err = errutil.New("unhandled affinity", a.String())

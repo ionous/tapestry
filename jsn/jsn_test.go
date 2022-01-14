@@ -117,7 +117,7 @@ func TestAnonymousOptional(t *testing.T) {
 // @requires light double committed
 func TestVarAsBool(t *testing.T) {
 	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
-	want := core.AllTrue{[]rt.BoolEval{
+	want := core.AllTrue{Test: []rt.BoolEval{
 		&core.GetVar{
 			Name: core.VariableName{Str: "requires light"},
 		},

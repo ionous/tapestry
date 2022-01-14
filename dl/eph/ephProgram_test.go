@@ -18,7 +18,7 @@ func TestGrammarDirectives(t *testing.T) {
 			Directive: grammar.Directive{
 				Lede: []string{"jump", "skip", "hop"},
 				Scans: []grammar.ScannerMaker{
-					&grammar.Action{"jumping"},
+					&grammar.Action{Action: "jumping"},
 				},
 			},
 		},

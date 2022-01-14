@@ -15,7 +15,7 @@ func TestAllTrue(t *testing.T) {
 	var l boolList
 	evals := []rt.BoolEval{}
 	for i := 0; i < 3; i++ {
-		test := &AllTrue{evals}
+		test := &AllTrue{Test: evals}
 		if ok, e := safe.GetBool(run, test); e != nil {
 			t.Fatal(e)
 		} else if !ok.Bool() {
@@ -29,7 +29,7 @@ func TestAllTrue(t *testing.T) {
 	}
 	// turn one false.
 	l.vals[1] = false
-	test := &AllTrue{evals}
+	test := &AllTrue{Test: evals}
 	if ok, e := safe.GetBool(run, test); e != nil {
 		t.Fatal(e)
 	} else if ok.Bool() {
@@ -44,7 +44,7 @@ func TestAnyTrue(t *testing.T) {
 	var l boolList
 	evals := []rt.BoolEval{}
 	for i := 0; i < 3; i++ {
-		test := &AnyTrue{evals}
+		test := &AnyTrue{Test: evals}
 		if ok, e := safe.GetBool(run, test); e != nil {
 			t.Fatal(e)
 		} else if ok.Bool() {
@@ -58,7 +58,7 @@ func TestAnyTrue(t *testing.T) {
 	}
 	// turn one true.
 	l.vals[1] = true
-	test := &AnyTrue{evals}
+	test := &AnyTrue{Test: evals}
 	if ok, e := safe.GetBool(run, test); e != nil {
 		t.Fatal(e)
 	} else if !ok.Bool() {

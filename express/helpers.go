@@ -18,7 +18,7 @@ func W(v string) string            { return v }
 
 func O(n string, exact bool) (ret rt.TextEval) {
 	if !exact {
-		ret = &render.RenderRef{N(n), render.RenderFlags{Str: render.RenderFlags_RenderAsAny}}
+		ret = &render.RenderRef{Name: N(n), Flags: render.RenderFlags{Str: render.RenderFlags_RenderAsAny}}
 	} else {
 		ret = T(n)
 	}

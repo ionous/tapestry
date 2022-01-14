@@ -30,14 +30,14 @@ var assignGrouping = testpat.Pattern{
 		{Name: "out", Affinity: affine.Record, Type: "group_settings"},
 	},
 	Rules: []rt.Rule{
-		{Execute: &core.Activity{[]rt.Execute{
+		{Execute: &core.Activity{Exe: []rt.Execute{
 			Put("out", "name", V("in")),
 			&core.ChooseAction{
 				If: &core.Matches{
 					Text:    V("in"),
 					Pattern: "^thing"},
 				Do: core.MakeActivity(
-					Put("out", "label", &core.FromText{T("thingies")}),
+					Put("out", "label", &core.FromText{Val: T("thingies")}),
 				),
 			},
 		}}},

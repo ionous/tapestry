@@ -23,23 +23,23 @@ func TestRelAssembly(t *testing.T) {
 	)
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kinds: "q"},
-		&EphRelations{"r", EphCardinality{
-			EphCardinality_OneOne_Opt,
-			&OneOne{"p", "q"},
+		&EphRelations{Rel: "r", Cardinality: EphCardinality{
+			Choice: EphCardinality_OneOne_Opt,
+			Value:  &OneOne{Kind: "p", OtherKind: "q"},
 		}},
-		&EphRelations{"s", EphCardinality{
-			EphCardinality_ManyOne_Opt,
-			&ManyOne{"p", "q"},
+		&EphRelations{Rel: "s", Cardinality: EphCardinality{
+			Choice: EphCardinality_ManyOne_Opt,
+			Value:  &ManyOne{Kinds: "p", OtherKind: "q"},
 		}},
 	)
 	dt.makeDomain(dd("c", "b"),
-		&EphRelations{"t", EphCardinality{
-			EphCardinality_OneMany_Opt,
-			&OneMany{"p", "p"},
+		&EphRelations{Rel: "t", Cardinality: EphCardinality{
+			Choice: EphCardinality_OneMany_Opt,
+			Value:  &OneMany{Kind: "p", OtherKinds: "p"},
 		}},
-		&EphRelations{"u", EphCardinality{
-			EphCardinality_OneMany_Opt,
-			&ManyMany{"q", "p"},
+		&EphRelations{Rel: "u", Cardinality: EphCardinality{
+			Choice: EphCardinality_OneMany_Opt,
+			Value:  &ManyMany{Kinds: "q", OtherKinds: "p"},
 		}},
 	)
 	if cat, e := buildAncestors(dt); e != nil {

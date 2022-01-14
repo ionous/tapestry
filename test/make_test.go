@@ -20,7 +20,7 @@ func TestMake(t *testing.T) {
 	testTime.Kinds.AddKinds((*GroupSettings)(nil))
 	op := &core.CallMake{
 		Kind:      W("group_settings"),
-		Arguments: core.NamedArgs("objects_with_articles", &core.FromBool{B(true)}),
+		Arguments: core.NamedArgs("objects_with_articles", &core.FromBool{Val: B(true)}),
 	}
 	if obj, e := op.GetRecord(&testTime); e != nil {
 		t.Fatal(e)

@@ -36,7 +36,7 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(
 			"'a' < 'b'",
 			&core.CompareText{
-				T("a"), &core.LessThan{}, T("b"),
+				A: T("a"), Is: &core.LessThan{}, B: T("b"),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -45,7 +45,7 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(
 			"7 >= 8",
 			&core.CompareNum{
-				F(7), &core.AtLeast{}, F(8),
+				A: F(7), Is: &core.AtLeast{}, B: F(8),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -54,8 +54,8 @@ func TestExpressions(t *testing.T) {
 		if e := testExpression(
 			"(5+6)*(1+2)",
 			&core.ProductOf{
-				&core.SumOf{F(5), F(6)},
-				&core.SumOf{F(1), F(2)},
+				A: &core.SumOf{A: F(5), B: F(6)},
+				B: &core.SumOf{A: F(1), B: F(2)},
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -72,7 +72,7 @@ func TestExpressions(t *testing.T) {
 							B(false),
 							// isNot requires command parsing
 							&core.Not{
-								B(true),
+								Test: B(true),
 							},
 						}},
 				}}); e != nil {
@@ -81,7 +81,7 @@ func TestExpressions(t *testing.T) {
 	})
 	t.Run("global", func(t *testing.T) {
 		if e := testExpression(".A",
-			&render.RenderName{"A"}); e != nil {
+			&render.RenderName{Name: "A"}); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -125,11 +125,11 @@ func TestExpressions(t *testing.T) {
 			&core.ProductOf{
 				A: &core.GetAtField{
 					Field: W("num"),
-					From:  &render.RenderField{T("A")},
+					From:  &render.RenderField{Name: T("A")},
 				},
 				B: &core.GetAtField{
 					Field: W("num"),
-					From:  &render.RenderField{T("b")},
+					From:  &render.RenderField{Name: T("b")},
 				},
 			}); e != nil {
 			t.Fatal(e)
@@ -154,8 +154,8 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{print_num_word: .group_size}",
 			&core.PrintNumWord{
 				Num: &render.RenderRef{
-					N("group_size"),
-					render.RenderFlags{Str: render.RenderFlags_RenderAsAny},
+					Name:  N("group_size"),
+					Flags: render.RenderFlags{Str: render.RenderFlags_RenderAsAny},
 				},
 			}); e != nil {
 			t.Fatal(e)
@@ -198,7 +198,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{if 7=7}boop{else}beep{end}",
 			&core.ChooseText{
 				If: &core.CompareNum{
-					F(7), &core.Equal{}, F(7),
+					A: F(7), Is: &core.Equal{}, B: F(7),
 				},
 				True:  T("boop"),
 				False: T("beep"),
@@ -210,8 +210,8 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{unless 7=7}boop{otherwise}beep{end}",
 			&core.ChooseText{
 				If: &core.Not{
-					&core.CompareNum{
-						F(7), &core.Equal{}, F(7),
+					Test: &core.CompareNum{
+						A: F(7), Is: &core.Equal{}, B: F(7),
 					}},
 				True:  T("boop"),
 				False: T("beep"),
@@ -233,11 +233,11 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{15|print_num!} {if 7=7}boop{end}",
 			&core.Join{
 				Parts: []rt.TextEval{
-					&core.PrintNum{F(15)},
+					&core.PrintNum{Num: F(15)},
 					T(" "),
 					&core.ChooseText{
 						If: &core.CompareNum{
-							F(7), &core.Equal{}, F(7),
+							A: F(7), Is: &core.Equal{}, B: F(7),
 						},
 						True: T("boop"),
 					},
@@ -251,7 +251,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&render.RenderPattern{
 				Pattern: P("hello"), Arguments: core.Args(
-					&core.FromText{T("world")},
+					&core.FromText{Val: T("world")},
 				)}); e != nil {
 			t.Fatal(e)
 		}
@@ -262,7 +262,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("hello {.object}",
 			&core.Join{Parts: []rt.TextEval{
 				T("hello "),
-				&render.RenderName{"object"}}},
+				&render.RenderName{Name: "object"}}},
 		); e != nil {
 			t.Fatal(e)
 		}

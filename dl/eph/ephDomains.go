@@ -50,7 +50,10 @@ func (d *Domain) AddEphemera(at string, ep Ephemera) (err error) {
 		// fix? consider all ephemera in a flat slice ( again ) scanning by phase instead of partitioning.
 		// that way we dont need all the separate lists and we can append....
 		els := d.phases[phase]
-		els.eph = append(els.eph, EphAt{at, ep})
+		els.eph = append(els.eph, EphAt{
+			At:  at,
+			Eph: ep,
+		})
 		d.phases[phase] = els
 	}
 	return

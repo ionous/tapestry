@@ -30,7 +30,7 @@ func TestPatternSingle(t *testing.T) {
 			}, {
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromNum{I(10)},
+				Initially: &core.FromNum{Val: I(10)},
 			}},
 			Result: &EphParams{
 				Name:     "success",
@@ -74,7 +74,7 @@ func TestPatternSeparateLocals(t *testing.T) {
 			Locals: []EphParams{{
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromNum{I(10)},
+				Initially: &core.FromNum{Val: I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -115,7 +115,7 @@ func TestPatternSeparateDomains(t *testing.T) {
 			Locals: []EphParams{{
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromNum{I(10)},
+				Initially: &core.FromNum{Val: I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -264,7 +264,7 @@ func TestPatternConflictingInit(t *testing.T) {
 			Locals: []EphParams{{
 				Name:      "n",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromText{T("mismatched")},
+				Initially: &core.FromText{Val: T("mismatched")},
 			}},
 		},
 	)

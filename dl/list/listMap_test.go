@@ -131,13 +131,13 @@ var reverseRecords = testpat.Pattern{
 	Return: "out",
 	Rules: []rt.Rule{{
 		Execute: &core.PutAtField{
-			Into:    &core.IntoVar{N("out")},
+			Into:    &core.IntoVar{Var: N("out")},
 			AtField: W("name"),
 			From: &core.FromText{
-				&core.MakeReversed{
-					&core.GetAtField{
+				Val: &core.MakeReversed{
+					Text: &core.GetAtField{
 						Field: W("name"),
-						From:  &core.FromVar{N("in")},
+						From:  &core.FromVar{Var: N("in")},
 					},
 				},
 			},
@@ -154,7 +154,7 @@ var reverseStrings = testpat.Pattern{
 		Execute: &core.Assign{
 			Var: N("out"),
 			From: &core.FromText{
-				&core.MakeReversed{V("in")},
+				Val: &core.MakeReversed{Text: V("in")},
 			},
 		},
 	},

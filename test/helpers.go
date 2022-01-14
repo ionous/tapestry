@@ -12,5 +12,5 @@ func T(s string) *literal.TextValue { return &literal.TextValue{Text: s} }
 
 func P(p string) core.PatternName  { return core.PatternName{Str: p} }
 func N(v string) core.VariableName { return core.VariableName{Str: v} }
-func V(i string) *core.GetVar      { return &core.GetVar{N(i)} }
+func V(i string) *core.GetVar      { return &core.GetVar{Name: N(i)} }
 func W(v string) string            { return v }

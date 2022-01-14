@@ -33,11 +33,11 @@ func TestDetermineNum(t *testing.T) {
 			Args: []core.CallArg{{
 				Name: "num",
 				From: &core.FromNum{
-					F(3),
+					Val: F(3),
 				}}}}}); len(diff) > 0 {
 		t.Fatal(diff)
 	} else if diff := pretty.Diff(els, []eph.Ephemera{
-		&eph.EphRefs{[]eph.Ephemera{
+		&eph.EphRefs{Refs: []eph.Ephemera{
 			&eph.EphKinds{
 				Kinds: "factorial",
 				From:  kindsOf.Pattern.String(),

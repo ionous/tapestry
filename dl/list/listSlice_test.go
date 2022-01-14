@@ -58,7 +58,7 @@ func slice(start, end int, src []string) (ret string) {
 	if run, _, e := newListTime(src, nil); e != nil {
 		ret = e.Error()
 	} else {
-		ret = joinText(run, &list.ListSlice{V("source"), I(start), I(end)})
+		ret = joinText(run, &list.ListSlice{List: V("source"), Start: I(start), End: I(end)})
 	}
 	return
 }

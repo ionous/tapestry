@@ -10,11 +10,11 @@ func (op *Comment) ImportStub(k *Importer) (ret interface{}, err error) {
 		ret = op
 	} else {
 		ret = &debug.DebugLog{
-			&core.FromText{
-				T(op.Lines.String()),
+			Value: &core.FromText{
+				Val: T(op.Lines.String()),
 			},
-			debug.LoggingLevel{
-				debug.LoggingLevel_Note,
+			LogLevel: debug.LoggingLevel{
+				Str: debug.LoggingLevel_Note,
 			},
 		}
 	}

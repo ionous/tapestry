@@ -184,15 +184,15 @@ func newAssignment(arg r.Value) (ret rt.Assignment, err error) {
 	case *render.RenderPattern:
 		ret = arg
 	case rt.BoolEval:
-		ret = &core.FromBool{arg}
+		ret = &core.FromBool{Val: arg}
 	case rt.NumberEval:
-		ret = &core.FromNum{arg}
+		ret = &core.FromNum{Val: arg}
 	case rt.NumListEval:
-		ret = &core.FromNumbers{arg}
+		ret = &core.FromNumbers{Vals: arg}
 	case rt.TextEval:
-		ret = &core.FromText{arg}
+		ret = &core.FromText{Val: arg}
 	case rt.TextListEval:
-		ret = &core.FromTexts{arg}
+		ret = &core.FromTexts{Vals: arg}
 	default:
 		err = errutil.Fmt("unknown pattern parameter type %T", arg)
 	}
@@ -207,8 +207,8 @@ func (c *Converter) buildUnless(cmd interface{}, arity int) (err error) {
 		if a, ok := arg.Interface().(rt.BoolEval); !ok {
 			err = errutil.New("argument is not a bool", arg.Type().String())
 		} else {
-			args[0] = r.ValueOf(&core.Not{a}) // rewrite the arg.
-			c.stack.push(args...)             //
+			args[0] = r.ValueOf(&core.Not{Test: a}) // rewrite the arg.
+			c.stack.push(args...)                   //
 			err = c.buildCommand(cmd, arity)
 		}
 	}
@@ -281,7 +281,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			} else {
 				// a chaing of dots indicates one or more fields of a record
 				// ex.  .object.fieldContainingAnRecord.otherField
-				var fieldSet core.FromSourceFields = &render.RenderField{T(firstField)}
+				var fieldSet core.FromSourceFields = &render.RenderField{Name: T(firstField)}
 
 				var getField *core.GetAtField
 				// .a.b: from the named object a, we want its field b
@@ -289,7 +289,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 				for _, field := range fields[1:] {
 					// the nth time through?
 					if getField != nil {
-						fieldSet = &core.FromRec{getField}
+						fieldSet = &core.FromRec{Rec: getField}
 					}
 					getField = &core.GetAtField{
 						Field: W(field),

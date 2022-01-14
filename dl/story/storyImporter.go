@@ -54,7 +54,7 @@ func (k *Importer) WriteEphemera(op eph.Ephemera) {
 }
 
 func Refs(refs ...eph.Ephemera) *eph.EphRefs {
-	return &eph.EphRefs{refs}
+	return &eph.EphRefs{Refs: refs}
 }
 
 // put the passed ephemera into the global scope
@@ -168,7 +168,7 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 						Contain: []eph.EphParams{{
 							Affinity:  eph.Affinity{eph.Affinity_Text},
 							Name:      resp.Name,
-							Initially: &core.FromText{resp.Text},
+							Initially: &core.FromText{Val: resp.Text},
 						}},
 					})
 				}

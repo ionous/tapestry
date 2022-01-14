@@ -35,7 +35,7 @@ func (on dotName) flags() (ret render.RenderFlags) {
 // we cant know the type of the variable .count without keeping a name stack during compilation
 // but we can use the existing command Var which implements every eval type.
 func (on dotName) getValueNamed() *render.RenderRef {
-	return &render.RenderRef{core.VariableName{Str: string(on)}, on.flags()}
+	return &render.RenderRef{Name: core.VariableName{Str: string(on)}, Flags: on.flags()}
 }
 
 // when dotted names are as arguments to patterns:
@@ -54,5 +54,5 @@ func (on dotName) getPrintedName() rt.TextEval {
 	// the render.RenderName function itself handles the capitalization check
 	// one thing missing here: if the text in a variable is not already an id
 	// this will just print the text.
-	return &render.RenderName{string(on)}
+	return &render.RenderName{Name: string(on)}
 }

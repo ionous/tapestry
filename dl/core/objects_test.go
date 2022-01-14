@@ -50,21 +50,21 @@ func TestObjects(t *testing.T) {
 		if e := testTrue(t, &run, &IsKindOf{Object: that, Kind: derived.Text}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &Not{&IsKindOf{this, derived.Text}}); e != nil {
+		if e := testTrue(t, &run, &Not{Test: &IsKindOf{Object: this, Kind: derived.Text}}); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("is_exact_kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &CompareText{A: &KindOf{this}, Is: &Equal{}, B: base}); e != nil {
+		if e := testTrue(t, &run, &CompareText{A: &KindOf{Object: this}, Is: &Equal{}, B: base}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &CompareText{A: &KindOf{that}, Is: &Unequal{}, B: base}); e != nil {
+		if e := testTrue(t, &run, &CompareText{A: &KindOf{Object: that}, Is: &Unequal{}, B: base}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &CompareText{A: &KindOf{that}, Is: &Equal{}, B: derived}); e != nil {
+		if e := testTrue(t, &run, &CompareText{A: &KindOf{Object: that}, Is: &Equal{}, B: derived}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &CompareText{A: &KindOf{this}, Is: &Unequal{}, B: derived}); e != nil {
+		if e := testTrue(t, &run, &CompareText{A: &KindOf{Object: this}, Is: &Unequal{}, B: derived}); e != nil {
 			t.Fatal(e)
 		}
 	})

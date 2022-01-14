@@ -21,10 +21,10 @@ func TestCompactParagraph(t *testing.T) {
 		cin.Hash("Example"):    (*Example)(nil),
 	}})
 	match := story.Story{
-		[]story.Paragraph{{
-			[]story.StoryStatement{&Example{}},
+		Paragraph: []story.Paragraph{{
+			StoryStatement: []story.StoryStatement{&Example{}},
 		}, {
-			[]story.StoryStatement{&Example{}, &Example{}},
+			StoryStatement: []story.StoryStatement{&Example{}, &Example{}},
 		}}}
 	if diff := pretty.Diff(out, match); len(diff) > 0 {
 		pretty.Println("got", out)

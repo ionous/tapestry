@@ -18,7 +18,7 @@ func (op *RenderTemplate) ImportStub(k *Importer) (ret interface{}, err error) {
 	} else if eval, ok := got.(rt.TextEval); !ok {
 		err = errutil.Fmt("render template has unknown expression %T", got)
 	} else {
-		ret = &render.RenderExp{eval}
+		ret = &render.RenderExp{Expression: eval}
 		// pretty.Println(eval)
 	}
 	return
@@ -36,7 +36,7 @@ func ConvertText(k *Importer, str string) (ret string, err error) {
 		} else if eval, ok := got.(rt.TextEval); !ok {
 			err = errutil.Fmt("render template has unknown expression %T", got)
 		} else {
-			ret, err = k.Marshal(&core.FromText{eval})
+			ret, err = k.Marshal(&core.FromText{Val: eval})
 		}
 	}
 	return

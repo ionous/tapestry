@@ -25,7 +25,7 @@ func TestImportSequence(t *testing.T) {
 	} else if e := din.Decode(&cmd, tapestry.Registry(), b); e != nil {
 		t.Fatal(e)
 	} else {
-		p := core.FromText{&cmd} // wrap the cycle text in a slot since that's the level ImportStub operates on
+		p := core.FromText{Val: &cmd} // wrap the cycle text in a slot since that's the level ImportStub operates on
 		if k.ImportStory(t.Name(), &p); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(p.Val, &_import_target); len(diff) > 0 {

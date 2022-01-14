@@ -68,7 +68,7 @@ func splice(src []string, start, cnt int, ins ...string) (ret string, err error)
 	if run, vals, e := newListTime(append([]string{}, src...), nil); e != nil {
 		err = e
 	} else {
-		rub := joinText(run, &list.ListSplice{W("source"), I(start), I(cnt), FromTs(ins)})
+		rub := joinText(run, &list.ListSplice{List: W("source"), Start: I(start), Remove: I(cnt), Insert: FromTs(ins)})
 		if strs, e := vals.GetNamedField("source"); e != nil {
 			err = e
 		} else {

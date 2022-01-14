@@ -45,7 +45,7 @@ func (stubs *Arguments) xform(k string, t kindsOf.Kinds) (retRefs *eph.EphRefs, 
 			})
 		}
 	}
-	retCall = core.CallArgs{args}
+	retCall = core.CallArgs{Args: args}
 	retRefs = Refs(&eph.EphKinds{
 		Kinds:   k,
 		From:    t.String(),
