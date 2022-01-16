@@ -46,7 +46,7 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	return
 }
 
-func CompactSlotDecoder(slot jsn.SlotBlock, msg json.RawMessage) (err error) {
+func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
 	if ptr, e := readLiteral(slot.GetType(), "", msg); e != nil {
 		err = e
 	} else if !slot.SetSlot(ptr) {

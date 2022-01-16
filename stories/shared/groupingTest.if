@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Comment:": "FIX: right now we dont support having the same named objects in multiple domains. we should, especially for testing, something something consider domain hierarchy too.  "
     },
@@ -104,35 +104,30 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "no grouping",
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "assign grouping",
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
+                        "Always",
                         {
-                          "PatternRule:hook activity:": [
-                            "Always",
+                          "Act:": [
                             {
-                              "Act:": [
-                                {
-                                  "Comment:": "For patterns which return a value, assigning a return value ends the pattern matching: so end this pattern and block out the default handler."
-                                },
-                                {
-                                  "Let:be:": [
-                                    "grouping",
-                                    "@grouping"
-                                  ]
-                                }
+                              "Comment:": "For patterns which return a value, assigning a return value ends the pattern matching: so end this pattern and block out the default handler."
+                            },
+                            {
+                              "Let:be:": [
+                                "grouping",
+                                "@grouping"
                               ]
                             }
                           ]
@@ -146,9 +141,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "no grouping",
@@ -193,9 +187,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "default grouping",
@@ -240,9 +233,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "custom few",
@@ -260,55 +252,51 @@
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "assign grouping",
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
                         {
-                          "PatternRule:hook activity:": [
+                          "KindOf:isExactly:": [
+                            "@obj",
+                            "props"
+                          ]
+                        },
+                        {
+                          "Act:": [
                             {
-                              "KindOf:isExactly:": [
-                                "@obj",
-                                "props"
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "props"
+                                },
+                                "label"
                               ]
                             },
                             {
-                              "Act:": [
+                              "Put:from:at:": [
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "props"
-                                    },
-                                    "label"
-                                  ]
+                                  "VarField:": "grouping"
                                 },
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide label"
-                                  ]
+                                  "FromBool:": true
+                                },
+                                "is hide label"
+                              ]
+                            },
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
                                 },
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide size"
-                                  ]
-                                }
+                                  "FromBool:": true
+                                },
+                                "is hide size"
                               ]
                             }
                           ]
@@ -319,38 +307,35 @@
                 }
               ]
             },
+            "--",
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "print several",
                 {
-                  "Pattern:rules:": [
-                    "print several",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
                         {
-                          "PatternRule:hook activity:": [
+                          "AllTrue:": [
                             {
-                              "AllTrue:": [
-                                {
-                                  "KindOf:is:": [
-                                    "@obj",
-                                    "triangles"
-                                  ]
-                                },
-                                {
-                                  "Cmp:is:num:": [
-                                    "@group size",
-                                    "GreaterThan",
-                                    1
-                                  ]
-                                }
+                              "KindOf:is:": [
+                                "@obj",
+                                "triangles"
                               ]
                             },
                             {
-                              "Act:": [
-                                {
-                                  "Say:": "a few shapely trigons"
-                                }
+                              "Cmp:is:num:": [
+                                "@group size",
+                                "GreaterThan",
+                                1
                               ]
+                            }
+                          ]
+                        },
+                        {
+                          "Act:": [
+                            {
+                              "Say:": "a few shapely trigons"
                             }
                           ]
                         }
@@ -363,9 +348,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestRule:hook activity:": [
         "custom few",
@@ -430,9 +414,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "custom replacement",
@@ -447,55 +430,51 @@
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "assign grouping",
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
                         {
-                          "PatternRule:hook activity:": [
+                          "KindOf:is:": [
+                            "@obj",
+                            "props"
+                          ]
+                        },
+                        {
+                          "Act:": [
                             {
-                              "KindOf:is:": [
-                                "@obj",
-                                "props"
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "some things"
+                                },
+                                "label"
                               ]
                             },
                             {
-                              "Act:": [
+                              "Put:from:at:": [
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "some things"
-                                    },
-                                    "label"
-                                  ]
+                                  "VarField:": "grouping"
                                 },
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide size"
-                                  ]
+                                  "FromBool:": true
+                                },
+                                "is hide size"
+                              ]
+                            },
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
                                 },
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide objects"
-                                  ]
-                                }
+                                  "FromBool:": true
+                                },
+                                "is hide objects"
                               ]
                             }
                           ]
@@ -509,9 +488,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Comment:": "deactivated: uncounted objects are their own groups now; so the triangles don't group with generic props. tbd: how to fix this style of group printing."
     },
@@ -577,9 +555,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "custom fancy phrase",
@@ -594,44 +571,40 @@
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "assign grouping",
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
                         {
-                          "PatternRule:hook activity:": [
+                          "KindOf:is:": [
+                            "@obj",
+                            "props"
+                          ]
+                        },
+                        {
+                          "Act:": [
                             {
-                              "KindOf:is:": [
-                                "@obj",
-                                "props"
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "the tiles"
+                                },
+                                "label"
                               ]
                             },
                             {
-                              "Act:": [
+                              "Put:from:at:": [
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "the tiles"
-                                    },
-                                    "label"
-                                  ]
+                                  "VarField:": "grouping"
                                 },
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide size"
-                                  ]
-                                }
+                                  "FromBool:": true
+                                },
+                                "is hide size"
                               ]
                             }
                           ]
@@ -642,75 +615,69 @@
                 }
               ]
             },
+            "--",
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "print group",
                 {
-                  "Pattern:rules:": [
-                    "print group",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:flags:hook activity:": [
                         {
-                          "PatternRule:flags:hook activity:": [
+                          "Cmp:is:txt:": [
                             {
-                              "Cmp:is:txt:": [
+                              "Get:from:": [
+                                "label",
                                 {
-                                  "Get:from:": [
-                                    "label",
-                                    {
-                                      "RecFields:": {
-                                        "Get:from:": [
-                                          "grouping",
-                                          {
-                                            "VarFields:": "group"
-                                          }
-                                        ]
+                                  "RecFields:": {
+                                    "Get:from:": [
+                                      "grouping",
+                                      {
+                                        "VarFields:": "group"
                                       }
-                                    }
-                                  ]
-                                },
-                                "Equals",
-                                "the tiles"
-                              ]
-                            },
-                            "before",
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "from a Scrabble set"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Paragraph:": [
-                {
-                  "Pattern:rules:": [
-                    "print grouped object",
-                    {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "KindOf:is:": [
-                                "@obj",
-                                "scrabble tiles"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "{.obj}"
+                                    ]
                                   }
                                 }
                               ]
+                            },
+                            "Equals",
+                            "the tiles"
+                          ]
+                        },
+                        "before",
+                        {
+                          "Act:": [
+                            {
+                              "Say:": "from a Scrabble set"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "--",
+            {
+              "Pattern:rules:": [
+                "print grouped object",
+                {
+                  "PatternRules:": [
+                    {
+                      "PatternRule:hook activity:": [
+                        {
+                          "KindOf:is:": [
+                            "@obj",
+                            "scrabble tiles"
+                          ]
+                        },
+                        {
+                          "Act:": [
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "{.obj}"
+                              }
                             }
                           ]
                         }
@@ -723,9 +690,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestRule:hook activity:": [
         "custom fancy phrase",
@@ -792,9 +758,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "custom parenthetical",
@@ -809,33 +774,29 @@
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "assign grouping",
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
                         {
-                          "PatternRule:hook activity:": [
+                          "KindOf:is:": [
+                            "@obj",
+                            "scrabble tiles"
+                          ]
+                        },
+                        {
+                          "Act:": [
                             {
-                              "KindOf:is:": [
-                                "@obj",
-                                "scrabble tiles"
-                              ]
-                            },
-                            {
-                              "Act:": [
+                              "Put:from:at:": [
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "scrabble tiles"
-                                    },
-                                    "label"
-                                  ]
-                                }
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "scrabble tiles"
+                                },
+                                "label"
                               ]
                             }
                           ]
@@ -846,29 +807,26 @@
                 }
               ]
             },
+            "--",
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "print grouped object",
                 {
-                  "Pattern:rules:": [
-                    "print grouped object",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
                         {
-                          "PatternRule:hook activity:": [
+                          "KindOf:is:": [
+                            "@obj",
+                            "scrabble tiles"
+                          ]
+                        },
+                        {
+                          "Act:": [
                             {
-                              "KindOf:is:": [
-                                "@obj",
-                                "scrabble tiles"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "{.obj}"
-                                  }
-                                }
-                              ]
+                              "Say:": {
+                                "RenderTemplate:": "{.obj}"
+                              }
                             }
                           ]
                         }
@@ -881,9 +839,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestRule:hook activity:": [
         "custom parenthetical",
@@ -916,9 +873,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "custom parenthetical articles",
@@ -933,33 +889,29 @@
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "assign grouping",
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
                         {
-                          "PatternRule:hook activity:": [
+                          "KindOf:is:": [
+                            "@obj",
+                            "scrabble tiles"
+                          ]
+                        },
+                        {
+                          "Act:": [
                             {
-                              "KindOf:is:": [
-                                "@obj",
-                                "scrabble tiles"
-                              ]
-                            },
-                            {
-                              "Act:": [
+                              "Put:from:at:": [
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "scrabble tiles"
-                                    },
-                                    "label"
-                                  ]
-                                }
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "scrabble tiles"
+                                },
+                                "label"
                               ]
                             }
                           ]
@@ -973,9 +925,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestRule:hook activity:": [
         "custom parenthetical articles",
@@ -1008,9 +959,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "custom unnamed parenthetical",
@@ -1025,33 +975,29 @@
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "assign grouping",
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
                         {
-                          "PatternRule:hook activity:": [
+                          "KindOf:is:": [
+                            "@obj",
+                            "props"
+                          ]
+                        },
+                        {
+                          "Act:": [
                             {
-                              "KindOf:is:": [
-                                "@obj",
-                                "props"
-                              ]
-                            },
-                            {
-                              "Act:": [
+                              "Put:from:at:": [
                                 {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "things"
-                                    },
-                                    "label"
-                                  ]
-                                }
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "things"
+                                },
+                                "label"
                               ]
                             }
                           ]
@@ -1065,9 +1011,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Comment:": "deactivated: uncounted objects are their own groups now; so the triangles don't group with generic props. tbd: how to fix this style of group printing."
     },
@@ -1137,4 +1082,4 @@
       ]
     }
   ]
-]
+}

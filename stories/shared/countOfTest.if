@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "TestRule:hook activity:": [
         "countOf",
@@ -27,9 +27,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "countOf",
@@ -37,84 +36,79 @@
           "TestOutput:": "o*-*x*x"
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "countOf",
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Pattern:": "magic symbols"
+            },
+            {
+              "Pattern:rules:": [
+                "magic symbols",
                 {
-                  "Pattern:": "magic symbols"
-                },
-                {
-                  "Pattern:rules:": [
-                    "magic symbols",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
+                        "Always",
                         {
-                          "PatternRule:hook activity:": [
-                            "Always",
+                          "Act:": [
                             {
-                              "Act:": [
-                                {
-                                  "Say:": "o"
-                                }
-                              ]
+                              "Say:": "o"
                             }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "PatternRule:hook activity:": [
+                        {
+                          "CountOf:num:": [
+                            "After",
+                            5
                           ]
                         },
                         {
-                          "PatternRule:hook activity:": [
+                          "Act:": [
                             {
-                              "CountOf:num:": [
-                                "After",
-                                5
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "x"
-                                }
-                              ]
+                              "Say:": "x"
                             }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "PatternRule:hook activity:": [
+                        {
+                          "CountOf:num:": [
+                            "At",
+                            3
                           ]
                         },
                         {
-                          "PatternRule:hook activity:": [
+                          "Act:": [
                             {
-                              "CountOf:num:": [
-                                "At",
-                                3
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "-"
-                                }
-                              ]
+                              "Say:": "-"
                             }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "PatternRule:hook activity:": [
+                        {
+                          "CountOf:num:": [
+                            "Every",
+                            2
                           ]
                         },
                         {
-                          "PatternRule:hook activity:": [
+                          "Act:": [
                             {
-                              "CountOf:num:": [
-                                "Every",
-                                2
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "*"
-                                }
-                              ]
+                              "Say:": "*"
                             }
                           ]
                         }
@@ -129,4 +123,4 @@
       ]
     }
   ]
-]
+}

@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Make kinds:of:": [
         " things",
@@ -15,58 +15,53 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "name of a kind",
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Nouns:depict:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "named object"
+                    ]
+                  },
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "unnamed object"
+                    ]
+                  }
+                ],
                 {
-                  "Nouns:depict:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "named object"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "unnamed object"
-                        ]
-                      }
-                    ],
-                    {
-                      "Kind:named:": [
-                        "are",
-                        "thing"
-                      ]
-                    }
+                  "Kind:named:": [
+                    "are",
+                    "thing"
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "Nouns:startAs:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "unnamed object"
+                    ]
+                  }
+                ],
                 {
-                  "Nouns:startAs:": [
+                  "NounTraits:trait:": [
+                    "is",
                     [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "unnamed object"
-                        ]
-                      }
-                    ],
-                    {
-                      "NounTraits:trait:": [
-                        "is",
-                        [
-                          "privately named"
-                        ]
-                      ]
-                    }
+                      "privately named"
+                    ]
                   ]
                 }
               ]
@@ -74,9 +69,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "name of a kind",
@@ -101,9 +95,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "print name",
@@ -239,9 +232,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "mention",
@@ -315,4 +307,4 @@
       ]
     }
   ]
-]
+}

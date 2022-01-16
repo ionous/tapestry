@@ -8687,7 +8687,7 @@ func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
 
 // Story
 type Story struct {
-	Paragraph   []Paragraph `if:"label=_"`
+	Paragraph   []Paragraph `if:"label=paragraphs"`
 	UserComment string
 }
 
@@ -8695,6 +8695,7 @@ func (*Story) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Story_Type,
 		Uses: composer.Type_Flow,
+		Lede: "story",
 	}
 }
 
@@ -8748,7 +8749,7 @@ func Story_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Story) (err error) {
 type Story_Flow struct{ ptr *Story }
 
 func (n Story_Flow) GetType() string      { return Story_Type }
-func (n Story_Flow) GetLede() string      { return Story_Type }
+func (n Story_Flow) GetLede() string      { return "story" }
 func (n Story_Flow) GetFlow() interface{} { return n.ptr }
 func (n Story_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Story); ok {
@@ -8772,12 +8773,206 @@ func Story_Optional_Marshal(m jsn.Marshaler, pv **Story) (err error) {
 func Story_Marshal(m jsn.Marshaler, val *Story) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(Story_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Story_Field_Paragraph)
+		e0 := m.MarshalKey("paragraphs", Story_Field_Paragraph)
 		if e0 == nil {
 			e0 = Paragraph_Repeats_Marshal(m, &val.Paragraph)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Story_Field_Paragraph))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// StoryBreak
+type StoryBreak struct {
+	UserComment string
+}
+
+// User implemented slots:
+var _ StoryStatement = (*StoryBreak)(nil)
+
+func (*StoryBreak) Compose() composer.Spec {
+	return composer.Spec{
+		Name: StoryBreak_Type,
+		Uses: composer.Type_Flow,
+		Lede: "--",
+	}
+}
+
+const StoryBreak_Type = "story_break"
+
+func (op *StoryBreak) Marshal(m jsn.Marshaler) error {
+	return StoryBreak_Marshal(m, op)
+}
+
+type StoryBreak_Slice []StoryBreak
+
+func (op *StoryBreak_Slice) GetType() string { return StoryBreak_Type }
+
+func (op *StoryBreak_Slice) Marshal(m jsn.Marshaler) error {
+	return StoryBreak_Repeats_Marshal(m, (*[]StoryBreak)(op))
+}
+
+func (op *StoryBreak_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *StoryBreak_Slice) SetSize(cnt int) {
+	var els []StoryBreak
+	if cnt >= 0 {
+		els = make(StoryBreak_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *StoryBreak_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return StoryBreak_Marshal(m, &(*op)[i])
+}
+
+func StoryBreak_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryBreak) error {
+	return jsn.RepeatBlock(m, (*StoryBreak_Slice)(vals))
+}
+
+func StoryBreak_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryBreak) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = StoryBreak_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type StoryBreak_Flow struct{ ptr *StoryBreak }
+
+func (n StoryBreak_Flow) GetType() string      { return StoryBreak_Type }
+func (n StoryBreak_Flow) GetLede() string      { return "--" }
+func (n StoryBreak_Flow) GetFlow() interface{} { return n.ptr }
+func (n StoryBreak_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*StoryBreak); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func StoryBreak_Optional_Marshal(m jsn.Marshaler, pv **StoryBreak) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = StoryBreak_Marshal(m, *pv)
+	} else if !enc {
+		var v StoryBreak
+		if err = StoryBreak_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(StoryBreak_Flow{val}); err == nil {
+		m.EndBlock()
+	}
+	return
+}
+
+// StoryLines
+type StoryLines struct {
+	Lines       []StoryStatement `if:"label=_"`
+	UserComment string
+}
+
+func (*StoryLines) Compose() composer.Spec {
+	return composer.Spec{
+		Name: StoryLines_Type,
+		Uses: composer.Type_Flow,
+		Lede: "story",
+	}
+}
+
+const StoryLines_Type = "story_lines"
+const StoryLines_Field_Lines = "$LINES"
+
+func (op *StoryLines) Marshal(m jsn.Marshaler) error {
+	return StoryLines_Marshal(m, op)
+}
+
+type StoryLines_Slice []StoryLines
+
+func (op *StoryLines_Slice) GetType() string { return StoryLines_Type }
+
+func (op *StoryLines_Slice) Marshal(m jsn.Marshaler) error {
+	return StoryLines_Repeats_Marshal(m, (*[]StoryLines)(op))
+}
+
+func (op *StoryLines_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *StoryLines_Slice) SetSize(cnt int) {
+	var els []StoryLines
+	if cnt >= 0 {
+		els = make(StoryLines_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *StoryLines_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return StoryLines_Marshal(m, &(*op)[i])
+}
+
+func StoryLines_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryLines) error {
+	return jsn.RepeatBlock(m, (*StoryLines_Slice)(vals))
+}
+
+func StoryLines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryLines) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = StoryLines_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type StoryLines_Flow struct{ ptr *StoryLines }
+
+func (n StoryLines_Flow) GetType() string      { return StoryLines_Type }
+func (n StoryLines_Flow) GetLede() string      { return "story" }
+func (n StoryLines_Flow) GetFlow() interface{} { return n.ptr }
+func (n StoryLines_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*StoryLines); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func StoryLines_Optional_Marshal(m jsn.Marshaler, pv **StoryLines) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = StoryLines_Marshal(m, *pv)
+	} else if !enc {
+		var v StoryLines
+		if err = StoryLines_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func StoryLines_Marshal(m jsn.Marshaler, val *StoryLines) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(StoryLines_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", StoryLines_Field_Lines)
+		if e0 == nil {
+			e0 = StoryStatement_Repeats_Marshal(m, &val.Lines)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", StoryLines_Field_Lines))
 		}
 		m.EndBlock()
 	}
@@ -9954,6 +10149,8 @@ var Slats = []composer.Composer{
 	(*SingularKind)(nil),
 	(*StoppingText)(nil),
 	(*Story)(nil),
+	(*StoryBreak)(nil),
+	(*StoryLines)(nil),
 	(*TestName)(nil),
 	(*TestOutput)(nil),
 	(*TestRule)(nil),
@@ -9966,6 +10163,7 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	562975275283375503:   (*StoryBreak)(nil),            /* -- */
 	7872120455849093108:  (*ActionContext)(nil),         /* ActionContext: */
 	14902711848163440508: (*ActionParams)(nil),          /* ActionParams common: */
 	11902859627634050329: (*ActionParams)(nil),          /* ActionParams dual: */
@@ -10079,7 +10277,8 @@ var Signatures = map[uint64]interface{}{
 	10010483713146895284: (*Send)(nil),                  /* Send:path:arguments: */
 	7279273919312137397:  (*ShuffleText)(nil),           /* ShuffleText: */
 	10085329253831819088: (*StoppingText)(nil),          /* StoppingText: */
-	13392546219852761816: (*Story)(nil),                 /* Story: */
+	11597613116511938589: (*Story)(nil),                 /* Story paragraphs: */
+	13392546219852761816: (*StoryLines)(nil),            /* Story: */
 	15090827023293362138: (*TestOutput)(nil),            /* TestOutput: */
 	11231723833188820353: (*TestRule)(nil),              /* TestRule:hook activity: */
 	15304439741055926590: (*TestScene)(nil),             /* TestScene:story: */

@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Kinds:have:": [
         "Things",
@@ -9,9 +9,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "print plural name",
@@ -81,68 +80,62 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "plural name printing",
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Nouns:depict:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "flowerpot"
+                    ]
+                  },
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "dishes"
+                    ]
+                  },
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "spoon"
+                    ]
+                  }
+                ],
                 {
-                  "Nouns:depict:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "flowerpot"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "dishes"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "spoon"
-                        ]
-                      }
-                    ],
-                    {
-                      "Kind:named:": [
-                        "are",
-                        "thing"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "NounAssignment:nouns:lines:": [
-                    "printed plural name",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "flowerpot"
-                        ]
-                      }
-                    ],
-                    "broken flower pots"
+                  "Kind:named:": [
+                    "are",
+                    "thing"
                   ]
                 }
+              ]
+            },
+            {
+              "NounAssignment:nouns:lines:": [
+                "printed plural name",
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "flowerpot"
+                    ]
+                  }
+                ],
+                "broken flower pots"
               ]
             }
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "plural name printing",
@@ -166,4 +159,4 @@
       ]
     }
   ]
-]
+}

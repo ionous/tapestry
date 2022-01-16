@@ -1,10 +1,9 @@
-[
-  [
+{
+  "Story:": [
     {
       "Comment:": "Since \"domains\" aren't yet hierarchical, to share objects across tests they have to be described globally."
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Nouns:depict:": [
         [
@@ -50,9 +49,8 @@
         ],
         "Kitchen"
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         " cats",
@@ -148,9 +146,8 @@
         ],
         "Your aunt's very own witches hat, a Halloween favorite."
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Nouns:startAs:": [
         [
@@ -305,9 +302,8 @@
           "rusty knife"
         ]
       }
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Nouns:startAs:": [
         [
@@ -405,9 +401,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Nouns:depict:and:": [
         [
@@ -621,9 +616,8 @@
         ],
         "Steam leaks from the top of a recently used espresso machine."
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "baseVis",
@@ -837,9 +831,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "lookObjectDescription",
@@ -931,9 +924,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "printing vantages",
@@ -1056,9 +1048,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "printing inline objects",
@@ -1098,4 +1089,4 @@
       ]
     }
   ]
-]
+}

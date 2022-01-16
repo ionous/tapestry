@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:": [
         "can use",
@@ -58,4 +58,4 @@
       ]
     }
   ]
-]
+}

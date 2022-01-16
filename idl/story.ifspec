@@ -14,10 +14,28 @@
                         "uses": "group",
                         "specs":
                         {
+                            "story_lines":
+                            {
+                                "spec": "{_%lines+story_statement}",
+                                "group": "internal",
+                                "sign": "story:"
+                            },
+                            "story_break":
+                            {
+                                "spec": "story_break",
+                                "lede": "--",
+                                "group": "internal",
+                                "slot": "story_statement",
+                                "desc": [
+                                    "this cheats a bit by making the signature the same as the comment marker",
+                                    "that allows nodes which look like comments but are actually story breaks."
+                                ]
+                            },
                             "story":
                             {
                                 "uses": "flow",
-                                "spec": "{+paragraph}"
+                                "spec": "{+paragraph}",
+                                "sign": "story paragraphs:"
                             },
                             "paragraph":
                             {

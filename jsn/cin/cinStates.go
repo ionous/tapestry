@@ -19,8 +19,8 @@ type xDecoder struct {
 	customFlow FlowDecoder
 }
 
-type SlotDecoder func(jsn.SlotBlock, json.RawMessage) error
-type FlowDecoder func(jsn.FlowBlock, json.RawMessage) error
+type SlotDecoder func(jsn.Marshaler, jsn.SlotBlock, json.RawMessage) error
+type FlowDecoder func(jsn.Marshaler, jsn.FlowBlock, json.RawMessage) error
 
 // Customization of the decoding process
 type Decoder xDecoder
@@ -29,10 +29,10 @@ func NewDecoder(reg Signatures) *Decoder {
 	d := &xDecoder{
 		reg:     reg,
 		Machine: chart.MakeDecoder(),
-		customSlot: func(jsn.SlotBlock, json.RawMessage) error {
+		customSlot: func(jsn.Marshaler, jsn.SlotBlock, json.RawMessage) error {
 			return chart.Unhandled("no custom slot handler")
 		},
-		customFlow: func(jsn.FlowBlock, json.RawMessage) error {
+		customFlow: func(jsn.Marshaler, jsn.FlowBlock, json.RawMessage) error {
 			return chart.Unhandled("no custom flow handler")
 		},
 	}
@@ -69,7 +69,7 @@ func (dec *xDecoder) decode(dst jsn.Marshalee, msg json.RawMessage) error {
 }
 
 func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay bool) {
-	if e := dec.customFlow(flow, msg); e == nil {
+	if e := dec.customFlow(dec, flow, msg); e == nil {
 		dec.Commit("customFlow")
 	} else {
 		var unhandled chart.Unhandled
@@ -94,7 +94,7 @@ func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay boo
 }
 
 func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay bool) {
-	if e := dec.customSlot(slot, msg); e == nil {
+	if e := dec.customSlot(dec, slot, msg); e == nil {
 		dec.Commit("customSlot")
 	} else {
 		var unhandled chart.Unhandled
@@ -349,27 +349,31 @@ func (dec *xDecoder) readCmd(msg json.RawMessage) (ret cmdData, err error) {
 	// functions without parameters are stored as simple strings.
 	var d map[string]json.RawMessage
 	if e := json.Unmarshal(msg, &d); e == nil {
-		var found bool
+		var out cmdData
 		for k, args := range d {
-			if k == "--" {
-				if e := json.Unmarshal(args, &ret.comment); e != nil {
+			if k == commentMarker {
+				if e := json.Unmarshal(args, &out.comment); e != nil {
 					err = errutil.New("couldnt read comment", e)
 					break
 				}
-			} else if found {
+			} else if len(out.key) > 0 {
 				err = errutil.New("expected only a single key", d)
 				break
-			} else if t, ok := findType(Hash(k), dec.reg); !ok {
-				err = errutil.New("couldnt find type for signature", k)
-				break
 			} else {
-				ret.reg, ret.key, ret.args = t, k, args
-				found = true
+				out.key, out.args = k, args
 				continue // keep going to catch errors
 			}
 		}
-		if err == nil && !found {
-			err = errutil.New("expected a valid signature", d)
+		if err == nil {
+			if len(out.comment) > 0 && len(out.key) == 0 {
+				out.key = commentMarker
+			}
+			if t, ok := findType(Hash(out.key), dec.reg); !ok {
+				err = errutil.New("couldnt find type for signature", out.key)
+			} else {
+				out.reg = t
+				ret = out
+			}
 		}
 	} else {
 		var k string // parameterless commands can be simple strings.
@@ -383,3 +387,5 @@ func (dec *xDecoder) readCmd(msg json.RawMessage) (ret cmdData, err error) {
 	}
 	return
 }
+
+const commentMarker = "--"

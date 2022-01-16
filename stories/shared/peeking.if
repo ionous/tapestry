@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Event:action:args common:": [
         "peek",
@@ -191,9 +191,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "report peeking",
@@ -279,4 +278,4 @@
       ]
     }
   ]
-]
+}

@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:about:": [
         "make groups",
@@ -72,9 +72,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "assign grouping",
@@ -222,9 +221,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         "Groupings",
@@ -255,9 +253,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         "Object groups",
@@ -279,14 +276,13 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "match groups",
         {
-          "PatternRequires:": [      
+          "PatternRequires:": [
             {
               "Record named:of:": [
                 "first",
@@ -306,7 +302,6 @@
             "Bool named:": "matching"
           }
         }
-       
       ]
     },
     {
@@ -461,9 +456,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:about:": [
         "collate groups",
@@ -719,4 +713,4 @@
       ]
     }
   ]
-]
+}

@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Make kinds:of:": [
         " agents",
@@ -49,9 +49,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Nouns:depict:": [
         [
@@ -137,9 +136,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "isPlayer",
@@ -233,9 +231,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "RelativeToNoun:nouns:areBeing:otherNouns:": [
         " whereabouts",
@@ -257,9 +254,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestRule:hook activity:": [
         "player tests",
@@ -304,9 +300,8 @@
           "TestOutput:": "yes"
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "GrammarDecl:": {
         "Alias:asNoun:": [
@@ -320,4 +315,4 @@
       }
     }
   ]
-]
+}

@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Event:action:args common:": [
         "take",
@@ -191,9 +191,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Listen kinds:handlers:": [
         "things",
@@ -288,9 +287,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "report taking",
@@ -374,9 +372,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:rules:": [
         "can reach",
@@ -588,9 +585,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:rules:": [
         "reach up",
@@ -643,9 +639,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:rules:": [
         "reach down",
@@ -750,4 +745,4 @@
       ]
     }
   ]
-]
+}

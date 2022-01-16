@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "TestStatement:test:": [
         "activating test",
@@ -114,75 +114,67 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "activating test",
         {
           "Story:": [
             {
-              "Paragraph:": [
-                {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "knife"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "self"
-                        ]
-                      }
+              "RelativeToNoun:nouns:areBeing:otherNouns:": [
+                " whereabouts",
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "knife"
                     ]
-                  ]
-                }
+                  }
+                ],
+                "is",
+                [
+                  {
+                    "Noun:named:": [
+                      "our",
+                      "self"
+                    ]
+                  }
+                ]
               ]
             },
+            "--",
             {
-              "Paragraph:": [
-                {
-                  "Nouns:depict:and:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "espresso controls"
-                        ]
-                      }
-                    ],
-                    {
-                      "Kind:named:": [
-                        "area",
-                        "device"
-                      ]
-                    },
-                    [
-                      {
-                        "NounRelation relation:otherNouns:": [
-                          "whereabouts",
-                          [
-                            {
-                              "Noun:named:": [
-                                "the",
-                                "kitchen"
-                              ]
-                            }
-                          ]
-                        ]
-                      }
+              "Nouns:depict:and:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "espresso controls"
                     ]
+                  }
+                ],
+                {
+                  "Kind:named:": [
+                    "area",
+                    "device"
                   ]
-                }
+                },
+                [
+                  {
+                    "NounRelation relation:otherNouns:": [
+                      "whereabouts",
+                      [
+                        {
+                          "Noun:named:": [
+                            "the",
+                            "kitchen"
+                          ]
+                        }
+                      ]
+                    ]
+                  }
+                ]
               ]
             }
           ]
@@ -190,4 +182,4 @@
       ]
     }
   ]
-]
+}

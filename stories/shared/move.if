@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:": [
         "Move Object",
@@ -178,9 +178,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "RemoveFromPlay",
@@ -247,9 +246,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "WearObject",
@@ -385,4 +383,4 @@
       ]
     }
   ]
-]
+}

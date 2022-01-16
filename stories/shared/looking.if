@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Event:action:args none:": [
         "look",
@@ -92,9 +92,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Listen kinds:handlers:": [
         "actors",
@@ -189,9 +188,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "Print vantage",
@@ -514,9 +512,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "PrintDarkHeader",
@@ -557,9 +554,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "PrintDarkDescription",
@@ -600,9 +596,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "PrintLocaleTitle",
@@ -695,9 +690,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "PrintLocaleSubtitle",
@@ -786,9 +780,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "PrintLocaleDescription",
@@ -1083,9 +1076,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Comment:": "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
     },
@@ -1107,7 +1099,8 @@
               ]
             }
           ]
-        },{
+        },
+        {
           "PatternResult:": {
             "Bool named:": "success"
           }
@@ -1269,9 +1262,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "PrintImpressionOf",
@@ -1481,9 +1473,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "CanAlsoSee",
@@ -1535,9 +1526,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:": "set everything unmentioned"
     },
@@ -1598,4 +1588,4 @@
       ]
     }
   ]
-]
+}

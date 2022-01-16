@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:": [
         "starts with vowel",
@@ -19,9 +19,8 @@
     },
     {
       "Comment:": "Determine if text starts with a vowel or vowel sound. This method is from mudconnect.com"
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:rules:": [
         "starts with vowel",
@@ -96,9 +95,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "vowels",
@@ -106,9 +104,8 @@
           "TestOutput:": "ok"
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestRule:hook activity:": [
         "vowels",
@@ -222,4 +219,4 @@
       ]
     }
   ]
-]
+}

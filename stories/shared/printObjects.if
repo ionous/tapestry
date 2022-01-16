@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:": [
         "print inline objects",
@@ -105,9 +105,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "print blocks",
@@ -213,9 +212,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "print object",
@@ -401,9 +399,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "print block",
@@ -558,9 +555,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "print inline storage",
@@ -654,9 +650,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "print details",
@@ -804,9 +799,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "print status",
@@ -895,9 +889,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "print inner status",
@@ -1064,4 +1057,4 @@
       ]
     }
   ]
-]
+}

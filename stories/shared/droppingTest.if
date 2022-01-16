@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "TestStatement:test:": [
         "dropping test",
@@ -76,38 +76,33 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "dropping test",
         {
           "Story:": [
             {
-              "Paragraph:": [
-                {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "knife"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "self"
-                        ]
-                      }
+              "RelativeToNoun:nouns:areBeing:otherNouns:": [
+                " whereabouts",
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "knife"
                     ]
-                  ]
-                }
+                  }
+                ],
+                "is",
+                [
+                  {
+                    "Noun:named:": [
+                      "our",
+                      "self"
+                    ]
+                  }
+                ]
               ]
             }
           ]
@@ -115,4 +110,4 @@
       ]
     }
   ]
-]
+}

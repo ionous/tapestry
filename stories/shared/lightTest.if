@@ -1,15 +1,14 @@
-[
-  [
+{
+  "Story:": [
     {
       "TestScene:story:": [
         "vision test",
         {
-          "Story:": []
+          "Story:": null
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "testing vision",
@@ -92,4 +91,4 @@
       ]
     }
   ]
-]
+}

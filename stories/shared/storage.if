@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:": [
         "provides storage",
@@ -75,9 +75,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "shows storage",
@@ -156,9 +155,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "visible storage",
@@ -283,9 +281,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "allows storage",
@@ -382,4 +379,4 @@
       ]
     }
   ]
-]
+}

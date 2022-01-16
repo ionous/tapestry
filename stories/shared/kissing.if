@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "GrammarDecl:": {
         "Directive:scans:": [
@@ -18,9 +18,8 @@
           ]
         ]
       }
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Event:action:args common:": [
         "kiss",
@@ -229,9 +228,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:rules:": [
         "can use",
@@ -345,9 +343,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Listen kinds:handlers:": [
         "actors",
@@ -396,9 +393,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "report kissing",
@@ -476,4 +472,4 @@
       ]
     }
   ]
-]
+}

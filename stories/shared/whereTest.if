@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Nouns:depict:": [
         [
@@ -81,59 +81,145 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Comment:": "Mildred and the table are in the room. The basket is on the table. The apple is in the basket. Mildred is carrying the scalpel and wearing the pen."
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "whereabouts",
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Nouns:relateTo:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "table"
+                    ]
+                  },
+                  {
+                    "Noun:named:": [
+                      "our",
+                      "Mildred"
+                    ]
+                  }
+                ],
                 {
-                  "Nouns:relateTo:": [
+                  "NounRelation areBeing:relation:otherNouns:": [
+                    "are",
+                    "whereabouts",
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "lab"
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            "--",
+            {
+              "Nouns:relateTo:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "basket"
+                    ]
+                  }
+                ],
+                {
+                  "NounRelation areBeing:relation:otherNouns:": [
+                    "is",
+                    "whereabouts",
                     [
                       {
                         "Noun:named:": [
                           "the",
                           "table"
                         ]
-                      },
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            "--",
+            {
+              "Nouns:relateTo:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "scalpel"
+                    ]
+                  },
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "pen"
+                    ]
+                  }
+                ],
+                {
+                  "NounRelation areBeing:relation:otherNouns:": [
+                    "are",
+                    "whereabouts",
+                    [
                       {
                         "Noun:named:": [
                           "our",
                           "Mildred"
                         ]
                       }
-                    ],
-                    {
-                      "NounRelation areBeing:relation:otherNouns:": [
-                        "are",
-                        "whereabouts",
-                        [
-                          {
-                            "Noun:named:": [
-                              "the",
-                              "lab"
-                            ]
-                          }
-                        ]
-                      ]
-                    }
+                    ]
                   ]
                 }
               ]
             },
+            "--",
             {
-              "Paragraph:": [
+              "Nouns:startAs:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "pen"
+                    ]
+                  }
+                ],
                 {
-                  "Nouns:relateTo:": [
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "worn"
+                    ]
+                  ]
+                }
+              ]
+            },
+            "--",
+            {
+              "Nouns:relateTo:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "apple"
+                    ]
+                  }
+                ],
+                {
+                  "NounRelation areBeing:relation:otherNouns:": [
+                    "is",
+                    "whereabouts",
                     [
                       {
                         "Noun:named:": [
@@ -141,111 +227,7 @@
                           "basket"
                         ]
                       }
-                    ],
-                    {
-                      "NounRelation areBeing:relation:otherNouns:": [
-                        "is",
-                        "whereabouts",
-                        [
-                          {
-                            "Noun:named:": [
-                              "the",
-                              "table"
-                            ]
-                          }
-                        ]
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Paragraph:": [
-                {
-                  "Nouns:relateTo:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "scalpel"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "pen"
-                        ]
-                      }
-                    ],
-                    {
-                      "NounRelation areBeing:relation:otherNouns:": [
-                        "are",
-                        "whereabouts",
-                        [
-                          {
-                            "Noun:named:": [
-                              "our",
-                              "Mildred"
-                            ]
-                          }
-                        ]
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Paragraph:": [
-                {
-                  "Nouns:startAs:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "pen"
-                        ]
-                      }
-                    ],
-                    {
-                      "NounTraits:trait:": [
-                        "is",
-                        [
-                          "worn"
-                        ]
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Paragraph:": [
-                {
-                  "Nouns:relateTo:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "apple"
-                        ]
-                      }
-                    ],
-                    {
-                      "NounRelation areBeing:relation:otherNouns:": [
-                        "is",
-                        "whereabouts",
-                        [
-                          {
-                            "Noun:named:": [
-                              "the",
-                              "basket"
-                            ]
-                          }
-                        ]
-                      ]
-                    }
+                    ]
                   ]
                 }
               ]
@@ -253,9 +235,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "whereabouts",
@@ -263,9 +244,8 @@
           "TestOutput:": "Mildred's parent is the lab.\nThe basket's parent is the table.\nMildred is in the lab.\nThe scalpel is in the lab.\nThe table encloses the basket.\nThe basket encloses the apple.\nThe basket contains the apple.\nThe  contains the basket.\nThe  supports the apple.\nThe table supports the basket.\nThe basket's parent: table.\nThe scalpel's parent: Mildred.\nMildred owns the pen.\nThe  carries the pen.\nMildred carries the scalpel.\nThe pen is in Mildred's pocket.\nThe scalpel is worn by: .\nThe common ancestor of the pen and itself: pen.\nThe common ancestor of the pen and a sibling: Mildred.\nThe common ancestor of the sibling and a pen: Mildred.\nThe common ancestor of the pen and its owner: Mildred.\nThe common ancestor of the pen's owner and the pen: Mildred.\n"
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestRule:hook activity:": [
         "whereabouts",
@@ -306,4 +286,4 @@
       ]
     }
   ]
-]
+}

@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Event:action:args none:": [
         "inventory",
@@ -92,9 +92,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Listen kinds:handlers:": [
         "actors",
@@ -143,9 +142,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "print inventory",
@@ -262,4 +260,4 @@
       ]
     }
   ]
-]
+}

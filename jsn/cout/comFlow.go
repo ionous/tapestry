@@ -26,7 +26,13 @@ func (cf *comFlow) addMsgPair(label, choice string, value interface{}) {
 func (cf *comFlow) finalize() (ret interface{}) {
 	sig := cf.sig.String()
 	if cnt := len(cf.values); cnt == 0 {
-		ret = sig
+		if len(cf.comment) == 0 {
+			ret = sig
+		} else {
+			ret = map[string]interface{}{
+				commentMarker: cf.comment,
+			}
+		}
 	} else {
 		var v interface{}
 		if cnt == 1 {
@@ -38,9 +44,11 @@ func (cf *comFlow) finalize() (ret interface{}) {
 			sig: v,
 		}
 		if len(cf.comment) > 0 {
-			m["--"] = cf.comment
+			m[commentMarker] = cf.comment
 		}
 		ret = m
 	}
 	return
 }
+
+const commentMarker = "--"

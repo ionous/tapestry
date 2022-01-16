@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "TestStatement:test:": [
         "storing test",
@@ -465,84 +465,79 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "storing test",
         {
           "Story:": [
             {
-              "Paragraph:": [
-                {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "coffee"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "coin"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "clutch"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "knife"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "flower"
-                        ]
-                      }
-                    ],
-                    "are",
-                    [
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "self"
-                        ]
-                      }
+              "RelativeToNoun:nouns:areBeing:otherNouns:": [
+                "whereabouts",
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "coffee"
                     ]
-                  ]
-                },
-                {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "Mildred"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "kitchen"
-                        ]
-                      }
+                  },
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "coin"
                     ]
-                  ]
-                }
+                  },
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "clutch"
+                    ]
+                  },
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "knife"
+                    ]
+                  },
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "flower"
+                    ]
+                  }
+                ],
+                "are",
+                [
+                  {
+                    "Noun:named:": [
+                      "our",
+                      "self"
+                    ]
+                  }
+                ]
+              ]
+            },
+            {
+              "RelativeToNoun:nouns:areBeing:otherNouns:": [
+                "whereabouts",
+                [
+                  {
+                    "Noun:named:": [
+                      "our",
+                      "Mildred"
+                    ]
+                  }
+                ],
+                "is",
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "kitchen"
+                    ]
+                  }
+                ]
               ]
             }
           ]
@@ -550,4 +545,4 @@
       ]
     }
   ]
-]
+}

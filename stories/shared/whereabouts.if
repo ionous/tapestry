@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "KindOfRelation:cardinality oneToMany:": [
         "whereabouts",
@@ -13,9 +13,8 @@
     },
     {
       "Comment:": "The placement of objects in the game world.  One parent to many children. "
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:about:": [
         "parentOf",
@@ -106,9 +105,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "parentsOf",
@@ -208,9 +206,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "childrenOf",
@@ -261,9 +258,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:about:": [
         "CurrentRoom",
@@ -403,9 +399,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:about:": [
         "Common Ancestor",
@@ -649,15 +644,13 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "ancestorOf",
-        { 
-          "PatternRequires:":
-          [
+        {
+          "PatternRequires:": [
             {
               "Text named:of:": [
                 "obj",
@@ -821,9 +814,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "locationOf",
@@ -936,9 +928,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "SupporterOf",
@@ -1035,9 +1026,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "ContainerOf",
@@ -1134,9 +1124,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "holderOf",
@@ -1234,9 +1223,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "CarrierOf",
@@ -1346,9 +1334,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "WearerOf",
@@ -1460,4 +1447,4 @@
       ]
     }
   ]
-]
+}

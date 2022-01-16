@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "GrammarDecl:": {
         "Directive:scans:": [
@@ -36,9 +36,8 @@
           ]
         ]
       }
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Event:action:args common:": [
         "attack",
@@ -178,9 +177,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "report attacking",
@@ -264,4 +262,4 @@
       ]
     }
   ]
-]
+}

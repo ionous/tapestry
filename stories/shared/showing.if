@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "GrammarDecl:": {
         "Directive:scans:": [
@@ -287,9 +287,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "report showing",
@@ -381,4 +380,4 @@
       ]
     }
   ]
-]
+}

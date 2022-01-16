@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:": [
         "can handle",
@@ -90,4 +90,4 @@
       ]
     }
   ]
-]
+}

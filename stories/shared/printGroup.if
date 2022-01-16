@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:about:": [
         "print group",
@@ -400,9 +400,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "print grouped object",
@@ -461,4 +460,4 @@
       ]
     }
   ]
-]
+}

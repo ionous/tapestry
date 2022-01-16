@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "TestStatement:test:": [
         "reach test",
@@ -313,63 +313,55 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "reach test",
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Nouns:depict:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "an",
+                      "other worldly cloak"
+                    ]
+                  }
+                ],
                 {
-                  "Nouns:depict:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "an",
-                          "other worldly cloak"
-                        ]
-                      }
-                    ],
-                    {
-                      "Kind:named:": [
-                        "isa",
-                        "thing"
-                      ]
-                    }
+                  "Kind:named:": [
+                    "isa",
+                    "thing"
                   ]
-                },
-                {
-                  "Comment:": "it is nowhere."
                 }
               ]
             },
             {
-              "Paragraph:": [
-                {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "self"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "cabinet"
-                        ]
-                      }
+              "Comment:": "it is nowhere."
+            },
+            "--",
+            {
+              "RelativeToNoun:nouns:areBeing:otherNouns:": [
+                " whereabouts",
+                [
+                  {
+                    "Noun:named:": [
+                      "our",
+                      "self"
                     ]
-                  ]
-                }
+                  }
+                ],
+                "is",
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "cabinet"
+                    ]
+                  }
+                ]
               ]
             }
           ]
@@ -377,4 +369,4 @@
       ]
     }
   ]
-]
+}

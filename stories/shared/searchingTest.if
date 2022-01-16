@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "TestStatement:test:": [
         "searching test",
@@ -116,70 +116,62 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "searching test",
         {
           "Story:": [
             {
-              "Paragraph:": [
-                {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "flower"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "knife"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "self"
-                        ]
-                      }
+              "RelativeToNoun:nouns:areBeing:otherNouns:": [
+                " whereabouts",
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "flower"
                     ]
-                  ]
-                }
+                  },
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "knife"
+                    ]
+                  }
+                ],
+                "is",
+                [
+                  {
+                    "Noun:named:": [
+                      "our",
+                      "self"
+                    ]
+                  }
+                ]
               ]
             },
+            "--",
             {
-              "Paragraph:": [
-                {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "purse"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "kitchen"
-                        ]
-                      }
+              "RelativeToNoun:nouns:areBeing:otherNouns:": [
+                " whereabouts",
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "purse"
                     ]
-                  ]
-                }
+                  }
+                ],
+                "is",
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "kitchen"
+                    ]
+                  }
+                ]
               ]
             }
           ]
@@ -187,4 +179,4 @@
       ]
     }
   ]
-]
+}

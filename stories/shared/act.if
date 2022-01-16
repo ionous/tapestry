@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:": [
         "state change",
@@ -34,9 +34,8 @@
           }
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Listen kinds:handlers:": [
         "things",
@@ -145,9 +144,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Listen kinds:handlers:": [
         "things",
@@ -234,9 +232,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:returns:": [
         "state changing",
@@ -363,4 +360,4 @@
       ]
     }
   ]
-]
+}

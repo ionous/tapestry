@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "GrammarDecl:": {
         "Directive:scans:": [
@@ -28,9 +28,8 @@
           ]
         ]
       }
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Event:action:args none:": [
         "sniff",
@@ -119,9 +118,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Event:action:args common:": [
         "smell",
@@ -315,9 +313,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "report smelling",
@@ -401,4 +398,4 @@
       ]
     }
   ]
-]
+}

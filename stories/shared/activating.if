@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Event:action:args common:": [
         "activate",
@@ -232,9 +232,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Event:action:args common:": [
         "deactivate",
@@ -467,9 +466,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         "Devices",
@@ -488,9 +486,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "KindsOfAspect:": " activatability"
     },
@@ -526,4 +523,4 @@
       ]
     }
   ]
-]
+}

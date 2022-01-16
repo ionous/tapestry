@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Event:action:args dual:": [
         "store into",
@@ -328,9 +328,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Listen kinds:handlers:": [
         "things",
@@ -418,9 +417,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "report storing into",
@@ -510,9 +508,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:rules:": [
         "can handle",
@@ -634,9 +631,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:rules:": [
         "reach down",
@@ -812,4 +808,4 @@
       ]
     }
   ]
-]
+}

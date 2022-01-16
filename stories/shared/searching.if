@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Event:action:args common:": [
         "search",
@@ -191,9 +191,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "report searching",
@@ -429,9 +428,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:rules:": [
         "can reach",
@@ -542,4 +540,4 @@
       ]
     }
   ]
-]
+}

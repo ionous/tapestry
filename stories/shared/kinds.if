@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Make kinds:of:": [
         "Objects",
@@ -25,9 +25,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         "Things",
@@ -191,9 +190,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         "Actors",
@@ -205,17 +203,15 @@
         " animals",
         "actor"
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         " props",
         "thing"
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         " openers",
@@ -308,9 +304,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         " containers",
@@ -363,9 +358,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "KindsOfAspect:": " illumination"
     },
@@ -410,17 +404,15 @@
         "usually",
         "lit"
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         " supporters",
         "prop"
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         " rooms",
@@ -436,9 +428,8 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Make kinds:of:": [
         " regions",
@@ -446,4 +437,4 @@
       ]
     }
   ]
-]
+}

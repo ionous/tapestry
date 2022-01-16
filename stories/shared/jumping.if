@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "GrammarDecl:": {
         "Directive:scans:": [
@@ -15,9 +15,8 @@
           ]
         ]
       }
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Event:action:args none:": [
         "jump",
@@ -95,9 +94,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "report jumping",
@@ -175,4 +173,4 @@
       ]
     }
   ]
-]
+}

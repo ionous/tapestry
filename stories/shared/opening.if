@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Event:action:args common:": [
         "open",
@@ -232,9 +232,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Event:action:args common:": [
         "close",
@@ -467,9 +466,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Comment:": "Can't open when locked. "
     },
@@ -527,9 +525,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Listen kinds:handlers:": [
         "things",
@@ -729,4 +726,4 @@
       ]
     }
   ]
-]
+}

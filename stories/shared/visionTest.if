@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "TestStatement:test:": [
         "vision testing",
@@ -68,30 +68,25 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "vision testing",
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Pattern:rules:": [
+                "Print news of light",
                 {
-                  "Pattern:rules:": [
-                    "Print news of light",
+                  "PatternRules:": [
                     {
-                      "PatternRules:": [
+                      "PatternRule:hook activity:": [
+                        "Always",
                         {
-                          "PatternRule:hook activity:": [
-                            "Always",
+                          "Act:": [
                             {
-                              "Act:": [
-                                {
-                                  "Say:": "The light, it burns."
-                                }
-                              ]
+                              "Say:": "The light, it burns."
                             }
                           ]
                         }
@@ -106,4 +101,4 @@
       ]
     }
   ]
-]
+}

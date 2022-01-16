@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Kinds:have:": [
         "Objects",
@@ -32,44 +32,39 @@
     },
     {
       "KindsOfAspect:": " pluralization"
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "articles",
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Nouns:depict:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "lamp-post"
+                    ]
+                  },
+                  {
+                    "Noun:named:": [
+                      "some",
+                      "soldiers"
+                    ]
+                  },
+                  {
+                    "Noun:named:": [
+                      "our",
+                      "Trevor"
+                    ]
+                  }
+                ],
                 {
-                  "Nouns:depict:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "lamp-post"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "some",
-                          "soldiers"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "Trevor"
-                        ]
-                      }
-                    ],
-                    {
-                      "Kind:named:": [
-                        "area",
-                        "thing"
-                      ]
-                    }
+                  "Kind:named:": [
+                    "area",
+                    "thing"
                   ]
                 }
               ]
@@ -77,9 +72,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestRule:hook activity:": [
         "articles",
@@ -93,9 +87,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "articles",
@@ -103,9 +96,8 @@
           "TestOutput:": "You can only just make out a lamp-post.\nYou can only just make out Trevor.\nYou can only just make out some soldiers.\nA lamp-post can be made out in the mist.\nTrevor can be made out in the mist.\nSome soldiers can be made out in the mist.\nYou can only just make out the lamp-post.\nYou can only just make out Trevor.\nYou can only just make out the soldiers.\nThe lamp-post may be a trick of the mist.\nTrevor may be a trick of the mist.\nThe soldiers may be a trick of the mist.\nYou can only just make out Trevor.\n"
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "A",
@@ -163,9 +155,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "The",
@@ -231,9 +222,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "Print article",
@@ -395,4 +385,4 @@
       ]
     }
   ]
-]
+}

@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:": "adjust light"
     },
@@ -138,9 +138,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:": "Print news of darkness"
     },
@@ -169,9 +168,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:": "Print news of light"
     },
@@ -216,4 +214,4 @@
       ]
     }
   ]
-]
+}

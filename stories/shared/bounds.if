@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:": [
         "parser bounds",
@@ -167,4 +167,4 @@
       ]
     }
   ]
-]
+}

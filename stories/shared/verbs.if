@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:returns:": [
         "verbing",
@@ -43,9 +43,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "contain",
@@ -104,9 +103,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "On",
@@ -165,9 +163,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "Off",
@@ -226,9 +223,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Pattern:requires:": [
         "Are",
@@ -332,9 +328,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Comment:": "say the phrase of are not or is not ( depending on the plural of the noun )"
     },
@@ -416,9 +411,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Comment:": "say the contraction aren't or isn't ( depending on the plural of the noun )"
     },
@@ -502,4 +496,4 @@
       ]
     }
   ]
-]
+}

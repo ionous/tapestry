@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Event:action:args common:": [
         "wear",
@@ -178,9 +178,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Event:action:args common:": [
         "remove",
@@ -359,9 +358,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "Comment:": "Can only remove what's worn. ( This isn't perfectly symmetrical with can only wear possessions, and that's okay. ) "
     },
@@ -430,4 +428,4 @@
       ]
     }
   ]
-]
+}

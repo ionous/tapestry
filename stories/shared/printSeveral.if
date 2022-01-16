@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Story:": [
     {
       "Pattern:requires:": [
         "print several",
@@ -81,32 +81,27 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestScene:story:": [
         "print several",
         {
           "Story:": [
             {
-              "Paragraph:": [
+              "Nouns:depict:": [
+                [
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "books"
+                    ]
+                  }
+                ],
                 {
-                  "Nouns:depict:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "books"
-                        ]
-                      }
-                    ],
-                    {
-                      "Kind:named:": [
-                        "area",
-                        "thing"
-                      ]
-                    }
+                  "Kind:named:": [
+                    "area",
+                    "thing"
                   ]
                 }
               ]
@@ -114,9 +109,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestRule:hook activity:": [
         "print several",
@@ -130,9 +124,8 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    "--",
     {
       "TestStatement:test:": [
         "print several",
@@ -142,4 +135,4 @@
       ]
     }
   ]
-]
+}
