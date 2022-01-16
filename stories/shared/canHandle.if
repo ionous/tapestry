@@ -1,6 +1,7 @@
 [
   [
     {
+      "--": "Determines whether an actor can manipulate some specific object.",
       "Pattern:requires:returns:": [
         "can handle",
         {
@@ -21,10 +22,9 @@
               ]
             },
             {
-              "Text named:of:desc:": [
+              "Text named:of:": [
                 "other noun",
-                "thing",
-                ", not all actions have a second noun and that's okay"
+                "thing"
               ]
             }
           ]

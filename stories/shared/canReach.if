@@ -1,6 +1,7 @@
 [
   [
     {
+      "--": "Determine whether an actor can touch some specific object.",
       "Pattern:requires:returns:": [
         "can reach",
         {
@@ -104,9 +105,7 @@
                         {
                           "Act:": [
                             {
-                              "Comment:": "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
-                            },
-                            {
+                              "--": "There's no problem reaching yourself, so start by putting yourself in the list of visited objects.",
                               "Put:into:": [
                                 "@i",
                                 {
@@ -144,9 +143,7 @@
                                 {
                                   "Act:": [
                                     {
-                                      "Comment:": "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized. "
-                                    },
-                                    {
+                                      "--": "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized.",
                                       "If:from:and:do:": [
                                         "response",
                                         {
@@ -198,6 +195,10 @@
                                         {
                                           "Act:": [
                                             {
+                                              "--": [
+                                                "This doesn't exit the loop.",
+                                                "It builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
+                                              ],
                                               "Let:be:": [
                                                 "reach error",
                                                 {
@@ -212,9 +213,6 @@
                                                 "reach response",
                                                 "@response"
                                               ]
-                                            },
-                                            {
-                                              "Comment:": "This doesn't exit the loop. \nIt builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
                                             }
                                           ]
                                         }
@@ -235,14 +233,7 @@
                       ]
                     },
                     {
-                      "Comment:": "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
-                    },
-                    {
-                      "Log:": {
-                        "FromTxts:": "@path"
-                      }
-                    },
-                    {
+                      "--": "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)",
                       "Let:be:": [
                         "i",
                         "@noun"
@@ -273,6 +264,7 @@
                             {
                               "If:do:": [
                                 {
+                                  "--": "Exit once we've found the lca.",
                                   "Cmp:is:num:": [
                                     "@lca",
                                     "GreaterThan",
@@ -281,9 +273,6 @@
                                 },
                                 {
                                   "Act:": [
-                                    {
-                                      "Comment:": "Exit once we've found the lca."
-                                    },
                                     "Break"
                                   ]
                                 }
@@ -363,13 +352,11 @@
                                 {
                                   "Act:": [
                                     {
+                                      "--": "Find the outermost dig error, updating the error each time.",
                                       "Let:be:": [
                                         "dig error",
                                         "@response"
                                       ]
-                                    },
-                                    {
-                                      "Comment:": "To find the outermost dig error keep going, \nupdating the error each time."
                                     }
                                   ]
                                 }
@@ -386,9 +373,7 @@
                       ]
                     },
                     {
-                      "Comment:": "Return the best response."
-                    },
-                    {
+                      "--": "Return the best response.",
                       "If:do:else:": [
                         {
                           "Cmp:is:num:": [
@@ -400,9 +385,7 @@
                         {
                           "Act:": [
                             {
-                              "Comment:": "No lca ever found? That's the most important error."
-                            },
-                            {
+                              "--": "No lca ever found? That's the most important error.",
                               "Let:be:": [
                                 "response",
                                 {
@@ -430,10 +413,8 @@
                             },
                             {
                               "Act:": [
-                                {
-                                  "Comment:": "There is an error reaching up from the actor towards the lca."
-                                },
-                                {
+                                {  
+                                  "--": "There was an error reaching up from the actor towards the lca.",
                                   "Let:be:": [
                                     "response",
                                     "@reach response"
@@ -451,9 +432,7 @@
                                 {
                                   "Act:": [
                                     {
-                                      "Comment:": "There was no error reaching up to the lca, so return any errors digging down to the noun."
-                                    },
-                                    {
+                                      "--": "There was no error reaching up to the lca, so return any errors digging down to the noun.",
                                       "Let:be:": [
                                         "response",
                                         "@dig error"
@@ -490,9 +469,11 @@
                 {
                   "Act:": [
                     {
-                      "Comment:": "Used to determine whether an action needing light can proceed. Returns some response text if the action is blocked.  Relies on the player's \"is in darkness\" which is (usually) calculated just once per turn ( in \"adjust light.\" )"
-                    },
-                    {
+                      "--": [
+                        "Used to determine whether an action needing light can proceed.",
+                        "Returns some response text if the action is blocked.",
+                        "Relies on the player's \"is in darkness\" which is (usually) calculated once per turn ( in \"adjust light.\" )"
+                      ],
                       "Let:be:": [
                         "response",
                         {

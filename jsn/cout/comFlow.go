@@ -1,5 +1,7 @@
 package cout
 
+import "strings"
+
 type comFlow struct {
 	sig     Sig
 	values  []interface{}
@@ -38,7 +40,13 @@ func (cf *comFlow) finalize() (ret interface{}) {
 			sig: v,
 		}
 		if len(cf.comment) > 0 {
-			m["--"] = cf.comment
+			var out interface{}
+			if lines := strings.Split(cf.comment, "\n"); len(lines) > 0 {
+				out = lines
+			} else {
+				out = cf.comment
+			}
+			m["--"] = out
 		}
 		ret = m
 	}

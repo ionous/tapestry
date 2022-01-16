@@ -1,11 +1,14 @@
 [
   [
     {
+      "--": "Define the traveling action, and the travel event.",
       "Event:action:args common:": [
         "travel",
         "traveling",
         {
-          "CommonAction:": "thing"
+          "--": "Traveling take one argument: the door to travel through.",
+          "--": "Future: allow directions too",
+          "CommonAction:": "door"
         }
       ]
     },
@@ -15,6 +18,7 @@
         {
           "PatternLocals:": [
             {
+              "--": "Get the actor from the agent.",
               "LocalDecl:value:": [
                 {
                   "Text named:of:": [
@@ -39,6 +43,10 @@
         {
           "PatternRules:": [
             {
+              "--": [
+                "If this is the player, make sure we can reach the door in question",
+                "and if not let the player know.",
+              ],
               "PatternRule:hook activity:": [
                 {
                   "Determine:arguments:": [
@@ -61,9 +69,10 @@
                       "If:from:and:do:else:": [
                         "result",
                         {
+                          "--": "'result' is the name of a new local variable containing the reach response.",
                           "FromTxt:": {
                             "Determine:arguments:": [
-                              "can handle",
+                              "can reach",
                               {
                                 "Args:": [
                                   {
@@ -84,6 +93,14 @@
                                     "Arg:from:": [
                                       "noun",
                                       "@noun"
+                                    ]
+                                  },
+                                  {
+                                    "Arg:from:": [
+                                      "requires light",
+                                      {
+                                        "FromBool:": true
+                                      }
                                     ]
                                   }
                                 ]
@@ -107,6 +124,7 @@
                           "ElseDo:": {
                             "Act:": [
                               {
+                                "--": "Send the travel event, and if nobody complains report traveling",
                                 "If:do:": [
                                   {
                                     "Send:path:arguments:": [
@@ -335,7 +353,7 @@
                         "Response:text:": [
                           "player travels",
                           {
-                            "RenderTemplate:": "travelped."
+                            "RenderTemplate:": "traveled."
                           }
                         ]
                       }
@@ -370,7 +388,7 @@
                         "Response:text:": [
                           "someone else travels",
                           {
-                            "RenderTemplate:": "{The: .actor|capitalize!} put down {the: .noun}."
+                            "RenderTemplate:": "{The: .actor|capitalize!} went through {the: .noun}."
                           }
                         ]
                       }

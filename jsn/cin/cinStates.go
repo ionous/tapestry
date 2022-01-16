@@ -3,6 +3,7 @@ package cin
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -352,9 +353,11 @@ func (dec *xDecoder) readCmd(msg json.RawMessage) (ret cmdData, err error) {
 		var found bool
 		for k, args := range d {
 			if k == "--" {
-				if e := json.Unmarshal(args, &ret.comment); e != nil {
-					err = errutil.New("couldnt read comment", e)
+				if c, e := readComment(args); e != nil {
+					err = e
 					break
+				} else {
+					ret.comment = c
 				}
 			} else if found {
 				err = errutil.New("expected only a single key", d)
@@ -379,6 +382,25 @@ func (dec *xDecoder) readCmd(msg json.RawMessage) (ret cmdData, err error) {
 			err = errutil.New("couldnt find type for string", k)
 		} else {
 			ret.reg, ret.key = t, k // no args, its parameterless
+		}
+	}
+	return
+}
+
+// reads a string or an array of strings.
+// note to self, dont read the comments.
+func readComment(msg json.RawMessage) (ret string, err error) {
+	var comment interface{}
+	if e := json.Unmarshal(msg, &comment); e != nil {
+		err = errutil.New("couldnt read comment", e)
+	} else {
+		switch c := comment.(type) {
+		case string:
+			ret = c
+		case []string:
+			ret = strings.Join(c, "\n")
+		default:
+			err = errutil.New("couldnt read comment")
 		}
 	}
 	return
