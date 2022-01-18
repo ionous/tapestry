@@ -85,7 +85,7 @@ func CompactFlowDecoder(m jsn.Marshaler, flow jsn.FlowBlock, msg json.RawMessage
 
 	case Story_Type:
 		var lines StoryLines
-		if e := lines.Marshal(m); e != nil {
+		if e := decode(&lines, msg, m.(cin.TypeCreator)); e != nil {
 			err = e
 		} else {
 			story := lines.reformat()
