@@ -104,16 +104,6 @@ func Underscore(name string) string {
 	return b.String()
 }
 
-// fix? backwards compat: skip strings starting with # or $
-func SpecialUnderscore(name string) (ret string) {
-	if len(name) == 0 || name[0] == '#' || name[0] == '$' {
-		ret = name
-	} else {
-		ret = Underscore(name)
-	}
-	return
-}
-
 // fix. this horrible algorithm sure needs to change
 // itd be fine i think to split first and then combine with word rules even
 // possibly worth considering ditching camelCasing anyway:
