@@ -74,7 +74,8 @@ func ReadLiteral(aff affine.Affinity, cls string, msg json.RawMessage) (ret Lite
 }
 
 func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, err error) {
-	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
+	// when decoding, we havent created the command yet ( we're doing that now )
+	// so we have to switch on the typename not the value in the slot.
 	switch typeName {
 	default:
 		err = chart.Unhandled("CustomSlot")
@@ -118,6 +119,12 @@ func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, e
 		} else {
 			ret = &TextValues{Values: val, Class: cls}
 		}
+		// note: trying to read a record literal into a record eval slot wouldnt work well
+		// it could differentiate b/t a record and command --
+		// and it would have to know what type the record is.
+		// could potentially think of it as a constructor
+		// "<recordName>:args:" -- might take some work to get there
+		// MakeRecord is the thing for now...
 	}
 	return
 }

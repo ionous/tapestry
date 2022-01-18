@@ -2098,124 +2098,6 @@ func CycleText_Marshal(m jsn.Marshaler, val *CycleText) (err error) {
 	return
 }
 
-// Determine
-type Determine struct {
-	Name        core.PatternName `if:"label=_"`
-	Arguments   *Arguments       `if:"label=arguments,optional"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.Execute = (*Determine)(nil)
-var _ rt.BoolEval = (*Determine)(nil)
-var _ rt.NumberEval = (*Determine)(nil)
-var _ rt.TextEval = (*Determine)(nil)
-var _ rt.RecordEval = (*Determine)(nil)
-var _ rt.NumListEval = (*Determine)(nil)
-var _ rt.TextListEval = (*Determine)(nil)
-var _ rt.RecordListEval = (*Determine)(nil)
-
-func (*Determine) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Determine_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Determine_Type = "determine"
-const Determine_Field_Name = "$NAME"
-const Determine_Field_Arguments = "$ARGUMENTS"
-
-func (op *Determine) Marshal(m jsn.Marshaler) error {
-	return Determine_Marshal(m, op)
-}
-
-type Determine_Slice []Determine
-
-func (op *Determine_Slice) GetType() string { return Determine_Type }
-
-func (op *Determine_Slice) Marshal(m jsn.Marshaler) error {
-	return Determine_Repeats_Marshal(m, (*[]Determine)(op))
-}
-
-func (op *Determine_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Determine_Slice) SetSize(cnt int) {
-	var els []Determine
-	if cnt >= 0 {
-		els = make(Determine_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Determine_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Determine_Marshal(m, &(*op)[i])
-}
-
-func Determine_Repeats_Marshal(m jsn.Marshaler, vals *[]Determine) error {
-	return jsn.RepeatBlock(m, (*Determine_Slice)(vals))
-}
-
-func Determine_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Determine) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Determine_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Determine_Flow struct{ ptr *Determine }
-
-func (n Determine_Flow) GetType() string      { return Determine_Type }
-func (n Determine_Flow) GetLede() string      { return Determine_Type }
-func (n Determine_Flow) GetFlow() interface{} { return n.ptr }
-func (n Determine_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Determine); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Determine_Optional_Marshal(m jsn.Marshaler, pv **Determine) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Determine_Marshal(m, *pv)
-	} else if !enc {
-		var v Determine
-		if err = Determine_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Determine_Marshal(m jsn.Marshaler, val *Determine) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Determine_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Determine_Field_Name)
-		if e0 == nil {
-			e0 = core.PatternName_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Determine_Field_Name))
-		}
-		e1 := m.MarshalKey("arguments", Determine_Field_Arguments)
-		if e1 == nil {
-			e1 = Arguments_Optional_Marshal(m, &val.Arguments)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Determine_Field_Arguments))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // Determiner requires a predefined or user-specified string.
 type Determiner struct {
 	Str string
@@ -10087,7 +9969,6 @@ var Slats = []composer.Composer{
 	(*CommonAction)(nil),
 	(*CountOf)(nil),
 	(*CycleText)(nil),
-	(*Determine)(nil),
 	(*Determiner)(nil),
 	(*EventBlock)(nil),
 	(*EventHandler)(nil),
@@ -10184,8 +10065,6 @@ var Signatures = map[uint64]interface{}{
 	10211567489959209123: (*CountOf)(nil),               /* CountOf:num: */
 	475310308664194536:   (*CycleText)(nil),             /* CycleText: */
 	16533349913402003729: (*MapDeparting)(nil),          /* Departing from:via:and:otherRoom: */
-	14117144937213193556: (*Determine)(nil),             /* Determine: */
-	18058198214790918510: (*Determine)(nil),             /* Determine:arguments: */
 	10917972213914269109: (*ActionDecl)(nil),            /* Event:action:args common: */
 	16786955135834098000: (*ActionDecl)(nil),            /* Event:action:args dual: */
 	12780627848155287324: (*ActionDecl)(nil),            /* Event:action:args none: */

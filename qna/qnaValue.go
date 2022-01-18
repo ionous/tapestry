@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
@@ -12,7 +13,7 @@ import (
 // fix? mdl_assign technically has redundant info --
 // because it implicitly stores the assignment type ( FromBool, etc. ) even though the field wont allow anything else
 // storing the evals ( re: readEval below ) would eliminate that.
-func decodeAssignment(a affine.Affinity, prog []byte, signatures []map[uint64]interface{}) (ret rt.Assignment, err error) {
+func decodeAssignment(a affine.Affinity, prog []byte, signatures cin.Signatures) (ret rt.Assignment, err error) {
 	if e := core.Decode(rt.Assignment_Slot{&ret}, prog, signatures); e != nil {
 		err = e
 	}
@@ -34,7 +35,7 @@ func readLiteralValue(a affine.Affinity, t string, msg []byte) (ret g.Value, err
 
 // the expected eval depends on the affinity (a) of the destination field.
 // fix? merge somehow with express.newAssignment?
-func readEvalValue(a affine.Affinity, rawValue []byte, signatures []map[uint64]interface{}) (ret rt.Assignment, err error) {
+func readEvalValue(a affine.Affinity, rawValue []byte, signatures cin.Signatures) (ret rt.Assignment, err error) {
 	switch a {
 	case affine.Bool:
 		var v rt.BoolEval

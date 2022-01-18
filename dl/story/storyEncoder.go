@@ -1,35 +1,44 @@
 package story
 
 import (
-	"encoding/json"
+	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
-	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // Write a story to a story file.
 func Encode(src *Story) (interface{}, error) {
-	weave := src.reformat()
-	return cout.Encode(&weave, CompactEncoder)
-}
-
-// Read a story from a story file.
-func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
-	return cin.NewDecoder(sig).
-		SetFlowDecoder(CompactFlowDecoder).
-		SetSlotDecoder(CompactSlotDecoder).
-		Decode(dst, msg)
+	lines := src.reformat()
+	return cout.Encode(&lines, CompactEncoder)
 }
 
 // customized writer of compact data
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
-	switch ptr := flow.GetFlow().(type) {
+	switch op := flow.GetFlow().(type) {
 	case *Story:
-		lines := ptr.reformat()
+		lines := op.reformat()
 		err = lines.Marshal(m)
+
+	case *core.CallPattern:
+		// rewrite pattern calls to look like normal operations.
+		patName := recase(op.Pattern.Str, true)
+		if err = m.MarshalBlock(fakeBlock(patName)); err == nil {
+			for _, arg := range op.Arguments.Args {
+				argName := recase(arg.Name, false)
+				if e := m.MarshalKey(argName, argName); e != nil {
+					err = e
+					break
+				} else if e := rt.Assignment_Marshal(m, &arg.From); e != nil {
+					err = e
+					break
+				}
+			}
+			m.EndBlock()
+		}
 
 	default:
 		err = core.CompactEncoder(m, flow)
@@ -37,24 +46,33 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	return
 }
 
-var CompactSlotDecoder = core.CompactSlotDecoder
+type fakeBlock string
 
-// customized reader of compact data
-func CompactFlowDecoder(m jsn.Marshaler, flow jsn.FlowBlock, msg json.RawMessage) (err error) {
-	switch typeName := flow.GetType(); typeName {
-	default:
-		err = chart.Unhandled("CustomFlow")
+func (fakeBlock) GetType() string          { return "fakeBlock" }
+func (fb fakeBlock) GetLede() string       { return string(fb) }
+func (fakeBlock) GetFlow() interface{}     { return nil }
+func (fakeBlock) SetFlow(interface{}) bool { return false }
 
-	case Story_Type:
-		var lines StoryLines
-		if e := lines.Marshal(m); e != nil {
-			err = e
+// pascal when true, camel when false
+func recase(str string, cap bool) string {
+	u := lang.Underscore(str)
+	rs := []rune(u)
+	var i int
+	for j, cnt := 0, len(rs); j < cnt; j++ {
+		if n := rs[j]; n == '_' {
+			cap = true
 		} else {
-			story := lines.reformat()
-			flow.SetFlow(&story)
+			if !cap {
+				n = unicode.ToLower(n)
+			} else {
+				n = unicode.ToUpper(n)
+				cap = false
+			}
+			rs[i] = n
+			i++
 		}
 	}
-	return
+	return string(rs[:i])
 }
 
 // change from old format composer friendly paragraph blocks into simpler to read and edit lines.

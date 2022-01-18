@@ -156,6 +156,18 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 				return
 			},
 		},
+		core.CallPattern_Type: KeyMap{
+			BlockStart: func(b jsn.Block, v interface{}) (err error) {
+				if flow, ok := b.(jsn.FlowBlock); !ok {
+					err = errutil.Fmt("trying to import something other than a flow")
+				} else if op, ok := flow.GetFlow().(*core.CallPattern); !ok {
+					err = errutil.Fmt("trying to import something other than a response")
+				} else {
+					k.WriteEphemera(importPattern(op))
+				}
+				return
+			},
+		},
 		core.Response_Type: KeyMap{
 			BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); !ok {

@@ -7,13 +7,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-// transforms "story.Determine" into the "core.CallPattern" command.
-// while the two commands are equivalent, this provides a hook to verify
-// the caller's arguments and the pattern's parameters match up.
-func (op *Determine) ImportStub(k *Importer) (interface{}, error) {
-	refs, args := op.Arguments.xform(op.Name.String(), kindsOf.Pattern)
-	k.WriteEphemera(refs)
-	return &core.CallPattern{Pattern: op.Name, Arguments: args}, nil
+func importPattern(op *core.CallPattern) *eph.EphRefs {
+	return refArgs(op.Pattern.String(), kindsOf.Pattern, op.Arguments.Args)
 }
 
 func (op *Make) ImportStub(k *Importer) (interface{}, error) {
@@ -47,6 +42,27 @@ func (stubs *Arguments) xform(k string, t kindsOf.Kinds) (retRefs *eph.EphRefs, 
 	}
 	retCall = core.CallArgs{Args: args}
 	retRefs = Refs(&eph.EphKinds{
+		Kinds:   k,
+		From:    t.String(),
+		Contain: refs,
+	})
+	return
+}
+
+func refArgs(k string, t kindsOf.Kinds, args []core.CallArg) (ret *eph.EphRefs) {
+	var refs []eph.EphParams
+	for _, arg := range args {
+		args = append(args, core.CallArg{
+			Name: arg.Name, // string
+			From: arg.From, // assignment
+		})
+		//
+		refs = append(refs, eph.EphParams{
+			Name:     arg.Name,
+			Affinity: infinityToAffinity(arg.From),
+		})
+	}
+	ret = Refs(&eph.EphKinds{
 		Kinds:   k,
 		From:    t.String(),
 		Contain: refs,

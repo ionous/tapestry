@@ -126,8 +126,8 @@
             "call_pattern":
             {
                 "uses": "flow",
-                "spec": "call_pattern {_%pattern:pattern_name} {args%arguments:call_args}",
-                "desc": "Runtime version of determine",
+                "spec": "determine {_%pattern:pattern_name} {args%arguments:call_args}",
+                "desc": "Executes a pattern, and potentially returns a value.",
                 "slot":
                 [
                     "execute",
@@ -138,8 +138,7 @@
                     "num_list_eval",
                     "text_list_eval",
                     "record_list_eval"
-                ],
-                "group": "internal"
+                ]
             },
             "capitalize":
             {

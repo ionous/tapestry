@@ -643,23 +643,6 @@
                         "uses": "group",
                         "specs":
                         {
-                            "determine":
-                            {
-                                "uses": "flow",
-                                "spec": "determine {_%name:pattern_name} {args%arguments?arguments}",
-                                "slot":
-                                [
-                                    "execute",
-                                    "bool_eval",
-                                    "number_eval",
-                                    "text_eval",
-                                    "record_eval",
-                                    "num_list_eval",
-                                    "text_list_eval",
-                                    "record_list_eval"
-                                ],
-                                "desc": "Runs a pattern, and potentially returns a value."
-                            },
                             "make":
                             {
                                 "uses": "flow",

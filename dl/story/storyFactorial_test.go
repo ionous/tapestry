@@ -29,6 +29,17 @@ func TestFactorialImport(t *testing.T) {
 				Name:   "factorial",
 				Expect: T("6"),
 			},
+			// referencing a call to the factorial pattern
+			&eph.EphRefs{Refs: []eph.Ephemera{
+				&eph.EphKinds{
+					Kinds: "factorial",
+					From:  "patterns",
+					Contain: []eph.EphParams{{
+						Affinity: eph.Affinity{eph.Affinity_Number},
+						Name:     "num",
+					}},
+				},
+			}},
 			// one test rule
 			&eph.EphChecks{
 				Name: "factorial",

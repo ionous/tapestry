@@ -1601,7 +1601,7 @@ func CallMake_Marshal(m jsn.Marshaler, val *CallMake) (err error) {
 	return
 }
 
-// CallPattern Runtime version of determine
+// CallPattern Executes a pattern, and potentially returns a value.
 type CallPattern struct {
 	Pattern     PatternName `if:"label=_"`
 	Arguments   CallArgs    `if:"label=args"`
@@ -1622,6 +1622,7 @@ func (*CallPattern) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CallPattern_Type,
 		Uses: composer.Type_Flow,
+		Lede: "determine",
 	}
 }
 
@@ -1676,7 +1677,7 @@ func CallPattern_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallPattern) (e
 type CallPattern_Flow struct{ ptr *CallPattern }
 
 func (n CallPattern_Flow) GetType() string      { return CallPattern_Type }
-func (n CallPattern_Flow) GetLede() string      { return CallPattern_Type }
+func (n CallPattern_Flow) GetLede() string      { return "determine" }
 func (n CallPattern_Flow) GetFlow() interface{} { return n.ptr }
 func (n CallPattern_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CallPattern); ok {
@@ -10588,7 +10589,6 @@ var Signatures = map[uint64]interface{}{
 	5769182059867686040:  (*Break)(nil),             /* Break */
 	1468716792759951334:  (*BufferText)(nil),        /* Buffers: */
 	15946925553828934364: (*CallMake)(nil),          /* CallMake:args: */
-	15968985848252216970: (*CallPattern)(nil),       /* CallPattern:args: */
 	9001627797986963633:  (*CallSend)(nil),          /* CallSend:to:args: */
 	11297042870903436571: (*Capitalize)(nil),        /* Capitalize: */
 	16120682472252114465: (*CompareNum)(nil),        /* Cmp:is:num: */
@@ -10598,6 +10598,7 @@ var Signatures = map[uint64]interface{}{
 	275481607335946827:   (*CallCycle)(nil),         /* Cycle:over: */
 	15006778405246945707: (*DiffOf)(nil),            /* Dec: */
 	15857313894902256996: (*DiffOf)(nil),            /* Dec:by: */
+	6635658011727307529:  (*CallPattern)(nil),       /* Determine:args: */
 	9642860352247282847:  (*QuotientOf)(nil),        /* Div:by: */
 	8764800739954063190:  (*During)(nil),            /* During: */
 	10400553141435587369: (*ChooseNothingElse)(nil), /* ElseDo: */
