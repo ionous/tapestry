@@ -6,6 +6,6 @@ import (
 )
 
 // export an internal function just for testing.
-func ImportPattern(op *core.CallPattern) *eph.EphRefs {
-	return importPattern(op)
+func ImportCall(op *core.CallPattern) *eph.EphRefs {
+	return importCall(op)
 }

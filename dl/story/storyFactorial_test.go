@@ -33,7 +33,7 @@ func TestFactorialImport(t *testing.T) {
 			&eph.EphRefs{Refs: []eph.Ephemera{
 				&eph.EphKinds{
 					Kinds: "factorial",
-					From:  "patterns",
+					// From:  kindsOf.Pattern.String() -- see note in importCall
 					Contain: []eph.EphParams{{
 						Affinity: eph.Affinity{eph.Affinity_Number},
 						Name:     "num",

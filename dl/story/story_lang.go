@@ -833,215 +833,6 @@ func AreEither_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreEither) (err e
 	return
 }
 
-// Argument
-type Argument struct {
-	Name        string        `if:"label=_,type=text"`
-	From        rt.Assignment `if:"label=from"`
-	UserComment string
-}
-
-func (*Argument) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Argument_Type,
-		Uses: composer.Type_Flow,
-		Lede: "arg",
-	}
-}
-
-const Argument_Type = "argument"
-const Argument_Field_Name = "$NAME"
-const Argument_Field_From = "$FROM"
-
-func (op *Argument) Marshal(m jsn.Marshaler) error {
-	return Argument_Marshal(m, op)
-}
-
-type Argument_Slice []Argument
-
-func (op *Argument_Slice) GetType() string { return Argument_Type }
-
-func (op *Argument_Slice) Marshal(m jsn.Marshaler) error {
-	return Argument_Repeats_Marshal(m, (*[]Argument)(op))
-}
-
-func (op *Argument_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Argument_Slice) SetSize(cnt int) {
-	var els []Argument
-	if cnt >= 0 {
-		els = make(Argument_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Argument_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Argument_Marshal(m, &(*op)[i])
-}
-
-func Argument_Repeats_Marshal(m jsn.Marshaler, vals *[]Argument) error {
-	return jsn.RepeatBlock(m, (*Argument_Slice)(vals))
-}
-
-func Argument_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Argument) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Argument_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Argument_Flow struct{ ptr *Argument }
-
-func (n Argument_Flow) GetType() string      { return Argument_Type }
-func (n Argument_Flow) GetLede() string      { return "arg" }
-func (n Argument_Flow) GetFlow() interface{} { return n.ptr }
-func (n Argument_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Argument); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Argument_Optional_Marshal(m jsn.Marshaler, pv **Argument) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Argument_Marshal(m, *pv)
-	} else if !enc {
-		var v Argument
-		if err = Argument_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Argument_Marshal(m jsn.Marshaler, val *Argument) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Argument_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Argument_Field_Name)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Argument_Field_Name))
-		}
-		e1 := m.MarshalKey("from", Argument_Field_From)
-		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Argument_Field_From))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Arguments
-type Arguments struct {
-	Args        []Argument `if:"label=_"`
-	UserComment string
-}
-
-func (*Arguments) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Arguments_Type,
-		Uses: composer.Type_Flow,
-		Lede: "args",
-	}
-}
-
-const Arguments_Type = "arguments"
-const Arguments_Field_Args = "$ARGS"
-
-func (op *Arguments) Marshal(m jsn.Marshaler) error {
-	return Arguments_Marshal(m, op)
-}
-
-type Arguments_Slice []Arguments
-
-func (op *Arguments_Slice) GetType() string { return Arguments_Type }
-
-func (op *Arguments_Slice) Marshal(m jsn.Marshaler) error {
-	return Arguments_Repeats_Marshal(m, (*[]Arguments)(op))
-}
-
-func (op *Arguments_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Arguments_Slice) SetSize(cnt int) {
-	var els []Arguments
-	if cnt >= 0 {
-		els = make(Arguments_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Arguments_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Arguments_Marshal(m, &(*op)[i])
-}
-
-func Arguments_Repeats_Marshal(m jsn.Marshaler, vals *[]Arguments) error {
-	return jsn.RepeatBlock(m, (*Arguments_Slice)(vals))
-}
-
-func Arguments_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Arguments) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Arguments_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Arguments_Flow struct{ ptr *Arguments }
-
-func (n Arguments_Flow) GetType() string      { return Arguments_Type }
-func (n Arguments_Flow) GetLede() string      { return "args" }
-func (n Arguments_Flow) GetFlow() interface{} { return n.ptr }
-func (n Arguments_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Arguments); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Arguments_Optional_Marshal(m jsn.Marshaler, pv **Arguments) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Arguments_Marshal(m, *pv)
-	} else if !enc {
-		var v Arguments
-		if err = Arguments_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Arguments_Marshal(m jsn.Marshaler, val *Arguments) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Arguments_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Arguments_Field_Args)
-		if e0 == nil {
-			e0 = Argument_Repeats_Marshal(m, &val.Args)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Arguments_Field_Args))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // Aspect requires a user-specified string.
 type Aspect struct {
 	Str string
@@ -3609,117 +3400,6 @@ func LocalInit_Marshal(m jsn.Marshaler, val *LocalInit) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", LocalInit_Field_Value))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Make
-type Make struct {
-	Name        string     `if:"label=_,type=text"`
-	Arguments   *Arguments `if:"label=arguments,optional"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.RecordEval = (*Make)(nil)
-
-func (*Make) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Make_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Make_Type = "make"
-const Make_Field_Name = "$NAME"
-const Make_Field_Arguments = "$ARGUMENTS"
-
-func (op *Make) Marshal(m jsn.Marshaler) error {
-	return Make_Marshal(m, op)
-}
-
-type Make_Slice []Make
-
-func (op *Make_Slice) GetType() string { return Make_Type }
-
-func (op *Make_Slice) Marshal(m jsn.Marshaler) error {
-	return Make_Repeats_Marshal(m, (*[]Make)(op))
-}
-
-func (op *Make_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Make_Slice) SetSize(cnt int) {
-	var els []Make
-	if cnt >= 0 {
-		els = make(Make_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Make_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Make_Marshal(m, &(*op)[i])
-}
-
-func Make_Repeats_Marshal(m jsn.Marshaler, vals *[]Make) error {
-	return jsn.RepeatBlock(m, (*Make_Slice)(vals))
-}
-
-func Make_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Make) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Make_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Make_Flow struct{ ptr *Make }
-
-func (n Make_Flow) GetType() string      { return Make_Type }
-func (n Make_Flow) GetLede() string      { return Make_Type }
-func (n Make_Flow) GetFlow() interface{} { return n.ptr }
-func (n Make_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Make); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Make_Optional_Marshal(m jsn.Marshaler, pv **Make) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Make_Marshal(m, *pv)
-	} else if !enc {
-		var v Make
-		if err = Make_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Make_Marshal(m jsn.Marshaler, val *Make) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Make_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Make_Field_Name)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Make_Field_Name))
-		}
-		e1 := m.MarshalKey("arguments", Make_Field_Arguments)
-		if e1 == nil {
-			e1 = Arguments_Optional_Marshal(m, &val.Arguments)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Make_Field_Arguments))
 		}
 		m.EndBlock()
 	}
@@ -9836,8 +9516,6 @@ var Slats = []composer.Composer{
 	(*AreAn)(nil),
 	(*AreBeing)(nil),
 	(*AreEither)(nil),
-	(*Argument)(nil),
-	(*Arguments)(nil),
 	(*Aspect)(nil),
 	(*AspectProperty)(nil),
 	(*AspectTraits)(nil),
@@ -9863,7 +9541,6 @@ var Slats = []composer.Composer{
 	(*Lines)(nil),
 	(*LocalDecl)(nil),
 	(*LocalInit)(nil),
-	(*Make)(nil),
 	(*MakeOpposite)(nil),
 	(*MakePlural)(nil),
 	(*ManyToMany)(nil),
@@ -9927,8 +9604,6 @@ var Signatures = map[uint64]interface{}{
 	14902711848163440508: (*ActionParams)(nil),          /* ActionParams common: */
 	11902859627634050329: (*ActionParams)(nil),          /* ActionParams dual: */
 	5868886119925925865:  (*ActionParams)(nil),          /* ActionParams none: */
-	6291103735245333139:  (*Argument)(nil),              /* Arg:from: */
-	2275326896920679506:  (*Arguments)(nil),             /* Args: */
 	4946346507935163764:  (*AspectProperty)(nil),        /* Aspect of: */
 	2627975827633552637:  (*AspectProperty)(nil),        /* Aspect of:desc: */
 	17855209504331534011: (*AspectTraits)(nil),          /* AspectTraits:traitPhrase: */
@@ -9964,8 +9639,6 @@ var Signatures = map[uint64]interface{}{
 	6009252662016869003:  (*LocalDecl)(nil),             /* LocalDecl:value: */
 	11789909816860756800: (*LocalInit)(nil),             /* LocalInit: */
 	5919854034648203527:  (*KindsOfKind)(nil),           /* Make kinds:of: */
-	9981010364372027439:  (*Make)(nil),                  /* Make: */
-	12609627593403083413: (*Make)(nil),                  /* Make:arguments: */
 	17216176745763384228: (*MakeOpposite)(nil),          /* Make:opposite: */
 	3572160234867157749:  (*MakePlural)(nil),            /* Make:plural: */
 	17563761532337350103: (*ManyToMany)(nil),            /* ManyToMany:otherKinds: */

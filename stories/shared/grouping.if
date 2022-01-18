@@ -117,21 +117,9 @@
                 {
                   "LocalInit:": {
                     "FromRec:": {
-                      "Make:arguments:": [
-                        "groupings",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "name",
-                                {
-                                  "FromTxt:": "@obj"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "Groupings name:": {
+                        "FromTxt:": "@obj"
+                      }
                     }
                   }
                 }

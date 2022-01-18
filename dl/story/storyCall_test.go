@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 
 	"github.com/kr/pretty"
 )
@@ -30,12 +29,12 @@ func TestDetermineNum(t *testing.T) {
 					}}}}}); len(diff) > 0 {
 			t.Fatal(diff)
 		} else {
-			refs := story.ImportPattern(call)
+			refs := story.ImportCall(call)
 			if diff := pretty.Diff(refs, &eph.EphRefs{
 				Refs: []eph.Ephemera{
 					&eph.EphKinds{
 						Kinds: "factorial",
-						From:  kindsOf.Pattern.String(),
+						// From:  kindsOf.Pattern.String() -- see note in importCall
 						Contain: []eph.EphParams{{
 							Affinity: eph.Affinity{eph.Affinity_Number},
 							Name:     "num",

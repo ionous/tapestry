@@ -1721,6 +1721,7 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 }
 
 // CallSend Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.
+// Although the event advertises it can take any bool evaluation, only pattern calls are supported.
 // Returns a true/false success value.
 type CallSend struct {
 	Path        rt.TextListEval `if:"label=_"`

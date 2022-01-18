@@ -100,7 +100,7 @@ func (k *Importer) AddImplicitAspect(aspect, kind string, traits ...string) {
 	}
 }
 
-// pre-processing hooks
+// post-processing hooks
 // presumably, this will have to be fixed eventually
 // so that states can be composited not specified in one big monolith.
 func importStory(k *Importer, tgt jsn.Marshalee) error {
@@ -163,7 +163,7 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 				} else if op, ok := flow.GetFlow().(*core.CallPattern); !ok {
 					err = errutil.Fmt("trying to import something other than a response")
 				} else {
-					k.WriteEphemera(importPattern(op))
+					k.WriteEphemera(importCall(op))
 				}
 				return
 			},

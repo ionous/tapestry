@@ -7,42 +7,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-func importPattern(op *core.CallPattern) *eph.EphRefs {
+func importCall(op *core.CallPattern) *eph.EphRefs {
 	return refArgs(op.Pattern.String(), kindsOf.Pattern, op.Arguments.Args)
 }
 
-func (op *Make) ImportStub(k *Importer) (interface{}, error) {
-	refs, args := op.Arguments.xform(op.Name, kindsOf.Record)
-	k.WriteEphemera(refs)
-	return &core.CallMake{Kind: op.Name, Arguments: args}, nil
-}
-
-func (stubs *Arguments) xform(k string, t kindsOf.Kinds) (retRefs *eph.EphRefs, retCall core.CallArgs) {
-	var args []core.CallArg
-	var refs []eph.EphParams
-	if stubs != nil {
-		for _, arg := range stubs.Args {
-			args = append(args, core.CallArg{
-				Name: arg.Name, // string
-				From: arg.From, // assignment
-			})
-			//
-			refs = append(refs, eph.EphParams{
-				Name:     arg.Name,
-				Affinity: infinityToAffinity(arg.From),
-			})
-		}
-	}
-	retCall = core.CallArgs{Args: args}
-	retRefs = Refs(&eph.EphKinds{
-		Kinds:   k,
-		From:    t.String(),
-		Contain: refs,
-	})
-	return
-}
-
-func refArgs(k string, t kindsOf.Kinds, args []core.CallArg) (ret *eph.EphRefs) {
+func refArgs(k string, parentKind kindsOf.Kinds, args []core.CallArg) (ret *eph.EphRefs) {
 	var refs []eph.EphParams
 	for _, arg := range args {
 		args = append(args, core.CallArg{
@@ -56,8 +25,10 @@ func refArgs(k string, t kindsOf.Kinds, args []core.CallArg) (ret *eph.EphRefs) 
 		})
 	}
 	ret = Refs(&eph.EphKinds{
-		Kinds:   k,
-		From:    t.String(),
+		Kinds: k,
+		// we dont actually know.
+		// its probably a pattern, but it could be a record just as well....
+		// From:    parentKind.String(),
 		Contain: refs,
 	})
 	return
