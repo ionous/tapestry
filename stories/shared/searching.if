@@ -80,25 +80,14 @@
                               {
                                 "If:do:": [
                                   {
-                                    "Send:path:arguments:": [
-                                      "search",
+                                    "Send:event:": [
                                       {
                                         "ParentsOf obj:": "@noun"
                                       },
                                       {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "actor",
-                                              "@actor"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "noun",
-                                              "@noun"
-                                            ]
-                                          }
+                                        "Search actor:noun:": [
+                                          "@actor",
+                                          "@noun"
                                         ]
                                       }
                                     ]

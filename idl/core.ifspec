@@ -729,14 +729,16 @@
             "call_send":
             {
                 "uses": "flow",
-                "spec": "call_send {_%event:text} {to%path:text_list_eval} {args%arguments:call_args}",
-                "slot":
-                [
+                "spec": "send {_%path:text_list_eval} {event:bool_eval}",
+                "slot": [
                     "execute",
                     "bool_eval"
                 ],
-                "group": "internal",
-                "desc": "Runtime version of send"
+                "desc": [
+                    "Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.",
+                    "Although the event advertises it can take any bool evaluation, only pattern calls are supported.",
+                    "Returns a true/false success value."
+                ]
             },
             "set_trait":
             {

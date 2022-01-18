@@ -104,48 +104,22 @@
                                     "ElseDo:": {
                                       "Act:": [
                                         {
-                                          "Send:path:arguments:": [
-                                            "state change",
+                                          "Send:event:": [
                                             {
                                               "ParentsOf obj:": "@noun"
                                             },
                                             {
-                                              "Args:": [
+                                              "StateChange actor:noun:trait:guard:change:": [
+                                                "@actor",
+                                                "@noun",
                                                 {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
+                                                  "FromTxt:": "activated"
                                                 },
                                                 {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
+                                                  "FromTxt:": "activatable"
                                                 },
                                                 {
-                                                  "Arg:from:": [
-                                                    "trait",
-                                                    {
-                                                      "FromTxt:": "activated"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "guard",
-                                                    {
-                                                      "FromTxt:": "activatable"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "change",
-                                                    {
-                                                      "FromTxt:": "switch on"
-                                                    }
-                                                  ]
+                                                  "FromTxt:": "switch on"
                                                 }
                                               ]
                                             }
@@ -276,48 +250,22 @@
                                     "ElseDo:": {
                                       "Act:": [
                                         {
-                                          "Send:path:arguments:": [
-                                            "state change",
+                                          "Send:event:": [
                                             {
                                               "ParentsOf obj:": "@noun"
                                             },
                                             {
-                                              "Args:": [
+                                              "StateChange actor:noun:trait:guard:change:": [
+                                                "@actor",
+                                                "@noun",
                                                 {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
+                                                  "FromTxt:": "deactivated"
                                                 },
                                                 {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
+                                                  "FromTxt:": "activatable"
                                                 },
                                                 {
-                                                  "Arg:from:": [
-                                                    "trait",
-                                                    {
-                                                      "FromTxt:": "deactivated"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "guard",
-                                                    {
-                                                      "FromTxt:": "activatable"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "change",
-                                                    {
-                                                      "FromTxt:": "switch off"
-                                                    }
-                                                  ]
+                                                  "FromTxt:": "switch off"
                                                 }
                                               ]
                                             }

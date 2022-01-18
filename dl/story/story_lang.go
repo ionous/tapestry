@@ -8167,127 +8167,6 @@ func RenderTemplate_Marshal(m jsn.Marshaler, val *RenderTemplate) (err error) {
 	return
 }
 
-// Send
-type Send struct {
-	Event       string          `if:"label=_,type=text"`
-	Path        rt.TextListEval `if:"label=path"`
-	Arguments   *Arguments      `if:"label=arguments,optional"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.Execute = (*Send)(nil)
-var _ rt.BoolEval = (*Send)(nil)
-
-func (*Send) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Send_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Send_Type = "send"
-const Send_Field_Event = "$EVENT"
-const Send_Field_Path = "$PATH"
-const Send_Field_Arguments = "$ARGUMENTS"
-
-func (op *Send) Marshal(m jsn.Marshaler) error {
-	return Send_Marshal(m, op)
-}
-
-type Send_Slice []Send
-
-func (op *Send_Slice) GetType() string { return Send_Type }
-
-func (op *Send_Slice) Marshal(m jsn.Marshaler) error {
-	return Send_Repeats_Marshal(m, (*[]Send)(op))
-}
-
-func (op *Send_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Send_Slice) SetSize(cnt int) {
-	var els []Send
-	if cnt >= 0 {
-		els = make(Send_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Send_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Send_Marshal(m, &(*op)[i])
-}
-
-func Send_Repeats_Marshal(m jsn.Marshaler, vals *[]Send) error {
-	return jsn.RepeatBlock(m, (*Send_Slice)(vals))
-}
-
-func Send_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Send) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Send_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Send_Flow struct{ ptr *Send }
-
-func (n Send_Flow) GetType() string      { return Send_Type }
-func (n Send_Flow) GetLede() string      { return Send_Type }
-func (n Send_Flow) GetFlow() interface{} { return n.ptr }
-func (n Send_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Send); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Send_Optional_Marshal(m jsn.Marshaler, pv **Send) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Send_Marshal(m, *pv)
-	} else if !enc {
-		var v Send
-		if err = Send_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Send_Marshal(m jsn.Marshaler, val *Send) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Send_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Send_Field_Event)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Event)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Send_Field_Event))
-		}
-		e1 := m.MarshalKey("path", Send_Field_Path)
-		if e1 == nil {
-			e1 = rt.TextListEval_Marshal(m, &val.Path)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Send_Field_Path))
-		}
-		e2 := m.MarshalKey("arguments", Send_Field_Arguments)
-		if e2 == nil {
-			e2 = Arguments_Optional_Marshal(m, &val.Arguments)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", Send_Field_Arguments))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // ShuffleText
 type ShuffleText struct {
 	Parts       []rt.TextEval `if:"label=_"`
@@ -10025,7 +9904,6 @@ var Slats = []composer.Composer{
 	(*RelationCardinality)(nil),
 	(*RelativeToNoun)(nil),
 	(*RenderTemplate)(nil),
-	(*Send)(nil),
 	(*ShuffleText)(nil),
 	(*SingularKind)(nil),
 	(*StoppingText)(nil),
@@ -10152,8 +10030,6 @@ var Signatures = map[uint64]interface{}{
 	5587008972147064084:  (*RelationCardinality)(nil),   /* RelationCardinality oneToOne: */
 	6898132702043823031:  (*RelativeToNoun)(nil),        /* RelativeToNoun:nouns:areBeing:otherNouns: */
 	15988073058027477451: (*RenderTemplate)(nil),        /* RenderTemplate: */
-	2420057392455761494:  (*Send)(nil),                  /* Send:path: */
-	10010483713146895284: (*Send)(nil),                  /* Send:path:arguments: */
 	7279273919312137397:  (*ShuffleText)(nil),           /* ShuffleText: */
 	10085329253831819088: (*StoppingText)(nil),          /* StoppingText: */
 	11597613116511938589: (*Story)(nil),                 /* Story paragraphs: */

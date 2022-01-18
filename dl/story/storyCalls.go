@@ -17,13 +17,6 @@ func (op *Make) ImportStub(k *Importer) (interface{}, error) {
 	return &core.CallMake{Kind: op.Name, Arguments: args}, nil
 }
 
-func (op *Send) ImportStub(k *Importer) (interface{}, error) {
-	// note: this used to pass "kindOf.Event" but we dont need to be so strict.
-	refs, args := op.Arguments.xform(op.Event, kindsOf.Pattern)
-	k.WriteEphemera(refs)
-	return &core.CallSend{Event: op.Event, Path: op.Path, Arguments: args}, nil
-}
-
 func (stubs *Arguments) xform(k string, t kindsOf.Kinds) (retRefs *eph.EphRefs, retCall core.CallArgs) {
 	var args []core.CallArg
 	var refs []eph.EphParams

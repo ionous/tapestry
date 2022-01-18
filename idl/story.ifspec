@@ -650,18 +650,6 @@
                                 "slot": "record_eval",
                                 "group": "misc"
                             },
-                            "send":
-                            {
-                                "uses": "flow",
-                                "spec": "send {_%event:text} {to%path:text_list_eval} {args%arguments?arguments}",
-                                "slot":
-                                [
-                                    "execute",
-                                    "bool_eval"
-                                ],
-                                "desc": "Triggers a event, returns a true/false success value.",
-                                "group": "internal"
-                            },
                             "argument":
                             {
                                 "uses": "flow",

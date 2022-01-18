@@ -104,48 +104,22 @@
                                     "ElseDo:": {
                                       "Act:": [
                                         {
-                                          "Send:path:arguments:": [
-                                            "state change",
+                                          "Send:event:": [
                                             {
                                               "ParentsOf obj:": "@noun"
                                             },
                                             {
-                                              "Args:": [
+                                              "StateChange actor:noun:trait:guard:change:": [
+                                                "@actor",
+                                                "@noun",
                                                 {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
+                                                  "FromTxt:": "open"
                                                 },
                                                 {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
+                                                  "FromTxt:": "openable"
                                                 },
                                                 {
-                                                  "Arg:from:": [
-                                                    "trait",
-                                                    {
-                                                      "FromTxt:": "open"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "guard",
-                                                    {
-                                                      "FromTxt:": "openable"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "change",
-                                                    {
-                                                      "FromTxt:": "open"
-                                                    }
-                                                  ]
+                                                  "FromTxt:": "open"
                                                 }
                                               ]
                                             }
@@ -276,48 +250,22 @@
                                     "ElseDo:": {
                                       "Act:": [
                                         {
-                                          "Send:path:arguments:": [
-                                            "state change",
+                                          "Send:event:": [
                                             {
                                               "ParentsOf obj:": "@noun"
                                             },
                                             {
-                                              "Args:": [
+                                              "StateChange actor:noun:trait:guard:change:": [
+                                                "@actor",
+                                                "@noun",
                                                 {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
+                                                  "FromTxt:": "closed"
                                                 },
                                                 {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
+                                                  "FromTxt:": "openable"
                                                 },
                                                 {
-                                                  "Arg:from:": [
-                                                    "trait",
-                                                    {
-                                                      "FromTxt:": "closed"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "guard",
-                                                    {
-                                                      "FromTxt:": "openable"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "change",
-                                                    {
-                                                      "FromTxt:": "close"
-                                                    }
-                                                  ]
+                                                  "FromTxt:": "close"
                                                 }
                                               ]
                                             }

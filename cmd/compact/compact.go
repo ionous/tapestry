@@ -13,6 +13,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
 	"github.com/ionous/errutil"
@@ -104,6 +105,8 @@ func (p *xform) decodeEncode(in, out string) (err error) {
 		err = e
 	} else if e := p.decode(&dst, b); e != nil {
 		err = e
+	} else if e := xformStory(&dst); e != nil {
+		err = e
 	} else if data, e := p.encode(&dst); e != nil {
 		err = e
 	} else {
@@ -151,4 +154,48 @@ func readOne(filePath string) (ret []byte, err error) {
 		fp.Close()
 	}
 	return
+}
+
+// example of migrating one command to another.
+func xformStory(tgt jsn.Marshalee) error {
+	return nil
+	// ts := chart.MakeEncoder()
+	// return ts.Marshal(tgt, story.Map(&ts, story.BlockMap{
+	// 	story.OtherBlocks: story.KeyMap{
+	// 		story.BlockStart: func(b jsn.Block, v interface{}) (err error) {
+	// 			switch newBlock := b.(type) {
+	// 			case jsn.SlotBlock:
+	// 				if slat, ok := newBlock.GetSlot(); !ok {
+	// 					err = jsn.Missing
+	// 				} else {
+	// 					switch op := slat.(type) {
+	// 					case *story.Send:
+	// 						var args []core.CallArg
+	// 						if op.Arguments != nil {
+	// 							for _, arg := range op.Arguments.Args {
+	// 								args = append(args, core.CallArg{
+	// 									Name: arg.Name, // string
+	// 									From: arg.From, // assignment
+	// 								})
+	// 							}
+	// 						}
+	// 						c := &core.CallSend{
+	// 							Path: op.Path,
+	// 							Event: core.CallPattern{
+	// 								Pattern:   core.PatternName{op.Event},
+	// 								Arguments: core.CallArgs{Args: args},
+	// 							},
+	// 							UserComment: op.UserComment,
+	// 						}
+
+	// 						if !newBlock.SetSlot(c) {
+	// 							err = errutil.New("failed to set replacement")
+	// 						}
+	// 					}
+	// 				}
+	// 			}
+	// 			return
+	// 		},
+	// 	},
+	// }))
 }

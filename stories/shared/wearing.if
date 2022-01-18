@@ -75,48 +75,22 @@
                           "ElseDo:": {
                             "Act:": [
                               {
-                                "Send:path:arguments:": [
-                                  "state change",
+                                "Send:event:": [
                                   {
                                     "ParentsOf obj:": "@noun"
                                   },
                                   {
-                                    "Args:": [
+                                    "StateChange actor:noun:trait:guard:change:": [
+                                      "@actor",
+                                      "@noun",
                                       {
-                                        "Arg:from:": [
-                                          "actor",
-                                          "@actor"
-                                        ]
+                                        "FromTxt:": "worn"
                                       },
                                       {
-                                        "Arg:from:": [
-                                          "noun",
-                                          "@noun"
-                                        ]
+                                        "FromTxt:": "wearable"
                                       },
                                       {
-                                        "Arg:from:": [
-                                          "trait",
-                                          {
-                                            "FromTxt:": "worn"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "guard",
-                                          {
-                                            "FromTxt:": "wearable"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "change",
-                                          {
-                                            "FromTxt:": "put on"
-                                          }
-                                        ]
+                                        "FromTxt:": "put on"
                                       }
                                     ]
                                   }
@@ -213,48 +187,22 @@
                           "ElseDo:": {
                             "Act:": [
                               {
-                                "Send:path:arguments:": [
-                                  "state change",
+                                "Send:event:": [
                                   {
                                     "ParentsOf obj:": "@noun"
                                   },
                                   {
-                                    "Args:": [
+                                    "StateChange actor:noun:trait:guard:change:": [
+                                      "@actor",
+                                      "@noun",
                                       {
-                                        "Arg:from:": [
-                                          "actor",
-                                          "@actor"
-                                        ]
+                                        "FromTxt:": "not worn"
                                       },
                                       {
-                                        "Arg:from:": [
-                                          "noun",
-                                          "@noun"
-                                        ]
+                                        "FromTxt:": "wearable"
                                       },
                                       {
-                                        "Arg:from:": [
-                                          "trait",
-                                          {
-                                            "FromTxt:": "not worn"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "guard",
-                                          {
-                                            "FromTxt:": "wearable"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "change",
-                                          {
-                                            "FromTxt:": "take off"
-                                          }
-                                        ]
+                                        "FromTxt:": "take off"
                                       }
                                     ]
                                   }

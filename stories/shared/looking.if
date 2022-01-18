@@ -44,20 +44,12 @@
                 {
                   "Act:": [
                     {
-                      "Send:path:arguments:": [
-                        "look",
+                      "Send:event:": [
                         {
                           "ParentsOf obj:": "@actor"
                         },
                         {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "actor",
-                                "@actor"
-                              ]
-                            }
-                          ]
+                          "Look actor:": "@actor"
                         }
                       ]
                     }

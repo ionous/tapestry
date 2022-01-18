@@ -44,20 +44,12 @@
                 {
                   "Act:": [
                     {
-                      "Send:path:arguments:": [
-                        "inventory",
+                      "Send:event:": [
                         {
                           "ParentsOf obj:": "@actor"
                         },
                         {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "actor",
-                                "@actor"
-                              ]
-                            }
-                          ]
+                          "Inventory actor:": "@actor"
                         }
                       ]
                     }

@@ -1720,11 +1720,11 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 	return
 }
 
-// CallSend Runtime version of send
+// CallSend Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.
+// Returns a true/false success value.
 type CallSend struct {
-	Event       string          `if:"label=_,type=text"`
-	Path        rt.TextListEval `if:"label=to"`
-	Arguments   CallArgs        `if:"label=args"`
+	Path        rt.TextListEval `if:"label=_"`
+	Event       rt.BoolEval     `if:"label=event"`
 	UserComment string
 }
 
@@ -1736,13 +1736,13 @@ func (*CallSend) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CallSend_Type,
 		Uses: composer.Type_Flow,
+		Lede: "send",
 	}
 }
 
 const CallSend_Type = "call_send"
-const CallSend_Field_Event = "$EVENT"
 const CallSend_Field_Path = "$PATH"
-const CallSend_Field_Arguments = "$ARGUMENTS"
+const CallSend_Field_Event = "$EVENT"
 
 func (op *CallSend) Marshal(m jsn.Marshaler) error {
 	return CallSend_Marshal(m, op)
@@ -1791,7 +1791,7 @@ func CallSend_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallSend) (err err
 type CallSend_Flow struct{ ptr *CallSend }
 
 func (n CallSend_Flow) GetType() string      { return CallSend_Type }
-func (n CallSend_Flow) GetLede() string      { return CallSend_Type }
+func (n CallSend_Flow) GetLede() string      { return "send" }
 func (n CallSend_Flow) GetFlow() interface{} { return n.ptr }
 func (n CallSend_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CallSend); ok {
@@ -1815,26 +1815,19 @@ func CallSend_Optional_Marshal(m jsn.Marshaler, pv **CallSend) (err error) {
 func CallSend_Marshal(m jsn.Marshaler, val *CallSend) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(CallSend_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CallSend_Field_Event)
+		e0 := m.MarshalKey("", CallSend_Field_Path)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Event)
+			e0 = rt.TextListEval_Marshal(m, &val.Path)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CallSend_Field_Event))
+			m.Error(errutil.New(e0, "in flow at", CallSend_Field_Path))
 		}
-		e1 := m.MarshalKey("to", CallSend_Field_Path)
+		e1 := m.MarshalKey("event", CallSend_Field_Event)
 		if e1 == nil {
-			e1 = rt.TextListEval_Marshal(m, &val.Path)
+			e1 = rt.BoolEval_Marshal(m, &val.Event)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", CallSend_Field_Path))
-		}
-		e2 := m.MarshalKey("args", CallSend_Field_Arguments)
-		if e2 == nil {
-			e2 = CallArgs_Marshal(m, &val.Arguments)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", CallSend_Field_Arguments))
+			m.Error(errutil.New(e1, "in flow at", CallSend_Field_Event))
 		}
 		m.EndBlock()
 	}
@@ -10589,7 +10582,6 @@ var Signatures = map[uint64]interface{}{
 	5769182059867686040:  (*Break)(nil),             /* Break */
 	1468716792759951334:  (*BufferText)(nil),        /* Buffers: */
 	15946925553828934364: (*CallMake)(nil),          /* CallMake:args: */
-	9001627797986963633:  (*CallSend)(nil),          /* CallSend:to:args: */
 	11297042870903436571: (*Capitalize)(nil),        /* Capitalize: */
 	16120682472252114465: (*CompareNum)(nil),        /* Cmp:is:num: */
 	7447576730273512137:  (*CompareText)(nil),       /* Cmp:is:txt: */
@@ -10665,6 +10657,7 @@ var Signatures = map[uint64]interface{}{
 	14613688398311225843: (*Row)(nil),               /* Row: */
 	3616198808268747974:  (*Rows)(nil),              /* Rows: */
 	3730533159734531406:  (*SayText)(nil),           /* Say: */
+	1341867280488142101:  (*CallSend)(nil),          /* Send:event: */
 	1183160597042696586:  (*MakeSentenceCase)(nil),  /* Sentence: */
 	10296278955051288620: (*CallShuffle)(nil),       /* Shuffle:over: */
 	17621435589152331937: (*Singularize)(nil),       /* Singular of: */

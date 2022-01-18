@@ -110,31 +110,15 @@
                                         {
                                           "If:do:": [
                                             {
-                                              "Send:path:arguments:": [
-                                                "retrieve from",
+                                              "Send:event:": [
                                                 {
                                                   "ParentsOf obj:": "@noun"
                                                 },
                                                 {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "actor",
-                                                        "@actor"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "noun",
-                                                        "@noun"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "other noun",
-                                                        "@other noun"
-                                                      ]
-                                                    }
+                                                  "RetrieveFrom actor:noun:otherNoun:": [
+                                                    "@actor",
+                                                    "@noun",
+                                                    "@other noun"
                                                   ]
                                                 }
                                               ]
@@ -344,25 +328,14 @@
                               "success",
                               {
                                 "FromBool:": {
-                                  "Send:path:arguments:": [
-                                    "take",
+                                  "Send:event:": [
                                     {
                                       "ParentsOf obj:": "@noun"
                                     },
                                     {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "actor",
-                                            "@actor"
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "noun",
-                                            "@noun"
-                                          ]
-                                        }
+                                      "Take actor:noun:": [
+                                        "@actor",
+                                        "@noun"
                                       ]
                                     }
                                   ]

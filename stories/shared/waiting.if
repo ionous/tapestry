@@ -46,25 +46,14 @@
                     {
                       "If:do:": [
                         {
-                          "Send:path:arguments:": [
-                            "wait",
+                          "Send:event:": [
                             {
                               "ParentsOf obj:": "@actor"
                             },
                             {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "actor",
-                                    "@actor"
-                                  ]
-                                },
-                                {
-                                  "Arg:from:": [
-                                    "noun",
-                                    "@actor"
-                                  ]
-                                }
+                              "Wait actor:noun:": [
+                                "@actor",
+                                "@actor"
                               ]
                             }
                           ]

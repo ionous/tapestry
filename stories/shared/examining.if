@@ -109,25 +109,14 @@
                                         {
                                           "If:do:": [
                                             {
-                                              "Send:path:arguments:": [
-                                                "examine",
+                                              "Send:event:": [
                                                 {
                                                   "ParentsOf obj:": "@noun"
                                                 },
                                                 {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "actor",
-                                                        "@actor"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "noun",
-                                                        "@noun"
-                                                      ]
-                                                    }
+                                                  "Examine actor:noun:": [
+                                                    "@actor",
+                                                    "@noun"
                                                   ]
                                                 }
                                               ]

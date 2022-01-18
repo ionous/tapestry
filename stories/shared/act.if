@@ -147,7 +147,7 @@
                           {
                             "Say:": {
                               "Response:text:": [
-                                "something changed iteself",
+                                "something changed itself",
                                 {
                                   "RenderTemplate:": "{The: .noun|capitalize!} {are!} {.trait}."
                                 }

@@ -35,15 +35,6 @@ func (*Make) GetRecord(rt.Runtime) (g.Value, error) {
 	panic("unexpected use of story method")
 }
 
-var _ StubImporter = (*Send)(nil)
-
-func (*Send) GetBool(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-func (*Send) Execute(rt.Runtime) error {
-	panic("unexpected use of story method")
-}
-
 var _ StubImporter = (*ShuffleText)(nil)
 
 func (*ShuffleText) GetText(rt.Runtime) (g.Value, error) {

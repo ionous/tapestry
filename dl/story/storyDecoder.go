@@ -82,7 +82,6 @@ func CompactFlowDecoder(m jsn.Marshaler, flow jsn.FlowBlock, msg json.RawMessage
 	switch typeName := flow.GetType(); typeName {
 	default:
 		err = chart.Unhandled("CustomFlow")
-
 	case Story_Type:
 		var lines StoryLines
 		if e := decode(&lines, msg, m.(cin.TypeCreator)); e != nil {

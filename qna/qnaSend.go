@@ -26,6 +26,7 @@ func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, er
 	} else if oldScope, e := run.ReplaceScope(res, true); e != nil {
 		err = e
 	} else {
+		// fix: nobody is using "current_noun" currently... so what does that say?
 		currentNoun := scope.NewSingleValue("current_noun", g.Empty)
 		run.PushScope(currentNoun)
 		// note: the scope has to be established before BuildPath gets called

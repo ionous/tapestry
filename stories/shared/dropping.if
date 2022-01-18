@@ -77,25 +77,14 @@
                               {
                                 "If:do:": [
                                   {
-                                    "Send:path:arguments:": [
-                                      "drop",
+                                    "Send:event:": [
                                       {
                                         "ParentsOf obj:": "@noun"
                                       },
                                       {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "actor",
-                                              "@actor"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "noun",
-                                              "@noun"
-                                            ]
-                                          }
+                                        "Drop actor:noun:": [
+                                          "@actor",
+                                          "@noun"
                                         ]
                                       }
                                     ]

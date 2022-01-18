@@ -77,25 +77,14 @@
                               {
                                 "If:do:": [
                                   {
-                                    "Send:path:arguments:": [
-                                      "travel",
+                                    "Send:event:": [
                                       {
                                         "ParentsOf obj:": "@noun"
                                       },
                                       {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "actor",
-                                              "@actor"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "noun",
-                                              "@noun"
-                                            ]
-                                          }
+                                        "Travel actor:noun:": [
+                                          "@actor",
+                                          "@noun"
                                         ]
                                       }
                                     ]

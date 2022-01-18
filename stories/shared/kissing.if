@@ -126,25 +126,14 @@
                                     "ElseDo:": {
                                       "Act:": [
                                         {
-                                          "Send:path:arguments:": [
-                                            "kiss",
+                                          "Send:event:": [
                                             {
                                               "ParentsOf obj:": "@noun"
                                             },
                                             {
-                                              "Args:": [
-                                                {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
-                                                }
+                                              "Kiss actor:noun:": [
+                                                "@actor",
+                                                "@noun"
                                               ]
                                             }
                                           ]

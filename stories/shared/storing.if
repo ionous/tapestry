@@ -150,31 +150,15 @@
                                                   {
                                                     "If:do:": [
                                                       {
-                                                        "Send:path:arguments:": [
-                                                          "store into",
+                                                        "Send:event:": [
                                                           {
                                                             "ParentsOf obj:": "@noun"
                                                           },
                                                           {
-                                                            "Args:": [
-                                                              {
-                                                                "Arg:from:": [
-                                                                  "actor",
-                                                                  "@actor"
-                                                                ]
-                                                              },
-                                                              {
-                                                                "Arg:from:": [
-                                                                  "noun",
-                                                                  "@noun"
-                                                                ]
-                                                              },
-                                                              {
-                                                                "Arg:from:": [
-                                                                  "other noun",
-                                                                  "@other noun"
-                                                                ]
-                                                              }
+                                                            "StoreInto actor:noun:otherNoun:": [
+                                                              "@actor",
+                                                              "@noun",
+                                                              "@other noun"
                                                             ]
                                                           }
                                                         ]

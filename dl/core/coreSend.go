@@ -1,30 +1,28 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"github.com/ionous/errutil"
 
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-// GetBool returns the first matching bool evaluation.
-func (op *CallSend) GetBool(run rt.Runtime) (g.Value, error) {
-	return op.send(run, affine.Bool)
-}
-
 // Execute runs send without returning a value
 func (op *CallSend) Execute(run rt.Runtime) (err error) {
-	_, err = op.send(run, affine.Bool)
+	_, err = op.GetBool(run)
 	return
 }
 
-func (op *CallSend) send(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+// GetBool returns the first matching bool evaluation.
+func (op *CallSend) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if path, e := safe.GetTextList(run, op.Path); e != nil {
 		err = e
+	} else if evt, ok := op.Event.(*CallPattern); !ok {
+		err = errutil.New("expected call pattern in send")
 	} else {
-		name, up := op.Event, path.Strings()
-		if v, e := run.Send(name, up, op.Arguments.Pack()); e != nil {
+		name, up := evt.Pattern.String(), path.Strings()
+		if v, e := run.Send(name, up, evt.Arguments.Pack()); e != nil {
 			err = cmdErrorCtx(op, name, e)
 		} else {
 			ret = v
