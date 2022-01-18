@@ -54,8 +54,10 @@ func (op *Op) ReadMsg() (retSig Signature, retArgs []json.RawMessage, err error)
 
 func parseOp(d map[string]json.RawMessage) (ret Op, err error) {
 	var out Op
+	var hadComment bool
 	for k, v := range d {
 		if k == commentMarker {
+			hadComment = true
 			if e := json.Unmarshal(v, &out.Cmt); e != nil {
 				err = errutil.New("couldnt read comment", e)
 				break
@@ -71,7 +73,7 @@ func parseOp(d map[string]json.RawMessage) (ret Op, err error) {
 	if err == nil {
 		// in the case that there was no command but there was a comment marker
 		// let the command *be* the comment marker
-		if len(out.Key) == 0 && len(out.Cmt) > 0 {
+		if len(out.Key) == 0 && hadComment {
 			out.Key = commentMarker
 		}
 		ret = out
