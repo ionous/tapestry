@@ -6,22 +6,39 @@ import (
 	"github.com/ionous/errutil"
 )
 
+type Signature struct {
+	Name   string
+	Params []Parameter
+}
+
+// given a json .if key such as "Command noun:trait:change choice:"
+// separate out the command name and parameter labels
+func ReadSignature(key string) (ret Signature, err error) {
+	var sig sigReader
+	if e := sig.readSig(key); e != nil {
+		err = e
+	} else {
+		ret = Signature{sig.cmd, sig.params}
+	}
+	return
+}
+
 type sigReader struct {
 	cmd       string
-	params    []sigParam // argument names
+	params    []Parameter // argument names
 	currLabel string
 	buf       runeBuffer
 }
 
-type sigParam struct {
-	label  string
-	choice string // optional
+type Parameter struct {
+	Label  string
+	Choice string // optional
 }
 
-func (p *sigParam) String() string {
-	out := p.label
-	if len(p.choice) > 0 {
-		out = out + " " + p.choice
+func (p *Parameter) String() string {
+	out := p.Label
+	if len(p.Choice) > 0 {
+		out = out + " " + p.Choice
 	}
 	return out
 }
@@ -56,7 +73,7 @@ func (s *sigReader) readCmd(r rune) {
 	switch {
 	// commands ending with a colon indicate an initial anonymous argument
 	case r == ':':
-		s.params = append(s.params, sigParam{}) // blank, unlabeled
+		s.params = append(s.params, Parameter{}) // blank, unlabeled
 		fallthrough
 	// a space is used to separate a command from its arguments
 	// ( and an immediate end of input means there are no arguments )
@@ -91,17 +108,17 @@ func (s *sigReader) readParam(r rune) (err error) {
 }
 
 // return (and reset) the pending argument's accumulated label and choice ( if any )
-func (s *sigReader) flush() sigParam {
-	var out sigParam
+func (s *sigReader) flush() Parameter {
+	var out Parameter
 	// nothing accumulated? then our parameter is anonymous
 	// ( that's totally fine for our first param )
 	if str := s.buf.unbuffer(); len(str) > 0 {
 		// if we dont have a label yet, str is the label
 		if len(s.currLabel) == 0 {
-			out.label = str
+			out.Label = str
 		} else {
 			// otherwise, str is the choice
-			out.label, out.choice = s.currLabel, str
+			out.Label, out.Choice = s.currLabel, str
 			s.currLabel = ""
 		}
 	}
