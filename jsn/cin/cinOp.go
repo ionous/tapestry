@@ -19,10 +19,10 @@ type Op struct {
 // functions without parameters are stored as simple strings.
 func ReadOp(msg json.RawMessage) (ret Op, err error) {
 	var d map[string]json.RawMessage
-	if e := json.Unmarshal(msg, &d); e == nil {
-		ret, err = parseOp(d) // start by trying to read the {} format
+	if e := json.Unmarshal(msg, &d); e != nil {
+		err = e
 	} else {
-		err = json.Unmarshal(msg, &ret.Key) // then try a raw string for parameterless commands.
+		ret, err = parseOp(d) // start by trying to read the {} format
 	}
 	return
 }
