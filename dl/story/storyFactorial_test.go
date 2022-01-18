@@ -19,10 +19,6 @@ func TestFactorialImport(t *testing.T) {
 	} else {
 		// the hierarchical story as a flat list of commands used by the assembler
 		// fix, future: "get var" and "assign" in the scope of a pattern should be generating parameter refs
-		// fix, future: the debug story shouldnt be using core.CallArg, it should be using the story.Args
-		//              so that we can see the code generate parameter references
-		//              ( alt: there should be no story args, and marshal should do the work )
-		//              cant change it right now b/c other tests depend on it.
 		expect := []eph.Ephemera{
 			// one test expectation
 			&eph.EphChecks{

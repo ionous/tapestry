@@ -33,8 +33,8 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 				break
 			} else {
 				if newVal, e := run.Call(pat, aff, []rt.Arg{
-					{"$1", &fromVal{inVal}},
-					{"$2", &fromVal{outVal}},
+					{Name: "$1", From: &fromVal{inVal}},
+					{Name: "$2", From: &fromVal{outVal}},
 				}); e == nil {
 					// send it back in for the next time.
 					outVal = newVal

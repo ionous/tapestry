@@ -70,8 +70,8 @@ var FactorialCheck = &core.Activity{Exe: []rt.Execute{
 			Num: &core.CallPattern{
 				Pattern: factorialName,
 				Arguments: core.CallArgs{
-					Args: []core.CallArg{
-						core.CallArg{
+					Args: []rt.Arg{
+						rt.Arg{
 							Name: "num",
 							From: &core.FromNum{
 								UserComment: "start the factorial with '3'",

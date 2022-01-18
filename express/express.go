@@ -156,7 +156,7 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 			if newa, e := newAssignment(arg); e != nil {
 				err = errutil.Append(e)
 			} else {
-				newp := core.CallArg{
+				newp := rt.Arg{
 					Name: W("$" + strconv.Itoa(i+1)),
 					From: newa,
 				}
@@ -165,8 +165,10 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 		}
 		if err == nil {
 			c.buildOne(&render.RenderPattern{
-				Pattern:   P(name),
-				Arguments: ps,
+				Call: core.CallPattern{
+					Pattern:   P(name),
+					Arguments: ps,
+				},
 			})
 		}
 	}

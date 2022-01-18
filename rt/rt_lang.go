@@ -2,8 +2,119 @@
 package rt
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/composer"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
+	"github.com/ionous/errutil"
 )
+
+// Arg Runtime version of argument
+type Arg struct {
+	Name        string     `if:"label=_,type=text"`
+	From        Assignment `if:"label=from"`
+	UserComment string
+}
+
+func (*Arg) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Arg_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Arg_Type = "arg"
+const Arg_Field_Name = "$NAME"
+const Arg_Field_From = "$FROM"
+
+func (op *Arg) Marshal(m jsn.Marshaler) error {
+	return Arg_Marshal(m, op)
+}
+
+type Arg_Slice []Arg
+
+func (op *Arg_Slice) GetType() string { return Arg_Type }
+
+func (op *Arg_Slice) Marshal(m jsn.Marshaler) error {
+	return Arg_Repeats_Marshal(m, (*[]Arg)(op))
+}
+
+func (op *Arg_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Arg_Slice) SetSize(cnt int) {
+	var els []Arg
+	if cnt >= 0 {
+		els = make(Arg_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Arg_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Arg_Marshal(m, &(*op)[i])
+}
+
+func Arg_Repeats_Marshal(m jsn.Marshaler, vals *[]Arg) error {
+	return jsn.RepeatBlock(m, (*Arg_Slice)(vals))
+}
+
+func Arg_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Arg) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Arg_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type Arg_Flow struct{ ptr *Arg }
+
+func (n Arg_Flow) GetType() string      { return Arg_Type }
+func (n Arg_Flow) GetLede() string      { return Arg_Type }
+func (n Arg_Flow) GetFlow() interface{} { return n.ptr }
+func (n Arg_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Arg); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func Arg_Optional_Marshal(m jsn.Marshaler, pv **Arg) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Arg_Marshal(m, *pv)
+	} else if !enc {
+		var v Arg
+		if err = Arg_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Arg_Marshal(m jsn.Marshaler, val *Arg) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(Arg_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Arg_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Arg_Field_Name))
+		}
+		e1 := m.MarshalKey("from", Arg_Field_From)
+		if e1 == nil {
+			e1 = Assignment_Marshal(m, &val.From)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Arg_Field_From))
+		}
+		m.EndBlock()
+	}
+	return
+}
 
 const Assignment_Type = "assignment"
 
@@ -638,4 +749,10 @@ var Slots = []interface{}{
 	(*TextListEval)(nil),
 }
 
-var Signatures = map[uint64]interface{}{}
+var Slats = []composer.Composer{
+	(*Arg)(nil),
+}
+
+var Signatures = map[uint64]interface{}{
+	6291103735245333139: (*Arg)(nil), /* Arg:from: */
+}

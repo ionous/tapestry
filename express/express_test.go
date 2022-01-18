@@ -250,9 +250,10 @@ func TestTemplates(t *testing.T) {
 	t.Run("indexed", func(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&render.RenderPattern{
-				Pattern: P("hello"), Arguments: core.Args(
-					&core.FromText{Val: T("world")},
-				)}); e != nil {
+				Call: core.CallPattern{
+					Pattern: P("hello"), Arguments: core.Args(
+						&core.FromText{Val: T("world")},
+					)}}); e != nil {
 			t.Fatal(e)
 		}
 	})

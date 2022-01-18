@@ -4,7 +4,7 @@ package list
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -670,7 +670,7 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 		}
 		e3 := m.MarshalKey("as", Erasing_Field_As)
 		if e3 == nil {
-			e3 = literal.Text_Unboxed_Marshal(m, &val.As)
+			e3 = prim.Text_Unboxed_Marshal(m, &val.As)
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", Erasing_Field_As))
@@ -802,7 +802,7 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 		}
 		e2 := m.MarshalKey("as", ErasingEdge_Field_As)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.As)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.As)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ErasingEdge_Field_As))
@@ -1909,7 +1909,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 		}
 		e2 := m.MarshalKey("using", ListGather_Field_Using)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.Using)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.Using)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ListGather_Field_Using))
@@ -2188,7 +2188,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 	if err = m.MarshalBlock(ListMap_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListMap_Field_ToList)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.ToList)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.ToList)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListMap_Field_ToList))
@@ -2202,7 +2202,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 		}
 		e2 := m.MarshalKey("using", ListMap_Field_UsingPattern)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.UsingPattern)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ListMap_Field_UsingPattern))
@@ -2309,7 +2309,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 	if err = m.MarshalBlock(ListReduce_Flow{val}); err == nil {
 		e0 := m.MarshalKey("into", ListReduce_Field_IntoValue)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.IntoValue)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.IntoValue)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListReduce_Field_IntoValue))
@@ -2323,7 +2323,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 		}
 		e2 := m.MarshalKey("using", ListReduce_Field_UsingPattern)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.UsingPattern)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ListReduce_Field_UsingPattern))
@@ -2533,7 +2533,7 @@ func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
 	if err = m.MarshalBlock(ListSet_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSet_Field_List)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.List)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSet_Field_List))
@@ -2790,7 +2790,7 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 		}
 		e1 := m.MarshalKey("by_field", ListSortNumbers_Field_ByField)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.ByField)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.ByField)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListSortNumbers_Field_ByField))
@@ -2913,7 +2913,7 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 		}
 		e1 := m.MarshalKey("by_field", ListSortText_Field_ByField)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.ByField)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.ByField)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListSortText_Field_ByField))
@@ -3039,7 +3039,7 @@ func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
 		}
 		e1 := m.MarshalKey("using", ListSortUsing_Field_Using)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Using)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Using)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListSortUsing_Field_Using))
@@ -3220,7 +3220,7 @@ func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 	if err = m.MarshalBlock(ListSplice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSplice_Field_List)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.List)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSplice_Field_List))

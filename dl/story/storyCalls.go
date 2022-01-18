@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
@@ -11,10 +12,10 @@ func importCall(op *core.CallPattern) *eph.EphRefs {
 	return refArgs(op.Pattern.String(), kindsOf.Pattern, op.Arguments.Args)
 }
 
-func refArgs(k string, parentKind kindsOf.Kinds, args []core.CallArg) (ret *eph.EphRefs) {
+func refArgs(k string, parentKind kindsOf.Kinds, args []rt.Arg) (ret *eph.EphRefs) {
 	var refs []eph.EphParams
 	for _, arg := range args {
-		args = append(args, core.CallArg{
+		args = append(args, rt.Arg{
 			Name: arg.Name, // string
 			From: arg.From, // assignment
 		})

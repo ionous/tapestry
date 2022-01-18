@@ -3,7 +3,7 @@ package grammar
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"github.com/ionous/errutil"
 )
@@ -101,7 +101,7 @@ func Action_Marshal(m jsn.Marshaler, val *Action) (err error) {
 	if err = m.MarshalBlock(Action_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Action_Field_Action)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Action)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Action)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Action_Field_Action))
@@ -205,14 +205,14 @@ func Alias_Marshal(m jsn.Marshaler, val *Alias) (err error) {
 	if err = m.MarshalBlock(Alias_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Alias_Field_Names)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Repeats_Marshal(m, &val.Names)
+			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Names)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Alias_Field_Names))
 		}
 		e1 := m.MarshalKey("as_noun", Alias_Field_AsNoun)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.AsNoun)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.AsNoun)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Alias_Field_AsNoun))
@@ -520,7 +520,7 @@ func Directive_Marshal(m jsn.Marshaler, val *Directive) (err error) {
 	if err = m.MarshalBlock(Directive_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Directive_Field_Lede)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Repeats_Marshal(m, &val.Lede)
+			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Lede)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Directive_Field_Lede))
@@ -797,7 +797,7 @@ func Noun_Marshal(m jsn.Marshaler, val *Noun) (err error) {
 	if err = m.MarshalBlock(Noun_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Noun_Field_Kind)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Kind)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Noun_Field_Kind))
@@ -1172,7 +1172,7 @@ func Self_Marshal(m jsn.Marshaler, val *Self) (err error) {
 	if err = m.MarshalBlock(Self_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Self_Field_Player)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Player)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Player)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Self_Field_Player))
@@ -1274,7 +1274,7 @@ func Words_Marshal(m jsn.Marshaler, val *Words) (err error) {
 	if err = m.MarshalBlock(Words_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Words_Field_Words)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Repeats_Marshal(m, &val.Words)
+			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Words)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Words_Field_Words))

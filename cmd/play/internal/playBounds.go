@@ -16,8 +16,9 @@ import (
 // enc is the enclosureOf the player
 func (pt *Playtime) LocationBounded(enc string) parser.Bounds {
 	return func(cb parser.NounVisitor) (ret bool) {
-		if kids, e := pt.Call("parser_bounds", affine.TextList, []rt.Arg{{"obj",
-			&core.FromValue{g.StringOf(enc)}},
+		if kids, e := pt.Call("parser_bounds", affine.TextList, []rt.Arg{{
+			Name: "obj",
+			From: &core.FromValue{g.StringOf(enc)}},
 		}); e != nil && !errors.Is(e, rt.NoResult{}) {
 			log.Println(e)
 		} else {

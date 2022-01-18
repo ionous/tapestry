@@ -109,19 +109,10 @@
                 "slot": "text_eval",
                 "group": "printing"
             },
-            "call_arg":
-            {
-                "uses": "flow",
-                "spec": "inarg {_%name:text} {from:assignment}",
-                "desc": "Runtime version of argument",
-                "group": "internal"
-            },
             "call_args":
             {
-                "uses": "flow",
-                "spec": "inargs {_%args+call_arg}",
-                "desc": "Runtime version of arguments",
-                "group": "internal"
+                "spec": "args {_%args+arg}",
+                "desc": "Pattern arguments."
             },
             "call_pattern":
             {
@@ -525,14 +516,6 @@
                 "slot": "comparator",
                 "desc": "The first value is less than the second value.",
                 "group": "comparison"
-            },
-            "call_make":
-            {
-                "uses": "flow",
-                "spec": "call_make {_%kind:text} {args%arguments:call_args}",
-                "slot": "record_eval",
-                "desc": "Runtime version of make",
-                "group": "internal"
             },
             "make_lowercase":
             {

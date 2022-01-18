@@ -22,7 +22,7 @@ func TestDetermineNum(t *testing.T) {
 		if diff := pretty.Diff(call, &core.CallPattern{
 			Pattern: core.PatternName{Str: "factorial"},
 			Arguments: core.CallArgs{
-				Args: []core.CallArg{{
+				Args: []rt.Arg{{
 					Name: "num",
 					From: &core.FromNum{
 						Val: F(3),

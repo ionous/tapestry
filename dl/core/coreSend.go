@@ -22,7 +22,7 @@ func (op *CallSend) GetBool(run rt.Runtime) (ret g.Value, err error) {
 		err = errutil.New("expected call pattern in send")
 	} else {
 		name, up := evt.Pattern.String(), path.Strings()
-		if v, e := run.Send(name, up, evt.Arguments.Pack()); e != nil {
+		if v, e := run.Send(name, up, evt.Arguments.Args); e != nil {
 			err = cmdErrorCtx(op, name, e)
 		} else {
 			ret = v

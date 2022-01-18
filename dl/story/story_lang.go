@@ -5,7 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -1003,7 +1003,7 @@ func AspectProperty_Marshal(m jsn.Marshaler, val *AspectProperty) (err error) {
 	if err = m.MarshalBlock(AspectProperty_Flow{val}); err == nil {
 		e0 := m.MarshalKey("of", AspectProperty_Field_Aspect)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Aspect)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Aspect)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", AspectProperty_Field_Aspect))
@@ -1227,14 +1227,14 @@ func BoolProperty_Marshal(m jsn.Marshaler, val *BoolProperty) (err error) {
 	if err = m.MarshalBlock(BoolProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", BoolProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", BoolProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", BoolProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", BoolProperty_Field_Type))
@@ -3501,14 +3501,14 @@ func MakeOpposite_Marshal(m jsn.Marshaler, val *MakeOpposite) (err error) {
 	if err = m.MarshalBlock(MakeOpposite_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakeOpposite_Field_Word)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Word)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Word)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MakeOpposite_Field_Word))
 		}
 		e1 := m.MarshalKey("opposite", MakeOpposite_Field_Opposite)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Opposite)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Opposite)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", MakeOpposite_Field_Opposite))
@@ -3613,14 +3613,14 @@ func MakePlural_Marshal(m jsn.Marshaler, val *MakePlural) (err error) {
 	if err = m.MarshalBlock(MakePlural_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakePlural_Field_Singular)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Singular)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Singular)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MakePlural_Field_Singular))
 		}
 		e1 := m.MarshalKey("plural", MakePlural_Field_Plural)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Plural)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Plural)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", MakePlural_Field_Plural))
@@ -4475,14 +4475,14 @@ func NamedProperty_Marshal(m jsn.Marshaler, val *NamedProperty) (err error) {
 	if err = m.MarshalBlock(NamedProperty_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NamedProperty_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NamedProperty_Field_Name))
 		}
 		e1 := m.MarshalKey("type", NamedProperty_Field_Type)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NamedProperty_Field_Type))
@@ -5453,14 +5453,14 @@ func NumListProperty_Marshal(m jsn.Marshaler, val *NumListProperty) (err error) 
 	if err = m.MarshalBlock(NumListProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", NumListProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NumListProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", NumListProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", NumListProperty_Field_Type))
@@ -5573,14 +5573,14 @@ func NumberProperty_Marshal(m jsn.Marshaler, val *NumberProperty) (err error) {
 	if err = m.MarshalBlock(NumberProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", NumberProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NumberProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", NumberProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", NumberProperty_Field_Type))
@@ -7359,14 +7359,14 @@ func RecordListProperty_Marshal(m jsn.Marshaler, val *RecordListProperty) (err e
 	if err = m.MarshalBlock(RecordListProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", RecordListProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RecordListProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", RecordListProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", RecordListProperty_Field_Type))
@@ -7479,14 +7479,14 @@ func RecordProperty_Marshal(m jsn.Marshaler, val *RecordProperty) (err error) {
 	if err = m.MarshalBlock(RecordProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", RecordProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RecordProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", RecordProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", RecordProperty_Field_Type))
@@ -9172,14 +9172,14 @@ func TextListProperty_Marshal(m jsn.Marshaler, val *TextListProperty) (err error
 	if err = m.MarshalBlock(TextListProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", TextListProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TextListProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", TextListProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", TextListProperty_Field_Type))
@@ -9292,14 +9292,14 @@ func TextProperty_Marshal(m jsn.Marshaler, val *TextProperty) (err error) {
 	if err = m.MarshalBlock(TextProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", TextProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TextProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", TextProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", TextProperty_Field_Type))

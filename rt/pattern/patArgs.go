@@ -33,12 +33,13 @@ func InitRecordFromArgs(run rt.Runtime, rec *g.Record, parts []string, args []rt
 	k := rec.Kind()
 	//
 	for i, a := range args {
-		// because args can be $1, $2, etc.
-		// ( mainly for list operations [ fix: but why arent they in the correct format already?? ] )
 		// search for a matching label.
 		if n := a.Name; len(n) == 0 {
 			err = errutil.New("unnamed arg at", i)
 		} else if a.Name[0] == '$' {
+			// note: because args can be $1, $2, etc.
+			// ( mainly for list operations and core.Args(), getPrintedNamedOf
+			// [ fix: but why arent they in the correct format already?? ] )
 			// validate positional arguments make sense
 			// ( see also: EphPatterns.Assemble )
 			if argIndex(labelIndex) != n {

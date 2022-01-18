@@ -1,0 +1,24 @@
+{
+    "prim": {
+        "uses": "group",
+        "specs": {
+            "bool": {
+                "uses": "str",
+                "spec": "{true} or {false}"
+            },
+            "number":{
+                "uses": "num"
+            },
+            "text": {
+                "uses": "str",
+                "desc":
+                [
+                    "A sequence of characters of any length, all on one line.",
+                    "Examples include letters, words, or short sentences.",
+                    "Text is generally something displayed to the player.",
+                    "See also: lines."
+                ]
+            }
+        }
+    }
+}

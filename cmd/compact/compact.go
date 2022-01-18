@@ -170,10 +170,10 @@ func xformStory(tgt jsn.Marshalee) error {
 	// 				} else {
 	// 					switch op := slat.(type) {
 	// 					case *story.Send:
-	// 						var args []core.CallArg
+	// 						var args []rt.Arg
 	// 						if op.Arguments != nil {
 	// 							for _, arg := range op.Arguments.Args {
-	// 								args = append(args, core.CallArg{
+	// 								args = append(args, rt.Arg{
 	// 									Name: arg.Name, // string
 	// 									From: arg.From, // assignment
 	// 								})

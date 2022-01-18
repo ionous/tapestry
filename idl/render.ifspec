@@ -34,7 +34,7 @@
             "render_pattern":
             {
                 "uses": "flow",
-                "spec": "render {_%pattern:pattern_name} {args%arguments:call_args}",
+                "spec": "render {_%call:call_pattern}",
                 "slot":
                 [
                     "assignment",

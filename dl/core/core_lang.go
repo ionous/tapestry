@@ -3,7 +3,7 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -1169,118 +1169,9 @@ func BufferText_Marshal(m jsn.Marshaler, val *BufferText) (err error) {
 	return
 }
 
-// CallArg Runtime version of argument
-type CallArg struct {
-	Name        string        `if:"label=_,type=text"`
-	From        rt.Assignment `if:"label=from"`
-	UserComment string
-}
-
-func (*CallArg) Compose() composer.Spec {
-	return composer.Spec{
-		Name: CallArg_Type,
-		Uses: composer.Type_Flow,
-		Lede: "inarg",
-	}
-}
-
-const CallArg_Type = "call_arg"
-const CallArg_Field_Name = "$NAME"
-const CallArg_Field_From = "$FROM"
-
-func (op *CallArg) Marshal(m jsn.Marshaler) error {
-	return CallArg_Marshal(m, op)
-}
-
-type CallArg_Slice []CallArg
-
-func (op *CallArg_Slice) GetType() string { return CallArg_Type }
-
-func (op *CallArg_Slice) Marshal(m jsn.Marshaler) error {
-	return CallArg_Repeats_Marshal(m, (*[]CallArg)(op))
-}
-
-func (op *CallArg_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *CallArg_Slice) SetSize(cnt int) {
-	var els []CallArg
-	if cnt >= 0 {
-		els = make(CallArg_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *CallArg_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return CallArg_Marshal(m, &(*op)[i])
-}
-
-func CallArg_Repeats_Marshal(m jsn.Marshaler, vals *[]CallArg) error {
-	return jsn.RepeatBlock(m, (*CallArg_Slice)(vals))
-}
-
-func CallArg_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallArg) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = CallArg_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type CallArg_Flow struct{ ptr *CallArg }
-
-func (n CallArg_Flow) GetType() string      { return CallArg_Type }
-func (n CallArg_Flow) GetLede() string      { return "inarg" }
-func (n CallArg_Flow) GetFlow() interface{} { return n.ptr }
-func (n CallArg_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*CallArg); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func CallArg_Optional_Marshal(m jsn.Marshaler, pv **CallArg) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = CallArg_Marshal(m, *pv)
-	} else if !enc {
-		var v CallArg
-		if err = CallArg_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func CallArg_Marshal(m jsn.Marshaler, val *CallArg) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(CallArg_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CallArg_Field_Name)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CallArg_Field_Name))
-		}
-		e1 := m.MarshalKey("from", CallArg_Field_From)
-		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", CallArg_Field_From))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// CallArgs Runtime version of arguments
+// CallArgs Pattern arguments.
 type CallArgs struct {
-	Args        []CallArg `if:"label=_"`
+	Args        []rt.Arg `if:"label=_"`
 	UserComment string
 }
 
@@ -1288,7 +1179,7 @@ func (*CallArgs) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CallArgs_Type,
 		Uses: composer.Type_Flow,
-		Lede: "inargs",
+		Lede: "args",
 	}
 }
 
@@ -1342,7 +1233,7 @@ func CallArgs_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallArgs) (err err
 type CallArgs_Flow struct{ ptr *CallArgs }
 
 func (n CallArgs_Flow) GetType() string      { return CallArgs_Type }
-func (n CallArgs_Flow) GetLede() string      { return "inargs" }
+func (n CallArgs_Flow) GetLede() string      { return "args" }
 func (n CallArgs_Flow) GetFlow() interface{} { return n.ptr }
 func (n CallArgs_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CallArgs); ok {
@@ -1368,7 +1259,7 @@ func CallArgs_Marshal(m jsn.Marshaler, val *CallArgs) (err error) {
 	if err = m.MarshalBlock(CallArgs_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallArgs_Field_Args)
 		if e0 == nil {
-			e0 = CallArg_Repeats_Marshal(m, &val.Args)
+			e0 = rt.Arg_Repeats_Marshal(m, &val.Args)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallArgs_Field_Args))
@@ -1473,7 +1364,7 @@ func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
 	if err = m.MarshalBlock(CallCycle_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallCycle_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallCycle_Field_Name))
@@ -1484,117 +1375,6 @@ func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", CallCycle_Field_Parts))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// CallMake Runtime version of make
-type CallMake struct {
-	Kind        string   `if:"label=_,type=text"`
-	Arguments   CallArgs `if:"label=args"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.RecordEval = (*CallMake)(nil)
-
-func (*CallMake) Compose() composer.Spec {
-	return composer.Spec{
-		Name: CallMake_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const CallMake_Type = "call_make"
-const CallMake_Field_Kind = "$KIND"
-const CallMake_Field_Arguments = "$ARGUMENTS"
-
-func (op *CallMake) Marshal(m jsn.Marshaler) error {
-	return CallMake_Marshal(m, op)
-}
-
-type CallMake_Slice []CallMake
-
-func (op *CallMake_Slice) GetType() string { return CallMake_Type }
-
-func (op *CallMake_Slice) Marshal(m jsn.Marshaler) error {
-	return CallMake_Repeats_Marshal(m, (*[]CallMake)(op))
-}
-
-func (op *CallMake_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *CallMake_Slice) SetSize(cnt int) {
-	var els []CallMake
-	if cnt >= 0 {
-		els = make(CallMake_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *CallMake_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return CallMake_Marshal(m, &(*op)[i])
-}
-
-func CallMake_Repeats_Marshal(m jsn.Marshaler, vals *[]CallMake) error {
-	return jsn.RepeatBlock(m, (*CallMake_Slice)(vals))
-}
-
-func CallMake_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallMake) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = CallMake_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type CallMake_Flow struct{ ptr *CallMake }
-
-func (n CallMake_Flow) GetType() string      { return CallMake_Type }
-func (n CallMake_Flow) GetLede() string      { return CallMake_Type }
-func (n CallMake_Flow) GetFlow() interface{} { return n.ptr }
-func (n CallMake_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*CallMake); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func CallMake_Optional_Marshal(m jsn.Marshaler, pv **CallMake) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = CallMake_Marshal(m, *pv)
-	} else if !enc {
-		var v CallMake
-		if err = CallMake_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func CallMake_Marshal(m jsn.Marshaler, val *CallMake) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(CallMake_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CallMake_Field_Kind)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Kind)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CallMake_Field_Kind))
-		}
-		e1 := m.MarshalKey("args", CallMake_Field_Arguments)
-		if e1 == nil {
-			e1 = CallArgs_Marshal(m, &val.Arguments)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", CallMake_Field_Arguments))
 		}
 		m.EndBlock()
 	}
@@ -1931,7 +1711,7 @@ func CallShuffle_Marshal(m jsn.Marshaler, val *CallShuffle) (err error) {
 	if err = m.MarshalBlock(CallShuffle_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallShuffle_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallShuffle_Field_Name))
@@ -2043,7 +1823,7 @@ func CallTerminal_Marshal(m jsn.Marshaler, val *CallTerminal) (err error) {
 	if err = m.MarshalBlock(CallTerminal_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallTerminal_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallTerminal_Field_Name))
@@ -2157,7 +1937,7 @@ func CallTrigger_Marshal(m jsn.Marshaler, val *CallTrigger) (err error) {
 	if err = m.MarshalBlock(CallTrigger_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallTrigger_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallTrigger_Field_Name))
@@ -2627,7 +2407,7 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 	if err = m.MarshalBlock(ChooseMoreValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseMoreValue_Field_Assign)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Assign)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Assign)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseMoreValue_Field_Assign))
@@ -3112,7 +2892,7 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 	if err = m.MarshalBlock(ChooseValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseValue_Field_Assign)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Assign)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Assign)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseValue_Field_Assign))
@@ -5072,7 +4852,7 @@ func GetAtField_Marshal(m jsn.Marshaler, val *GetAtField) (err error) {
 	if err = m.MarshalBlock(GetAtField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", GetAtField_Field_Field)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Field)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Field)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", GetAtField_Field_Field))
@@ -5384,7 +5164,7 @@ func HasDominion_Marshal(m jsn.Marshaler, val *HasDominion) (err error) {
 	if err = m.MarshalBlock(HasDominion_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", HasDominion_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", HasDominion_Field_Name))
@@ -6200,7 +5980,7 @@ func IsExactKindOf_Marshal(m jsn.Marshaler, val *IsExactKindOf) (err error) {
 		}
 		e1 := m.MarshalKey("is_exactly", IsExactKindOf_Field_Kind)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Kind)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", IsExactKindOf_Field_Kind))
@@ -6312,7 +6092,7 @@ func IsKindOf_Marshal(m jsn.Marshaler, val *IsKindOf) (err error) {
 		}
 		e1 := m.MarshalKey("is", IsKindOf_Field_Kind)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Kind)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", IsKindOf_Field_Kind))
@@ -6627,7 +6407,7 @@ func KindsOf_Marshal(m jsn.Marshaler, val *KindsOf) (err error) {
 	if err = m.MarshalBlock(KindsOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindsOf_Field_Kind)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Kind)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindsOf_Field_Kind))
@@ -7347,7 +7127,7 @@ func Matches_Marshal(m jsn.Marshaler, val *Matches) (err error) {
 		}
 		e1 := m.MarshalKey("to", Matches_Field_Pattern)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Pattern)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Pattern)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Matches_Field_Pattern))
@@ -8551,7 +8331,7 @@ func PutAtField_Marshal(m jsn.Marshaler, val *PutAtField) (err error) {
 		}
 		e2 := m.MarshalKey("at", PutAtField_Field_AtField)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.AtField)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.AtField)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", PutAtField_Field_AtField))
@@ -8879,7 +8659,7 @@ func Response_Marshal(m jsn.Marshaler, val *Response) (err error) {
 	if err = m.MarshalBlock(Response_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Response_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Response_Field_Name))
@@ -10482,10 +10262,8 @@ var Slats = []composer.Composer{
 	(*BracketText)(nil),
 	(*Break)(nil),
 	(*BufferText)(nil),
-	(*CallArg)(nil),
 	(*CallArgs)(nil),
 	(*CallCycle)(nil),
-	(*CallMake)(nil),
 	(*CallPattern)(nil),
 	(*CallSend)(nil),
 	(*CallShuffle)(nil),
@@ -10575,6 +10353,7 @@ var Signatures = map[uint64]interface{}{
 	5766132082989451290:  (*AllTrue)(nil),           /* AllTrue: */
 	3551738626604328996:  (*Always)(nil),            /* Always */
 	5530004915832666773:  (*AnyTrue)(nil),           /* AnyTrue: */
+	2275326896920679506:  (*CallArgs)(nil),          /* Args: */
 	650855941173987400:   (*TriggerOnce)(nil),       /* At */
 	8393987310376781689:  (*AtLeast)(nil),           /* AtLeast */
 	6318029524925488119:  (*AtMost)(nil),            /* AtMost */
@@ -10582,7 +10361,6 @@ var Signatures = map[uint64]interface{}{
 	296659450533921070:   (*BracketText)(nil),       /* Brackets: */
 	5769182059867686040:  (*Break)(nil),             /* Break */
 	1468716792759951334:  (*BufferText)(nil),        /* Buffers: */
-	15946925553828934364: (*CallMake)(nil),          /* CallMake:args: */
 	11297042870903436571: (*Capitalize)(nil),        /* Capitalize: */
 	16120682472252114465: (*CompareNum)(nil),        /* Cmp:is:num: */
 	7447576730273512137:  (*CompareText)(nil),       /* Cmp:is:txt: */
@@ -10617,8 +10395,6 @@ var Signatures = map[uint64]interface{}{
 	16837911797943566414: (*ChooseAction)(nil),      /* If:do:else: */
 	1980715091726959140:  (*ChooseValue)(nil),       /* If:from:and:do: */
 	7009621164357801941:  (*ChooseValue)(nil),       /* If:from:and:do:else: */
-	12587790669191301162: (*CallArg)(nil),           /* Inarg:from: */
-	5369402786275276311:  (*CallArgs)(nil),          /* Inargs: */
 	2338774282197734279:  (*SumOf)(nil),             /* Inc: */
 	13375523970040178104: (*SumOf)(nil),             /* Inc:by: */
 	3262909017575450402:  (*IsEmpty)(nil),           /* Is empty: */
